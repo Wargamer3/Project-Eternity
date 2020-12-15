@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{15869D7F-5B08-4D2A-8DC6-78A470A9E250}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.Editors.VisualNovelEditor</RootNamespace>
+    <AssemblyName>Project Eternity Visual Novel Editor</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Add Character ID.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Add Character ID.Designer.cs">
+      <DependentUpon>Add Character ID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Add Character Location.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Add Character Location.Designer.cs">
+      <DependentUpon>Add Character Location.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Character Data.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Character Data.Designer.cs">
+      <DependentUpon>Character Data.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialog Editor.Designer.cs">
+      <DependentUpon>Dialog Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Visual Novel Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Visual Novel Editor.Designer.cs">
+      <DependentUpon>Project Eternity Visual Novel Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextEdit.Designer.cs">
+      <DependentUpon>TextEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Visual Novel Extension.cs" />
+    <Compile Include="Visual Novel Viewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <EmbeddedResource Include="Add Character ID.resx">
+      <DependentUpon>Add Character ID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Add Character Location.resx">
+      <DependentUpon>Add Character Location.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Character Data.resx">
+      <DependentUpon>Character Data.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialog Editor.resx">
+      <DependentUpon>Dialog Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Visual Novel Editor.resx">
+      <DependentUpon>Project Eternity Visual Novel Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="TextEdit.resx">
+      <DependentUpon>TextEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Visual Novel Viewer.resx">
+      <DependentUpon>Visual Novel Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Script.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297B027-A204-417E-89A0-5ED5A7F525D8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
+      <Project>{7EE3C972-F915-4491-99A2-E654E634405F}</Project>
+      <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{DD46B019-61BA-4F24-A7E1-EF212C27CDCE}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Visual Novel\Project Eternity Visual Novel.csproj">
+      <Project>{b6e9fdce-3c8d-40e6-bb12-f3d0822fdc58}</Project>
+      <Name>Project Eternity Visual Novel</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Image Viewer\Project Eternity Image Viewer.csproj">
+      <Project>{ccf148c7-fec2-4cd2-bc4f-25bc6c3a102a}</Project>
+      <Name>Project Eternity Image Viewer</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

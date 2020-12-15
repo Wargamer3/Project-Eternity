@@ -1,0 +1,167 @@
+<h1><u>Deathmatch AI</u></h1>
+
+<p>Deathamtch AI scripts are AI scripts that can be used inside the Deathmatch Mod.</p>
+
+<h1>Get Map Variable:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px"><strong>Variable Name:</strong> The name of the variable to get.</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script returns a number corresponding to the variable specified. Will crash if the variable is not set.</p>
+
+<h1>Set Map Variable:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px"><strong>Variable Name:</strong> The name of the variable to get.</p>
+
+<p style="margin-left:40px"><strong>Sign Operator:</strong>&nbsp;The kind of operation to do with the variable. Can be equal, add, substract, multiply, divide or modulo.</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script will set or change the number of a&nbsp;variable.</p>
+
+<h1>Get Enemies:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script holds a list of Squad of every Squad from every Player that are of a different team than the AI&#39;s Squad.</p>
+
+<h1>Get Targets:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px"><strong>Add Movement To Range:</strong> Consider that the Squad can move before attacking to extend the range of the Attack.</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Leader Attack:</strong> Attack the Leader wants to use.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script holds a list of Squad of every Squad from every Player that are of a different team than the AI&#39;s Squad and that can be attacked.</p>
+
+<p style="margin-left:40px">The Squads need to be inside the weapon range and if the Squad has moved, the Attack need to have the &quot;Post movement&quot; attribute.</p>
+
+<h1>Get Attacks:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script holds a list the AI&#39;s&nbsp;Squad&nbsp;attack ordered by their power. (Strongest attack is first)</p>
+
+<h1>Has Squad Attacked:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script returns true if the AI&#39;s Squad has attacked and false if it didn&#39;t.</p>
+
+<h1>Move Cursor To Attack Enemy:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Enemy:</strong> Enemy Squad to attack.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script will move the cursor on an enemy and will attack after. This script is will pause the rest of the AI until the attack is finished.</p>
+
+<h1>Move Toward&nbsp;Enemy:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Enemy:</strong> Enemy Squad to move toward.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script will move the&nbsp;AI&#39;s Squad within Attack range without attacking.</p>
+
+<h1>Move Toward Closest Enemy:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script will move the AI&#39;s Squad toward the closest Enemy.</p>
+
+<h1>End Squad Turn:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script will end that AI&#39;s Squad turn.</p>

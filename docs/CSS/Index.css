@@ -1,0 +1,24 @@
+/********************************
+*
+*
+*			Table CSS
+*
+*
+********************************/
+.indexTable
+{
+	display : block;
+	width : 100%;
+	border-spacing : 20px;
+	table-layout : fixed;
+}
+
+.indexTable td
+{
+	padding : 0px;
+	height : 226px;
+	width: 20%;
+	background-color : #D7D7D7;
+}
+
+	

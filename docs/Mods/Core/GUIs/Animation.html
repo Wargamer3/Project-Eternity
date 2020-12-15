@@ -1,0 +1,47 @@
+<h1><span style="font-size:26px">Animation Editor</span></h1>
+
+<p><img src="/Public/Images/GUIs/Animation.png" style="height:500px; margin-left:5px; margin-right:5px; width:663px" /></p>
+
+<p>The Animation Editor lets you edit an Animation.</p>
+
+<p>An Animation is made from a list of Layers that don&#39;t affect each other and each layer contains a&nbsp;list of Timelines.</p>
+
+<h2>Animation Preview</h2>
+
+<p>The animation preview panel lets you see what the animation will look like when played. Any engine related Timeline will still work but will use fake data to preview their result.</p>
+
+<p>The mouse can be used to select and change the Scale, Rotation and position of the selected Timeline. The mouse cursor will change depending on what action it will do if clicked and dragged.</p>
+
+<p>Press the right click to open the context menu which is&nbsp;used to create or delete Timelines.</p>
+
+<p>The arrow keys can be used to move a Timeline by one pixel.</p>
+
+<h2>Active Timelines</h2>
+
+<p>A Timeline represent how an object will react on each frame. Each Timeline is made of Key Frames. A Key Frame will be represented by a black square, if there are multiple Key Frame on the Timeline, an arrow will be drawn between them. By concept&nbsp;the first frame of a Timline will be a Key Frame that contains the initial parameters.</p>
+
+<p>Each Key Frame contains information specific to the Timeline it&#39;s part of. Visible timeline usually have a position, scale and rotation parameter. Each Key Frame can be selected and modified through the Object Properties box.</p>
+
+<p>The name of the Timeline&nbsp;is visible on the left while the Key Frames are on the right. The playback timeline as well as its cursor&nbsp;are&nbsp;at the top.</p>
+
+<p>Hold the Alt key while holding down the left click on the playback timeline to limit on which frames to playback will work with. The selected frames will be highlighted in blue.</p>
+
+<h2>Animation Layers</h2>
+
+<p>Each Layer contains a list of Timelines. Every Layers are executed at the same time but does not affect each other.</p>
+
+<p>Each Timeline has a Name, an&nbsp;Alpha and a Blend State.</p>
+
+<p>The Alpha will affect every Timeline in the layer and can be used to make transparent Layers.</p>
+
+<p>The Blend State is only used by Sub-Layers and is used to change how the Timeline works. Add is the default value and will make the Timelines add color, as such they will draw their content normally. Substract is the opposite and will make the Timelines remove color, as such they will erase anything that was drawn under them and can be used to create holes.</p>
+
+<p>A Sub-Layer can be created by dragging a Layer onto an other Layer. Sub-Layers will appear slightly shifted to the right to confirm it&#39;s Sub-Layer.</p>
+
+<p>The Engine Layer is a special Layer that can&#39;t delete or add Timelines. It only contains&nbsp;Timelines that can&#39;t be created through the Animation Preview.</p>
+
+<p>It contains the Animation Origin, the Background, the SFX and the Quotes Timelines.</p>
+
+<h2>Object Properties</h2>
+
+<p>This is where the properties of a selected object can be edited. It can display the properties of Timelines, Key Frames and Layers.</p>

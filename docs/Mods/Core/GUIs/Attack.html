@@ -1,0 +1,103 @@
+<table border="1" cellpadding="1" cellspacing="1" style="width:100%">
+	<tbody>
+		<tr>
+			<td><img src="/Public/Images/GUIs/Attack.png" style="height:348px; width:706px" /></td>
+			<td style="vertical-align: top; width: 100%;">
+			<h3>Attack Editor</h3>
+
+			<p>The attack editor is used to create attacks Units can use in combat.</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Item Information:</h3>
+
+<p>This section contains basic informations about the attack.</p>
+
+<ul>
+	<li><strong>Name:</strong> The name of the attack.</li>
+	<li><strong>Description:</strong> Flavor text if needed.</li>
+	<li><strong>Edit Quotes:</strong> Decided which quoteset to use during combat. The quotesets are defined by the&nbsp;Character using that attack.</li>
+</ul>
+
+<h3>Stats:</h3>
+
+<ul>
+	<li><strong>Damage:</strong> The base damage the attack will do. If needed scripts can be used to change the damage depending of&nbsp;the combat.</li>
+	<li><strong>EN cost:</strong> How much EN is used when using this Attack.</li>
+	<li><strong>Maximum ammo:</strong> How many times the Attack can be used per map. Use 0 if there is no limit.</li>
+	<li><strong>Morale requirement:</strong> How much morale the Pilot needs to use this Attack.</li>
+	<li><strong>Minimum range:</strong> Define after how many tiles the Attack can hit.</li>
+	<li><strong>Maximum range:</strong> Define the maximum distance in tiles the Attack can hit.</li>
+	<li><strong>Accuracy:</strong> Bonus used for the Attack. Increase or decrease&nbsp;hit chances.</li>
+	<li><strong>Critical:</strong>&nbsp;Bonus used for the Attack. Increase or decrease critical hit chances.</li>
+</ul>
+
+<h3>Secondary properties:</h3>
+
+<ul>
+	<li><strong>Post Movement:</strong> The attack can be used after moving.</li>
+	<li><strong>Sword Cut:</strong> Not implemented</li>
+	<li><strong>Shoot Down:</strong>&nbsp;Not implemented</li>
+</ul>
+
+<h3>Other Stats:</h3>
+
+<p>The rank&nbsp;affects accuracy and the final damage based on the location of the attacked target. If not set (value is &#39;-&#39;), the weapon can not be used on target from those location.</p>
+
+<p>Bonus chart:</p>
+
+<ul>
+	<li><strong>S:</strong> 20%</li>
+	<li><strong>A:</strong> 10%</li>
+	<li><strong>B:</strong> 0%</li>
+	<li><strong>C:</strong> -15%</li>
+	<li><strong>D:</strong> -30%</li>
+</ul>
+
+<h3>Attack type:</h3>
+
+<p>Decide&nbsp;if the accuracy and damage values are based on the pilot&#39;s MEL(Melee) stat or the RNG(Range) stat.</p>
+
+<p>Types that uses MEL:</p>
+
+<ul>
+	<li>Blank</li>
+	<li>Melee</li>
+	<li>Solid blade</li>
+	<li>Energy blade</li>
+</ul>
+
+<p>Types that uses RNG:</p>
+
+<ul>
+	<li>Solid shot</li>
+	<li>Energy shot</li>
+	<li>Remote</li>
+	<li>Special</li>
+</ul>
+
+<h3>Primary property:</h3>
+
+<p>Decide how you can attack other Unit.</p>
+
+<ul>
+	<li><strong>None:</strong> Select a target on the map with a cursor, will only attack the leader of the targeted squad.</li>
+	<li><strong>MULTI:</strong>&nbsp;Not implemented</li>
+	<li><strong>BREAK:</strong>&nbsp;Not implemented</li>
+	<li><strong>PLA:</strong> Same as none. If the Unit using having this attack is a wingman, it can use it to attack at the same time as the leader.</li>
+	<li><strong>DASH:</strong>&nbsp;Not implemented. Move foward the target when attacking.</li>
+	<li><strong>ALL:</strong> Same as none but will attack wingmans as well as the leader.</li>
+	<li><strong>MAP:</strong> Select a target on the map using one a special pattern that can also hit allies. The attack can be used in 3 different ways:
+	<ul>
+		<li><strong>Spread:</strong> Attack around the user.</li>
+		<li><strong>Direction:</strong> Attack in a direction. (Left, Up, Right or&nbsp;Down)</li>
+		<li><strong>Targeted:</strong>&nbsp;Attack around the cursor.</li>
+	</ul>
+	</li>
+</ul>
+
+<h3>Pilot skills:</h3>
+
+<p>A list of skills that activate during combat.</p>

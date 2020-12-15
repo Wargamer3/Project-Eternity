@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A1AF9211-44CA-4EC9-ADC3-3C00907F9F09}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ProjectEternity.GameScreens.TripleThunderServer</RootNamespace>
+    <AssemblyName>Project Eternity Triple Thunder Server</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Game Scripts\Ask Change Player Type Script Server.cs" />
+    <Compile Include="Game Scripts\Ask Change Room Extras Battle Script Server.cs" />
+    <Compile Include="Game Scripts\Ask Change Room Extras Mission Script Server.cs" />
+    <Compile Include="Game Scripts\Ask Change Team Script Server.cs" />
+    <Compile Include="Game Scripts\Ask Game Data Script Server.cs" />
+    <Compile Include="Game Scripts\Ask Join Room Script Server.cs" />
+    <Compile Include="Game Scripts\Ask Change Character Script Server.cs" />
+    <Compile Include="Game Scripts\Ask Start Game Battle Script Server.cs" />
+    <Compile Include="Game Scripts\Ask Start Game Mission Script Server.cs" />
+    <Compile Include="Game Scripts\Change Room Extras Battle Script Server.cs" />
+    <Compile Include="Game Scripts\Change Room Extras Mission Script Server .cs" />
+    <Compile Include="Game Scripts\Create Enemy Script Server.cs" />
+    <Compile Include="Game Scripts\Create Game Script Server.cs" />
+    <Compile Include="Game Scripts\Create Player Script Server.cs" />
+    <Compile Include="Game Scripts\Create Room Script Server.cs" />
+    <Compile Include="Game Scripts\Finished Loading Script Server.cs" />
+    <Compile Include="Game Scripts\Join Room Local Script Server.cs" />
+    <Compile Include="Game Scripts\Leave Room Script Server.cs" />
+    <Compile Include="Game Scripts\Player Joined Script Server.cs" />
+    <Compile Include="Game Scripts\Send Game Data Script Server.cs" />
+    <Compile Include="Game Scripts\Receive Game Data Script Server.cs" />
+    <Compile Include="Game Scripts\Shoot Bullet Script Server.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Online\Project Eternity Online.csproj">
+      <Project>{b59faa7c-e4db-4e01-82fb-3c3cda7eebd7}</Project>
+      <Name>Project Eternity Online</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Database\Database.csproj">
+      <Project>{4304b49f-e5a9-4e1f-8ab4-5d3cc8c33b28}</Project>
+      <Name>Database</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Triple Thunder\Project Eternity Triple Thunder.csproj">
+      <Project>{d2aff601-4df2-466b-91eb-3aa010668360}</Project>
+      <Name>Project Eternity Triple Thunder</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

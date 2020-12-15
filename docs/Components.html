@@ -1,0 +1,88 @@
+<html>
+	<head>
+	 	<title>
+	 		GUIs
+	 	</title>
+	</head>
+	<body>
+		<link rel='stylesheet' href='CSS/TemplatePage.css'>
+    <script type='text/javascript' script-name='wire-one' src='http://use.edgefonts.net/wire-one.js'></script>
+	<script src='Javascript/Components.js'></script>
+    <script type='text/javascript'>
+        var JavascriptWebsiteRoot = 'http://project-eternity-website.nanoapp.io';
+    </script><header>
+	<div id="titre_logo">
+        <a href='/' target='_blank'><img height='139px' width='150px' alt='' /></a>	</div>
+	<div id="titre_principal">
+		<h1>Project Eternity</h1>
+	</div>
+</header>
+        <section>
+            <div class="VerticalMenu">
+                <ul class="VerticalMenu">
+					<link rel='stylesheet' href='CSS/VerticalMenu.css'>
+					<li>
+                    	<a href='Mods.html'  style='border-left : 5px solid #FFEFDF'>
+                        <span>Mods</span>
+						</a>
+					</li>
+					<li>
+                    <a href='Components.html?OrderBy=Alphabetical&ModsFilter=*&PagesFilter=GUIs'  style='border-left : 5px solid #0F5434'>
+                        <span>GUIs</span>
+						</a>
+					</li>
+					<li>
+                    	<a href='Components.html?OrderBy=Alphabetical&ModsFilter=*&PagesFilter=Code'  style='border-left : 5px solid #522342'>
+                        <span>Components</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+            <div class="contenu">
+				<select id='OrderBy' style='display: block;width:200px;' onchange='ChoosePagesFilter()'>
+					<option value='Alphabetical' selected="selected">Alphabetical</option><option value='Mods'>Mods</option>
+				</select>
+				<select id='Mods Filter' style='display: block;width:200px;' onchange='ChoosePagesFilter()'>
+					<option value='*' selected="selected">*</option><option value='Core'>Core</option><option value='Deathmatch'>Deathmatch</option>
+				</select>
+				<select id='Pages Filter' style='display: block;width:200px;' onchange='ChoosePagesFilter()'>
+					<option value='*'>*</option><option value='GUIs'>GUIs</option><option value='Components' selected="selected">Components</option>
+				</select>
+				<table class='dimensionTable'>
+					<tbody id='Components'>
+
+					</tbody>
+				</table>            
+			</div>
+        </section>
+		<script>FillMenu()</script>
+	 	<script type='text/javascript' src='Javascript/PagesFilter.js'></script>
+		<script type='text/javascript' src='Javascript/InitPagesFilter.js'></script>		
+		<footer id="pied-de-page">
+			<div id="font-noir">
+				<div id="fond-noir-fade">
+					<div class="largeur">
+						<div class="colonne">
+							<section class="a-propos">
+								<h3>About</h3>
+								<p>
+									The goal of the project Eternity is to create the Eternity Engine and help with creation of various
+                                    video games. The engine comes with various GUIs and open ended DLLs to help speed up the creation of
+                                    new assets.
+								</p>
+							</section>
+													
+							<div class="clearboth">
+							</div>
+													
+						</div>
+						
+						<div class="copyright">
+							<p class="largeur">
+								© 2016
+						</div>
+					</div>
+				</div>
+			</div>
+</footer>	</body>
+</html>

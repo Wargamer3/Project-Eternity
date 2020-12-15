@@ -1,0 +1,362 @@
+<h1><u>Battle Effects</u></h1>
+
+<p>Battle Effects are effect that can be used on any map based on the Battle Map such as the Deathmatch Map.</p>
+
+<h1>Status Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Status type:</strong>&nbsp;Which status to affect, can be&nbsp;MEL, RNG, DEF, SKL, EVA or&nbsp;HIT.</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the status. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect adds a temporary bonus value to the stats of a Character.</p>
+
+<h1>Unit Stat&nbsp;Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent of the maximum value of a stat. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Unit stat:</strong>&nbsp;Which status to affect, can be&nbsp;MaxHP, MaxEN, Armor, Mobility or&nbsp;MaxMV</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the status. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect adds a temporary bonus value to the stats of a Unit.</p>
+
+<h1>Will Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent or the current Will. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the Will. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the&nbsp;Will&nbsp;of a Character.</p>
+
+<h1>Will Limit Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the Will limit. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the maximum Will of a Character.</p>
+
+<h1>SP Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the SP. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the SP of a Character.</p>
+
+<h1>Max SP Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the max SP. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the maximum SP of a Character.</p>
+
+<h1>Hit Rate Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the accuracy of an Attack. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the Attack&#39;s HIT value with a fixed number&nbsp;when attacking, is part of the &quot;Other&quot; value in the Accuracy formula.</p>
+
+<p style="margin-left:40px">1 is equivalent to a 1% increase.</p>
+
+<h1>Critical Hit Rate Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the chances of a critical hit. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the chances of getting a critical hit.</p>
+
+<p style="margin-left:40px">1 is equivalent to a 1% increase.</p>
+
+<h1>Critical Hit Always Succeed Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect guarantee that&nbsp;a critical hit will happen.</p>
+
+<h1>Critical Hit Always Fail Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect guarantee that&nbsp;a critical hit will not happen. This Effect takes priority over any other critical effect.</p>
+
+<h1>Evasion Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the evasion when&nbsp;attacked. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the final evasion value by a fixed number, is part of the &quot;Other&quot; value in the Evasion formula.</p>
+
+<p style="margin-left:40px">1 is equivalent to a 1% increase.</p>
+
+<h1>Base Damage Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the base damage. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the base damage value by a fixed number. The base damage is the damage without the critical bonus if there is one.</p>
+
+<p style="margin-left:40px">Absolute damages are not affected by other damage modifiers.</p>
+
+<p style="margin-left:40px">Relative damage is affected the the Damage Taken Effect.</p>
+
+<h1>Damage Taken Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the base damage taken. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the base damage taken.</p>
+
+<p style="margin-left:40px">Absolute damage will take priority over every other damage Effects. Absolute damage decide how much damage the defender will take and ignores criticals.</p>
+
+<p style="margin-left:40px">Relative damage percent is multiplied by the attacker&#39;s Base Damage relative effect.</p>
+
+<p style="margin-left:40px">The base damage is the damage without the critical bonus if there is one.</p>
+
+<h1>Final Damage Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the final damage. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the final damage value by a fixed number. The final damage is the damage after the critical bonus if there is one.</p>
+
+<p style="margin-left:40px">Absolute final damages are affected by relative final damage Effects.</p>
+
+<h1>EN Cost Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the EN cost of an attack. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes EN cost of an attack that uses EN. It is possible to make attacks give EN instead of using it if the EN Cost Effect is too high.</p>
+
+<h1>Max Ammo Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the max ammo of all attacks. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes max ammo for all attack, when used it will also increase the ammo count of each attack based on the value used.</p>
+
+<h1>MV Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the distance a Unit can move. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the distance a Unit can move.</p>
+
+<h1>Attack Range Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the distance a Unit can Attack. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the distance a Unit can Attack.</p>
+
+<h1>HP Regen Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent of the max HP. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the HP of the Unit. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the HP of a Unit.</p>
+
+<h1>EN Regen Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent of the max EN. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the EN of the Unit. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the EN of a Unit.</p>
+
+<h1>Ammo Regen Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Number type:</strong>&nbsp;Absolute for a fixed number, Relative for a percent of the max ammo. (1 being 100%, 0.50 being 50%)</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the ammo of &nbsp;each Attacks of the Unit. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the ammo of each Attacks of a Unit.</p>
+
+<h1>EXP Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;EXP</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">Not implemented</p>
+
+<h1>Money Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Money</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">Not implemented</p>
+
+<h1>Support Attack Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the number of times a Unit can use support attack. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the number of times a Unit can use support attack.</p>
+
+<h1>Support Defend Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Value:</strong>&nbsp;Fixed value used to increase or decrease the number of times a Unit can use support defend. Can be a positive or negative number. Is compatible with the formula parser.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the number of times a Unit can use support defend.</p>
+
+<h1>Unit Terrain Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Terrain:</strong>&nbsp;Name of the terrain attribute to affect.</li>
+	<li><strong>Number type:</strong>&nbsp;Absolute to set the attribute for a fixed value, Relative for an increase.</li>
+	<li><strong>Value:</strong>&nbsp;How much to increase or decrease the attribute of the terrain. Can be a positive or negative number. Is compatible with the formula parser.</li>
+	<li><strong>Can downgrade:</strong>&nbsp;Only used if Absolute number type is selected, prevent the attribute for being downgrade if the value is lower than the current Unit&#39;s&nbsp;attribute.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes the terrain&#39;s attribute for a Unit.</p>
+
+<h1>Unit Movement Effect:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Use Air:</strong>&nbsp;Allow or not a Unit to move through air.</li>
+	<li><strong>Use Land:</strong>&nbsp;Allow or not a Unit to move through land.</li>
+	<li><strong>Use Sea:</strong>&nbsp;Allow or not a Unit to move through sea.</li>
+	<li><strong>Use Space:</strong>&nbsp;Allow or not a Unit to move through space.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This Effect changes where a Unit can go.</p>

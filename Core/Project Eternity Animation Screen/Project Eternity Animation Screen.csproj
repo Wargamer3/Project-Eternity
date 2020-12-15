@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7297B027-A204-417E-89A0-5ED5A7F525D8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.GameScreens.AnimationScreen</RootNamespace>
+    <AssemblyName>Project Eternity Animation Screen</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Core\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Core\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Backgrounds\Animation Background 3D Base.cs" />
+    <Compile Include="Backgrounds\Animation Background 3D Billboard Complex.cs" />
+    <Compile Include="Backgrounds\Animation Background Object 2D.cs" />
+    <Compile Include="Animation Timeline Viewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Animation Timeline Viewer.Designer.cs">
+      <DependentUpon>Animation Timeline Viewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Backgrounds\Animation Background 2D Image.cs" />
+    <Compile Include="AnimationObjectKeyFrame.cs" />
+    <Compile Include="Backgrounds\Animation Background 2D.cs" />
+    <Compile Include="Backgrounds\Animation Background 3D.cs" />
+    <Compile Include="Animation Class Editor.cs" />
+    <Compile Include="Backgrounds\Animation Background 2D Base.cs" />
+    <Compile Include="Backgrounds\Animation Background 2D Image Complex.cs" />
+    <Compile Include="Backgrounds\Animation Background 3D Billboard.cs" />
+    <Compile Include="Simple Animation.cs" />
+    <Compile Include="Animation Class.cs" />
+    <Compile Include="Backgrounds\Animation Background.cs" />
+    <Compile Include="Animation Objects\Quote Set.cs" />
+    <Compile Include="Animation Objects\Quote.cs" />
+    <Compile Include="Animation Objects\SFX.cs" />
+    <Compile Include="Complex Animation.cs" />
+    <Compile Include="Partial Animation.cs" />
+    <Compile Include="Connected Component Labeling.cs" />
+    <Compile Include="External\Contour Tracing Technique.cs" />
+    <Compile Include="Image Editors\Polygon Cutter Helper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Image Editors\Polygon Cutter Helper.Designer.cs">
+      <DependentUpon>Polygon Cutter Helper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Image Editors\Polygon Cutter Viewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Image Editors\Marker Viewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Image Editors\Marker Helper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Image Editors\Marker Helper.Designer.cs">
+      <DependentUpon>Marker Helper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Image Editors\Quote Set Helper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Image Editors\Quote Set Helper.Designer.cs">
+      <DependentUpon>Quote Set Helper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Image Editors\SFX Helper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Image Editors\SFX Helper.Designer.cs">
+      <DependentUpon>SFX Helper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Selectors.cs" />
+    <Compile Include="Timelines\Animation Origin Timeline.cs" />
+    <Compile Include="Timelines\Core Timeline.cs" />
+    <Compile Include="Timelines\Group Timeline.cs" />
+    <Compile Include="Timelines\Marker Timeline.cs" />
+    <Compile Include="Timelines\Polygon Cutter Timeline.cs" />
+    <Compile Include="Timelines\SFX Timeline.cs" />
+    <Compile Include="Timelines\Quote Set Timeline.cs" />
+    <Compile Include="Timelines\Background Timeline.cs" />
+    <Compile Include="Timelines\Fixed Timeline.cs" />
+    <Compile Include="Timelines\Visible Timeline.cs" />
+    <Compile Include="Timelines\Timeline.cs" />
+    <Compile Include="Animation Viewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Animation Viewer.Designer.cs">
+      <DependentUpon>Animation Viewer.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Animation Timeline Viewer.resx">
+      <DependentUpon>Animation Timeline Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Image Editors\Polygon Cutter Helper.resx">
+      <DependentUpon>Polygon Cutter Helper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Image Editors\Marker Helper.resx">
+      <DependentUpon>Marker Helper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Image Editors\Quote Set Helper.resx">
+      <DependentUpon>Quote Set Helper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Image Editors\SFX Helper.resx">
+      <DependentUpon>SFX Helper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Animation Viewer.resx">
+      <DependentUpon>Animation Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FMOD\FMOD.csproj">
+      <Project>{DFB48E6D-A44C-4784-89A3-86F21A108531}</Project>
+      <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Constants\Project Eternity Constants.csproj">
+      <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
+      <Name>Project Eternity Constants</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AA868A2E-28BC-4659-BFE8-E41925A98F65}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.Editors.SorcererStreetMapEditor</RootNamespace>
+    <AssemblyName>Project Eternity Sorcerer Street Editor</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Editors\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Editors\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Spell Card Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Spell Card Editor.Designer.cs">
+      <DependentUpon>Spell Card Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Item Card Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Item Card Editor.Designer.cs">
+      <DependentUpon>Item Card Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Map Statistics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Map Statistics.Designer.cs">
+      <DependentUpon>Map Statistics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Project Eternity Sorcerer Street Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Project Eternity Sorcerer Street Editor.Designer.cs">
+      <DependentUpon>Project Eternity Sorcerer Street Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tile Attributes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tile Attributes.Designer.cs">
+      <DependentUpon>Tile Attributes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Creature Card Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Creature Card Editor.Designer.cs">
+      <DependentUpon>Creature Card Editor.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Spell Card Editor.resx">
+      <DependentUpon>Spell Card Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Item Card Editor.resx">
+      <DependentUpon>Item Card Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Map Statistics.resx">
+      <DependentUpon>Map Statistics.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Project Eternity Sorcerer Street Editor.resx">
+      <DependentUpon>Project Eternity Sorcerer Street Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tile Attributes.resx">
+      <DependentUpon>Tile Attributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Creature Card Editor.resx">
+      <DependentUpon>Creature Card Editor.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297B027-A204-417E-89A0-5ED5A7F525D8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{DD46B019-61BA-4F24-A7E1-EF212C27CDCE}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mods\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
+      <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mods\Project Eternity Sorcerer Street\Project Eternity Sorcerer Street.csproj">
+      <Project>{1a6e23c4-0ffd-4c13-9fc5-3675f82f9251}</Project>
+      <Name>Project Eternity Sorcerer Street</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Map Editor\Project Eternity Map Editor.csproj">
+      <Project>{7e9fe48e-9926-4ef4-9b6b-3241841be67b}</Project>
+      <Name>Project Eternity Map Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,39 @@
+<h1>AI Editor</h1>
+
+<p><img alt="" src="/Public/Images/GUIs/AI.png" style="height:500px; width:810px" /></p>
+
+<p>The AI Editor allow to edit and AI.</p>
+
+<p>An AI is made from &nbsp;multiple AI scripts linked together, starting from a On Step script.</p>
+
+<h2>AI Preview</h2>
+
+<p>The AI preview panel lets you see, modify, link and move the AI scripts containted in the AI.</p>
+
+<p>Drag and drap the AI scripts with the mouse to move them.</p>
+
+<p>Hold the mouse inside one of the black boxes around an AI script to start the linking process. Left boxes can only be linked to boxes on the right side of AI scripts and bottom boxes can only be linked to boxes on the top of AI scripts.</p>
+
+<p>The right and left boxes are execution links. An AI script will automatically launch, one at a time, every AI script linked to its right boxes in the order they are set. If an AI script is asynchronous, it will pause the rest of the AI and let the game run normally until it is finished. For instance an AI script that move and object could pause the rest of the AI until the object finish moving.</p>
+
+<p>The top and bottom boxes are data links. AI scripts receive content from the boxes at the top and send content through the boxes at&nbsp;the bottom. There is no validation on the type of data sent and received so you have to make sure the AI script linked together are compatible. For instance, the &quot;<strong>If</strong>&quot; AI script only access true/false data, sending it a list of enemy will make it crash on execution.</p>
+
+<p>&nbsp;</p>
+
+<h2>AI Scripts</h2>
+
+<p>The list on the right contains every AI script usable by the Editor. Double clicking on one will add it to the AI preview section in the top left corner.</p>
+
+<p>AI scripts are sorted by category, the Core category can be used in any kind of AI while others may be limited to specific mods. For instance the Deathmatch Scripts can only work inside the Deathmatch mod and will crash if used in another mod.</p>
+
+<p>&nbsp;</p>
+
+<h2>AI Properties</h2>
+
+<p>The box at the bottom right let you change the properties of some AI scripts.</p>
+
+<p>It can be used to change the order of execution of the execution links.</p>
+
+<p>It can also be used to add a comment that will be displayed in the bottom right of the script.</p>
+
+<p>Some AI scripts like Set Variable have extra properties that can be set here. For instance the &quot;<strong>Set Variable&quot;</strong> can be set to have a default value.</p>

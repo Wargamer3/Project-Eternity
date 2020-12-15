@@ -1,0 +1,350 @@
+header
+{
+    width : 100%;
+}
+
+ul {
+	list-style : none;
+}
+
+body {
+	margin: 0px;
+	background-color : #DFDFDF;
+}
+
+/************************************************
+*
+*
+*				HEADER
+*
+*
+*************************************************/
+
+
+#titre_logo
+{
+    display: inline-block; 
+	position: relative;
+	width: 160px;
+	border: 0px solid black;
+	vertical-align: top;
+	padding-left: 5%;
+}
+
+#titre_principal
+{
+	margin-top : -155px;
+	padding-bottom : 40px;
+	padding-top: 40px;
+	padding-left: 150px;
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	border: none;
+	font: normal normal bold 40px/normal "wire-one", Helvetica, sans-serif;
+	-o-text-overflow: clip;
+	text-overflow: clip;
+	text-shadow: 0px 16px 3px #8F8F8F;
+}
+
+#titre_principal h1 {
+	color: white;
+	font-size: 39px;
+	padding-left : 6%;
+}
+
+
+/***************************************************
+*
+*
+*				DROP DOWN MENU
+*
+*
+***************************************************/
+
+.menu
+{
+    display: inline-block; 
+    position: absolute;
+    width: 200px;
+    right: 60px;
+    top: 5px;
+    height : 30px;
+	border: solid #a6a6a6 2px;
+	border-radius: 6px;
+	z-index: 50;
+	
+	background: #919191;
+    background: -moz-linear-gradient(#919191 0%, #131313 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #919191), color-stop(100%, #131313));
+    background: -webkit-linear-gradient(#919191 0%, #131313 100%);
+    background: linear-gradient(#919191 0%, #131313 100%);
+
+}
+
+.menu a {
+	display : block;
+	height : 30px;
+	margin-top : -8px;
+	margin-left : -10px;
+	text-decoration: none;
+}
+
+.menu span {
+	color : white;
+}
+
+.menu:hover .menuderoulant {
+	display : block;
+}
+
+.menuderoulant {
+	display : none;
+	width : 200px;
+	font-size : 15px;
+	
+}
+
+.menuderoulant a {
+	width : 168px;
+	margin-left : -81px;
+	padding-left : 30px;
+	background-color : #3A3939;
+	border-left: solid #a6a6a6 2px;
+	border-right: solid #a6a6a6 2px;
+	height : 24px;
+}
+
+.menuderoulant a:hover span {
+	color: #A58EA2;
+}
+
+/*********************************
+*
+*
+*
+*			CSS for FOOTER 
+*
+*
+*
+**********************************/
+
+#pied-de-page {
+	display : block;
+	margin : 0;
+	padding : 0;
+	border : 0;
+	font-size : 100%;
+	font : inherit;
+	vertical-align : baseline;
+}
+
+#font-noir {
+	min-width: 960px;
+}
+
+#pied-de-page div.largeur {
+	color : #e4e4e4;
+}
+
+.largeur {
+	width : 960px;
+	margin : 0 auto;
+}
+
+#pied-de-page .colonne {
+	padding : 0 26px;
+	width : 908;
+	position : relative;
+}
+
+#pied-de-page .a-propos {
+	float : left;
+	padding : 22px 20px 0 0;
+	width : 202px;
+}
+
+#pied-de-page .carte {
+	float : left;
+	padding : 22px 0 0 21px;
+	width : 182px;
+}
+
+#pied-de-page .coordonnees {
+	float : left;
+	padding : 22px 0 0 20px;
+	width : 247px;
+}
+
+#pied-de-page .medias-sociaux {
+	padding : 0 0 0 20px;
+	width : 247px;
+	float : left;
+}
+
+#pied-de-page .liens {
+	position : absolute;
+	top : 0;
+	right : 26px;
+	padding : 42px 0 0 19px;
+	width : 195px;
+}
+
+.clearboth {
+	clear : both;
+	content : '.';
+	font-size : 0px;
+	line-height : 0px;
+	height : 0px;
+}
+
+#pied-de-page div.copyright {
+	position : relative;
+	min-width : 960px;
+}
+	
+#pied-de-page .colonne h3 {
+	padding-bottom : 2px;
+}
+
+#pied-de-page h3 {
+	font-size : 12px;
+	text-transform : uppercase;
+}
+
+#pied-de-page p {
+	margin-top : 0;
+}
+
+#pied-de-page .liens > div.premier {
+	background : none;
+	position : relative;
+	height : 70px;
+	margin-top : 40%;
+}
+
+.deuxieme, .copyright{
+	padding : 20px 0 ;
+}
+
+#pied-de-page .liens .menu-personnel, #pied-de-page .liens .menu-omnivox{
+	margin : 0 20px;
+	width : 155px;
+}
+
+.menu-omnivox ul {
+	border : 1px solid #bdbdbd;
+	position : relative;
+	-webkit-border-radius : 2px;
+	-moz-border-radius : 2px;
+	border-radius : 2px;
+}
+
+.menu-omnivox ul li, .menu-personnel ul li{
+	margin-left : -40px;
+	width : 155px;
+}
+
+.menu-omnivox ul li a {
+	display : block;
+	border : 1px solid #fcfcfc;
+	font-size : 11px;
+	font-weight : bold;
+	color : #444444;
+	padding : 3px 6px;
+	text-decoration : none;
+}
+
+#pied-de-page .liens .menu-omnivox a img {
+	padding-left : 6px;
+}
+
+.menu-omnivox ul li a img {
+	margin-left : 5px;
+}
+
+.dernier {
+	margin-top : -10%;
+}
+
+.coordonnees a {
+	color : #A58EA2;
+}
+
+.coordonnees a:hover {
+	color : #D3CCC6; 
+}
+
+
+/**************************************************
+*
+*
+*				CSS for Content
+*
+*
+**************************************************/
+.contenu
+{
+	margin-left : 260px;
+	width : 70%;
+    display: block;
+	position : static;
+}
+#editor1
+{
+	position : static !important;
+}
+.titreTemplate {
+	text-align: center;
+	font : normal normal bold 60px/normal "wire-one", Helvetica, sans-serif;
+	color : #FF8004;
+}
+
+.textTemplate {
+	color : #013161;
+	padding-left : 17%;
+}
+
+.sousTitre {
+	padding-left: 17%;
+	width : 70%;
+	color : #d06700;
+}
+
+.Hide {
+	display : none;
+}
+
+.arrow {
+	display : block;
+	position : relative;
+	padding-left : 17%;
+	left : 50px;
+	margin-top : -50px;
+	height : 30px !important;
+	width : initial !important;
+}
+
+.dimensionTable {
+	display : block;
+	width : 100%;
+	border-spacing : 20px;
+	table-layout : fixed;
+}
+
+.dimensionTable td {
+	padding : 0px;
+	width : 25%;
+	height : 226px;
+}
+
+.dimensionTable img {
+	width : 170px;
+	height : 166px;
+}
+
+.nomEnseignant {
+	overflow : hidden;
+	text-align : center;
+}
+

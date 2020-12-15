@@ -1,0 +1,81 @@
+# .NET Desktop
+# Build and run tests for .NET Desktop or Windows classic desktop solutions.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'x86'
+  buildConfiguration: 'Release'
+  XNAContentPipelineTargetPlatform: 'Windows'
+  XNAContentPipelineTargetProfile: 'Reach'
+
+steps:
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: 'XnaForVS2019.zip'
+    destinationFolder: ./
+    cleanDestinationFolder: false 
+
+- script: call "XNA Framework 4.0 Redist.msi" /quiet
+  workingDirectory: 'XnaForVS2019/2. XNA Framework 4.0 Redistribution'
+
+- script: call "XNA Game Studio Platform Tools.msi" /quiet
+  workingDirectory: 'XnaForVS2019/3. XNA Game Studio 4.0 Platform Tools'
+
+- script: call "XNA Game Studio Shared.msi" /quiet
+  workingDirectory: 'XnaForVS2019/4. XNA Game Studio 4.0 Shared'
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: 'C:/Program Files (x86)/MSBuild/Microsoft/XNA Game Studio'
+    targetFolder: 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Microsoft/XNA Game Studio'
+
+- script: call "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/Common7/Tools/VsDevCmd.bat" & gacutil /i Microsoft.Build.Framework.dll
+  workingDirectory: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin"
+  failOnStderr: true
+
+- script: call "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/Common7/Tools/VsDevCmd.bat" & gacutil /i Microsoft.Build.dll
+  workingDirectory: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin"
+  failOnStderr: true
+
+- script: call "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/Common7/Tools/VsDevCmd.bat" & gacutil /i System.Collections.Immutable.dll
+  workingDirectory: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin"
+  failOnStderr: true
+
+- script: call "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/Common7/Tools/VsDevCmd.bat" & gacutil /i Microsoft.Build.Utilities.Core.dll
+  workingDirectory: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin"
+  failOnStderr: true
+
+- task: NuGetToolInstaller@1
+  displayName: 'Installing NuGet'
+
+- task: NuGetCommand@2
+  displayName: 'Resolving dependencies for $(solution)'
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    property: XNAContentPipelineTargetPlatform=Windows;XNAContentPipelineTargetProfile=Reach
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts'
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/Project Eternity/Project Eternity/bin/$(buildConfiguration)'
+    ArtifactName: 'PublishBuildArtifacts'
+    

@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D2AFF601-4DF2-466B-91EB-3AA010668360}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.GameScreens.TripleThunderScreen</RootNamespace>
+    <AssemblyName>Project Eternity Triple Thunder</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Mods\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Mods\</OutputPath>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attacks\Attack Box.cs" />
+    <Compile Include="AI.cs" />
+    <Compile Include="Attacks\Combo.cs" />
+    <Compile Include="Attacks\Damage Number.cs" />
+    <Compile Include="Attacks\Hitscan Box.cs" />
+    <Compile Include="Attacks\Kill Message.cs" />
+    <Compile Include="Attacks\Melee Box.cs" />
+    <Compile Include="Attacks\Point Of View Box.cs" />
+    <Compile Include="Attacks\Projectile Box.cs" />
+    <Compile Include="Attacks\Projectile Info.cs" />
+    <Compile Include="Attacks\Weapon Holder.cs" />
+    <Compile Include="Data Manager.cs" />
+    <Compile Include="Effects.cs" />
+    <Compile Include="Equipment\Armors\Armor 1.cs" />
+    <Compile Include="Equipment\Armors\Armor Base.cs" />
+    <Compile Include="Equipment\Armors\Default Armor.cs" />
+    <Compile Include="Equipment\Jetpacks\Dummy Jetpack.cs" />
+    <Compile Include="Equipment\Empty Equipment.cs" />
+    <Compile Include="Equipment\Equipment.cs" />
+    <Compile Include="Equipment\Equipment Loadout.cs" />
+    <Compile Include="Equipment\Jetpacks\Jetpack Base.cs" />
+    <Compile Include="Equipment\Jetpacks\Manual Jetpack.cs" />
+    <Compile Include="Equipment\Menu Equipment.cs" />
+    <Compile Include="Equipment\Shoes\Base Shoes.cs" />
+    <Compile Include="Equipment\Shoes\Regular Jump Shoes.cs" />
+    <Compile Include="Equipment\Shoes\Wall Jump Shoes.cs" />
+    <Compile Include="Equipment\Shoes\Long Jump Shoes.cs" />
+    <Compile Include="Explosion Attributes Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Explosion Attributes Editor.Designer.cs">
+      <DependentUpon>Explosion Attributes Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Equipment\Jetpacks\Jump Jetpack.cs" />
+    <Compile Include="Formula Parser.cs" />
+    <Compile Include="Game Rules\Mission Game Rules.cs" />
+    <Compile Include="Game Rules\Battle Game Rules.cs" />
+    <Compile Include="Game Rules\Game Rules.cs" />
+    <Compile Include="Inputs\Controller Robot Input.cs" />
+    <Compile Include="Inputs\Keyboard And Mouse Robot Input.cs" />
+    <Compile Include="Inputs\Null Robot Input.cs" />
+    <Compile Include="Inputs\Null Robot Input Manager.cs" />
+    <Compile Include="Inputs\Player Robot Input Manager.cs" />
+    <Compile Include="Inputs\Robot Input Helper.cs" />
+    <Compile Include="Inputs\Robot Input Manager.cs" />
+    <Compile Include="Menus\Battle Mode Select.cs" />
+    <Compile Include="Menus\Battle Map Select.cs" />
+    <Compile Include="Menus\Create Room Mission.cs" />
+    <Compile Include="Menus\Game End Battle Screen.cs" />
+    <Compile Include="Menus\IMissionSelect.cs" />
+    <Compile Include="Menus\Loading Screen.cs" />
+    <Compile Include="Menus\Battle Select.cs" />
+    <Compile Include="Menus\Rooms\Server Room Informations.cs" />
+    <Compile Include="Menus\Rooms\Mission Room Informations.cs" />
+    <Compile Include="Menus\Rooms\Battle Room Informations.cs" />
+    <Compile Include="Menus\Rooms\Room Informations.cs" />
+    <Compile Include="Online\Ask Change Room Extras Script Client.cs" />
+    <Compile Include="Online\Change Room Extras Mission Script Client.cs" />
+    <Compile Include="Online\Change Room Extras Battle Script Client.cs" />
+    <Compile Include="Online\Change Room Subtype Script Client.cs" />
+    <Compile Include="Online\Change Player Type Script Client.cs" />
+    <Compile Include="Online\Change Team Script Client.cs" />
+    <Compile Include="Online\Create Game Battle Script Client.cs" />
+    <Compile Include="Online\Game Ended Script Client.cs" />
+    <Compile Include="Online\Go To Next Map Script Client.cs" />
+    <Compile Include="Online\Go To Next Map Script Server - Copier.cs" />
+    <Compile Include="Online\Game Ended Script Server.cs" />
+    <Compile Include="Online\Infrastructure\Triple Thunder Client Group.cs" />
+    <Compile Include="Online\Join Room Failed Script Client.cs" />
+    <Compile Include="Online\Receive Game Data Script Client.cs" />
+    <Compile Include="Online\Send Player Respawn Script Client.cs" />
+    <Compile Include="Online\Send Player Respawn Script Server.cs" />
+    <Compile Include="Sounds\ISFXGenerator.cs" />
+    <Compile Include="Magic\Magic Core Fireball.cs" />
+    <Compile Include="Magic\Triple Thunder Magic.cs" />
+    <Compile Include="Map Scripting.cs" />
+    <Compile Include="Menus\Buy Equipment.cs" />
+    <Compile Include="Menus\Buy Character.cs" />
+    <Compile Include="Menus\Character Select.cs" />
+    <Compile Include="Menus\Create Room Battle.cs" />
+    <Compile Include="Menus\Loby.cs" />
+    <Compile Include="Menus\Shop.cs" />
+    <Compile Include="Menus\Mission Select.cs" />
+    <Compile Include="Online\Create Game Mission Script Client.cs" />
+    <Compile Include="Online\Create Enemy Script Client.cs" />
+    <Compile Include="Online\Create Player Script Client.cs" />
+    <Compile Include="Online\Finished Loading Script Client.cs" />
+    <Compile Include="Online\Join Room Local Script Client.cs" />
+    <Compile Include="Online\Login Success Script Client.cs" />
+    <Compile Include="Online\Player Joined Script Client.cs" />
+    <Compile Include="Online\Change Character Script Client.cs" />
+    <Compile Include="Online\Change Map Script Client.cs" />
+    <Compile Include="Online\Player Left Script Client.cs" />
+    <Compile Include="Online\Send Room ID Script Client.cs" />
+    <Compile Include="Online\Room List Script Client.cs" />
+    <Compile Include="Online\Send Player Damage Script Client.cs" />
+    <Compile Include="Online\Send Player Damage Script Server.cs" />
+    <Compile Include="Online\Shoot Bullet Script Client.cs" />
+    <Compile Include="Online\Send Player Update Script Client.cs" />
+    <Compile Include="Online\Send Player Update Script Server.cs" />
+    <Compile Include="Online\Triple Thunder Online Client.cs" />
+    <Compile Include="Pause Menu.cs" />
+    <Compile Include="Player Manager.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Prop.cs" />
+    <Compile Include="Inputs\Robot Input.cs" />
+    <Compile Include="Scrolling Text Overlay.cs" />
+    <Compile Include="Selectors.cs" />
+    <Compile Include="Sounds\Mute SFX Generator.cs" />
+    <Compile Include="Sounds\SFX Generator.cs" />
+    <Compile Include="Sounds\Unit Sounds.cs" />
+    <Compile Include="Spawn Point.cs" />
+    <Compile Include="Triple Thunder Timeline.cs" />
+    <Compile Include="Layer.cs" />
+    <Compile Include="Fighting Zone.cs" />
+    <Compile Include="Particle system\ParticleSettings.cs" />
+    <Compile Include="Particle system\ParticleSystem.cs" />
+    <Compile Include="Particle system\ParticleVertex.cs" />
+    <Compile Include="Particule.cs" />
+    <Compile Include="Robot Animation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vehicle.cs" />
+    <Compile Include="Attacks\Weapon.cs" />
+    <Compile Include="World Polygon.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">
+      <Project>{f5cd64c0-abde-44c7-8af8-0a47164d5f69}</Project>
+      <Name>Project Eternity AI</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{EA7A4390-EEBB-43F1-BE86-33177B215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Constants\Project Eternity Constants.csproj">
+      <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
+      <Name>Project Eternity Constants</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
+      <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
+      <Name>Project Eternity Control Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
+      <Project>{7EE3C972-F915-4491-99A2-E654E634405F}</Project>
+      <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Magic\Project Eternity Magic.csproj">
+      <Project>{1283ea14-32a1-4d1e-a2af-f5b03823cb02}</Project>
+      <Name>Project Eternity Magic</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Online\Project Eternity Online.csproj">
+      <Project>{b59faa7c-e4db-4e01-82fb-3c3cda7eebd7}</Project>
+      <Name>Project Eternity Online</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FMOD\FMOD.csproj">
+      <Project>{DFB48E6D-A44C-4784-89A3-86F21A108531}</Project>
+      <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Roslyn\Roslyn.csproj">
+      <Project>{4EEEA09D-CFBC-43A7-9491-1D7738FC49E7}</Project>
+      <Name>Roslyn</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Explosion Attributes Editor.resx">
+      <DependentUpon>Explosion Attributes Editor.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

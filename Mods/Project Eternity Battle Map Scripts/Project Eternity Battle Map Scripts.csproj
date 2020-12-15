@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C9DCC447-A1E1-45DE-AFDB-A3BD4F200F02}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.GameScreens.BattleMapScreen</RootNamespace>
+    <AssemblyName>Project Eternity Battle Map Scripts</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Scripts\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Scripts\</OutputPath>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cutscene Scripts\Flash Cursor.cs" />
+    <Compile Include="Map Conditions\Active Player.cs" />
+    <Compile Include="Map Conditions\Gate.cs" />
+    <Compile Include="Map Triggers\Asign Variable.cs" />
+    <Compile Include="Map Triggers\Start Cutscene.cs" />
+    <Compile Include="Cutscene Scripts\Helpers\Route Menu Selector.cs" />
+    <Compile Include="Cutscene Scripts\Add Character.cs" />
+    <Compile Include="Cutscene Scripts\Add Character From Roster.cs" />
+    <Compile Include="Cutscene Scripts\Add Unit In Team.cs" />
+    <Compile Include="Cutscene Scripts\Add Squad.cs" />
+    <Compile Include="Cutscene Scripts\Add Unit From Roster.cs" />
+    <Compile Include="Cutscene Scripts\Assign Character.cs" />
+    <Compile Include="Cutscene Scripts\Center Camera.cs" />
+    <Compile Include="Cutscene Scripts\Change Map Theme.cs" />
+    <Compile Include="Cutscene Scripts\Character Event Flag.cs" />
+    <Compile Include="Cutscene Scripts\Define Global Pilot Unit.cs" />
+    <Compile Include="Cutscene Scripts\End Map.cs" />
+    <Compile Include="Cutscene Scripts\Fade To Black.cs" />
+    <Compile Include="Cutscene Scripts\Launch Intermission Screen.cs" />
+    <Compile Include="Cutscene Scripts\Launch Next Map.cs" />
+    <Compile Include="Cutscene Scripts\Move Cursor.cs" />
+    <Compile Include="Cutscene Scripts\Play Map Theme.cs" />
+    <Compile Include="Cutscene Scripts\Remove Character.cs" />
+    <Compile Include="Cutscene Scripts\Remove Squad.cs" />
+    <Compile Include="Cutscene Scripts\Remove Unit.cs" />
+    <Compile Include="Cutscene Scripts\Road Selection.cs" />
+    <Compile Include="Cutscene Scripts\Set Loss Condition.cs" />
+    <Compile Include="Cutscene Scripts\Set Next Map.cs" />
+    <Compile Include="Cutscene Scripts\Set Skill Point.cs" />
+    <Compile Include="Cutscene Scripts\Set Victory Condition.cs" />
+    <Compile Include="Cutscene Scripts\Shake Screen.cs" />
+    <Compile Include="Cutscene Scripts\Start Animation.cs" />
+    <Compile Include="Cutscene Scripts\Unit Event Flag.cs" />
+    <Compile Include="Cutscene Scripts\Unit Present Flag.cs" />
+    <Compile Include="Map Conditions\Current Turn.cs" />
+    <Compile Include="Map Conditions\Expression.cs" />
+    <Compile Include="Map Triggers\Counter.cs" />
+    <Compile Include="Map Triggers\Start Music.cs" />
+    <Compile Include="Map Triggers\Start Visual Novel.cs" />
+    <Compile Include="Map Triggers\Switch.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Battle Map Cutscene Script Holder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Core Scripts\Project Eternity Core Scripts.csproj">
+      <Project>{60ac9427-f1d2-4fb9-b470-87e3e56b763e}</Project>
+      <Name>Project Eternity Core Scripts</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
+      <Project>{7ee3c972-f915-4491-99a2-e654e634405f}</Project>
+      <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Visual Novel\Project Eternity Visual Novel.csproj">
+      <Project>{b6e9fdce-3c8d-40e6-bb12-f3d0822fdc58}</Project>
+      <Name>Project Eternity Visual Novel</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FMOD\FMOD.csproj">
+      <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
+      <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
+      <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

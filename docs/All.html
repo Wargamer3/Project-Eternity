@@ -1,0 +1,175 @@
+<html>
+	<head>
+	 	<title>
+	 		GUIs
+	 	</title>
+	</head>
+	<body>
+		<link rel='stylesheet' href='http://project-eternity-website.nanoapp.io/CSS/TemplatePage.css'>
+    <script type='text/javascript' script-name='wire-one' src='http://use.edgefonts.net/wire-one.js'></script>
+    <script src='http://project-eternity-website.nanoapp.io/javascript/jquery-1.11.2.min.js'></script>
+    <script type='text/javascript'>
+        var JavascriptWebsiteRoot = 'http://project-eternity-website.nanoapp.io';
+    </script><header>
+	<div id="titre_logo">
+        <a href='/' target='_blank'><img height='139px' width='150px' alt='' /></a>	</div>
+	<div id="titre_principal">
+		<h1>Project Eternity</h1>
+	</div>
+	<div class="menu">
+		<ul>
+			<li>
+                <a href="#1">
+                    <span>Quick menu</span>
+                </a>
+				<ul class="menuderoulant">
+					<li>
+                                <a href='http://project-eternity-website.nanoapp.io/Connection/SignIn.php' style='border-left : 5px solid #AEAEAE'>
+                                    <span>Sign In</span>
+                                </a>
+                            </li>				</ul>
+			</li>
+		</ul>
+	</div>
+</header>
+        <section>
+            <div class="VerticalMenu">
+                <ul class="VerticalMenu">
+	<link rel='stylesheet' href='http://project-eternity-website.nanoapp.io/CSS/VerticalMenu.css'><li>
+                    <a href='/DisplayMods.php'  style='border-left : 5px solid #FFEFDF'>
+                        <span>Mods</span>
+                    </a></li><li>
+                    <a href='/DisplayPages.php?OrderBy=Alphabetical&ModsFilter=*&PagesFilter=GUIs'  style='border-left : 5px solid #0F5434'>
+                        <span>GUIs</span>
+                    </a></li><li>
+                    <a href='/DisplayPages.php?OrderBy=Alphabetical&ModsFilter=*&PagesFilter=Code'  style='border-left : 5px solid #522342'>
+                        <span>Code</span>
+                    </a></li></ul>            </div>
+            <div class="contenu">
+                                <select id='OrderBy' style='display: block;width:200px;' onchange='ChoosePagesFilter()'>
+                    <option value='Alphabetical' selected="selected">Alphabetical</option><option value='Mods'>Mods</option>                </select>
+                <select id='Mods Filter' style='display: block;width:200px;' onchange='ChoosePagesFilter()'>
+                    <option value='*' selected="selected">*</option><option value='Core'>Core</option><option value='Deathmatch'>Deathmatch</option>                </select>
+                <select id='Pages Filter' style='display: block;width:200px;' onchange='ChoosePagesFilter()'>
+                    <option value='*' selected="selected">*</option><option value='GUIs'>GUIs</option><option value='Code'>Code</option>                </select>
+                <table class='dimensionTable' id='Pages Table'><tr><td width="25%">
+				<div>Battle Effects</div>
+				<a href='DisplayPage.php?PagePath=Battle/Code/Battle Effects.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Conquest AI</div>
+				<a href='DisplayPage.php?PagePath=Conquest/Code/Conquest AI.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Conquest map</div>
+				<a href='DisplayPage.php?PagePath=Conquest/Code/Conquest map.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Conquest unit</div>
+				<a href='DisplayPage.php?PagePath=Conquest/GUIs/Conquest unit.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Animation Screen</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Animation Screen.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Base Editor</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Base Editor.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Character</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Character.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Core AI</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Core AI.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Core Scripts</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Core Scripts.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Cutscene</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Cutscene.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Formula Parser</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Formula Parser.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Magic</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Magic.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Unit</div>
+				<a href='DisplayPage.php?PagePath=Core/Code/Unit.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>AI</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/AI.html'><img src='/Public/Images/GUIs/AI.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Animation background 2D</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Animation background 2D.html'><img src='/Public/Images/GUIs/Animation background 2D.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Animation background 3D</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Animation background 3D.html'><img src='/Public/Images/GUIs/Animation background 3D.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Animation</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Animation.html'><img src='/Public/Images/GUIs/Animation.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Attack</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Attack.html'><img src='/Public/Images/GUIs/Attack.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Bitmap animation</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Bitmap animation.html'><img src='/Public/Images/GUIs/Bitmap animation.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Character skill</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Character skill.html'><img src='/Public/Images/GUIs/Character skill.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Character</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Character.html'><img src='/Public/Images/GUIs/Character.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Characters spirit</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Characters spirit.html'><img src='/Public/Images/GUIs/Characters spirit.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Cutscene</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Cutscene.html'><img src='/Public/Images/GUIs/Cutscene.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Image viewer</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Image viewer.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Music player</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Music player.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Roster editor</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Roster editor.html'><img src='/Public/Images/GUIs/Roster editor.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>System list</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/System list.html'><img src='/Public/Images/GUIs/System list.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Tileset</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Tileset.html'><img src='/Public/Images/GUIs/Tileset.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Unit ability</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Unit ability.html'><img src='/Public/Images/GUIs/Unit ability.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Unit consumable part</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Unit consumable part.html'><img src='/Public/Images/GUIs/Unit consumable part.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Unit standard part</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Unit standard part.html'><img src='/Public/Images/GUIs/Unit standard part.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Visual novel</div>
+				<a href='DisplayPage.php?PagePath=Core/GUIs/Visual novel.html'><img src='/Public/Images/GUIs/Visual novel.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Deathmatch AI</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/Code/Deathmatch AI.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Deathmatch Skill Requirements</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/Code/Deathmatch Skill Requirements.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Formula Parser</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/Code/Formula Parser.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Combining unit</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/GUIs/Combining unit.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Deathmatch map</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/GUIs/Deathmatch map.html'><img src='/Public/Images/GUIs/Deathmatch map.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Hub unit</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/GUIs/Hub unit.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Multi-form unit</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/GUIs/Multi-form unit.html'><img src='/Public/Images/GUIs/Multi-form unit.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Normal unit</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/GUIs/Normal unit.html'><img src='/Public/Images/GUIs/Normal unit.png' alt='Photo profile' align='middle'></a></td></tr><tr><td width="25%">
+				<div>Transforming unit</div>
+				<a href='DisplayPage.php?PagePath=Deathmatch/GUIs/Transforming unit.html'><img src='/Public/Images/GUIs/Transforming unit.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Triple Thunder AI</div>
+				<a href='DisplayPage.php?PagePath=Triple Thunder/Code/Triple Thunder AI.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>Triple Thunder Map</div>
+				<a href='DisplayPage.php?PagePath=Triple Thunder/Code/Triple Thunder Map.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td><td width="25%">
+				<div>World Map</div>
+				<a href='DisplayPage.php?PagePath=World/Code/World Map.html'><img src='/Public/Images/photoProfileDefault.png' alt='Photo profile' align='middle'></a></td></tr><tr>	</tr>
+		</table>            </div>
+        </section>
+	 	<script type='text/javascript' src='http://project-eternity-website.nanoapp.io/Javascript/PagesFilter.js'></script>
+            <script type='text/javascript' src='http://project-eternity-website.nanoapp.io/Javascript/InitPagesFilter.js'></script>		
+		<footer id="pied-de-page">
+			<div id="font-noir">
+				<div id="fond-noir-fade">
+					<div class="largeur">
+						<div class="colonne">
+							<section class="a-propos">
+								<h3>About</h3>
+								<p>
+									The goal of the project Eternity is to create the Eternity Engine and help with creation of various
+                                    video games. The engine comes with various GUIs and open ended DLLs to help speed up the creation of
+                                    new assets.
+								</p>
+							</section>
+													
+							<div class="clearboth">
+							</div>
+													
+						</div>
+						
+						<div class="copyright">
+							<p class="largeur">
+								© 2016
+						</div>
+					</div>
+				</div>
+			</div>
+</footer>	</body>
+</html>

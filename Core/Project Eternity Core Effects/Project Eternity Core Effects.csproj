@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4443915C-152E-44F3-BD60-766080C0C0F0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.Core.Effects</RootNamespace>
+    <AssemblyName>Project Eternity Core Effects</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Effects\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Effects\</OutputPath>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Effects\Activate Spirit Effect.cs" />
+    <Compile Include="Effects\Auto Dodge Effect.cs" />
+    <Compile Include="Effects\Barrier Effect.cs" />
+    <Compile Include="Effects\Extra Movements Per Turn Effect.cs" />
+    <Compile Include="Effects\Ignore EnemySkill Effect.cs" />
+    <Compile Include="Effects\Nullify Attack Effect.cs" />
+    <Compile Include="Effects\Nullify Damage Effect.cs" />
+    <Compile Include="Effects\Parry Effect.cs" />
+    <Compile Include="Effects\Post Attack Effect.cs" />
+    <Compile Include="Effects\Post Movement Effect.cs" />
+    <Compile Include="Effects\Repair Effect.cs" />
+    <Compile Include="Effects\Attack First Effect.cs" />
+    <Compile Include="Effects\Resupply Effect.cs" />
+    <Compile Include="Effects\Shield Effect.cs" />
+    <Compile Include="Effects\Sword Cut Effect.cs" />
+    <Compile Include="Skill Requirements\After Moving Requirement.cs" />
+    <Compile Include="Skill Requirements\Player Phase Start Requirement.cs" />
+    <Compile Include="Effects\Shoot Down Effect.cs" />
+    <Compile Include="Skill Requirements\HP Left Requirement.cs" />
+    <Compile Include="Skill Requirements\On Create Requirement.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Skill Requirements\Only Once Requirement.cs" />
+    <Compile Include="Skill Requirements\Passive Requirement.cs" />
+    <Compile Include="Skill Requirements\Piloted Unit Name Requirement.cs" />
+    <Compile Include="Skill Requirements\Pilot Skill Found Requirement.cs" />
+    <Compile Include="Skill Requirements\Pilot Stat Requirement.cs" />
+    <Compile Include="Skill Requirements\Tag Requirement.cs" />
+    <Compile Include="Skill Requirements\Will Reached Requirement.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

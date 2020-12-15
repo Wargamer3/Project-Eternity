@@ -1,0 +1,81 @@
+<table border="0" cellpadding="1" cellspacing="1" style="width:100%">
+	<tbody>
+		<tr>
+			<td><img alt="" src="/Public/Images/GUIs/Character skill.png" style="border-style:solid; border-width:0px; float:left; height:311px; width:773px" /></td>
+			<td style="vertical-align:top; width:100%">
+			<h3>Character Skill Editor</h3>
+
+			<p>The Character Skill Editor is used to create skills with multiple levels of evolution. Skills can affect the user as well of an enemy.</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h1>Levels:</h1>
+
+<p>Each skill can have as many levels as needed but only one is active at a time meaning that&nbsp;each level is unaffected by the other levels.</p>
+
+<p>Each level contains a list of Activations.</p>
+
+<p>Selecting a different Level will update the Activations list to match which Activations the Level contains</p>
+
+<h1>Activations:</h1>
+
+<p>Activations are simply a container for&nbsp;a list of Requirements and Effects.</p>
+
+<p>When every requirements of an Activation are met, it will activate its effects. This mean a skill can have multiple Activation and have only one of them active, this way it&#39;s possible to have one Activation with only a passive requirement to have an effect active at all time and and have an other Activation that activate under a different requirement. All Activations can be active at the same time.</p>
+
+<h1>Requirements:</h1>
+
+<p>Requirements are a list of conditions that all need to be met before activating the Effects defined by the selected Activation.</p>
+
+<p>There is no limit to the amount of Requirements that can be used. Some Requirements are passive and will be considered met as long as the condition is true.&nbsp;If used alone those Requirements will launch the Effects for every actions the player do and may cause unexpected behavior if&nbsp;the Lifetime is not set to Permanent.</p>
+
+<p>Some Requirements will also need extra parameters to work and the bottom box will update to show what can be changed.</p>
+
+<h1>Effects:</h1>
+
+<p>List of effects that will be activated by the selected Activation.</p>
+
+<p>New Effects can be added to the list with the Add button.</p>
+
+<p>Effects can be removed from the list with the Remove Button.</p>
+
+<p>The selected Effect can be changed with the dropdown list.</p>
+
+<p>Each Effect can be applied to the user and/or an enemy. They can be used to increase or decrease statistics or give new abilities.</p>
+
+<p>Some Effects will also need extra parameters to work and the bottom box will update to show what can be changed.</p>
+
+<h1>Affected types:</h1>
+
+<p>Defines who will be affected by the Effects. The affected types are context sensitive if used on an enemy.</p>
+
+<p>There can be more than one affected types selected.</p>
+
+<p>If activated from a battle, it will automatically use the Effects on the enemy.</p>
+
+<ul>
+	<li><strong>Self:</strong> Used on the leader of the current&nbsp;Squad.</li>
+	<li><strong>Squad:</strong> Used on the leader and wingmans of the current&nbsp;Squad.</li>
+	<li><strong>Enemy:</strong> Used on the leader of the targeted enemy.</li>
+	<li><strong>Enemy Squad:</strong> Used on the leader and wingmans of the targeted enemy.</li>
+	<li><strong>ALL:</strong>&nbsp;Used on every Squad on the map.</li>
+	<li><strong>ALL&nbsp;allies:</strong> Used on every Squad of the same team on the map.</li>
+	<li><strong>ALL&nbsp;enemies:</strong> Used on every Squad of a different team on the map.</li>
+	<li><strong>Aura:</strong> Used on every Squad of the same team within a distance from the user.</li>
+	<li><strong>Enemy aura:</strong> Used on every Squad of a different team within a distance from the user.</li>
+	<li><strong>Radius:</strong>&nbsp;Only used when a&nbsp;type of Aura is selected. Defines the radius used by the Aura to detects targets.</li>
+</ul>
+
+<h1>Lifetime types:</h1>
+
+<p>Defines how long the Effects will last. If needed, the Effects can be deactivated when a Requirement fails. This way you can have a Permanent Effect stop working after a Requirement is met.</p>
+
+<ul>
+	<li><strong>Permanent:</strong>&nbsp;Once activated, the Effect will never expire.</li>
+	<li><strong>Turns:</strong>&nbsp;Once activated, the Effect will expire after a number of turns.</li>
+	<li><strong>Battle:</strong>&nbsp;Once activated, the Effect will expire after a number of battles.</li>
+	<li><strong>Stacking:</strong>&nbsp;The Effect can be activated a number of times to multiply its effect.</li>
+	<li><strong>Reset when Requirements fail:</strong>&nbsp;Will deactivate the Effects if one of the Requirements fail.</li>
+</ul>

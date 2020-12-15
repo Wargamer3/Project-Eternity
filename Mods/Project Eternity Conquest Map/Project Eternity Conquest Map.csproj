@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E91E70D4-DA94-403B-952B-8E3EB630E8E0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.GameScreens.ConquestMapScreen</RootNamespace>
+    <AssemblyName>Project Eternity Conquest Map</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Mods\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Mods\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Acion Panels\Action Panel Conquest.cs" />
+    <Compile Include="Acion Panels\Map Menu\End.cs" />
+    <Compile Include="Acion Panels\Map Menu\Intel.cs" />
+    <Compile Include="Acion Panels\Map Menu\Options.cs" />
+    <Compile Include="Acion Panels\Map Menu\Power.cs" />
+    <Compile Include="Acion Panels\Map Menu\Save.cs" />
+    <Compile Include="Acion Panels\Map Menu\Unit.cs" />
+    <Compile Include="Acion Panels\Phase Menu.cs" />
+    <Compile Include="Acion Panels\Player Actions\Move Unit.cs" />
+    <Compile Include="Acion Panels\Player Actions\Building Unit Selected.cs" />
+    <Compile Include="Acion Panels\Player Actions\Player Default.cs" />
+    <Compile Include="Acion Panels\Player Actions\Enemy Unit Selected.cs" />
+    <Compile Include="Acion Panels\Player Actions\Main Menu.cs" />
+    <Compile Include="Acion Panels\Player Actions\Unit Selected.cs" />
+    <Compile Include="Acion Panels\Unit Actions\AI Default.cs" />
+    <Compile Include="Acion Panels\Unit Actions\AI Move Cursor.cs" />
+    <Compile Include="Acion Panels\Unit Actions\AI Move Toward Enemy.cs" />
+    <Compile Include="Acion Panels\Unit Actions\AI Attack.cs" />
+    <Compile Include="Acion Panels\Unit Actions\Attack.cs" />
+    <Compile Include="Acion Panels\Unit Actions\Capture.cs" />
+    <Compile Include="Acion Panels\Unit Actions\Wait.cs" />
+    <Compile Include="AI.cs" />
+    <Compile Include="Animation Screen.cs" />
+    <Compile Include="Battle Animation Screen.cs" />
+    <Compile Include="Conquest Map.cs" />
+    <Compile Include="Battle Formulas.cs" />
+    <Compile Include="Map Layer.cs" />
+    <Compile Include="Overlays.cs" />
+    <Compile Include="Map Interaction.cs" />
+    <Compile Include="Drawable Grids.cs" />
+    <Compile Include="Movement Algorithm Conquest.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Unit Delegates.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">
+      <Project>{f5cd64c0-abde-44c7-8af8-0a47164d5f69}</Project>
+      <Name>Project Eternity AI</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Constants\Project Eternity Constants.csproj">
+      <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
+      <Name>Project Eternity Constants</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
+      <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
+      <Name>Project Eternity Control Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
+      <Project>{7ee3c972-f915-4491-99a2-e654e634405f}</Project>
+      <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FMOD\FMOD.csproj">
+      <Project>{DFB48E6D-A44C-4784-89A3-86F21A108531}</Project>
+      <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Units\Project Eternity Unit Conquest\Project Eternity Unit Conquest.csproj">
+      <Project>{ef17745e-1116-499c-94d0-5d3607ee8fa4}</Project>
+      <Name>Project Eternity Unit Conquest</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
+      <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

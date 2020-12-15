@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D6FC98BD-A6EE-4223-B995-65299D714A4C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.GameScreens.BattleMapScreen</RootNamespace>
+    <AssemblyName>Project Eternity Battle Map</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Mods\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>..\Project Eternity\Project Eternity\bin\x86\Debug\Content\Battle Maps\Project Eternity Battle Map.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Core\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>..\Project Eternity\Project Eternity\bin\x86\Release\Content\Battle Maps\Project Eternity Battle Map.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Intermission Screen\Data Screen.cs" />
+    <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
+    <Compile Include="Map Layer.cs" />
+    <Compile Include="Menus\Attacks Menu.cs" />
+    <Compile Include="Online\Online Scripts.cs" />
+    <Compile Include="Team Lists\Roster Unit.cs" />
+    <Compile Include="Team Lists\Roster Character.cs" />
+    <Compile Include="Team Lists\Roster.cs" />
+    <Compile Include="Team Lists\Team List Character.cs" />
+    <Compile Include="Team Lists\Team List Squad.cs" />
+    <Compile Include="Team Lists\Team List Unit.cs" />
+    <Compile Include="Viewers\Battle Map Viewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DayNightCycle.cs" />
+    <Compile Include="Drawable Grid.cs" />
+    <Compile Include="Abstract Methods.cs" />
+    <Compile Include="Battle Map.cs" />
+    <Compile Include="Battle Methods.cs" />
+    <Compile Include="End Screen.cs" />
+    <Compile Include="Extra Cutscenes.cs" />
+    <Compile Include="Intermission Screen\3DViewer.cs" />
+    <Compile Include="Intermission Screen\Drawable Menu.cs" />
+    <Compile Include="Intermission Screen\Forge.cs" />
+    <Compile Include="Intermission Screen\Formula Parser.cs" />
+    <Compile Include="Intermission Screen\New Intermission Screen.cs" />
+    <Compile Include="Intermission Screen\Intermission Screen.cs" />
+    <Compile Include="Intermission Screen\Inventory.cs" />
+    <Compile Include="Intermission Screen\Loadout Screen.cs" />
+    <Compile Include="Intermission Screen\Multiplayer Mode Selection Screen.cs" />
+    <Compile Include="Intermission Screen\Pilot Training.cs" />
+    <Compile Include="Intermission Screen\Pilot List Screen.cs" />
+    <Compile Include="Intermission Screen\Unit Upgrades.cs" />
+    <Compile Include="Intermission Screen\Unit Equipment Screen.cs" />
+    <Compile Include="Intermission Screen\Unit Parts.cs" />
+    <Compile Include="Intermission Screen\Unit List.cs" />
+    <Compile Include="Intermission Screen\Pilot Swap.cs" />
+    <Compile Include="Intermission Screen\Shop.cs" />
+    <Compile Include="Intermission Screen\Squad Selection Screen.cs" />
+    <Compile Include="Menus\Action Menu.cs" />
+    <Compile Include="Menus\RouteMenu.cs" />
+    <Compile Include="Movement Algorithm.cs" />
+    <Compile Include="PopUpInputBox.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Menus\Status Menu.cs" />
+    <Compile Include="Skill Helper.cs" />
+    <Compile Include="Event Point.cs" />
+    <Compile Include="System List.cs" />
+    <Compile Include="Map Scripting.cs" />
+    <Compile Include="Terrain.cs" />
+    <Compile Include="Viewers\Tileset Viewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Constants\Project Eternity Constants.csproj">
+      <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
+      <Name>Project Eternity Constants</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
+      <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
+      <Name>Project Eternity Control Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Core Effects\Project Eternity Core Effects.csproj">
+      <Project>{4443915c-152e-44f3-bd60-766080c0c0f0}</Project>
+      <Name>Project Eternity Core Effects</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Core Scripts\Project Eternity Core Scripts.csproj">
+      <Project>{60ac9427-f1d2-4fb9-b470-87e3e56b763e}</Project>
+      <Name>Project Eternity Core Scripts</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
+      <Project>{7ee3c972-f915-4491-99a2-e654e634405f}</Project>
+      <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Online\Project Eternity Online.csproj">
+      <Project>{b59faa7c-e4db-4e01-82fb-3c3cda7eebd7}</Project>
+      <Name>Project Eternity Online</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FMOD\FMOD.csproj">
+      <Project>{DFB48E6D-A44C-4784-89A3-86F21A108531}</Project>
+      <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Roslyn\Roslyn.csproj">
+      <Project>{4eeea09d-cfbc-43a7-9491-1d7738fc49e7}</Project>
+      <Name>Roslyn</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Units\Project Eternity Unit Multi-Form\Project Eternity Unit Multi-Form.csproj">
+      <Project>{fa0bb5b5-c4e9-4e5c-be70-c859c2699cd6}</Project>
+      <Name>Project Eternity Unit Multi-Form</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Viewers\Battle Map Viewer.resx">
+      <DependentUpon>Battle Map Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

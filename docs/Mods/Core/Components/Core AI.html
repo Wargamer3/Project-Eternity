@@ -1,0 +1,244 @@
+<h1><u>Core AI</u></h1>
+
+<p>Core AI scripts are basic logic AI scripts that can be used on any Mod that support AI.</p>
+
+<h1>On Step:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script is called every time the AI is updated and call the linked scripts without restrictions.</p>
+
+<h1>Subroutine:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px"><strong>Script to use path:</strong>&nbsp;Path to an AI file.</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script will execute another AI and will call the linked scripts when the selected AI returns with either the <strong>Return</strong>&nbsp;script or the&nbsp;<strong>Return Value</strong>&nbsp;script.</p>
+
+<p style="margin-left:40px">The&nbsp;<strong>Extract Return Value</strong>&nbsp;script can be used to retrieve values returned by this script.</p>
+
+<h1>Event:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px"><strong>Script to use path:</strong>&nbsp;Path to an AI file.</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">Unlike the Subroutine, this script need to be called from another script, it works the same way as the <strong>On Step</strong>&nbsp;script.</p>
+
+<p style="margin-left:40px">&nbsp;</p>
+
+<p style="margin-left:40px">This script will execute another and will call the linked scripts when the selected AI returns with either the <strong>Return</strong>&nbsp;script or the&nbsp;<strong>Return Value</strong>&nbsp;script.</p>
+
+<p style="margin-left:40px">The&nbsp;<strong>Extract Return Value</strong>&nbsp;script can be used to retrieve values returned by this AI script.</p>
+
+<h1>Return:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script returns null and is only used to end AI that will be used by <strong>Subroutine </strong>and <strong>Event </strong>scripts.</p>
+
+<h1>Return Value:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script returns an object&nbsp;and is only used to end AI that will be used by <strong>Subroutine </strong>and <strong>Event </strong>scripts.</p>
+
+<p style="margin-left:40px">You can return more than one object by using multiple <strong>Return Value</strong> scripts as they do not pause the AI.</p>
+
+<h1>Extract Return Value:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Index:</strong> The index of which object to get. Starts at 0.</li>
+</ul>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">Retrieve an object returned from a <strong>Subroutine </strong>or <strong>Event </strong>script and send it to the linked scripts.</p>
+
+<h1>Logic Operator:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<ul>
+	<li><strong>Logic Operator:</strong>&nbsp;Which operator to use to compare the left object with the right object.</li>
+</ul>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Left Number:</strong> A number that you want to compare.</li>
+	<li><strong>Right Number:</strong> A&nbsp;number that you want to compare.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script compared the value of the left number with the value of the right number using a logic operator. It will return true or false depending of the result of the comparison.</p>
+
+<h1>For Each:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Object List:</strong> A list of object you want to loop through.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script will call its following&nbsp;linked scripts one time for each object in the list used. It will also send the object it is curently using so it can be used directly with a <strong>Set Variable</strong> script.</p>
+
+<h1>If:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Condition:</strong> A true or false value.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script will call its following&nbsp;linked scripts based on&nbsp;the condition. If the condition is true it will only call the scripts linked through the &quot;Condition is true&quot; box.&nbsp;If the condition is false it will only call the scripts linked through the &quot;Condition is false&quot; box.</p>
+
+<h1>Set Variable:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px"><strong>Default Value:</strong> An optional field that can be used so the script don&#39;t have to be initialized by another script.</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li>None</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">Thie script is used to hold an object of any type. When called from an other script it will keep the object it received forever unless it is changed by being called again.</p>
+
+<h1>Get Content:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Content:</strong>&nbsp;The object to get.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script is used to send data from a data holder like the <strong>Set Variable</strong> script to its linked scripts. Since data holder can&#39;t execute other scripts, they can only send data through requirement boxes. This script use a requirement box to get the data then call the scripts that can&#39;t get data through requirement boxes.</p>
+
+<p style="margin-left:40px">For example, it can be used to get data from a <strong>Set Variable</strong> script and send it to another <strong>Set Variable</strong> script.</p>
+
+<h1>Get Random Content From List:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Content:</strong>&nbsp;A list of objects.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script works the same way as the <strong>Get Content</strong> script but only works with a list. It will return a random&nbsp;object contained in the list.</p>
+
+<h1>Get First Content From List:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Content:</strong>&nbsp;A list of objects.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script works the same way as the <strong>Get Content</strong> script but only works with a list. It will return the first object contained in the list.</p>
+
+<h1>Get List Count:</h1>
+
+<p><strong>Fields:</strong></p>
+
+<p style="margin-left:40px">None</p>
+
+<p><strong>Requirement:</strong></p>
+
+<ul>
+	<li><strong>Content:</strong>&nbsp;A list of objects.</li>
+</ul>
+
+<p><strong>Description:</strong></p>
+
+<p style="margin-left:40px">This script returns the number of objects in a list. Can be used to know if a list is not empty.</p>

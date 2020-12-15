@@ -1,0 +1,359 @@
+<p>The Deathmatch Formula Parser extends the <a href="http://project-eternity-website.nanoapp.io/DisplayPage.php?PagePath=Core/Code/Formula Parser.html">Core Formula Parser</a> to allow it to access Map properties.</p>
+
+<p>Each expression is split&nbsp;on the period&nbsp;character (.) to detect each word.</p>
+
+<p>The only&nbsp;exception if the Player word, it needs to be followed by&nbsp;number, e.g.,&nbsp;Player1.SquadCount.</p>
+
+<p>If there are no period in the expression then nothing will be parsed and will return the word as is.</p>
+
+<p>If there is a single period then it can be one of the following:</p>
+
+<ul>
+	<li><strong>Map/Game</strong>
+
+	<ul>
+		<li><strong>.Turn/GameTurn/TurnGame/BattleTurn/TurnBattle/MapTurn/TurnMap/PlayerTurn:</strong></li>
+	</ul>
+	</li>
+</ul>
+
+<p style="margin-left:120px">Returns the current game turn number.</p>
+
+<ul>
+	<li>
+	<ul>
+		<li><strong>.Phase/CurrentPhase/ActivePlayer/CurrentPlayer:</strong></li>
+	</ul>
+	</li>
+</ul>
+
+<p style="margin-left:120px">Return the current player number starting from 0. I.e., if used on the turn of Player 1, it will return 0</p>
+
+<p style="margin-left:120px">&nbsp;</p>
+
+<p style="margin-left:40px"><strong>Atk.UnitValue</strong></p>
+
+<p style="margin-left:80px">Can only be used during battle, returns a property from the attacking Unit.</p>
+
+<p style="margin-left:80px">UnitValue represent one of the words from the UnitValue section.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<p style="margin-left:40px"><strong>Def.UnitValue</strong></p>
+
+<p style="margin-left:80px">Can only be used during battle, returns a property from the defending Unit.</p>
+
+<p style="margin-left:80px">UnitValue represent one of the words from the UnitValue section.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<p style="margin-left:40px"><strong>Player.SquadCount/SquadCountAlive</strong></p>
+
+<p style="margin-left:80px">Returns the number of Squads alive for the corresponding player.</p>
+
+<hr />
+<h2>UnitVariable</h2>
+
+<p>The UnitVariable&nbsp;let you access the leader Unit of a Squad&nbsp;before accessing one of its properties with a&nbsp;UnitValue expression.</p>
+
+<p>E.g. Unit.Name.Getter-1.UnitValue or&nbsp;Unit.Name.Getter-1.MaxHP</p>
+
+<ul>
+	<li><strong>Name.NameValue</strong></li>
+</ul>
+
+<p style="margin-left:80px">Access an active Unit with the same name as NameValue</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>At/AtPosition</strong></li>
+</ul>
+
+<p style="margin-left:80px">Access the a Unit at the position asked using the syntax [X,Y] or return a Unit inside the zone defined by [X1,Y1]-[X2,Y2].</p>
+
+<p style="margin-left:80px">E.g. Unit.At.[5,6]-[5,9].UnitValue</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<hr />
+<h2>UnitValue</h2>
+
+<ul>
+	<li><strong>Position/Location</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the position of a Unit with the syntax [X,Y]. I.g. [5,6]</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>Name/LeaderName/CurrentLeaderName</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the name of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>HP/HitPoint/HitPoints</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the remaining HP&nbsp;of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>MaxHP/HPMax/MaxHitPoint/MaxHitPoints/HitPointMax/HitPointsMax</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Return the maximum HP&nbsp;of a Unit.</p>
+
+<p style="margin-left:80px">​​​​​​​Returns the name of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>EN/Energy</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the remaining EN&nbsp;of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>MaxEN/ENMax/MaxEnergy/EnergyMax</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the maximum EN&nbsp;of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>Armor</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the armor&nbsp;of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>Mobility</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the mobility of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>MaxMV/MV/MaxMovement/Movement</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the MV of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>Lv/Lvl/Level</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the level of the pilot of a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>MEL/Melee</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the MEL statistic&nbsp;of the pilot a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>RNG/Range</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the RNG statistic&nbsp;of the pilot a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>Def/Defense</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the DEF statistic&nbsp;of the pilot a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>SKL/Skill</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the SKL statistic&nbsp;of the pilot a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>EVA/Evasion</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the EVA statistic&nbsp;of the pilot a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>HIT</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Returns the HIT statistic&nbsp;of the pilot a Unit.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<hr />
+<h2>SquadVariable</h2>
+
+<p>The SquadValue returns a diffrent thing depending of the number of period in its expression.</p>
+
+<h3>First parameter:</h3>
+
+<ul>
+	<li><strong>Id</strong></li>
+</ul>
+
+<p style="margin-left:80px">Access the Squad with the corresponding Id.</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>Name</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Access the Squad with the corresponding Name.</p>
+
+<p style="margin-left:80px">E.g. Squad.Name.GetterTeam.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>At/AtPosition</strong></li>
+</ul>
+
+<p style="margin-left:80px">​​​​​​​Access the a Squad at the position asked using the syntax [X,Y] or return a Squad inside the zone defined by [X1,Y1]-[X2,Y2].</p>
+
+<p style="margin-left:80px">E.g. Unit.At.[5,6]-[5,9].UnitValue</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<h3>Second parameter:</h3>
+
+<ul>
+	<li><strong>Leader/CurrentLeader</strong></li>
+</ul>
+
+<p style="margin-left:80px">Access the Leader of the Squad. Must be followed by a UnitValue.</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.Leader.UnitValue.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>WingmanA/CurrentWingmanA/Wingman1/CurrentWingman1</strong></li>
+</ul>
+
+<p style="margin-left:80px">Access the WingmanA of the Squad. Must be followed by a UnitValue. Will crash if there is no WinmanA.</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.WingmanA.UnitValue.</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>WingmanB/CurrentWingmanB/Wingman2/CurrentWingman2</strong></li>
+</ul>
+
+<p style="margin-left:80px">Access the WingmanB&nbsp;of the Squad. Must be followed by a UnitValue. Will crash if there is no WinmanB.</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.WingmanB.UnitValue.</p>
+
+<ul>
+	<li>&nbsp;</li>
+	<li><strong>Position/Location</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the position of the squad with the syntax [X,Y].</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.Position</p>
+
+<ul>
+	<li>&nbsp;</li>
+	<li><strong>Name/SquadName</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the name of the Squad.</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.Name</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>LeaderName/CurrentLeaderName</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the name of the leader of the Squad.</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.LeaderName</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>WingmanAName/CurrentWingmanAName/Wingman1Name/CurrentWingman1Name</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the name of the wingman A of the Squad.</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.WingmanAName</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>WingmanBName/CurrentWingmanBName/Wingman2Name/CurrentWingman2Name</strong>​​​​​​​</li>
+</ul>
+
+<p style="margin-left:80px">Returns the name of the wingman B&nbsp;of the Squad.</p>
+
+<p>&nbsp;</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.WingmanBName</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>Id</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the id of the Squad.</p>
+
+<p style="margin-left:80px">E.g. Squad.At.[6,3].Id</p>
+
+<p style="margin-left:80px">&nbsp;</p>
+
+<ul>
+	<li><strong>Anything else</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the UnitValue of the leader of the Squad.</p>
+
+<p style="margin-left:80px">E.g. Squad.At.[6,3].Armor</p>
+
+<h3>Third parameter:</h3>
+
+<ul>
+	<li><strong>UnitValue</strong></li>
+</ul>
+
+<p style="margin-left:80px">Returns the UnitValue of the Unit selected by the second parameter.</p>
+
+<p style="margin-left:80px">E.g. Squad.Id.12345.Leader.HP.</p>
+
+<p style="margin-left:80px">&nbsp;</p>

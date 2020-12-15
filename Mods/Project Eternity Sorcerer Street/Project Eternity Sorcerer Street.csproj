@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1A6E23C4-0FFD-4C13-9FC5-3675F82F9251}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.GameScreens.SorcererStreetScreen</RootNamespace>
+    <AssemblyName>Project Eternity Sorcerer Street</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Mods\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Mods\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Acion Panels\Action Menu.cs" />
+    <Compile Include="Acion Panels\Battle\Attack Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Boosts Modifier Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Creature Modifier Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Enchant Modifier Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Item Modifier Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Item Selection Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Land Modifier Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Start Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Attack Animation Phase.cs" />
+    <Compile Include="Acion Panels\Player\Card Selection Phase.cs" />
+    <Compile Include="Acion Panels\Player\Confirm Creature Summon.cs" />
+    <Compile Include="Acion Panels\Player\Creature Card Selection Phase.cs" />
+    <Compile Include="Acion Panels\Player\Draw Card Phase.cs" />
+    <Compile Include="Acion Panels\Player\Gain Phase.cs" />
+    <Compile Include="Acion Panels\Player\Player Default.cs" />
+    <Compile Include="Acion Panels\Player\Refill Deck Phase.cs" />
+    <Compile Include="Acion Panels\Player\Roll Dice Phase.cs" />
+    <Compile Include="Acion Panels\Player\Spell Card Selection Phase.cs" />
+    <Compile Include="Acion Panels\Player\Player Actions.cs" />
+    <Compile Include="Acion Panels\Spells\Select Single Target.cs" />
+    <Compile Include="Acion Panels\Terrain\Choose Territory.cs" />
+    <Compile Include="Acion Panels\Terrain\Gate Commands.cs" />
+    <Compile Include="Acion Panels\Terrain\Help.cs" />
+    <Compile Include="Acion Panels\Terrain\Info.cs" />
+    <Compile Include="Acion Panels\Terrain\Options.cs" />
+    <Compile Include="Acion Panels\Terrain\Level Up Commands.cs" />
+    <Compile Include="Acion Panels\Terrain\ViewMap.cs" />
+    <Compile Include="Acion Panels\Terrain\End Player Phase.cs" />
+    <Compile Include="Animation Screen.cs" />
+    <Compile Include="Camera 3D.cs" />
+    <Compile Include="Card.cs" />
+    <Compile Include="Battle Context.cs" />
+    <Compile Include="Map 2D.cs" />
+    <Compile Include="Map 3D.cs" />
+    <Compile Include="Map Layer.cs" />
+    <Compile Include="Movement Algorithm.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Sorcerer Map.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sorcerer Street Unit.cs" />
+    <Compile Include="Terrains.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">
+      <Project>{f5cd64c0-abde-44c7-8af8-0a47164d5f69}</Project>
+      <Name>Project Eternity AI</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{EA7A4390-EEBB-43F1-BE86-33177B215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Constants\Project Eternity Constants.csproj">
+      <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
+      <Name>Project Eternity Constants</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
+      <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
+      <Name>Project Eternity Control Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
+      <Project>{7ee3c972-f915-4491-99a2-e654e634405f}</Project>
+      <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FMOD\FMOD.csproj">
+      <Project>{DFB48E6D-A44C-4784-89A3-86F21A108531}</Project>
+      <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
+      <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

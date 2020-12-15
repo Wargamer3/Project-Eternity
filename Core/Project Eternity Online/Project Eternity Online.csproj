@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B59FAA7C-E4DB-4E01-82FB-3C3CDA7EEBD7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.Core.Online</RootNamespace>
+    <AssemblyName>Project Eternity Online</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Core\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Core\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\Force Server Change Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Change Character Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Change Room Subtype Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Change Map Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Change Player Type Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Change Room Subtype Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Change Map Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Change Team Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Game Data Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Game Data Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Join Room Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Join Room Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Login Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Login Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Change Character Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Change Room Subtype Script Server .cs" />
+    <Compile Include="Commands\Game Commands\Change Map Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Change Player Type Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Change Team Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Connection Success Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Connection Success Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Join Room Failed Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Leave Room Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Login Success Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Player Left Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Room List Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Room List Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Start Game Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Create Room Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Create Room Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Join Room Remote Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Room List Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Send Room ID Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Client Is Ready Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Client Is Ready Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Server Is Ready Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Server Is Ready Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Transfer Room Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Transfer Room Script Server.cs" />
+    <Compile Include="Commands\Master Added Script Client.cs" />
+    <Compile Include="Commands\Master Added Script Server.cs" />
+    <Compile Include="Commands\Master List Script Client.cs" />
+    <Compile Include="Commands\Master List Script Server.cs" />
+    <Compile Include="Commands\Redirect Script Client.cs" />
+    <Compile Include="Commands\Redirect Script Server.cs" />
+    <Compile Include="Commands\Server Manager Added Script Client.cs" />
+    <Compile Include="Commands\Server Manager Added Script Server.cs" />
+    <Compile Include="IDataManager.cs" />
+    <Compile Include="Infrastructure\Client Group.cs" />
+    <Compile Include="Infrastructure\Client.cs" />
+    <Compile Include="Infrastructure\Master.cs" />
+    <Compile Include="Infrastructure\Server Manager.cs" />
+    <Compile Include="Infrastructure\Server.cs" />
+    <Compile Include="IOnlineConnection.cs" />
+    <Compile Include="IOnlineGame.cs" />
+    <Compile Include="IRoomInformations.cs" />
+    <Compile Include="Online Connection.cs" />
+    <Compile Include="Online Reader.cs" />
+    <Compile Include="Online Script Holder.cs" />
+    <Compile Include="Online Script.cs" />
+    <Compile Include="Online Configuration.cs" />
+    <Compile Include="Online Writer.cs" />
+    <Compile Include="PlayerPOCO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

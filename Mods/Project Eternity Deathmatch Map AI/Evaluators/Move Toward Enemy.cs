@@ -1,0 +1,127 @@
+﻿using System;
+using System.IO;
+using System.ComponentModel;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
+using ProjectEternity.Core.AI;
+using ProjectEternity.Core.Units;
+using ProjectEternity.GameScreens.DeathmatchMapScreen;
+
+namespace ProjectEternity.AI.DeathmatchMapScreen
+{
+    public sealed partial class DeathmatchScriptHolder
+    {
+        /// <summary>
+        /// Move before attacking an enemy with a Post movement Attack
+        /// </summary>
+        public class MoveTowardEnemy : DeathmatchScript, ScriptEvaluator
+        {
+            private bool _AttackAfterMoving;
+
+            public MoveTowardEnemy()
+                : base(150, 50, "Move Toward Enemy", new string[0], new string[1] { "Enemy" })
+            {
+                _AttackAfterMoving = true;
+            }
+
+            public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
+            {
+                StartMovement();
+                Result = new List<object>();
+                IsCompleted = true;
+                if (_AttackAfterMoving)
+                {
+                    Info.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAIAttackBehavior(Info.Map, Info.ActiveSquad, Info.Map.ActivePlayerIndex, (Tuple<int, int>)ArrayReferences[0].ReferencedScript.GetContent()));
+                    IsCompleted = false;
+                    Result = new List<object>() { "break" };
+                }
+            }
+
+            private void StartMovement()
+            {
+                Tuple<int, int> Target = (Tuple<int, int>)ArrayReferences[0].ReferencedScript.GetContent();
+                Squad TargetSquad = Info.Map.ListPlayer[Target.Item1].ListSquad[Target.Item2];
+
+                Unit CurrentActiveUnit = Info.ActiveSquad.CurrentLeader;
+                Vector3 ActiveSquadPosition = Info.ActiveSquad.Position;
+
+                //Define the minimum and maximum value of the attack range.
+                int MinRange = Info.ActiveSquad.CurrentLeader.CurrentAttack.RangeMinimum;
+                int MaxRange = Info.ActiveSquad.CurrentLeader.CurrentAttack.RangeMaximum;
+                if (MaxRange > 1)
+                    MaxRange += CurrentActiveUnit.Boosts.RangeModifier;
+
+                //Select a target.
+                Info.Map.TargetPlayerIndex = Target.Item1;
+                Info.Map.TargetSquadIndex = Target.Item2;
+                float DistanceUnit = Math.Abs(ActiveSquadPosition.X - TargetSquad.X) + Math.Abs(ActiveSquadPosition.Y - TargetSquad.Y);
+                //Move to be in range.
+
+                List<Vector3> ListRealChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                for (int M = 0; M < ListRealChoice.Count; M++)
+                {//Remove every MV that would make it impossible to attack.
+                    float Distance = Math.Abs(ListRealChoice[M].X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Y - TargetSquad.Y);
+                    //Check if you can attack it if you moved.
+                    if (Distance < MinRange || Distance > MaxRange)
+                        ListRealChoice.RemoveAt(M--);
+                }
+
+                //Must find a spot to move if got there, just to make sure it won't crash in case of logic error.
+                if (ListRealChoice.Count != 0)
+                {
+                    int Choice = RandomHelper.Next(ListRealChoice.Count);
+
+                    //Movement initialisation.
+                    Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad);
+
+                    //Prepare the Cursor to move.
+                    Info.Map.CursorPosition.X = ListRealChoice[Choice].X;
+                    Info.Map.CursorPosition.Y = ListRealChoice[Choice].Y;
+                    Info.ActiveSquad.SetPosition(ListRealChoice[Choice]);
+
+                    Info.Map.FinalizeMovement(Info.ActiveSquad, (int)Info.Map.GetTerrain(Info.ActiveSquad).MovementCost);
+                }
+                else
+                {
+                    //Something is blocking the path.
+                    Info.Map.FinalizeMovement(Info.ActiveSquad, 1);
+                }
+            }
+
+            public override void Load(BinaryReader BR)
+            {
+                base.Load(BR);
+
+                _AttackAfterMoving = BR.ReadBoolean();
+            }
+
+            public override void Save(BinaryWriter BW)
+            {
+                base.Save(BW);
+
+                BW.Write(_AttackAfterMoving);
+            }
+
+            public override AIScript CopyScript()
+            {
+                return new MoveTowardEnemy();
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute(""),
+            DefaultValueAttribute(true)]
+            public bool AttackAfterMoving
+            {
+                get
+                {
+                    return _AttackAfterMoving;
+                }
+                set
+                {
+                    _AttackAfterMoving = value;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7C11554E-4976-4E8D-8893-595ADF1C8E68}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectEternity.UnitTests</RootNamespace>
+    <AssemblyName>Project Eternity Unit Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="Adventure Tests\Explosion Tests.cs" />
+    <Compile Include="Adventure Tests\Adventure Map Tests.cs" />
+    <Compile Include="Adventure Tests\Collision Zone Tests.cs" />
+    <Compile Include="Conquest Tests\Animation Screens Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Dodge\All Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Dodge\Battle Behavior Tests Base Class.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Dodge\Focus Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Dodge\Spread Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Block\All Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Block\Battle Behavior Tests Base Class.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Block\Focus Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Block\Spread Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Counterattack\All Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Counterattack\Battle Behavior Tests Base Class.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Counterattack\Focus Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Always Counterattack\Spread Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Simple Counterattack\All Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Simple Counterattack\Battle Behavior Tests Base Class.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Simple Counterattack\Focus Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Simple Counterattack\Spread Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Smart Counterattack\Battle Behavior Tests Base Class.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Smart Counterattack\All Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Smart Counterattack\Spread Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Behavior\Smart Counterattack\Focus Battle Behavior Tests.cs" />
+    <Compile Include="Deathmatch Tests\Core Battle Effect Unit Tests.cs" />
+    <Compile Include="Deathmatch Tests\Battle Effect Unit Tests.cs" />
+    <Compile Include="Deathmatch Tests\Deathmatch Map Helper.cs" />
+    <Compile Include="Deathmatch Tests\Deathmatch Requirement Unit Tests.cs" />
+    <Compile Include="Deathmatch Tests\Core Requirement Unit Tests.cs" />
+    <Compile Include="Deathmatch Tests\AI Tests.cs" />
+    <Compile Include="Sorcerer Street Tests\Battle Effects Tests.cs" />
+    <Compile Include="Sorcerer Street Tests\Battle Tests.cs" />
+    <Compile Include="Sorcerer Street Tests\Map Tests.cs" />
+    <Compile Include="Unit Magic\Blank Timeline.cs" />
+    <Compile Include="Unit Magic\Animation Screens Tests.cs" />
+    <Compile Include="Unit Magic\Unit Magic Tests.cs" />
+    <Compile Include="Racing Tests.cs" />
+    <Compile Include="Deathmatch Tests\Deathmatch Requirement Integration Tests.cs" />
+    <Compile Include="Cutscene Unit Tests.cs" />
+    <Compile Include="Skills Unit Tests.cs" />
+    <Compile Include="GUI Unit Tests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Triple Thunder\Triple Thunder Magic Tests.cs" />
+    <Compile Include="Triple Thunder\Triple Thunder Tests.cs" />
+    <Compile Include="Attack Tests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Project Eternity AI\Project Eternity AI.csproj">
+      <Project>{F5CD64C0-ABDE-44C7-8AF8-0A47164D5F69}</Project>
+      <Name>Project Eternity AI</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297B027-A204-417E-89A0-5ED5A7F525D8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{EA7A4390-EEBB-43F1-BE86-33177B215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Constants\Project Eternity Constants.csproj">
+      <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
+      <Name>Project Eternity Constants</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Core AIs\Project Eternity Core AIs.csproj">
+      <Project>{ec194a36-1a2b-4fc7-b02f-9a7b784a6947}</Project>
+      <Name>Project Eternity Core AIs</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Core Effects\Project Eternity Core Effects.csproj">
+      <Project>{4443915c-152e-44f3-bd60-766080c0c0f0}</Project>
+      <Name>Project Eternity Core Effects</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Core Magic\Project Eternity Core Magic.csproj">
+      <Project>{7799963e-6a03-413b-954d-ff12d0104092}</Project>
+      <Name>Project Eternity Core Magic</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Core Scripts\Project Eternity Core Scripts.csproj">
+      <Project>{60ac9427-f1d2-4fb9-b470-87e3e56b763e}</Project>
+      <Name>Project Eternity Core Scripts</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
+      <Project>{7EE3C972-F915-4491-99A2-E654E634405F}</Project>
+      <Name>Project Eternity Cutscene</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{DD46B019-61BA-4F24-A7E1-EF212C27CDCE}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Magic\Project Eternity Magic.csproj">
+      <Project>{1283ea14-32a1-4d1e-a2af-f5b03823cb02}</Project>
+      <Name>Project Eternity Magic</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Editors\Project Eternity Animation Background Editor\Project Eternity Animation Background Editor.csproj">
+      <Project>{49E85ED4-0B63-47B0-B935-16B328EDEE45}</Project>
+      <Name>Project Eternity Animation Background Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Editors\Project Eternity Unit Normal Editor\Project Eternity Unit Normal Editor.csproj">
+      <Project>{110B472F-44EF-46D7-A59E-D2FF74E061C0}</Project>
+      <Name>Project Eternity Unit Normal Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Adventure Map\Project Eternity Adventure Map.csproj">
+      <Project>{5ffb04a9-36ba-4020-9fd9-de0d690c2925}</Project>
+      <Name>Project Eternity Adventure Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Battle Map Effects\Project Eternity Battle Map Effects.csproj">
+      <Project>{520F4163-583B-4C89-8491-8280A9AEA0CF}</Project>
+      <Name>Project Eternity Battle Map Effects</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Battle Map Scripts\Project Eternity Battle Map Scripts.csproj">
+      <Project>{c9dcc447-a1e1-45de-afdb-a3bd4f200f02}</Project>
+      <Name>Project Eternity Battle Map Scripts</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{D6FC98BD-A6EE-4223-B995-65299D714A4C}</Project>
+      <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Conquest Map\Project Eternity Conquest Map.csproj">
+      <Project>{E91E70D4-DA94-403B-952B-8E3EB630E8E0}</Project>
+      <Name>Project Eternity Conquest Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Deathmatch Effects\Project Eternity Deathmatch Effects.csproj">
+      <Project>{2adc67e7-75ea-4cc1-8e68-988928fb8497}</Project>
+      <Name>Project Eternity Deathmatch Effects</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Deathmatch Map AI\Project Eternity Deathmatch Map AI.csproj">
+      <Project>{c6ff4abd-9427-4002-98f9-eeb2f75645bf}</Project>
+      <Name>Project Eternity Deathmatch Map AI</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Deathmatch Map Scripts\Project Eternity Deathmatch Map Scripts.csproj">
+      <Project>{ec6eb478-22e3-46ef-ad91-e801a7611ac7}</Project>
+      <Name>Project Eternity Deathmatch Map Scripts</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Deathmatch Map Timelines\Project Eternity Deathmatch Map Timelines.csproj">
+      <Project>{5f05f815-0a6b-43e7-a254-39d0409bfe8e}</Project>
+      <Name>Project Eternity Deathmatch Map Timelines</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Deathmatch Map\Project Eternity Deathmatch Map.csproj">
+      <Project>{24157076-0F9F-4FAB-8E32-76B4320C28B9}</Project>
+      <Name>Project Eternity Deathmatch Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Racing\Project Eternity Racing.csproj">
+      <Project>{AB427185-63C7-4FAA-8622-2D960B773310}</Project>
+      <Name>Project Eternity Racing</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Sorcerer Street Effects\Project Eternity Sorcerer Street Effects.csproj">
+      <Project>{722f9b71-da49-433c-b048-267a84b270e4}</Project>
+      <Name>Project Eternity Sorcerer Street Effects</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Sorcerer Street\Project Eternity Sorcerer Street.csproj">
+      <Project>{1a6e23c4-0ffd-4c13-9fc5-3675f82f9251}</Project>
+      <Name>Project Eternity Sorcerer Street</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Triple Thunder Effects\Project Eternity Triple Thunder Effects.csproj">
+      <Project>{38aa67e8-4515-4b65-acc0-6ddeb7e263ad}</Project>
+      <Name>Project Eternity Triple Thunder Effects</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Mods\Project Eternity Triple Thunder\Project Eternity Triple Thunder.csproj">
+      <Project>{D2AFF601-4DF2-466B-91EB-3AA010668360}</Project>
+      <Name>Project Eternity Triple Thunder</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity GUI\Project Eternity GUI.csproj">
+      <Project>{cdaa3ab3-e13b-430f-bccc-31a7ce9e197f}</Project>
+      <Name>Project Eternity GUI</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Roslyn\Roslyn.csproj">
+      <Project>{4eeea09d-cfbc-43a7-9491-1d7738fc49e7}</Project>
+      <Name>Roslyn</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Units\Project Eternity Unit Conquest\Project Eternity Unit Conquest.csproj">
+      <Project>{EF17745E-1116-499C-94D0-5D3607EE8FA4}</Project>
+      <Name>Project Eternity Unit Conquest</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Units\Project Eternity Unit Magic\Project Eternity Unit Magic.csproj">
+      <Project>{4FE19DB0-80C0-443D-BDB4-9D715F122C70}</Project>
+      <Name>Project Eternity Unit Magic</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Units\Project Eternity Unit Normal\Project Eternity Unit Normal.csproj">
+      <Project>{FBED9B93-209A-4322-812E-66BA8516AE18}</Project>
+      <Name>Project Eternity Unit Normal</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd "$(SolutionDir)"
+xcopy /Y /S "Project Eternity\Project Eternity\bin\Debug\*" "$(TargetDir)" /EXCLUDE:TestsExclusion.txt</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

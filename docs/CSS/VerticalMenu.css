@@ -1,0 +1,90 @@
+ul.VerticalMenu
+{
+    float: left;
+    background:#fff;
+    width:250px;
+    margin:5px;
+    padding:0;
+    list-style: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px; 
+    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    box-shadow:  1px 1px 10px rgba(0, 0, 0, 0.1);   
+    z-index: 1;
+}
+
+ul.VerticalMenu li
+{
+	height : 50px;
+}
+
+ul.VerticalMenu li ul
+{
+	display : none;
+	position : relative;
+	top : -50px;
+	right : -250px;
+	background : #fff;
+	width : 250px;
+	padding-left : 0px;
+}
+
+.VerticalMenu li a
+{
+    width:225px;
+    padding-left:20px;
+    height:50px;
+    line-height:50px;
+    display:block;
+    overflow:hidden;
+    position:relative;
+    text-decoration:none;
+    text-transform:uppercase;
+    font-size:14px;
+    color:#686868;    
+    -webkit-transition:all 0.2s linear;
+    -moz-transition:all 0.2s linear;
+    -o-transition:all 0.2s linear;
+    transition:all 0.2s linear;         
+}
+ 
+.VerticalMenu li a:hover
+{
+    background:#efefef;
+}
+    
+.VerticalMenu li:first-child a:hover, .form li:first-child a
+{
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+}
+
+.VerticalMenu li:last-child a:hover, .form li:last-child a
+{
+    -webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+}
+
+.VerticalMenu li a:hover i
+{
+    color:#ea4f35;
+}
+
+ul.VerticalMenu li:hover ul
+{
+	display : block
+}
+
+ul.VerticalMenu li:hover ul li ul
+{
+	display : none;
+}
+
+ul.VerticalMenu li ul li:hover ul
+{
+	display : block;
+}
