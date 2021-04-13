@@ -1,3 +1,25 @@
+#main-content {
+	justify-content: center;
+	margin: auto;
+	margin-top: 2vh;
+	padding: 16px;
+	width: 80vw;
+}
+
+.resource-header, .about-header {
+	position: relative;
+	border-top: solid 4px #a63446;
+	border-bottom: solid 4px #a63446;
+	font-size: 32px;
+	margin-top: 2vh;
+}
+
+span {
+	padding: 10px 20px;
+	z-index: 1;
+}
+
+
 /********************************
 *
 *
@@ -5,20 +27,26 @@
 *
 *
 ********************************/
-.indexTable
-{
-	display : block;
-	width : 100%;
-	border-spacing : 20px;
-	table-layout : fixed;
+.indexTable {
+	display: grid;
+	border-spacing: 20px;
+	table-layout: fixed;
+	justify-content: center;
 }
 
 .indexTable td
 {
-	padding : 0px;
-	height : 226px;
-	width: 20%;
-	background-color : #D7D7D7;
+	padding: 20px;
+	margin-top: 20px;
+	border: 4px solid #1e1c1c;
+	width: 20vw;
+	background-color : #131314;
+}
+
+td a {
+	text-decoration: none;
+	font-weight: bold;
+	color: inherit;
 }
 
 	
