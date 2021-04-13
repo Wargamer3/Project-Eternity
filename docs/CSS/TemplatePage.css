@@ -1,15 +1,27 @@
 header
 {
-    width : 100%;
+    width : 100vw;
 }
 
 ul {
 	list-style : none;
 }
 
+div {
+	display: block;
+}
+
+
+* {
+	box-sizing: border-box;
+}
+
 body {
 	margin: 0px;
-	background-color : #DFDFDF;
+	background-color : #505052;
+	height: 100vh;
+	font-family: 'Raleway', sans-serif;
+	color: #ffffff;
 }
 
 /************************************************
@@ -21,36 +33,38 @@ body {
 *************************************************/
 
 
-#titre_logo
+.title {
+	margin: auto;
+	width: 100vw;
+	display: flex;
+	background-color: #12132a;
+	box-shadow: 0px 0px 5px 0px #9a79c8;
+}
+
+#title_logo
 {
     display: inline-block; 
 	position: relative;
-	width: 160px;
 	border: 0px solid black;
 	vertical-align: top;
 	padding-left: 5%;
 }
 
-#titre_principal
+#title_principal
 {
-	margin-top : -155px;
-	padding-bottom : 40px;
-	padding-top: 40px;
-	padding-left: 150px;
+	padding-left: 5vw;
+	padding-top: 10px;
 	-webkit-box-sizing: content-box;
 	-moz-box-sizing: content-box;
 	box-sizing: content-box;
 	border: none;
-	font: normal normal bold 40px/normal "wire-one", Helvetica, sans-serif;
-	-o-text-overflow: clip;
-	text-overflow: clip;
+	font: normal normal bold 16px/normal "wire-one", Helvetica, sans-serif;
 	text-shadow: 0px 16px 3px #8F8F8F;
 }
 
-#titre_principal h1 {
+#title_principal h1 {
 	color: white;
-	font-size: 39px;
-	padding-left : 6%;
+	font-size: 32px;
 }
 
 
