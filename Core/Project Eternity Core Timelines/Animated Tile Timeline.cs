@@ -278,9 +278,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     new Rectangle(0, 0, ExtraFilling + AnimationStart, ActiveSprite.Height), Color.White, 0,
                         new Vector2(0, Origin.Y),
                     new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect, DrawingDepth);
-                
+
                 int RepeatX = _MaxWidth / ActiveSprite.Width - 1;
-                g.Draw(ActiveSprite, new Vector2(StartX - RepeatX * FinalSpriteWidth, Position.Y),
+                g.Draw(ActiveSprite, new Vector2(StartX - RepeatX * FinalSpriteWidth + AnimationStart * ScaleFactor.X, Position.Y),
                     new Rectangle(AnimationStart, 0, ActiveSprite.Width - AnimationStart, ActiveSprite.Height), Color.White, 0,
                         new Vector2(0, Origin.Y),
                     new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect, DrawingDepth);
@@ -288,20 +288,20 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             else
             {
                 int AnimationEnd = ActiveSprite.Width - AnimationStart;
-                StartX = Position.X - OffsetX - ExtraFilling - AnimationStart + ActiveSprite.Width;
+                StartX = Position.X - (OffsetX + ExtraFilling + AnimationStart - ActiveSprite.Width) * ScaleFactor.X;
 
-                g.Draw(ActiveSprite, new Vector2(Position.X + (ActiveSprite.Width - ExtraFilling) - OffsetX - AnimationStart + ActiveSprite.Width,  Position.Y),
+                g.Draw(ActiveSprite, new Vector2(Position.X + (ActiveSprite.Width - ExtraFilling - OffsetX - AnimationStart + ActiveSprite.Width) * ScaleFactor.X,  Position.Y),
                     new Rectangle(0, 0, ExtraFilling - AnimationEnd, ActiveSprite.Height), Color.White, 0,
                         new Vector2(0, Origin.Y),
                     new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect, DrawingDepth);
 
 
-                g.Draw(ActiveSprite, new Vector2(Position.X - _MaxWidth - AnimationStart + ActiveSprite.Width, Position.Y),
+                g.Draw(ActiveSprite, new Vector2(Position.X - (_MaxWidth + AnimationStart - ActiveSprite.Width) * ScaleFactor.X, Position.Y),
                     new Rectangle(0, 0, ActiveSprite.Width, ActiveSprite.Height), Color.White, 0,
                         new Vector2(0, Origin.Y),
                     new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect, DrawingDepth);
 
-                g.Draw(ActiveSprite, new Vector2(Position.X - _MaxWidth, Position.Y),
+                g.Draw(ActiveSprite, new Vector2(Position.X - _MaxWidth * ScaleFactor.X, Position.Y),
                     new Rectangle(AnimationStart, 0, ActiveSprite.Width - AnimationStart, ActiveSprite.Height), Color.White, 0,
                         new Vector2(0, Origin.Y),
                     new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect, DrawingDepth);
