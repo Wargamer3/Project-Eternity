@@ -18,21 +18,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             SpriteSheetViewer.DicActiveSpriteSheetBitmap = new Dictionary<Tuple<int, int>, SpriteSheetTimeline>();
         }
 
-        public SpriteSheetHelper(string BitmapName)
-        {
-            if (SpriteSheetViewer != null)
-            {
-                ListViewItem NewListViewItem = new ListViewItem(BitmapName);
-                Texture2D NewTexture = SpriteSheetViewer.content.Load<Texture2D>("Animations/Sprite Sheets/" + BitmapName);
-                NewListViewItem.Tag = NewTexture;
-                SpriteSheetViewer.DicSpriteSheet.Add(Name, NewTexture);
-                lvSpriteSheets.Items.Add(NewListViewItem);
-
-                NewListViewItem.Selected = true;
-                NewListViewItem.Focused = true;
-            }
-        }
-
         private void btnConfirm_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;

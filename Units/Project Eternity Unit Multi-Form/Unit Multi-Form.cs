@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Text;
 using System.IO;
+using System.Text;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Units.Normal;
-using System.Collections.Generic;
-using ProjectEternity.Core.Item;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.Core.Units.MultiForm
 {
