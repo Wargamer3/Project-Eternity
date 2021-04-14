@@ -89,7 +89,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             SpriteSheetTimeline NewSpawnAnimatedBitmapEvent = new SpriteSheetTimeline(SpriteSheetName, SpriteSheet, SourceRectangle);
 
             NewSpawnAnimatedBitmapEvent.SpriteSheetHelperDialog = new SpriteSheetHelper();
-            NewSpawnAnimatedBitmapEvent.SpriteSheetHelperDialog.SpriteSheetViewer.Preload();
             NewSpawnAnimatedBitmapEvent.SpriteSheetHelperDialog.SpriteSheetViewer.DicSpriteSheet = new Dictionary<string, Texture2D>();
 
             ListViewItem NewListViewItem = new ListViewItem(SpriteSheetName);
