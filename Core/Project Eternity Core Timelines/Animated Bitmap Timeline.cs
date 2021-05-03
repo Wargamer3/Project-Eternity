@@ -184,6 +184,14 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 UpdateAnimationSprite(KeyFrame);
             }
+            else
+            {
+                Position = PositionOld;
+                ScaleFactor = ScaleFactorOld;
+                Angle = AngleOld;
+                Alpha = AlphaOld;
+                DrawingDepth = DrawingDepthOld;
+            }
 
             ActiveSprite.Update(ActiveSprite.FramesPerSecond * (1 / 60f));
             if (ActiveSprite.AnimationEnded)
@@ -237,7 +245,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             if (ScaleFactor.Y < 0)
                 ActiveEffect |= SpriteEffects.FlipVertically;
 
-            ActiveSprite.Draw(g, Position, Color.White, Angle, DrawingDepth, new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect);
+            ActiveSprite.Draw(g, Position, Color.FromNonPremultiplied(255, 255, 255, Alpha), Angle, DrawingDepth, new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect);
         }
 
         [Editor(typeof(AnimatedBitmapSelector), typeof(UITypeEditor)),
