@@ -157,7 +157,7 @@ namespace ProjectEternity.Core.Characters
         private SharableInt32 _EXP;
         public int EXP { set { _EXP.Value = value; } get { return _EXP.Value; } }
 
-        public int NextEXP { get { return 500 - EXP; } }// How long until a character levels up.
+        public int NextEXP { get { return 500; } }// How long until a character levels up.
         private SharableInt32 _Level;
         public int Level { set { _Level.Value = value; } get { return _Level.Value; } }// The characters current level. MEL, RNG, DEF, SKL, EVA, HIT, and SP all improve slightly with every level up.
 

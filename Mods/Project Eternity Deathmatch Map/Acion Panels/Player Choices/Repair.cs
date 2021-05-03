@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].HP < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].MaxHP)
                         {
                             Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].HealUnit(
-                                ((ActiveSquad.CurrentLeader.PilotLevel * 100) + (ActiveSquad.CurrentLeader.PilotSKL * 10)));
+                                (ActiveSquad.CurrentLeader.PilotLevel * 100) + (ActiveSquad.CurrentLeader.PilotSKL * 10));
 
                             CanRepair = true;
                         }
@@ -147,6 +147,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (CanRepair)
                     {
+                        ActiveSquad.CurrentLeader.PilotEXP += 25;
+                        if (ActiveSquad.CurrentLeader.PilotEXP >= ActiveSquad.CurrentLeader.PilotNextEXP)
+                            ActiveSquad.CurrentLeader.Pilot.LevelUp();
                         ActiveSquad.EndTurn();
                         RemoveAllSubActionPanels();
                     }
