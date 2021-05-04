@@ -232,10 +232,10 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                     ActiveAttack.SaveItem(BW);
                 }
 
-                BW.Write(frmAttacks.ListAttack[A].Animations.Count);
-                for (int An = 0; An < frmAttacks.ListAttack[A].Animations.Count; ++An)
+                BW.Write(frmAttacks.ListAttack[A].Animations[0].Animations.Count);
+                for (int An = 0; An < frmAttacks.ListAttack[A].Animations[0].Animations.Count; ++An)
                 {
-                    BW.Write(frmAttacks.ListAttack[A].Animations[An].AnimationName);
+                    frmAttacks.ListAttack[A].Animations[0].Animations[An].Save(BW);
                 }
             }
 
@@ -547,7 +547,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 ExportIniFile.AddValue("Attacks", "Attack " + A, frmAttacks.ListAttack[A].FullName);
                 for (int An = 0; An < frmAttacks.ListAttack[A].Animations.Count; ++An)
                 {
-                    ExportIniFile.AddValue("Attack Animations", "Attack " + A + " Path " + An, frmAttacks.ListAttack[A].Animations[An].AnimationName);
+                    ExportIniFile.AddValue("Attack Animations", "Attack " + A + " Path " + An, frmAttacks.ListAttack[A].Animations[0].Animations[An].AnimationName);
                 }
             }
 

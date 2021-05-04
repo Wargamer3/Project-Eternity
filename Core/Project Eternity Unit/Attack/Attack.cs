@@ -22,237 +22,6 @@ namespace ProjectEternity.Core.Attacks
 
     public enum WeaponMAPProperties : byte {  Spread = 0, Direction = 1, Targeted = 2 };
 
-    public class AttackAnimations
-    {
-        public AnimationInfo[] ArrayAnimationPath;
-
-        public AnimationInfo Start { get { return ArrayAnimationPath[0]; } set { ArrayAnimationPath[0] = value; } }
-
-        public AnimationInfo EndHit { get { return ArrayAnimationPath[1]; } set { ArrayAnimationPath[1] = value; } }
-
-        public AnimationInfo EndMiss { get { return ArrayAnimationPath[2]; } set { ArrayAnimationPath[2] = value; } }
-
-        public AnimationInfo EndDestroyed { get { return ArrayAnimationPath[3]; } set { ArrayAnimationPath[3] = value; } }
-
-        public AnimationInfo EndBlocked { get { return ArrayAnimationPath[4]; } set { ArrayAnimationPath[4] = value; } }
-
-        public AnimationInfo EndParried { get { return ArrayAnimationPath[5]; } set { ArrayAnimationPath[5] = value; } }
-
-        public AnimationInfo EndShootDown { get { return ArrayAnimationPath[6]; } set { ArrayAnimationPath[6] = value; } }
-
-        public AnimationInfo EndNegated { get { return ArrayAnimationPath[7]; } set { ArrayAnimationPath[7] = value; } }
-
-        public AttackAnimations()
-        {
-            ArrayAnimationPath = new AnimationInfo[8];
-        }
-
-        public AnimationInfo this[int Index]
-        {
-            get
-            {
-                return ArrayAnimationPath[Index];
-            }
-            set
-            {
-                ArrayAnimationPath[Index] = value;
-            }
-        }
-
-        public int Count { get { return ArrayAnimationPath.Length; } }
-    }
-
-    public struct MAPAttackAttributes
-    {
-        public int Width;
-        public int Height;
-        public List<List<bool>> ListChoice; // When Directional, default direction is down.
-        public WeaponMAPProperties Property;
-        public bool FriendlyFire;
-        public int Delay;
-
-        public MAPAttackAttributes(BinaryReader BR)
-        {
-            Width = BR.ReadInt32();
-            Height = BR.ReadInt32();
-            ListChoice = new List<List<bool>>(Width * 2 + 1);
-            for (int X = 0; X < Width * 2 + 1; X++)
-            {
-                ListChoice.Add(new List<bool>(Height * 2 + 1));
-                for (int Y = 0; Y < Height * 2 + 1; Y++)
-                    ListChoice[X].Add(BR.ReadBoolean());
-            }
-
-            Property = (WeaponMAPProperties)BR.ReadByte();
-            FriendlyFire = BR.ReadBoolean();
-            Delay = BR.ReadInt32();
-        }
-
-        public bool CanAttackTarget(Vector3 StartPosition, Vector3 TargetPosition, int StartingMV, int FinishingMV)
-        {
-            int StartX = (int)StartPosition.X;
-            int StartY = (int)StartPosition.Y;
-            int TargetX = (int)TargetPosition.X;
-            int TargetY = (int)TargetPosition.Y;
-            
-            if (Property == WeaponMAPProperties.Spread)
-            {
-                for (int X = ListChoice.Count - 1; X >= 0; --X)
-                {
-                    for (int Y = ListChoice[X].Count - 1; Y >= 0; --Y)
-                    {
-                        //Not an active tile.
-                        if (!ListChoice[X][Y])
-                            continue;
-                        
-                        //Start a the cursor position.
-                        float PosX = StartX - Width + X;
-                        float PosY = StartY - Height + Y;
-
-                        //If a Unit is in range.
-                        if (PosX == TargetX && PosY == TargetY)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            #region Dirrection
-
-            else if (Property == WeaponMAPProperties.Direction)
-            {
-                if (GetTargetsDirectionalUp(StartPosition).Contains(TargetPosition))
-                    return true;
-
-                if (GetTargetsDirectionalDown(StartPosition).Contains(TargetPosition))
-                    return true;
-
-                if (GetTargetsDirectionalLeft(StartPosition).Contains(TargetPosition))
-                    return true;
-
-                if (GetTargetsDirectionalRight(StartPosition).Contains(TargetPosition))
-                    return true;
-            }
-
-            #endregion
-
-            else if (Property == WeaponMAPProperties.Targeted)
-            {
-                int DistanceX = Math.Abs(StartX - TargetX);
-                int DistanceY = Math.Abs(StartY - TargetY);
-                //If a Unit is in range.
-                if (DistanceX + Width >= StartingMV && DistanceX <= FinishingMV + Width &&
-                    DistanceY + Height >= StartingMV && DistanceY <= FinishingMV + Height)
-                {
-                    for (int X = ListChoice.Count - 1; X >= 0; --X)
-                    {
-                        for (int Y = ListChoice[X].Count - 1; Y >= 0; --Y)
-                        {
-                            //Not an active tile.
-                            if (!ListChoice[X][Y])
-                                continue;
-                            int DistanceCenterX = X - Width;
-                            int DistanceCenterY = Y - Height;
-
-                            if (DistanceX >= StartingMV + DistanceCenterX && DistanceX <= FinishingMV + DistanceCenterX &&
-                                DistanceY >= StartingMV + DistanceCenterY && DistanceY <= FinishingMV + DistanceCenterY)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public List<Vector3> GetTargetsDirectionalUp(Vector3 Position)
-        {
-            List<Vector3> AttackChoice = new List<Vector3>();
-
-            float PosX = Position.X - Width;
-            float PosY = Position.Y - 1;
-
-            for (int X = 0; X < ListChoice.Count; X++)
-            {
-                for (int Y = 0; Y < ListChoice[X].Count; Y++)
-                {
-                    if (ListChoice[X][Y])
-                    {
-                        AttackChoice.Add(new Vector3(PosX + X, PosY - Y, Position.Z));
-                    }
-                }
-            }
-
-            return AttackChoice;
-        }
-
-        public List<Vector3> GetTargetsDirectionalDown(Vector3 Position)
-        {
-            List<Vector3> AttackChoice = new List<Vector3>();
-
-            float PosX = Position.X - Width;
-            float PosY = Position.Y + 1;
-
-            for (int X = 0; X < ListChoice.Count; X++)
-            {
-                for (int Y = 0; Y < ListChoice[X].Count; Y++)
-                {
-                    if (ListChoice[X][Y])
-                    {
-                        AttackChoice.Add(new Vector3(PosX + X, PosY + Y, Position.Z));
-                    }
-                }
-            }
-
-            return AttackChoice;
-        }
-
-        public List<Vector3> GetTargetsDirectionalLeft(Vector3 Position)
-        {
-            List<Vector3> AttackChoice = new List<Vector3>();
-
-            float PosX = Position.X - 1;
-            float PosY = Position.Y - Width;
-
-            for (int X = 0; X < ListChoice.Count; X++)
-            {
-                for (int Y = 0; Y < ListChoice[X].Count; Y++)
-                {
-                    if (ListChoice[X][Y])
-                    {
-                        AttackChoice.Add(new Vector3(PosX - Y, PosY + X, Position.Z));
-                    }
-                }
-            }
-
-            return AttackChoice;
-        }
-
-        public List<Vector3> GetTargetsDirectionalRight(Vector3 Position)
-        {
-            List<Vector3> AttackChoice = new List<Vector3>();
-
-            float PosX = Position.X + 1;
-            float PosY = Position.Y - Width;
-
-            for (int X = 0; X < ListChoice.Count; X++)
-            {
-                for (int Y = 0; Y < ListChoice[X].Count; Y++)
-                {
-                    if (ListChoice[X][Y])
-                    {
-                        AttackChoice.Add(new Vector3(PosX + Y, PosY + X, Position.Z));
-                    }
-                }
-            }
-
-            return AttackChoice;
-        }
-    }
-
     public class Attack : ShopItem
     {
         public enum MinorAttributes { PostMovement, Beam, Assault, Status, IgnoreSizePenalty, CombinationAttack };
@@ -290,12 +59,13 @@ namespace ProjectEternity.Core.Attacks
         public Dictionary<string, char> DicTerrainAttribute;
 
         public MAPAttackAttributes MAPAttributes;
-        public readonly AttackAnimations Animations;
+        public readonly List<AttackContext> Animations;
         public readonly bool IsExternal;
 
         public Attack()
         {
-            Animations = new AttackAnimations();
+            Animations = new List<AttackContext>();
+            Animations.Add(new AttackContext());
             DicTerrainAttribute = new Dictionary<string, char>();
             DicTerrainAttribute.Add("Land", 'A');
             DicTerrainAttribute.Add("Air", 'A');
@@ -329,7 +99,7 @@ namespace ProjectEternity.Core.Attacks
 
         public Attack(string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
         {
-            Animations = new AttackAnimations();
+            Animations = new List<AttackContext>();
             IsExternal = true;
 
             FileStream FS = new FileStream("Content/Attacks/" + AttackPath + ".pew", FileMode.Open, FileAccess.Read);
@@ -344,7 +114,7 @@ namespace ProjectEternity.Core.Attacks
 
         public Attack(BinaryReader BR, string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
         {
-            Animations = new AttackAnimations();
+            Animations = new List<AttackContext>();
             IsExternal = false;
 
             Init(BR, AttackPath, DicRequirement, DicEffect);
@@ -506,6 +276,11 @@ namespace ProjectEternity.Core.Attacks
             {
                 return Convert.ToInt32(FormulaParser.ActiveParser.Evaluate(PowerFormula));
             }
+        }
+
+        public AttackAnimations GetAttackAnimations()
+        {
+            return Animations[0].Animations;
         }
 
         public override string ToString()

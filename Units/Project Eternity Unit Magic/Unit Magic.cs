@@ -190,10 +190,10 @@ namespace ProjectEternity.Units.Magic
                 SpellAttack.Ammo = 10;
                 SpellAttack.MaxAmmo = 10;
                 SpellAttack.ArrayAttackAttributes = new BaseAutomaticSkill[0];
-                SpellAttack.Animations[0] = new MagicAttackAnimationStartInfo("Default Animations/Idle", ActiveMagicSpell, GlobalProjectileContext, MagicProjectileParams.SharedParams);
+                SpellAttack.Animations[0].Animations[0] = new MagicAttackAnimationStartInfo("Default Animations/Idle", ActiveMagicSpell, GlobalProjectileContext, MagicProjectileParams.SharedParams);
                 for (int A = 1; A < SpellAttack.Animations.Count; ++A)
                 {
-                    SpellAttack.Animations[A] = new MagicAttackAnimationInfo("Default Animations/Attack", ActiveMagicSpell, GlobalProjectileContext, MagicProjectileParams.SharedParams);
+                    SpellAttack.Animations[0].Animations[A] = new MagicAttackAnimationInfo("Default Animations/Attack", ActiveMagicSpell, GlobalProjectileContext, MagicProjectileParams.SharedParams);
                 }
                 ListAttack.Add(SpellAttack);
             }

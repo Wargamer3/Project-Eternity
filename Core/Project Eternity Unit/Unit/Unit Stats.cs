@@ -193,12 +193,7 @@ namespace ProjectEternity.Core.Units
                 if (NewAttack.Pri == WeaponPrimaryProperty.PLA)
                     PLAAttack = A;
 
-                //Load Animation paths.
-                int AttackAnimationCount = BR.ReadInt32();
-                for (int An = 0; An < AttackAnimationCount; ++An)
-                {
-                    NewAttack.Animations[An] = new AnimationInfo(BR.ReadString());
-                }
+                NewAttack.Animations.Add(new AttackContext(BR));
                 ListAttack.Add(NewAttack);
             }
 
@@ -279,12 +274,10 @@ namespace ProjectEternity.Core.Units
                     if (ActiveAnimationField.Key.StartsWith(ActiveField.Key))
                     {
                         int An = Convert.ToInt32(ActiveAnimationField.Key.Substring(ActiveField.Key.Length + 5));
-                        NewAttack.Animations[An] = new AnimationInfo(ActiveField.Key);
+                        NewAttack.Animations[0].Animations[An] = new AnimationInfo(ActiveField.Key);
                     }
                 }
                 ListAttack.Add(NewAttack);
-
-                ++A;
             }
 
             foreach (KeyValuePair<string, string> ActiveField in UnitFile.ReadHeader("Animations"))

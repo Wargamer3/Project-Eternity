@@ -53,7 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animation Info.cs" />
-    <Compile Include="Attack.cs" />
+    <Compile Include="Attack\Attack Context.cs" />
+    <Compile Include="Attack\Attack.cs" />
+    <Compile Include="Attack\Attack Animations.cs" />
+    <Compile Include="Attack\MAP Attack Attributes.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Parts.cs" />
     <Compile Include="Effects.cs" />
@@ -63,10 +66,12 @@
     <Compile Include="Squad.cs" />
     <Compile Include="Standard Parts.cs" />
     <Compile Include="Map Components.cs" />
-    <Compile Include="Unit Stats.cs" />
-    <Compile Include="Unit Map.cs" />
-    <Compile Include="Unit.cs" />
+    <Compile Include="Unit\Stats Boosts.cs" />
+    <Compile Include="Unit\Unit Stats.cs" />
+    <Compile Include="Unit\Unit Map.cs" />
+    <Compile Include="Unit\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unit\Unit Animations.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\FMOD\FMOD.csproj">

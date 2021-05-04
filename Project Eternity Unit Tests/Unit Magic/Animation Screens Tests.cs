@@ -195,7 +195,7 @@ namespace ProjectEternity.UnitTests
 
             DummyAnimation.UpdateKeyFrame(0);
 
-            foreach (KeyValuePair<int, Timeline> ActiveExtraTimeline in DummySquad.CurrentLeader.ListAttack[1].Animations.ArrayAnimationPath[AnimationIndex].GetExtraTimelines(DummyAnimation))
+            foreach (KeyValuePair<int, Timeline> ActiveExtraTimeline in DummySquad.CurrentLeader.ListAttack[1].Animations[0].Animations.ArrayAnimationPath[AnimationIndex].GetExtraTimelines(DummyAnimation))
             {
                 DummyLayer.AddTimelineEvent(ActiveExtraTimeline.Key, ActiveExtraTimeline.Value);
             }

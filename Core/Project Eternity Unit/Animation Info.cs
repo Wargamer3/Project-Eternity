@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
 using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.Core.Units
@@ -20,6 +22,11 @@ namespace ProjectEternity.Core.Units
         public virtual Dictionary<int, Timeline> GetExtraTimelines(AnimationClass NewAnimation)
         {
             return new Dictionary<int, Timeline>();
+        }
+
+        public void Save(BinaryWriter BW)
+        {
+            BW.Write(AnimationName);
         }
     }
 }

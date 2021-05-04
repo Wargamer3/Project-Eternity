@@ -59,18 +59,23 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
         private void btnCreateAttack_Click(object sender, EventArgs e)
         {
+            if (lstAttackContexts.SelectedIndex <= -1)
+            {
+                return;
+            }
+
             Attack NewAttack = new Attack();
             NewAttack.ItemName = "New Item";
             NewAttack.FullName = "New Item";
 
-            NewAttack.Animations.Start = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/Start");
-            NewAttack.Animations.EndHit = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Hit");
-            NewAttack.Animations.EndMiss = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Miss");
-            NewAttack.Animations.EndDestroyed = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Destroyed");
-            NewAttack.Animations.EndBlocked = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Blocked");
-            NewAttack.Animations.EndParried = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Parried");
-            NewAttack.Animations.EndShootDown = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Shoot Down");
-            NewAttack.Animations.EndNegated = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Negated");
+            NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/Start");
+            NewAttack.Animations[0].Animations.EndHit = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Hit");
+            NewAttack.Animations[0].Animations.EndMiss = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Miss");
+            NewAttack.Animations[0].Animations.EndDestroyed = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Destroyed");
+            NewAttack.Animations[0].Animations.EndBlocked = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Blocked");
+            NewAttack.Animations[0].Animations.EndParried = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Parried");
+            NewAttack.Animations[0].Animations.EndShootDown = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Shoot Down");
+            NewAttack.Animations[0].Animations.EndNegated = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Negated");
 
             _ListAttack.Add(NewAttack);
             lstAttack.Items.Add(new ProjectEternityAttackEditor());
@@ -131,15 +136,6 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttacks));
         }
 
-        private void btnSelectAnimation_Click(object sender, EventArgs e)
-        {
-            if (lstAttack.SelectedIndex >= 0 && lstAttackAnimations.SelectedIndex >= 0)
-            {
-                ItemSelectionChoice = ItemSelectionChoices.Animation;
-                ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimations));
-            }
-        }
-
         private void lstAttack_SelectedIndexChanged(object sender, EventArgs e)
         {
             lstAttackAnimations.SelectedIndex = -1;
@@ -159,12 +155,36 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             }
         }
 
+        private void lstAttackContexts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void lstAttackAnimations_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstAttack.SelectedIndex >= 0 && lstAttackAnimations.SelectedIndex >= 0)
+            if (lstAttack.SelectedIndex >= 0 && lstAttackContexts.SelectedIndex >= 0 && lstAttackAnimations.SelectedIndex >= 0)
             {
-                txtAnimationName.Text = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackAnimations.SelectedIndex].AnimationName;
+                txtAnimationName.Text = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex].Animations[lstAttackAnimations.SelectedIndex].AnimationName;
             }
+        }
+
+        private void btnSelectAnimation_Click(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex >= 0 && lstAttackContexts.SelectedIndex >= 0 && lstAttackAnimations.SelectedIndex >= 0)
+            {
+                ItemSelectionChoice = ItemSelectionChoices.Animation;
+                ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimations));
+            }
+        }
+
+        private void cbUpgradeValues_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AttackUpgradesValueIndex = (byte)cbUpgradeValues.SelectedIndex;
+        }
+
+        private void cbUpgradeCost_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AttackUpgradesCostIndex = (byte)cbUpgradeCost.SelectedIndex;
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
@@ -188,14 +208,14 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                             }
                             Attack NewAttack = new Attack(Name, DicRequirement, DicEffect);
 
-                            NewAttack.Animations.Start = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/Start");
-                            NewAttack.Animations.EndHit = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Hit");
-                            NewAttack.Animations.EndMiss = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Miss");
-                            NewAttack.Animations.EndDestroyed = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Destroyed");
-                            NewAttack.Animations.EndBlocked = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Blocked");
-                            NewAttack.Animations.EndParried = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Parried");
-                            NewAttack.Animations.EndShootDown = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Shoot Down");
-                            NewAttack.Animations.EndNegated = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Negated");
+                            NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/Start");
+                            NewAttack.Animations[0].Animations.EndHit = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Hit");
+                            NewAttack.Animations[0].Animations.EndMiss = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Miss");
+                            NewAttack.Animations[0].Animations.EndDestroyed = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Destroyed");
+                            NewAttack.Animations[0].Animations.EndBlocked = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Blocked");
+                            NewAttack.Animations[0].Animations.EndParried = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Parried");
+                            NewAttack.Animations[0].Animations.EndShootDown = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Shoot Down");
+                            NewAttack.Animations[0].Animations.EndNegated = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Negated");
 
                             _ListAttack.Add(NewAttack);
                             lstAttack.Items.Add(Name);
@@ -204,21 +224,11 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
                     case ItemSelectionChoices.Animation:
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(19);
-                        _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackAnimations.SelectedIndex] = new Core.Units.AnimationInfo(Name);
+                        _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex].Animations[lstAttackAnimations.SelectedIndex] = new Core.Units.AnimationInfo(Name);
                         txtAnimationName.Text = Name;
                         break;
                 }
             }
-        }
-
-        private void cbUpgradeValues_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            AttackUpgradesValueIndex = (byte)cbUpgradeValues.SelectedIndex;
-        }
-
-        private void cbUpgradeCost_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            AttackUpgradesCostIndex = (byte)cbUpgradeCost.SelectedIndex;
         }
     }
 }
