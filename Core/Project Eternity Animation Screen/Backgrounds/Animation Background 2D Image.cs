@@ -20,6 +20,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             this.Path = Path;
             sprBackground = Content.Load<Texture2D>("Animations/Background Sprites/" + Path);
             SpriteCenter = new Vector2(sprBackground.Width / 2, sprBackground.Height / 2);
+            _RepeatXOffset = sprBackground.Width;
+            _RepeatYOffset = sprBackground.Height;
         }
 
         public AnimationBackground2DImage(ContentManager Content, BinaryReader BR)
@@ -58,40 +60,45 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override void Draw(CustomSpriteBatch g, float CameraX, float CameraY, int ScreenWidth, int ScreenHeight)
         {
-            bool RepatXIfOffscreen = false;
             float FinalX = SpriteCenter.X;
             if (_UseParallaxScrolling)
             {
-                if (RepatXIfOffscreen)
-                {
-                    FinalX += ((CurrentPosition.X - CameraX) * (1 - _Depth)) % ScreenWidth;
-                }
-                else
-                {
-                    FinalX += (CurrentPosition.X - CameraX) * (1 - _Depth);
-                }
+                FinalX += (CurrentPosition.X - CameraX) * (1 - _Depth);
             }
             else
-                FinalX += (CurrentPosition.X - CameraX) % ScreenWidth;
+            {
+                FinalX += (CurrentPosition.X - CameraX);
+            }
 
             float FinalY = SpriteCenter.Y;
             if (_UseParallaxScrolling)
-                FinalY += ((CurrentPosition.Y - CameraY) * (1 - _Depth));
+            {
+                FinalY += (CurrentPosition.Y - CameraY) * (1 - _Depth);
+            }
             else
-                FinalY += (CurrentPosition.Y - CameraY) % ScreenHeight;
+            {
+                FinalY += (CurrentPosition.Y - CameraY);
+            }
+
 
             int StartX = 0;
             int RepeatXNumber = 1;
             if (_RepeatX)
             {
+                FinalX %= _RepeatXOffset;
+                if (FinalX < 0)
+                    FinalX += _RepeatXOffset;
                 StartX = -1;
-                RepeatXNumber = (int)Math.Ceiling(ScreenWidth / (double)sprBackground.Width) + 1;
+                RepeatXNumber = (int)Math.Ceiling(ScreenWidth / (double)_RepeatXOffset) + 1;
             }
 
             int StartY = 0;
             int RepeatYNumber = 1;
             if (_RepeatY)
             {
+                FinalY %= _RepeatYOffset;
+                if (FinalY < 0)
+                    FinalY += _RepeatYOffset;
                 StartY = -1;
                 RepeatYNumber = (int)Math.Ceiling(ScreenHeight / (double)sprBackground.Height) + 1;
             }
@@ -116,7 +123,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     }
 
                     g.Draw(sprBackground,
-                        new Vector2(FinalX + X * sprBackground.Width, FinalY + Y * sprBackground.Height),
+                        new Vector2(FinalX + X * _RepeatXOffset, FinalY + Y * _RepeatYOffset),
                         null, _Color, 0, SpriteCenter, 1, FlipEffect, _Depth);
 
                     if (_FlipOnRepeatY)

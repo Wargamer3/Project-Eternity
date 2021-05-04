@@ -19,6 +19,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             this.Path = Path;
             BackgroundChain = new AnimationBackgroundObject2D(Content, Path);
+            _RepeatXOffset = BackgroundChain.sprBackground.Width;
+            _RepeatYOffset = BackgroundChain.sprBackground.Height;
         }
 
         public AnimationBackground2DImageComplex(ContentManager Content, BinaryReader BR)
@@ -68,20 +70,29 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             float FinalX = SpriteCenter.X;
             if (_UseParallaxScrolling)
+            {
                 FinalX += ((CurrentPosition.X - CameraX) * (1 - _Depth)) % ScreenWidth;
+            }
             else
-                FinalX += (CurrentPosition.X - CameraX) % ScreenWidth;
+            {
+                FinalX += (CurrentPosition.X - CameraX);
+            }
 
             float FinalY = SpriteCenter.Y;
             if (_UseParallaxScrolling)
                 FinalY += ((CurrentPosition.Y - CameraY) * (1 - _Depth));
             else
-                FinalY += (CurrentPosition.Y - CameraY) % ScreenHeight;
+            {
+                FinalY += (CurrentPosition.Y - CameraY);
+            }
 
             int StartX = 0;
             int RepeatXNumber = 1;
             if (_RepeatX)
             {
+                FinalX %= _RepeatXOffset;
+                if (FinalX < 0)
+                    FinalX += _RepeatXOffset;
                 StartX = -1;
                 RepeatXNumber = (int)Math.Ceiling(ScreenWidth / (double)BackgroundChain.sprBackground.Width) + 1;
             }
@@ -90,6 +101,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             int RepeatYNumber = 1;
             if (_RepeatY)
             {
+                FinalY %= _RepeatYOffset;
+                if (FinalY < 0)
+                    FinalY += _RepeatYOffset;
                 StartY = -1;
                 RepeatYNumber = (int)Math.Ceiling(ScreenHeight / (double)BackgroundChain.sprBackground.Height) + 1;
             }
@@ -113,7 +127,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                         FlipEffect |= SpriteEffects.FlipVertically;
                     }
 
-                    Vector2 FinalPos = new Vector2(FinalX + X * BackgroundChain.sprBackground.Width, FinalY + Y * BackgroundChain.sprBackground.Height);
+                    Vector2 FinalPos = new Vector2(FinalX + X * _RepeatXOffset, FinalY + Y * _RepeatYOffset);
                     g.Draw(BackgroundChain.sprBackground,
                         FinalPos,
                         null, _Color, 0, SpriteCenter, 1, FlipEffect, _Depth);

@@ -18,6 +18,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         protected float _Depth;
         protected bool _RepeatX;
         protected bool _RepeatY;
+        protected int _RepeatXOffset;
+        protected int _RepeatYOffset;
         protected bool _FlipOnRepeatX;
         protected bool _FlipOnRepeatY;
         protected Vector2 SpriteCenter;
@@ -67,6 +69,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             _RepeatX = BR.ReadBoolean();
             _RepeatY = BR.ReadBoolean();
+            _RepeatXOffset = BR.ReadInt32();
+            _RepeatYOffset = BR.ReadInt32();
             _FlipOnRepeatX = BR.ReadBoolean();
             _FlipOnRepeatY = BR.ReadBoolean();
             _Color = new Color(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), BR.ReadByte());
@@ -92,6 +96,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             BW.Write(_RepeatX);
             BW.Write(_RepeatY);
+            BW.Write(_RepeatXOffset);
+            BW.Write(_RepeatYOffset);
             BW.Write(_FlipOnRepeatX);
             BW.Write(_FlipOnRepeatY);
             BW.Write(_Color.R);
@@ -221,6 +227,34 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             set
             {
                 _RepeatY = value;
+            }
+        }
+
+        [CategoryAttribute("Background Attributes"),
+        DescriptionAttribute(".")]
+        public int RepeatXOffset
+        {
+            get
+            {
+                return _RepeatXOffset;
+            }
+            set
+            {
+                _RepeatXOffset = value;
+            }
+        }
+
+        [CategoryAttribute("Background Attributes"),
+        DescriptionAttribute(".")]
+        public int RepeatYOffset
+        {
+            get
+            {
+                return _RepeatYOffset;
+            }
+            set
+            {
+                _RepeatYOffset = value;
             }
         }
 
