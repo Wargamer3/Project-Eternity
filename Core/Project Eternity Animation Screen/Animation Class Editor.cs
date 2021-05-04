@@ -206,7 +206,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 if (ActiveLayer.ListActiveMarker[M].Sprite != null)
                 {
                     g.Draw(ActiveLayer.ListActiveMarker[M].Sprite, new Vector2(ActiveLayer.ListActiveMarker[M].Position.X, ActiveLayer.ListActiveMarker[M].Position.Y),
-                        null, Color.White, 0, new Vector2(ActiveLayer.ListActiveMarker[M].Sprite.Width / 2, ActiveLayer.ListActiveMarker[M].Sprite.Height / 2), ActiveLayer.ListActiveMarker[M].ScaleFactor, SpriteEffects.None, 1);
+                        null, Color.White, ActiveLayer.ListActiveMarker[M].Angle, new Vector2(ActiveLayer.ListActiveMarker[M].Sprite.Width / 2, ActiveLayer.ListActiveMarker[M].Sprite.Height / 2),
+                        ActiveLayer.ListActiveMarker[M].ScaleFactor, SpriteEffects.None, ActiveLayer.ListActiveMarker[M].DrawingDepth);
                 }
             }
 
