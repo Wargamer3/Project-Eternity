@@ -139,15 +139,30 @@ namespace ProjectEternity.Core.Item
             if (CurrentSkillLevel.ActivationsCount == 0)
                 return;
 
+            BaseSkillActivation SkillActivation = null;
             for (int A = 0; A < CurrentSkillLevel.ListActivation.Count; A++)
             {
-                bool HasActivated = CurrentSkillLevel.ListActivation[A].Activate(SkillRequirementToActivate, Name);
+                bool HasActivated = CurrentSkillLevel.ListActivation[A].CanActivate(SkillRequirementToActivate, Name);
 
                 if (HasActivated)
                 {
+                    if (CurrentSkillLevel.ListActivation[A].Weight == -1)
+                    {
+                        CurrentSkillLevel.ListActivation[A].Activate(Name);
+                    }
+                    else if (CurrentSkillLevel.ListActivation[A] == null || CurrentSkillLevel.ListActivation[A].Weight > SkillActivation.Weight)
+                    {
+                        SkillActivation = CurrentSkillLevel.ListActivation[A];
+                    }
+
                     if (CurrentSkillLevel.ActivationsCount > 0)
                         CurrentSkillLevel.ActivationsCount--;
                 }
+            }
+
+            if (SkillActivation != null)
+            {
+                SkillActivation.Activate(Name);
             }
         }
     }

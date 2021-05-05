@@ -10,7 +10,9 @@ namespace ProjectEternity.Core.Item
         public List<BaseEffect> ListEffect;//List of Effect to execute once activated.
         public List<List<string>> ListEffectTarget;//List activation to use for each effect, one activation per effect.
         public List<List<AutomaticSkillTargetType>> ListEffectTargetReal;//List activation to use for each effect, one activation per effect.
+
         private byte _ActivationPercentage;
+        private int _Weight;
 
         public BaseSkillActivation()
         {
@@ -19,6 +21,7 @@ namespace ProjectEternity.Core.Item
             ListEffectTarget = new List<List<string>>();
             ListEffectTargetReal = new List<List<AutomaticSkillTargetType>>();
             _ActivationPercentage = 100;
+            _Weight = -1;
         }
 
         public BaseSkillActivation(BaseSkillActivation Clone)
@@ -58,6 +61,7 @@ namespace ProjectEternity.Core.Item
         public BaseSkillActivation(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
         {
             ActivationPercentage = BR.ReadByte();
+            _Weight = BR.ReadInt32();
 
             //Requirements
             int ListRequirementCount = BR.ReadInt32();
@@ -92,7 +96,7 @@ namespace ProjectEternity.Core.Item
             }
         }
 
-        public bool Activate(string SkillRequirementToActivate, string SkillName)
+        public bool CanActivate(string SkillRequirementToActivate, string SkillName)
         {
             bool CanActivate = true;
             //Check if you can attack with ActivationPercentage.
@@ -127,9 +131,24 @@ namespace ProjectEternity.Core.Item
             return CanActivate;
         }
 
+        public void Activate(string SkillName)
+        {
+            for (int E = 0; E < ListEffect.Count; E++)
+            {
+                foreach (AutomaticSkillTargetType ActiveActivation in ListEffectTargetReal[E])
+                {
+                    if (ActiveActivation.CanExecuteEffectOnTarget(ListEffect[E]))
+                    {
+                        ActiveActivation.ExecuteAndAddEffectToTarget(ListEffect[E], SkillName);
+                    }
+                }
+            }
+        }
+
         public void Save(BinaryWriter BW)
         {
             BW.Write(ActivationPercentage);
+            BW.Write(_Weight);
 
             //Activations.
             BW.Write(ListRequirement.Count);
@@ -159,6 +178,14 @@ namespace ProjectEternity.Core.Item
         {
             get { return _ActivationPercentage; }
             set { _ActivationPercentage = value; }
+        }
+
+        [CategoryAttribute("Activation Attributes"),
+        DescriptionAttribute(".")]
+        public int Weight
+        {
+            get { return _Weight; }
+            set { _Weight = value; }
         }
     }
 }

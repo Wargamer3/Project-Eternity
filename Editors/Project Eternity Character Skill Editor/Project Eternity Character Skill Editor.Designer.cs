@@ -78,6 +78,8 @@
             this.gbLevelDetails = new System.Windows.Forms.GroupBox();
             this.txtUpgradePrice = new System.Windows.Forms.NumericUpDown();
             this.lblUpgradePrice = new System.Windows.Forms.Label();
+            this.lblActivationWeight = new System.Windows.Forms.Label();
+            this.txtActivationWeight = new System.Windows.Forms.NumericUpDown();
             this.gbLevels.SuspendLayout();
             this.gbRequirements.SuspendLayout();
             this.gbLifetimeTypes.SuspendLayout();
@@ -92,6 +94,7 @@
             this.gbEffects.SuspendLayout();
             this.gbLevelDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtUpgradePrice)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtActivationWeight)).BeginInit();
             this.SuspendLayout();
             // 
             // gbLevels
@@ -477,6 +480,8 @@
             // 
             // gbActivations
             // 
+            this.gbActivations.Controls.Add(this.lblActivationWeight);
+            this.gbActivations.Controls.Add(this.txtActivationWeight);
             this.gbActivations.Controls.Add(this.lblActivationChance);
             this.gbActivations.Controls.Add(this.txtActivationChance);
             this.gbActivations.Controls.Add(this.lstActivations);
@@ -485,7 +490,7 @@
             this.gbActivations.Enabled = false;
             this.gbActivations.Location = new System.Drawing.Point(199, 27);
             this.gbActivations.Name = "gbActivations";
-            this.gbActivations.Size = new System.Drawing.Size(181, 177);
+            this.gbActivations.Size = new System.Drawing.Size(181, 201);
             this.gbActivations.TabIndex = 6;
             this.gbActivations.TabStop = false;
             this.gbActivations.Text = "Activations";
@@ -523,7 +528,7 @@
             // 
             // btnRemoveActivation
             // 
-            this.btnRemoveActivation.Location = new System.Drawing.Point(100, 146);
+            this.btnRemoveActivation.Location = new System.Drawing.Point(100, 172);
             this.btnRemoveActivation.Name = "btnRemoveActivation";
             this.btnRemoveActivation.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveActivation.TabIndex = 7;
@@ -533,7 +538,7 @@
             // 
             // btnAddActivation
             // 
-            this.btnAddActivation.Location = new System.Drawing.Point(6, 146);
+            this.btnAddActivation.Location = new System.Drawing.Point(6, 172);
             this.btnAddActivation.Name = "btnAddActivation";
             this.btnAddActivation.Size = new System.Drawing.Size(75, 23);
             this.btnAddActivation.TabIndex = 6;
@@ -610,9 +615,9 @@
             // 
             this.gbLevelDetails.Controls.Add(this.txtUpgradePrice);
             this.gbLevelDetails.Controls.Add(this.lblUpgradePrice);
-            this.gbLevelDetails.Location = new System.Drawing.Point(199, 210);
+            this.gbLevelDetails.Location = new System.Drawing.Point(199, 248);
             this.gbLevelDetails.Name = "gbLevelDetails";
-            this.gbLevelDetails.Size = new System.Drawing.Size(181, 157);
+            this.gbLevelDetails.Size = new System.Drawing.Size(181, 119);
             this.gbLevelDetails.TabIndex = 12;
             this.gbLevelDetails.TabStop = false;
             this.gbLevelDetails.Text = "Level Details";
@@ -633,6 +638,33 @@
             this.lblUpgradePrice.Size = new System.Drawing.Size(77, 13);
             this.lblUpgradePrice.TabIndex = 0;
             this.lblUpgradePrice.Text = "Upgrade price:";
+            // 
+            // lblActivationWeight
+            // 
+            this.lblActivationWeight.AutoSize = true;
+            this.lblActivationWeight.Location = new System.Drawing.Point(7, 148);
+            this.lblActivationWeight.Name = "lblActivationWeight";
+            this.lblActivationWeight.Size = new System.Drawing.Size(41, 13);
+            this.lblActivationWeight.TabIndex = 15;
+            this.lblActivationWeight.Text = "Weight";
+            // 
+            // txtActivationWeight
+            // 
+            this.txtActivationWeight.Location = new System.Drawing.Point(106, 146);
+            this.txtActivationWeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.txtActivationWeight.Name = "txtActivationWeight";
+            this.txtActivationWeight.Size = new System.Drawing.Size(69, 20);
+            this.txtActivationWeight.TabIndex = 14;
+            this.txtActivationWeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.txtActivationWeight.ValueChanged += new System.EventHandler(this.txtActivationWeight_ValueChanged);
             // 
             // ProjectEternityCharacterSkillEditor
             // 
@@ -672,6 +704,7 @@
             this.gbLevelDetails.ResumeLayout(false);
             this.gbLevelDetails.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtUpgradePrice)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtActivationWeight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -729,6 +762,8 @@
         private System.Windows.Forms.Label lblUpgradePrice;
         private System.Windows.Forms.Label lblActivationChance;
         private System.Windows.Forms.NumericUpDown txtActivationChance;
+        private System.Windows.Forms.Label lblActivationWeight;
+        private System.Windows.Forms.NumericUpDown txtActivationWeight;
     }
 }
 

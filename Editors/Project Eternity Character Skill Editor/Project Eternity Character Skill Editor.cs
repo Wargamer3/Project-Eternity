@@ -158,6 +158,14 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
             }
         }
 
+        private void txtActivationWeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstActivations.SelectedItems.Count > 0)
+            {
+                ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[lstActivations.SelectedIndex].Weight = (byte)txtActivationWeight.Value;
+            }
+        }
+
         private void btnRemoveActivation_Click(object sender, EventArgs e)
         {
             if (lstActivations.SelectedItems.Count > 0)
@@ -262,6 +270,7 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
 
                 BaseSkillActivation ActiveSkillActivation = ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[lstActivations.SelectedIndex];
                 txtActivationChance.Value = ActiveSkillActivation.ActivationPercentage;
+                txtActivationWeight.Value = ActiveSkillActivation.Weight;
                 for (int A = 0; A < ActiveSkillActivation.ListRequirement.Count; A++)
                 {
                     lstRequirements.Items.Add(ActiveSkillActivation.ListRequirement[A].SkillRequirementName);
