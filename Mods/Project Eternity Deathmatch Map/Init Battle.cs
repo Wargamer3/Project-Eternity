@@ -72,7 +72,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             AnimationBackground ActiveAnimationBackground = new AnimationBackground2D("Backgrounds 2D/Ground", Content, GraphicsDevice);
 
-            AttackAnimations AttackerAnimations = ActiveAttack.GetAttackAnimations();
+            AttackAnimations AttackerAnimations = ActiveAttack.GetAttackAnimations(FormulaParser.ActiveParser);
             CreateAnimation(AttackingSquad.CurrentLeader.Animations.MoveFoward, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, "", HorionztalMirror);
 
             CreateAnimation(AttackerAnimations.Start, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, ExtraTextIntro, HorionztalMirror);
@@ -174,7 +174,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             TargetPlayerIndex = DefenderPlayerIndex;
             TargetSquadIndex = ListPlayer[TargetPlayerIndex].ListSquad.IndexOf(TargetSquad);
 
-            bool ShowAnimation = Constants.ShowAnimation && ActiveSquad.CurrentLeader.CurrentAttack.GetAttackAnimations().Start.AnimationName != null;
+            bool ShowAnimation = Constants.ShowAnimation && ActiveSquad.CurrentLeader.CurrentAttack.GetAttackAnimations(FormulaParser.ActiveParser).Start.AnimationName != null;
             ListNextAnimationScreen.Clear();
             NonDemoScreen.ListNonDemoBattleFrame.Clear();
             ListActionMenuChoice.RemoveAllSubActionPanels();

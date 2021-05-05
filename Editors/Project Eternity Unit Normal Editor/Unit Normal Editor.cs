@@ -232,10 +232,10 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                     ActiveAttack.SaveItem(BW);
                 }
 
-                BW.Write(frmAttacks.ListAttack[A].Animations[0].Animations.Count);
-                for (int An = 0; An < frmAttacks.ListAttack[A].Animations[0].Animations.Count; ++An)
+                BW.Write(frmAttacks.ListAttack[A].Animations.Count);
+                for (int An = 0; An < frmAttacks.ListAttack[A].Animations.Count; ++An)
                 {
-                    frmAttacks.ListAttack[A].Animations[0].Animations[An].Save(BW);
+                    frmAttacks.ListAttack[A].Animations[An].Save(BW);
                 }
             }
 
@@ -347,7 +347,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 lstPilots.Items.Add(LoadedUnit.ListCharacterIDWhitelist[P]);
             }
 
-            frmAttacks.ListAttack = LoadedUnit.ListAttack;
+            frmAttacks.SetAttacks(LoadedUnit.ListAttack);
             frmAttacks.cbUpgradeCost.SelectedIndex = (int)LoadedUnit.UnitStat.AttackUpgradesCost;
             frmAttacks.cbUpgradeValues.SelectedIndex = (int)LoadedUnit.UnitStat.AttackUpgradesSpeed;
 

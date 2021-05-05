@@ -46,27 +46,32 @@
             this.lblUpgradeValues = new System.Windows.Forms.Label();
             this.cbUpgradeValues = new System.Windows.Forms.ComboBox();
             this.gbAttackOriginContext = new System.Windows.Forms.GroupBox();
-            this.lblAttackOriginType = new System.Windows.Forms.Label();
-            this.cbAttackOriginType = new System.Windows.Forms.ComboBox();
             this.txtAttackOriginCustomType = new System.Windows.Forms.TextBox();
             this.lblAttackOriginCustomType = new System.Windows.Forms.Label();
+            this.lblAttackOriginType = new System.Windows.Forms.Label();
+            this.cbAttackOriginType = new System.Windows.Forms.ComboBox();
             this.gbAttackTargetContext = new System.Windows.Forms.GroupBox();
             this.txtAttackTargetCustomType = new System.Windows.Forms.TextBox();
             this.lblAttackTargetCustomType = new System.Windows.Forms.Label();
             this.lblAttackTargetType = new System.Windows.Forms.Label();
             this.cbAttackTargetType = new System.Windows.Forms.ComboBox();
             this.gbAttackContexts = new System.Windows.Forms.GroupBox();
-            this.btnAddAttackContext = new System.Windows.Forms.Button();
-            this.lstAttackContexts = new System.Windows.Forms.ListBox();
+            this.txtAttackContextWeight = new System.Windows.Forms.NumericUpDown();
+            this.lblAttackContextWeight = new System.Windows.Forms.Label();
+            this.txtAttackContextParserValue = new System.Windows.Forms.TextBox();
+            this.btnRemoveAttackContext = new System.Windows.Forms.Button();
+            this.lblAttackContextParserValue = new System.Windows.Forms.Label();
             this.txtAttackContextName = new System.Windows.Forms.TextBox();
             this.lblAttackContextName = new System.Windows.Forms.Label();
-            this.btnRemoveAttackContext = new System.Windows.Forms.Button();
+            this.btnAddAttackContext = new System.Windows.Forms.Button();
+            this.lstAttackContexts = new System.Windows.Forms.ListBox();
             this.gbAttacks.SuspendLayout();
             this.gbAnimations.SuspendLayout();
             this.gbUpgrades.SuspendLayout();
             this.gbAttackOriginContext.SuspendLayout();
             this.gbAttackTargetContext.SuspendLayout();
             this.gbAttackContexts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAttackContextWeight)).BeginInit();
             this.SuspendLayout();
             // 
             // gbAttacks
@@ -149,6 +154,7 @@
             this.gbAnimations.Controls.Add(this.txtAnimationName);
             this.gbAnimations.Controls.Add(this.lblAnimationPath);
             this.gbAnimations.Controls.Add(this.lstAttackAnimations);
+            this.gbAnimations.Enabled = false;
             this.gbAnimations.Location = new System.Drawing.Point(481, 12);
             this.gbAnimations.Name = "gbAnimations";
             this.gbAnimations.Size = new System.Drawing.Size(223, 230);
@@ -268,12 +274,31 @@
             this.gbAttackOriginContext.Controls.Add(this.lblAttackOriginCustomType);
             this.gbAttackOriginContext.Controls.Add(this.lblAttackOriginType);
             this.gbAttackOriginContext.Controls.Add(this.cbAttackOriginType);
+            this.gbAttackOriginContext.Enabled = false;
             this.gbAttackOriginContext.Location = new System.Drawing.Point(326, 12);
             this.gbAttackOriginContext.Name = "gbAttackOriginContext";
-            this.gbAttackOriginContext.Size = new System.Drawing.Size(149, 100);
+            this.gbAttackOriginContext.Size = new System.Drawing.Size(149, 137);
             this.gbAttackOriginContext.TabIndex = 3;
             this.gbAttackOriginContext.TabStop = false;
             this.gbAttackOriginContext.Text = "Attack Origin Context";
+            // 
+            // txtAttackOriginCustomType
+            // 
+            this.txtAttackOriginCustomType.Location = new System.Drawing.Point(6, 72);
+            this.txtAttackOriginCustomType.Name = "txtAttackOriginCustomType";
+            this.txtAttackOriginCustomType.ReadOnly = true;
+            this.txtAttackOriginCustomType.Size = new System.Drawing.Size(137, 20);
+            this.txtAttackOriginCustomType.TabIndex = 8;
+            this.txtAttackOriginCustomType.TextChanged += new System.EventHandler(this.txtAttackOriginCustomType_TextChanged);
+            // 
+            // lblAttackOriginCustomType
+            // 
+            this.lblAttackOriginCustomType.AutoSize = true;
+            this.lblAttackOriginCustomType.Location = new System.Drawing.Point(6, 56);
+            this.lblAttackOriginCustomType.Name = "lblAttackOriginCustomType";
+            this.lblAttackOriginCustomType.Size = new System.Drawing.Size(72, 13);
+            this.lblAttackOriginCustomType.TabIndex = 7;
+            this.lblAttackOriginCustomType.Text = "Custom Type:";
             // 
             // lblAttackOriginType
             // 
@@ -299,22 +324,7 @@
             this.cbAttackOriginType.Name = "cbAttackOriginType";
             this.cbAttackOriginType.Size = new System.Drawing.Size(137, 21);
             this.cbAttackOriginType.TabIndex = 2;
-            // 
-            // txtAttackOriginCustomType
-            // 
-            this.txtAttackOriginCustomType.Location = new System.Drawing.Point(6, 72);
-            this.txtAttackOriginCustomType.Name = "txtAttackOriginCustomType";
-            this.txtAttackOriginCustomType.Size = new System.Drawing.Size(137, 20);
-            this.txtAttackOriginCustomType.TabIndex = 8;
-            // 
-            // lblAttackOriginCustomType
-            // 
-            this.lblAttackOriginCustomType.AutoSize = true;
-            this.lblAttackOriginCustomType.Location = new System.Drawing.Point(6, 56);
-            this.lblAttackOriginCustomType.Name = "lblAttackOriginCustomType";
-            this.lblAttackOriginCustomType.Size = new System.Drawing.Size(72, 13);
-            this.lblAttackOriginCustomType.TabIndex = 7;
-            this.lblAttackOriginCustomType.Text = "Custom Type:";
+            this.cbAttackOriginType.SelectedIndexChanged += new System.EventHandler(this.cbAttackOriginType_SelectedIndexChanged);
             // 
             // gbAttackTargetContext
             // 
@@ -322,9 +332,10 @@
             this.gbAttackTargetContext.Controls.Add(this.lblAttackTargetCustomType);
             this.gbAttackTargetContext.Controls.Add(this.lblAttackTargetType);
             this.gbAttackTargetContext.Controls.Add(this.cbAttackTargetType);
-            this.gbAttackTargetContext.Location = new System.Drawing.Point(326, 118);
+            this.gbAttackTargetContext.Enabled = false;
+            this.gbAttackTargetContext.Location = new System.Drawing.Point(326, 155);
             this.gbAttackTargetContext.Name = "gbAttackTargetContext";
-            this.gbAttackTargetContext.Size = new System.Drawing.Size(149, 100);
+            this.gbAttackTargetContext.Size = new System.Drawing.Size(149, 137);
             this.gbAttackTargetContext.TabIndex = 9;
             this.gbAttackTargetContext.TabStop = false;
             this.gbAttackTargetContext.Text = "Attack Target Context";
@@ -333,8 +344,10 @@
             // 
             this.txtAttackTargetCustomType.Location = new System.Drawing.Point(6, 72);
             this.txtAttackTargetCustomType.Name = "txtAttackTargetCustomType";
+            this.txtAttackTargetCustomType.ReadOnly = true;
             this.txtAttackTargetCustomType.Size = new System.Drawing.Size(137, 20);
             this.txtAttackTargetCustomType.TabIndex = 8;
+            this.txtAttackTargetCustomType.TextChanged += new System.EventHandler(this.txtAttackTargetCustomType_TextChanged);
             // 
             // lblAttackTargetCustomType
             // 
@@ -369,56 +382,51 @@
             this.cbAttackTargetType.Name = "cbAttackTargetType";
             this.cbAttackTargetType.Size = new System.Drawing.Size(137, 21);
             this.cbAttackTargetType.TabIndex = 2;
+            this.cbAttackTargetType.SelectedIndexChanged += new System.EventHandler(this.cbAttackTargetType_SelectedIndexChanged);
             // 
             // gbAttackContexts
             // 
+            this.gbAttackContexts.Controls.Add(this.txtAttackContextWeight);
+            this.gbAttackContexts.Controls.Add(this.lblAttackContextWeight);
+            this.gbAttackContexts.Controls.Add(this.txtAttackContextParserValue);
             this.gbAttackContexts.Controls.Add(this.btnRemoveAttackContext);
+            this.gbAttackContexts.Controls.Add(this.lblAttackContextParserValue);
             this.gbAttackContexts.Controls.Add(this.txtAttackContextName);
             this.gbAttackContexts.Controls.Add(this.lblAttackContextName);
             this.gbAttackContexts.Controls.Add(this.btnAddAttackContext);
             this.gbAttackContexts.Controls.Add(this.lstAttackContexts);
+            this.gbAttackContexts.Enabled = false;
             this.gbAttackContexts.Location = new System.Drawing.Point(159, 12);
             this.gbAttackContexts.Name = "gbAttackContexts";
-            this.gbAttackContexts.Size = new System.Drawing.Size(161, 253);
+            this.gbAttackContexts.Size = new System.Drawing.Size(161, 317);
             this.gbAttackContexts.TabIndex = 8;
             this.gbAttackContexts.TabStop = false;
             this.gbAttackContexts.Text = "Attack Contexts";
             // 
-            // btnAddAttackContext
+            // txtAttackContextWeight
             // 
-            this.btnAddAttackContext.Location = new System.Drawing.Point(6, 172);
-            this.btnAddAttackContext.Name = "btnAddAttackContext";
-            this.btnAddAttackContext.Size = new System.Drawing.Size(77, 23);
-            this.btnAddAttackContext.TabIndex = 7;
-            this.btnAddAttackContext.Text = "Add";
-            this.btnAddAttackContext.UseVisualStyleBackColor = true;
+            this.txtAttackContextWeight.Location = new System.Drawing.Point(76, 292);
+            this.txtAttackContextWeight.Name = "txtAttackContextWeight";
+            this.txtAttackContextWeight.Size = new System.Drawing.Size(79, 20);
+            this.txtAttackContextWeight.TabIndex = 14;
+            this.txtAttackContextWeight.ValueChanged += new System.EventHandler(this.txtAttackContextWeight_ValueChanged);
             // 
-            // lstAttackContexts
+            // lblAttackContextWeight
             // 
-            this.lstAttackContexts.FormattingEnabled = true;
-            this.lstAttackContexts.Items.AddRange(new object[] {
-            "Any"});
-            this.lstAttackContexts.Location = new System.Drawing.Point(6, 19);
-            this.lstAttackContexts.Name = "lstAttackContexts";
-            this.lstAttackContexts.Size = new System.Drawing.Size(149, 147);
-            this.lstAttackContexts.TabIndex = 1;
-            this.lstAttackContexts.SelectedIndexChanged += new System.EventHandler(this.lstAttackContexts_SelectedIndexChanged);
+            this.lblAttackContextWeight.AutoSize = true;
+            this.lblAttackContextWeight.Location = new System.Drawing.Point(3, 276);
+            this.lblAttackContextWeight.Name = "lblAttackContextWeight";
+            this.lblAttackContextWeight.Size = new System.Drawing.Size(44, 13);
+            this.lblAttackContextWeight.TabIndex = 13;
+            this.lblAttackContextWeight.Text = "Weight:";
             // 
-            // txtAttackContextName
+            // txtAttackContextParserValue
             // 
-            this.txtAttackContextName.Location = new System.Drawing.Point(6, 227);
-            this.txtAttackContextName.Name = "txtAttackContextName";
-            this.txtAttackContextName.Size = new System.Drawing.Size(149, 20);
-            this.txtAttackContextName.TabIndex = 9;
-            // 
-            // lblAttackContextName
-            // 
-            this.lblAttackContextName.AutoSize = true;
-            this.lblAttackContextName.Location = new System.Drawing.Point(6, 211);
-            this.lblAttackContextName.Name = "lblAttackContextName";
-            this.lblAttackContextName.Size = new System.Drawing.Size(77, 13);
-            this.lblAttackContextName.TabIndex = 8;
-            this.lblAttackContextName.Text = "Context Name:";
+            this.txtAttackContextParserValue.Location = new System.Drawing.Point(6, 253);
+            this.txtAttackContextParserValue.Name = "txtAttackContextParserValue";
+            this.txtAttackContextParserValue.Size = new System.Drawing.Size(149, 20);
+            this.txtAttackContextParserValue.TabIndex = 12;
+            this.txtAttackContextParserValue.TextChanged += new System.EventHandler(this.txtAttackContextParserValue_TextChanged);
             // 
             // btnRemoveAttackContext
             // 
@@ -428,6 +436,52 @@
             this.btnRemoveAttackContext.TabIndex = 10;
             this.btnRemoveAttackContext.Text = "Remove";
             this.btnRemoveAttackContext.UseVisualStyleBackColor = true;
+            this.btnRemoveAttackContext.Click += new System.EventHandler(this.btnRemoveAttackContext_Click);
+            // 
+            // lblAttackContextParserValue
+            // 
+            this.lblAttackContextParserValue.AutoSize = true;
+            this.lblAttackContextParserValue.Location = new System.Drawing.Point(6, 237);
+            this.lblAttackContextParserValue.Name = "lblAttackContextParserValue";
+            this.lblAttackContextParserValue.Size = new System.Drawing.Size(70, 13);
+            this.lblAttackContextParserValue.TabIndex = 11;
+            this.lblAttackContextParserValue.Text = "Parser Value:";
+            // 
+            // txtAttackContextName
+            // 
+            this.txtAttackContextName.Location = new System.Drawing.Point(6, 214);
+            this.txtAttackContextName.Name = "txtAttackContextName";
+            this.txtAttackContextName.Size = new System.Drawing.Size(149, 20);
+            this.txtAttackContextName.TabIndex = 9;
+            this.txtAttackContextName.TextChanged += new System.EventHandler(this.txtAttackContextName_TextChanged);
+            // 
+            // lblAttackContextName
+            // 
+            this.lblAttackContextName.AutoSize = true;
+            this.lblAttackContextName.Location = new System.Drawing.Point(6, 198);
+            this.lblAttackContextName.Name = "lblAttackContextName";
+            this.lblAttackContextName.Size = new System.Drawing.Size(77, 13);
+            this.lblAttackContextName.TabIndex = 8;
+            this.lblAttackContextName.Text = "Context Name:";
+            // 
+            // btnAddAttackContext
+            // 
+            this.btnAddAttackContext.Location = new System.Drawing.Point(6, 172);
+            this.btnAddAttackContext.Name = "btnAddAttackContext";
+            this.btnAddAttackContext.Size = new System.Drawing.Size(77, 23);
+            this.btnAddAttackContext.TabIndex = 7;
+            this.btnAddAttackContext.Text = "Add";
+            this.btnAddAttackContext.UseVisualStyleBackColor = true;
+            this.btnAddAttackContext.Click += new System.EventHandler(this.btnAddAttackContext_Click);
+            // 
+            // lstAttackContexts
+            // 
+            this.lstAttackContexts.FormattingEnabled = true;
+            this.lstAttackContexts.Location = new System.Drawing.Point(6, 19);
+            this.lstAttackContexts.Name = "lstAttackContexts";
+            this.lstAttackContexts.Size = new System.Drawing.Size(149, 147);
+            this.lstAttackContexts.TabIndex = 1;
+            this.lstAttackContexts.SelectedIndexChanged += new System.EventHandler(this.lstAttackContexts_SelectedIndexChanged);
             // 
             // Attacks
             // 
@@ -453,6 +507,7 @@
             this.gbAttackTargetContext.PerformLayout();
             this.gbAttackContexts.ResumeLayout(false);
             this.gbAttackContexts.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAttackContextWeight)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -492,5 +547,9 @@
         private System.Windows.Forms.Button btnAddAttackContext;
         private System.Windows.Forms.ListBox lstAttackContexts;
         private System.Windows.Forms.Button btnRemoveAttackContext;
+        private System.Windows.Forms.TextBox txtAttackContextParserValue;
+        private System.Windows.Forms.Label lblAttackContextParserValue;
+        private System.Windows.Forms.NumericUpDown txtAttackContextWeight;
+        private System.Windows.Forms.Label lblAttackContextWeight;
     }
 }

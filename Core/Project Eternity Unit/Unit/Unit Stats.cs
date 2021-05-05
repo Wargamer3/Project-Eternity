@@ -193,7 +193,12 @@ namespace ProjectEternity.Core.Units
                 if (NewAttack.Pri == WeaponPrimaryProperty.PLA)
                     PLAAttack = A;
 
-                NewAttack.Animations.Add(new AttackContext(BR));
+                Int32 ListAttackContextCount = BR.ReadInt32();
+                for (int AC = 0; AC < ListAttackContextCount; ++AC)
+                {
+                    NewAttack.Animations.Add(new AttackContext(BR));
+                }
+
                 ListAttack.Add(NewAttack);
             }
 

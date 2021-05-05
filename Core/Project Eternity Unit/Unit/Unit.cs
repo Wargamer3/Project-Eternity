@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Parts;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Characters;
-using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.Core.Units
 {

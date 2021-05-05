@@ -5,6 +5,7 @@ using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Editors.AttackEditor;
+using static ProjectEternity.Core.Attacks.AttackContext;
 
 namespace ProjectEternity.Editors.UnitNormalEditor
 {
@@ -21,22 +22,6 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             get
             {
                 return _ListAttack;
-            }
-            set
-            {
-                _ListAttack = value;
-                lstAttack.Items.Clear();
-                for (int A = 0; A < _ListAttack.Count; A++)
-                {
-                    if (_ListAttack[A].IsExternal)
-                    {
-                        lstAttack.Items.Add(_ListAttack[A].ItemName);
-                    }
-                    else
-                    {
-                        lstAttack.Items.Add(new ProjectEternityAttackEditor(_ListAttack[A]));
-                    }
-                }
             }
         }
 
@@ -55,6 +40,23 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             _ListAttack = new List<Attack>();
             AttackUpgradesValueIndex = 0;
             AttackUpgradesCostIndex = 0;
+        }
+
+        public void SetAttacks(List<Attack> ListAttack)
+        {
+            _ListAttack = ListAttack;
+            lstAttack.Items.Clear();
+            for (int A = 0; A < _ListAttack.Count; A++)
+            {
+                if (_ListAttack[A].IsExternal)
+                {
+                    lstAttack.Items.Add(_ListAttack[A].ItemName);
+                }
+                else
+                {
+                    lstAttack.Items.Add(new ProjectEternityAttackEditor(_ListAttack[A]));
+                }
+            }
         }
 
         private void btnCreateAttack_Click(object sender, EventArgs e)
@@ -138,6 +140,22 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
         private void lstAttack_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (lstAttack.SelectedIndex <= -1)
+            {
+                gbAttackContexts.Enabled = false;
+                return;
+            }
+
+            Attack ActiveAttack = _ListAttack[lstAttack.SelectedIndex];
+
+            gbAttackContexts.Enabled = true;
+
+            lstAttackContexts.Items.Clear();
+            foreach (AttackContext ActiveContext in ActiveAttack.Animations)
+            {
+                lstAttackContexts.Items.Add(ActiveContext.ContextName);
+            }
+
             lstAttackAnimations.SelectedIndex = -1;
         }
 
@@ -155,10 +173,157 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             }
         }
 
+        #region Attack Context
+
         private void lstAttackContexts_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.SelectedIndex <= -1)
+            {
+                gbAttackOriginContext.Enabled = false;
+                gbAttackTargetContext.Enabled = false;
+                gbAnimations.Enabled = false;
+                return;
+            }
 
+            gbAttackOriginContext.Enabled = true;
+            gbAttackTargetContext.Enabled = true;
+            gbAnimations.Enabled = true;
+
+            AttackContext ActiveContext = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex];
+
+            txtAttackContextName.Text = ActiveContext.ContextName;
+            txtAttackContextParserValue.Text = ActiveContext.ParserValue;
+
+            cbAttackOriginType.SelectedIndex = (int)ActiveContext.AttackOriginType;
+            cbAttackTargetType.SelectedIndex = (int)ActiveContext.AttackTargetType;
+
+            txtAttackOriginCustomType.Text = ActiveContext.AttackOriginCustomType;
+            txtAttackTargetCustomType.Text = ActiveContext.AttackTargetCustomType;
+            txtAttackContextWeight.Value = ActiveContext.Weight;
         }
+
+        private void txtAttackContextName_TextChanged(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.SelectedIndex <= -1)
+            {
+                return;
+            }
+
+            AttackContext ActiveContext = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex];
+
+            ActiveContext.ContextName = txtAttackContextName.Text;
+            lstAttackContexts.Items[lstAttackContexts.SelectedIndex] = txtAttackContextName.Text;
+        }
+
+        private void txtAttackContextParserValue_TextChanged(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.SelectedIndex <= -1)
+            {
+                return;
+            }
+
+            AttackContext ActiveContext = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex];
+
+            ActiveContext.ParserValue = txtAttackContextParserValue.Text;
+        }
+
+        private void txtAttackContextWeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.SelectedIndex <= -1)
+            {
+                return;
+            }
+
+            AttackContext ActiveContext = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex];
+
+            ActiveContext.Weight = (int)txtAttackContextWeight.Value;
+        }
+
+        private void btnAddAttackContext_Click(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1)
+            {
+                return;
+            }
+
+            Attack ActiveAttack = _ListAttack[lstAttack.SelectedIndex];
+            AttackContext NewAttackContext = new AttackContext();
+            NewAttackContext.Animations.Start = new Core.Units.AnimationInfo(Name + "/Start");
+            NewAttackContext.Animations.EndHit = new Core.Units.AnimationInfo(Name + "/End Hit");
+            NewAttackContext.Animations.EndMiss = new Core.Units.AnimationInfo(Name + "/End Miss");
+            NewAttackContext.Animations.EndDestroyed = new Core.Units.AnimationInfo(Name + "/End Destroyed");
+            NewAttackContext.Animations.EndBlocked = new Core.Units.AnimationInfo(Name + "/End Blocked");
+            NewAttackContext.Animations.EndParried = new Core.Units.AnimationInfo(Name + "/End Parried");
+            NewAttackContext.Animations.EndShootDown = new Core.Units.AnimationInfo(Name + "/End Shoot Down");
+            NewAttackContext.Animations.EndNegated = new Core.Units.AnimationInfo(Name + "/End Negated");
+            ActiveAttack.Animations.Add(NewAttackContext);
+            lstAttackContexts.Items.Add("Any");
+        }
+
+        private void btnRemoveAttackContext_Click(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.Items.Count <= 1)
+            {
+                return;
+            }
+
+            Attack ActiveAttack = _ListAttack[lstAttack.SelectedIndex];
+            ActiveAttack.Animations.RemoveAt(lstAttackContexts.SelectedIndex);
+            lstAttackContexts.Items.RemoveAt(lstAttackContexts.SelectedIndex);
+        }
+
+        private void cbAttackOriginType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.SelectedIndex <= -1)
+            {
+                return;
+            }
+
+            AttackContext ActiveContext = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex];
+
+            ActiveContext.AttackOriginType = (ContextTypes)cbAttackOriginType.SelectedIndex;
+
+            txtAttackOriginCustomType.ReadOnly = ActiveContext.AttackOriginType == ContextTypes.Custom;
+        }
+
+        private void cbAttackTargetType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.SelectedIndex <= -1)
+            {
+                return;
+            }
+
+            AttackContext ActiveContext = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex];
+
+            ActiveContext.AttackTargetType = (ContextTypes)cbAttackTargetType.SelectedIndex;
+            txtAttackTargetCustomType.ReadOnly = ActiveContext.AttackTargetType == ContextTypes.Custom;
+        }
+
+        private void txtAttackOriginCustomType_TextChanged(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.SelectedIndex <= -1)
+            {
+                return;
+            }
+
+            AttackContext ActiveContext = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex];
+
+            ActiveContext.AttackOriginCustomType = txtAttackOriginCustomType.Text;
+        }
+
+        private void txtAttackTargetCustomType_TextChanged(object sender, EventArgs e)
+        {
+            if (lstAttack.SelectedIndex <= -1 || lstAttackContexts.SelectedIndex <= -1)
+            {
+                return;
+            }
+
+            AttackContext ActiveContext = _ListAttack[lstAttack.SelectedIndex].Animations[lstAttackContexts.SelectedIndex];
+
+            ActiveContext.AttackTargetCustomType = txtAttackTargetCustomType.Text;
+        }
+
+        #endregion
 
         private void lstAttackAnimations_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -207,15 +372,16 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                                 return;
                             }
                             Attack NewAttack = new Attack(Name, DicRequirement, DicEffect);
+                            NewAttack.Animations.Add(new AttackContext());
 
-                            NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/Start");
-                            NewAttack.Animations[0].Animations.EndHit = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Hit");
-                            NewAttack.Animations[0].Animations.EndMiss = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Miss");
-                            NewAttack.Animations[0].Animations.EndDestroyed = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Destroyed");
-                            NewAttack.Animations[0].Animations.EndBlocked = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Blocked");
-                            NewAttack.Animations[0].Animations.EndParried = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Parried");
-                            NewAttack.Animations[0].Animations.EndShootDown = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Shoot Down");
-                            NewAttack.Animations[0].Animations.EndNegated = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Negated");
+                            NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(Name + "/Start");
+                            NewAttack.Animations[0].Animations.EndHit = new Core.Units.AnimationInfo(Name + "/End Hit");
+                            NewAttack.Animations[0].Animations.EndMiss = new Core.Units.AnimationInfo(Name + "/End Miss");
+                            NewAttack.Animations[0].Animations.EndDestroyed = new Core.Units.AnimationInfo(Name + "/End Destroyed");
+                            NewAttack.Animations[0].Animations.EndBlocked = new Core.Units.AnimationInfo(Name + "/End Blocked");
+                            NewAttack.Animations[0].Animations.EndParried = new Core.Units.AnimationInfo(Name + "/End Parried");
+                            NewAttack.Animations[0].Animations.EndShootDown = new Core.Units.AnimationInfo(Name + "/End Shoot Down");
+                            NewAttack.Animations[0].Animations.EndNegated = new Core.Units.AnimationInfo(Name + "/End Negated");
 
                             _ListAttack.Add(NewAttack);
                             lstAttack.Items.Add(Name);

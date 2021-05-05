@@ -278,7 +278,7 @@ namespace ProjectEternity.Core.Attacks
             }
         }
 
-        public AttackAnimations GetAttackAnimations()
+        public AttackAnimations GetAttackAnimations(FormulaParser ActiveParser)
         {
             return Animations[0].Animations;
         }
