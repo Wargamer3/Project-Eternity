@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         private void btnSetSprite_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem("Animations/Sprites", "Select an image to use", false));
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites, "Select an image to use", false));
         }
 
         private void SpawnViewer_MouseMove(object sender, MouseEventArgs e)

@@ -259,6 +259,33 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 UpdateAnimationSprite(KeyFrame);
             }
 
+            if (ChainLink != null)
+            {
+                ChainLink.Update(ChainLink.FramesPerSecond * (1 / 60f));
+                if (ChainLink.AnimationEnded)
+                {
+                    ChainLink.LoopAnimation();
+                }
+            }
+
+            if (ChainEnd != null)
+            {
+                ChainEnd.Update(ChainEnd.FramesPerSecond * (1 / 60f));
+                if (ChainEnd.AnimationEnded)
+                {
+                    ChainEnd.LoopAnimation();
+                }
+            }
+
+            if (ChainStart != null)
+            {
+                ChainStart.Update(ChainStart.FramesPerSecond * (1 / 60f));
+                if (ChainStart.AnimationEnded)
+                {
+                    ChainStart.LoopAnimation();
+                }
+            }
+
             AnimatedChainKeyFrame ActiveKeyFrame;
             VisibleAnimationObjectKeyFrame ActiveAnimationSpriteKeyFrame;
 
