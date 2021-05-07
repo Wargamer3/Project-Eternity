@@ -20,29 +20,29 @@ namespace Particle3DSample
 
 
         // Settings class controls the appearance and animation of this particle system.
-        ParticleSettings settings;
+        public ParticleSettings settings;
 
         // Custom effect for drawing particles. This computes the particle
         // animation entirely in the vertex shader: no per-particle CPU work required!
-        Effect particleEffect;
+        private Effect particleEffect;
 
 
         // Shortcuts for accessing frequently changed effect parameters.
-        EffectParameter effectViewProjectionParameter;
-        EffectParameter effectTimeParameter;
+        private EffectParameter effectViewProjectionParameter;
+        private EffectParameter effectTimeParameter;
 
 
         // An array of particles, treated as a circular queue.
-        ParticleVertex[] particles;
+        private ParticleVertex[] particles;
 
 
         // A vertex buffer holding our particles. This contains the same data as
         // the particles array, but copied across to where the GPU can access it.
-        DynamicVertexBuffer vertexBuffer;
+        private DynamicVertexBuffer vertexBuffer;
 
 
         // Index buffer turns sets of four vertices into particle quads (pairs of triangles).
-        IndexBuffer indexBuffer;
+        private IndexBuffer indexBuffer;
 
 
         // The particles array and vertex buffer are treated as a circular queue.
@@ -130,11 +130,7 @@ namespace Particle3DSample
         // when it is safe to retire old particles back into the free list.
         int drawCounter;
 
-
-        // Shared random number generator.
-        static Random random = new Random();
-
-        EffectParameterCollection parameters;
+        public EffectParameterCollection parameters;
 
         #endregion
 
@@ -175,7 +171,7 @@ namespace Particle3DSample
 
             // Set the values of parameters that do not change.
             parameters["Gravity"].SetValue(settings.Gravity);
-            parameters["Duration"].SetValue((float)settings.Duration.TotalSeconds);
+            parameters["Duration"].SetValue((float)settings.DurationInSeconds);
             parameters["SpeedMultiplier"].SetValue(60f);
             parameters["NumberOfImages"].SetValue(settings.NumberOfImages);
             parameters["StartingAlpha"].SetValue(settings.StartingAlpha);
@@ -210,12 +206,9 @@ namespace Particle3DSample
             indexBuffer.SetData(indices);
         }
         
-        public void Update(GameTime gameTime)
+        public void Update(double ElapsedTotalSeconds)
         {
-            if (gameTime == null)
-                throw new ArgumentNullException("gameTime");
-
-            currentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            currentTime += (float)ElapsedTotalSeconds;
 
             RetireActiveParticles();
             FreeRetiredParticles();
@@ -240,7 +233,7 @@ namespace Particle3DSample
         /// </summary>
         void RetireActiveParticles()
         {
-            float particleDuration = (float)settings.Duration.TotalSeconds;
+            float particleDuration = (float)settings.DurationInSeconds;
 
             while (firstActiveParticle != firstNewParticle)
             {

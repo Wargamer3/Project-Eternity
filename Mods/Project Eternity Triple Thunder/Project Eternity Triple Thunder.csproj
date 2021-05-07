@@ -168,9 +168,6 @@
     <Compile Include="Triple Thunder Timeline.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="Fighting Zone.cs" />
-    <Compile Include="Particle system\ParticleSettings.cs" />
-    <Compile Include="Particle system\ParticleSystem.cs" />
-    <Compile Include="Particle system\ParticleVertex.cs" />
     <Compile Include="Particule.cs" />
     <Compile Include="Robot Animation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -259,7 +259,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 PropulsorParticleSettings.TextureName = "Triple Thunder/Jetpack Flare_strip16";
                 PropulsorParticleSettings.MaxParticles = 20000;
                 PropulsorParticleSettings.MinScale = new Vector2(1, 1);
-                PropulsorParticleSettings.Duration = TimeSpan.FromSeconds(1);
+                PropulsorParticleSettings.DurationInSeconds = 1d;
                 PropulsorParticleSettings.Gravity = new Vector2(0, 0);
                 PropulsorParticleSettings.NumberOfImages = 16;
                 PropulsorParticleSettings.BlendState = BlendState.AlphaBlend;
@@ -606,7 +606,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             UpdateLevelChange(gameTime);
 
-            Propulsor.ParticleSystem.Update(gameTime);
+            Propulsor.ParticleSystem.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
             sprVehicleInIcon.Update(gameTime);
             if (sprVehicleInIcon.AnimationEnded)

@@ -156,16 +156,16 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             AnimatedBitmapSpawnerHelper NewSpawner = new AnimatedBitmapSpawnerHelper();
             if (NewSpawner.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                AnimatedBitmapTimeline NewAnimatedBitmapSpawner = new AnimatedBitmapTimeline(NewSpawner.SpawnViewer.content, NewSpawner.SpawnViewer.BitmapName);
+                AnimatedBitmapTimeline NewAnimatedBitmapTimeline = new AnimatedBitmapTimeline(NewSpawner.SpawnViewer.content, NewSpawner.SpawnViewer.BitmapName);
 
-                NewAnimatedBitmapSpawner.Position = new Vector2(535, 170);
-                NewAnimatedBitmapSpawner.SpawnFrame = KeyFrame;
-                NewAnimatedBitmapSpawner.DeathFrame = KeyFrame + 10;
-                NewAnimatedBitmapSpawner.IsUsed = true;//Disable the spawner as we spawn the AnimatedBitmap manually.
-                NewAnimatedBitmapSpawner.Add(KeyFrame, new AnimatedBitmapKeyFrame(NewAnimatedBitmapSpawner.Position,
-                                                                                true, -1, NewAnimatedBitmapSpawner.ActiveSprite.FramesPerSecond));
+                NewAnimatedBitmapTimeline.Position = new Vector2(535, 170);
+                NewAnimatedBitmapTimeline.SpawnFrame = KeyFrame;
+                NewAnimatedBitmapTimeline.DeathFrame = KeyFrame + 10;
+                NewAnimatedBitmapTimeline.IsUsed = true;//Disable the spawner as we spawn the AnimatedBitmap manually.
+                NewAnimatedBitmapTimeline.Add(KeyFrame, new AnimatedBitmapKeyFrame(NewAnimatedBitmapTimeline.Position,
+                                                                                true, -1, NewAnimatedBitmapTimeline.ActiveSprite.FramesPerSecond));
 
-                ReturnValue.Add(NewAnimatedBitmapSpawner);
+                ReturnValue.Add(NewAnimatedBitmapTimeline);
             }
 
             return ReturnValue;

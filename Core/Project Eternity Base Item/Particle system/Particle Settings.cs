@@ -17,11 +17,11 @@ namespace Particle3DSample
 {
     public struct ParticleSettings
     {
-        public ParticleSettings(string TextureName, int MaxParticles, TimeSpan Duration, Vector2 Gravity, Vector2 Size, Vector2 MinScale, int NumberOfImages = 1)
+        public ParticleSettings(string TextureName, int MaxParticles, double DurationInSeconds, Vector2 Gravity, Vector2 Size, Vector2 MinScale, int NumberOfImages = 1)
         {
             this.TextureName = TextureName;
             this.MaxParticles = MaxParticles;
-            this.Duration = Duration;
+            this.DurationInSeconds = DurationInSeconds;
             this.Gravity = Gravity;
             this.MinScale = MinScale;
             this.NumberOfImages = NumberOfImages;
@@ -32,7 +32,7 @@ namespace Particle3DSample
 
         public string TextureName;
         public int MaxParticles;
-        public TimeSpan Duration;
+        public double DurationInSeconds;
         public Vector2 Gravity;
         public Vector2 MinScale;
         public int NumberOfImages;
