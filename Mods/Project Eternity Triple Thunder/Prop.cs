@@ -481,12 +481,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             JumpPadAnimation.Update(gameTime);
 
-            foreach (RobotAnimation ActiveRobot in Owner.DicRobot.Values)
+            foreach (Player ActivePlayer in Map.ListAllPlayer)
             {
                 PolygonCollisionResult FinalCollisionResult = new PolygonCollisionResult(Vector2.Zero, -1);
-                foreach (CollisionPolygon EnemyCollision in ActiveRobot.ListCollisionPolygon)
+                foreach (CollisionPolygon EnemyCollision in ActivePlayer.InGameRobot.ListCollisionPolygon)
                 {
-                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(JumpPadPolygon, EnemyCollision.ActivePolygon, ActiveRobot.Speed);
+                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(JumpPadPolygon, EnemyCollision.ActivePolygon, ActivePlayer.InGameRobot.Speed);
 
                     if (FinalCollisionResult.Distance < 0 || (CollisionResult.Distance >= 0 && CollisionResult.Distance > FinalCollisionResult.Distance))
                     {
@@ -496,7 +496,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (FinalCollisionResult.Distance >= 0)
                 {
-                    ActiveRobot.Speed.Y = -_JumpSpeed;
+                    ActivePlayer.InGameRobot.Speed.Y = -_JumpSpeed;
                 }
             }
         }
@@ -504,6 +504,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public override void BeginDraw(CustomSpriteBatch g)
         {
         }
+
         public override void Draw(CustomSpriteBatch g)
         {
             if (JumpPadAnimation != null)
@@ -582,17 +583,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             
             PolygonCollisionResult FinalCollisionResult = new PolygonCollisionResult(Vector2.Zero, -1);
 
-            foreach (RobotAnimation ActiveRobot in Owner.DicRobot.Values)
+            foreach (Player ActivePlayer in Map.ListAllPlayer)
             {
-                foreach (CollisionPolygon EnemyCollision in ActiveRobot.ListCollisionPolygon)
+                foreach (CollisionPolygon EnemyCollision in ActivePlayer.InGameRobot.ListCollisionPolygon)
                 {
-                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(TeleportPolygon, EnemyCollision.ActivePolygon, ActiveRobot.Speed);
+                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(TeleportPolygon, EnemyCollision.ActivePolygon, ActivePlayer.InGameRobot.Speed);
 
                     if (CollisionResult.Distance >= 0 && CollisionResult.Distance > FinalCollisionResult.Distance)
                     {
-                        ActiveRobot.Speed += _TeleportSpeed;
-                        ActiveRobot.Move(_TeleportOffset);
-                        Owner.ChangeRobotLayer(ActiveRobot, _LayerIndex);
+                        ActivePlayer.InGameRobot.Speed += _TeleportSpeed;
+                        ActivePlayer.InGameRobot.Move(_TeleportOffset);
+                        Owner.ChangeRobotLayer(ActivePlayer.InGameRobot, _LayerIndex);
                     }
                 }
             }
@@ -703,11 +704,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 PolygonCollisionResult FinalCollisionResult = new PolygonCollisionResult(Vector2.Zero, -1);
 
-                foreach (RobotAnimation ActiveRobot in Owner.DicRobot.Values)
+                foreach (Player ActivePlayer in Map.ListAllPlayer)
                 {
-                    foreach (CollisionPolygon EnemyCollision in ActiveRobot.ListCollisionPolygon)
+                    foreach (CollisionPolygon EnemyCollision in ActivePlayer.InGameRobot.ListCollisionPolygon)
                     {
-                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(TeleportPolygon, EnemyCollision.ActivePolygon, ActiveRobot.Speed);
+                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(TeleportPolygon, EnemyCollision.ActivePolygon, ActivePlayer.InGameRobot.Speed);
 
                         if (CollisionResult.Distance >= 0 && CollisionResult.Distance > FinalCollisionResult.Distance)
                         {
