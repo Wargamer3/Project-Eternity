@@ -150,7 +150,7 @@ namespace ProjectEternity.Core.Item
                     {
                         CurrentSkillLevel.ListActivation[A].Activate(Name);
                     }
-                    else if (CurrentSkillLevel.ListActivation[A] == null || CurrentSkillLevel.ListActivation[A].Weight > SkillActivation.Weight)
+                    else if (SkillActivation == null || CurrentSkillLevel.ListActivation[A].Weight > SkillActivation.Weight)
                     {
                         SkillActivation = CurrentSkillLevel.ListActivation[A];
                     }
