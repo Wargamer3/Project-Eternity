@@ -145,44 +145,6 @@ namespace ProjectEternity.Editors.SkillChainEditor
             }
         }
 
-        private void AddSkillNode()
-        {
-            BaseAutomaticSkill NewSkill = new BaseAutomaticSkill();
-            NewSkill.Name = "Dummy Skill";
-            NewSkill.ListSkillLevel.Add(new BaseSkillLevel());
-            NewSkill.CurrentLevel = 1;
-
-            BaseSkillActivation NewActivation = new BaseSkillActivation();
-            NewSkill.CurrentSkillLevel.ListActivation.Add(NewActivation);
-
-            NewActivation.ListRequirement.Add(DicRequirement.First().Value.Copy());
-            NewActivation.ListEffectTarget.Add(new List<string>());
-            NewActivation.ListEffect.Add(DicEffect.First().Value.Copy());
-
-            TreeNode SelectedNode = tvSkills.SelectedNode;
-            if (SelectedNode != null)
-            {
-                BaseAutomaticSkill ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
-                while (ActiveSkill == null)
-                {
-                    SelectedNode = SelectedNode.Parent;
-                    ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
-                }
-
-                BaseEffect ActiveEffect = ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect[lstEffects.SelectedIndex];
-                ActiveEffect.ListFollowingSkill.Add(NewSkill);
-            }
-
-            if (tvSkills.SelectedNode != null)
-            {
-                CreateTree(NewSkill, tvSkills.SelectedNode.Nodes);
-            }
-            else
-            {
-                CreateTree(NewSkill, tvSkills.Nodes);
-            }
-        }
-        
         private void CreateTree(BaseAutomaticSkill ActiveSkill, TreeNodeCollection Nodes)
         {
             TreeNode NewNode = new TreeNode(ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[0].SkillRequirementName);
@@ -196,7 +158,7 @@ namespace ProjectEternity.Editors.SkillChainEditor
 
                 foreach (BaseAutomaticSkill ActiveFollowingSkill in ActiveEffect.ListFollowingSkill)
                 {
-                    CreateTree(ActiveFollowingSkill, NewNode.Nodes);
+                    CreateTree(ActiveFollowingSkill, EffectNode.Nodes);
                 }
             }
         }
@@ -228,7 +190,53 @@ namespace ProjectEternity.Editors.SkillChainEditor
 
         private void tsmNewRequirement_Click(object sender, EventArgs e)
         {
-            AddSkillNode();
+            BaseAutomaticSkill NewSkill = new BaseAutomaticSkill();
+            NewSkill.Name = "Dummy Skill";
+            NewSkill.ListSkillLevel.Add(new BaseSkillLevel());
+            NewSkill.CurrentLevel = 1;
+
+            BaseSkillActivation NewActivation = new BaseSkillActivation();
+            NewSkill.CurrentSkillLevel.ListActivation.Add(NewActivation);
+
+            NewActivation.ListRequirement.Add(DicRequirement.First().Value.Copy());
+            NewActivation.ListEffectTarget.Add(new List<string>());
+            NewActivation.ListEffect.Add(DicEffect.First().Value.Copy());
+
+            TreeNode SelectedNode = tvSkills.SelectedNode;
+            TreeNode EffectNode = null;
+            if (SelectedNode != null)
+            {
+                BaseAutomaticSkill ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
+                if (ActiveSkill != null)
+                {
+                    EffectNode = SelectedNode.Parent;
+                }
+                else
+                {
+                    while (ActiveSkill == null)
+                    {
+                        ActiveSkill = SelectedNode.Parent.Tag as BaseAutomaticSkill;
+                        if (ActiveSkill != null)
+                        {
+                            EffectNode = SelectedNode;
+                        }
+
+                        SelectedNode = SelectedNode.Parent;
+                    }
+                }
+
+                BaseEffect ActiveEffect = ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect[lstEffects.SelectedIndex];
+                ActiveEffect.ListFollowingSkill.Add(NewSkill);
+            }
+
+            if (tvSkills.SelectedNode != null)
+            {
+                CreateTree(NewSkill, EffectNode.Nodes);
+            }
+            else
+            {
+                CreateTree(NewSkill, tvSkills.Nodes);
+            }
         }
 
         private void lstEffects_SelectedIndexChanged(object sender, EventArgs e)
