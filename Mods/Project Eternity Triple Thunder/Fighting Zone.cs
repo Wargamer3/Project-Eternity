@@ -66,6 +66,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private SpriteFont fntNumberBullet;
         private SpriteFont fntNumberDamage;
 
+        public AnimatedSprite sprExplosionSplinter;
+        public AnimatedSprite sprEnemyExplosionSplinter;
+
         #endregion
 
         public Dictionary<string, double> DicMapVariables;
@@ -248,25 +251,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 LoadRessources();
 
-                Matrix view = Matrix.Identity;
-
-                Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, 1);
-                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-                Projection = view * (HalfPixelOffset * Projection);
-
-                Particle3DSample.ParticleSettings PropulsorParticleSettings = new Particle3DSample.ParticleSettings();
-                PropulsorParticleSettings.TextureName = "Triple Thunder/Jetpack Flare_strip16";
-                PropulsorParticleSettings.MaxParticles = 20000;
-                PropulsorParticleSettings.MinScale = new Vector2(1, 1);
-                PropulsorParticleSettings.DurationInSeconds = 1d;
-                PropulsorParticleSettings.Gravity = new Vector2(0, 0);
-                PropulsorParticleSettings.NumberOfImages = 16;
-                PropulsorParticleSettings.BlendState = BlendState.AlphaBlend;
-                PropulsorParticleSettings.StartingAlpha = 0.7f;
-                PropulsorParticleSettings.EndAlpha = 0.1f;
-                Propulsor.ParticleSystem = new Particle3DSample.ParticleSystem(PropulsorParticleSettings);
-                Propulsor.ParticleSystem.LoadContent(Content, GraphicsDevice, Projection);
+                Propulsor.Load(Content, GraphicsDevice, Constants.Width, Constants.Height);
             }
 
             LoadMap();
@@ -490,6 +475,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             fntNumberBulletSmall = Content.Load<SpriteFont>("Triple Thunder/HUD/Number Bullet Small");
             fntNumberBullet = Content.Load<SpriteFont>("Triple Thunder/HUD/Number Bullets");
             fntNumberDamage = Content.Load<SpriteFont>("Triple Thunder/HUD/Number Damage");
+
+            sprExplosionSplinter = new AnimatedSprite(Content, "Animations/Sprites/gob_SplinterStone_strip6", Vector2.Zero, 0);
+            sprEnemyExplosionSplinter = new AnimatedSprite(Content, "Animations/Sprites/gob_SplinterEnemy_strip8", Vector2.Zero, 0);
 
             ScrollingText = new ScrollingTextOverlay(sprStageStart);
         }

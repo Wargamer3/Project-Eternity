@@ -470,7 +470,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                     if (ActiveAttackBox.ExplosionAttributes.ExplosionRadius > 0)
                     {
-                        CreateExplosion(CollisionPoint, ActiveAttackBox);
+                        CreateExplosion(CollisionPoint, ActiveAttackBox, GravityVector);
                     }
 
                     ActiveAttackBox.ListAttackedRobots.Add(TargetRobot);
@@ -524,7 +524,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (ActiveAttackBox.ExplosionAttributes.ExplosionRadius > 0)
                 {
-                    CreateExplosion(CollisionPoint, ActiveAttackBox);
+                    CreateExplosion(CollisionPoint, ActiveAttackBox, FinalCollisionGroundResult.Axis);
                 }
                 else if (!ActiveAttackBox.FollowOwner)
                 {
@@ -637,7 +637,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        private void CreateExplosion(Vector2 ExplosionCenter, AttackBox ActiveAttackBox)
+        private void CreateExplosion(Vector2 ExplosionCenter, AttackBox ActiveAttackBox, Vector2 CollisionGroundResult)
         {
             foreach (KeyValuePair<uint, RobotAnimation> ActiveRobotPair in DicRobot)
             {
@@ -697,7 +697,23 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 NewExplosion.IsLooped = false;
                 NewExplosion.Position = new Vector2(ExplosionCenter.X, ExplosionCenter.Y - NewExplosion.PositionRectangle.Height / 2);
                 ListImages.Add(NewExplosion);
+
+                for (int i = 0; i < 30; ++i)
+                {
+                    AddVisualEffect(Owner.sprExplosionSplinter, ExplosionCenter, new Vector2(CollisionGroundResult.X - 3 + (float)RandomHelper.Random.NextDouble() * 6, CollisionGroundResult.Y * (2 +  (float)RandomHelper.Random.NextDouble() * 4)));
+                }
             }
+        }
+
+        public void AddVisualEffect(AnimatedSprite NewEffect, Vector2 Position, Vector2 Speed)
+        {
+            MovingSimpleAnimation NewVisualEffect = new MovingSimpleAnimation(1, Position, Speed, GravityVector * Gravity * 0.5f, (float)(RandomHelper.Random.NextDouble() * Math.PI));
+            NewVisualEffect.ActualSprite = NewEffect.Copy();
+            NewVisualEffect.ActualSprite.SetRandomFrame();
+
+            NewVisualEffect.Position = Position;
+
+            ListVisualEffects.Add(NewVisualEffect);
         }
 
         public void Draw(CustomSpriteBatch g)

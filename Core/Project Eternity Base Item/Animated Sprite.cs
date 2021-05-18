@@ -147,6 +147,13 @@ namespace ProjectEternity.Core.Item
             AnimationSpriteRealPosition = NewFrame;
         }
 
+        public void SetRandomFrame()
+        {
+            int NewFrame = RandomHelper.Next(ArraySpriteSource.Length);
+            AnimationSpritePosition = NewFrame;
+            AnimationSpriteRealPosition = NewFrame;
+        }
+
         public int GetFrame()
         {
             return AnimationSpriteRealPosition;

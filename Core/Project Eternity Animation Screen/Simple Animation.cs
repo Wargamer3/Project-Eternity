@@ -20,8 +20,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public Vector2 Position;
         public Vector2 Origin;
         private Vector2 _Scale;
-        private Vector2 AbsoluteScale;
-        private SpriteEffects ScaleEffect;
+        protected Vector2 AbsoluteScale;
+        protected SpriteEffects ScaleEffect;
         public float Depth;
         public float Angle;
         public bool IsLooped;
@@ -201,7 +201,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             return NewSimpleAnimation;
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             if (IsAnimated)
             {
@@ -245,7 +245,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             Draw(g, Position);
         }
 
-        public void Draw(CustomSpriteBatch g, Vector2 Position)
+        public virtual void Draw(CustomSpriteBatch g, Vector2 Position)
         {
             if (IsAnimated)
             {
@@ -417,6 +417,58 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             for (int L = ListAnimationLayer.Count - 1; L >= 0; --L)
             {
                 g.Draw(ListAnimationLayer[L].renderTarget, Vector2.Zero, Color.White);
+            }
+        }
+    }
+
+    public class MovingSimpleAnimation : SimpleAnimation
+    {
+        private double TimeAliveInSeconds;
+        private double TimeAliveInSecondsRemaining;
+        private Vector2 Speed;
+        private Vector2 Gravity;
+
+        public MovingSimpleAnimation(double TimeAliveInSeconds, Vector2 Position, Vector2 Speed, Vector2 Gravity, float Angle)
+        {
+            this.TimeAliveInSeconds = TimeAliveInSecondsRemaining = TimeAliveInSeconds;
+            this.Position = Position;
+            this.Speed = Speed;
+            this.Gravity = Gravity;
+            this.Angle = Angle;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            Position += Speed;
+            Speed += Gravity;
+
+            TimeAliveInSecondsRemaining -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (TimeAliveInSecondsRemaining <= 0)
+            {
+                HasEnded = true;
+            }
+        }
+
+        public override void Draw(CustomSpriteBatch g, Vector2 Position)
+        {
+            if (IsAnimated)
+            {
+                ActiveAnimation.TransformationMatrix = Matrix.CreateTranslation(-ActiveAnimation.AnimationOrigin.Position.X, -ActiveAnimation.AnimationOrigin.Position.Y, 0)
+                                                        * Matrix.CreateRotationZ(Angle)
+                                                        * Matrix.CreateScale(Scale.X, Scale.Y, 1f)
+                                                        * Matrix.CreateTranslation(Position.X,
+                                                                                   Position.Y, 0);
+                ActiveAnimation.Draw(g);
+            }
+            else if (StaticSprite != null)
+            {
+                g.Draw(StaticSprite, Position, new Rectangle(0, 0, StaticSprite.Width, StaticSprite.Height), Color.FromNonPremultiplied(255, 255, 255, 127), Angle, Origin, AbsoluteScale, ScaleEffect, Depth);
+            }
+            else
+            {
+                ActualSprite.Draw(g, Position, Color.FromNonPremultiplied(255, 255, 255, (int)(TimeAliveInSecondsRemaining / TimeAliveInSeconds * 127)), Angle, Depth);
             }
         }
     }
