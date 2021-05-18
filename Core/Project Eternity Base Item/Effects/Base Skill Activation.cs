@@ -114,20 +114,6 @@ namespace ProjectEternity.Core.Item
                 }
             }
 
-            if (CanActivate)
-            {
-                for (int E = 0; E < ListEffect.Count; E++)
-                {
-                    foreach (AutomaticSkillTargetType ActiveActivation in ListEffectTargetReal[E])
-                    {
-                        if (ActiveActivation.CanExecuteEffectOnTarget(ListEffect[E]))
-                        {
-                            ActiveActivation.ExecuteAndAddEffectToTarget(ListEffect[E], SkillName);
-                        }
-                    }
-                }
-            }
-
             return CanActivate;
         }
 
