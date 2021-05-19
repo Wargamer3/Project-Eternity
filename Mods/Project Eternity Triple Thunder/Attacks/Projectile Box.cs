@@ -53,7 +53,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             this.ActiveProjectileInfo = ActiveProjectileInfo;
             this.Position = Position;
-            this.Angle = Angle;
+            if (ActiveProjectileInfo.RotatationAllowed)
+            {
+                this.Angle = Angle;
+            }
             this.AffectedByGravity = ActiveProjectileInfo.AffectedByGravity;
 
             this.Speed = new Vector2((float)Math.Cos(Angle) * ActiveProjectileInfo.ProjectileSpeed, (float)Math.Sin(Angle) * ActiveProjectileInfo.ProjectileSpeed);
@@ -103,7 +106,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     Speed += FightingZone.GravityVector;
                 }
 
-                if (Speed != Vector2.Zero)
+                if (Speed != Vector2.Zero && ActiveProjectileInfo.RotatationAllowed)
                 {
                     Angle = (float)Math.Atan2(Speed.Y, Speed.X);
                 }

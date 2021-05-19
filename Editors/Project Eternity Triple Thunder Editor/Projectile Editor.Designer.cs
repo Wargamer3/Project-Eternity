@@ -55,6 +55,8 @@
             this.txtBulletType = new System.Windows.Forms.TextBox();
             this.btnAddBulletType = new System.Windows.Forms.Button();
             this.lstBulletTypes = new System.Windows.Forms.ListBox();
+            this.lblAllowRotation = new System.Windows.Forms.Label();
+            this.ckAllowRotation = new System.Windows.Forms.CheckBox();
             this.gbProjectileInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtProjectileSpeed)).BeginInit();
             this.gbBulletTypes.SuspendLayout();
@@ -64,6 +66,8 @@
             // 
             this.gbProjectileInformation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbProjectileInformation.Controls.Add(this.ckAllowRotation);
+            this.gbProjectileInformation.Controls.Add(this.lblAllowRotation);
             this.gbProjectileInformation.Controls.Add(this.lvlTrailEffect);
             this.gbProjectileInformation.Controls.Add(this.cboTrailEffect);
             this.gbProjectileInformation.Controls.Add(this.lblProjectileEffect);
@@ -130,14 +134,14 @@
             "Alpha Blend",
             "Additive",
             "Negative"});
-            this.cboProjectileEffect.Location = new System.Drawing.Point(166, 136);
+            this.cboProjectileEffect.Location = new System.Drawing.Point(166, 135);
             this.cboProjectileEffect.Name = "cboProjectileEffect";
             this.cboProjectileEffect.Size = new System.Drawing.Size(121, 21);
             this.cboProjectileEffect.TabIndex = 54;
             // 
             // btnTextureTrail
             // 
-            this.btnTextureTrail.Location = new System.Drawing.Point(146, 255);
+            this.btnTextureTrail.Location = new System.Drawing.Point(153, 255);
             this.btnTextureTrail.Name = "btnTextureTrail";
             this.btnTextureTrail.Size = new System.Drawing.Size(134, 23);
             this.btnTextureTrail.TabIndex = 53;
@@ -160,7 +164,7 @@
             this.txtTrailPath.Location = new System.Drawing.Point(6, 229);
             this.txtTrailPath.Name = "txtTrailPath";
             this.txtTrailPath.ReadOnly = true;
-            this.txtTrailPath.Size = new System.Drawing.Size(274, 20);
+            this.txtTrailPath.Size = new System.Drawing.Size(281, 20);
             this.txtTrailPath.TabIndex = 51;
             // 
             // lblTrailPath
@@ -228,7 +232,7 @@
             // 
             // txtProjectileSpeed
             // 
-            this.txtProjectileSpeed.Location = new System.Drawing.Point(160, 87);
+            this.txtProjectileSpeed.Location = new System.Drawing.Point(167, 86);
             this.txtProjectileSpeed.Name = "txtProjectileSpeed";
             this.txtProjectileSpeed.Size = new System.Drawing.Size(120, 20);
             this.txtProjectileSpeed.TabIndex = 44;
@@ -246,7 +250,7 @@
             // 
             this.ckAffectedByGravity.AutoSize = true;
             this.ckAffectedByGravity.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ckAffectedByGravity.Location = new System.Drawing.Point(265, 114);
+            this.ckAffectedByGravity.Location = new System.Drawing.Point(107, 114);
             this.ckAffectedByGravity.Margin = new System.Windows.Forms.Padding(3, 4, 3, 5);
             this.ckAffectedByGravity.Name = "ckAffectedByGravity";
             this.ckAffectedByGravity.Size = new System.Drawing.Size(15, 14);
@@ -255,7 +259,7 @@
             // 
             // btnUseTextureProjectile
             // 
-            this.btnUseTextureProjectile.Location = new System.Drawing.Point(146, 58);
+            this.btnUseTextureProjectile.Location = new System.Drawing.Point(153, 58);
             this.btnUseTextureProjectile.Name = "btnUseTextureProjectile";
             this.btnUseTextureProjectile.Size = new System.Drawing.Size(134, 23);
             this.btnUseTextureProjectile.TabIndex = 3;
@@ -278,7 +282,7 @@
             this.txtProjectilePath.Location = new System.Drawing.Point(6, 32);
             this.txtProjectilePath.Name = "txtProjectilePath";
             this.txtProjectilePath.ReadOnly = true;
-            this.txtProjectilePath.Size = new System.Drawing.Size(274, 20);
+            this.txtProjectilePath.Size = new System.Drawing.Size(281, 20);
             this.txtProjectilePath.TabIndex = 1;
             // 
             // lblProjectilePath
@@ -360,6 +364,26 @@
             this.lstBulletTypes.TabIndex = 2;
             this.lstBulletTypes.SelectedIndexChanged += new System.EventHandler(this.lstBulletTypes_SelectedIndexChanged);
             // 
+            // lblAllowRotation
+            // 
+            this.lblAllowRotation.AutoSize = true;
+            this.lblAllowRotation.Location = new System.Drawing.Point(184, 114);
+            this.lblAllowRotation.Name = "lblAllowRotation";
+            this.lblAllowRotation.Size = new System.Drawing.Size(75, 13);
+            this.lblAllowRotation.TabIndex = 58;
+            this.lblAllowRotation.Text = "Allow Rotation";
+            // 
+            // ckAllowRotation
+            // 
+            this.ckAllowRotation.AutoSize = true;
+            this.ckAllowRotation.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ckAllowRotation.Location = new System.Drawing.Point(272, 113);
+            this.ckAllowRotation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 5);
+            this.ckAllowRotation.Name = "ckAllowRotation";
+            this.ckAllowRotation.Size = new System.Drawing.Size(15, 14);
+            this.ckAllowRotation.TabIndex = 59;
+            this.ckAllowRotation.UseVisualStyleBackColor = true;
+            // 
             // ProjectileEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -407,5 +431,7 @@
         private System.Windows.Forms.TextBox txtBulletType;
         private System.Windows.Forms.Button btnAddBulletType;
         private System.Windows.Forms.ListBox lstBulletTypes;
+        public System.Windows.Forms.CheckBox ckAllowRotation;
+        private System.Windows.Forms.Label lblAllowRotation;
     }
 }

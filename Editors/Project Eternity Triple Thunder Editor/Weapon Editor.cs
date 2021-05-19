@@ -94,6 +94,7 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
                 {
                     BW.Write((float)ProjectileDetailEditor.txtProjectileSpeed.Value);
                     BW.Write(ProjectileDetailEditor.ckAffectedByGravity.Checked);
+                    BW.Write(ProjectileDetailEditor.ckAllowRotation.Checked);
 
                     BW.Write(ProjectileDetailEditor.IsProjectileAnimated);
                     BW.Write(ProjectileDetailEditor.txtProjectilePath.Text);
@@ -158,6 +159,7 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
                 {
                     ProjectileDetailEditor.txtProjectileSpeed.Value = (decimal)BR.ReadSingle();
                     ProjectileDetailEditor.ckAffectedByGravity.Checked = BR.ReadBoolean();
+                    ProjectileDetailEditor.ckAllowRotation.Checked = BR.ReadBoolean();
                     ProjectileDetailEditor.IsProjectileAnimated = BR.ReadBoolean();
                     ProjectileDetailEditor.txtProjectilePath.Text = BR.ReadString();
 

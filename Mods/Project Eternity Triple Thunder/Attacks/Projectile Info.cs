@@ -11,6 +11,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public float ProjectileSpeed;
         public bool AffectedByGravity;
+        public bool RotatationAllowed;
         public SimpleAnimation ProjectileAnimation;
         public byte TrailType;
         public byte TrailEffectType;
@@ -25,6 +26,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             ProjectileSpeed = BR.ReadSingle();
             AffectedByGravity = BR.ReadBoolean();
+            RotatationAllowed = BR.ReadBoolean();
 
             ProjectileAnimation = new SimpleAnimation(BR, false);
 
