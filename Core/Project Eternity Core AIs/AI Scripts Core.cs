@@ -602,6 +602,125 @@ namespace ProjectEternity.Core.AI
             }
         }
 
+        public class AddValueToContent : AIScript, ScriptEvaluator
+        {
+            private double _Value;
+
+            public AddValueToContent()
+                : base(150, 50, "Add Value To Content", new string[1] { "Received Object" }, new string[1] { "Content" })
+            {
+            }
+
+            public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
+            {
+                double OriginalValue = (double)ArrayReferences[0].ReferencedScript.GetContent();
+                OriginalValue += _Value;
+                ExecuteFollowingScripts(0, gameTime, OriginalValue, out IsCompleted, out Result);
+                IsCompleted = true;
+            }
+
+            public override void Load(BinaryReader BR)
+            {
+                base.Load(BR);
+
+                _Value = BR.ReadDouble();
+            }
+
+            public override void Save(BinaryWriter BW)
+            {
+                base.Save(BW);
+                BW.Write(_Value);
+            }
+
+            public override AIScript CopyScript()
+            {
+                return new AddValueToContent();
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute("")]
+            public double Value
+            {
+                get
+                {
+                    return _Value;
+                }
+                set
+                {
+                    _Value = value;
+                }
+            }
+        }
+
+        public class AddRandomValueToContent : AIScript, ScriptEvaluator
+        {
+            private double _MinValue;
+            private double _MaxValue;
+
+            public AddRandomValueToContent()
+                : base(150, 50, "Add Random Value To Content", new string[1] { "Received Object" }, new string[1] { "Content" })
+            {
+            }
+
+            public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
+            {
+                double OriginalValue = (double)ArrayReferences[0].ReferencedScript.GetContent();
+                double Difference = _MaxValue - _MinValue;
+
+                OriginalValue = OriginalValue - _MinValue + RandomHelper.Random.NextDouble() * Difference;
+                ExecuteFollowingScripts(0, gameTime, OriginalValue, out IsCompleted, out Result);
+                IsCompleted = true;
+            }
+
+            public override void Load(BinaryReader BR)
+            {
+                base.Load(BR);
+
+                _MinValue = BR.ReadDouble();
+                _MaxValue = BR.ReadDouble();
+            }
+
+            public override void Save(BinaryWriter BW)
+            {
+                base.Save(BW);
+                BW.Write(_MinValue);
+                BW.Write(_MaxValue);
+            }
+
+            public override AIScript CopyScript()
+            {
+                return new AddRandomValueToContent();
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute("")]
+            public double MinValue
+            {
+                get
+                {
+                    return _MinValue;
+                }
+                set
+                {
+                    _MinValue = value;
+                }
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute("")]
+            public double MaxValue
+            {
+                get
+                {
+                    return _MaxValue;
+                }
+                set
+                {
+                    _MaxValue = value;
+                }
+            }
+        }
+
         public class GetRandomContentFromList : AIScript, ScriptEvaluator
         {
             public GetRandomContentFromList()
