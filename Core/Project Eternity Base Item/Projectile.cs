@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Item;
 
@@ -116,6 +117,7 @@ namespace ProjectEternity.Core
         {
             public Vector2 OwnerPosition;
             public float OwnerAngle;
+            public ContentManager Content;
         }
 
         // This class is shared through every RobotEffects used to temporary pass variables to effects.

@@ -470,7 +470,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                     if (ActiveAttackBox.ExplosionAttributes.ExplosionRadius > 0)
                     {
-                        CreateExplosion(CollisionPoint, ActiveAttackBox, GravityVector);
+                        CreateExplosion(CollisionPoint, ActiveAttackBox.Owner, ActiveAttackBox.ExplosionAttributes, GravityVector);
                     }
 
                     ActiveAttackBox.ListAttackedRobots.Add(TargetRobot);
@@ -524,7 +524,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (ActiveAttackBox.ExplosionAttributes.ExplosionRadius > 0)
                 {
-                    CreateExplosion(CollisionPoint, ActiveAttackBox, FinalCollisionGroundResult.Axis);
+                    CreateExplosion(CollisionPoint, ActiveAttackBox.Owner, ActiveAttackBox.ExplosionAttributes, FinalCollisionGroundResult.Axis);
                 }
                 else if (!ActiveAttackBox.FollowOwner)
                 {
@@ -637,30 +637,30 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        private void CreateExplosion(Vector2 ExplosionCenter, AttackBox ActiveAttackBox, Vector2 CollisionGroundResult)
+        public void CreateExplosion(Vector2 ExplosionCenter, RobotAnimation RobotOwner, Weapon.ExplosionOptions ExplosionAttributes, Vector2 CollisionGroundResult)
         {
             foreach (KeyValuePair<uint, RobotAnimation> ActiveRobotPair in DicRobot)
             {
                 RobotAnimation TargetRobot = ActiveRobotPair.Value;
 
-                bool IsSelf = TargetRobot == ActiveAttackBox.Owner;
+                bool IsSelf = TargetRobot == RobotOwner;
 
-                if (TargetRobot.HP <= 0 || (TargetRobot.Team == ActiveAttackBox.Owner.Team && !IsSelf))
+                if (TargetRobot.HP <= 0 || (TargetRobot.Team == RobotOwner.Team && !IsSelf))
                 {
                     continue;
                 }
 
                 float DistanceFromCenter = Vector2.Distance(ExplosionCenter, TargetRobot.Position);
 
-                if (DistanceFromCenter <= ActiveAttackBox.ExplosionAttributes.ExplosionRadius)
+                if (DistanceFromCenter <= ExplosionAttributes.ExplosionRadius)
                 {
-                    float DistanceRatio = DistanceFromCenter / ActiveAttackBox.ExplosionAttributes.ExplosionRadius;
-                    float ExplosionDiff = ActiveAttackBox.ExplosionAttributes.ExplosionDamageAtCenter - ActiveAttackBox.ExplosionAttributes.ExplosionDamageAtEdge;
+                    float DistanceRatio = DistanceFromCenter / ExplosionAttributes.ExplosionRadius;
+                    float ExplosionDiff = ExplosionAttributes.ExplosionDamageAtCenter - ExplosionAttributes.ExplosionDamageAtEdge;
 
-                    float FinalDamage = ActiveAttackBox.ExplosionAttributes.ExplosionDamageAtCenter + ExplosionDiff * DistanceRatio;
+                    float FinalDamage = ExplosionAttributes.ExplosionDamageAtCenter + ExplosionDiff * DistanceRatio;
                     if (IsSelf)
                     {
-                        FinalDamage *= ActiveAttackBox.ExplosionAttributes.ExplosionDamageToSelfMultiplier;
+                        FinalDamage *= ExplosionAttributes.ExplosionDamageToSelfMultiplier;
                     }
 
                     if (Owner.IsOfflineOrServer || Owner.IsServer)
@@ -669,31 +669,31 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                         if (TargetRobot.HasKnockback)
                         {
-                            float WindDiff = ActiveAttackBox.ExplosionAttributes.ExplosionWindPowerAtCenter - ActiveAttackBox.ExplosionAttributes.ExplosionWindPowerAtEdge;
+                            float WindDiff = ExplosionAttributes.ExplosionWindPowerAtCenter - ExplosionAttributes.ExplosionWindPowerAtEdge;
                             Vector2 WindVector = Vector2.Normalize(TargetRobot.Position - ExplosionCenter);
-                            Vector2 FinalWind = WindVector * (ActiveAttackBox.ExplosionAttributes.ExplosionWindPowerAtCenter + WindDiff * DistanceRatio);
+                            Vector2 FinalWind = WindVector * (ExplosionAttributes.ExplosionWindPowerAtCenter + WindDiff * DistanceRatio);
 
                             if (IsSelf)
                             {
-                                FinalWind *= ActiveAttackBox.ExplosionAttributes.ExplosionWindPowerToSelfMultiplier;
+                                FinalWind *= ExplosionAttributes.ExplosionWindPowerToSelfMultiplier;
                             }
 
                             TargetRobot.Speed += FinalWind;
                         }
 
-                        OnDamageRobot(ActiveAttackBox.Owner, TargetRobot, (int)FinalDamage, TargetRobot.Position, Owner.IsMainCharacter(TargetRobot.ID));
+                        OnDamageRobot(RobotOwner, TargetRobot, (int)FinalDamage, TargetRobot.Position, Owner.IsMainCharacter(TargetRobot.ID));
                     }
                 }
             }
 
-            if (!Owner.IsServer && ActiveAttackBox.ExplosionAttributes.ExplosionAnimation.Path != string.Empty)
+            if (!Owner.IsServer && ExplosionAttributes.ExplosionAnimation.Path != string.Empty)
             {
-                if (ActiveAttackBox.ExplosionAttributes.sndExplosion != null)
+                if (ExplosionAttributes.sndExplosion != null)
                 {
-                    PlayerSFXGenerator.PrepareExplosionSound(ActiveAttackBox.ExplosionAttributes.sndExplosion, ExplosionCenter);
+                    PlayerSFXGenerator.PrepareExplosionSound(ExplosionAttributes.sndExplosion, ExplosionCenter);
                 }
 
-                SimpleAnimation NewExplosion = ActiveAttackBox.ExplosionAttributes.ExplosionAnimation.Copy();
+                SimpleAnimation NewExplosion = ExplosionAttributes.ExplosionAnimation.Copy();
                 NewExplosion.IsLooped = false;
                 NewExplosion.Position = new Vector2(ExplosionCenter.X, ExplosionCenter.Y - NewExplosion.PositionRectangle.Height / 2);
                 ListImages.Add(NewExplosion);

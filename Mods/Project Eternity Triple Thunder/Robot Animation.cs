@@ -1074,9 +1074,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             CurrentLayer.AddProjectile(NewAttackBox);
         }
 
-        internal void CreateAttackBox(string WeaponName, Vector2 GunNozzlePosition, List<AttackBox> ListAttack)
+        public void CreateAttackBox(string WeaponName, Vector2 GunNozzlePosition, List<AttackBox> ListAttack)
         {
             CurrentLayer.AddProjectile(ID, WeaponName, GunNozzlePosition, ListAttack);
+        }
+
+        public void CreateExplosion(Vector2 ExplosionCenter, Weapon.ExplosionOptions ExplosionAttributes, Vector2 CollisionGroundResult)
+        {
+            CurrentLayer.CreateExplosion(ExplosionCenter, this, ExplosionAttributes, CollisionGroundResult);
         }
 
         public void Reload()

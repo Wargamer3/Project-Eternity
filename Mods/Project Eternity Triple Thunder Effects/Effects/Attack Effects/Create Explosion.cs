@@ -4,6 +4,7 @@ using System.Drawing.Design;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens.AnimationScreen;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
@@ -28,6 +29,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         protected override void Load(BinaryReader BR)
         {
             _ExplosionAttributes = new Weapon.ExplosionOptions(BR);
+            if (_ExplosionAttributes.ExplosionAnimation.Path != string.Empty)
+            {
+                _ExplosionAttributes.ExplosionAnimation.Load(Params.SharedParams.Content, "Animations/Sprites/");
+            }
         }
 
         protected override void Save(BinaryWriter BW)
@@ -42,6 +47,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         protected override string DoExecuteEffect()
         {
+            Vector2 ProjectileAngleVector = new Vector2(-(float)Math.Cos(Params.SharedParams.OwnerAngle), -(float)Math.Sin(Params.SharedParams.OwnerAngle));
+            Params.LocalContext.Owner.CreateExplosion(Params.LocalContext.OwnerProjectile.ListCollisionPolygon[0].Center, _ExplosionAttributes, ProjectileAngleVector);
+
             return null;
         }
 

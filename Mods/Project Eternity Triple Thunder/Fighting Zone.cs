@@ -133,6 +133,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             DicMapVariables = new Dictionary<string, double>();
             FormulaParser.ActiveParser = new FightingZoneFormulaParser(this);
             AttackParams = new TripleThunderAttackParams(GlobalAttackContext);
+            AttackParams.SharedParams.Content = Content;
             ListLayer = new List<Layer>();
             ListAllPlayerInfo = new List<Player>();
             ListLocalPlayerInfo = new List<Player>();
