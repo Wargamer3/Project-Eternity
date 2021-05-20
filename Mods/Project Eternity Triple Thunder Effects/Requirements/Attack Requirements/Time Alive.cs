@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         #region Properties
 
         [CategoryAttribute("Effect Attributes"),
-        DescriptionAttribute("Time to wait before activating skill in milliseconds.")]
+        DescriptionAttribute("Time to wait before activating skill in seconds.")]
         public double TimeToWait
         {
             get { return _TimeToWait; }
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         }
 
         [CategoryAttribute("Effect Attributes"),
-        DescriptionAttribute("Time to wait before activating a following execution in milliseconds.")]
+        DescriptionAttribute("Time to wait before activating a following execution in seconds.")]
         public double Delay
         {
             get { return _Delay; }
