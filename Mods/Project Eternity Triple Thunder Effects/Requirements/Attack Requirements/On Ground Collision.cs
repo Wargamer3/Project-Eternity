@@ -15,6 +15,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
         }
 
+        public override bool CanActicateManually(string ManualActivationName)
+        {
+            return base.CanActicateManually(ManualActivationName) && GlobalContext.OwnerProjectile.Speed.X != 0 && GlobalContext.OwnerProjectile.Speed.Y != 0;
+        }
+
         public override bool CanActivatePassive()
         {
             return false;
