@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-
     public sealed partial class GameScriptHolder
     {
         public class Shoot : TripleThunderScript, ScriptEvaluator
