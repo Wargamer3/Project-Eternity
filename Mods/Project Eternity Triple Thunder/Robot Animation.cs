@@ -60,6 +60,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         protected Weapon ProneAnimations { get { return ListStanceAnimation.Count > 3 ? ListStanceAnimation[3] : null; } }
         public WeaponHolder Weapons;
         protected List<Weapon> ListStanceAnimation;
+        public Weapon ActiveAddedWeapon;
         public MovementInputs CurrentMovementInput;
         public string ActiveAttackStance;
         public string ActiveMovementStance;
@@ -433,8 +434,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     SetAnimation(CurrentStanceAnimations.ComboByName(Animation).AnimationName);
                     if (ActiveWeapon.CurrentAnimation == null)
                     {
-                        ActiveWeapon.CurrentAnimation = AddPartialAnimation(ActiveWeapon.ComboByName(Animation).AnimationName);
-                        ActiveWeapon.CurrentAnimation.UpdateKeyFrame(ActiveWeapon.CurrentAnimation.ActiveKeyFrame);
+                        ActivatePartialWeapon(ActiveWeapon, ActiveWeapon.ComboByName(Animation).AnimationName);
                     }
                 }
             }
@@ -793,14 +793,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     if (ActiveWeapon.NextCombo.AnimationType == AnimationTypes.PartialAnimation)
                     {
                         RemovePartialAnimation(ActiveWeapon.ActiveCombo.AnimationName);
-                        ActiveWeapon.CurrentAnimation = AddPartialAnimation(ActiveWeapon.NextCombo.AnimationName);
-                        ActiveWeapon.CurrentAnimation.UpdateKeyFrame(ActiveWeapon.CurrentAnimation.ActiveKeyFrame++);
+                        ActivatePartialWeapon(ActiveWeapon, ActiveWeapon.NextCombo.AnimationName);
+                        ActiveWeapon.CurrentAnimation.ActiveKeyFrame++;
                     }
                     else
                     {
                         LockAnimation = true;
-                        ActiveWeapon.CurrentAnimation = SetAnimation(ActiveWeapon.NextCombo.AnimationName);
-                        ActiveWeapon.CurrentAnimation.UpdateKeyFrame(ActiveWeapon.CurrentAnimation.ActiveKeyFrame);
+                        ActivatePartialWeapon(ActiveWeapon, ActiveWeapon.NextCombo.AnimationName);
                     }
                 }
             }
@@ -836,8 +835,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (WeaponToUse.CurrentAnimation == null)
                 {
-                    WeaponToUse.CurrentAnimation = AddPartialAnimation(WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
-                    WeaponToUse.CurrentAnimation.UpdateKeyFrame(WeaponToUse.CurrentAnimation.ActiveKeyFrame);
+                    ActivatePartialWeapon(WeaponToUse, WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
                 }
             }
         }
@@ -870,8 +868,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 UseNextCombo(true, WeaponToUse);
                 if (WeaponToUse.CurrentAnimation == null)
                 {
-                    WeaponToUse.CurrentAnimation = AddPartialAnimation(WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
-                    WeaponToUse.CurrentAnimation.UpdateKeyFrame(WeaponToUse.CurrentAnimation.ActiveKeyFrame);
+                    ActivatePartialWeapon(WeaponToUse, WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
                 }
             }
         }
@@ -892,8 +889,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             UseNextCombo(true, WeaponToUse);
             if (WeaponToUse.CurrentAnimation == null)
             {
-                WeaponToUse.CurrentAnimation = AddPartialAnimation(WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
-                WeaponToUse.CurrentAnimation.UpdateKeyFrame(WeaponToUse.CurrentAnimation.ActiveKeyFrame);
+                ActivatePartialWeapon(WeaponToUse, WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
             }
         }
 
@@ -920,8 +916,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     UseNextCombo(true, WeaponToUse);
                     if (WeaponToUse.CurrentAnimation == null)
                     {
-                        WeaponToUse.CurrentAnimation = AddPartialAnimation(WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
-                        WeaponToUse.CurrentAnimation.UpdateKeyFrame(WeaponToUse.CurrentAnimation.ActiveKeyFrame);
+                        ActivatePartialWeapon(WeaponToUse, WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
                     }
                 }
             }
@@ -983,7 +978,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        private void Shoot(Vector2 GunNozzlePosition, Weapon ActiveWeapon, int WeaponIndex)
+        public void Shoot(Vector2 GunNozzlePosition, Weapon ActiveWeapon, int WeaponIndex)
         {
             bool CanShoot;
 
@@ -1178,8 +1173,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         if (ActiveWeapon.CurrentAnimation.AnimationPath == ActiveWeapon.ReloadCombo.AnimationName)
                         {
                             ActiveWeapon.IsReloading = false;
-                            ActiveWeapon.CurrentAnimation = AddPartialAnimation(ActiveWeapon.ComboByName(ActiveMovementStance).AnimationName);
-                            ActiveWeapon.CurrentAnimation.UpdateKeyFrame(ActiveWeapon.CurrentAnimation.ActiveKeyFrame);
+                            ActivatePartialWeapon(ActiveWeapon, ActiveWeapon.ComboByName(ActiveMovementStance).AnimationName);
                         }
                         else
                         {
@@ -1197,8 +1191,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     UseNextCombo(true, ActiveWeapon);
                     if (ActiveWeapon.CurrentAnimation == null)
                     {
-                        ActiveWeapon.CurrentAnimation = AddPartialAnimation(ActiveWeapon.ComboByName(ActiveMovementStance).AnimationName);
-                        ActiveWeapon.CurrentAnimation.UpdateKeyFrame(ActiveWeapon.CurrentAnimation.ActiveKeyFrame);
+                        ActivatePartialWeapon(ActiveWeapon, ActiveWeapon.ComboByName(ActiveMovementStance).AnimationName);
                     }
                 }
                 else
@@ -1218,6 +1211,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 }
             }
+        }
+
+        private void ActivatePartialWeapon(Weapon ActiveWeapon, string AnimationName)
+        {
+            ActiveAddedWeapon = ActiveWeapon;
+            ActiveWeapon.CurrentAnimation = AddPartialAnimation(AnimationName);
+            ActiveWeapon.CurrentAnimation.UpdateKeyFrame(ActiveWeapon.CurrentAnimation.ActiveKeyFrame);
+            ActiveAddedWeapon = null;
         }
 
         #endregion

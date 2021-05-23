@@ -11,8 +11,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
     {
         private const string TimelineType = "Ranged Attack";
 
-        private RobotAnimation Owner;
+        private readonly RobotAnimation Owner;
         private bool _ShootSecondaryWeapon;
+        private Weapon OwnerWeapon;
 
         public GunNozzleTimeline()
             : base(TimelineType, "New Gun Nozzle")
@@ -28,6 +29,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             : this()
         {
             this.Owner = Owner;
+            if (Owner != null)
+            {
+                this.OwnerWeapon = Owner.ActiveAddedWeapon;
+            }
         }
 
         public GunNozzleTimeline(BinaryReader BR, RobotAnimation Owner)
@@ -35,6 +40,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             Origin = new Point(Width / 2, Height / 2);
             this.Owner = Owner;
+            if (Owner != null)
+            {
+                this.OwnerWeapon = Owner.ActiveAddedWeapon;
+            }
 
             _SpawnFrame = BR.ReadInt32();
             _DeathFrame = BR.ReadInt32();
@@ -119,7 +128,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 OnNewKeyFrameAnimationSprite(ActiveKeyFrame);
 
                 if (Owner != null)
-                    Owner.Shoot(Position, _ShootSecondaryWeapon);
+                {
+                    if (_ShootSecondaryWeapon)
+                    {
+                        Owner.Shoot(Position, _ShootSecondaryWeapon);
+                    }
+                    else
+                    {
+                        int i = Owner.Weapons.ActivePrimaryWeapons.IndexOf(OwnerWeapon);
+                        Owner.Shoot(Position, OwnerWeapon, i);
+                    }
+                }
 
                 if (DicAnimationKeyFrame.TryGetValue(NextKeyFrame, out ActiveAnimationSpriteKeyFrame))
                 {
