@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 
-namespace ProjectEternity.GameScreens.AdventureScreen
+namespace ProjectEternity.Core
 {
     public interface ICollisionObject<T> where T : class, ICollisionObject<T>
     {
@@ -14,8 +14,8 @@ namespace ProjectEternity.GameScreens.AdventureScreen
     {
         public List<Polygon> ListCollisionPolygon;
         public LinkedList<CollisionZone<T>> ListParent;
-        internal Vector2 Center;
-        internal float Radius;
+        public Vector2 Center;
+        public float Radius;
 
         public CollisionObject(Vector2[] ArrayVertex, int MaxWidth, int MaxHeight)
         {
@@ -219,11 +219,11 @@ namespace ProjectEternity.GameScreens.AdventureScreen
             return SetUniqueObject;
         }
 
-        internal HashSet<T> GetCollidableObjects<V>(CollisionObject<V> collisionBox)
+        public HashSet<T> GetCollidableObjects<V>(CollisionObject<V> CollisionBox)
             where V : class, ICollisionObject<V>
         {
             HashSet<T> SetUniqueObject = new HashSet<T>();
-            int[] Keys = GetKeysFromCircle(collisionBox.Center, collisionBox.Radius);
+            int[] Keys = GetKeysFromCircle(CollisionBox.Center, CollisionBox.Radius);
             for (int K = 0; K < Keys.Length; ++K)
             {
                 foreach (T ActiveObstacle in ArraySubZone[Keys[K]].ListObjectInZoneAndOverlappingParents)

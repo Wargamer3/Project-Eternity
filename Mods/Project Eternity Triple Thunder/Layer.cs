@@ -698,9 +698,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 NewExplosion.Position = new Vector2(ExplosionCenter.X, ExplosionCenter.Y - NewExplosion.PositionRectangle.Height / 2);
                 ListImages.Add(NewExplosion);
 
-                for (int i = 0; i < 30; ++i)
+                if (Owner.IsInsideCamera(ExplosionCenter, new Vector2(1, 1)))
                 {
-                    AddVisualEffect(Owner.sprExplosionSplinter, ExplosionCenter, new Vector2(CollisionGroundResult.X - 3 + (float)RandomHelper.Random.NextDouble() * 6, CollisionGroundResult.Y * (2 +  (float)RandomHelper.Random.NextDouble() * 4)));
+                    for (int i = 0; i < 30; ++i)
+                    {
+                        AddVisualEffect(Owner.sprExplosionSplinter, ExplosionCenter, new Vector2(CollisionGroundResult.X - 3 + (float)RandomHelper.Random.NextDouble() * 6, CollisionGroundResult.Y * (2 + (float)RandomHelper.Random.NextDouble() * 4)));
+                    }
                 }
             }
         }

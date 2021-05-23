@@ -77,6 +77,7 @@
     <Compile Include="Action Menu.cs" />
     <Compile Include="3D\Camera 3D.cs" />
     <Compile Include="Animated Sprite.cs" />
+    <Compile Include="Collision Zone.cs" />
     <Compile Include="Effects\Base Automatic Skill.cs" />
     <Compile Include="Effects\Automatic Skill Target Type.cs" />
     <Compile Include="Effects\Base Skill Requirement.cs" />

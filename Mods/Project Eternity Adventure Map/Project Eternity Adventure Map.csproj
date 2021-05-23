@@ -51,7 +51,6 @@
     <Compile Include="Adventure Map.cs" />
     <Compile Include="Bomb.cs" />
     <Compile Include="Bullet.cs" />
-    <Compile Include="Collision Zone.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Prop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

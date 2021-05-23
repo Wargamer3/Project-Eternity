@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectEternity.GameScreens.AdventureScreen;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.UnitTests.AdventureTests
 {
