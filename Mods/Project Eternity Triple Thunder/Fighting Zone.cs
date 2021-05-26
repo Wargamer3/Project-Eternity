@@ -906,8 +906,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 if (ActivePlayer.InGameRobot.ID == PlayerID)
                 {
+                    Vector2 Movement = new Vector2(PositionX - ActivePlayer.InGameRobot.Position.X, PositionY - ActivePlayer.InGameRobot.Position.Y);
                     ActivePlayer.InGameRobot.ChangeLayer(ListLayer[LayerIndex]);
-                    ActivePlayer.InGameRobot.Position = new Vector2(PositionX, PositionY);
+                    ActivePlayer.InGameRobot.Move(Movement);
                     ActivePlayer.InGameRobot.HP = PlayerHP;
                     return;
                 }
@@ -921,8 +922,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     {
                         if (ActiveRobot.ID == PlayerID)
                         {
+                            Vector2 Movement = new Vector2(PositionX - ActiveRobot.Position.X, PositionY - ActiveRobot.Position.Y);
                             ActiveRobot.ChangeLayer(ListLayer[LayerIndex]);
-                            ActiveRobot.Position = new Vector2(PositionX, PositionY);
+                            ActiveRobot.Move(Movement);
                             ActiveRobot.HP = PlayerHP;
                         }
                     }
