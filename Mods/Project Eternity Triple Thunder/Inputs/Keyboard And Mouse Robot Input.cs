@@ -23,11 +23,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Update(GameTime gameTime)
         {
-            UpdateOwner(gameTime);
-
             MouseState MousePosition = MouseHelper.MouseStateCurrent;
 
-            Owner.UpdateAllWeaponsAngle(new Vector2(MousePosition.X + Owner.Camera.X - Owner.Position.X, MousePosition.Y + Owner.Camera.Y - Owner.Position.Y));
+            if (Owner.RespawnTimer <= 0)
+            {
+                UpdateOwner(gameTime);
+
+                Owner.UpdateAllWeaponsAngle(new Vector2(MousePosition.X + Owner.Camera.X - Owner.Position.X, MousePosition.Y + Owner.Camera.Y - Owner.Position.Y));
+            }
 
             UpdateCamera(new Vector2(MousePosition.X, MousePosition.Y));
         }
