@@ -590,13 +590,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveRobot.ListIgnoredGroundPolygon.Clear();
                 ActiveRobot.NormalizedGroundVector = new Vector2(-GravityVector.Y, GravityVector.X);
             }
-            else
-            {
-                HasCollided = true;
-                Vector2 FinalMovement = ActiveRobot.Speed + MovementCorection;
-
-                ActiveRobot.Move(FinalMovement);
-            }
 
             return HasCollided;
         }
