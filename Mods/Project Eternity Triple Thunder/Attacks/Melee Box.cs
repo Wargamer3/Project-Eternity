@@ -13,12 +13,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public override void OnCollision(PolygonCollisionResult FinalCollisionResult, Polygon FinalCollisionPolygon, out Vector2 CollisionPoint)
         {
             IsAlive = false;
-            CollisionPoint = ListCollisionPolygon[0].Center;
+            CollisionPoint = Collision.ListCollisionPolygon[0].Center;
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Owner.SetAttackContext(this, Owner, 0, ListCollisionPolygon[0].Center);
+            Owner.SetAttackContext(this, Owner, 0, Collision.ListCollisionPolygon[0].Center);
 
             if (FollowOwner)
             {

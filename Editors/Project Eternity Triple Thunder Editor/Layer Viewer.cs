@@ -198,9 +198,9 @@ namespace ProjectEternity.Editors.AnimationEditor
                         g.Draw(sprPixel, new Rectangle((int)ActiveSpawn.SpawnLocation.X + 13, (int)ActiveSpawn.SpawnLocation.Y + 24, 6, 6), Color.Black);
                     }
 
-                    foreach (Polygon ActivePolygon in ActiveLayer.ListWorldCollisionPolygon)
+                    foreach (WorldPolygon ActivePolygon in ActiveLayer.ListWorldCollisionPolygon)
                     {
-                        PolygonTriangle.Draw(g, GraphicsDevice, sprPixel, new PolygonTriangle(PolygonTriangle.SelectionTypes.None, ActivePolygon, 0, 0));
+                        PolygonTriangle.Draw(g, GraphicsDevice, sprPixel, new PolygonTriangle(PolygonTriangle.SelectionTypes.None, ActivePolygon.Collision.ListCollisionPolygon[0], 0, 0));
                     }
 
                     if (SelectedAnimation != null)

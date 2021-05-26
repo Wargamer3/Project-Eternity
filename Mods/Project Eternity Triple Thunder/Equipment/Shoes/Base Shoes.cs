@@ -225,12 +225,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             //Check if the wall is not a floor/slope
             foreach (Tuple<PolygonCollisionResult, Polygon> FinalCollisionResult in ListWallCollidingPolygon)
             {
-                foreach (CollisionPolygon ActivePlayerCollisionPolygon in Owner.ListCollisionPolygon)
+                foreach (Polygon ActivePlayerCollisionPolygon in Owner.Collision.ListCollisionPolygon)
                 {
-                    if (ActivePlayerCollisionPolygon.IsDead)
-                        continue;
-
-                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon.ActivePolygon, FinalCollisionResult.Item2, Owner.Speed, new Vector2(0, -Owner.Speed.Y - 1));
+                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, FinalCollisionResult.Item2, Owner.Speed, new Vector2(0, -Owner.Speed.Y - 1));
 
                     if (CollisionResult.Distance >= 0)
                     {

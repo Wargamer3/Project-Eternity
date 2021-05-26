@@ -226,26 +226,6 @@ namespace ProjectEternity.Core.Item
             UpdateWorldPosition(Vector2.Zero, 0);
         }
 
-        public Polygon(Polygon Copy)
-        {
-            ArrayVertex = new Vector2[Copy.ArrayVertex.Length];
-            Array.Copy(Copy.ArrayVertex, ArrayVertex, ArrayVertex.Length);
-
-            ArrayIndex = new short[Copy.ArrayIndex.Length];
-            Array.Copy(Copy.ArrayIndex, ArrayIndex, ArrayIndex.Length);
-
-            ArrayUVCoordinates = new Vector2[Copy.ArrayUVCoordinates.Length];
-            Array.Copy(Copy.ArrayUVCoordinates, ArrayUVCoordinates, ArrayUVCoordinates.Length);
-
-            ArrayColorPoints = new Color[Copy.ArrayColorPoints.Length];
-            Array.Copy(Copy.ArrayColorPoints, ArrayColorPoints, ArrayColorPoints.Length);
-
-            ArrayFinalVertex = new VertexPositionColorTexture[Copy.ArrayFinalVertex.Length];
-            Array.Copy(Copy.ArrayFinalVertex, ArrayFinalVertex, ArrayFinalVertex.Length);
-
-            TriangleCount = Copy.TriangleCount;
-        }
-
         public Polygon(BinaryReader BR, float MaxWidth, float MaxHeight)
         {
             float MinX = float.MaxValue;
@@ -283,6 +263,29 @@ namespace ProjectEternity.Core.Item
             ComputeColorAndUVCoordinates(MaxWidth, MaxHeight);
             ComputePerpendicularAxis();
             UpdateWorldPosition(Vector2.Zero, 0);
+        }
+
+        public Polygon(Polygon Copy)
+        {
+            ArrayVertex = new Vector2[Copy.ArrayVertex.Length];
+            Array.Copy(Copy.ArrayVertex, ArrayVertex, ArrayVertex.Length);
+
+            ArrayAxis = new Vector2[Copy.ArrayAxis.Length];
+            Array.Copy(Copy.ArrayAxis, ArrayAxis, ArrayAxis.Length);
+
+            ArrayIndex = new short[Copy.ArrayIndex.Length];
+            Array.Copy(Copy.ArrayIndex, ArrayIndex, ArrayIndex.Length);
+
+            ArrayUVCoordinates = new Vector2[Copy.ArrayUVCoordinates.Length];
+            Array.Copy(Copy.ArrayUVCoordinates, ArrayUVCoordinates, ArrayUVCoordinates.Length);
+
+            ArrayColorPoints = new Color[Copy.ArrayColorPoints.Length];
+            Array.Copy(Copy.ArrayColorPoints, ArrayColorPoints, ArrayColorPoints.Length);
+
+            ArrayFinalVertex = new VertexPositionColorTexture[Copy.ArrayFinalVertex.Length];
+            Array.Copy(Copy.ArrayFinalVertex, ArrayFinalVertex, ArrayFinalVertex.Length);
+
+            TriangleCount = Copy.TriangleCount;
         }
 
         public void Save(BinaryWriter BW)

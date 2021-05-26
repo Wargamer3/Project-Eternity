@@ -181,7 +181,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         ListCollisionPolygon[C].Offset(Owner.Position.X - Owner.AnimationOrigin.Position.X, Owner.Position.Y - Owner.AnimationOrigin.Position.Y);
                     }
 
-                    NewAttackBox.ListCollisionPolygon = ListCollisionPolygon;
+                    NewAttackBox.Collision.ListCollisionPolygon = ListCollisionPolygon;
                     //TODO: delete the attack box is the animation is cancelled
                     Owner.CreateAttackBox(NewAttackBox);
                 }

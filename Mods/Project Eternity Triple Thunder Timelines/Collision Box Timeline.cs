@@ -14,14 +14,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private const string TimelineType = "Collision Box";
 
         private RobotAnimation Owner;
-        private List<CollisionPolygon> ListCollisionPolygon;
+        private List<Polygon> ListCollisionPolygon;
         private List<Polygon> ListOriginalPolygon;
         public Rectangle SourceRectangle;
 
         public CollisionBoxTimeline()
             : base(TimelineType, "New Collision Box")
         {
-            ListCollisionPolygon = new List<CollisionPolygon>();
+            ListCollisionPolygon = new List<Polygon>();
             ListOriginalPolygon = new List<Polygon>();
         }
 
@@ -41,12 +41,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             this.Owner = Owner;
 
             int ListCollisionPolygonCount = BR.ReadInt32();
-            ListCollisionPolygon = new List<CollisionPolygon>(ListCollisionPolygonCount);
+            ListCollisionPolygon = new List<Polygon>(ListCollisionPolygonCount);
             ListOriginalPolygon = new List<Polygon>();
             for (int P = ListCollisionPolygonCount - 1; P >= 0; --P)
             {
                 Polygon NewPolygon = new Polygon(BR, 1, 1);
-                ListCollisionPolygon.Add(new CollisionPolygon(NewPolygon));
+                ListCollisionPolygon.Add(new Polygon(NewPolygon));
                 ListOriginalPolygon.Add(new Polygon(NewPolygon));
             }
 
@@ -73,9 +73,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         protected override void DoSave(BinaryWriter BW)
         {
             BW.Write(ListCollisionPolygon.Count);
-            foreach (CollisionPolygon ActiveCollisionPolygon in ListCollisionPolygon)
+            foreach (Polygon ActiveCollisionPolygon in ListCollisionPolygon)
             {
-                ActiveCollisionPolygon.ActivePolygon.Save(BW);
+                ActiveCollisionPolygon.Save(BW);
             }
 
             BW.Write(DicAnimationKeyFrame.Count);
@@ -126,12 +126,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 VisibleAnimationObjectKeyFrame NewPolygonCutterKeyFrame = new VisibleAnimationObjectKeyFrame(NewCollisionBoxTimeline.Position,
                                                                                 true, -1);
 
-                CollisionPolygon NewKeyFramePolygon = new CollisionPolygon(new Polygon(NewArrayVertex, ActiveLayer.renderTarget.Width, ActiveLayer.renderTarget.Height));
+                Polygon NewKeyFramePolygon = new Polygon(NewArrayVertex, ActiveLayer.renderTarget.Width, ActiveLayer.renderTarget.Height);
 
                 NewCollisionBoxTimeline.Add(KeyFrame, NewPolygonCutterKeyFrame);
                 NewCollisionBoxTimeline.ListCollisionPolygon.Add(NewKeyFramePolygon);
-                NewCollisionBoxTimeline.ListOriginalPolygon.Add(new Polygon(NewKeyFramePolygon.ActivePolygon));
-                NewKeyFramePolygon.ActivePolygon.UpdateWorldPosition(Vector2.Zero, 0f);
+                NewCollisionBoxTimeline.ListOriginalPolygon.Add(new Polygon(NewKeyFramePolygon));
+                NewKeyFramePolygon.UpdateWorldPosition(Vector2.Zero, 0f);
 
                 NewCollisionBoxTimeline.ComputeSourceRectangle();
                 ReturnValue.Add(NewCollisionBoxTimeline);
@@ -162,7 +162,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 OnNewKeyFrameAnimationSprite(ActiveKeyFrame);
                 for (int C = ListCollisionPolygon.Count - 1; C >= 0; --C)
                 {
-                    ListCollisionPolygon[C].ActivePolygon.Offset(Position.X, Position.Y);
+                    ListCollisionPolygon[C].Offset(Position.X, Position.Y);
                 }
 
                 if (DicAnimationKeyFrame.TryGetValue(NextKeyFrame, out ActiveAnimationSpriteKeyFrame))
@@ -182,12 +182,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             for(int C = ListCollisionPolygon.Count - 1; C >=0; --C)
             {
-                for (int V = 0; V < ListCollisionPolygon[C].ActivePolygon.VertexCount; V++)
+                for (int V = 0; V < ListCollisionPolygon[C].VertexCount; V++)
                 {
-                    ListCollisionPolygon[C].ActivePolygon.ArrayVertex[V] = ListOriginalPolygon[C].ArrayVertex[V];
+                    ListCollisionPolygon[C].ArrayVertex[V] = ListOriginalPolygon[C].ArrayVertex[V];
                 }
 
-                ListCollisionPolygon[C].ActivePolygon.ComputerCenter();
+                ListCollisionPolygon[C].ComputerCenter();
             }
 
             base.SpawnItem(ActiveAnimation, ActiveLayer, KeyFrame);
@@ -214,7 +214,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             for (int C = ListCollisionPolygon.Count - 1; C >= 0; --C)
             {
-                ListCollisionPolygon[C].ActivePolygon.Offset(Translation.X, Translation.Y);
+                ListCollisionPolygon[C].Offset(Translation.X, Translation.Y);
                 ListOriginalPolygon[C].Offset(Translation.X, Translation.Y);
             }
         }
@@ -256,22 +256,22 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             if (IsInEditMode)
             {
-                foreach (CollisionPolygon ActivePolygon in ListCollisionPolygon)
+                foreach (Polygon ActivePolygon in ListCollisionPolygon)
                 {
-                    for (int I = 0; I < ActivePolygon.ActivePolygon.ArrayIndex.Length; I += 3)
+                    for (int I = 0; I < ActivePolygon.ArrayIndex.Length; I += 3)
                     {
-                        Vector2 Vertex1 = ActivePolygon.ActivePolygon.ArrayVertex[ActivePolygon.ActivePolygon.ArrayIndex[I]];
-                        Vector2 Vertex2 = ActivePolygon.ActivePolygon.ArrayVertex[ActivePolygon.ActivePolygon.ArrayIndex[I + 1]];
-                        Vector2 Vertex3 = ActivePolygon.ActivePolygon.ArrayVertex[ActivePolygon.ActivePolygon.ArrayIndex[I + 2]];
+                        Vector2 Vertex1 = ActivePolygon.ArrayVertex[ActivePolygon.ArrayIndex[I]];
+                        Vector2 Vertex2 = ActivePolygon.ArrayVertex[ActivePolygon.ArrayIndex[I + 1]];
+                        Vector2 Vertex3 = ActivePolygon.ArrayVertex[ActivePolygon.ArrayIndex[I + 2]];
 
                         g.DrawLine(GameScreen.sprPixel, Vertex1, Vertex2, Color.Black, 1);
                         g.DrawLine(GameScreen.sprPixel, Vertex2, Vertex3, Color.Black, 1);
                         g.DrawLine(GameScreen.sprPixel, Vertex3, Vertex1, Color.Black, 1);
                     }
-                    for (int V = 0; V < ActivePolygon.ActivePolygon.ArrayVertex.Length; V++)
+                    for (int V = 0; V < ActivePolygon.ArrayVertex.Length; V++)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)ActivePolygon.ActivePolygon.ArrayVertex[V].X - 2,
-                                                        (int)ActivePolygon.ActivePolygon.ArrayVertex[V].Y - 2, 5, 5), Color.Black);
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)ActivePolygon.ArrayVertex[V].X - 2,
+                                                        (int)ActivePolygon.ArrayVertex[V].Y - 2, 5, 5), Color.Black);
                     }
                 }
             }

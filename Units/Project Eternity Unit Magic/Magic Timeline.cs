@@ -85,7 +85,7 @@ namespace ProjectEternity.Units.Magic
         {
             foreach (Projectile ActiveProjectile in ListProjectile)
             {
-                g.Draw(GameScreens.GameScreen.sprPixel, new Rectangle((int)ActiveProjectile.ListCollisionPolygon[0].ArrayVertex[0].X, (int)ActiveProjectile.ListCollisionPolygon[0].ArrayVertex[0].Y, 10, 10), Color.Red);
+                g.Draw(GameScreens.GameScreen.sprPixel, new Rectangle((int)ActiveProjectile.Collision.ListCollisionPolygon[0].ArrayVertex[0].X, (int)ActiveProjectile.Collision.ListCollisionPolygon[0].ArrayVertex[0].Y, 10, 10), Color.Red);
             }
         }
 

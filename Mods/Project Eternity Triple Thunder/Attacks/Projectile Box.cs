@@ -40,7 +40,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        private Vector2 Position;
         private float Angle;
         private SimpleAnimation ProjectileAnimation;
         private BulletTrail Trail;
@@ -52,7 +51,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             : base(Damage, ExplosionAttributes, Owner, false)
         {
             this.ActiveProjectileInfo = ActiveProjectileInfo;
-            this.Position = Position;
             if (ActiveProjectileInfo.RotatationAllowed)
             {
                 this.Angle = Angle;
@@ -88,7 +86,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             NewPolygon.ComputePerpendicularAxis();
             NewPolygon.ComputerCenter();
 
-            ListCollisionPolygon = new List<Polygon>(1) { NewPolygon };
+            Collision.ListCollisionPolygon = new List<Polygon>(1) { NewPolygon };
+            Collision.ComputeCenterAndRadius();
+            this.Collision.Position = Position;
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     Angle = (float)Math.Atan2(Speed.Y, Speed.X);
                 }
 
-                Owner.SetAttackContext(this, Owner, Angle, ListCollisionPolygon[0].Center);
+                Owner.SetAttackContext(this, Owner, Angle, Collision.ListCollisionPolygon[0].Center);
 
                 if (ProjectileAnimation != null)
                 {
@@ -143,7 +143,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             base.Move(gameTime);
 
-            Position += Speed;
+            Collision.Position += Speed;
 
             if (ProjectileAnimation != null)
             {
@@ -163,11 +163,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (Trail != null)
             {
-                Trail.Draw(g, Vector2.Zero, ListCollisionPolygon[0].Center, Speed, Angle);
+                Trail.Draw(g, Vector2.Zero, Collision.ListCollisionPolygon[0].Center, Speed, Angle);
             }
             else if (ActiveProjectileInfo.TrailType == 1)
             {
-                g.DrawLine(GameScreen.sprPixel, Position, Position + Speed, Color.FromNonPremultiplied(255, 255, 255, 127), 1);
+                g.DrawLine(GameScreen.sprPixel, Collision.Position, Collision.Position + Speed, Color.FromNonPremultiplied(255, 255, 255, 127), 1);
             }
 
             if (ProjectileAnimation != null)
@@ -187,7 +187,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public override void OnCollision(PolygonCollisionResult FinalCollisionResult, Polygon FinalCollisionPolygon, out Vector2 CollisionPoint)
         {
             IsAlive = false;
-            CollisionPoint = ListCollisionPolygon[0].Center;
+            CollisionPoint = Collision.ListCollisionPolygon[0].Center;
         }
     }
 }

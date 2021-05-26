@@ -168,9 +168,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             while (NeedToMoveUp)
             {
-                foreach (CollisionPolygon ActivePlayerCollisionPolygon in Owner.ListCollisionPolygon)
+                foreach (Polygon ActivePlayerCollisionPolygon in Owner.Collision.ListCollisionPolygon)
                 {
-                    if (ActivePlayerCollisionPolygon.IsDead || !NeedToMoveUp)
+                    if (!NeedToMoveUp)
                         continue;
 
                     foreach (Tuple<PolygonCollisionResult, Polygon> FinalCollisionResult in ListFloorCollidingPolygon)
@@ -180,7 +180,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         Owner.NormalizedGroundVector = GroundAxis;
                         Owner.NormalizedPerpendicularGroundVector = FinalCollisionResult.Item1.Axis;
 
-                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon.ActivePolygon, FinalCollisionResult.Item2, Vector2.Zero, Vector2.Zero);
+                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, FinalCollisionResult.Item2, Vector2.Zero, Vector2.Zero);
 
                         if (CollisionResult.Distance >= 0)
                         {
@@ -206,12 +206,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     bool NeedToMoveDown = true;
                     foreach (Tuple<PolygonCollisionResult, Polygon> FinalCollisionResult in ListFloorCollidingPolygon)
                     {
-                        foreach (CollisionPolygon ActivePlayerCollisionPolygon in Owner.ListCollisionPolygon)
+                        foreach (Polygon ActivePlayerCollisionPolygon in Owner.Collision.ListCollisionPolygon)
                         {
-                            if (ActivePlayerCollisionPolygon.IsDead)
-                                continue;
-
-                            PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon.ActivePolygon, FinalCollisionResult.Item2, Owner.GravityVector);
+                            PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, FinalCollisionResult.Item2, Owner.GravityVector);
 
                             if (CollisionResult.Distance >= 0)
                             {
@@ -262,12 +259,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             //Check if the wall is not a floor/slope
             foreach (Tuple<PolygonCollisionResult, Polygon> FinalCollisionResult in ListWallCollidingPolygon)
             {
-                foreach (CollisionPolygon ActivePlayerCollisionPolygon in Owner.ListCollisionPolygon)
+                foreach (Polygon ActivePlayerCollisionPolygon in Owner.Collision.ListCollisionPolygon)
                 {
-                    if (ActivePlayerCollisionPolygon.IsDead)
-                        continue;
-
-                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon.ActivePolygon, FinalCollisionResult.Item2, Owner.Speed, new Vector2(0, -Owner.Speed.Y - 1));
+                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, FinalCollisionResult.Item2, Owner.Speed, new Vector2(0, -Owner.Speed.Y - 1));
 
                     if (CollisionResult.Distance >= 0)
                     {

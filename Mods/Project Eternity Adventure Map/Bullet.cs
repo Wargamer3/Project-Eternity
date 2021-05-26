@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.AdventureScreen
 
         private void Move()
         {
-            CollisionBox.Center += Speed;
+            CollisionBox.Position += Speed;
         }
 
         public override void SetAngle(float Angle)

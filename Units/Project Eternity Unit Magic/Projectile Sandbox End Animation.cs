@@ -92,7 +92,7 @@ namespace ProjectEternity.Units.Magic
                     if (ActiveProjectile.IsAlive)
                     {
                         ActiveProjectile.Update(gameTime);
-                        foreach (Polygon ProjectileCollision in ActiveProjectile.ListCollisionPolygon)
+                        foreach (Polygon ProjectileCollision in ActiveProjectile.Collision.ListCollisionPolygon)
                         {
                             //Out of bound
                             if (!ListOutputProjectile.Contains(ActiveProjectile)

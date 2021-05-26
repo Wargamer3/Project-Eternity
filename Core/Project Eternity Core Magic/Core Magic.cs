@@ -134,16 +134,16 @@ namespace ProjectEternity.Core.Magic
             NewPolygon.ComputePerpendicularAxis();
             NewPolygon.ComputerCenter();
 
-            ListCollisionPolygon = new List<Polygon>(1) { NewPolygon };
+            Collision.ListCollisionPolygon = new List<Polygon>(1) { NewPolygon };
             MagicParams.SetMagicUser(Parent);
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
             MagicParams.SetMagicUser(Parent);
-            Params.SharedParams.OwnerPosition = ListCollisionPolygon[0].Center;
+            Params.SharedParams.OwnerPosition = Collision.ListCollisionPolygon[0].Center;
             Params.SharedParams.OwnerAngle = (float)Math.Atan2(Speed.Y, Speed.X);
-            ListCollisionPolygon[0].Offset(Speed.X, Speed.Y);
+            Collision.ListCollisionPolygon[0].Offset(Speed.X, Speed.Y);
         }
     }
 

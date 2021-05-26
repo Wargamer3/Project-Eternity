@@ -14,21 +14,27 @@ namespace ProjectEternity.Core
     {
         public List<Polygon> ListCollisionPolygon;
         public LinkedList<CollisionZone<T>> ListParent;
-        public Vector2 Center;
+        public Vector2 Position;
         public float Radius;
+
+        public CollisionObject()
+        {
+            ListCollisionPolygon = new List<Polygon>();
+            ListParent = new LinkedList<CollisionZone<T>>();
+        }
 
         public CollisionObject(Vector2[] ArrayVertex, int MaxWidth, int MaxHeight)
         {
             ListCollisionPolygon = new List<Polygon>() { new Polygon(ArrayVertex, MaxWidth, MaxHeight) };
             ListParent = new LinkedList<CollisionZone<T>>();
 
-            Init();
+            ComputeCenterAndRadius();
         }
 
-        public void Init()
+        public void ComputeCenterAndRadius()
         {
-            float totalX = 0;
-            float totalY = 0;
+            float TotalX = 0;
+            float TotalY = 0;
             float MinX = float.MaxValue;
             float MinY = float.MaxValue;
             float MaxX = float.MinValue;
@@ -48,11 +54,11 @@ namespace ProjectEternity.Core
                 if (ListCollisionPolygon[P].Center.Y + ListCollisionPolygon[P].Radius > MaxY)
                     MaxY = ListCollisionPolygon[P].Center.Y + ListCollisionPolygon[P].Radius;
 
-                totalX += ListCollisionPolygon[P].Center.X;
-                totalY += ListCollisionPolygon[P].Center.Y;
+                TotalX += ListCollisionPolygon[P].Center.X;
+                TotalY += ListCollisionPolygon[P].Center.Y;
             }
 
-            Center = new Vector2(totalX / ListCollisionPolygon.Count, totalY / ListCollisionPolygon.Count);
+            Position = new Vector2(TotalX / ListCollisionPolygon.Count, TotalY / ListCollisionPolygon.Count);
             Radius = Math.Max(MaxX - MinX, MaxY - MinY) / 2f;
         }
 
@@ -157,11 +163,14 @@ namespace ProjectEternity.Core
 
             if (ArraySubZone.Length > 0)
             {
-                int[] Keys = GetKeysFromCircle(NewObject.Collision.Center, NewObject.Collision.Radius);
+                int[] Keys = GetKeysFromCircle(NewObject.Collision.Position, NewObject.Collision.Radius);
 
                 for (int K = 0; K < Keys.Length; ++K)
                 {
-                    ArraySubZone[Keys[K]].AddToZone(NewObject);
+                    if (Keys[K] >= 0 && Keys[K] < ArraySubZone.Length)
+                    {
+                        ArraySubZone[Keys[K]].AddToZone(NewObject);
+                    }
                 }
             }
 
@@ -170,7 +179,7 @@ namespace ProjectEternity.Core
 
         public void Move(T ObjectToMove, Vector2 Offset)
         {
-            ObjectToMove.Collision.Center += Offset;
+            ObjectToMove.Collision.Position += Offset;
             CollisionZone<T> Root = ObjectToMove.Collision.ListParent.First.Value;
 
             foreach (CollisionZone<T> ActiveParent in ObjectToMove.Collision.ListParent)
@@ -223,12 +232,15 @@ namespace ProjectEternity.Core
             where V : class, ICollisionObject<V>
         {
             HashSet<T> SetUniqueObject = new HashSet<T>();
-            int[] Keys = GetKeysFromCircle(CollisionBox.Center, CollisionBox.Radius);
+            int[] Keys = GetKeysFromCircle(CollisionBox.Position, CollisionBox.Radius);
             for (int K = 0; K < Keys.Length; ++K)
             {
-                foreach (T ActiveObstacle in ArraySubZone[Keys[K]].ListObjectInZoneAndOverlappingParents)
+                if (Keys[K] >= 0)
                 {
-                    SetUniqueObject.Add(ActiveObstacle);
+                    foreach (T ActiveObstacle in ArraySubZone[Keys[K]].ListObjectInZoneAndOverlappingParents)
+                    {
+                        SetUniqueObject.Add(ActiveObstacle);
+                    }
                 }
             }
 

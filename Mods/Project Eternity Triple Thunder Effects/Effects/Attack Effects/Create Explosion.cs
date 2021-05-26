@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         protected override void Load(BinaryReader BR)
         {
             _ExplosionAttributes = new Weapon.ExplosionOptions(BR);
-            if (_ExplosionAttributes.ExplosionAnimation.Path != string.Empty)
+            if (_ExplosionAttributes.ExplosionAnimation.Path != string.Empty && Params != null && Params.SharedParams.Content != null)
             {
                 _ExplosionAttributes.ExplosionAnimation.Load(Params.SharedParams.Content, "Animations/Sprites/");
             }
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         protected override string DoExecuteEffect()
         {
             Vector2 ProjectileAngleVector = new Vector2(-(float)Math.Cos(Params.SharedParams.OwnerAngle), -(float)Math.Sin(Params.SharedParams.OwnerAngle));
-            Params.LocalContext.Owner.CreateExplosion(Params.LocalContext.OwnerProjectile.ListCollisionPolygon[0].Center, _ExplosionAttributes, ProjectileAngleVector);
+            Params.LocalContext.Owner.CreateExplosion(Params.LocalContext.OwnerProjectile.Collision.ListCollisionPolygon[0].Center, _ExplosionAttributes, ProjectileAngleVector);
 
             return null;
         }

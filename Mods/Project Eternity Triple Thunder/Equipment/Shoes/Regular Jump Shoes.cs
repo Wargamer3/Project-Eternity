@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         IsReadyToJump = false;
                         Vector2 VerticalSpeed = Owner.Speed * Owner.NormalizedPerpendicularGroundVector;
                         JumpSpeedVector = Owner.JumpSpeed * -Owner.GravityVector;
-                        Owner.Speed = Owner.Speed + VerticalSpeed + JumpSpeedVector;
+                        Owner.Speed += VerticalSpeed + JumpSpeedVector;
                         if (Owner.Sounds.JumpStartSound != UnitSounds.JumpStartSounds.None)
                         {
                             Owner.PlayerSFXGenerator.PlayJumpStartSound(Owner.Sounds.JumpStartSound);
@@ -87,6 +87,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     IsJumping = false;
                 }
             }
+
 
             IsReadyToJump = false;
         }
@@ -153,9 +154,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             while (NeedToMoveUp)
             {
-                foreach (CollisionPolygon ActivePlayerCollisionPolygon in Owner.ListCollisionPolygon)
+                foreach (Polygon ActivePlayerCollisionPolygon in Owner.Collision.ListCollisionPolygon)
                 {
-                    if (ActivePlayerCollisionPolygon.IsDead || !NeedToMoveUp)
+                    if (!NeedToMoveUp)
                         continue;
 
                     foreach (Tuple<PolygonCollisionResult, Polygon> FinalCollisionResult in ListFloorCollidingPolygon)
@@ -165,7 +166,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         Owner.NormalizedGroundVector = GroundAxis;
                         Owner.NormalizedPerpendicularGroundVector = FinalCollisionResult.Item1.Axis;
 
-                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon.ActivePolygon, FinalCollisionResult.Item2, Vector2.Zero, Vector2.Zero);
+                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, FinalCollisionResult.Item2, Vector2.Zero, Vector2.Zero);
 
                         if (CollisionResult.Distance >= 0)
                         {
@@ -191,12 +192,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     bool NeedToMoveDown = true;
                     foreach (Tuple<PolygonCollisionResult, Polygon> FinalCollisionResult in ListFloorCollidingPolygon)
                     {
-                        foreach (CollisionPolygon ActivePlayerCollisionPolygon in Owner.ListCollisionPolygon)
+                        foreach (Polygon ActivePlayerCollisionPolygon in Owner.Collision.ListCollisionPolygon)
                         {
-                            if (ActivePlayerCollisionPolygon.IsDead)
-                                continue;
-
-                            PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon.ActivePolygon, FinalCollisionResult.Item2, Owner.GravityVector);
+                            PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, FinalCollisionResult.Item2, Owner.GravityVector);
 
                             if (CollisionResult.Distance >= 0)
                             {
@@ -221,7 +219,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Owner.Move(Owner.Speed + VerticalSpeedCancelVector);
 
-            Owner.Speed = Owner.Speed + VerticalSpeedCancelVector + Owner.GravityVector;
+            Owner.Speed += VerticalSpeedCancelVector + Owner.GravityVector * 3;//Extra gravity determine how much you can stick to a downward slope.
         }
 
         public override void OnCeilingCollision(List<Tuple<PolygonCollisionResult, Polygon>> ListCeilingCollidingPolygon)
@@ -247,12 +245,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             //Check if the wall is not a floor/slope
             foreach (Tuple<PolygonCollisionResult, Polygon> FinalCollisionResult in ListWallCollidingPolygon)
             {
-                foreach (CollisionPolygon ActivePlayerCollisionPolygon in Owner.ListCollisionPolygon)
+                foreach (Polygon ActivePlayerCollisionPolygon in Owner.Collision.ListCollisionPolygon)
                 {
-                    if (ActivePlayerCollisionPolygon.IsDead)
-                        continue;
-
-                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon.ActivePolygon, FinalCollisionResult.Item2, Owner.Speed, new Vector2(0, -Owner.Speed.Y - 1));
+                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, FinalCollisionResult.Item2, Owner.Speed, new Vector2(0, -Owner.Speed.Y - 1));
 
                     if (CollisionResult.Distance >= 0)
                     {

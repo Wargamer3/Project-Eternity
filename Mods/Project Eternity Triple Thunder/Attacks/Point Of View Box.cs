@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             NewPolygon.ComputerCenter();
 
-            ListCollisionPolygon = new List<Polygon>(1) { NewPolygon };
+            Collision.ListCollisionPolygon = new List<Polygon>(1) { NewPolygon };
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void DrawRegular(CustomSpriteBatch g)
         {
-            GameScreen.DrawLine(g, ListCollisionPolygon[0].ArrayVertex[0], ListCollisionPolygon[0].ArrayVertex[2], Color.Black, 3);
+            GameScreen.DrawLine(g, Collision.ListCollisionPolygon[0].ArrayVertex[0], Collision.ListCollisionPolygon[0].ArrayVertex[2], Color.Black, 3);
         }
 
         public override void OnCollision(PolygonCollisionResult FinalCollisionResult, Polygon FinalCollisionPolygon, out Vector2 CollisionPoint)

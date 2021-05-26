@@ -37,12 +37,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             NewPolygon.ComputePerpendicularAxis();
             NewPolygon.ComputerCenter();
 
-            ListCollisionPolygon = new List<Polygon>(1) { NewPolygon };
+            Collision.ListCollisionPolygon = new List<Polygon>(1) { NewPolygon };
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Owner.SetAttackContext(this, Owner, Angle, ListCollisionPolygon[0].Center);
+            Owner.SetAttackContext(this, Owner, Angle, Collision.ListCollisionPolygon[0].Center);
         }
 
         public override void SetAngle(float Angle)
@@ -53,8 +53,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             if (Speed != Vector2.Zero)
             {
-                ListCollisionPolygon[0].ArrayVertex[1] = CollisionPoint;
-                ListCollisionPolygon[0].ArrayVertex[2] = CollisionPoint;
+                Collision.ListCollisionPolygon[0].ArrayVertex[1] = CollisionPoint;
+                Collision.ListCollisionPolygon[0].ArrayVertex[2] = CollisionPoint;
                 Speed = Vector2.Zero;
             }
         }
@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public override void OnCollision(PolygonCollisionResult FinalCollisionResult, Polygon FinalCollisionPolygon, out Vector2 CollisionPoint)
         {
             float MinDistance = float.MaxValue;
-            Vector2 FinalCollisionPoint = ListCollisionPolygon[0].ArrayVertex[2];
+            Vector2 FinalCollisionPoint = Collision.ListCollisionPolygon[0].ArrayVertex[2];
 
             for (int I = 0; I < FinalCollisionPolygon.ArrayIndex.Length; I += 3)
             {
@@ -73,13 +73,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 CollisionPoint = Vector2.Zero;
 
                 if (Polygon.DoLinesIntersect(
-                    ListCollisionPolygon[0].ArrayVertex[0],
-                    ListCollisionPolygon[0].ArrayVertex[2] + Speed,
+                    Collision.ListCollisionPolygon[0].ArrayVertex[0],
+                    Collision.ListCollisionPolygon[0].ArrayVertex[2] + Speed,
                     Vertex1,
                     Vertex2,
                     ref CollisionPoint))
                 {
-                    float DistanceToPoint = (ListCollisionPolygon[0].ArrayVertex[0] - CollisionPoint).Length();
+                    float DistanceToPoint = (Collision.ListCollisionPolygon[0].ArrayVertex[0] - CollisionPoint).Length();
 
                     if (DistanceToPoint < MinDistance)
                     {
@@ -89,13 +89,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
 
                 if (Polygon.DoLinesIntersect(
-                    ListCollisionPolygon[0].ArrayVertex[0],
-                    ListCollisionPolygon[0].ArrayVertex[2] + Speed,
+                    Collision.ListCollisionPolygon[0].ArrayVertex[0],
+                    Collision.ListCollisionPolygon[0].ArrayVertex[2] + Speed,
                     Vertex2,
                     Vertex3,
                     ref CollisionPoint))
                 {
-                    float DistanceToPoint = (ListCollisionPolygon[0].ArrayVertex[0] - CollisionPoint).Length();
+                    float DistanceToPoint = (Collision.ListCollisionPolygon[0].ArrayVertex[0] - CollisionPoint).Length();
 
                     if (DistanceToPoint < MinDistance)
                     {
@@ -105,13 +105,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
 
                 if (Polygon.DoLinesIntersect(
-                    ListCollisionPolygon[0].ArrayVertex[0],
-                    ListCollisionPolygon[0].ArrayVertex[2] + Speed,
+                    Collision.ListCollisionPolygon[0].ArrayVertex[0],
+                    Collision.ListCollisionPolygon[0].ArrayVertex[2] + Speed,
                     Vertex3,
                     Vertex1,
                     ref CollisionPoint))
                 {
-                    float DistanceToPoint = (ListCollisionPolygon[0].ArrayVertex[0] - CollisionPoint).Length();
+                    float DistanceToPoint = (Collision.ListCollisionPolygon[0].ArrayVertex[0] - CollisionPoint).Length();
 
                     if (DistanceToPoint < MinDistance)
                     {
@@ -123,14 +123,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Vector2 MovementCorection = FinalCollisionResult.Axis * FinalCollisionResult.Distance;
             Vector2 FinalMovement = Speed + MovementCorection;
-            CollisionPoint = Polygon.GetCollisionPointFromLine(ListCollisionPolygon[0].ArrayVertex[0], ListCollisionPolygon[0].ArrayVertex[2], Speed, FinalCollisionPolygon, out _);
+            CollisionPoint = Polygon.GetCollisionPointFromLine(Collision.ListCollisionPolygon[0].ArrayVertex[0], Collision.ListCollisionPolygon[0].ArrayVertex[2], Speed, FinalCollisionPolygon, out _);
 
             FinalizeCollision(FinalMovement, FinalCollisionPoint);
         }
 
         public override void DrawRegular(CustomSpriteBatch g)
         {
-            GameScreen.DrawLine(g, ListCollisionPolygon[0].ArrayVertex[0], ListCollisionPolygon[0].ArrayVertex[2], Color.Black, 3);
+            GameScreen.DrawLine(g, Collision.ListCollisionPolygon[0].ArrayVertex[0], Collision.ListCollisionPolygon[0].ArrayVertex[2], Color.Black, 3);
         }
     }
 }

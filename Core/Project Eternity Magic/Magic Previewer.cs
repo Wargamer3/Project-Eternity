@@ -88,7 +88,7 @@ namespace ProjectEternity.Core.Magic
                 if (ActiveProjectile.IsAlive)
                 {
                     ActiveProjectile.Update(gameTime);
-                    foreach (Polygon ProjectileCollision in ActiveProjectile.ListCollisionPolygon)
+                    foreach (Polygon ProjectileCollision in ActiveProjectile.Collision.ListCollisionPolygon)
                     {
                         //Out of bound
                         if (Polygon.PolygonCollisionSAT(SandboxCollisionBox, ProjectileCollision, Vector2.Zero).Distance < 0

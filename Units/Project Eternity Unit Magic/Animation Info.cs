@@ -97,19 +97,19 @@ namespace ProjectEternity.Units.Magic
                 float MaxX = float.MinValue;
                 float MaxY = float.MinValue;
 
-                for (int P = ActiveProjectile.ListCollisionPolygon.Count - 1; P >= 0; --P)
+                for (int P = ActiveProjectile.Collision.ListCollisionPolygon.Count - 1; P >= 0; --P)
                 {
-                    for (int V = ActiveProjectile.ListCollisionPolygon[P].ArrayVertex.Length - 1; V >= 0; --V)
+                    for (int V = ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex.Length - 1; V >= 0; --V)
                     {
-                        if (ActiveProjectile.ListCollisionPolygon[P].ArrayVertex[V].X < MinX)
-                            MinX = ActiveProjectile.ListCollisionPolygon[P].ArrayVertex[V].X;
-                        if (ActiveProjectile.ListCollisionPolygon[P].ArrayVertex[V].X > MaxX)
-                            MaxX = ActiveProjectile.ListCollisionPolygon[P].ArrayVertex[V].X;
+                        if (ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex[V].X < MinX)
+                            MinX = ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex[V].X;
+                        if (ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex[V].X > MaxX)
+                            MaxX = ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex[V].X;
 
-                        if (ActiveProjectile.ListCollisionPolygon[P].ArrayVertex[V].Y < MinY)
-                            MinY = ActiveProjectile.ListCollisionPolygon[P].ArrayVertex[V].Y;
-                        if (ActiveProjectile.ListCollisionPolygon[P].ArrayVertex[V].Y > MaxY)
-                            MaxY = ActiveProjectile.ListCollisionPolygon[P].ArrayVertex[V].Y;
+                        if (ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex[V].Y < MinY)
+                            MinY = ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex[V].Y;
+                        if (ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex[V].Y > MaxY)
+                            MaxY = ActiveProjectile.Collision.ListCollisionPolygon[P].ArrayVertex[V].Y;
                     }
                 }
 

@@ -12,7 +12,7 @@ namespace ProjectEternity.Core
         void AddProjectile(Projectile NewProjectile);
     }
 
-    public abstract class Projectile
+    public abstract class Projectile : ICollisionObject<Projectile>
     {
         public bool IsAlive;
         private bool HasLifetime;
@@ -22,7 +22,9 @@ namespace ProjectEternity.Core
         public Vector2 Speed;
         protected bool AffectedByGravity;
         public double DistanceTravelled;
-        public List<Polygon> ListCollisionPolygon;
+
+        CollisionObject<Projectile> CollisionBox;
+        public CollisionObject<Projectile> Collision => CollisionBox;
         public List<BaseAutomaticSkill> ListActiveSkill;
 
         public Projectile()
@@ -33,6 +35,7 @@ namespace ProjectEternity.Core
             DistanceTravelled = 0;
             Speed = Vector2.Zero;
             ListActiveSkill = new List<BaseAutomaticSkill>();
+            CollisionBox = new CollisionObject<Projectile>();
         }
 
         public Projectile(double Lifetime)
@@ -46,6 +49,7 @@ namespace ProjectEternity.Core
             TimeAlive = 0;
             Speed = Vector2.Zero;
             ListActiveSkill = new List<BaseAutomaticSkill>();
+            CollisionBox = new CollisionObject<Projectile>();
         }
 
         public void Update(GameTime gameTime)
@@ -85,9 +89,9 @@ namespace ProjectEternity.Core
 
         public void Offset(Vector2 Translation)
         {
-            for(int P = ListCollisionPolygon.Count - 1; P>=0; --P)
+            for(int P = Collision.ListCollisionPolygon.Count - 1; P>=0; --P)
             {
-                ListCollisionPolygon[P].Offset(Translation.X, Translation.Y);
+                Collision.ListCollisionPolygon[P].Offset(Translation.X, Translation.Y);
             }
         }
 

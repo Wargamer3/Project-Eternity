@@ -38,10 +38,10 @@ namespace ProjectEternity.GameScreens.AdventureScreen
             if (SecondsBeforeExplosion <= 0)
             {
                 Owner.Remove(this);
-                SimpleLinearExplosion ExplosionUp = new SimpleLinearExplosion(Owner, CollisionBox.Center, new Vector2(0f, -1f));
-                SimpleLinearExplosion ExplosionDown = new SimpleLinearExplosion(Owner, CollisionBox.Center, new Vector2(0f, 1f));
-                SimpleLinearExplosion ExplosionLeft = new SimpleLinearExplosion(Owner, CollisionBox.Center, new Vector2(-1f, 0f));
-                SimpleLinearExplosion ExplosionRight = new SimpleLinearExplosion(Owner, CollisionBox.Center, new Vector2(1f, 0f));
+                SimpleLinearExplosion ExplosionUp = new SimpleLinearExplosion(Owner, CollisionBox.Position, new Vector2(0f, -1f));
+                SimpleLinearExplosion ExplosionDown = new SimpleLinearExplosion(Owner, CollisionBox.Position, new Vector2(0f, 1f));
+                SimpleLinearExplosion ExplosionLeft = new SimpleLinearExplosion(Owner, CollisionBox.Position, new Vector2(-1f, 0f));
+                SimpleLinearExplosion ExplosionRight = new SimpleLinearExplosion(Owner, CollisionBox.Position, new Vector2(1f, 0f));
 
                 Owner.Add(ExplosionUp);
                 Owner.Add(ExplosionDown);
@@ -229,7 +229,7 @@ namespace ProjectEternity.GameScreens.AdventureScreen
         
         private void Move(Vector2 Movement)
         {
-            CollisionBox.Center += Movement / 2;
+            CollisionBox.Position += Movement / 2;
             CollisionBox.Radius += (Movement.X + Movement.Y) / 2;
             CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardLeftVector] = CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardLeftVector] + Movement;
             CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardRightVector] = CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardRightVector] + Movement;
@@ -610,7 +610,7 @@ namespace ProjectEternity.GameScreens.AdventureScreen
 
         private void Move(Vector2 Movement)
         {
-            CollisionBox.Center += Movement / 2;
+            CollisionBox.Position += Movement / 2;
             CollisionBox.Radius += (Movement.X + Movement.Y) / 2;
             CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardLeftVector] = CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardLeftVector] + Movement;
             CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardRightVector] = CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardRightVector] + Movement;

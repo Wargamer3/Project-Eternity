@@ -1145,13 +1145,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     if (ShowCollisionBoxes)
                     {
                         //Collisions Boxes
-                        foreach (CollisionPolygon ActivePolygonBox in ActiveRobot.ListCollisionPolygon)
+                        foreach (Polygon ActivePolygon in ActiveRobot.Collision.ListCollisionPolygon)
                         {
-                            if (ActivePolygonBox.IsDead)
-                                continue;
-
-                            Polygon ActivePolygon = ActivePolygonBox.ActivePolygon;
-
                             g.Draw(sprPixel, new Rectangle((int)ActivePolygon.Center.X - 2,
                                                            (int)ActivePolygon.Center.Y - 2, 5, 5), Color.Red);
 
@@ -1213,26 +1208,26 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 for (int L = 0; L < ListLayer.Count; L++)
                 {
-                    foreach (Polygon ActivePolygon in ListLayer[L].ListWorldCollisionPolygon)
+                    foreach (WorldPolygon ActivePolygon in ListLayer[L].ListWorldCollisionPolygon)
                     {
-                        for (int V = 0; V < ActivePolygon.ArrayVertex.Length; V++)
+                        for (int V = 0; V < ActivePolygon.Collision.ListCollisionPolygon[0].ArrayVertex.Length; V++)
                         {
                             Vector2 EndPoint;
-                            if (V < ActivePolygon.ArrayVertex.Length - 1)
+                            if (V < ActivePolygon.Collision.ListCollisionPolygon[0].ArrayVertex.Length - 1)
                             {
-                                EndPoint = ActivePolygon.ArrayVertex[V + 1];
+                                EndPoint = ActivePolygon.Collision.ListCollisionPolygon[0].ArrayVertex[V + 1];
                             }
                             else
                             {
-                                EndPoint = ActivePolygon.ArrayVertex[0];
+                                EndPoint = ActivePolygon.Collision.ListCollisionPolygon[0].ArrayVertex[0];
                             }
 
-                            DrawLine(g, ActivePolygon.ArrayVertex[V], EndPoint, Color.Black);
-                            if (V < ActivePolygon.ArrayAxis.Length)
+                            DrawLine(g, ActivePolygon.Collision.ListCollisionPolygon[0].ArrayVertex[V], EndPoint, Color.Black);
+                            if (V < ActivePolygon.Collision.ListCollisionPolygon[0].ArrayAxis.Length)
                             {
-                                Vector2 StartPoint = ActivePolygon.ArrayVertex[V];
-                                StartPoint -= (ActivePolygon.ArrayVertex[V] - EndPoint) / 2;
-                                DrawLine(g, StartPoint, StartPoint + ActivePolygon.ArrayAxis[V] * 20, Color.Red);
+                                Vector2 StartPoint = ActivePolygon.Collision.ListCollisionPolygon[0].ArrayVertex[V];
+                                StartPoint -= (ActivePolygon.Collision.ListCollisionPolygon[0].ArrayVertex[V] - EndPoint) / 2;
+                                DrawLine(g, StartPoint, StartPoint + ActivePolygon.Collision.ListCollisionPolygon[0].ArrayAxis[V] * 20, Color.Red);
                             }
                         }
                     }

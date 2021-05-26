@@ -234,7 +234,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
             NewSkill.AddSkillEffectsToTarget(string.Empty);
             Constants.TotalGameTime = 10;
             NewSkill.AddSkillEffectsToTarget(string.Empty);
-            DummyMap.ListLayer[0].ListAttackCollisionBox[0].ListCollisionPolygon[0].Center = new Vector2(10, 10);
+            DummyMap.ListLayer[0].ListAttackCollisionBox[0].Collision.ListCollisionPolygon[0].Center = new Vector2(10, 10);
 
             //Channel enough Mana for 2 fireballs
             for (int i = 0; i < 50; i++)
@@ -247,8 +247,8 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
             DummyMap.ListLayer[0].ListAttackCollisionBox[0].Update(new GameTime(new TimeSpan(), new TimeSpan(0, 0, 0, 50, 0)));
 
             Assert.AreEqual(2, DummyMap.ListLayer[0].ListAttackCollisionBox.Count);
-            Assert.AreEqual(new Vector2(15, 10) , DummyMap.ListLayer[0].ListAttackCollisionBox[0].ListCollisionPolygon[0].Center);
-            Assert.AreEqual(new Vector2(15, 10), DummyMap.ListLayer[0].ListAttackCollisionBox[1].ListCollisionPolygon[0].Center);
+            Assert.AreEqual(new Vector2(15, 10) , DummyMap.ListLayer[0].ListAttackCollisionBox[0].Collision.ListCollisionPolygon[0].Center);
+            Assert.AreEqual(new Vector2(15, 10), DummyMap.ListLayer[0].ListAttackCollisionBox[1].Collision.ListCollisionPolygon[0].Center);
         }
 
         [TestMethod]
@@ -287,7 +287,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
             NewSkill.AddSkillEffectsToTarget(string.Empty);
             Constants.TotalGameTime = 10;
             NewSkill.AddSkillEffectsToTarget(string.Empty);
-            DummyMap.ListLayer[0].ListAttackCollisionBox[0].ListCollisionPolygon[0].Center = new Vector2(10, 10);
+            DummyMap.ListLayer[0].ListAttackCollisionBox[0].Collision.ListCollisionPolygon[0].Center = new Vector2(10, 10);
 
             //Channel enough Mana for 2 fireballs
             for (int i = 0; i < 50; i++)
@@ -299,8 +299,8 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
 
             DummyMap.ListLayer[0].ListAttackCollisionBox[0].Update(new GameTime(new TimeSpan(), new TimeSpan(0, 0, 0, 50, 0)));
 
-            Assert.AreEqual(0, DummyMap.ListLayer[0].ListAttackCollisionBox[0].ListCollisionPolygon[0].Center.X);
-            Assert.AreEqual(70, DummyMap.ListLayer[0].ListAttackCollisionBox[1].ListCollisionPolygon[0].Center.X);
+            Assert.AreEqual(0, DummyMap.ListLayer[0].ListAttackCollisionBox[0].Collision.ListCollisionPolygon[0].Center.X);
+            Assert.AreEqual(70, DummyMap.ListLayer[0].ListAttackCollisionBox[1].Collision.ListCollisionPolygon[0].Center.X);
         }
 
         [TestMethod]

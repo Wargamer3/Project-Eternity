@@ -68,7 +68,7 @@ namespace ProjectEternity.UnitTests
             }
 
             Assert.AreEqual(1, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][0]).ListProjectile.Count);
-            Assert.AreEqual(580, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][0]).ListProjectile[0].ListCollisionPolygon[0].Center.X, 0.01);
+            Assert.AreEqual(580, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][0]).ListProjectile[0].Collision.ListCollisionPolygon[0].Center.X, 0.01);
 
             for (int i = 0; i <= 60; ++i)
             {
@@ -78,7 +78,7 @@ namespace ProjectEternity.UnitTests
                 DummyAnimation.Update(new GameTime());
 
                 Assert.AreEqual(1, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][0]).ListProjectile.Count);
-                Assert.AreEqual(580 - (i + 1) * 6, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][0]).ListProjectile[0].ListCollisionPolygon[0].Center.X, 0.01);
+                Assert.AreEqual(580 - (i + 1) * 6, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][0]).ListProjectile[0].Collision.ListCollisionPolygon[0].Center.X, 0.01);
             }
         }
 
@@ -97,7 +97,7 @@ namespace ProjectEternity.UnitTests
             CreateDummyAnimation(DummySquad, EnemySquad, 1);
 
             Assert.AreEqual(1, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][1]).ListProjectile.Count);
-            Assert.AreEqual(612, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][1]).ListProjectile[0].ListCollisionPolygon[0].Center.X, 0.01);
+            Assert.AreEqual(612, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][1]).ListProjectile[0].Collision.ListCollisionPolygon[0].Center.X, 0.01);
 
             for (int i = 0; i < 49; ++i)
             {
@@ -107,7 +107,7 @@ namespace ProjectEternity.UnitTests
                 DummyAnimation.Update(new GameTime());
 
                 Assert.AreEqual(1, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][1]).ListProjectile.Count);
-                Assert.AreEqual(612 - (i + 1) * 6, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][1]).ListProjectile[0].ListCollisionPolygon[0].Center.X, 0.01);
+                Assert.AreEqual(612 - (i + 1) * 6, ((MagicTimeline)DummyLayer.DicTimelineEvent[0][1]).ListProjectile[0].Collision.ListCollisionPolygon[0].Center.X, 0.01);
             }
         }
 

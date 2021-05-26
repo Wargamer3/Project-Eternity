@@ -14,7 +14,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
     {
         private readonly List<DelayedExecutableOnlineScript> ListDelayedOnlineCommand;
 
-        public List<WorldPolygon> ListWorldCollisionPolygon;
+        private readonly CollisionZone<WorldPolygon> WorldCollisions;
+        public readonly List<WorldPolygon> ListWorldCollisionPolygon;//Only used to save and load
         public Dictionary<uint, RobotAnimation> DicRobot;
         public List<Vehicle> ListVehicle;
         public readonly List<RobotAnimation> ListRobotToAdd;
@@ -45,6 +46,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public Layer(FightingZone Owner)
         {
             ListDelayedOnlineCommand = new List<DelayedExecutableOnlineScript>();
+            WorldCollisions = new CollisionZone<WorldPolygon>(1, 1, 0 ,0);
             ListWorldCollisionPolygon = new List<WorldPolygon>();
             ListImages = new List<SimpleAnimation>();
             ListProp = new List<Prop>();
@@ -66,7 +68,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Dictionary<string, Prop> DicPropsByName = Prop.GetAllPropsByName();
 
             int ListPolygonCount = BR.ReadInt32();
-            ListWorldCollisionPolygon = new List<WorldPolygon>(ListPolygonCount);
+            WorldCollisions = new CollisionZone<WorldPolygon>((int)Math.Max(Owner.CameraBounds.Width * 1.5, Owner.CameraBounds.Height * 1.5),
+                50,
+                (int)(Math.Min(Owner.CameraBounds.X * 1.5, -Owner.CameraBounds.X * 1.5)),
+                (int)(Math.Min(Owner.CameraBounds.Y * 1.5, -Owner.CameraBounds.Y * 1.5)));
+
             for (int P = 0; P < ListPolygonCount; P++)
             {
                 int ArrayVertexCount = BR.ReadInt32();
@@ -93,7 +99,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 NewPolygon.BlockBullets = BlockBullets;
                 NewPolygon.IsPlatform = IsPlatform;
 
-                NewPolygon.ComputerCenter();
+                NewPolygon.Collision.ListCollisionPolygon[0].ComputerCenter();
+                WorldCollisions.AddToZone(NewPolygon);
                 ListWorldCollisionPolygon.Add(NewPolygon);
             }
 
@@ -163,15 +170,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             BW.Write(ListWorldCollisionPolygon.Count);
             foreach (WorldPolygon ActivePolygon in ListWorldCollisionPolygon)
             {
-                BW.Write(ActivePolygon.ArrayVertex.Length);
-                for (int V = 0; V < ActivePolygon.ArrayVertex.Length; V++)
-                {
-                    BW.Write(ActivePolygon.ArrayVertex[V].X);
-                    BW.Write(ActivePolygon.ArrayVertex[V].Y);
-                }
-
-                BW.Write(ActivePolygon.BlockBullets);
-                BW.Write(ActivePolygon.IsPlatform);
+                ActivePolygon.Save(BW);
             }
 
             BW.Write(GroundLevelCollision.ArrayVertex.Length);
@@ -446,16 +445,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 PolygonCollisionResult FinalCollisionResult = new PolygonCollisionResult(Vector2.Zero, -1);
                 Polygon FinalCollisionPolygon = null;
 
-                foreach (CollisionPolygon EnemyCollision in TargetRobot.ListCollisionPolygon)
+                foreach (Polygon EnemyCollision in TargetRobot.Collision.ListCollisionPolygon)
                 {
-                    foreach (Polygon CollisionPolygon in ActiveAttackBox.ListCollisionPolygon)
+                    foreach (Polygon CollisionPolygon in ActiveAttackBox.Collision.ListCollisionPolygon)
                     {
-                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(CollisionPolygon, EnemyCollision.ActivePolygon, ActiveAttackBox.Speed);
+                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(CollisionPolygon, EnemyCollision, ActiveAttackBox.Speed);
 
                         if (FinalCollisionResult.Distance < 0 || (CollisionResult.Distance >= 0 && CollisionResult.Distance > FinalCollisionResult.Distance))
                         {
                             FinalCollisionResult = CollisionResult;
-                            FinalCollisionPolygon = EnemyCollision.ActivePolygon;
+                            FinalCollisionPolygon = EnemyCollision;
                         }
                     }
                 }
@@ -493,24 +492,34 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
+        public HashSet<WorldPolygon> GetCollidingWorldObjects(AttackBox ActiveAttackBox)
+        {
+            return WorldCollisions.GetCollidableObjects(ActiveAttackBox.Collision);
+        }
+
+        public HashSet<WorldPolygon> GetCollidingWorldObjects(RobotAnimation ActiveRobot)
+        {
+            return WorldCollisions.GetCollidableObjects(ActiveRobot.Collision);
+        }
+
         public void UpdateAttackCollisionWithWorld(AttackBox ActiveAttackBox)
         {
             PolygonCollisionResult FinalCollisionResult = new PolygonCollisionResult(Vector2.Zero, -1);
             PolygonCollisionResult FinalCollisionGroundResult = new PolygonCollisionResult(Vector2.Zero, -1);
             Polygon FinalCollisionPolygon = null;
 
-            foreach (Polygon ActivePolygon in ListWorldCollisionPolygon)
+            foreach (WorldPolygon ActivePolygon in GetCollidingWorldObjects(ActiveAttackBox))
             {
-                foreach (Polygon CollisionPolygon in ActiveAttackBox.ListCollisionPolygon)
+                foreach (Polygon CollisionPolygon in ActiveAttackBox.Collision.ListCollisionPolygon)
                 {
                     PolygonCollisionResult CollisionGroundResult;
-                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(CollisionPolygon, ActivePolygon, ActiveAttackBox.Speed, out CollisionGroundResult);
+                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(CollisionPolygon, ActivePolygon.Collision.ListCollisionPolygon[0], ActiveAttackBox.Speed, out CollisionGroundResult);
 
                     if (FinalCollisionResult.Distance < 0 || (CollisionResult.Distance >= 0 && CollisionResult.Distance > FinalCollisionResult.Distance))
                     {
                         FinalCollisionResult = CollisionResult;
                         FinalCollisionGroundResult = CollisionGroundResult;
-                        FinalCollisionPolygon = ActivePolygon;
+                        FinalCollisionPolygon = ActivePolygon.Collision.ListCollisionPolygon[0];
                     }
                 }
             }
@@ -541,39 +550,41 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListCelingCollidingPolygon = new List<Tuple<PolygonCollisionResult, Polygon>>();
             ListWallCollidingPolygon = new List<Tuple<PolygonCollisionResult, Polygon>>();
 
-            foreach (Polygon ActiveWorldPolygon in ListWorldCollisionPolygon)
+            foreach (WorldPolygon ActiveWorldPolygon in GetCollidingWorldObjects(ActiveRobot))
             {
                 if (ActiveRobot.ListIgnoredGroundPolygon.Contains(ActiveWorldPolygon))
                     continue;
 
-                foreach (CollisionPolygon ActivePlayerCollisionPolygon in ActiveRobot.ListCollisionPolygon)
+                foreach (Polygon ActivePlayerCollisionPolygon in ActiveRobot.Collision.ListCollisionPolygon)
                 {
-                    if (ActivePlayerCollisionPolygon.IsDead)
-                        continue;
-
-                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon.ActivePolygon, ActiveWorldPolygon, ActiveRobot.Speed);
+                    PolygonCollisionResult CollisionResultB;
+                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, ActiveWorldPolygon.Collision.ListCollisionPolygon[0], ActiveRobot.Speed, out CollisionResultB);
 
                     if (CollisionResult.Distance >= 0)
                     {
-                        ListAllCollidingPolygon.Add(new Tuple<PolygonCollisionResult, Polygon>(CollisionResult, ActiveWorldPolygon));
+                        PolygonCollisionResult CollisionResult2 = Polygon.PolygonCollisionSAT(ActivePlayerCollisionPolygon, ActiveWorldPolygon.Collision.ListCollisionPolygon[0], Vector2.Zero, ActiveRobot.Speed);
 
+                        ListAllCollidingPolygon.Add(new Tuple<PolygonCollisionResult, Polygon>(CollisionResult, ActiveWorldPolygon.Collision.ListCollisionPolygon[0]));
+                        
+                        if (CollisionResult2.Distance != CollisionResult.Distance)
+                            continue;
                         Vector2 GroundAxis = new Vector2(-CollisionResult.Axis.Y, CollisionResult.Axis.X);
                         double FinalCollisionResultAngle = Math.Atan2(GroundAxis.X, GroundAxis.Y);
 
                         //Ground detection
                         if (FinalCollisionResultAngle >= FightingZone.GroundMinAngle && FinalCollisionResultAngle <= FightingZone.GroundMaxAngle)
                         {
-                            ListFloorCollidingPolygon.Add(new Tuple<PolygonCollisionResult, Polygon>(CollisionResult, ActiveWorldPolygon));
+                            ListFloorCollidingPolygon.Add(new Tuple<PolygonCollisionResult, Polygon>(CollisionResult, ActiveWorldPolygon.Collision.ListCollisionPolygon[0]));
                         }
                         //Ceiling
                         else if (FinalCollisionResultAngle <= -FightingZone.GroundMinAngle && FinalCollisionResultAngle >= -FightingZone.GroundMaxAngle)
                         {
-                            ListCelingCollidingPolygon.Add(new Tuple<PolygonCollisionResult, Polygon>(CollisionResult, ActiveWorldPolygon));
+                            ListCelingCollidingPolygon.Add(new Tuple<PolygonCollisionResult, Polygon>(CollisionResult, ActiveWorldPolygon.Collision.ListCollisionPolygon[0]));
                         }
                         //Wall
                         else
                         {
-                            ListWallCollidingPolygon.Add(new Tuple<PolygonCollisionResult, Polygon>(CollisionResult, ActiveWorldPolygon));
+                            ListWallCollidingPolygon.Add(new Tuple<PolygonCollisionResult, Polygon>(CollisionResult, ActiveWorldPolygon.Collision.ListCollisionPolygon[0]));
                         }
                     }
                 }

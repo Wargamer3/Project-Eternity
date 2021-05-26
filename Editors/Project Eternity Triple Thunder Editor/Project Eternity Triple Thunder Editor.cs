@@ -236,7 +236,11 @@ namespace ProjectEternity.Editors.TripleThunderEditor
                 case 1://Collisions
                     if (e.Button == MouseButtons.Right && LayerViewer.SelectedPolygonTriangle != null)
                     {
-                        ActiveLayer.ListWorldCollisionPolygon.Remove((WorldPolygon)LayerViewer.SelectedPolygonTriangle.ActivePolygon);
+                        for (int P = ActiveLayer.ListWorldCollisionPolygon.Count - 1; P >= 0; --P)
+                        {
+                            if (ActiveLayer.ListWorldCollisionPolygon[P].Collision.ListCollisionPolygon[0] == LayerViewer.SelectedPolygonTriangle.ActivePolygon)
+                            ActiveLayer.ListWorldCollisionPolygon.RemoveAt(P);
+                        }
                         lstCollisionBox.Items.Clear();
 
                         for (int C = 0; C < ActiveLayer.ListWorldCollisionPolygon.Count; C++)
@@ -462,7 +466,9 @@ namespace ProjectEternity.Editors.TripleThunderEditor
         {
             if (lstCollisionBox.SelectedIndex >= 0)
             {
-                LayerViewer.SelectedPolygonTriangle = new PolygonTriangle(PolygonTriangle.SelectionTypes.Polygon, ActiveLayer.ListWorldCollisionPolygon[lstCollisionBox.SelectedIndex], 0, 0);
+                LayerViewer.SelectedPolygonTriangle = new PolygonTriangle(PolygonTriangle.SelectionTypes.Polygon,
+                    ActiveLayer.ListWorldCollisionPolygon[lstCollisionBox.SelectedIndex].Collision.ListCollisionPolygon[0],
+                    0, 0);
             }
         }
 
@@ -631,9 +637,9 @@ namespace ProjectEternity.Editors.TripleThunderEditor
                 LayerViewer.SelectedPolygonTriangle = null;
                 SelectionChoice = SelectionChoices.None;
 
-                foreach (Polygon ActivePolygon in ActiveLayer.ListWorldCollisionPolygon)
+                foreach (WorldPolygon ActivePolygon in ActiveLayer.ListWorldCollisionPolygon)
                 {
-                    PolygonTriangle Result = ActivePolygon.PolygonCollisionWithMouse(RealX, RealY);
+                    PolygonTriangle Result = ActivePolygon.Collision.ListCollisionPolygon[0].PolygonCollisionWithMouse(RealX, RealY);
 
                     if (Result.ActivePolygon != null)
                     {

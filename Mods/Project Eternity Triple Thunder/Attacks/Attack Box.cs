@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public virtual void Move(GameTime gameTime)
         {
-            foreach (Polygon ActivePolygon in ListCollisionPolygon)
+            foreach (Polygon ActivePolygon in Collision.ListCollisionPolygon)
             {
                 ActivePolygon.Offset(Speed.X, Speed.Y);
             }
@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             if (FightingZone.ShowCollisionBoxes)
             {
-                foreach (Polygon ActivePolygon in ListCollisionPolygon)
+                foreach (Polygon ActivePolygon in Collision.ListCollisionPolygon)
                 {
                     g.Draw(FightingZone.sprPixel, new Rectangle((int)(ActivePolygon.Center.X) - 2,
                                                (int)(ActivePolygon.Center.Y) - 2, (int)(5), (int)5), Color.Red);

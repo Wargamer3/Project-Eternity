@@ -11,19 +11,7 @@ using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class CollisionPolygon
-    {
-        public bool IsDead;
-        public Polygon ActivePolygon;
-
-        public CollisionPolygon(Polygon ActivePolygon)
-        {
-            IsDead = false;
-            this.ActivePolygon = ActivePolygon;
-        }
-    }
-
-    public class RobotAnimation : ComplexAnimation
+    public class RobotAnimation : ComplexAnimation, ICollisionObject<RobotAnimation>
     {
         public uint ID;
         public readonly string Name;
@@ -46,11 +34,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public Vector2 TotalMovementThisFrame;
         public Vector2 NormalizedGroundVector;
         public Vector2 NormalizedPerpendicularGroundVector;
-        public List<Polygon> ListCollidingGroundPolygon;
-        public List<Polygon> ListIgnoredGroundPolygon;
+        public List<WorldPolygon> ListCollidingGroundPolygon;
+        public List<WorldPolygon> ListIgnoredGroundPolygon;
 
         public int CurrentLane;//Current max Y position.
-        public List<CollisionPolygon> ListCollisionPolygon;
+        private CollisionObject<RobotAnimation> CollisionBox;
+        public CollisionObject<RobotAnimation> Collision => CollisionBox;
 
         public bool LockAnimation;
         protected Weapon CurrentStanceAnimations;
@@ -99,9 +88,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Weapons = new WeaponHolder(0);
             IsInAir = false;
             CurrentLane = 1350;
-            ListCollisionPolygon = new List<CollisionPolygon>();
-            ListCollidingGroundPolygon = new List<Polygon>();
-            ListIgnoredGroundPolygon = new List<Polygon>();
+            CollisionBox = new CollisionObject<RobotAnimation>();
+            ListCollidingGroundPolygon = new List<WorldPolygon>();
+            ListIgnoredGroundPolygon = new List<WorldPolygon>();
             Effects = new EffectHolder();
             ListMagicSpell = new List<MagicSpell>();
             ListMagicSpell.Add(new MagicSpell(null));
@@ -531,11 +520,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 if (ActiveRobot == EnemyRobot.Value)
                     continue;
 
-                foreach (CollisionPolygon ActiveCollision in ActiveRobot.ListCollisionPolygon)
+                foreach (Polygon ActiveCollision in ActiveRobot.Collision.ListCollisionPolygon)
                 {
-                    foreach (CollisionPolygon EnemyCollision in EnemyRobot.Value.ListCollisionPolygon)
+                    foreach (Polygon EnemyCollision in EnemyRobot.Value.Collision.ListCollisionPolygon)
                     {
-                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActiveCollision.ActivePolygon, EnemyCollision.ActivePolygon, ActiveRobot.Speed);
+                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActiveCollision, EnemyCollision, ActiveRobot.Speed);
 
                         if (FinalCollisionResult.Distance < 0 || (CollisionResult.Distance >= 0 && CollisionResult.Distance < FinalCollisionResult.Distance))
                             FinalCollisionResult = CollisionResult;
@@ -924,7 +913,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void FallThroughFloor()
         {
-            foreach (Polygon ActivePolygon in ListCollidingGroundPolygon)
+            foreach (WorldPolygon ActivePolygon in ListCollidingGroundPolygon)
             {
                 if (!ListIgnoredGroundPolygon.Contains(ActivePolygon))
                     ListIgnoredGroundPolygon.Add(ActivePolygon);
@@ -934,11 +923,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public void Move(Vector2 Movement)
         {
             Position += Movement;
+            Collision.Position = Position;
             TotalMovementThisFrame += Movement;
 
-            foreach (CollisionPolygon ActiveCollision in ListCollisionPolygon)
+            foreach (Polygon ActiveCollision in Collision.ListCollisionPolygon)
             {
-                ActiveCollision.ActivePolygon.Offset(Movement.X, Movement.Y);
+                ActiveCollision.Offset(Movement.X, Movement.Y);
             }
         }
 
@@ -1093,46 +1083,33 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public void CreateCollisionBox(List<CollisionPolygon> ListNewCollisionPolygon)
+        public void CreateCollisionBox(List<Polygon> ListNewCollisionPolygon)
         {
-            foreach (CollisionPolygon ActiveCollisionPolygon in ListNewCollisionPolygon)
+            foreach (Polygon ActiveCollisionPolygon in ListNewCollisionPolygon)
             {
-                Vector2 Distance = (ActiveCollisionPolygon.ActivePolygon.Center - AnimationOrigin.Position) * Scale;
+                Vector2 Distance = (ActiveCollisionPolygon.Center - AnimationOrigin.Position) * Scale;
 
-                ActiveCollisionPolygon.ActivePolygon.Offset(Position.X - ActiveCollisionPolygon.ActivePolygon.Center.X + Distance.X,
-                                                            Position.Y - ActiveCollisionPolygon.ActivePolygon.Center.Y + Distance.Y);
+                ActiveCollisionPolygon.Offset(Position.X - ActiveCollisionPolygon.Center.X + Distance.X,
+                                                            Position.Y - ActiveCollisionPolygon.Center.Y + Distance.Y);
 
-                ActiveCollisionPolygon.ActivePolygon.Scale(Scale);
+                ActiveCollisionPolygon.Scale(Scale);
 
-                bool CollisionPolygonReplaced = false;
-                for (int C = ListCollisionPolygon.Count - 1; C >= 0 && !CollisionPolygonReplaced; --C)
-                {
-                    if (ListCollisionPolygon[C].IsDead)
-                    {
-                        ListCollisionPolygon[C] = ActiveCollisionPolygon;
-                        CollisionPolygonReplaced = true;
-                    }
-                }
-
-                if (!CollisionPolygonReplaced)
-                    ListCollisionPolygon.Add(ActiveCollisionPolygon);
-
-                ActiveCollisionPolygon.IsDead = false;
+                CollisionBox.ListCollisionPolygon.Add(ActiveCollisionPolygon);
             }
         }
 
-        public void DeleteCollisionBox(List<CollisionPolygon> ListNewCollisionPolygon)
+        public void DeleteCollisionBox(List<Polygon> ListNewCollisionPolygon)
         {
-            foreach (CollisionPolygon ActiveCollisionPolygon in ListNewCollisionPolygon)
+            foreach (Polygon ActiveCollisionPolygon in ListNewCollisionPolygon)
             {
-                ActiveCollisionPolygon.IsDead = true;
+                CollisionBox.ListCollisionPolygon.Remove(ActiveCollisionPolygon);
             }
         }
 
         public Rectangle GetCollisionSize()
         {
-            Rectangle CollisionSize = new Rectangle(0, 0, 0, 0);
-            foreach (var a in ListCollisionPolygon)
+            Rectangle CollisionSize = new Rectangle(0, 0, 1, 1);
+            foreach (var a in Collision.ListCollisionPolygon)
             {
             }
 
