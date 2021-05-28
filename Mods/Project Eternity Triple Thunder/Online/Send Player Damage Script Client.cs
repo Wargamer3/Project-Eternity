@@ -42,12 +42,21 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public void ExecuteOnMainThread()
         {
-            Layer ActiveLayer = Owner.TripleThunderGame.ListLayer[LayerIndex];
-            RobotAnimation ActiveRobot = ActiveLayer.DicRobot[ActiveRobotID];
-            RobotAnimation TargetRobot = ActiveLayer.DicRobot[TargetRobotID];
+            RobotAnimation ActiveRobot;
+            RobotAnimation TargetRobot;
 
-            TargetRobot.HP = FinalHP;
-            ActiveLayer.OnDamageRobot(ActiveRobot, TargetRobot, Damage, DamagePosition, IsPlayerControlled);
+            if (LayerIndex < Owner.TripleThunderGame.ListLayer.Count)
+            {
+                Layer ActiveLayer = Owner.TripleThunderGame.ListLayer[LayerIndex];
+                bool HasActiveRobot = ActiveLayer.DicRobot.TryGetValue(ActiveRobotID, out ActiveRobot);
+                bool HasTargetRobot = ActiveLayer.DicRobot.TryGetValue(TargetRobotID, out TargetRobot);
+
+                if (HasActiveRobot && HasTargetRobot)
+                {
+                    TargetRobot.HP = FinalHP;
+                    ActiveLayer.OnDamageRobot(ActiveRobot, TargetRobot, Damage, DamagePosition, IsPlayerControlled);
+                }
+            }
         }
 
         protected override void Read(OnlineReader Host)

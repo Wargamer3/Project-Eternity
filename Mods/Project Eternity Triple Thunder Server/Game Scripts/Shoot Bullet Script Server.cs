@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 
         protected override void Execute(IOnlineConnection Sender)
         {
-            if (Owner.InGameRobot.ID == OwnerID)
+            if (Sender.IsGameReady && Owner.InGameRobot.ID == OwnerID)
             {
                 Layer ActiveLayer = ActiveGame.ListLayer[LayerIndex];
                 ActiveLayer.DelayOnlineScript(this);
