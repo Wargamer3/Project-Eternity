@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -86,6 +87,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             List<string> ListServerIP = new List<string>();
             bool TryConnecting = true;
+            Trace.Listeners.Add(new TextWriterTraceListener("ClientError.log", "myListener"));
 
             //Loop through every connections until you find a working server or none
             do

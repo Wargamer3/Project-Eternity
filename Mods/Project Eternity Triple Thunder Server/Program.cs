@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.TripleThunderScreen.Online;
+using System.Diagnostics;
 
 namespace ProjectEternity.GameScreens.TripleThunderServer
 {
@@ -28,6 +29,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
             string PublicIP = ConnectionInfo.ReadField("ServerInfo", "PublicIP");
             int PublicPort = int.Parse(ConnectionInfo.ReadField("ServerInfo", "PublicPort"));
+            Trace.Listeners.Add(new TextWriterTraceListener("ServerError.log", "myListener"));
 
             OnlineServer.StartListening(PublicIP, PublicPort);
             Console.ReadKey();

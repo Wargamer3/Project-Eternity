@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online
@@ -45,6 +46,40 @@ namespace ProjectEternity.Core.Online
             return null;
         }
 
+        internal List<OnlineScript> ReadAllScripts()
+        {
+            List<OnlineScript> ListReadScript = new List<OnlineScript>();
+
+            if (ActiveStream.DataAvailable)
+                BeginRead();
+            else
+                return ListReadScript;
+
+            while (CanRead)
+            {
+                int OriginalReadBufferPos = ReadBufferPos;
+                try
+                {
+                    string ScriptName = ReadString();
+                    OnlineScript NewScript = DicOnlineScripts[ScriptName].Copy();
+
+                    NewScript.Read(this);
+
+                    ListReadScript.Add(NewScript);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(DateTimeOffset.Now + " - Reading " + ex.Message);
+                    Trace.TraceError(DateTimeOffset.Now + " - Reading " + ex.StackTrace);
+                    Trace.Flush();
+                    ReadBufferPos = OriginalReadBufferPos;
+                    return ListReadScript;
+                }
+            }
+
+            return ListReadScript;
+        }
+
         internal IEnumerable<OnlineScript> ReadScripts()
         {
             if (ActiveStream.DataAvailable)
@@ -54,19 +89,49 @@ namespace ProjectEternity.Core.Online
 
             while (CanRead)
             {
-                string ScriptName = ReadString();
-                OnlineScript NewScript = DicOnlineScripts[ScriptName].Copy();
+                int OriginalReadBufferPos = ReadBufferPos;
+                OnlineScript NewScript = null;
+                try
+                {
+                    string ScriptName = ReadString();
+                    OnlineScript ReadScript = DicOnlineScripts[ScriptName].Copy();
 
-                NewScript.Read(this);
+                    ReadScript.Read(this);
+                    NewScript = ReadScript;
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(DateTimeOffset.Now + " - Reading " + ex.Message);
+                    Trace.TraceError(DateTimeOffset.Now + " - Reading " + ex.StackTrace);
+                    Trace.Flush();
+                    ReadBufferPos = OriginalReadBufferPos;
+                    yield break;
+                }
 
-                yield return NewScript;
+                if (NewScript == null)
+                    yield break;
+                else
+                    yield return NewScript;
             }
         }
 
         public void BeginRead()
         {
-            ReadBuffer = new byte[0];
+            int RemainingReadBuffer = ReadBuffer.Length - ReadBufferPos;
+
+            if (RemainingReadBuffer > 0)
+            {
+                byte[] ArrayRemainingReadBuffer = new byte[RemainingReadBuffer];
+                Buffer.BlockCopy(ReadBuffer, ReadBufferPos, ArrayRemainingReadBuffer, 0, RemainingReadBuffer);
+                ReadBuffer = ArrayRemainingReadBuffer;
+            }
+            else
+            {
+                ReadBuffer = new byte[0];
+            }
+
             ReadBufferPos = 0;
+
             if (ActiveStream.CanRead)
             {
                 byte[] ArrayNewData = new byte[255];

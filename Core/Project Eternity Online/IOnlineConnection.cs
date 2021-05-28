@@ -13,6 +13,8 @@ namespace ProjectEternity.Core.Online
 
         bool IsGameReady { get; set; }
 
+        List<OnlineScript> ListAsyncOnlineScript { get; }
+
         void AddOrReplaceScripts(Dictionary<string, OnlineScript> DicNewScript);
 
         void Send(OnlineScript ScriptToSend);
@@ -20,6 +22,10 @@ namespace ProjectEternity.Core.Online
         void SendWriteBuffer();
 
         IEnumerable<OnlineScript> ReadScripts();
+
+        void StartReadingScriptAsync();
+
+        void StopReadingScriptAsync();
 
         void Close();
 

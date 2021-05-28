@@ -17,6 +17,11 @@ namespace ProjectEternity.Core.Online
             ScriptToWrite.Write(this);
         }
 
+        public string GetDebugContent()
+        {
+           return System.Text.Encoding.Unicode.GetString(WriteBuffer); //UTF-16 encoding
+        }
+
         public void ClearWriteBuffer()
         {
             WriteBuffer = new byte[0];

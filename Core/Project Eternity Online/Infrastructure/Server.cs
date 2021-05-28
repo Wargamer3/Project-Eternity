@@ -112,9 +112,14 @@ namespace ProjectEternity.Core.Online
                 }
                 else
                 {
-                    foreach (OnlineScript ActiveScript in ActivePlayer.ReadScripts())
+                    lock (ActivePlayer.ListAsyncOnlineScript)
                     {
-                        ActiveScript.Execute(ActivePlayer);
+                        foreach (OnlineScript ActiveScript in ActivePlayer.ListAsyncOnlineScript)
+                        {
+                            ActiveScript.Execute(ActivePlayer);
+                        }
+
+                        ActivePlayer.ListAsyncOnlineScript.Clear();
                     }
                 }
             });
@@ -165,13 +170,20 @@ namespace ProjectEternity.Core.Online
                             {
                                 ActiveGroup.CurrentGame.RemoveOnlinePlayer(PlayerID, ActivePlayer);
                             }
+
+                            ActivePlayer.StopReadingScriptAsync();
                         }
                     }
                     else
                     {
-                        foreach (OnlineScript ActiveScript in ActivePlayer.ReadScripts())
+                        lock (ActivePlayer.ListAsyncOnlineScript)
                         {
-                            ActiveScript.Execute(ActivePlayer);
+                            foreach (OnlineScript ActiveScript in ActivePlayer.ListAsyncOnlineScript)
+                            {
+                                ActiveScript.Execute(ActivePlayer);
+                            }
+
+                            ActivePlayer.ListAsyncOnlineScript.Clear();
                         }
                     }
                 }
@@ -189,9 +201,14 @@ namespace ProjectEternity.Core.Online
             {
                 foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListOnlinePlayer)
                 {
-                    foreach (OnlineScript ActiveScript in ActivePlayer.ReadScripts())
+                    lock (ActivePlayer.ListAsyncOnlineScript)
                     {
-                        ActiveScript.Execute(ActivePlayer);
+                        foreach (OnlineScript ActiveScript in ActivePlayer.ListAsyncOnlineScript)
+                        {
+                            ActiveScript.Execute(ActivePlayer);
+                        }
+
+                        ActivePlayer.ListAsyncOnlineScript.Clear();
                     }
                 }
 
@@ -277,6 +294,7 @@ namespace ProjectEternity.Core.Online
         public void OnClientConnected(IOnlineConnection NewClient)
         {
             ListPlayer.Add(NewClient);
+            NewClient.StartReadingScriptAsync();
             NewClient.Send(new ConnectionSuccessScriptServer());
         }
 
