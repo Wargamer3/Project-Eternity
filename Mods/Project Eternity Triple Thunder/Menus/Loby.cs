@@ -221,11 +221,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 if (MouseHelper.MouseStateCurrent.X >= X - sprRoom.Origin.X && MouseHelper.MouseStateCurrent.X <= X + sprRoom.Origin.X
                     && MouseHelper.MouseStateCurrent.Y >= Y - sprRoom.Origin.Y && MouseHelper.MouseStateCurrent.Y <= Y + sprRoom.Origin.Y)
                 {
-                    if (MouseHelper.InputLeftButtonPressed())
+                    if (MouseHelper.InputLeftButtonPressed() && !ActiveRoom.Value.IsDead)
                     {
                         Dictionary<string, OnlineScript> DicCreateRoomScript = new Dictionary<string, OnlineScript>();
                         OnlineClient.Host.AddOrReplaceScripts(DicCreateRoomScript);
                         OnlineClient.JoinRoom(ActiveRoom.Key);
+                        ActiveRoom.Value.IsDead = true;
                     }
                 }
 
