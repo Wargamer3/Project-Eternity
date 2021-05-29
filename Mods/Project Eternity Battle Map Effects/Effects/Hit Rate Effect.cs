@@ -4,6 +4,7 @@ using System.ComponentModel;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Effects;
+using System;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -35,8 +36,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_HitRateValue);
-            int EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            string EvaluationResult;
+            int EvaluationValue;
+
+            try
+            {
+                EvaluationResult = FormulaParser.ActiveParser.Evaluate(_HitRateValue);
+                EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+
+            }
+            catch
+            {
+                return string.Empty;
+            }
 
             Params.LocalContext.EffectTargetUnit.Boosts.AccuracyModifier += EvaluationValue;
 

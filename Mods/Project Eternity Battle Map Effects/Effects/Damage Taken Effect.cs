@@ -40,9 +40,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_DamageTakenValue);
-            string ExtraText = string.Empty;
+            string EvaluationResult;
 
+            try
+            {
+                EvaluationResult = FormulaParser.ActiveParser.Evaluate(_DamageTakenValue);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+
+            string ExtraText = string.Empty;
             if (EvaluationResult != _DamageTakenValue)
             {
                 ExtraText = " (" + _DamageTakenValue + ")";
