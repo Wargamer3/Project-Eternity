@@ -7,6 +7,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -29,7 +30,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             private int _RightUnitAttackDamage;
             private int _LeftUnitAttackDamage;
 
-            private AnimationScreen BattleSequence;
+            private List<GameScreen> ListNextAnimationScreen;
 
             public ScriptStartBattleSequence()
                 : this(null)
@@ -46,6 +47,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 _RightUnitWeaponName = "";
                 DefendingUnitWeaponName = "";
+                ListNextAnimationScreen = new List<GameScreen>();
 
                 IsInit = false;
                 IsEnded = false;
@@ -125,21 +127,52 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
 
+                    LeftSquad.CurrentLeader.AttackIndex = 0;
+
+                    if (!string.IsNullOrWhiteSpace(AttackingUnitWeaponName))
+                    {
+                        for (int A = 0; A < LeftSquad.CurrentLeader.ListAttack.Count; ++A)
+                        {
+                            if (LeftSquad.CurrentLeader.ListAttack[A].ItemName == DefendingUnitWeaponName)
+                            {
+                                LeftSquad.CurrentLeader.AttackIndex = A;
+                            }
+                        }
+                    }
+
                     SquadBattleResult AttackingResult = Map.CalculateFinalHP(RightSquad, null, 0,
                                                                             FormationChoices.Focused, LeftSquad, null, 1, true, true);
                     AttackingResult.ArrayResult[0].AttackMissed = false;
-                    AttackingResult.ArrayResult[0].AttackDamage = 500;
+                    AttackingResult.ArrayResult[0].AttackDamage = AttackingUnitAttackDamage;
 
                     AnimationScreen.AnimationUnitStats UnitStats = new AnimationScreen.AnimationUnitStats(RightSquad, LeftSquad, true);
 
-                    Map.GenerateNextAnimationScreens(RightSquad, new SupportSquadHolder(), LeftSquad, new SupportSquadHolder(), UnitStats, AnimationScreen.BattleAnimationTypes.RightAttackLeft, AttackingResult);
+                    if (IsCounterattack)
+                    {
+                        ListNextAnimationScreen = Map.GenerateNextAnimationScreens(RightSquad, new SupportSquadHolder(), LeftSquad, new SupportSquadHolder(), UnitStats, AnimationScreen.BattleAnimationTypes.RightConteredByLeft, AttackingResult);
+                    }
+                    else
+                    {
+                        ListNextAnimationScreen = Map.GenerateNextAnimationScreens(RightSquad, new SupportSquadHolder(), LeftSquad, new SupportSquadHolder(), UnitStats, AnimationScreen.BattleAnimationTypes.RightAttackLeft, AttackingResult);
+                    }
+
+                    Map.PushScreen(ListNextAnimationScreen[0]);
                 }
                 else
                 {
-                    if (!Map.ListGameScreen.Contains(BattleSequence))
+                    if (!Map.ListGameScreen.Contains(ListNextAnimationScreen[0]))
                     {
-                        ExecuteEvent(this, 0);
-                        IsEnded = true;
+                        ListNextAnimationScreen.Remove(ListNextAnimationScreen[0]);
+
+                        if (ListNextAnimationScreen.Count > 0)
+                        {
+                            Map.PushScreen(ListNextAnimationScreen[0]);
+                        }
+                        else
+                        {
+                            ExecuteEvent(this, 0);
+                            IsEnded = true;
+                        }
                     }
                 }
             }

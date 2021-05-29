@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListNextAnimationScreen.Add(NewAnimationScreen);
         }
 
-        public void GenerateNextAnimationScreens(Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, Squad TargetSquad, SupportSquadHolder TargetSquadSupport,
+        public List<GameScreen> GenerateNextAnimationScreens(Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, Squad TargetSquad, SupportSquadHolder TargetSquadSupport,
             AnimationScreen.AnimationUnitStats UnitStats, AnimationScreen.BattleAnimationTypes BattleAnimationType, SquadBattleResult AttackingResult)
         {
             bool IsActiveSquadOnRight = BattleAnimationType == AnimationScreen.BattleAnimationTypes.RightAttackLeft || BattleAnimationType == AnimationScreen.BattleAnimationTypes.LeftConteredByRight;
@@ -110,6 +110,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
             }
+
+            return ListNextAnimationScreen;
         }
 
         public void GetLeftRightSquads(bool IsActiveSquadOnRight,
