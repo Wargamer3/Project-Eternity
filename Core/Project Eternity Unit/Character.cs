@@ -155,7 +155,7 @@ namespace ProjectEternity.Core.Characters
         public bool CanPilot;
         public TerrainGrades TerrainGrade;
         private SharableInt32 _EXP;
-        public int EXP { set { _EXP.Value = value; } get { return _EXP.Value; } }
+        public int EXP { private set { _EXP.Value = value; } get { return _EXP.Value; } }
 
         public int NextEXP { get { return 500; } }// How long until a character levels up.
         private SharableInt32 _Level;
@@ -468,8 +468,15 @@ namespace ProjectEternity.Core.Characters
             }
         }
 
-        public void LevelUp()
+        public void IncreaseEXP(int EXPGained)
         {
+            EXP += EXPGained;
+        }
+
+        public void LevelUpOnce()
+        {
+
+            EXP -= NextEXP;
             Level++;
             BaseMEL.Value = ArrayLevelMEL[Level - 1];
             BaseRNG.Value = ArrayLevelRNG[Level - 1];
@@ -477,8 +484,6 @@ namespace ProjectEternity.Core.Characters
             BaseSKL.Value = ArrayLevelSKL[Level - 1];
             BaseEVA.Value = ArrayLevelEVA[Level - 1];
             BaseHIT.Value = ArrayLevelHIT[Level - 1];
-
-            EXP -= 500;
 
             for (int S = ArrayPilotSkill.Length - 1; S >= 0; --S)
             {

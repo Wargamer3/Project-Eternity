@@ -112,11 +112,6 @@ namespace ProjectEternity.Core.Units
                 else
                     return 0;
             }
-            set
-            {
-                if (ArrayCharacterActive.Length > 0)
-                    ArrayCharacterActive[0].EXP = value;
-            }
         }
 
         public int PilotNextEXP

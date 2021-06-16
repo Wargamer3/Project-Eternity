@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
+using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -14,36 +16,56 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         #region Ressources
 
         private SpriteFont fntFinlanderFont;
+        private Texture2D sprArrow;
 
         #endregion
 
         #region Variables
 
-        Character Pilot;
-        int OriginalPilotLevel;
-        int OriginalPilotSP;
-        bool[] ArrayOriginalPilotSkill;
-        bool[] ArrayOriginalPilotSpirit;
-        int PilotOriginalMEL;
-        int PilotOriginalRNG;
-        int PilotOriginalSKL;
-        int PilotOriginalDEF;
-        int PilotOriginalEVA;
-        int PilotOriginalHIT;
+        public int TotalExpGained;
+        public int TotalPPGained;
+        public int TotalMoneyGained;
+
+        private bool ShowLevelUp;
+
+        public bool UpdateBattleEventsOnClose;
+        private readonly DeathmatchMap Map;
+        private readonly Character Pilot;
+        private readonly Unit Owner;
+        public readonly bool IsHuman;
+
+        private readonly int OriginalPilotLevel;
+        private readonly int OriginalPilotSP;
+        private readonly bool[] ArrayOriginalPilotSkill;
+        private readonly bool[] ArrayOriginalPilotSpirit;
+        private readonly int PilotOriginalMEL;
+        private readonly int PilotOriginalRNG;
+        private readonly int PilotOriginalSKL;
+        private readonly int PilotOriginalDEF;
+        private readonly int PilotOriginalEVA;
+        private readonly int PilotOriginalHIT;
 
         #endregion
 
-        public LevelUpMenu(Character Pilot)
+        public LevelUpMenu(DeathmatchMap Map, Character Pilot, Unit Owner, bool IsHuman)
         {
-            Pilot.EXP = 500034;
+            RequireDrawFocus = true;
+            RequireFocus = true;
+            TotalExpGained = 500034;
+
+            this.UpdateBattleEventsOnClose = false;
+            this.Map = Map;
             this.Pilot = Pilot;
+            this.Owner = Owner;
+            this.IsHuman = IsHuman;
+
             OriginalPilotLevel = Pilot.Level;
             OriginalPilotSP = Pilot.MaxSP;
 
             ArrayOriginalPilotSkill = new bool[Pilot.ArrayPilotSkill.Length];
             for (int i = 0; i < Pilot.ArrayPilotSkill.Length; ++i)
             {
-                ArrayOriginalPilotSkill[i] = Pilot.ArrayPilotSkill[i].CurrentLevel == 0;
+                ArrayOriginalPilotSkill[i] = Pilot.ArrayPilotSkill[i].CurrentLevel <= Pilot.Level;
             }
 
             ArrayOriginalPilotSpirit = new bool[Pilot.ArrayPilotSpirit.Length];
@@ -58,47 +80,125 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PilotOriginalDEF = Pilot.DEF;
             PilotOriginalEVA = Pilot.EVA;
             PilotOriginalHIT = Pilot.HIT;
-
-            LevelUp();
         }
 
-        private void LevelUp()
+        public void LevelUp()
         {
             //Only 5 levels up allowed.
-            if (Pilot.EXP > 2500)
+            if (TotalExpGained > 2500)
             {
-                Pilot.EXP = 2500;
+                TotalExpGained = 2500;
             }
 
-            while (Pilot.EXP >= 500)
+            Pilot.IncreaseEXP(TotalExpGained);
+
+            while (Pilot.EXP >= Pilot.NextEXP)
             {
-                Pilot.LevelUp();
+                Pilot.LevelUpOnce();
             }
         }
 
         public override void Load()
         {
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
+            sprArrow = Content.Load<Texture2D>("Status Screen/Arrow"); 
+
+            LevelUp();
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (InputHelper.InputConfirmReleased())
+            {
+                if (Pilot.Level != OriginalPilotLevel && !ShowLevelUp)
+                {
+                    ShowLevelUp = true;
+                }
+                else
+                {
+                    RemoveScreen(this);
+
+                    if (UpdateBattleEventsOnClose)
+                    {
+                        Map.UpdateMapEvent(BattleMap.EventTypeOnBattle, 1);
+                    }
+                }
+            }
         }
 
         public override void Draw(CustomSpriteBatch g)
         {
+            if (ShowLevelUp)
+            {
+                DrawLevelUp(g);
+            }
+            else
+            {
+                DrawRecap(g);
+            }
+        }
+
+        public void DrawRecap(CustomSpriteBatch g)
+        {
             int Y = 15;
             DrawBox(g, new Vector2(30, Y), 180, 45, Color.Black);
-            g.DrawString(fntFinlanderFont, "LEVEL UP", new Vector2(60, Y += 8), Color.White);
+            g.DrawString(fntFinlanderFont, "RESULTS", new Vector2(60, Y += 8), Color.Yellow);
+
+            Y += 37;
+            DrawBox(g, new Vector2(30, Y), 580, 110, Color.Green);
+            g.Draw(Pilot.sprPortrait, new Rectangle(70, Y + 15, 80, 80), Color.White);
+            g.DrawString(fntFinlanderFont, Pilot.Name, new Vector2(190, Y += 3), Color.White);
+            g.Draw(Owner.SpriteMap, new Rectangle(190, Y + 25, 32, 32), Color.White);
+            g.DrawString(fntFinlanderFont, Owner.FullName, new Vector2(225, Y += 25), Color.White);
+            g.DrawString(fntFinlanderFont, "Level", new Vector2(190, Y += 25), Color.Yellow);
+
+            if (Pilot.Level != OriginalPilotLevel)
+            {
+                g.DrawString(fntFinlanderFont, Pilot.Level.ToString(), new Vector2(270, Y), Color.LightGreen);
+                g.DrawString(fntFinlanderFont, "Level Up", new Vector2(300, Y), Color.Yellow);
+            }
+            else
+            {
+
+                g.DrawString(fntFinlanderFont, OriginalPilotLevel.ToString(), new Vector2(270, Y), Color.Yellow);
+            }
+
+            g.DrawString(fntFinlanderFont, "EXP", new Vector2(190, Y += 25), Color.White);
+            g.DrawString(fntFinlanderFont, TotalExpGained.ToString(), new Vector2(250, Y), Color.White);
+            g.DrawString(fntFinlanderFont, "PP", new Vector2(320, Y), Color.White);
+            g.DrawString(fntFinlanderFont, TotalPPGained.ToString(), new Vector2(360, Y), Color.White);
+            g.DrawString(fntFinlanderFont, "Money", new Vector2(420, Y), Color.White);
+            g.DrawString(fntFinlanderFont, TotalMoneyGained.ToString(), new Vector2(500, Y), Color.White);
+
+            DrawBox(g, new Vector2(30, Y += 32), 580, 45, Color.Black);
+            g.DrawStringMiddleAligned(fntFinlanderFont, "GAINED PARTS", new Vector2(Constants.Width / 2, Y += 8), Color.Yellow);
+            DrawBox(g, new Vector2(30, Y += 36), 580, 90, Color.Green);
+            for (int i = 0; i < 4; ++i)
+            {
+                g.DrawString(fntFinlanderFont, "---------------", new Vector2(50 + (300 * (i / 2)), Y + 10 + (40 * (i % 2))), Color.White);
+            }
+        }
+
+        public void DrawLevelUp(CustomSpriteBatch g)
+        {
+            int Y = 15;
+            DrawBox(g, new Vector2(30, Y), 180, 45, Color.Black);
+            g.DrawString(fntFinlanderFont, "LEVEL UP", new Vector2(60, Y += 8), Color.Yellow);
 
             Y += 37;
             DrawBox(g, new Vector2(30, Y), 580, 135, Color.Green);
+            g.Draw(sprPixel, new Rectangle(70, Y + 30, 80, 80), Color.White);
+            DrawRectangle(g, new Vector2(70, Y + 30), new Vector2(70 + 80, Y + 30 + 80), Color.Black);
+            g.Draw(Pilot.sprPortrait, new Rectangle(70, Y + 30, 80, 80), Color.White);
             g.DrawString(fntFinlanderFont, Pilot.Name, new Vector2(190, Y += 3), Color.White);
-            g.DrawString(fntFinlanderFont, "Unit Name", new Vector2(190, Y += 25), Color.White);
+            g.Draw(Owner.SpriteMap, new Rectangle(190, Y + 25, 32, 32), Color.White);
+            g.DrawString(fntFinlanderFont, Owner.FullName, new Vector2(225, Y += 25), Color.White);
             g.DrawString(fntFinlanderFont, "Level", new Vector2(190, Y += 25), Color.Yellow);
+
             if (Pilot.Level != OriginalPilotLevel)
             {
                 g.DrawString(fntFinlanderFont, OriginalPilotLevel.ToString(), new Vector2(270, Y), Color.LightGreen);
+                g.Draw(sprArrow, new Vector2(295, Y + 10), Color.White);
                 g.DrawString(fntFinlanderFont, Pilot.Level.ToString(), new Vector2(320, Y), Color.LightGreen);
             }
             else
@@ -109,10 +209,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             g.DrawString(fntFinlanderFont, "EXP", new Vector2(190, Y += 25), Color.White);
             g.DrawString(fntFinlanderFont, Pilot.EXP.ToString(), new Vector2(250, Y), Color.White);
-            g.DrawString(fntFinlanderFont, "NEXT " + Pilot.NextEXP, new Vector2(320, Y), Color.White);
+            g.DrawString(fntFinlanderFont, "NEXT " + (Pilot.NextEXP - Pilot.EXP), new Vector2(320, Y), Color.White);
             g.DrawString(fntFinlanderFont, "SP", new Vector2(190, Y += 25), Color.White);
-            g.DrawString(fntFinlanderFont, Pilot.MaxSP.ToString(), new Vector2(250, Y), Color.White);
-            g.DrawString(fntFinlanderFont, "+" + (Pilot.MaxSP), new Vector2(320, Y), Color.White);
+            if (Pilot.MaxSP != OriginalPilotSP)
+            {
+                g.DrawString(fntFinlanderFont, Pilot.MaxSP.ToString(), new Vector2(250, Y), Color.LightGreen);
+                g.DrawString(fntFinlanderFont, "+" + (Pilot.MaxSP - OriginalPilotSP), new Vector2(320, Y), Color.LightGreen);
+            }
+            else
+            {
+                g.DrawString(fntFinlanderFont, Pilot.MaxSP.ToString(), new Vector2(250, Y), Color.White);
+            }
 
             DrawBox(g, new Vector2(30, Y += 32), 193, 45, Color.Black);
             DrawBox(g, new Vector2(223, Y), 193, 45, Color.Black);
@@ -163,7 +270,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     g.DrawString(fntFinlanderFont, "---", new Vector2(233, Y + i * 25), Color.White);
                 }
             }
-            
+
             DrawStat(g, Y, "MEL", PilotOriginalMEL, Pilot.MEL);
             DrawStat(g, Y + 25, "RNG", PilotOriginalRNG, Pilot.RNG);
             DrawStat(g, Y + 50, "SKL", PilotOriginalSKL, Pilot.SKL);

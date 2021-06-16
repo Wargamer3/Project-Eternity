@@ -147,9 +147,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (CanRepair)
                     {
-                        ActiveSquad.CurrentLeader.PilotEXP += 25;
-                        if (ActiveSquad.CurrentLeader.PilotEXP >= ActiveSquad.CurrentLeader.PilotNextEXP)
-                            ActiveSquad.CurrentLeader.Pilot.LevelUp();
+                        LevelUpMenu BattleRecap = new LevelUpMenu(Map, ActiveSquad.CurrentLeader.Pilot, ActiveSquad.CurrentLeader, true);
+                        BattleRecap.TotalExpGained += 25;
+                        if (Constants.ShowBattleRecap)
+                        {
+                            Map.PushScreen(BattleRecap);
+                        }
+                        else
+                        {
+                            BattleRecap.LevelUp();
+                        }
                         ActiveSquad.EndTurn();
                         RemoveAllSubActionPanels();
                     }

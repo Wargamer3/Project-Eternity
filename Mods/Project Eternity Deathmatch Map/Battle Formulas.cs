@@ -432,13 +432,14 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             }
 
             List<Unit> ListDeadDefender = new List<Unit>();
+            List<LevelUpMenu> ListBattleRecap = new List<LevelUpMenu>();
 
-            FinalizeBattle(Attacker, AttackerPlayerIndex, Target, DefenderPlayerIndex, ResultAttack, ListDeadDefender);
+            ListBattleRecap.AddRange(FinalizeBattle(Attacker, AttackerPlayerIndex, Target, DefenderPlayerIndex, ResultAttack, ListDeadDefender));
 
             //Counter attack
             if (TargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack && TargetSquad.CurrentLeader.HP > 0)
             {
-                FinalizeBattle(TargetSquad, DefenderPlayerIndex, Attacker, AttackerPlayerIndex, ResultDefend, new List<Unit>());
+                ListBattleRecap.AddRange(FinalizeBattle(TargetSquad, DefenderPlayerIndex, Attacker, AttackerPlayerIndex, ResultDefend, new List<Unit>()));
             }
 
             //Support Attack
@@ -447,8 +448,10 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 //Remove 1 Support Defend.
                 --ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifier;
 
-                FinalizeBattle(ActiveSquadSupport.ActiveSquadSupport.CurrentLeader, ActiveSquadSupport.ActiveSquadSupport, AttackerPlayerIndex,
+                LevelUpMenu BattleRecap = FinalizeBattle(ActiveSquadSupport.ActiveSquadSupport.CurrentLeader, ActiveSquadSupport.ActiveSquadSupport, AttackerPlayerIndex,
                     TargetSquad.CurrentLeader, TargetSquad, DefenderPlayerIndex, ResultAttack.ResultSupportAttack, ListDeadDefender);
+
+                ListBattleRecap.Add(BattleRecap);
             }
 
             Attacker.UpdateSquad();
@@ -468,16 +471,40 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             #endregion
 
-            UpdateMapEvent(EventTypeOnBattle, 1);
+            bool HasRecap = false;
+            for (int R = ListBattleRecap.Count - 1; R >= 0; --R)
+            {
+                if (Constants.ShowBattleRecap && ListBattleRecap[R].IsHuman)
+                {
+                    PushScreen(ListBattleRecap[R]);
+                    if (!HasRecap)
+                    {
+                        ListBattleRecap[R].UpdateBattleEventsOnClose = true;
+                    }
+                    HasRecap = true;
+                }
+                else
+                {
+                    ListBattleRecap[R].LevelUp();
+                }
+            }
+
+            if (!HasRecap)
+            {
+                UpdateMapEvent(EventTypeOnBattle, 1);
+            }
         }
 
-        private void FinalizeBattle(Squad Attacker, int AttackerPlayerIndex,
+        private List<LevelUpMenu> FinalizeBattle(Squad Attacker, int AttackerPlayerIndex,
                                    Squad Defender, int DefenderPlayerIndex,
                                    SquadBattleResult Result, List<Unit> ListDeadDefender)
         {
+
+            List<LevelUpMenu> ListBattleRecap = new List<LevelUpMenu>();
             for (int U = 0; U < Attacker.UnitsAliveInSquad; U++)
             {
-                FinalizeBattle(Attacker[U], Attacker, AttackerPlayerIndex, Result.ArrayResult[U].Target, Defender, DefenderPlayerIndex, Result.ArrayResult[U], ListDeadDefender);
+                LevelUpMenu BattleRecap = FinalizeBattle(Attacker[U], Attacker, AttackerPlayerIndex, Result.ArrayResult[U].Target, Defender, DefenderPlayerIndex, Result.ArrayResult[U], ListDeadDefender);
+                ListBattleRecap.Add(BattleRecap);
             }
 
             if (!Attacker.ListAttackedTeam.Contains(ListPlayer[DefenderPlayerIndex].Team))
@@ -485,14 +512,20 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             if (!Defender.ListAttackedTeam.Contains(ListPlayer[AttackerPlayerIndex].Team))
                 Defender.ListAttackedTeam.Add(ListPlayer[AttackerPlayerIndex].Team);
+
+            return ListBattleRecap;
         }
 
-        private void FinalizeBattle(Unit Attacker, Squad AttackerSquad, int AttackerPlayerIndex,
+        private LevelUpMenu FinalizeBattle(Unit Attacker, Squad AttackerSquad, int AttackerPlayerIndex,
                                    Unit Defender, Squad DefenderSquad, int DefenderPlayerIndex,
                                    BattleResult Result, List<Unit> ListDeadDefender)
         {
+            LevelUpMenu BattleRecap = null;
             if (Attacker.CurrentAttack != null && !ListDeadDefender.Contains(Result.Target))
             {
+                BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, ListPlayer[AttackerPlayerIndex].IsHuman);
+                BattleRecap.TotalExpGained += (int)(Result.Target.Pilot.EXPValue * Attacker.Boosts.EXPMultiplier);
+
                 FinalizeAttack(Attacker, Result);
 
                 //Will Gains
@@ -501,6 +534,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     ListDeadDefender.Add(Result.Target);
 
                     FinalizeDeath(AttackerSquad, AttackerPlayerIndex, DefenderSquad, DefenderPlayerIndex, Result.Target);
+                    Attacker.PilotKills += 1;
 
                     for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
                     {
@@ -543,6 +577,8 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     }
                 }
             }
+
+            return BattleRecap;
         }
 
         private void FinalizeDeath(Squad Attacker, int AttackerPlayerIndex,
@@ -591,11 +627,6 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 --UnitAttacker.CurrentAttack.Ammo;
 
             UnitAttacker.ConsumeEN(UnitAttacker.EN - Result.AttackAttackerFinalEN);
-
-            UnitAttacker.PilotEXP += (int)(Result.Target.Pilot.EXPValue * UnitAttacker.Boosts.EXPMultiplier);
-
-            if (UnitAttacker.PilotEXP >= UnitAttacker.PilotNextEXP)
-                UnitAttacker.Pilot.LevelUp();
 
             int Money = 0;
             Constants.Money += (int)(Money * UnitAttacker.Boosts.MoneyMultiplier);
