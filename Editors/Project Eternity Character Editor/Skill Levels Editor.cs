@@ -21,7 +21,7 @@ namespace ProjectEternity.Editors.CharacterEditor
             lblName.Text = SkillName;
             dgvLevels.Rows.Clear();
 
-            BaseAutomaticSkill NewSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + SkillName + ".pecs", DicRequirement, DicEffect);
+            BaseAutomaticSkill NewSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + SkillName + ".pecs", SkillName, DicRequirement, DicEffect);
 
             for(int L = 0; L < NewSkill.ListSkillLevel.Count; ++L)
             {

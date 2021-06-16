@@ -7,7 +7,7 @@ namespace ProjectEternity.Core.Item
     public class BaseAutomaticSkill
     {
         public string Name;
-        public string FullName;
+        public string RelativePath;
         public string Description;
         public int CurrentLevel;
         public List<BaseSkillLevel> ListSkillLevel;
@@ -23,7 +23,7 @@ namespace ProjectEternity.Core.Item
         public BaseAutomaticSkill(BaseAutomaticSkill Clone)
         {
             Name = Clone.Name;
-            FullName = Clone.FullName;
+            RelativePath = Clone.RelativePath;
             Description = Clone.Description;
             CurrentLevel = Clone.CurrentLevel;
 
@@ -34,14 +34,14 @@ namespace ProjectEternity.Core.Item
             }
         }
 
-        public BaseAutomaticSkill(string SkillPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public BaseAutomaticSkill(string FullPath, string RelativePath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
             : this()
         {
-            FullName = SkillPath.Substring(0, SkillPath.Length - 5).Substring(26);
-            Name = Path.GetFileNameWithoutExtension(SkillPath);
+            this.RelativePath = RelativePath;
+            Name = Path.GetFileNameWithoutExtension(FullPath);
             CurrentLevel = 1;
 
-            FileStream FS = new FileStream(SkillPath, FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream(FullPath, FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
             Load(BR, DicRequirement, DicEffect);
@@ -54,7 +54,7 @@ namespace ProjectEternity.Core.Item
         {
             BaseAutomaticSkill NewSkill = new BaseAutomaticSkill();
             NewSkill.Name = Name;
-            NewSkill.FullName = Name;
+            NewSkill.RelativePath = Name;
             NewSkill.ListSkillLevel.Add(new BaseSkillLevel());
             NewSkill.CurrentLevel = 1;
             BaseSkillActivation NewActivation = new BaseSkillActivation();
@@ -66,7 +66,7 @@ namespace ProjectEternity.Core.Item
         public BaseAutomaticSkill(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
         {
             Name = "N/A";
-            FullName = "N/A";
+            RelativePath = "N/A";
             CurrentLevel = 1;
 
             Load(BR, DicRequirement, DicEffect);

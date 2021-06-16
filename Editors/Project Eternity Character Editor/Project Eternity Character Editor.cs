@@ -423,43 +423,43 @@ namespace ProjectEternity.Editors.CharacterEditor
             {
                 if (NewCharacter.ArrayPilotSkill[S] != null)
                 {
-                    ArraySkillLevelsEditor[S] = new SkillLevelsEditor(NewCharacter.ArrayPilotSkill[S].FullName, NewCharacter.ArrayPilotSkillLevels[S]);
+                    ArraySkillLevelsEditor[S] = new SkillLevelsEditor(NewCharacter.ArrayPilotSkill[S].RelativePath, NewCharacter.ArrayPilotSkillLevels[S]);
                 }
 
                 switch (S)
                 {
                     case 0:
-                        txtPilotSkill1.Text = NewCharacter.ArrayPilotSkill[S].FullName;
+                        txtPilotSkill1.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
                         ckLockedSkill1.Checked = NewCharacter.ArrayPilotSkillLocked[S];
                         btnEditLevels1.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 1:
-                        txtPilotSkill2.Text = NewCharacter.ArrayPilotSkill[S].FullName;
+                        txtPilotSkill2.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
                         ckLockedSkill2.Checked = NewCharacter.ArrayPilotSkillLocked[S];
                         btnEditLevels2.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 2:
-                        txtPilotSkill3.Text = NewCharacter.ArrayPilotSkill[S].FullName;
+                        txtPilotSkill3.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
                         ckLockedSkill3.Checked = NewCharacter.ArrayPilotSkillLocked[S];
                         btnEditLevels3.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 3:
-                        txtPilotSkill4.Text = NewCharacter.ArrayPilotSkill[S].FullName;
+                        txtPilotSkill4.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
                         ckLockedSkill4.Checked = NewCharacter.ArrayPilotSkillLocked[S];
                         btnEditLevels4.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 4:
-                        txtPilotSkill5.Text = NewCharacter.ArrayPilotSkill[S].FullName;
+                        txtPilotSkill5.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
                         ckLockedSkill5.Checked = NewCharacter.ArrayPilotSkillLocked[S];
                         btnEditLevels5.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
                         break;
 
                     case 5:
-                        txtPilotSkill6.Text = NewCharacter.ArrayPilotSkill[S].FullName;
+                        txtPilotSkill6.Text = NewCharacter.ArrayPilotSkill[S].RelativePath;
                         ckLockedSkill6.Checked = NewCharacter.ArrayPilotSkillLocked[S];
                         btnEditLevels6.Enabled = NewCharacter.ArrayPilotSkill[S] != null;
                         break;

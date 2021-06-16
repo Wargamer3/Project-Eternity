@@ -76,7 +76,7 @@ namespace ProjectEternity.Editors.RelationshipEditor
             string Name = FilePath.Substring(0, FilePath.Length - 5).Substring(26);
             this.Text = Name + " - Project Eternity Relationship Editor";
 
-            ActiveSkill = new BaseAutomaticSkill(SkillPath, DicRequirement, DicEffect);
+            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect);
 
             txtDescription.Text = ActiveSkill.Description;
 

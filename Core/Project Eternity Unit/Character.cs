@@ -330,7 +330,8 @@ namespace ProjectEternity.Core.Characters
 
             for (int S = 0; S < SkillListCount; ++S)
             {
-                ArrayPilotSkill[S] = new BaseAutomaticSkill("Content/Characters/Skills/" + BR.ReadString() + ".pecs", DicRequirement, DicEffect);
+                string RelativePath = BR.ReadString();
+                ArrayPilotSkill[S] = new BaseAutomaticSkill("Content/Characters/Skills/" + RelativePath + ".pecs", RelativePath, DicRequirement, DicEffect);
                 ArrayPilotSkillLocked[S] = BR.ReadBoolean();
                 Int32 SkillLevelsCount = BR.ReadInt32();
                 ArrayPilotSkillLevels[S] = new SkillLevels(BR, SkillLevelsCount);
@@ -343,7 +344,7 @@ namespace ProjectEternity.Core.Characters
             {
                 string RelationshipBonusName = BR.ReadString();
                 int RelationshipLevel = BR.ReadInt32();
-                ArrayRelationshipBonus[S] = new BaseAutomaticSkill("Content/Characters/Relationships/" + RelationshipBonusName + ".pecr", DicRequirement, DicEffect);
+                ArrayRelationshipBonus[S] = new BaseAutomaticSkill("Content/Characters/Relationships/" + RelationshipBonusName + ".pecr", RelationshipBonusName, DicRequirement, DicEffect);
 
                 ArrayRelationshipBonus[S].CurrentLevel = RelationshipLevel;
 

@@ -153,7 +153,7 @@ namespace ProjectEternity.Editors.CharacterEditor
                         {
                             AllowEvents = false;
                             Name = Items[I].Substring(0, Items[0].Length - 5).Substring(33);
-                            BaseAutomaticSkill NewRelationshipSkill = new BaseAutomaticSkill("Content/Characters/Relationships/" + Name + ".pecr", DicRequirement, DicEffect);
+                            BaseAutomaticSkill NewRelationshipSkill = new BaseAutomaticSkill("Content/Characters/Relationships/" + Name + ".pecr", Name, DicRequirement, DicEffect);
                             NewRelationshipSkill.CurrentSkillLevel.ListActivation[0].ListRequirement.Add(DicRequirement["Relationship Requirement"].Copy());
                             ListRelationshipSkill[lstCharacters.SelectedIndex] = NewRelationshipSkill;
 

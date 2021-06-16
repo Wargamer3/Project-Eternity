@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 while (!SR.EndOfStream)
                 {
                     string Line = SR.ReadLine();
-                    ListBuyableSkill.Add(new BaseAutomaticSkill("Content/Characters/Skills/" + Line + ".pecs", DicRequirement, DicEffect));
+                    ListBuyableSkill.Add(new BaseAutomaticSkill("Content/Characters/Skills/" + Line + ".pecs", Line, DicRequirement, DicEffect));
                 }
                 SR.Close();
             }
@@ -75,9 +75,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 string[] Files = Directory.GetFiles("Content/Characters/Skills", "*.pecs", SearchOption.AllDirectories);
 
-                foreach (var File in Files)
+                foreach (string File in Files)
                 {
-                    ListBuyableSkill.Add(new BaseAutomaticSkill(File, DicRequirement, DicEffect));
+                    string RelativePath = File;
+                    ListBuyableSkill.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect));
                 }
             }
 
@@ -100,7 +101,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 string[] Files = Directory.GetFiles("Content/Characters/Spirits", "*.pecs", SearchOption.AllDirectories);
 
-                foreach (var File in Files)
+                foreach (string File in Files)
                 {
                     ListSpirit.Add(new ManualSkill(File, DicRequirement, DicEffect));
                 }
@@ -117,7 +118,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 while (!SR.EndOfStream)
                 {
                     string Line = SR.ReadLine();
-                    ListBuyableSkill.Add(new BaseAutomaticSkill("Content/Characters/Skills/" + Line + ".pecs", DicRequirement, DicEffect));
+                    ListBuyableSkill.Add(new BaseAutomaticSkill("Content/Characters/Skills/" + Line + ".pecs", Line, DicRequirement, DicEffect));
                 }
                 SR.Close();
             }
@@ -125,9 +126,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 string[] Files = Directory.GetFiles("Content/Characters/Skills", "*.pecs", SearchOption.AllDirectories);
 
-                foreach (var File in Files)
+                foreach (string File in Files)
                 {
-                    ListSkill.Add(new BaseAutomaticSkill(File, DicRequirement, DicEffect));
+                    string RelativePath = File;
+                    ListSkill.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect));
                 }
             }
 
@@ -142,7 +144,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 while (!SR.EndOfStream)
                 {
                     string Line = SR.ReadLine();
-                    ListAbility.Add(new BaseAutomaticSkill("Content/Units/Abilities/" + Line + ".pecs", DicRequirement, DicEffect));
+                    ListAbility.Add(new BaseAutomaticSkill("Content/Units/Abilities/" + Line + ".pecs", Line, DicRequirement, DicEffect));
                 }
                 SR.Close();
             }
@@ -150,9 +152,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 string[] Files = Directory.GetFiles("Content/Units/Abilities", "*.pecs", SearchOption.AllDirectories);
 
-                foreach (var File in Files)
+                foreach (string File in Files)
                 {
-                    ListAbility.Add(new BaseAutomaticSkill(File, DicRequirement, DicEffect));
+                    string RelativePath = File;
+                    ListAbility.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect));
                 }
             }
 

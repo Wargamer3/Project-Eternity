@@ -76,7 +76,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
             string Name = FilePath.Substring(0, FilePath.Length - 5).Substring(24);
             this.Text = Name + " - Project Eternity Unit Ability Editor";
 
-            ActiveSkill = new BaseAutomaticSkill(SkillPath, DicRequirement, DicEffect);
+            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect);
 
             txtDescription.Text = ActiveSkill.Description;
 

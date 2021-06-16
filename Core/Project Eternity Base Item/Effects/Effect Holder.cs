@@ -15,13 +15,13 @@ namespace ProjectEternity.Core.Item
         public void QuickSave(BinaryWriter BW)
         {
             BW.Write(DicActiveEffect.Count);
-            foreach (KeyValuePair<string, List<BaseEffect>> ListEffect in DicActiveEffect)
+            foreach (KeyValuePair<string, List<BaseEffect>> ListActiveEffect in DicActiveEffect)
             {
-                BW.Write(ListEffect.Key);
+                BW.Write(ListActiveEffect.Key);
 
-                BW.Write(ListEffect.Value.Count);
-                for (int E = 0; E < ListEffect.Value.Count; ++E)
-                    ListEffect.Value[E].WriteEffect(BW);
+                BW.Write(ListActiveEffect.Value.Count);
+                for (int E = 0; E < ListActiveEffect.Value.Count; ++E)
+                    ListActiveEffect.Value[E].WriteEffect(BW);
             }
         }
 
@@ -36,7 +36,9 @@ namespace ProjectEternity.Core.Item
                 int ListEffectValueCount = BR.ReadInt32();
                 List<BaseEffect> ListEffect = new List<BaseEffect>(ListEffectValueCount);
                 for (int E = 0; E < ListEffectValueCount; ++E)
+                {
                     ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect));
+                }
 
                 DicActiveEffect.Add(Key, ListEffect);
             }

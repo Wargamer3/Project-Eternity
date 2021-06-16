@@ -203,7 +203,10 @@ namespace ProjectEternity.Core.Attacks
             this.ArrayAttackAttributes = new BaseAutomaticSkill[AttackAttributesCount];
 
             for (int S = 0; S < AttackAttributesCount; ++S)
-                ArrayAttackAttributes[S] = new BaseAutomaticSkill("Content/Attacks/Attributes/" + BR.ReadString() + ".peaa", DicRequirement, DicEffect);
+            {
+                string RelativePath = BR.ReadString();
+                ArrayAttackAttributes[S] = new BaseAutomaticSkill("Content/Attacks/Attributes/" + RelativePath + ".peaa", RelativePath, DicRequirement, DicEffect);
+            }
 
             ListQuoteSet = new List<string>();
             int ListQuoteSetCount = BR.ReadInt32();

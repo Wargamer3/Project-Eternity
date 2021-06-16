@@ -208,7 +208,8 @@ namespace ProjectEternity.Core.Units
             ArrayUnitAbility = new BaseAutomaticSkill[ListAbilityCount];
             for (int A = ListAbilityCount - 1; A >= 0; --A)
             {
-                ArrayUnitAbility[A] = new BaseAutomaticSkill("Content/Units/Abilities/" + BR.ReadString() + ".pes", DicRequirement, DicEffect);
+                string RelativePath = BR.ReadString();
+                ArrayUnitAbility[A] = new BaseAutomaticSkill("Content/Units/Abilities/" + RelativePath + ".pes", RelativePath, DicRequirement, DicEffect);
             }
         }
 
@@ -294,7 +295,7 @@ namespace ProjectEternity.Core.Units
             List<BaseAutomaticSkill> ListAbility = new List<BaseAutomaticSkill>();
             foreach (KeyValuePair<string, string> ActiveField in UnitFile.ReadHeader("Abilities"))
             {
-                ListAbility.Add(new BaseAutomaticSkill("Content/Units/Abilities/" + ActiveField.Value + ".pes", DicRequirement, DicEffect));
+                ListAbility.Add(new BaseAutomaticSkill("Content/Units/Abilities/" + ActiveField.Value + ".pes", ActiveField.Value, DicRequirement, DicEffect));
             }
 
             ArrayUnitAbility = ListAbility.ToArray();
