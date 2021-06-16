@@ -174,8 +174,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Y += 3;
             DrawBox(g, new Vector2(0, Y), Constants.Width, fntArial15.LineSpacing * 3 + 6, Color.White);
             g.DrawString(fntArial15, "Money", new Vector2(10, Y + 3), Color.White);
-            g.DrawStringRightAligned(fntArial15, "XXXXXXXX", new Vector2(340, Y + 3), Color.White);
+            g.DrawStringRightAligned(fntArial15, Constants.Money.ToString(), new Vector2(340, Y + 3), Color.White);
             g.DrawString(fntArial15, "Next Stage", new Vector2(350, Y + 3), Color.White);
+            g.DrawStringRightAligned(fntArial15, BattleMap.NextMapPath, new Vector2(630, Y + 3), Color.White);
             Y += fntArial15.LineSpacing;
             g.DrawString(fntArial15, "Skill Points", new Vector2(10, Y + 3), Color.White);
             g.DrawStringRightAligned(fntArial15, "XX", new Vector2(340, Y + 3), Color.White);
@@ -192,6 +193,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Character MainCharacter = ListPresentCharacter[0];
 
                 DrawBox(g, new Vector2(X + 10, fntArial26.LineSpacing - 1), 120, 120, Color.White);
+                g.Draw(sprPixel, new Rectangle(X + 30, Y + 20, 80, 80), Color.White);
+                DrawRectangle(g, new Vector2(X + 30, Y + 20), new Vector2(X + 30 + 80, Y + 20 + 80), Color.Black);
+                g.Draw(MainCharacter.sprPortrait, new Vector2(X + 30, Y + 20), Color.White);
                 g.DrawString(fntArial26, "#1 ACE", new Vector2(X + 140, Y), Color.White);
                 g.DrawString(fntArial15, MainCharacter.Name, new Vector2(X + 140, Y += fntArial26.LineSpacing), Color.White);
                 g.DrawString(fntArial15, "Level:", new Vector2(X + 140, Y += fntArial15.LineSpacing), Color.White);

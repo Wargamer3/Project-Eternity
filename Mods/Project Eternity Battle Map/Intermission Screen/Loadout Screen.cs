@@ -26,8 +26,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int PageCurrent;
         int PageMax;
         const int ItemPerPage = 8;
-        static BattleMap NewMap;
-        static List<Squad> ListSpawnSquad;
+        private static BattleMap NewMap;
+        private static List<Squad> ListSpawnSquad;
+        private static List<GameScreen> ListGameScreenCreatedByMap;
 
         private List<Squad> ListPresentSquad;
         public List<EventPoint> ListSingleplayerSpawns;
@@ -55,12 +56,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListPresentSquad = PlayerRoster.TeamSquads.GetPresent();
 
             PageMax = (int)Math.Ceiling(ListPresentSquad.Count / (float)ItemPerPage);
+
+            //Keep the map in cache in case the player goes back and forth between menus.
             if (NewMap == null)
             {
+                int OldNumberOfGameScreen = ListGameScreen.Count;
                 ListSpawnSquad = new List<Squad>();
                 NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(BattleMap.NextMapPath, 0, ListSpawnSquad);
                 NewMap.ListGameScreen = ListGameScreen;
                 NewMap.Load();
+
+                //Remove any GameScreen created by the map so they don't show up immediately.
+                ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);
+                for (int S = ListGameScreen.Count - 1 - OldNumberOfGameScreen; S >= 0; --S)
+                {
+                    ListGameScreenCreatedByMap.Add(ListGameScreen[S]);
+                    ListGameScreen.RemoveAt(S);
+                }
             }
 
             ListSingleplayerSpawns = new List<EventPoint>();
@@ -103,6 +115,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         RemoveAllScreens();
                         ListGameScreen.Insert(0, NewMap);
+                        for (int S = 0; S < ListGameScreenCreatedByMap.Count; ++S)
+                        {
+                            ListGameScreen.Insert(0, ListGameScreenCreatedByMap[S]);
+                        }
+                        ListGameScreenCreatedByMap.Clear();
                         NewMap = null;
                     }
                     else
