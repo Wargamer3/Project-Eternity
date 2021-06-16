@@ -447,25 +447,7 @@ namespace ProjectEternity.Core.Characters
 
         public void Init()
         {
-            BaseMEL.Value = ArrayLevelMEL[Level - 1];
-            BaseRNG.Value = ArrayLevelRNG[Level - 1];
-            BaseDEF.Value = ArrayLevelDEF[Level - 1];
-            BaseSKL.Value = ArrayLevelSKL[Level - 1];
-            BaseEVA.Value = ArrayLevelEVA[Level - 1];
-            BaseHIT.Value = ArrayLevelHIT[Level - 1];
-
-            for (int S = ArrayPilotSkill.Length - 1; S >= 0; --S)
-            {
-                int SkillLevel;
-                for (int L = Level; L > 0; --L)
-                {
-                    if (ArrayPilotSkillLevels[S].DicSkillLevelPerCharacterLevel.TryGetValue(L, out SkillLevel))
-                    {
-                        ArrayPilotSkill[S].CurrentLevel = SkillLevel;
-                        break;
-                    }
-                }
-            }
+            InitStats();
         }
 
         public void IncreaseEXP(int EXPGained)
@@ -475,9 +457,14 @@ namespace ProjectEternity.Core.Characters
 
         public void LevelUpOnce()
         {
-
             EXP -= NextEXP;
             Level++;
+
+            InitStats();
+        }
+
+        private void InitStats()
+        {
             BaseMEL.Value = ArrayLevelMEL[Level - 1];
             BaseRNG.Value = ArrayLevelRNG[Level - 1];
             BaseDEF.Value = ArrayLevelDEF[Level - 1];
@@ -562,9 +549,11 @@ namespace ProjectEternity.Core.Characters
             string CharacterFullName = BR.ReadString();
             Character NewCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect);
 
+            NewCharacter.Level = BR.ReadInt32();
             NewCharacter.EXP = BR.ReadInt32();
             NewCharacter.Kills = BR.ReadInt32();
             NewCharacter.PilotPoints = BR.ReadInt32();
+            NewCharacter.InitStats();
 
             return NewCharacter;
         }
@@ -604,6 +593,7 @@ namespace ProjectEternity.Core.Characters
         public void SaveProgression(BinaryWriter BW)
         {
             BW.Write(FullName);
+            BW.Write(Level);
             BW.Write(EXP);
             BW.Write(Kills);
             BW.Write(PilotPoints);
