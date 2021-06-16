@@ -256,9 +256,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             SkillPoint = BR.ReadString();
 
             sndBattleThemeName = BR.ReadString();
-            FMODSound NewBattleTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + sndBattleThemeName + ".mp3");
-            NewBattleTheme.SetLoop(true);
-            sndBattleTheme = NewBattleTheme;
+            if (!string.IsNullOrEmpty(sndBattleThemeName))
+            {
+                FMODSound NewBattleTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + sndBattleThemeName + ".mp3");
+
+                NewBattleTheme.SetLoop(true);
+                sndBattleTheme = NewBattleTheme;
+            }
 
             string ThemePath = BR.ReadString();
             uint ThemePosition = BR.ReadUInt32();
@@ -334,7 +338,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     NewSquad.SquadName = ActiveSquadSquadName;
 
                     NewListSquad.Add(NewSquad);
-                    SpawnSquad(P, NewSquad, ActiveSquadID, new Vector3(ActiveSquadPositionX, ActiveSquadPositionY, ActiveSquadPositionZ));
+
+                    if (NewSquad.CurrentLeader != null)
+                    {
+                        SpawnSquad(P, NewSquad, ActiveSquadID, new Vector3(ActiveSquadPositionX, ActiveSquadPositionY, ActiveSquadPositionZ));
+                    }
                 }
             }
 

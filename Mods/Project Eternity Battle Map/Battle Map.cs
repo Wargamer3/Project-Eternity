@@ -753,7 +753,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
         
-        public static BattleMap LoadTemporaryMap()
+        public static BattleMap LoadTemporaryMap(List<GameScreen> ListGameScreen)
         {
             FileStream FS = new FileStream("TempSave.sav", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -762,6 +762,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             string MapAssembly = BR.ReadString();
             Type MapType = Type.GetType(MapAssembly);
             BattleMap NewMap = (BattleMap)Activator.CreateInstance(MapType, BattleMapPath);
+            NewMap.ListGameScreen = ListGameScreen;
             NewMap.Load();
             NewMap.LoadTemporaryMap(BR);
 

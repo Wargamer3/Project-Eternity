@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
@@ -111,8 +114,7 @@ namespace ProjectEternity
                         {
                             sndIntroSong.Stop();
                             sndConfirm.Play();
-                            BattleMap QuickLoadMap = BattleMap.LoadTemporaryMap();
-                            QuickLoadMap.ListGameScreen = ListGameScreen;
+                            BattleMap QuickLoadMap = BattleMap.LoadTemporaryMap(ListGameScreen);
                             ListGameScreen.Insert(0, QuickLoadMap);
                         }
                         else
@@ -136,7 +138,13 @@ namespace ProjectEternity
                             sndIntroSong.Stop();
                             sndConfirm.Play();
 
-                            PushScreen(new IntermissionScreen());
+                            Roster PlayerRoster = new Roster();
+                            PlayerRoster.LoadRoster();
+                            Dictionary<string, Unit> DicUnitType = Unit.LoadAllUnits();
+                            Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
+                            Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
+                            DataScreen.LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect);
+                            PushScreen(new NewIntermissionScreen(PlayerRoster));
                         }
                         else
                         {

@@ -5,14 +5,14 @@ using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class DataScreen : GameScreen
+    public class DataScreen : GameScreen
     {
         private Texture2D sprMapMenuBackground;
 
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else if (CursorIndex == 1)
                 {
-                    LoadProgression();
+                    LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect);
                 }
                 else if (CursorIndex == 2)
                 {
@@ -148,7 +148,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Close();
         }
 
-        public void LoadProgression()
+        public static void LoadProgression(Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
         {
             FileStream FS = new FileStream("SRWE Save.bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS);
