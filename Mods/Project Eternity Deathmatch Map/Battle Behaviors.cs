@@ -89,6 +89,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.Delay > 0)
             {
                 ListDelayedAttack.Add(new DelayedAttack(ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquad, ActivePlayerIndex, AttackChoice));
+                ListActionMenuChoice.RemoveAllSubActionPanels();
+                ActiveSquad.EndTurn();
             }
             else
             {
