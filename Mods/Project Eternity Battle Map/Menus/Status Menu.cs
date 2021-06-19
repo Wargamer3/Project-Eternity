@@ -402,22 +402,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int CurrentX = 235;
 
-            if (ActiveUnit.ListTerrainChoices.Contains("Air"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
             {
                 g.Draw(sprSky, new Vector2(CurrentX, 420), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Land"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
             {
                 g.Draw(sprLand, new Vector2(CurrentX, 420), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Sea"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
             {
                 g.Draw(sprSea, new Vector2(CurrentX, 420), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Space"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
             {
                 g.Draw(sprSpace, new Vector2(CurrentX, 420), Color.White);
                 CurrentX += 50;
@@ -431,31 +431,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawBox(g, new Vector2(MiddlePosX, BottomPositionY), MiddleWidth, BottomHeight, Color.White);
 
             g.Draw(sprSky, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
-            if (ActiveSquad.CurrentMovement == "Air")
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Air") + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeAir, new Vector2(MiddlePosX + 34, CurrentY), Color.Green);
+            if (ActiveSquad.CurrentMovement == UnitStats.TerrainAir)
+                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainAir) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeAir, new Vector2(MiddlePosX + 34, CurrentY), Color.Green);
             else
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Air") + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeAir, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainAir) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeAir, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
             CurrentY += DistanceBetweenText + fntFinlanderFont.LineSpacing;
             g.Draw(sprLand, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
-            if (ActiveSquad.CurrentMovement == "Land")
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Land") + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeLand, new Vector2(MiddlePosX + 34, CurrentY), Color.Green);
+            if (ActiveSquad.CurrentMovement == UnitStats.TerrainLand)
+                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainLand) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeLand, new Vector2(MiddlePosX + 34, CurrentY), Color.Green);
             else
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Land") + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeLand, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainLand) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeLand, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
             CurrentY += DistanceBetweenText + fntFinlanderFont.LineSpacing;
             g.Draw(sprSea, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
-            if (ActiveSquad.CurrentMovement == "Sea")
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Sea") + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSea, new Vector2(MiddlePosX + 34, CurrentY), Color.Green);
+            if (ActiveSquad.CurrentMovement == UnitStats.TerrainSea)
+                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSea) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSea, new Vector2(MiddlePosX + 34, CurrentY), Color.Green);
             else
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Sea") + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSea, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSea) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSea, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
             CurrentY += DistanceBetweenText + fntFinlanderFont.LineSpacing;
             g.Draw(sprSpace, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
-            if (ActiveSquad.CurrentMovement == "Space")
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Space") + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSpace, new Vector2(MiddlePosX + 34, CurrentY), Color.Green);
+            if (ActiveSquad.CurrentMovement == UnitStats.TerrainSpace)
+                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSpace) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSpace, new Vector2(MiddlePosX + 34, CurrentY), Color.Green);
             else
-                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Space") + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSpace, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+                g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSpace) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSpace, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
             int RightWidth = (Constants.Width - 10) / 5;
             int RightPosY = 50;
@@ -677,22 +677,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int CurrentX = 235;
 
-            if (ActiveUnit.ListTerrainChoices.Contains("Air"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
             {
                 g.Draw(sprSky, new Vector2(CurrentX, 420), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Land"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
             {
                 g.Draw(sprLand, new Vector2(CurrentX, 420), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Sea"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
             {
                 g.Draw(sprSea, new Vector2(CurrentX, 420), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Space"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
             {
                 g.Draw(sprSpace, new Vector2(CurrentX, 420), Color.White);
                 CurrentX += 50;
@@ -707,19 +707,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntFinlanderFont, "Terrain", new Vector2(523, 292), Color.Yellow);
 
             g.Draw(sprSky, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
-            g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Air").ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainAir).ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
             CurrentY += fntFinlanderFont.LineSpacing + 6;
             g.Draw(sprLand, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
-            g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Land").ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainLand).ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
             CurrentY += fntFinlanderFont.LineSpacing + 6;
             g.Draw(sprSea, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
-            g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Sea").ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSea).ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
             CurrentY += fntFinlanderFont.LineSpacing + 6;
             g.Draw(sprSpace, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
-            g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute("Space").ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSpace).ToString(), new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
             if (SecondaryMenuIndex == 1)
             {

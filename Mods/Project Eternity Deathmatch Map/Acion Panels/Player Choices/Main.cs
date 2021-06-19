@@ -58,25 +58,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddChoiceToCurrentPanel(OptionalPanel);
                 }
 
-                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains("Land") && ActiveSquad.CurrentMovement != "Land" && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == "Land")
+                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainLand)
+                    && ActiveSquad.CurrentMovement != UnitStats.TerrainLand
+                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == UnitStats.TerrainLand)
                 {
                     AddChoiceToCurrentPanel(new ActionPanelLand(Map, ActiveSquad));
                 }
-                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains("Sea") && ActiveSquad.CurrentMovement != "Sea" && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == "Sea")
+
+                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainUnderwater)
+                    && ActiveSquad.CurrentMovement != UnitStats.TerrainUnderwater
+                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == UnitStats.TerrainSea)
                 {
                     AddChoiceToCurrentPanel(new ActionPanelDive(Map, ActiveSquad));
                 }
-                if (ActiveSquad.CurrentMovement != "Air")
+
+                if (ActiveSquad.CurrentMovement != UnitStats.TerrainAir)
                 {
-                    if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains("Air"))
+                    if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                     {
                         if (ActiveSquad.CurrentWingmanA != null)
                         {
-                            if (ActiveSquad.CurrentWingmanA.ListTerrainChoices.Contains("Air"))
+                            if (ActiveSquad.CurrentWingmanA.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                             {
                                 if (ActiveSquad.CurrentWingmanB != null)
                                 {
-                                    if (ActiveSquad.CurrentWingmanB.ListTerrainChoices.Contains("Air"))
+                                    if (ActiveSquad.CurrentWingmanB.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                                     {
                                         AddChoiceToCurrentPanel(new ActionPanelFly(Map, ActiveSquad));
                                     }
@@ -93,7 +99,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
                 }
-                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains("Underground") && ActiveSquad.CurrentMovement != "Underground" && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == "Land")
+
+                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainUnderground)
+                    && ActiveSquad.CurrentMovement != UnitStats.TerrainUnderground
+                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == UnitStats.TerrainLand)
                 {
                     AddChoiceToCurrentPanel(new ActionPanelDig(Map, ActiveSquad));
                 }

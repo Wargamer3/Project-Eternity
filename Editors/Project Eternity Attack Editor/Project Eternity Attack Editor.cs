@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.Editors.AttackEditor
 {
@@ -361,7 +362,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Air
 
-            switch (DicTerrainAttribute["Air"])
+            switch (DicTerrainAttribute[UnitStats.TerrainAir])
             {
                 case '-':
                     cbAirRank.SelectedIndex = 0;
@@ -392,7 +393,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Land
 
-            switch (DicTerrainAttribute["Land"])
+            switch (DicTerrainAttribute[UnitStats.TerrainLand])
             {
                 case '-':
                     cbLandRank.SelectedIndex = 0;
@@ -423,7 +424,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Sea
 
-            switch (DicTerrainAttribute["Sea"])
+            switch (DicTerrainAttribute[UnitStats.TerrainSea])
             {
                 case '-':
                     cbSeaRank.SelectedIndex = 0;
@@ -454,7 +455,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Space
 
-            switch (DicTerrainAttribute["Space"])
+            switch (DicTerrainAttribute[UnitStats.TerrainSpace])
             {
                 case '-':
                     cbSpaceRank.SelectedIndex = 0;

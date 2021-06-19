@@ -89,7 +89,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         continue;
 
                     //Remove 5 EN each time the Squad spend a turn in the air.
-                    if (ActiveSquad.CurrentMovement == "Air")
+                    if (ActiveSquad.CurrentMovement == Core.Units.UnitStats.TerrainAir)
                         ActiveSquad.CurrentLeader.ConsumeEN(5);
 
                     for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)

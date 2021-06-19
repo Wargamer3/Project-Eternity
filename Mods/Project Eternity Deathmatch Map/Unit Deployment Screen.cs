@@ -208,22 +208,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             GameScreen.DrawBox(g, new Vector2(10, 400), 620, 70, Color.White);
             g.DrawString(fntFinlanderFont, "Move Type", new Vector2(50, 400), Color.Yellow);
             int X = 100 - (SelectedUnit.ListTerrainChoices.Count - 1) * 15;
-            if (SelectedUnit.ListTerrainChoices.Contains("Air"))
+            if (SelectedUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
             {
                 g.Draw(sprSky, new Vector2(X, 435), Color.White);
                 X += 30;
             }
-            if (SelectedUnit.ListTerrainChoices.Contains("Land"))
+            if (SelectedUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
             {
                 g.Draw(sprLand, new Vector2(X, 435), Color.White);
                 X += 30;
             }
-            if (SelectedUnit.ListTerrainChoices.Contains("Sea"))
+            if (SelectedUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
             {
                 g.Draw(sprSea, new Vector2(X, 435), Color.White);
                 X += 30;
             }
-            if (SelectedUnit.ListTerrainChoices.Contains("Space"))
+            if (SelectedUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
             {
                 g.Draw(sprSpace, new Vector2(X, 435), Color.White);
                 X += 30;
@@ -234,10 +234,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.Draw(sprLand, new Vector2(450, 435), Color.White);
             g.Draw(sprSea, new Vector2(500, 435), Color.White);
             g.Draw(sprSpace, new Vector2(550, 435), Color.White);
-            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute("Air").ToString(), new Vector2(425, 430), Color.Yellow);
-            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute("Land").ToString(), new Vector2(475, 430), Color.Yellow);
-            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute("Sea").ToString(), new Vector2(525, 430), Color.Yellow);
-            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute("Space").ToString(), new Vector2(575, 430), Color.Yellow);
+            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute(UnitStats.TerrainAir).ToString(), new Vector2(425, 430), Color.Yellow);
+            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute(UnitStats.TerrainLand).ToString(), new Vector2(475, 430), Color.Yellow);
+            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute(UnitStats.TerrainSea).ToString(), new Vector2(525, 430), Color.Yellow);
+            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute(UnitStats.TerrainSpace).ToString(), new Vector2(575, 430), Color.Yellow);
         }
 
         private void DrawMenuItem(CustomSpriteBatch g, int ItemIndex, int X, int Y)

@@ -5,6 +5,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using UnitStats = ProjectEternity.Core.Units.UnitStats;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -61,7 +62,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             if (AttackerSquad.IsFlying)
             {
-                AttackerTerrainType = "Air";
+                AttackerTerrainType = UnitStats.TerrainAir;
             }
             else
             {
@@ -70,7 +71,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             if (DefenderSquad.IsFlying)
             {
-                DefenderTerrainType = "Air";
+                DefenderTerrainType = UnitStats.TerrainAir;
                 DefenderTerrain = null;
             }
             else
@@ -306,7 +307,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             if (AttackerSquad.IsFlying)
             {
-                AttackerTerrainType = "Air";
+                AttackerTerrainType = UnitStats.TerrainAir;
             }
             else
             {
@@ -315,7 +316,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             if (DefenderSquad.IsFlying)
             {
-                DefenderTerrainType = "Air";
+                DefenderTerrainType = UnitStats.TerrainAir;
                 DefenderTerrain = null;
             }
             else

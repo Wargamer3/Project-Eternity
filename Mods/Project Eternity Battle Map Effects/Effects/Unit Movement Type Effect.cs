@@ -44,25 +44,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string Output = "Added support for ";
 
-            if (_UseAir && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains("Air"))
+            if (_UseAir && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainAir))
             {
-                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add("Air");
-                Output += "Air ";
+                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add(Core.Units.UnitStats.TerrainAir);
+                Output += Core.Units.UnitStats.TerrainAir + " ";
             }
-            if (_UseLand && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains("Land"))
+            if (_UseLand && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainLand))
             {
-                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add("Land");
-                Output += "Land ";
+                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add(Core.Units.UnitStats.TerrainLand);
+                Output += Core.Units.UnitStats.TerrainLand + " ";
             }
-            if (_UseSea && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains("Sea"))
+            if (_UseSea && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainSea))
             {
-                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add("Sea");
-                Output += "Sea ";
+                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add(Core.Units.UnitStats.TerrainSea);
+                Output += Core.Units.UnitStats.TerrainSea + " ";
             }
-            if (_UseSpace && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains("Space"))
+            if (_UseSpace && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainSpace))
             {
-                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add("Space");
-                Output += "Space ";
+                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add(Core.Units.UnitStats.TerrainSpace);
+                Output += Core.Units.UnitStats.TerrainSpace + " ";
             }
 
             return Output;

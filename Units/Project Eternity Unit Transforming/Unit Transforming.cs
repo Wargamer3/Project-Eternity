@@ -135,18 +135,18 @@ namespace ProjectEternity.Core.Units.Transforming
             if (ArrayTransformingUnit[ActiveUnit].WillRequirement >= 0 && PilotMorale < ArrayTransformingUnit[ActiveUnit].WillRequirement)
                 return false;
 
-            if (ArrayTransformingUnit[ActiveUnit].UnitTransformed.ListTerrainChoices.Contains("Air") &&
-                !ArrayTransformingUnit[ActiveUnit].UnitTransformed.ListTerrainChoices.Contains("Land"))
+            if (ArrayTransformingUnit[ActiveUnit].UnitTransformed.ListTerrainChoices.Contains(UnitStats.TerrainAir) &&
+                !ArrayTransformingUnit[ActiveUnit].UnitTransformed.ListTerrainChoices.Contains(UnitStats.TerrainLand))
             {
                 if (CurrentWingmanA != null)
                 {
-                    if (!CurrentWingmanA.ListTerrainChoices.Contains("Air"))
+                    if (!CurrentWingmanA.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                         return false;
                     else
                     {
                         if (CurrentWingmanB != null)
                         {
-                            if (!CurrentWingmanB.ListTerrainChoices.Contains("Air"))
+                            if (!CurrentWingmanB.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                                 return false;
                         }
                     }

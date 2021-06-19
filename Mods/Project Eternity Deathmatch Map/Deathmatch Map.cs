@@ -137,10 +137,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListDelayedAttack = new List<DelayedAttack>();
             ListLayer = new List<MapLayer>();
             ListTerrainType = new List<string>();
-            ListTerrainType.Add("Air");
-            ListTerrainType.Add("Land");
-            ListTerrainType.Add("Sea");
-            ListTerrainType.Add("Space");
+            ListTerrainType.Add(UnitStats.TerrainAir);
+            ListTerrainType.Add(UnitStats.TerrainLand);
+            ListTerrainType.Add(UnitStats.TerrainSea);
+            ListTerrainType.Add(UnitStats.TerrainSpace);
         }
 
         public DeathmatchMap(string BattleMapPath)
@@ -638,7 +638,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         public int GetSquadMaxMovement(Squad ActiveSquad)
         {
-            if (ActiveSquad.CurrentMovement == "Air")
+            if (ActiveSquad.CurrentMovement == UnitStats.TerrainAir)
             {
                 int StartingMV = Math.Min(ActiveSquad.CurrentLeader.MaxMovement, ActiveSquad.CurrentLeader.EN);//Maximum distance you can reach.
 
@@ -678,15 +678,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (!ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(ActiveSquad.CurrentMovement))
             {
                 //Can be in air.
-                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains("Air"))
+                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                 {
-                    ActiveSquad.CurrentMovement = "Air";
+                    ActiveSquad.CurrentMovement = UnitStats.TerrainAir;
                     ActiveSquad.IsFlying = true;
                 }
                 //Can be on land.
-                else if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains("Land"))
+                else if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainLand))
                 {
-                    ActiveSquad.CurrentMovement = "Land";
+                    ActiveSquad.CurrentMovement = UnitStats.TerrainLand;
                     ActiveSquad.IsFlying = false;
                 }
             }
@@ -751,14 +751,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void FinalizeMovement(Squad CurrentSquad, int UsedMovement)
         {
-            if (CurrentSquad.CurrentMovement != "Air" && GetTerrainType(CurrentSquad.X, CurrentSquad.Y, CurrentSquad.LayerIndex) != "Air")
+            if (CurrentSquad.CurrentMovement != UnitStats.TerrainAir && GetTerrainType(CurrentSquad.X, CurrentSquad.Y, CurrentSquad.LayerIndex) != UnitStats.TerrainAir)
             {
                 CurrentSquad.CurrentMovement = GetTerrainType(CurrentSquad.X, CurrentSquad.Y, CurrentSquad.LayerIndex);
             }
             
             if (UsedMovement > 0)
             {
-                if (CurrentSquad.CurrentMovement == "Air")
+                if (CurrentSquad.CurrentMovement == UnitStats.TerrainAir)
                 {
                     CurrentSquad.CurrentLeader.ConsumeEN((int)GetTerrain(CurrentSquad).MovementCost);
                     if (CurrentSquad.CurrentWingmanA != null)

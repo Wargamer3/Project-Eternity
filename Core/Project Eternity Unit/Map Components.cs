@@ -14,6 +14,7 @@ namespace ProjectEternity.Core.Units
         public int ActionsRemaining { get { return _ActionsRemaining; } set { _ActionsRemaining = value; } }
         public string CurrentMovement;//How the Unit is currently moving.
         public bool IsFlying;
+        public bool IsUnderTerrain;
         public bool IsPlayerControlled;
 
         protected Vector3 _Position;

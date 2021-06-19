@@ -67,10 +67,10 @@ namespace ProjectEternity.Core.Attacks
             Animations = new List<AttackContext>();
             Animations.Add(new AttackContext());
             DicTerrainAttribute = new Dictionary<string, char>();
-            DicTerrainAttribute.Add("Land", 'A');
-            DicTerrainAttribute.Add("Air", 'A');
-            DicTerrainAttribute.Add("Sea", 'A');
-            DicTerrainAttribute.Add("Space", 'A');
+            DicTerrainAttribute.Add(UnitStats.TerrainLand, 'A');
+            DicTerrainAttribute.Add(UnitStats.TerrainAir, 'A');
+            DicTerrainAttribute.Add(UnitStats.TerrainSea, 'A');
+            DicTerrainAttribute.Add(UnitStats.TerrainSpace, 'A');
         }
 
         public Attack(string Name, string Description, int Price, string PowerFormula, int RangeMin, int RangeMax, WeaponPrimaryProperty Pri, WeaponSecondaryProperty Sec,
@@ -194,10 +194,10 @@ namespace ProjectEternity.Core.Attacks
 
             char[] Grades = new char[6] { '-', 'S', 'A', 'B', 'C', 'D' };
             DicTerrainAttribute = new Dictionary<string, char>(4);
-            DicTerrainAttribute.Add("Air", Grades[TerrainGradeAir]);
-            DicTerrainAttribute.Add("Land", Grades[TerrainGradeLand]);
-            DicTerrainAttribute.Add("Sea", Grades[TerrainGradeSea]);
-            DicTerrainAttribute.Add("Space", Grades[TerrainGradeSpace]);
+            DicTerrainAttribute.Add(UnitStats.TerrainAir, Grades[TerrainGradeAir]);
+            DicTerrainAttribute.Add(UnitStats.TerrainLand, Grades[TerrainGradeLand]);
+            DicTerrainAttribute.Add(UnitStats.TerrainSea, Grades[TerrainGradeSea]);
+            DicTerrainAttribute.Add(UnitStats.TerrainSpace, Grades[TerrainGradeSpace]);
 
             Int32 AttackAttributesCount = BR.ReadInt32();
             this.ArrayAttackAttributes = new BaseAutomaticSkill[AttackAttributesCount];

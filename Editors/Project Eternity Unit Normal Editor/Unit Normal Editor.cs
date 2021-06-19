@@ -8,6 +8,7 @@ using ProjectEternity.Core.Units.Normal;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Editors.ImageViewer;
 using ProjectEternity.Editors.AttackEditor;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.Editors.UnitNormalEditor
 {
@@ -126,25 +127,25 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Write(frmAttacks.AttackUpgradesCostIndex);
 
             Dictionary<string, int> DicTerrainValue = new Dictionary<string, int>();
-            DicTerrainValue.Add("Air", 0);
-            DicTerrainValue.Add("Land", 0);
-            DicTerrainValue.Add("Sea", 0);
-            DicTerrainValue.Add("Space", 0);
+            DicTerrainValue.Add(UnitStats.TerrainAir, 0);
+            DicTerrainValue.Add(UnitStats.TerrainLand, 0);
+            DicTerrainValue.Add(UnitStats.TerrainSea, 0);
+            DicTerrainValue.Add(UnitStats.TerrainSpace, 0);
             if (cbTerrainAir.SelectedIndex >= 0)
             {
-                DicTerrainValue["Air"] = cbTerrainAir.SelectedIndex;
+                DicTerrainValue[UnitStats.TerrainAir] = cbTerrainAir.SelectedIndex;
             }
             if (cbTerrainLand.SelectedIndex >= 0)
             {
-                DicTerrainValue["Land"] = cbTerrainLand.SelectedIndex;
+                DicTerrainValue[UnitStats.TerrainLand] = cbTerrainLand.SelectedIndex;
             }
             if (cbTerrainSea.SelectedIndex >= 0)
             {
-                DicTerrainValue["Sea"] = cbTerrainSea.SelectedIndex;
+                DicTerrainValue[UnitStats.TerrainSea] = cbTerrainSea.SelectedIndex;
             }
             if (cbTerrainSpace.SelectedIndex >= 0)
             {
-                DicTerrainValue["Space"] = cbTerrainSpace.SelectedIndex;
+                DicTerrainValue[UnitStats.TerrainSpace] = cbTerrainSpace.SelectedIndex;
             }
 
             BW.Write(DicTerrainValue.Count);
@@ -156,15 +157,17 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
             List<string> UnitMovements = new List<string>();
             if (cboMovementAir.Checked)
-                UnitMovements.Add("Air");
+                UnitMovements.Add(UnitStats.TerrainAir);
             if (cboMovementLand.Checked)
-                UnitMovements.Add("Land");
+                UnitMovements.Add(UnitStats.TerrainLand);
             if (cboMovementSea.Checked)
-                UnitMovements.Add("Sea");
+                UnitMovements.Add(UnitStats.TerrainSea);
             if (cboMovementSpace.Checked)
-                UnitMovements.Add("Space");
+                UnitMovements.Add(UnitStats.TerrainSpace);
             if (cboMovementUnderground.Checked)
-                UnitMovements.Add("Underground");
+                UnitMovements.Add(UnitStats.TerrainUnderground);
+            if (cboMovementUnderwater.Checked)
+                UnitMovements.Add(UnitStats.TerrainUnderwater);
 
             BW.Write(UnitMovements.Count);
             for (int i = 0; i < UnitMovements.Count; i++)
@@ -382,21 +385,23 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             txtBaseMovement.Text = LoadedUnit.MaxMovement.ToString();
 
             List<char> Grades = new List<char> { '-', 'S', 'A', 'B', 'C', 'D' };
-            cbTerrainAir.SelectedIndex = LoadedUnit.DicTerrainValue["Air"];
-            cbTerrainLand.SelectedIndex = LoadedUnit.DicTerrainValue["Land"];
-            cbTerrainSea.SelectedIndex = LoadedUnit.DicTerrainValue["Sea"];
-            cbTerrainSpace.SelectedIndex = LoadedUnit.DicTerrainValue["Space"];
+            cbTerrainAir.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainAir];
+            cbTerrainLand.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainLand];
+            cbTerrainSea.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainSea];
+            cbTerrainSpace.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainSpace];
 
-            if (LoadedUnit.ListTerrainChoices.Contains("Air"))
+            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                 cboMovementAir.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains("Land"))
+            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
                 cboMovementLand.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains("Sea"))
+            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
                 cboMovementSea.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains("Space"))
+            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
                 cboMovementSpace.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains("Underground"))
+            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainUnderground))
                 cboMovementUnderground.Checked = true;
+            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainUnderwater))
+                cboMovementUnderwater.Checked = true;
 
             if (LoadedUnit.Size == "LLL")
                 rbSizeLLL.Checked = true;
@@ -466,32 +471,34 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
             if (cbTerrainAir.SelectedIndex >= 0)
             {
-                ExportIniFile.AddValue("Unit Terrain", "Air", cbTerrainAir.Text);
+                ExportIniFile.AddValue("Unit Terrain", UnitStats.TerrainAir, cbTerrainAir.Text);
             }
             if (cbTerrainLand.SelectedIndex >= 0)
             {
-                ExportIniFile.AddValue("Unit Terrain", "Land", cbTerrainLand.Text);
+                ExportIniFile.AddValue("Unit Terrain", UnitStats.TerrainLand, cbTerrainLand.Text);
             }
             if (cbTerrainSea.SelectedIndex >= 0)
             {
-                ExportIniFile.AddValue("Unit Terrain", "Sea", cbTerrainSea.Text);
+                ExportIniFile.AddValue("Unit Terrain", UnitStats.TerrainSea, cbTerrainSea.Text);
             }
             if (cbTerrainSpace.SelectedIndex >= 0)
             {
-                ExportIniFile.AddValue("Unit Terrain", "Space", cbTerrainSpace.Text);
+                ExportIniFile.AddValue("Unit Terrain", UnitStats.TerrainSpace, cbTerrainSpace.Text);
             }
 
             List<string> UnitMovements = new List<string>();
             if (cboMovementAir.Checked)
-                ExportIniFile.AddValue("Unit Movements", "Air", "");
+                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainAir, "");
             if (cboMovementLand.Checked)
-                ExportIniFile.AddValue("Unit Movements", "Land", "");
+                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainLand, "");
             if (cboMovementSea.Checked)
-                ExportIniFile.AddValue("Unit Movements", "Sea", "");
+                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainSea, "");
             if (cboMovementSpace.Checked)
-                ExportIniFile.AddValue("Unit Movements", "Space", "");
+                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainSpace, "");
             if (cboMovementUnderground.Checked)
-                ExportIniFile.AddValue("Unit Movements", "Underground", "");
+                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainUnderground, "");
+            if (cboMovementUnderwater.Checked)
+                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainUnderwater, "");
 
             if (rbSizeLLL.Checked)
                 ExportIniFile.AddValue("Unit Stats", "Size", "LLL");

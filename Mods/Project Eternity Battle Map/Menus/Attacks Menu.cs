@@ -182,13 +182,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(ActiveFont, "Energy", new Vector2(310, YStart + 178), Color.Yellow);
             g.DrawStringRightAligned(ActiveFont, ActiveUnit.ListAttack[CursorIndex].ENCost.ToString(), new Vector2(435, YStart + 178), Color.White);
             g.Draw(sprSky, new Vector2(447, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, ActiveUnit.ListAttack[CursorIndex].DicTerrainAttribute["Air"].ToString(), new Vector2(472, YStart + 178), Color.White);
+            g.DrawString(ActiveFont, ActiveUnit.ListAttack[CursorIndex].DicTerrainAttribute[UnitStats.TerrainAir].ToString(), new Vector2(472, YStart + 178), Color.White);
             g.Draw(sprLand, new Vector2(493, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, ActiveUnit.ListAttack[CursorIndex].DicTerrainAttribute["Land"].ToString(), new Vector2(518, YStart + 178), Color.White);
+            g.DrawString(ActiveFont, ActiveUnit.ListAttack[CursorIndex].DicTerrainAttribute[UnitStats.TerrainLand].ToString(), new Vector2(518, YStart + 178), Color.White);
             g.Draw(sprSea, new Vector2(539, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, ActiveUnit.ListAttack[CursorIndex].DicTerrainAttribute["Sea"].ToString(), new Vector2(564, YStart + 178), Color.White);
+            g.DrawString(ActiveFont, ActiveUnit.ListAttack[CursorIndex].DicTerrainAttribute[UnitStats.TerrainSea].ToString(), new Vector2(564, YStart + 178), Color.White);
             g.Draw(sprSpace, new Vector2(585, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, ActiveUnit.ListAttack[CursorIndex].DicTerrainAttribute["Space"].ToString(), new Vector2(610, YStart + 178), Color.White);
+            g.DrawString(ActiveFont, ActiveUnit.ListAttack[CursorIndex].DicTerrainAttribute[UnitStats.TerrainSpace].ToString(), new Vector2(610, YStart + 178), Color.White);
 
             DrawBox(g, new Vector2(5, YStart + 220), 630, 140, Color.White);
             //Draw the cursor.

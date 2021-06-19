@@ -17,7 +17,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            ActiveSquad.CurrentMovement = "Air";
+            ActiveSquad.CurrentMovement = UnitStats.TerrainAir;
             ActiveSquad.IsFlying = true;
             RemoveFromPanelList(this);
             ReplaceChoiceInCurrentPanel(new ActionPanelLand(Map, ActiveSquad), typeof(ActionPanelFly));

@@ -31,6 +31,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExport = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.lblPrice = new System.Windows.Forms.Label();
             this.txtPrice = new System.Windows.Forms.TextBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
@@ -78,7 +79,8 @@
             this.lblTerrainSea = new System.Windows.Forms.Label();
             this.lblTerrainLand = new System.Windows.Forms.Label();
             this.lblTerrainAir = new System.Windows.Forms.Label();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cboUnderwater = new System.Windows.Forms.GroupBox();
+            this.cboMovementUnderwater = new System.Windows.Forms.CheckBox();
             this.cboMovementUnderground = new System.Windows.Forms.CheckBox();
             this.cboMovementSpace = new System.Windows.Forms.CheckBox();
             this.cboMovementSea = new System.Windows.Forms.CheckBox();
@@ -94,7 +96,6 @@
             this.rbSizeLLL = new System.Windows.Forms.RadioButton();
             this.gbAttacks = new System.Windows.Forms.GroupBox();
             this.btnEditAttack = new System.Windows.Forms.Button();
-            this.tsmDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtPartsSlots)).BeginInit();
@@ -105,7 +106,7 @@
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtEXP)).BeginInit();
             this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
+            this.cboUnderwater.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.gbAttacks.SuspendLayout();
             this.SuspendLayout();
@@ -132,9 +133,16 @@
             // tsmExport
             // 
             this.tsmExport.Name = "tsmExport";
-            this.tsmExport.Size = new System.Drawing.Size(52, 20);
+            this.tsmExport.Size = new System.Drawing.Size(53, 20);
             this.tsmExport.Text = "Export";
             this.tsmExport.Click += new System.EventHandler(this.tsmExport_Click);
+            // 
+            // tsmDetails
+            // 
+            this.tsmDetails.Name = "tsmDetails";
+            this.tsmDetails.Size = new System.Drawing.Size(54, 20);
+            this.tsmDetails.Text = "Details";
+            this.tsmDetails.Click += new System.EventHandler(this.tsmDetails_Click);
             // 
             // lblPrice
             // 
@@ -337,6 +345,7 @@
             // 
             // lstAnimations
             // 
+            this.lstAnimations.HideSelection = false;
             this.lstAnimations.Location = new System.Drawing.Point(3, 3);
             this.lstAnimations.Name = "lstAnimations";
             this.lstAnimations.Size = new System.Drawing.Size(258, 189);
@@ -631,19 +640,30 @@
             this.lblTerrainAir.TabIndex = 0;
             this.lblTerrainAir.Text = "Air:";
             // 
-            // groupBox5
+            // cboUnderwater
             // 
-            this.groupBox5.Controls.Add(this.cboMovementUnderground);
-            this.groupBox5.Controls.Add(this.cboMovementSpace);
-            this.groupBox5.Controls.Add(this.cboMovementSea);
-            this.groupBox5.Controls.Add(this.cboMovementLand);
-            this.groupBox5.Controls.Add(this.cboMovementAir);
-            this.groupBox5.Location = new System.Drawing.Point(566, 158);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(156, 133);
-            this.groupBox5.TabIndex = 30;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Movement types";
+            this.cboUnderwater.Controls.Add(this.cboMovementUnderwater);
+            this.cboUnderwater.Controls.Add(this.cboMovementUnderground);
+            this.cboUnderwater.Controls.Add(this.cboMovementSpace);
+            this.cboUnderwater.Controls.Add(this.cboMovementSea);
+            this.cboUnderwater.Controls.Add(this.cboMovementLand);
+            this.cboUnderwater.Controls.Add(this.cboMovementAir);
+            this.cboUnderwater.Location = new System.Drawing.Point(566, 158);
+            this.cboUnderwater.Name = "cboUnderwater";
+            this.cboUnderwater.Size = new System.Drawing.Size(156, 167);
+            this.cboUnderwater.TabIndex = 30;
+            this.cboUnderwater.TabStop = false;
+            this.cboUnderwater.Text = "Movement types";
+            // 
+            // cboMovementUnderwater
+            // 
+            this.cboMovementUnderwater.AutoSize = true;
+            this.cboMovementUnderwater.Location = new System.Drawing.Point(6, 134);
+            this.cboMovementUnderwater.Name = "cboMovementUnderwater";
+            this.cboMovementUnderwater.Size = new System.Drawing.Size(81, 17);
+            this.cboMovementUnderwater.TabIndex = 5;
+            this.cboMovementUnderwater.Text = "Underwater";
+            this.cboMovementUnderwater.UseVisualStyleBackColor = true;
             // 
             // cboMovementUnderground
             // 
@@ -704,7 +724,7 @@
             this.groupBox6.Controls.Add(this.rbSizeL);
             this.groupBox6.Controls.Add(this.rbSizeLL);
             this.groupBox6.Controls.Add(this.rbSizeLLL);
-            this.groupBox6.Location = new System.Drawing.Point(566, 297);
+            this.groupBox6.Location = new System.Drawing.Point(566, 331);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(156, 94);
             this.groupBox6.TabIndex = 31;
@@ -790,7 +810,7 @@
             // gbAttacks
             // 
             this.gbAttacks.Controls.Add(this.btnEditAttack);
-            this.gbAttacks.Location = new System.Drawing.Point(566, 397);
+            this.gbAttacks.Location = new System.Drawing.Point(566, 431);
             this.gbAttacks.Name = "gbAttacks";
             this.gbAttacks.Size = new System.Drawing.Size(156, 48);
             this.gbAttacks.TabIndex = 32;
@@ -807,13 +827,6 @@
             this.btnEditAttack.UseVisualStyleBackColor = true;
             this.btnEditAttack.Click += new System.EventHandler(this.btnEditAttacks_Click);
             // 
-            // tsmDetails
-            // 
-            this.tsmDetails.Name = "tsmDetails";
-            this.tsmDetails.Size = new System.Drawing.Size(54, 20);
-            this.tsmDetails.Text = "Details";
-            this.tsmDetails.Click += new System.EventHandler(this.tsmDetails_Click);
-            // 
             // UnitNormalEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -821,7 +834,7 @@
             this.ClientSize = new System.Drawing.Size(734, 491);
             this.Controls.Add(this.gbAttacks);
             this.Controls.Add(this.groupBox6);
-            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.cboUnderwater);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.tabList);
@@ -846,8 +859,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtEXP)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
+            this.cboUnderwater.ResumeLayout(false);
+            this.cboUnderwater.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.gbAttacks.ResumeLayout(false);
@@ -892,7 +905,7 @@
         private System.Windows.Forms.Label lblTerrainSpace;
         private System.Windows.Forms.Label lblTerrainSea;
         private System.Windows.Forms.Label lblTerrainLand;
-        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox cboUnderwater;
         private System.Windows.Forms.CheckBox cboMovementAir;
         private System.Windows.Forms.CheckBox cboMovementLand;
         private System.Windows.Forms.CheckBox cboMovementSpace;
@@ -925,5 +938,6 @@
         private System.Windows.Forms.Label lblEXP;
         private System.Windows.Forms.ToolStripMenuItem tsmExport;
         private System.Windows.Forms.ToolStripMenuItem tsmDetails;
+        private System.Windows.Forms.CheckBox cboMovementUnderwater;
     }
 }

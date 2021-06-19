@@ -7,6 +7,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.Core.Characters
 {
@@ -42,13 +43,13 @@ namespace ProjectEternity.Core.Characters
             {
                 switch (TerrainType)
                 {
-                    case "Air":
+                    case UnitStats.TerrainAir:
                         return TerrainGradeAir;
-                    case "Land":
+                    case UnitStats.TerrainLand:
                         return TerrainGradeLand;
-                    case "Sea":
+                    case UnitStats.TerrainSea:
                         return TerrainGradeSea;
-                    case "Space":
+                    case UnitStats.TerrainSpace:
                         return TerrainGradeSpace;
                 }
 

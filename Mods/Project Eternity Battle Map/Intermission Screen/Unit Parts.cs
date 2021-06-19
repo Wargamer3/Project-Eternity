@@ -343,22 +343,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawStatChange(g, CurrentMaxMV, SelectedUnit.MaxMovement, StartX + 150, Y);
 
             g.DrawString(fntFinlanderFont, "Move Type", new Vector2(StartX + 15, Y += LineSpacing), Color.White);
-            if (ListTerrainChoices.Contains("Air"))
+            if (ListTerrainChoices.Contains(UnitStats.TerrainAir))
                 g.Draw(sprSky, new Vector2(StartX + 150, Y + 7), Color.White);
             else
                 g.Draw(sprLand, new Vector2(StartX + 150, Y + 7), Color.White);
 
-            if (SelectedUnit.ListTerrainChoices.Contains("Air"))
+            if (SelectedUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                 g.Draw(sprSky, new Vector2(StartX + 230, Y + 7), Color.White);
             else
                 g.Draw(sprLand, new Vector2(StartX + 230, Y + 7), Color.White);
 
             g.DrawString(fntFinlanderFont, "Terrain", new Vector2(StartX + 15, Y += LineSpacing), Color.White);
 
-            DrawTerrainChange(g, "Air", sprSky, StartX + 40, Y + 28);
-            DrawTerrainChange(g, "Land", sprLand, StartX + 90, Y + 28);
-            DrawTerrainChange(g, "Sea", sprSea, StartX + 140, Y + 28);
-            DrawTerrainChange(g, "Space", sprSpace, StartX + 190, Y + 28);
+            DrawTerrainChange(g, UnitStats.TerrainAir, sprSky, StartX + 40, Y + 28);
+            DrawTerrainChange(g, UnitStats.TerrainLand, sprLand, StartX + 90, Y + 28);
+            DrawTerrainChange(g, UnitStats.TerrainSea, sprSea, StartX + 140, Y + 28);
+            DrawTerrainChange(g, UnitStats.TerrainSpace, sprSpace, StartX + 190, Y + 28);
         }
 
         private void DrawPartMenu(CustomSpriteBatch g, bool ShowListPartCursor)

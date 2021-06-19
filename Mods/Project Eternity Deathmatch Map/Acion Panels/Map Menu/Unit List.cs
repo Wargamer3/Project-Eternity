@@ -148,22 +148,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawString(fntFinlanderFont, ActiveUnit.MaxMovement.ToString(), new Vector2(420, 430), Color.White);
             int CurrentX = 445;
 
-            if (ActiveUnit.ListTerrainChoices.Contains("Air"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
             {
                 g.Draw(sprSky, new Vector2(CurrentX, 435), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Land"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
             {
                 g.Draw(sprLand, new Vector2(CurrentX, 435), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Sea"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
             {
                 g.Draw(sprSea, new Vector2(CurrentX, 435), Color.White);
                 CurrentX += 50;
             }
-            if (ActiveUnit.ListTerrainChoices.Contains("Space"))
+            if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
             {
                 g.Draw(sprSpace, new Vector2(CurrentX, 435), Color.White);
                 CurrentX += 50;

@@ -120,35 +120,35 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListPlayer[PlayerIndex].ListSquad.Add(NewSquad);
             
-            if (NewSquad.CurrentLeader.ListTerrainChoices.Contains("Air"))
+            if (NewSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
             {
                 if (NewSquad.CurrentWingmanA != null)
                 {
-                    if (NewSquad.CurrentWingmanA.ListTerrainChoices.Contains("Air"))
+                    if (NewSquad.CurrentWingmanA.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                     {
                         if (NewSquad.CurrentWingmanB != null)
                         {
-                            if (NewSquad.CurrentWingmanB.ListTerrainChoices.Contains("Air"))
+                            if (NewSquad.CurrentWingmanB.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                             {
                                 NewSquad.IsFlying = true;
-                                NewSquad.CurrentMovement = "Air";
+                                NewSquad.CurrentMovement = UnitStats.TerrainAir;
                             }
                         }
                         else
                         {
                             NewSquad.IsFlying = true;
-                            NewSquad.CurrentMovement = "Air";
+                            NewSquad.CurrentMovement = UnitStats.TerrainAir;
                         }
                     }
                 }
                 else
                 {
                     NewSquad.IsFlying = true;
-                    NewSquad.CurrentMovement = "Air";
+                    NewSquad.CurrentMovement = UnitStats.TerrainAir;
                 }
             }
             else
-                NewSquad.CurrentMovement = "Land";
+                NewSquad.CurrentMovement = UnitStats.TerrainLand;
         }
         
         public override void SaveTemporaryMap()

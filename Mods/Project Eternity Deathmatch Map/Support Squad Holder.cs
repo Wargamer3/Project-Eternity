@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     //Can't support if the attacking unit is flying and the support can't fly.
                     if (SquadIndex >= 0 && ActivePlayer.ListSquad[SquadIndex].CurrentLeader.Boosts.SupportAttackModifier > 0
                         && (!AttackingSquad.IsFlying
-                            || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.ListTerrainChoices.Contains("Air")))
+                            || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir)))
                     {
                         if (!ActivePlayer.ListSquad[SquadIndex].CanMove)
                             continue;
@@ -126,7 +126,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         //Can't support if the defending unit is flying and the support can't fly.
                         if (SquadIndex >= 0 && ActivePlayer.ListSquad[SquadIndex].CurrentLeader.Boosts.SupportDefendModifier > 0
                             && (!DefendingSquad.IsFlying
-                                || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.ListTerrainChoices.Contains("Air")))
+                                || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir)))
                         {
                             ActivePlayer.ListSquad[SquadIndex].CurrentLeader.AttackIndex = -1;
                             AddSupportSquad(ActivePlayer.ListSquad[SquadIndex]);

@@ -9,6 +9,13 @@ namespace ProjectEternity.Core.Units
 {
     public class UnitStats
     {
+        public const string TerrainLand = "Land";
+        public const string TerrainSea = "Sea";
+        public const string TerrainAir = "Air";
+        public const string TerrainSpace = "Space";
+        public const string TerrainUnderground = "Underground";
+        public const string TerrainUnderwater = "Underwater";
+
         [Flags]
         public enum UnitLinkTypes : int
         {
@@ -106,10 +113,10 @@ namespace ProjectEternity.Core.Units
 
             DicUnitLink = new Dictionary<string, UnitLinkTypes>();
             Boosts = new StatsBoosts();
-            Boosts.DicTerrainLetterAttributeModifier.Add("Air", 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add("Land", 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add("Sea", 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add("Space", 0);
+            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainAir, 0);
+            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainLand, 0);
+            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainSea, 0);
+            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainSpace, 0);
 
             ArrayUnitAbility = new BaseAutomaticSkill[0];
             ListAttack = new List<Attack>();

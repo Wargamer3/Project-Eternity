@@ -457,18 +457,18 @@ namespace ProjectEternity.Editors.UnitTester
                                 txtAttackerMobility.Value = NewUnit.Mobility;
 
                                 List<char> Grades = new List<char> { '-', 'S', 'A', 'B', 'C', 'D' };
-                                cbAttackerTerrainAir.SelectedIndex = NewUnit.DicTerrainValue["Air"];
-                                cbAttackerTerrainLand.SelectedIndex = NewUnit.DicTerrainValue["Land"];
-                                cbAttackerTerrainSea.SelectedIndex = NewUnit.DicTerrainValue["Sea"];
-                                cbAttackerTerrainSpace.SelectedIndex = NewUnit.DicTerrainValue["Space"];
+                                cbAttackerTerrainAir.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainAir];
+                                cbAttackerTerrainLand.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainLand];
+                                cbAttackerTerrainSea.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainSea];
+                                cbAttackerTerrainSpace.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainSpace];
 
-                                if (NewUnit.ListTerrainChoices.Contains("Air"))
+                                if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                                     rbAttackerMovementAir.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains("Land"))
+                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
                                     rbAttackerMovementLand.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains("Sea"))
+                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
                                     rbAttackerMovementSea.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains("Space"))
+                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
                                     rbAttackerMovementSpace.Checked = true;
 
                                 if (NewUnit.Size == "LLL")
@@ -493,18 +493,18 @@ namespace ProjectEternity.Editors.UnitTester
                                 txtDefenderArmor.Value = NewUnit.Armor;
                                 txtDefenderMobility.Value = NewUnit.Mobility;
                                 
-                                cbDefenderTerrainAir.SelectedIndex = NewUnit.DicTerrainValue["Air"];
-                                cbDefenderTerrainLand.SelectedIndex = NewUnit.DicTerrainValue["Land"];
-                                cbDefenderTerrainSea.SelectedIndex = NewUnit.DicTerrainValue["Sea"];
-                                cbDefenderTerrainSpace.SelectedIndex = NewUnit.DicTerrainValue["Space"];
+                                cbDefenderTerrainAir.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainAir];
+                                cbDefenderTerrainLand.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainLand];
+                                cbDefenderTerrainSea.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainSea];
+                                cbDefenderTerrainSpace.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainSpace];
 
-                                if (NewUnit.ListTerrainChoices.Contains("Air"))
+                                if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
                                     rbDefenderMovementAir.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains("Land"))
+                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
                                     rbDefenderMovementLand.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains("Sea"))
+                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
                                     rbDefenderMovementSea.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains("Space"))
+                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
                                     rbDefenderMovementSpace.Checked = true;
 
                                 if (NewUnit.Size == "LLL")
@@ -581,10 +581,10 @@ namespace ProjectEternity.Editors.UnitTester
                         else if (NewWeapon.Style == WeaponStyle.R)
                             rbWeaponRange.Checked = true;
 
-                        cbWeaponAirRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute["Air"]);
-                        cbWeaponLandRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute["Land"]);
-                        cbWeaponSeaRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute["Sea"]);
-                        cbWeaponSpaceRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute["Space"]);
+                        cbWeaponAirRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute[UnitStats.TerrainAir]);
+                        cbWeaponLandRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute[UnitStats.TerrainLand]);
+                        cbWeaponSeaRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute[UnitStats.TerrainSea]);
+                        cbWeaponSpaceRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute[UnitStats.TerrainSpace]);
                         break;
 
                         #endregion

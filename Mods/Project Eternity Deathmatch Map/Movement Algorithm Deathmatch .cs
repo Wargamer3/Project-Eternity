@@ -15,18 +15,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo)
         {
             float MovementCostToNeighbor = 0;
-            if (MapComponent.CurrentMovement == "Air")
+            if (MapComponent.CurrentMovement == UnitStats.TerrainAir)
             {
-                if (Map.GetTerrainLetterAttribute(UnitStat, "Air") == 'C' || Map.GetTerrainLetterAttribute(UnitStat, "Air") == 'D' || Map.GetTerrainLetterAttribute(UnitStat, "Air") == '-')
+                if (Map.GetTerrainLetterAttribute(UnitStat, UnitStats.TerrainAir) == 'C'
+                    || Map.GetTerrainLetterAttribute(UnitStat, UnitStats.TerrainAir) == 'D'
+                    || Map.GetTerrainLetterAttribute(UnitStat, UnitStats.TerrainAir) == '-')
+                {
                     MovementCostToNeighbor += 0.5f;
+                }
                 else
+                {
                     MovementCostToNeighbor += 1;
+                }
             }
             else
             {
                 char TerrainCharacter = Map.GetTerrainLetterAttribute(UnitStat, Map.GetTerrainType(TerrainToGo));
 
-                if ((TerrainCharacter == 'C' || TerrainCharacter == 'D' || TerrainCharacter == '-') && Map.GetTerrainType(TerrainToGo) != "Land")
+                if ((TerrainCharacter == 'C' || TerrainCharacter == 'D' || TerrainCharacter == '-') && Map.GetTerrainType(TerrainToGo) != UnitStats.TerrainLand)
                     MovementCostToNeighbor += TerrainToGo.MVMoveCost + 0.5f;
                 else if (TerrainCharacter == 'S' && TerrainToGo.MVMoveCost > 1)
                     MovementCostToNeighbor += TerrainToGo.MVMoveCost / 2;
