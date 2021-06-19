@@ -103,11 +103,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     switch (ActiveTerrain.ListBonus[i])
                                     {
                                         case TerrainBonus.HPRegen:
-                                            ActiveSquad[U].HealUnit((int)(ActiveTerrain.ListBonusValue[i] / 100.0f) * ActiveSquad[U].MaxHP);
+                                            ActiveSquad[U].HealUnit((int)(ActiveTerrain.ListBonusValue[i] / 100.0f * ActiveSquad[U].MaxHP));
                                             break;
 
                                         case TerrainBonus.ENRegen:
-                                            ActiveSquad[U].RefillEN((int)(ActiveTerrain.ListBonusValue[i] / 100.0f) * ActiveSquad[U].MaxEN);
+                                            ActiveSquad[U].RefillEN((int)(ActiveTerrain.ListBonusValue[i] / 100.0f * ActiveSquad[U].MaxEN));
                                             break;
                                         case TerrainBonus.HPRestore:
                                             ActiveSquad[U].HealUnit(ActiveTerrain.ListBonusValue[i]);
