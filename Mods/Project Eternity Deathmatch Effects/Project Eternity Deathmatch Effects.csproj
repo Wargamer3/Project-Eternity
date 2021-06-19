@@ -98,6 +98,7 @@
     <Compile Include="Skill Requirements\Distance To Enemy.cs" />
     <Compile Include="Skill Requirements\Support Attack.cs" />
     <Compile Include="Skill Requirements\Support Defend.cs" />
+    <Compile Include="Skill Requirements\VS Underwater Unit.cs" />
     <Compile Include="Skill Requirements\VS Water Unit.cs" />
     <Compile Include="Skill Requirements\VS Land Unit.cs" />
     <Compile Include="Skill Requirements\VS Flying Unit.cs" />

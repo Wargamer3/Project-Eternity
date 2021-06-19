@@ -25,6 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public static string VSFlyingUnitRequirementName = "VS Flying Unit Requirement";
         public static string VSLandUnitRequirementName = "VS Land Unit Requirement";
         public static string VSWaterUnitRequirementName = "VS Water Unit Requirement";
+        public static string VSUnderwaterUnitRequirementName = "VS Underwater Unit Requirement";
         public static string AttackUsedRequirementName = "Attack Used Requirement";
         public static string AttackDefendedRequirementName = "Attack Defended Requirement";
         public static string SupportAttackRequirementName = "Support Attack Requirement";
