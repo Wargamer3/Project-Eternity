@@ -209,7 +209,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Add or remove the EN needed to the pilot.
             if (InputHelper.InputCommand1Pressed())
             {
-                if (ActiveSpirit == null)
+                if (ActiveSpirit == null || !ActiveSpirit.IsUnlocked)
                     return;
 
                 if (ActiveSpirit.CanActivate)
@@ -246,7 +246,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             else if (InputHelper.InputConfirmPressed())
             {
-                if (ActiveSpirit == null)
+                if (ActiveSpirit == null || !ActiveSpirit.IsUnlocked)
                     return;
 
                 if (ListSelectedSpirit.Count == 0)
@@ -462,20 +462,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (PilotSpiritActivation[DisplayedUnitIndex][PilotIndex].Contains(ActiveCharacter.ArrayPilotSpirit[S]))
                     g.Draw(sprSpiritMenuSelectChosen, new Vector2(StartX + 5, Y + 125 + S * 18), Color.White);
 
-                if (ActiveCharacter.ArrayPilotSpirit[S].CanActivate && !PilotSpiritActivation[DisplayedUnitIndex][PilotIndex].Contains(ActiveCharacter.ArrayPilotSpirit[S])
-                    && GetPilotRemainingSP() - ActiveCharacter.ArrayPilotSpirit[S].SPCost >= 0)
+                if (ActiveCharacter.ArrayPilotSpirit[S].IsUnlocked)
                 {
-                    DrawText(g, ActiveCharacter.ArrayPilotSpirit[S].Name,
-                        new Vector2(StartX + 20, Y + 123 + S * 18), Color.White);
-                    DrawTextRightAligned(g, ActiveCharacter.ArrayPilotSpirit[S].SPCost.ToString(),
-                        new Vector2(StartX + 183, Y + 123 + S * 18), Color.White);
+                    if (ActiveCharacter.ArrayPilotSpirit[S].CanActivate && !PilotSpiritActivation[DisplayedUnitIndex][PilotIndex].Contains(ActiveCharacter.ArrayPilotSpirit[S])
+                        && GetPilotRemainingSP() - ActiveCharacter.ArrayPilotSpirit[S].SPCost >= 0)
+                    {
+                        DrawText(g, ActiveCharacter.ArrayPilotSpirit[S].Name,
+                            new Vector2(StartX + 20, Y + 123 + S * 18), Color.White);
+                        DrawTextRightAligned(g, ActiveCharacter.ArrayPilotSpirit[S].SPCost.ToString(),
+                            new Vector2(StartX + 183, Y + 123 + S * 18), Color.White);
+                    }
+                    else
+                    {
+                        DrawText(g, ActiveCharacter.ArrayPilotSpirit[S].Name,
+                            new Vector2(StartX + 20, Y + 123 + S * 18), Color.Gray);
+                        DrawTextRightAligned(g, ActiveCharacter.ArrayPilotSpirit[S].SPCost.ToString(),
+                            new Vector2(StartX + 183, Y + 123 + S * 18), Color.Gray);
+                    }
                 }
                 else
                 {
-                    DrawText(g, ActiveCharacter.ArrayPilotSpirit[S].Name,
-                        new Vector2(StartX + 20, Y + 123 + S * 18), Color.Gray);
-                    DrawTextRightAligned(g, ActiveCharacter.ArrayPilotSpirit[S].SPCost.ToString(),
-                        new Vector2(StartX + 183, Y + 123 + S * 18), Color.Gray);
+                    DrawText(g, "------------------",
+                        new Vector2(StartX + 20, Y + 123 + S * 18), Color.White);
+                    DrawTextRightAligned(g, "--",
+                        new Vector2(StartX + 183, Y + 123 + S * 18), Color.White);
                 }
             }
 
