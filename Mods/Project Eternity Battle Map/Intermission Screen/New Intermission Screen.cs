@@ -57,6 +57,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Menu[0].Open = true;
             Menu[1].Open = true;
             Menu[2].Open = true;
+
+            Menu[0].IsAvailable[0] = true;
+            Menu[0].IsAvailable[1] = true;
+            Menu[0].IsAvailable[2] = true;
+
+            Menu[1].IsAvailable[0] = true;
+            Menu[1].IsAvailable[1] = true;
+            Menu[1].IsAvailable[2] = true;
+            Menu[1].IsAvailable[3] = true;
+
+            Menu[2].IsAvailable[0] = true;
+            Menu[2].IsAvailable[1] = true;
+            Menu[2].IsAvailable[2] = true;
+            Menu[2].IsAvailable[3] = true;
+            Menu[2].IsAvailable[4] = true;
+
             MenuElements = Menu[0].Categories.Length + Menu[1].Categories.Length + Menu[2].Categories.Length;
 
             fntArial15 = Content.Load<SpriteFont>("Fonts/Arial15");
@@ -145,7 +161,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             g.End();
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
+
             g.DrawString(fntArial26, "INTERMISSION", new Vector2(0, 0), Color.White);
             int X = (int)fntArial26.MeasureString("INTERMISSION").X;
             int Y = fntArial26.LineSpacing - 1;

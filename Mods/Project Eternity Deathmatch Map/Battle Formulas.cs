@@ -452,7 +452,10 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 LevelUpMenu BattleRecap = FinalizeBattle(ActiveSquadSupport.ActiveSquadSupport.CurrentLeader, ActiveSquadSupport.ActiveSquadSupport, AttackerPlayerIndex,
                     TargetSquad.CurrentLeader, TargetSquad, DefenderPlayerIndex, ResultAttack.ResultSupportAttack, ListDeadDefender);
 
-                ListBattleRecap.Add(BattleRecap);
+                if (BattleRecap != null)
+                {
+                    ListBattleRecap.Add(BattleRecap);
+                }
             }
 
             Attacker.UpdateSquad();
@@ -505,7 +508,10 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             for (int U = 0; U < Attacker.UnitsAliveInSquad; U++)
             {
                 LevelUpMenu BattleRecap = FinalizeBattle(Attacker[U], Attacker, AttackerPlayerIndex, Result.ArrayResult[U].Target, Defender, DefenderPlayerIndex, Result.ArrayResult[U], ListDeadDefender);
-                ListBattleRecap.Add(BattleRecap);
+                if (BattleRecap != null)
+                {
+                    ListBattleRecap.Add(BattleRecap);
+                }
             }
 
             if (!Attacker.ListAttackedTeam.Contains(ListPlayer[DefenderPlayerIndex].Team))
@@ -524,14 +530,14 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             LevelUpMenu BattleRecap = null;
             if (Attacker.CurrentAttack != null && !ListDeadDefender.Contains(Result.Target))
             {
-                BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, ListPlayer[AttackerPlayerIndex].IsHuman);
-                BattleRecap.TotalExpGained += (int)(Result.Target.Pilot.EXPValue * Attacker.Boosts.EXPMultiplier);
-
                 FinalizeAttack(Attacker, Result);
 
                 //Will Gains
                 if (Result.Target.HP <= 0)
                 {
+                    BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, ListPlayer[AttackerPlayerIndex].IsHuman);
+                    BattleRecap.TotalExpGained += (int)(Result.Target.Pilot.EXPValue * Attacker.Boosts.EXPMultiplier);
+
                     ListDeadDefender.Add(Result.Target);
 
                     FinalizeDeath(AttackerSquad, AttackerPlayerIndex, DefenderSquad, DefenderPlayerIndex, Result.Target);
