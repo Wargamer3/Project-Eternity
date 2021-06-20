@@ -30,9 +30,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                char TerrainCharacter = Map.GetTerrainLetterAttribute(UnitStat, Map.GetTerrainType(TerrainToGo));
+                string TerrainType = Map.GetTerrainType(TerrainToGo);
 
-                if ((TerrainCharacter == 'C' || TerrainCharacter == 'D' || TerrainCharacter == '-') && Map.GetTerrainType(TerrainToGo) != UnitStats.TerrainLand)
+                if (!UnitStat.ListTerrainChoices.Contains(TerrainType))
+                {
+                    return -1;
+                }
+
+                char TerrainCharacter = Map.GetTerrainLetterAttribute(UnitStat, TerrainType);
+
+                if ((TerrainCharacter == 'C' || TerrainCharacter == 'D' || TerrainCharacter == '-') && TerrainType != UnitStats.TerrainLand)
                     MovementCostToNeighbor += TerrainToGo.MVMoveCost + 0.5f;
                 else if (TerrainCharacter == 'S' && TerrainToGo.MVMoveCost > 1)
                     MovementCostToNeighbor += TerrainToGo.MVMoveCost / 2;

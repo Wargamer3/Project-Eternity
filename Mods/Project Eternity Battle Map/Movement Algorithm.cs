@@ -101,11 +101,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, MapComponent.LayerIndex);
                 foreach (MovementAlgorithmTile Neighbor in ListSuccessors)
                 {
+                    //Cost to move to this Neighbor
+                    float MovementCostToNeighbor = GetMVCost(MapComponent, UnitStat, CurrentNode, Neighbor);
+                    if (MovementCostToNeighbor < 0)
+                    {
+                        continue;
+                    }
+
                     if (!ListAllNode.Contains(Neighbor))
                         ListAllNode.Add(Neighbor);
 
-                    //Cost to move to this Neighbor
-                    float MovementCostToNeighbor = CurrentNode.MovementCost + GetMVCost(MapComponent, UnitStat, CurrentNode, Neighbor);
+                    MovementCostToNeighbor += CurrentNode.MovementCost;
 
                     //Bad path with higher movement cost then it already has.
                     if (ListCloseNode.Contains(Neighbor) && MovementCostToNeighbor >= Neighbor.MovementCost)
