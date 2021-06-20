@@ -105,7 +105,7 @@ namespace ProjectEternity.Editors.MapEditor
                 if (TA.ShowDialog() == DialogResult.OK)
                 {
                     ReplaceTerrain(X, Y, new Terrain(X, Y,
-                                                                        SelectedTerrain.TerrainTypeIndex,
+                                                                        TA.TerrainTypeIndex,
                                                                         TA.MVEnterCost,
                                                                         TA.MVMoveCost,
                                                                         TA.ListActivation.ToArray(),
