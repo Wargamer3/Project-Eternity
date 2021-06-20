@@ -198,7 +198,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (Pilot.Level != OriginalPilotLevel)
             {
                 g.DrawString(fntFinlanderFont, OriginalPilotLevel.ToString(), new Vector2(270, Y), Color.LightGreen);
-                g.Draw(sprArrow, new Vector2(295, Y + 10), Color.White);
+                g.Draw(sprArrow, new Vector2(300, Y + 10), Color.White);
                 g.DrawString(fntFinlanderFont, Pilot.Level.ToString(), new Vector2(320, Y), Color.LightGreen);
             }
             else

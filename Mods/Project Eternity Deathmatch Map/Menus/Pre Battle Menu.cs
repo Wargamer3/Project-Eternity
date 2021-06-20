@@ -185,9 +185,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     g.DrawString(fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack.ItemName, new Vector2(405, 397), Color.White);
                     //Draw remaining supports
-                    g.DrawStringMiddleAligned(fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifier + "/" + AttackingSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifierMax, new Vector2(353, 372), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
+                    g.DrawStringMiddleAligned(fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifier + "/" + AttackingSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifierMax,
+                        new Vector2(359, 372), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
                     //Draw the hit rate %.
-                    g.DrawStringMiddleAligned(fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader.AttackAccuracy, new Vector2(353, 401), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
+                    g.DrawStringMiddleAligned(fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader.AttackAccuracy,
+                        new Vector2(359, 401), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
                 }
             }
 

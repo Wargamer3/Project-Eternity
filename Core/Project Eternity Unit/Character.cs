@@ -460,7 +460,7 @@ namespace ProjectEternity.Core.Characters
         {
             EXP -= NextEXP;
             Level++;
-            Level = Math.Min(Level, ArrayLevelMEL.Length - 1);
+            Level = Math.Min(Level, ArrayLevelMEL.Length);
 
             InitStats();
         }
