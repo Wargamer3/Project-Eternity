@@ -104,7 +104,9 @@ namespace ProjectEternity.Core.Item
                 {
                     for (int R = 0; R < ActiveActivation.ListRequirement.Count; R++)
                     {
-                        ActiveActivation.ListRequirement[R] = ActiveActivation.ListRequirement[R].Copy();
+                        BaseSkillRequirement NewRequirement = DicRequirement[ActiveActivation.ListRequirement[R].SkillRequirementName].Copy();
+                        NewRequirement.CopyMembers(ActiveActivation.ListRequirement[R]);
+                        ActiveActivation.ListRequirement[R] = NewRequirement;
                     }
 
                     ActiveActivation.ListEffectTargetReal.Clear();

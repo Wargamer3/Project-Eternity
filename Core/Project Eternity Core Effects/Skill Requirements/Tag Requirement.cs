@@ -44,8 +44,15 @@ namespace ProjectEternity.Core.Effects
             return NewSkillEffect;
         }
 
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            TagRequirement NewRequirement = (TagRequirement)Copy;
+
+            _Tag = NewRequirement._Tag;
+        }
+
         #region Properties
-        
+
         [CategoryAttribute("Requirement Attributes"),
         DescriptionAttribute(".")]
         public string Tag

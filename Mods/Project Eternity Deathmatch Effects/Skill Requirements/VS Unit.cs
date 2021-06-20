@@ -45,7 +45,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             return NewSkillEffect;
         }
-        
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            VSUnitRequirement NewRequirement = (VSUnitRequirement)Copy;
+
+            _UnitName = NewRequirement._UnitName;
+            _Not = NewRequirement._Not;
+        }
+
         [CategoryAttribute("Requirement Attributes"),
         DescriptionAttribute(".")]
         public string UnitName

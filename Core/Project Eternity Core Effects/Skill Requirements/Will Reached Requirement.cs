@@ -50,6 +50,13 @@ namespace ProjectEternity.Core.Effects
             return NewSkillEffect;
         }
 
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            WillReachedRequirement NewRequirement = (WillReachedRequirement)Copy;
+
+            _WillNeeded = NewRequirement._WillNeeded;
+        }
+
         #region Properties
 
         [TypeConverter(typeof(LogicOperatorConverter)),

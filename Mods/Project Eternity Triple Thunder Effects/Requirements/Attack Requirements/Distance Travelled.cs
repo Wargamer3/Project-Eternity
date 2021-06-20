@@ -78,7 +78,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             return NewSkillEffect;
         }
-        
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            DistanceTravelledRequirement NewRequirement = (DistanceTravelledRequirement)Copy;
+
+            _DistanceToTravel = NewRequirement._DistanceToTravel;
+            _MaxExecutions = NewRequirement._MaxExecutions;
+            _Delay = NewRequirement._Delay;
+        }
+
         #region Properties
 
         [CategoryAttribute("Effect Attributes"),

@@ -26,5 +26,9 @@ namespace ProjectEternity.Core.Item
         {
             return new OnCreatedRequirement();
         }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+        }
     }
 }

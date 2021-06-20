@@ -80,6 +80,10 @@ namespace ProjectEternity.Core.Magic
         {
             return new ManaChanneledRequirement(ManaRequired, MagicParams);
         }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+        }
     }
 
     public class ChannelExternalManaEffect : MagicEffect

@@ -74,6 +74,14 @@ namespace ProjectEternity.Core.Effects
             return NewSkillEffect;
         }
 
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            PilotStatRequirement NewRequirement = (PilotStatRequirement)Copy;
+
+            _EffectValue = NewRequirement._EffectValue;
+            _StatusType = NewRequirement._StatusType;
+        }
+
         #region Properties
 
         [TypeConverter(typeof(LogicOperatorConverter)),

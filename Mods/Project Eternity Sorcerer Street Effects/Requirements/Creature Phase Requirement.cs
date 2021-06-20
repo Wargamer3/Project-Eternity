@@ -14,6 +14,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(ActionPanelBattleCreatureModifierPhase.RequirementName, GlobalContext)
         {
         }
+
+        protected override void DoSave(BinaryWriter BW)
+        {
+        }
+
+        protected override void Load(BinaryReader BR)
+        {
+        }
         
         public override bool CanActivatePassive()
         {
@@ -25,11 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new SorcererStreetCreaturePhaseRequirement(GlobalContext);
         }
 
-        protected override void DoSave(BinaryWriter BW)
-        {
-        }
-
-        protected override void Load(BinaryReader BR)
+        public override void CopyMembers(BaseSkillRequirement Copy)
         {
         }
     }

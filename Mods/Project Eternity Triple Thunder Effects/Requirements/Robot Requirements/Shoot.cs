@@ -16,6 +16,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             : base(Name, GlobalContext)
         {
         }
+
+        protected override void DoSave(BinaryWriter BW)
+        {
+        }
+
+        protected override void Load(BinaryReader BR)
+        {
+        }
         
         public override bool CanActivatePassive()
         {
@@ -27,11 +35,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             return new ShootRequirement(GlobalContext);
         }
 
-        protected override void DoSave(BinaryWriter BW)
-        {
-        }
-
-        protected override void Load(BinaryReader BR)
+        public override void CopyMembers(BaseSkillRequirement Copy)
         {
         }
     }

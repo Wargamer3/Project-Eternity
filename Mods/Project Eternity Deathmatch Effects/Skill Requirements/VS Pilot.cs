@@ -41,7 +41,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             return NewSkillEffect;
         }
-        
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            VSPilotRequirement NewRequirement = (VSPilotRequirement)Copy;
+
+            _PilotName = NewRequirement._PilotName;
+        }
+
         [CategoryAttribute("Requirement Attributes"),
         DescriptionAttribute(".")]
         public string PilotName

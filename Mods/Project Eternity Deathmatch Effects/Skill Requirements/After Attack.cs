@@ -29,5 +29,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             return NewSkillEffect;
         }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+        }
     }
 }

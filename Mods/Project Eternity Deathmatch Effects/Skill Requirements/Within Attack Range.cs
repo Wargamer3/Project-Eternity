@@ -45,6 +45,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return base.CanActicateManually(AfterAttackRequirementName);
         }
 
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            WithinAttackRangeRequirement NewRequirement = (WithinAttackRangeRequirement)Copy;
+
+            _Range = NewRequirement._Range;
+            _ConsiderWalls = NewRequirement._ConsiderWalls;
+        }
+
         [CategoryAttribute("Requirement Attributes"),
         DescriptionAttribute(".")]
         public int Range

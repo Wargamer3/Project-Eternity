@@ -15,6 +15,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
+        protected override void DoSave(BinaryWriter BW)
+        {
+        }
+
+        protected override void Load(BinaryReader BR)
+        {
+        }
+
         public override bool CanActivatePassive()
         {
             return false;
@@ -25,11 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new SorcererStreesBeforeAttackRequirement(GlobalContext);
         }
 
-        protected override void DoSave(BinaryWriter BW)
-        {
-        }
-
-        protected override void Load(BinaryReader BR)
+        public override void CopyMembers(BaseSkillRequirement Copy)
         {
         }
     }

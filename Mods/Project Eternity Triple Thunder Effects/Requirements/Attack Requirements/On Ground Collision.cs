@@ -39,5 +39,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             return NewSkillEffect;
         }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+        }
     }
 }

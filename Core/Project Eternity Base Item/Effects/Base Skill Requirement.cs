@@ -46,6 +46,8 @@ namespace ProjectEternity.Core.Item
 
         public abstract BaseSkillRequirement Copy();
 
+        public abstract void CopyMembers(BaseSkillRequirement Copy);
+
         public override string ToString()
         {
             return SkillRequirementName;

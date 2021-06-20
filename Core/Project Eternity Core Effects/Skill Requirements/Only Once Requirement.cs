@@ -51,5 +51,9 @@ namespace ProjectEternity.Core.Effects
 
             return NewSkillEffect;
         }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+        }
     }
 }

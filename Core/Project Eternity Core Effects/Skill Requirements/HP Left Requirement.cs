@@ -59,9 +59,18 @@ namespace ProjectEternity.Core.Effects
             HPLeftRequirement NewSkillEffect = new HPLeftRequirement(GlobalContext);
             NewSkillEffect._LogicOperator = _LogicOperator;
             NewSkillEffect._NumberType = _NumberType;
-            NewSkillEffect._HPLeft = HPLeft;
+            NewSkillEffect._HPLeft = _HPLeft;
 
             return NewSkillEffect;
+        }
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            HPLeftRequirement NewRequirement = (HPLeftRequirement)Copy;
+
+            _LogicOperator = NewRequirement._LogicOperator;
+            _NumberType = NewRequirement._NumberType;
+            _HPLeft = NewRequirement._HPLeft;
         }
 
         #region Properties

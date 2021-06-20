@@ -710,6 +710,14 @@ namespace ProjectEternity.Core.Magic
 
                 return NewSkillEffect;
             }
+
+            public override void CopyMembers(BaseSkillRequirement Copy)
+            {
+                TimeEllapsedRequirement NewRequirement = (TimeEllapsedRequirement)Copy;
+
+                MaxExecutions = NewRequirement.MaxExecutions;
+                Delay = NewRequirement.Delay;
+            }
         }
 
         private double SecondsToWait;

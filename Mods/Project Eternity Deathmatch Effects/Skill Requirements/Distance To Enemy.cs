@@ -75,7 +75,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             return NewSkillEffect;
         }
-        
+
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            DistanceToEnemyRequirement NewRequirement = (DistanceToEnemyRequirement)Copy;
+
+            _DistanceToEnemy = NewRequirement._DistanceToEnemy;
+            _IncludeDiagonals = NewRequirement._IncludeDiagonals;
+        }
+
         [CategoryAttribute("Requirement Attributes"),
         DescriptionAttribute("")]
         public int DistanceToEnemy

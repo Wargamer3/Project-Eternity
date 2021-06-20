@@ -47,6 +47,13 @@ namespace ProjectEternity.Core.Effects
             return NewSkillEffect;
         }
 
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            PilotedUnitNameRequirement NewRequirement = (PilotedUnitNameRequirement)Copy;
+
+            _UnitName = NewRequirement._UnitName;
+        }
+
         #region Properties
 
         [CategoryAttribute("Requirement Attributes"),

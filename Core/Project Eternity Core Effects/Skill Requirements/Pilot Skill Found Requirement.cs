@@ -52,6 +52,13 @@ namespace ProjectEternity.Core.Effects
             return NewSkillEffect;
         }
 
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            PilotSkillFoundRequirement NewRequirement = (PilotSkillFoundRequirement)Copy;
+
+            _PilotSkill = NewRequirement._PilotSkill;
+        }
+
         #region Properties
 
         [CategoryAttribute("Requirement Attributes"),

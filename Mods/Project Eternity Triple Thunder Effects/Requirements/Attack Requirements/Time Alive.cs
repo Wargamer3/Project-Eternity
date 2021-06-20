@@ -79,6 +79,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             return NewSkillEffect;
         }
 
+        public override void CopyMembers(BaseSkillRequirement Copy)
+        {
+            TimeAliveRequirement NewRequirement = (TimeAliveRequirement)Copy;
+
+            _TimeToWait = NewRequirement._TimeToWait;
+            _MaxExecutions = NewRequirement._MaxExecutions;
+            _Delay = NewRequirement._Delay;
+        }
+
         #region Properties
 
         [CategoryAttribute("Effect Attributes"),
