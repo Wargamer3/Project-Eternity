@@ -64,6 +64,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListSpawnSquad = new List<Squad>();
                 NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(BattleMap.NextMapPath, 0, ListSpawnSquad);
                 NewMap.ListGameScreen = ListGameScreen;
+                NewMap.PlayerRoster = PlayerRoster;
                 NewMap.Load();
 
                 //Remove any GameScreen created by the map so they don't show up immediately.
