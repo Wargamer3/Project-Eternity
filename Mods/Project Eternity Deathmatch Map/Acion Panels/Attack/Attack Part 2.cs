@@ -32,15 +32,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
             {
-                ActiveSquad.CurrentLeader.CurrentAttack.UpdateAttack(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.CursorPosition,
-                    Map.GetTerrainType(Map.CursorPosition.X, Map.CursorPosition.Y, Map.ActiveLayerIndex), ActiveSquad.CanMove);
-
-                if (!ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)
-                {
-                    Map.sndDeny.Play();
-                    return;
-                }
-
                 int TargetSelect = 0;
                 //Verify if the cursor is over one of the possible MV position.
                 while ((Map.CursorPosition.X != AttackChoice[TargetSelect].X || Map.CursorPosition.Y != AttackChoice[TargetSelect].Y)
@@ -60,6 +51,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.ListPlayer[ActivePlayerIndex].Team != Map.ListPlayer[P].Team)//If it's an ennemy.
                         {
+                            ActiveSquad.CurrentLeader.CurrentAttack.UpdateAttack(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.CursorPosition,
+                                Map.ListPlayer[P].ListSquad[TargetSelect].CurrentMovement, ActiveSquad.CanMove);
+
+                            if (!ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)
+                            {
+                                Map.sndDeny.Play();
+                                return;
+                            }
+
                             Map.PrepareSquadsForBattle(ActiveSquad, Map.ListPlayer[P].ListSquad[TargetSelect]);
 
                             SupportSquadHolder ActiveSquadSupport = new SupportSquadHolder();
