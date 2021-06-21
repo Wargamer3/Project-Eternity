@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             int PosX = (int)ActiveUnit.X;
             int PosY = (int)ActiveUnit.Y;
             Attack ActiveWeapon = ActiveUnit.ListAttack[0];
-            List<Tuple<int, int>> ListDefendingSquad = CanSquadAttackWeapon1(PosX, PosY, ActivePlayerIndex, ActiveUnit.FullName, ActiveUnit.ListAttack[1]);
+            List<Tuple<int, int>> ListDefendingSquad = CanSquadAttackWeapon1(PosX, PosY, ActivePlayerIndex, ActiveUnit.RelativePath, ActiveUnit.ListAttack[1]);
 
             if (!ActiveUnit.CanMove && !((ActiveWeapon.Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement || ActiveUnit.Boosts.PostMovementModifier.Attack))
                 return false;
@@ -132,7 +132,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             int PosX = (int)ActiveUnit.X;
             int PosY = (int)ActiveUnit.Y;
             Attack ActiveWeapon = ActiveUnit.ListAttack[1];
-            List<Tuple<int, int>> ListDefendingSquad = CanSquadAttackWeapon2(PosX, PosY, ActivePlayerIndex, ActiveUnit.FullName, ActiveUnit.ListAttack[1]);
+            List<Tuple<int, int>> ListDefendingSquad = CanSquadAttackWeapon2(PosX, PosY, ActivePlayerIndex, ActiveUnit.RelativePath, ActiveUnit.ListAttack[1]);
             if (ListDefendingSquad == null)
                 return false;
 

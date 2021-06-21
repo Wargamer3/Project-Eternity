@@ -67,7 +67,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                 foreach (Tuple<int, int> Target in ListHitRate)
                 {
-                    if (Info.Map.ListPlayer[Target.Item1].ListSquad[Target.Item2].CurrentLeader.FullName == _EnemyName)
+                    if (Info.Map.ListPlayer[Target.Item1].ListSquad[Target.Item2].CurrentLeader.RelativePath == _EnemyName)
                         ListEnemy.Add(Target);
                 }
 

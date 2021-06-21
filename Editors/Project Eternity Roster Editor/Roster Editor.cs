@@ -2,10 +2,10 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using ProjectEternity.Core.Characters;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Editor;
-using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Editors.RosterEditor
 {
@@ -63,7 +63,7 @@ namespace ProjectEternity.Editors.RosterEditor
             for (int U = 0; U < ListUnit.Count; U++)
             {
                 BW.Write(ListUnit[U].UnitTypeName);
-                BW.Write(ListUnit[U].UnitStat.Name);
+                BW.Write(ListUnit[U].RelativePath);
                 BW.Write(ListUnit[U].TeamEventID);
 
                 BW.Write(ListUnit[U].UnitStat.DicUnitLink.Count);
@@ -119,8 +119,8 @@ namespace ProjectEternity.Editors.RosterEditor
                 Unit NewUnit = Unit.FromType(UnitTypeName, UnitName, null, DicUnitType, DicRequirement, DicEffect);
                 NewUnit.TeamEventID = EventID;
 
-                lstUnits.Items.Add(NewUnit.UnitStat.Name);
-                lstUnitsToShareFrom.Items.Add(NewUnit.UnitStat.Name);
+                lstUnits.Items.Add(NewUnit.ItemName);
+                lstUnitsToShareFrom.Items.Add(NewUnit.ItemName);
                 ListUnit.Add(NewUnit);
 
                 int DicUnitLinkCount = BR.ReadInt32();

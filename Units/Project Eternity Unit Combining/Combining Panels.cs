@@ -28,7 +28,7 @@ namespace ProjectEternity.Core.Units.Combining
             string LeaderName = ActiveUnit.ArrayCombiningUnitName[0];
             foreach (Squad ActiveSquad in ActiveUnit.ListFoundCombiningUnit)
             {
-                if (LeaderName.Contains(ActiveSquad.CurrentLeader.FullName))
+                if (LeaderName.Contains(ActiveSquad.CurrentLeader.RelativePath))
                 {
                     return ActiveSquad;
                 }

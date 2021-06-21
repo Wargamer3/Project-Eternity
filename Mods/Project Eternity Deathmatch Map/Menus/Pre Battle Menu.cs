@@ -180,7 +180,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DrawBox(g, new Vector2(325, 370), 70, 35, Color.Blue);
                 DrawBox(g, new Vector2(325, 370 + 30), 70, 35, Color.Blue);
                 DrawBox(g, new Vector2(395, 370), 240, 65, Color.Blue);
-                g.DrawString(fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader.FullName, new Vector2(405, 375), Color.White);
+                g.DrawString(fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader.RelativePath, new Vector2(405, 375), Color.White);
                 if (AttackingSupport.ActiveSquadSupport.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
                 {
                     g.DrawString(fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack.ItemName, new Vector2(405, 397), Color.White);
@@ -213,7 +213,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         g.DrawString(fntFinlanderFont, "Support", new Vector2(45, StartY + 5), Color.White);
                         g.DrawString(fntFinlanderFont, ActiveSupportUnit.Boosts.SupportAttackModifier + "/" + ActiveSupportUnit.Boosts.SupportAttackModifierMax, new Vector2(45, StartY + 35), Color.White);
                         g.Draw(ActiveSupportUnit.SpriteMap, new Vector2(200, StartY + 10), Color.White);
-                        g.DrawString(fntFinlanderFont, ActiveSupportUnit.FullName, new Vector2(245, StartY + 5), Color.White);
+                        g.DrawString(fntFinlanderFont, ActiveSupportUnit.RelativePath, new Vector2(245, StartY + 5), Color.White);
                         g.DrawString(fntFinlanderFont, ActiveSupportUnit.PilotName, new Vector2(245, StartY + 35), Color.White);
                         g.DrawString(fntFinlanderFont, "LVL", new Vector2(475, StartY + 5), Color.White);
                         g.DrawString(fntFinlanderFont, "Will", new Vector2(475, StartY + 35), Color.White);
@@ -266,7 +266,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 DrawBox(g, new Vector2(325, 370), 70, 65, Color.Blue);
                 DrawBox(g, new Vector2(395, 370), 240, 65, Color.Blue);
-                g.DrawString(fntFinlanderFont, TargetSquadSupport.ActiveSquadSupport.CurrentLeader.FullName, new Vector2(405, 375), Color.White);
+                g.DrawString(fntFinlanderFont, TargetSquadSupport.ActiveSquadSupport.CurrentLeader.RelativePath, new Vector2(405, 375), Color.White);
                 g.DrawString(fntFinlanderFont, "Support Defense", new Vector2(405, 397), Color.White);
                 //Draw remaining supports
                 g.DrawStringMiddleAligned(fntFinlanderFont, TargetSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportDefendModifier + "/" + TargetSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportDefendModifierMax,
@@ -293,7 +293,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         g.DrawString(fntFinlanderFont, "Support", new Vector2(45, StartY + 5), Color.White);
                         g.DrawString(fntFinlanderFont, ActiveSupportUnit.Boosts.SupportDefendModifier + "/" + ActiveSupportUnit.Boosts.SupportDefendModifierMax, new Vector2(45, StartY + 35), Color.White);
                         g.Draw(ActiveSupportUnit.SpriteMap, new Vector2(200, StartY + 10), Color.White);
-                        g.DrawString(fntFinlanderFont, ActiveSupportUnit.FullName, new Vector2(245, StartY + 5), Color.White);
+                        g.DrawString(fntFinlanderFont, ActiveSupportUnit.RelativePath, new Vector2(245, StartY + 5), Color.White);
                         g.DrawString(fntFinlanderFont, ActiveSupportUnit.PilotName, new Vector2(245, StartY + 35), Color.White);
                         g.DrawString(fntFinlanderFont, "LVL", new Vector2(475, StartY + 5), Color.White);
                         g.DrawString(fntFinlanderFont, "Will", new Vector2(475, StartY + 35), Color.White);
@@ -338,7 +338,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BattleSumaryDrawWingmanLeft(g, 5, 230, SquadLeft.CurrentWingmanA, Color.FromNonPremultiplied(0xff, 0x00, 0x00, 255), ShowStats);
                 DrawBox(g, new Vector2(5, 230), 240, 65, Color.Red);
                 DrawBox(g, new Vector2(245, 230), 70, 65, Color.Red);
-                g.DrawString(fntFinlanderFont, SquadLeft.CurrentWingmanA.FullName, new Vector2(15, 230 + 5), Color.White);
+                g.DrawString(fntFinlanderFont, SquadLeft.CurrentWingmanA.RelativePath, new Vector2(15, 230 + 5), Color.White);
                 g.DrawString(fntFinlanderFont, SquadLeft.CurrentWingmanA.HP.ToString(), new Vector2(15, 230 + 27), Color.White);
             }
 
@@ -352,7 +352,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DrawBox(g, new Vector2(5, 370), 240, 65, Color.Red);
                 DrawBox(g, new Vector2(245, 370), 70, 35, Color.Red);
                 DrawBox(g, new Vector2(245, 370 + 30), 70, 35, Color.Red);
-                g.DrawString(fntFinlanderFont, Support.CurrentLeader.FullName, new Vector2(15, 370 + 5), Color.White);
+                g.DrawString(fntFinlanderFont, Support.CurrentLeader.RelativePath, new Vector2(15, 370 + 5), Color.White);
 
                 //Support defend won't have an attack
                 if (Support.CurrentLeader.CurrentAttack != null)
@@ -370,7 +370,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawBox(g, new Vector2(DrawX, DrawY + 120), 310, 60, Color.Red);
             g.Draw(UnitToDraw.SpriteMap, new Vector2(DrawX + 6, DrawY + 5), Color.White);
             DrawText(g, UnitToDraw.PilotName, new Vector2(DrawX + 41, DrawY + 3), Color.White);
-            DrawText(g, UnitToDraw.FullName, new Vector2(DrawX + 41, DrawY + 25), Color.White);
+            DrawText(g, UnitToDraw.RelativePath, new Vector2(DrawX + 41, DrawY + 25), Color.White);
             DrawTextRightAligned(g, "LV: " + UnitToDraw.PilotLevel, new Vector2(DrawX + 230, DrawY + 3), Color.White);
             DrawTextRightAligned(g, "Will: " + UnitToDraw.PilotMorale, new Vector2(DrawX + 230, DrawY + 22), Color.White);
 
@@ -416,7 +416,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             DrawBox(g, new Vector2(DrawX, DrawY), 240, 65, Color.Red);
             DrawBox(g, new Vector2(DrawX + 240, DrawY), 70, 65, Color.Red);
-            g.DrawString(fntFinlanderFont, UnitToDraw.FullName, new Vector2(DrawX + 10, DrawY + 5), Color.White);
+            g.DrawString(fntFinlanderFont, UnitToDraw.RelativePath, new Vector2(DrawX + 10, DrawY + 5), Color.White);
             g.DrawString(fntFinlanderFont, UnitToDraw.HP.ToString(), new Vector2(DrawX + 10, DrawY + 27), Color.White);
 
             if (UnitToDraw.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
@@ -473,7 +473,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawBox(g, new Vector2(DrawX, DrawY + 120), 310, 60, Color.Blue);
             g.Draw(UnitToDraw.SpriteMap, new Vector2(DrawX + 76, DrawY + 5), Color.White);
             DrawText(g, UnitToDraw.PilotName, new Vector2(DrawX + 111, DrawY + 3), Color.White);
-            DrawText(g, UnitToDraw.FullName, new Vector2(DrawX + 111, DrawY + 25), Color.White);
+            DrawText(g, UnitToDraw.RelativePath, new Vector2(DrawX + 111, DrawY + 25), Color.White);
             DrawTextRightAligned(g, "LV: " + UnitToDraw.PilotLevel, new Vector2(DrawX + 300, DrawY + 3), Color.White);
             DrawTextRightAligned(g, "Will: " + UnitToDraw.PilotMorale, new Vector2(DrawX + 300, DrawY + 22), Color.White);
 
@@ -520,7 +520,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             DrawBox(g, new Vector2(DrawX, DrawY), 70, 65, Color.Blue);
             DrawBox(g, new Vector2(DrawX + 70, DrawY), 240, 65, Color.Blue);
-            g.DrawString(fntFinlanderFont, UnitToDraw.FullName, new Vector2(DrawX + 80, DrawY + 5), Color.White);
+            g.DrawString(fntFinlanderFont, UnitToDraw.RelativePath, new Vector2(DrawX + 80, DrawY + 5), Color.White);
             g.DrawString(fntFinlanderFont, UnitToDraw.HP.ToString(), new Vector2(DrawX + 80, DrawY + 27), Color.White);
 
             if (UnitToDraw.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)

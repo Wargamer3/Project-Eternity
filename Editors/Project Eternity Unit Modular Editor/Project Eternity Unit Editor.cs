@@ -154,9 +154,9 @@ namespace ProjectEternity.Editors.UnitModularEditor
 
             #endregion
 
-            this.Text = LoadedUnit.FullName + " - Project Eternity Unit Editor";
+            this.Text = LoadedUnit.RelativePath + " - Project Eternity Unit Editor";
 
-            txtName.Text = LoadedUnit.FullName;
+            txtName.Text = LoadedUnit.RelativePath;
             txtPrice.Text = LoadedUnit.Price.ToString();
             txtDescription.Text = LoadedUnit.Description;
         }
@@ -1144,9 +1144,9 @@ namespace ProjectEternity.Editors.UnitModularEditor
                     case ItemSelectionChoices.Head:
                         string HeadName = Items[I].Substring(0, Items[I].Length - 5).Substring(27);
                         PartHead NewHead = new PartHead(HeadName);
-                        if (lstHead.Items.Contains(NewHead.FullName))
+                        if (lstHead.Items.Contains(NewHead.RelativePath))
                         {
-                            MessageBox.Show("This head is already listed.\r\n" + NewHead.FullName);
+                            MessageBox.Show("This head is already listed.\r\n" + NewHead.RelativePath);
                             return;
                         }
                         ListHead.Add(NewHead);
@@ -1158,9 +1158,9 @@ namespace ProjectEternity.Editors.UnitModularEditor
                         PartTorso NewTorso = new PartTorso(TorsoName);
                         if (NewTorso != null)
                         {
-                            if (lstTorso.Items.Contains(NewTorso.FullName))
+                            if (lstTorso.Items.Contains(NewTorso.RelativePath))
                             {
-                                MessageBox.Show("This torso is already listed.\r\n" + NewTorso.FullName);
+                                MessageBox.Show("This torso is already listed.\r\n" + NewTorso.RelativePath);
                                 return;
                             }
                             ListTorso.Add(NewTorso);
@@ -1173,9 +1173,9 @@ namespace ProjectEternity.Editors.UnitModularEditor
                         PartArm NewLeftArm = new PartArm(LeftArmName);
                         if (NewLeftArm != null)
                         {
-                            if (lstLeftArm.Items.Contains(NewLeftArm.FullName))
+                            if (lstLeftArm.Items.Contains(NewLeftArm.RelativePath))
                             {
-                                MessageBox.Show("This left arm is already listed.\r\n" + NewLeftArm.FullName);
+                                MessageBox.Show("This left arm is already listed.\r\n" + NewLeftArm.RelativePath);
                                 return;
                             }
                             ListLeftArm.Add(NewLeftArm);
@@ -1188,9 +1188,9 @@ namespace ProjectEternity.Editors.UnitModularEditor
                         PartArm NewRightArm = new PartArm(RightArmName);
                         if (NewRightArm != null)
                         {
-                            if (lstRightArm.Items.Contains(NewRightArm.FullName))
+                            if (lstRightArm.Items.Contains(NewRightArm.RelativePath))
                             {
-                                MessageBox.Show("This right arm is already listed.\r\n" + NewRightArm.FullName);
+                                MessageBox.Show("This right arm is already listed.\r\n" + NewRightArm.RelativePath);
                                 return;
                             }
                             ListRightArm.Add(NewRightArm);
@@ -1203,9 +1203,9 @@ namespace ProjectEternity.Editors.UnitModularEditor
                         PartLegs NewLegs = new PartLegs(LegsName);
                         if (NewLegs != null)
                         {
-                            if (lstLegs.Items.Contains(NewLegs.FullName))
+                            if (lstLegs.Items.Contains(NewLegs.RelativePath))
                             {
-                                MessageBox.Show("This head is already listed.\r\n" + NewLegs.FullName);
+                                MessageBox.Show("This head is already listed.\r\n" + NewLegs.RelativePath);
                                 return;
                             }
                             ListLegs.Add(NewLegs);

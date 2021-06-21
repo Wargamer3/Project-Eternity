@@ -308,11 +308,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     string OutputText = ListPresentSquad[S].SquadName + "(";
 
                     if (ListPresentSquad[S].CurrentLeader != null)
-                        OutputText += ListPresentSquad[S].CurrentLeader.FullName;
+                        OutputText += ListPresentSquad[S].CurrentLeader.RelativePath;
                     if (ListPresentSquad[S].CurrentWingmanA != null)
-                        OutputText += " / " + ListPresentSquad[S].CurrentWingmanA.FullName;
+                        OutputText += " / " + ListPresentSquad[S].CurrentWingmanA.RelativePath;
                     if (ListPresentSquad[S].CurrentWingmanB != null)
-                        OutputText += " / " + ListPresentSquad[S].CurrentWingmanB.FullName;
+                        OutputText += " / " + ListPresentSquad[S].CurrentWingmanB.RelativePath;
 
                     OutputText += ") [";
                     if (ListPresentSquad[S].IsNameLocked)
@@ -370,7 +370,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             continue;
 
                         g.DrawString(fntArial12, ListPresentUnit[U + ActiveUnitMinIndex].UnitTypeName, new Vector2(50, 70 + fntArial12.LineSpacing * U), Color.White);
-                        g.DrawString(fntArial12, ListPresentUnit[U + ActiveUnitMinIndex].FullName, new Vector2(160, 70 + fntArial12.LineSpacing * U), Color.White);
+                        g.DrawString(fntArial12, ListPresentUnit[U + ActiveUnitMinIndex].RelativePath, new Vector2(160, 70 + fntArial12.LineSpacing * U), Color.White);
                     }
                     g.Draw(sprPixel, new Rectangle(50, 50 + (ActiveUnitIndex + 1 - ActiveUnitMinIndex) * fntArial12.LineSpacing, Constants.Width - 100, fntArial12.LineSpacing), CursorColor);
                     break;

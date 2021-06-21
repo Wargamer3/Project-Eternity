@@ -88,8 +88,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int YStart = 115;
 
             g.Draw(ActiveUnit.SpriteMap, new Vector2(20, 50), Color.White);
-            g.DrawString(ActiveFont, ActiveUnit.FullName, new Vector2(60, 50), Color.White);
-            g.Draw(sprPixel, new Rectangle(60, 75, (int)ActiveFont.MeasureString(ActiveUnit.FullName).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
+            g.DrawString(ActiveFont, ActiveUnit.RelativePath, new Vector2(60, 50), Color.White);
+            g.Draw(sprPixel, new Rectangle(60, 75, (int)ActiveFont.MeasureString(ActiveUnit.RelativePath).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
 
             DrawBox(g, new Vector2(5, YStart - 30), 630, 200, Color.White);
             g.DrawString(ActiveFont, "Attack", new Vector2(50, YStart - 25), Color.Yellow);

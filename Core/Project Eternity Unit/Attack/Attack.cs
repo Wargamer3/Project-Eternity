@@ -62,7 +62,8 @@ namespace ProjectEternity.Core.Attacks
         public readonly List<AttackContext> Animations;
         public readonly bool IsExternal;
 
-        public Attack()
+        public Attack(string RelativeName)
+            : base(RelativeName)
         {
             Animations = new List<AttackContext>();
             Animations.Add(new AttackContext());
@@ -93,11 +94,12 @@ namespace ProjectEternity.Core.Attacks
         }
 
         public Attack(Attack Weapon)
-            : this(Weapon.FullName, Weapon.Description, Weapon.Price, Weapon.PowerFormula, Weapon.RangeMinimum, Weapon.RangeMaximum, Weapon.Pri, Weapon.Sec, Weapon.Accuracy, Weapon.Critical, Weapon.MaxAmmo, Weapon.ENCost, Weapon.MoraleRequirement, Weapon.AttackType, Weapon.DicTerrainAttribute)
+            : this(Weapon.RelativePath, Weapon.Description, Weapon.Price, Weapon.PowerFormula, Weapon.RangeMinimum, Weapon.RangeMaximum, Weapon.Pri, Weapon.Sec, Weapon.Accuracy, Weapon.Critical, Weapon.MaxAmmo, Weapon.ENCost, Weapon.MoraleRequirement, Weapon.AttackType, Weapon.DicTerrainAttribute)
         {
         }
 
         public Attack(string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+            : base(AttackPath)
         {
             Animations = new List<AttackContext>();
             IsExternal = true;
@@ -113,6 +115,7 @@ namespace ProjectEternity.Core.Attacks
         }
 
         public Attack(BinaryReader BR, string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+            : base(AttackPath)
         {
             Animations = new List<AttackContext>();
             IsExternal = false;
@@ -123,7 +126,6 @@ namespace ProjectEternity.Core.Attacks
         public void Init(BinaryReader BR, string AttackName, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
         {
             //Create the Part file.
-            this.FullName = AttackName;
             this.ItemName = Path.GetFileNameWithoutExtension("Content/Attacks/" + AttackName + ".pew");
             this.Description = BR.ReadString();
 

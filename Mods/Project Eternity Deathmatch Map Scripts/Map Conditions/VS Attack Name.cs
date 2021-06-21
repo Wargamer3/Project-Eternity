@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Update(int Index)
         {
             bool VSAttackNameFound = false;
-            if (Map.ActiveSquad != null && Map.ActiveSquad.CurrentLeader.CurrentAttack.FullName == AttackName)
+            if (Map.ActiveSquad != null && Map.ActiveSquad.CurrentLeader.CurrentAttack.RelativePath == AttackName)
             {
                 Map.ExecuteFollowingScripts(this, 0);
                 Map.ExecuteFollowingScripts(this, 1);
@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 VSAttackNameFound = true;
             }
             else if (Map.TargetSquad != null && Map.TargetSquad.CurrentLeader.BattleDefenseChoice == Core.Units.Unit.BattleDefenseChoices.Attack &&
-                    Map.TargetSquad.CurrentLeader.CurrentAttack.FullName == AttackName)
+                    Map.TargetSquad.CurrentLeader.CurrentAttack.RelativePath == AttackName)
             {
                 if (!VSAttackNameFound)
                     Map.ExecuteFollowingScripts(this, 0);

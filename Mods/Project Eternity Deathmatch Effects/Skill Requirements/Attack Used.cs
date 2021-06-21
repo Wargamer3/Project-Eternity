@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            return Context.EffectOwnerUnit != null && Context.EffectOwnerUnit.CurrentAttack != null && Context.EffectOwnerUnit.CurrentAttack.FullName == _AttackName;
+            return Context.EffectOwnerUnit != null && Context.EffectOwnerUnit.CurrentAttack != null && Context.EffectOwnerUnit.CurrentAttack.RelativePath == _AttackName;
         }
 
         public override BaseSkillRequirement Copy()

@@ -108,7 +108,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             GameScreen.DrawBox(g, new Vector2(X, Y), 200, 80, BoxColor);
 
-            GameScreen.DrawText(g, TargetUnitResult.Target.FullName, new Vector2(X + 45, Y + 6), Color.White);
+            GameScreen.DrawText(g, TargetUnitResult.Target.RelativePath, new Vector2(X + 45, Y + 6), Color.White);
             if (TargetUnitResult.Target.Pilot != null)
             {
                 GameScreen.DrawText(g, TargetUnitResult.Target.Pilot.Name, new Vector2(X + 45, Y + 24), Color.White);

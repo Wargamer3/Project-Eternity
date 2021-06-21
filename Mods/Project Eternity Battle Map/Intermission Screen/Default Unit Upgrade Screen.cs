@@ -154,8 +154,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntFinlanderFont, "UNIT UPGRADE", new Vector2(10, 10), Color.White);
 
             g.Draw(SelectedUnit.SpriteMap, new Vector2(20, 50), Color.White);
-            g.DrawString(fntFinlanderFont, SelectedUnit.FullName, new Vector2(60, 50), Color.White);
-            g.Draw(sprPixel, new Rectangle(60, 75, (int)fntFinlanderFont.MeasureString(SelectedUnit.FullName).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
+            g.DrawString(fntFinlanderFont, SelectedUnit.RelativePath, new Vector2(60, 50), Color.White);
+            g.Draw(sprPixel, new Rectangle(60, 75, (int)fntFinlanderFont.MeasureString(SelectedUnit.RelativePath).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
             g.Draw(SelectedUnit.SpriteUnit, new Vector2(250 - SelectedUnit.SpriteUnit.Width, 280 - SelectedUnit.SpriteUnit.Height), Color.White);
 
             int Y = 350;

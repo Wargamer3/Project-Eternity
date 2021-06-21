@@ -125,7 +125,7 @@ namespace ProjectEternity.Core.Units.Combining
             {
                 Squad ActiveSquad = ListFoundCombiningUnit[S];
 
-                if (ActiveSquad.CurrentLeader.FullName != FullName)
+                if (ActiveSquad.CurrentLeader.RelativePath != RelativePath)
                 {
                     Microsoft.Xna.Framework.Vector3 FinalPosition;
                     Map.GetEmptyPosition(ActiveSquad.Position, out FinalPosition);
@@ -161,7 +161,7 @@ namespace ProjectEternity.Core.Units.Combining
                         {
                             foreach (string LeaderName in ArrayCombiningUnitName)
                             {
-                                if (LeaderName.Contains(OtherSquad.CurrentLeader.FullName))
+                                if (LeaderName.Contains(OtherSquad.CurrentLeader.RelativePath))
                                 {
                                     ListFoundCombiningUnit.Add(OtherSquad);
                                 }

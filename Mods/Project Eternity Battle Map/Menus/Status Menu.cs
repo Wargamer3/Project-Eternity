@@ -364,8 +364,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Unit ActiveUnit = ActiveSquad.CurrentLeader;
             g.Draw(ActiveUnit.SpriteMap, new Vector2(20, 50), Color.White);
-            g.DrawString(fntFinlanderFont, ActiveUnit.FullName, new Vector2(60, 50), Color.White);
-            g.Draw(sprPixel, new Rectangle(60, 75, (int)fntFinlanderFont.MeasureString(ActiveUnit.FullName).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
+            g.DrawString(fntFinlanderFont, ActiveUnit.RelativePath, new Vector2(60, 50), Color.White);
+            g.Draw(sprPixel, new Rectangle(60, 75, (int)fntFinlanderFont.MeasureString(ActiveUnit.RelativePath).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
             g.Draw(ActiveUnit.SpriteUnit, new Vector2(240, 280 - ActiveUnit.SpriteUnit.Height), Color.White);
 
             int BottomWidth = 504 - 100;
@@ -618,8 +618,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Unit ActiveUnit = ActiveSquad.CurrentLeader;
             g.Draw(ActiveSquad.CurrentLeader.SpriteMap, new Vector2(20, 50), Color.White);
-            g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.FullName, new Vector2(60, 50), Color.White);
-            g.Draw(sprPixel, new Rectangle(60, 75, (int)fntFinlanderFont.MeasureString(ActiveSquad.CurrentLeader.FullName).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
+            g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.RelativePath, new Vector2(60, 50), Color.White);
+            g.Draw(sprPixel, new Rectangle(60, 75, (int)fntFinlanderFont.MeasureString(ActiveSquad.CurrentLeader.RelativePath).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
             g.Draw(ActiveSquad.CurrentLeader.SpriteUnit, new Vector2(250 - ActiveSquad.CurrentLeader.SpriteUnit.Width, 280 - ActiveSquad.CurrentLeader.SpriteUnit.Height), Color.White);
 
             DrawBox(g, new Vector2(355, 88), 260, 40, Color.Gray);

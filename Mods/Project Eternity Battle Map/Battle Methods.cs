@@ -112,13 +112,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 NullifyAttack = true;
             }
-            else if (DefenderBoosts.ParryModifier.Contains(ActiveWeapon.FullName) || DefenderBoosts.NullifyDamageModifier)
+            else if (DefenderBoosts.ParryModifier.Contains(ActiveWeapon.RelativePath) || DefenderBoosts.NullifyDamageModifier)
                 NullifyAttack = true;
             else if (DefenderSquad != null)
             {
                 for (int U = DefenderSquad.UnitsAliveInSquad - 1; U >= 0 && !NullifyAttack; --U)
                 {
-                    if (DefenderSquad[U].Boosts.NullifyAttackModifier.Contains(ActiveWeapon.FullName))
+                    if (DefenderSquad[U].Boosts.NullifyAttackModifier.Contains(ActiveWeapon.RelativePath))
                         NullifyAttack = true;
                 }
             }
@@ -336,8 +336,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                     Result.AttackAttackerFinalEN -= ENCost;
                                     int BreakingDamage = int.Parse(FormulaParser.ActiveParser.Evaluate(ActiveBarrierEffect.BreakingDamage), CultureInfo.InvariantCulture);
                                     //Look for weapon breaker or damage breaker or if the Barrier can protect against that Attack.
-                                    if ((ActiveBarrierEffect.EffectiveAttacks.Count > 0 && !ActiveBarrierEffect.EffectiveAttacks.Contains(Attacker.CurrentAttack.FullName)) ||
-                                        ActiveBarrierEffect.BreakingAttacks.Contains(Attacker.CurrentAttack.FullName) ||
+                                    if ((ActiveBarrierEffect.EffectiveAttacks.Count > 0 && !ActiveBarrierEffect.EffectiveAttacks.Contains(Attacker.CurrentAttack.RelativePath)) ||
+                                        ActiveBarrierEffect.BreakingAttacks.Contains(Attacker.CurrentAttack.RelativePath) ||
                                         Result.AttackDamage >= BreakingDamage)
                                     {
                                         IsBarrierBreak = true;

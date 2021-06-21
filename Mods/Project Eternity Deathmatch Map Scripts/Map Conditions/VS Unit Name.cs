@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int U = Map.ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
                 {
-                    if (Map.ActiveSquad[U].FullName == UnitName)
+                    if (Map.ActiveSquad[U].RelativePath == UnitName)
                     {
                         Map.ExecuteFollowingScripts(this, 0);
                         Map.ExecuteFollowingScripts(this, 1);
@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int U = Map.TargetSquad.UnitsAliveInSquad - 1; U >= 0; --U)
                 {
-                    if (Map.TargetSquad[U].FullName == UnitName)
+                    if (Map.TargetSquad[U].RelativePath == UnitName)
                     {
                         if (!VSUnitNameFound)
                             Map.ExecuteFollowingScripts(this, 0);

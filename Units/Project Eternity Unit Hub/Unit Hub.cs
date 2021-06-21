@@ -67,12 +67,12 @@ namespace ProjectEternity.Core.Units.Hub
                 string XNADirectory = UnitDirectory.Substring(8);
 
                 if (File.Exists(UnitDirectory + "\\Map Sprite\\" + Name + ".xnb"))
-                    SpriteMap = Content.Load<Texture2D>(XNADirectory + "\\Map Sprite\\" + this.FullName);
+                    SpriteMap = Content.Load<Texture2D>(XNADirectory + "\\Map Sprite\\" + this.RelativePath);
                 else
                     SpriteMap = Content.Load<Texture2D>("Units/Default");
 
                 if (File.Exists(UnitDirectory + "\\Unit Sprite\\" + Name + ".xnb"))
-                    SpriteUnit = Content.Load<Texture2D>(XNADirectory + "\\Unit Sprite\\" + this.FullName);
+                    SpriteUnit = Content.Load<Texture2D>(XNADirectory + "\\Unit Sprite\\" + this.RelativePath);
             }
 
             FS.Close();

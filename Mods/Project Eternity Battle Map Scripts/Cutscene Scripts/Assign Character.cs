@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Unit UnitToAssign = null;
                 foreach (Unit ActiveUnit in Map.PlayerRoster.TeamUnits.GetAll())
                 {
-                    if (ActiveUnit.FullName == _UnitName)
+                    if (ActiveUnit.RelativePath == _UnitName)
                     {
                         UnitToAssign = ActiveUnit;
                         break;

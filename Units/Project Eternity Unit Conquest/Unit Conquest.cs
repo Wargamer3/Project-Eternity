@@ -172,8 +172,7 @@ namespace ProjectEternity.Core.Units.Conquest
 
             _UnitStat.PLAAttack = -1;
 
-            Attack Weapon1 = new Attack();
-            Weapon1.FullName = Weapon1Name;
+            Attack Weapon1 = new Attack(Weapon1Name);
             Weapon1.RangeMinimum = Weapon1MinimumRange;
             Weapon1.RangeMaximum = Weapon1MaximumRange;
             if (Weapon1PostMovement)
@@ -183,8 +182,7 @@ namespace ProjectEternity.Core.Units.Conquest
 
             ListAttack.Add(Weapon1);
 
-            Attack Weapon2 = new Attack();
-            Weapon2.FullName = Weapon2Name;
+            Attack Weapon2 = new Attack(Weapon2Name);
             Weapon2.RangeMinimum = Weapon2MinimumRange;
             Weapon2.RangeMaximum = Weapon2MaximumRange;
             if (Weapon2PostMovement)

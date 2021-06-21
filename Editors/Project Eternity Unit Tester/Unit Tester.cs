@@ -449,7 +449,7 @@ namespace ProjectEternity.Editors.UnitTester
 
                             if (tabControl1.SelectedIndex == 0)//Attacker
                             {
-                                txtAttackerName.Text = NewUnit.FullName;
+                                txtAttackerName.Text = NewUnit.RelativePath;
 
                                 txtAttackerHP.Value = NewUnit.MaxHP;
                                 txtAttackerEN.Value = NewUnit.MaxEN;
@@ -486,7 +486,7 @@ namespace ProjectEternity.Editors.UnitTester
                             }
                             else if (tabControl1.SelectedIndex == 1)//Defender
                             {
-                                txtDefenderName.Text = NewUnit.FullName;
+                                txtDefenderName.Text = NewUnit.RelativePath;
 
                                 txtDefenderHP.Value = NewUnit.MaxHP;
                                 txtDefenderEN.Value = NewUnit.MaxEN;

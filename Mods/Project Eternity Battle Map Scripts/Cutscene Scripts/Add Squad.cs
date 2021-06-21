@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 List<Character> ListCharacterPresent = Map.PlayerRoster.TeamCharacters.GetPresent();
 
                 List<Unit> ListUnitPresent = Map.PlayerRoster.TeamUnits.GetPresent();
-                NewLeader = ListUnitPresent.Find(u => u.UnitTypeName + "\\" + u.FullName == _LeaderName);
+                NewLeader = ListUnitPresent.Find(u => u.UnitTypeName + "\\" + u.RelativePath == _LeaderName);
                 Map.PlayerRoster.TeamUnits.Remove(NewLeader);
 
                 NewLeader.ArrayCharacterActive = new Character[_LeaderCharacterName.Length];
@@ -97,7 +97,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (!string.IsNullOrEmpty(_WingmanAName))
                 {
-                    NewWingmanA = ListUnitPresent.Find(u => u.UnitTypeName + "\\" + u.FullName == _WingmanAName);
+                    NewWingmanA = ListUnitPresent.Find(u => u.UnitTypeName + "\\" + u.RelativePath == _WingmanAName);
                     Map.PlayerRoster.TeamUnits.Remove(NewWingmanA);
 
                     NewWingmanA.ArrayCharacterActive = new Character[_WingmanACharacterName.Length];
@@ -110,7 +110,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (!string.IsNullOrEmpty(_WingmanBName))
                 {
-                    NewWingmanB = ListUnitPresent.Find(u => u.UnitTypeName + "\\" + u.FullName == _WingmanBName);
+                    NewWingmanB = ListUnitPresent.Find(u => u.UnitTypeName + "\\" + u.RelativePath == _WingmanBName);
                     Map.PlayerRoster.TeamUnits.Remove(NewWingmanB);
 
                     NewWingmanB.ArrayCharacterActive = new Character[_WingmanBCharacterName.Length];

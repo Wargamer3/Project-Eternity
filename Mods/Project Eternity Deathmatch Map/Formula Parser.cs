@@ -153,7 +153,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             for (int U = ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
                             {
-                                if (ListPlayer[P].ListSquad[S][U].FullName == Expression[2] && ListPlayer[P].ListSquad[S][U].HP > 0)
+                                if (ListPlayer[P].ListSquad[S][U].RelativePath == Expression[2] && ListPlayer[P].ListSquad[S][U].HP > 0)
                                 {
                                     if (UnitCount)
                                         ++UnitNumber;
@@ -243,7 +243,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case "name":
                 case "leadername":
                 case "currentleadername":
-                    ReturnExpression = ActiveUnit.FullName.ToLower().Replace(" ", "");
+                    ReturnExpression = ActiveUnit.RelativePath.ToLower().Replace(" ", "");
                     break;
 
                 case "hp":
@@ -478,21 +478,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     case "leadername":
                     case "currentleadername":
-                        ReturnExpression = ActiveSquad.CurrentLeader.FullName;
+                        ReturnExpression = ActiveSquad.CurrentLeader.RelativePath;
                         break;
 
                     case "wingmananame":
                     case "currentwingmananame":
                     case "wingman1name":
                     case "currentwingman1name":
-                        ReturnExpression = ActiveSquad.CurrentWingmanA.FullName;
+                        ReturnExpression = ActiveSquad.CurrentWingmanA.RelativePath;
                         break;
 
                     case "wingmanbname":
                     case "currentwingmanbname":
                     case "wingman2name":
                     case "currentwingman2name":
-                        ReturnExpression = ActiveSquad.CurrentWingmanB.FullName;
+                        ReturnExpression = ActiveSquad.CurrentWingmanB.RelativePath;
                         break;
 
                     case "id":

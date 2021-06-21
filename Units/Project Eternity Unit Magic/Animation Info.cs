@@ -85,7 +85,7 @@ namespace ProjectEternity.Units.Magic
             SharedParams.OwnerAngle = 0;
 
             List<BaseAutomaticSkill> ListAttackAttribute = ActiveSpell.ComputeSpell();
-            Attack SpellAttack = new Attack();
+            Attack SpellAttack = new Attack("Dummy Attack");
             SpellAttack.ArrayAttackAttributes = ListAttackAttribute.ToArray();
 
             ListOutputProjectile = AnimationStartSandbox.SimulateAttack(SpellAttack);

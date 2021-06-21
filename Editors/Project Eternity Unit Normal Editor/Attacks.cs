@@ -66,9 +66,8 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 return;
             }
 
-            Attack NewAttack = new Attack();
+            Attack NewAttack = new Attack("New Item");
             NewAttack.ItemName = "New Item";
-            NewAttack.FullName = "New Item";
 
             NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/Start");
             NewAttack.Animations[0].Animations.EndHit = new Core.Units.AnimationInfo(UnitName + "/" + Name + "/End Hit");
@@ -167,7 +166,6 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 ActiveEditor.ShowDialog();
 
                 _ListAttack[lstAttack.SelectedIndex].ItemName = ActiveEditor.txtName.Text;
-                _ListAttack[lstAttack.SelectedIndex].FullName = ActiveEditor.txtName.Text;
                 //Refresh text
                 lstAttack.Items[lstAttack.SelectedIndex] = lstAttack.SelectedItem;
             }

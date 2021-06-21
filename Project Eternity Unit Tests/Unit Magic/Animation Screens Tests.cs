@@ -134,10 +134,9 @@ namespace ProjectEternity.UnitTests
             DummyCharacter.Init();
 
             List<MagicSpell> ListMagicSpell = new List<MagicSpell>();
-            UnitMagic DummyUnit = new UnitMagic(ListMagicSpell);
+            UnitMagic DummyUnit = new UnitMagic("Dummy Unit", ListMagicSpell);
             ListMagicSpell.Add(CreateFireball(DummyUnit, DummyUnit.MagicProjectileParams));
 
-            DummyUnit.FullName = "Dummy Unit";
             DummyUnit.MaxHP = 10000;
             DummyUnit.MaxEN = 200;
             DummyUnit.Armor = 100;

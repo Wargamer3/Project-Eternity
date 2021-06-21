@@ -39,7 +39,7 @@ namespace ProjectEternity.Units.Magic
         private BattleMap Map;
 
         public UnitMagic()
-            : base(null)
+            : base()
         {
             ArrayCharacterActive = new Core.Characters.Character[0];
             ListMagicSpell = new List<MagicSpell>();
@@ -50,8 +50,8 @@ namespace ProjectEternity.Units.Magic
             MagicParams = new MagicUserParams(GlobalMagicContext);
         }
 
-        public UnitMagic(List<MagicSpell> ListMagicSpell)
-            : this()
+        public UnitMagic(string RelativePath, List<MagicSpell> ListMagicSpell)
+            : base(RelativePath)
         {
             this.ListMagicSpell = ListMagicSpell;
         }
@@ -113,12 +113,12 @@ namespace ProjectEternity.Units.Magic
                 string XNADirectory = UnitDirectory.Substring(8);
 
                 if (File.Exists(UnitDirectory + "\\Map Sprite\\" + Name + ".xnb"))
-                    SpriteMap = Content.Load<Texture2D>(XNADirectory + "\\Map Sprite\\" + this.FullName);
+                    SpriteMap = Content.Load<Texture2D>(XNADirectory + "\\Map Sprite\\" + this.RelativePath);
                 else
                     SpriteMap = Content.Load<Texture2D>("Units/Default");
 
                 if (File.Exists(UnitDirectory + "\\Unit Sprite\\" + Name + ".xnb"))
-                    SpriteUnit = Content.Load<Texture2D>(XNADirectory + "\\Unit Sprite\\" + this.FullName);
+                    SpriteUnit = Content.Load<Texture2D>(XNADirectory + "\\Unit Sprite\\" + this.RelativePath);
             }
 
             FS.Close();
@@ -181,9 +181,8 @@ namespace ProjectEternity.Units.Magic
         {
             foreach (MagicSpell ActiveMagicSpell in ListMagicSpell)
             {
-                Attack SpellAttack = new Attack();
+                Attack SpellAttack = new Attack(ActiveMagicSpell.Name);
                 SpellAttack.ItemName = ActiveMagicSpell.Name;
-                SpellAttack.FullName = ActiveMagicSpell.Name;
                 SpellAttack.PowerFormula = "30";
                 SpellAttack.RangeMinimum = 1;
                 SpellAttack.RangeMaximum = 10;

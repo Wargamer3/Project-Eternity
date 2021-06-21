@@ -326,7 +326,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
                 #endregion
             }
 
-            this.Text = LoadedPart.FullName + " - Project Eternity Part Editor";
+            this.Text = LoadedPart.RelativePath + " - Project Eternity Part Editor";
 
             txtPrice.Text = LoadedPart.Price.ToString();
             txtDescription.Text = LoadedPart.Description;

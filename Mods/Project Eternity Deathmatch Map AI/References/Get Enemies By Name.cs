@@ -27,7 +27,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     {
                         for (int S = Info.Map.ListPlayer[P].ListSquad.Count - 1; S >= 0; --S)
                         {
-                            if (Info.Map.ListPlayer[P].ListSquad[S].CurrentLeader.FullName == _EnemyName)
+                            if (Info.Map.ListPlayer[P].ListSquad[S].CurrentLeader.RelativePath == _EnemyName)
                                 ListEnemy.Add(Info.Map.ListPlayer[P].ListSquad[S]);
                         }
                     }

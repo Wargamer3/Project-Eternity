@@ -315,14 +315,13 @@ namespace ProjectEternity.Core.Units.Modular
         { }
 
         public UnitModular(string Name, ContentManager Content)
-            : base()
+            : base(Name)
         {
             FileStream FS = new FileStream("Content/Units/Modular/" + Name + ".peu", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
             ArrayCharacterActive = new Character[0];
-            FullName = Name;
             this.Description = BR.ReadString();
             this.Price = BR.ReadInt32();
 

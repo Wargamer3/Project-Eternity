@@ -33,7 +33,7 @@ namespace ProjectEternity.Core.Effects
 
         public override bool CanActivatePassive()
         {
-            if (GlobalContext.EffectTargetUnit.FullName == UnitName)
+            if (GlobalContext.EffectTargetUnit.RelativePath == UnitName)
                 return true;
             else
                 return false;

@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     for (int U = Map.ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
                     {
-                        if (Map.ListPlayer[P].ListSquad[S][U].FullName == UnitExistsName && Map.ListPlayer[P].ListSquad[S][U].HP > 0)
+                        if (Map.ListPlayer[P].ListSquad[S][U].RelativePath == UnitExistsName && Map.ListPlayer[P].ListSquad[S][U].HP > 0)
                         {
                             Map.ExecuteFollowingScripts(this, 0);
                             return;

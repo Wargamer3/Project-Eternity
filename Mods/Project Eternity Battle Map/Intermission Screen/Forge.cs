@@ -158,8 +158,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Item description
             if (CursorFilter.CursorIndex >= 0 && CursorFilter.CursorIndex < CursorFilter.ListItem.Count)
             {
-                g.DrawString(fntArial10, CursorFilter.ListItem[CursorFilter.CursorIndex].FullName, new Vector2(10, 45), Color.White);
-                g.DrawString(fntArial10, '"' + CursorFilter.ListItem[CursorFilter.CursorIndex].FullName + '"' + " Blueprint", new Vector2(50, 330), Color.White);
+                g.DrawString(fntArial10, CursorFilter.ListItem[CursorFilter.CursorIndex].RelativePath, new Vector2(10, 45), Color.White);
+                g.DrawString(fntArial10, '"' + CursorFilter.ListItem[CursorFilter.CursorIndex].RelativePath + '"' + " Blueprint", new Vector2(50, 330), Color.White);
                 Blueprint Item = (Blueprint)CursorFilter.ListItem[CursorFilter.CursorIndex];
                 for (int i = 0; i < Item.ListRequirement.Count; i++)
                 {
@@ -249,10 +249,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (Index >= CursorIndexStart && Index < 32 + CursorIndexStart)
                     {
                         //Draw the name,
-                        g.DrawString(fntArial8, Filter.ListItem[i].FullName, new Vector2(X + 20, Y), Color.White);
+                        g.DrawString(fntArial8, Filter.ListItem[i].RelativePath, new Vector2(X + 20, Y), Color.White);
                         //If the current ShopItem is selected, highlight it.
                         if (i == Filter.CursorIndex)
-                            g.Draw(sprRectangle, new Rectangle(X + 16, Y, (int)fntArial8.MeasureString(Filter.ListItem[i].FullName).X + 10, fntArial8.LineSpacing), Color.FromNonPremultiplied(255, 255, 255, CursorAlpha));
+                            g.Draw(sprRectangle, new Rectangle(X + 16, Y, (int)fntArial8.MeasureString(Filter.ListItem[i].RelativePath).X + 10, fntArial8.LineSpacing), Color.FromNonPremultiplied(255, 255, 255, CursorAlpha));
                         Y += fntArial8.LineSpacing;
                     }
                     Index++;

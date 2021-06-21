@@ -311,7 +311,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DrawUnitInfo(CustomSpriteBatch g, int StartX)
         {
-            g.DrawString(fntFinlanderFont, SelectedUnit.FullName, new Vector2(StartX + 15, 40), Color.White);
+            g.DrawString(fntFinlanderFont, SelectedUnit.RelativePath, new Vector2(StartX + 15, 40), Color.White);
             g.Draw(SelectedUnit.SpriteUnit, new Vector2(StartX + 30, 100), Color.White);
 
             int Y = 155;
@@ -402,7 +402,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int U = 0; U < ActivePartInfo.ListUnit.Count; ++U)
             {
-                g.DrawString(fntFinlanderFont, ActivePartInfo.ListUnit[U].FullName, new Vector2(10, 55 + LineSpacing * U), Color.White);
+                g.DrawString(fntFinlanderFont, ActivePartInfo.ListUnit[U].RelativePath, new Vector2(10, 55 + LineSpacing * U), Color.White);
             }
 
             g.Draw(sprPixel, new Rectangle(10, 61 + CursorIndexListPartUnits * LineSpacing, 305, LineSpacing), Color.FromNonPremultiplied(255, 255, 255, 127));

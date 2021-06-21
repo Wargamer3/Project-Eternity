@@ -129,7 +129,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             if (Spawn.LeaderName == null)
                             {
-                                Spawn.LeaderName = CurrentUnit.FullName;
+                                Spawn.LeaderName = CurrentUnit.RelativePath;
                                 AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + SpawnTexturePath,
                                     new Microsoft.Xna.Framework.Vector2((Spawn.Position.X - Map.CameraPosition.X) * Map.TileSize.X, (Spawn.Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y),
                                     0.5f);

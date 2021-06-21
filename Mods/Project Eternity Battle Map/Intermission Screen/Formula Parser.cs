@@ -91,7 +91,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 case "name":
                 case "leadername":
                 case "currentleadername":
-                    ReturnExpression = ActiveUnit.FullName;
+                    ReturnExpression = ActiveUnit.RelativePath;
                     break;
 
                 case "hp":
@@ -219,21 +219,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     case "leadername":
                     case "currentleadername":
-                        ReturnExpression = ActiveSquad.CurrentLeader.FullName;
+                        ReturnExpression = ActiveSquad.CurrentLeader.RelativePath;
                         break;
 
                     case "wingmananame":
                     case "currentwingmananame":
                     case "wingman1name":
                     case "currentwingman1name":
-                        ReturnExpression = ActiveSquad.CurrentWingmanA.FullName;
+                        ReturnExpression = ActiveSquad.CurrentWingmanA.RelativePath;
                         break;
 
                     case "wingmanbname":
                     case "currentwingmanbname":
                     case "wingman2name":
                     case "currentwingman2name":
-                        ReturnExpression = ActiveSquad.CurrentWingmanB.FullName;
+                        ReturnExpression = ActiveSquad.CurrentWingmanB.RelativePath;
                         break;
 
                     case "id":
@@ -308,7 +308,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case "name":
-                        ReturnExpression = ActiveUnit.FullName;
+                        ReturnExpression = ActiveUnit.RelativePath;
                         break;
                 }
 

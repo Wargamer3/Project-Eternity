@@ -132,7 +132,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         Y += 10;
                         for (int i = 0; i < ListBlueprints.Count; i++)
-                            g.DrawString(fntArial8, ListBlueprints[i].FullName, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
+                            g.DrawString(fntArial8, ListBlueprints[i].RelativePath, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
                     }
                     Y += 20;
                     g.DrawString(fntArial12, "Consumables (" + ListConsumables.Count + " )", new Vector2(Constants.Height - 90, Y), Color.Black);
@@ -142,7 +142,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         Y += 10;
                         for (int i = 0; i < ListConsumables.Count; i++)
-                            g.DrawString(fntArial8, ListConsumables[i].FullName, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
+                            g.DrawString(fntArial8, ListConsumables[i].RelativePath, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
                     }
                     Y += 20;
                     g.DrawString(fntArial12, "Unit parts (" + ListUnitParts.Count + " )", new Vector2(Constants.Height - 90, Y), Color.Black);
@@ -152,7 +152,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         Y += 10;
                         for (int i = 0; i < ListUnitParts.Count; i++)
-                            g.DrawString(fntArial8, ListUnitParts[i].FullName, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
+                            g.DrawString(fntArial8, ListUnitParts[i].RelativePath, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
                     }
                     Y += 20;
                     g.DrawString(fntArial12, "Units (" + ListUnits.Count + " )", new Vector2(Constants.Height - 90, Y), Color.Black);
@@ -162,7 +162,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         Y += 10;
                         for (int i = 0; i < ListUnits.Count; i++)
-                            g.DrawString(fntArial8, ListUnits[i].FullName, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
+                            g.DrawString(fntArial8, ListUnits[i].RelativePath, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
                     }
                     Y += 20;
                     g.DrawString(fntArial12, "Scrap parts (" + ListScrapParts.Count + " )", new Vector2(Constants.Height - 90, Y), Color.Black);
@@ -172,7 +172,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         Y += 10;
                         for (int i = 0; i < ListScrapParts.Count; i++)
-                            g.DrawString(fntArial8, ListScrapParts[i].FullName, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
+                            g.DrawString(fntArial8, ListScrapParts[i].RelativePath, new Vector2(Constants.Height - 80, Y += fntArial8.LineSpacing), Color.Black);
                     }
                 }
                 else if (Sort == SortType.Alphabetical)
@@ -180,7 +180,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     int i = 0;
                     foreach (KeyValuePair<string, ShopItem> ActiveItem in ListItems)
                     {
-                        g.DrawString(fntArial8, ActiveItem.Value.FullName, new Vector2(Constants.Height - 90, Y), Color.Black);
+                        g.DrawString(fntArial8, ActiveItem.Value.RelativePath, new Vector2(Constants.Height - 90, Y), Color.Black);
                         Y += fntArial8.LineSpacing;
                         i++;
                     }

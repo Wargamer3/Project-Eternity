@@ -38,7 +38,8 @@ namespace ProjectEternity.Core.Units.Modular
         protected int BaseHP, BaseEN, BaseArmor, BaseMobility;
         protected float BaseMovement;
 
-        protected PartUnit()
+        protected PartUnit(string RelativePath)
+            : base(RelativePath)
         {
         }
 
@@ -237,6 +238,7 @@ namespace ProjectEternity.Core.Units.Modular
         public List<string> ListPartCPU;
 
         public PartHead(string RelativePath)
+            : base(RelativePath)
         {
             FileStream FS = new FileStream("Content/Units/Modular/Head/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -244,7 +246,6 @@ namespace ProjectEternity.Core.Units.Modular
 
             LoadBaseData(BR);
 
-            this.FullName = RelativePath;
             this.BaseSize = 0;
             this.ActiveWeapons = new List<int>();
 
@@ -375,6 +376,7 @@ namespace ProjectEternity.Core.Units.Modular
         public List<string> ListPartShell;
 
         public PartTorso(string RelativePath)
+            : base(RelativePath)
         {
             FileStream FS = new FileStream("Content/Units/Modular/Torso/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -382,7 +384,6 @@ namespace ProjectEternity.Core.Units.Modular
 
             LoadBaseData(BR);
 
-            this.FullName = RelativePath;
             this.BaseSize = 0;
             this.ActiveWeapons = new List<int>();
 
@@ -493,6 +494,7 @@ namespace ProjectEternity.Core.Units.Modular
         public List<string> ListPartStrength;
 
         public PartArm(string RelativePath)
+            : base(RelativePath)
         {
             FileStream FS = new FileStream("Content/Units/Modular/Arm/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -500,7 +502,6 @@ namespace ProjectEternity.Core.Units.Modular
 
             LoadBaseData(BR);
 
-            this.FullName = RelativePath;
             this.BaseSize = 0;
             this.ActiveWeapons = new List<int>();
 
@@ -594,6 +595,7 @@ namespace ProjectEternity.Core.Units.Modular
         public List<string> ListPartStrength;
 
         public PartLegs(string RelativePath)
+            : base(RelativePath)
         {
             FileStream FS = new FileStream("Content/Units/Modular/Legs/" + RelativePath + ".peup", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
@@ -601,7 +603,6 @@ namespace ProjectEternity.Core.Units.Modular
 
             LoadBaseData(BR);
 
-            this.FullName = RelativePath;
             this.BaseSize = 0;
             this.ActiveWeapons = new List<int>();
 

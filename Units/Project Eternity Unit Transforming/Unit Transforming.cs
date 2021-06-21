@@ -65,6 +65,7 @@ namespace ProjectEternity.Core.Units.Transforming
             : base(Name, Map)
         {
             this.OriginalName = Name;
+            this.ItemName = Name;
             PermanentTransformation = false;
             HPPercentage = 1;
             ENPercentage = 1;

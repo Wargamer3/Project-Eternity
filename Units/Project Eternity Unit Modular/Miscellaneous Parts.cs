@@ -22,6 +22,7 @@ namespace ProjectEternity.Core.Units.Modular
         }
 
         public Part(string RelativePath, PartTypes PartType)
+            : base(RelativePath)
         {
             string FullPath = RelativePath;
             switch (PartType)
@@ -51,7 +52,6 @@ namespace ProjectEternity.Core.Units.Modular
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
             this.PartType = PartType;
-            this.FullName = RelativePath;
             this.Description = BR.ReadString();
             this.Price = BR.ReadInt32();
 

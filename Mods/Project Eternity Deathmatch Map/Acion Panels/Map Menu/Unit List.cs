@@ -117,7 +117,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ActiveUnit = ListMapMenuUnitPosition[U + UnitIndex].Item1;
                 g.Draw(ActiveUnit.SpriteMap, new Vector2(70, 90 + U * LineSpacing), Color.White);
-                g.DrawString(fntFinlanderFont, ActiveUnit.FullName, new Vector2(110, 85 + U * LineSpacing), Color.White);
+                g.DrawString(fntFinlanderFont, ActiveUnit.RelativePath, new Vector2(110, 85 + U * LineSpacing), Color.White);
                 GameScreen.DrawBar(g, sprBarLargeBackground, sprBarLargeHP, new Vector2(380, 100 + U * LineSpacing), ActiveUnit.HP, ActiveUnit.MaxHP);
                 GameScreen.DrawTextRightAligned(g, ActiveUnit.HP + "/" + ActiveUnit.MaxHP, new Vector2(485, 95 + U * LineSpacing), Color.White);
                 GameScreen.DrawBar(g, sprBarLargeBackground, sprBarLargeEN, new Vector2(505, 100 + U * LineSpacing), ActiveUnit.EN, ActiveUnit.MaxEN);
@@ -128,7 +128,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             GameScreen.DrawBox(g, new Vector2(10, 395), 620, 80, Color.White);
             ActiveUnit = ListMapMenuUnitPosition[MapUnitListChoice].Item1;
             g.Draw(ActiveUnit.SpriteMap, new Vector2(20, 405), Color.White);
-            g.DrawString(fntFinlanderFont, ActiveUnit.FullName, new Vector2(60, 400), Color.White);
+            g.DrawString(fntFinlanderFont, ActiveUnit.RelativePath, new Vector2(60, 400), Color.White);
             g.DrawString(fntFinlanderFont, ActiveUnit.PilotName, new Vector2(305, 400), Color.White);
             g.DrawString(fntFinlanderFont, "Pilot", new Vector2(250, 400), Color.Yellow);
             g.DrawString(fntFinlanderFont, "Lvl", new Vector2(445, 400), Color.Yellow);

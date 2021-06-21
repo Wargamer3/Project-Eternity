@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public List<Tuple<int, int>> CanSquadAttackWeapon(int PosX, int PosY, int ActivePlayerIndex, string UnitName, Attack ActiveWeapon, Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon)
         {
-            if (ActiveWeapon.FullName == "" || !DicUnitDamageWeapon.ContainsKey(UnitName))
+            if (ActiveWeapon.RelativePath == "" || !DicUnitDamageWeapon.ContainsKey(UnitName))
                 return new List<Tuple<int, int>>();
 
             List<Tuple<int, int>> ListSquadFound = new List<Tuple<int, int>>();

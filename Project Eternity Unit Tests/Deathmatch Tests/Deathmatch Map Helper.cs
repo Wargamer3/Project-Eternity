@@ -73,8 +73,7 @@ namespace ProjectEternity.UnitTests
             DummyCharacter.ArrayLevelMaxSP = new int[1] { 50 };
             DummyCharacter.Init();
 
-            Unit DummyUnit = new UnitNormal();
-            DummyUnit.FullName = "Dummy Unit";
+            Unit DummyUnit = new UnitNormal("Dummy Unit");
             DummyUnit.MaxHP = 10000;
             DummyUnit.MaxEN = 200;
             DummyUnit.Armor = 100;

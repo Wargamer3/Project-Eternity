@@ -20,24 +20,24 @@ namespace ProjectEternity.Core.Units.Modular
             public PartHead GetHeadByName(string Name)
             {
                 return ListPartHead.Find(delegate (PartHead PartHead)
-                { return PartHead.FullName == Name; });
+                { return PartHead.RelativePath == Name; });
             }
 
             public PartTorso GetTorsoByName(string Name)
             {
-                return ListPartTorso.Find(x => x.FullName == Name);
+                return ListPartTorso.Find(x => x.RelativePath == Name);
             }
 
             public PartArm GetArmByName(string Name)
             {
                 return ListPartArm.Find(delegate (PartArm PartArm)
-                { return PartArm.FullName == Name; });
+                { return PartArm.RelativePath == Name; });
             }
 
             public PartLegs GetLegsByName(string Name)
             {
                 return ListPartLegs.Find(delegate (PartLegs PartLegs)
-                { return PartLegs.FullName == Name; });
+                { return PartLegs.RelativePath == Name; });
             }
             public void LoadParts()
             {
@@ -162,7 +162,7 @@ namespace ProjectEternity.Core.Units.Modular
                     if (CurrentUnit.Parts.Head.CPU != null)
                         ListItem.Add(CurrentUnit.Parts.Head.CPU);
 
-                    Head.Add(new FilterItem(CurrentUnit.Parts.Head.FullName, ListItem, new List<FilterItem>()));
+                    Head.Add(new FilterItem(CurrentUnit.Parts.Head.RelativePath, ListItem, new List<FilterItem>()));
                     Head[0].IsOpen = true;
                     MainFilter.ListFilter.Add(new FilterItem("Head", new List<ShopItem>(), Head));
                 }
@@ -184,7 +184,7 @@ namespace ProjectEternity.Core.Units.Modular
                     if (CurrentUnit.Parts.Torso.Shell != null)
                         ListItem.Add(CurrentUnit.Parts.Torso.Shell);
 
-                    Torso.Add(new FilterItem(CurrentUnit.Parts.Torso.FullName, ListItem, new List<FilterItem>()));
+                    Torso.Add(new FilterItem(CurrentUnit.Parts.Torso.RelativePath, ListItem, new List<FilterItem>()));
                     Torso[0].IsOpen = true;
                     MainFilter.ListFilter.Add(new FilterItem("Torso", new List<ShopItem>(), Torso));
                 }
@@ -203,7 +203,7 @@ namespace ProjectEternity.Core.Units.Modular
                     if (CurrentUnit.Parts.LeftArm.Strength != null)
                         ListItem.Add(CurrentUnit.Parts.LeftArm.Strength);
 
-                    LeftArm.Add(new FilterItem(CurrentUnit.Parts.LeftArm.FullName, ListItem, new List<FilterItem>()));
+                    LeftArm.Add(new FilterItem(CurrentUnit.Parts.LeftArm.RelativePath, ListItem, new List<FilterItem>()));
                     LeftArm[0].IsOpen = true;
                     MainFilter.ListFilter.Add(new FilterItem("Left Arm", new List<ShopItem>(), LeftArm));
                 }
@@ -222,7 +222,7 @@ namespace ProjectEternity.Core.Units.Modular
                     if (CurrentUnit.Parts.RightArm.Strength != null)
                         ListItem.Add(CurrentUnit.Parts.RightArm.Strength);
 
-                    RightArm.Add(new FilterItem(CurrentUnit.Parts.RightArm.FullName, ListItem, new List<FilterItem>()));
+                    RightArm.Add(new FilterItem(CurrentUnit.Parts.RightArm.RelativePath, ListItem, new List<FilterItem>()));
                     RightArm[0].IsOpen = true;
                     MainFilter.ListFilter.Add(new FilterItem("Right Arm", new List<ShopItem>(), RightArm));
                 }
@@ -241,7 +241,7 @@ namespace ProjectEternity.Core.Units.Modular
                     if (CurrentUnit.Parts.Legs.Strength != null)
                         ListItem.Add(CurrentUnit.Parts.Legs.Strength);
 
-                    Legs.Add(new FilterItem(CurrentUnit.Parts.Legs.FullName, ListItem, new List<FilterItem>()));
+                    Legs.Add(new FilterItem(CurrentUnit.Parts.Legs.RelativePath, ListItem, new List<FilterItem>()));
                     Legs[0].IsOpen = true;
                     MainFilter.ListFilter.Add(new FilterItem("Legs", new List<ShopItem>(), Legs));
                 }
@@ -557,27 +557,27 @@ namespace ProjectEternity.Core.Units.Modular
                             {
                                 case Selection.Head:
                                     CurrentUnit.Parts.Head = GetHeadByName(CurrentUnit.Parts.ListHead[CursorPartIndex]);
-                                    CursorFilter.Name = CurrentUnit.Parts.Head.FullName;
+                                    CursorFilter.Name = CurrentUnit.Parts.Head.RelativePath;
                                     break;
 
                                 case Selection.Torso:
                                     CurrentUnit.Parts.Torso = GetTorsoByName(CurrentUnit.Parts.ListTorso[CursorPartIndex]);
-                                    CursorFilter.Name = CurrentUnit.Parts.Torso.FullName;
+                                    CursorFilter.Name = CurrentUnit.Parts.Torso.RelativePath;
                                     break;
 
                                 case Selection.LeftArm:
                                     CurrentUnit.Parts.LeftArm = GetArmByName(CurrentUnit.Parts.ListLeftArm[CursorPartIndex]);
-                                    CursorFilter.Name = CurrentUnit.Parts.LeftArm.FullName;
+                                    CursorFilter.Name = CurrentUnit.Parts.LeftArm.RelativePath;
                                     break;
 
                                 case Selection.RightArm:
                                     CurrentUnit.Parts.RightArm = GetArmByName(CurrentUnit.Parts.ListRightArm[CursorPartIndex]);
-                                    CursorFilter.Name = CurrentUnit.Parts.RightArm.FullName;
+                                    CursorFilter.Name = CurrentUnit.Parts.RightArm.RelativePath;
                                     break;
 
                                 case Selection.Legs:
                                     CurrentUnit.Parts.Legs = GetLegsByName(CurrentUnit.Parts.ListLegs[CursorPartIndex]);
-                                    CursorFilter.Name = CurrentUnit.Parts.Legs.FullName;
+                                    CursorFilter.Name = CurrentUnit.Parts.Legs.RelativePath;
                                     break;
                             }
                         }
@@ -614,7 +614,7 @@ namespace ProjectEternity.Core.Units.Modular
                                     }
                                     else//Weapons
                                     {
-                                        CursorFilter.ListItem[CursorFilter.CursorIndex].FullName = CurrentUnit.Parts.Head.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.Head.BaseSize][CursorPartIndex];
+                                        CursorFilter.ListItem[CursorFilter.CursorIndex].ItemName = CurrentUnit.Parts.Head.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.Head.BaseSize][CursorPartIndex];
                                         CurrentUnit.Parts.Head.ActiveWeapons[CursorFilter.CursorIndex - CurrentUnit.Parts.Head.BaseSize] = CursorPartIndex;
                                     }
                                     break;
@@ -644,7 +644,7 @@ namespace ProjectEternity.Core.Units.Modular
                                     }
                                     else//Weapons
                                     {
-                                        CursorFilter.ListItem[CursorFilter.CursorIndex].FullName = CurrentUnit.Parts.Torso.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.Torso.BaseSize][CursorPartIndex];
+                                        CursorFilter.ListItem[CursorFilter.CursorIndex].ItemName = CurrentUnit.Parts.Torso.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.Torso.BaseSize][CursorPartIndex];
                                         CurrentUnit.Parts.Torso.ActiveWeapons[CursorFilter.CursorIndex - CurrentUnit.Parts.Torso.BaseSize] = CursorPartIndex;
                                     }
                                     break;
@@ -670,7 +670,7 @@ namespace ProjectEternity.Core.Units.Modular
                                     }
                                     else//Weapons
                                     {
-                                        CursorFilter.ListItem[CursorFilter.CursorIndex].FullName = CurrentUnit.Parts.LeftArm.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.LeftArm.BaseSize][CursorPartIndex];
+                                        CursorFilter.ListItem[CursorFilter.CursorIndex].ItemName = CurrentUnit.Parts.LeftArm.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.LeftArm.BaseSize][CursorPartIndex];
                                         CurrentUnit.Parts.LeftArm.ActiveWeapons[CursorFilter.CursorIndex - CurrentUnit.Parts.LeftArm.BaseSize] = CursorPartIndex;
                                     }
                                     break;
@@ -696,7 +696,7 @@ namespace ProjectEternity.Core.Units.Modular
                                     }
                                     else//Weapons
                                     {
-                                        CursorFilter.ListItem[CursorFilter.CursorIndex].FullName = CurrentUnit.Parts.RightArm.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.RightArm.BaseSize][CursorPartIndex];
+                                        CursorFilter.ListItem[CursorFilter.CursorIndex].ItemName = CurrentUnit.Parts.RightArm.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.RightArm.BaseSize][CursorPartIndex];
                                         CurrentUnit.Parts.RightArm.ActiveWeapons[CursorFilter.CursorIndex - CurrentUnit.Parts.RightArm.BaseSize] = CursorPartIndex;
                                     }
                                     break;
@@ -722,7 +722,7 @@ namespace ProjectEternity.Core.Units.Modular
                                     }
                                     else//Weapons
                                     {
-                                        CursorFilter.ListItem[CursorFilter.CursorIndex].FullName = CurrentUnit.Parts.Legs.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.Legs.BaseSize][CursorPartIndex];
+                                        CursorFilter.ListItem[CursorFilter.CursorIndex].ItemName = CurrentUnit.Parts.Legs.ListWeaponSlot[CursorFilter.CursorIndex - CurrentUnit.Parts.Legs.BaseSize][CursorPartIndex];
                                         CurrentUnit.Parts.Legs.ActiveWeapons[CursorFilter.CursorIndex - CurrentUnit.Parts.Legs.BaseSize] = CursorPartIndex;
                                     }
                                     break;
@@ -768,7 +768,7 @@ namespace ProjectEternity.Core.Units.Modular
                     int Index = 0;
                     int Y = Constants.Height + 7;
                     //Bottom
-                    g.DrawString(fntArial8, "Name: " + CurrentUnit.FullName, new Vector2(8, Y - fntArial8.LineSpacing * 8), Color.Black);
+                    g.DrawString(fntArial8, "Name: " + CurrentUnit.RelativePath, new Vector2(8, Y - fntArial8.LineSpacing * 8), Color.Black);
                     g.DrawString(fntArial8, "HP: " + CurrentUnit.MaxHP, new Vector2(8, Y - fntArial8.LineSpacing * 7), Color.Black);
                     g.DrawString(fntArial8, "EN: " + CurrentUnit.MaxEN, new Vector2(8, Y - fntArial8.LineSpacing * 6), Color.Black);
                     g.DrawString(fntArial8, "Armor: " + CurrentUnit.Armor, new Vector2(8, Y - fntArial8.LineSpacing * 5), Color.Black);
@@ -807,7 +807,7 @@ namespace ProjectEternity.Core.Units.Modular
                     g.Draw(sprRectangle, new Rectangle(0, 280, Constants.Height - 100, 97), Color.Black);
                     g.Draw(sprRectangle, new Rectangle(380, 0, 1, Constants.Height), Color.Black);
                     //Bottom
-                    g.DrawString(fntArial8, "Name: " + CurrentUnit.FullName, new Vector2(5, Constants.Height - fntArial8.LineSpacing * 8), Color.Black);
+                    g.DrawString(fntArial8, "Name: " + CurrentUnit.RelativePath, new Vector2(5, Constants.Height - fntArial8.LineSpacing * 8), Color.Black);
                     if (HPChange > 0)
                         g.DrawString(fntArial8, "HP: " + CurrentUnit.MaxHP + " + " + HPChange, new Vector2(5, Constants.Height - fntArial8.LineSpacing * 7), Color.Green);
                     else if (HPChange < 0)
@@ -861,31 +861,31 @@ namespace ProjectEternity.Core.Units.Modular
                             case Selection.Head:
 
                                 for (int H = 0; H < CurrentUnit.Parts.ListHead.Count; H++)
-                                    g.DrawString(fntArial12, GetHeadByName(CurrentUnit.Parts.ListHead[H]).FullName, new Vector2(420, 60 + H * fntArial12.LineSpacing), Color.Black);
+                                    g.DrawString(fntArial12, GetHeadByName(CurrentUnit.Parts.ListHead[H]).RelativePath, new Vector2(420, 60 + H * fntArial12.LineSpacing), Color.Black);
                                 break;
 
                             case Selection.Torso:
 
                                 for (int T = 0; T < CurrentUnit.Parts.ListTorso.Count; T++)
-                                    g.DrawString(fntArial12, GetTorsoByName(CurrentUnit.Parts.ListTorso[T]).FullName, new Vector2(420, 60 + T * fntArial12.LineSpacing), Color.Black);
+                                    g.DrawString(fntArial12, GetTorsoByName(CurrentUnit.Parts.ListTorso[T]).RelativePath, new Vector2(420, 60 + T * fntArial12.LineSpacing), Color.Black);
                                 break;
 
                             case Selection.LeftArm:
 
                                 for (int A = 0; A < CurrentUnit.Parts.ListLeftArm.Count; A++)
-                                    g.DrawString(fntArial12, GetArmByName(CurrentUnit.Parts.ListLeftArm[A]).FullName, new Vector2(420, 60 + A * fntArial12.LineSpacing), Color.Black);
+                                    g.DrawString(fntArial12, GetArmByName(CurrentUnit.Parts.ListLeftArm[A]).RelativePath, new Vector2(420, 60 + A * fntArial12.LineSpacing), Color.Black);
                                 break;
 
                             case Selection.RightArm:
 
                                 for (int A = 0; A < CurrentUnit.Parts.ListRightArm.Count; A++)
-                                    g.DrawString(fntArial12, GetArmByName(CurrentUnit.Parts.ListRightArm[A]).FullName, new Vector2(420, 60 + A * fntArial12.LineSpacing), Color.Black);
+                                    g.DrawString(fntArial12, GetArmByName(CurrentUnit.Parts.ListRightArm[A]).RelativePath, new Vector2(420, 60 + A * fntArial12.LineSpacing), Color.Black);
                                 break;
 
                             case Selection.Legs:
 
                                 for (int L = 0; L < CurrentUnit.Parts.ListLegs.Count; L++)
-                                    g.DrawString(fntArial12, GetLegsByName(CurrentUnit.Parts.ListLegs[L]).FullName, new Vector2(420, 60 + L * fntArial12.LineSpacing), Color.Black);
+                                    g.DrawString(fntArial12, GetLegsByName(CurrentUnit.Parts.ListLegs[L]).RelativePath, new Vector2(420, 60 + L * fntArial12.LineSpacing), Color.Black);
                                 break;
                         }
                     }
@@ -1391,7 +1391,7 @@ namespace ProjectEternity.Core.Units.Modular
                                 }
                             }
                             //Draw the name,
-                            g.DrawStringRightAligned(fntArial8, Filter.ListItem[i].FullName, new Vector2(X + 190, Y), Color.Black);
+                            g.DrawStringRightAligned(fntArial8, Filter.ListItem[i].RelativePath, new Vector2(X + 190, Y), Color.Black);
                             //If the current ShopItem is selected, highlight it.
                             if (i == Filter.CursorIndex)
                                 g.Draw(sprRectangle, new Rectangle(X + 16, Y, 620 - X, fntArial8.LineSpacing), Color.FromNonPremultiplied(0, 0, 0, CursorAlpha));

@@ -36,7 +36,7 @@ namespace ProjectEternity.UnitTests.UnitMagicTests
         public void TestMagicUnit()
         {
             List<MagicSpell> ListMagicSpell = new List<MagicSpell>();
-            UnitMagic ActiveUser = new UnitMagic(ListMagicSpell);
+            UnitMagic ActiveUser = new UnitMagic("Dummy Magic", ListMagicSpell);
             MagicSpell ActiveSpell = new MagicSpell(ActiveUser, ActiveUser);
             MagicUserParams Params = new MagicUserParams(ActiveSpell.GlobalContext);
             ProjectileContext GlobalContext = new ProjectileContext();
@@ -60,7 +60,7 @@ namespace ProjectEternity.UnitTests.UnitMagicTests
         public void TestMagicSanbox()
         {
             List<MagicSpell> ListMagicSpell = new List<MagicSpell>();
-            UnitMagic ActiveUser = new UnitMagic(ListMagicSpell);
+            UnitMagic ActiveUser = new UnitMagic("Dummy Magic", ListMagicSpell);
 
             Character DummyCharacter = new Character();
             DummyCharacter.Name = "Dummy Pilot";
@@ -96,7 +96,7 @@ namespace ProjectEternity.UnitTests.UnitMagicTests
         public void TestMagicSanboxSimulation()
         {
             List<MagicSpell> ListMagicSpell = new List<MagicSpell>();
-            UnitMagic ActiveUser = new UnitMagic(ListMagicSpell);
+            UnitMagic ActiveUser = new UnitMagic("Dummy Magic", ListMagicSpell);
 
             Character DummyCharacter = new Character();
             DummyCharacter.Name = "Dummy Pilot";

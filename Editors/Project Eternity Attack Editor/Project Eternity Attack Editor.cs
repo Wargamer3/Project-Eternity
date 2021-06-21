@@ -237,12 +237,12 @@ namespace ProjectEternity.Editors.AttackEditor
 
         private void LoadAttack(Attack ActiveWeapon)
         {
-            this.Text = ActiveWeapon.FullName + " - Project Eternity Attack Editor";
+            this.Text = ActiveWeapon.RelativePath + " - Project Eternity Attack Editor";
             Editor = new QuoteEditor();
             MAPAttackEditor = new MAPAttackEditor();
 
             //Create the Part file.
-            string ItemName = ActiveWeapon.FullName;
+            string ItemName = ActiveWeapon.RelativePath;
             string Description = ActiveWeapon.Description;
 
             string PowerFormula = ActiveWeapon.PowerFormula;

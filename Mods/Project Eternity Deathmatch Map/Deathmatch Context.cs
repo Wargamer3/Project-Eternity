@@ -97,14 +97,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (this.Params.LocalContext.EffectOwnerSquad != null && !string.IsNullOrEmpty(this.Params.LocalContext.EffectOwnerSquad.SquadName))
                         ListDebugText.Add("Owner Squad: " + this.Params.LocalContext.EffectOwnerSquad.SquadName);
                     if (this.Params.LocalContext.EffectOwnerUnit != null)
-                        ListDebugText.Add("Owner Unit: " + this.Params.LocalContext.EffectOwnerUnit.FullName);
+                        ListDebugText.Add("Owner Unit: " + this.Params.LocalContext.EffectOwnerUnit.RelativePath);
                     if (this.Params.LocalContext.EffectOwnerCharacter != null)
                         ListDebugText.Add("Owner Pilot: " + this.Params.LocalContext.EffectOwnerCharacter.FullName);
 
                     if (this.Params.LocalContext.EffectTargetSquad != null && !string.IsNullOrEmpty(this.Params.LocalContext.EffectTargetSquad.SquadName))
                         ListDebugText.Add("Target Squad: " + this.Params.LocalContext.EffectTargetSquad.SquadName);
                     if (this.Params.LocalContext.EffectTargetUnit != null)
-                        ListDebugText.Add("Target Unit: " + this.Params.LocalContext.EffectTargetUnit.FullName);
+                        ListDebugText.Add("Target Unit: " + this.Params.LocalContext.EffectTargetUnit.RelativePath);
                     if (this.Params.LocalContext.EffectTargetCharacter != null)
                         ListDebugText.Add("Target Pilot: " + this.Params.LocalContext.EffectTargetCharacter.FullName);
 

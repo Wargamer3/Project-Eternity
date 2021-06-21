@@ -83,7 +83,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(23);
             UnitConquest LoadedUnit = new UnitConquest(Name, null, DicRequirement, DicEffect);
 
-            this.Text = LoadedUnit.FullName + " - Project Eternity Conquest Unit Editor";
+            this.Text = LoadedUnit.RelativePath + " - Project Eternity Conquest Unit Editor";
 
             cbMovementType.Text = LoadedUnit.ListTerrainChoices[0];
             txtHP.Value = LoadedUnit.MaxHP / 10;

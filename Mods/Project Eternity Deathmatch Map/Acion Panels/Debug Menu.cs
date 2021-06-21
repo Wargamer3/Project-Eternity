@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 int X = 20 + U * 205;
                 GameScreen.DrawBox(g, new Vector2(X, 20), 200, 400, Color.White);
-                GameScreen.DrawText(g, ActiveSquad[U].FullName, new Vector2(X + 5, 25), Color.White);
+                GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + 5, 25), Color.White);
                 for (int E = 0; E < ListSquadEffect[U].Count; ++E)
                 {
                     GameScreen.DrawText(g, ListSquadEffect[U][E].ToString(), new Vector2(X + 10, 45 + E * 20), Color.White);

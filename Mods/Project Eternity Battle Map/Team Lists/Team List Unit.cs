@@ -54,8 +54,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void RemoveAll(string UnitName)
         {
-            ListAll.RemoveAll(C => C.FullName == UnitName);
-            ListAvailable.RemoveAll(C => C.FullName == UnitName);
+            ListAll.RemoveAll(C => C.RelativePath == UnitName);
+            ListAvailable.RemoveAll(C => C.RelativePath == UnitName);
         }
 
         public void Save(BinaryWriter BW)

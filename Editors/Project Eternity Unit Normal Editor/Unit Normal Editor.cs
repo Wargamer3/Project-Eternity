@@ -227,7 +227,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             for (int A = 0; A < frmAttacks.ListAttack.Count; ++A)
             {
                 BW.Write(frmAttacks.ListAttack[A].IsExternal);
-                BW.Write(frmAttacks.ListAttack[A].FullName);
+                BW.Write(frmAttacks.ListAttack[A].RelativePath);
 
                 if (!frmAttacks.ListAttack[A].IsExternal)
                 {
@@ -369,11 +369,11 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
             txtPartsSlots.Value = LoadedUnit.ArrayParts.Length;
 
-            this.Text = LoadedUnit.FullName + " - Project Eternity Unit Editor";
+            this.Text = LoadedUnit.RelativePath + " - Project Eternity Unit Editor";
 
             #region Load controls
 
-            txtName.Text = LoadedUnit.FullName;
+            txtName.Text = LoadedUnit.ItemName;
             txtPrice.Text = LoadedUnit.Price.ToString();
             txtEXP.Value = LoadedUnit.UnitStat.EXPValue;
             txtDescription.Text = LoadedUnit.Description;
@@ -551,7 +551,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             //Attacks.
             for (int A = 0; A < frmAttacks.ListAttack.Count; ++A)
             {
-                ExportIniFile.AddValue("Attacks", "Attack " + A, frmAttacks.ListAttack[A].FullName);
+                ExportIniFile.AddValue("Attacks", "Attack " + A, frmAttacks.ListAttack[A].RelativePath);
                 for (int An = 0; An < frmAttacks.ListAttack[A].Animations.Count; ++An)
                 {
                     ExportIniFile.AddValue("Attack Animations", "Attack " + A + " Path " + An, frmAttacks.ListAttack[A].Animations[0].Animations[An].AnimationName);

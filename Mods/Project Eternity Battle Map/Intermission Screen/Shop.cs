@@ -163,12 +163,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Item description
             if (CursorFilter.CursorIndex >= 0 && CursorFilter.CursorIndex < CursorFilter.ListItem.Count)
             {
-                g.DrawString(fntArial10, CursorFilter.ListItem[CursorFilter.CursorIndex].FullName, new Vector2(10, 45), Color.White);
+                g.DrawString(fntArial10, CursorFilter.ListItem[CursorFilter.CursorIndex].RelativePath, new Vector2(10, 45), Color.White);
                 g.DrawString(fntArial10, "Cost: " + CursorFilter.ListItem[CursorFilter.CursorIndex].Price, new Vector2(10, 45 + fntArial10.LineSpacing * 2), Color.White);
                 int QuantityOwned = 0;
-                if (Inventory.ListItems.ContainsKey(CursorFilter.ListItem[CursorFilter.CursorIndex].FullName))
+                if (Inventory.ListItems.ContainsKey(CursorFilter.ListItem[CursorFilter.CursorIndex].RelativePath))
                 {
-                    QuantityOwned = Inventory.ListItems[CursorFilter.ListItem[CursorFilter.CursorIndex].FullName].Quantity;
+                    QuantityOwned = Inventory.ListItems[CursorFilter.ListItem[CursorFilter.CursorIndex].RelativePath].Quantity;
                 }
                 g.DrawString(fntArial10, CursorFilter.ListItem[CursorFilter.CursorIndex].Quantity + " in stock, " + QuantityOwned + " Owned", new Vector2(10, 45 + fntArial10.LineSpacing * 3), Color.White);
                 //Bottom
@@ -270,17 +270,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (Index >= CursorIndexStart && Index < 32 + CursorIndexStart)
                     {
                         //Draw the name,
-                        g.DrawString(fntArial8, Filter.ListItem[i].FullName, new Vector2(X + 20, Y), Color.White);
+                        g.DrawString(fntArial8, Filter.ListItem[i].RelativePath, new Vector2(X + 20, Y), Color.White);
                         //Draw the quantity related informations.
                         int QuantityOwned = 0;
-                        if (Inventory.ListItems.ContainsKey(Filter.ListItem[i].FullName))
+                        if (Inventory.ListItems.ContainsKey(Filter.ListItem[i].RelativePath))
                         {
-                            QuantityOwned = Inventory.ListItems[Filter.ListItem[i].FullName].Quantity;
+                            QuantityOwned = Inventory.ListItems[Filter.ListItem[i].RelativePath].Quantity;
                         }
                         g.DrawString(fntArial8, Filter.ListItem[i].QuantityToBuy + " / " + Filter.ListItem[i].Quantity + " (" + QuantityOwned + ")", new Vector2(Constants.Width - 60, Y), Color.Aqua);
                         //If the current ShopItem is selected, highlight it.
                         if (i == Filter.CursorIndex)
-                            g.Draw(sprRectangle, new Rectangle(X + 16, Y, (int)fntArial8.MeasureString(Filter.ListItem[i].FullName).X + 10, fntArial8.LineSpacing), Color.FromNonPremultiplied(255, 255, 255, CursorAlpha));
+                            g.Draw(sprRectangle, new Rectangle(X + 16, Y, (int)fntArial8.MeasureString(Filter.ListItem[i].RelativePath).X + 10, fntArial8.LineSpacing), Color.FromNonPremultiplied(255, 255, 255, CursorAlpha));
                         Y += fntArial8.LineSpacing;
                     }
                     Index++;
@@ -313,7 +313,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int I = 0; I < Filter.ListItem.Count; I++)
             {
                 Filter.ListItem[I].Quantity -= Filter.ListItem[I].QuantityToBuy;
-                Inventory.ListItems[Filter.ListItem[I].FullName].Quantity += Filter.ListItem[I].QuantityToBuy;
+                Inventory.ListItems[Filter.ListItem[I].RelativePath].Quantity += Filter.ListItem[I].QuantityToBuy;
                 Filter.ListItem[I].QuantityToBuy = 0;
             }
             //Reset its child.

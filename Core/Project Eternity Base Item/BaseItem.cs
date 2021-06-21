@@ -228,7 +228,7 @@ namespace ProjectEternity.Core.Item
     public abstract class ShopItem
     {
         public string ItemName;
-        public string FullName;
+        public readonly string RelativePath;
         public string Description;
         public int Price;
         public int Quantity;
@@ -238,14 +238,14 @@ namespace ProjectEternity.Core.Item
         {
         }
 
-        protected ShopItem(string FullName)
-            : this(FullName, "", 0)
+        protected ShopItem(string RelativePath)
+            : this(RelativePath, "", 0)
         {
         }
 
-        public ShopItem(string FullName, string Description, int Price)
+        public ShopItem(string RelativePath, string Description, int Price)
         {
-            this.FullName = FullName;
+            this.RelativePath = RelativePath;
             this.Description = Description;
             this.Price = Price;
             this.Quantity = 1;
@@ -258,7 +258,7 @@ namespace ProjectEternity.Core.Item
             if (OtherShopItem == null)
                 return base.Equals(obj);
             else
-                return FullName == OtherShopItem.FullName;
+                return RelativePath == OtherShopItem.RelativePath;
         }
 
         public override int GetHashCode()
@@ -268,7 +268,7 @@ namespace ProjectEternity.Core.Item
 
         public override string ToString()
         {
-            return FullName;
+            return RelativePath;
         }
     }
 
