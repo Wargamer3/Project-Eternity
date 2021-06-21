@@ -79,17 +79,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
 
                     _SpawnUnit.ArrayCharacterActive = ListUnitCharacter.ToArray();
-                }
+                    _SpawnUnit.Pilot.Level = _SpawnCharacterLevel;
+                    _SpawnUnit.UnitStat.HPUpgrades.Value = _SpawnUnitStatsUpgrade;
+                    _SpawnUnit.UnitStat.ENUpgrades.Value = _SpawnUnitStatsUpgrade;
+                    _SpawnUnit.UnitStat.ArmorUpgrades.Value = _SpawnUnitStatsUpgrade;
+                    _SpawnUnit.UnitStat.MobilityUpgrades.Value = _SpawnUnitStatsUpgrade;
 
-                if (SpawnUnit != null)
-                {
-                    SpawnUnit.Pilot.Level = _SpawnCharacterLevel;
-                    SpawnUnit.UnitStat.HPUpgrades.Value = _SpawnUnitStatsUpgrade;
-                    SpawnUnit.UnitStat.ENUpgrades.Value = _SpawnUnitStatsUpgrade;
-                    SpawnUnit.UnitStat.ArmorUpgrades.Value = _SpawnUnitStatsUpgrade;
-                    SpawnUnit.UnitStat.MobilityUpgrades.Value = _SpawnUnitStatsUpgrade;
-
-                    SpawnUnit.UnitStat.AttackUpgrades.Value = SpawnUnitAttackUpgrade;
+                    _SpawnUnit.UnitStat.AttackUpgrades.Value = SpawnUnitAttackUpgrade;
                 }
             }
 
