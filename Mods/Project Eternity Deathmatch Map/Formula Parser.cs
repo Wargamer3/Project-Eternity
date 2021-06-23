@@ -171,6 +171,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ReturnExpression = UnitNumber.ToString();
                     break;
 
+                case "originalname"://Transforming Unit have a different ItemName. ie Getter has Getter as ItemName but Getter-1 as UnitStat Name
+                    ReturnExpression = "0";
+                    for (int P = ListPlayer.Count - 1; P >= 0 && ActiveSquad == null; --P)
+                    {
+                        for (int S = ListPlayer[P].ListSquad.Count - 1; S >= 0 && ActiveSquad == null; --S)
+                        {
+                            for (int U = ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
+                            {
+                                if (ListPlayer[P].ListSquad[S][U].ItemName.ToLower().Replace(" ", "") == Expression[2] && ListPlayer[P].ListSquad[S][U].HP > 0)
+                                {
+                                    if (UnitCount)
+                                        ++UnitNumber;
+                                    else
+                                    {
+                                        ActiveSquad = ListPlayer[P].ListSquad[S];
+                                        ActiveUnit = ActiveSquad.CurrentLeader;
+                                        ReturnExpression = "1";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (UnitCount)
+                        ReturnExpression = UnitNumber.ToString();
+                    break;
                 case "at":
                 case "atposition":
                     ReturnExpression = "0";
@@ -244,6 +269,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case "leadername":
                 case "currentleadername":
                     ReturnExpression = ActiveUnit.UnitStat.Name.ToLower().Replace(" ", "");
+                    break;
+
+                case "originalname"://Transforming Unit have a different ItemName. ie Getter has Getter as ItemName but Getter-1 as UnitStat Name
+                    ReturnExpression = ActiveUnit.ItemName.ToLower().Replace(" ", "");
                     break;
 
                 case "hp":
