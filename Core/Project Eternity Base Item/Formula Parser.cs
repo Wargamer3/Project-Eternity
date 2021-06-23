@@ -141,7 +141,7 @@ namespace ProjectEternity.Core
 
             #region Process divisions
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "/")
                 {
@@ -172,7 +172,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
@@ -180,7 +180,7 @@ namespace ProjectEternity.Core
 
             #region Process multiplications
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "*")
                 {
@@ -211,7 +211,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
@@ -219,7 +219,7 @@ namespace ProjectEternity.Core
 
             #region Process modulos.
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "%")
                 {
@@ -250,7 +250,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
@@ -258,7 +258,7 @@ namespace ProjectEternity.Core
 
             #region Process additions.
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "+")
                 {
@@ -289,7 +289,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
@@ -297,7 +297,7 @@ namespace ProjectEternity.Core
 
             #region Process subtractions.
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "-")
                 {
@@ -328,7 +328,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
@@ -340,7 +340,7 @@ namespace ProjectEternity.Core
 
             #region Process <, <=, >, >=
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "<" || ListOperation[i] == "<=" || ListOperation[i] == ">"|| ListOperation[i] == ">=")
                 {
@@ -389,7 +389,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
@@ -397,7 +397,7 @@ namespace ProjectEternity.Core
 
             #region Process ==, !=
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "==" || ListOperation[i] == "!=")
                 {
@@ -448,7 +448,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
@@ -460,7 +460,7 @@ namespace ProjectEternity.Core
 
             #region Process logical AND (&&)
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "&&")
                 {
@@ -485,7 +485,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
@@ -493,7 +493,7 @@ namespace ProjectEternity.Core
 
             #region Process logical OR (||)
 
-            for (int i = ListOperation.Count - 2; i >= 0; i--)
+            for (int i = ListOperation.Count - 2; i >= 0; --i)
             {
                 if (ListOperation[i] == "||")
                 {
@@ -518,7 +518,7 @@ namespace ProjectEternity.Core
 
                     ListOperation.RemoveAt(i + 1);
                     ListOperation.RemoveAt(i - 1);
-                    i -= 2;
+                    --i;
                 }
             }
 
