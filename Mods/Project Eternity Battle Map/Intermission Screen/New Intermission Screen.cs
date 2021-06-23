@@ -82,6 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListPresentCharacter = PlayerRoster.TeamCharacters.GetPresent();
             ListPresentUnit = PlayerRoster.TeamUnits.GetPresent();
+            ListPresentCharacter = ListPresentCharacter.OrderByDescending(C => C.Kills).ToList();
 
             for (int U = 0; U < ListPresentUnit.Count; ++U)
             {
@@ -221,7 +222,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawStringRightAligned(fntArial15, MainCharacter.Kills.ToString(), new Vector2(X + 240, Y + 3), Color.White);
 
                 Y = 170;
-                for (int i = 2; i <= 6 && i - 1 < ListPresentCharacter.Count; ++i)
+                for (int i = 2; i <= 7 && i - 1 < ListPresentCharacter.Count; ++i)
                 {
                     Character ActiveCharacter = ListPresentCharacter[i - 1];
                     g.DrawString(fntArial26, "#" + i, new Vector2(X + 15, Y), Color.White);
