@@ -132,23 +132,28 @@ namespace ProjectEternity.Core.Units.Transforming
 
         public override void OnSelect()
         {
+            for (int i = 0; i < TransformingUnit.ArrayTransformingUnit.Length; ++i)
+            {
+                AddChoiceToCurrentPanel(new ActionPanelConfirmTransform(TransformingUnit, i, ActiveSquad, Map,
+                    TransformingUnit.CanTransform(i, Map.ActiveSquad.CurrentWingmanA, Map.ActiveSquad.CurrentWingmanB)));
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
             if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
             {
-                if (TransformingUnit.ArrayTransformingUnit[TransformationChoice].WillRequirement >= 0 && TransformingUnit.PilotMorale >= TransformingUnit.ArrayTransformingUnit[TransformationChoice].WillRequirement)
+                if (TransformingUnit.ArrayTransformingUnit[ActionMenuCursor].WillRequirement >= 0 && TransformingUnit.PilotMorale >= TransformingUnit.ArrayTransformingUnit[ActionMenuCursor].WillRequirement)
                 {
-                    AddToPanelListAndSelect(new ActionPanelTranform2WingmanWill(TransformationChoice, TransformingUnit, ActiveSquad, ShowSquadMembers, Map));
+                    AddToPanelListAndSelect(new ActionPanelTranform2WingmanWill(ActionMenuCursor, TransformingUnit, ActiveSquad, ShowSquadMembers, Map));
                 }
-                else if (TransformingUnit.ArrayTransformingUnit[TransformationChoice].TurnLimit >= 0)
+                else if (TransformingUnit.ArrayTransformingUnit[ActionMenuCursor].TurnLimit >= 0)
                 {
-                    AddToPanelListAndSelect(new ActionPanelTranform2WingmanTurn(TransformationChoice, TransformingUnit, ActiveSquad, ShowSquadMembers, Map));
+                    AddToPanelListAndSelect(new ActionPanelTranform2WingmanTurn(ActionMenuCursor, TransformingUnit, ActiveSquad, ShowSquadMembers, Map));
                 }
                 else
                 {
-                    TransformingUnit.ChangeUnit(TransformationChoice);
+                    TransformingUnit.ChangeUnit(ActionMenuCursor);
                     Map.UpdateSquadCurrentMovement(ActiveSquad);
                 }
 
@@ -160,12 +165,12 @@ namespace ProjectEternity.Core.Units.Transforming
             }
             else if (InputHelper.InputUpPressed())
             {
-                TransformationChoice -= (TransformationChoice > 0) ? 1 : 0;
+                ActionMenuCursor -= (ActionMenuCursor > 0) ? 1 : 0;
                 Map.sndSelection.Play();
             }
             else if (InputHelper.InputDownPressed())
             {
-                TransformationChoice += (TransformationChoice < TransformingUnit.ArrayTransformingUnit.Length - 1) ? 1 : 0;
+                ActionMenuCursor += (ActionMenuCursor < TransformingUnit.ArrayTransformingUnit.Length - 1) ? 1 : 0;
                 Map.sndSelection.Play();
             }
         }
