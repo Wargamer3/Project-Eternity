@@ -53,7 +53,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { "Characters" }, "Characters/", new string[] { ".pec" }, typeof(ProjectEternityCharacterEditor))
+                new EditorInfo(new string[] { "Characters" }, "Characters/", new string[] { ".pec" }, typeof(ProjectEternityCharacterEditor), true, null, true)
             };
 
             return Info;
@@ -705,7 +705,9 @@ namespace ProjectEternity.Editors.CharacterEditor
 
                     case ItemSelectionChoices.AceBonus:
                         if (Items[I] == null)
+                        {
                             txtAceBonus.Text = "None";
+                        }
                         else
                         {
                             Name = Items[I].Substring(0, Items[0].Length - 5).Substring(Items[0].LastIndexOf("Skills") + 7);
@@ -714,8 +716,15 @@ namespace ProjectEternity.Editors.CharacterEditor
                         break;
 
                     case ItemSelectionChoices.Slave:
+                        if (Items[I] == null)
+                        {
+                            txtSlave.Text = "None";
+                        }
+                        else
+                        {
                             Name = Items[I].Substring(0, Items[0].Length - 4).Substring(19);
                             txtSlave.Text = Name;
+                        }
                         break;
 
                     #region Skills
