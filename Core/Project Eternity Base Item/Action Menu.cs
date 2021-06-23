@@ -73,6 +73,7 @@ namespace ProjectEternity.Core.Item
         protected readonly List<ActionPanel> ListNextChoice;//Array of choices to display.
         public int ActionMenuCursor;
         private readonly bool CanCancel;
+        public bool IsEnabled;
 
         // List of ActionPanel shared through every ActionPanel objects.
         protected readonly ActionPanelHolder ListActionMenuChoice;
@@ -85,6 +86,7 @@ namespace ProjectEternity.Core.Item
             this.CanCancel = CanCancel;
             this.Name = Name;
             this.ListActionMenuChoice = ListActionMenuChoice;
+            this.IsEnabled = true;
             ActionMenuWidth = MinActionMenuWidth;
 
             ListNextChoice = new List<ActionPanel>();

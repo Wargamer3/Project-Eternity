@@ -88,7 +88,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Draw the choices.
             for (int A = 0; A < ListNextChoice.Count; A++)
             {
-                GameScreen.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.White);
+                if (ListNextChoice[A].IsEnabled)
+                {
+                    GameScreen.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.White);
+                }
+                else
+                {
+                    GameScreen.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.Gray);
+                }
                 Y += PannelHeight;
             }
 
