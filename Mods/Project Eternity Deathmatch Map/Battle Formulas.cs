@@ -458,13 +458,6 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 }
             }
 
-            Attacker.UpdateSquad();
-            if (ActiveSquadSupport != null && ActiveSquadSupport.ActiveSquadSupport != null)
-                ActiveSquadSupport.ActiveSquadSupport.UpdateSquad();
-            TargetSquad.UpdateSquad();
-            if (TargetSquadSupport != null && TargetSquadSupport.ActiveSquadSupport != null)
-                TargetSquadSupport.ActiveSquadSupport.UpdateSquad();
-
             #region Explosions
 
             //Explosion of death cutscene
@@ -481,10 +474,16 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 if (Constants.ShowBattleRecap && ListBattleRecap[R].IsHuman)
                 {
                     PushScreen(ListBattleRecap[R]);
+
                     if (!HasRecap)
                     {
-                        ListBattleRecap[R].UpdateBattleEventsOnClose = true;
+                        ListBattleRecap[R].SetBattleContent(true, Attacker, ActiveSquadSupport, TargetSquad, TargetSquadSupport);
                     }
+                    else
+                    {
+                        ListBattleRecap[R].SetBattleContent(false, Attacker, ActiveSquadSupport, TargetSquad, TargetSquadSupport);
+                    }
+
                     HasRecap = true;
                 }
                 else
@@ -496,6 +495,14 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             if (!HasRecap)
             {
                 UpdateMapEvent(EventTypeOnBattle, 1);
+
+                //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)
+                Attacker.UpdateSquad();
+                if (ActiveSquadSupport != null && ActiveSquadSupport.ActiveSquadSupport != null)
+                    ActiveSquadSupport.ActiveSquadSupport.UpdateSquad();
+                TargetSquad.UpdateSquad();
+                if (TargetSquadSupport != null && TargetSquadSupport.ActiveSquadSupport != null)
+                    TargetSquadSupport.ActiveSquadSupport.UpdateSquad();
             }
         }
 

@@ -28,11 +28,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private bool ShowLevelUp;
 
-        public bool UpdateBattleEventsOnClose;
+        private bool UpdateBattleEventsOnClose;
         private readonly DeathmatchMap Map;
         private readonly Character Pilot;
         private readonly Unit Owner;
         public readonly bool IsHuman;
+        private Squad Attacker;
+        private SupportSquadHolder ActiveSquadSupport;
+        private Squad TargetSquad;
+        private SupportSquadHolder TargetSquadSupport;
 
         private readonly int OriginalPilotLevel;
         private readonly int OriginalPilotSP;
@@ -82,6 +86,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PilotOriginalHIT = Pilot.HIT;
         }
 
+        public void SetBattleContent(bool UpdateBattleEventsOnClose, Squad Attacker, SupportSquadHolder ActiveSquadSupport, Squad TargetSquad, SupportSquadHolder TargetSquadSupport)
+        {
+            this.UpdateBattleEventsOnClose = UpdateBattleEventsOnClose;
+            this.Attacker = Attacker;
+            this.ActiveSquadSupport = ActiveSquadSupport;
+            this.TargetSquad = TargetSquad;
+            this.TargetSquadSupport = TargetSquadSupport;
+        }
+
         public void LevelUp()
         {
             //Only 5 levels up allowed.
@@ -121,6 +134,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (UpdateBattleEventsOnClose)
                     {
                         Map.UpdateMapEvent(BattleMap.EventTypeOnBattle, 1);
+                    }
+
+                    //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)
+                    if (Attacker != null)
+                    {
+                        Attacker.UpdateSquad();
+                        if (ActiveSquadSupport != null && ActiveSquadSupport.ActiveSquadSupport != null)
+                            ActiveSquadSupport.ActiveSquadSupport.UpdateSquad();
+                        TargetSquad.UpdateSquad();
+                        if (TargetSquadSupport != null && TargetSquadSupport.ActiveSquadSupport != null)
+                            TargetSquadSupport.ActiveSquadSupport.UpdateSquad();
                     }
                 }
             }
