@@ -484,7 +484,7 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        public virtual void ReloadSkills(Unit Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
         {
             for (int P = 0; P < ArrayParts.Length; ++P)
             {
@@ -492,6 +492,14 @@ namespace ProjectEternity.Core.Units
                 {
                     UnitConsumablePart ActivePart = (UnitConsumablePart)ArrayParts[P];
                     ActivePart.Spirit.ReloadSkills(DicRequirement, DicEffect, DicTarget);
+                }
+            }
+
+            for (int A = 0; A < ArrayUnitAbility.Length; ++A)
+            {
+                if (ArrayUnitAbility[A] != null)
+                {
+                    ArrayUnitAbility[A].ReloadSkills(DicRequirement, DicEffect);
                 }
             }
 

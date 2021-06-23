@@ -145,7 +145,7 @@
     <Compile Include="Terrain\Spherical Map 3D.cs" />
     <Compile Include="Terrain\Sub Map Layer.cs" />
     <Compile Include="Terrain\Tile 3D.cs" />
-    <Compile Include="Unit Delegates.cs" />
+    <Compile Include="Deathmatch Unit.cs" />
     <Compile Include="Online\Multiplayer Screen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Deployment Screen.cs" />

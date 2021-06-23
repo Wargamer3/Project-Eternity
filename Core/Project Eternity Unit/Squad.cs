@@ -246,11 +246,11 @@ namespace ProjectEternity.Core.Units
                 IsDead = true;
         }
 
-        public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        public void ReloadSkills(Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
         {
             for (int U = 0; U < ArrayUnit.Length; ++U)
             {
-                ArrayUnit[U].ReloadSkills(DicRequirement, DicEffect, DicTarget);
+                ArrayUnit[U].ReloadSkills(DicUnitType[ArrayUnit[U].UnitTypeName], DicRequirement, DicEffect, DicTarget);
             }
         }
 
