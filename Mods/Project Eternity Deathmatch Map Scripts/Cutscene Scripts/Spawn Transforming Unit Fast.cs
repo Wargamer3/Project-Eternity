@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             public ScriptSpawnTransformingUnitFast(DeathmatchMap Map)
-                : base(Map, 140, 70, "Spawn Transforming Unit Fast", new string[] { "Spawn" }, new string[] { "Timer Ended", "Animation Ended", "SFX Ended" })
+                : base(Map, 150, 70, "Spawn Transforming Unit Fast", new string[] { "Spawn" }, new string[] { "Timer Ended", "Animation Ended", "SFX Ended" })
             {
                 UnitSpawner = new ScriptSpawnSquadHelper(Map, this);
                 Leader = new ScriptUnit(Map);

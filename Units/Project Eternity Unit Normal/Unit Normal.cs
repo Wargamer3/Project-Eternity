@@ -43,7 +43,7 @@ namespace ProjectEternity.Core.Units.Normal
                 Description = BR.ReadString();
                 Price = BR.ReadInt32();
                 
-                _UnitStat = new UnitStats(RelativePath, BR, DicRequirement, DicEffect);
+                _UnitStat = new UnitStats(ItemName, BR, DicRequirement, DicEffect);
 
                 int ListPartSlotCount = BR.ReadInt32();
                 ArrayParts = new UnitPart[ListPartSlotCount];

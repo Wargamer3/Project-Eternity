@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public ScriptSpawnUnitEvent(DeathmatchMap Map)
                 : base(Map, 140, 70, "Spawn Event Unit", new string[] { "Spawn" }, new string[] { "Timer Ended", "Animation Ended", "SFX Ended" })
             {
-                _EventID = "";
+                _EventID = string.Empty;
                 UnitSpawner = new ScriptSpawnSquadHelper(Map, this);
                 UnitSpawner.WingmanAToSpawnID = 0;
                 UnitSpawner.WingmanAToSpawnID = 0;

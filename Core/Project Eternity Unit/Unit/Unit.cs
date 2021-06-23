@@ -680,7 +680,7 @@ namespace ProjectEternity.Core.Units
 
         public void Save(BinaryWriter BW)
         {
-            BW.Write(_UnitStat.Name);
+            BW.Write(RelativePath);
             BW.Write(UnitTypeName);
             BW.Write(TeamEventID);
 

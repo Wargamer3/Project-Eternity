@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                         int SquadCountAlive = 0;
                                         for (int S = 0; S < ActivePlayer.ListSquad.Count; S++)
                                         {
-                                            if (!ActivePlayer.ListSquad[S].IsDead)
+                                            if (!ActivePlayer.ListSquad[S].IsDead && ActivePlayer.ListSquad[S].CurrentLeader != null && ActivePlayer.ListSquad[S].CurrentLeader.HP > 0)
                                                 SquadCountAlive++;
                                         }
                                         return SquadCountAlive.ToString();
@@ -153,7 +153,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             for (int U = ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
                             {
-                                if (ListPlayer[P].ListSquad[S][U].RelativePath == Expression[2] && ListPlayer[P].ListSquad[S][U].HP > 0)
+                                if (ListPlayer[P].ListSquad[S][U].UnitStat.Name.ToLower().Replace(" ", "") == Expression[2] && ListPlayer[P].ListSquad[S][U].HP > 0)
                                 {
                                     if (UnitCount)
                                         ++UnitNumber;
@@ -243,7 +243,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case "name":
                 case "leadername":
                 case "currentleadername":
-                    ReturnExpression = ActiveUnit.RelativePath.ToLower().Replace(" ", "");
+                    ReturnExpression = ActiveUnit.UnitStat.Name.ToLower().Replace(" ", "");
                     break;
 
                 case "hp":

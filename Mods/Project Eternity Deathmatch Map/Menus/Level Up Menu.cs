@@ -149,7 +149,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.Draw(Pilot.sprPortrait, new Rectangle(70, Y + 15, 80, 80), Color.White);
             g.DrawString(fntFinlanderFont, Pilot.Name, new Vector2(190, Y += 3), Color.White);
             g.Draw(Owner.SpriteMap, new Rectangle(190, Y + 25, 32, 32), Color.White);
-            g.DrawString(fntFinlanderFont, Owner.RelativePath, new Vector2(225, Y += 25), Color.White);
+            g.DrawString(fntFinlanderFont, Owner.UnitStat.Name, new Vector2(225, Y += 25), Color.White);
             g.DrawString(fntFinlanderFont, "Level", new Vector2(190, Y += 25), Color.Yellow);
 
             if (Pilot.Level != OriginalPilotLevel)
@@ -192,7 +192,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.Draw(Pilot.sprPortrait, new Rectangle(70, Y + 30, 80, 80), Color.White);
             g.DrawString(fntFinlanderFont, Pilot.Name, new Vector2(190, Y += 3), Color.White);
             g.Draw(Owner.SpriteMap, new Rectangle(190, Y + 25, 32, 32), Color.White);
-            g.DrawString(fntFinlanderFont, Owner.RelativePath, new Vector2(225, Y += 25), Color.White);
+            g.DrawString(fntFinlanderFont, Owner.UnitStat.Name, new Vector2(225, Y += 25), Color.White);
             g.DrawString(fntFinlanderFont, "Level", new Vector2(190, Y += 25), Color.Yellow);
 
             if (Pilot.Level != OriginalPilotLevel)

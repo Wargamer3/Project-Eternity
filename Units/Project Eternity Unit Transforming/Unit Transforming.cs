@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units.Normal;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
@@ -46,7 +47,6 @@ namespace ProjectEternity.Core.Units.Transforming
 
         private double HPPercentage;
         private double ENPercentage;
-        private string OriginalName;
 
         public UnitTransforming()
             : base(null)
@@ -64,7 +64,6 @@ namespace ProjectEternity.Core.Units.Transforming
         public UnitTransforming(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
             : base(Name, Map)
         {
-            this.OriginalName = Name;
             this.ItemName = Name;
             PermanentTransformation = false;
             HPPercentage = 1;
