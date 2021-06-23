@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Cutscene Scripts\Add Player.cs" />
     <Compile Include="Cutscene Scripts\Center Camera On Squad.cs" />
+    <Compile Include="Cutscene Scripts\Spawn Transforming Unit Event Fast.cs" />
     <Compile Include="Cutscene Scripts\Transform Unit.cs" />
     <Compile Include="Cutscene Scripts\Spawn Transforming Unit Fast.cs" />
     <Compile Include="Deathmatch Cutscene Script Holder.cs" />
