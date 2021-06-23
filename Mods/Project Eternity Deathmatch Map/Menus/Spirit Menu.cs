@@ -323,9 +323,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Map.sndSelection.Play();
                 }
                 //End of Spirit list, move to last pilot.
-                else if (PilotIndex - 1 > 0)
+                else if (PilotIndex - 1 >= 0)
                 {
                     PilotIndex--;
+                    CursorIndex = ActiveSquad[ActiveUnitIndex].ArrayCharacterActive[PilotIndex].ArrayPilotSpirit.Length - 1;
                     Map.sndSelection.Play();
                 }
             }
@@ -341,6 +342,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else if (PilotIndex + 1 < ActiveSquad[ActiveUnitIndex].ArrayCharacterActive.Length)
                 {
                     PilotIndex++;
+                    CursorIndex = 0;
                     Map.sndSelection.Play();
                 }
             }
@@ -392,15 +394,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void DrawSpiritMenu(CustomSpriteBatch g, int DisplayedUnitIndex, int StartX, int PilotIndex, int CursorIndex, bool DrawCursor)
         {
-            int Y = 255;
+            int Y = 25;
 
-            for (int P = 1; P < ActiveSquad[DisplayedUnitIndex].ArrayCharacterActive.Length; P++)
+            for (int P = 0; P < ActiveSquad[DisplayedUnitIndex].ArrayCharacterActive.Length; P++)
             {
-                Y += 10;
+                if (P == PilotIndex)
+                {
+                    Y += 120 + 115;
+                    continue;
+                }
 
                 DrawBox(g, new Vector2(StartX, Y), 189, 25, Color.White);
                 DrawText(g, ActiveSquad[DisplayedUnitIndex].ArrayCharacterActive[P].Name,
                     new Vector2(StartX + 8, Y + 3), Color.White);
+
                 Y += sprSpiritMenuPilotBox.Height;
             }
 
@@ -409,8 +416,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawBox(g, new Vector2(StartX, Y), 189, 120, Color.White);
             DrawBox(g, new Vector2(StartX, Y + 120), 189, 115, Color.White);
 
-            #region Draw Active Spirit Informations
+            DrawCharacterMenu(g, DisplayedUnitIndex, StartX, PilotIndex, CursorIndex, DrawCursor);
+        }
 
+        public void DrawCharacterMenu(CustomSpriteBatch g, int DisplayedUnitIndex, int StartX, int PilotIndex, int CursorIndex, bool DrawCursor)
+        {
+            int Y = 25 + sprSpiritMenuPilotBox.Height * PilotIndex;
             Character ActiveCharacter = ActiveSquad[DisplayedUnitIndex].ArrayCharacterActive[PilotIndex];
 
             DrawBox(g, new Vector2(StartX + 4, Y + 4), 88, 88, Color.White);
@@ -429,7 +440,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawTextRightAligned(g, "/" + ActiveCharacter.MaxSP,
                 new Vector2(StartX + 183, Y + 50), Color.White);
             int ENWidth = (int)fntShadowFont.MeasureString(ActiveCharacter.MaxSP.ToString()).X - 2;
-            
+
             DrawTextRightAligned(g, ActiveCharacter.SP.ToString(), new Vector2(StartX + 183 - ENWidth, Y + 50), Color.Lime);
 
             DrawText(g, "Will", new Vector2(StartX + 95, Y + 70), Color.Yellow);
@@ -450,9 +461,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     g.Draw(sprSpiritMenuHighlight, new Vector2(StartX + 4, Y + 124 + CursorIndex * 18), Color.White);
 
-                    if (CursorIndex < ActiveCharacter.ArrayPilotSpirit.Length)
+                    if (CursorIndex < ActiveCharacter.ArrayPilotSpirit.Length && ActiveCharacter.ArrayPilotSpirit[CursorIndex].IsUnlocked)
+                    {
                         DrawText(g, ActiveCharacter.ArrayPilotSpirit[CursorIndex].Description,
                             new Vector2(32, 3), Color.White);
+                    }
                 }
             }
 
@@ -488,8 +501,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         new Vector2(StartX + 183, Y + 123 + S * 18), Color.White);
                 }
             }
-
-            #endregion
         }
     }
 }
