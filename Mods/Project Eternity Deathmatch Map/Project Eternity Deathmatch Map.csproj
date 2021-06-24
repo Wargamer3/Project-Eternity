@@ -128,7 +128,7 @@
     <Compile Include="Map Interaction.cs" />
     <Compile Include="Terrain\Map Layer.cs" />
     <Compile Include="Acion Panels\Map Menu\Map Menu.cs" />
-    <Compile Include="Menus\Non Demo Screen.cs" />
+    <Compile Include="Menus\Non Demo\Non Demo Screen.cs" />
     <Compile Include="Menus\Pre Battle Menu.cs" />
     <Compile Include="Menus\Level Up Menu.cs" />
     <Compile Include="Menus\Result Menu.cs" />
