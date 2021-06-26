@@ -65,10 +65,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 EnemySupport = NonDemoRightSupport;
             }
 
-            string ExtraTextIntro = AttackingSquad.CurrentLeader.RelativePath + " Attacks!";
-            string ExtraTextHit = AttackingSquad.CurrentLeader.RelativePath + " hits! " + EnemySquad.CurrentLeader.RelativePath + " takes " + BattleResult.ArrayResult[0].AttackDamage + " damage!";
-            string ExtraTextMiss = AttackingSquad.CurrentLeader.RelativePath + " misses! " + EnemySquad.CurrentLeader.RelativePath + " takes 0 damage!";
-            string ExtraTextKill = EnemySquad.CurrentLeader.RelativePath + " is destroyed!";
+            string ExtraTextIntro = AttackingSquad.CurrentLeader.ItemName + " Attacks!";
+            string ExtraTextHit = AttackingSquad.CurrentLeader.ItemName + " hits! " + EnemySquad.CurrentLeader.ItemName + " takes " + BattleResult.ArrayResult[0].AttackDamage + " damage!";
+            string ExtraTextMiss = AttackingSquad.CurrentLeader.ItemName + " misses! " + EnemySquad.CurrentLeader.ItemName + " takes 0 damage!";
+            string ExtraTextKill = EnemySquad.CurrentLeader.ItemName + " is destroyed!";
 
             AnimationBackground ActiveAnimationBackground = new AnimationBackground2D("Backgrounds 2D/Ground", Content, GraphicsDevice);
 
