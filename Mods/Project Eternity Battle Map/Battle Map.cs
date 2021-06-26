@@ -958,14 +958,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             bool CanKeyboardMove = false;
             if (InputHelper.InputLeftHold() || InputHelper.InputRightHold() || InputHelper.InputUpHold() || InputHelper.InputDownHold())
             {
-                CursorHoldTime += 1.5f;
-
-                if (CursorHoldTime <= 1.5f)
-                    CanKeyboardMove = true;
-                else if (CursorHoldTime >= 8)
+                if (CursorHoldTime < 0)
                 {
                     CanKeyboardMove = true;
-                    CursorHoldTime -= 8;
+                    CursorHoldTime = 0f;
+                }
+                else
+                {
+                    CursorHoldTime += 1f;
+
+                    if (CursorHoldTime >= 28)
+                    {
+                        CanKeyboardMove = true;
+                        CursorHoldTime -= 5;
+                    }
+                    else if (CursorHoldTime == 18)
+                    {
+                        CanKeyboardMove = true;
+                    }
                 }
             }
             else
