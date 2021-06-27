@@ -100,6 +100,19 @@ namespace ProjectEternity.Core.Scripts
                                 object EnumValue = Enum.Parse(Property.PropertyType, Value);
                                 Property.SetValue(LineScript, Convert.ChangeType(EnumValue, Property.PropertyType, CultureInfo.InvariantCulture));
                             }
+                            else if (Value.StartsWith("{"))//Structs like Vector2
+                            {
+                                object PropertReference = Property.GetValue(LineScript);
+                                string[] ArrayLineContentField = Value.Split(new string[] { "{", ":", " ", "}" }, StringSplitOptions.RemoveEmptyEntries);
+
+                                for (int j = 0; j < ArrayLineContentField.Length; j += 2)
+                                {
+                                    System.Reflection.FieldInfo FieldToSet = PropertReference.GetType().GetField(ArrayLineContentField[j]);
+                                    FieldToSet.SetValue(PropertReference, Convert.ChangeType(ArrayLineContentField[j + 1], FieldToSet.FieldType, CultureInfo.InvariantCulture));
+                                }
+
+                                Property.SetValue(LineScript, PropertReference);
+                            }
                             else
                             {
                                 Property.SetValue(LineScript, Convert.ChangeType(Value, Property.PropertyType, CultureInfo.InvariantCulture));
