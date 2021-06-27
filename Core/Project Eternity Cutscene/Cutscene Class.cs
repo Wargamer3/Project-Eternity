@@ -198,16 +198,20 @@ namespace ProjectEternity.Core.Scripts
             }
 
             #endregion
+        }
 
-            for (int S = 0; S < ScriptCount; S++)
-            {
-                DicActionScript[S].AfterCutsceneLoad();
-            }
+        public void LoadForEditor()
+        {
+            if (!File.Exists("Content/Cutscenes/" + CutscenePath + ".pec"))
+                return;
 
-            for (int D = 0; D < ScriptDataContainer; D++)
-            {
-                ListDataContainer[D].AfterCutsceneLoad();
-            }
+            FileStream FS = new FileStream("Content/Cutscenes/" + CutscenePath + ".pec", FileMode.Open, FileAccess.Read);
+            BinaryReader BR = new BinaryReader(FS);
+
+            Load(BR);
+
+            FS.Close();
+            BR.Close();
         }
 
         public override void Load()
@@ -219,6 +223,16 @@ namespace ProjectEternity.Core.Scripts
             BinaryReader BR = new BinaryReader(FS);
 
             Load(BR);
+
+            for (int S = 0; S < DicActionScript.Count; S++)
+            {
+                DicActionScript[S].AfterCutsceneLoad();
+            }
+
+            for (int D = 0; D < ListDataContainer.Count; D++)
+            {
+                ListDataContainer[D].AfterCutsceneLoad();
+            }
 
             FS.Close();
             BR.Close();

@@ -126,7 +126,7 @@ namespace ProjectEternity.Editors.CutsceneEditor
                 cutsceneViewer.ActiveCutscene.DicCutsceneScript = CutsceneScriptHolder.LoadAllScripts();
             }
 
-            cutsceneViewer.ActiveCutscene.Load();
+            cutsceneViewer.ActiveCutscene.LoadForEditor();
             cutsceneViewer.Init(SelectScript);
         }
     }
