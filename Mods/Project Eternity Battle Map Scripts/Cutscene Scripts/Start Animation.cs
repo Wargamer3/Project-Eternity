@@ -4,10 +4,10 @@ using System.ComponentModel;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Scripts;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-
     public sealed partial class ExtraBattleMapCutsceneScriptHolder
     {
         public class ScriptStartAnimation : BattleMapScript
@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             private string _AnimationPath;
             private float _AnimationSpeed;
-            private Microsoft.Xna.Framework.Vector2 _AnimationPosition;
+            private Vector2 _AnimationPosition;
 
             public ScriptStartAnimation()
                 : this(null)
@@ -36,10 +36,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 IsActive = true;
                 IsDrawn = true;
 
-                AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, new Microsoft.Xna.Framework.Vector2(_AnimationPosition.X * Map.TileSize.X, _AnimationPosition.Y * Map.TileSize.Y), _AnimationSpeed);
+                AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, Vector2.Zero, _AnimationSpeed);
             }
 
-            public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+            public override void Update(GameTime gameTime)
             {
                 if (AnimationSprite != null)
                 {
@@ -55,14 +55,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public override void Draw(CustomSpriteBatch g)
             {
                 if (AnimationSprite != null)
-                    AnimationSprite.Draw(g);
+                {
+                    float PosX = (_AnimationPosition.X - Map.CameraPosition.X) * Map.TileSize.X;
+                    float PosY = (_AnimationPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+
+                    AnimationSprite.Draw(g, new Vector2(PosX, PosY), Color.White);
+                }
             }
 
             public override void Load(BinaryReader BR)
             {
                 AnimationPath = BR.ReadString();
                 AnimationSpeed = BR.ReadSingle();
-                AnimationPosition = new Microsoft.Xna.Framework.Vector2(BR.ReadSingle(), BR.ReadSingle());
+                AnimationPosition = new Vector2(BR.ReadSingle(), BR.ReadSingle());
             }
 
             public override void Save(BinaryWriter BW)
@@ -112,7 +117,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             [CategoryAttribute("Animation behavior"),
             DescriptionAttribute("The Animation position.")]
-            public Microsoft.Xna.Framework.Vector2 AnimationPosition
+            public Vector2 AnimationPosition
             {
                 get
                 {
