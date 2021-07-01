@@ -140,29 +140,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             OnCreateControl();
         }
-        
+
         /// <summary>
         /// Draws the control.
         /// </summary>
         protected override void Draw()
         {
             Thread.Sleep(33);
-            double elapsed = Timer.Elapsed.TotalSeconds;
-            Timer.Restart();
+            if (ActiveMap != null)
+            {
+                double elapsed = Timer.Elapsed.TotalSeconds;
+                Timer.Restart();
 
-            ActiveMap.Update(new GameTime(TimeSpan.FromSeconds(elapsed), TimeSpan.FromSeconds(elapsed)));
+                ActiveMap.Update(new GameTime(TimeSpan.FromSeconds(elapsed), TimeSpan.FromSeconds(elapsed)));
 
-            for (int S = ActiveMap.ListGameScreen.Count - 1; S >= 0; --S)
-                ActiveMap.ListGameScreen[S].Update(new GameTime(TimeSpan.FromSeconds(elapsed), TimeSpan.FromSeconds(elapsed)));
-            // Clear to the default control background color.
-            Color backColor = new Color(BackColor.R, BackColor.G, BackColor.B);
+                for (int S = ActiveMap.ListGameScreen.Count - 1; S >= 0; --S)
+                    ActiveMap.ListGameScreen[S].Update(new GameTime(TimeSpan.FromSeconds(elapsed), TimeSpan.FromSeconds(elapsed)));
+                // Clear to the default control background color.
+                Color backColor = new Color(BackColor.R, BackColor.G, BackColor.B);
 
-            GraphicsDevice.Clear(backColor);
-            
-            if (ViewerIndex == 2)
-                Helper.DrawScripts();
-            else
-                DrawMap();
+                GraphicsDevice.Clear(backColor);
+
+                if (ViewerIndex == 2)
+                    Helper.DrawScripts();
+                else
+                    DrawMap();
+            }
         }
 
         private void DrawMap()
