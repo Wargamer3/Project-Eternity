@@ -45,6 +45,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +55,22 @@
   <ItemGroup>
     <Compile Include="Cutscene Scripts\Add Player.cs" />
     <Compile Include="Cutscene Scripts\Center Camera On Squad.cs" />
+    <Compile Include="Cutscene Scripts\Change Terrain Effect.cs" />
+    <Compile Include="Cutscene Scripts\Selectors\Map Destination Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cutscene Scripts\Selectors\Map Destination Editor.Designer.cs">
+      <DependentUpon>Map Destination Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cutscene Scripts\Selectors\Tileset Origin Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cutscene Scripts\Selectors\Tileset Origin Editor.Designer.cs">
+      <DependentUpon>Tileset Origin Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cutscene Scripts\Selectors\Map Destination Selector.cs" />
+    <Compile Include="Cutscene Scripts\Selectors\Tileset Origin Selector.cs" />
+    <Compile Include="Cutscene Scripts\Selectors\Tileset Selector.cs" />
     <Compile Include="Cutscene Scripts\Spawn Transforming Unit Event Fast.cs" />
     <Compile Include="Cutscene Scripts\Transform Unit.cs" />
     <Compile Include="Cutscene Scripts\Spawn Transforming Unit Fast.cs" />
@@ -143,6 +160,11 @@
       <Name>Project Eternity Visual Novel</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
+      <Name>Project Eternity Base Editor</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\FMOD\FMOD.csproj">
       <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
       <Name>FMOD</Name>
@@ -163,6 +185,14 @@
       <Name>Project Eternity Deathmatch Map</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Cutscene Scripts\Selectors\Map Destination Editor.resx">
+      <DependentUpon>Map Destination Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cutscene Scripts\Selectors\Tileset Origin Editor.resx">
+      <DependentUpon>Tileset Origin Editor.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

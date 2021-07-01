@@ -64,6 +64,14 @@
     <Compile Include="Automatic Skill Activations\Squad Enemy.cs" />
     <Compile Include="Effects\Change Terrain Elevation Effect.cs" />
     <Compile Include="Effects\Change Terrain Effect.cs" />
+    <Compile Include="Effects\Selectors\Tileset Origin Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Effects\Selectors\Tileset Origin Editor.Designer.cs">
+      <DependentUpon>Tileset Origin Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\Selectors\Tileset Origin Selector.cs" />
+    <Compile Include="Effects\Selectors\Tileset Selector.cs" />
     <Compile Include="Skill Requirements\After Attack.cs" />
     <Compile Include="Skill Requirements\After Getting Attacked.cs" />
     <Compile Include="Skill Requirements\After Getting Destroy.cs" />
@@ -83,8 +91,6 @@
     <Compile Include="Skill Requirements\Before Miss.cs" />
     <Compile Include="Skill Requirements\Relationship.cs" />
     <Compile Include="Automatic Skill Activations\All Enemies.cs" />
-    <Compile Include="Effects\Tileset Origin Selector.cs" />
-    <Compile Include="Effects\Tileset Selector.cs" />
     <Compile Include="Manuel Skill Activations\Ally.cs" />
     <Compile Include="Manuel Skill Activations\Ally Squad.cs" />
     <Compile Include="Manual Skill Activation Deathmatch.cs" />
@@ -105,19 +111,8 @@
     <Compile Include="Skill Requirements\VS Pilot.cs" />
     <Compile Include="Skill Requirements\VS Unit.cs" />
     <Compile Include="Skill Requirements\Within Attack Range.cs" />
-    <Compile Include="Tileset Origin Editor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Tileset Origin Editor.Designer.cs">
-      <DependentUpon>Tileset Origin Editor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Manuel Skill Activations\Everyone.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Tileset Origin Editor.resx">
-      <DependentUpon>Tileset Origin Editor.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
@@ -155,6 +150,11 @@
       <Name>Project Eternity Deathmatch Map</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Effects\Selectors\Tileset Origin Editor.resx">
+      <DependentUpon>Tileset Origin Editor.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

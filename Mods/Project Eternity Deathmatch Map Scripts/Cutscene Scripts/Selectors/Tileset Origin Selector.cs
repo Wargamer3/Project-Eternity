@@ -7,6 +7,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class TilesetOriginSelector : UITypeEditor
     {
+        public struct ChangeTerrainAttribute
+        {
+            public string Tileset;
+            public Microsoft.Xna.Framework.Point TileSize;
+            public Microsoft.Xna.Framework.Rectangle Origin;
+
+            public ChangeTerrainAttribute(string Tileset, Microsoft.Xna.Framework.Point TileSize, Microsoft.Xna.Framework.Rectangle Origin)
+            {
+                this.Tileset = Tileset;
+                this.TileSize = TileSize;
+                this.Origin = Origin;
+            }
+
+            public override string ToString()
+            {
+                return Origin.ToString();
+            }
+        }
+
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.Modal;
@@ -18,14 +37,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 provider.GetService(typeof(IWindowsFormsEditorService));
             if (svc != null)
             {
-                ChangeTerrainEffect.ChangeTerrainAttribute TerrainAttirubte = (ChangeTerrainEffect.ChangeTerrainAttribute)value;
+                ChangeTerrainAttribute TerrainAttirubte = (ChangeTerrainAttribute)value;
                 TilesetOriginEditor Editor = new TilesetOriginEditor();
                 Editor.TilesetViewer.Preload();
                 Editor.TilesetViewer.InitTileset(TerrainAttirubte.Tileset, TerrainAttirubte.TileSize);
 
                 if (Editor.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-
+                    TerrainAttirubte.Origin.X = Editor.TilesetViewer.ActiveTile.X;
+                    TerrainAttirubte.Origin.Y = Editor.TilesetViewer.ActiveTile.Y;
                 }
             }
             return value;

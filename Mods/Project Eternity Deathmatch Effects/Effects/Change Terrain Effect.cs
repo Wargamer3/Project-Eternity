@@ -5,31 +5,13 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static ProjectEternity.GameScreens.DeathmatchMapScreen.TilesetOriginSelector;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public sealed class ChangeTerrainEffect : DeathmatchEffect
     {
         public static string Name = "Change Terrain";
-
-        public struct ChangeTerrainAttribute
-        {
-            public string Tileset;
-            public Point TileSize;
-            public Rectangle Origin;
-
-            public ChangeTerrainAttribute(string Tileset, Point TileSize, Rectangle Origin)
-            {
-                this.Tileset = Tileset;
-                this.TileSize = TileSize;
-                this.Origin = Origin;
-            }
-
-            public override string ToString()
-            {
-                return Origin.ToString();
-            }
-        }
 
         private ChangeTerrainAttribute TerrainAttribute;
         private Texture2D sprTileset;

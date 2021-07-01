@@ -29,25 +29,50 @@
         private void InitializeComponent()
         {
             this.TilesetViewer = new ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl();
+            this.btnConfirm = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TilesetViewer
             // 
-            this.TilesetViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TilesetViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TilesetViewer.Location = new System.Drawing.Point(0, 0);
             this.TilesetViewer.Name = "TilesetViewer";
             this.TilesetViewer.Size = new System.Drawing.Size(305, 298);
             this.TilesetViewer.TabIndex = 0;
-            this.TilesetViewer.Text = "tilesetViewerControl1";
+            this.TilesetViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TilesetViewer_MouseClick);
+            // 
+            // btnConfirm
+            // 
+            this.btnConfirm.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnConfirm.Location = new System.Drawing.Point(137, 304);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(75, 23);
+            this.btnConfirm.TabIndex = 1;
+            this.btnConfirm.Text = "Confirm";
+            this.btnConfirm.UseVisualStyleBackColor = true;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(218, 304);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 2;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // TilesetOriginEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(305, 298);
+            this.ClientSize = new System.Drawing.Size(305, 332);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.TilesetViewer);
             this.Name = "TilesetOriginEditor";
-            this.Text = "Form1";
+            this.Text = "Tileset Origin Editor";
             this.ResumeLayout(false);
 
         }
@@ -55,5 +80,7 @@
         #endregion
 
         public BattleMapScreen.TilesetViewerControl TilesetViewer;
+        private System.Windows.Forms.Button btnConfirm;
+        private System.Windows.Forms.Button btnCancel;
     }
 }

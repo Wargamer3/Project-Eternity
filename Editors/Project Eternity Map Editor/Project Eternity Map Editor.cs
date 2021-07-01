@@ -285,7 +285,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMaps }, "Maps/Deathmatch Maps/", new string[] { ".pem" }, typeof(ProjectEternityMapEditor)),
+                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathDeathmatchMaps }, "Maps/Deathmatch Maps/", new string[] { ".pem" }, typeof(ProjectEternityMapEditor)),
                 new EditorInfo(new string[] { GUIRootPathMapBGM }, "Maps/BGM/", new string[] { ".mp3" }, typeof(ProjectEternityMusicPlayerEditor), false)
             };
 

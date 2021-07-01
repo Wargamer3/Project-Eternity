@@ -67,6 +67,7 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathVisualNovelPortraits = "Visual Novels/Portraits";
         public const string GUIRootPathVisualNovelBackgrounds = "Visual Novels/Backgrounds";
         public const string GUIRootPathMaps = "Maps";
+        public const string GUIRootPathDeathmatchMaps = "Deathmatch/Maps";
         public const string GUIRootPathWorldMaps = "Maps/World Maps";
         public const string GUIRootPathAdventureMaps = "Maps/Adventure Maps";
         public const string GUIRootPathAdventureRessources = "Maps/Adventure Ressources";

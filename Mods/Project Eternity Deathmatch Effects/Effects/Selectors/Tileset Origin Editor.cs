@@ -8,5 +8,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             InitializeComponent();
         }
+
+        private void TilesetViewer_MouseClick(object sender, MouseEventArgs e)
+        {
+            TilesetViewer.ActiveTile = new Microsoft.Xna.Framework.Point(e.X, e.Y);
+        }
     }
 }
