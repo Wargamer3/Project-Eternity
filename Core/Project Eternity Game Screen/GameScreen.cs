@@ -62,8 +62,8 @@ namespace ProjectEternity.GameScreens
         public void PushScreen(GameScreen Screen)
         {
             Screen.ListGameScreen = ListGameScreen;
-            Screen.Load();
             ListGameScreen.Insert(0, Screen);
+            Screen.Load();//Load after the insertion so that Load can use PushScreen
         }
 
         protected void RemoveWithoutUnloading(GameScreen Screen)
