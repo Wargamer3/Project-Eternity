@@ -148,7 +148,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.BattleMenuCursorIndexSecond == 0)
                         {
-                            TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, ActiveSquad.Position, ActiveSquad.CurrentMovement, true);
+                            TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, ActiveSquad.Position, ActiveSquad.ArrayMapSize, ActiveSquad.CurrentMovement, true);
                             Map.WeaponIndexOld = TargetSquad.CurrentLeader.AttackIndex;
                             TargetSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
                             Map.BattleMenuStage = BattleMenuStages.ChooseAttack;
@@ -355,7 +355,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             if (Map.BattleMenuCursorIndexSecond == 0)
                             {
-                                TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, ActiveSquad.Position, ActiveSquad.CurrentMovement, TargetSquad.CanMove);
+                                TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, ActiveSquad.Position, ActiveSquad.ArrayMapSize, ActiveSquad.CurrentMovement, TargetSquad.CanMove);
 
                                 Map.WeaponIndexOld = TargetSquad.CurrentLeader.AttackIndex;
                                 TargetSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.

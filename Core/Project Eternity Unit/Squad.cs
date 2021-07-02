@@ -39,6 +39,7 @@ namespace ProjectEternity.Core.Units
 
         public override int Width { get { return CurrentLeader.SpriteMap.Width; } }
         public override int Height { get { return CurrentLeader.SpriteMap.Height; } }
+        public override bool[,] ArrayMapSize { get { return CurrentLeader.UnitStat.ArrayMapSize; } }
         public override bool IsActive { get { return (CurrentLeader != null || IsEventSquad) && !IsDead; } }
 
         /// <summary>

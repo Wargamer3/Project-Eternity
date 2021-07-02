@@ -16,6 +16,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool IsActive => throw new System.NotImplementedException();
 
+        public override bool[,] ArrayMapSize { get { return new bool[,] { { true } }; } }
+
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
         {
             throw new System.NotImplementedException();

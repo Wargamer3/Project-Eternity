@@ -450,24 +450,24 @@ namespace ProjectEternity.Core.Units
 
         public abstract void DoInit();
 
-        public void UpdateAllAttacks(Vector3 StartPosition, Vector3 TargetPosition, string TargetMovementType, bool CanMove)
+        public void UpdateAllAttacks(Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
             for (int A = 0; A < ListAttack.Count; A++)
             {
                 if (!ListAttack[A].CanAttack)
                 {
-                    ListAttack[A].UpdateAttack(this, StartPosition, TargetPosition, TargetMovementType, CanMove);
+                    ListAttack[A].UpdateAttack(this, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove);
                 }
             }
         }
 
-        public void UpdateNonMAPAttacks(Vector3 StartPosition, Vector3 TargetPosition, string TargetMovementType, bool CanMove)
+        public void UpdateNonMAPAttacks(Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
             for (int A = 0; A < ListAttack.Count; A++)
             {
                 if (ListAttack[A].Pri != WeaponPrimaryProperty.MAP)
                 {
-                    ListAttack[A].UpdateAttack(this, StartPosition, TargetPosition, TargetMovementType, CanMove);
+                    ListAttack[A].UpdateAttack(this, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove);
                 }
                 else
                 {

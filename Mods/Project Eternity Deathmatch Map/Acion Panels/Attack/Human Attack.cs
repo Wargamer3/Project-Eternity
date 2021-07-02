@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             case BattleMenuChoices.Action:
                                 if (ActiveSquad.UnitsAliveInSquad == 1)
                                 {
-                                    ActiveSquad.CurrentLeader.UpdateNonMAPAttacks(ActiveSquad.Position, TargetSquad.Position, TargetSquad.CurrentMovement, ActiveSquad.CanMove);
+                                    ActiveSquad.CurrentLeader.UpdateNonMAPAttacks(ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, ActiveSquad.CanMove);
 
                                     ActiveSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
                                     Map.BattleMenuStage = BattleMenuStages.ChooseAttack;
@@ -441,7 +441,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.DisableAllAttacks();
                             ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.UpdateAllAttacks(
                                 ActiveSquadSupport.ActiveSquadSupport.Position,
-                                TargetSquad.Position, TargetSquad.CurrentMovement,
+                                TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement,
                                 ActiveSquadSupport.ActiveSquadSupport.CanMove);
 
                             Map.WeaponIndexOld = ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex;

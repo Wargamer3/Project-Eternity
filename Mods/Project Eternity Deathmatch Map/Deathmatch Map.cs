@@ -631,7 +631,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         continue;
 
                     CurrentUnit.UpdateAllAttacks(StartPosition, ListPlayer[P].ListSquad[U].Position,
-                            ListPlayer[P].ListSquad[U].CurrentMovement, CanMove);
+                            ListPlayer[P].ListSquad[U].ArrayMapSize, ListPlayer[P].ListSquad[U].CurrentMovement, CanMove);
                 }
             }
         }

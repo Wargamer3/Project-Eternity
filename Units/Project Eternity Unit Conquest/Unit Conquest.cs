@@ -16,6 +16,7 @@ namespace ProjectEternity.Core.Units.Conquest
     {
         public override int Width { get { return Unit.SpriteMap.Width; } }
         public override int Height { get { return Unit.SpriteMap.Height; } }
+        public override bool[,] ArrayMapSize { get { return Unit.UnitStat.ArrayMapSize; } }
         public override bool IsActive { get { return true; } }
 
         public UnitConquest Unit;

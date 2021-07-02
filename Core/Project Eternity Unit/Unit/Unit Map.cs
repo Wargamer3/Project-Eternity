@@ -8,6 +8,7 @@ namespace ProjectEternity.Core.Units
 
         public override int Width { get { return ActiveUnit.SpriteMap.Width; } }
         public override int Height { get { return ActiveUnit.SpriteMap.Height; } }
+        public override bool[,] ArrayMapSize { get { return ActiveUnit.UnitStat.ArrayMapSize; } }
         public override bool IsActive { get { return ActiveUnit.HP > 0; } }
 
         public UnitMap(Unit ActiveUnit)

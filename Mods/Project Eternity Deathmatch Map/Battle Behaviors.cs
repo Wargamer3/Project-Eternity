@@ -133,7 +133,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (ListPlayer[P].ListSquad[TargetSelect].CurrentLeader == null)
                         continue;
 
-                    ActiveWeapon.UpdateAttack(ActiveSquad.CurrentLeader, Position, ListPlayer[P].ListSquad[TargetSelect].Position, ListPlayer[P].ListSquad[TargetSelect].CurrentMovement, CanMove);
+                    ActiveWeapon.UpdateAttack(ActiveSquad.CurrentLeader, Position, ListPlayer[P].ListSquad[TargetSelect].Position,
+                        ListPlayer[P].ListSquad[TargetSelect].ArrayMapSize, ListPlayer[P].ListSquad[TargetSelect].CurrentMovement, CanMove);
 
                     //Make sure you can use it.
                     if (ActiveWeapon.CanAttack)
@@ -222,7 +223,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         Attack PLAAttack = ActiveSquad.CurrentWingmanA.ListAttack[ActiveSquad.CurrentWingmanA.PLAAttack];
 
-                        PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, OppositeSquad.Position, OppositeSquad.CurrentMovement, true);
+                        PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, OppositeSquad.Position, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentMovement, true);
 
                         if (PLAAttack.CanAttack)
                         {
@@ -244,7 +245,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         Attack PLAAttack = ActiveSquad.CurrentWingmanB.ListAttack[ActiveSquad.CurrentWingmanA.PLAAttack];
 
-                        PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, OppositeSquad.Position, OppositeSquad.CurrentMovement, true);
+                        PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, OppositeSquad.Position, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentMovement, true);
 
                         if (PLAAttack.CanAttack)
                         {
@@ -270,7 +271,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         
                         if (OppositeSquad.CurrentWingmanA != null)
                         {
-                            PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, OppositeSquad.Position, OppositeSquad.CurrentMovement, true);
+                            PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, OppositeSquad.Position, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentMovement, true);
 
                             if (PLAAttack.CanAttack)
                             {
@@ -295,7 +296,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         
                         if (OppositeSquad.CurrentWingmanB != null)
                         {
-                            PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, OppositeSquad.Position, OppositeSquad.CurrentMovement, true);
+                            PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, OppositeSquad.Position, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentMovement, true);
 
                             if (PLAAttack.CanAttack)
                             {
@@ -880,7 +881,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Try to find a weapon to counter attack.
                 int DamageOld = 0;
 
-                DefenderUnit.UpdateNonMAPAttacks(DefenderSquad.Position, AttackerSquad.Position, AttackerSquad.CurrentMovement, true);
+                DefenderUnit.UpdateNonMAPAttacks(DefenderSquad.Position, AttackerSquad.Position, AttackerSquad.ArrayMapSize, AttackerSquad.CurrentMovement, true);
 
                 if (!UsePLAWeapon)
                 {

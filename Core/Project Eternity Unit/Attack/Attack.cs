@@ -216,9 +216,9 @@ namespace ProjectEternity.Core.Attacks
                 ListQuoteSet.Add(BR.ReadString());
         }
 
-        public void UpdateAttack(Unit CurrentUnit, Vector3 StartPosition, Vector3 TargetPosition, string TargetMovementType, bool CanMove)
+        public void UpdateAttack(Unit CurrentUnit, Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
-            if (CanAttackTarget(CurrentUnit, StartPosition, TargetPosition, TargetMovementType, CanMove))
+            if (CanAttackTarget(CurrentUnit, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove))
             {
                 _CanAttack = true;
             }
@@ -233,7 +233,7 @@ namespace ProjectEternity.Core.Attacks
             _CanAttack = false;
         }
 
-        private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, Vector3 TargetPosition, string TargetMovementType, bool CanMove)
+        private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
             //If the Mech have enough EN to use the weapon and the weapon have enough ammo to fire.
             if (CurrentUnit.EN < ENCost || (Ammo <= 0 && MaxAmmo > 0)
@@ -255,15 +255,36 @@ namespace ProjectEternity.Core.Attacks
             {
                 if (Pri == WeaponPrimaryProperty.MAP)
                 {
-                    return MAPAttributes.CanAttackTarget(StartPosition, TargetPosition, MinDistance, MaxDistance);
+                    for (int X = 0; X < ArrayTargetMapSize.GetLength(0); X++)
+                    {
+                        for (int Y = 0; Y < ArrayTargetMapSize.GetLength(1); Y++)
+                        {
+                            if (ArrayTargetMapSize[X, Y])
+                            {
+                                if (MAPAttributes.CanAttackTarget(StartPosition, new Vector3(TargetPosition.X + X, TargetPosition.Y + Y, TargetPosition.Z), MinDistance, MaxDistance))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    float Distance = Math.Abs(StartPosition.X - TargetPosition.X) + Math.Abs(StartPosition.Y - TargetPosition.Y);
-                    //If a Unit is in range.
-                    if (Distance >= MinDistance && Distance <= MaxDistance)
+                    for (int X = 0; X < ArrayTargetMapSize.GetLength(0); X++)
                     {
-                        return true;
+                        for (int Y = 0; Y < ArrayTargetMapSize.GetLength(1); Y++)
+                        {
+                            if (ArrayTargetMapSize[X, Y])
+                            {
+                                float Distance = Math.Abs(StartPosition.X - (TargetPosition.X + X)) + Math.Abs(StartPosition.Y - (TargetPosition.Y + Y));
+                                //If a Unit is in range.
+                                if (Distance >= MinDistance && Distance <= MaxDistance)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
                     }
                 }
             }

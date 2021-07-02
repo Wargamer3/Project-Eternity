@@ -28,6 +28,7 @@ namespace ProjectEternity.Core.Units
         public List<string> ListAllowedTransportUnitName;
         public abstract int Width { get; }
         public abstract int Height { get; }
+        public abstract bool[,] ArrayMapSize { get; }
         public abstract bool IsActive { get; }//Decide if it can be updated or drawn.
 
         public void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, Color UnitColor)
@@ -98,8 +99,10 @@ namespace ProjectEternity.Core.Units
     public class StandaloneUnitMapCompontent : UnitMapComponent
     {
         public AnimatedSprite SpriteMap;
+
         public override int Width { get { return SpriteMap.SpriteWidth; } }
         public override int Height { get { return SpriteMap.SpriteHeight; } }
+        public override bool[,] ArrayMapSize { get { return new bool[,] { { true } }; } }
         public override bool IsActive { get { return true; } }
 
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
