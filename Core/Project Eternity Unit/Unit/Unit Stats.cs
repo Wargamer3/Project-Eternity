@@ -63,7 +63,7 @@ namespace ProjectEternity.Core.Units
         public Dictionary<string, UnitLinkTypes> DicUnitLink;//List which Units it can link to and how.
 
         public string Size;
-        private bool[,] ArrayMapSize;//Custom mask for actual place a Unit is taking.
+        public bool[,] ArrayMapSize;//Custom mask for actual place a Unit is taking.
 
         public List<Attack> ListAttack;
         public int PLAAttack;

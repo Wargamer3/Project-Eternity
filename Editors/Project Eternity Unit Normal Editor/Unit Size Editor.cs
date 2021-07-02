@@ -163,18 +163,21 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         {
             txtWidth.Enabled = false;
             txtHeight.Enabled = false;
+            DrawUnitSize();
         }
 
         private void rbSizeOnly_CheckedChanged(object sender, EventArgs e)
         {
-            txtWidth.Enabled = false;
-            txtHeight.Enabled = false;
+            txtWidth.Enabled = true;
+            txtHeight.Enabled = true;
+            DrawUnitSize();
         }
 
         private void rbCustomSizeBox_CheckedChanged(object sender, EventArgs e)
         {
             txtWidth.Enabled = true;
             txtHeight.Enabled = true;
+            DrawUnitSize();
         }
     }
 }

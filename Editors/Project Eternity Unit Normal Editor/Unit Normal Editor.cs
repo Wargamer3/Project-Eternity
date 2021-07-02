@@ -416,6 +416,38 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             else if (LoadedUnit.Size == "SS")
                 rbSizeSS.Checked = true;
 
+            if (LoadedUnit.UnitStat.ArrayMapSize.GetLength(0) == 1 && LoadedUnit.UnitStat.ArrayMapSize.GetLength(1) == 1)
+            {
+                frmUnitSizeEditor.rbNone.Checked = true;
+            }
+            else
+            {
+                frmUnitSizeEditor.txtWidth.Value = LoadedUnit.UnitStat.ArrayMapSize.GetLength(0);
+                frmUnitSizeEditor.txtHeight.Value = LoadedUnit.UnitStat.ArrayMapSize.GetLength(1);
+                bool AllTrue = true;
+
+                for (int X = 0; X < LoadedUnit.UnitStat.ArrayMapSize.GetLength(0); X++)
+                {
+                    for (int Y = 0; Y < LoadedUnit.UnitStat.ArrayMapSize.GetLength(1); Y++)
+                    {
+                        if (!LoadedUnit.UnitStat.ArrayMapSize[X, Y])
+                        {
+                            AllTrue = false;
+                        }
+                        frmUnitSizeEditor.ListUnitSize[X][Y] = LoadedUnit.UnitStat.ArrayMapSize[X, Y];
+                    }
+                }
+
+                if (AllTrue)
+                {
+                    frmUnitSizeEditor.rbSizeOnly.Checked = true;
+                }
+                else
+                {
+                    frmUnitSizeEditor.rbCustomSizeBox.Checked = true;
+                }
+            }
+
             #endregion
         }
 
