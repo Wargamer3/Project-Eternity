@@ -155,7 +155,9 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 lstAttackContexts.Items.Add(ActiveContext.ContextName);
             }
 
+
             lstAttackAnimations.SelectedIndex = -1;
+            lstAttackContexts.SelectedIndex = 0;
         }
 
         private void lstAttack_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -198,6 +200,8 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             txtAttackOriginCustomType.Text = ActiveContext.AttackOriginCustomType;
             txtAttackTargetCustomType.Text = ActiveContext.AttackTargetCustomType;
             txtAttackContextWeight.Value = ActiveContext.Weight;
+
+            lstAttackAnimations.SelectedIndex = 0;
         }
 
         private void txtAttackContextName_TextChanged(object sender, EventArgs e)
