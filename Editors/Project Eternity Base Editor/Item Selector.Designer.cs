@@ -47,7 +47,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(105, 332);
+            this.btnCancel.Location = new System.Drawing.Point(235, 332);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(85, 23);
             this.btnCancel.TabIndex = 2;
@@ -60,10 +60,12 @@
             this.lvItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvItems.HideSelection = false;
             this.lvItems.Location = new System.Drawing.Point(12, 12);
             this.lvItems.Name = "lvItems";
-            this.lvItems.Size = new System.Drawing.Size(178, 314);
+            this.lvItems.Size = new System.Drawing.Size(308, 314);
             this.lvItems.TabIndex = 3;
+            this.lvItems.TileSize = new System.Drawing.Size(300, 30);
             this.lvItems.UseCompatibleStateImageBehavior = false;
             this.lvItems.View = System.Windows.Forms.View.Tile;
             this.lvItems.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lvItems_ItemSelectionChanged);
@@ -72,7 +74,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(202, 367);
+            this.ClientSize = new System.Drawing.Size(332, 367);
             this.Controls.Add(this.lvItems);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAccept);
