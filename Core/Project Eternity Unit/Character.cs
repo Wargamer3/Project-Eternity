@@ -275,7 +275,8 @@ namespace ProjectEternity.Core.Characters
             DicAttackQuoteSet = new Dictionary<string, QuoteSet>();
         }
 
-        public Character(string CharacterPath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public Character(string CharacterPath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
             : this()
         {
             FileStream FS = new FileStream("Content/Characters/" + CharacterPath + ".pec", FileMode.Open, FileAccess.Read);
@@ -311,7 +312,7 @@ namespace ProjectEternity.Core.Characters
 
             if (!string.IsNullOrWhiteSpace(SlaveName) && SlaveName != "None")
             {
-                Slave = new Character(SlaveName, Content, DicRequirement, DicEffect);
+                Slave = new Character(SlaveName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
 
             Int32 SpiritListCount = BR.ReadInt32();
@@ -319,7 +320,7 @@ namespace ProjectEternity.Core.Characters
 
             for (int S = 0; S < SpiritListCount; ++S)
             {
-                ArrayPilotSpirit[S] = new ManualSkill("Content/Characters/Spirits/" + BR.ReadString() + ".pecs", DicRequirement, DicEffect);
+                ArrayPilotSpirit[S] = new ManualSkill("Content/Characters/Spirits/" + BR.ReadString() + ".pecs", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 ArrayPilotSpirit[S].SPCost = BR.ReadInt32();
                 ArrayPilotSpirit[S].LevelRequirement = BR.ReadInt32();
             }
@@ -332,7 +333,7 @@ namespace ProjectEternity.Core.Characters
             for (int S = 0; S < SkillListCount; ++S)
             {
                 string RelativePath = BR.ReadString();
-                ArrayPilotSkill[S] = new BaseAutomaticSkill("Content/Characters/Skills/" + RelativePath + ".pecs", RelativePath, DicRequirement, DicEffect);
+                ArrayPilotSkill[S] = new BaseAutomaticSkill("Content/Characters/Skills/" + RelativePath + ".pecs", RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 ArrayPilotSkillLocked[S] = BR.ReadBoolean();
                 Int32 SkillLevelsCount = BR.ReadInt32();
                 ArrayPilotSkillLevels[S] = new SkillLevels(BR, SkillLevelsCount);
@@ -345,7 +346,7 @@ namespace ProjectEternity.Core.Characters
             {
                 string RelationshipBonusName = BR.ReadString();
                 int RelationshipLevel = BR.ReadInt32();
-                ArrayRelationshipBonus[S] = new BaseAutomaticSkill("Content/Characters/Relationships/" + RelationshipBonusName + ".pecr", RelationshipBonusName, DicRequirement, DicEffect);
+                ArrayRelationshipBonus[S] = new BaseAutomaticSkill("Content/Characters/Relationships/" + RelationshipBonusName + ".pecr", RelationshipBonusName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 ArrayRelationshipBonus[S].CurrentLevel = RelationshipLevel;
 
@@ -528,28 +529,30 @@ namespace ProjectEternity.Core.Characters
             }
         }
 
-        public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             for (int S = 0; S < ArrayPilotSpirit.Length; ++S)
             {
-                ArrayPilotSpirit[S].ReloadSkills(DicRequirement, DicEffect, DicTarget);
+                ArrayPilotSpirit[S].ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
 
             for (int S = 0; S < ArrayPilotSkill.Length; ++S)
             {
-                ArrayPilotSkill[S].ReloadSkills(DicRequirement, DicEffect);
+                ArrayPilotSkill[S].ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
 
             for (int S = 0; S < ArrayRelationshipBonus.Length; ++S)
             {
-                ArrayRelationshipBonus[S].ReloadSkills(DicRequirement, DicEffect);
+                ArrayRelationshipBonus[S].ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 
-        public static Character LoadCharacterWithProgression(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public static Character LoadCharacterWithProgression(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             string CharacterFullName = BR.ReadString();
-            Character NewCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect);
+            Character NewCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             NewCharacter.Level = BR.ReadInt32();
             NewCharacter.EXP = BR.ReadInt32();
@@ -573,7 +576,8 @@ namespace ProjectEternity.Core.Characters
             Effects.QuickSave(BW);
         }
 
-        public void QuickLoad(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public void QuickLoad(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             EXP = BR.ReadInt32();
             Kills = BR.ReadInt32();
@@ -582,13 +586,14 @@ namespace ProjectEternity.Core.Characters
             PilotPoints = BR.ReadInt32();
             SP = BR.ReadInt32();
 
-            Effects.QuickLoad(BR, DicRequirement, DicEffect);
+            Effects.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
-        public static Character QuickLoadFromFile(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public static Character QuickLoadFromFile(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            Character NewCharacter = new Character(BR.ReadString(), Content, DicRequirement, DicEffect);
-            NewCharacter.QuickLoad(BR, DicRequirement, DicEffect);
+            Character NewCharacter = new Character(BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            NewCharacter.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             return NewCharacter;
         }
 

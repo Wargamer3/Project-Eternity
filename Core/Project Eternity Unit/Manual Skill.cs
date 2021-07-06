@@ -2,16 +2,14 @@
 using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Core.Skill
 {
     public abstract class ManualSkillTarget
     {
-        public static Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
-
         public readonly string TargetType;
         public readonly bool MustBeUsedAlone;
 
@@ -36,7 +34,7 @@ namespace ProjectEternity.Core.Skill
             }
         }
 
-        public static ManualSkillTarget LoadCopy(BinaryReader BR)
+        public static ManualSkillTarget LoadCopy(BinaryReader BR, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             string TargetType = BR.ReadString();
 
@@ -45,30 +43,41 @@ namespace ProjectEternity.Core.Skill
             return NewManualSkillTarget;
         }
 
-        public static void LoadAllSkillRequirement()
+        public static Dictionary<string, ManualSkillTarget> LoadAllTargetTypes()
         {
-            DicManualSkillTarget.Clear();
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories));
 
-            LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories));
+            return DicManualSkillTarget;
         }
 
-        public static void LoadFromAssembly(Assembly ActiveAssembly, params object[] Args)
+        public static Dictionary<string, ManualSkillTarget> LoadFromAssembly(Assembly ActiveAssembly, params object[] Args)
         {
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
+
             List<ManualSkillTarget> ListActivation = ReflectionHelper.GetObjectsFromBaseTypes<ManualSkillTarget>(typeof(ManualSkillTarget), ActiveAssembly.GetTypes(), Args);
 
             foreach (ManualSkillTarget Instance in ListActivation)
             {
                 DicManualSkillTarget.Add(Instance.TargetType, Instance);
             }
+
+            return DicManualSkillTarget;
         }
 
-        public static void LoadFromAssemblyFiles(string[] ArrayFilePath, params object[] Args)
+        public static Dictionary<string, ManualSkillTarget> LoadFromAssemblyFiles(string[] ArrayFilePath, params object[] Args)
         {
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
+
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
                 Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
-                LoadFromAssembly(ActiveAssembly, Args);
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveRequirement in LoadFromAssembly(ActiveAssembly, Args))
+                {
+                    DicManualSkillTarget.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
             }
+
+            return DicManualSkillTarget;
         }
     }
 
@@ -92,7 +101,8 @@ namespace ProjectEternity.Core.Skill
 
         }
 
-        public ManualSkill(string SkillPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public ManualSkill(string SkillPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             _CanActivate = false;
             IsUnlocked = false;
@@ -104,14 +114,14 @@ namespace ProjectEternity.Core.Skill
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
             Range = BR.ReadInt32();
-            Target = ManualSkillTarget.LoadCopy(BR);
+            Target = ManualSkillTarget.LoadCopy(BR, DicManualSkillTarget);
 
             Description = BR.ReadString();
 
             int ListEffectCount = BR.ReadInt32();
             ListEffect = new List<BaseEffect>(ListEffectCount);
             for (int i = 0; i < ListEffectCount; i++)
-                ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect));
+                ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
 
             FS.Close();
             BR.Close();
@@ -127,10 +137,10 @@ namespace ProjectEternity.Core.Skill
             _CanActivate = Target.CanActivateOnTarget(this);
         }
 
-        public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            Target = DicTarget[Target.TargetType].Copy();
-
+            Target = DicManualSkillTarget[Target.TargetType].Copy();
 
             for (int E = 0; E < ListEffect.Count; E++)
             {
@@ -140,7 +150,7 @@ namespace ProjectEternity.Core.Skill
 
                 foreach (BaseAutomaticSkill ActiveFollowingSkill in ListEffect[E].ListFollowingSkill)
                 {
-                    ActiveFollowingSkill.ReloadSkills(DicRequirement, DicEffect);
+                    ActiveFollowingSkill.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 }
             }
         }

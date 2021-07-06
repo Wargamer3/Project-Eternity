@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             UnitSpawner.LeaderToSpawn = new ScriptUnit(Map);
                             UnitSpawner.LeaderToSpawn.OverrideUnit(ActiveUnit);
-                            ActiveUnit.ReloadSkills(Map.DicUnitType[ActiveUnit.UnitTypeName], Map.DicRequirement, Map.DicEffect, Core.Skill.ManualSkillTarget.DicManualSkillTarget);
+                            ActiveUnit.ReloadSkills(Map.DicUnitType[ActiveUnit.UnitTypeName], Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
                             break;
                         }
                     }

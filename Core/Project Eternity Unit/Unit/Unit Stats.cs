@@ -133,7 +133,8 @@ namespace ProjectEternity.Core.Units
             this.ArrayMapSize = ArrayMapSize;
         }
 
-        public UnitStats(string Name, BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitStats(string Name, BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : this()
         {
             this.Name = Name;
@@ -189,11 +190,11 @@ namespace ProjectEternity.Core.Units
 
                 if (IsExternal)
                 {
-                    NewAttack = new Attack(AttackName, DicRequirement, DicEffect);
+                    NewAttack = new Attack(AttackName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 }
                 else
                 {
-                    NewAttack = new Attack(BR, AttackName, DicRequirement, DicEffect);
+                    NewAttack = new Attack(BR, AttackName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 }
 
                 NewAttack.Ammo = NewAttack.MaxAmmo;
@@ -216,11 +217,12 @@ namespace ProjectEternity.Core.Units
             for (int A = ListAbilityCount - 1; A >= 0; --A)
             {
                 string RelativePath = BR.ReadString();
-                ArrayUnitAbility[A] = new BaseAutomaticSkill("Content/Units/Abilities/" + RelativePath + ".pes", RelativePath, DicRequirement, DicEffect);
+                ArrayUnitAbility[A] = new BaseAutomaticSkill("Content/Units/Abilities/" + RelativePath + ".pes", RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 
-        public UnitStats(string Name, IniFile UnitFile, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitStats(string Name, IniFile UnitFile, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : this()
         {
             this.Name = Name;
@@ -276,7 +278,7 @@ namespace ProjectEternity.Core.Units
             foreach (KeyValuePair<string, string> ActiveField in UnitFile.ReadHeader("Attacks"))
             {
                 int A = Convert.ToInt32(ActiveField.Key.Substring(7));
-                Attack NewAttack = new Attack(ActiveField.Value, DicRequirement, DicEffect);
+                Attack NewAttack = new Attack(ActiveField.Value, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 NewAttack.Ammo = NewAttack.MaxAmmo;
                 if (NewAttack.Pri == WeaponPrimaryProperty.PLA)
                     PLAAttack = A;
@@ -302,7 +304,7 @@ namespace ProjectEternity.Core.Units
             List<BaseAutomaticSkill> ListAbility = new List<BaseAutomaticSkill>();
             foreach (KeyValuePair<string, string> ActiveField in UnitFile.ReadHeader("Abilities"))
             {
-                ListAbility.Add(new BaseAutomaticSkill("Content/Units/Abilities/" + ActiveField.Value + ".pes", ActiveField.Value, DicRequirement, DicEffect));
+                ListAbility.Add(new BaseAutomaticSkill("Content/Units/Abilities/" + ActiveField.Value + ".pes", ActiveField.Value, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             }
 
             ArrayUnitAbility = ListAbility.ToArray();

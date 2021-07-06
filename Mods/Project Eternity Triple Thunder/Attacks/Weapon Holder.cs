@@ -46,16 +46,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public void ChangeMap(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public void ChangeMap(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             List<string> ListWeaponName = new List<string>(DicWeaponByName.Keys);
             for (int W = 0; W < ListWeaponName.Count; ++W)
             {
-                DicWeaponByName[ListWeaponName[W]] = new Weapon(ListWeaponName[W], DicRequirement, DicEffect);
+                DicWeaponByName[ListWeaponName[W]] = new Weapon(ListWeaponName[W], DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             for (int W = 0; W < ListActiveSecondaryWeapon.Count; ++W)
             {
-                ListActiveSecondaryWeapon[W] = new Weapon(ListActiveSecondaryWeapon[W].Name, DicRequirement, DicEffect);
+                ListActiveSecondaryWeapon[W] = new Weapon(ListActiveSecondaryWeapon[W].Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             for (int W = 0; W < ListActivePrimaryWeapon.Count; ++W)
             {

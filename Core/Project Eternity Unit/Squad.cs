@@ -246,11 +246,12 @@ namespace ProjectEternity.Core.Units
                 IsDead = true;
         }
 
-        public void ReloadSkills(Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        public void ReloadSkills(Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             for (int U = 0; U < ArrayUnit.Length; ++U)
             {
-                ArrayUnit[U].ReloadSkills(DicUnitType[ArrayUnit[U].UnitTypeName], DicRequirement, DicEffect, DicTarget);
+                ArrayUnit[U].ReloadSkills(DicUnitType[ArrayUnit[U].UnitTypeName], DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
         }
 
@@ -311,7 +312,9 @@ namespace ProjectEternity.Core.Units
             ArrayUnit[CurrentLeaderIndex] = NewLeader;
         }
 
-        public static Squad LoadSquadWithProgression(BinaryReader BR, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public static Squad LoadSquadWithProgression(BinaryReader BR, ContentManager Content, Dictionary<string, Unit> DicUnitType,
+            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             string SquadName = BR.ReadString();
             bool IsNameLocked = BR.ReadBoolean();
@@ -320,15 +323,15 @@ namespace ProjectEternity.Core.Units
             bool IsWingmanBLocked = BR.ReadBoolean();
 
             int UnitsInSquad = BR.ReadInt32();
-            Unit NewLeader = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect);
+            Unit NewLeader = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             Unit NewWingmanA = null;
             Unit NewWingmanB = null;
 
             if (UnitsInSquad >= 2)
-                NewWingmanA = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect);
+                NewWingmanA = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             if (UnitsInSquad >= 3)
-                NewWingmanB = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect);
+                NewWingmanB = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             Squad NewSquad = new Squad(SquadName, NewLeader, NewWingmanA, NewWingmanB);
             NewSquad.IsNameLocked = IsNameLocked;

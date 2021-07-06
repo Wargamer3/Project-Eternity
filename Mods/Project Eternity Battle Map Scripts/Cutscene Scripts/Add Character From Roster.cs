@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 for (int C = 0; C < _ArrayCharacterName.Length; ++C)
                 {
-                    Map.PlayerRoster.AddCharacterFromRoster(_ArrayCharacterName[C], Map.DicRequirement, Map.DicEffect);
+                    Map.PlayerRoster.AddCharacterFromRoster(_ArrayCharacterName[C], Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
                 }
                 IsEnded = true;
             }

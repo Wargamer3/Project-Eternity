@@ -37,7 +37,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (!string.IsNullOrEmpty(_SpawnUnitName))
                 {
                     string[] UnitInfo = _SpawnUnitName.Split(new[] { "/" }, StringSplitOptions.None);
-                    Unit NewUnit = Unit.FromType(UnitInfo[0], _SpawnUnitName.Remove(0, UnitInfo[0].Length + 1), GameScreen.ContentFallback, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                    Unit NewUnit = Unit.FromType(UnitInfo[0], _SpawnUnitName.Remove(0, UnitInfo[0].Length + 1), GameScreen.ContentFallback, Map.DicUnitType, Map.DicRequirement,
+                        Map.DicEffect, Map.DicAutomaticSkillTarget);
 
                     if (_IsPresent)
                     {

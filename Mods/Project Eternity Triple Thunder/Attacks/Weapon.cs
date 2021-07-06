@@ -165,7 +165,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             NumberOfProjectiles = 1;
         }
 
-        public Weapon(string Path, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects)
+        public Weapon(string Path, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             this.Name = Path;
             FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + Path + ".ttw", FileMode.Open, FileAccess.Read);
@@ -194,9 +194,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
                 for (int N = 0; N < tvSkillsNodesCount; ++N)
                 {
-                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects);
+                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
 
-                    InitSkillChainTarget(ActiveSkill);
+                    InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
 
                     ListActiveSkill.Add(ActiveSkill);
                 }
@@ -309,7 +309,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Owner.CreateAttackBox(Name, GunNozzlePosition, ListAttack);
         }
 
-        private void InitSkillChainTarget(BaseAutomaticSkill ActiveSkill)
+        private void InitSkillChainTarget(BaseAutomaticSkill ActiveSkill, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             foreach (BaseSkillLevel ActiveSkillLevel in ActiveSkill.ListSkillLevel)
             {
@@ -319,20 +319,20 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     {
                         if (ActiveSkillActivation.ListEffect[E] is TripleThunderAttackEffect)
                         {
-                            ActiveSkillActivation.ListEffectTargetReal[E].Add(AutomaticSkillTargetType.DicTargetType["Self Attack"]);
+                            ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Self Attack"]);
                         }
                         else if (ActiveSkillActivation.ListEffect[E] is TripleThunderRobotEffect)
                         {
-                            ActiveSkillActivation.ListEffectTargetReal[E].Add(AutomaticSkillTargetType.DicTargetType["Self Robot"]);
+                            ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Self Robot"]);
                         }
                         else if (ActiveSkillActivation.ListEffect[E] is ProjectileEffect)
                         {
-                            ActiveSkillActivation.ListEffectTargetReal[E].Add(AutomaticSkillTargetType.DicTargetType["Self Attack"]);
+                            ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Self Attack"]);
                         }
 
                         foreach(BaseAutomaticSkill ActiveFollowingSkill in ActiveSkillActivation.ListEffect[E].ListFollowingSkill)
                         {
-                            InitSkillChainTarget(ActiveFollowingSkill);
+                            InitSkillChainTarget(ActiveFollowingSkill, DicAutomaticSkillTarget);
                         }
                     }
                 }

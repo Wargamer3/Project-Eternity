@@ -1,5 +1,4 @@
-﻿using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
+﻿using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,8 +13,6 @@ namespace ProjectEternity.UnitTests.BattleBehavior
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            AutomaticSkillTargetType.DicTargetType.Clear();
-
             GlobalDeathmatchContext = new DeathmatchContext();
             DummyMap = DeathmatchMapHelper.CreateDummyMap(GlobalDeathmatchContext);
         }

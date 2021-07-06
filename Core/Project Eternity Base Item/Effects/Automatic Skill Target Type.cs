@@ -8,8 +8,6 @@ namespace ProjectEternity.Core.Item
 {
     public abstract class AutomaticSkillTargetType
     {
-        public static Dictionary<string, AutomaticSkillTargetType> DicTargetType = new Dictionary<string, AutomaticSkillTargetType>();
-
         public readonly string TargetType;
 
         public AutomaticSkillTargetType(string TargetType)
@@ -21,36 +19,50 @@ namespace ProjectEternity.Core.Item
         public abstract void ExecuteAndAddEffectToTarget(BaseEffect ActiveSkillEffect, string SkillName);
         public abstract AutomaticSkillTargetType Copy();
 
-        public static void LoadAllTargetTypes()
+        public static Dictionary<string, AutomaticSkillTargetType> LoadAllTargetTypes()
         {
-            DicTargetType.Clear();
-
-            LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), typeof(AutomaticSkillTargetType));
+            Dictionary<string, AutomaticSkillTargetType> DicTargetType = LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), typeof(AutomaticSkillTargetType));
 
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType));
+                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveRequirement in LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType)))
+                {
+                    DicTargetType.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
             }
+
+            return DicTargetType;
         }
 
-        public static void LoadFromAssembly(Assembly ActiveAssembly, Type TypeOfRequirement, params object[] Args)
+        public static Dictionary<string, AutomaticSkillTargetType> LoadFromAssembly(Assembly ActiveAssembly, Type TypeOfRequirement, params object[] Args)
         {
+            Dictionary<string, AutomaticSkillTargetType> DicTargetType = new Dictionary<string, AutomaticSkillTargetType>();
+
             List<AutomaticSkillTargetType> ListSkillEffect = ReflectionHelper.GetObjectsFromBaseTypes<AutomaticSkillTargetType>(TypeOfRequirement, ActiveAssembly.GetTypes(), Args);
 
             foreach (AutomaticSkillTargetType Instance in ListSkillEffect)
             {
                 DicTargetType.Add(Instance.TargetType, Instance);
             }
+
+            return DicTargetType;
         }
 
-        public static void LoadFromAssemblyFiles(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
+        public static Dictionary<string, AutomaticSkillTargetType> LoadFromAssemblyFiles(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
         {
+            Dictionary<string, AutomaticSkillTargetType> DicTargetType = new Dictionary<string, AutomaticSkillTargetType>();
+
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
                 Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
-                LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args);
+                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveRequirement in LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args))
+                {
+                    DicTargetType.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
             }
+
+            return DicTargetType;
         }
     }
 }

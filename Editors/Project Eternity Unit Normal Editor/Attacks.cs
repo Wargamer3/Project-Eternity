@@ -29,6 +29,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         public byte AttackUpgradesCostIndex;
         private Dictionary<string, BaseSkillRequirement> DicRequirement;
         private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public Attacks()
         {
@@ -36,6 +37,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             _ListAttack = new List<Attack>();
             AttackUpgradesValueIndex = 0;
@@ -373,7 +375,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                                 MessageBox.Show("This attack is already listed.\r\n" + Name);
                                 return;
                             }
-                            Attack NewAttack = new Attack(Name, DicRequirement, DicEffect);
+                            Attack NewAttack = new Attack(Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                             NewAttack.Animations.Add(new AttackContext());
 
                             NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(Name + "/Start");

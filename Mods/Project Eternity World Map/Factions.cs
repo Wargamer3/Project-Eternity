@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
             ListInteractionIcons = new List<Texture2D>();
             List<Unit> ListSpawnUnit = new List<Unit>();
-            ListSpawnUnit.Add(new UnitNormal("World Map/Humans/Ninja", Content, DicRequirement, DicEffect));
+            ListSpawnUnit.Add(new UnitNormal("World Map/Humans/Ninja", Content, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             ListInteractionIcons.Add(Content.Load<Texture2D>("Maps/World Maps/Constructions/Humans/Upgrade Icon"));
             ListInteractionIcons.Add(Content.Load<Texture2D>("Maps/World Maps/Constructions/Humans/Unit Factory/Build Ninja Icon"));
             ListInteractionIcons.Add(Content.Load<Texture2D>("Maps/World Maps/Constructions/Humans/Unit Factory/Waypoint Icon"));

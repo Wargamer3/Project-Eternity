@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 string ExtraAnimationPath = BR.ReadString();
                 if (!string.IsNullOrEmpty(ExtraAnimationPath))
                 {
-                    ListStanceAnimation.Add(new Weapon(ExtraAnimationPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect));
+                    ListStanceAnimation.Add(new Weapon(ExtraAnimationPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
                 }
             }
 
@@ -52,7 +52,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             for (int W = 0; W < ListWeaponCount; ++W)
             {
                 string WeaponName = BR.ReadString();
-                Weapons.AddWeaponToStash(new Weapon(WeaponName, CurrentLayer.DicRequirement, CurrentLayer.DicEffect));
+                Weapons.AddWeaponToStash(new Weapon(WeaponName, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
             }
 
             if (ListExtraWeapon != null)

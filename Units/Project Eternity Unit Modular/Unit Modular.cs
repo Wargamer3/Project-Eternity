@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Core.Units.Modular
 {
@@ -412,7 +412,8 @@ namespace ProjectEternity.Core.Units.Modular
             InitParts();
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             return new UnitModular(Name, Content);
         }

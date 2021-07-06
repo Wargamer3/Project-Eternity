@@ -8,6 +8,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Units.Modular;
+using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.Editors.UnitModularEditor
 {
@@ -27,6 +28,8 @@ namespace ProjectEternity.Editors.UnitModularEditor
 
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
+        private Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
         public ProjectEternityUnitModularEditor()
         {
@@ -42,6 +45,8 @@ namespace ProjectEternity.Editors.UnitModularEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
             ResetControls();
         }
@@ -1128,7 +1133,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
                 switch (ItemSelectionChoice)
                 {
                     case ItemSelectionChoices.Pilot:
-                        Character NewPilot = new Character(Items[I], null, DicRequirement, DicEffect);
+                        Character NewPilot = new Character(Items[I], null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                         if (NewPilot != null)
                         {
                             if (lstPilots.Items.Contains(NewPilot.Name))
@@ -1218,13 +1223,11 @@ namespace ProjectEternity.Editors.UnitModularEditor
 
         private void UnitEditor_Shown(object sender, EventArgs e)
         {
-            #region Load parts
-
             for (int P = 0; P < lstPilots.Items.Count; P++)
             {
                 string Name = (string)lstPilots.Items[P];
                 //Add the pilot.
-                ListPilot.Add(new Character(Name, null, DicRequirement, DicEffect));
+                ListPilot.Add(new Character(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
             }
 
             for (int Head = 0; Head < lstHead.Items.Count; Head++)
@@ -1261,8 +1264,6 @@ namespace ProjectEternity.Editors.UnitModularEditor
                 //Add the Legs.
                 ListLegs.Add(new PartLegs(Name));
             }
-
-            #endregion
 
             UpdatePartBoosts();
         }

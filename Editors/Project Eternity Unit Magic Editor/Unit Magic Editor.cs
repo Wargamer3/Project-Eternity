@@ -2,9 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Editor;
 using ProjectEternity.Units.Magic;
 
 namespace ProjectEternity.Editors.UnitHubEditor
@@ -18,6 +18,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private Dictionary<string, Unit> DicUnitType;
         private Dictionary<string, BaseSkillRequirement> DicRequirement;
         private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public UnitMagicEditor()
         {
@@ -26,6 +27,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             DicUnitType = Unit.LoadAllUnits();
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
         }
 
         public UnitMagicEditor(string FilePath, object[] Params)
@@ -73,7 +75,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private void LoadUnit(string UnitPath)
         {
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(20);
-            UnitMagic NewUnit = new UnitMagic(Name, null, DicUnitType, DicRequirement, DicEffect);
+            UnitMagic NewUnit = new UnitMagic(Name, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             txtOriginalUnit.Text = NewUnit.OriginalUnitName;
 

@@ -737,11 +737,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
                     string UnitName = ActivePlayer.ReadString();
                     int CharacterCount = ActivePlayer.ReadInt32();
 
-                    NewLeader = Unit.FromType(UnitTypeName, UnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                    NewLeader = Unit.FromType(UnitTypeName, UnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
                     NewLeader.ArrayCharacterActive = new Character[CharacterCount];
 
                     for (int C = 0; C < CharacterCount; C++)
-                        NewLeader.ArrayCharacterActive[C] = new Character(ActivePlayer.ReadString(), Map.Content, Map.DicRequirement, Map.DicEffect);
+                        NewLeader.ArrayCharacterActive[C] = new Character(ActivePlayer.ReadString(), Map.Content, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
 
                     //Initialise the Unit stats.
                     NewLeader.Init();
@@ -752,11 +752,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
                     string UnitName = ActivePlayer.ReadString();
                     int CharacterCount = ActivePlayer.ReadInt32();
 
-                    NewWingmanA = Unit.FromType(UnitTypeName, UnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                    NewWingmanA = Unit.FromType(UnitTypeName, UnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
                     NewWingmanA.ArrayCharacterActive = new Character[CharacterCount];
 
                     for (int C = 0; C < CharacterCount; C++)
-                        NewWingmanA.ArrayCharacterActive[C] = new Character(ActivePlayer.ReadString(), Map.Content, Map.DicRequirement, Map.DicEffect);
+                        NewWingmanA.ArrayCharacterActive[C] = new Character(ActivePlayer.ReadString(), Map.Content, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
 
                     //Initialise the Unit stats.
                     NewWingmanA.Init();
@@ -767,11 +767,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
                     string UnitName = ActivePlayer.ReadString();
                     int CharacterCount = ActivePlayer.ReadInt32();
 
-                    NewWingmanB = Unit.FromType(UnitTypeName, UnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                    NewWingmanB = Unit.FromType(UnitTypeName, UnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
                     NewWingmanB.ArrayCharacterActive = new Character[CharacterCount];
 
                     for (int C = 0; C < CharacterCount; C++)
-                        NewWingmanB.ArrayCharacterActive[C] = new Character(ActivePlayer.ReadString(), Map.Content, Map.DicRequirement, Map.DicEffect);
+                        NewWingmanB.ArrayCharacterActive[C] = new Character(ActivePlayer.ReadString(), Map.Content, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
 
                     //Initialise the Unit stats.
                     NewWingmanB.Init();

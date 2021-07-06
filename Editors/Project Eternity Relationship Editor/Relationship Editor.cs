@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Data;
 using System.IO;
+using System.Data;
 using System.Linq;
 using System.Collections.Generic;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Effects;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Editors.RelationshipEditor
 {
@@ -16,6 +16,7 @@ namespace ProjectEternity.Editors.RelationshipEditor
 
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
+        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public ProjectEternityRelationshipEditor()
         {
@@ -23,6 +24,7 @@ namespace ProjectEternity.Editors.RelationshipEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             AllowEvents = true;
             cboEffectType.Items.AddRange(DicEffect.Values.OrderBy(x => x.EffectTypeName).ToArray());
@@ -76,7 +78,7 @@ namespace ProjectEternity.Editors.RelationshipEditor
             string Name = FilePath.Substring(0, FilePath.Length - 5).Substring(26);
             this.Text = Name + " - Project Eternity Relationship Editor";
 
-            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect);
+            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             txtDescription.Text = ActiveSkill.Description;
 

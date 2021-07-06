@@ -45,7 +45,7 @@ namespace ProjectEternity.Core.Units
         public Texture2D SpriteMap;
         public string SpriteUnitPath;
         public Texture2D SpriteUnit;
-        
+
         protected int _HP;
         protected int _EN;
         public int HP { get { return _HP; } }
@@ -364,7 +364,7 @@ namespace ProjectEternity.Core.Units
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
                 Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
-                foreach(KeyValuePair<string, Unit> ActiveUnit in LoadFromAssembly(ActiveAssembly, Args))
+                foreach (KeyValuePair<string, Unit> ActiveUnit in LoadFromAssembly(ActiveAssembly, Args))
                 {
                     DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);
                 }
@@ -374,19 +374,22 @@ namespace ProjectEternity.Core.Units
         }
 
         public static Unit FromFullName(string Name, Microsoft.Xna.Framework.Content.ContentManager Content,
-            Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+            Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             string[] UnitInfo = Name.Split(new[] { "/" }, StringSplitOptions.None);
-            return FromType(UnitInfo[0], Name.Remove(0, UnitInfo[0].Length + 1), Content, DicUnitType, DicRequirement, DicEffect);
+            return FromType(UnitInfo[0], Name.Remove(0, UnitInfo[0].Length + 1), Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
-        public static Unit FromType(string UnitType, string Name, Microsoft.Xna.Framework.Content.ContentManager Content, 
-            Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public static Unit FromType(string UnitType, string Name, Microsoft.Xna.Framework.Content.ContentManager Content,
+            Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return DicUnitType[UnitType].FromFile(Name, Content, DicRequirement, DicEffect);
+            return DicUnitType[UnitType].FromFile(Name, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
-        public abstract Unit FromFile(string Name, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect);
+        public abstract Unit FromFile(string Name, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget);
 
         public void QuickSave(BinaryWriter BW)
         {
@@ -406,7 +409,8 @@ namespace ProjectEternity.Core.Units
 
         protected abstract void DoQuickSave(BinaryWriter BW);
 
-        public void QuickLoad(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public void QuickLoad(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             _HP = BR.ReadInt32();
             _EN = BR.ReadInt32();
@@ -415,7 +419,7 @@ namespace ProjectEternity.Core.Units
             ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
             for (int C = 0; C < ArrayCharacterActive.Length; ++C)
             {
-                ArrayCharacterActive[C] = Character.QuickLoadFromFile(BR, Content, DicRequirement, DicEffect);
+                ArrayCharacterActive[C] = Character.QuickLoadFromFile(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
 
             DoQuickLoad(BR, Content);
@@ -423,13 +427,15 @@ namespace ProjectEternity.Core.Units
 
         protected abstract void DoQuickLoad(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content);
 
-        public static Unit QuickLoadFromFile(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public static Unit QuickLoadFromFile(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,
+            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             string UnitType = BR.ReadString();
             string UnitName = BR.ReadString();
 
-            Unit NewUnit = Unit.FromType(UnitType, UnitName, Content, DicUnitType, DicRequirement, DicEffect);
-            NewUnit.QuickLoad(BR, Content, DicRequirement, DicEffect);
+            Unit NewUnit = Unit.FromType(UnitType, UnitName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            NewUnit.QuickLoad(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             return NewUnit;
         }
@@ -484,13 +490,14 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public virtual void ReloadSkills(Unit Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        public virtual void ReloadSkills(Unit Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             for (int P = 0; P < ArrayParts.Length; ++P)
             {
                 if (ArrayParts[P] != null)
                 {
-                    ArrayParts[P].ReloadSkills(DicRequirement, DicEffect, DicTarget);
+                    ArrayParts[P].ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 }
             }
 
@@ -498,13 +505,13 @@ namespace ProjectEternity.Core.Units
             {
                 if (ArrayUnitAbility[A] != null)
                 {
-                    ArrayUnitAbility[A].ReloadSkills(DicRequirement, DicEffect);
+                    ArrayUnitAbility[A].ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 }
             }
 
             for (int C = 0; C < ArrayCharacterActive.Length; ++C)
             {
-                ArrayCharacterActive[C].ReloadSkills(DicRequirement, DicEffect, DicTarget);
+                ArrayCharacterActive[C].ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
         }
 
@@ -628,7 +635,7 @@ namespace ProjectEternity.Core.Units
                 ArrayCharacterActive[C].Effects.UpdateAllEffectsLifetime(LifetimeType);
             }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -658,20 +665,22 @@ namespace ProjectEternity.Core.Units
         /// <param name="ListActionMenuChoice">Action Panel Holder</param>
         public virtual List<ActionPanel> OnMenuSelect(Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         { return new List<ActionPanel>(); }
-        
-        public static Unit LoadUnitWithProgress(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+
+        public static Unit LoadUnitWithProgress(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,
+            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             string UnitFullName = BR.ReadString();
             string UnitTypeName = BR.ReadString();
             string TeamEventID = BR.ReadString();
-            Unit NewUnit = Unit.FromType(UnitTypeName, UnitFullName, Content, DicUnitType, DicRequirement, DicEffect);
+            Unit NewUnit = Unit.FromType(UnitTypeName, UnitFullName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             NewUnit.TeamEventID = TeamEventID;
 
             int ArrayCharacterActiveLength = BR.ReadInt32();
             NewUnit.ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
             for (int C = 0; C < ArrayCharacterActiveLength; C++)
             {
-                NewUnit.ArrayCharacterActive[C] = Character.LoadCharacterWithProgression(BR, Content, DicRequirement, DicEffect);
+                NewUnit.ArrayCharacterActive[C] = Character.LoadCharacterWithProgression(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
 
             return NewUnit;
@@ -693,7 +702,7 @@ namespace ProjectEternity.Core.Units
         public abstract GameScreens.GameScreen GetCustomizeScreen();
 
         #region TerrainAttributes
-        
+
         public char TerrainLetterAttribute(string Terrain)
         {
             return Grades[Math.Min(Grades.Length - 1, _UnitStat.TerrainAttributeValue(Terrain))];

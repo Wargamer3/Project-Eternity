@@ -264,8 +264,6 @@ namespace ProjectEternity
 
             SplashScreen.SetStatus("Loading Ressources");
 
-            Core.Skill.ManualSkillTarget.LoadAllSkillRequirement();
-            Core.Item.AutomaticSkillTargetType.LoadAllTargetTypes();
             SystemList.LoadSystemLists();
 
             #region Ressources loading

@@ -307,8 +307,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
             }
-            
-            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Deathmatch Map", "*.csx", SearchOption.TopDirectoryOnly);
+
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Deathmatch Map", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
                 Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(UnitSkillRequirement), GlobalDeathmatchContext);
@@ -322,13 +322,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void LoadAutomaticSkillActivation()
         {
             base.LoadAutomaticSkillActivation();
-            
-            AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Deathmatch Map", "*.dll"), typeof(AutomaticSkillTargetType), GlobalDeathmatchContext);
+
+            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Deathmatch Map", "*.dll"), typeof(AutomaticSkillTargetType), GlobalDeathmatchContext))
+            {
+                DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+            }
 
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Deathmatch Map", " *.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType), GlobalDeathmatchContext);
+                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType), GlobalDeathmatchContext))
+                {
+                    DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+                }
             }
         }
 
@@ -336,12 +342,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             base.LoadManualSkillActivation();
 
-            ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Deathmatch Map", "*.dll"), GlobalDeathmatchContext);
+            foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Deathmatch Map", "*.dll"), GlobalDeathmatchContext))
+            {
+                DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
+            }
 
-            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Deathmatch Map", " *.csx", SearchOption.TopDirectoryOnly);
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Deathmatch Map", " *.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                ManualSkillTarget.LoadFromAssembly(ActiveAssembly, GlobalDeathmatchContext);
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssembly(ActiveAssembly, GlobalDeathmatchContext))
+                {
+                    DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
+                }
             }
         }
 

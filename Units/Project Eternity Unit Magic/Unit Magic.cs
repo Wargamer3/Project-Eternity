@@ -62,12 +62,14 @@ namespace ProjectEternity.Units.Magic
             this.Map = Map;
         }
 
-        public UnitMagic(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
-            : this(Name, Content, null, DicUnitType, DicRequirement, DicEffect)
+        public UnitMagic(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            : this(Name, Content, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget)
         {
         }
 
-        public UnitMagic(string Name, ContentManager Content, BattleMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitMagic(string Name, ContentManager Content, BattleMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name)
         {
             this.Map = Map;
@@ -96,7 +98,7 @@ namespace ProjectEternity.Units.Magic
             OriginalUnitName = BR.ReadString();
             if (!string.IsNullOrEmpty(OriginalUnitName) && DicUnitType != null)
             {
-                OriginalUnit = Unit.FromFullName(OriginalUnitName, Content, DicUnitType, DicRequirement, DicEffect);
+                OriginalUnit = Unit.FromFullName(OriginalUnitName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 _UnitStat = OriginalUnit.UnitStat;
             }
 
@@ -133,7 +135,7 @@ namespace ProjectEternity.Units.Magic
 
             if (OriginalUnit == null)
             {
-                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
                 _UnitStat = OriginalUnit.UnitStat;
             }
         }
@@ -152,15 +154,16 @@ namespace ProjectEternity.Units.Magic
             return new List<ActionPanel>() { new ActionPanelSpellSelection(Map, this), new ActionPanelChannelExternalMana(ListActionMenuChoice, this) };
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             if (Map == null)
             {
-                return new UnitMagic(Name, Content, null, DicRequirement, DicEffect);
+                return new UnitMagic(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             else
             {
-                return new UnitMagic(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect);
+                return new UnitMagic(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 

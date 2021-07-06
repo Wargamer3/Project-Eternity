@@ -40,6 +40,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public Dictionary<string, BaseSkillRequirement> DicRequirement { get { return Owner.DicRequirement; } }
         public Dictionary<string, BaseEffect> DicEffect { get { return Owner.DicEffect; } }
+        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget { get { return Owner.DicAutomaticSkillTarget; } }
 
         public ISFXGenerator PlayerSFXGenerator { get { return Owner.PlayerSFXGenerator; } }
 

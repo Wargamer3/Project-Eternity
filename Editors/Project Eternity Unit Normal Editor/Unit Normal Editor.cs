@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Units.Normal;
-using ProjectEternity.Core.Item;
 using ProjectEternity.Editors.ImageViewer;
 using ProjectEternity.Editors.AttackEditor;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.Editors.UnitNormalEditor
 {
@@ -23,6 +23,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public UnitNormalEditor()
         {
@@ -35,6 +36,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             txtName.Text = "";
             txtPrice.Text = "0";
@@ -266,7 +268,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void LoadUnit(string UnitPath)
         {
             Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(21);
-            UnitNormal LoadedUnit = new UnitNormal(Name, null, DicRequirement, DicEffect);
+            UnitNormal LoadedUnit = new UnitNormal(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             frmAttacks.UnitName = Name;
 

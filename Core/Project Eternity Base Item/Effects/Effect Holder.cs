@@ -25,7 +25,8 @@ namespace ProjectEternity.Core.Item
             }
         }
 
-        public void QuickLoad(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public void QuickLoad(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             int DicActivePilotEffectCount = BR.ReadInt32();
             DicActiveEffect = new Dictionary<string, List<BaseEffect>>(DicActivePilotEffectCount);
@@ -37,7 +38,7 @@ namespace ProjectEternity.Core.Item
                 List<BaseEffect> ListEffect = new List<BaseEffect>(ListEffectValueCount);
                 for (int E = 0; E < ListEffectValueCount; ++E)
                 {
-                    ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect));
+                    ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
 
                 DicActiveEffect.Add(Key, ListEffect);

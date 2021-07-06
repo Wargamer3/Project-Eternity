@@ -2,9 +2,9 @@
 using System.IO;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Attacks;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.Editors.AttackEditor
 {
@@ -20,6 +20,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
         private Dictionary<string, BaseSkillRequirement> DicRequirement;
         private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public ProjectEternityAttackEditor()
         {
@@ -27,6 +28,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             cbAirRank.SelectedIndex = 0;
             cbLandRank.SelectedIndex = 0;
@@ -231,7 +233,7 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             string Name = AttackPath.Substring(0, AttackPath.Length - 4).Substring(16);
 
-            Attack ActiveWeapon = new Attack(Name, DicRequirement, DicEffect);
+            Attack ActiveWeapon = new Attack(Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             LoadAttack(ActiveWeapon);
         }
 

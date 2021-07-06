@@ -34,7 +34,8 @@ namespace ProjectEternity.Core.Item
             }
         }
 
-        public BaseAutomaticSkill(string FullPath, string RelativePath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public BaseAutomaticSkill(string FullPath, string RelativePath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : this()
         {
             this.RelativePath = RelativePath;
@@ -44,7 +45,7 @@ namespace ProjectEternity.Core.Item
             FileStream FS = new FileStream(FullPath, FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
-            Load(BR, DicRequirement, DicEffect);
+            Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             FS.Close();
             BR.Close();
@@ -63,16 +64,18 @@ namespace ProjectEternity.Core.Item
             return NewSkill;
         }
 
-        public BaseAutomaticSkill(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public BaseAutomaticSkill(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             Name = "N/A";
             RelativePath = "N/A";
             CurrentLevel = 1;
 
-            Load(BR, DicRequirement, DicEffect);
+            Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
-        private void Load(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        private void Load(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             Description = BR.ReadString();
 
@@ -81,7 +84,7 @@ namespace ProjectEternity.Core.Item
 
             for (int L = 0; L < ListSkillLevelCount; L++)
             {
-                ListSkillLevel.Add(new BaseSkillLevel(BR, DicRequirement, DicEffect));
+                ListSkillLevel.Add(new BaseSkillLevel(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             }
         }
 
@@ -96,7 +99,7 @@ namespace ProjectEternity.Core.Item
             }
         }
 
-        public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             foreach (BaseSkillLevel ActiveSkillLevel in ListSkillLevel)
             {
@@ -116,7 +119,7 @@ namespace ProjectEternity.Core.Item
                         ActiveActivation.ListEffectTargetReal.Add(NewListEffectTargetReal);
                         foreach (string ActiveTarget in ListActiveTarget)
                         {
-                            NewListEffectTargetReal.Add(AutomaticSkillTargetType.DicTargetType[ActiveTarget].Copy());
+                            NewListEffectTargetReal.Add(DicAutomaticSkillTarget[ActiveTarget].Copy());
                         }
                     }
 
@@ -128,7 +131,7 @@ namespace ProjectEternity.Core.Item
 
                         foreach (BaseAutomaticSkill ActiveFollowingSkill in ActiveActivation.ListEffect[E].ListFollowingSkill)
                         {
-                            ActiveFollowingSkill.ReloadSkills(DicRequirement, DicEffect);
+                            ActiveFollowingSkill.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
                         }
                     }
                 }

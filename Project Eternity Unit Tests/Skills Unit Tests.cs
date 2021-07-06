@@ -24,8 +24,6 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void TestLoadAll()
         {
-            AutomaticSkillTargetType.DicTargetType.Clear();
-
             BaseEffect.LoadAllEffects();
             BaseSkillRequirement.LoadAllRequirements();
             AutomaticSkillTargetType.LoadAllTargetTypes();

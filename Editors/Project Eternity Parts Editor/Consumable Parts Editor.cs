@@ -15,8 +15,10 @@ namespace ProjectEternity.Editors.PartsEditor
     {
         private bool AllowEvents;
 
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, BaseSkillRequirement> DicRequirement;
+        private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
+        private Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
         public ProjectEternityConsumablePartEditor()
         {
@@ -24,6 +26,8 @@ namespace ProjectEternity.Editors.PartsEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
         }
 
         public ProjectEternityConsumablePartEditor(string FilePath, object[] Params)
@@ -99,7 +103,7 @@ namespace ProjectEternity.Editors.PartsEditor
         /// <param name="SkillPath">Path from which to open the Skill.</param>
         private void LoadSkill(string SkillPath)
         {
-            ManualSkill ActiveSkill = new ManualSkill(SkillPath, DicRequirement, DicEffect);
+            ManualSkill ActiveSkill = new ManualSkill(SkillPath, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             txtRange.Text = ActiveSkill.Range.ToString();
             txtDescription.Text = ActiveSkill.Description;

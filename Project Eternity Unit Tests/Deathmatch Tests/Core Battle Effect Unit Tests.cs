@@ -14,7 +14,7 @@ namespace ProjectEternity.UnitTests
             AutoDodgeEffect NewEffect = (AutoDodgeEffect)DummyMap.DicEffect[AutoDodgeEffect.Name].Copy();
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -33,7 +33,7 @@ namespace ProjectEternity.UnitTests
             NullifyDamageEffect NewEffect = (NullifyDamageEffect)DummyMap.DicEffect[NullifyDamageEffect.Name].Copy();
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -56,7 +56,7 @@ namespace ProjectEternity.UnitTests
             NewEffect.Move = true;
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -85,7 +85,7 @@ namespace ProjectEternity.UnitTests
             NewEffect.Move = true;
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -112,7 +112,7 @@ namespace ProjectEternity.UnitTests
             NewEffect.MaxExtraMovementsPerTurn = 5;
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -132,7 +132,7 @@ namespace ProjectEternity.UnitTests
             NewEffect.Value = "";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -148,7 +148,7 @@ namespace ProjectEternity.UnitTests
             NewEffect.Value = "test";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -167,7 +167,7 @@ namespace ProjectEternity.UnitTests
             RepairEffect NewEffect = (RepairEffect)DummyMap.DicEffect[RepairEffect.Name].Copy();
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -186,7 +186,7 @@ namespace ProjectEternity.UnitTests
             ResupplyEffect NewEffect = (ResupplyEffect)DummyMap.DicEffect[ResupplyEffect.Name].Copy();
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -205,7 +205,7 @@ namespace ProjectEternity.UnitTests
             ShieldEffect NewEffect = (ShieldEffect)DummyMap.DicEffect[ShieldEffect.Name].Copy();
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -225,7 +225,7 @@ namespace ProjectEternity.UnitTests
             NewEffect.Attacks.Add("Test");
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -245,7 +245,7 @@ namespace ProjectEternity.UnitTests
             NewEffect.Attacks.Add("Test");
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();

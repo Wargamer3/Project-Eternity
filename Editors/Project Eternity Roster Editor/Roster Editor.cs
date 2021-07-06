@@ -6,6 +6,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Characters;
+using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.Editors.RosterEditor
 {
@@ -21,6 +22,8 @@ namespace ProjectEternity.Editors.RosterEditor
         private Dictionary<string, Unit> DicUnitType;
         private Dictionary<string, BaseSkillRequirement> DicRequirement;
         private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
+        private Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
         public ProjectEternityRosterEditor()
         {
@@ -31,6 +34,8 @@ namespace ProjectEternity.Editors.RosterEditor
             DicUnitType = Unit.LoadAllUnits();
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
         }
 
         public override EditorInfo[] LoadEditors()
@@ -93,7 +98,7 @@ namespace ProjectEternity.Editors.RosterEditor
 
             for (int C = 0; C < ListCharacterCount; C++)
             {
-                Character NewCharacter = new Character(BR.ReadString(), null, DicRequirement, DicEffect);
+                Character NewCharacter = new Character(BR.ReadString(), null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
                 lstCharacters.Items.Add(NewCharacter.FullName);
                 lstCharactersToShareFrom.Items.Add(NewCharacter.FullName);
@@ -116,7 +121,7 @@ namespace ProjectEternity.Editors.RosterEditor
                 string UnitTypeName = BR.ReadString();
                 string UnitName = BR.ReadString();
                 string EventID = BR.ReadString();
-                Unit NewUnit = Unit.FromType(UnitTypeName, UnitName, null, DicUnitType, DicRequirement, DicEffect);
+                Unit NewUnit = Unit.FromType(UnitTypeName, UnitName, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 NewUnit.TeamEventID = EventID;
 
                 lstUnits.Items.Add(NewUnit.ItemName);
@@ -423,7 +428,7 @@ namespace ProjectEternity.Editors.RosterEditor
                         if (Name != null)
                         {
                             string[] UnitInfo = Name.Split(new[] { "/" }, StringSplitOptions.None);
-                            Unit NewUnit = Unit.FromType(UnitInfo[0], Name.Remove(0, UnitInfo[0].Length + 1), null, DicUnitType, DicRequirement, DicEffect);
+                            Unit NewUnit = Unit.FromType(UnitInfo[0], Name.Remove(0, UnitInfo[0].Length + 1), null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                             lstUnits.Items.Add(Name);
                             lstUnitsToShareFrom.Items.Add(Name);
@@ -435,7 +440,7 @@ namespace ProjectEternity.Editors.RosterEditor
                         if (Items[I] != null)
                         {
                             Name = Items[I].Substring(0, Items[I].Length - 4).Substring(Items[I].LastIndexOf("Characters") + 11);
-                            Character NewCharacter = new Character(Name, null, DicRequirement, DicEffect);
+                            Character NewCharacter = new Character(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
                             lstCharacters.Items.Add(Name);
                             lstCharactersToShareFrom.Items.Add(Name);

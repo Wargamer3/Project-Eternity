@@ -36,7 +36,8 @@ namespace ProjectEternity.Core.Item
             ListFollowingSkill = new List<BaseAutomaticSkill>();
         }
 
-        public static BaseEffect FromFile(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public static BaseEffect FromFile(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             string EffectName = BR.ReadString();
 
@@ -62,7 +63,7 @@ namespace ProjectEternity.Core.Item
             int ListFollowingSkillCount = BR.ReadInt32();
             for (int S = ListFollowingSkillCount - 1; S >= 0; --S)
             {
-                NewSkillEffect.ListFollowingSkill.Add(new BaseAutomaticSkill(BR, DicRequirement, DicEffect));
+                NewSkillEffect.ListFollowingSkill.Add(new BaseAutomaticSkill(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             }
 
             return NewSkillEffect;

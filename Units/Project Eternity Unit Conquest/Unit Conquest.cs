@@ -147,7 +147,8 @@ namespace ProjectEternity.Core.Units.Conquest
             BR.Close();
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             return new UnitConquest(Name, Content, DicRequirement, DicEffect);
         }

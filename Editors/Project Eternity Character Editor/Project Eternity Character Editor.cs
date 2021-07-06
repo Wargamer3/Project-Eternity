@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
-using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Editors.CharacterEditor
 {
@@ -20,8 +21,10 @@ namespace ProjectEternity.Editors.CharacterEditor
         private SkillLevelsEditor[] ArraySkillLevelsEditor;
         private RelationshipEditor frmRelationshipEditor;
 
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, BaseSkillRequirement> DicRequirement;
+        private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
+        private Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
         public ProjectEternityCharacterEditor()
         {
@@ -29,6 +32,8 @@ namespace ProjectEternity.Editors.CharacterEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
         }
 
         public ProjectEternityCharacterEditor(string FilePath, object[] Params)
@@ -340,7 +345,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void LoadCharacter(string CharacterPath)
         {
             Name = CharacterPath.Substring(0, CharacterPath.Length - 4).Substring(CharacterPath.LastIndexOf("Characters") + 11);
-            Character NewCharacter = new Character(Name, null, DicRequirement, DicEffect);
+            Character NewCharacter = new Character(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             QuoteEditor = new CharacterQuotesEditor();
             StatsEditor = new CharacterStatsEditor(NewCharacter);
             frmDetailsEditor = new DetailsEditor();

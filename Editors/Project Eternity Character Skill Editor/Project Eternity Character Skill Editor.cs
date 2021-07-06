@@ -15,6 +15,7 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
 
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
+        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public ProjectEternityCharacterSkillEditor()
         {
@@ -22,6 +23,7 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             AllowEvents = true;
             cboEffectType.Items.AddRange(DicEffect.Values.OrderBy(x => x.EffectTypeName).ToArray());
@@ -73,7 +75,7 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
             string Name = FilePath.Substring(0, FilePath.Length - 5).Substring(26);
             this.Text = Name + " - Project Eternity Skill Editor";
 
-            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect);
+            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             txtDescription.Text = ActiveSkill.Description;
 

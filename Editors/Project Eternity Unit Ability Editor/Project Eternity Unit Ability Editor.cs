@@ -13,8 +13,9 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
         private BaseAutomaticSkill ActiveSkill;
         private bool AllowEvents;
 
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, BaseSkillRequirement> DicRequirement;
+        private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public ProjectEternityUnitAbilityEditor()
         {
@@ -22,6 +23,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             AllowEvents = true;
             cboEffectType.Items.AddRange(DicEffect.Values.OrderBy(x => x.EffectTypeName).ToArray());
@@ -76,7 +78,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
             string Name = FilePath.Substring(0, FilePath.Length - 5).Substring(24);
             this.Text = Name + " - Project Eternity Unit Ability Editor";
 
-            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect);
+            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             txtDescription.Text = ActiveSkill.Description;
 

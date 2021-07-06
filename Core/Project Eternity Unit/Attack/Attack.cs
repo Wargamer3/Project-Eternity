@@ -98,7 +98,8 @@ namespace ProjectEternity.Core.Attacks
         {
         }
 
-        public Attack(string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public Attack(string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(AttackPath)
         {
             Animations = new List<AttackContext>();
@@ -108,22 +109,24 @@ namespace ProjectEternity.Core.Attacks
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
-            Init(BR, AttackPath, DicRequirement, DicEffect);
+            Init(BR, AttackPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             FS.Close();
             BR.Close();
         }
 
-        public Attack(BinaryReader BR, string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public Attack(BinaryReader BR, string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(AttackPath)
         {
             Animations = new List<AttackContext>();
             IsExternal = false;
 
-            Init(BR, AttackPath, DicRequirement, DicEffect);
+            Init(BR, AttackPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
-        public void Init(BinaryReader BR, string AttackName, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public void Init(BinaryReader BR, string AttackName, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             //Create the Part file.
             this.ItemName = Path.GetFileNameWithoutExtension("Content/Attacks/" + AttackName + ".pew");
@@ -207,7 +210,7 @@ namespace ProjectEternity.Core.Attacks
             for (int S = 0; S < AttackAttributesCount; ++S)
             {
                 string RelativePath = BR.ReadString();
-                ArrayAttackAttributes[S] = new BaseAutomaticSkill("Content/Attacks/Attributes/" + RelativePath + ".peaa", RelativePath, DicRequirement, DicEffect);
+                ArrayAttackAttributes[S] = new BaseAutomaticSkill("Content/Attacks/Attributes/" + RelativePath + ".peaa", RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
 
             ListQuoteSet = new List<string>();

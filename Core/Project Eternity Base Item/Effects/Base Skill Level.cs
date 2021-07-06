@@ -40,7 +40,8 @@ namespace ProjectEternity.Core.Item
             Price = Clone.Price;
         }
 
-        public BaseSkillLevel(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public BaseSkillLevel(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             ActivationsCount = BR.ReadInt32();
             Price = BR.ReadInt32();
@@ -49,7 +50,7 @@ namespace ProjectEternity.Core.Item
             ListActivation = new List<BaseSkillActivation>(ListActivationCount);
             for (int R = 0; R < ListActivationCount; R++)
             {
-                ListActivation.Add(new BaseSkillActivation(BR, DicRequirement, DicEffect));
+                ListActivation.Add(new BaseSkillActivation(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             }
         }
 

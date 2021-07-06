@@ -20,13 +20,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Map = Map;
         }
 
-        public override void ReloadSkills(Unit Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        public override void ReloadSkills(Unit Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             DeathmatchUnit DeathmatchUnitCopy = (DeathmatchUnit)Copy;
 
             this.Map = DeathmatchUnitCopy.Map;
 
-            base.ReloadSkills(Copy, DicRequirement, DicEffect, DicTarget);
+            base.ReloadSkills(Copy, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
         }
     }
 }

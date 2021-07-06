@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveSquad.At(U).ReinitializeMembers(Map.DicUnitType[ActiveSquad.At(U).UnitTypeName]);
             }
 
-            ActiveSquad.ReloadSkills(SwitchMap.DicUnitType, SwitchMap.DicRequirement, SwitchMap.DicEffect, ManualSkillTarget.DicManualSkillTarget);
+            ActiveSquad.ReloadSkills(SwitchMap.DicUnitType, SwitchMap.DicRequirement, SwitchMap.DicEffect, SwitchMap.DicAutomaticSkillTarget, SwitchMap.DicManualSkillTarget);
             SwitchMap.ListPlayer[Map.ActivePlayerIndex].ListSquad.Add(ActiveSquad);
             SwitchMap.ListPlayer[Map.ActivePlayerIndex].UpdateAliveStatus();
             ActiveSquad.SetPosition(new Vector3(ActiveSwitchPoint.OtherMapEntryPoint.X, ActiveSwitchPoint.OtherMapEntryPoint.Y, ActiveSquad.Z));

@@ -17,6 +17,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         private bool AllowEvents;
         private Dictionary<string, BaseSkillRequirement> DicRequirement;
         private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         private List<BaseAutomaticSkill> ListRelationshipSkill;
         private List<BaseAutomaticSkill> ListRelationshipSkillOriginal;
@@ -27,6 +28,7 @@ namespace ProjectEternity.Editors.CharacterEditor
             AllowEvents = false;
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
             cboRequirementType.Items.AddRange(DicRequirement.Values.OrderBy(x => x.SkillRequirementName).ToArray());
 
             ListRelationshipSkill = new List<BaseAutomaticSkill>();
@@ -153,7 +155,7 @@ namespace ProjectEternity.Editors.CharacterEditor
                         {
                             AllowEvents = false;
                             Name = Items[I].Substring(0, Items[0].Length - 5).Substring(33);
-                            BaseAutomaticSkill NewRelationshipSkill = new BaseAutomaticSkill("Content/Characters/Relationships/" + Name + ".pecr", Name, DicRequirement, DicEffect);
+                            BaseAutomaticSkill NewRelationshipSkill = new BaseAutomaticSkill("Content/Characters/Relationships/" + Name + ".pecr", Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                             NewRelationshipSkill.CurrentSkillLevel.ListActivation[0].ListRequirement.Add(DicRequirement["Relationship Requirement"].Copy());
                             ListRelationshipSkill[lstCharacters.SelectedIndex] = NewRelationshipSkill;
 

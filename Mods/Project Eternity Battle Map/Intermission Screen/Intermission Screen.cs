@@ -9,6 +9,7 @@ using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.MultiForm;
+using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -41,6 +42,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, Unit> DicUnitType;
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
+        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
+        public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
         public IntermissionScreen()
             : base()
@@ -63,6 +66,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicUnitType = Unit.LoadAllUnits();
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
@@ -305,7 +310,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BattleMap.DicRouteChoices.Add(RouteKey, RouteValue);
             }
 
-            PlayerRoster.LoadTeam(BR, DicUnitType, DicRequirement, DicEffect);
+            PlayerRoster.LoadTeam(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             int ListPartCount = BR.ReadInt32();
             for (int P = 0; P < ListPartCount; P++)
@@ -314,11 +319,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string[] PartByType = LoadedPartPath.Split('/');
                 if (PartByType[0] == "Standard Parts")
                 {
-                    SystemList.ListPart.Add(LoadedPartPath, new UnitStandardPart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect));
+                    SystemList.ListPart.Add(LoadedPartPath, new UnitStandardPart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
                 else if (PartByType[0] == "Consumable Parts")
                 {
-                    SystemList.ListPart.Add(LoadedPartPath, new UnitConsumablePart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect));
+                    SystemList.ListPart.Add(LoadedPartPath, new UnitConsumablePart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
                 }
             }
 

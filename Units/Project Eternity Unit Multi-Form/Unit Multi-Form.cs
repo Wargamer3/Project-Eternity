@@ -42,7 +42,8 @@ namespace ProjectEternity.Core.Units.MultiForm
         public UnitMultiForm()
         { }
 
-        public UnitMultiForm(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitMultiForm(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name)
         {
             this.OriginalName = Name;
@@ -69,7 +70,7 @@ namespace ProjectEternity.Core.Units.MultiForm
                 ArrayUnitStat[U] = new EquipmentInformations();
                 ArrayUnitStat[U].EquipmentName = EquipmentName;
 
-                ArrayUnitStat[U].UnitForm = new UnitNormal(EquipmentUnitPath, Content, DicRequirement, DicEffect);
+                ArrayUnitStat[U].UnitForm = new UnitNormal(EquipmentUnitPath, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
 
             _UnitStat = ArrayUnitStat[0].UnitForm.UnitStat;
@@ -103,9 +104,10 @@ namespace ProjectEternity.Core.Units.MultiForm
             _EN = (int)(MaxEN * ENPercentage);
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return new UnitMultiForm(Name, Content, DicRequirement, DicEffect);
+            return new UnitMultiForm(Name, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         protected override void DoQuickSave(BinaryWriter BW)

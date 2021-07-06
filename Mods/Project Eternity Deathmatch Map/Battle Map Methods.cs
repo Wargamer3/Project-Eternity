@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FMOD;
-using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -36,7 +35,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             {
                                 ListSpawnSquad[SpawnSquadIndex].At(U).ReinitializeMembers(DicUnitType[ListSpawnSquad[SpawnSquadIndex].At(U).UnitTypeName]);
                             }
-                            ListSpawnSquad[SpawnSquadIndex].ReloadSkills(DicUnitType, DicRequirement, DicEffect, ManualSkillTarget.DicManualSkillTarget);
+                            ListSpawnSquad[SpawnSquadIndex].ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                             SpawnSquad(0, ListSpawnSquad[SpawnSquadIndex], 0, ListSingleplayerSpawns[S].Position);
                             ++SpawnSquadIndex;
                         }
@@ -54,8 +53,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (string.IsNullOrEmpty(ListPlayer[P].ListSpawnPoint[S].LeaderTypeName))
                             continue;
 
-                        Unit NewLeaderUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].LeaderTypeName, ListPlayer[P].ListSpawnPoint[S].LeaderName, Content, DicUnitType, DicRequirement, DicEffect);
-                        Character NewLeaderPilot = new Character(ListPlayer[P].ListSpawnPoint[S].LeaderPilot, Content, DicRequirement, DicEffect);
+                        Unit NewLeaderUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].LeaderTypeName, ListPlayer[P].ListSpawnPoint[S].LeaderName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                        Character NewLeaderPilot = new Character(ListPlayer[P].ListSpawnPoint[S].LeaderPilot, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                         NewLeaderPilot.Level = 1;
                         NewLeaderUnit.ArrayCharacterActive = new Character[1] { NewLeaderPilot };
 
@@ -64,16 +63,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (!string.IsNullOrEmpty(ListPlayer[P].ListSpawnPoint[S].WingmanAName))
                         {
-                            NewWingmanAUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].WingmanATypeName, ListPlayer[P].ListSpawnPoint[S].WingmanAName, Content, DicUnitType, DicRequirement, DicEffect);
-                            Character NewWingmanAPilot = new Character(ListPlayer[P].ListSpawnPoint[S].WingmanAPilot, Content, DicRequirement, DicEffect);
+                            NewWingmanAUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].WingmanATypeName, ListPlayer[P].ListSpawnPoint[S].WingmanAName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                            Character NewWingmanAPilot = new Character(ListPlayer[P].ListSpawnPoint[S].WingmanAPilot, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                             NewWingmanAPilot.Level = 1;
                             NewWingmanAUnit.ArrayCharacterActive = new Character[1] { NewWingmanAPilot };
                         }
 
                         if (!string.IsNullOrEmpty(ListPlayer[P].ListSpawnPoint[S].WingmanBName))
                         {
-                            NewWingmanBUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].WingmanBTypeName, ListPlayer[P].ListSpawnPoint[S].WingmanBName, Content, DicUnitType, DicRequirement, DicEffect);
-                            Character NewWingmanBPilot = new Character(ListPlayer[P].ListSpawnPoint[S].WingmanBPilot, Content, DicRequirement, DicEffect);
+                            NewWingmanBUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].WingmanBTypeName, ListPlayer[P].ListSpawnPoint[S].WingmanBName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                            Character NewWingmanBPilot = new Character(ListPlayer[P].ListSpawnPoint[S].WingmanBPilot, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                             NewWingmanBPilot.Level = 1;
                             NewWingmanBUnit.ArrayCharacterActive = new Character[1] { NewWingmanBPilot };
                         }
@@ -309,9 +308,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         string UnitAssemblyQualifiedName = BR.ReadString();
                         string UnitName = BR.ReadString();
-                        ArrayNewUnit[U] = DicUnitType[UnitAssemblyQualifiedName].FromFile(UnitName, Content, DicRequirement, DicEffect);
-                        
-                        ArrayNewUnit[U].QuickLoad(BR, Content, DicRequirement, DicEffect);
+                        ArrayNewUnit[U] = DicUnitType[UnitAssemblyQualifiedName].FromFile(UnitName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+
+                        /*GlobalDeathmatchContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
+                            GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter);*/
+
+                        ArrayNewUnit[U].QuickLoad(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                     }
                     NewSquad = new Squad(ActiveSquadSquadName, ArrayNewUnit[0],
                                          ArrayNewUnit.Length >= 2 ? ArrayNewUnit[1] : null,

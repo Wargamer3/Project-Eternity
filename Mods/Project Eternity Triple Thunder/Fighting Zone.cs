@@ -103,6 +103,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public static bool ShowHPBars = true;
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
+        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
         public Dictionary<string, MapEvent> DicMapEvent = new Dictionary<string, MapEvent>();
         public Dictionary<string, MapCondition> DicMapCondition = new Dictionary<string, MapCondition>();
         public Dictionary<string, MapTrigger> DicMapTrigger = new Dictionary<string, MapTrigger>();
@@ -153,6 +154,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             DicEffect = new Dictionary<string, BaseEffect>();
             DicRequirement = new Dictionary<string, BaseSkillRequirement>();
+            DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
             ListMapScript = new List<MapScript>();
             ListMapEvent = new List<MapEvent>();
         }
@@ -353,7 +355,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                             ListExtraWeapon = new List<Weapon>();
                             for (int W = 0; W < ListEnememyWeapon.Count; ++W)
                             {
-                                ListExtraWeapon.Add(new Weapon(ListEnememyWeapon[W], ActiveLayer.DicRequirement, ActiveLayer.DicEffect));
+                                ListExtraWeapon.Add(new Weapon(ListEnememyWeapon[W], ActiveLayer.DicRequirement, ActiveLayer.DicEffect, ActiveLayer.DicAutomaticSkillTarget));
                             }
 
                             //TODO: support vehicles
@@ -535,10 +537,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void LoadTripleThunderTargetTypes()
         {
-            AutomaticSkillTargetType.DicTargetType.Clear();
-            AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Triple Thunder", "*.dll"), typeof(AttackTargetType), GlobalAttackContext);
+            DicAutomaticSkillTarget.Clear();
+            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Triple Thunder", "*.dll"), typeof(AttackTargetType), GlobalAttackContext))
+            {
+                DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+            }
 
-            AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Triple Thunder", "*.dll"), typeof(RobotTargetType), GlobalRobotContext);
+            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Triple Thunder", "*.dll"), typeof(RobotTargetType), GlobalRobotContext))
+            {
+                DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+            }
         }
 
         private void LoadTripleThunderAIScripts()

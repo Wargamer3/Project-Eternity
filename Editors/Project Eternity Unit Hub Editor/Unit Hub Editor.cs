@@ -18,6 +18,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private Dictionary<string, Unit> DicUnitType;
         private Dictionary<string, BaseSkillRequirement> DicRequirement;
         private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public UnitHubEditor()
         {
@@ -26,6 +27,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
             DicUnitType = Unit.LoadAllUnits();
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
         }
 
         public UnitHubEditor(string FilePath, object[] Params)
@@ -77,7 +79,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private void LoadUnit(string UnitPath)
         {
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(18);
-            UnitHub NewUnit = new UnitHub(Name, null, DicUnitType, DicRequirement, DicEffect);
+            UnitHub NewUnit = new UnitHub(Name, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             txtOriginalUnit.Text = NewUnit.OriginalUnitName;
 

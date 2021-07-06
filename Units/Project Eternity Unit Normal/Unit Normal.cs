@@ -23,7 +23,8 @@ namespace ProjectEternity.Core.Units.Normal
 
         }
 
-        public UnitNormal(string RelativePath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitNormal(string RelativePath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(RelativePath)
         {
             MaxCharacter = 1;
@@ -43,7 +44,7 @@ namespace ProjectEternity.Core.Units.Normal
                 Description = BR.ReadString();
                 Price = BR.ReadInt32();
                 
-                _UnitStat = new UnitStats(ItemName, BR, DicRequirement, DicEffect);
+                _UnitStat = new UnitStats(ItemName, BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 int ListPartSlotCount = BR.ReadInt32();
                 ArrayParts = new UnitPart[ListPartSlotCount];
@@ -57,7 +58,7 @@ namespace ProjectEternity.Core.Units.Normal
                 Description = UnitFile.ReadField("Unit Stats", "Description");
                 Price = Convert.ToInt32(UnitFile.ReadField("Unit Stats", "Price"));
                 
-                _UnitStat = new UnitStats(RelativePath, UnitFile, DicRequirement, DicEffect);
+                _UnitStat = new UnitStats(RelativePath, UnitFile, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 ArrayParts = new UnitPart[Convert.ToInt32(UnitFile.ReadField("Unit Stats", "Parts Slots"))];
             }
@@ -87,9 +88,10 @@ namespace ProjectEternity.Core.Units.Normal
             }
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return new UnitNormal(Name, Content, DicRequirement, DicEffect);
+            return new UnitNormal(Name, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         public override void ReinitializeMembers(Unit InitializedUnitBase)

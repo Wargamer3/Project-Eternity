@@ -63,12 +63,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (Content != null && !string.IsNullOrEmpty(_SpawnUnitName))
                 {
                     string[] UnitInfo = _SpawnUnitName.Split(new[] { "/" }, StringSplitOptions.None);
-                    _SpawnUnit = Unit.FromType(UnitInfo[0], _SpawnUnitName.Remove(0, UnitInfo[0].Length + 1), Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                    _SpawnUnit = Unit.FromType(UnitInfo[0], _SpawnUnitName.Remove(0, UnitInfo[0].Length + 1), Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
 
                     List<Character> ListUnitCharacter = new List<Character>();
                     for (int C = 0; C < _SpawnCharacter.Length; C++)
                     {
-                        Character NewCharacter = new Character(_SpawnCharacter[C], Content, Map.DicRequirement, Map.DicEffect);
+                        Character NewCharacter = new Character(_SpawnCharacter[C], Content, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
                         NewCharacter.Level = _SpawnCharacterLevel;
                         ListUnitCharacter.Add(NewCharacter);
                         if (NewCharacter.Slave != null)

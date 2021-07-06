@@ -76,7 +76,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             List<Weapon> ListExtraWeapon = new List<Weapon>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
-                ListExtraWeapon.Add(new Weapon(_ListWeapons[W], Owner.DicRequirement, Owner.DicEffect));
+                ListExtraWeapon.Add(new Weapon(_ListWeapons[W], Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
             //TODO: Create the robot on load to avoid loading assets when this effect is called.

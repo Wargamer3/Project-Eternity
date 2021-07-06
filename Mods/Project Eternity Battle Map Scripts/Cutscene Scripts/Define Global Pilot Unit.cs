@@ -59,12 +59,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (Content != null && !string.IsNullOrEmpty(_SpawnUnitName))
                 {
                     string[] UnitInfo = _SpawnUnitName.Split(new[] { "\\" }, StringSplitOptions.None);
-                    _SpawnUnit = Unit.FromType(UnitInfo[0], _SpawnUnitName.Remove(0, UnitInfo[0].Length + 1), Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                    _SpawnUnit = Unit.FromType(UnitInfo[0], _SpawnUnitName.Remove(0, UnitInfo[0].Length + 1), Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
 
                     _SpawnUnit.ArrayCharacterActive = new Character[_SpawnCharacter.Length];
                     for (int C = 0; C < _SpawnCharacter.Length; C++)
                     {
-                        _SpawnUnit.ArrayCharacterActive[C] = new Character(_SpawnCharacter[C], Content, Map.DicRequirement, Map.DicEffect);
+                        _SpawnUnit.ArrayCharacterActive[C] = new Character(_SpawnCharacter[C], Content, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
                     }
                 }
             }

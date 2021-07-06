@@ -11,6 +11,7 @@ using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
+using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.GameScreens.VisualNovelScreen
 {
@@ -261,7 +262,9 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
             Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
-            _LoadedCharacter = new Character(CharacterName, null, DicRequirement, DicEffect);
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
+            _LoadedCharacter = new Character(CharacterName, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
         }
 
         public VisualNovelCharacter(BinaryReader BR)
@@ -277,7 +280,9 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
             Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
-            _LoadedCharacter = new Character(CharacterName, null, DicRequirement, DicEffect);
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
+            _LoadedCharacter = new Character(CharacterName, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
         }
 
         public void Save(BinaryWriter BW)

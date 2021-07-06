@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -143,7 +144,9 @@ namespace ProjectEternity
                             Dictionary<string, Unit> DicUnitType = Unit.LoadAllUnits();
                             Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
                             Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
-                            DataScreen.LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect);
+                            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+                            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
+                            DataScreen.LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                             PushScreen(new NewIntermissionScreen(PlayerRoster));
                         }
                         else

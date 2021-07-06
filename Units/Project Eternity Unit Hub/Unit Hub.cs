@@ -2,10 +2,10 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using ProjectEternity.Core.Item;
-using ProjectEternity.GameScreens;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Item;
+using ProjectEternity.GameScreens;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.VisualNovelScreen;
 
@@ -31,12 +31,14 @@ namespace ProjectEternity.Core.Units.Hub
             this.Map = Map;
         }
 
-        public UnitHub(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
-            : this(Name, Content, null, DicUnitType, DicRequirement, DicEffect)
+        public UnitHub(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            : this(Name, Content, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget)
         {
         }
 
-        public UnitHub(string Name, ContentManager Content, BattleMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitHub(string Name, ContentManager Content, BattleMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name)
         {
             this.Map = Map;
@@ -50,7 +52,7 @@ namespace ProjectEternity.Core.Units.Hub
             OriginalUnitName = BR.ReadString();
             if (!string.IsNullOrEmpty(OriginalUnitName))
             {
-                OriginalUnit = Unit.FromFullName(OriginalUnitName, Content, DicUnitType, DicRequirement, DicEffect);
+                OriginalUnit = Unit.FromFullName(OriginalUnitName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 _UnitStat = OriginalUnit.UnitStat;
             }
             
@@ -105,9 +107,10 @@ namespace ProjectEternity.Core.Units.Hub
             return new List<ActionPanel>() { new ActionPanelVisualNovel(ListActionMenuChoice, NewVisualNovel) };
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return new UnitHub(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect);
+            return new UnitHub(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         protected override void DoQuickSave(BinaryWriter BW)

@@ -58,6 +58,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
+        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
+        public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
         public BattleContext GlobalBattleContext;
 
@@ -114,7 +116,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void LoadEffects()
+        private void LoadEffects()
         {
             foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
             {
@@ -144,7 +146,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void LoadSkillRequirements()
+        private void LoadSkillRequirements()
         {
             DicRequirement.Add(BaseSkillRequirement.OnCreatedRequirementName, new OnCreatedRequirement());
 
@@ -159,7 +161,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
             }
 
-            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
                 Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(UnitSkillRequirement), GlobalBattleContext);
@@ -168,6 +170,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
                 }
             }
+
             ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
@@ -179,39 +182,64 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void LoadAutomaticSkillActivation()
+        private void LoadAutomaticSkillActivation()
         {
-            AutomaticSkillTargetType.DicTargetType.Clear();
-            AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(AutomaticSkillTargetType));
-            AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(AutomaticSkillTargetType), GlobalBattleContext);
+            DicAutomaticSkillTarget.Clear();
+            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(AutomaticSkillTargetType)))
+            {
+                DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+            }
+            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(AutomaticSkillTargetType), GlobalBattleContext))
+            {
+                DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+            }
 
-            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType));
+                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType)))
+                {
+                    DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+                }
             }
             ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType), GlobalBattleContext);
+                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType), GlobalBattleContext))
+                {
+                    DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+                }
             }
         }
 
-        public void LoadManualSkillActivation()
+        private void LoadManualSkillActivation()
         {
-            ManualSkillTarget.DicManualSkillTarget.Clear();
-            ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"));
-            ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"));
+            DicManualSkillTarget.Clear();
+            foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll")))
+            {
+                DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
+            }
+            foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll")))
+            {
+                DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
+            }
 
-            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                ManualSkillTarget.LoadFromAssembly(ActiveAssembly);
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssembly(ActiveAssembly))
+                {
+                    DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
+                }
             }
+
             ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                ManualSkillTarget.LoadFromAssembly(ActiveAssembly, this);
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssembly(ActiveAssembly, this))
+                {
+                    DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
+                }
             }
         }
 
@@ -258,7 +286,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 GlobalBattleContext.SetContext(null, SelectedUnit, SelectedUnit.Pilot, null, SelectedUnit, SelectedUnit.Pilot);
                 UnitPart ActivePart = SystemList.ListPart.ElementAt(CursorIndexListPart - 1).Value;
-                ActivePart.ReloadSkills(DicRequirement, DicEffect, ManualSkillTarget.DicManualSkillTarget);
+                ActivePart.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 ActivePart.ActivatePassiveBuffs();
             }
         }

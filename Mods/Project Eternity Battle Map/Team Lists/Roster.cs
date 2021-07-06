@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -25,14 +25,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicRosterUnit = new Dictionary<string, RosterUnit>();
         }
 
-        public Character AddCharacterFromRoster(string NewCharacterName, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public Character AddCharacterFromRoster(string NewCharacterName, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             RosterCharacter RosterCharacter;
             DicRosterCharacter.TryGetValue(NewCharacterName, out RosterCharacter);
 
             if (RosterCharacter != null)
             {
-                Character NewCharacter = new Character(RosterCharacter.FilePath, GameScreen.ContentFallback, DicRequirement, DicEffect);
+                Character NewCharacter = new Character(RosterCharacter.FilePath, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 NewCharacter.DicCharacterLink = new Dictionary<string, Character.CharacterLinkTypes>(RosterCharacter.DicCharacterLink);
                 NewCharacter.TeamTags.AddTag("Present");
                 NewCharacter.Level = 1;
@@ -48,14 +49,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return null;
         }
 
-        public void AddUnitFromRoster(string NewUnitName, string[] ArrayNewUnitCharacter, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public void AddUnitFromRoster(string NewUnitName, string[] ArrayNewUnitCharacter, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             RosterUnit RosterUnit;
             DicRosterUnit.TryGetValue(NewUnitName, out RosterUnit);
 
             if (RosterUnit != null)
             {
-                Unit SpawnUnit = Unit.FromType(RosterUnit.UnitTypeName, RosterUnit.FilePath, GameScreen.ContentFallback, DicUnitType, DicRequirement, DicEffect);
+                Unit SpawnUnit = Unit.FromType(RosterUnit.UnitTypeName, RosterUnit.FilePath, GameScreen.ContentFallback, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 SpawnUnit.UnitStat.DicUnitLink = new Dictionary<string, UnitStats.UnitLinkTypes>(RosterUnit.DicUnitLink);
                 SpawnUnit.TeamEventID = RosterUnit.EventID;
                 SpawnUnit.TeamTags.AddTag("Present");
@@ -65,7 +67,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 for (int C = 0; C < ArrayNewUnitCharacter.Length; ++C)
                 {
-                    Character NewCharacter = AddCharacterFromRoster(ArrayNewUnitCharacter[C], DicRequirement, DicEffect);
+                    Character NewCharacter = AddCharacterFromRoster(ArrayNewUnitCharacter[C], DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                     ListCharacter.Add(NewCharacter);
                     if (NewCharacter.Slave != null)
                     {
@@ -140,11 +142,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CreateUnitRosterDependencies();
         }
 
-        public void LoadTeam(BinaryReader BR, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public void LoadTeam(BinaryReader BR, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            TeamCharacters.Load(BR, DicRequirement, DicEffect);
-            TeamUnits.Load(BR, DicUnitType, DicRequirement, DicEffect);
-            TeamSquads.Load(BR, DicUnitType, DicRequirement, DicEffect);
+            TeamCharacters.Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            TeamUnits.Load(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            TeamSquads.Load(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             CreateCharacterRosterDependencies();
             CreateUnitRosterDependencies();
@@ -193,13 +196,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
             //Read everything
             while (!SR.EndOfStream)
             {
                 string PilotName = SR.ReadLine();
 
-                Character NewCharacter = new Character(PilotName, GameScreen.ContentFallback, DicRequirement, DicEffect);
+                Character NewCharacter = new Character(PilotName, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 NewCharacter.Level = 1;
                 TeamCharacters.ListAll.Add(NewCharacter);
             }
@@ -216,6 +221,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Dictionary<string, Unit> DicUnitType = Unit.LoadAllUnits();
             Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             //Read everything
             while (!SR.EndOfStream)
@@ -223,7 +229,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string UnitName = SR.ReadLine();
 
                 string[] UnitInfo = UnitName.Split(new[] { "\\", "/" }, StringSplitOptions.None);
-                Unit _SpawnUnit = Unit.FromType(UnitInfo[0], UnitName.Remove(0, UnitInfo[0].Length + 1), GameScreen.ContentFallback, DicUnitType, DicRequirement, DicEffect);
+                Unit _SpawnUnit = Unit.FromType(UnitInfo[0], UnitName.Remove(0, UnitInfo[0].Length + 1), GameScreen.ContentFallback, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 TeamUnits.ListAll.Add(_SpawnUnit);
             }

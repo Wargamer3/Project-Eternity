@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Microsoft.Xna.Framework.Content;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.Core.Units.Builder
 {
@@ -29,12 +29,14 @@ namespace ProjectEternity.Core.Units.Builder
             this.Map = Map;
         }
 
-        public UnitBuilder(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
-            : this(Name, Content, null, DicUnitType, DicRequirement, DicEffect)
+        public UnitBuilder(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            : this(Name, Content, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget)
         {
         }
 
-        public UnitBuilder(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitBuilder(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name)
         {
             this.Map = Map;
@@ -46,7 +48,7 @@ namespace ProjectEternity.Core.Units.Builder
             OriginalUnitName = BR.ReadString();
             if (!string.IsNullOrEmpty(OriginalUnitName) && DicUnitType != null)
             {
-                OriginalUnit = Unit.FromFullName(OriginalUnitName, Content, DicUnitType, DicRequirement, DicEffect);
+                OriginalUnit = Unit.FromFullName(OriginalUnitName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 _UnitStat = OriginalUnit.UnitStat;
                 _HP = OriginalUnit.MaxHP;
                 _EN = OriginalUnit.MaxEN;
@@ -86,7 +88,7 @@ namespace ProjectEternity.Core.Units.Builder
 
             if (OriginalUnit == null)
             {
-                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
                 _UnitStat = OriginalUnit.UnitStat;
                 _HP = OriginalUnit.MaxHP;
                 _EN = OriginalUnit.MaxEN;
@@ -107,15 +109,16 @@ namespace ProjectEternity.Core.Units.Builder
             return new List<ActionPanel>() { new ActionPanelBuild(Map, this) };
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             if (Map == null)
             {
-                return new UnitBuilder(Name, Content, null, DicRequirement, DicEffect);
+                return new UnitBuilder(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             else
             {
-                return new UnitBuilder(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect);
+                return new UnitBuilder(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 

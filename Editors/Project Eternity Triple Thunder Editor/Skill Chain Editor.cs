@@ -13,14 +13,16 @@ namespace ProjectEternity.Editors.SkillChainEditor
     public partial class SkillChainEditor : BaseEditor
     {
         private bool AllowEvent;
-        Dictionary<string, BaseSkillRequirement> DicRequirement;
-        Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, BaseSkillRequirement> DicRequirement;
+        private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public SkillChainEditor()
         {
             InitializeComponent();
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             foreach (KeyValuePair<string, BaseEffect> ActiveEffect in Projectile.GetCoreProjectileEffects(null))
             {
@@ -89,7 +91,7 @@ namespace ProjectEternity.Editors.SkillChainEditor
             int tvSkillsNodesCount = BR.ReadInt32();
             for (int N = 0; N < tvSkillsNodesCount; ++N)
             {
-                BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BR, DicRequirement, DicEffect);
+                BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 CreateTree(ActiveSkill, tvSkills.Nodes);
             }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Units.Transforming;
@@ -18,6 +18,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
 
         private Dictionary<string, BaseSkillRequirement> DicRequirement;
         private Dictionary<string, BaseEffect> DicEffect;
+        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public UnitTransformingEditor()
         {
@@ -25,6 +26,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
 
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
         }
 
         public UnitTransformingEditor(string FilePath, object[] Params)
@@ -80,7 +82,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
         private void LoadUnit(string UnitPath)
         {
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(27);
-            UnitTransforming NewUnit = new UnitTransforming(Name, null, DicRequirement, DicEffect);
+            UnitTransforming NewUnit = new UnitTransforming(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             for (int U = 0; U < NewUnit.ArrayTransformingUnit.Length; ++U)
             {

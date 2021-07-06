@@ -9,6 +9,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -31,6 +32,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, Unit> DicUnitType;
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
+        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
+        public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
         public DataScreen(Roster PlayerRoster)
         {
@@ -52,6 +55,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicUnitType = Unit.LoadAllUnits();
             DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             DicEffect = BaseEffect.LoadAllEffects();
+            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
         }
 
         public override void Update(GameTime gameTime)
@@ -82,7 +87,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else if (CursorIndex == 1)
                 {
-                    LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect);
+                    LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 }
                 else if (CursorIndex == 2)
                 {
@@ -148,7 +153,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Close();
         }
 
-        public static void LoadProgression(Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public static void LoadProgression(Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             FileStream FS = new FileStream("SRWE Save.bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS);
@@ -175,7 +181,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BattleMap.DicRouteChoices.Add(RouteKey, RouteValue);
             }
 
-            PlayerRoster.LoadTeam(BR, DicUnitType, DicRequirement, DicEffect);
+            PlayerRoster.LoadTeam(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             int ListPartCount = BR.ReadInt32();
             for (int P = 0; P < ListPartCount; P++)
@@ -184,11 +190,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string[] PartByType = LoadedPartPath.Split('/');
                 if (PartByType[0] == "Standard Parts")
                 {
-                    SystemList.ListPart.Add(LoadedPartPath, new UnitStandardPart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect));
+                    SystemList.ListPart.Add(LoadedPartPath, new UnitStandardPart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
                 else if (PartByType[0] == "Consumable Parts")
                 {
-                    SystemList.ListPart.Add(LoadedPartPath, new UnitConsumablePart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect));
+                    SystemList.ListPart.Add(LoadedPartPath, new UnitConsumablePart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
                 }
             }
 

@@ -18,7 +18,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            AutomaticSkillTargetType.DicTargetType.Clear();
+            DummyMap.DicAutomaticSkillTarget.Clear();
 
             AttackContext = new TripleThunderAttackContext();
             RobotContext = new TripleThunderRobotContext();
@@ -73,7 +73,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         public void TestLoad()
         {
             CreateDummySkill(DummyMap.DicRequirement[TimeAliveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[SelfAttackTargetType.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[SelfAttackTargetType.Name].Copy(),
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
         }
 
@@ -81,7 +81,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         public void TestSkillActivation()
         {
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[TimeAliveRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[SelfAttackTargetType.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[SelfAttackTargetType.Name].Copy(),
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
 
             AttackContext.Owner = CreateDummyRobot();
@@ -95,7 +95,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         {
             TimeAliveRequirement NewRequirement = (TimeAliveRequirement)DummyMap.DicRequirement[TimeAliveRequirement.Name].Copy();
             NewRequirement.TimeToWait = 1000;
-            BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement, AutomaticSkillTargetType.DicTargetType[SelfAttackTargetType.Name].Copy(),
+            BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement, DummyMap.DicAutomaticSkillTarget[SelfAttackTargetType.Name].Copy(),
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
 
             AttackContext.Owner = CreateDummyRobot();
@@ -111,7 +111,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         {
             TimeAliveRequirement NewRequirement = (TimeAliveRequirement)DummyMap.DicRequirement[TimeAliveRequirement.Name].Copy();
             NewRequirement.TimeToWait = 1000;
-            BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement, AutomaticSkillTargetType.DicTargetType[SelfAttackTargetType.Name].Copy(),
+            BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement, DummyMap.DicAutomaticSkillTarget[SelfAttackTargetType.Name].Copy(),
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
 
             AttackContext.Owner = CreateDummyRobot();
@@ -127,7 +127,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         {
             TimeAliveRequirement NewRequirement = (TimeAliveRequirement)DummyMap.DicRequirement[TimeAliveRequirement.Name].Copy();
             NewRequirement.TimeToWait = 1000;
-            BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement, AutomaticSkillTargetType.DicTargetType[SelfAttackTargetType.Name].Copy(),
+            BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement, DummyMap.DicAutomaticSkillTarget[SelfAttackTargetType.Name].Copy(),
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
 
             AttackContext.Owner = CreateDummyRobot();
@@ -144,7 +144,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         public void TestShootSkillRequirementFail()
         {
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[ShootRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[SelfTargetType.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[SelfTargetType.Name].Copy(),
                                                             DummyMap.DicEffect[ShootWeaponEffect.Name].Copy());
 
             RobotContext.Target = CreateDummyRobot();
@@ -158,7 +158,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         public void TestShootSkillRequirementSuccess()
         {
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[ShootRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[SelfTargetType.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[SelfTargetType.Name].Copy(),
                                                             DummyMap.DicEffect[ShootWeaponEffect.Name].Copy());
 
             RobotContext.Target = CreateDummyRobot();
@@ -180,14 +180,14 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
             TimedBulletSkillRequirement.TimeToWait = 0.4;
             
             BaseAutomaticSkill TimedBulletSkill = CreateDummySkill(TimedBulletSkillRequirement,
-                                                            AutomaticSkillTargetType.DicTargetType[SelfAttackTargetType.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[SelfAttackTargetType.Name].Copy(),
                                                             TimedBulletSkillEffect);
 
             BaseEffect DummyBulletInitSkillEffect = DummyMap.DicEffect[LaunchAttackEffect.Name].Copy();
             DummyBulletInitSkillEffect.ListFollowingSkill = new List<BaseAutomaticSkill>() { TimedBulletSkill };
 
             BaseAutomaticSkill DummyBulletInitSkill = CreateDummySkill(new OnCreatedRequirement(),
-                                                            AutomaticSkillTargetType.DicTargetType[SelfAttackTargetType.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[SelfAttackTargetType.Name].Copy(),
                                                             DummyBulletInitSkillEffect);
 
             BaseEffect ShootEffect1 = DummyMap.DicEffect[ShootWeaponEffect.Name].Copy();
@@ -199,11 +199,11 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
             ShootEffect2.MaximumStack = 5;
 
             BaseAutomaticSkill DummyInitShootSkill1 = CreateDummySkill(DummyMap.DicRequirement[ShootRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[SelfTargetType.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[SelfTargetType.Name].Copy(),
                                                             ShootEffect1);
 
             BaseAutomaticSkill DummyInitShootSkill2 = CreateDummySkill(DummyMap.DicRequirement[ShootRequirement.Name].Copy(),
-                                                            AutomaticSkillTargetType.DicTargetType[SelfTargetType.Name].Copy(),
+                                                            DummyMap.DicAutomaticSkillTarget[SelfTargetType.Name].Copy(),
                                                             ShootEffect2);
 
             RobotContext.Target = CreateDummyRobot();

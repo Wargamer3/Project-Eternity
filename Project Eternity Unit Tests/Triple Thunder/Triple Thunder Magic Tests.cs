@@ -22,8 +22,6 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            AutomaticSkillTargetType.DicTargetType.Clear();
-
             AttackContext = new TripleThunderAttackContext();
             RobotContext = new TripleThunderRobotContext();
             DummyMap = new FightingZone(RobotContext, AttackContext);

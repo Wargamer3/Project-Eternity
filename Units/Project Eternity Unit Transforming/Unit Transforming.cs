@@ -56,12 +56,14 @@ namespace ProjectEternity.Core.Units.Transforming
             : base(Map)
         { }
         
-        public UnitTransforming(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
-            : this(Name, Content, null, DicRequirement, DicEffect)
+        public UnitTransforming(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            : this(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget)
         {
         }
 
-        public UnitTransforming(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitTransforming(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name, Map)
         {
             this.ItemName = Name;
@@ -86,7 +88,7 @@ namespace ProjectEternity.Core.Units.Transforming
                 string TransformingUnitPath = BR.ReadString();
                 ArrayTransformingUnit[U].TransformingUnitName = TransformingUnitPath;
 
-                ArrayTransformingUnit[U].UnitTransformed = new UnitNormal(TransformingUnitPath, Content, DicRequirement, DicEffect);
+                ArrayTransformingUnit[U].UnitTransformed = new UnitNormal(TransformingUnitPath, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 ArrayTransformingUnit[U].WillRequirement = BR.ReadInt32();
                 ArrayTransformingUnit[U].TurnLimit = BR.ReadInt32();
@@ -195,9 +197,10 @@ namespace ProjectEternity.Core.Units.Transforming
             return new List<ActionPanel>();
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return new UnitTransforming(Name, Content, Map, DicRequirement, DicEffect);
+            return new UnitTransforming(Name, Content, Map, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         protected override void DoQuickSave(BinaryWriter BW)

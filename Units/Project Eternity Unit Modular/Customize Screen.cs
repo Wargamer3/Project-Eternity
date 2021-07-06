@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core.Attacks;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens;
+using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.Core.Units.Modular
 {

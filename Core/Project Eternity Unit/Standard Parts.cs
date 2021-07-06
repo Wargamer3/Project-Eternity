@@ -18,7 +18,8 @@ namespace ProjectEternity.Core.Parts
             Skill.ListSkillLevel.Add(new BaseSkillLevel());
         }
 
-        public UnitStandardPart(string SkillPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitStandardPart(string SkillPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             Skill = new BaseAutomaticSkill();
             Skill.Name = Path.GetFileNameWithoutExtension(SkillPath);
@@ -37,7 +38,7 @@ namespace ProjectEternity.Core.Parts
             int ListActivationRequirementCount = BR.ReadInt32();
             for (int R = 0; R < ListActivationRequirementCount; R++)
             {
-                NewSkillLevel.ListActivation.Add(new BaseSkillActivation(BR, DicRequirement, DicEffect));
+                NewSkillLevel.ListActivation.Add(new BaseSkillActivation(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             }
 
             FS.Close();
@@ -73,9 +74,10 @@ namespace ProjectEternity.Core.Parts
             }
         }
 
-        public override void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        public override void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            Skill.ReloadSkills(DicRequirement, DicEffect);
+            Skill.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         [CategoryAttribute("Level Attributes"),

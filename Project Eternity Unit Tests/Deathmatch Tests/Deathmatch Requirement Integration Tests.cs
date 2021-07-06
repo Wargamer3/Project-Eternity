@@ -17,8 +17,6 @@ namespace ProjectEternity.UnitTests
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            AutomaticSkillTargetType.DicTargetType.Clear();
-
             GlobalDeathmatchContext = new DeathmatchContext();
             DummyMap = DeathmatchMapHelper.CreateDummyMap(GlobalDeathmatchContext);
         }
@@ -46,7 +44,7 @@ namespace ProjectEternity.UnitTests
             BaseSkillActivation TestSkillActivation = new BaseSkillActivation();
 
             TestSkillActivation.ListEffectTarget.Add(new List<string>() { "Self" });
-            TestSkillActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { AutomaticSkillTargetType.DicTargetType[EffectActivationSelf.Name].Copy() });
+            TestSkillActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy() });
             TestSkillActivation.ActivationPercentage = 100;
             TestSkillActivation.ListRequirement.Add(Requirement);
 

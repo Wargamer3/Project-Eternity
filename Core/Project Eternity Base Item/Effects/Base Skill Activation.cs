@@ -58,7 +58,8 @@ namespace ProjectEternity.Core.Item
             _ActivationPercentage = Clone._ActivationPercentage;
         }
 
-        public BaseSkillActivation(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public BaseSkillActivation(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             ActivationPercentage = BR.ReadByte();
             _Weight = BR.ReadInt32();
@@ -86,13 +87,13 @@ namespace ProjectEternity.Core.Item
                 {
                     string ListActivationType = BR.ReadString();
                     NewListActivationType.Add(ListActivationType);
-                    NewListEffectTargetReal.Add(AutomaticSkillTargetType.DicTargetType[ListActivationType].Copy());
+                    NewListEffectTargetReal.Add(DicAutomaticSkillTarget[ListActivationType].Copy());
                 }
 
                 ListEffectTarget.Add(NewListActivationType);
                 ListEffectTargetReal.Add(NewListEffectTargetReal);
 
-                ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect));
+                ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             }
         }
 

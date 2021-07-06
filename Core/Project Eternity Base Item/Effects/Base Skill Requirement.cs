@@ -57,7 +57,7 @@ namespace ProjectEternity.Core.Item
         {
             Dictionary<string, BaseSkillRequirement> DicRequirement = LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), typeof(BaseSkillRequirement));
 
-            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
                 foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in LoadFromAssembly(ActiveAssembly, typeof(BaseSkillRequirement)))

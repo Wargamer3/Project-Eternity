@@ -35,12 +35,14 @@ namespace ProjectEternity.Core.Units.Combining
             ArrayCombiningUnitName = new string[0];
         }
 
-        public UnitCombining(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
-            : this(Name, Content, null, DicUnitType, DicRequirement, DicEffect)
+        public UnitCombining(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            : this(Name, Content, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget)
         {
         }
 
-        public UnitCombining(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public UnitCombining(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name, Map)
         {
             Combined = false;
@@ -52,7 +54,7 @@ namespace ProjectEternity.Core.Units.Combining
             OriginalUnitName = BR.ReadString();
             if (!string.IsNullOrEmpty(OriginalUnitName) && DicUnitType!=null)
             {
-                OriginalUnit = FromFullName(OriginalUnitName, Content, DicUnitType, DicRequirement, DicEffect);
+                OriginalUnit = FromFullName(OriginalUnitName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 _UnitStat = OriginalUnit.UnitStat;
                 _HP = OriginalUnit.MaxHP;
@@ -65,7 +67,7 @@ namespace ProjectEternity.Core.Units.Combining
             CombinedUnitName = BR.ReadString();
             if (!string.IsNullOrEmpty(CombinedUnitName) && DicUnitType != null)
             {
-                CombinedUnit = FromFullName(CombinedUnitName, Content, DicUnitType, DicRequirement, DicEffect);
+                CombinedUnit = FromFullName(CombinedUnitName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
 
             int ArrayCombiningUnitLength = BR.ReadInt32();
@@ -87,8 +89,8 @@ namespace ProjectEternity.Core.Units.Combining
 
             if (OriginalUnit == null)
             {
-                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
-                CombinedUnit = FromFullName(CombinedUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect);
+                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
+                CombinedUnit = FromFullName(CombinedUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget  );
 
                 _UnitStat = OriginalUnit.UnitStat;
                 _HP = OriginalUnit.MaxHP;
@@ -183,15 +185,16 @@ namespace ProjectEternity.Core.Units.Combining
             return new List<ActionPanel>();
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect)
+        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             if (Map == null)
             {
-                return new UnitCombining(Name, Content, null, DicRequirement, DicEffect);
+                return new UnitCombining(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             else
             {
-                return new UnitCombining(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect);
+                return new UnitCombining(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 

@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Collections.Generic;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Skill;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -18,6 +18,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
             Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
             #region Parts
 
@@ -31,11 +33,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     string[] PartByType = Line.Split('/');
                     if (PartByType[0] == "Standard Parts")
                     {
-                        ListPart.Add(Line, new UnitStandardPart("Content/Units/" + Line + ".pep", DicRequirement, DicEffect));
+                        ListPart.Add(Line, new UnitStandardPart("Content/Units/" + Line + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget));
                     }
                     else if (PartByType[0] == "Consumable Parts")
                     {
-                        ListPart.Add(Line, new UnitConsumablePart("Content/Units/" + Line + ".pep", DicRequirement, DicEffect));
+                        ListPart.Add(Line, new UnitConsumablePart("Content/Units/" + Line + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
                     }
                 }
                 SR.Close();
@@ -46,13 +48,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 foreach (string File in Files)
                 {
-                    ListPart.Add(File, new UnitStandardPart(File, DicRequirement, DicEffect));
+                    ListPart.Add(File, new UnitStandardPart(File, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
                 Files = Directory.GetFiles("Content/Units/Consumable Parts", "*.pep", SearchOption.AllDirectories);
 
                 foreach (var File in Files)
                 {
-                    ListPart.Add(File, new UnitConsumablePart(File, DicRequirement, DicEffect));
+                    ListPart.Add(File, new UnitConsumablePart(File, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
                 }
             }
 
@@ -67,7 +69,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 while (!SR.EndOfStream)
                 {
                     string Line = SR.ReadLine();
-                    ListBuyableSkill.Add(new BaseAutomaticSkill("Content/Characters/Skills/" + Line + ".pecs", Line, DicRequirement, DicEffect));
+                    ListBuyableSkill.Add(new BaseAutomaticSkill("Content/Characters/Skills/" + Line + ".pecs", Line, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
                 SR.Close();
             }
@@ -78,7 +80,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 foreach (string File in Files)
                 {
                     string RelativePath = File;
-                    ListBuyableSkill.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect));
+                    ListBuyableSkill.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
             }
 
@@ -93,7 +95,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 while (!SR.EndOfStream)
                 {
                     string Line = SR.ReadLine();
-                    ListSpirit.Add(new ManualSkill("Content/Characters/Spirits/" + Line + ".pecs", DicRequirement, DicEffect));
+                    ListSpirit.Add(new ManualSkill("Content/Characters/Spirits/" + Line + ".pecs", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
                 }
                 SR.Close();
             }
@@ -103,7 +105,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 foreach (string File in Files)
                 {
-                    ListSpirit.Add(new ManualSkill(File, DicRequirement, DicEffect));
+                    ListSpirit.Add(new ManualSkill(File, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
                 }
             }
 
@@ -118,7 +120,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 while (!SR.EndOfStream)
                 {
                     string Line = SR.ReadLine();
-                    ListBuyableSkill.Add(new BaseAutomaticSkill("Content/Characters/Skills/" + Line + ".pecs", Line, DicRequirement, DicEffect));
+                    ListBuyableSkill.Add(new BaseAutomaticSkill("Content/Characters/Skills/" + Line + ".pecs", Line, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
                 SR.Close();
             }
@@ -129,7 +131,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 foreach (string File in Files)
                 {
                     string RelativePath = File;
-                    ListSkill.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect));
+                    ListSkill.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
             }
 
@@ -144,7 +146,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 while (!SR.EndOfStream)
                 {
                     string Line = SR.ReadLine();
-                    ListAbility.Add(new BaseAutomaticSkill("Content/Units/Abilities/" + Line + ".pecs", Line, DicRequirement, DicEffect));
+                    ListAbility.Add(new BaseAutomaticSkill("Content/Units/Abilities/" + Line + ".pecs", Line, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
                 SR.Close();
             }
@@ -155,7 +157,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 foreach (string File in Files)
                 {
                     string RelativePath = File;
-                    ListAbility.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect));
+                    ListAbility.Add(new BaseAutomaticSkill(File, RelativePath, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
             }
 
