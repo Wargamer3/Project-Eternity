@@ -1,10 +1,16 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
+using Roslyn;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.ControlHelper;
 
@@ -50,6 +56,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private List<Unit> ListPresentUnit;
 
+        public Dictionary<string, BaseSkillRequirement> DicRequirement;
+        public Dictionary<string, BaseEffect> DicEffect;
+
+        public BattleContext GlobalBattleContext;
+
         public UnitPartsScreen(Roster PlayerRoster)
             : base(PlayerRoster)
         {
@@ -59,6 +70,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicTerrainLetterAttribute = new Dictionary<string, char>();
             CurrentPagePart = 1;
             PageMaxPart = (int)Math.Ceiling(SystemList.ListPart.Count / (double)MaxPerPagePart);
+
+            DicRequirement = new Dictionary<string, BaseSkillRequirement>();
+            DicEffect = new Dictionary<string, BaseEffect>();
+            GlobalBattleContext = new BattleContext();
         }
 
         public override void Load()
@@ -71,6 +86,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
+
+            LoadEffects();
+            LoadSkillRequirements();
+            LoadAutomaticSkillActivation();
+            LoadManualSkillActivation();
 
             ListPartInfo = new List<PartInfo>();
             foreach(var ActivePart in SystemList.ListPart)
@@ -91,6 +111,107 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         }
                     }
                 }
+            }
+        }
+
+        public void LoadEffects()
+        {
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+            {
+                DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+            }
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+            {
+                DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+            }
+
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+                {
+                    DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+                }
+            }
+
+            ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+                {
+                    DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+                }
+            }
+        }
+
+        public void LoadSkillRequirements()
+        {
+            DicRequirement.Add(BaseSkillRequirement.OnCreatedRequirementName, new OnCreatedRequirement());
+
+            Dictionary<string, BaseSkillRequirement> DicRequirementCore = BaseSkillRequirement.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(UnitSkillRequirement), GlobalBattleContext);
+            foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementCore)
+            {
+                DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+            }
+            Dictionary<string, BaseSkillRequirement> DicRequirementBattleMap = BaseSkillRequirement.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(UnitSkillRequirement), GlobalBattleContext);
+            foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementBattleMap)
+            {
+                DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+            }
+
+            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                Dictionary<string, BaseSkillRequirement> DicRequirementCoreAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(UnitSkillRequirement), GlobalBattleContext);
+                foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementCoreAssembly)
+                {
+                    DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
+            }
+            ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                Dictionary<string, BaseSkillRequirement> DicRequirementBattleMapAssembly = BaseSkillRequirement.LoadFromAssembly(ActiveAssembly, typeof(UnitSkillRequirement), GlobalBattleContext);
+                foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in DicRequirementBattleMapAssembly)
+                {
+                    DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
+            }
+        }
+
+        public void LoadAutomaticSkillActivation()
+        {
+            AutomaticSkillTargetType.DicTargetType.Clear();
+            AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(AutomaticSkillTargetType));
+            AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(AutomaticSkillTargetType), GlobalBattleContext);
+
+            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType));
+            }
+            ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType), GlobalBattleContext);
+            }
+        }
+
+        public void LoadManualSkillActivation()
+        {
+            ManualSkillTarget.DicManualSkillTarget.Clear();
+            ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"));
+            ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"));
+
+            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                ManualSkillTarget.LoadFromAssembly(ActiveAssembly);
+            }
+            ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                ManualSkillTarget.LoadFromAssembly(ActiveAssembly, this);
             }
         }
 
@@ -135,7 +256,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             SelectedUnit.ActivePassiveBuffs();
             if (CursorIndexListPart > 0)
             {
-                SystemList.ListPart.ElementAt(CursorIndexListPart - 1).Value.ActivatePassiveBuffs();
+                GlobalBattleContext.SetContext(null, SelectedUnit, SelectedUnit.Pilot, null, SelectedUnit, SelectedUnit.Pilot);
+                UnitPart ActivePart = SystemList.ListPart.ElementAt(CursorIndexListPart - 1).Value;
+                ActivePart.ReloadSkills(DicRequirement, DicEffect, ManualSkillTarget.DicManualSkillTarget);
+                ActivePart.ActivatePassiveBuffs();
             }
         }
 
@@ -208,7 +332,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorIndexListPart == 0)
                 {
                     //Remove link.
-                    foreach (var ActivePartInfo in ListPartInfo)
+                    foreach (PartInfo ActivePartInfo in ListPartInfo)
                     {
                         if (ActivePartInfo.ActivePart == SelectedUnit.ArrayParts[CursorIndexUnitPart])
                         {
@@ -343,22 +467,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawStatChange(g, CurrentMaxMV, SelectedUnit.MaxMovement, StartX + 150, Y);
 
             g.DrawString(fntFinlanderFont, "Move Type", new Vector2(StartX + 15, Y += LineSpacing), Color.White);
-            if (ListTerrainChoices.Contains(UnitStats.TerrainAir))
+            if (ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainAir))
                 g.Draw(sprSky, new Vector2(StartX + 150, Y + 7), Color.White);
             else
                 g.Draw(sprLand, new Vector2(StartX + 150, Y + 7), Color.White);
 
-            if (SelectedUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
+            if (SelectedUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainAir))
                 g.Draw(sprSky, new Vector2(StartX + 230, Y + 7), Color.White);
             else
                 g.Draw(sprLand, new Vector2(StartX + 230, Y + 7), Color.White);
 
             g.DrawString(fntFinlanderFont, "Terrain", new Vector2(StartX + 15, Y += LineSpacing), Color.White);
 
-            DrawTerrainChange(g, UnitStats.TerrainAir, sprSky, StartX + 40, Y + 28);
-            DrawTerrainChange(g, UnitStats.TerrainLand, sprLand, StartX + 90, Y + 28);
-            DrawTerrainChange(g, UnitStats.TerrainSea, sprSea, StartX + 140, Y + 28);
-            DrawTerrainChange(g, UnitStats.TerrainSpace, sprSpace, StartX + 190, Y + 28);
+            DrawTerrainChange(g, Core.Units.UnitStats.TerrainAir, sprSky, StartX + 40, Y + 28);
+            DrawTerrainChange(g, Core.Units.UnitStats.TerrainLand, sprLand, StartX + 90, Y + 28);
+            DrawTerrainChange(g, Core.Units.UnitStats.TerrainSea, sprSea, StartX + 140, Y + 28);
+            DrawTerrainChange(g, Core.Units.UnitStats.TerrainSpace, sprSpace, StartX + 190, Y + 28);
         }
 
         private void DrawPartMenu(CustomSpriteBatch g, bool ShowListPartCursor)

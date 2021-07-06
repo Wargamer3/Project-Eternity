@@ -3,6 +3,8 @@ using System.Text;
 using System.ComponentModel;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.Core.Parts
 {
@@ -53,13 +55,13 @@ namespace ProjectEternity.Core.Parts
             {
                 bool IsPassive = false;
 
-                foreach (var ActiveRequirement in Activation.ListRequirement)
+                foreach (BaseSkillRequirement ActiveRequirement in Activation.ListRequirement)
                 {
                     IsPassive = ActiveRequirement.CanActivatePassive();
                 }
                 if (IsPassive)
                 {
-                    foreach (var ActiveEffect in Activation.ListEffect)
+                    foreach (BaseEffect ActiveEffect in Activation.ListEffect)
                     {
                         if (ActiveEffect.EffectTypeName == "Unit Stat Effect")
                         {
@@ -69,6 +71,11 @@ namespace ProjectEternity.Core.Parts
                     }
                 }
             }
+        }
+
+        public override void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        {
+            Skill.ReloadSkills(DicRequirement, DicEffect);
         }
 
         [CategoryAttribute("Level Attributes"),

@@ -488,10 +488,9 @@ namespace ProjectEternity.Core.Units
         {
             for (int P = 0; P < ArrayParts.Length; ++P)
             {
-                if (ArrayParts[P] != null && ArrayParts[P].PartType == PartTypes.Consumable)
+                if (ArrayParts[P] != null)
                 {
-                    UnitConsumablePart ActivePart = (UnitConsumablePart)ArrayParts[P];
-                    ActivePart.Spirit.ReloadSkills(DicRequirement, DicEffect, DicTarget);
+                    ArrayParts[P].ReloadSkills(DicRequirement, DicEffect, DicTarget);
                 }
             }
 

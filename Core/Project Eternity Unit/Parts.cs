@@ -1,4 +1,8 @@
-﻿namespace ProjectEternity.Core.Parts
+﻿using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
+using System.Collections.Generic;
+
+namespace ProjectEternity.Core.Parts
 {
     public enum PartTypes { Standard, Consumable }
 
@@ -11,5 +15,7 @@
         public int Quantity = 1;
         
         public abstract void ActivatePassiveBuffs();
+
+        public abstract void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget);
     }
 }
