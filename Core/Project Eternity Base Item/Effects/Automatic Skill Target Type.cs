@@ -27,7 +27,7 @@ namespace ProjectEternity.Core.Item
 
             LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), typeof(AutomaticSkillTargetType));
 
-            var ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
                 LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType));

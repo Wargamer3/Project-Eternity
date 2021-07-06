@@ -34,8 +34,6 @@ namespace ProjectEternity.Core.Units
         public bool IsWingmanALocked;
         public bool IsWingmanBLocked;
         public bool IsDead;
-        public List<int> ListAttackedTeam;//List of teams that this Unit has encounter. (Used to to know if we have access to its data)
-        public TagSystem TeamTags;
 
         public override int Width { get { return CurrentLeader.SpriteMap.Width; } }
         public override int Height { get { return CurrentLeader.SpriteMap.Height; } }

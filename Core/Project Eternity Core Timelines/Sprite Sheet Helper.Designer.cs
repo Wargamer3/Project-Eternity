@@ -107,12 +107,14 @@
             // 
             // lvSpriteSheets
             // 
+            this.lvSpriteSheets.HideSelection = false;
             this.lvSpriteSheets.Location = new System.Drawing.Point(6, 19);
             this.lvSpriteSheets.MultiSelect = false;
             this.lvSpriteSheets.Name = "lvSpriteSheets";
             this.lvSpriteSheets.Size = new System.Drawing.Size(157, 291);
             this.lvSpriteSheets.TabIndex = 0;
             this.lvSpriteSheets.UseCompatibleStateImageBehavior = false;
+            this.lvSpriteSheets.View = System.Windows.Forms.View.List;
             this.lvSpriteSheets.SelectedIndexChanged += new System.EventHandler(this.lvSpriteSheets_SelectedIndexChanged);
             // 
             // btnCancel
