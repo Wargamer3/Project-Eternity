@@ -75,6 +75,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DicRequirement = new Dictionary<string, BaseSkillRequirement>();
             DicEffect = new Dictionary<string, BaseEffect>();
+            DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
+            DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
             GlobalBattleContext = new BattleContext();
         }
 
@@ -144,6 +146,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
                 }
             }
+
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadAllEffects())
+            {
+                if (!DicEffect.ContainsKey(ActiveEffect.Key))
+                {
+                    DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+                }
+            }
         }
 
         private void LoadSkillRequirements()
@@ -180,6 +190,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
                 }
             }
+
+            foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in BaseSkillRequirement.LoadAllRequirements())
+            {
+                if (!DicRequirement.ContainsKey(ActiveRequirement.Key))
+                {
+                    DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
+            }
         }
 
         private void LoadAutomaticSkillActivation()
@@ -206,6 +224,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
                 foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(AutomaticSkillTargetType), GlobalBattleContext))
+                {
+                    DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+                }
+            }
+
+            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadAllTargetTypes())
+            {
+                if (!DicAutomaticSkillTarget.ContainsKey(ActiveAutomaticSkill.Key))
                 {
                     DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
                 }
@@ -237,6 +263,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
                 foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssembly(ActiveAssembly, this))
+                {
+                    DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
+                }
+            }
+
+            foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadAllTargetTypes())
+            {
+                if (!DicManualSkillTarget.ContainsKey(ActiveManualSkill.Key))
                 {
                     DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
                 }
