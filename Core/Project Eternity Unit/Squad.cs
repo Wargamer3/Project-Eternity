@@ -103,6 +103,7 @@ namespace ProjectEternity.Core.Units
 
             SquadDefenseBattleBehavior = "";
             ListAttackedTeam = new List<int>();
+            ListParthDrop = new List<string>();
             TeamTags = new TagSystem();
 
             if (WingmanB != null)

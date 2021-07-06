@@ -542,7 +542,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 //Will Gains
                 if (Result.Target.HP <= 0)
                 {
-                    BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, ListPlayer[AttackerPlayerIndex].IsHuman);
+                    BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, AttackerSquad, ListPlayer[AttackerPlayerIndex].IsHuman);
                     BattleRecap.TotalExpGained += (int)(Result.Target.Pilot.EXPValue * Attacker.Boosts.EXPMultiplier);
 
                     ListDeadDefender.Add(Result.Target);

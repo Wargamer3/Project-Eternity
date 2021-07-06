@@ -150,7 +150,7 @@ namespace ProjectEternity.Core.Scripts
                     List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitParts);
                     if (Items != null)
                     {
-                        value = Items[0].Substring(0, Items[0].Length - 4).Substring(29);
+                        value = Items[0].Substring(0, Items[0].Length - 4).Substring(14);
                     }
                 }
                 return value;

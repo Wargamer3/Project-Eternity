@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.ControlHelper;
@@ -32,11 +35,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly DeathmatchMap Map;
         private readonly Character Pilot;
         private readonly Unit Owner;
+        private readonly Squad OwnerSquad;
         public readonly bool IsHuman;
         private Squad Attacker;
         private SupportSquadHolder ActiveSquadSupport;
         private Squad TargetSquad;
         private SupportSquadHolder TargetSquadSupport;
+        private List<string> ListDropPart;
 
         private readonly int OriginalPilotLevel;
         private readonly int OriginalPilotSP;
@@ -51,7 +56,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         #endregion
 
-        public LevelUpMenu(DeathmatchMap Map, Character Pilot, Unit Owner, bool IsHuman)
+        public LevelUpMenu(DeathmatchMap Map, Character Pilot, Unit Owner, Squad OwnerSquad, bool IsHuman)
         {
             RequireDrawFocus = true;
             RequireFocus = true;
@@ -61,7 +66,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Map = Map;
             this.Pilot = Pilot;
             this.Owner = Owner;
+            this.OwnerSquad = OwnerSquad;
             this.IsHuman = IsHuman;
+
+            ListDropPart = new List<string>();
 
             OriginalPilotLevel = Pilot.Level;
             OriginalPilotSP = Pilot.MaxSP;
@@ -93,6 +101,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ActiveSquadSupport = ActiveSquadSupport;
             this.TargetSquad = TargetSquad;
             this.TargetSquadSupport = TargetSquadSupport;
+
+            Squad Enemy;
+
+            if (OwnerSquad == Attacker)
+            {
+                Enemy = TargetSquad;
+            }
+            else
+            {
+                Enemy = Attacker;
+            }
+
+            foreach (string PartDropPath in Enemy.ListParthDrop)
+            {
+                string[] PartByType = PartDropPath.Split('/');
+                ListDropPart.Add(PartByType[PartByType.Length - 1]);
+                if (PartByType[0] == "Standard Parts")
+                {
+                    SystemList.ListPart.Add(PartDropPath, new UnitStandardPart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect));
+                }
+                else if (PartByType[0] == "Consumable Parts")
+                {
+                    SystemList.ListPart.Add(PartDropPath, new UnitConsumablePart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect));
+                }
+            }
         }
 
         public void LevelUp()
@@ -199,7 +232,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawBox(g, new Vector2(30, Y += 36), 580, 90, Color.Green);
             for (int i = 0; i < 4; ++i)
             {
-                g.DrawString(fntFinlanderFont, "---------------", new Vector2(50 + (300 * (i / 2)), Y + 10 + (40 * (i % 2))), Color.White);
+                if (i < ListDropPart.Count)
+                {
+                    g.DrawString(fntFinlanderFont, ListDropPart[i], new Vector2(50 + (300 * (i / 2)), Y + 10 + (40 * (i % 2))), Color.White);
+                }
+                else
+                {
+                    g.DrawString(fntFinlanderFont, "---------------", new Vector2(50 + (300 * (i / 2)), Y + 10 + (40 * (i % 2))), Color.White);
+                }
             }
         }
 

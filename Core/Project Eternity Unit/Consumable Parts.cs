@@ -19,6 +19,11 @@ namespace ProjectEternity.Core.Parts
         {
         }
 
+        public override void ReloadSkills(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, ManualSkillTarget> DicTarget)
+        {
+            Spirit.ReloadSkills(DicRequirement, DicEffect, DicTarget);
+        }
+
         public override string Name
         {
             get

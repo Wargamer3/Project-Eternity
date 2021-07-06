@@ -147,7 +147,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (CanRepair)
                     {
-                        LevelUpMenu BattleRecap = new LevelUpMenu(Map, ActiveSquad.CurrentLeader.Pilot, ActiveSquad.CurrentLeader, true);
+                        LevelUpMenu BattleRecap = new LevelUpMenu(Map, ActiveSquad.CurrentLeader.Pilot, ActiveSquad.CurrentLeader, ActiveSquad, true);
                         BattleRecap.TotalExpGained += 25;
                         if (Constants.ShowBattleRecap)
                         {

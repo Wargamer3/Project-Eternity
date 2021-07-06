@@ -297,15 +297,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (!string.IsNullOrEmpty(PartDropPath))
                     {
-                        string[] PartByType = PartDropPath.Split('/');
-                        if (PartByType[0] == "Standard Parts")
-                        {
-                            SystemList.ListPart.Add(PartDropPath, new UnitStandardPart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect));
-                        }
-                        else if (PartByType[0] == "Consumable Parts")
-                        {
-                            SystemList.ListPart.Add(PartDropPath, new UnitConsumablePart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect));
-                        }
+                        NewSquad.ListParthDrop.Add(PartDropPath);
                     }
                 }
             }

@@ -26,6 +26,7 @@ namespace ProjectEternity.Core.Units
         public List<UnitMapComponent> ListTransportedUnit;
         public bool CanTransportUnit;
         public List<string> ListAllowedTransportUnitName;
+        public List<string> ListParthDrop;
         public List<int> ListAttackedTeam;//List of teams that this Unit has encounter. (Used to to know if we have access to its data)
         public TagSystem TeamTags;
         public abstract int Width { get; }
