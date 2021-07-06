@@ -58,6 +58,7 @@
     <Compile Include="Attack\Attack Animations.cs" />
     <Compile Include="Attack\MAP Attack Attributes.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Manual Skill Target.cs" />
     <Compile Include="Parts.cs" />
     <Compile Include="Effects.cs" />
     <Compile Include="Automatic Skills.cs" />

@@ -2,10 +2,10 @@
 using System.IO;
 using System.Globalization;
 using System.ComponentModel;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
-using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Effects
 {
