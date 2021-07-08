@@ -942,9 +942,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             {
                 //TODO: Don't use Begin to use the transformationMatrix as it force the rendering making it impossible to properly use the drawing depth.
                 if (ActiveLayer.LayerBlendState == AnimationLayer.LayerBlendStates.Add)
+                {
                     g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, ActiveLayer.SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix);
+                }
                 else if (ActiveLayer.LayerBlendState == AnimationLayer.LayerBlendStates.Substract)
+                {
                     g.Begin(SpriteSortMode.BackToFront, NegativeBlendState, ActiveLayer.SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix);
+                }
                 else
                 {
                     GraphicsDevice.Clear(ClearOptions.Stencil, Color.Black, 0, 0);
