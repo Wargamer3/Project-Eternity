@@ -114,7 +114,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 GameScreen.DrawText(g, TargetUnitResult.Target.Pilot.Name, new Vector2(X + 45, Y + 24), Color.White);
             }
 
-            g.Draw(TargetUnitResult.Target.SpriteMap, new Vector2(X + 6, Y + 8), Color.White);
+            g.Draw(TargetUnitResult.Target.SpriteMap, new Rectangle(X + 6, Y + 8, 32, 32), Color.White);
 
             GameScreen.DrawBar(g, Map.sprBarSmallBackground, Map.sprBarSmallHP, new Vector2(X + 140, Y + 13), TargetUnitResult.Target.HP, TargetUnitResult.Target.MaxHP);
             GameScreen.DrawBar(g, Map.sprBarSmallBackground, Map.sprBarSmallEN, new Vector2(X + 140, Y + 30), TargetUnitResult.Target.EN, TargetUnitResult.Target.MaxEN);
