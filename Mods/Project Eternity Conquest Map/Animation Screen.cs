@@ -155,14 +155,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         GraphicsDevice.SetRenderTarget(ActiveMarkerAnimation.ListAnimationLayer[i].renderTarget);
                         GraphicsDevice.Clear(Color.Transparent);
                         //Don't draw submarkers.
-                        DrawLayer(g, ActiveMarkerAnimation.ListAnimationLayer[i], false, null);
+                        DrawLayer(g, ActiveMarkerAnimation.ListAnimationLayer[i], false, false, null, true);
                     }
                 }
 
                 GraphicsDevice.SetRenderTarget(ListAnimationLayer[L].renderTarget);
                 GraphicsDevice.Clear(Color.Transparent);
 
-                DrawLayer(g, ListAnimationLayer[L], true, null);
+                DrawLayer(g, ListAnimationLayer[L], false, true, null, true);
             }
         }
 

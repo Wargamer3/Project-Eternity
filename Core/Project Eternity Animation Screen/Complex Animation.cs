@@ -350,7 +350,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 GraphicsDevice.SetRenderTarget(ListRenderTarget[L]);
                 GraphicsDevice.Clear(Color.Transparent);
 
-                DrawLayer(g, ListAnimationLayer[L], false, null);
+                DrawLayer(g, ListAnimationLayer[L], false, false, null, true);
 
                 for (int A = 0; A < ListActivePartialAnimation.Count; A++)
                 {
@@ -358,7 +358,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     
                     if (L < ListActivePartialAnimation[A].ListAnimationLayer.BasicLayerCount)
                     {
-                        DrawLayer(g, ListActivePartialAnimation[A].ListAnimationLayer[L], false, null);
+                        DrawLayer(g, ListActivePartialAnimation[A].ListAnimationLayer[L], false, false, null, true);
                     }
                 }
             }
@@ -369,7 +369,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 for (int L = ListAnimationLayer.BasicLayerCount; L < ListActivePartialAnimation[A].ListAnimationLayer.BasicLayerCount; L++)
                 {
-                    DrawLayer(g, ListActivePartialAnimation[A].ListAnimationLayer[L], false, null);
+                    DrawLayer(g, ListActivePartialAnimation[A].ListAnimationLayer[L], false, false, null, true);
                 }
             }
 

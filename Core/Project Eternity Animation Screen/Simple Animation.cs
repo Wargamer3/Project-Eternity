@@ -408,7 +408,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 GameScreen.GraphicsDevice.SetRenderTarget(ListAnimationLayer[L].renderTarget);
                 GameScreen.GraphicsDevice.Clear(Color.Transparent);
 
-                DrawLayer(g, ListAnimationLayer[L], false, null);
+                DrawLayer(g, ListAnimationLayer[L], false, false, null, true);
             }
         }
 

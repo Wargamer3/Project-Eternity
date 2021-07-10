@@ -126,7 +126,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 g.End();
 
-                DrawLayer(g, ListAnimationLayer[L], false, null);
+                DrawLayer(g, ListAnimationLayer[L], false, false, null, true);
             }
 
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);

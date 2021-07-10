@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Texture2D sprInfinity;
         private bool IsLoaded;
 
-        public AnimationScreen(string AnimationPath, DeathmatchMap Map, Squad ActiveSquad, Squad EnemySquad, Attack ActiveAttack,
+        public AnimationScreen(string AnimationPath, DeathmatchMap Map, Squad AttackingSquad, Squad EnemySquad, Attack ActiveAttack,
             BattleMap.SquadBattleResult BattleResult, AnimationUnitStats UnitStats, AnimationBackground ActiveTerrain, string ExtraText, bool IsLeftAttacking)
             : base(AnimationPath)
         {
@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             IsLoaded = false;
 
             this.Map = Map;
-            this.AttackingSquad = ActiveSquad;
+            this.AttackingSquad = AttackingSquad;
             this.EnemySquad = EnemySquad;
             this.ActiveAttack = ActiveAttack;
             this.BattleResult = BattleResult;
@@ -99,13 +99,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ExtraText = ExtraText;
             this.IsLeftAttacking = IsLeftAttacking;
 
-            RightSquad = ActiveSquad;
+            RightSquad = AttackingSquad;
             LeftSquad = EnemySquad;
 
             if (IsLeftAttacking)
             {
                 RightSquad = EnemySquad;
-                LeftSquad = ActiveSquad;
+                LeftSquad = AttackingSquad;
             }
         }
 
@@ -261,78 +261,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int L = ListAnimationLayer.Count - 1; L >= 0; --L)
             {
-                #region Markers
-
-                foreach (List<Timeline> ListActiveEvent in ListAnimationLayer[L].DicTimelineEvent.Values)
-                {
-                    foreach (Timeline ActiveTimeline in ListActiveEvent)
-                    {
-                        MarkerTimeline ActiveMarkerEvent = ActiveTimeline as MarkerTimeline;
-                        if (ActiveMarkerEvent == null)
-                            continue;
-
-                        string AnimationPath = "";
-
-                        switch (ActiveMarkerEvent.MarkerType)
-                        {
-                            case "Support Stand":
-                            case "Support Standing":
-                            case "Enemy Standing":
-                            case "Enemy Stand":
-                            case "Enemy Default":
-                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemyUnit.Animations.Default.AnimationName);
-                                break;
-
-                            case "Enemy Wingman A Standing":
-                            case "Enemy Wingman 1 Standing":
-                                if (EnemySquad.CurrentWingmanA != null)
-                                    ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemySquad.CurrentWingmanA.Animations.Default.AnimationName);
-                                break;
-
-                            case "Enemy Wingman B Standing":
-                            case "Enemy Wingman 2 Standing":
-                                if (EnemySquad.CurrentWingmanB != null)
-                                    ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemySquad.CurrentWingmanB.Animations.Default.AnimationName);
-                                break;
-
-                            case "Enemy Hit":
-                                if (BattleResult.ArrayResult[0].AttackMissed)
-                                {
-                                    AnimationPath = EnemyUnit.Animations.Default.AnimationName;
-                                }
-                                else
-                                {
-                                    AnimationPath = EnemyUnit.Animations.Hit.AnimationName;
-                                }
-                                if (File.Exists("Content/Animations/" + AnimationPath + ".pea"))
-                                {
-                                    ActiveMarkerEvent.AnimationMarker = new AnimationClass(AnimationPath);
-                                }
-                                else
-                                    ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemyUnit.Animations.Default.AnimationName);
-                                break;
-
-                            case "Player Stand":
-                            case "Player Standing":
-                            case "Player Default":
-                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(ActiveUnit.Animations.Default.AnimationName);
-                                break;
-
-                            default:
-                                AnimationPath = EnemyUnit.Animations.Default.AnimationName;
-                                if (ActiveMarkerEvent.MarkerType.StartsWith("Player "))
-                                {
-                                    AnimationPath = ActiveMarkerEvent.MarkerType.Split(new string[] { "Player " }, StringSplitOptions.RemoveEmptyEntries)[0];
-                                }
-                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(AnimationPath);
-                                break;
-                        }
-                        ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
-                        ActiveMarkerEvent.AnimationMarker.Load();
-                    }
-                }
-
-                #endregion
+                InitMarkers(ListAnimationLayer[L], AttackingSquad, EnemySquad);
 
                 #region Quotes
 
@@ -421,6 +350,133 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     GraphicsDevice.PresentationParameters.BackBufferHeight);
 
                 #endregion
+            }
+        }
+
+        private void InitMarkers(AnimationLayer ActiveLayer, Squad AttackingSquad, Squad EnemySquad)
+        {
+            Unit ActiveUnit = AttackingSquad.CurrentLeader;
+            Unit EnemyUnit = EnemySquad.CurrentLeader;
+
+            foreach (List<Timeline> ListActiveEvent in ActiveLayer.DicTimelineEvent.Values)
+            {
+                foreach (Timeline ActiveTimeline in ListActiveEvent)
+                {
+                    MarkerTimeline ActiveMarkerEvent = ActiveTimeline as MarkerTimeline;
+                    if (ActiveMarkerEvent == null)
+                        continue;
+
+                    string AnimationPath;
+
+                    switch (ActiveMarkerEvent.MarkerType)
+                    {
+                        case "Support Stand":
+                        case "Support Standing":
+                        case "Enemy Standing":
+                        case "Enemy Stand":
+                        case "Enemy Default":
+                            ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemyUnit.Animations.Default.AnimationName);
+
+                            ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
+                            ActiveMarkerEvent.AnimationMarker.Load();
+
+                            for (int L = ActiveMarkerEvent.AnimationMarker.ListAnimationLayer.Count - 1; L >= 0; --L)
+                            {
+                                InitMarkers(ActiveMarkerEvent.AnimationMarker.ListAnimationLayer[L], EnemySquad, AttackingSquad);
+                            }
+                            break;
+
+                        case "Enemy Wingman A Standing":
+                        case "Enemy Wingman 1 Standing":
+                            if (EnemySquad.CurrentWingmanA != null)
+                            {
+                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemySquad.CurrentWingmanA.Animations.Default.AnimationName);
+
+                                ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
+                                ActiveMarkerEvent.AnimationMarker.Load();
+
+                                for (int L = ActiveMarkerEvent.AnimationMarker.ListAnimationLayer.Count - 1; L >= 0; --L)
+                                {
+                                    InitMarkers(ActiveMarkerEvent.AnimationMarker.ListAnimationLayer[L], EnemySquad, AttackingSquad);
+                                }
+                            }
+                            break;
+
+                        case "Enemy Wingman B Standing":
+                        case "Enemy Wingman 2 Standing":
+                            if (EnemySquad.CurrentWingmanB != null)
+                            {
+                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemySquad.CurrentWingmanB.Animations.Default.AnimationName);
+
+                                ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
+                                ActiveMarkerEvent.AnimationMarker.Load();
+
+                                for (int L = ActiveMarkerEvent.AnimationMarker.ListAnimationLayer.Count - 1; L >= 0; --L)
+                                {
+                                    InitMarkers(ActiveMarkerEvent.AnimationMarker.ListAnimationLayer[L], EnemySquad, AttackingSquad);
+                                }
+                            }
+                            break;
+
+                        case "Enemy Hit":
+                            if (BattleResult.ArrayResult[0].AttackMissed)
+                            {
+                                AnimationPath = EnemyUnit.Animations.Default.AnimationName;
+                            }
+                            else
+                            {
+                                AnimationPath = EnemyUnit.Animations.Hit.AnimationName;
+                            }
+                            if (File.Exists("Content/Animations/" + AnimationPath + ".pea"))
+                            {
+                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(AnimationPath);
+                            }
+                            else
+                            {
+                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemyUnit.Animations.Default.AnimationName);
+                            }
+
+                            ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
+                            ActiveMarkerEvent.AnimationMarker.Load();
+
+                            for (int L = ActiveMarkerEvent.AnimationMarker.ListAnimationLayer.Count - 1; L >= 0; --L)
+                            {
+                                InitMarkers(ActiveMarkerEvent.AnimationMarker.ListAnimationLayer[L], EnemySquad, AttackingSquad);
+                            }
+                            break;
+
+                        case "Player Stand":
+                        case "Player Standing":
+                        case "Player Default":
+                            ActiveMarkerEvent.AnimationMarker = new AnimationClass(ActiveUnit.Animations.Default.AnimationName);
+
+                            ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
+                            ActiveMarkerEvent.AnimationMarker.Load();
+
+                            for (int L = ActiveMarkerEvent.AnimationMarker.ListAnimationLayer.Count - 1; L >= 0; --L)
+                            {
+                                InitMarkers(ActiveMarkerEvent.AnimationMarker.ListAnimationLayer[L], AttackingSquad, EnemySquad);
+                            }
+                            break;
+
+                        default:
+                            AnimationPath = EnemyUnit.Animations.Default.AnimationName;
+                            if (ActiveMarkerEvent.MarkerType.StartsWith("Player "))
+                            {
+                                AnimationPath = ActiveMarkerEvent.MarkerType.Split(new string[] { "Player " }, StringSplitOptions.RemoveEmptyEntries)[0];
+                            }
+                            ActiveMarkerEvent.AnimationMarker = new AnimationClass(AnimationPath);
+
+                            ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
+                            ActiveMarkerEvent.AnimationMarker.Load();
+
+                            for (int L = ActiveMarkerEvent.AnimationMarker.ListAnimationLayer.Count - 1; L >= 0; --L)
+                            {
+                                InitMarkers(ActiveMarkerEvent.AnimationMarker.ListAnimationLayer[L], AttackingSquad, EnemySquad);
+                            }
+                            break;
+                    }
+                }
             }
         }
 
@@ -513,15 +569,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         GraphicsDevice.SetRenderTarget(ActiveMarkerAnimation.ListAnimationLayer[i].renderTarget);
                         GraphicsDevice.Clear(Color.Transparent);
-                        //Don't draw submarkers.
-                        DrawLayer(g, ActiveMarkerAnimation.ListAnimationLayer[i], false, null);
+                        //Draw submarkers.
+                        DrawLayer(g, ActiveMarkerAnimation.ListAnimationLayer[i], true, false, null, true);
                     }
                 }
 
                 GraphicsDevice.SetRenderTarget(ListAnimationLayer[L].renderTarget);
                 GraphicsDevice.Clear(Color.Transparent);
 
-                DrawLayer(g, ListAnimationLayer[L], true, null);
+                DrawLayer(g, ListAnimationLayer[L], false, true, null, true);
             }
         }
 

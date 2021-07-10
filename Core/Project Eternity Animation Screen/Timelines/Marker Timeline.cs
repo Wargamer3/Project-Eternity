@@ -154,7 +154,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                         OnProgressiveNextKeyFrameAnimationSprite(ActiveKeyFrame, KeyFrame, NextKeyFrame);
                     }
                     else
+                    {
                         NextEvent = null;
+                    }
                 }
             }
 

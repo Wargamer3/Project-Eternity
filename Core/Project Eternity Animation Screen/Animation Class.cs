@@ -936,9 +936,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             throw new NotImplementedException();
         }
 
-        public void DrawLayer(CustomSpriteBatch g, AnimationLayer ActiveLayer, bool DrawMarker, AnimationLayer Parent, bool DrawChild = true)
+        public void DrawLayer(CustomSpriteBatch g, AnimationLayer ActiveLayer, bool DrawNestedMarkers, bool DrawMarkerRenderTarget, AnimationLayer Parent, bool BeginDraw)
         {
-            if (DrawChild)
+            if (BeginDraw)
             {
                 //TODO: Don't use Begin to use the transformationMatrix as it force the rendering making it impossible to properly use the drawing depth.
                 if (ActiveLayer.LayerBlendState == AnimationLayer.LayerBlendStates.Add)
@@ -953,7 +953,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 {
                     GraphicsDevice.Clear(ClearOptions.Stencil, Color.Black, 0, 0);
                     g.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, AlwaysStencilState, null, null);
-                    DrawLayer(g, Parent, false, null, false);
+                    DrawLayer(g, Parent, DrawNestedMarkers, false, null, false);
 
                     g.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, EqualStencilState, null, null);
                     for (int A = 0; A < ActiveLayer.ListVisibleObject.Count; A++)
@@ -968,7 +968,20 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 ActiveLayer.ListVisibleObject[A].Draw(g, false);
             }
 
-            if (DrawMarker)
+            if (DrawNestedMarkers)
+            {
+                for (int M = 0; M < ActiveLayer.ListActiveMarker.Count; M++)
+                {
+                    AnimationClass ActiveMarkerAnimation = ActiveLayer.ListActiveMarker[M].AnimationMarker;
+
+                    for (int i = 0; i < ActiveMarkerAnimation.ListAnimationLayer.BasicLayerCount; i++)
+                    {
+                        DrawLayer(g, ActiveMarkerAnimation.ListAnimationLayer[i], DrawNestedMarkers, DrawMarkerRenderTarget, null, false);
+                    }
+                }
+            }
+
+            if (DrawMarkerRenderTarget)
             {
                 for (int M = 0; M < ActiveLayer.ListActiveMarker.Count; M++)
                 {
@@ -994,14 +1007,15 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     }
                 }
             }
-            g.End();
 
-            if (DrawChild)
+            if (BeginDraw)
             {
-                for (int L = 0; L < ActiveLayer.ListChildren.Count; L++)
-                {
-                    DrawLayer(g, ActiveLayer.ListChildren[L], DrawMarker, ActiveLayer, true);
-                }
+                g.End();
+            }
+
+            for (int L = 0; L < ActiveLayer.ListChildren.Count; L++)
+            {
+                DrawLayer(g, ActiveLayer.ListChildren[L], DrawNestedMarkers, DrawMarkerRenderTarget, ActiveLayer, BeginDraw);
             }
         }
     }
