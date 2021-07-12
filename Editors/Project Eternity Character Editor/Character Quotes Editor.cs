@@ -135,6 +135,15 @@ namespace ProjectEternity.Editors.CharacterEditor
             {
                 txtQuoteEditor.Enabled = true;
                 txtQuoteEditor.Text = (string)lstQuotes.SelectedItem;
+
+                if (lvBaseQuotes.SelectedIndices.Count == 1)
+                {
+                    txtPortraitPath.Text = ((Character.QuoteSet)lvBaseQuotes.SelectedItems[0].Tag).PortraitPath;
+                }
+                else if (dgvQuoteSets.CurrentRow != null && dgvQuoteSets.CurrentRow.Tag != null)
+                {
+                    txtPortraitPath.Text = ((Character.QuoteSet)dgvQuoteSets.CurrentRow.Tag).PortraitPath;
+                }
             }
         }
 
