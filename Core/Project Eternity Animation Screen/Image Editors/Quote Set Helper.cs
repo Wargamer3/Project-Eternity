@@ -91,6 +91,16 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             }
         }
 
+        private void txtQuoteSet_TextChanged(object sender, EventArgs e)
+        {
+            ActiveQuote.ActiveQuoteSet.QuoteSetName = txtQuoteSetName.Text;
+        }
+
+        private void ckUseLast_CheckedChanged(object sender, EventArgs e)
+        {
+            ActiveQuote.ActiveQuoteSet.QuoteSetUseLast = ckUseLast.Checked;
+        }
+
         private void rbQuoteChoiceRandom_CheckedChanged(object sender, EventArgs e)
         {
             if (lstQuoteSet.SelectedIndex >= 0)
@@ -129,6 +139,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             {
                 ActiveQuote.ActiveQuoteSet.QuoteStyle = QuoteSet.QuoteStyles.QuoteSet;
                 gbQuoteSet.Enabled = true;
+                txtQuoteSetName.Text = ActiveQuote.ActiveQuoteSet.QuoteSetName;
                 ckUseLast.Checked = ActiveQuote.ActiveQuoteSet.QuoteSetUseLast;
 
                 if (ActiveQuote.ActiveQuoteSet.QuoteSetChoice == QuoteSet.QuoteSetChoices.Random)
@@ -154,11 +165,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             {
                 ActiveQuote.ActiveQuoteSet.QuoteStyle = QuoteSet.QuoteStyles.Reaction;
             }
-        }
-
-        private void ckUseLast_CheckedChanged(object sender, EventArgs e)
-        {
-            ActiveQuote.ActiveQuoteSet.QuoteSetUseLast = ckUseLast.Checked;
         }
 
         private void txtCustomText_TextChanged(object sender, EventArgs e)

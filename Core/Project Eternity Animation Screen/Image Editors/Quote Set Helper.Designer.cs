@@ -44,16 +44,16 @@
             this.lblQuoteChoice = new System.Windows.Forms.Label();
             this.txtCustomText = new System.Windows.Forms.TextBox();
             this.lblQuoteSet = new System.Windows.Forms.Label();
-            this.txtQuoteSet = new System.Windows.Forms.TextBox();
+            this.txtQuoteSetName = new System.Windows.Forms.TextBox();
             this.gbQuoteSetList = new System.Windows.Forms.GroupBox();
             this.btnRemoveQuoteSet = new System.Windows.Forms.Button();
             this.btnAddQuoteSet = new System.Windows.Forms.Button();
             this.lstQuoteSet = new System.Windows.Forms.ListBox();
             this.gbCustomText = new System.Windows.Forms.GroupBox();
+            this.txtPortraitPath = new System.Windows.Forms.TextBox();
+            this.btnSelectPortrait = new System.Windows.Forms.Button();
             this.gbQuoteSet = new System.Windows.Forms.GroupBox();
             this.ckUseLast = new System.Windows.Forms.CheckBox();
-            this.btnSelectPortrait = new System.Windows.Forms.Button();
-            this.txtPortraitPath = new System.Windows.Forms.TextBox();
             this.gbTarget.SuspendLayout();
             this.gbQuoteStyle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtQuoteChoiceValue)).BeginInit();
@@ -238,10 +238,11 @@
             // 
             // txtQuoteSet
             // 
-            this.txtQuoteSet.Location = new System.Drawing.Point(6, 32);
-            this.txtQuoteSet.Name = "txtQuoteSet";
-            this.txtQuoteSet.Size = new System.Drawing.Size(160, 20);
-            this.txtQuoteSet.TabIndex = 1;
+            this.txtQuoteSetName.Location = new System.Drawing.Point(6, 32);
+            this.txtQuoteSetName.Name = "txtQuoteSet";
+            this.txtQuoteSetName.Size = new System.Drawing.Size(160, 20);
+            this.txtQuoteSetName.TabIndex = 1;
+            this.txtQuoteSetName.TextChanged += new System.EventHandler(this.txtQuoteSet_TextChanged);
             // 
             // gbQuoteSetList
             // 
@@ -296,6 +297,24 @@
             this.gbCustomText.TabStop = false;
             this.gbCustomText.Text = "Custom Text";
             // 
+            // txtPortraitPath
+            // 
+            this.txtPortraitPath.Location = new System.Drawing.Point(106, 45);
+            this.txtPortraitPath.Name = "txtPortraitPath";
+            this.txtPortraitPath.ReadOnly = true;
+            this.txtPortraitPath.Size = new System.Drawing.Size(134, 20);
+            this.txtPortraitPath.TabIndex = 9;
+            // 
+            // btnSelectPortrait
+            // 
+            this.btnSelectPortrait.Location = new System.Drawing.Point(6, 45);
+            this.btnSelectPortrait.Name = "btnSelectPortrait";
+            this.btnSelectPortrait.Size = new System.Drawing.Size(94, 23);
+            this.btnSelectPortrait.TabIndex = 7;
+            this.btnSelectPortrait.Text = "Select Portait";
+            this.btnSelectPortrait.UseVisualStyleBackColor = true;
+            this.btnSelectPortrait.Click += new System.EventHandler(this.btnSelectPortrait_Click);
+            // 
             // gbQuoteSet
             // 
             this.gbQuoteSet.Controls.Add(this.ckUseLast);
@@ -304,7 +323,7 @@
             this.gbQuoteSet.Controls.Add(this.rbQuoteChoiceFixed);
             this.gbQuoteSet.Controls.Add(this.rbQuoteChoiceRandom);
             this.gbQuoteSet.Controls.Add(this.lblQuoteSet);
-            this.gbQuoteSet.Controls.Add(this.txtQuoteSet);
+            this.gbQuoteSet.Controls.Add(this.txtQuoteSetName);
             this.gbQuoteSet.Location = new System.Drawing.Point(125, 87);
             this.gbQuoteSet.Name = "gbQuoteSet";
             this.gbQuoteSet.Size = new System.Drawing.Size(246, 100);
@@ -322,24 +341,6 @@
             this.ckUseLast.Text = "Use Last";
             this.ckUseLast.UseVisualStyleBackColor = true;
             this.ckUseLast.CheckedChanged += new System.EventHandler(this.ckUseLast_CheckedChanged);
-            // 
-            // btnSelectPortrait
-            // 
-            this.btnSelectPortrait.Location = new System.Drawing.Point(6, 45);
-            this.btnSelectPortrait.Name = "btnSelectPortrait";
-            this.btnSelectPortrait.Size = new System.Drawing.Size(94, 23);
-            this.btnSelectPortrait.TabIndex = 7;
-            this.btnSelectPortrait.Text = "Select Portait";
-            this.btnSelectPortrait.UseVisualStyleBackColor = true;
-            this.btnSelectPortrait.Click += new System.EventHandler(this.btnSelectPortrait_Click);
-            // 
-            // txtPortraitPath
-            // 
-            this.txtPortraitPath.Location = new System.Drawing.Point(106, 45);
-            this.txtPortraitPath.Name = "txtPortraitPath";
-            this.txtPortraitPath.ReadOnly = true;
-            this.txtPortraitPath.Size = new System.Drawing.Size(134, 20);
-            this.txtPortraitPath.TabIndex = 9;
             // 
             // QuoteSetHelper
             // 
@@ -394,7 +395,7 @@
         private System.Windows.Forms.GroupBox gbCustomText;
         private System.Windows.Forms.GroupBox gbQuoteSet;
         private System.Windows.Forms.CheckBox ckUseLast;
-        private System.Windows.Forms.TextBox txtQuoteSet;
+        private System.Windows.Forms.TextBox txtQuoteSetName;
         private System.Windows.Forms.TextBox txtPortraitPath;
         private System.Windows.Forms.Button btnSelectPortrait;
 
