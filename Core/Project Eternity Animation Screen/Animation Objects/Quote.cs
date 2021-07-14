@@ -9,7 +9,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public Targets Target;
         public int SelectedQuoteSet;
         public List<QuoteSet> ListQuoteSet;
-        public string ActiveText;
+        public List<string> ActiveText;
         public SimpleAnimation ActiveCharacter;
         public string PortraitPath;
 
@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             Target = Targets.Attacker;
             SelectedQuoteSet = 0;
             PortraitPath = "";
-            ActiveText = "";
+            ActiveText = new List<string>();
 
             ListQuoteSet = new List<QuoteSet>();
             ListQuoteSet.Add(new QuoteSet());

@@ -304,23 +304,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         case QuoteSet.QuoteStyles.Reaction:
                             QuoteTypes ActiveQuoteType = QuoteTypes.Damaged;
                             ActiveQuoteTuple = GetQuote(ActiveQuoteType, ActivePilot, EnemyPilot, UseRandomIndex, ref QuoteIndex);
-                            ActiveQuote.ActiveText = ActiveQuoteTuple.Item2;
+                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 650);
                             ActiveQuote.PortraitPath = ActiveQuoteTuple.Item1;
                             break;
 
                         case QuoteSet.QuoteStyles.QuoteSet:
                             ActiveQuoteTuple = GetAttackQuote(ActiveQuoteSet.QuoteSetName, ActivePilot, EnemyPilot, UseRandomIndex, ref QuoteIndex);
-                            ActiveQuote.ActiveText = ActiveQuoteTuple.Item2;
+                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 650);
                             ActiveQuote.PortraitPath = ActiveQuoteTuple.Item1;
                             break;
 
                         case QuoteSet.QuoteStyles.Custom:
-                            ActiveQuote.ActiveText = ActiveQuoteSet.CustomText;
+                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteSet.CustomText, 650);
                             break;
 
                         case QuoteSet.QuoteStyles.MoveIn:
                             ActiveQuoteTuple = GetQuote(QuoteTypes.BattleStart, ActivePilot, EnemyPilot, UseRandomIndex, ref QuoteIndex);
-                            ActiveQuote.ActiveText = ActiveQuoteTuple.Item2;
+                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 650);
                             ActiveQuote.PortraitPath = ActiveQuoteTuple.Item1;
                             break;
                     }
@@ -656,15 +656,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else
                 {
                     g.Draw(ActiveCharacter.StaticSprite,
-                        new Rectangle(30, Constants.Height - VNBoxHeight + 40, ActiveCharacter.StaticSprite.Width, ActiveCharacter.StaticSprite.Height),
+                        new Rectangle(30, Constants.Height - VNBoxHeight + 10, ActiveCharacter.StaticSprite.Width, ActiveCharacter.StaticSprite.Height),
                         new Rectangle(0, 0, ActiveCharacter.StaticSprite.Width, ActiveCharacter.StaticSprite.Height), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                 }
             }
 
-            g.DrawString(fntFinlanderFont, ExtraText, new Vector2(25, Constants.Height - VNBoxHeight + 10), Color.White);
-
             if (ActiveQuoteSet != null)
-                g.DrawString(fntFinlanderFont, ActiveQuoteSet, new Vector2(125, Constants.Height - VNBoxHeight + 40), Color.White);
+                TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 450, Constants.Height - VNBoxHeight + 10, 650);
 
             g.End();
             g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
