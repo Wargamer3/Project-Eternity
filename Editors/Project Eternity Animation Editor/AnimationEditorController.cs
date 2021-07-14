@@ -395,7 +395,7 @@ namespace ProjectEternity.Editors.AnimationEditor
                 }
                 if (CurrentIndex == TargetIndex)
                 {
-                    if (InsertInGroup)
+                    if (InsertInGroup && Owner.ActiveAnimation.ListAnimationLayer[i] != Owner.ActiveAnimation.ListAnimationLayer.EngineLayer)
                     {
                         Owner.ActiveAnimation.ListAnimationLayer[i].ListChildren.Add(ActiveEvent);
                         return;

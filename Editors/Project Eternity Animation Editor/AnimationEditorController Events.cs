@@ -168,7 +168,7 @@ namespace ProjectEternity.Editors.AnimationEditor
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                if (ActiveAnimationLayersEvent != null)
+                if (ActiveAnimationLayersEvent != null && ActiveAnimationLayersEvent != Owner.ActiveAnimation.ListAnimationLayer.EngineLayer)
                 {
                     AnimationLayersDragDropInsertIndex = -2;
                     Owner.DoDragDrop(ActiveAnimationLayersEvent, DragDropEffects.Move);
@@ -215,22 +215,30 @@ namespace ProjectEternity.Editors.AnimationEditor
         {
             Point MousePos = Owner.panAnimationLayers.PointToClient(new Point(e.X, e.Y));
             int NewDragDropInsertIndex = MousePos.Y / AnimationLayerItemHeight + Owner.vsbAnimationLayer.Value;
-            if (NewDragDropInsertIndex < AnimationLayersVisibleItemCount)
+
+            if (NewDragDropInsertIndex < AnimationLayersVisibleItemCount - 1)
             {
                 if (NewDragDropInsertIndex != AnimationLayersDragDropSelectedItemIndex)
                 {
-                    AnimationClass.AnimationLayer SelectItem = GetAnimationLayer(NewDragDropInsertIndex);
                     int YValue = MousePos.Y % AnimationLayerItemHeight;
                     if (YValue < AnimationLayerItemHeight * 0.25f || YValue > AnimationLayerItemHeight * 0.75f)
+                    {
                         AnimationLayersDragDropInsertIndex = (MousePos.Y + AnimationLayerItemHeight / 2) / AnimationLayerItemHeight + Owner.vsbAnimationLayer.Value;
+                    }
                     else
+                    {
                         AnimationLayersDragDropInsertIndex = -1;
+                    }
                 }
                 else
+                {
                     AnimationLayersDragDropInsertIndex = -2;
+                }
             }
             else
-                AnimationLayersDragDropInsertIndex = AnimationLayersVisibleItemCount;
+            {
+                AnimationLayersDragDropInsertIndex = AnimationLayersVisibleItemCount - 1;
+            }
 
             DrawAnimationLayers();
         }
