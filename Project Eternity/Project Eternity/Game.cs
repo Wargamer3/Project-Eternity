@@ -176,6 +176,7 @@ namespace ProjectEternity
             BattleMap.DicGlobalVariables = new Dictionary<string, string>();
             BattleMap.DicRouteChoices = new Dictionary<string, int>();
             GameScreen.LoadHelpers(Content);
+            TextHelper.LoadHelpers(Content);
 
             #region Key mapping
 

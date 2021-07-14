@@ -136,7 +136,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int Y = (Constants.Height - 150) / 2;
 
             DrawBox(g, new Vector2(StartX, Y + 95), BoxWidth, 25, Color.White);
-            DrawText(g, "SELECT: PARTS",
+            TextHelper.DrawText(g, "SELECT: PARTS",
                 new Vector2(StartX + 8, Y + 98), Color.White);
             DrawBox(g, new Vector2(StartX, Y + 120), BoxWidth, 110, Color.White);
 
@@ -146,7 +146,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (CursorIndex < ListUnitPart.Count)
                 {
-                    DrawText(g, ListUnitPart[CursorIndex].Spirit.Description,
+                    TextHelper.DrawText(g, ListUnitPart[CursorIndex].Spirit.Description,
                         new Vector2(32, 3), Color.White);
                 }
             }
@@ -155,12 +155,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (ListUnitPart[S].Spirit.CanActivate)
                 {
-                    DrawText(g, ListUnitPart[S].Name,
+                    TextHelper.DrawText(g, ListUnitPart[S].Name,
                         new Vector2(StartX + 8, Y + 123 + S * 18), Color.White);
                 }
                 else
                 {
-                    DrawText(g, ListUnitPart[S].Name,
+                    TextHelper.DrawText(g, ListUnitPart[S].Name,
                         new Vector2(StartX + 8, Y + 123 + S * 18), Color.Gray);
                 }
             }

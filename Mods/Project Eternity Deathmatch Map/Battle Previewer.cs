@@ -108,10 +108,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             GameScreen.DrawBox(g, new Vector2(X, Y), 200, 80, BoxColor);
 
-            GameScreen.DrawText(g, TargetUnitResult.Target.UnitStat.Name, new Vector2(X + 45, Y + 6), Color.White);
+            TextHelper.DrawText(g, TargetUnitResult.Target.UnitStat.Name, new Vector2(X + 45, Y + 6), Color.White);
             if (TargetUnitResult.Target.Pilot != null)
             {
-                GameScreen.DrawText(g, TargetUnitResult.Target.Pilot.Name, new Vector2(X + 45, Y + 24), Color.White);
+                TextHelper.DrawText(g, TargetUnitResult.Target.Pilot.Name, new Vector2(X + 45, Y + 24), Color.White);
             }
 
             g.Draw(TargetUnitResult.Target.SpriteMap, new Rectangle(X + 6, Y + 8, 32, 32), Color.White);
@@ -127,12 +127,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (!TargetUnitResult.AttackMissed)
                 {
-                    GameScreen.DrawText(g, "Hit " + TargetUnitResult.Accuracy.ToString(), new Vector2(X + 6, Y + 42), Color.White);
+                    TextHelper.DrawText(g, "Hit " + TargetUnitResult.Accuracy.ToString(), new Vector2(X + 6, Y + 42), Color.White);
                 }
 
                 if (TargetUnitResult.AttackDamage != 0)
                 {
-                    GameScreen.DrawText(g, "DMG " + TargetUnitResult.AttackDamage + "(" + (int)(TargetUnitResult.AttackDamage * 1.2f) + ")", new Vector2(X + 6, Y + 58), Color.White);
+                    TextHelper.DrawText(g, "DMG " + TargetUnitResult.AttackDamage + "(" + (int)(TargetUnitResult.AttackDamage * 1.2f) + ")", new Vector2(X + 6, Y + 58), Color.White);
                 }
             }
         }

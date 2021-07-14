@@ -257,8 +257,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             g.Draw(ActiveUnit.SpriteMap, new Vector2(X + 30, Y), Color.White);
             g.DrawString(fntFinlanderFont, ActiveUnit.RelativePath, new Vector2(X + 70, Y), Color.White);
-            GameScreen.DrawTextRightAligned(g, ActiveUnit.MaxHP.ToString(), new Vector2(340, Y), Color.White);
-            GameScreen.DrawTextRightAligned(g, ActiveUnit.MaxEN.ToString(), new Vector2(400, Y), Color.White);
+            TextHelper.DrawTextRightAligned(g, ActiveUnit.MaxHP.ToString(), new Vector2(340, Y), Color.White);
+            TextHelper.DrawTextRightAligned(g, ActiveUnit.MaxEN.ToString(), new Vector2(400, Y), Color.White);
 
             if (ActiveUnit.Pilot != null)
             {

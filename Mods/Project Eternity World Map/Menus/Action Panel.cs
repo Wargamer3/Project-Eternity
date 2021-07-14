@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             //Draw the choices.
             for (int A = 0; A < ListNextChoice.Count; A++)
             {
-                GameScreen.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.White);
+                TextHelper.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.White);
                 Y += PannelHeight;
             }
 

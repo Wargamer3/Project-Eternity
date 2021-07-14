@@ -103,6 +103,7 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="Tag System.cs" />
     <Compile Include="Text Input.cs" />
+    <Compile Include="Text Helper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Project Eternity Control Helper\Project Eternity Control Helper.csproj">

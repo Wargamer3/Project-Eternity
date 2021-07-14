@@ -126,16 +126,16 @@ namespace ProjectEternity
 
             int LineHeight = 20;
             DrawBox(g, new Vector2(40, 40), Constants.Width - 80, Constants.Height - 80, Color.White);
-            DrawText(g, "Normal", new Vector2(50, 50), Color.White);
-            DrawText(g, "Super Tree Wars", new Vector2(50, 50 + LineHeight * 1), Color.White);
-            DrawText(g, "Intermission", new Vector2(50, 50 + LineHeight * 2), Color.White);
-            DrawText(g, "Multiplayer", new Vector2(50, 50 + LineHeight * 3), Color.White);
-            DrawText(g, "World Map", new Vector2(50, 50 + LineHeight * 4), Color.White);
-            DrawText(g, "Conquest", new Vector2(50, 50 + LineHeight * 5), Color.White);
-            DrawText(g, "Sorcerer Street", new Vector2(50, 50 + LineHeight * 6), Color.White);
-            DrawText(g, "Racing", new Vector2(50, 50 + LineHeight * 7), Color.White);
-            DrawText(g, "Super Tank", new Vector2(50, 50 + LineHeight * 8), Color.White);
-            DrawText(g, "Triple Thunder", new Vector2(50, 50 + LineHeight * 9), Color.White);
+            TextHelper.DrawText(g, "Normal", new Vector2(50, 50), Color.White);
+            TextHelper.DrawText(g, "Super Tree Wars", new Vector2(50, 50 + LineHeight * 1), Color.White);
+            TextHelper.DrawText(g, "Intermission", new Vector2(50, 50 + LineHeight * 2), Color.White);
+            TextHelper.DrawText(g, "Multiplayer", new Vector2(50, 50 + LineHeight * 3), Color.White);
+            TextHelper.DrawText(g, "World Map", new Vector2(50, 50 + LineHeight * 4), Color.White);
+            TextHelper.DrawText(g, "Conquest", new Vector2(50, 50 + LineHeight * 5), Color.White);
+            TextHelper.DrawText(g, "Sorcerer Street", new Vector2(50, 50 + LineHeight * 6), Color.White);
+            TextHelper.DrawText(g, "Racing", new Vector2(50, 50 + LineHeight * 7), Color.White);
+            TextHelper.DrawText(g, "Super Tank", new Vector2(50, 50 + LineHeight * 8), Color.White);
+            TextHelper.DrawText(g, "Triple Thunder", new Vector2(50, 50 + LineHeight * 9), Color.White);
 
             g.Draw(sprPixel, new Rectangle(50, 50 + SelectedChoice * LineHeight, Constants.Width - 100, LineHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
         }

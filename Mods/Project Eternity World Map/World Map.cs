@@ -517,12 +517,12 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             MapGrid.Draw(g);
             int Y = Constants.Height - 30;
             DrawBox(g, new Vector2(0, Y), 400, 30, Color.White);
-            DrawText(g, "Ressources", new Vector2(5, Y + 5), Color.White);
-            DrawTextRightAligned(g, ListPlayer[ActivePlayerIndex].EnergyReserve.ToString(), new Vector2(150, Y + 5), Color.White);
-            DrawText(g, "Unit", new Vector2(155, Y + 5), Color.White);
-            DrawTextRightAligned(g, ListPlayer[ActivePlayerIndex].ListUnit.Count.ToString(), new Vector2(220, Y + 5), Color.White);
-            DrawText(g, "Constructions", new Vector2(225, Y + 5), Color.White);
-            DrawTextRightAligned(g, ListPlayer[ActivePlayerIndex].ListConstruction.Count.ToString(), new Vector2(360, Y + 5), Color.White);
+            TextHelper.DrawText(g, "Ressources", new Vector2(5, Y + 5), Color.White);
+            TextHelper.DrawTextRightAligned(g, ListPlayer[ActivePlayerIndex].EnergyReserve.ToString(), new Vector2(150, Y + 5), Color.White);
+            TextHelper.DrawText(g, "Unit", new Vector2(155, Y + 5), Color.White);
+            TextHelper.DrawTextRightAligned(g, ListPlayer[ActivePlayerIndex].ListUnit.Count.ToString(), new Vector2(220, Y + 5), Color.White);
+            TextHelper.DrawText(g, "Constructions", new Vector2(225, Y + 5), Color.White);
+            TextHelper.DrawTextRightAligned(g, ListPlayer[ActivePlayerIndex].ListConstruction.Count.ToString(), new Vector2(360, Y + 5), Color.White);
 
             if (ListActionMenuChoice.HasMainPanel)
             {

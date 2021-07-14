@@ -192,43 +192,43 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     g.Draw(sprPixel, new Rectangle(20, 13, 84, 84), Color.Gray);
                     g.Draw(sprPixel, new Rectangle(22, 15, 80, 80), Color.White);
                     g.Draw(ActiveCharacter.sprPortrait, new Vector2(22, 15), Color.White);
-                    DrawText(g, ActiveCharacter.Name, new Vector2(20, 100), Color.Yellow);
-                    DrawText(g, "Lv", new Vector2(20, 120), Color.Yellow);
-                    DrawText(g, ActiveCharacter.Level.ToString(), new Vector2(60, 120), Color.White);
-                    DrawText(g, "SP", new Vector2(20, 140), Color.Yellow);
-                    DrawText(g, ActiveCharacter.SP.ToString(), new Vector2(60, 140), Color.White);
+                    TextHelper.DrawText(g, ActiveCharacter.Name, new Vector2(20, 100), Color.Yellow);
+                    TextHelper.DrawText(g, "Lv", new Vector2(20, 120), Color.Yellow);
+                    TextHelper.DrawText(g, ActiveCharacter.Level.ToString(), new Vector2(60, 120), Color.White);
+                    TextHelper.DrawText(g, "SP", new Vector2(20, 140), Color.Yellow);
+                    TextHelper.DrawText(g, ActiveCharacter.SP.ToString(), new Vector2(60, 140), Color.White);
 
                     DrawBox(g, new Vector2(10, 180), 150, 100, Color.White);
-                    DrawText(g, "Current PP", new Vector2(20, 190), Color.Yellow);
-                    DrawTextRightAligned(g, ActiveCharacter.PilotPoints.ToString(), new Vector2(150, 190), Color.White);
-                    DrawText(g, "Skill PP Cost", new Vector2(20, 220), Color.Yellow);
-                    DrawTextRightAligned(g, ActiveCharacter.PilotPoints.ToString(), new Vector2(150, 220), Color.White);
-                    DrawText(g, "Remaining PP", new Vector2(20, 250), Color.Yellow);
-                    DrawTextRightAligned(g, ActiveCharacter.PilotPoints.ToString(), new Vector2(150, 250), Color.White);
+                    TextHelper.DrawText(g, "Current PP", new Vector2(20, 190), Color.Yellow);
+                    TextHelper.DrawTextRightAligned(g, ActiveCharacter.PilotPoints.ToString(), new Vector2(150, 190), Color.White);
+                    TextHelper.DrawText(g, "Skill PP Cost", new Vector2(20, 220), Color.Yellow);
+                    TextHelper.DrawTextRightAligned(g, ActiveCharacter.PilotPoints.ToString(), new Vector2(150, 220), Color.White);
+                    TextHelper.DrawText(g, "Remaining PP", new Vector2(20, 250), Color.Yellow);
+                    TextHelper.DrawTextRightAligned(g, ActiveCharacter.PilotPoints.ToString(), new Vector2(150, 250), Color.White);
 
                     DrawBox(g, new Vector2(120, 10), 510, 100, Color.White);
-                    DrawText(g, "Skill Description", new Vector2(125, 15), Color.Yellow);
+                    TextHelper.DrawText(g, "Skill Description", new Vector2(125, 15), Color.Yellow);
                     DrawBox(g, new Vector2(170, 120), 200, 160, Color.White);
-                    DrawText(g, "Pilot Skills", new Vector2(180, 125), Color.Yellow);
+                    TextHelper.DrawText(g, "Pilot Skills", new Vector2(180, 125), Color.Yellow);
                     for (int S = 0; S < 6; ++S)
                     {
                         if (S < ActiveCharacter.ArrayPilotSkill.Length)
                         {
-                            DrawText(g, ActiveCharacter.ArrayPilotSkill[S].Name, new Vector2(180, 150 + S * 20), Color.White);
+                            TextHelper.DrawText(g, ActiveCharacter.ArrayPilotSkill[S].Name, new Vector2(180, 150 + S * 20), Color.White);
                         }
                         else
                         {
-                            DrawText(g, "-------", new Vector2(180, 150 + S * 20), Color.White);
+                            TextHelper.DrawText(g, "-------", new Vector2(180, 150 + S * 20), Color.White);
                         }
                     }
                     DrawBox(g, new Vector2(375, 120), 255, 160, Color.White);
-                    DrawText(g, "Available Skills", new Vector2(385, 125), Color.Yellow);
-                    DrawTextRightAligned(g, "1/4", new Vector2(530, 125), Color.LightBlue);
-                    DrawTextRightAligned(g, "Required PP", new Vector2(620, 125), Color.Yellow);
+                    TextHelper.DrawText(g, "Available Skills", new Vector2(385, 125), Color.Yellow);
+                    TextHelper.DrawTextRightAligned(g, "1/4", new Vector2(530, 125), Color.LightBlue);
+                    TextHelper.DrawTextRightAligned(g, "Required PP", new Vector2(620, 125), Color.Yellow);
                     for (int S = 0; S < 6; ++S)
                     {
-                        DrawText(g, "-------", new Vector2(385, 150 + S * 20), Color.White);
-                        DrawTextRightAligned(g, "0", new Vector2(620, 150 + S * 20), Color.White);
+                        TextHelper.DrawText(g, "-------", new Vector2(385, 150 + S * 20), Color.White);
+                        TextHelper.DrawTextRightAligned(g, "0", new Vector2(620, 150 + S * 20), Color.White);
                     }
                     break;
             }
@@ -272,12 +272,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     Unit ActiveUnit = ListPresentUnit[ActiveCharacterInfo.UnitIndex];
                     g.Draw(ActiveUnit.SpriteMap, new Vector2(350, Y), Color.White);
                     g.DrawString(fntFinlanderFont, ActiveUnit.RelativePath, new Vector2(380, Y), Color.White);
-                    DrawTextRightAligned(g, ActiveUnit.MaxHP.ToString(), new Vector2(600, Y), Color.White);
+                    TextHelper.DrawTextRightAligned(g, ActiveUnit.MaxHP.ToString(), new Vector2(600, Y), Color.White);
                 }
                 else
                 {
                     g.DrawString(fntFinlanderFont, "-----------", new Vector2(380, Y), Color.White);
-                    DrawTextRightAligned(g, "---------", new Vector2(600, Y), Color.White);
+                    TextHelper.DrawTextRightAligned(g, "---------", new Vector2(600, Y), Color.White);
                 }
                 Y += LineSpacing;
             }

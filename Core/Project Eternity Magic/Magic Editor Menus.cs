@@ -74,7 +74,7 @@ namespace ProjectEternity.Core.Magic
 
                 MagicElement ActiveElement = ListAllMagicElementChoice[i];
                 g.Draw(Editor.sprMagicCircle, new Rectangle(X, Y, ElementSize, ElementSize), Color.White);
-                GameScreen.DrawTextMiddleAligned(g, ActiveElement.ToString(), new Vector2(X + 38, Y + ElementSize), Color.White);
+                TextHelper.DrawTextMiddleAligned(g, ActiveElement.ToString(), new Vector2(X + 38, Y + ElementSize), Color.White);
             }
         }
 
@@ -137,7 +137,7 @@ namespace ProjectEternity.Core.Magic
 
             for (int A = 0; A < ActiveMagicElement.ArrayAttributes.Length; A++)
             {
-                GameScreen.DrawText(g, ActiveMagicElement.ArrayAttributes[A].Name, new Vector2(SpellBoxX + 18, Y), Color.White);
+                TextHelper.DrawText(g, ActiveMagicElement.ArrayAttributes[A].Name, new Vector2(SpellBoxX + 18, Y), Color.White);
 
                 Y += AttributeNameHeight;
 

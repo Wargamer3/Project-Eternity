@@ -105,7 +105,7 @@ namespace ProjectEternity.GameScreens
 
             for (int i = LineIndex; i < LineIndex + 22 && i < ListDebugText.Count; ++i)
             {
-                DrawText(g, ListDebugText[i], new Vector2(15, StartY + (i - LineIndex) * 20), Color.White);
+                TextHelper.DrawText(g, ListDebugText[i], new Vector2(15, StartY + (i - LineIndex) * 20), Color.White);
             }
         }
     }

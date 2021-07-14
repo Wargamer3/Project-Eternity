@@ -142,8 +142,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Unit ActiveUnit = ListPresentUnit[ItemIndex];
             g.Draw(ActiveUnit.SpriteMap, new Vector2(X, Y), Color.White);
             g.DrawString(fntFinlanderFont, ActiveUnit.RelativePath, new Vector2(X + 40, Y), Color.White);
-            DrawTextRightAligned(g, ActiveUnit.MaxHP.ToString(), new Vector2(300, Y + 5), Color.White);
-            DrawTextRightAligned(g, ActiveUnit.MaxEN.ToString(), new Vector2(400, Y + 5), Color.White);
+            TextHelper.DrawTextRightAligned(g, ActiveUnit.MaxHP.ToString(), new Vector2(300, Y + 5), Color.White);
+            TextHelper.DrawTextRightAligned(g, ActiveUnit.MaxEN.ToString(), new Vector2(400, Y + 5), Color.White);
 
             if (ActiveUnit.Pilot != null)
             {

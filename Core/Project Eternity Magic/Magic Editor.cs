@@ -228,13 +228,13 @@ namespace ProjectEternity.Core.Magic
         {
             g.Draw(sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), Color.White);
             DrawBox(g, new Vector2(0, 0), Constants.Width, 30, Color.Black);
-            DrawText(g, "Name: Test Magic", new Vector2(5, 5), Color.White);
-            DrawTextRightAligned(g, "Total cost: " + 15, new Vector2(435, 5), Color.White);
+            TextHelper.DrawText(g, "Name: Test Magic", new Vector2(5, 5), Color.White);
+            TextHelper.DrawTextRightAligned(g, "Total cost: " + 15, new Vector2(435, 5), Color.White);
             DrawBox(g, new Vector2(Constants.Width - 400, 0), 200, 30, Color.Black);
-            DrawTextMiddleAligned(g, "Preview Spell",
+            TextHelper.DrawTextMiddleAligned(g, "Preview Spell",
                 new Vector2(Constants.Width - 300, 5), Color.White);
             DrawBox(g, new Vector2(Constants.Width - 200, 0), 200, 30, Color.Black);
-            DrawTextMiddleAligned(g, "Add Magic Element",
+            TextHelper.DrawTextMiddleAligned(g, "Add Magic Element",
                 new Vector2(Constants.Width - 100, 5), Color.White);
 
             g.End();
@@ -289,7 +289,7 @@ namespace ProjectEternity.Core.Magic
                 }
 
 
-                DrawTextMiddleAligned(g, ActiveMagicElement.Name,
+                TextHelper.DrawTextMiddleAligned(g, ActiveMagicElement.Name,
                     new Vector2(ActiveMagicElement.Position.X,
                                 ActiveMagicElement.Position.Y - 10), Color.White);
             }

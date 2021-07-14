@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else
                 g.Draw(sprCursorConfirmEndNo, new Vector2((Constants.Width - sprCursorConfirmEndNo.Width) / 2, (Constants.Height - sprCursorConfirmEndNo.Height) / 2), Color.White);
 
-            GameScreen.DrawText(g, SquadRemaining.ToString(), new Vector2((Constants.Width - sprCursorConfirmEndYes.Width) / 2 + 123,
+            TextHelper.DrawText(g, SquadRemaining.ToString(), new Vector2((Constants.Width - sprCursorConfirmEndYes.Width) / 2 + 123,
                                                                (Constants.Height - sprCursorConfirmEndNo.Height) / 2 + 26), Color.White);
         }
     }

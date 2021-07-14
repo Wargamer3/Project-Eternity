@@ -7,6 +7,7 @@ using FMOD;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens;
 using ProjectEternity.Core.ControlHelper;
+using static ProjectEternity.Core.TextHelper;
 
 namespace ProjectEternity.Core.Scripts
 {
@@ -14,7 +15,6 @@ namespace ProjectEternity.Core.Scripts
     {
         public class ScriptScrollingText : CutsceneActionScript
         {
-            public enum TextAligns { Left, Center, Right, Justified }
             private string _Text;
             private float _TextSpeed;
             private string _SFXPath;
@@ -75,50 +75,12 @@ namespace ProjectEternity.Core.Scripts
             {
                 g.End();
                 g.Begin(SpriteSortMode.Immediate, null);
-                float YOffset = 0;
-                int XPos = 320;
-                if (TextAlign == TextAligns.Left)
-                {
-                    XPos -= TextMaxWidthInPixel / 2;
-                    foreach (string ActiveLine in ListText)
-                    {
-                        GameScreen.DrawText(g, ActiveLine, new Microsoft.Xna.Framework.Vector2(XPos, 630 + Progression + YOffset), Microsoft.Xna.Framework.Color.White);
-                        YOffset += GameScreen.fntShadowFont.LineSpacing;
-                    }
-                }
-                else if (TextAlign == TextAligns.Right)
-                {
-                    XPos += TextMaxWidthInPixel / 2;
-                    foreach (string ActiveLine in ListText)
-                    {
-                        GameScreen.DrawTextRightAligned(g, ActiveLine, new Microsoft.Xna.Framework.Vector2(XPos, 630 + Progression + YOffset), Microsoft.Xna.Framework.Color.White);
-                        YOffset += GameScreen.fntShadowFont.LineSpacing;
-                    }
-                }
-                else if (TextAlign == TextAligns.Center)
-                {
-                    foreach (string ActiveLine in ListText)
-                    {
-                        GameScreen.DrawTextMiddleAligned(g, ActiveLine, new Microsoft.Xna.Framework.Vector2(XPos, 630 + Progression + YOffset), Microsoft.Xna.Framework.Color.White);
-                        YOffset += GameScreen.fntShadowFont.LineSpacing;
-                    }
-                }
-                else if (TextAlign == TextAligns.Justified)
-                {
-                    XPos -= TextMaxWidthInPixel / 2;
 
-                    foreach (string ActiveLine in ListText)
-                    {
-                        float TextWidth = GameScreen.fntShadowFont.MeasureString(ActiveLine).X;
-                        float ScaleFactor = TextMaxWidthInPixel / TextWidth;
-                        for (int C = 0; C < ActiveLine.Length; ++C)
-                        {
-                            float Offset = GameScreen.fntShadowFont.MeasureString(ActiveLine.Substring(0, C)).X;
-                            GameScreen.DrawText(g, ActiveLine[C].ToString(), new Microsoft.Xna.Framework.Vector2(XPos + Offset * ScaleFactor, 630 + Progression + YOffset), Microsoft.Xna.Framework.Color.White);
-                        }
-                        YOffset += GameScreen.fntShadowFont.LineSpacing;
-                    }
-                }
+                float XPos = 320;
+                float YPos = 630 + Progression;
+
+                TextHelper.DrawTextMultiline(g, TextHelper.fntShadowFont, ListText, _TextAlign, XPos, YPos, TextMaxWidthInPixel);
+
                 g.End();
                 g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             }

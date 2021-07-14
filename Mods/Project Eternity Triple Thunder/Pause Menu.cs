@@ -49,11 +49,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Y += 5;
             DrawBox(g, new Vector2(X + 5, Y), Width - 10, 40, Color.White);
-            DrawTextMiddleAligned(g, "Resume", new Vector2(Constants.Width / 2, Y + 10), Color.White);
+            TextHelper.DrawTextMiddleAligned(g, "Resume", new Vector2(Constants.Width / 2, Y + 10), Color.White);
 
             Y += 45;
             DrawBox(g, new Vector2(X + 5, Y), Width - 10, 40, Color.White);
-            DrawTextMiddleAligned(g, "Exit", new Vector2(Constants.Width / 2, Y + 10), Color.White);
+            TextHelper.DrawTextMiddleAligned(g, "Exit", new Vector2(Constants.Width / 2, Y + 10), Color.White);
         }
     }
 }

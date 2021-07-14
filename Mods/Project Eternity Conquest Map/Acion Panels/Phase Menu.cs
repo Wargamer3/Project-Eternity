@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            GameScreen.DrawText(g, "New Phase", new Vector2(100, 100), Color.White);
+            TextHelper.DrawText(g, "New Phase", new Vector2(100, 100), Color.White);
         }
     }
 }

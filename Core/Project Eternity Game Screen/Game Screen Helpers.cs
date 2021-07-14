@@ -17,12 +17,7 @@ namespace ProjectEternity.GameScreens
         private static Texture2D sprBoxBackgroundGray;
         private static Texture2D sprBoxBackgroundBlack;
 
-        private static SpriteFont fntWhiteFont;
-        private static SpriteFont _fntShadowFont;
-
         public static Texture2D sprPixel { get { return _sprPixel; } }
-
-        public static SpriteFont fntShadowFont { get { return _fntShadowFont; } }
 
         public static DebugScreen Debug;
 
@@ -38,32 +33,7 @@ namespace ProjectEternity.GameScreens
             sprBoxBackgroundGray = Content.Load<Texture2D>("Main Menu New/Background Gray");
             sprBoxBackgroundBlack = Content.Load<Texture2D>("Main Menu New/Background Black");
 
-            fntWhiteFont = Content.Load<SpriteFont>("Fonts/arialCustom10-5");
-            fntWhiteFont.Spacing = -7;
-            _fntShadowFont = Content.Load<SpriteFont>("Fonts/arialCustom10-5S");
-            _fntShadowFont.Spacing = -7;
-
             Debug = new DebugScreen();
-        }
-
-        public static void DrawText(CustomSpriteBatch g, string Text, Vector2 Position, Color TextColor)
-        {
-            g.DrawString(_fntShadowFont, Text, Position, Color.Black);
-            g.DrawString(fntWhiteFont, Text, Position, TextColor);
-        }
-
-        public static void DrawTextRightAligned(CustomSpriteBatch g, string Text, Vector2 Position, Color TextColor)
-        {
-            int TextWidth = (int)fntShadowFont.MeasureString(Text).X;
-            g.DrawString(fntShadowFont, Text, Position, Color.Black, 0, new Vector2(TextWidth, 0), 1, SpriteEffects.None, 1);
-            g.DrawString(fntWhiteFont, Text, Position, TextColor, 0, new Vector2(TextWidth, 0), 1, SpriteEffects.None, 0);
-        }
-
-        public static void DrawTextMiddleAligned(CustomSpriteBatch g, string Text, Vector2 Position, Color TextColor)
-        {
-            int TextWidth = (int)fntShadowFont.MeasureString(Text).X / 2;
-            g.DrawString(fntShadowFont, Text, Position, Color.Black, 0, new Vector2(TextWidth, 0), 1, SpriteEffects.None, 1);
-            g.DrawString(fntWhiteFont, Text, Position, TextColor, 0, new Vector2(TextWidth, 0), 1, SpriteEffects.None, 0);
         }
 
         public static void DrawLine(CustomSpriteBatch g, Vector2 StartPos, Vector2 EndPos, Color ActiveColor, int width = 1)

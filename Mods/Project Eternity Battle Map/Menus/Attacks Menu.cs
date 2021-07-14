@@ -201,7 +201,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (A < ActiveUnit.ListAttack[CursorIndex].ArrayAttackAttributes.Length)
                 {
                     TextToDraw = ActiveUnit.ListAttack[CursorIndex].ArrayAttackAttributes[A].Name;
-                    DrawText(g, ActiveUnit.ListAttack[CursorIndex].ArrayAttackAttributes[A].Description,
+                    TextHelper.DrawText(g, ActiveUnit.ListAttack[CursorIndex].ArrayAttackAttributes[A].Description,
                         new Vector2(BoxPosition.X + 20, BoxPosition.Y + 22 + A * 31), Color.White);
                 }
                 g.DrawString(ActiveFont, TextToDraw, new Vector2(BoxPosition.X, BoxPosition.Y + A * 31), Color.White);

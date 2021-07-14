@@ -107,9 +107,9 @@ namespace ProjectEternity.Core.Units.Transforming
                 GameScreen.DrawBox(g, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), MinActionMenuWidth, PannelHeight, Color.White);
                 if (!(ActiveSquad[U] is UnitTransforming) ||
                     ((UnitTransforming)ActiveSquad[SelectedUnitIndex]).PermanentTransformation)
-                    GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
+                    TextHelper.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
                 else
-                    GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
+                    TextHelper.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
             }
             g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth, (int)Y + SelectedUnitIndex * PannelHeight, 50, 20), Color.FromNonPremultiplied(255, 255, 255, 128));
         }
@@ -193,9 +193,9 @@ namespace ProjectEternity.Core.Units.Transforming
                 {
                     GameScreen.DrawBox(g, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), MinActionMenuWidth, PannelHeight, Color.White);
                     if (!(ActiveSquad[U] is UnitTransforming) || TransformingUnit.PermanentTransformation)
-                        GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
+                        TextHelper.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
                     else
-                        GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
+                        TextHelper.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
                 }
                 g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth, (int)Y + ActiveSquad.IndexOf(TransformingUnit) * PannelHeight, 50, 20), Color.FromNonPremultiplied(255, 255, 255, 128));
             }
@@ -206,9 +206,9 @@ namespace ProjectEternity.Core.Units.Transforming
             {
                 g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth + MinActionMenuWidth, (int)Y + U * PannelHeight, 50, 20), Color.Navy);
                 if (TransformingUnit.CanTransform(U, Map.ActiveSquad.CurrentWingmanA, Map.ActiveSquad.CurrentWingmanB))
-                    GameScreen.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
+                    TextHelper.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
                 else
-                    GameScreen.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
+                    TextHelper.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
             }
             g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth + MinActionMenuWidth, (int)Y + TransformationChoice * PannelHeight, 50, 20), Color.FromNonPremultiplied(255, 255, 255, 128));*/
         }
@@ -268,9 +268,9 @@ namespace ProjectEternity.Core.Units.Transforming
                     GameScreen.DrawBox(g, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), MinActionMenuWidth, PannelHeight, Color.White);
                     if (!(ActiveSquad[U] is UnitTransforming) ||
                         TransformingUnit.PermanentTransformation)
-                        GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
+                        TextHelper.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
                     else
-                        GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
+                        TextHelper.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
                 }
                 g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth, (int)Y + ActiveSquad.IndexOf(TransformingUnit) * PannelHeight, 50, 20), Color.FromNonPremultiplied(255, 255, 255, 128));
             }
@@ -279,15 +279,15 @@ namespace ProjectEternity.Core.Units.Transforming
             {
                 g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth + MinActionMenuWidth, (int)Y + U * PannelHeight, 50, 20), Color.Navy);
                 if (TransformingUnit.CanTransform(U, ActiveSquad.CurrentWingmanA, ActiveSquad.CurrentWingmanB))
-                    GameScreen.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
+                    TextHelper.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
                 else
-                    GameScreen.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
+                    TextHelper.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
             }
 
             g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth, (int)Y + TransformationChoice * PannelHeight, 50, 20), Color.FromNonPremultiplied(255, 255, 255, 128));
 
             g.Draw(GameScreen.sprPixel, new Rectangle(Constants.Width / 2 - 100, Constants.Height / 2 - 25, 200, 50), Color.Navy);
-            GameScreen.DrawText(g, ActiveSquad.CurrentLeader.RelativePath + " will transform into " + TransformingUnit.ArrayTransformingUnit[TransformationChoice].TransformingUnitName + ".\n\rThis will be permanent. Continue?", new Vector2(Constants.Width / 2 - 100, Constants.Height / 2 - 25), Color.White);
+            TextHelper.DrawText(g, ActiveSquad.CurrentLeader.RelativePath + " will transform into " + TransformingUnit.ArrayTransformingUnit[TransformationChoice].TransformingUnitName + ".\n\rThis will be permanent. Continue?", new Vector2(Constants.Width / 2 - 100, Constants.Height / 2 - 25), Color.White);
         }
     }
 
@@ -342,9 +342,9 @@ namespace ProjectEternity.Core.Units.Transforming
             {
                 GameScreen.DrawBox(g, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), MinActionMenuWidth, PannelHeight, Color.White);
                 if (!(ActiveSquad[U] is UnitTransforming) || TransformingUnit.PermanentTransformation)
-                    GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
+                    TextHelper.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
                 else
-                    GameScreen.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
+                    TextHelper.DrawText(g, ActiveSquad[U].RelativePath, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
             }
             g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth, (int)Y + ActiveSquad.IndexOf(TransformingUnit) * PannelHeight, 50, 20), Color.FromNonPremultiplied(255, 255, 255, 128));
 
@@ -352,12 +352,12 @@ namespace ProjectEternity.Core.Units.Transforming
             {
                 g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth + MinActionMenuWidth, (int)Y + U * PannelHeight, 50, 20), Color.Navy);
                 if (TransformingUnit.CanTransform(U, ActiveSquad.CurrentWingmanA, ActiveSquad.CurrentWingmanB))
-                    GameScreen.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
+                    TextHelper.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
                 else
-                    GameScreen.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
+                    TextHelper.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);
             }
             g.Draw(GameScreen.sprPixel, new Rectangle(Constants.Width / 2 - 100, Constants.Height / 2 - 25, 200, 50), Color.Navy);
-            GameScreen.DrawText(g, ActiveSquad.CurrentLeader.RelativePath + " will transform into " + TransformingUnit.ArrayTransformingUnit[TransformationChoice].TransformingUnitName + " for\n\r" + TransformingUnit.ArrayTransformingUnit[TransformationChoice].TurnLimit + " turns. Continue?", new Vector2(Constants.Width / 2 - 100, Constants.Height / 2 - 25), Color.White);
+            TextHelper.DrawText(g, ActiveSquad.CurrentLeader.RelativePath + " will transform into " + TransformingUnit.ArrayTransformingUnit[TransformationChoice].TransformingUnitName + " for\n\r" + TransformingUnit.ArrayTransformingUnit[TransformationChoice].TurnLimit + " turns. Continue?", new Vector2(Constants.Width / 2 - 100, Constants.Height / 2 - 25), Color.White);
         }
     }
 }

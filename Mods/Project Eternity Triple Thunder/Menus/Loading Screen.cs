@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             g.GraphicsDevice.Clear(Color.Black);
             DrawRectangle(g, Vector2.Zero, new Vector2(Constants.Width, Constants.Height), Color.Black);
-            DrawText(g, "Loading", new Vector2(10, 10), Color.White);
+            TextHelper.DrawText(g, "Loading", new Vector2(10, 10), Color.White);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void AddChoiceToCurrentPanel(ActionPanel Panel)
         {
             base.AddChoiceToCurrentPanel(Panel);
-            ActionMenuWidth = Math.Max(ActionMenuWidth, (int)GameScreen.fntShadowFont.MeasureString(Panel.Name).X + 35);
+            ActionMenuWidth = Math.Max(ActionMenuWidth, (int)TextHelper.fntShadowFont.MeasureString(Panel.Name).X + 35);
         }
 
         protected void NavigateThroughNextChoices(FMOD.FMODSound sndSelection, FMOD.FMODSound sndConfirm)
@@ -90,11 +90,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (ListNextChoice[A].IsEnabled)
                 {
-                    GameScreen.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.White);
+                    TextHelper.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.White);
                 }
                 else
                 {
-                    GameScreen.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.Gray);
+                    TextHelper.DrawText(g, ListNextChoice[A].ToString(), new Vector2(X, Y), Color.Gray);
                 }
                 Y += PannelHeight;
             }

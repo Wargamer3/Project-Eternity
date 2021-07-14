@@ -374,13 +374,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawBox(g, new Vector2(DrawX, DrawY + 80), 310, 40, Color.Black);
             DrawBox(g, new Vector2(DrawX, DrawY + 120), 310, 60, Color.Red);
             g.Draw(UnitToDraw.SpriteMap, new Vector2(DrawX + 6, DrawY + 5), Color.White);
-            DrawText(g, UnitToDraw.PilotName, new Vector2(DrawX + 41, DrawY + 3), Color.White);
-            DrawText(g, UnitToDraw.UnitStat.Name, new Vector2(DrawX + 41, DrawY + 25), Color.White);
-            DrawTextRightAligned(g, "LV: " + UnitToDraw.PilotLevel, new Vector2(DrawX + 230, DrawY + 3), Color.White);
-            DrawTextRightAligned(g, "Will: " + UnitToDraw.PilotMorale, new Vector2(DrawX + 230, DrawY + 22), Color.White);
+            TextHelper.DrawText(g, UnitToDraw.PilotName, new Vector2(DrawX + 41, DrawY + 3), Color.White);
+            TextHelper.DrawText(g, UnitToDraw.UnitStat.Name, new Vector2(DrawX + 41, DrawY + 25), Color.White);
+            TextHelper.DrawTextRightAligned(g, "LV: " + UnitToDraw.PilotLevel, new Vector2(DrawX + 230, DrawY + 3), Color.White);
+            TextHelper.DrawTextRightAligned(g, "Will: " + UnitToDraw.PilotMorale, new Vector2(DrawX + 230, DrawY + 22), Color.White);
 
-            DrawTextRightAligned(g, "HP", new Vector2(DrawX + 60, DrawY + 43), Color.Yellow);
-            DrawTextRightAligned(g, "EN", new Vector2(DrawX + 60, DrawY + 59), Color.Yellow);
+            TextHelper.DrawTextRightAligned(g, "HP", new Vector2(DrawX + 60, DrawY + 43), Color.Yellow);
+            TextHelper.DrawTextRightAligned(g, "EN", new Vector2(DrawX + 60, DrawY + 59), Color.Yellow);
             //Draw HP bar
             DrawBar(g, sprBarExtraLargeBackground, sprBarExtraLargeHP, new Vector2(DrawX + 60, DrawY + 46), UnitToDraw.HP, UnitToDraw.MaxHP);
             //Draw EN bar.
@@ -404,9 +404,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.DrawString(fntFinlanderFont, "EVA", new Vector2(DrawX + 245, DrawY + 27), Color.White);
 
             //Draw HP number.
-            DrawTextRightAligned(g, UnitToDraw.HP + "/" + UnitToDraw.MaxHP, new Vector2(DrawX + 229, DrawY + 41), Color.White);
+            TextHelper.DrawTextRightAligned(g, UnitToDraw.HP + "/" + UnitToDraw.MaxHP, new Vector2(DrawX + 229, DrawY + 41), Color.White);
             //Draw EN number.
-            DrawTextRightAligned(g, UnitToDraw.EN + "/" + UnitToDraw.MaxEN, new Vector2(DrawX + 229, DrawY + 57), Color.White);
+            TextHelper.DrawTextRightAligned(g, UnitToDraw.EN + "/" + UnitToDraw.MaxEN, new Vector2(DrawX + 229, DrawY + 57), Color.White);
 
             for (int A = 0; A < 4; A++)
             {
@@ -477,13 +477,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawBox(g, new Vector2(DrawX, DrawY + 80), 310, 40, Color.Black);
             DrawBox(g, new Vector2(DrawX, DrawY + 120), 310, 60, Color.Blue);
             g.Draw(UnitToDraw.SpriteMap, new Vector2(DrawX + 76, DrawY + 5), Color.White);
-            DrawText(g, UnitToDraw.PilotName, new Vector2(DrawX + 111, DrawY + 3), Color.White);
-            DrawText(g, UnitToDraw.UnitStat.Name, new Vector2(DrawX + 111, DrawY + 25), Color.White);
-            DrawTextRightAligned(g, "LV: " + UnitToDraw.PilotLevel, new Vector2(DrawX + 300, DrawY + 3), Color.White);
-            DrawTextRightAligned(g, "Will: " + UnitToDraw.PilotMorale, new Vector2(DrawX + 300, DrawY + 22), Color.White);
+            TextHelper.DrawText(g, UnitToDraw.PilotName, new Vector2(DrawX + 111, DrawY + 3), Color.White);
+            TextHelper.DrawText(g, UnitToDraw.UnitStat.Name, new Vector2(DrawX + 111, DrawY + 25), Color.White);
+            TextHelper.DrawTextRightAligned(g, "LV: " + UnitToDraw.PilotLevel, new Vector2(DrawX + 300, DrawY + 3), Color.White);
+            TextHelper.DrawTextRightAligned(g, "Will: " + UnitToDraw.PilotMorale, new Vector2(DrawX + 300, DrawY + 22), Color.White);
 
-            DrawTextRightAligned(g, "HP", new Vector2(DrawX + 130, DrawY + 43), Color.Yellow);
-            DrawTextRightAligned(g, "EN", new Vector2(DrawX + 130, DrawY + 59), Color.Yellow);
+            TextHelper.DrawTextRightAligned(g, "HP", new Vector2(DrawX + 130, DrawY + 43), Color.Yellow);
+            TextHelper.DrawTextRightAligned(g, "EN", new Vector2(DrawX + 130, DrawY + 59), Color.Yellow);
             //Draw HP bar
             DrawBar(g, sprBarExtraLargeBackground, sprBarExtraLargeHP, new Vector2(DrawX + 130, DrawY + 46), UnitToDraw.HP, UnitToDraw.MaxHP);
             //Draw EN bar.
@@ -508,9 +508,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.DrawString(fntFinlanderFont, "EVA", new Vector2(DrawX + 5, DrawY + 27), Color.White);
 
             //Draw HP number.
-            DrawTextRightAligned(g, UnitToDraw.HP + "/" + UnitToDraw.MaxHP, new Vector2(DrawX + 299, DrawY + 41), Color.White);
+            TextHelper.DrawTextRightAligned(g, UnitToDraw.HP + "/" + UnitToDraw.MaxHP, new Vector2(DrawX + 299, DrawY + 41), Color.White);
             //Draw EN number.
-            DrawTextRightAligned(g, UnitToDraw.EN + "/" + UnitToDraw.MaxEN, new Vector2(DrawX + 299, DrawY + 57), Color.White);
+            TextHelper.DrawTextRightAligned(g, UnitToDraw.EN + "/" + UnitToDraw.MaxEN, new Vector2(DrawX + 299, DrawY + 57), Color.White);
 
             for (int A = 0; A < 4; A++)
             {

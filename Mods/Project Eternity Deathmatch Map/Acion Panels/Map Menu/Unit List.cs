@@ -119,9 +119,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.Draw(ActiveUnit.SpriteMap, new Vector2(70, 90 + U * LineSpacing), Color.White);
                 g.DrawString(fntFinlanderFont, ActiveUnit.RelativePath, new Vector2(110, 85 + U * LineSpacing), Color.White);
                 GameScreen.DrawBar(g, sprBarLargeBackground, sprBarLargeHP, new Vector2(380, 100 + U * LineSpacing), ActiveUnit.HP, ActiveUnit.MaxHP);
-                GameScreen.DrawTextRightAligned(g, ActiveUnit.HP + "/" + ActiveUnit.MaxHP, new Vector2(485, 95 + U * LineSpacing), Color.White);
+                TextHelper.DrawTextRightAligned(g, ActiveUnit.HP + "/" + ActiveUnit.MaxHP, new Vector2(485, 95 + U * LineSpacing), Color.White);
                 GameScreen.DrawBar(g, sprBarLargeBackground, sprBarLargeEN, new Vector2(505, 100 + U * LineSpacing), ActiveUnit.EN, ActiveUnit.MaxEN);
-                GameScreen.DrawTextRightAligned(g, ActiveUnit.EN + "/" + ActiveUnit.MaxEN, new Vector2(610, 95 + U * LineSpacing), Color.White);
+                TextHelper.DrawTextRightAligned(g, ActiveUnit.EN + "/" + ActiveUnit.MaxEN, new Vector2(610, 95 + U * LineSpacing), Color.White);
             }
             g.Draw(GameScreen.sprPixel, new Rectangle(30, 75 + MapUnitListChoice * LineSpacing, 590, 45), Color.FromNonPremultiplied(255, 255, 255, 127));
 
@@ -138,11 +138,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             g.DrawString(fntFinlanderFont, "HP", new Vector2(15, 430), Color.Yellow);
             GameScreen.DrawBar(g, sprBarLargeBackground, sprBarLargeHP, new Vector2(80, 440), ActiveUnit.HP, ActiveUnit.MaxHP);
-            GameScreen.DrawTextRightAligned(g, ActiveUnit.HP + "/" + ActiveUnit.MaxHP, new Vector2(185, 435), Color.White);
+            TextHelper.DrawTextRightAligned(g, ActiveUnit.HP + "/" + ActiveUnit.MaxHP, new Vector2(185, 435), Color.White);
 
             g.DrawString(fntFinlanderFont, "EN", new Vector2(200, 430), Color.Yellow);
             GameScreen.DrawBar(g, sprBarLargeBackground, sprBarLargeEN, new Vector2(255, 440), ActiveUnit.EN, ActiveUnit.MaxEN);
-            GameScreen.DrawTextRightAligned(g, ActiveUnit.EN + "/" + ActiveUnit.MaxEN, new Vector2(360, 435), Color.White);
+            TextHelper.DrawTextRightAligned(g, ActiveUnit.EN + "/" + ActiveUnit.MaxEN, new Vector2(360, 435), Color.White);
 
             g.DrawString(fntFinlanderFont, "MV", new Vector2(375, 430), Color.Yellow);
             g.DrawString(fntFinlanderFont, ActiveUnit.MaxMovement.ToString(), new Vector2(420, 430), Color.White);

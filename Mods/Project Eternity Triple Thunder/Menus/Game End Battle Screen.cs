@@ -97,7 +97,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 sprInfoBarBattle.Draw(g, new Vector2(CenterX, 180 + i * 35), Color.White);
                 DrawNumberRightAligned(g, fntNumberPosition, i + 1, new Vector2(70, 165 + i * 35));
                 DrawNumberLeftAligned(g, fntNumberGreen, i + 1, new Vector2(100, 174 + i * 35));
-                DrawTextMiddleAligned(g, Owner.ListAllPlayer[i].Name, new Vector2(210, 172 + i * 35), Color.White);
+                TextHelper.DrawTextMiddleAligned(g, Owner.ListAllPlayer[i].Name, new Vector2(210, 172 + i * 35), Color.White);
                 sprBestMark.SetFrame(0);
                 sprBestMark.Draw(g, new Vector2(350, 180 + i * 35), Color.White);
                 DrawNumberRightAligned(g, fntNumberRed, Owner.ListAllPlayer[i].InGameRobot.Kill, new Vector2(385, 174 + i * 35));

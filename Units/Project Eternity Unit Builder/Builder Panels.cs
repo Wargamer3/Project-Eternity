@@ -57,7 +57,7 @@ namespace ProjectEternity.Core.Units.Builder
             for (int U = 0; U < 1; ++U)
             {
                 GameScreen.DrawBox(g, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), MinActionMenuWidth, PannelHeight, Color.White);
-                GameScreen.DrawText(g, "Electric Wall", new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
+                TextHelper.DrawText(g, "Electric Wall", new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
             }
             g.Draw(GameScreen.sprPixel, new Rectangle(X + MinActionMenuWidth, Y + SelectedUnitIndex * PannelHeight, 50, 20), Color.FromNonPremultiplied(255, 255, 255, 128));
         }

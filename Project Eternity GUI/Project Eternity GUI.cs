@@ -37,6 +37,7 @@ namespace ProjectEternity.GUI
                 SplashScreen.SetStatus("Initializing Graphics");
                 RootGraphicDevice = new GUIGraphicDevice();
                 GameScreens.GameScreen.LoadHelpers(RootGraphicDevice.Content);
+                TextHelper.LoadHelpers(RootGraphicDevice.Content);
                 GameScreens.GameScreen.GraphicsDevice = RootGraphicDevice.GraphicsDevice;
             }
 
