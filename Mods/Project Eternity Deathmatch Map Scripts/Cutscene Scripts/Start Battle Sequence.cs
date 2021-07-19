@@ -155,8 +155,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         ListNextAnimationScreen = Map.GenerateNextAnimationScreens(RightSquad, new SupportSquadHolder(), LeftSquad, new SupportSquadHolder(), UnitStats, AnimationScreen.BattleAnimationTypes.RightAttackLeft, AttackingResult);
                     }
-
-                    Map.PushScreen(ListNextAnimationScreen[0]);
                 }
                 else
                 {
