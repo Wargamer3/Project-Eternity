@@ -205,10 +205,17 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             {
                 if (ActiveLayer.ListActiveMarker[M].Sprite != null)
                 {
+                    SpriteEffects ActiveEffect = SpriteEffects.None;
+                    if (ActiveLayer.ListActiveMarker[M].ScaleFactor.X < 0)
+                        ActiveEffect = SpriteEffects.FlipHorizontally;
+                    if (ActiveLayer.ListActiveMarker[M].ScaleFactor.Y < 0)
+                        ActiveEffect |= SpriteEffects.FlipVertically;
+
                     g.Draw(ActiveLayer.ListActiveMarker[M].Sprite, new Vector2(ActiveLayer.ListActiveMarker[M].Position.X, ActiveLayer.ListActiveMarker[M].Position.Y),
                         null, Color.White, ActiveLayer.ListActiveMarker[M].Angle,
                         new Vector2(ActiveLayer.ListActiveMarker[M].Sprite.Width / 2, ActiveLayer.ListActiveMarker[M].Sprite.Height / 2),
-                        ActiveLayer.ListActiveMarker[M].ScaleFactor, SpriteEffects.None, ActiveLayer.ListActiveMarker[M].DrawingDepth);
+                        new Vector2(Math.Abs(ActiveLayer.ListActiveMarker[M].ScaleFactor.X), Math.Abs(ActiveLayer.ListActiveMarker[M].ScaleFactor.Y)),
+                        ActiveEffect, ActiveLayer.ListActiveMarker[M].DrawingDepth);
                 }
             }
 
