@@ -455,17 +455,25 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                             {
                                 Real = MouseToAnimationCoords(MouseEventOld.Location);
 
-                                foreach (VisibleTimeline ActiveTimeline in ActiveAnimation.ListSelectedObjects)
+                                foreach (VisibleTimeline ActiveObject in ActiveAnimation.ListSelectedObjects)
                                 {
-                                    ActiveTimeline.MouseMoveExtra(ActiveKeyFrame, Real.X, Real.Y, e.X - MouseEventOld.X, e.Y - MouseEventOld.Y);
+                                    VisibleTimeline ActiveTimeline = ActiveObject as VisibleTimeline;
+                                    if (ActiveTimeline != null)
+                                    {
+                                        ActiveTimeline.MouseMoveExtra(ActiveKeyFrame, Real.X, Real.Y, e.X - MouseEventOld.X, e.Y - MouseEventOld.Y);
+                                    }
                                 }
                             }
                             else
                             {
-                                foreach (VisibleTimeline ActiveObject in ActiveAnimation.ListSelectedObjects)
+                                foreach (Timeline ActiveObject in ActiveAnimation.ListSelectedObjects)
                                 {
-                                    MouseMoveAnimationObject(ActiveObject, e.X - MouseEventOriginal.X, e.Y - MouseEventOriginal.Y, Angle, AngleChange, ScaleChange);
-                                    ActiveObject.OnUpdatePosition(new Microsoft.Xna.Framework.Vector2(e.X - MouseEventOld.X, e.Y - MouseEventOld.Y));
+                                    VisibleTimeline ActiveTimeline = ActiveObject as VisibleTimeline;
+                                    if (ActiveTimeline != null)
+                                    {
+                                        MouseMoveAnimationObject(ActiveTimeline, e.X - MouseEventOriginal.X, e.Y - MouseEventOriginal.Y, Angle, AngleChange, ScaleChange);
+                                        ActiveTimeline.OnUpdatePosition(new Microsoft.Xna.Framework.Vector2(e.X - MouseEventOld.X, e.Y - MouseEventOld.Y));
+                                    }
                                 }
                                 OldRotatingAngle = PositiveAngle;
                             }

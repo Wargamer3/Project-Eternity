@@ -135,14 +135,22 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             if (NextEventKeyFrame >= 0)//If there is a next key frame, update it.
                 NextEventKeyFrame += Difference;
 
+            //Remove first to avoid duplicate error
+            Dictionary<int, VisibleAnimationObjectKeyFrame> ListRemovedKeyFrame = new Dictionary<int, VisibleAnimationObjectKeyFrame>();
             foreach (int KeyFrame in Keys)
             {
                 VisibleAnimationObjectKeyFrame ActiveKeyFrame = DicAnimationKeyFrame[KeyFrame];
-                if (ActiveKeyFrame.NextKeyFrame >= 0)//If there is a next key frame, update it.
-                    ActiveKeyFrame.NextKeyFrame += Difference;
+                ListRemovedKeyFrame.Add(KeyFrame, ActiveKeyFrame);
 
-                Add(KeyFrame + Difference, ActiveKeyFrame);
                 Remove(KeyFrame);
+            }
+
+            foreach (KeyValuePair<int, VisibleAnimationObjectKeyFrame> ActiveKeyFrame in ListRemovedKeyFrame)
+            {
+                if (ActiveKeyFrame.Value.NextKeyFrame >= 0)//If there is a next key frame, update it.
+                    ActiveKeyFrame.Value.NextKeyFrame += Difference;
+
+                Add(ActiveKeyFrame.Key + Difference, ActiveKeyFrame.Value);
             }
 
             //Replace the old Tag.
