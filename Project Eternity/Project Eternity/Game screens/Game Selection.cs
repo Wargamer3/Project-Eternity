@@ -9,6 +9,7 @@ using ProjectEternity.GameScreens.RacingScreen;
 using ProjectEternity.GameScreens.WorldMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using System.Collections.Generic;
 
 namespace ProjectEternity
 {
@@ -59,13 +60,37 @@ namespace ProjectEternity
                 switch ((MenuChoices)SelectedChoice)
                 {
                     case MenuChoices.Normal:
+                        int OldNumberOfGameScreen = ListGameScreen.Count;
                         StreamReader BR = new StreamReader("Content/Map path.ini");
-                        PushScreen(new DeathmatchMap(BR.ReadLine(), 0, new System.Collections.Generic.List<Core.Units.Squad>()));
+                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), 0, new List<Core.Units.Squad>());
                         BR.Close();
+                        NewMap.ListGameScreen = ListGameScreen;
+                        NewMap.PlayerRoster = new Roster();
+                        NewMap.Load();
+
+                        //Remove any GameScreen created by the map so they don't show up immediately.
+                        List<GameScreen>  ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);
+                        for (int S = ListGameScreen.Count - 1 - OldNumberOfGameScreen; S >= 0; --S)
+                        {
+                            ListGameScreenCreatedByMap.Add(ListGameScreen[S]);
+                            ListGameScreen.RemoveAt(S);
+                        }
+
+                        RemoveAllScreens();
+                        ListGameScreen.Insert(0, NewMap);
+                        NewMap.Update(gameTime);
+
+                        for (int S = 0; S < ListGameScreenCreatedByMap.Count; ++S)
+                        {
+                            ListGameScreen.Insert(0, ListGameScreenCreatedByMap[S]);
+                            ListGameScreenCreatedByMap[S].Update(gameTime);
+                        }
+
+                        ListGameScreenCreatedByMap.Clear();
                         break;
 
                     case MenuChoices.SuperTreeWar:
-                        PushScreen(new DeathmatchMap("Super Tree Wars/Holy Temple", 0, new System.Collections.Generic.List<Core.Units.Squad>()));
+                        PushScreen(new DeathmatchMap("Super Tree Wars/Holy Temple", 0, new List<Core.Units.Squad>()));
                         break;
 
                     case MenuChoices.Intermission:
@@ -80,7 +105,7 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.WorldMap:
-                        PushScreen(new WorldMap("Test Map", 0, new System.Collections.Generic.List<Core.Units.Squad>()));
+                        PushScreen(new WorldMap("Test Map", 0, new List<Core.Units.Squad>()));
                         break;
 
                     case MenuChoices.Conquest:

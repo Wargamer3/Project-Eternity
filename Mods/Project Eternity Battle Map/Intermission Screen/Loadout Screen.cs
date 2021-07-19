@@ -115,11 +115,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (ListSpawnSquad.Count == ListSingleplayerSpawns.Count)
                     {
                         RemoveAllScreens();
+
                         ListGameScreen.Insert(0, NewMap);
+                        NewMap.Update(gameTime);
+
                         for (int S = 0; S < ListGameScreenCreatedByMap.Count; ++S)
                         {
                             ListGameScreen.Insert(0, ListGameScreenCreatedByMap[S]);
+                            ListGameScreenCreatedByMap[S].Update(gameTime);
                         }
+
                         ListGameScreenCreatedByMap.Clear();
                         NewMap = null;
                     }
