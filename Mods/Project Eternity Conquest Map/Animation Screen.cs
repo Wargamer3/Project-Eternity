@@ -112,9 +112,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             base.BeginDraw(g);
 
-            if (ActiveCharacter != null && ActiveCharacter.IsAnimated)
+            if (ActiveCharacterSprite != null && ActiveCharacterSprite.IsAnimated)
             {
-                ActiveCharacter.ActiveAnimation.BeginDraw(g);
+                ActiveCharacterSprite.ActiveAnimation.BeginDraw(g);
             }
 
             for (int L = 0; L < ListAnimationLayer.Count; L++)

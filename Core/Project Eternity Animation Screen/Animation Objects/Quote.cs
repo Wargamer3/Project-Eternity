@@ -9,8 +9,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public Targets Target;
         public int SelectedQuoteSet;
         public List<QuoteSet> ListQuoteSet;
+        public string ActiveCharacterName;
         public List<string> ActiveText;
-        public SimpleAnimation ActiveCharacter;
+        public SimpleAnimation ActiveCharacterSprite;
         public string PortraitPath;
 
         public Quote()

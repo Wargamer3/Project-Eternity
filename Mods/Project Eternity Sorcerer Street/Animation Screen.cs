@@ -91,9 +91,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             g.End();
 
-            if (ActiveCharacter != null && ActiveCharacter.IsAnimated)
+            if (ActiveCharacterSprite != null && ActiveCharacterSprite.IsAnimated)
             {
-                ActiveCharacter.ActiveAnimation.BeginDraw(g);
+                ActiveCharacterSprite.ActiveAnimation.BeginDraw(g);
             }
 
             for (int L = 0; L < ListAnimationLayer.Count; L++)

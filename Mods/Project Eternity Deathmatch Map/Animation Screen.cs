@@ -304,24 +304,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         case QuoteSet.QuoteStyles.Reaction:
                             QuoteTypes ActiveQuoteType = QuoteTypes.Damaged;
                             ActiveQuoteTuple = GetQuote(ActiveQuoteType, ActivePilot, EnemyPilot, UseRandomIndex, ref QuoteIndex);
-                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 650);
+                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 500);
                             ActiveQuote.PortraitPath = ActiveQuoteTuple.Item1;
+                            ActiveQuote.ActiveCharacterName = ActivePilot.Name;
                             break;
 
                         case QuoteSet.QuoteStyles.QuoteSet:
                             ActiveQuoteTuple = GetAttackQuote(ActiveQuoteSet.QuoteSetName, ActivePilot, EnemyPilot, UseRandomIndex, ref QuoteIndex);
-                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 650);
+                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 500);
                             ActiveQuote.PortraitPath = ActiveQuoteTuple.Item1;
+                            ActiveQuote.ActiveCharacterName = ActivePilot.Name;
                             break;
 
                         case QuoteSet.QuoteStyles.Custom:
-                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteSet.CustomText, 650);
+                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteSet.CustomText, 500);
                             break;
 
                         case QuoteSet.QuoteStyles.MoveIn:
                             ActiveQuoteTuple = GetQuote(QuoteTypes.BattleStart, ActivePilot, EnemyPilot, UseRandomIndex, ref QuoteIndex);
-                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 650);
+                            ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 500);
                             ActiveQuote.PortraitPath = ActiveQuoteTuple.Item1;
+                            ActiveQuote.ActiveCharacterName = ActivePilot.Name;
                             break;
                     }
 
@@ -329,13 +332,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (ActiveQuote.PortraitPath.StartsWith("Animations"))
                         {
-                            ActiveQuote.ActiveCharacter = new SimpleAnimation("", ActiveQuote.PortraitPath, new AnimationLooped(ActiveQuote.PortraitPath));
-                            ActiveQuote.ActiveCharacter.ActiveAnimation.Content = Content;
-                            ActiveQuote.ActiveCharacter.ActiveAnimation.Load();
+                            ActiveQuote.ActiveCharacterSprite = new SimpleAnimation("", ActiveQuote.PortraitPath, new AnimationLooped(ActiveQuote.PortraitPath));
+                            ActiveQuote.ActiveCharacterSprite.ActiveAnimation.Content = Content;
+                            ActiveQuote.ActiveCharacterSprite.ActiveAnimation.Load();
                         }
                         else
                         {
-                            ActiveQuote.ActiveCharacter = new SimpleAnimation("", ActiveQuote.PortraitPath, Content.Load<Texture2D>(ActiveQuote.PortraitPath));
+                            ActiveQuote.ActiveCharacterSprite = new SimpleAnimation("", ActiveQuote.PortraitPath, Content.Load<Texture2D>(ActiveQuote.PortraitPath));
                         }
                     }
                 }
@@ -528,9 +531,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             g.End();
 
-            if (ActiveCharacter != null && ActiveCharacter.IsAnimated)
+            if (ActiveCharacterSprite != null && ActiveCharacterSprite.IsAnimated)
             {
-                ActiveCharacter.ActiveAnimation.BeginDraw(g);
+                ActiveCharacterSprite.ActiveAnimation.BeginDraw(g);
             }
 
             for (int L = 0; L < ListAnimationLayer.Count; L++)
@@ -639,30 +642,40 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             DrawBox(g, new Vector2(0, Constants.Height - VNBoxHeight), Constants.Width, VNBoxHeight, Color.White);
 
-            if (ActiveCharacter != null)
+            if (ActiveCharacterSprite != null)
             {
-                if (ActiveCharacter.IsAnimated)
+                if (ActiveCharacterSprite.IsAnimated)
                 {
-                    for (int L = ActiveCharacter.ActiveAnimation.ListAnimationLayer.Count - 1; L >= 0; --L)
+                    for (int L = ActiveCharacterSprite.ActiveAnimation.ListAnimationLayer.Count - 1; L >= 0; --L)
                     {
-                        int OriginX = (int)ActiveCharacter.ActiveAnimation.AnimationOrigin.Position.X;
+                        int OriginX = (int)ActiveCharacterSprite.ActiveAnimation.AnimationOrigin.Position.X;
 
-                        g.Draw(ActiveCharacter.ActiveAnimation.ListAnimationLayer[L].renderTarget,
+                        g.Draw(ActiveCharacterSprite.ActiveAnimation.ListAnimationLayer[L].renderTarget,
                             new Vector2(0, Constants.Height - VNBoxHeight), null, Color.White, 0,
-                            new Vector2(OriginX, ActiveCharacter.ActiveAnimation.AnimationOrigin.Position.Y),
+                            new Vector2(OriginX, ActiveCharacterSprite.ActiveAnimation.AnimationOrigin.Position.Y),
                             new Vector2(1, 1), SpriteEffects.None, 0);
                     }
                 }
                 else
                 {
-                    g.Draw(ActiveCharacter.StaticSprite,
-                        new Rectangle(30, Constants.Height - VNBoxHeight + 10, ActiveCharacter.StaticSprite.Width, ActiveCharacter.StaticSprite.Height),
-                        new Rectangle(0, 0, ActiveCharacter.StaticSprite.Width, ActiveCharacter.StaticSprite.Height), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
+                    g.Draw(ActiveCharacterSprite.StaticSprite,
+                        new Rectangle(20, Constants.Height - VNBoxHeight + 15, ActiveCharacterSprite.StaticSprite.Width, ActiveCharacterSprite.StaticSprite.Height),
+                        new Rectangle(0, 0, ActiveCharacterSprite.StaticSprite.Width, ActiveCharacterSprite.StaticSprite.Height), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                 }
             }
+            if (ActiveCharacterName != null)
+            {
+                g.DrawString(fntFinlanderFont, ActiveCharacterName, new Vector2(105, Constants.Height - VNBoxHeight + 8), Color.White);
 
-            if (ActiveQuoteSet != null)
-                TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 450, Constants.Height - VNBoxHeight + 10, 650);
+                if (ActiveQuoteSet != null)
+                {
+                    TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, Constants.Height - VNBoxHeight + 38, 500);
+                }
+            }
+            else if (ActiveQuoteSet != null)
+            {
+                TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, Constants.Height - VNBoxHeight + 10, 500);
+            }
 
             g.End();
             g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);

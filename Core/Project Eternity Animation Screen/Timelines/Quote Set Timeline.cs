@@ -120,8 +120,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public override void SpawnItem(AnimationClass ActiveAnimation, AnimationClass.AnimationLayer ActiveLayer, int KeyFrame)
         {
             Quote ActiveQuoteSetFrame = ((QuoteSetKeyFrame)DicAnimationKeyFrame[KeyFrame]).QuoteSet;
+            ActiveAnimation.ActiveCharacterName = ActiveQuoteSetFrame.ActiveCharacterName;
             ActiveAnimation.ActiveQuoteSet = ActiveQuoteSetFrame.ActiveText;
-            ActiveAnimation.ActiveCharacter = ActiveQuoteSetFrame.ActiveCharacter;
+            ActiveAnimation.ActiveCharacterSprite = ActiveQuoteSetFrame.ActiveCharacterSprite;
         }
 
         protected override AnimationObjectKeyFrame CreateFirstKeyFrame()

@@ -581,8 +581,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public List<SFX> ListActiveSFX;
 
+        public string ActiveCharacterName;
         public List<string> ActiveQuoteSet;
-        public SimpleAnimation ActiveCharacter;
+        public SimpleAnimation ActiveCharacterSprite;
 
         protected const int VNBoxHeight = 128;
 
