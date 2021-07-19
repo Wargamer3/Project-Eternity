@@ -329,7 +329,17 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     AnimationObjectKeyFrame Move;
 
                     if (ActiveTimelineEvent.TryGetValue(MouseFrame, out Move))
+                    {
                         OnKeyFrameSelected(Move);
+                    }
+                    else
+                    {
+                        if (ModifierKeys == Keys.Shift && MouseFrame > ActiveTimelineEvent.SpawnFrame)
+                        {
+                            ActiveTimelineEvent.CreateKeyFrame(ActiveLayer, MouseFrame);
+                            DrawTimeline();
+                        }
+                    }
                 }
 
                 if (TimelineResizeSide != TimelineResizeSides.None)
@@ -355,10 +365,20 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                     if (ActiveTimelineEvent.TryGetValue(MouseFrame, out Move))
                     {
-                        tsmCreateGroup.Visible = false;
-                        tsmDeleteItem.Visible = false;
-                        tsmDeleteKeyFrame.Visible = true;
-                        tsmInsertKeyFrame.Visible = false;
+                        if (ModifierKeys == Keys.Shift)
+                        {
+                            ActiveTimelineEvent.DeleteKeyFrame(MouseFrame);
+                            DrawTimeline();
+                        }
+                        else
+                        {
+                            tsmCreateGroup.Visible = false;
+                            tsmDeleteItem.Visible = false;
+                            tsmDeleteKeyFrame.Visible = true;
+                            tsmInsertKeyFrame.Visible = false;
+
+                            cmsTimelineOptions.Show(this, e.Location);
+                        }
                     }
                     else
                     {
@@ -366,9 +386,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                         tsmDeleteItem.Visible = false;
                         tsmDeleteKeyFrame.Visible = false;
                         tsmInsertKeyFrame.Visible = true;
-                    }
 
-                    cmsTimelineOptions.Show(this, e.Location);
+                        cmsTimelineOptions.Show(this, e.Location);
+                    }
                 }
             }
         }
