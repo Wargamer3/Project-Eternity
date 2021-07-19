@@ -210,15 +210,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private int ComputeDamage(DamageKeyFrame KeyFrame)
         {
-            int DamageDealt = GetDamageFromText(KeyFrame.Damage);
-
-            string[] DamageSplit = KeyFrame.Damage.Split('/');
+            string[] DamageSplit = KeyFrame.Damage.Replace(" ", "").Split('/');
             if (DamageSplit.Length == 1)
             {
+                int DamageDealt = GetDamageFromText(KeyFrame.Damage);
                 return DamageDealt;
             }
             else if (DamageSplit.Length == 2)
             {
+                int DamageDealt = GetDamageFromText(DamageSplit[0]);
                 return (int)(DamageDealt / Convert.ToDouble(DamageSplit[1], System.Globalization.CultureInfo.InvariantCulture));
             }
 
