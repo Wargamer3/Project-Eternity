@@ -118,7 +118,7 @@ namespace ProjectEternity.Core
                 XPos -= TextMaxWidthInPixel / 2;
                 foreach (string ActiveLine in ListText)
                 {
-                    DrawText(g, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White);
+                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White);
                     YOffset += TextFont.LineSpacing;
                 }
             }
@@ -127,7 +127,8 @@ namespace ProjectEternity.Core
                 XPos += TextMaxWidthInPixel / 2;
                 foreach (string ActiveLine in ListText)
                 {
-                    DrawTextRightAligned(g, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White);
+                    int TextWidth = (int)TextFont.MeasureString(ActiveLine).X;
+                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White, 0f, new Vector2(TextWidth, 0), 1f, SpriteEffects.None, 0f);
                     YOffset += TextFont.LineSpacing;
                 }
             }
@@ -135,7 +136,8 @@ namespace ProjectEternity.Core
             {
                 foreach (string ActiveLine in ListText)
                 {
-                    DrawTextMiddleAligned(g, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White);
+                    int TextWidth = (int)TextFont.MeasureString(ActiveLine).X / 2;
+                    g.DrawString(TextFont, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White, 0f, new Vector2(TextWidth, 0), 1f, SpriteEffects.None, 0f);
                     YOffset += TextFont.LineSpacing;
                 }
             }
@@ -150,7 +152,7 @@ namespace ProjectEternity.Core
                     for (int C = 0; C < ActiveLine.Length; ++C)
                     {
                         float Offset = TextFont.MeasureString(ActiveLine.Substring(0, C)).X;
-                        DrawText(g, ActiveLine[C].ToString(), new Vector2(XPos + Offset * ScaleFactor, YPos + YOffset), Color.White);
+                        g.DrawString(TextFont, ActiveLine[C].ToString(), new Vector2(XPos + Offset * ScaleFactor, YPos + YOffset), Color.White);
                     }
                     YOffset += TextFont.LineSpacing;
                 }
