@@ -18,10 +18,10 @@ namespace ProjectEternity.Editors.MapEditor
     {
         public interface IMapHelper
         {
+            ITileAttributes GetTileEditor();
             Terrain GetTerrain(int X, int Y, int LayerIndex);
             void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset);
             void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex);
-            void EditTerrain(int X, int Y, int LayerIndex);
             void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex);
             IMapLayer CreateNewLayer();
             ISubMapLayer CreateNewSubLayer(IMapLayer ParentLayer);
@@ -39,6 +39,24 @@ namespace ProjectEternity.Editors.MapEditor
             public DeathmatchMapHelper(DeathmatchMap ActiveMap)
             {
                 this.ActiveMap = ActiveMap;
+            }
+
+            public ITileAttributes GetTileEditor()
+            {
+                HashSet<string> ListBattleBackgroundAnimationPath = new HashSet<string>();
+
+                foreach (MapLayer ActiveMapLayer in ActiveMap.ListLayer)
+                {
+                    foreach (Terrain ActiveTerrain in ActiveMapLayer.ArrayTerrain)
+                    {
+                        if (!string.IsNullOrEmpty(ActiveTerrain.BattleBackgroundAnimationPath) && ActiveTerrain.BattleBackgroundAnimationPath != "None")
+                        {
+                            ListBattleBackgroundAnimationPath.Add(ActiveTerrain.BattleBackgroundAnimationPath);
+                        }
+                    }
+                }
+
+                return new TileAttributes(ListBattleBackgroundAnimationPath);
             }
 
             public Terrain GetTerrain(int X, int Y, int LayerIndex)
@@ -95,24 +113,6 @@ namespace ProjectEternity.Editors.MapEditor
                 NewTerrain.Position = new Vector3(X, Y, 0);
 
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
-            }
-
-            public void EditTerrain(int X, int Y, int LayerIndex)
-            {
-                Terrain SelectedTerrain = GetTerrain(X, Y, LayerIndex);
-                TileAttributes TA = new TileAttributes(new Terrain(SelectedTerrain));
-
-                if (TA.ShowDialog() == DialogResult.OK)
-                {
-                    ReplaceTerrain(X, Y, new Terrain(X, Y,
-                                                                        TA.TerrainTypeIndex,
-                                                                        TA.MVEnterCost,
-                                                                        TA.MVMoveCost,
-                                                                        TA.ListActivation.ToArray(),
-                                                                        TA.ListBonus.ToArray(),
-                                                                        TA.ListBonusValue.ToArray(),
-                                                                        TA.BattleBackgroundAnimationPath), LayerIndex);
-                }
             }
 
             public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex)
@@ -198,6 +198,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         //Spawn point related stuff.
         private EventPoint ActiveSpawn;
+
+        protected ITileAttributes TileAttributesEditor;
 
         public ProjectEternityMapEditor()
         {
@@ -453,18 +455,11 @@ namespace ProjectEternity.Editors.MapEditor
                 Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
                 DrawableTile SelectedTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
-                TileAttributes TA = new TileAttributes(new Terrain(SelectedTerrain));
+                TileAttributesEditor.Init(new Terrain(SelectedTerrain));
 
-                if (TA.ShowDialog() == DialogResult.OK)
+                if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                 {
-                    ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = new Terrain(TilePos.X, TilePos.Y,
-                                                                                                                TA.TerrainTypeIndex,
-                                                                                                                TA.MVEnterCost,
-                                                                                                                TA.MVMoveCost,
-                                                                                                                TA.ListActivation.ToArray(),
-                                                                                                                TA.ListBonus.ToArray(),
-                                                                                                                TA.ListBonusValue.ToArray(),
-                                                                                                                TA.BattleBackgroundAnimationPath);
+                    ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y] = TileAttributesEditor.ActiveTerrain;
                 }
             }
         }
@@ -568,7 +563,14 @@ namespace ProjectEternity.Editors.MapEditor
                         if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
                         {//Get the Tile under the mouse base on the map starting pos.
                             Point TilePos = new Point(MouseX, MouseY);
-                            Helper.EditTerrain(TilePos.X, TilePos.Y, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                            Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+
+                            TileAttributesEditor.Init(SelectedTerrain);
+
+                            if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
+                            {
+                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                            }
                         }
                         //Just create a new Tile.
                         else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
@@ -1211,6 +1213,8 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 TilesetViewer.InitTileset(string.Empty, BattleMapViewer.ActiveMap.TileSize);
             }
+
+            TileAttributesEditor = Helper.GetTileEditor();
 
             #endregion
 

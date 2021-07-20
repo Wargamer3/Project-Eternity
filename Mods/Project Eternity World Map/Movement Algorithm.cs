@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
         public override MovementAlgorithmTile GetTile(float PosX, float PosY, int LayerIndex)
         {
-            return Map.ArrayTerrain[(int)PosX, (int)PosY];
+            return Map.ListLayer[LayerIndex].ArrayTerrain[(int)PosX, (int)PosY];
         }
     }
 }

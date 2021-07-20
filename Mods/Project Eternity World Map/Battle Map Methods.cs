@@ -10,7 +10,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
     {
         public Terrain GetTerrain(int X, int Y, int LayerIndex)
         {
-            return ArrayTerrain[X, Y];
+            return ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
         public override void SaveTemporaryMap()

@@ -7,36 +7,19 @@ using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.MapEditor
 {
-    public partial class TileAttributes : Form
+    public partial class TileAttributes : Form, ITileAttributes
     {
         private enum ItemSelectionChoices { BattleBackgroundAnimation };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
-        public int TerrainTypeIndex;//What kind of terrain it is.
-        public int MVEnterCost;//How much energy is required to enter in it.
-        public int MVMoveCost;//How much energy is required to move in it.
-        public List<TerrainActivation> ListActivation;//Activation type of the bonuses.
-        public List<TerrainBonus> ListBonus;//Bonuses the terrain can give.
-        public List<int> ListBonusValue;//Value of the bonuses.
-        public string BattleBackgroundAnimationPath;
+        public Terrain ActiveTerrain;
 
-        public TileAttributes(Terrain ActiveTerrain)
+        Terrain ITileAttributes.ActiveTerrain => ActiveTerrain;
+
+        public TileAttributes(HashSet<string> ListBattleBackgroundAnimationPath)
         {
             InitializeComponent();
-
-            this.TerrainTypeIndex = ActiveTerrain.TerrainTypeIndex;
-            this.MVEnterCost = ActiveTerrain.MVEnterCost;
-            this.MVMoveCost = ActiveTerrain.MVMoveCost;
-            this.ListActivation = ActiveTerrain.ListActivation.ToList();
-            this.ListBonus = ActiveTerrain.ListBonus.ToList();
-            this.ListBonusValue = ActiveTerrain.ListBonusValue.ToList();
-            this.BattleBackgroundAnimationPath = ActiveTerrain.BattleBackgroundAnimationPath;
-
-            txtMVEnterCost.Text = MVEnterCost.ToString();
-            txtMVMoveCost.Text = MVMoveCost.ToString();
-
-            cboTerrainType.SelectedIndex = TerrainTypeIndex;
 
             cboTerrainBonusActivation.Items.Add("On every turns");
             cboTerrainBonusActivation.Items.Add("On this turn");
@@ -59,14 +42,34 @@ namespace ProjectEternity.Editors.MapEditor
             cboTerrainBonusType.Items.Add("Evasion");
 
             cboBattleAnimationBackground.Items.Add("None");
-
-            //Load the lstTerrainBonus.
-            for (int i = 0; i < ListActivation.Count; i++)
+            foreach (string ActivePath in ListBattleBackgroundAnimationPath)
             {
-                lstTerrainBonus.Items.Add((i + 1) + ". " + cboTerrainBonusType.Items[(int)ListBonus[i]].ToString() + " (" + ListBonusValue[i].ToString() + " ) - " + cboTerrainBonusActivation.Items[(int)ListActivation[i]].ToString());
+                cboBattleAnimationBackground.Items.Add(ActivePath);
+            }
+        }
+
+        public virtual void Init(Terrain ActiveTerrain)
+        {
+            ActiveTerrain = new Terrain(ActiveTerrain);
+            this.ActiveTerrain = ActiveTerrain;
+
+            cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
+            if (string.IsNullOrEmpty(ActiveTerrain.BattleBackgroundAnimationPath))
+            {
+                cboBattleAnimationBackground.SelectedItem = "None";
+            }
+            else
+            {
+                cboBattleAnimationBackground.SelectedItem = ActiveTerrain.BattleBackgroundAnimationPath;
             }
 
-            if (ListActivation.Count > 0)
+            //Load the lstTerrainBonus.
+            for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)
+            {
+                lstTerrainBonus.Items.Add((i + 1) + ". " + cboTerrainBonusType.Items[(int)ActiveTerrain.ListBonus[i]].ToString() + " (" + ActiveTerrain.ListBonusValue[i].ToString() + " ) - " + cboTerrainBonusActivation.Items[(int)ActiveTerrain.ListActivation[i]].ToString());
+            }
+
+            if (ActiveTerrain.ListActivation.Length > 0)
             {
                 cboTerrainBonusActivation.Enabled = true;
                 cboTerrainBonusType.Enabled = true;
@@ -81,57 +84,33 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        private void txtMVEnterCost_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtMVMoveCost_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtBonusValue_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
         private void cboTerrainType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TerrainTypeIndex = cboTerrainType.SelectedIndex;
+            ActiveTerrain.TerrainTypeIndex = cboTerrainType.SelectedIndex;
         }
 
         private void txtMVEnterCost_TextChanged(object sender, EventArgs e)
         {
             if (txtMVEnterCost.Text.Length == 0)
-                MVEnterCost = 0;
+                ActiveTerrain.MVEnterCost = 0;
             else
-                MVEnterCost = Convert.ToInt32(txtMVEnterCost.Text);
+                ActiveTerrain.MVEnterCost = Convert.ToInt32(txtMVEnterCost.Text);
         }
 
         private void txtMVMoveCost_TextChanged(object sender, EventArgs e)
         {
             if (txtMVMoveCost.Text.Length == 0)
-                MVMoveCost = 0;
+                ActiveTerrain.MVMoveCost = 0;
             else
-                MVMoveCost = Convert.ToInt32(txtMVMoveCost.Text);
+                ActiveTerrain.MVMoveCost = Convert.ToInt32(txtMVMoveCost.Text);
         }
 
         private void btnAddNewBonus_Click(object sender, EventArgs e)
         {
             lstTerrainBonus.Items.Add((lstTerrainBonus.Items.Count + 1) + ". HP regen (5 ) - On every turn");
-            ListActivation.Add(TerrainActivation.OnEveryTurns);
-            ListBonus.Add(TerrainBonus.HPRegen);
-            ListBonusValue.Add(5);
+            ActiveTerrain.ListActivation = ActiveTerrain.ListActivation.Concat(new TerrainActivation[] { TerrainActivation.OnEveryTurns }).ToArray();
+            ActiveTerrain.ListBonus = ActiveTerrain.ListBonus.Concat(new TerrainBonus[] { TerrainBonus.HPRegen }).ToArray();
+            ActiveTerrain.ListBonusValue = ActiveTerrain.ListBonusValue.Concat(new int[] { 5 }).ToArray();
             lstTerrainBonus.SelectedIndex = lstTerrainBonus.Items.Count - 1;
         }
 
@@ -140,9 +119,10 @@ namespace ProjectEternity.Editors.MapEditor
             if (lstTerrainBonus.SelectedIndex >= 0)
             {
                 int Index = lstTerrainBonus.SelectedIndex;
-                ListActivation.RemoveAt(lstTerrainBonus.SelectedIndex);
-                ListBonus.RemoveAt(lstTerrainBonus.SelectedIndex);
-                ListBonusValue.RemoveAt(lstTerrainBonus.SelectedIndex);
+                ActiveTerrain.ListActivation = ActiveTerrain.ListActivation.Where((source, index) => index != Index).ToArray();
+                ActiveTerrain.ListBonus = ActiveTerrain.ListBonus.Where((source, index) => index != Index).ToArray();
+                ActiveTerrain.ListBonusValue = ActiveTerrain.ListBonusValue.Where((source, index) => index != Index).ToArray();
+
                 lstTerrainBonus.Items.RemoveAt(lstTerrainBonus.SelectedIndex);
                 if (lstTerrainBonus.Items.Count > 0)
                 {
@@ -150,9 +130,9 @@ namespace ProjectEternity.Editors.MapEditor
                         lstTerrainBonus.SelectedIndex = lstTerrainBonus.Items.Count - 1;
                     else
                         lstTerrainBonus.SelectedIndex = Index;
-                    cboTerrainBonusActivation.SelectedIndex = (int)ListActivation[lstTerrainBonus.SelectedIndex];
-                    cboTerrainBonusType.SelectedIndex = (int)ListBonus[lstTerrainBonus.SelectedIndex];
-                    txtBonusValue.Text = ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
+                    cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex];
+                    cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex];
+                    txtBonusValue.Text = ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
                 }
                 else
                 {
@@ -177,9 +157,9 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lstTerrainBonus.SelectedIndex != -1)
             {
-                cboTerrainBonusActivation.SelectedIndex = (int)ListActivation[lstTerrainBonus.SelectedIndex];
-                cboTerrainBonusType.SelectedIndex = (int)ListBonus[lstTerrainBonus.SelectedIndex];
-                txtBonusValue.Text = ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
+                cboTerrainBonusActivation.SelectedIndex = (int)ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex];
+                cboTerrainBonusType.SelectedIndex = (int)ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex];
+                txtBonusValue.Text = ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex].ToString();
 
                 cboTerrainBonusActivation.Enabled = true;
                 cboTerrainBonusType.Enabled = true;
@@ -191,7 +171,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lstTerrainBonus.SelectedIndex != -1)
             {
-                ListBonus[lstTerrainBonus.SelectedIndex] = (TerrainBonus)cboTerrainBonusType.SelectedIndex;
+                ActiveTerrain.ListBonus[lstTerrainBonus.SelectedIndex] = (TerrainBonus)cboTerrainBonusType.SelectedIndex;
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
@@ -200,7 +180,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lstTerrainBonus.SelectedIndex != -1)
             {
-                ListActivation[lstTerrainBonus.SelectedIndex] = (TerrainActivation)cboTerrainBonusActivation.SelectedIndex;
+                ActiveTerrain.ListActivation[lstTerrainBonus.SelectedIndex] = (TerrainActivation)cboTerrainBonusActivation.SelectedIndex;
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
@@ -209,14 +189,14 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lstTerrainBonus.SelectedIndex != -1 && txtBonusValue.Text != "")
             {
-                ListBonusValue[lstTerrainBonus.SelectedIndex] = Convert.ToInt32(txtBonusValue.Text);
+                ActiveTerrain.ListBonusValue[lstTerrainBonus.SelectedIndex] = Convert.ToInt32(txtBonusValue.Text);
                 lstTerrainBonus.Items[lstTerrainBonus.SelectedIndex] = (lstTerrainBonus.SelectedIndex + 1) + ". " + cboTerrainBonusType.Text + " (" + txtBonusValue.Text + " ) - " + cboTerrainBonusActivation.Text;
             }
         }
 
         private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BattleBackgroundAnimationPath = cboBattleAnimationBackground.SelectedItem.ToString();
+            ActiveTerrain.BattleBackgroundAnimationPath = cboBattleAnimationBackground.SelectedItem.ToString();
         }
 
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
@@ -233,7 +213,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        protected void ListMenuItemsSelected(List<string> Items)
+        private void ListMenuItemsSelected(List<string> Items)
         {
             if (Items == null)
                 return;

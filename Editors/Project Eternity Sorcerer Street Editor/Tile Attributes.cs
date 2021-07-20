@@ -1,12 +1,23 @@
-﻿using ProjectEternity.GameScreens.SorcererStreetScreen;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using ProjectEternity.Editors.MapEditor;
+using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.SorcererStreetScreen;
 
 namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
-    public partial class TileAttributes : Form
+    public partial class TileAttributes : Form, ITileAttributes
     {
         public int TerrainTypeIndex;//What kind of terrain it is.
+
+        TerrainSorcererStreet ActiveTerrain;
+
+        Terrain ITileAttributes.ActiveTerrain => ActiveTerrain;
+
+        public TileAttributes()
+        {
+            InitializeComponent();
+        }
 
         public TileAttributes(int TerrainTypeIndex)
         {
@@ -15,10 +26,9 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             cboTerrainType.SelectedIndex = TerrainTypeIndex;
         }
 
-        public TileAttributes(TerrainSorcererStreet ActiveTerrain)
+        public void Init(Terrain ActiveTerrain)
         {
-            InitializeComponent();
-
+            ActiveTerrain = this.ActiveTerrain = new TerrainSorcererStreet((TerrainSorcererStreet)ActiveTerrain);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
         }
 

@@ -21,6 +21,11 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 this.ActiveMap = ActiveMap;
             }
 
+            public ITileAttributes GetTileEditor()
+            {
+                return new TileAttributes();
+            }
+
             public Terrain GetTerrain(int X, int Y, int LayerIndex)
             {
                 return ActiveMap.GetTerrain(X, Y, LayerIndex);
@@ -75,17 +80,6 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 NewTerrain.Position = new Vector3(X, Y, 0);
 
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
-            }
-
-            public void EditTerrain(int X, int Y, int LayerIndex)
-            {
-                TerrainSorcererStreet SelectedTerrain = ActiveMap.GetTerrain(X, Y, LayerIndex);
-                TileAttributes TA = new TileAttributes(new TerrainSorcererStreet(SelectedTerrain));
-
-                if (TA.ShowDialog() == DialogResult.OK)
-                {
-                    ReplaceTerrain(X, Y, new TerrainSorcererStreet(X, Y, TA.cboTerrainType.SelectedIndex), LayerIndex);
-                }
             }
 
             public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex)

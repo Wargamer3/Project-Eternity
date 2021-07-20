@@ -1,12 +1,23 @@
-﻿using ProjectEternity.GameScreens.ConquestMapScreen;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using ProjectEternity.Editors.MapEditor;
+using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.ConquestMapScreen;
 
-namespace ProjectEternity.Editors.RacingMapEditor
+namespace ProjectEternity.Editors.ConquestMapEditor
 {
-    public partial class TileAttributes : Form
+    public partial class TileAttributes : Form, ITileAttributes
     {
         public int TerrainTypeIndex;//What kind of terrain it is.
+
+        TerrainConquest ActiveTerrain;
+
+        Terrain ITileAttributes.ActiveTerrain => ActiveTerrain;
+
+        public TileAttributes()
+        {
+            InitializeComponent();
+        }
 
         public TileAttributes(int TerrainTypeIndex)
         {
@@ -15,10 +26,9 @@ namespace ProjectEternity.Editors.RacingMapEditor
             cboTerrainType.SelectedIndex = TerrainTypeIndex;
         }
 
-        public TileAttributes(TerrainConquest ActiveTerrain)
+        public void Init(Terrain ActiveTerrain)
         {
-            InitializeComponent();
-
+            ActiveTerrain = this.ActiveTerrain = new TerrainConquest(ActiveTerrain);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
         }
 

@@ -48,7 +48,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         public Texture2D sprWaypoint;
         
         public List<string> ListTileSetPath;
-        public Terrain[,] ArrayTerrain;//Array of every tile on the map.
 
         public List<Player> ListPlayer;
         public List<MapZoneInfo> ListZone;
@@ -88,11 +87,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             ListConsumable = new List<MapConsumable>();
             ListLayer = new List<MapLayer>();
             this.CameraPosition = Vector3.Zero;
-
-            ArrayTerrain = new Terrain[MapSize.X, MapSize.Y];
-            for (int Y = 0; Y < MapSize.Y; Y++)
-                for (int X = 0; X < MapSize.X; X++)
-                    ArrayTerrain[X, Y] = new Terrain(X, Y);
 
             this.BattleMapPath = BattleMapPath;
             this.ListPlayer = new List<Player>();

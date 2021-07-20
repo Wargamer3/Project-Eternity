@@ -8,7 +8,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
 using ProjectEternity.Editors.MapEditor;
 
-namespace ProjectEternity.Editors.RacingMapEditor
+namespace ProjectEternity.Editors.ConquestMapEditor
 {
     public partial class ProjectEternityConquestEditor : ProjectEternityMapEditor
     {
@@ -19,6 +19,11 @@ namespace ProjectEternity.Editors.RacingMapEditor
             public ConquestMapHelper(ConquestMap ActiveMap)
             {
                 this.ActiveMap = ActiveMap;
+            }
+
+            public ITileAttributes GetTileEditor()
+            {
+                return new TileAttributes();
             }
 
             public Terrain GetTerrain(int X, int Y, int LayerIndex)
@@ -75,17 +80,6 @@ namespace ProjectEternity.Editors.RacingMapEditor
                 NewTerrain.Position = new Vector3(X, Y, 0);
 
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
-            }
-
-            public void EditTerrain(int X, int Y, int LayerIndex)
-            {
-                TerrainConquest SelectedTerrain = ActiveMap.GetTerrain(X, Y, LayerIndex);
-                TileAttributes TA = new TileAttributes(new TerrainConquest(SelectedTerrain));
-
-                if (TA.ShowDialog() == DialogResult.OK)
-                {
-                    ReplaceTerrain(X, Y, new TerrainConquest(X, Y, SelectedTerrain.TerrainTypeIndex), LayerIndex);
-                }
             }
 
             public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex)

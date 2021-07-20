@@ -1,4 +1,4 @@
-﻿namespace ProjectEternity.Editors.RacingMapEditor
+﻿namespace ProjectEternity.Editors.ConquestMapEditor
 {
     partial class TileAttributes
     {

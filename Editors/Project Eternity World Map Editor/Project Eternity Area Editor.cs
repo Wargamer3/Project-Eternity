@@ -21,6 +21,24 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 this.ActiveMap = ActiveMap;
             }
 
+            public ITileAttributes GetTileEditor()
+            {
+                HashSet<string> ListBattleBackgroundAnimationPath = new HashSet<string>();
+
+                foreach (MapLayer ActiveMapLayer in ActiveMap.ListLayer)
+                {
+                    foreach (Terrain ActiveTerrain in ActiveMapLayer.ArrayTerrain)
+                    {
+                        if (!string.IsNullOrEmpty(ActiveTerrain.BattleBackgroundAnimationPath) && ActiveTerrain.BattleBackgroundAnimationPath != "None")
+                        {
+                            ListBattleBackgroundAnimationPath.Add(ActiveTerrain.BattleBackgroundAnimationPath);
+                        }
+                    }
+                }
+
+                return new TileAttributes(ListBattleBackgroundAnimationPath);
+            }
+
             public Terrain GetTerrain(int X, int Y, int LayerIndex)
             {
                 return ActiveMap.GetTerrain(X, Y, LayerIndex);
@@ -75,24 +93,6 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 NewTerrain.Position = new Vector3(X, Y, 0);
 
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
-            }
-
-            public void EditTerrain(int X, int Y, int LayerIndex)
-            {
-                Terrain SelectedTerrain = GetTerrain(X, Y, LayerIndex);
-                TileAttributes TA = new TileAttributes(new Terrain(SelectedTerrain));
-
-                if (TA.ShowDialog() == DialogResult.OK)
-                {
-                    ReplaceTerrain(X, Y, new Terrain(X, Y,
-                                                                        SelectedTerrain.TerrainTypeIndex,
-                                                                        TA.MVEnterCost,
-                                                                        TA.MVMoveCost,
-                                                                        TA.ListActivation.ToArray(),
-                                                                        TA.ListBonus.ToArray(),
-                                                                        TA.ListBonusValue.ToArray(),
-                                                                        TA.BattleBackgroundAnimationPath), LayerIndex);
-                }
             }
 
             public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex)
