@@ -28,7 +28,7 @@ namespace ProjectEternity.Editors.AnimationEditor
 
             for (int I = 0; I < Items.Count; I++)
             {
-                BackgroundPreview = Items[I].Substring(0, Items[0].Length - 5).Substring(19);
+                BackgroundPreview = Items[I].Substring(0, Items[I].Length - 5).Substring(19);
             }
         }
     }

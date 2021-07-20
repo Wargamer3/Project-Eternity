@@ -79,6 +79,7 @@
     <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
     <Compile Include="Map Layer.cs" />
     <Compile Include="Menus\Attacks Menu.cs" />
+    <Compile Include="Movement Algorithm Tile.cs" />
     <Compile Include="Online\Online Scripts.cs" />
     <Compile Include="Team Lists\Roster Unit.cs" />
     <Compile Include="Team Lists\Roster Character.cs" />
