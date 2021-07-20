@@ -46,6 +46,10 @@
             this.txtMVEnterCost = new System.Windows.Forms.NumericUpDown();
             this.txtMVMoveCost = new System.Windows.Forms.NumericUpDown();
             this.txtBonusValue = new System.Windows.Forms.NumericUpDown();
+            this.lblBattleAnimationBackground = new System.Windows.Forms.Label();
+            this.cboBattleAnimationBackground = new System.Windows.Forms.ComboBox();
+            this.btnDeleteBattleAnimationBackground = new System.Windows.Forms.Button();
+            this.btnNewBattleAnimationBackground = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.txtMVEnterCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMVMoveCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).BeginInit();
@@ -60,7 +64,7 @@
             "Land",
             "Sea",
             "Space"});
-            this.cboTerrainType.Location = new System.Drawing.Point(12, 47);
+            this.cboTerrainType.Location = new System.Drawing.Point(12, 25);
             this.cboTerrainType.Name = "cboTerrainType";
             this.cboTerrainType.Size = new System.Drawing.Size(121, 21);
             this.cboTerrainType.TabIndex = 0;
@@ -68,7 +72,7 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(12, 31);
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 13);
             this.label1.TabIndex = 0;
@@ -77,7 +81,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 87);
+            this.label2.Location = new System.Drawing.Point(12, 49);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(73, 13);
             this.label2.TabIndex = 2;
@@ -86,7 +90,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 143);
+            this.label3.Location = new System.Drawing.Point(12, 94);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 13);
             this.label3.TabIndex = 4;
@@ -94,17 +98,19 @@
             // 
             // lstTerrainBonus
             // 
+            this.lstTerrainBonus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lstTerrainBonus.FormattingEnabled = true;
-            this.lstTerrainBonus.Location = new System.Drawing.Point(171, 47);
+            this.lstTerrainBonus.Location = new System.Drawing.Point(320, 25);
             this.lstTerrainBonus.Name = "lstTerrainBonus";
-            this.lstTerrainBonus.Size = new System.Drawing.Size(176, 225);
+            this.lstTerrainBonus.Size = new System.Drawing.Size(117, 82);
             this.lstTerrainBonus.TabIndex = 5;
             this.lstTerrainBonus.SelectedIndexChanged += new System.EventHandler(this.lstTerrainBonus_SelectedIndexChanged);
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(168, 31);
+            this.label4.Location = new System.Drawing.Point(317, 9);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(72, 13);
             this.label4.TabIndex = 6;
@@ -112,9 +118,10 @@
             // 
             // cboTerrainBonusType
             // 
+            this.cboTerrainBonusType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboTerrainBonusType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTerrainBonusType.FormattingEnabled = true;
-            this.cboTerrainBonusType.Location = new System.Drawing.Point(353, 47);
+            this.cboTerrainBonusType.Location = new System.Drawing.Point(317, 126);
             this.cboTerrainBonusType.Name = "cboTerrainBonusType";
             this.cboTerrainBonusType.Size = new System.Drawing.Size(121, 21);
             this.cboTerrainBonusType.TabIndex = 7;
@@ -122,7 +129,8 @@
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(353, 31);
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.Location = new System.Drawing.Point(317, 110);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(100, 13);
             this.label5.TabIndex = 8;
@@ -130,8 +138,9 @@
             // 
             // label6
             // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(353, 143);
+            this.label6.Location = new System.Drawing.Point(317, 190);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(66, 13);
             this.label6.TabIndex = 10;
@@ -139,17 +148,19 @@
             // 
             // btnAccept
             // 
-            this.btnAccept.Location = new System.Drawing.Point(403, 292);
+            this.btnAccept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAccept.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnAccept.Location = new System.Drawing.Point(362, 244);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(75, 23);
             this.btnAccept.TabIndex = 11;
             this.btnAccept.Text = "Accept";
             this.btnAccept.UseVisualStyleBackColor = true;
-            this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
             // 
             // btnAddNewBonus
             // 
-            this.btnAddNewBonus.Location = new System.Drawing.Point(356, 191);
+            this.btnAddNewBonus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddNewBonus.Location = new System.Drawing.Point(214, 25);
             this.btnAddNewBonus.Name = "btnAddNewBonus";
             this.btnAddNewBonus.Size = new System.Drawing.Size(100, 23);
             this.btnAddNewBonus.TabIndex = 12;
@@ -159,7 +170,8 @@
             // 
             // btnRemoveBonus
             // 
-            this.btnRemoveBonus.Location = new System.Drawing.Point(356, 220);
+            this.btnRemoveBonus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRemoveBonus.Location = new System.Drawing.Point(214, 54);
             this.btnRemoveBonus.Name = "btnRemoveBonus";
             this.btnRemoveBonus.Size = new System.Drawing.Size(100, 23);
             this.btnRemoveBonus.TabIndex = 13;
@@ -169,7 +181,8 @@
             // 
             // btnClearBonuses
             // 
-            this.btnClearBonuses.Location = new System.Drawing.Point(356, 249);
+            this.btnClearBonuses.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearBonuses.Location = new System.Drawing.Point(214, 83);
             this.btnClearBonuses.Name = "btnClearBonuses";
             this.btnClearBonuses.Size = new System.Drawing.Size(100, 23);
             this.btnClearBonuses.TabIndex = 14;
@@ -179,7 +192,8 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(353, 87);
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label7.Location = new System.Drawing.Point(317, 150);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(121, 13);
             this.label7.TabIndex = 16;
@@ -187,9 +201,10 @@
             // 
             // cboTerrainBonusActivation
             // 
+            this.cboTerrainBonusActivation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboTerrainBonusActivation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTerrainBonusActivation.FormattingEnabled = true;
-            this.cboTerrainBonusActivation.Location = new System.Drawing.Point(353, 103);
+            this.cboTerrainBonusActivation.Location = new System.Drawing.Point(317, 166);
             this.cboTerrainBonusActivation.Name = "cboTerrainBonusActivation";
             this.cboTerrainBonusActivation.Size = new System.Drawing.Size(121, 21);
             this.cboTerrainBonusActivation.TabIndex = 15;
@@ -197,7 +212,7 @@
             // 
             // txtMVEnterCost
             // 
-            this.txtMVEnterCost.Location = new System.Drawing.Point(15, 103);
+            this.txtMVEnterCost.Location = new System.Drawing.Point(15, 65);
             this.txtMVEnterCost.Minimum = new decimal(new int[] {
             1,
             0,
@@ -210,7 +225,7 @@
             // 
             // txtMVMoveCost
             // 
-            this.txtMVMoveCost.Location = new System.Drawing.Point(15, 160);
+            this.txtMVMoveCost.Location = new System.Drawing.Point(15, 111);
             this.txtMVMoveCost.Minimum = new decimal(new int[] {
             1,
             0,
@@ -223,7 +238,8 @@
             // 
             // txtBonusValue
             // 
-            this.txtBonusValue.Location = new System.Drawing.Point(356, 159);
+            this.txtBonusValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBonusValue.Location = new System.Drawing.Point(320, 206);
             this.txtBonusValue.Minimum = new decimal(new int[] {
             100,
             0,
@@ -234,11 +250,56 @@
             this.txtBonusValue.TabIndex = 19;
             this.txtBonusValue.ValueChanged += new System.EventHandler(this.txtBonusValue_TextChanged);
             // 
+            // lblBattleAnimationBackground
+            // 
+            this.lblBattleAnimationBackground.AutoSize = true;
+            this.lblBattleAnimationBackground.Location = new System.Drawing.Point(12, 134);
+            this.lblBattleAnimationBackground.Name = "lblBattleAnimationBackground";
+            this.lblBattleAnimationBackground.Size = new System.Drawing.Size(142, 13);
+            this.lblBattleAnimationBackground.TabIndex = 25;
+            this.lblBattleAnimationBackground.Text = "Battle animation background";
+            // 
+            // cboBattleAnimationBackground
+            // 
+            this.cboBattleAnimationBackground.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboBattleAnimationBackground.FormattingEnabled = true;
+            this.cboBattleAnimationBackground.Location = new System.Drawing.Point(12, 150);
+            this.cboBattleAnimationBackground.Name = "cboBattleAnimationBackground";
+            this.cboBattleAnimationBackground.Size = new System.Drawing.Size(163, 21);
+            this.cboBattleAnimationBackground.TabIndex = 24;
+            this.cboBattleAnimationBackground.SelectedIndexChanged += new System.EventHandler(this.cboBattleAnimationBackground_SelectedIndexChanged);
+            // 
+            // btnDeleteBattleAnimationBackground
+            // 
+            this.btnDeleteBattleAnimationBackground.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDeleteBattleAnimationBackground.Location = new System.Drawing.Point(100, 177);
+            this.btnDeleteBattleAnimationBackground.Name = "btnDeleteBattleAnimationBackground";
+            this.btnDeleteBattleAnimationBackground.Size = new System.Drawing.Size(75, 24);
+            this.btnDeleteBattleAnimationBackground.TabIndex = 23;
+            this.btnDeleteBattleAnimationBackground.Text = "Delete";
+            this.btnDeleteBattleAnimationBackground.UseVisualStyleBackColor = true;
+            this.btnDeleteBattleAnimationBackground.Click += new System.EventHandler(this.btnDeleteBattleAnimationBackground_Click);
+            // 
+            // btnNewBattleAnimationBackground
+            // 
+            this.btnNewBattleAnimationBackground.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnNewBattleAnimationBackground.Location = new System.Drawing.Point(12, 177);
+            this.btnNewBattleAnimationBackground.Name = "btnNewBattleAnimationBackground";
+            this.btnNewBattleAnimationBackground.Size = new System.Drawing.Size(75, 24);
+            this.btnNewBattleAnimationBackground.TabIndex = 22;
+            this.btnNewBattleAnimationBackground.Text = "New";
+            this.btnNewBattleAnimationBackground.UseVisualStyleBackColor = true;
+            this.btnNewBattleAnimationBackground.Click += new System.EventHandler(this.btnNewBattleAnimationBackground_Click);
+            // 
             // TileAttributes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(490, 327);
+            this.ClientSize = new System.Drawing.Size(449, 279);
+            this.Controls.Add(this.lblBattleAnimationBackground);
+            this.Controls.Add(this.cboBattleAnimationBackground);
+            this.Controls.Add(this.btnDeleteBattleAnimationBackground);
+            this.Controls.Add(this.btnNewBattleAnimationBackground);
             this.Controls.Add(this.txtBonusValue);
             this.Controls.Add(this.txtMVMoveCost);
             this.Controls.Add(this.txtMVEnterCost);
@@ -287,5 +348,9 @@
         private System.Windows.Forms.NumericUpDown txtMVEnterCost;
         private System.Windows.Forms.NumericUpDown txtMVMoveCost;
         private System.Windows.Forms.NumericUpDown txtBonusValue;
+        private System.Windows.Forms.Label lblBattleAnimationBackground;
+        private System.Windows.Forms.ComboBox cboBattleAnimationBackground;
+        private System.Windows.Forms.Button btnDeleteBattleAnimationBackground;
+        private System.Windows.Forms.Button btnNewBattleAnimationBackground;
     }
 }

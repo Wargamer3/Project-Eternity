@@ -23,7 +23,7 @@ namespace ProjectEternity.Editors.MapEditor
         private BufferedGraphics pbTilePreviewGraphicDevice;
         private Point pbTilePreviewStartingPoint;//Point from which to start drawing the Tile preview.
 
-        private enum ItemSelectionChoices { Tile, TileAsBackground, BGM, UnitPosition, Cutscene };
+        private enum ItemSelectionChoices { Tile, BattleBackgroundAnimation };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
@@ -55,6 +55,8 @@ namespace ProjectEternity.Editors.MapEditor
             cboTerrainBonusType.Items.Add("Armor");
             cboTerrainBonusType.Items.Add("Accuracy");
             cboTerrainBonusType.Items.Add("Evasion");
+
+            cboBattleAnimationBackground.Items.Add("None");
         }
 
         public ProjectEternityTilesetPresetEditor(string FilePath, object[] Params)
@@ -100,17 +102,7 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
                 {
-                    BW.Write(ArrayTerrain[X, Y].TerrainTypeIndex);
-                    BW.Write(ArrayTerrain[X, Y].MVEnterCost);
-                    BW.Write(ArrayTerrain[X, Y].MVMoveCost);
-
-                    BW.Write(ArrayTerrain[X, Y].ListBonus.Length);
-                    for (int i = 0; i < ArrayTerrain[X, Y].ListBonus.Length; i++)
-                    {
-                        BW.Write((int)ArrayTerrain[X, Y].ListBonus[i]);
-                        BW.Write((int)ArrayTerrain[X, Y].ListActivation[i]);
-                        BW.Write(ArrayTerrain[X, Y].ListBonusValue[i]);
-                    }
+                    ArrayTerrain[X, Y].Save(BW);
                 }
             }
 
@@ -140,6 +132,14 @@ namespace ProjectEternity.Editors.MapEditor
             TilesetName = NewTilesetPreset.TilesetName;
 
             ArrayTerrain = NewTilesetPreset.ArrayTerrain;
+
+            foreach (Terrain ActiveTerrain in ArrayTerrain)
+            {
+                if (!string.IsNullOrEmpty(ActiveTerrain.BattleBackgroundAnimationPath) && !cboBattleAnimationBackground.Items.Contains(ActiveTerrain.BattleBackgroundAnimationPath))
+                {
+                    cboBattleAnimationBackground.Items.Add(ActiveTerrain.BattleBackgroundAnimationPath);
+                }
+            }
 
             if (!string.IsNullOrWhiteSpace(TilesetName))
                 InitTileset(TilesetName);
@@ -301,6 +301,32 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
+        private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ListActiveTile.Count > 0)
+            {
+                Point ActiveTile = ListActiveTile[0];
+                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
+                ActiveTerrain.BattleBackgroundAnimationPath = cboBattleAnimationBackground.SelectedItem.ToString();
+
+                UpdateAllTiles();
+            }
+        }
+
+        private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.BattleBackgroundAnimation;
+            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimationsBackgroundsAll));
+        }
+
+        private void btnDeleteBattleAnimationBackground_Click(object sender, EventArgs e)
+        {
+            if (cboBattleAnimationBackground.SelectedIndex >= 0)
+            {
+                cboBattleAnimationBackground.Items.RemoveAt(cboBattleAnimationBackground.SelectedIndex);
+            }
+        }
+
         private void UpdateAllTiles()
         {
             if (ListActiveTile.Count > 1)
@@ -371,6 +397,15 @@ namespace ProjectEternity.Editors.MapEditor
                 txtMVMoveCost.Text = ArrayTerrain[ActiveTile.X, ActiveTile.Y].MVMoveCost.ToString();
 
                 cboTerrainType.SelectedIndex = ArrayTerrain[ActiveTile.X, ActiveTile.Y].TerrainTypeIndex;
+                if (string.IsNullOrEmpty(ArrayTerrain[ActiveTile.X, ActiveTile.Y].BattleBackgroundAnimationPath))
+                {
+                    cboBattleAnimationBackground.SelectedItem = "None";
+                }
+                else
+                {
+                    cboBattleAnimationBackground.SelectedItem = ArrayTerrain[ActiveTile.X, ActiveTile.Y].BattleBackgroundAnimationPath;
+                }
+
                 lstTerrainBonus.Items.Clear();
 
                 //Load the lstTerrainBonus.
@@ -450,6 +485,14 @@ namespace ProjectEternity.Editors.MapEditor
                                 }
                             }
                             pbTilePreview_MouseClick(this, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
+                        }
+                        break;
+
+                    case ItemSelectionChoices.BattleBackgroundAnimation:
+                        string BackgroundPath = Items[I];
+                        if (BackgroundPath != null)
+                        {
+                            cboBattleAnimationBackground.Items.Add(BackgroundPath.Substring(0, BackgroundPath.Length - 5).Substring(19));
                         }
                         break;
                 }

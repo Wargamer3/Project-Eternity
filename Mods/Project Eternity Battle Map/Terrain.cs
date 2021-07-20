@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -114,6 +114,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public TerrainActivation[] ListActivation;//Activation type of the bonuses.
         public TerrainBonus[] ListBonus;//Bonuses the terrain can give.
         public int[] ListBonusValue;//Value of the bonuses.
+        public string BattleBackgroundAnimationPath;
 
         /// <summary>
         /// Used to create the empty array of the map.
@@ -127,6 +128,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListActivation = (TerrainActivation[])Other.ListActivation.Clone();
             this.ListBonus = (TerrainBonus[])Other.ListBonus.Clone();
             this.ListBonusValue = (int[])Other.ListBonusValue.Clone();
+            this.BattleBackgroundAnimationPath = Other.BattleBackgroundAnimationPath;
         }
 
         /// <summary>
@@ -141,6 +143,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListActivation = new TerrainActivation[0];
             this.ListBonus = ListBonus = new TerrainBonus[0];
             this.ListBonusValue = ListBonusValue = new int[0];
+            this.BattleBackgroundAnimationPath = string.Empty;
         }
 
         /// <summary>
@@ -155,7 +158,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="ListBonus">Bonuses the terrain can give.</param>
         /// <param name="ListBonusValue">//Value of the bonuses.</param>
         public Terrain(int XPos, int YPos, int TerrainTypeIndex, int MVEnterCost, int MVMoveCost,
-            TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue)
+            TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue,
+            string BattleBackgroundAnimationPath)
             : this(XPos, YPos)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
@@ -164,6 +168,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListActivation = ListActivation;
             this.ListBonus = ListBonus;
             this.ListBonusValue = ListBonusValue;
+            this.BattleBackgroundAnimationPath = BattleBackgroundAnimationPath;
         }
 
         public Terrain(BinaryReader BR, int XPos, int YPos)
@@ -184,6 +189,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListActivation[i] = (TerrainActivation)BR.ReadInt32();
                 ListBonusValue[i] = BR.ReadInt32();
             }
+
+            BattleBackgroundAnimationPath = BR.ReadString();
         }
 
         public virtual void Save(BinaryWriter BW)
@@ -199,6 +206,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BW.Write((int)ListActivation[i]);
                 BW.Write(ListBonusValue[i]);
             }
+
+            BW.Write(BattleBackgroundAnimationPath);
         }
     }
 }

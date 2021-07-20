@@ -90,7 +90,8 @@ namespace ProjectEternity.Editors.WorldMapEditor
                                                                         TA.MVMoveCost,
                                                                         TA.ListActivation.ToArray(),
                                                                         TA.ListBonus.ToArray(),
-                                                                        TA.ListBonusValue.ToArray()), LayerIndex);
+                                                                        TA.ListBonusValue.ToArray(),
+                                                                        TA.BattleBackgroundAnimationPath), LayerIndex);
                 }
             }
 

@@ -110,7 +110,8 @@ namespace ProjectEternity.Editors.MapEditor
                                                                         TA.MVMoveCost,
                                                                         TA.ListActivation.ToArray(),
                                                                         TA.ListBonus.ToArray(),
-                                                                        TA.ListBonusValue.ToArray()), LayerIndex);
+                                                                        TA.ListBonusValue.ToArray(),
+                                                                        TA.BattleBackgroundAnimationPath), LayerIndex);
                 }
             }
 
@@ -462,7 +463,8 @@ namespace ProjectEternity.Editors.MapEditor
                                                                                                                 TA.MVMoveCost,
                                                                                                                 TA.ListActivation.ToArray(),
                                                                                                                 TA.ListBonus.ToArray(),
-                                                                                                                TA.ListBonusValue.ToArray());
+                                                                                                                TA.ListBonusValue.ToArray(),
+                                                                                                                TA.BattleBackgroundAnimationPath);
                 }
             }
         }
@@ -1089,7 +1091,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                 {
                                     Helper.ReplaceTerrain(X, Y, new Terrain(X, Y,
-                                       0, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
+                                       0, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0], string.Empty),
                                        0);
 
                                     Helper.ReplaceTile(X, Y, 

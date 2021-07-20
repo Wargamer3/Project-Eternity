@@ -3,17 +3,23 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.MapEditor
 {
     public partial class TileAttributes : Form
     {
+        private enum ItemSelectionChoices { BattleBackgroundAnimation };
+
+        private ItemSelectionChoices ItemSelectionChoice;
+
         public int TerrainTypeIndex;//What kind of terrain it is.
         public int MVEnterCost;//How much energy is required to enter in it.
         public int MVMoveCost;//How much energy is required to move in it.
         public List<TerrainActivation> ListActivation;//Activation type of the bonuses.
         public List<TerrainBonus> ListBonus;//Bonuses the terrain can give.
         public List<int> ListBonusValue;//Value of the bonuses.
+        public string BattleBackgroundAnimationPath;
 
         public TileAttributes(Terrain ActiveTerrain)
         {
@@ -25,6 +31,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.ListActivation = ActiveTerrain.ListActivation.ToList();
             this.ListBonus = ActiveTerrain.ListBonus.ToList();
             this.ListBonusValue = ActiveTerrain.ListBonusValue.ToList();
+            this.BattleBackgroundAnimationPath = ActiveTerrain.BattleBackgroundAnimationPath;
 
             txtMVEnterCost.Text = MVEnterCost.ToString();
             txtMVMoveCost.Text = MVMoveCost.ToString();
@@ -50,6 +57,8 @@ namespace ProjectEternity.Editors.MapEditor
             cboTerrainBonusType.Items.Add("Armor");
             cboTerrainBonusType.Items.Add("Accuracy");
             cboTerrainBonusType.Items.Add("Evasion");
+
+            cboBattleAnimationBackground.Items.Add("None");
 
             //Load the lstTerrainBonus.
             for (int i = 0; i < ListActivation.Count; i++)
@@ -205,9 +214,43 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        private void btnAccept_Click(object sender, EventArgs e)
+        private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            BattleBackgroundAnimationPath = cboBattleAnimationBackground.SelectedItem.ToString();
+        }
+
+        private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.BattleBackgroundAnimation;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll));
+        }
+
+        private void btnDeleteBattleAnimationBackground_Click(object sender, EventArgs e)
+        {
+            if (cboBattleAnimationBackground.SelectedIndex >= 0)
+            {
+                cboBattleAnimationBackground.Items.RemoveAt(cboBattleAnimationBackground.SelectedIndex);
+            }
+        }
+
+        protected void ListMenuItemsSelected(List<string> Items)
+        {
+            if (Items == null)
+                return;
+
+            for (int I = 0; I < Items.Count; I++)
+            {
+                switch (ItemSelectionChoice)
+                {
+                    case ItemSelectionChoices.BattleBackgroundAnimation:
+                        string BackgroundPath = Items[I];
+                        if (BackgroundPath != null)
+                        {
+                            cboBattleAnimationBackground.Items.Add(BackgroundPath.Substring(0, BackgroundPath.Length - 5).Substring(19));
+                        }
+                        break;
+                }
+            }
         }
     }
 }
