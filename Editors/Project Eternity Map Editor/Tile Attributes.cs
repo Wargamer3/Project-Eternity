@@ -14,10 +14,11 @@ namespace ProjectEternity.Editors.MapEditor
         private ItemSelectionChoices ItemSelectionChoice;
 
         public Terrain ActiveTerrain;
+        Terrain.TilesetPreset ActivePreset;
 
         Terrain ITileAttributes.ActiveTerrain => ActiveTerrain;
 
-        public TileAttributes(HashSet<string> ListBattleBackgroundAnimationPath)
+        public TileAttributes()
         {
             InitializeComponent();
 
@@ -40,28 +41,22 @@ namespace ProjectEternity.Editors.MapEditor
             cboTerrainBonusType.Items.Add("Armor");
             cboTerrainBonusType.Items.Add("Accuracy");
             cboTerrainBonusType.Items.Add("Evasion");
-
-            cboBattleAnimationBackground.Items.Add("None");
-            foreach (string ActivePath in ListBattleBackgroundAnimationPath)
-            {
-                cboBattleAnimationBackground.Items.Add(ActivePath);
-            }
         }
 
-        public virtual void Init(Terrain ActiveTerrain)
+        public virtual void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset)
         {
             ActiveTerrain = new Terrain(ActiveTerrain);
             this.ActiveTerrain = ActiveTerrain;
+            this.ActivePreset = ActivePreset;
+            cboBattleAnimationBackground.Items.Clear();
+            cboBattleAnimationBackground.Items.Add("None");
+            foreach (string ActivePath in ActivePreset.ListBattleBackgroundAnimationPath)
+            {
+                cboBattleAnimationBackground.Items.Add(ActivePath);
+            }
 
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
-            if (string.IsNullOrEmpty(ActiveTerrain.BattleBackgroundAnimationPath))
-            {
-                cboBattleAnimationBackground.SelectedItem = "None";
-            }
-            else
-            {
-                cboBattleAnimationBackground.SelectedItem = ActiveTerrain.BattleBackgroundAnimationPath;
-            }
+            cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex + 1;
 
             //Load the lstTerrainBonus.
             for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)
@@ -196,7 +191,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActiveTerrain.BattleBackgroundAnimationPath = cboBattleAnimationBackground.SelectedItem.ToString();
+            ActiveTerrain.BattleBackgroundAnimationIndex = cboBattleAnimationBackground.SelectedIndex - 1;
         }
 
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
@@ -226,7 +221,9 @@ namespace ProjectEternity.Editors.MapEditor
                         string BackgroundPath = Items[I];
                         if (BackgroundPath != null)
                         {
-                            cboBattleAnimationBackground.Items.Add(BackgroundPath.Substring(0, BackgroundPath.Length - 5).Substring(19));
+                            BackgroundPath = BackgroundPath.Substring(0, BackgroundPath.Length - 5).Substring(19);
+                            ActivePreset.ListBattleBackgroundAnimationPath.Add(BackgroundPath);
+                            cboBattleAnimationBackground.Items.Add(BackgroundPath);
                         }
                         break;
                 }

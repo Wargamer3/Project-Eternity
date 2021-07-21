@@ -23,20 +23,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
 
             public ITileAttributes GetTileEditor()
             {
-                HashSet<string> ListBattleBackgroundAnimationPath = new HashSet<string>();
-
-                foreach (MapLayer ActiveMapLayer in ActiveMap.ListLayer)
-                {
-                    foreach (Terrain ActiveTerrain in ActiveMapLayer.ArrayTerrain)
-                    {
-                        if (!string.IsNullOrEmpty(ActiveTerrain.BattleBackgroundAnimationPath) && ActiveTerrain.BattleBackgroundAnimationPath != "None")
-                        {
-                            ListBattleBackgroundAnimationPath.Add(ActiveTerrain.BattleBackgroundAnimationPath);
-                        }
-                    }
-                }
-
-                return new TileAttributes(ListBattleBackgroundAnimationPath);
+                return new TileAttributes();
             }
 
             public Terrain GetTerrain(int X, int Y, int LayerIndex)

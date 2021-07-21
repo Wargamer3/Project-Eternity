@@ -26,7 +26,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             cboTerrainType.SelectedIndex = TerrainTypeIndex;
         }
 
-        public void Init(Terrain ActiveTerrain)
+        public void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset)
         {
             ActiveTerrain = this.ActiveTerrain = new TerrainSorcererStreet((TerrainSorcererStreet)ActiveTerrain);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;

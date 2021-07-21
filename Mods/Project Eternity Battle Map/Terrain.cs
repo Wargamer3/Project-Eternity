@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -15,6 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public string TilesetName;
             public Terrain[,] ArrayTerrain;
             public DrawableTile[,] ArrayTiles;
+            public List<string> ListBattleBackgroundAnimationPath;
 
             public TilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int Index)
             {
@@ -22,6 +24,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 ArrayTerrain = new Terrain[TilesetWidth / TileSizeX, TilesetHeight / TileSizeY];
                 ArrayTiles = new DrawableTile[ArrayTerrain.GetLength(0), ArrayTerrain.GetLength(1)];
+                ListBattleBackgroundAnimationPath = new List<string>();
 
                 //Tiles
                 for (int Y = 0; Y < ArrayTerrain.GetLength(1); Y++)
@@ -63,6 +66,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         ArrayTiles[X, Y] = NewTile;
                     }
                 }
+
+                ListBattleBackgroundAnimationPath = new List<string>();
+                int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();
+                for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
+                {
+                    ListBattleBackgroundAnimationPath.Add(BR.ReadString());
+                }
             }
 
             public static TilesetPreset FromFile(string FilePath, int Index = 0)
@@ -82,7 +92,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return NewTilesetPreset;
             }
 
-            public static void SaveTerrainPreset(BinaryWriter BW, Terrain[,] ArrayTerrain, string TilesetName)
+            public static void SaveTerrainPreset(BinaryWriter BW, Terrain[,] ArrayTerrain, string TilesetName, List<string> ListBattleBackgroundAnimationPath)
             {
                 BW.Write(TilesetName);
 
@@ -97,13 +107,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         ArrayTerrain[X, Y].Save(BW);
                     }
                 }
+
+                BW.Write(ListBattleBackgroundAnimationPath.Count);
+                foreach (string BattleBackgroundAnimationPath in ListBattleBackgroundAnimationPath)
+                {
+                    BW.Write(BattleBackgroundAnimationPath);
+                }
             }
         }
 
         public TerrainActivation[] ListActivation;//Activation type of the bonuses.
         public TerrainBonus[] ListBonus;//Bonuses the terrain can give.
         public int[] ListBonusValue;//Value of the bonuses.
-        public string BattleBackgroundAnimationPath;
+        public int BattleBackgroundAnimationIndex;
 
         /// <summary>
         /// Used to create the empty array of the map.
@@ -117,7 +133,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListActivation = (TerrainActivation[])Other.ListActivation.Clone();
             this.ListBonus = (TerrainBonus[])Other.ListBonus.Clone();
             this.ListBonusValue = (int[])Other.ListBonusValue.Clone();
-            this.BattleBackgroundAnimationPath = Other.BattleBackgroundAnimationPath;
+            this.BattleBackgroundAnimationIndex = Other.BattleBackgroundAnimationIndex;
         }
 
         /// <summary>
@@ -132,7 +148,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListActivation = new TerrainActivation[0];
             this.ListBonus = ListBonus = new TerrainBonus[0];
             this.ListBonusValue = ListBonusValue = new int[0];
-            this.BattleBackgroundAnimationPath = string.Empty;
+            this.BattleBackgroundAnimationIndex = -1;
         }
 
         /// <summary>
@@ -148,7 +164,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="ListBonusValue">//Value of the bonuses.</param>
         public Terrain(int XPos, int YPos, int TerrainTypeIndex, int MVEnterCost, int MVMoveCost,
             TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue,
-            string BattleBackgroundAnimationPath)
+            int BattleBackgroundAnimationIndex)
             : this(XPos, YPos)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
@@ -157,7 +173,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListActivation = ListActivation;
             this.ListBonus = ListBonus;
             this.ListBonusValue = ListBonusValue;
-            this.BattleBackgroundAnimationPath = BattleBackgroundAnimationPath;
+            this.BattleBackgroundAnimationIndex = BattleBackgroundAnimationIndex;
         }
 
         public Terrain(BinaryReader BR, int XPos, int YPos)
@@ -179,7 +195,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListBonusValue[i] = BR.ReadInt32();
             }
 
-            BattleBackgroundAnimationPath = BR.ReadString();
+            BattleBackgroundAnimationIndex = BR.ReadInt32();
         }
 
         public virtual void Save(BinaryWriter BW)
@@ -196,7 +212,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BW.Write(ListBonusValue[i]);
             }
 
-            BW.Write(BattleBackgroundAnimationPath);
+            BW.Write(BattleBackgroundAnimationIndex);
         }
     }
 }

@@ -361,7 +361,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(ListTilesetPreset.Count);
             for (int T = 0; T < ListTilesetPreset.Count; T++)
             {
-                Terrain.TilesetPreset.SaveTerrainPreset(BW, ListTilesetPreset[T].ArrayTerrain, ListTilesetPreset[T].TilesetName);
+                Terrain.TilesetPreset.SaveTerrainPreset(BW, ListTilesetPreset[T].ArrayTerrain, ListTilesetPreset[T].TilesetName, ListTilesetPreset[T].ListBattleBackgroundAnimationPath);
             }
         }
 
@@ -544,32 +544,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected void LoadTilesets(BinaryReader BR)
         {
-
             //Tile sets
             int Tiles = BR.ReadInt32();
-            for (int i = 0; i < Tiles; i++)
+            for (int T = 0; T < Tiles; T++)
             {
-                ListTilesetPreset.Add(new Terrain.TilesetPreset(BR, TileSize.X, TileSize.Y, i));
+                ListTilesetPreset.Add(new Terrain.TilesetPreset(BR, TileSize.X, TileSize.Y, T));
 
                 #region Load Tilesets
 
-                string SpritePath = ListTilesetPreset[i].TilesetName;
+                string SpritePath = ListTilesetPreset[T].TilesetName;
 
                 if (Content != null)
                 {
-                    Texture2D T;
                     if (File.Exists("Content/Maps/Tilesets/" + SpritePath + ".xnb"))
-                        T = Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath);
+                        ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/" + SpritePath));
                     else
-                        T = Content.Load<Texture2D>("Maps/Tilesets/Default");
-
-                    ListTileSet.Add(T);
+                        ListTileSet.Add(Content.Load<Texture2D>("Maps/Tilesets/Default"));
                 }
 
                 #endregion
             }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>

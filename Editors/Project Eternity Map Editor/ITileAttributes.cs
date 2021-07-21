@@ -7,7 +7,7 @@ namespace ProjectEternity.Editors.MapEditor
     {
         Terrain ActiveTerrain { get; }
 
-        void Init(Terrain ActiveTerrain);
+        void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset);
         DialogResult ShowDialog();
     }
 }
