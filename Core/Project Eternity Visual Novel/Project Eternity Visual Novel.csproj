@@ -8,7 +8,7 @@
     <ProjectGuid>{B6E9FDCE-3C8D-40E6-BB12-F3D0822FDC58}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ProjectEternityVisualNovel</RootNamespace>
+    <RootNamespace>ProjectEternity.GameScreens.VisualNovelScreen</RootNamespace>
     <AssemblyName>Project Eternity Visual Novel</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dialog.cs" />
+    <Compile Include="Extra Menu.cs" />
     <Compile Include="Speaker Priority.cs" />
     <Compile Include="Visual Novel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

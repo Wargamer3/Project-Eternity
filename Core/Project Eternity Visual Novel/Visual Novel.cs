@@ -91,7 +91,6 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
         private SpriteFont fntMultiDialogFont;
         private SpriteFont fntFinlanderFont;
 
-        private bool ShowSumary = false;
         public bool IsPaused = false;
         public bool UseLocalization = true;
         public Dictionary<string, int> DicMapVariables;
@@ -715,34 +714,15 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             }
             if (InputHelper.InputUpPressed())
             {
-                if (ShowSumary)
-                {//Change the CurrentDialog to the one selected in the sumary(chosed by TimelineIndex).
-                    TimelineIndex -= TimelineIndex > 0 ? 1 : 0;
-                    CurrentDialog = Timeline[TimelineIndex];
-                    ShowSumary = true;
-                }
-                else
-                {
-                    DialogChoice -= DialogChoice > 0 ? 1 : 0;
-                    if (DialogChoice <= DialogChoiceMinIndex)
-                        DialogChoiceMinIndex = DialogChoice;
-                }
+                DialogChoice -= DialogChoice > 0 ? 1 : 0;
+                if (DialogChoice <= DialogChoiceMinIndex)
+                    DialogChoiceMinIndex = DialogChoice;
             }
             else if (InputHelper.InputDownPressed())
             {
-                if (ShowSumary)
-                {
-                    //Change the CurrentDialog to the one selected in the sumary(chosed by TimelineIndex).
-                    TimelineIndex += TimelineIndex < TimelineIndexMax - 1 ? 1 : 0;
-                    CurrentDialog = Timeline[TimelineIndex];
-                    ShowSumary = true;
-                }
-                else
-                {
-                    DialogChoice += DialogChoice < CurrentDialog.ListNextDialog.Count - 1 ? 1 : 0;
-                    if (DialogChoice - MaxDialogChoice >= DialogChoiceMinIndex)
-                        DialogChoiceMinIndex = DialogChoice - MaxDialogChoice + 1;
-                }
+                DialogChoice += DialogChoice < CurrentDialog.ListNextDialog.Count - 1 ? 1 : 0;
+                if (DialogChoice - MaxDialogChoice >= DialogChoiceMinIndex)
+                    DialogChoiceMinIndex = DialogChoice - MaxDialogChoice + 1;
             }
             if (InputHelper.InputConfirmPressed())
             {
@@ -776,7 +756,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             }
             else if (InputHelper.InputCancelPressed())
             {//Show/Hide the sumary.
-                ShowSumary = !ShowSumary;
+                PushScreen(new ExtraMenu(this, fntFinlanderFont, TimelineIndexMax));
             }
         }
 
@@ -861,30 +841,6 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 }
                 else
                     DrawText(g, new Vector2(5, Constants.Height - VNBoxHeight), CurrentDialog.Text);
-            }
-
-            if (ShowSumary)
-            {
-                DrawExtra(g);
-            }
-        }
-
-        private void DrawExtra(CustomSpriteBatch g)
-        {
-            //Draw the VN sumary.
-            g.Draw(sprPixel, new Rectangle(Constants.Width / 2 - 100, 100, 200, 150), Color.Gray);//Background
-            int i = Math.Max(0, TimelineIndex - 5);
-            int CurrentText = 0;
-            //Draw a sumary of every text line up to MaxTime.
-            while (CurrentText <= 5 && i < TimelineIndexMax)
-            {//Draw cursor.
-                if (i == TimelineIndex)
-                    g.Draw(sprPixel, new Rectangle(Constants.Width / 2 - 100, 100 + CurrentText * fntFinlanderFont.LineSpacing * 2, 200, fntFinlanderFont.LineSpacing * 2), Color.FromNonPremultiplied(255, 255, 255, 100));
-                //Crop the text before drawing it.
-                string TextBuffer = Timeline[i].Text.Substring(0, Math.Min(20, Timeline[i].Text.Length));
-                g.DrawString(fntFinlanderFont, TextBuffer, new Vector2(Constants.Width / 2 - 100, 100 + CurrentText * (fntFinlanderFont.LineSpacing * 2)), Color.White);
-                CurrentText++;
-                i++;
             }
         }
 
