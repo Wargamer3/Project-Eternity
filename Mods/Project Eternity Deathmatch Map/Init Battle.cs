@@ -70,43 +70,70 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             string ExtraTextMiss = AttackingSquad.CurrentLeader.ItemName + " misses! " + EnemySquad.CurrentLeader.ItemName + " takes 0 damage!";
             string ExtraTextKill = EnemySquad.CurrentLeader.ItemName + " is destroyed!";
 
-            AnimationBackground ActiveAnimationBackground = new AnimationBackground2D("Backgrounds 2D/Ground", Content, GraphicsDevice);
+            AnimationBackground ActiveSquadBackground;
+            AnimationBackground TargetSquadBackground;
+
+            string ActiveSquadBackgroundPath = "Backgrounds 2D/Empty";
+            string TargetSquadBackgroundPath = "Backgrounds 2D/Empty";
+            BattleMapScreen.Terrain ActiveSquadTerrain = GetTerrain(ActiveSquad);
+            BattleMapScreen.Terrain TargetSquadTerrain = GetTerrain(TargetSquad);
+
+            if (ActiveSquadTerrain.BattleBackgroundAnimationIndex >= 0)
+            {
+                ActiveSquadBackgroundPath = ListTilesetPreset[ActiveSquadTerrain.TerrainTypeIndex].ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleBackgroundAnimationIndex];
+            }
+
+            if (TargetSquadTerrain.BattleBackgroundAnimationIndex >= 0)
+            {
+                TargetSquadBackgroundPath = ListTilesetPreset[TargetSquadTerrain.TerrainTypeIndex].ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleBackgroundAnimationIndex];
+            }
+
+            ActiveSquadBackground = new AnimationBackground2D(ActiveSquadBackgroundPath, Content, GraphicsDevice);
+
+            if (ActiveSquadBackgroundPath == TargetSquadBackgroundPath)
+            {
+                TargetSquadBackground = ActiveSquadBackground;
+            }
+            else
+            {
+                TargetSquadBackground = new AnimationBackground2D(TargetSquadBackgroundPath, Content, GraphicsDevice);
+            }
 
             AttackAnimations AttackerAnimations = ActiveAttack.GetAttackAnimations(FormulaParser.ActiveParser);
-            CreateAnimation(AttackingSquad.CurrentLeader.Animations.MoveFoward, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, "", HorionztalMirror);
+            CreateAnimation(AttackingSquad.CurrentLeader.Animations.MoveFoward, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror);
 
-            CreateAnimation(AttackerAnimations.Start, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, ExtraTextIntro, HorionztalMirror);
+            CreateAnimation(AttackerAnimations.Start, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, ExtraTextIntro, HorionztalMirror);
 
             if (BattleResult.ArrayResult[0].AttackMissed)
             {
-                CreateAnimation(AttackerAnimations.EndMiss, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, ExtraTextMiss, HorionztalMirror);
+                CreateAnimation(AttackerAnimations.EndMiss, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, TargetSquadBackground, ExtraTextMiss, HorionztalMirror);
             }
             else
             {
                 // Check for support
                 if (EnemySupport != null)
                 {
-                    CreateAnimation("Default Animations/Support In", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, "", HorionztalMirror);
+                    CreateAnimation("Default Animations/Support In", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror);
                     if (BattleResult.ArrayResult[0].Target.ComputeRemainingHPAfterDamage(BattleResult.ArrayResult[0].AttackDamage) > 0)
                     {
-                        CreateAnimation(AttackerAnimations.EndHit, this, AttackingSquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, "", HorionztalMirror);
-                        CreateAnimation("Default Animations/Support Out", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, "", HorionztalMirror);
+                        CreateAnimation(AttackerAnimations.EndHit, this, AttackingSquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror);
+                        CreateAnimation("Default Animations/Support Out", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror);
                     }
                     else
                     {
-                        CreateAnimation(AttackerAnimations.EndDestroyed, this, AttackingSquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, "", HorionztalMirror);
-                        CreateAnimation("Default Animations/Support Destroyed", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, "", HorionztalMirror);
+                        CreateAnimation(AttackerAnimations.EndDestroyed, this, AttackingSquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror);
+                        CreateAnimation("Default Animations/Support Destroyed", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror);
                     }
                 }
                 else
                 {
                     if (BattleResult.ArrayResult[0].Target.ComputeRemainingHPAfterDamage(BattleResult.ArrayResult[0].AttackDamage) <= 0)
                     {
-                        CreateAnimation(AttackerAnimations.EndDestroyed, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, ExtraTextKill, HorionztalMirror);
+                        CreateAnimation(AttackerAnimations.EndDestroyed, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, TargetSquadBackground, ExtraTextKill, HorionztalMirror);
                     }
                     else
                     {
-                        CreateAnimation(AttackerAnimations.EndHit, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveAnimationBackground, ExtraTextHit, HorionztalMirror);
+                        CreateAnimation(AttackerAnimations.EndHit, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, TargetSquadBackground, ExtraTextHit, HorionztalMirror);
                     }
                 }
             }
