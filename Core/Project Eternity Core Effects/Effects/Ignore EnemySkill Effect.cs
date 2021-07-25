@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.IO;
+using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Core.Effects
@@ -21,12 +22,12 @@ namespace ProjectEternity.Core.Effects
             _IgnoreEnemySkillValue = string.Empty;
         }
 
-        protected override void Load(System.IO.BinaryReader BR)
+        protected override void Load(BinaryReader BR)
         {
             _IgnoreEnemySkillValue = BR.ReadString();
         }
 
-        protected override void Save(System.IO.BinaryWriter BW)
+        protected override void Save(BinaryWriter BW)
         {
             BW.Write(_IgnoreEnemySkillValue);
         }

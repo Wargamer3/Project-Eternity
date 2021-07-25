@@ -47,6 +47,14 @@ namespace ProjectEternity.Core.Magic
                 this.MagicParams = new MagicUserParams(MagicParams);
             }
         }
+
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
+        }
     }
 
     public sealed class ManaChanneledRequirement : MagicRequirement

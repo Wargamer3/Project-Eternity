@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.IO;
+using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Core.Effects
@@ -20,11 +21,11 @@ namespace ProjectEternity.Core.Effects
         {
         }
         
-        protected override void Load(System.IO.BinaryReader BR)
+        protected override void Load(BinaryReader BR)
         {
         }
 
-        protected override void Save(System.IO.BinaryWriter BW)
+        protected override void Save(BinaryWriter BW)
         {
         }
 

@@ -28,6 +28,14 @@ namespace ProjectEternity.Core.Effects
                 this.Params = new ProjectileParams(Params);
             }
         }
+
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
+        }
     }
 
     public sealed class ChangeAttackSpeedEffect : ProjectileEffect

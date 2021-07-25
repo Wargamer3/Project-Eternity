@@ -1,7 +1,7 @@
-﻿using ProjectEternity.Core.Item;
-using ProjectEternity.GameScreens.BattleMapScreen;
+﻿using System.IO;
+using ProjectEternity.Core.Item;
 using System.Collections.Generic;
-using System.IO;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -57,6 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             GlobalContext.ArrayAttackPosition.CopyTo(LocalContext.ArrayAttackPosition, 0);
         }
     }
+
     public abstract class DeathmatchEffect : BaseEffect
     {
         /// <summary>
@@ -117,6 +118,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (LifetimeType == Core.Effects.SkillEffect.LifetimeTypePermanent)
                 LifetimeTypeValue = -1;
+        }
+
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
         }
 
         public override bool CanActivate()

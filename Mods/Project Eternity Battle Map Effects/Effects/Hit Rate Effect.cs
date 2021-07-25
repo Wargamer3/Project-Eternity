@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Globalization;
 using System.ComponentModel;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Effects;
-using System;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

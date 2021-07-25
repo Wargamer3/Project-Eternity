@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
@@ -125,6 +126,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 this.Params = new TripleThunderRobotParams(Params);
             }
         }
+
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
+        }
     }
 
     public abstract class TripleThunderAttackEffect : BaseEffect
@@ -148,6 +157,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 this.Params = new TripleThunderAttackParams(Params);
             }
+        }
+
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
         }
     }
 

@@ -585,8 +585,6 @@ namespace ProjectEternity.Core.Characters
             Will = BR.ReadInt32();
             PilotPoints = BR.ReadInt32();
             SP = BR.ReadInt32();
-
-            Effects.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         public static Character QuickLoadFromFile(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,

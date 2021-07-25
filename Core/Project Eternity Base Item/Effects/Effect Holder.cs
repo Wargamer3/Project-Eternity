@@ -21,7 +21,7 @@ namespace ProjectEternity.Core.Item
 
                 BW.Write(ListActiveEffect.Value.Count);
                 for (int E = 0; E < ListActiveEffect.Value.Count; ++E)
-                    ListActiveEffect.Value[E].WriteEffect(BW);
+                    ListActiveEffect.Value[E].QuickSave(BW);
             }
         }
 
@@ -38,7 +38,7 @@ namespace ProjectEternity.Core.Item
                 List<BaseEffect> ListEffect = new List<BaseEffect>(ListEffectValueCount);
                 for (int E = 0; E < ListEffectValueCount; ++E)
                 {
-                    ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+                    ListEffect.Add(BaseEffect.FromQuickSaveFile(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
 
                 DicActiveEffect.Add(Key, ListEffect);

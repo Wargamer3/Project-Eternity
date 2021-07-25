@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.IO;
+using System.ComponentModel;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 
@@ -22,14 +23,14 @@ namespace ProjectEternity.Core.Effects
             ListAttack = new List<string>();
         }
         
-        protected override void Load(System.IO.BinaryReader BR)
+        protected override void Load(BinaryReader BR)
         {
             int NullifyAttackListAttackCount = BR.ReadInt32();
             for (int A = 0; A < NullifyAttackListAttackCount; A++)
                 ListAttack.Add(BR.ReadString());
         }
 
-        protected override void Save(System.IO.BinaryWriter BW)
+        protected override void Save(BinaryWriter BW)
         {
             BW.Write(ListAttack.Count);
             for (int A = 0; A < ListAttack.Count; A++)

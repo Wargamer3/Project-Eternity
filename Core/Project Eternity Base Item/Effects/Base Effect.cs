@@ -69,9 +69,68 @@ namespace ProjectEternity.Core.Item
             return NewSkillEffect;
         }
 
+        public static BaseEffect FromQuickSaveFile(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            string EffectName = BR.ReadString();
+
+            BaseEffect NewSkillEffect = DicEffect[EffectName].Copy();
+
+            NewSkillEffect.QuickLoad(BR);
+
+            int ListFollowingSkillCount = BR.ReadInt32();
+            for (int S = ListFollowingSkillCount - 1; S >= 0; --S)
+            {
+                NewSkillEffect.ListFollowingSkill.Add(new BaseAutomaticSkill(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+            }
+
+            return NewSkillEffect;
+        }
+
         protected abstract void Load(BinaryReader BR);
 
+        protected void QuickLoad(BinaryReader BR)
+        {
+            string LifetimeType = BR.ReadString();
+            int LifetimeTypeValue = BR.ReadInt32();
+
+            bool IsStacking = BR.ReadBoolean();
+            int MaximumStack = BR.ReadInt32();
+            int Range = BR.ReadInt32();
+            int Lifetime = BR.ReadInt32();
+
+            this.LifetimeType = LifetimeType;
+            this.LifetimeTypeValue = LifetimeTypeValue;
+
+            Load(BR);
+
+            this.Lifetime = Lifetime;
+            this.IsStacking = IsStacking;
+            this.MaximumStack = MaximumStack;
+            this.Range = Range;
+
+            DoQuickLoad(BR);
+        }
+
+        protected abstract void DoQuickLoad(BinaryReader BR);
+
         protected abstract void Save(BinaryWriter BW);
+
+        public void QuickSave(BinaryWriter BW)
+        {
+            BW.Write(EffectTypeName);
+
+            BW.Write(LifetimeType);
+            BW.Write(LifetimeTypeValue);
+
+            BW.Write(IsStacking);
+            BW.Write(MaximumStack);
+            BW.Write(Range);
+            BW.Write(Lifetime);
+            DoQuickSave(BW);
+        }
+
+        protected abstract void DoQuickSave(BinaryWriter BW);
 
         public void WriteEffect(BinaryWriter BW)
         {

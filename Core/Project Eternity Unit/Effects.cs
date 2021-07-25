@@ -300,6 +300,21 @@ namespace ProjectEternity.Core.Effects
                 LifetimeTypeValue = -1;
         }
 
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
+            BW.Write(Params.LocalContext.EffectOwnerSquad.ID);
+            BW.Write(Params.LocalContext.EffectOwnerSquad.IndexOf(Params.LocalContext.EffectOwnerUnit));
+            BW.Write(Array.IndexOf(Params.LocalContext.EffectOwnerUnit.ArrayCharacterActive, Params.LocalContext.EffectOwnerCharacter));
+
+            BW.Write(Params.LocalContext.EffectTargetSquad.ID);
+            BW.Write(Params.LocalContext.EffectOwnerSquad.IndexOf(Params.LocalContext.EffectTargetUnit));
+            BW.Write(Array.IndexOf(Params.LocalContext.EffectTargetUnit.ArrayCharacterActive, Params.LocalContext.EffectTargetCharacter));
+        }
+
         public override bool CanActivate()
         {
             return true;

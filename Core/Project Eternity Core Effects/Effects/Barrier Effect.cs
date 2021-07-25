@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
+using System.IO;
 
 namespace ProjectEternity.Core.Effects
 {
@@ -38,7 +39,7 @@ namespace ProjectEternity.Core.Effects
         {
         }
 
-        protected override void Load(System.IO.BinaryReader BR)
+        protected override void Load(BinaryReader BR)
         {
             _BarrierType = (BarrierTypes)BR.ReadByte();
             _ENCost = BR.ReadString();
@@ -59,7 +60,7 @@ namespace ProjectEternity.Core.Effects
                 ListBreakingSkill.Add(BR.ReadString());
         }
 
-        protected override void Save(System.IO.BinaryWriter BW)
+        protected override void Save(BinaryWriter BW)
         {
             BW.Write((byte)_BarrierType);
             BW.Write(_ENCost);
@@ -84,18 +85,18 @@ namespace ProjectEternity.Core.Effects
         {
             string Output = string.Empty;
 
-            Output += "Barrier type: " + _BarrierType + System.Environment.NewLine;
-            Output += "EN cost: " + _ENCost + System.Environment.NewLine;
-            Output += "Number type: " + _NumberType + System.Environment.NewLine;
-            Output += "Damage reduction: " + _DamageReduction + System.Environment.NewLine;
-            Output += "Breaking damage: " + _BreakingDamage + System.Environment.NewLine;
+            Output += "Barrier type: " + _BarrierType + Environment.NewLine;
+            Output += "EN cost: " + _ENCost + Environment.NewLine;
+            Output += "Number type: " + _NumberType + Environment.NewLine;
+            Output += "Damage reduction: " + _DamageReduction + Environment.NewLine;
+            Output += "Breaking damage: " + _BreakingDamage + Environment.NewLine;
 
-            Output += "Effective Attacks: " + _BreakingDamage + System.Environment.NewLine;
-            Output += string.Join(System.Environment.NewLine, ListEffectiveAttack);
-            Output += "Breaking Attacks: " + _BreakingDamage + System.Environment.NewLine;
-            Output += string.Join(System.Environment.NewLine, ListBreakingAttack);
-            Output += "Breaking Skills: " + _BreakingDamage + System.Environment.NewLine;
-            Output += string.Join(System.Environment.NewLine, ListBreakingSkill);
+            Output += "Effective Attacks: " + _BreakingDamage + Environment.NewLine;
+            Output += string.Join(Environment.NewLine, ListEffectiveAttack);
+            Output += "Breaking Attacks: " + _BreakingDamage + Environment.NewLine;
+            Output += string.Join(Environment.NewLine, ListBreakingAttack);
+            Output += "Breaking Skills: " + _BreakingDamage + Environment.NewLine;
+            Output += string.Join(Environment.NewLine, ListBreakingSkill);
 
             return Output;
         }

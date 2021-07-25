@@ -116,7 +116,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Magic
         {
         }
 
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+        }
+
         protected override void Save(BinaryWriter BW)
+        {
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
         {
         }
     }

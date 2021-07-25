@@ -1,4 +1,5 @@
-﻿using ProjectEternity.Core.Item;
+﻿using System.IO;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -24,6 +25,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 this.Params = new SorcererStreetBattleParams(Params);
             }
+        }
+
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
         }
     }
 }

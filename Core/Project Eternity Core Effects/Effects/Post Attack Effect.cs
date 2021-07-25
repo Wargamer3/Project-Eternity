@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.IO;
+using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Core.Effects
@@ -26,7 +27,7 @@ namespace ProjectEternity.Core.Effects
         {
         }
 
-        protected override void Load(System.IO.BinaryReader BR)
+        protected override void Load(BinaryReader BR)
         {
             _Attack = BR.ReadBoolean();
             _Transform = BR.ReadBoolean();
@@ -34,7 +35,7 @@ namespace ProjectEternity.Core.Effects
             _Move = BR.ReadBoolean();
         }
 
-        protected override void Save(System.IO.BinaryWriter BW)
+        protected override void Save(BinaryWriter BW)
         {
             BW.Write(_Attack);
             BW.Write(_Transform);

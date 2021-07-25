@@ -205,20 +205,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     BW.Write(ActiveSquad.Z);
                     BW.Write(ActiveSquad.SquadName);
 
-                    int UnitInSquad = ActiveSquad.UnitsInSquad;
+                    int UnitsInSquad = ActiveSquad.UnitsInSquad;
 
-                    BW.Write(UnitInSquad);
+                    BW.Write(UnitsInSquad);
                     BW.Write(ActiveSquad.CurrentLeaderIndex);
                     BW.Write(ActiveSquad.CurrentWingmanAIndex);
                     BW.Write(ActiveSquad.CurrentWingmanBIndex);
 
-                    for (int U = 0; U < UnitInSquad; ++U)
+                    for (int U = 0; U < UnitsInSquad; ++U)
                         ActiveSquad.At(U).QuickSave(BW);
 
                     //List of Attacked Teams.
                     BW.Write(ActiveSquad.ListAttackedTeam.Count);
                     for (int U = 0; U < ActiveSquad.ListAttackedTeam.Count; ++U)
                         BW.Write(ActiveSquad.ListAttackedTeam[U]);
+                }
+            }
+            foreach (Player ActivePlayer in ListPlayer)
+            {
+                foreach (Squad ActiveSquad in ActivePlayer.ListSquad)
+                {
+                    for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
+                    {
+                        foreach (Character ActiveCharacter in ActiveSquad.At(U).ArrayCharacterActive)
+                        {
+                            ActiveCharacter.Effects.QuickSave(BW);
+                        }
+                    }
                 }
             }
 
@@ -255,18 +268,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             SkillPoint = BR.ReadString();
 
             sndBattleThemeName = BR.ReadString();
-            FMODSound NewBattleTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + sndBattleThemeName + ".mp3");
-            NewBattleTheme.SetLoop(true);
-            sndBattleTheme = NewBattleTheme;
+            if (!string.IsNullOrEmpty(sndBattleThemeName))
+            {
+                FMODSound NewBattleTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + sndBattleThemeName + ".mp3");
+
+                NewBattleTheme.SetLoop(true);
+                sndBattleTheme = NewBattleTheme;
+            }
 
             string ThemePath = BR.ReadString();
             uint ThemePosition = BR.ReadUInt32();
 
-            FMODSound NewTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + ThemePath + ".mp3");
-            NewTheme.SetLoop(true);
-            NewTheme.PlayAsBGM();
-            FMODSystem.sndActiveBGMName = ThemePath;
-            NewTheme.SetPosition(ThemePosition);
+            if (!string.IsNullOrEmpty(ThemePath))
+            {
+                FMODSound NewTheme = new FMODSound(FMODSystem, "Content/Maps/BGM/" + ThemePath + ".mp3");
+                NewTheme.SetLoop(true);
+                NewTheme.PlayAsBGM();
+                FMODSystem.sndActiveBGMName = ThemePath;
+                NewTheme.SetPosition(ThemePosition);
+            }
 
             int ListPlayerCount = BR.ReadInt32();
             ListPlayer = new List<Player>(ListPlayerCount);
@@ -310,11 +330,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         string UnitName = BR.ReadString();
                         ArrayNewUnit[U] = DicUnitType[UnitAssemblyQualifiedName].FromFile(UnitName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
-                        /*GlobalDeathmatchContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
-                            GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter);*/
-
                         ArrayNewUnit[U].QuickLoad(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                     }
+
                     NewSquad = new Squad(ActiveSquadSquadName, ArrayNewUnit[0],
                                          ArrayNewUnit.Length >= 2 ? ArrayNewUnit[1] : null,
                                          ArrayNewUnit.Length >= 3 ? ArrayNewUnit[2] : null);
@@ -330,13 +348,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     NewSquad.SetWingmanB(CurrentWingmanBIndex);
 
                     if (!CanMove)
+                    {
                         NewSquad.EndTurn();
+                    }
 
                     NewSquad.ActionsRemaining = ActionsRemaining;
                     NewSquad.SquadName = ActiveSquadSquadName;
 
                     NewListSquad.Add(NewSquad);
-                    SpawnSquad(P, NewSquad, ActiveSquadID, new Vector3(ActiveSquadPositionX, ActiveSquadPositionY, ActiveSquadPositionZ));
+
+                    if (NewSquad.CurrentLeader != null)
+                    {
+                        //Do not spawn squads as it will trigger effect that were already activated
+                        SpawnSquad(P, NewSquad, ActiveSquadID, new Vector3(ActiveSquadPositionX, ActiveSquadPositionY, ActiveSquadPositionZ));
+                    }
+                }
+            }
+            for (int P = 0; P < ListPlayer.Count; ++P)
+            {
+                for (int S = 0; S < ListPlayer[P].ListSquad.Count; ++S)
+                {
+                    ListPlayer[P].ListSquad[S].ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                    /*GlobalDeathmatchContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
+                        GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter);*/
+
                 }
             }
 

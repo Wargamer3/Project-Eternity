@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
-using ProjectEternity.Core.Item;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Item;
+using ProjectEternity.GameScreens.BattleMapScreen;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.TilesetOriginSelector;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
