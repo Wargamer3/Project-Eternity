@@ -58,9 +58,14 @@
     <Compile Include="Attack\Attack Animations.cs" />
     <Compile Include="Attack\MAP Attack Attributes.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Effects\CSV Converter.cs" />
+    <Compile Include="Effects\Status Type Converter.cs" />
+    <Compile Include="Effects\Unit Effect Context.cs" />
+    <Compile Include="Effects\Unit Effect Params.cs" />
+    <Compile Include="Effects\Unit Stats Converter.cs" />
     <Compile Include="Manual Skill Target.cs" />
     <Compile Include="Parts.cs" />
-    <Compile Include="Effects.cs" />
+    <Compile Include="Effects\Skill Effect.cs" />
     <Compile Include="Automatic Skills.cs" />
     <Compile Include="Consumable Parts.cs" />
     <Compile Include="Manual Skill.cs" />
