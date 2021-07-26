@@ -66,6 +66,7 @@ namespace ProjectEternity
                         BR.Close();
                         NewMap.ListGameScreen = ListGameScreen;
                         NewMap.PlayerRoster = new Roster();
+                        NewMap.PlayerRoster.LoadRoster();
                         NewMap.Load();
 
                         //Remove any GameScreen created by the map so they don't show up immediately.

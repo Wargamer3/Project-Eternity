@@ -227,6 +227,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
         protected BattleContext GlobalBattleContext;
+        protected UnitQuickLoadEffectContext GlobalQuickLoadContext;
 
         #region Screen shaking
 
@@ -293,6 +294,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListSubMap = new List<BattleMap>();
 
             GlobalBattleContext = new BattleContext();
+            GlobalQuickLoadContext = new UnitQuickLoadEffectContext();
 
             #region Screen shaking
 
@@ -602,11 +604,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public virtual void LoadEffects()
         {
-            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext, GlobalQuickLoadContext)))
             {
                 DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
             }
-            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext, GlobalQuickLoadContext)))
             {
                 DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
             }
@@ -614,7 +616,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext, GlobalQuickLoadContext)))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
                 }
@@ -623,7 +625,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext, GlobalQuickLoadContext)))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
                 }
@@ -789,7 +791,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Type MapType = Type.GetType(MapAssembly);
             BattleMap NewMap = (BattleMap)Activator.CreateInstance(MapType, BattleMapPath);
             NewMap.ListGameScreen = ListGameScreen;
-            NewMap.Load();
             NewMap.LoadTemporaryMap(BR);
 
             FS.Close();

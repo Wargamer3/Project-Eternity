@@ -61,7 +61,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
         public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
-        public BattleContext GlobalBattleContext;
+        private BattleContext GlobalBattleContext;
+        private UnitQuickLoadEffectContext GlobalQuickLoadContext;
 
         public UnitPartsScreen(Roster PlayerRoster)
             : base(PlayerRoster)
@@ -78,6 +79,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
             GlobalBattleContext = new BattleContext();
+            GlobalQuickLoadContext = new UnitQuickLoadEffectContext();
         }
 
         public override void Load()
@@ -120,11 +122,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void LoadEffects()
         {
-            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext, GlobalQuickLoadContext)))
             {
                 DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
             }
-            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Battle Map", "*.dll"), typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext, GlobalQuickLoadContext)))
             {
                 DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
             }
@@ -132,7 +134,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext, GlobalQuickLoadContext)))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
                 }
@@ -141,7 +143,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext)))
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(SkillEffect), new UnitEffectParams(GlobalBattleContext, GlobalQuickLoadContext)))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
                 }

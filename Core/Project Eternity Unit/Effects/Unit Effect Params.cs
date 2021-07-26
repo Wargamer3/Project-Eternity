@@ -5,7 +5,7 @@
     /// </summary>
     public class UnitEffectParams
     {
-        // This class is shared through every RobotEffects used to temporary pass variables to effects.
+        // This class is shared through every SkillEffect used to temporary pass variables to effects.
         // Because it is shared through all effect, its variables will constantly change and must be kept as a member after being activated.
         // There should never be more than one instance of the global context.
         public readonly UnitEffectContext GlobalContext;
@@ -13,14 +13,18 @@
         // This context is local and can't be changed.
         public readonly UnitEffectContext LocalContext;
 
-        public UnitEffectParams(UnitEffectContext GlobalContext)
+        // Used to feed Squads, Units and Character when quick loading.
+        public readonly UnitQuickLoadEffectContext GlobalQuickLoadContext;
+
+        public UnitEffectParams(UnitEffectContext GlobalContext, UnitQuickLoadEffectContext GlobalQuickLoadContext)
         {
             this.GlobalContext = GlobalContext;
+            this.GlobalQuickLoadContext = GlobalQuickLoadContext;
             LocalContext = new UnitEffectContext();
         }
 
         public UnitEffectParams(UnitEffectParams Clone)
-            : this(Clone.GlobalContext)
+            : this(Clone.GlobalContext, Clone.GlobalQuickLoadContext)
         {
         }
 

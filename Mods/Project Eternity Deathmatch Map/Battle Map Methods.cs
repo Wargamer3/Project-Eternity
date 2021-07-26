@@ -7,6 +7,8 @@ using FMOD;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -118,7 +120,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             NewSquad.SetPosition(Position);
 
             ListPlayer[PlayerIndex].ListSquad.Add(NewSquad);
-            
+
             if (NewSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
             {
                 if (NewSquad.CurrentWingmanA != null)
@@ -147,7 +149,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
             else
+            {
                 NewSquad.CurrentMovement = UnitStats.TerrainLand;
+            }
         }
         
         public override void SaveTemporaryMap()
@@ -204,6 +208,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     BW.Write(ActiveSquad.Y);
                     BW.Write(ActiveSquad.Z);
                     BW.Write(ActiveSquad.SquadName);
+                    BW.Write(ActiveSquad.CurrentMovement);
+                    BW.Write(ActiveSquad.IsFlying);
+                    BW.Write(ActiveSquad.IsUnderTerrain);
+                    BW.Write(ActiveSquad.IsPlayerControlled);
+                    BW.Write(ActiveSquad.LayerIndex);
+                    if (ActiveSquad.SquadAI == null || ActiveSquad.SquadAI.Path == null)
+                    {
+                        BW.Write(string.Empty);
+                    }
+                    else
+                    {
+                        BW.Write(ActiveSquad.SquadAI.Path);
+                    }
 
                     int UnitsInSquad = ActiveSquad.UnitsInSquad;
 
@@ -221,14 +238,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         BW.Write(ActiveSquad.ListAttackedTeam[U]);
                 }
             }
-            foreach (Player ActivePlayer in ListPlayer)
+
+            for (int P = 0; P < ListPlayer.Count; P++)
             {
-                foreach (Squad ActiveSquad in ActivePlayer.ListSquad)
+                for (int S = 0; S < ListPlayer[P].ListSquad.Count; S++)
                 {
-                    for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
+                    for (int U = 0; U < ListPlayer[P].ListSquad[S].UnitsInSquad; ++U)
                     {
-                        foreach (Character ActiveCharacter in ActiveSquad.At(U).ArrayCharacterActive)
+                        for (int C = 0; C < ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive.Length; C++)
                         {
+                            Character ActiveCharacter = ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive[C];
                             ActiveCharacter.Effects.QuickSave(BW);
                         }
                     }
@@ -247,7 +266,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BattleMap LoadTemporaryMap(BinaryReader BR)
         {
+            LoadContent();
+
+            ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
+            //Initialise the ScreenSize based on the map loaded.
+            ScreenSize = new Point(Constants.Width / TileSize.X, Constants.Height / TileSize.Y);
+
             IsStarted = true;
+            IsInit = true;
+            RequireDrawFocus = false;
+
+            TogglePreview(true);
+
             int DicMapVariablesCount = BR.ReadInt32();
             DicMapVariables = new Dictionary<string, double>(DicMapVariablesCount);
             for (int i = 0; i < DicMapVariablesCount; ++i)
@@ -288,6 +318,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTheme.SetPosition(ThemePosition);
             }
 
+            Dictionary<uint, Squad> DicLoadedSquad = new Dictionary<uint, Squad>();
+
             int ListPlayerCount = BR.ReadInt32();
             ListPlayer = new List<Player>(ListPlayerCount);
             for (int P = 0; P < ListPlayerCount; ++P)
@@ -306,7 +338,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListPlayer.Add(NewPlayer);
 
                 int ActivePlayerListSquadCount = BR.ReadInt32();
-                List<Squad> NewListSquad = new List<Squad>(ActivePlayerListSquadCount);
                 for (int S = 0; S < ActivePlayerListSquadCount; ++S)
                 {
                     Squad NewSquad;
@@ -317,6 +348,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     float ActiveSquadPositionY = BR.ReadSingle();
                     float ActiveSquadPositionZ = BR.ReadSingle();
                     string ActiveSquadSquadName = BR.ReadString();
+                    string ActiveSquadCurrentMovement = BR.ReadString();
+                    bool ActiveSquadIsFlying = BR.ReadBoolean();
+                    bool ActiveSquadIsUnderTerrain = BR.ReadBoolean();
+                    bool ActiveSquadIsPlayerControlled = BR.ReadBoolean();
+                    int ActiveSquadLayerIndex = BR.ReadInt32();
+                    string ActiveSquadSquadAI = BR.ReadString();
 
                     int ActiveSquadUnitsInSquad = BR.ReadInt32();
                     int CurrentLeaderIndex = BR.ReadInt32();
@@ -336,7 +373,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     NewSquad = new Squad(ActiveSquadSquadName, ArrayNewUnit[0],
                                          ArrayNewUnit.Length >= 2 ? ArrayNewUnit[1] : null,
                                          ArrayNewUnit.Length >= 3 ? ArrayNewUnit[2] : null);
-                    NewSquad.Init(GlobalBattleContext);
 
                     int ListAttackedTeamCount = BR.ReadInt32();
                     NewSquad.ListAttackedTeam = new List<int>(ListAttackedTeamCount);
@@ -354,23 +390,72 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     NewSquad.ActionsRemaining = ActionsRemaining;
                     NewSquad.SquadName = ActiveSquadSquadName;
+                    NewSquad.ID = ActiveSquadID;
 
-                    NewListSquad.Add(NewSquad);
+                    DicLoadedSquad.Add(ActiveSquadID, NewSquad);
 
                     if (NewSquad.CurrentLeader != null)
                     {
                         //Do not spawn squads as it will trigger effect that were already activated
-                        SpawnSquad(P, NewSquad, ActiveSquadID, new Vector3(ActiveSquadPositionX, ActiveSquadPositionY, ActiveSquadPositionZ));
+                        if (Content != null)
+                        {
+                            NewSquad.Unit3D = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
+                        }
+
+                        if (!string.IsNullOrEmpty(ActiveSquadSquadAI))
+                        {
+                            NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(this, NewSquad));
+                            NewSquad.SquadAI.Load(ActiveSquadSquadAI);
+                        }
+
+                        NewPlayer.IsAlive = true;
+
+                        ActivateAutomaticSkills(NewSquad, string.Empty);
+                    }
+
+                    NewSquad.UpdateSquad();
+
+                    //Load the Battle Themes.
+                    for (int U = 0; U < NewSquad.UnitsInSquad; ++U)
+                    {
+                        for (int C = NewSquad.At(U).ArrayCharacterActive.Length - 1; C >= 0; --C)
+                            if (!string.IsNullOrEmpty(NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName))
+                                if (!Character.DicBattleTheme.ContainsKey(NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName))
+                                    Character.DicBattleTheme.Add(NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName, new FMODSound(FMODSystem, "Content/Maps/BGM/" + NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName + ".mp3"));
+                    }
+
+                    NewSquad.CurrentMovement = ActiveSquadCurrentMovement;
+                    NewSquad.IsFlying = ActiveSquadIsFlying;
+                    NewSquad.IsUnderTerrain = ActiveSquadIsUnderTerrain;
+                    NewSquad.IsPlayerControlled = ActiveSquadIsPlayerControlled;
+                    NewSquad.SetLayerIndex(ActiveSquadLayerIndex);
+                    NewSquad.SetPosition(new Vector3(ActiveSquadPositionX, ActiveSquadPositionY, ActiveSquadPositionZ));
+                    NewPlayer.ListSquad.Add(NewSquad);
+                }
+            }
+
+            GlobalQuickLoadContext.SetContext(DicLoadedSquad);
+
+            for (int P = 0; P < ListPlayer.Count; P++)
+            {
+                for (int S = 0; S < ListPlayer[P].ListSquad.Count; S++)
+                {
+                    for (int U = 0; U < ListPlayer[P].ListSquad[S].UnitsInSquad; ++U)
+                    {
+                        for (int C = 0; C < ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive.Length; C++)
+                        {
+                            Character ActiveCharacter = ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive[C];
+                            ActiveCharacter.Effects.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                        }
                     }
                 }
             }
+
             for (int P = 0; P < ListPlayer.Count; ++P)
             {
                 for (int S = 0; S < ListPlayer[P].ListSquad.Count; ++S)
                 {
                     ListPlayer[P].ListSquad[S].ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                    /*GlobalDeathmatchContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
-                        GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter);*/
 
                 }
             }

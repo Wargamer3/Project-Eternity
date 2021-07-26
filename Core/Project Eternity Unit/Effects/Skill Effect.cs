@@ -2,6 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Core.Effects
 {
@@ -71,6 +73,24 @@ namespace ProjectEternity.Core.Effects
 
         protected override void DoQuickLoad(BinaryReader BR)
         {
+            uint EffectOwnerSquadID = BR.ReadUInt32();
+            int EffectOwnerUnitIndex = BR.ReadInt32();
+            int EffectOwnerCharacterIndex = BR.ReadInt32();
+
+            uint EffectTargetSquadID = BR.ReadUInt32();
+            int EffectTargetUnitIndex = BR.ReadInt32();
+            int EffectTargetCharacterIndex = BR.ReadInt32();
+
+            Squad EffectOwnerSquad = Params.GlobalQuickLoadContext.ArrayEffectOwnerSquad[EffectOwnerSquadID];
+            Unit EffectOwnerUnit = EffectOwnerSquad.At(EffectOwnerUnitIndex);
+            Character EffectOwnerCharacter = EffectOwnerUnit.ArrayCharacterActive[EffectOwnerCharacterIndex];
+
+            Squad EffectTargetSquad = Params.GlobalQuickLoadContext.ArrayEffectOwnerSquad[EffectTargetSquadID];
+            Unit EffectTargetUnit = EffectTargetSquad.At(EffectTargetUnitIndex);
+            Character EffectTargetCharacter = EffectTargetUnit.ArrayCharacterActive[EffectTargetCharacterIndex];
+
+            Params.GlobalContext.SetContext(EffectOwnerSquad, EffectOwnerUnit, EffectOwnerCharacter, EffectTargetSquad, EffectTargetUnit, EffectTargetCharacter);
+            Params.CopyGlobalIntoLocal();
         }
 
         protected override void DoQuickSave(BinaryWriter BW)

@@ -394,7 +394,7 @@ namespace ProjectEternity.Core.Units
         public void QuickSave(BinaryWriter BW)
         {
             BW.Write(UnitTypeName);
-            BW.Write(_UnitStat.Name);
+            BW.Write(RelativePath);
             BW.Write(HP);
             BW.Write(EN);
 

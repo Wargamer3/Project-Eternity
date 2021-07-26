@@ -109,7 +109,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
                 }
 
-                foreach (var ActivePlayer in Map.ListPlayer)
+                foreach (Player ActivePlayer in Map.ListPlayer)
                 {
                     for (int S = 0; S < ActivePlayer.ListSquad.Count; S++)
                     {

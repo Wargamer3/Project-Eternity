@@ -572,8 +572,6 @@ namespace ProjectEternity.Core.Characters
             BW.Write(Will);
             BW.Write(PilotPoints);
             BW.Write(SP);
-
-            Effects.QuickSave(BW);
         }
 
         public void QuickLoad(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,

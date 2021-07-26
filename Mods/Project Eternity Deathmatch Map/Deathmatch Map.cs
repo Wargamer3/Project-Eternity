@@ -197,6 +197,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         public override void Load()
         {
+            LoadContent();
+
+            Init();
+            OnNewTurn();
+
+            TogglePreview(true);
+        }
+
+        private void LoadContent()
+        {
             if (PlayerRoster == null)
             {
                 PlayerRoster = new Roster();
@@ -226,14 +236,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             NonDemoScreen = new NonDemoScreen(this);
             NonDemoScreen.Load();
-            
+
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntArial16 = Content.Load<SpriteFont>("Fonts/Arial16");
-
-            Init();
-            OnNewTurn();
-
-            TogglePreview(true);
         }
 
         private void LoadMap()

@@ -105,7 +105,7 @@ namespace ProjectEternity
                         sndConfirm.Play();
 
                         /*StreamReader BR = new StreamReader("Content/Map path.ini");
-                        PushScreen(new DeathmatchMap(BR.ReadLine(), 0, new System.Collections.Generic.List<Core.Units.Squad>()));
+                        PushScreen(new DeathmatchMap(BR.ReadLine(), 0, new List<Squad>()));
                         BR.Close();*/
                         PushScreen(new GameSelection());
                         break;

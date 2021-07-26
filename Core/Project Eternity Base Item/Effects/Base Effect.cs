@@ -76,20 +76,15 @@ namespace ProjectEternity.Core.Item
 
             BaseEffect NewSkillEffect = DicEffect[EffectName].Copy();
 
-            NewSkillEffect.QuickLoad(BR);
-
-            int ListFollowingSkillCount = BR.ReadInt32();
-            for (int S = ListFollowingSkillCount - 1; S >= 0; --S)
-            {
-                NewSkillEffect.ListFollowingSkill.Add(new BaseAutomaticSkill(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
-            }
+            NewSkillEffect.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             return NewSkillEffect;
         }
 
         protected abstract void Load(BinaryReader BR);
 
-        protected void QuickLoad(BinaryReader BR)
+        protected void QuickLoad(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             string LifetimeType = BR.ReadString();
             int LifetimeTypeValue = BR.ReadInt32();
@@ -97,12 +92,19 @@ namespace ProjectEternity.Core.Item
             bool IsStacking = BR.ReadBoolean();
             int MaximumStack = BR.ReadInt32();
             int Range = BR.ReadInt32();
-            int Lifetime = BR.ReadInt32();
 
             this.LifetimeType = LifetimeType;
             this.LifetimeTypeValue = LifetimeTypeValue;
 
             Load(BR);
+
+            int ListFollowingSkillCount = BR.ReadInt32();
+            for (int S = ListFollowingSkillCount - 1; S >= 0; --S)
+            {
+                ListFollowingSkill.Add(new BaseAutomaticSkill(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+            }
+
+            int Lifetime = BR.ReadInt32();
 
             this.Lifetime = Lifetime;
             this.IsStacking = IsStacking;
@@ -118,15 +120,10 @@ namespace ProjectEternity.Core.Item
 
         public void QuickSave(BinaryWriter BW)
         {
-            BW.Write(EffectTypeName);
+            WriteEffect(BW);
 
-            BW.Write(LifetimeType);
-            BW.Write(LifetimeTypeValue);
-
-            BW.Write(IsStacking);
-            BW.Write(MaximumStack);
-            BW.Write(Range);
             BW.Write(Lifetime);
+
             DoQuickSave(BW);
         }
 

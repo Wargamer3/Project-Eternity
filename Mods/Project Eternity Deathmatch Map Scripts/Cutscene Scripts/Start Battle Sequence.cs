@@ -76,8 +76,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             else if (Map.ListPlayer[P].ListSquad[U].ID == _LeftUnitID)
                             {
                                 LeftSquad = Map.ListPlayer[P].ListSquad[U];
-                                Map.TargetSquadIndex = U;
                                 Map.TargetPlayerIndex = P;
+                                Map.TargetSquadIndex = U;
                             }
                             else
                                 continue;

@@ -60,6 +60,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="Effects\CSV Converter.cs" />
     <Compile Include="Effects\Status Type Converter.cs" />
+    <Compile Include="Effects\Unit Quick Load Effect Context.cs" />
     <Compile Include="Effects\Unit Effect Context.cs" />
     <Compile Include="Effects\Unit Effect Params.cs" />
     <Compile Include="Effects\Unit Stats Converter.cs" />
