@@ -89,6 +89,17 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 ((Map2D)ActiveMap.ListLayer[LayerIndex].LayerGrid).ReplaceTile(X, Y, NewTile);
             }
 
+            public void RemoveTileset(int TilesetIndex)
+            {
+                ActiveMap.ListTileSet.RemoveAt(TilesetIndex);
+                ActiveMap.ListTilesetPreset.RemoveAt(TilesetIndex);
+
+                foreach (MapLayer ActiveLayer in ActiveMap.ListLayer)
+                {
+                    ActiveLayer.LayerGrid.RemoveTileset(TilesetIndex);
+                }
+            }
+
             public IMapLayer CreateNewLayer()
             {
                 MapLayer NewLayer = new MapLayer(ActiveMap);

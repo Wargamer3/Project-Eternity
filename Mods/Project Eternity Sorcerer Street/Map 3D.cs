@@ -222,6 +222,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
+        public void RemoveTileset(int TilesetIndex)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(GameTime gameTime)
         {
             if (Map.CursorPositionVisible.X < 0 || Map.CursorPositionVisible.Y < 0 || Map.CursorPositionVisible.X >= Map.MapSize.X || Map.CursorPositionVisible.Y >= Map.MapSize.Y)

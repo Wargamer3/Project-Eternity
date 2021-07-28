@@ -188,6 +188,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
+        public void RemoveTileset(int TilesetIndex)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(GameTime gameTime)
         {
             Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, sprCursor.Width, sprCursor.Height, Radius);

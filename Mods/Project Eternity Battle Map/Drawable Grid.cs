@@ -45,6 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void Load(BinaryReader BR);
         void Update(GameTime gameTime);
         void TogglePreview(bool UsePreview);
+        void RemoveTileset(int TilesetIndex);
         void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor);
         void BeginDraw(CustomSpriteBatch g);
         void Draw(CustomSpriteBatch g);
@@ -140,6 +141,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void TogglePreview(bool UsePreview)
         {
             ShowUnits = !ShowUnits;
+        }
+
+        public void RemoveTileset(int TilesetIndex)
+        {
+            for (int X = ArrayTile.GetLength(0) - 1; X >= 0; --X)
+            {
+                for (int Y = ArrayTile.GetLength(1) - 1; Y >= 0; --Y)
+                {
+                    if (ArrayTile[X, Y].Tileset > TilesetIndex)
+                    {
+                        --ArrayTile[X, Y].Tileset;
+                    }
+                }
+            }
         }
 
         public void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor)

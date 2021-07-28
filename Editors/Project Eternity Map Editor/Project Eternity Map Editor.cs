@@ -22,6 +22,7 @@ namespace ProjectEternity.Editors.MapEditor
             void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset);
             void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex);
             void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex);
+            void RemoveTileset(int TilesetIndex);
             IMapLayer CreateNewLayer();
             ISubMapLayer CreateNewSubLayer(IMapLayer ParentLayer);
             void RemoveLayer(int Index);
@@ -106,6 +107,17 @@ namespace ProjectEternity.Editors.MapEditor
                 DrawableTile NewTile = new DrawableTile(TilePreset);
                 
                 ActiveMap.ListLayer[LayerIndex].OriginalLayerGrid.ReplaceTile(X, Y, NewTile);
+            }
+
+            public void RemoveTileset(int TilesetIndex)
+            {
+                ActiveMap.ListTileSet.RemoveAt(TilesetIndex);
+                ActiveMap.ListTilesetPreset.RemoveAt(TilesetIndex);
+
+                foreach (MapLayer ActiveLayer in ActiveMap.ListLayer)
+                {
+                    ActiveLayer.LayerGrid.RemoveTileset(TilesetIndex);
+                }
             }
 
             public IMapLayer CreateNewLayer()
@@ -414,9 +426,9 @@ namespace ProjectEternity.Editors.MapEditor
             if (cboTiles.SelectedIndex >= 0)
             {//Put the current index in a buffer.
                 int Index = cboTiles.SelectedIndex;
+
+                Helper.RemoveTileset(Index);
                 //Move the current tile set.
-                BattleMapViewer.ActiveMap.ListTileSet.RemoveAt(Index);
-                BattleMapViewer.ActiveMap.ListTilesetPreset.RemoveAt(Index);
                 cboTiles.Items.RemoveAt(Index);
 
                 //Replace the index with a new one.
