@@ -12,13 +12,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public List<AnimationBackground2DBase> ListBackground;
 
         public AnimationBackground2D(ContentManager Content, GraphicsDevice g)
-            :base("2D", Content, g)
+            : this("", Content, g)
         {
             ListBackground = new List<AnimationBackground2DBase>();
         }
 
         public AnimationBackground2D(string AnimationBackgroundPath, ContentManager Content, GraphicsDevice g)
-            : this(Content, g)
+            : base("2D", AnimationBackgroundPath, Content, g)
         {
             FileStream FS = new FileStream("Content/Animations/" + AnimationBackgroundPath + ".peab", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS);

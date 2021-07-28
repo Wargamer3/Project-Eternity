@@ -8,6 +8,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 {
     public abstract class AnimationBackground
     {
+        public readonly string AnimationFullPath;
         protected Texture2D sprPixel;
 
         public readonly string BackgroundType;
@@ -19,10 +20,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public Vector3 DefaultCameraPosition;
         public Vector3 DefaultCameraRotation;
 
-        public AnimationBackground(string BackgroundType, ContentManager Content, GraphicsDevice g)
+        public AnimationBackground(string BackgroundType, string AnimationFullPath, ContentManager Content, GraphicsDevice g)
         {
-            sprPixel = Content.Load<Texture2D>("Pixel");
             this.BackgroundType = BackgroundType;
+            this.AnimationFullPath = AnimationFullPath;
+            sprPixel = Content.Load<Texture2D>("Pixel");
         }
 
         public static AnimationBackground LoadAnimationBackground(string AnimationBackgroundPath, ContentManager Content, GraphicsDevice g)

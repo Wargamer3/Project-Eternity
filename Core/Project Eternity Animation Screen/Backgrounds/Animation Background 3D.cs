@@ -307,7 +307,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public float Ceiling = 100000f;
 
         public AnimationBackground3D(ContentManager Content, GraphicsDevice g)
-            : base("3D", Content, g)
+            : this("", Content, g)
         {
             ListBackground = new List<AnimationBackground3DBase>();
 
@@ -353,7 +353,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         }
 
         public AnimationBackground3D(string AnimationBackgroundPath, ContentManager Content, GraphicsDevice g)
-            : this(Content, g)
+            : base("3D", AnimationBackgroundPath, Content, g)
         {
             FileStream FS = new FileStream("Content/Animations/" + AnimationBackgroundPath + ".peab", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS);

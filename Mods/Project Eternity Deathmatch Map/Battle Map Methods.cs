@@ -9,6 +9,7 @@ using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -182,6 +183,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.Write(LossCondition);
             BW.Write(SkillPoint);
 
+            BW.Write(ListBackgrounds.Count);
+            for (int B = 0; B < ListBackgrounds.Count; ++B)
+            {
+                BW.Write(ListBackgrounds[B].AnimationFullPath);
+            }
+            BW.Write(ListForegrounds.Count);
+            for (int F = 0; F < ListForegrounds.Count; ++F)
+            {
+                BW.Write(ListForegrounds[F].AnimationFullPath);
+            }
+
             BW.Write(sndBattleThemeName);
 
             BW.Write(FMODSystem.sndActiveBGMName);
@@ -296,6 +308,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             VictoryCondition = BR.ReadString();
             LossCondition = BR.ReadString();
             SkillPoint = BR.ReadString();
+
+            ListBackgrounds.Clear();
+            int ListBackgroundCount = BR.ReadInt32();
+            for (int B = 0; B < ListBackgroundCount; ++B)
+            {
+                ListBackgrounds.Add(AnimationBackground.LoadAnimationBackground(BR.ReadString(), Content, GraphicsDevice));
+            }
+
+            ListForegrounds.Clear();
+            int ListForegroundCount = BR.ReadInt32();
+            for (int F = 0; F < ListForegroundCount; ++F)
+            {
+                ListForegrounds.Add(AnimationBackground.LoadAnimationBackground(BR.ReadString(), Content, GraphicsDevice));
+            }
 
             sndBattleThemeName = BR.ReadString();
             if (!string.IsNullOrEmpty(sndBattleThemeName))
