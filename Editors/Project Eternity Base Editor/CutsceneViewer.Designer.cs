@@ -31,35 +31,46 @@ namespace ProjectEternity.Editors.CutsceneEditor
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.cmsScriptMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsScriptSelectedMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmDeleteScript = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmCopyScriptAsText = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.sclScriptHeight = new System.Windows.Forms.VScrollBar();
             this.sclScriptWidth = new System.Windows.Forms.HScrollBar();
             this.panDrawingSurface = new System.Windows.Forms.Panel();
+            this.cmsScriptSelectedMenu.SuspendLayout();
             this.panDrawingSurface.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // cmsScriptSelectedMenu
+            // 
+            this.cmsScriptSelectedMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmDeleteScript,
+            this.tsmCopyScriptAsText,
+            this.tsmCopy});
+            this.cmsScriptSelectedMenu.Name = "cmsScriptMenu";
+            this.cmsScriptSelectedMenu.Size = new System.Drawing.Size(176, 70);
             // 
             // tsmDeleteScript
             // 
             this.tsmDeleteScript.Name = "tsmDeleteScript";
-            this.tsmDeleteScript.Size = new System.Drawing.Size(140, 22);
+            this.tsmDeleteScript.Size = new System.Drawing.Size(175, 22);
             this.tsmDeleteScript.Text = "Delete Script";
             this.tsmDeleteScript.Click += new System.EventHandler(this.tsmDeleteScript_Click);
             // 
             // tsmCopyScriptAsText
             // 
             this.tsmCopyScriptAsText.Name = "tsmCopyScriptAsText";
-            this.tsmCopyScriptAsText.Size = new System.Drawing.Size(140, 22);
+            this.tsmCopyScriptAsText.Size = new System.Drawing.Size(175, 22);
             this.tsmCopyScriptAsText.Text = "Copy Script As Text";
             this.tsmCopyScriptAsText.Click += new System.EventHandler(this.tsmCopyScriptAsText_Click);
             // 
-            // cmsScriptMenu
+            // tsmCopy
             // 
-            this.cmsScriptMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmDeleteScript, this.tsmCopyScriptAsText});
-            this.cmsScriptMenu.Name = "cmsScriptMenu";
-            this.cmsScriptMenu.Size = new System.Drawing.Size(141, 26);
+            this.tsmCopy.Name = "tsmCopy";
+            this.tsmCopy.Size = new System.Drawing.Size(175, 22);
+            this.tsmCopy.Text = "Copy";
+            this.tsmCopy.Click += new System.EventHandler(this.tsmCopy_Click);
             // 
             // sclScriptHeight
             // 
@@ -100,6 +111,7 @@ namespace ProjectEternity.Editors.CutsceneEditor
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panDrawingSurface);
             this.Name = "CutsceneViewer";
+            this.cmsScriptSelectedMenu.ResumeLayout(false);
             this.panDrawingSurface.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -107,11 +119,12 @@ namespace ProjectEternity.Editors.CutsceneEditor
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip cmsScriptMenu;
+        private System.Windows.Forms.ContextMenuStrip cmsScriptSelectedMenu;
         private System.Windows.Forms.ToolStripMenuItem tsmDeleteScript;
         private System.Windows.Forms.ToolStripMenuItem tsmCopyScriptAsText;
         private System.Windows.Forms.VScrollBar sclScriptHeight;
         private System.Windows.Forms.HScrollBar sclScriptWidth;
         private System.Windows.Forms.Panel panDrawingSurface;
+        private System.Windows.Forms.ToolStripMenuItem tsmCopy;
     }
 }

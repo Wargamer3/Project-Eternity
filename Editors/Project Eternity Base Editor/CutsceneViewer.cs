@@ -249,6 +249,38 @@ namespace ProjectEternity.Editors.CutsceneEditor
             DrawScripts();
         }
 
+        private void tsmCopy_Click(object sender, EventArgs e)
+        {
+            CutsceneScript NewScript = null;
+            if (ActiveScriptType == ActiveScriptTypes.ActionScript)
+            {
+                NewScript = ActiveCutscene.DicActionScript[ActiveScriptIndex].CopyScript(ActiveCutscene);
+            }
+            else if (ActiveScriptType == ActiveScriptTypes.DataContainer)
+            {
+                NewScript = ActiveCutscene.ListDataContainer[ActiveScriptIndex].CopyScript(ActiveCutscene);
+            }
+
+            NewScript.ScriptSize.X = 0;
+            NewScript.ScriptSize.Y = 0;
+
+            InitScript(NewScript);
+            if (NewScript is CutsceneDataContainer)
+            {
+                UInt32 NextID = 1;
+                for (int S = ActiveCutscene.ListDataContainer.Count - 1; S >= 0; --S)
+                    if (ActiveCutscene.ListDataContainer[S].Name == NewScript.Name)
+                        NextID++;
+                ((CutsceneDataContainer)NewScript).ID = NextID;
+                ActiveCutscene.ListDataContainer.Add((CutsceneDataContainer)NewScript);
+            }
+            else
+            {
+                ActiveCutscene.AddActionScript((CutsceneActionScript)NewScript);
+            }
+            DrawScripts();
+        }
+
         private void panDrawingSurface_Paint(object sender, PaintEventArgs e)
         {
             DrawScripts();
@@ -329,7 +361,7 @@ namespace ProjectEternity.Editors.CutsceneEditor
                     }
                     else if ((e.Button & MouseButtons.Right) == MouseButtons.Right)
                     {
-                        cmsScriptMenu.Show(this, PointToClient(Cursor.Position));
+                        cmsScriptSelectedMenu.Show(this, PointToClient(Cursor.Position));
                         return;
                     }
                 }
@@ -426,11 +458,12 @@ namespace ProjectEternity.Editors.CutsceneEditor
                     }
                     else if ((e.Button & MouseButtons.Right) == MouseButtons.Right)
                     {
-                        cmsScriptMenu.Show(this, PointToClient(Cursor.Position));
+                        cmsScriptSelectedMenu.Show(this, PointToClient(Cursor.Position));
                         return;
                     }
                 }
             }
+
             ScriptLink = null;
             ScriptLinkIndex = -1;
             ScriptLinkEventIndex = -1;
