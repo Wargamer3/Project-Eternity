@@ -140,7 +140,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             protected override CutsceneScript DoCopyScript()
             {
-                return new ChangeTerrainEffect(Map);
+                ChangeTerrainEffect NewScript = new ChangeTerrainEffect(Map);
+                NewScript.Tileset = Tileset;
+                NewScript.TileSize = TileSize;
+                NewScript.TilesetOrigin = TilesetOrigin;
+                NewScript.MapDestination.AddRange(MapDestination);
+                NewScript.TilesPerSeconds = TilesPerSeconds;
+                NewScript.MinSimultaneousTiles = MinSimultaneousTiles;
+                NewScript.TilesTransformationCounter = TilesTransformationCounter;
+                NewScript.sprTileset = sprTileset;
+                return NewScript;
             }
 
             #region Properties
