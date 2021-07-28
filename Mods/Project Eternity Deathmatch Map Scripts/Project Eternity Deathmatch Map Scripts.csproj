@@ -72,6 +72,7 @@
     <Compile Include="Cutscene Scripts\Selectors\Tileset Origin Selector.cs" />
     <Compile Include="Cutscene Scripts\Selectors\Tileset Selector.cs" />
     <Compile Include="Cutscene Scripts\Spawn Transforming Unit Event Fast.cs" />
+    <Compile Include="Cutscene Scripts\Change Foreground.cs" />
     <Compile Include="Cutscene Scripts\Transform Unit.cs" />
     <Compile Include="Cutscene Scripts\Spawn Transforming Unit Fast.cs" />
     <Compile Include="Deathmatch Cutscene Script Holder.cs" />

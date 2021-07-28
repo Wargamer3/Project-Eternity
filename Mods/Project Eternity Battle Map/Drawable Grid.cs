@@ -129,6 +129,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayTile = ReplacementGrid;
         }
 
+        public void ReplaceForegrounds(List<AnimationBackground> ListForegrounds)
+        {
+            ListForegrounds.Clear();
+            ListForegrounds.AddRange(ListForegrounds);
+        }
+
         public void Update(GameTime gameTime)
         {
             if (ShowUnits)
@@ -139,6 +145,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int B = 0; B < ListBackgrounds.Count; ++B)
             {
                 ListBackgrounds[B].Update(gameTime);
+            }
+
+            for (int F = 0; F < ListForegrounds.Count; ++F)
+            {
+                ListForegrounds[F].Update(gameTime);
             }
 
             DicDrawablePointPerColor.Clear();

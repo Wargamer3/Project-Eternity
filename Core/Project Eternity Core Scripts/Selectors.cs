@@ -272,6 +272,37 @@ namespace ProjectEternity.Core.Scripts
             }
         }
 
+        public class MapBackgroundSelector : UITypeEditor
+        {
+            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+            {
+                return UITypeEditorEditStyle.Modal;
+            }
+
+            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+            {
+                IWindowsFormsEditorService svc = (IWindowsFormsEditorService)
+                    provider.GetService(typeof(IWindowsFormsEditorService));
+                if (svc != null)
+                {
+                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll, "Select which foregrounds to use.", true);
+                    if (Items != null)
+                    {
+                        List<string> ListForegroundsPath = new List<string>();
+                        for (int I = 0; I < Items.Count; I++)
+                        {
+                            string BackgroundName = Items[I].Substring(0, Items[0].Length - 5).Substring(19);
+
+                            ListForegroundsPath.Add(BackgroundName);
+                        }
+
+                        value = ListForegroundsPath;
+                    }
+                }
+                return value;
+            }
+        }
+
         public class BlueprintSelector : UITypeEditor
         {
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
