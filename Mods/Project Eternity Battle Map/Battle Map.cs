@@ -257,7 +257,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected BattleMap()
             : base()
         {
-            RequireFocus = true;
             MapSize = new Point(10, 10);
             TileSize = new Point(32, 32);
             ActiveLayerIndex = 0;

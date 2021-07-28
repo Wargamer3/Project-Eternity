@@ -454,8 +454,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 OnlinePlayers.Update();
             }
+
             if (!IsFrozen)
             {
+                foreach (MapLayer ActiveMapLayer in ListLayer)
+                {
+                    ActiveMapLayer.Update(gameTime);
+                }
+
+                if (!IsOnTop)
+                {
+                    return;
+                }
+
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
                 {
                     ListLayer[0].LayerGrid = new Map3D(this, GraphicsDevice);
@@ -473,11 +484,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ListLayer[0].LayerGrid = ListLayer[0].OriginalLayerGrid;
                 }
 
-                foreach (MapLayer ActiveMapLayer in ListLayer)
-                {
-                    ActiveMapLayer.Update(gameTime);
-                }
-                
                 if (ListNextAnimationScreen.Count > 0)
                 {
                     PushScreen(ListNextAnimationScreen[0]);
