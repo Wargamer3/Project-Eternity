@@ -2,12 +2,12 @@
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
+using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
-using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

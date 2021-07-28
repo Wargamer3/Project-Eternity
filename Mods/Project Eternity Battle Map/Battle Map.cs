@@ -195,9 +195,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool ShowAllLayers;
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
         public List<string> ListBackgroundsPath;
-        public List<AnimationBackground> ListBackgrounds;
+        public List<AnimationBackground> ListBackground;
         public List<string> ListForegroundsPath;
-        public List<AnimationBackground> ListForegrounds;
+        public List<AnimationBackground> ListForeground;
 
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
         public Vector3 CameraPosition;
@@ -268,9 +268,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             GameTurn = 0;
             ListTileSet = new List<Texture2D>();
-            ListBackgrounds = new List<AnimationBackground>();
+            ListBackground = new List<AnimationBackground>();
             ListBackgroundsPath = new List<string>();
-            ListForegrounds = new List<AnimationBackground>();
+            ListForeground = new List<AnimationBackground>();
             ListForegroundsPath = new List<string>();
             ListActionMenuChoice = new ActionPanelHolder();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
@@ -591,12 +591,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int B = 0; B < ListBackgroundsPath.Count; B++)
             {
-                ListBackgrounds.Add(AnimationBackground.LoadAnimationBackground(ListBackgroundsPath[B], Content, GraphicsDevice));
+                ListBackground.Add(AnimationBackground.LoadAnimationBackground(ListBackgroundsPath[B], Content, GraphicsDevice));
             }
 
             for (int F = 0; F < ListForegroundsPath.Count; F++)
             {
-                ListForegrounds.Add(AnimationBackground.LoadAnimationBackground(ListForegroundsPath[F], Content, GraphicsDevice));
+                ListForeground.Add(AnimationBackground.LoadAnimationBackground(ListForegroundsPath[F], Content, GraphicsDevice));
             }
 
             #endregion

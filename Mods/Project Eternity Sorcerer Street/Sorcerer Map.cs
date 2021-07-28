@@ -225,7 +225,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (i == 0)
                 {
-                    ListLayer.Add(new MapLayer(this, ListBackgrounds, ListForegrounds, BR));
+                    ListLayer.Add(new MapLayer(this, ListBackground, ListForeground, BR));
                 }
                 else
                 {

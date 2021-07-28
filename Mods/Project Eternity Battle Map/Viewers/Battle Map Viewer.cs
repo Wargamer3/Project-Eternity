@@ -316,6 +316,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         
         private void BattleMapViewerControl_SizeChanged(object sender, EventArgs e)
         {
+            if (ActiveMap == null)
+            {
+                return;
+            }
+
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Width, Height, 0, 0, -1f);
             Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 

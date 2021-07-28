@@ -183,15 +183,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.Write(LossCondition);
             BW.Write(SkillPoint);
 
-            BW.Write(ListBackgrounds.Count);
-            for (int B = 0; B < ListBackgrounds.Count; ++B)
+            BW.Write(ListBackground.Count);
+            for (int B = 0; B < ListBackground.Count; ++B)
             {
-                BW.Write(ListBackgrounds[B].AnimationFullPath);
+                BW.Write(ListBackground[B].AnimationFullPath);
             }
-            BW.Write(ListForegrounds.Count);
-            for (int F = 0; F < ListForegrounds.Count; ++F)
+            BW.Write(ListForeground.Count);
+            for (int F = 0; F < ListForeground.Count; ++F)
             {
-                BW.Write(ListForegrounds[F].AnimationFullPath);
+                BW.Write(ListForeground[F].AnimationFullPath);
             }
 
             BW.Write(sndBattleThemeName);
@@ -309,18 +309,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LossCondition = BR.ReadString();
             SkillPoint = BR.ReadString();
 
-            ListBackgrounds.Clear();
+            ListBackground.Clear();
             int ListBackgroundCount = BR.ReadInt32();
             for (int B = 0; B < ListBackgroundCount; ++B)
             {
-                ListBackgrounds.Add(AnimationBackground.LoadAnimationBackground(BR.ReadString(), Content, GraphicsDevice));
+                ListBackground.Add(AnimationBackground.LoadAnimationBackground(BR.ReadString(), Content, GraphicsDevice));
             }
 
-            ListForegrounds.Clear();
+            ListForeground.Clear();
             int ListForegroundCount = BR.ReadInt32();
             for (int F = 0; F < ListForegroundCount; ++F)
             {
-                ListForegrounds.Add(AnimationBackground.LoadAnimationBackground(BR.ReadString(), Content, GraphicsDevice));
+                ListForeground.Add(AnimationBackground.LoadAnimationBackground(BR.ReadString(), Content, GraphicsDevice));
             }
 
             sndBattleThemeName = BR.ReadString();
