@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -11,8 +9,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private readonly SorcererStreetMap ActiveMap;
 
-        public SorcererStreetMap2D(SorcererStreetMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds)
-            : base(Map, ListBackgrounds, ListForegrounds)
+        public SorcererStreetMap2D(SorcererStreetMap Map)
+            : base(Map)
         {
             ActiveMap = Map;
 
@@ -29,8 +27,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ReplaceGrid(ArrayTile);
         }
 
-        public SorcererStreetMap2D(SorcererStreetMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BinaryReader BR)
-            : base(Map, ListBackgrounds, ListForegrounds)
+        public SorcererStreetMap2D(SorcererStreetMap Map, BinaryReader BR)
+            : base(Map)
         {
             ActiveMap = Map;
 

@@ -132,6 +132,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             FormulaParser.ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
             ListPlayer = new List<Player>();
+            RequireFocus = false;
             RequireDrawFocus = true;
             Pathfinder = new MovementAlgorithmDeathmatch(this);
             ListDelayedAttack = new List<DelayedAttack>();
@@ -273,14 +274,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int i = 0; i < LayerCount; ++i)
             {
-                if (i == 0)
-                {
-                    ListLayer.Add(new MapLayer(this, ListBackground, ListForeground, BR));
-                }
-                else
-                {
-                    ListLayer.Add(new MapLayer(this, new List<GameScreens.AnimationScreen.AnimationBackground>(), new List<GameScreens.AnimationScreen.AnimationBackground>(), BR));
-                }
+                ListLayer.Add(new MapLayer(this, BR));
             }
         }
 
@@ -457,6 +451,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (!IsFrozen)
             {
+                for (int B = 0; B < ListBackground.Count; ++B)
+                {
+                    ListBackground[B].Update(gameTime);
+                }
+
+                for (int F = 0; F < ListForeground.Count; ++F)
+                {
+                    ListForeground[F].Update(gameTime);
+                }
+
                 foreach (MapLayer ActiveMapLayer in ListLayer)
                 {
                     ActiveMapLayer.Update(gameTime);
@@ -550,6 +554,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.Begin();
             }
 
+            if (ListBackground.Count > 0)
+            {
+                g.End();
+                for (int B = 0; B < ListBackground.Count; B++)
+                {
+                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
+                }
+                g.Begin();
+            }
+
             if (ShowAllLayers)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
@@ -560,6 +574,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else
             {
                 ListLayer[ActiveLayerIndex].Draw(g);
+            }
+
+            if (ListForeground.Count > 0)
+            {
+                g.End();
+                for (int F = 0; F < ListForeground.Count; F++)
+                {
+                    ListForeground[F].Draw(g, Constants.Width, Constants.Height);
+                }
+                g.Begin();
             }
 
             if (IsOnTop)

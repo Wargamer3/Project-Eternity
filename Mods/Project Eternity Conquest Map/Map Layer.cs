@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private int ToggleTimer;
         private ConquestMap Map;
 
-        public MapLayer(ConquestMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds)
+        public MapLayer(ConquestMap Map)
         {
             this.Map = Map;
 
@@ -48,10 +48,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-            LayerGrid = new ConquestMap2D(Map, ListBackgrounds, ListForegrounds, new FogOfWarGridOverlay(Map));
+            LayerGrid = new ConquestMap2D(Map, new FogOfWarGridOverlay(Map));
         }
 
-        public MapLayer(ConquestMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BinaryReader BR)
+        public MapLayer(ConquestMap Map, BinaryReader BR)
         {
             this.Map = Map;
 
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-            LayerGrid = new ConquestMap2D(Map, ListBackgrounds, ListForegrounds, new FogOfWarGridOverlay(Map), BR);
+            LayerGrid = new ConquestMap2D(Map, new FogOfWarGridOverlay(Map), BR);
         }
 
         public void Save(BinaryWriter BW)

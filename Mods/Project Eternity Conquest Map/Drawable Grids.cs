@@ -11,8 +11,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     {
         private readonly ConquestMap ActiveMap;
 
-        public ConquestMap2D(ConquestMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BattleMapOverlay MapOverlay)
-            : base(Map, ListBackgrounds, ListForegrounds, MapOverlay)
+        public ConquestMap2D(ConquestMap Map, BattleMapOverlay MapOverlay)
+            : base(Map, MapOverlay)
         {
             ActiveMap = Map;
 
@@ -29,8 +29,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ReplaceGrid(ArrayTile);
         }
 
-        public ConquestMap2D(ConquestMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BattleMapOverlay MapOverlay, BinaryReader BR)
-            : base(Map, ListBackgrounds, ListForegrounds, MapOverlay)
+        public ConquestMap2D(ConquestMap Map, BattleMapOverlay MapOverlay, BinaryReader BR)
+            : base(Map, MapOverlay)
         {
             ActiveMap = Map;
 

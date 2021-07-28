@@ -1,9 +1,7 @@
 ﻿using System.IO;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -11,8 +9,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         private readonly DeathmatchMap ActiveMap;
 
-        public DeathmatchMap2D(DeathmatchMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds)
-            : base(Map, ListBackgrounds, ListForegrounds)
+        public DeathmatchMap2D(DeathmatchMap Map)
+            : base(Map)
         {
             ActiveMap = Map;
 
@@ -29,8 +27,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ReplaceGrid(ArrayTile);
         }
 
-        public DeathmatchMap2D(DeathmatchMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BinaryReader BR)
-            : base(Map, ListBackgrounds, ListForegrounds)
+        public DeathmatchMap2D(DeathmatchMap Map, BinaryReader BR)
+            : base(Map)
         {
             ActiveMap = Map;
 

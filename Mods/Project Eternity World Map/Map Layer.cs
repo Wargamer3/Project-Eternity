@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         private int ToggleTimer;
         private WorldMap Map;
 
-        public MapLayer(WorldMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds)
+        public MapLayer(WorldMap Map)
         {
             this.Map = Map;
 
@@ -49,10 +49,10 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 }
             }
 
-            LayerGrid = new WorldMap2D(Map, ListBackgrounds, ListForegrounds);
+            LayerGrid = new WorldMap2D(Map);
         }
 
-        public MapLayer(WorldMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BinaryReader BR)
+        public MapLayer(WorldMap Map, BinaryReader BR)
         {
             this.Map = Map;
 
@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 }
             }
             
-            LayerGrid = OriginalLayerGrid = new WorldMap2D(Map, ListBackgrounds, ListForegrounds, BR);
+            LayerGrid = OriginalLayerGrid = new WorldMap2D(Map, BR);
         }
 
         public void Save(BinaryWriter BW)

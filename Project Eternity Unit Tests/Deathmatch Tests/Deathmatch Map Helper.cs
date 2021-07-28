@@ -13,7 +13,7 @@ namespace ProjectEternity.UnitTests
         public static DeathmatchMap CreateDummyMap(DeathmatchContext GlobalDeathmatchContext)
         {
             DeathmatchMap DummyMap = new DeathmatchMap(GlobalDeathmatchContext);
-            DummyMap.ListLayer.Add(new MapLayer(DummyMap, null, null));
+            DummyMap.ListLayer.Add(new MapLayer(DummyMap));
             DummyMap.LoadEffects();
             DummyMap.LoadSkillRequirements();
             DummyMap.LoadAutomaticSkillActivation();
@@ -22,7 +22,7 @@ namespace ProjectEternity.UnitTests
             DummyMap.NonDemoScreen = new NonDemoScreen(DummyMap);
             DummyMap.ListGameScreen = new List<GameScreens.GameScreen>();
 
-            DummyMap.ListLayer.Add(new MapLayer(DummyMap, null, null));
+            DummyMap.ListLayer.Add(new MapLayer(DummyMap));
             DummyMap.ListLayer[0].ArrayTerrain = new Terrain[20, 20];
             for (int X = 0; X < 20; ++X)
             {

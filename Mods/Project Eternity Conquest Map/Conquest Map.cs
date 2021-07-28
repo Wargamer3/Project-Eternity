@@ -252,14 +252,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             for (int i = 0; i < LayerCount; ++i)
             {
-                if (i == 0)
-                {
-                    ListLayer.Add(new MapLayer(this, ListBackground, ListForeground, BR));
-                }
-                else
-                {
-                    ListLayer.Add(new MapLayer(this, null, null, BR));
-                }
+                ListLayer.Add(new MapLayer(this, BR));
             }
         }
 

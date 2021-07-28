@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Scripts;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using ProjectEternity.Editors.MusicPlayer;
-using ProjectEternity.Core;
-using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
-using ProjectEternity.Core.Scripts;
 
 namespace ProjectEternity.Editors.MapEditor
 {
@@ -111,7 +110,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             public IMapLayer CreateNewLayer()
             {
-                MapLayer NewLayer = new MapLayer(ActiveMap, new List<GameScreens.AnimationScreen.AnimationBackground>(), new List<GameScreens.AnimationScreen.AnimationBackground>());
+                MapLayer NewLayer = new MapLayer(ActiveMap);
                 ActiveMap.ListLayer.Add(NewLayer);
                 return NewLayer;
             }
@@ -262,7 +261,7 @@ namespace ProjectEternity.Editors.MapEditor
                 fs.Close();
                 DeathmatchMap NewMap = new DeathmatchMap(FilePath, 0, null);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
-                NewMap.ListLayer.Add(new MapLayer(NewMap, NewMap.ListBackground, NewMap.ListForeground));
+                NewMap.ListLayer.Add(new MapLayer(NewMap));
                 BattleMapViewer.ActiveMap.ArrayMultiplayerColor = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
 
                 SaveItem(FilePath, FilePath);

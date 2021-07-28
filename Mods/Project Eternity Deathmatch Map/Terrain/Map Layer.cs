@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ToggleTimer;
         private DeathmatchMap Map;
 
-        public MapLayer(DeathmatchMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds)
+        public MapLayer(DeathmatchMap Map)
         {
             this.Map = Map;
 
@@ -41,11 +41,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, ListBackgrounds, ListForegrounds);
+            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map);
             _Depth = OriginalLayerGrid.Depth;
         }
 
-        public MapLayer(DeathmatchMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BinaryReader BR)
+        public MapLayer(DeathmatchMap Map, BinaryReader BR)
         {
             this.Map = Map;
 
@@ -76,7 +76,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, ListBackgrounds, ListForegrounds, BR);
+            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, BR);
             OriginalLayerGrid.Depth = Depth;
         }
 

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
@@ -11,8 +9,8 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
     {
         private readonly WorldMap ActiveMap;
 
-        public WorldMap2D(WorldMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds)
-            : base(Map, ListBackgrounds, ListForegrounds)
+        public WorldMap2D(WorldMap Map)
+            : base(Map)
         {
             ActiveMap = Map;
 
@@ -29,8 +27,8 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             ReplaceGrid(ArrayTile);
         }
 
-        public WorldMap2D(WorldMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BinaryReader BR)
-            : this(Map, ListBackgrounds, ListForegrounds)
+        public WorldMap2D(WorldMap Map, BinaryReader BR)
+            : this(Map)
         {
             ActiveMap = Map;
 

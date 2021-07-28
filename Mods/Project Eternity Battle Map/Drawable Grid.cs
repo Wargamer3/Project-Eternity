@@ -63,29 +63,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected Vector3 CameraPosition { get { return Map.CameraPosition; } }
 
-        private List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
-        private List<AnimationBackground> ListBackgrounds;
-        private List<AnimationBackground> ListForegrounds;
-
         private DrawableTile[,] ArrayTile;
 
         public bool ShowUnits;
         public float Depth;
 
-        public Map2D(BattleMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds)
+        public Map2D(BattleMap Map)
         {
             this.Map = Map;
             MapOverlay = new DayNightCycleColorOnly();
             DicDrawablePointPerColor = new Dictionary<Color, List<Vector3>>();
             Depth = 1f;
-
-            ListTileSet = Map.ListTileSet;
-            this.ListBackgrounds = ListBackgrounds;
-            this.ListForegrounds = ListForegrounds;
         }
 
-        public Map2D(BattleMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BattleMapOverlay MapOverlay)
-            : this(Map, ListBackgrounds, ListForegrounds)
+        public Map2D(BattleMap Map, BattleMapOverlay MapOverlay)
+            : this(Map)
         {
             this.MapOverlay = MapOverlay;
         }
@@ -142,16 +134,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 MapOverlay.Update(gameTime);
             }
 
-            for (int B = 0; B < ListBackgrounds.Count; ++B)
-            {
-                ListBackgrounds[B].Update(gameTime);
-            }
-
-            for (int F = 0; F < ListForegrounds.Count; ++F)
-            {
-                ListForegrounds[F].Update(gameTime);
-            }
-
             DicDrawablePointPerColor.Clear();
         }
 
@@ -176,34 +158,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Draw(CustomSpriteBatch g)
         {
-            if (ListBackgrounds.Count > 0)
-            {
-                g.End();
-                for (int B = 0; B < ListBackgrounds.Count; B++)
-                {
-                    ListBackgrounds[B].Draw(g, Constants.Width, Constants.Height);
-                }
-                g.Begin();
-            }
-
             for (int X = ArrayTile.GetLength(0) - 1; X >= 0; --X)
             {
                 for (int Y = ArrayTile.GetLength(1) - 1; Y >= 0; --Y)
                 {
-                    g.Draw(ListTileSet[ArrayTile[X, Y].Tileset],
+                    g.Draw(Map.ListTileSet[ArrayTile[X, Y].Tileset],
                         new Vector2((X - CameraPosition.X) * TileSize.X, (Y - CameraPosition.Y) * TileSize.Y), 
                         ArrayTile[X, Y].Origin, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, Depth);
                 }
-            }
-
-            if (ListForegrounds.Count > 0)
-            {
-                g.End();
-                for (int F = 0; F < ListForegrounds.Count; F++)
-                {
-                    ListForegrounds[F].Draw(g, Constants.Width, Constants.Height);
-                }
-                g.Begin();
             }
 
             if (ShowUnits)

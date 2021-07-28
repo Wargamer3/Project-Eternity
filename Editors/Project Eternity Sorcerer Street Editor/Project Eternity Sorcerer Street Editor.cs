@@ -89,9 +89,20 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 ((Map2D)ActiveMap.ListLayer[LayerIndex].LayerGrid).ReplaceTile(X, Y, NewTile);
             }
 
+            public void RemoveTileset(int TilesetIndex)
+            {
+                ActiveMap.ListTileSet.RemoveAt(TilesetIndex);
+                ActiveMap.ListTilesetPreset.RemoveAt(TilesetIndex);
+
+                foreach (MapLayer ActiveLayer in ActiveMap.ListLayer)
+                {
+                    ActiveLayer.LayerGrid.RemoveTileset(TilesetIndex);
+                }
+            }
+
             public IMapLayer CreateNewLayer()
             {
-                MapLayer NewLayer = new MapLayer(ActiveMap, null, null);
+                MapLayer NewLayer = new MapLayer(ActiveMap);
                 ActiveMap.ListLayer.Add(NewLayer);
                 return NewLayer;
             }
@@ -166,7 +177,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 fs.Close();
                 SorcererStreetMap NewMap = new SorcererStreetMap(FilePath, 0);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
-                NewMap.ListLayer.Add(new MapLayer(NewMap, NewMap.ListBackground, NewMap.ListForeground));
+                NewMap.ListLayer.Add(new MapLayer(NewMap));
                 BattleMapViewer.ActiveMap.ArrayMultiplayerColor = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
 
                 SaveItem(FilePath, FilePath);

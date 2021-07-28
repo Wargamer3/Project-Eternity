@@ -142,7 +142,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             LoadMap();
             LoadMapAssets();
 
-            MapGrid = new WorldMap2D(this, ListBackground, ListForeground);
+            MapGrid = new WorldMap2D(this);
 
             sprWaypoint = Content.Load<Texture2D>("Maps/World Maps/Constructions/Humans/Unit Factory/Waypoint");
             Player NewPlayer = new Player("Player", "Human", true, 0, Factions.Humans, Color.Blue);
@@ -202,7 +202,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
             for (int i = 0; i < LayerCount; ++i)
             {
-                ListLayer.Add(new MapLayer(this, ListBackground, ListForeground, BR));
+                ListLayer.Add(new MapLayer(this, BR));
             }
         }
 
