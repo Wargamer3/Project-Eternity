@@ -17,10 +17,12 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             private int _ChainLengthInPixel;
             public List<Vector2> ListChainSplinePoints;
+            public List<Vector2> ListChainSplinePointsMoveValue;
 
             private AnimatedChainKeyFrame()
             {
                 ListChainSplinePoints = new List<Vector2>();
+                ListChainSplinePointsMoveValue = new List<Vector2>();
             }
 
             public AnimatedChainKeyFrame(Vector2 NextPosition, bool IsProgressive, int NextKeyFrame, int _ChainLengthInPixel)
@@ -28,6 +30,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             {
                 this._ChainLengthInPixel = _ChainLengthInPixel;
                 ListChainSplinePoints = new List<Vector2>();
+                ListChainSplinePointsMoveValue = new List<Vector2>();
             }
 
             public AnimatedChainKeyFrame(BinaryReader BR)
@@ -37,9 +40,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 int ListChainSplinePointsCount = BR.ReadInt32();
                 ListChainSplinePoints = new List<Vector2>(ListChainSplinePointsCount);
+                ListChainSplinePointsMoveValue = new List<Vector2>(ListChainSplinePointsCount);
                 for (int C = 0; C < ListChainSplinePointsCount; ++C)
                 {
                     ListChainSplinePoints.Add(new Vector2(BR.ReadSingle(), BR.ReadSingle()));
+                    ListChainSplinePointsMoveValue.Add(new Vector2());
                 }
             }
 
@@ -64,6 +69,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 NewAnimatedBitmapKeyFrame.UpdateFrom(this);
                 NewAnimatedBitmapKeyFrame._ChainLengthInPixel = _ChainLengthInPixel;
                 NewAnimatedBitmapKeyFrame.ListChainSplinePoints = new List<Vector2>(ListChainSplinePoints);
+                NewAnimatedBitmapKeyFrame.ListChainSplinePointsMoveValue = new List<Vector2>(ListChainSplinePointsMoveValue);
 
                 return NewAnimatedBitmapKeyFrame;
             }
@@ -91,6 +97,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         private int CurrentChainLengthInPixel;
         private List<Vector2> ListCurrentChainSplinePoints;
+        private List<Vector2> ListCurrentChainSplinePointsOld;
 
         public string ChainLinkPath;
         public string ChainEndPath;
@@ -99,6 +106,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public AnimatedSprite ChainLink;
         public AnimatedSprite ChainEnd;
         public AnimatedSprite ChainStart;
+
+        private AnimatedChainKeyFrame NextActiveKeyFrame;
 
         public AnimatedChainTimeline()
             : base(TimelineType, "New Chain")
@@ -257,6 +266,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             if (NextEvent != null)
             {
                 UpdateAnimationSprite(KeyFrame);
+
+                for (int L = 0; L < NextActiveKeyFrame.ListChainSplinePoints.Count; ++L)
+                {
+                    Vector2 Result = NextActiveKeyFrame.ListChainSplinePointsMoveValue[L] * (KeyFrame - EventKeyFrameOld);
+                    ListCurrentChainSplinePoints[L] = new Vector2(ListCurrentChainSplinePointsOld[L].X + (int)Result.X, ListCurrentChainSplinePointsOld[L].Y + (int)Result.Y);
+
+                }
             }
 
             if (ChainLink != null)
@@ -302,17 +318,23 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 CurrentChainLengthInPixel = ActiveKeyFrame.ChainLengthInPixel;
                 ListCurrentChainSplinePoints = new List<Vector2>(ActiveKeyFrame.ListChainSplinePoints);
+                ListCurrentChainSplinePointsOld = new List<Vector2>(ActiveKeyFrame.ListChainSplinePoints);
 
                 if (DicAnimationKeyFrame.TryGetValue(NextKeyFrame, out ActiveAnimationSpriteKeyFrame))
                 {
-                    ActiveKeyFrame = (AnimatedChainKeyFrame)ActiveAnimationSpriteKeyFrame;
-                    if (ActiveKeyFrame.IsProgressive)
+                    NextActiveKeyFrame = (AnimatedChainKeyFrame)ActiveAnimationSpriteKeyFrame;
+                    if (NextActiveKeyFrame.IsProgressive)
                     {
-                        OnProgressiveNextKeyFrameAnimationSprite(ActiveKeyFrame, KeyFrame, NextKeyFrame);
-
+                        OnProgressiveNextKeyFrameAnimationSprite(NextActiveKeyFrame, KeyFrame, NextKeyFrame);
 
                         float KeyFrameChange = KeyFrame - NextKeyFrame;
-                        //Calculate of how many pixel the AnimatedBitmap will move per step.
+
+                        for (int L = 0; L < ActiveKeyFrame.ListChainSplinePoints.Count; ++L)
+                        {
+                            NextActiveKeyFrame.ListChainSplinePointsMoveValue[L] = new Vector2((ActiveKeyFrame.ListChainSplinePoints[L].X - NextActiveKeyFrame.ListChainSplinePoints[L].X) / KeyFrameChange,
+                                                                   (ActiveKeyFrame.ListChainSplinePoints[L].Y - NextActiveKeyFrame.ListChainSplinePoints[L].Y) / KeyFrameChange);
+
+                        }
                     }
                     else
                     {
@@ -390,9 +412,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 float t = ProgressionValue;
 
-                float x0 = PositionOld.X;
+                float x0 = Position.X;
                 float x2 = ListCurrentChainSplinePoints[ListCurrentChainSplinePoints.Count - 1].X;
-                float y0 = PositionOld.Y;
+                float y0 = Position.Y;
                 float y2 = ListCurrentChainSplinePoints[ListCurrentChainSplinePoints.Count - 1].Y;
 
                 int n = ListCurrentChainSplinePoints.Count + 1;
@@ -503,12 +525,14 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 {
                     if (value < ActiveKeyFrame.ListChainSplinePoints.Count)
                     {
+                        ActiveKeyFrame.ListChainSplinePointsMoveValue.RemoveRange(value, ActiveKeyFrame.ListChainSplinePoints.Count - value);
                         ActiveKeyFrame.ListChainSplinePoints.RemoveRange(value, ActiveKeyFrame.ListChainSplinePoints.Count - value);
                     }
                     else
                     {
                         while (value > ActiveKeyFrame.ListChainSplinePoints.Count)
                         {
+                            ActiveKeyFrame.ListChainSplinePointsMoveValue.Add(new Vector2(Position.X, Position.Y));
                             ActiveKeyFrame.ListChainSplinePoints.Add(new Vector2(Position.X, Position.Y));
                         }
                     }
@@ -516,12 +540,14 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 if (value < ListCurrentChainSplinePoints.Count)
                 {
+                    ListCurrentChainSplinePointsOld.RemoveRange(value, ListCurrentChainSplinePoints.Count - value);
                     ListCurrentChainSplinePoints.RemoveRange(value, ListCurrentChainSplinePoints.Count - value);
                 }
                 else
                 {
                     while (value > ListCurrentChainSplinePoints.Count)
                     {
+                        ListCurrentChainSplinePointsOld.Add(new Vector2(Position.X, Position.Y));
                         ListCurrentChainSplinePoints.Add(new Vector2(Position.X, Position.Y));
                     }
                 }
