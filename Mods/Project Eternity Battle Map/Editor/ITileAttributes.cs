@@ -1,7 +1,6 @@
-﻿using ProjectEternity.GameScreens.BattleMapScreen;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace ProjectEternity.Editors.MapEditor
+namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public interface ITileAttributes
     {

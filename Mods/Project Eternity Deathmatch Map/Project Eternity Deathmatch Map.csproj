@@ -116,6 +116,7 @@
     <Compile Include="Battle Behaviors.cs" />
     <Compile Include="Battle Formulas.cs" />
     <Compile Include="Battle Previewer.cs" />
+    <Compile Include="Deathmatch Map Helper.cs" />
     <Compile Include="Terrain\Camera 3D.cs" />
     <Compile Include="Deathmatch Context.cs" />
     <Compile Include="Deathmatch Map Requirement.cs" />

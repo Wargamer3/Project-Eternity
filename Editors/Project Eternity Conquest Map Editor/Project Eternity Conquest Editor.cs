@@ -4,9 +4,9 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Editors.MapEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
-using ProjectEternity.Editors.MapEditor;
 
 namespace ProjectEternity.Editors.ConquestMapEditor
 {
@@ -29,6 +29,11 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             public Terrain GetTerrain(int X, int Y, int LayerIndex)
             {
                 return ActiveMap.GetTerrain(X, Y, LayerIndex);
+            }
+
+            public DrawableTile GetTile(int X, int Y, int LayerIndex)
+            {
+                throw new NotImplementedException();
             }
 
             public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)

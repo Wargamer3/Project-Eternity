@@ -19,7 +19,7 @@ namespace ProjectEternity.Core.Editor
         public string FilePath;
         protected static ItemSelector ItemSelectorMenu;
         public static GetItems GetItemsByRoot;
-        public GetItemInfo GetItemByKey;
+        public static GetItemInfo GetItemByKey;
         public const string GUIRootPathAnimations = "Animations";
         public const string GUIRootPathAnimationsSprites = "Animations/Sprites";
         public const string GUIRootPathAnimationsBackgroundsAll = "Animations/Backgrounds";
@@ -152,7 +152,7 @@ namespace ProjectEternity.Core.Editor
             ItemSelectorMenu.TopMost = true;
             ItemSelectorMenu.ShowDialog();
             //Item selected, call the ItemsSelected method.
-            if (ItemSelectorMenu.DialogResult == System.Windows.Forms.DialogResult.OK)
+            if (ItemSelectorMenu.DialogResult == DialogResult.OK)
                 return ItemSelectorMenu.GetResult();
             return null;
         }

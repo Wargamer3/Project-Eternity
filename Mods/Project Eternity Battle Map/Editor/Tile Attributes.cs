@@ -2,10 +2,9 @@
 using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Editor;
 
-namespace ProjectEternity.Editors.MapEditor
+namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public partial class TileAttributes : Form, ITileAttributes
     {

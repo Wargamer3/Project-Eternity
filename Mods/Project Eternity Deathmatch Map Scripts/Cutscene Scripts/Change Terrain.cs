@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public sealed partial class DeathmatchCutsceneScriptHolder
     {
-        public class ChangeTerrainEffect : DeathmatchMapScript
+        public class ScriptChangeTerrain : DeathmatchMapScript
         {
             private ChangeTerrainAttribute TerrainAttribute;
             private List<Vector2> ListTerrainChangeLocation;
@@ -28,13 +28,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             private double TransformationCounter;
             private double TilesTransformationCounter;
 
-            public ChangeTerrainEffect()
+            public ScriptChangeTerrain()
                 : this(null)
             {
             }
 
-            public ChangeTerrainEffect(DeathmatchMap Map)
-                : base(Map, 150, 50, "Change Terrain Effect", new string[] { "Change" }, new string[] { "Terrain Changed" })
+            public ScriptChangeTerrain(DeathmatchMap Map)
+                : base(Map, 150, 50, "Change Terrain", new string[] { "Change" }, new string[] { "Terrain Changed" })
             {
                 TerrainAttribute = new ChangeTerrainAttribute(string.Empty, new Point(32, 32), new Rectangle(0, 0, 32, 32));
 
@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             protected override CutsceneScript DoCopyScript()
             {
-                ChangeTerrainEffect NewScript = new ChangeTerrainEffect(Map);
+                ScriptChangeTerrain NewScript = new ScriptChangeTerrain(Map);
                 NewScript.Tileset = Tileset;
                 NewScript.TileSize = TileSize;
                 NewScript.TilesetOrigin = TilesetOrigin;

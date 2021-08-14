@@ -5,9 +5,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.GUI
@@ -42,6 +39,7 @@ namespace ProjectEternity.GUI
             }
 
             BaseEditor.GetItemsByRoot = GetItemsByRoot;
+            BaseEditor.GetItemByKey = GetItemValueByKey;
             this.SetStyle(ControlStyles.StandardDoubleClick, false);//Disable right double click.
 
             //Place holder to store values for the lookup.
@@ -539,7 +537,6 @@ namespace ProjectEternity.GUI
             try
             {
                 BaseEditor instance = Activator.CreateInstance(Info.EditorType, GetFilePathForItemNode(ActiveNode), Info.InitParams) as BaseEditor;
-                instance.GetItemByKey = GetItemValueByKey;
                 instance.Show();
             }
             catch (Exception E)

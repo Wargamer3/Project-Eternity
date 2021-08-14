@@ -55,7 +55,15 @@
   <ItemGroup>
     <Compile Include="Cutscene Scripts\Add Player.cs" />
     <Compile Include="Cutscene Scripts\Center Camera On Squad.cs" />
-    <Compile Include="Cutscene Scripts\Change Terrain Effect.cs" />
+    <Compile Include="Cutscene Scripts\Change Map.cs" />
+    <Compile Include="Cutscene Scripts\Change Terrain.cs" />
+    <Compile Include="Cutscene Scripts\Selectors\Map Editor Selector.cs" />
+    <Compile Include="Cutscene Scripts\Selectors\Map Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cutscene Scripts\Selectors\Map Editor.Designer.cs">
+      <DependentUpon>Map Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Cutscene Scripts\Selectors\Map Destination Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -188,6 +196,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Cutscene Scripts\Selectors\Map Editor.resx">
+      <DependentUpon>Map Editor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Cutscene Scripts\Selectors\Map Destination Editor.resx">
       <DependentUpon>Map Destination Editor.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ProjectEternity.Editors.MapEditor
+namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public partial class ExtraLayerAttributes : Form
     {

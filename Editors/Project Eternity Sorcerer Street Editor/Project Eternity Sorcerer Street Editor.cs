@@ -31,6 +31,11 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return ActiveMap.GetTerrain(X, Y, LayerIndex);
             }
 
+            public DrawableTile GetTile(int X, int Y, int LayerIndex)
+            {
+                return ActiveMap.ListLayer[LayerIndex].OriginalLayerGrid.GetTile(X, Y);
+            }
+
             public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)
             {
                 for (int L = 0; L < GetLayerCount(); ++L)

@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public Terrain(int XPos, int YPos)
+        public Terrain(float XPos, float YPos)
         {
             this.Position = new Vector3(XPos, YPos, 0);
             this.TerrainTypeIndex = 0;
@@ -176,7 +176,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.BattleBackgroundAnimationIndex = BattleBackgroundAnimationIndex;
         }
 
-        public Terrain(BinaryReader BR, int XPos, int YPos)
+        public Terrain(BinaryReader BR, float XPos, float YPos)
             : this(XPos, YPos)
         {
             TerrainTypeIndex = BR.ReadInt32();

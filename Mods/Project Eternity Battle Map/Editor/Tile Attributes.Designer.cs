@@ -1,4 +1,4 @@
-﻿namespace ProjectEternity.Editors.MapEditor
+﻿namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     partial class TileAttributes
     {

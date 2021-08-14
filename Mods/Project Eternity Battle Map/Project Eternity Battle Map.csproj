@@ -75,8 +75,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Editor\Extra Layer Attributes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\Extra Layer Attributes.Designer.cs">
+      <DependentUpon>Extra Layer Attributes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\IMapHelper.cs" />
+    <Compile Include="Editor\Tile Attributes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\Tile Attributes.Designer.cs">
+      <DependentUpon>Tile Attributes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Intermission Screen\Data Screen.cs" />
     <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
+    <Compile Include="Editor\ITileAttributes.cs" />
     <Compile Include="Map Layer.cs" />
     <Compile Include="Menus\Attacks Menu.cs" />
     <Compile Include="Movement Algorithm Tile.cs" />
@@ -87,7 +101,7 @@
     <Compile Include="Team Lists\Team List Character.cs" />
     <Compile Include="Team Lists\Team List Squad.cs" />
     <Compile Include="Team Lists\Team List Unit.cs" />
-    <Compile Include="Viewers\Battle Map Viewer.cs">
+    <Compile Include="Editor\Battle Map Viewer.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DayNightCycle.cs" />
@@ -126,7 +140,7 @@
     <Compile Include="System List.cs" />
     <Compile Include="Map Scripting.cs" />
     <Compile Include="Terrain.cs" />
-    <Compile Include="Viewers\Tileset Viewer.cs">
+    <Compile Include="Editor\Tileset Viewer.cs">
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
@@ -203,8 +217,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Viewers\Battle Map Viewer.resx">
+    <EmbeddedResource Include="Editor\Battle Map Viewer.resx">
       <DependentUpon>Battle Map Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Extra Layer Attributes.resx">
+      <DependentUpon>Extra Layer Attributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\Tile Attributes.resx">
+      <DependentUpon>Tile Attributes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
