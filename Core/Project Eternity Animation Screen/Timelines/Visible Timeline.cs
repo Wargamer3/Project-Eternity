@@ -270,6 +270,15 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             MaxY = (int)(MinY + Height * Math.Abs(ScaleFactor.Y));
         }
 
+        public virtual bool CanSelect(int PosX, int PosY)
+        {
+            int MinX, MinY, MaxX, MaxY;
+            GetMinMax(out MinX, out MinY, out MaxX, out MaxY);
+
+            //Select Item.
+            return PosX >= MinX && PosX < MaxX && PosY >= MinY && PosY < MaxY;
+        }
+
         //Generic Update methods.
         protected void UpdateAnimationSprite(int KeyFrame)
         {

@@ -615,7 +615,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
             }
+        }
 
+        public void DrawUI(CustomSpriteBatch g)
+        {
             g.End();
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 

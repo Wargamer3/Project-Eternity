@@ -94,25 +94,6 @@ namespace ProjectEternity.Editors.AnimationEditor
 
             #endregion
 
-            #region Owner.cbShowUI
-
-            //Init the ShowGrid button (as it can't be done with the tool box)
-            Owner.AnimationViewer.ShowUI = true;
-            Owner.cbShowUI = new CheckBox();
-            Owner.cbShowUI.Text = "Show UI";
-            Owner.cbShowUI.AutoSize = false;
-            //Link a CheckedChanged event to a method.
-            Owner.cbShowUI.CheckedChanged += new EventHandler(cbShowUI_CheckedChanged);
-            Owner.cbShowUI.Checked = true;
-            //Make it 10 pixel after the last mnuToolBar item.
-            Owner.cbShowUI.Padding = new Padding(10, 0, 0, 0);
-            s = new ToolStripControlHost(Owner.cbShowUI);
-            s.AutoSize = false;
-            s.Width = 100;
-            Owner.mnuToolBar.Items.Add(s);
-
-            #endregion
-
             if (GameScreens.GameScreen.FMODSystem == null)
             {
                 try

@@ -42,7 +42,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public bool IsPlaying;
         public bool ShowBorderBoxes;
         public bool ShowNextPositions;
-        public bool ShowUI;
         private SelectionChoices SelectionChoice;
 
         private int ActiveKeyFrame { get { return ActiveAnimation.ActiveKeyFrame; } set { ActiveAnimation.ActiveKeyFrame = value; } }
@@ -335,11 +334,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 for (int A = 0; A < ActiveLayer.ListVisibleObject.Count; A++)
                 {
-                    int MinX, MinY, MaxX, MaxY;
-                    ActiveLayer.ListVisibleObject[A].GetMinMax(out MinX, out MinY, out MaxX, out MaxY);
-
-                    if (Real.X >= MinX && Real.X < MaxX &&
-                        Real.Y >= MinY && Real.Y < MaxY)
+                    if (ActiveLayer.ListVisibleObject[A].CanSelect(Real.X, Real.Y))
                     {
                         ActiveAnimation.ListSelectedObjects.Add(ActiveLayer.ListVisibleObject[A]);
                         BitmapAction = BitmapActions.Move;
@@ -348,11 +343,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 }
                 for (int P = 0; P < ActiveLayer.ListPolygonCutter.Count; P++)
                 {
-                    int MinX, MinY, MaxX, MaxY;
-                    ActiveLayer.ListPolygonCutter[P].GetMinMax(out MinX, out MinY, out MaxX, out MaxY);
-
-                    if (e.X >= MinX && e.X < MaxX &&
-                        e.Y >= MinY && e.Y < MaxY)
+                    if (ActiveLayer.ListPolygonCutter[P].CanSelect(Real.X, Real.Y))
                     {
                         ActiveAnimation.ListSelectedObjects.Add(ActiveLayer.ListPolygonCutter[P]);
                         BitmapAction = BitmapActions.Move;
@@ -784,11 +775,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             for (int A = 0; A < ActiveLayer.ListVisibleObject.Count; A++)
             {
-                int MinX, MinY, MaxX, MaxY;
-                ActiveLayer.ListVisibleObject[A].GetMinMax(out MinX, out MinY, out MaxX, out MaxY);
-
                 //Select Item.
-                if (CanSelect && PosX >= MinX && PosX < MaxX && PosY >= MinY && PosY < MaxY)
+                if (CanSelect && ActiveLayer.ListVisibleObject[A].CanSelect(PosX, PosY))
                 {
                     //Single item selection.
                     if (Control.ModifierKeys != Keys.Shift)
@@ -828,11 +816,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             for (int M = 0; M < ActiveLayer.ListActiveMarker.Count; M++)
             {
-                int MinX, MinY, MaxX, MaxY;
-                ActiveLayer.ListActiveMarker[M].GetMinMax(out MinX, out MinY, out MaxX, out MaxY);
-
                 //Select Item.
-                if (CanSelect && PosX >= MinX && PosX < MaxX && PosY >= MinY && PosY < MaxY)
+                if (CanSelect && ActiveLayer.ListActiveMarker[M].CanSelect(PosX, PosY))
                 {
                     //Single item selection.
                     if (Control.ModifierKeys != Keys.Shift)
@@ -1144,7 +1129,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             g.Scale = t;
 
-            ActiveAnimation.DrawEditor(g, Width, Height, IsInEditMode, ShowBorderBoxes, ShowNextPositions, ShowUI);
+            ActiveAnimation.DrawEditor(g, Width, Height, IsInEditMode, ShowBorderBoxes, ShowNextPositions);
 
             Thread.Sleep(1);
         }

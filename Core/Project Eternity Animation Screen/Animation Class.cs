@@ -585,7 +585,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public List<string> ActiveQuoteSet;
         public SimpleAnimation ActiveCharacterSprite;
 
-        protected const int VNBoxHeight = 128;
+        public const int VNBoxHeight = 128;
 
         public string CurrentQuote;
         public string AnimationPath;

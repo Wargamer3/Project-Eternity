@@ -28,7 +28,6 @@ namespace ProjectEternity.Editors.AnimationEditor
 
         public CheckBox cbShowBorderBoxes;
         public CheckBox cbShowNextPositions;
-        public CheckBox cbShowUI;
         public DeathmatchAnimationEditor ActiveAnimation;
 
         private AnimationEditorController Controller;

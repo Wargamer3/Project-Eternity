@@ -88,6 +88,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 int ObjectMaxY;
                 ActiveVisibleTimeline.GetMinMax(out ObjectMinX, out ObjectMinY, out ObjectMaxX, out ObjectMaxY);
 
+                if (ObjectMinX == ObjectMaxX || ObjectMinY == ObjectMaxY)
+                {
+                    continue;
+                }
+
                 if (ObjectMinX < MinX)
                     MinX = ObjectMinX;
                 if (ObjectMaxX > MaxX)
@@ -107,7 +112,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             MultipleSelectionOrigin.Y = MultipleSelectionRectangle.Height / 2;
         }
 
-        public virtual void DrawEditor(CustomSpriteBatch g, int ScreenWidth, int ScreenHeight, bool IsInEditMode, bool ShowBorderBoxes, bool ShowNextPositions, bool ShowUI)
+        public virtual void DrawEditor(CustomSpriteBatch g, int ScreenWidth, int ScreenHeight, bool IsInEditMode, bool ShowBorderBoxes, bool ShowNextPositions)
         {
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.White);

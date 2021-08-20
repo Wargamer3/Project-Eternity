@@ -36,11 +36,6 @@ namespace ProjectEternity.Editors.AnimationEditor
             Owner.AnimationViewer.ShowNextPositions = Owner.cbShowNextPositions.Checked;
         }
 
-        public void cbShowUI_CheckedChanged(object sender, EventArgs e)
-        {
-            Owner.AnimationViewer.ShowUI = Owner.cbShowUI.Checked;
-        }
-
         #region Animation Viewer
 
         public void tmrAnimation_Tick(object sender, EventArgs e)
