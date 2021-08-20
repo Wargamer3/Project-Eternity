@@ -242,7 +242,7 @@ namespace ProjectEternity.UnitTests
         public void TestNullifyAttackEffect()
         {
             NullifyAttackEffect NewEffect = (NullifyAttackEffect)DummyMap.DicEffect[NullifyAttackEffect.Name].Copy();
-            NewEffect.Attacks.Add("Test");
+            NewEffect.Attacks = new string[] { "Test" };
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.DicRequirement[PassiveRequirement.Name].Copy(),
                                                             DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
