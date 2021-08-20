@@ -60,7 +60,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             RequireDrawFocus = true;
             RequireFocus = true;
-            TotalExpGained = 500034;
 
             this.UpdateBattleEventsOnClose = false;
             this.Map = Map;
