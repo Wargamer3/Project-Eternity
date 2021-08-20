@@ -75,17 +75,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             string ActiveSquadBackgroundPath = "Backgrounds 2D/Empty";
             string TargetSquadBackgroundPath = "Backgrounds 2D/Empty";
+            BattleMapScreen.DrawableTile ActiveSquadTile = GetTile(ActiveSquad);
+            BattleMapScreen.DrawableTile TargetSquadTile = GetTile(TargetSquad);
             BattleMapScreen.Terrain ActiveSquadTerrain = GetTerrain(ActiveSquad);
             BattleMapScreen.Terrain TargetSquadTerrain = GetTerrain(TargetSquad);
 
             if (ActiveSquadTerrain.BattleBackgroundAnimationIndex >= 0)
             {
-                ActiveSquadBackgroundPath = ListTilesetPreset[ActiveSquadTerrain.TerrainTypeIndex].ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleBackgroundAnimationIndex];
+                ActiveSquadBackgroundPath = ListTilesetPreset[ActiveSquadTile.Tileset].ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleBackgroundAnimationIndex];
             }
 
             if (TargetSquadTerrain.BattleBackgroundAnimationIndex >= 0)
             {
-                TargetSquadBackgroundPath = ListTilesetPreset[TargetSquadTerrain.TerrainTypeIndex].ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleBackgroundAnimationIndex];
+                TargetSquadBackgroundPath = ListTilesetPreset[TargetSquadTile.Tileset].ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleBackgroundAnimationIndex];
             }
 
             ActiveSquadBackground = new AnimationBackground2D(ActiveSquadBackgroundPath, Content, GraphicsDevice);

@@ -413,6 +413,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return GetTerrain(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.LayerIndex);
         }
 
+        public DrawableTile GetTile(UnitMapComponent ActiveUnit)
+        {
+            return GetTile(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.LayerIndex);
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (GameMode == 1)
