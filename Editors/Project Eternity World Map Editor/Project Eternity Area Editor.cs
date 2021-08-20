@@ -21,6 +21,11 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 this.ActiveMap = ActiveMap;
             }
 
+            public void InitMap()
+            {
+                ActiveMap.Load();
+            }
+
             public ITileAttributes GetTileEditor()
             {
                 return new TileAttributes();

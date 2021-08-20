@@ -66,6 +66,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 NewMap.ListGameScreen = ListGameScreen;
                 NewMap.PlayerRoster = PlayerRoster;
                 NewMap.Load();
+                NewMap.Init();
+                NewMap.TogglePreview(true);
 
                 //Remove any GameScreen created by the map so they don't show up immediately.
                 ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);

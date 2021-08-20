@@ -33,6 +33,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 NewMap.ListGameScreen = Owner.ListGameScreen;
                 Owner.RemoveAllScreens();
                 Owner.PushScreen(NewMap);
+                NewMap.TogglePreview(true);
                 IsEnded = true;
             }
 

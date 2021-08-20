@@ -116,6 +116,7 @@ namespace ProjectEternity
                             sndIntroSong.Stop();
                             sndConfirm.Play();
                             BattleMap QuickLoadMap = BattleMap.LoadTemporaryMap(ListGameScreen);
+                            QuickLoadMap.TogglePreview(true);
                             ListGameScreen.Insert(0, QuickLoadMap);
                         }
                         else

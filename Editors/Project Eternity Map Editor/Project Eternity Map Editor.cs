@@ -152,7 +152,8 @@ namespace ProjectEternity.Editors.MapEditor
             BattleMapViewer.ActiveMap = NewMap;
             NewMap.ListGameScreen = new List<GameScreens.GameScreen>();
             NewMap.Content = BattleMapViewer.content;
-            NewMap.Load();
+            Helper.InitMap();
+            ActiveMap.TogglePreview(true);
             NewMap.CursorPositionVisible = new Vector3(-1, -1, 0);
 
             BattleMapViewer.SetListMapScript(NewMap.ListMapScript);

@@ -28,23 +28,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public override void ExecuteTrigger(int Index)
             {
                 IsActive = true;
-                IsEnded = true;
+            }
 
+            public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+            {
                 for (int P = 0; P < Map.ListPlayer.Count; P++)
                 {
                     for (int U = 0; U < Map.ListPlayer[P].ListSquad.Count; U++)
                     {
                         if (Map.ListPlayer[P].ListSquad[U].ID == _UnitToMoveID)
                         {
+                            Map.ListActionMenuChoice.RemoveAllActionPanels();
                             Map.ListActionMenuChoice.Add(new ActionPanelHubStep(Map, Map.ListPlayer[P].ListSquad[U]));
+                            IsEnded = true;
                             return;
                         }
                     }
                 }
-            }
-
-            public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
-            {
             }
 
             public override void Draw(CustomSpriteBatch g)

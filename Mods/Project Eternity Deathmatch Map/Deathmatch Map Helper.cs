@@ -14,6 +14,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ActiveMap = ActiveMap;
         }
 
+        public void InitMap()
+        {
+            ActiveMap.Load();
+            ActiveMap.Init();
+        }
+
         public ITileAttributes GetTileEditor()
         {
             return new TileAttributes();

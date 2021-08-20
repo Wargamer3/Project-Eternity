@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FMOD;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
-using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Scripts;
-using ProjectEternity.Core;
 using ProjectEternity.GameScreens.AnimationScreen;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -96,6 +95,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
             }
+
+            OnNewTurn();
         }
 
         /// <summary>
@@ -278,7 +279,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BattleMap LoadTemporaryMap(BinaryReader BR)
         {
-            LoadContent();
+            Load();
 
             ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
             //Initialise the ScreenSize based on the map loaded.

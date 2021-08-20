@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         /// <summary>
         /// Called every time every players has finished their actions.
         /// </summary>
-        public void OnNewTurn()
+        internal void OnNewTurn()
         {
             for (int P = 0; P < ListPlayer.Count; P++)
             {

@@ -68,6 +68,8 @@ namespace ProjectEternity
                         NewMap.PlayerRoster = new Roster();
                         NewMap.PlayerRoster.LoadRoster();
                         NewMap.Load();
+                        NewMap.Init();
+                        NewMap.TogglePreview(true);
 
                         //Remove any GameScreen created by the map so they don't show up immediately.
                         List<GameScreen>  ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);
@@ -91,7 +93,34 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.SuperTreeWar:
-                        PushScreen(new DeathmatchMap("Super Tree Wars/Holy Temple", 0, new List<Core.Units.Squad>()));
+                        int OldNumberOfGameScreenSTW = ListGameScreen.Count;
+                        DeathmatchMap NewMapSTW = new DeathmatchMap("Super Tree Wars/Holy Temple", 0, new List<Core.Units.Squad>());
+                        NewMapSTW.ListGameScreen = ListGameScreen;
+                        NewMapSTW.PlayerRoster = new Roster();
+                        NewMapSTW.PlayerRoster.LoadRoster();
+                        NewMapSTW.Load();
+                        NewMapSTW.Init();
+                        NewMapSTW.TogglePreview(true);
+
+                        //Remove any GameScreen created by the map so they don't show up immediately.
+                        List<GameScreen> ListGameScreenCreatedByMapSTW = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreenSTW);
+                        for (int S = ListGameScreen.Count - 1 - OldNumberOfGameScreenSTW; S >= 0; --S)
+                        {
+                            ListGameScreenCreatedByMapSTW.Add(ListGameScreen[S]);
+                            ListGameScreen.RemoveAt(S);
+                        }
+
+                        RemoveAllScreens();
+                        ListGameScreen.Insert(0, NewMapSTW);
+                        NewMapSTW.Update(gameTime);
+
+                        for (int S = 0; S < ListGameScreenCreatedByMapSTW.Count; ++S)
+                        {
+                            ListGameScreen.Insert(0, ListGameScreenCreatedByMapSTW[S]);
+                            ListGameScreenCreatedByMapSTW[S].Update(gameTime);
+                        }
+
+                        ListGameScreenCreatedByMapSTW.Clear();
                         break;
 
                     case MenuChoices.Intermission:

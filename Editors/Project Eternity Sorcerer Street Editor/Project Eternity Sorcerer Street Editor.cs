@@ -21,6 +21,11 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 this.ActiveMap = ActiveMap;
             }
 
+            public void InitMap()
+            {
+                ActiveMap.Load();
+            }
+
             public ITileAttributes GetTileEditor()
             {
                 return new TileAttributes();

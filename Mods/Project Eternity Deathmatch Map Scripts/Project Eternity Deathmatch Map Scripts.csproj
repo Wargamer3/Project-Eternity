@@ -103,7 +103,7 @@
     <Compile Include="Cutscene Scripts\Start Animation Relative.cs" />
     <Compile Include="Cutscene Scripts\Start Battle Sequence.cs" />
     <Compile Include="Cutscene Scripts\Start Deathmatch Visual Novel.cs" />
-    <Compile Include="Cutscene Scripts\ScriptStartHub.cs" />
+    <Compile Include="Cutscene Scripts\Start Hub.cs" />
     <Compile Include="Cutscene Scripts\ScriptUnit.cs" />
     <Compile Include="Cutscene Scripts\Unit Deployment Screen.cs" />
     <Compile Include="Map Conditions\Active Team.cs" />

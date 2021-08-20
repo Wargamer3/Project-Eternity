@@ -4,6 +4,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public interface IMapHelper
     {
+        void InitMap();
         ITileAttributes GetTileEditor();
         Terrain GetTerrain(int X, int Y, int LayerIndex);
         DrawableTile GetTile(int X, int Y, int LayerIndex);

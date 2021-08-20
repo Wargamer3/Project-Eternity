@@ -198,16 +198,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         public override void Load()
         {
-            LoadContent();
-
-            Init();
-            OnNewTurn();
-
-            TogglePreview(true);
-        }
-
-        private void LoadContent()
-        {
             if (PlayerRoster == null)
             {
                 PlayerRoster = new Roster();
@@ -406,25 +396,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Init();
                 }
             }
-        }
-
-        public Delegate CreateDelegateWithObjectParameters(object instance, MethodInfo methodInfo)
-        {
-            var parameters = methodInfo.GetParameters()
-                .Select(parameterInfo => new
-                {
-                    MethodParameterType = parameterInfo.ParameterType,
-                    DelegateParameter = Expression.Parameter(typeof(object), parameterInfo.Name)
-                })
-                .Select(x => new
-                {
-                    x.DelegateParameter,
-                    MethodParameter = Expression.Convert(x.DelegateParameter, x.MethodParameterType)
-                });
-            MethodCallExpression methodCallExpression = instance == null
-                                                            ? Expression.Call(methodInfo, parameters.Select(x => x.MethodParameter).ToArray())
-                                                            : Expression.Call(Expression.Constant(instance), methodInfo, parameters.Select(x => x.MethodParameter).ToArray());
-            return Expression.Lambda(methodCallExpression, parameters.Select(x => x.DelegateParameter).ToArray()).Compile();
         }
 
         public Terrain GetTerrain(float X, float Y, int LayerIndex)

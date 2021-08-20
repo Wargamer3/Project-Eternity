@@ -38,6 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (!SwitchMap.IsInit)
             {
                 SwitchMap.Init();
+                SwitchMap.TogglePreview(true);
             }
 
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
