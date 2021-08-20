@@ -80,6 +80,10 @@
             this.lstLevels = new System.Windows.Forms.ListBox();
             this.btnRemoveLevel = new System.Windows.Forms.Button();
             this.btnAddLevel = new System.Windows.Forms.Button();
+            this.lblActivationWeight = new System.Windows.Forms.Label();
+            this.txtActivationWeight = new System.Windows.Forms.NumericUpDown();
+            this.lblActivationChance = new System.Windows.Forms.Label();
+            this.txtActivationChance = new System.Windows.Forms.NumericUpDown();
             this.cmsSkillInformation.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gbEffects.SuspendLayout();
@@ -92,6 +96,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtRangeValue)).BeginInit();
             this.gbRequirements.SuspendLayout();
             this.gbLevels.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtActivationWeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtActivationChance)).BeginInit();
             this.SuspendLayout();
             // 
             // cmsSkillInformation
@@ -228,13 +234,17 @@
             // 
             // gbActivations
             // 
+            this.gbActivations.Controls.Add(this.lblActivationWeight);
+            this.gbActivations.Controls.Add(this.txtActivationWeight);
+            this.gbActivations.Controls.Add(this.lblActivationChance);
+            this.gbActivations.Controls.Add(this.txtActivationChance);
             this.gbActivations.Controls.Add(this.lstActivations);
             this.gbActivations.Controls.Add(this.btnRemoveActivation);
             this.gbActivations.Controls.Add(this.btnAddActivation);
             this.gbActivations.Enabled = false;
             this.gbActivations.Location = new System.Drawing.Point(199, 27);
             this.gbActivations.Name = "gbActivations";
-            this.gbActivations.Size = new System.Drawing.Size(181, 177);
+            this.gbActivations.Size = new System.Drawing.Size(181, 201);
             this.gbActivations.TabIndex = 17;
             this.gbActivations.TabStop = false;
             this.gbActivations.Text = "Activations";
@@ -244,13 +254,13 @@
             this.lstActivations.FormattingEnabled = true;
             this.lstActivations.Location = new System.Drawing.Point(6, 19);
             this.lstActivations.Name = "lstActivations";
-            this.lstActivations.Size = new System.Drawing.Size(169, 121);
+            this.lstActivations.Size = new System.Drawing.Size(169, 95);
             this.lstActivations.TabIndex = 8;
             this.lstActivations.SelectedIndexChanged += new System.EventHandler(this.lstActivations_SelectedIndexChanged);
             // 
             // btnRemoveActivation
             // 
-            this.btnRemoveActivation.Location = new System.Drawing.Point(100, 146);
+            this.btnRemoveActivation.Location = new System.Drawing.Point(100, 172);
             this.btnRemoveActivation.Name = "btnRemoveActivation";
             this.btnRemoveActivation.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveActivation.TabIndex = 7;
@@ -260,7 +270,7 @@
             // 
             // btnAddActivation
             // 
-            this.btnAddActivation.Location = new System.Drawing.Point(6, 146);
+            this.btnAddActivation.Location = new System.Drawing.Point(6, 172);
             this.btnAddActivation.Name = "btnAddActivation";
             this.btnAddActivation.Size = new System.Drawing.Size(75, 23);
             this.btnAddActivation.TabIndex = 6;
@@ -372,7 +382,7 @@
             this.groupBox3.Controls.Add(this.txtDescription);
             this.groupBox3.Location = new System.Drawing.Point(12, 210);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(368, 157);
+            this.groupBox3.Size = new System.Drawing.Size(181, 157);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Description";
@@ -385,7 +395,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(356, 132);
+            this.txtDescription.Size = new System.Drawing.Size(169, 132);
             this.txtDescription.TabIndex = 0;
             // 
             // gbAffectedTypes
@@ -622,6 +632,55 @@
             this.btnAddLevel.UseVisualStyleBackColor = true;
             this.btnAddLevel.Click += new System.EventHandler(this.btnAddLevel_Click);
             // 
+            // lblActivationWeight
+            // 
+            this.lblActivationWeight.AutoSize = true;
+            this.lblActivationWeight.Location = new System.Drawing.Point(7, 148);
+            this.lblActivationWeight.Name = "lblActivationWeight";
+            this.lblActivationWeight.Size = new System.Drawing.Size(41, 13);
+            this.lblActivationWeight.TabIndex = 19;
+            this.lblActivationWeight.Text = "Weight";
+            // 
+            // txtActivationWeight
+            // 
+            this.txtActivationWeight.Location = new System.Drawing.Point(106, 146);
+            this.txtActivationWeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.txtActivationWeight.Name = "txtActivationWeight";
+            this.txtActivationWeight.Size = new System.Drawing.Size(69, 20);
+            this.txtActivationWeight.TabIndex = 18;
+            this.txtActivationWeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.txtActivationWeight.ValueChanged += new System.EventHandler(this.txtActivationWeight_ValueChanged);
+            // 
+            // lblActivationChance
+            // 
+            this.lblActivationChance.AutoSize = true;
+            this.lblActivationChance.Location = new System.Drawing.Point(7, 122);
+            this.lblActivationChance.Name = "lblActivationChance";
+            this.lblActivationChance.Size = new System.Drawing.Size(93, 13);
+            this.lblActivationChance.TabIndex = 17;
+            this.lblActivationChance.Text = "Activation chance";
+            // 
+            // txtActivationChance
+            // 
+            this.txtActivationChance.Location = new System.Drawing.Point(106, 120);
+            this.txtActivationChance.Name = "txtActivationChance";
+            this.txtActivationChance.Size = new System.Drawing.Size(69, 20);
+            this.txtActivationChance.TabIndex = 16;
+            this.txtActivationChance.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.txtActivationChance.ValueChanged += new System.EventHandler(this.txtActivationChance_ValueChanged);
+            // 
             // ProjectEternityUnitAbilityEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -644,6 +703,7 @@
             this.menuStrip1.PerformLayout();
             this.gbEffects.ResumeLayout(false);
             this.gbActivations.ResumeLayout(false);
+            this.gbActivations.PerformLayout();
             this.gbLifetimeTypes.ResumeLayout(false);
             this.gbLifetimeTypes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaximumStack)).EndInit();
@@ -655,6 +715,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtRangeValue)).EndInit();
             this.gbRequirements.ResumeLayout(false);
             this.gbLevels.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtActivationWeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtActivationChance)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -713,6 +775,10 @@
         private System.Windows.Forms.ListBox lstLevels;
         private System.Windows.Forms.Button btnRemoveLevel;
         private System.Windows.Forms.Button btnAddLevel;
+        private System.Windows.Forms.Label lblActivationWeight;
+        private System.Windows.Forms.NumericUpDown txtActivationWeight;
+        private System.Windows.Forms.Label lblActivationChance;
+        private System.Windows.Forms.NumericUpDown txtActivationChance;
     }
 }
 

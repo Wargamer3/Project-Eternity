@@ -75,7 +75,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
         /// <param name="SkillPath">Path from which to open the Skill.</param>
         private void LoadSkill(string SkillPath)
         {
-            string Name = FilePath.Substring(0, FilePath.Length - 5).Substring(24);
+            string Name = FilePath.Substring(0, FilePath.Length - 4).Substring(24);
             this.Text = Name + " - Project Eternity Unit Ability Editor";
 
             ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
@@ -138,6 +138,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
         {
             if (lstLevels.SelectedItems.Count > 0)
             {
+                ActiveSkill.ListSkillLevel.RemoveAt(lstLevels.SelectedIndex);
                 lstLevels.Items.RemoveAt(lstLevels.SelectedIndex);
             }
         }
@@ -154,9 +155,26 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
 
         private void btnRemoveActivation_Click(object sender, EventArgs e)
         {
-            if (lstRequirements.SelectedItems.Count > 0)
+            if (lstActivations.SelectedItems.Count > 0)
             {
-                lstRequirements.Items.RemoveAt(lstRequirements.SelectedIndex);
+                ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation.RemoveAt(lstActivations.SelectedIndex);
+                lstActivations.Items.RemoveAt(lstActivations.SelectedIndex);
+            }
+        }
+
+        private void txtActivationChance_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstActivations.SelectedItems.Count > 0)
+            {
+                ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[lstActivations.SelectedIndex].ActivationPercentage = (byte)txtActivationChance.Value;
+            }
+        }
+
+        private void txtActivationWeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstActivations.SelectedItems.Count > 0)
+            {
+                ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[lstActivations.SelectedIndex].Weight = (byte)txtActivationWeight.Value;
             }
         }
 
@@ -242,6 +260,9 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
                 lstEffects.Items.Clear();
 
                 BaseSkillActivation ActiveSkillActivation = ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[lstActivations.SelectedIndex];
+                txtActivationChance.Value = ActiveSkillActivation.ActivationPercentage;
+                txtActivationWeight.Value = ActiveSkillActivation.Weight;
+
                 for (int A = 0; A < ActiveSkillActivation.ListRequirement.Count; A++)
                 {
                     lstRequirements.Items.Add(ActiveSkillActivation.ListRequirement[A].SkillRequirementName);
