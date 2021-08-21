@@ -196,6 +196,7 @@ namespace ProjectEternity.Core.Item
         public Polygon()
         {
             ArrayIndex = new short[0];
+            ArrayAxis = new Vector2[0];
         }
 
         public Polygon(Vector2[] ArrayVertex, float MaxWidth, float MaxHeight)
@@ -210,6 +211,7 @@ namespace ProjectEternity.Core.Item
             ArrayIndex[3] = 0;
             ArrayIndex[4] = 2;
             ArrayIndex[5] = 3;
+            ArrayAxis = new Vector2[0];
             ComputePerpendicularAxis();
             ComputeColorAndUVCoordinates(MaxWidth, MaxHeight);
             UpdateWorldPosition(Vector2.Zero, 0);
@@ -219,6 +221,7 @@ namespace ProjectEternity.Core.Item
         {
             this.ArrayVertex = ArrayVertex;
             this.ArrayIndex = ArrayIndex;
+            ArrayAxis = new Vector2[0];
             TriangleCount = ArrayIndex.Length / 3;
 
             ComputePerpendicularAxis();
