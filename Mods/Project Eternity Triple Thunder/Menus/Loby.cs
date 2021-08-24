@@ -122,7 +122,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             while (TryConnecting);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-            ChatInput = new TextInput(fntArial12, sprPixel, new Vector2(68, 518), new Vector2(470, 20));
+            ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20));
 
             sndBGM = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/Music/Channel.mp3");
             sndBGM.SetLoop(true);

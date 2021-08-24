@@ -56,8 +56,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             OKButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/OK Button", new Vector2(565, 380), OnButtonOver, CreateMissionSelect);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-            RoomNameInput = new TextInput(fntArial12, sprPixel, new Vector2(270, 255), new Vector2(314, 20));
-            PasswordInput = new TextInput(fntArial12, sprPixel, new Vector2(470, 287), new Vector2(84, 20), null, true);
+            RoomNameInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(270, 255), new Vector2(314, 20));
+            PasswordInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(470, 287), new Vector2(84, 20), null, true);
 
             RoomNameInput.SetText("Let's have fun!");
         }

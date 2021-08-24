@@ -11,6 +11,7 @@ namespace ProjectEternity.Core.Item
     {
         public delegate void OnConfirmDelegate(string InputMessage);
 
+        private Texture2D sprPixel;
         private Texture2D sprCursor;
         private SpriteFont fntText;
 
@@ -28,14 +29,17 @@ namespace ProjectEternity.Core.Item
         private int MessageStartIndex;//Index of the starting letter of the message to draw.
         private int MessageCursorIndex;//Index of the typing cursor in the message.
         private float MessageCursorPosition;//X position of the cursor, based on its index.
+        private int MessageSelectionCursorIndex;
+        private float MessageSelectionCursorPosition;
         private double BlinkingTimer;
         private bool IsCursorVisible;
 
         private Keys[] LastPressedKeys;
 
-        public TextInput(SpriteFont fntText, Texture2D sprCursor, Vector2 TextInputPosition, Vector2 TextInputSize, OnConfirmDelegate OnConfirm = null, bool DigitsOnly = false)
+        public TextInput(SpriteFont fntText, Texture2D sprPixel, Texture2D sprCursor, Vector2 TextInputPosition, Vector2 TextInputSize, OnConfirmDelegate OnConfirm = null, bool DigitsOnly = false)
         {
             this.fntText = fntText;
+            this.sprPixel = sprPixel;
             this.sprCursor = sprCursor;
             this.TextInputPosition = TextInputPosition;
             this.TextInputSize = TextInputSize;
@@ -60,16 +64,45 @@ namespace ProjectEternity.Core.Item
         public void Update(GameTime gameTime)
         {
             if (MouseHelper.MouseStateCurrent.X >= TextInputPosition.X && MouseHelper.MouseStateCurrent.Y >= TextInputPosition.Y
-                && MouseHelper.MouseStateCurrent.X <= TextInputPosition.X + TextInputSize.X && MouseHelper.MouseStateCurrent.Y <= TextInputPosition.Y + TextInputSize.Y
-                && MouseHelper.InputLeftButtonPressed())
+                && MouseHelper.MouseStateCurrent.X <= TextInputPosition.X + TextInputSize.X && MouseHelper.MouseStateCurrent.Y <= TextInputPosition.Y + TextInputSize.Y)
             {
-                IsActive = true;
-                IsCursorVisible = true;
-                BlinkingTimer = 0d;
+                if (MouseHelper.InputLeftButtonPressed())
+                {
+                    IsActive = true;
+                    IsCursorVisible = true;
+                    BlinkingTimer = 0d;
+                    MessageSelectionCursorIndex = MessageCursorIndex;
+
+                    int MouseCursorPosition = GetMouseCursorPosition();
+                    MessageCursorIndex = MouseCursorPosition;
+                    UpdateMessengerCursor();
+                    MessageSelectionCursorIndex = GetMouseCursorPosition();
+                    MessageSelectionCursorPosition = GetCursorPosition(MessageSelectionCursorIndex);
+                }
+                else if (MouseHelper.MouseMoved() && MouseHelper.InputLeftButtonHold())
+                {
+                    MessageCursorIndex = GetMouseCursorPosition();
+
+                    if (MessageCursorIndex >= TextVisible.Length && MessageStartIndex + MessageCursorIndex + 1 < Text.Length)
+                    {
+                        ++MessageCursorIndex;
+                        ++MessageStartIndex;
+                    }
+                    else if (MessageCursorIndex <= MessageStartIndex && MessageStartIndex - 1 >= 0)
+                    {
+                        --MessageCursorIndex;
+                        --MessageStartIndex;
+                    }
+
+                    MessageCursorPosition = GetCursorPosition(MessageCursorIndex);
+                    MessageSelectionCursorPosition = GetCursorPosition(MessageSelectionCursorIndex);
+                    UpdateMessengerCursor(false);
+                }
             }
             else if (MouseHelper.InputLeftButtonPressed())
             {
                 IsActive = false;
+                MessageSelectionCursorIndex = MessageCursorIndex;
             }
 
             if (IsActive)
@@ -84,6 +117,35 @@ namespace ProjectEternity.Core.Item
 
                 ReadKeys();
             }
+        }
+
+        private int GetMouseCursorPosition()
+        {
+            float MouseX = MouseHelper.MouseStateCurrent.X - TextInputPosition.X;
+            float LastTextX = 0;
+
+            for (int i = 1; i <= TextVisible.Length; ++i)
+            {
+                float TextX = fntText.MeasureString(TextVisible.Substring(0, i)).X;
+
+                if (MouseX <= TextX)
+                {
+                    float SelectedCharacterSize = TextX - LastTextX;
+
+                    if (MouseX <= TextX - SelectedCharacterSize / 2)
+                    {
+                        return MessageStartIndex + i - 1;
+                    }
+                    else
+                    {
+                        return MessageStartIndex + i;
+                    }
+                }
+
+                LastTextX = TextX;
+            }
+
+            return TextVisible.Length;
         }
 
         public void SetText(string NewText)
@@ -117,10 +179,7 @@ namespace ProjectEternity.Core.Item
                             break;
 
                         case Keys.OemComma:
-                            Text += "'";
-                            TextVisible = Text;
-                            MessageCursorIndex++;
-                            UpdateMessengerCursor();
+                            AddText("'");
                             break;
 
                         case Keys.Enter:
@@ -144,26 +203,37 @@ namespace ProjectEternity.Core.Item
                             break;
 
                         case Keys.Space:
-                            Text += " ";
-                            TextVisible = Text;
-                            MessageCursorIndex++;
-                            UpdateMessengerCursor();
+                            AddText(" ");
                             break;
 
                         case Keys.Back:
-                            if (MessageCursorIndex > 0)
+                            if (MessageSelectionCursorIndex != MessageCursorIndex)
                             {
-                                Text = Text.Remove(--MessageCursorIndex, 1);
-                                UpdateMessengerCursor();
+                                DeleteSelection();
                             }
+                            else
+                            {
+                                if (MessageCursorIndex > 0)
+                                {
+                                    Text = Text.Remove(--MessageCursorIndex, 1);
+                                }
+                            }
+                            UpdateMessengerCursor();
                             break;
 
                         case Keys.Delete:
-                            if (MessageCursorIndex < Text.Length)
+                            if (MessageSelectionCursorIndex != MessageCursorIndex)
                             {
-                                Text = Text.Remove(MessageCursorIndex, 1);
-                                UpdateMessengerCursor();
+                                DeleteSelection();
                             }
+                            else
+                            {
+                                if (MessageCursorIndex < Text.Length)
+                                {
+                                    Text = Text.Remove(MessageCursorIndex, 1);
+                                }
+                            }
+                            UpdateMessengerCursor();
                             break;
 
                         case Keys.D0:
@@ -186,10 +256,11 @@ namespace ProjectEternity.Core.Item
                         case Keys.NumPad7:
                         case Keys.NumPad8:
                         case Keys.NumPad9:
-                            Text += ActiveKey.ToString().Replace("D", "").Replace("NumPad", "");
-                            TextVisible = Text;
-                            MessageCursorIndex++;
-                            UpdateMessengerCursor();
+                            AddText(ActiveKey.ToString().Replace("D", "").Replace("NumPad", ""));
+                            break;
+
+                        case Keys.Divide:
+                            AddText("/");
                             break;
 
                         default:
@@ -200,24 +271,56 @@ namespace ProjectEternity.Core.Item
 
                             if (KeyboardHelper.KeyHold(Keys.LeftShift) || KeyboardHelper.KeyHold(Keys.RightShift))
                             {
-                                Text += ActiveKey.ToString();
+                                AddText(ActiveKey.ToString());
                             }
                             else
                             {
-                                Text += ActiveKey.ToString().ToLower();
+                                AddText(ActiveKey.ToString().ToLower());
                             }
-                            TextVisible = Text;
-                            MessageCursorIndex++;
-                            UpdateMessengerCursor();
                             break;
                     }
                 }
             }
 
+            if (PressedKeys.Length > 0)
+            {
+                IsCursorVisible = true;
+                BlinkingTimer = 0d;
+            }
+
             LastPressedKeys = PressedKeys;
         }
 
-        private void UpdateMessengerCursor()
+        private void AddText(string TextToAdd)
+        {
+            if (MessageCursorIndex == Text.Length)
+            {
+                Text += TextToAdd;
+            }
+            else
+            {
+                Text = Text.Insert(MessageCursorIndex, TextToAdd);
+            }
+
+            TextVisible = Text;
+            MessageCursorIndex += TextToAdd.Length;
+            UpdateMessengerCursor();
+        }
+
+        private void DeleteSelection()
+        {
+            if (MessageSelectionCursorIndex > MessageCursorIndex)
+            {
+                Text = Text.Remove(MessageCursorIndex, MessageSelectionCursorIndex - MessageCursorIndex);
+            }
+            else
+            {
+                Text = Text.Remove(MessageSelectionCursorIndex, MessageCursorIndex - MessageSelectionCursorIndex);
+                MessageCursorIndex -= MessageCursorIndex - MessageSelectionCursorIndex;
+            }
+        }
+
+        private void UpdateMessengerCursor(bool UpdateCursor = true)
         {
             if (MessageCursorIndex < MessageStartIndex)
             {
@@ -225,45 +328,59 @@ namespace ProjectEternity.Core.Item
                 {
                     MessageStartIndex--;
                 }
-
-                TextVisible = Text.Substring(MessageStartIndex);
-
-                while (fntText.MeasureString(TextVisible).X > TextInputSize.X)
-                {
-                    TextVisible = TextVisible.Substring(0, TextVisible.Length - 1);
-                }
             }
 
-            MessageCursorPosition = fntText.MeasureString(Text.Substring(MessageStartIndex, MessageCursorIndex - MessageStartIndex)).X;
+            float CursorPosition = fntText.MeasureString(Text.Substring(MessageStartIndex, MessageCursorIndex - MessageStartIndex)).X;
 
-            //Crop the text so it fits in the message box.
+            while (CursorPosition > TextInputSize.X)
+            {
+                ++MessageStartIndex;
+                CursorPosition = fntText.MeasureString(Text.Substring(MessageStartIndex, MessageCursorIndex - MessageStartIndex)).X;
+            }
+
+            TextVisible = Text.Substring(MessageStartIndex);
+
+            while (fntText.MeasureString(TextVisible).X > TextInputSize.X)
+            {
+                TextVisible = TextVisible.Substring(0, TextVisible.Length - 1);
+            }
+
+            if (UpdateCursor)
+            {
+                MessageCursorPosition = GetCursorPosition(MessageCursorIndex);
+                MessageSelectionCursorIndex = MessageCursorIndex;
+            }
+        }
+
+        private float GetCursorPosition(int MessageCursorIndex)
+        {
+            if (MessageCursorIndex - MessageStartIndex < 0)
+            {
+                return 0;
+            }
+
+            float MessageCursorPosition = fntText.MeasureString(Text.Substring(MessageStartIndex, MessageCursorIndex - MessageStartIndex)).X;
+
             if (MessageCursorPosition > TextInputSize.X)
             {
-                TextVisible = Text.Substring(MessageStartIndex);
-
-                while ((TextVisible.Length + MessageStartIndex) > MessageCursorIndex)
-                {
-                    TextVisible = TextVisible.Substring(0, TextVisible.Length - 1);
-                }
-
-                while (fntText.MeasureString(TextVisible).X > TextInputSize.X)
-                {
-                    TextVisible = TextVisible.Substring(1, TextVisible.Length - 1);
-                    MessageStartIndex++;
-                }
-
-                //Update the real cursor position.
                 if (MessageCursorIndex - MessageStartIndex >= TextVisible.Length)
                 {
-                    MessageCursorPosition = fntText.MeasureString(TextVisible).X;
+                    MessageCursorPosition =  fntText.MeasureString(TextVisible).X;
                 }
             }
             else
             {
-                TextVisible = Text.Substring(MessageStartIndex);
-                //Get the real cursor position.
-                MessageCursorPosition = fntText.MeasureString(TextVisible.Substring(0, MessageCursorIndex - MessageStartIndex)).X;
+                if (MessageCursorIndex - MessageStartIndex > TextVisible.Length)
+                {
+                    MessageCursorPosition = fntText.MeasureString(TextVisible.Substring(0, TextVisible.Length)).X;
+                }
+                else
+                {
+                    MessageCursorPosition = fntText.MeasureString(TextVisible.Substring(0, MessageCursorIndex - MessageStartIndex)).X;
+                }
             }
+
+            return MessageCursorPosition;
         }
 
         private void EreaseText(string InputMessage)
@@ -276,6 +393,18 @@ namespace ProjectEternity.Core.Item
 
         public void Draw(CustomSpriteBatch g)
         {
+            if (MessageSelectionCursorIndex >= 0 && MessageSelectionCursorIndex != MessageCursorIndex)
+            {
+                if (MessageSelectionCursorPosition > MessageCursorPosition)
+                {
+                    g.Draw(sprPixel, new Rectangle((int)(TextInputPosition.X + MessageCursorPosition), (int)TextInputPosition.Y + 1, (int)(MessageSelectionCursorPosition - MessageCursorPosition), (int)TextInputSize.Y - 2), Color.FromNonPremultiplied(255, 255, 255, 127));
+                }
+                else
+                {
+                    g.Draw(sprPixel, new Rectangle((int)(TextInputPosition.X + MessageSelectionCursorPosition), (int)TextInputPosition.Y + 1, (int)(MessageCursorPosition - MessageSelectionCursorPosition), (int)TextInputSize.Y - 2), Color.FromNonPremultiplied(255, 255, 255, 127));
+                }
+            }
+
             if (IsActive && IsCursorVisible)
             {
                 g.Draw(sprCursor, new Rectangle((int)(TextInputPosition.X + MessageCursorPosition), (int)TextInputPosition.Y + 1, 1, (int)TextInputSize.Y - 2), Color.Black);
