@@ -49,6 +49,26 @@ namespace XNA_Content_Builder
 
                 #endregion
 
+                #region Sprite Sheets
+
+                Files = Directory.GetFiles("../Content/Animations/Sprite Sheets", "*.png", SearchOption.AllDirectories);
+                // Tell the ContentBuilder what to build.
+                for (int F = 0; F < Files.Count(); F++)
+                {
+                    //if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
+                        Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                }
+
+                Files = Directory.GetFiles("../Content/Animations/Sprites", "*.png", SearchOption.AllDirectories);
+                // Tell the ContentBuilder what to build.
+                for (int F = 0; F < Files.Count(); F++)
+                {
+                    if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
+                        Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                }
+
+                #endregion
+
                 // Build this new model data.
                 string buildError = Builder.Build();
                 if (!string.IsNullOrEmpty(buildError))

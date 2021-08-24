@@ -114,15 +114,16 @@ namespace Microsoft.Xna.Framework.Content.Builder
         {
             string projectPath = Path.Combine(buildDirectory, "content.contentproj");
             //string outputPath = Path.Combine(buildDirectory, "bin");
-            string outputPath = Directory.GetCurrentDirectory();
+            string CurrentDirectory = Directory.GetCurrentDirectory();
+            string outputPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
 
             // Create the build project.
-            projectRootElement = ProjectRootElement.Create(outputPath);
+            projectRootElement = ProjectRootElement.Create(outputPath + "\\Content");
 
             // Include the standard targets file that defines how to build XNA Framework content.
             /*projectRootElement.AddImport("$(MSBuildExtensionsPath)\\Microsoft\\XNA Game Studio\\" +
                                          "v4.0\\Microsoft.Xna.GameStudio.ContentPipeline.targets");*/
-            projectRootElement.AddImport(outputPath + "\\Microsoft.Xna.GameStudio.ContentPipeline.targets");
+            projectRootElement.AddImport(CurrentDirectory + "\\Microsoft.Xna.GameStudio.ContentPipeline.targets");
 
             buildProject = new Project(projectRootElement);
 
@@ -130,7 +131,7 @@ namespace Microsoft.Xna.Framework.Content.Builder
             buildProject.SetProperty("XnaProfile", "Reach");
             buildProject.SetProperty("XnaFrameworkVersion", "v4.0");
             buildProject.SetProperty("Configuration", "Release");
-            buildProject.SetProperty("OutputPath", outputPath.Substring(0, outputPath.Length - 9));
+            buildProject.SetProperty("OutputPath", outputPath);
 
             // Register any custom importers or processors.
             foreach (string pipelineAssembly in pipelineAssemblies)
