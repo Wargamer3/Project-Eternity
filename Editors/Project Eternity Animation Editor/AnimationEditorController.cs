@@ -129,7 +129,7 @@ namespace ProjectEternity.Editors.AnimationEditor
             if (Owner.AnimationViewer.ListOldAnimation.Count > 1)
             {
                 Owner.AnimationViewer.Undo();
-                Owner.ActiveAnimation = (DeathmatchAnimationEditor)Owner.AnimationViewer.ActiveAnimation;
+                Owner.ActiveAnimation = Owner.AnimationViewer.ActiveAnimation;
                 Owner.panTimelineViewer.SetActiveAnimation(Owner.AnimationViewer.ActiveAnimation);
                 FinalizeLayerSelection(Owner.ActiveAnimation.ListAnimationLayer[0]);
                 Owner.panTimelineViewer.UpdateTimelineVisibleItems();

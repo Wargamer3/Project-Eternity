@@ -78,7 +78,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Deathmatch Animation Editor.cs" />
     <Compile Include="AnimationEditorController.cs" />
     <Compile Include="AnimationEditorController Events.cs" />
     <Compile Include="Project Eternity Animation Editor.cs">

@@ -28,7 +28,7 @@ namespace ProjectEternity.Editors.AnimationEditor
 
         public CheckBox cbShowBorderBoxes;
         public CheckBox cbShowNextPositions;
-        public DeathmatchAnimationEditor ActiveAnimation;
+        public AnimationClassEditor ActiveAnimation;
 
         private AnimationEditorController Controller;
         public AnimationProperties PropertiesDialog;
@@ -123,7 +123,7 @@ namespace ProjectEternity.Editors.AnimationEditor
 
             AnimationViewer.Preload();
 
-            ActiveAnimation = new DeathmatchAnimationEditor(Name);
+            ActiveAnimation = new AnimationClassEditor(Name);
             ActiveAnimation.Content = new ContentManager(AnimationViewer.Services);
             ActiveAnimation.Content.RootDirectory = "Content";
             AnimationViewer.ActiveAnimation = ActiveAnimation;
