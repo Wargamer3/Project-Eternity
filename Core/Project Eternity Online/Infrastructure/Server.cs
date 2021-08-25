@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace ProjectEternity.Core.Online
 {

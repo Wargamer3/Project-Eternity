@@ -92,7 +92,7 @@
     <Compile Include="Effects\Projectile Effects.cs" />
     <Compile Include="Formula Parser.cs" />
     <Compile Include="Ini File.cs" />
-    <Compile Include="Interactive Button.cs" />
+    <Compile Include="UI\Interactive Button.cs" />
     <Compile Include="Particle system\Particle Settings.cs" />
     <Compile Include="Particle system\Particle System.cs" />
     <Compile Include="Particle system\Particle Vertex.cs" />
@@ -100,10 +100,10 @@
     <Compile Include="Polygon.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scrollbar.cs" />
+    <Compile Include="UI\Scrollbar.cs" />
     <Compile Include="Sprite.cs" />
     <Compile Include="Tag System.cs" />
-    <Compile Include="Text Input.cs" />
+    <Compile Include="UI\Text Input.cs" />
     <Compile Include="Text Helper.cs" />
   </ItemGroup>
   <ItemGroup>

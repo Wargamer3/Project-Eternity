@@ -697,7 +697,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (--OnlinePlayerUpdateTimer <= 0)
             {
-                OnlinePlayerUpdateTimer = 5;
+                OnlinePlayerUpdateTimer = 2;
                 OnlineServer.SharedWriteBuffer.ClearWriteBuffer();
 
                 for (int L = 0; L < ListLayer.Count; L++)
