@@ -56,6 +56,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private InteractiveButton StartButton;
         private InteractiveButton BackToLobbyButton;
 
+        private Scrollbar MissionScrollbar;
+
         private AnimatedSprite PlayerInfo;
         private AnimatedSprite PlayerInfoOutline;
         private AnimatedSprite QuestButton;
@@ -67,6 +69,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private readonly MissionRoomInformations Room;
         private readonly List<MissionInfo> ListMissionInfo;
+        private int MissionInfoStartIndex;
         private string CurrentMissionName;
         private string CurrentMissionDescription;
         private Texture2D sprCurrentMissionImage;
@@ -141,6 +144,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             QuestNormalButton.CanBeChecked = true;
             QuestHardButton.CanBeChecked = true;
 
+            MissionScrollbar = new Scrollbar(Content.Load<Texture2D>("Triple Thunder/Menus/Common/Scrollbar 2"), new Vector2(512, 108), 250, 0, OnMissionScrollbarChange);
+
             IsHost = false;
             foreach (Player ActivePlayer in Room.GetLocalPlayers())
             {
@@ -210,6 +215,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 ActiveButton.Update(gameTime);
             }
+
+            MissionScrollbar.Update(gameTime);
 
             foreach (Player ActiveRobot in Room.ListRoomPlayer)
             {
@@ -335,7 +342,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-
         #region Button methods
 
         private void ReturnToLobby()
@@ -426,7 +432,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         #endregion
 
-
         private void ChangeDifficulty(string Difficulty)
         {
             Room.CurrentDifficulty = Difficulty;
@@ -461,6 +466,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 ListMissionInfo.Add(new MissionInfo(FileName, "Missions/" + Difficulty + "/" + FileName, Description, sprMissionImage));
             }
+
+            MissionScrollbar.ChangeMaxValue(ListMissionInfo.Count - 4);
         }
 
         private void UpdateSelectedMission(MissionInfo SelectedMissionInfo)
@@ -500,6 +507,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Room.RoomSubtype = RoomSubtype;
         }
 
+        private void OnMissionScrollbarChange(float ScrollbarValue)
+        {
+            MissionInfoStartIndex = (int)ScrollbarValue;
+        }
+
         public override void BeginDraw(CustomSpriteBatch g)
         {
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -536,6 +548,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Draw(g);
             }
 
+            MissionScrollbar.Draw(g);
+
             g.DrawString(fntText, Room.RoomName, new Vector2(68, 7), Color.White);
 
             g.DrawStringMiddleAligned(fntText, CurrentMissionName, new Vector2(170, 114), Color.White);
@@ -553,21 +567,21 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 DrawPlayerBox(g, DrawX, DrawY, Room.ListRoomPlayer[P], true);
             }
 
-            for (int M = 0; M < ListMissionInfo.Count; ++M)
+            for (int M = MissionInfoStartIndex, i = 0 ; M < ListMissionInfo.Count && i < 4; ++M, ++i)
             {
-                QuestButton.Draw(g, new Vector2(405, 140 + M * 64), Color.White);
-                g.DrawString(fntText, (M + 1).ToString().PadLeft(2, '0'), new Vector2(395, 120 + M * 64), Color.FromNonPremultiplied(0, 255, 0, 255));
-                g.DrawString(fntText, "1", new Vector2(485, 120 + M * 64), Color.White);
-                g.DrawString(fntText, ListMissionInfo[M].MissionName, new Vector2(328, 145 + M * 64), Color.FromNonPremultiplied(0, 255, 0, 255));
+                QuestButton.Draw(g, new Vector2(405, 140 + i * 64), Color.White);
+                g.DrawString(fntText, (M + 1).ToString().PadLeft(2, '0'), new Vector2(395, 120 + i * 64), Color.FromNonPremultiplied(0, 255, 0, 255));
+                g.DrawString(fntText, "1", new Vector2(485, 120 + i * 64), Color.White);
+                g.DrawString(fntText, ListMissionInfo[M].MissionName, new Vector2(328, 145 + i * 64), Color.FromNonPremultiplied(0, 255, 0, 255));
 
                 Rectangle QuestButtonCollisionBox = new Rectangle(405 - (int)QuestButton.Origin.X,
-                                                                140 - (int)QuestButton.Origin.Y + M * 64,
+                                                                140 - (int)QuestButton.Origin.Y + i * 64,
                                                                 QuestButton.SpriteWidth,
                                                                 QuestButton.SpriteHeight);
 
                 if (QuestButtonCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                 {
-                    PlayerInfoOutline.Draw(g, new Vector2(405, 140 + M * 64), Color.White);
+                    PlayerInfoOutline.Draw(g, new Vector2(405, 140 + i * 64), Color.White);
                 }
             }
         }
