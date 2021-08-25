@@ -807,7 +807,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void AddPlayer(Player NewPlayer, int LayerIndex, Vector2 Position, uint ID)
         {
-            RobotAnimation SpawnedPlayer = new RobotAnimation("Players/" + NewPlayer.Equipment.CharacterType, ListLayer[LayerIndex], Position, 0, NewPlayer.Equipment, PlayerSFXGenerator, new List<Weapon>());
+            RobotAnimation SpawnedPlayer = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, ListLayer[LayerIndex], Position, 0, NewPlayer.Equipment, PlayerSFXGenerator, new List<Weapon>());
 
             SpawnedPlayer.Weapons.ActivateSecondaryWeapon();
 

@@ -64,9 +64,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             CancelButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/Cancel Button", new Vector2(508, 510), OnButtonOver, Cancel);
             OKButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/OK Button", new Vector2(590, 510), OnButtonOver, Confirm);
 
-            foreach (string ActiveCharacterPath in Directory.EnumerateFiles("Content/Units/Triple Thunder/Players"))
+            foreach (string ActiveCharacterPath in Directory.EnumerateFiles("Content/Units/Triple Thunder/Characters"))
             {
-                string ActiveCharacter = ActiveCharacterPath.Remove(0, 37);
+                string ActiveCharacter = ActiveCharacterPath.Remove(0, 40);
                 ActiveCharacter = ActiveCharacter.Remove(ActiveCharacter.Length - 4);
 
                 CharacterInfo NewCharacterInfo = new CharacterInfo(ActiveCharacter,

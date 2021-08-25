@@ -193,7 +193,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             foreach (Player ActivePlayer in Room.ListRoomPlayer)
             {
-                ActivePlayer.CharacterPreview = new RobotAnimation("Players/" + ActivePlayer.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerEquipment(), new MuteSFXGenerator(), new List<Weapon>());
+                ActivePlayer.CharacterPreview = new RobotAnimation("Characters/" + ActivePlayer.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerEquipment(), new MuteSFXGenerator(), new List<Weapon>());
             }
         }
 
@@ -273,7 +273,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public void AddPlayer(Player NewPlayer)
         {
             Room.ListRoomPlayer.Add(NewPlayer);
-            NewPlayer.CharacterPreview = new RobotAnimation("Players/" + NewPlayer.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerEquipment(), new MuteSFXGenerator(), new List<Weapon>());
+            NewPlayer.CharacterPreview = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerEquipment(), new MuteSFXGenerator(), new List<Weapon>());
 
             UpdateReadyOrHost();
         }
@@ -310,7 +310,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 sprActivePlayerIcon = DicCharacterIconByName[PlayerToUpdate.Equipment.CharacterType];
             }
 
-            PlayerToUpdate.CharacterPreview = new RobotAnimation("Players/" + PlayerToUpdate.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerEquipment(), new MuteSFXGenerator(), new List<Weapon>());
+            PlayerToUpdate.CharacterPreview = new RobotAnimation("Characters/" + PlayerToUpdate.Equipment.CharacterType, null, Vector2.Zero, 0, new PlayerEquipment(), new MuteSFXGenerator(), new List<Weapon>());
         }
 
         public void UpdateReadyOrHost()
