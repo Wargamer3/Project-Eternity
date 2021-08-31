@@ -33,9 +33,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         void PlayRollSound(RollSounds RollSound);
         void PlayDashSound(DashSounds DashSound);
 
-
-
-
         //Non customizable
         void PlayLandSound();
         void PlaySpawnSound();

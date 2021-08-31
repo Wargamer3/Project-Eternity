@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.TripleThunderScreen;
 
 namespace ProjectEternity.GameScreens.TripleThunderServer
 {

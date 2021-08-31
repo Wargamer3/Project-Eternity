@@ -69,6 +69,7 @@
     <Compile Include="Game Scripts\Send Game Data Script Server.cs" />
     <Compile Include="Game Scripts\Receive Game Data Script Server.cs" />
     <Compile Include="Game Scripts\Shoot Bullet Script Server.cs" />
+    <Compile Include="Online Helper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

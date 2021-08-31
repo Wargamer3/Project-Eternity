@@ -109,6 +109,8 @@
     <Compile Include="Menus\Rooms\Mission Room Informations.cs" />
     <Compile Include="Menus\Rooms\Battle Room Informations.cs" />
     <Compile Include="Menus\Rooms\Room Informations.cs" />
+    <Compile Include="Online\In Game\Create SFX Script Client.cs" />
+    <Compile Include="Online\In Game\Create VFX Script Client.cs" />
     <Compile Include="Online\Menus\Ask Change Room Extras Script Client.cs" />
     <Compile Include="Online\Menus\Change Room Extras Mission Script Client.cs" />
     <Compile Include="Online\Menus\Change Room Extras Battle Script Client.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Online\In Game\Game Ended Script Server.cs" />
     <Compile Include="Online\Infrastructure\Triple Thunder Client Group.cs" />
     <Compile Include="Online\Menus\Join Room Failed Script Client.cs" />
+    <Compile Include="Online\Online Helper.cs" />
     <Compile Include="Online\Receive Game Data Script Client.cs" />
     <Compile Include="Online\In Game\Send Player Respawn Script Client.cs" />
     <Compile Include="Online\In Game\Send Player Respawn Script Server.cs" />

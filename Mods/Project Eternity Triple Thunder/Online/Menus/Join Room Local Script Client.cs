@@ -2,7 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
-using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 {
@@ -61,13 +60,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
                 NewFightingZone = new FightingZone(Owner);
                 NewFightingZone.ListGameScreen = ScreenOwner.ListGameScreen;
 
-                DicNewScript.Add(SendPlayerUpdateScriptClient.ScriptName, new SendPlayerUpdateScriptClient(Owner));
-                DicNewScript.Add(SendPlayerRespawnScriptClient.ScriptName, new SendPlayerRespawnScriptClient(Owner));
-                DicNewScript.Add(SendPlayerDamageScriptClient.ScriptName, new SendPlayerDamageScriptClient(Owner));
-                DicNewScript.Add(ShootBulletScriptClient.ScriptName, new ShootBulletScriptClient(Owner));
-                DicNewScript.Add(ReceiveGameDataScriptClient.ScriptName, new ReceiveGameDataScriptClient(Owner));
-                DicNewScript.Add(GoToNextMapScriptClient.ScriptName, new GoToNextMapScriptClient(Owner));
-                DicNewScript.Add(GameEndedScriptClient.ScriptName, new GameEndedScriptClient(Owner));
+                DicNewScript = OnlineHelper.GetTripleThunderScriptsClient(Owner);
                 Host.IsGameReady = true;
             }
             if (RoomType == RoomInformations.RoomTypeMission)

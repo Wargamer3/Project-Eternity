@@ -50,11 +50,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
                 NewGame.AddLocalCharacter(ActivePlayer);
 
                 //Add Game Specific scripts
-                Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
-                DicNewScript.Add(FinishedLoadingScriptServer.ScriptName, new FinishedLoadingScriptServer(CreatedGroup));
-                DicNewScript.Add(SendPlayerUpdateScriptServer.ScriptName, new SendPlayerUpdateScriptServer(CreatedGroup, ActivePlayer));
-                DicNewScript.Add(ShootBulletScriptServer.ScriptName, new ShootBulletScriptServer(CreatedGroup, ActivePlayer));
-                DicNewScript.Add(AskTripleThunderGameDataScriptServer.ScriptName, new AskTripleThunderGameDataScriptServer(CreatedGroup));
+                Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetTripleThunderScriptsServer(CreatedGroup, ActivePlayer);
                 ActiveOnlinePlayer.AddOrReplaceScripts(DicNewScript);
             }
 

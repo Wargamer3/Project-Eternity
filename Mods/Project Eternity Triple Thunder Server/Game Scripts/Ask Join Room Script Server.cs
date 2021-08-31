@@ -69,11 +69,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
                     CurrentGame.AddPlayerFromSpawn(ActivePlayer, CurrentGame.NextID + (uint.MaxValue - 100), true, out LayerIndex);
 
                     //Add Game Specific scripts
-                    DicNewScript = new Dictionary<string, OnlineScript>();
-                    DicNewScript.Add(FinishedLoadingScriptServer.ScriptName, new FinishedLoadingScriptServer(ActiveGroup));
-                    DicNewScript.Add(SendPlayerUpdateScriptServer.ScriptName, new SendPlayerUpdateScriptServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer));
-                    DicNewScript.Add(ShootBulletScriptServer.ScriptName, new ShootBulletScriptServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer));
-                    DicNewScript.Add(AskTripleThunderGameDataScriptServer.ScriptName, new AskTripleThunderGameDataScriptServer((TripleThunderClientGroup)ActiveGroup));
+                    DicNewScript = OnlineHelper.GetTripleThunderScriptsServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer);
                     Sender.AddOrReplaceScripts(DicNewScript);
 
                     foreach (IOnlineConnection OtherPlayer in ActiveGroup.Room.ListOnlinePlayer)
