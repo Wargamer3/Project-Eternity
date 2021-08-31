@@ -27,44 +27,56 @@ namespace XNA_Content_Builder
 
                 #region Units map icons
 
-                Files = Directory.GetFiles("../Content/Units", "*.png", SearchOption.AllDirectories);
-                // Tell the ContentBuilder what to build.
-                for (int F = 0; F < Files.Count(); F++)
+                if (Directory.Exists("../Content/Units"))
                 {
-                    if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
-                        Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                    Files = Directory.GetFiles("../Content/Units", "*.png", SearchOption.AllDirectories);
+                    // Tell the ContentBuilder what to build.
+                    for (int F = 0; F < Files.Count(); F++)
+                    {
+                        if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
+                            Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                    }
                 }
 
                 #endregion
 
                 #region Map tilesets
 
-                Files = Directory.GetFiles("../Content/Maps/Tilesets", "*.png", SearchOption.AllDirectories);
-                // Tell the ContentBuilder what to build.
-                for (int F = 0; F < Files.Count(); F++)
+                if (Directory.Exists("../Content/Maps/Tilesets"))
                 {
-                    if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
-                        Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                    Files = Directory.GetFiles("../Content/Maps/Tilesets", "*.png", SearchOption.AllDirectories);
+                    // Tell the ContentBuilder what to build.
+                    for (int F = 0; F < Files.Count(); F++)
+                    {
+                        if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
+                            Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                    }
                 }
 
                 #endregion
 
                 #region Sprite Sheets
 
-                Files = Directory.GetFiles("../Content/Animations/Sprite Sheets", "*.png", SearchOption.AllDirectories);
-                // Tell the ContentBuilder what to build.
-                for (int F = 0; F < Files.Count(); F++)
+                if (Directory.Exists("../Content/Animations/Sprite Sheets"))
                 {
-                    //if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
+                    Files = Directory.GetFiles("../Content/Animations/Sprite Sheets", "*.png", SearchOption.AllDirectories);
+                    // Tell the ContentBuilder what to build.
+                    for (int F = 0; F < Files.Count(); F++)
+                    {
+                        //if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
                         Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                    }
                 }
 
-                Files = Directory.GetFiles("../Content/Animations/Sprites", "*.png", SearchOption.AllDirectories);
-                // Tell the ContentBuilder what to build.
-                for (int F = 0; F < Files.Count(); F++)
+                if (Directory.Exists("../Content/Animations/Sprites"))
                 {
-                    if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
-                        Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                    Files = Directory.GetFiles("../Content/Animations/Sprites", "*.png", SearchOption.AllDirectories);
+                    // Tell the ContentBuilder what to build.
+                    for (int F = 0; F < Files.Count(); F++)
+                    {
+                        if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
+                            Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                    }
                 }
 
                 #endregion
