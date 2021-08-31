@@ -398,6 +398,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             if (e.X < 0)
                 return;
 
+            int MouseFrameHalf = (e.X - TimelineStartX + ScrollbarStartIndex + 4) / 8;
             int MouseFrame = (e.X - TimelineStartX + ScrollbarStartIndex) / 8;
 
             #region Left Button
@@ -437,10 +438,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     }
                     else if (ActiveTimelineEvent != null)
                     {
-                        if (MouseFrame == MouseFrameOld || MouseFrame < ActiveTimelineEvent.SpawnFrame)
+                        if (MouseFrame == MouseFrameOld)
                             return;
 
                         AnimationObjectKeyFrame ExistingKeyFrameObject;
+                        int NextKeyFrame;
 
                         #region Move Timeline
 
@@ -458,8 +460,14 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                                 //Remove the Spawner from the Timeline.
                                 ActiveLayer.RemoveTimelineEvent(ActiveTimelineEvent.SpawnFrame, ActiveTimelineEvent);
 
-                                ActiveTimelineEvent.DeleteKeyFrame(MouseFrameOriginal);
-                                ActiveTimelineEvent.CreateKeyFrame(ActiveLayer, MouseFrame);
+                                ActiveTimelineEvent.GetSurroundingKeyFrames(ActiveTimelineEvent.SpawnFrame - 1, out _, out NextKeyFrame);
+                                if (NextKeyFrame  == MouseFrame)//Don't reduce the timeline if there's a keyframe there
+                                    return;
+
+                                AnimationObjectKeyFrame KeyFrameToMove = ActiveTimelineEvent.Get(ActiveTimelineEvent.SpawnFrame);
+                                ActiveTimelineEvent.Remove(ActiveTimelineEvent.SpawnFrame);
+                                ActiveTimelineEvent.Add(MouseFrame, KeyFrameToMove);
+
                                 MouseEventOriginal = e;
 
                                 //Replace the old Tag.
@@ -474,10 +482,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                             #region Right
 
                             case TimelineResizeSides.Right:
-                                if (ActiveTimelineEvent.SpawnFrame >= MouseFrame)
+                                if (ActiveTimelineEvent.SpawnFrame >= MouseFrame || MouseFrame < ActiveTimelineEvent.SpawnFrame)
                                     return;
 
-                                int NextKeyFrame;
                                 ActiveTimelineEvent.GetSurroundingKeyFrames(MouseFrame - 1, out _, out NextKeyFrame);
                                 if (NextKeyFrame >= MouseFrame)//Don't reduce the timeline if there's a keyframe there
                                     return;
@@ -496,6 +503,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                             #region All
 
                             case TimelineResizeSides.All:
+                                if (MouseFrame < ActiveTimelineEvent.SpawnFrame)
+                                    return;
+
                                 MouseEventOld = e;
 
                                 //Remove the Spawner from the Timeline.
@@ -519,7 +529,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                             case TimelineResizeSides.MoveKeyFrame:
 
-                                if (MouseFrame < ActiveTimelineEvent.DeathFrame)
+                                if (MouseFrame < ActiveTimelineEvent.DeathFrame || MouseFrame < ActiveTimelineEvent.SpawnFrame)
                                 {
                                     ActiveTimelineEvent.MoveKeyFrame(MouseFrameOriginal, MouseFrame);
                                     MouseEventOriginal = e;
@@ -559,7 +569,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                     if (ItemTag != null)
                     {
-                        if (MouseFrame == ItemTag.SpawnFrame || MouseFrame == ItemTag.DeathFrame)
+                        if (MouseFrame == ItemTag.SpawnFrame || MouseFrameHalf == ItemTag.DeathFrame)
                             Cursor.Current = Cursors.VSplit;
                         else if (MouseFrame < ItemTag.DeathFrame)
                             Cursor.Current = Cursors.Hand;

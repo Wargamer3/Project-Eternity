@@ -171,9 +171,17 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 HighestPreviousKeyFrameObject.NextKeyFrame = KeyFrame;
             }
 
-            AnimationObjectKeyFrame ActiveAnimationSprite = HighestPreviousKeyFrameObject.Copy(ActiveLayer, NextKeyFrame);
+            if (HighestPreviousKeyFrameObject != null)
+            {
+                AnimationObjectKeyFrame ActiveAnimationSprite = HighestPreviousKeyFrameObject.Copy(ActiveLayer, NextKeyFrame);
 
-            Add(KeyFrame, ActiveAnimationSprite);
+                Add(KeyFrame, ActiveAnimationSprite);
+            }
+            else
+            {
+                Add(KeyFrame, null);
+            }
+
             NextEventKeyFrame = KeyFrame;
         }
 
