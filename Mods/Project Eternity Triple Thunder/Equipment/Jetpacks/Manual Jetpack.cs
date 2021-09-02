@@ -49,6 +49,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     {
                         JetpackSFXGenerator.PlayJetpackEndSound(Owner.Sounds.JetpackEndSound);
                     }
+
                     UsedLastUpdate = false;
                 }
 

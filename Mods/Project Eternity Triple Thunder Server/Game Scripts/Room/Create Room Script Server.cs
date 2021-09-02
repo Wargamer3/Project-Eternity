@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             foreach (IOnlineConnection ActivePlayer in CreatedGroup.Room.ListOnlinePlayer)
             {
                 //Add Game Specific scripts
-                Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
+                Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetRoomScriptsServer(NewRoom, Owner);
                 if (NewRoom.RoomType == RoomInformations.RoomTypeMission)
                 {
                     MissionRoomInformations MissionRoom = (MissionRoomInformations)NewRoom;
@@ -53,12 +53,6 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
                     DicNewScript.Add(AskChangeRoomExtrasBattleScriptServer.ScriptName, new AskChangeRoomExtrasBattleScriptServer(BattleRoom));
                 }
 
-                DicNewScript.Add(AskChangeCharacterScriptServer.ScriptName, new AskChangeCharacterScriptServer(NewRoom));
-                DicNewScript.Add(AskChangePlayerTypeScriptServer.ScriptName, new AskChangePlayerTypeScriptServer(NewRoom));
-                DicNewScript.Add(AskChangeTeamScriptServer.ScriptName, new AskChangeTeamScriptServer(NewRoom));
-                DicNewScript.Add(AskChangeMapScriptServer.ScriptName, new AskChangeMapScriptServer(NewRoom, Owner));
-                DicNewScript.Add(AskChangeRoomSubtypeScriptServer.ScriptName, new AskChangeRoomSubtypeScriptServer(NewRoom));
-                DicNewScript.Add(LeaveRoomScriptServer.ScriptName, new LeaveRoomScriptServer(NewRoom, Owner));
                 ActivePlayer.AddOrReplaceScripts(DicNewScript);
             }
         }

@@ -33,13 +33,8 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
                 ActivePlayer.Send(new PlayerJoinedScriptServer(ListJoiningPlayerInfo));
             }
 
-            Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
-            DicNewScript.Add(AskChangeCharacterScriptServer.ScriptName, new AskChangeCharacterScriptServer(JoinedRoom));
-            DicNewScript.Add(AskChangePlayerTypeScriptServer.ScriptName, new AskChangePlayerTypeScriptServer(JoinedRoom));
-            DicNewScript.Add(AskChangeTeamScriptServer.ScriptName, new AskChangeTeamScriptServer(JoinedRoom));
-            DicNewScript.Add(AskChangeMapScriptServer.ScriptName, new AskChangeMapScriptServer(JoinedRoom, Owner));
-            DicNewScript.Add(AskChangeRoomSubtypeScriptServer.ScriptName, new AskChangeRoomSubtypeScriptServer(JoinedRoom));
-            DicNewScript.Add(LeaveRoomScriptServer.ScriptName, new LeaveRoomScriptServer(JoinedRoom, Owner));
+            Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetRoomScriptsServer(JoinedRoom, Owner);
+
             if (JoinedRoom.RoomType == RoomInformations.RoomTypeMission)
             {
                 MissionRoomInformations MissionRoom = (MissionRoomInformations)JoinedRoom;
