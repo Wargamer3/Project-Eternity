@@ -4,7 +4,7 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 {
-    public class SendRoomIDScriptClient : OnlineScript
+    public class SendRoomIDScriptClient : OnlineScript, DelayedExecutableOnlineScript
     {
         public const string ScriptName = "Send Room ID";
 
@@ -16,6 +16,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         private readonly int MaxNumberOfPlayer;
 
         private string RoomID;
+        private GameScreen NewScreen;
 
         public SendRoomIDScriptClient(TripleThunderOnlineClient Owner, GameScreen ScreenOwner, string RoomName, string RoomType, string RoomSubtype, int MaxNumberOfPlayer)
             : base(ScriptName)
@@ -51,26 +52,24 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
                 MissionRoomInformations MissionRoom = new MissionRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer);
                 NewRoom = MissionRoom;
 
-                MissionSelect NewScreen = new MissionSelect(Owner, MissionRoom);
-                NewMissionSelectScreen = NewScreen;
+                MissionSelect NewMissionSelect = new MissionSelect(Owner, MissionRoom);
+                NewScreen = NewMissionSelect;
+                NewMissionSelectScreen = NewMissionSelect;
 
                 DicNewScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameMissionScriptClient(Owner, ScreenOwner.ListGameScreen, MissionRoom));
                 DicNewScript.Add(ChangeRoomExtrasMissionScriptClient.ScriptName, new ChangeRoomExtrasMissionScriptClient(MissionRoom, NewMissionSelectScreen));
-
-                ScreenOwner.PushScreen(NewScreen);
             }
             else
             {
                 BattleRoomInformations BattleRoom = new BattleRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer);
                 NewRoom = BattleRoom;
 
-                BattleSelect NewScreen = new BattleSelect(Owner, BattleRoom);
-                NewMissionSelectScreen = NewScreen;
+                BattleSelect NewBattleSelect = new BattleSelect(Owner, BattleRoom);
+                NewScreen = NewBattleSelect;
+                NewMissionSelectScreen = NewBattleSelect;
 
                 DicNewScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameBattleScriptClient(Owner, ScreenOwner.ListGameScreen, BattleRoom));
                 DicNewScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasBattleScriptClient(BattleRoom, NewMissionSelectScreen));
-
-                ScreenOwner.PushScreen(NewScreen);
             }
 
             DicNewScript.Add(PlayerJoinedScriptClient.ScriptName, new PlayerJoinedScriptClient(NewMissionSelectScreen));
@@ -84,6 +83,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             Host.AddOrReplaceScripts(DicNewScript);
 
             ScreenOwner.RemoveScreen(ScreenOwner);
+
+            Owner.DelayOnlineScript(this);
+        }
+
+        public void ExecuteOnMainThread()
+        {
+            ScreenOwner.PushScreen(NewScreen);
         }
 
         protected override void Read(OnlineReader Sender)

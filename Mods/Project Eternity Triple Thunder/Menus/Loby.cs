@@ -189,6 +189,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Update(GameTime gameTime)
         {
+            OnlineClient.ExecuteDelayedScripts();
+
             if (FMODSystem.sndActiveBGM != sndBGM)
             {
                 sndBGM.PlayAsBGM();

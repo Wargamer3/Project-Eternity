@@ -206,6 +206,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Update(GameTime gameTime)
         {
+            if (OnlineClient != null)
+            {
+                OnlineClient.ExecuteDelayedScripts();
+            }
+
             if (FMODSystem.sndActiveBGM != sndBGM)
             {
                 sndBGM.PlayAsBGM();
@@ -254,10 +259,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (MouseHelper.InputLeftButtonPressed() && IsHost)
             {
-                for (int M = 0; M < ListMissionInfo.Count; ++M)
+                for (int M = MissionInfoStartIndex, i = 0; M < ListMissionInfo.Count && i < 4; ++M, ++i)
                 {
                     Rectangle QuestButtonCollisionBox = new Rectangle(405 - (int)QuestButton.Origin.X,
-                                                                    140 - (int)QuestButton.Origin.Y + M * 64,
+                                                                    140 - (int)QuestButton.Origin.Y + i * 64,
                                                                     QuestButton.SpriteWidth,
                                                                     QuestButton.SpriteHeight);
 

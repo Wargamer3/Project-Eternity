@@ -5,7 +5,7 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 {
-    public class JoinRoomLocalScriptClient : OnlineScript
+    public class JoinRoomLocalScriptClient : OnlineScript, DelayedExecutableOnlineScript
     {
         public const string ScriptName = "Join Room Local";
 
@@ -23,6 +23,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         private byte[] RoomData;
         private bool HasGame;
         private List<Player> ListPlayer;
+        private GameScreen NewScreen;
 
         public JoinRoomLocalScriptClient(TripleThunderOnlineClient Owner, GameScreen ScreenOwner, bool RemoveOwner = false)
             : base(ScriptName)
@@ -70,12 +71,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
                 {
                     NewFightingZone.Rules = new MissionGameRules(MissionRoom, NewFightingZone);
                 }
+
                 NewRoom = MissionRoom;
-                MissionSelect NewScreen = new MissionSelect(Owner, MissionRoom);
+
+                MissionSelect NewMissionSelect = new MissionSelect(Owner, MissionRoom);
+                NewScreen = NewMissionSelect;
+                NewMissionSelectScreen = NewMissionSelect;
+
                 DicNewScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameMissionScriptClient(Owner, ScreenOwner.ListGameScreen, MissionRoom));
-                DicNewScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasMissionScriptClient(MissionRoom, NewScreen));
-                NewMissionSelectScreen = NewScreen;
-                ScreenOwner.PushScreen(NewScreen);
+                DicNewScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasMissionScriptClient(MissionRoom, NewMissionSelect));
             }
             else
             {
@@ -84,12 +88,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
                 {
                     NewFightingZone.Rules = new BattleGameRules(BattleRoom, NewFightingZone);
                 }
+
                 NewRoom = BattleRoom;
-                BattleSelect NewScreen = new BattleSelect(Owner, BattleRoom);
+
+                BattleSelect NewBattleSelect = new BattleSelect(Owner, BattleRoom);
+                NewScreen = NewBattleSelect;
+                NewMissionSelectScreen = NewBattleSelect;
+
                 DicNewScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameBattleScriptClient(Owner, ScreenOwner.ListGameScreen, BattleRoom));
-                DicNewScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasBattleScriptClient(BattleRoom, NewScreen));
-                NewMissionSelectScreen = NewScreen;
-                ScreenOwner.PushScreen(NewScreen);
+                DicNewScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasBattleScriptClient(BattleRoom, NewBattleSelect));
             }
 
             if (HasGame)
@@ -106,6 +113,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             DicNewScript.Add(ChangeRoomSubtypeScriptClient.ScriptName, new ChangeRoomSubtypeScriptClient(NewMissionSelectScreen));
 
             Host.AddOrReplaceScripts(DicNewScript);
+
+            Owner.DelayOnlineScript(this);
+        }
+
+        public void ExecuteOnMainThread()
+        {
+            ScreenOwner.PushScreen(NewScreen);
         }
 
         protected override void Read(OnlineReader Sender)
