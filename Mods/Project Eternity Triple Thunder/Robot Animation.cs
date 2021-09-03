@@ -8,6 +8,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Magic;
 using ProjectEternity.GameScreens.AnimationScreen;
+using ProjectEternity.GameScreens.TripleThunderScreen.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
@@ -1060,6 +1061,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public void CreateExplosion(Vector2 ExplosionCenter, Weapon.ExplosionOptions ExplosionAttributes, Vector2 CollisionGroundResult)
         {
             CurrentLayer.CreateExplosion(ExplosionCenter, this, ExplosionAttributes, CollisionGroundResult);
+        }
+
+        public void SendOnlineSFX(Vector2 SFXPosition, CreateSFXScriptClient.SFXTypes SFXType)
+        {
+            CurrentLayer.SendOnlineSFX(SFXPosition, SFXType);
+        }
+
+        public void SendOnlineVFX(Vector2 VFXPosition, Vector2 VFXSpeed, CreateVFXScriptClient.VFXTypes VFXType)
+        {
+            CurrentLayer.SendOnlineVFX(VFXPosition, VFXSpeed, VFXType);
         }
 
         public void Reload()

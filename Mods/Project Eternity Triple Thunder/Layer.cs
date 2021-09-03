@@ -597,11 +597,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             return Owner.DicMapVariables[VariableName];
         }
 
-        public void DelayOnlineScript(DelayedExecutableOnlineScript NewProjectile)
+        public void DelayOnlineScript(DelayedExecutableOnlineScript ScriptToDelay)
         {
             lock (ListDelayedOnlineCommand)
             {
-                ListDelayedOnlineCommand.Add(NewProjectile);
+                ListDelayedOnlineCommand.Add(ScriptToDelay);
             }
         }
 
@@ -717,6 +717,22 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         AddVisualEffect(Owner.sprExplosionSplinter, ExplosionCenter, new Vector2(CollisionGroundResult.X - 3 + (float)RandomHelper.Random.NextDouble() * 6, CollisionGroundResult.Y * (2 + (float)RandomHelper.Random.NextDouble() * 4)));
                     }
                 }
+            }
+        }
+
+        public void SendOnlineSFX(Vector2 SFXPosition, CreateSFXScriptClient.SFXTypes SFXType)
+        {
+            if (Owner.OnlineClient != null)
+            {
+                Owner.OnlineClient.Host.Send(new CreateSFXScriptClient(SFXPosition, SFXType));
+            }
+        }
+
+        public void SendOnlineVFX(Vector2 VFXPosition, Vector2 VFXSpeed, CreateVFXScriptClient.VFXTypes VFXType)
+        {
+            if (Owner.OnlineClient != null)
+            {
+                Owner.OnlineClient.Host.Send(new CreateVFXScriptClient(VFXPosition, VFXSpeed, VFXType));
             }
         }
 

@@ -18,8 +18,6 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             DicNewScript.Add(AskChangeMapScriptServer.ScriptName, new AskChangeMapScriptServer(NewRoom, Owner));
             DicNewScript.Add(AskChangeRoomSubtypeScriptServer.ScriptName, new AskChangeRoomSubtypeScriptServer(NewRoom));
             DicNewScript.Add(LeaveRoomScriptServer.ScriptName, new LeaveRoomScriptServer(NewRoom, Owner));
-            DicNewScript.Add(CreateSFXScriptServer.ScriptName, new CreateSFXScriptServer());
-            DicNewScript.Add(CreateVFXScriptServer.ScriptName, new CreateVFXScriptServer());
 
             return DicNewScript;
         }
@@ -32,6 +30,8 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             DicNewScript.Add(SendPlayerUpdateScriptServer.ScriptName, new SendPlayerUpdateScriptServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer));
             DicNewScript.Add(ShootBulletScriptServer.ScriptName, new ShootBulletScriptServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer));
             DicNewScript.Add(AskTripleThunderGameDataScriptServer.ScriptName, new AskTripleThunderGameDataScriptServer((TripleThunderClientGroup)ActiveGroup));
+            DicNewScript.Add(CreateSFXScriptServer.ScriptName, new CreateSFXScriptServer((TripleThunderClientGroup)ActiveGroup));
+            DicNewScript.Add(CreateVFXScriptServer.ScriptName, new CreateVFXScriptServer((TripleThunderClientGroup)ActiveGroup));
 
             return DicNewScript;
         }

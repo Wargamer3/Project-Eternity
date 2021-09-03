@@ -29,15 +29,18 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 {
                     float ExtraSpeed = (float)Random.NextDouble() - 0.5f;
                     Propulsor.ParticleSystem.AddParticle(Owner.Position, new Vector2(ExtraSpeed, 0.2f));
+                    Owner.SendOnlineVFX(Owner.Position, new Vector2(ExtraSpeed, 0.2f), Online.CreateVFXScriptClient.VFXTypes.Jetpack);
                 }
 
                 if (Owner.IsOnGround && Owner.Sounds.JetpackStartSound != UnitSounds.JetpackStartSounds.None)
                 {
                     JetpackSFXGenerator.PlayJetpackStartSound(Owner.Sounds.JetpackStartSound);
+                    Owner.SendOnlineSFX(Owner.Position, Online.CreateSFXScriptClient.SFXTypes.JetpackLoop);
                 }
                 else if (Owner.Sounds.JetpackUseSound != UnitSounds.JetpackUseSounds.None)
                 {
                     JetpackSFXGenerator.PlayJetpackLoopSound(Owner.Sounds.JetpackUseSound);
+                    Owner.SendOnlineSFX(Owner.Position, Online.CreateSFXScriptClient.SFXTypes.JetpackStart);
                 }
 
                 UsedLastUpdate = true;
@@ -48,6 +51,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     if (Owner.Sounds.JetpackEndSound != UnitSounds.JetpackEndSounds.None)
                     {
                         JetpackSFXGenerator.PlayJetpackEndSound(Owner.Sounds.JetpackEndSound);
+                        Owner.SendOnlineSFX(Owner.Position, Online.CreateSFXScriptClient.SFXTypes.JetpackEnd);
                     }
 
                     UsedLastUpdate = false;
@@ -65,6 +69,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (UsedLastUpdate && Owner.Sounds.JetpackEndSound != UnitSounds.JetpackEndSounds.None)
             {
                 JetpackSFXGenerator.PlayJetpackEndSound(Owner.Sounds.JetpackEndSound);
+                Owner.SendOnlineSFX(Owner.Position, Online.CreateSFXScriptClient.SFXTypes.JetpackEnd);
             }
 
             if (JetpackFuel < JetpackFuelMax)

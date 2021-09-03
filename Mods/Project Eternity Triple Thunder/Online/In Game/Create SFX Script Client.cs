@@ -21,10 +21,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             this.Owner = Owner;
         }
 
-        public CreateSFXScriptClient(Vector2 Position)
+        public CreateSFXScriptClient(Vector2 Position, SFXTypes SFXType)
             : base(ScriptName)
         {
             this.Position = Position;
+            this.SFXType = SFXType;
         }
 
         public override OnlineScript Copy()
