@@ -92,6 +92,8 @@
     <Compile Include="IDataManager.cs" />
     <Compile Include="Infrastructure\Client Group.cs" />
     <Compile Include="Infrastructure\Client.cs" />
+    <Compile Include="Infrastructure\Communication Client.cs" />
+    <Compile Include="Infrastructure\Communication Server.cs" />
     <Compile Include="Infrastructure\Master.cs" />
     <Compile Include="Infrastructure\Server Manager.cs" />
     <Compile Include="Infrastructure\Server.cs" />

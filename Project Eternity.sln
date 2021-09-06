@@ -393,6 +393,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Databa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Triple Thunder Scripts", "Mods\Project Eternity Triple Thunder Scripts\Project Eternity Triple Thunder Scripts.csproj", "{770F081B-9301-451C-999C-A81EEC75D141}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Communication Server", "Project Eternity Communication Server\Project Eternity Communication Server.csproj", "{81E0FCC6-B04E-40CA-8FFB-4381799FDAA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -798,6 +800,10 @@ Global
 		{770F081B-9301-451C-999C-A81EEC75D141}.Debug|x86.Build.0 = Debug|x86
 		{770F081B-9301-451C-999C-A81EEC75D141}.Release|x86.ActiveCfg = Release|x86
 		{770F081B-9301-451C-999C-A81EEC75D141}.Release|x86.Build.0 = Release|x86
+		{81E0FCC6-B04E-40CA-8FFB-4381799FDAA0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{81E0FCC6-B04E-40CA-8FFB-4381799FDAA0}.Debug|x86.Build.0 = Debug|Any CPU
+		{81E0FCC6-B04E-40CA-8FFB-4381799FDAA0}.Release|x86.ActiveCfg = Release|Any CPU
+		{81E0FCC6-B04E-40CA-8FFB-4381799FDAA0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
