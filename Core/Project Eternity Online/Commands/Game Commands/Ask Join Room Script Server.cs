@@ -6,15 +6,15 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Ask Join Room";
 
-        protected readonly Server Owner;
+        protected readonly GameServer Owner;
         private string RoomID;
 
-        public AskJoinRoomScriptServer(Server Owner)
+        public AskJoinRoomScriptServer(GameServer Owner)
             : this(Owner, null)
         {
         }
 
-        public AskJoinRoomScriptServer(Server Owner, string RoomID)
+        public AskJoinRoomScriptServer(GameServer Owner, string RoomID)
             : base(ScriptName)
         {
             this.Owner = Owner;
@@ -36,7 +36,7 @@ namespace ProjectEternity.Core.Online
             IRoomInformations RoomToJoin;
             if (Owner.DicAllRoom.TryGetValue(RoomID, out RoomToJoin))
             {
-                ClientGroup LocalRoom = null;
+                GameClientGroup LocalRoom = null;
                 if (RoomToJoin.OwnerServerIP != Owner.IP)
                 {
                     Sender.Send(new JoinRoomRemoteScriptServer(RoomID, RoomToJoin.OwnerServerIP, RoomToJoin.OwnerServerPort));
@@ -68,7 +68,7 @@ namespace ProjectEternity.Core.Online
             }
         }
 
-        protected abstract void OnJoinRoomLocal(IOnlineConnection Sender, string RoomID, ClientGroup ActiveGroup);
+        protected abstract void OnJoinRoomLocal(IOnlineConnection Sender, string RoomID, GameClientGroup ActiveGroup);
 
         protected internal override void Read(OnlineReader Sender)
         {

@@ -6,12 +6,12 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Ask Login";
 
-        private readonly Server Owner;
+        private readonly GameServer Owner;
 
         private string Login;
         private string Password;
 
-        public AskLoginScriptServer(Server Owner)
+        public AskLoginScriptServer(GameServer Owner)
             : base(ScriptName)
         {
             this.Owner = Owner;

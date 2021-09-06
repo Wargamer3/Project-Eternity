@@ -7,16 +7,16 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Create Room";
 
-        private readonly Server Owner;
-        private readonly ClientGroup ClientGroupTemplate;
+        private readonly GameServer Owner;
+        private readonly GameClientGroup ClientGroupTemplate;
 
         private string RoomName;
         private string RoomType;
         private string RoomSubtype;
         private int MaxNumberOfPlayer;
-        public ClientGroup CreatedGroup;
+        public GameClientGroup CreatedGroup;
 
-        public CreateRoomScriptServer(Server Owner, ClientGroup ClientGroupTemplate)
+        public CreateRoomScriptServer(GameServer Owner, GameClientGroup ClientGroupTemplate)
             : base(ScriptName)
         {
             this.Owner = Owner;

@@ -2,13 +2,13 @@
 
 namespace ProjectEternity.Core.Online
 {
-    public interface ClientGroup
+    public interface GameClientGroup
     {
         IOnlineGame CurrentGame { get; }
         IRoomInformations Room { get; }
 
         bool IsRunningSlow();
 
-        ClientGroup CreateFromTemplate(IRoomInformations Room);
+        GameClientGroup CreateFromTemplate(IRoomInformations Room);
     }
 }

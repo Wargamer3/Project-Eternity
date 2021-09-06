@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 
             MongoDBManager Databse = new MongoDBManager();
             Databse.Init();
-            Server OnlineServer = new Server(Databse, DicOnlineScripts);
+            GameServer OnlineServer = new GameServer(Databse, DicOnlineScripts);
 
             DicOnlineScripts.Add(AskGameDataScriptServer.ScriptName, new AskGameDataScriptServer());
             DicOnlineScripts.Add(AskLoginScriptServer.ScriptName, new AskLoginScriptServer(OnlineServer));

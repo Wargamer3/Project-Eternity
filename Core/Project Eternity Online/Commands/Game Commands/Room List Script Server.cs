@@ -7,10 +7,10 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Room List";
 
-        private readonly Server Owner;
+        private readonly GameServer Owner;
         private readonly ICollection<IRoomInformations> ListRoomUpdates;
 
-        public RoomListScriptServer(Server Owner, ICollection<IRoomInformations> ListRoomUpdates)
+        public RoomListScriptServer(GameServer Owner, ICollection<IRoomInformations> ListRoomUpdates)
             : base(ScriptName)
         {
             this.Owner = Owner;

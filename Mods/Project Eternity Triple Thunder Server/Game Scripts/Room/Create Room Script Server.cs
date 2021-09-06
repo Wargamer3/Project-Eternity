@@ -8,10 +8,10 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 {
     public class CreateRoomTripleThunderScriptServer : CreateRoomScriptServer
     {
-        private readonly Server Owner;
-        private readonly ClientGroup ClientGroupTemplate;
+        private readonly GameServer Owner;
+        private readonly GameClientGroup ClientGroupTemplate;
 
-        public CreateRoomTripleThunderScriptServer(Server Owner, ClientGroup ClientGroupTemplate)
+        public CreateRoomTripleThunderScriptServer(GameServer Owner, GameClientGroup ClientGroupTemplate)
             : base(Owner, ClientGroupTemplate)
         {
             this.Owner = Owner;

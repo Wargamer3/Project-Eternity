@@ -3,7 +3,7 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 {
-    public class TripleThunderClientGroup : ClientGroup
+    public class TripleThunderClientGroup : GameClientGroup
     {
         public static readonly TripleThunderClientGroup Template = new TripleThunderClientGroup();
         public FightingZone _CurrentGame;
@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             this._Room = Room;
         }
 
-        public ClientGroup CreateFromTemplate(IRoomInformations Room)
+        public GameClientGroup CreateFromTemplate(IRoomInformations Room)
         {
             return new TripleThunderClientGroup(Room);
         }

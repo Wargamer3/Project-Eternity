@@ -12,9 +12,9 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
         private readonly string RoomID;
         private readonly string CurrentDifficulty;
         private readonly List<Player> ListJoiningPlayer;
-        private readonly ClientGroup ActiveGroup;
+        private readonly GameClientGroup ActiveGroup;
 
-        public JoinRoomLocalScriptServer(string RoomID, string CurrentDifficulty, List<Player> ListJoiningPlayer, ClientGroup ActiveGroup)
+        public JoinRoomLocalScriptServer(string RoomID, string CurrentDifficulty, List<Player> ListJoiningPlayer, GameClientGroup ActiveGroup)
             : base(ScriptName)
         {
             this.RoomID = RoomID;

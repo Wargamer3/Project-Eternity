@@ -10,11 +10,11 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
     {
         public const string ScriptName = "Send Game Data";
 
-        Server Owner;
+        GameServer Owner;
         string RoomID;
         byte[] ArrayGameData;
 
-        public SendGameDataScriptServer(Server Owner)
+        public SendGameDataScriptServer(GameServer Owner)
             : base(ScriptName)
         {
             this.Owner = Owner;

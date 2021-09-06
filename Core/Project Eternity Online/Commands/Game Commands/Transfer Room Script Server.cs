@@ -6,19 +6,19 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Transfer Room";
 
-        private readonly Server Owner;
-        private readonly ClientGroup ClientGroupTemplate;
+        private readonly GameServer Owner;
+        private readonly GameClientGroup ClientGroupTemplate;
 
         string RoomID;
 
-        public TransferRoomScriptServer(Server Owner, ClientGroup ClientGroupTemplate)
+        public TransferRoomScriptServer(GameServer Owner, GameClientGroup ClientGroupTemplate)
             : base(ScriptName)
         {
             this.Owner = Owner;
             this.ClientGroupTemplate = ClientGroupTemplate;
         }
 
-        public TransferRoomScriptServer(Server Owner, ClientGroup ClientGroupTemplate, string RoomID)
+        public TransferRoomScriptServer(GameServer Owner, GameClientGroup ClientGroupTemplate, string RoomID)
             : this(Owner, ClientGroupTemplate)
         {
             this.RoomID = RoomID;
@@ -36,7 +36,7 @@ namespace ProjectEternity.Core.Online
 
         protected internal override void Execute(IOnlineConnection ActivePlayer)
         {
-            ClientGroup ActiveTransferingRoom;
+            GameClientGroup ActiveTransferingRoom;
 
             if (Owner.DicTransferingRoom.TryGetValue(RoomID, out ActiveTransferingRoom) && ActiveTransferingRoom.Room.ListOnlinePlayer.Count < ActiveTransferingRoom.Room.CurrentPlayerCount)
             {
@@ -44,7 +44,7 @@ namespace ProjectEternity.Core.Online
             }
             else if (Owner.DicAllRoom.ContainsKey(RoomID))
             {
-                ClientGroup NewRoom = ClientGroupTemplate.CreateFromTemplate(Owner.TransferRoom(RoomID));
+                GameClientGroup NewRoom = ClientGroupTemplate.CreateFromTemplate(Owner.TransferRoom(RoomID));
                 Owner.DicTransferingRoom.Add(RoomID, NewRoom);
                 NewRoom.Room.AddOnlinePlayer(ActivePlayer, "Host");
                 ActivePlayer.Send(new AskGameDataScriptServer());

@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public readonly TripleThunderOnlineClient OnlineClient;
         private int OnlinePlayerUpdateTimer;
-        public readonly Server OnlineServer;
+        public readonly GameServer OnlineServer;
         public readonly TripleThunderClientGroup GameGroup;
 
         public FightingZone()
@@ -191,7 +191,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             UsePreview = false;
         }
 
-        public FightingZone(string MapName, bool UseTeams, Server OnlineServer, TripleThunderClientGroup GameGroup, List<Player> ListLocalPlayer = null, List<Player> ListAllPlayer = null)
+        public FightingZone(string MapName, bool UseTeams, GameServer OnlineServer, TripleThunderClientGroup GameGroup, List<Player> ListLocalPlayer = null, List<Player> ListAllPlayer = null)
             : this()
         {
             FightingZonePath = MapName;

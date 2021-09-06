@@ -9,7 +9,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         void ExecuteOnMainThread();
     }
 
-    public class TripleThunderOnlineClient : Client
+    public class TripleThunderOnlineClient : GameClient
     {
         public FightingZone TripleThunderGame { get; private set; }
         private readonly List<DelayedExecutableOnlineScript> ListDelayedOnlineCommand;

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online
 {
-    public class Client
+    public class GameClient
     {
         public IOnlineConnection Host;
         public IOnlineConnection LastTopLevel;
@@ -20,12 +20,12 @@ namespace ProjectEternity.Core.Online
 
         public bool IsConnected => Host != null && Host.IsConnected();
 
-        public Client()
+        public GameClient()
             : this(new Dictionary<string, OnlineScript>())
         {
         }
 
-        public Client(Dictionary<string, OnlineScript> DicOnlineScripts)
+        public GameClient(Dictionary<string, OnlineScript> DicOnlineScripts)
         {
             RoomID = null;
             CurrentGame = null;

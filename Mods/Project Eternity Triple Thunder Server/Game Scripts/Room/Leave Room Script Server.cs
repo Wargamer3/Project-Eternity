@@ -8,9 +8,9 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
         public const string ScriptName = "Leave Room";
 
         private readonly IRoomInformations Owner;
-        private readonly Server OnlineServer;
+        private readonly GameServer OnlineServer;
 
-        public LeaveRoomScriptServer(IRoomInformations Owner, Server OnlineServer)
+        public LeaveRoomScriptServer(IRoomInformations Owner, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;

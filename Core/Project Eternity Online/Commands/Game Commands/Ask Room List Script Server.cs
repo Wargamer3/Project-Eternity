@@ -6,9 +6,9 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Ask Room List";
 
-        private readonly Server Owner;
+        private readonly GameServer Owner;
 
-        public AskRoomListScriptServer(Server Owner)
+        public AskRoomListScriptServer(GameServer Owner)
             : base(ScriptName)
         {
             this.Owner = Owner;

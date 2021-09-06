@@ -8,7 +8,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 {
     public class AskJoinRoomScriptServer : Core.Online.AskJoinRoomScriptServer
     {
-        public AskJoinRoomScriptServer(Server Owner)
+        public AskJoinRoomScriptServer(GameServer Owner)
             : base(Owner)
         {
         }
@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             return new AskJoinRoomScriptServer(Owner);
         }
 
-        protected override void OnJoinRoomLocal(IOnlineConnection Sender, string RoomID, ClientGroup ActiveGroup)
+        protected override void OnJoinRoomLocal(IOnlineConnection Sender, string RoomID, GameClientGroup ActiveGroup)
         {
             RoomInformations JoinedRoom = (RoomInformations)ActiveGroup.Room;
             List <Player> ListJoiningPlayerInfo = JoinedRoom.GetOnlinePlayer(Sender);

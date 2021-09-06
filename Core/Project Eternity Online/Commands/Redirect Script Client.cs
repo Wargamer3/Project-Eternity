@@ -7,13 +7,13 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Redirect";
 
-        private readonly Client Owner;
+        private readonly GameClient Owner;
         private string ServerIP;
         private int ServerPort;
         private string CommunicationServerIP;
         private int CommunicationServerPort;
 
-        public RedirectScriptClient(Client Owner)
+        public RedirectScriptClient(GameClient Owner)
             : base(ScriptName)
         {
             this.Owner = Owner;

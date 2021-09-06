@@ -4,9 +4,9 @@ namespace ProjectEternity.Core.Online
 {
     public class ForceServerChangeScriptServer : OnlineScript
     {
-        private Client Owner;
+        private GameClient Owner;
 
-        public ForceServerChangeScriptServer(Client Owner)
+        public ForceServerChangeScriptServer(GameClient Owner)
             : base("Redirect")
         {
             this.Owner = Owner;

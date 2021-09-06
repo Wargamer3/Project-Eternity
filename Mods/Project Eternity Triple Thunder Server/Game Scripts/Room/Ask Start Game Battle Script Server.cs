@@ -12,9 +12,9 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 
         private readonly BattleRoomInformations Owner;
         private readonly TripleThunderClientGroup CreatedGroup;
-        private readonly Server OnlineServer;
+        private readonly GameServer OnlineServer;
 
-        public AskStartGameBattleScriptServer(BattleRoomInformations Owner, TripleThunderClientGroup CreatedGroup, Server OnlineServer)
+        public AskStartGameBattleScriptServer(BattleRoomInformations Owner, TripleThunderClientGroup CreatedGroup, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;

@@ -7,9 +7,9 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
     {
         public const string ScriptName = "Finished Loading";
 
-        private readonly ClientGroup ActiveGroup;
+        private readonly GameClientGroup ActiveGroup;
 
-        public FinishedLoadingScriptServer(ClientGroup ActiveGroup)
+        public FinishedLoadingScriptServer(GameClientGroup ActiveGroup)
             : base(ScriptName)
         {
             this.ActiveGroup = ActiveGroup;

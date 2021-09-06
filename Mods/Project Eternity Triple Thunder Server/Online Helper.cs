@@ -8,7 +8,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 {
     public static class OnlineHelper
     {
-        public static Dictionary<string, OnlineScript> GetRoomScriptsServer(RoomInformations NewRoom, Server Owner)
+        public static Dictionary<string, OnlineScript> GetRoomScriptsServer(RoomInformations NewRoom, GameServer Owner)
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 
@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             return DicNewScript;
         }
 
-        public static Dictionary<string, OnlineScript> GetTripleThunderScriptsServer(ClientGroup ActiveGroup, Player ActivePlayer)
+        public static Dictionary<string, OnlineScript> GetTripleThunderScriptsServer(GameClientGroup ActiveGroup, Player ActivePlayer)
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 

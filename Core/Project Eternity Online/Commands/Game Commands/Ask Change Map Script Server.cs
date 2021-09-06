@@ -7,12 +7,12 @@ namespace ProjectEternity.Core.Online
         public const string ScriptName = "Ask Change Map";
 
         private readonly IRoomInformations Owner;
-        private readonly Server OnlineServer;
+        private readonly GameServer OnlineServer;
 
         private string CurrentDifficulty;
         private string MissionPath;
 
-        public AskChangeMapScriptServer(IRoomInformations Owner, Server OnlineServer)
+        public AskChangeMapScriptServer(IRoomInformations Owner, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;

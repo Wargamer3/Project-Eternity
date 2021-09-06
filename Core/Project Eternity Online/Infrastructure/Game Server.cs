@@ -13,15 +13,15 @@ namespace ProjectEternity.Core.Online
     /// They all share the same database meaning they all share the same rooms and players.
     /// The Server handle the chat and rooms for its Clients and share informations to its sole Server Manager.
     /// </summary>
-    public class Server
+    public class GameServer
     {
         public readonly List<IOnlineConnection> ListPlayer;
         public readonly List<IOnlineConnection> ListPlayerToRemove;
 
-        public readonly Dictionary<string, ClientGroup> DicLocalRoom;
+        public readonly Dictionary<string, GameClientGroup> DicLocalRoom;
         public readonly List<string> ListLocalRoomToRemove;
 
-        public readonly Dictionary<string, ClientGroup> DicTransferingRoom;
+        public readonly Dictionary<string, GameClientGroup> DicTransferingRoom;
         public readonly List<string> ListTransferingRoomToRemove;
 
         public readonly Dictionary<string, IRoomInformations> DicAllRoom;
@@ -43,15 +43,15 @@ namespace ProjectEternity.Core.Online
 
         private CancellationTokenSource CancelToken;
 
-        public Server(IDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
+        public GameServer(IDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
         {
             ListPlayer = new List<IOnlineConnection>();
             ListPlayerToRemove = new List<IOnlineConnection>();
 
-            DicLocalRoom = new Dictionary<string, ClientGroup>();
+            DicLocalRoom = new Dictionary<string, GameClientGroup>();
             ListLocalRoomToRemove = new List<string>();
 
-            DicTransferingRoom = new Dictionary<string, ClientGroup>();
+            DicTransferingRoom = new Dictionary<string, GameClientGroup>();
             ListTransferingRoomToRemove = new List<string>();
 
             DicAllRoom = new Dictionary<string, IRoomInformations>();
@@ -197,7 +197,7 @@ namespace ProjectEternity.Core.Online
                 ListLocalRoomToRemove.RemoveAt(0);
             }
 
-            foreach (ClientGroup ActiveGroup in DicTransferingRoom.Values)
+            foreach (GameClientGroup ActiveGroup in DicTransferingRoom.Values)
             {
                 foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListOnlinePlayer)
                 {
