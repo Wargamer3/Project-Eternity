@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Squad ActiveSquad = ListAISquad[U];
                 Map.ActiveSquadIndex = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
 
-                if (!Map.ActiveSquad.CanMove || Map.ActiveSquad.CurrentLeader == null)
+                if (!ActiveSquad.CanMove || ActiveSquad.CurrentLeader == null)
                 {
                     --UnitsNotUpdatedCount;
                     continue;
