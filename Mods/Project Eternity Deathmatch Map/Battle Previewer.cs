@@ -53,6 +53,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
 
                             Squad DefendingSquad = Map.ListPlayer[P].ListSquad[UnitIndex];
+                            Map.TargetPlayerIndex = P;
+                            Map.TargetSquadIndex = UnitIndex;
 
                             if (ActiveAttack != null)
                             {
