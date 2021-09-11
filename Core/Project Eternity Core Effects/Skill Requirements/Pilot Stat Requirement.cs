@@ -56,12 +56,14 @@ namespace ProjectEternity.Core.Effects
         {
             _StatusType = (StatusTypes)BR.ReadByte();
             _EffectValue = BR.ReadString();
+            _LogicOperator = (Operators.LogicOperators)BR.ReadByte();
         }
 
         protected override void DoSave(BinaryWriter BW)
         {
             BW.Write((byte)_StatusType);
             BW.Write(_EffectValue);
+            BW.Write((byte)_LogicOperator);
         }
 
         public override BaseSkillRequirement Copy()
