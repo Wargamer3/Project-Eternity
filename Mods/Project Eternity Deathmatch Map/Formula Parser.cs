@@ -93,6 +93,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         return UnitStatFromUnit(Map.ActiveSquad.CurrentLeader, Map.ActiveSquad, Expression[1]);
 
                     case "def":
+                    case "defender":
                         if (Map.TargetSquad == null)
                             throw new Exception(Input + " is invalid");
                         return UnitStatFromUnit(Map.TargetSquad.CurrentLeader, Map.TargetSquad, Expression[1]);

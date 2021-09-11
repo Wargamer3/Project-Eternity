@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Editors.MusicPlayer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using ProjectEternity.Editors.MusicPlayer;
 
 namespace ProjectEternity.Editors.MapEditor
 {
