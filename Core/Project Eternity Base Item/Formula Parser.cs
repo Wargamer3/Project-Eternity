@@ -128,9 +128,12 @@ namespace ProjectEternity.Core
                 }
             }
 
-            #region Process sign operations
+            if (StackOperation.Count == 1)
+                return ComputeValue(StackOperation.Pop());
 
             List<string> ListOperation = StackOperation.ToList();
+
+            #region Process sign operations
 
             bool RightIsNumber;
             bool LeftIsNumber;
@@ -588,6 +591,23 @@ namespace ProjectEternity.Core
                 else
                     LeftIsNumber = false;
             }
+        }
+
+        protected string ComputeValue(string Right)
+        {
+            string RightNumber = Right.Replace(" ", "");
+            //Just remove space from numbers. Need to remove space so IsNumber work.
+            if (char.IsNumber(RightNumber[0]))
+            {
+                Right = RightNumber;
+            }
+
+            if (!char.IsNumber(Right[0]) && Right[0] != '-')
+            {
+                return ValueFromVariable(Right);
+            }
+
+            return Right;
         }
 
         protected abstract string ValueFromVariable(string Input);
