@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Globalization;
 using System.ComponentModel;
 using ProjectEternity.Core;
@@ -13,6 +14,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private Operators.NumberTypes _NumberType;
         private string _FinalDamageValue;
+        private string LastEvaluationResult = null;
 
         public FinalDamageEffect()
             : base(Name, true)
@@ -38,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_FinalDamageValue);
+            string EvaluationResult = GetFinalDamageValue();
 
             string ExtraText = "";
             if (EvaluationResult != _FinalDamageValue)
@@ -63,6 +65,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return _FinalDamageValue;
+        }
+
+        private string GetFinalDamageValue()
+        {
+            string EvaluationResult;
+
+            try
+            {
+                EvaluationResult = FormulaParser.ActiveParser.Evaluate(_FinalDamageValue);
+                LastEvaluationResult = EvaluationResult;
+            }
+            catch(Exception)
+            {
+                return LastEvaluationResult;
+            }
+
+            return EvaluationResult;
         }
 
         protected override BaseEffect DoCopy()
