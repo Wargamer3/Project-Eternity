@@ -192,6 +192,7 @@ namespace ProjectEternity.Editors.CharacterSkillEditor
         {
             if (lstLevels.SelectedItems.Count > 0 && lstActivations.SelectedItems.Count > 0 && lstRequirements.SelectedItems.Count > 0)
             {
+                ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[lstActivations.SelectedIndex].ListRequirement.RemoveAt(lstRequirements.SelectedIndex);
                 lstRequirements.Items.RemoveAt(lstRequirements.SelectedIndex);
             }
         }
