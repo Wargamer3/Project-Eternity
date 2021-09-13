@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].HP < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].MaxHP)
                         {
-                            ListMVChoice.Add(ActiveSquad.Position + new Vector3(1, 0, 0));
+                            ListMVChoice.Add(ActiveSquad.Position - new Vector3(1, 0, 0));
                             break;
                         }
                     }
