@@ -270,11 +270,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     for (int C = 0; C < ActiveSquad[U].ArrayCharacterActive.Length; C++)
                     {
-                        for (int S = 0; S < PilotSpiritActivation[ActiveUnitIndex][PilotIndex].Count; ++S)
+                        for (int S = 0; S < PilotSpiritActivation[U][C].Count; ++S)
                         {
                             Map.GlobalDeathmatchContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null);
 
-                            ManualSkill SpiritToActivate = PilotSpiritActivation[ActiveUnitIndex][PilotIndex][S];
+                            ManualSkill SpiritToActivate = PilotSpiritActivation[U][C][S];
 
                             //Consume SP and activate skills.
                             SpiritToActivate.ActiveSkillFromMenu(ActiveSquad[U].ArrayCharacterActive[C], ActiveSquad);
@@ -282,7 +282,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             SpiritToActivate.UpdateSkillActivation();
 
                             ListSelectedSpirit.Remove(SpiritToActivate);
-                            PilotSpiritActivation[ActiveUnitIndex][PilotIndex].Remove(SpiritToActivate);
+                            PilotSpiritActivation[U][C].Remove(SpiritToActivate);
                         }
                     }
                 }
