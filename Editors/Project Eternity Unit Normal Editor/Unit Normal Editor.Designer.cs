@@ -494,6 +494,11 @@
             // txtEXP
             // 
             this.txtEXP.Location = new System.Drawing.Point(340, 19);
+            this.txtEXP.Maximum = new decimal(new int[] {
+            50000,
+            0,
+            0,
+            0});
             this.txtEXP.Name = "txtEXP";
             this.txtEXP.Size = new System.Drawing.Size(73, 20);
             this.txtEXP.TabIndex = 31;
