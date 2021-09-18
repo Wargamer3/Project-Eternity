@@ -102,7 +102,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Link characters to Intermission Unit
             for (int U = 0; U < ListPresentUnit.Count; U++)
             {
-                for (int P = 0; P < ListPresentUnit[U].MaxCharacter; P++)
+                for (int P = 0; P < ListPresentUnit[U].ArrayCharacterActive.Length; P++)
                 {
                     for (int i = 1; i < ListCharacterInfo.Count; i++)
                     {
