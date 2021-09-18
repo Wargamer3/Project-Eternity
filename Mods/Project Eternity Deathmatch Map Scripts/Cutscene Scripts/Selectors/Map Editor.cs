@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -96,11 +97,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
                             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
-                            Helper.ReplaceTerrain((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                PresetTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                            int PosX = (int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X;
+                            int PosY = (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y;
+                            if (PosX < BattleMapViewer.ActiveMap.MapSize.X && PosY < BattleMapViewer.ActiveMap.MapSize.Y)
+                            {
+                                Helper.ReplaceTerrain(PosX, PosY, PresetTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
 
-                            Helper.ReplaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                PresetTile, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                                Helper.ReplaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
+                                    PresetTile, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                            }
                         }
                     }
                 }
@@ -165,8 +170,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.X == FinalX && BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.Y == FinalY)
                     {
-                        TerrainAttribute.ListTerrainChangeLocation.RemoveAt(S);
-                        TerrainAttribute.ListTileChangeLocation.RemoveAt(S);
+                        if (TerrainAttribute.ListTerrainChangeLocation.Count > 0)
+                        {
+                            TerrainAttribute.ListTerrainChangeLocation.RemoveAt(S);
+                            TerrainAttribute.ListTileChangeLocation.RemoveAt(S);
+                        }
                         BattleMapViewer.ActiveMap.ListSingleplayerSpawns.RemoveAt(S);
                         return;
                     }
@@ -274,7 +282,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         string MapLogicName = Items[0].Substring(0, Items[0].Length - 4).Substring(29);
                         BattleMapViewer.Preload();
                         DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, 0, new List<Core.Units.Squad>());
-                        BattleMapViewer.ActiveMap = NewMap;
                         Helper = new DeathmatchMapHelper(NewMap);
                         NewMap.ListGameScreen = new List<GameScreen>();
                         NewMap.Content = BattleMapViewer.content;
@@ -291,33 +298,58 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
                         };
 
-                        for (int S = BattleMapViewer.ActiveMap.ListMapScript.Count - 1; S >= 0; --S)
+                        for (int S = NewMap.ListMapScript.Count - 1; S >= 0; --S)
                         {
-                            BattleMapViewer.Helper.InitScript(BattleMapViewer.ActiveMap.ListMapScript[S]);
+                            BattleMapViewer.Helper.InitScript(NewMap.ListMapScript[S]);
                         }
 
                         for (int T = 0; T < TerrainAttribute.ListTerrainChangeLocation.Count; T++)
                         {
                             Vector3 NewDestinationPoint = TerrainAttribute.ListTerrainChangeLocation[T].Position;
-                            BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Add(new EventPoint(NewDestinationPoint, T.ToString(), 255, 255, 255));
+                            NewMap.ListSingleplayerSpawns.Add(new EventPoint(NewDestinationPoint, T.ToString(), 255, 255, 255));
                         }
-
-                        BattleMapViewer.RefreshScrollbars();
 
                         Matrix Projection = Matrix.CreateOrthographicOffCenter(0, BattleMapViewer.Width, BattleMapViewer.Height, 0, 0, -1f);
                         Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 
                         Matrix projectionMatrix = HalfPixelOffset * Projection;
 
-                        ActiveMap.fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
+                        NewMap.fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
 
                         #region Tiles
 
-                        for (int T = 0; T < BattleMapViewer.ActiveMap.ListTilesetPreset.Count; T++)
+                        for (int T = 0; T < TerrainAttribute.ListTileset.Count; ++T)
                         {
-                            TerrainAttribute.ListTileset.Add(BattleMapViewer.ActiveMap.ListTilesetPreset[T].TilesetName);
+                            bool AlreadyExist = false;
+                            for (int P = 0; P < NewMap.ListTilesetPreset.Count; ++P)
+                            {
+                                if (TerrainAttribute.ListTileset[T] == NewMap.ListTilesetPreset[P].TilesetName)
+                                {
+                                    AlreadyExist = true;
+                                    break;
+                                }
+                            }
 
-                            ItemInfo Item = BaseEditor.GetItemByKey(BaseEditor.GUIRootPathMapTilesetImages, BattleMapViewer.ActiveMap.ListTilesetPreset[T].TilesetName);
+                            if (!AlreadyExist)
+                            {
+                                Texture2D sprTileset = NewMap.Content.Load<Texture2D>("Maps/Tilesets/" + TerrainAttribute.ListTileset[T]);
+                                if (!NewMap.ListTileSet.Contains(sprTileset))
+                                {
+
+                                    NewMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(TerrainAttribute.ListTileset[T], sprTileset.Width, sprTileset.Height, NewMap.TileSize.X, NewMap.TileSize.Y, NewMap.ListTilesetPreset.Count));
+                                    NewMap.ListTileSet.Add(sprTileset);
+                                }
+                            }
+                        }
+
+                        for (int T = 0; T < NewMap.ListTilesetPreset.Count; T++)
+                        {
+                            if (!TerrainAttribute.ListTileset.Contains(NewMap.ListTilesetPreset[T].TilesetName))
+                            {
+                                TerrainAttribute.ListTileset.Add(NewMap.ListTilesetPreset[T].TilesetName);
+                            }
+
+                            ItemInfo Item = BaseEditor.GetItemByKey(BaseEditor.GUIRootPathMapTilesetImages, NewMap.ListTilesetPreset[T].TilesetName);
 
                             if (Item.Path != null)
                             {
@@ -332,26 +364,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
                             else
                             {
-                                MessageBox.Show(BattleMapViewer.ActiveMap.ListTilesetPreset[T].TilesetName + " not found, loading default tileset instead.");
+                                MessageBox.Show(NewMap.ListTilesetPreset[T].TilesetName + " not found, loading default tileset instead.");
                                 cboTiles.Items.Add("Default");
                             }
                         }
-
-                        if (BattleMapViewer.ActiveMap.ListTilesetPreset.Count > 0)
-                        {
-                            cboTiles.SelectedIndex = 0;
-                        }
-
-                        if (cboTiles.SelectedIndex >= 0)
-                        {
-                            TilesetViewer.InitTileset(BattleMapViewer.ActiveMap.ListTileSet[cboTiles.SelectedIndex], BattleMapViewer.ActiveMap.TileSize);
-                        }
-                        else
-                        {
-                            TilesetViewer.InitTileset(string.Empty, BattleMapViewer.ActiveMap.TileSize);
-                        }
-
-                        TileAttributesEditor = Helper.GetTileEditor();
 
                         #endregion
 
@@ -364,6 +380,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             Helper.ReplaceTerrain(PosX, PosY, ActiveTerrain, 0);
                             Helper.ReplaceTile(PosX, PosY, ActiveTile, 0);
                         }
+
+                        BattleMapViewer.ActiveMap = NewMap;
+
+                        BattleMapViewer.RefreshScrollbars();
+
+                        if (NewMap.ListTilesetPreset.Count > 0)
+                        {
+                            cboTiles.SelectedIndex = 0;
+                        }
+
+                        if (cboTiles.SelectedIndex >= 0)
+                        {
+                            TilesetViewer.InitTileset(NewMap.ListTileSet[cboTiles.SelectedIndex], NewMap.TileSize);
+                        }
+                        else
+                        {
+                            TilesetViewer.InitTileset(string.Empty, NewMap.TileSize);
+                        }
+
+                        TileAttributesEditor = Helper.GetTileEditor();
 
                         break;
 

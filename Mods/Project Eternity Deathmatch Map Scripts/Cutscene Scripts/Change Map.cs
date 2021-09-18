@@ -112,12 +112,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (Map != null)
                 {
+                    bool TilesetAdded = false;
                     for (int T = 0; T < TerrainAttribute.ListTileset.Count; ++T)
                     {
                         bool AlreadyExist = false;
                         for (int P = 0; P < Map.ListTilesetPreset.Count; ++P)
                         {
-                            if (TerrainAttribute.ListTileset[P] == Map.ListTilesetPreset[P].TilesetName)
+                            if (TerrainAttribute.ListTileset[T] == Map.ListTilesetPreset[P].TilesetName)
                             {
                                 AlreadyExist = true;
                                 break;
@@ -129,13 +130,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             Texture2D sprTileset = Map.Content.Load<Texture2D>("Maps/Tilesets/" + TerrainAttribute.ListTileset[T]);
                             if (!Map.ListTileSet.Contains(sprTileset))
                             {
-
+                                TilesetAdded = true;
                                 Map.ListTilesetPreset.Add(new Terrain.TilesetPreset(TerrainAttribute.ListTileset[T], sprTileset.Width, sprTileset.Height, Map.TileSize.X, Map.TileSize.Y, Map.ListTilesetPreset.Count));
                                 Map.ListTileSet.Add(sprTileset);
                             }
                         }
                     }
 
+                    if (TilesetAdded)//Recalculate the tileset index
+                    {
+                        for (int L = 0; L < ListTerrainChangeLocationCount; ++L)
+                        {
+                            int OriginalTilesetIndex = TerrainAttribute.ListTileChangeLocation[L].Tileset;
+
+                            for (int P = 0; P < Map.ListTilesetPreset.Count; ++P)
+                            {
+                                if (P != OriginalTilesetIndex && TerrainAttribute.ListTileset[OriginalTilesetIndex] == Map.ListTilesetPreset[P].TilesetName)
+                                {
+                                    TerrainAttribute.ListTileChangeLocation[L] = new DrawableTile(TerrainAttribute.ListTileChangeLocation[L].Origin, P);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
