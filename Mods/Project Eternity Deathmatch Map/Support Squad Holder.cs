@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         && (!AttackingSquad.IsFlying
                             || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir)))
                     {
-                        if (!ActivePlayer.ListSquad[SquadIndex].CanMove)
+                        if (!ActivePlayer.ListSquad[SquadIndex].CanMove || ActivePlayer.ListSquad[SquadIndex] == AttackingSquad)
                             continue;
 
                         Squad AttackerSupportSquad = ActivePlayer.ListSquad[SquadIndex];
