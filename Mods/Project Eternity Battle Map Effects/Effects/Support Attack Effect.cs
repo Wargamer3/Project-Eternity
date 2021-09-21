@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "Support Attack Effect";
 
         private string _SupportAttackValue;
+        private int LastEvaluationResult;
 
         public SupportAttackEffect()
             : base(Name, true)
@@ -37,6 +38,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_SupportAttackValue);
             int FinalySupportAttackValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = FinalySupportAttackValue;
+
             Params.LocalContext.EffectTargetUnit.Boosts.SupportAttackModifierMax += FinalySupportAttackValue;
             Params.LocalContext.EffectTargetUnit.Boosts.SupportAttackModifier += FinalySupportAttackValue;
 
@@ -46,6 +49,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "Support attack can be used " + _SupportAttackValue + " more times";
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.SupportAttackModifierMax += LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

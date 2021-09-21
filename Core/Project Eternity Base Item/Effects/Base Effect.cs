@@ -272,6 +272,8 @@ namespace ProjectEternity.Core.Item
         /// <returns>Activation info used for logs</returns>
         protected abstract string DoExecuteEffect();
 
+        protected internal abstract void ReactivateEffect();
+
         public override bool Equals(object obj)
         {
             if (obj is BaseEffect)

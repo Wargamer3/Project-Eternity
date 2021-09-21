@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "Limit Break Effect";
 
         private string _LimitBreakValue;
+        private int LastEvaluationResult;
 
         public WillLimitBreakEffect()
             : base(Name, true)
@@ -36,12 +37,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected override string DoExecuteEffect()
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_LimitBreakValue);
-            Params.LocalContext.EffectTargetCharacter.MaxWill += (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            Params.LocalContext.EffectTargetCharacter.MaxWill += LastEvaluationResult;
 
             if (EvaluationResult != _LimitBreakValue)
                 return "Max Will increased by " + (int)double.Parse(FormulaParser.ActiveParser.Evaluate(_LimitBreakValue), CultureInfo.InvariantCulture) + " (" + _LimitBreakValue + ")";
             else
                 return "Max Will increased by " + _LimitBreakValue;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetCharacter.MaxWill += LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

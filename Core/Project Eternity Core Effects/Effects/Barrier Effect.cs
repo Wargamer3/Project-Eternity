@@ -100,7 +100,11 @@ namespace ProjectEternity.Core.Effects
 
             return Output;
         }
-        
+
+        protected override void ReactivateEffect()
+        {
+        }
+
         protected override BaseEffect DoCopy()
         {
             BarrierEffect NewEffect = new BarrierEffect(Params);

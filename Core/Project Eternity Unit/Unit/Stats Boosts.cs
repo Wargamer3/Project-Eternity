@@ -88,6 +88,8 @@ namespace ProjectEternity.Core.Units
             ParryModifier = new List<string>();
             NullifyAttackModifier = new List<string>();
             DicTerrainLetterAttributeModifier = new Dictionary<string, int>();
+            SupportAttackModifier = 0;
+            SupportDefendModifier = 0;
             Reset();
         }
 
@@ -162,9 +164,7 @@ namespace ProjectEternity.Core.Units
             EvasionModifier = 0;
             EvasionFixedModifier = 0;//Give a fixed evasion value.
 
-            SupportAttackModifier = 0;
             SupportAttackModifierMax = 0;
-            SupportDefendModifier = 0;
             SupportDefendModifierMax = 0;
         }
     }

@@ -76,6 +76,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return TerrainAttribute.Tileset + " (" + TerrainAttribute.Origin.X + ", " + TerrainAttribute.Origin.Y + ")";
         }
 
+        protected override void ReactivateEffect()
+        {
+            //Don't change terrain on reactivation
+        }
+
         protected override BaseEffect DoCopy()
         {
             ChangeTerrainEffect NewEffect = new ChangeTerrainEffect(Params);

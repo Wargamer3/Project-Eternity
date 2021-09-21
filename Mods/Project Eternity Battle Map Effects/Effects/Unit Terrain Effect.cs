@@ -17,6 +17,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Operators.NumberTypes _NumberType;
         private string _Value;
         private bool _CanDowngrade;
+        private int LastEvaluationResult;
 
         public UnitTerrainEffect()
             : base(Name, true)
@@ -48,6 +49,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_Value);
             int FinalValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = FinalValue;
 
             string ExtraText = string.Empty;
 
@@ -84,7 +86,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 + Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain]
                 + ExtraText;
         }
-        
+
+        protected override void ReactivateEffect()
+        {
+            if (NumberType == Operators.NumberTypes.Absolute)
+            {
+                if (_CanDowngrade)
+                {
+                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = LastEvaluationResult;
+                }
+                else if (LastEvaluationResult < Params.LocalContext.EffectTargetUnit.DicTerrainValue[_Terrain])
+                {
+                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = Math.Max(Params.LocalContext.EffectTargetUnit.DicTerrainValue[_Terrain], LastEvaluationResult);
+                }
+            }
+            else if (NumberType == Operators.NumberTypes.Relative)
+            {
+                Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = Math.Min(Unit.Grades.Length, Math.Max(0, Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] + LastEvaluationResult));
+            }
+        }
+
         protected override BaseEffect DoCopy()
         {
             UnitTerrainEffect NewEffect = new UnitTerrainEffect(Params);

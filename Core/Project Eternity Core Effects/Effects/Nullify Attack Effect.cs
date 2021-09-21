@@ -46,6 +46,12 @@ namespace ProjectEternity.Core.Effects
             return string.Join(System.Environment.NewLine, ArrayAttack);
         }
 
+        protected override void ReactivateEffect()
+        {
+            for (int A = ArrayAttack.Length - 1; A >= 0; --A)
+                Params.LocalContext.EffectTargetUnit.Boosts.NullifyAttackModifier.Add(ArrayAttack[A]);
+        }
+
         protected override BaseEffect DoCopy()
         {
             NullifyAttackEffect NewEffect = new NullifyAttackEffect(Params);

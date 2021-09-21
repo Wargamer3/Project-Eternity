@@ -40,7 +40,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = GetFinalDamageValue();
+            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_FinalDamageValue);
+            LastEvaluationResult = EvaluationResult;
 
             string ExtraText = "";
             if (EvaluationResult != _FinalDamageValue)
@@ -67,21 +68,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return _FinalDamageValue;
         }
 
-        private string GetFinalDamageValue()
+        protected override void ReactivateEffect()
         {
-            string EvaluationResult;
-
-            try
+            if (NumberType == Operators.NumberTypes.Absolute)
             {
-                EvaluationResult = FormulaParser.ActiveParser.Evaluate(_FinalDamageValue);
-                LastEvaluationResult = EvaluationResult;
-            }
-            catch(Exception)
-            {
-                return LastEvaluationResult;
-            }
+                int EvaluationValue = (int)double.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
 
-            return EvaluationResult;
+                Params.LocalContext.EffectTargetUnit.Boosts.FinalDamageModifier = EvaluationValue;
+            }
+            else if (NumberType == Operators.NumberTypes.Relative)
+            {
+                float EvaluationValue = float.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+                Params.LocalContext.EffectTargetUnit.Boosts.FinalDamageMultiplier = EvaluationValue;
+            }
         }
 
         protected override BaseEffect DoCopy()

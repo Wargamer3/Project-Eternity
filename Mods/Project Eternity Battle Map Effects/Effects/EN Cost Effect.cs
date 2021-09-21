@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "EN Cost Effect";
 
         private string _ENCostValue;
+        private int LastEvaluationResult;
 
         public ENCostEffect()
             : base(Name, true)
@@ -37,6 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_ENCostValue);
             int EvaluationValue = (int)double.Parse(FormulaParser.ActiveParser.Evaluate(_ENCostValue), CultureInfo.InvariantCulture);
+            LastEvaluationResult = EvaluationValue;
 
             Params.LocalContext.EffectTargetUnit.Boosts.ENCostModifier = EvaluationValue;
 
@@ -46,6 +48,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "EN cost changed by " + _ENCostValue;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.ENCostModifier = LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

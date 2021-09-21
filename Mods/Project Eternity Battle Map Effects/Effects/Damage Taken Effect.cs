@@ -13,6 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private Operators.NumberTypes _NumberType;
         private string _DamageTakenValue;
+        private string LastEvaluationResult;
 
         public DamageTakenEffect()
             : base(Name, true)
@@ -42,14 +43,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult;
 
-            try
-            {
-                EvaluationResult = FormulaParser.ActiveParser.Evaluate(_DamageTakenValue);
-            }
-            catch
-            {
-                return string.Empty;
-            }
+            EvaluationResult = FormulaParser.ActiveParser.Evaluate(_DamageTakenValue);
+            LastEvaluationResult = EvaluationResult;
 
             string ExtraText = string.Empty;
             if (EvaluationResult != _DamageTakenValue)
@@ -75,6 +70,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "Damage taken increased by " + EvaluationResult;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            if (_NumberType == Operators.NumberTypes.Absolute)
+            {
+                int EvaluationValue = (int)double.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+
+                Params.LocalContext.EffectTargetUnit.Boosts.FinalDamageTakenFixedModifier = EvaluationValue;
+            }
+            else if (_NumberType == Operators.NumberTypes.Relative)
+            {
+                float EvaluationValue = float.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+
+                Params.LocalContext.EffectTargetUnit.Boosts.BaseDamageTakenReductionMultiplier = EvaluationValue;
+            }
         }
 
         protected override BaseEffect DoCopy()

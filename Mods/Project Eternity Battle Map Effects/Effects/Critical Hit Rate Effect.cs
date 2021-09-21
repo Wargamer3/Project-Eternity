@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "Critical Hit Rate Effect";
 
         private string _CriticalHitRateValue;
+        private int LastEvaluationResult;
 
         public CriticalHitRateEffect()
             : base(Name, true)
@@ -37,6 +38,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_CriticalHitRateValue);
             int EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = EvaluationValue;
+
             string ExtraText = string.Empty;
 
             if (EvaluationResult != _CriticalHitRateValue)
@@ -47,6 +50,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Params.LocalContext.EffectTargetUnit.Boosts.CriticalHitRateModifier = EvaluationValue;
 
             return "Critical hit chances increased by " + EvaluationValue + ExtraText + "%";
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.CriticalHitRateModifier = LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

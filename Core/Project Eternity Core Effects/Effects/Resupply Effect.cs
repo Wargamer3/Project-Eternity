@@ -32,6 +32,11 @@ namespace ProjectEternity.Core.Effects
             return string.Empty;
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.ResupplyModifier = true;
+        }
+
         protected override BaseEffect DoCopy()
         {
             ResupplyEffect NewEffect = new ResupplyEffect(Params);

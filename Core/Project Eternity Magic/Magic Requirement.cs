@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 
@@ -54,6 +55,11 @@ namespace ProjectEternity.Core.Magic
 
         protected override void DoQuickSave(BinaryWriter BW)
         {
+        }
+
+        protected override void ReactivateEffect()
+        {
+            throw new NotImplementedException();
         }
     }
 

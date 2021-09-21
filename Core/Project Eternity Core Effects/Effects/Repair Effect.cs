@@ -32,6 +32,11 @@ namespace ProjectEternity.Core.Effects
             return string.Empty;
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.RepairModifier = true;
+        }
+
         protected override BaseEffect DoCopy()
         {
             RepairEffect NewEffect = new RepairEffect(Params);

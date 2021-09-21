@@ -37,6 +37,11 @@ namespace ProjectEternity.Core.Effects
             return string.Empty;
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.NullifyDamageModifier = true;
+        }
+
         protected override BaseEffect DoCopy()
         {
             NullifyDamageEffect NewEffect = new NullifyDamageEffect(Params);

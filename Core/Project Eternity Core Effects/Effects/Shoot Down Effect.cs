@@ -31,6 +31,11 @@ namespace ProjectEternity.Core.Effects
             throw new NotImplementedException();
         }
 
+        protected override void ReactivateEffect()
+        {
+            throw new NotImplementedException();
+        }
+
         protected override BaseEffect DoCopy()
         {
             ShootDownEffect NewEffect = new ShootDownEffect(Params);

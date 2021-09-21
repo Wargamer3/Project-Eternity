@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "Evasion Rate Effect";
 
         private string _EvasionRateValue;
+        private int LastEvaluationResult;
 
         public EvasionRateEffect()
             : base(Name, true)
@@ -37,6 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_EvasionRateValue);
             int EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = EvaluationValue;
 
             Params.LocalContext.EffectTargetUnit.Boosts.EvasionModifier += EvaluationValue;
 
@@ -46,6 +48,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "Evasion was raised by " + EvaluationValue;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.EvasionModifier += LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

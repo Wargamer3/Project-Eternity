@@ -13,6 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "Hit Rate Effect";
 
         private string _HitRateValue;
+        private int LastEvaluationResult;
 
         public HitRateEffect()
             : base(Name, true)
@@ -39,16 +40,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             string EvaluationResult;
             int EvaluationValue;
 
-            try
-            {
-                EvaluationResult = FormulaParser.ActiveParser.Evaluate(_HitRateValue);
-                EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
-
-            }
-            catch
-            {
-                return string.Empty;
-            }
+            EvaluationResult = FormulaParser.ActiveParser.Evaluate(_HitRateValue);
+            EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = EvaluationValue;
 
             Params.LocalContext.EffectTargetUnit.Boosts.AccuracyModifier += EvaluationValue;
 
@@ -58,6 +52,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "Hit rate increased by " + _HitRateValue;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.AccuracyModifier += LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

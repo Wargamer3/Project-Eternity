@@ -39,6 +39,11 @@ namespace ProjectEternity.Core.Effects
             return _IgnoreEnemySkillValue;
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.ListIgnoreSkill.Add(_IgnoreEnemySkillValue);
+        }
+
         protected override BaseEffect DoCopy()
         {
             IgnoreEnemySkillEffect NewEffect = new IgnoreEnemySkillEffect(Params);

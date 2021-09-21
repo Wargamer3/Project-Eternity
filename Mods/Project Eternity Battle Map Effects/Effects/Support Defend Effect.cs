@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "Support Defend Effect";
 
         private string _SupportDefendValue;
+        private int LastEvaluationResult;
 
         public SupportDefendEffect()
             : base(Name, true)
@@ -37,6 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_SupportDefendValue);
             int FinalSupportDefendValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = FinalSupportDefendValue;
             Params.LocalContext.EffectTargetUnit.Boosts.SupportDefendModifierMax += FinalSupportDefendValue;
             Params.LocalContext.EffectTargetUnit.Boosts.SupportDefendModifier += FinalSupportDefendValue;
 
@@ -46,6 +48,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "Support defend can be used " + _SupportDefendValue + " more times";
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.SupportDefendModifierMax += LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

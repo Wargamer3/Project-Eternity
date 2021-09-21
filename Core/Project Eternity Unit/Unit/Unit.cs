@@ -619,12 +619,12 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public void ExecuteSkillsEffects()
+        public void ReactivateEffects()
         {
             ResetBoosts();
             for (int C = ArrayCharacterActive.Length - 1; C >= 0; --C)
             {
-                ArrayCharacterActive[C].Effects.ExecuteAllEffects(ListIgnoreSkill);
+                ArrayCharacterActive[C].Effects.ReactivateEffects(ListIgnoreSkill);
             }
         }
 

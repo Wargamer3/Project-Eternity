@@ -70,6 +70,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return "SP Increased by " + EvaluationValue + Extra;
         }
 
+        protected override void ReactivateEffect()
+        {
+            //Don't regen SP on reactivation
+        }
+
         protected override BaseEffect DoCopy()
         {
             SPEffect NewEffect = new SPEffect(Params);

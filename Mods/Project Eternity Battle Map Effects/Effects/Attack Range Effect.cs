@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "Attack Range Effect";
 
         private string _RangeValue;
+        private int LastEvaluationResult;
 
         public AttackRangeEffect()
             : base(Name, true)
@@ -37,6 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_RangeValue);
             int EvaluationValue = (int)double.Parse(FormulaParser.ActiveParser.Evaluate(_RangeValue), CultureInfo.InvariantCulture);
+            LastEvaluationResult = EvaluationValue;
 
             string ExtraText = "";
             if (EvaluationResult != _RangeValue)
@@ -47,6 +49,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Params.LocalContext.EffectTargetUnit.Boosts.RangeModifier = EvaluationValue;
 
             return "Attack range increased by " + EvaluationValue + ExtraText;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.RangeModifier = LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

@@ -32,6 +32,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return string.Empty;
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.CriticalAlwaysFail = true;
+        }
+
         protected override BaseEffect DoCopy()
         {
             CriticalHitAlwaysFailEffect NewEffect = new CriticalHitAlwaysFailEffect(Params);

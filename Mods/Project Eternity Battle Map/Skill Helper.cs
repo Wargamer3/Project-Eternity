@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             //Reset active effects in case an effect was removed.
-            ActiveUnit.ExecuteSkillsEffects();
+            ActiveUnit.ReactivateEffects();
 
             GlobalBattleContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot);
 

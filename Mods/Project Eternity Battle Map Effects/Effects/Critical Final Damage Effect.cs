@@ -13,6 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private Operators.NumberTypes _NumberType;
         private string _BaseDamageValue;
+        private string LastEvaluationResult;
 
         public CriticalFinalDamageEffect()
             : base(Name, true)
@@ -39,6 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected override string DoExecuteEffect()
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_BaseDamageValue);
+            LastEvaluationResult = EvaluationResult;
 
             string ExtraText = "";
             if (EvaluationResult != _BaseDamageValue)
@@ -60,6 +62,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "Will deal " + _BaseDamageValue + ExtraText + " extra damage";
+        }
+
+        protected override void ReactivateEffect()
+        {
+            if (NumberType == Operators.NumberTypes.Absolute)
+            {
+                int EvaluationValue = (int)double.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+                Params.LocalContext.EffectTargetUnit.Boosts.CriticalFinalDamageModifier = EvaluationValue;
+            }
+            else if (NumberType == Operators.NumberTypes.Relative)
+            {
+                float EvaluationValue = float.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+                Params.LocalContext.EffectTargetUnit.Boosts.CriticalFinalDamageMultiplier = EvaluationValue;
+            }
         }
 
         protected override BaseEffect DoCopy()

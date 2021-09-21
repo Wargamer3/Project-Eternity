@@ -1,8 +1,8 @@
-﻿using ProjectEternity.Core.Item;
+﻿using System;
+using System.IO;
+using ProjectEternity.Core.Item;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using System.Collections.Generic;
-using System.IO;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
@@ -134,6 +134,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         protected override void DoQuickSave(BinaryWriter BW)
         {
         }
+
+        protected override void ReactivateEffect()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public abstract class TripleThunderAttackEffect : BaseEffect
@@ -165,6 +170,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         protected override void DoQuickSave(BinaryWriter BW)
         {
+        }
+
+        protected override void ReactivateEffect()
+        {
+            throw new NotImplementedException();
         }
     }
 

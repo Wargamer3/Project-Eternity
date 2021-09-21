@@ -39,6 +39,11 @@ namespace ProjectEternity.Core.Effects
             //AddPilotSpiritEffect(ActiveUnit, ActiveUnit.Pilot, TargetSquad, ActivePlayerIndex);
         }
 
+        protected override void ReactivateEffect()
+        {
+            //Don't activate the spirit on reactivation
+        }
+
         protected override BaseEffect DoCopy()
         {
             ActivateSpiritEffect NewEffect = new ActivateSpiritEffect(Params);

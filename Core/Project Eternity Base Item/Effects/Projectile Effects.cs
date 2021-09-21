@@ -36,6 +36,10 @@ namespace ProjectEternity.Core.Effects
         protected override void DoQuickSave(BinaryWriter BW)
         {
         }
+
+        protected internal override void ReactivateEffect()
+        {
+        }
     }
 
     public sealed class ChangeAttackSpeedEffect : ProjectileEffect

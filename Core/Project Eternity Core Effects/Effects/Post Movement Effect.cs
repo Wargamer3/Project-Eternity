@@ -63,6 +63,14 @@ namespace ProjectEternity.Core.Effects
             return "Attack: " + (_Attack ? "Yes" : "No") + " Transform: " + (_Transform ? "Yes" : "No") + " Spirit: " + (_Spirit ? "Yes" : "No") + " Move: " + (_Move ? "Yes" : "No");
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.PostMovementModifier.Attack = _Attack;
+            Params.LocalContext.EffectTargetUnit.Boosts.PostMovementModifier.Transform = _Transform;
+            Params.LocalContext.EffectTargetUnit.Boosts.PostMovementModifier.Spirit = _Spirit;
+            Params.LocalContext.EffectTargetUnit.Boosts.PostMovementModifier.Move = _Move;
+        }
+
         protected override BaseEffect DoCopy()
         {
             PostMovementEffect NewEffect = new PostMovementEffect(Params);

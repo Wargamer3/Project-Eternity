@@ -13,6 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private StatusTypes _StatusType;
         private string _EffectValue;
+        private int LastEvaluationResult;
 
         public StatusEffect()
             : base(Name, true)
@@ -41,6 +42,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_EffectValue);
             int EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = EvaluationValue;
 
             string Extra = "";
             if (EvaluationResult != _EffectValue)
@@ -76,6 +78,36 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return _EffectValue;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            switch (StatusType)
+            {
+                case StatusTypes.MEL:
+                    Params.LocalContext.EffectTargetCharacter.BonusMEL += LastEvaluationResult;
+                    break;
+
+                case StatusTypes.RNG:
+                    Params.LocalContext.EffectTargetCharacter.BonusRNG += LastEvaluationResult;
+                    break;
+
+                case StatusTypes.DEF:
+                    Params.LocalContext.EffectTargetCharacter.BonusDEF += LastEvaluationResult;
+                    break;
+
+                case StatusTypes.SKL:
+                    Params.LocalContext.EffectTargetCharacter.BonusSKL += LastEvaluationResult;
+                    break;
+
+                case StatusTypes.EVA:
+                    Params.LocalContext.EffectTargetCharacter.BonusEVA += LastEvaluationResult;
+                    break;
+
+                case StatusTypes.HIT:
+                    Params.LocalContext.EffectTargetCharacter.BonusHIT += LastEvaluationResult;
+                    break;
+            }
         }
 
         protected override BaseEffect DoCopy()

@@ -14,6 +14,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private Operators.NumberTypes _NumberType;
         private string _WillValue;
+        private string LastEvaluationResult;
 
         public WillEffect()
             : base(Name, true)
@@ -45,17 +46,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected override string DoExecuteEffect()
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_WillValue);
+            LastEvaluationResult = EvaluationResult;
             Character TargetCharacter = Params.LocalContext.EffectTargetCharacter;
 
             int WillBonus = 0;
 
             if (NumberType == Operators.NumberTypes.Absolute)
             {
-                WillBonus = (int)double.Parse(FormulaParser.ActiveParser.Evaluate(_WillValue), CultureInfo.InvariantCulture);
+                WillBonus = (int)double.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
             }
             else if (NumberType == Operators.NumberTypes.Relative)
             {
-                WillBonus = (int)(TargetCharacter.Will * float.Parse(FormulaParser.ActiveParser.Evaluate(_WillValue), CultureInfo.InvariantCulture));
+                WillBonus = (int)(TargetCharacter.Will * float.Parse(LastEvaluationResult, CultureInfo.InvariantCulture));
             }
 
             TargetCharacter.WillBonus += WillBonus;
@@ -66,6 +68,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "Will increased by " + _WillValue;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Character TargetCharacter = Params.LocalContext.EffectTargetCharacter;
+
+            if (NumberType == Operators.NumberTypes.Absolute)
+            {
+                TargetCharacter.WillBonus += (int)double.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+            }
+            else if (NumberType == Operators.NumberTypes.Relative)
+            {
+                TargetCharacter.WillBonus += (int)(TargetCharacter.Will * float.Parse(LastEvaluationResult, CultureInfo.InvariantCulture));
+            }
         }
 
         protected override BaseEffect DoCopy()

@@ -68,6 +68,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return Output;
         }
 
+        protected override void ReactivateEffect()
+        {
+            if (_UseAir && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainAir))
+            {
+                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add(Core.Units.UnitStats.TerrainAir);
+            }
+            if (_UseLand && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainLand))
+            {
+                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add(Core.Units.UnitStats.TerrainLand);
+            }
+            if (_UseSea && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainSea))
+            {
+                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add(Core.Units.UnitStats.TerrainSea);
+            }
+            if (_UseSpace && !Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Contains(Core.Units.UnitStats.TerrainSpace))
+            {
+                Params.LocalContext.EffectTargetUnit.ListTerrainChoices.Add(Core.Units.UnitStats.TerrainSpace);
+            }
+        }
+
         protected override BaseEffect DoCopy()
         {
             UnitMovementTypeEffect NewEffect = new UnitMovementTypeEffect(Params);

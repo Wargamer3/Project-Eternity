@@ -11,9 +11,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public static string Name = "Unit Stat Effect";
 
-        private Core.Effects.UnitStats _UnitStat;
+        private UnitStats _UnitStat;
         private Operators.NumberTypes _NumberType;
         private string _Value;
+        private string LastEvaluationResult;
 
         public UnitStatEffect()
             : base(Name, true)
@@ -29,7 +30,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override void Load(BinaryReader BR)
         {
-            _UnitStat = (Core.Effects.UnitStats)BR.ReadByte();
+            _UnitStat = (UnitStats)BR.ReadByte();
             _NumberType = (Operators.NumberTypes)BR.ReadByte();
             _Value = BR.ReadString();
         }
@@ -44,6 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected override string DoExecuteEffect()
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_Value);
+            LastEvaluationResult = EvaluationResult;
             string Extra = "";
             if (EvaluationResult != _Value)
             {
@@ -78,31 +80,90 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (NumberType == Operators.NumberTypes.Relative)
             {
+                float EvaluationValue = float.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+
                 switch (_UnitStat)
                 {
                     case UnitStats.MaxHP:
-                        Params.LocalContext.EffectTargetUnit.Boosts.HPMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxHP * float.Parse(EvaluationResult, CultureInfo.InvariantCulture));
-                        return "Map HP increased by " + (int)(Params.LocalContext.EffectTargetUnit.MaxHP * float.Parse(EvaluationResult, CultureInfo.InvariantCulture)) + Extra;
+                        Params.LocalContext.EffectTargetUnit.Boosts.HPMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxHP * EvaluationValue);
+                        return "Map HP increased by " + (int)(Params.LocalContext.EffectTargetUnit.MaxHP * EvaluationValue) + Extra;
 
                     case UnitStats.MaxEN:
-                        Params.LocalContext.EffectTargetUnit.Boosts.ENMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxEN * float.Parse(EvaluationResult, CultureInfo.InvariantCulture));
-                        return "Map EN increased by " + (int)(Params.LocalContext.EffectTargetUnit.MaxEN * float.Parse(EvaluationResult, CultureInfo.InvariantCulture)) + Extra;
+                        Params.LocalContext.EffectTargetUnit.Boosts.ENMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxEN * EvaluationValue);
+                        return "Map EN increased by " + (int)(Params.LocalContext.EffectTargetUnit.MaxEN * EvaluationValue) + Extra;
 
                     case UnitStats.Armor:
-                        Params.LocalContext.EffectTargetUnit.Boosts.ArmorModifier += (int)(Params.LocalContext.EffectTargetUnit.Armor * float.Parse(EvaluationResult, CultureInfo.InvariantCulture));
-                        return "Armor increased by " + (int)(Params.LocalContext.EffectTargetUnit.Armor * float.Parse(EvaluationResult, CultureInfo.InvariantCulture)) + Extra;
+                        Params.LocalContext.EffectTargetUnit.Boosts.ArmorModifier += (int)(Params.LocalContext.EffectTargetUnit.Armor * EvaluationValue);
+                        return "Armor increased by " + (int)(Params.LocalContext.EffectTargetUnit.Armor * EvaluationValue) + Extra;
 
                     case UnitStats.Mobility:
-                        Params.LocalContext.EffectTargetUnit.Boosts.MobilityModifier += (int)(Params.LocalContext.EffectTargetUnit.Mobility * float.Parse(EvaluationResult, CultureInfo.InvariantCulture));
-                        return "Mobility increased by " + (int)(Params.LocalContext.EffectTargetUnit.Mobility * float.Parse(EvaluationResult, CultureInfo.InvariantCulture)) + Extra;
+                        Params.LocalContext.EffectTargetUnit.Boosts.MobilityModifier += (int)(Params.LocalContext.EffectTargetUnit.Mobility * EvaluationValue);
+                        return "Mobility increased by " + (int)(Params.LocalContext.EffectTargetUnit.Mobility * EvaluationValue) + Extra;
 
                     case UnitStats.MaxMV:
-                        Params.LocalContext.EffectTargetUnit.Boosts.MVMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxMovement * float.Parse(EvaluationResult, CultureInfo.InvariantCulture));
-                        return "Max MV increased by " + (int)(Params.LocalContext.EffectTargetUnit.MaxMovement * float.Parse(EvaluationResult, CultureInfo.InvariantCulture)) + Extra;
+                        Params.LocalContext.EffectTargetUnit.Boosts.MVMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxMovement * EvaluationValue);
+                        return "Max MV increased by " + (int)(Params.LocalContext.EffectTargetUnit.MaxMovement * EvaluationValue) + Extra;
                 }
             }
 
             return _Value;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            if (NumberType == Operators.NumberTypes.Absolute)
+            {
+                int EvaluationValue = (int)double.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+                switch (_UnitStat)
+                {
+                    case UnitStats.MaxHP:
+                        Params.LocalContext.EffectTargetUnit.Boosts.HPMaxModifier += EvaluationValue;
+                        break;
+
+                    case UnitStats.MaxEN:
+                        Params.LocalContext.EffectTargetUnit.Boosts.ENMaxModifier += EvaluationValue;
+                        break;
+
+                    case UnitStats.Armor:
+                        Params.LocalContext.EffectTargetUnit.Boosts.ArmorModifier += EvaluationValue;
+                        break;
+
+                    case UnitStats.Mobility:
+                        Params.LocalContext.EffectTargetUnit.Boosts.MobilityModifier += EvaluationValue;
+                        break;
+
+                    case UnitStats.MaxMV:
+                        Params.LocalContext.EffectTargetUnit.Boosts.MVMaxModifier += EvaluationValue;
+                        break;
+                }
+            }
+            else if (NumberType == Operators.NumberTypes.Relative)
+            {
+                float EvaluationValue = float.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+
+                switch (_UnitStat)
+                {
+                    case UnitStats.MaxHP:
+                        Params.LocalContext.EffectTargetUnit.Boosts.HPMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxHP * EvaluationValue);
+                        break;
+
+                    case UnitStats.MaxEN:
+                        Params.LocalContext.EffectTargetUnit.Boosts.ENMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxEN * EvaluationValue);
+                        break;
+
+                    case UnitStats.Armor:
+                        Params.LocalContext.EffectTargetUnit.Boosts.ArmorModifier += (int)(Params.LocalContext.EffectTargetUnit.Armor * EvaluationValue);
+                        break;
+
+                    case UnitStats.Mobility:
+                        Params.LocalContext.EffectTargetUnit.Boosts.MobilityModifier += (int)(Params.LocalContext.EffectTargetUnit.Mobility * EvaluationValue);
+                        break;
+
+                    case UnitStats.MaxMV:
+                        Params.LocalContext.EffectTargetUnit.Boosts.MVMaxModifier += (int)(Params.LocalContext.EffectTargetUnit.MaxMovement * EvaluationValue);
+                        break;
+                }
+            }
         }
 
         protected override BaseEffect DoCopy()

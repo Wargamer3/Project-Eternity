@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "MV Effect";
 
         private string _MVValue;
+        private int LastEvaluationResult;
 
         public MVEffect()
             : base(Name, true)
@@ -37,6 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_MVValue);
             int EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = EvaluationValue;
 
             Params.LocalContext.EffectTargetUnit.Boosts.MovementModifier = EvaluationValue;
 
@@ -46,6 +48,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return "MV increased by " + _MVValue;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.MovementModifier = LastEvaluationResult;
         }
 
         protected override BaseEffect DoCopy()

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -33,6 +34,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoQuickSave(BinaryWriter BW)
         {
+        }
+
+        protected override void ReactivateEffect()
+        {
+            throw new NotImplementedException();
         }
     }
 }

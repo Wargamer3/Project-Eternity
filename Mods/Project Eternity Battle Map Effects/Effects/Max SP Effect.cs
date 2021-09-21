@@ -13,6 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private Operators.NumberTypes _NumberType;
         private string _MaxSPValue;
+        private string LastEvaluationResult;
 
         public MaxSPEffect()
             : base(Name, true)
@@ -39,6 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected override string DoExecuteEffect()
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_MaxSPValue);
+            LastEvaluationResult = EvaluationResult;
 
             string Extra = string.Empty;
 
@@ -61,6 +63,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Params.LocalContext.EffectTargetCharacter.BonusMaxSP += EvaluationValue;
 
             return "Max SP increased by " + EvaluationValue + Extra;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            int EvaluationValue = 0;
+
+            if (NumberType == Operators.NumberTypes.Absolute)
+            {
+                EvaluationValue = (int)double.Parse(LastEvaluationResult, CultureInfo.InvariantCulture);
+            }
+            else if (NumberType == Operators.NumberTypes.Relative)
+            {
+                EvaluationValue = (int)(Params.LocalContext.EffectTargetCharacter.MaxSP * float.Parse(LastEvaluationResult, CultureInfo.InvariantCulture));
+            }
+
+            Params.LocalContext.EffectTargetCharacter.BonusMaxSP += EvaluationValue;
         }
 
         protected override BaseEffect DoCopy()

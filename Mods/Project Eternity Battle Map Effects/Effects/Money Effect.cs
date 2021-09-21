@@ -37,6 +37,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             throw new NotImplementedException();
         }
 
+        protected override void ReactivateEffect()
+        {
+            throw new NotImplementedException();
+        }
+
         protected override BaseEffect DoCopy()
         {
             MoneyEffect NewEffect = new MoneyEffect(Params);

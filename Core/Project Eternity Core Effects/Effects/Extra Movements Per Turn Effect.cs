@@ -41,6 +41,11 @@ namespace ProjectEternity.Core.Effects
             return _ExtraMovementsPerTurn + " - max " + _MaxExtraMovementsPerTurn;
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.ExtraActionsPerTurn = _ExtraMovementsPerTurn;
+        }
+
         protected override BaseEffect DoCopy()
         {
             ExtraMovementsPerTurnEffect NewEffect = new ExtraMovementsPerTurnEffect(Params);

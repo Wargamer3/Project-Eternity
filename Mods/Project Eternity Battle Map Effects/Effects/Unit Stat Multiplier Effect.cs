@@ -9,7 +9,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public static string Name = "Unit Stat Multiplier Effect";
 
-        private Core.Effects.UnitStats _UnitStat;
+        private UnitStats _UnitStat;
         private float _Value;
 
         public UnitStatMultiplierEffect()
@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override void Load(BinaryReader BR)
         {
-            _UnitStat = (Core.Effects.UnitStats)BR.ReadByte();
+            _UnitStat = (UnitStats)BR.ReadByte();
             _Value = BR.ReadSingle();
         }
 
@@ -62,6 +62,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return _Value.ToString();
         }
 
+        protected override void ReactivateEffect()
+        {
+            switch (_UnitStat)
+            {
+                case UnitStats.MaxHP:
+                    Params.LocalContext.EffectTargetUnit.Boosts.HPMaxMultiplier = _Value;
+                    break;
+
+                case UnitStats.MaxEN:
+                    Params.LocalContext.EffectTargetUnit.Boosts.ENMaxMultiplier = _Value;
+                    break;
+
+                case UnitStats.Armor:
+                    Params.LocalContext.EffectTargetUnit.Boosts.ArmorMultiplier = _Value;
+                    break;
+
+                case UnitStats.Mobility:
+                    Params.LocalContext.EffectTargetUnit.Boosts.MobilityMultiplier = _Value;
+                    break;
+
+                case UnitStats.MaxMV:
+                    Params.LocalContext.EffectTargetUnit.Boosts.MVMaxMultiplier = _Value;
+                    break;
+            }
+        }
+
         protected override BaseEffect DoCopy()
         {
             UnitStatMultiplierEffect NewEffect = new UnitStatMultiplierEffect(Params);
@@ -85,7 +111,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         [TypeConverter(typeof(UnitStatsConverter)),
         CategoryAttribute("Effect Attributes"),
         DescriptionAttribute(".")]
-        public Core.Effects.UnitStats UnitStat
+        public UnitStats UnitStat
         {
             get { return _UnitStat; }
             set { _UnitStat = value; }

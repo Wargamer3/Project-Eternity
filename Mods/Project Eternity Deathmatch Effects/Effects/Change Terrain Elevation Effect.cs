@@ -61,6 +61,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         }
 
+        protected override void ReactivateEffect()
+        {
+            //Don't change terrain on reactivation
+        }
+
         protected override BaseEffect DoCopy()
         {
             ChangeTerrainElevationEffect NewEffect = new ChangeTerrainElevationEffect(Params);

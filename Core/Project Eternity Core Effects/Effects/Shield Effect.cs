@@ -31,6 +31,11 @@ namespace ProjectEternity.Core.Effects
             return string.Empty;
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.ShieldModifier = true;
+        }
+
         protected override BaseEffect DoCopy()
         {
             ShieldEffect NewEffect = new ShieldEffect(Params);

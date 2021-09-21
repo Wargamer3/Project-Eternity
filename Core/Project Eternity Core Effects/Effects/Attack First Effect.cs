@@ -32,6 +32,11 @@ namespace ProjectEternity.Core.Effects
             return string.Empty;
         }
 
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.AttackFirstModifier = true;
+        }
+
         protected override BaseEffect DoCopy()
         {
             AttackFirstEffect NewEffect = new AttackFirstEffect(Params);

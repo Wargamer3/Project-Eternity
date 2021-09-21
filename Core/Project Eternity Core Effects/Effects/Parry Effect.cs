@@ -45,6 +45,12 @@ namespace ProjectEternity.Core.Effects
             return string.Join(System.Environment.NewLine, ListAttack);
         }
 
+        protected override void ReactivateEffect()
+        {
+            for (int A = ListAttack.Count - 1; A >= 0; --A)
+                Params.LocalContext.EffectTargetUnit.Boosts.ParryModifier.Add(ListAttack[A]);
+        }
+
         protected override BaseEffect DoCopy()
         {
             ParryEffect NewEffect = new ParryEffect(Params);

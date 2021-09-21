@@ -105,7 +105,7 @@ namespace ProjectEternity.Core.Item
             return true;
         }
 
-        public void ExecuteAllEffects(List<string> ListIgnoreSkill = null)
+        public void ReactivateEffects(List<string> ListIgnoreSkill = null)
         {
             foreach (KeyValuePair<string, List<BaseEffect>> ActiveListEffect in DicActiveEffect)
             {
@@ -116,7 +116,7 @@ namespace ProjectEternity.Core.Item
                 {
                     BaseEffect ActiveEffect = ActiveListEffect.Value[E];
                     
-                    ActiveEffect.ExecuteEffect();
+                    ActiveEffect.ReactivateEffect();
                 }
             }
         }

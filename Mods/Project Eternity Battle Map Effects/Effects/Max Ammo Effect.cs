@@ -12,6 +12,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static string Name = "Max Ammo Effect";
 
         private string _MaxAmmoValue;
+        private int LastEvaluationResult;
+
 
         public MaxAmmoEffect()
             : base(Name, true)
@@ -37,6 +39,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_MaxAmmoValue);
             int FinalMaxAmmoValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            LastEvaluationResult = FinalMaxAmmoValue;
+
             Params.LocalContext.EffectTargetUnit.Boosts.AmmoMaxModifier = FinalMaxAmmoValue;
 
             for (int W = Params.LocalContext.EffectTargetUnit.ListAttack.Count - 1; W >= 0; --W)
@@ -47,6 +51,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return "Max ammo increased by " + FinalMaxAmmoValue + " (" + _MaxAmmoValue + ")";
             }
             return "Max ammo increased by " + _MaxAmmoValue;
+        }
+
+        protected override void ReactivateEffect()
+        {
+            Params.LocalContext.EffectTargetUnit.Boosts.AmmoMaxModifier = LastEvaluationResult;
+            //Don't give ammo on reactivation
         }
 
         protected override BaseEffect DoCopy()
