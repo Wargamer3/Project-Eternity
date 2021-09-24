@@ -1,4 +1,5 @@
-﻿using ProjectEternity.Core.Item;
+﻿using ProjectEternity.Core.Effects;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -26,10 +27,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void ExecuteAndAddEffectToTarget(BaseEffect ActiveSkillEffect, string SkillName)
         {
+            string LifeType = "";
+
+            if (ActiveSkillEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
+            {
+                LifeType = SkillEffect.LifetimeTypeTurns + GlobalContext.Map.ActivePlayerIndex;
+            }
+
             GlobalContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter, 
                 GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter);
 
-            GlobalContext.EffectTargetUnit.Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName);
+            GlobalContext.EffectTargetUnit.Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
         }
 
         public override AutomaticSkillTargetType Copy()
