@@ -546,6 +546,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         GraphicsDevice.PresentationParameters.BackBufferWidth,
                         GraphicsDevice.PresentationParameters.BackBufferHeight);
                 }
+
                 for (int M = 0; M < ListAnimationLayer[L].ListActiveMarker.Count; M++)
                 {
                     AnimationClass ActiveMarkerAnimation = ListAnimationLayer[L].ListActiveMarker[M].AnimationMarker;

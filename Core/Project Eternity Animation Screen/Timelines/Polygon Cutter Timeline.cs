@@ -205,7 +205,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 DicAnimationKeyFrame.Add(Key, NewPolygonCutterKeyFrame);
             }
 
-            PolygonCutterKeyFrame FirstKeyFrame = (PolygonCutterKeyFrame)DicAnimationKeyFrame[0];
+            int FirstKey = int.MaxValue;
+            foreach (int ActiveKey in DicAnimationKeyFrame.Keys)
+            {
+                if (FirstKey > ActiveKey)
+                    FirstKey = ActiveKey;
+            }
+            PolygonCutterKeyFrame FirstKeyFrame = (PolygonCutterKeyFrame)DicAnimationKeyFrame[FirstKey];
             for (int P = 0; P < FirstKeyFrame.ListPolygon.Count; P++)
             {
                 Polygon ActivePolygon = new Polygon(FirstKeyFrame.ListPolygon[P]);
@@ -223,10 +229,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             BW.Write((byte)_PolygonCutterType);
             BW.Write((byte)_PolygonCutterSpecialEffect);
 
-            if (((PolygonCutterKeyFrame)DicAnimationKeyFrame[0]).ListPolygon[1].ArrayUVCoordinates[0].X.ToString() != "0,635474861")
-            {
-
-            }
             BW.Write(DicAnimationKeyFrame.Count);
             foreach (KeyValuePair<int, VisibleAnimationObjectKeyFrame> KeyFrame in DicAnimationKeyFrame)
             {
