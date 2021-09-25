@@ -12,6 +12,7 @@ namespace ProjectEternity.Core.Online
         public IOnlineConnection Host;
         public IOnlineConnection LastTopLevel;
         private readonly Dictionary<string, OnlineScript> DicOnlineScripts;
+        protected readonly List<DelayedExecutableOnlineScript> ListDelayedOnlineCommand;
         public string ClientVersion;
 
         public string RoomID;
@@ -29,6 +30,7 @@ namespace ProjectEternity.Core.Online
         {
             RoomID = null;
             CurrentGame = null;
+            ListDelayedOnlineCommand = new List<DelayedExecutableOnlineScript>();
 
             this.DicOnlineScripts = DicOnlineScripts;
         }
@@ -138,6 +140,27 @@ namespace ProjectEternity.Core.Online
         public void StartGame()
         {
             Host.Send(new AskStartGameScriptClient());
+        }
+
+        public void ExecuteDelayedScripts()
+        {
+            lock (ListDelayedOnlineCommand)
+            {
+                foreach (DelayedExecutableOnlineScript ActiveCommand in ListDelayedOnlineCommand)
+                {
+                    ActiveCommand.ExecuteOnMainThread();
+                }
+
+                ListDelayedOnlineCommand.Clear();
+            }
+        }
+
+        public void DelayOnlineScript(DelayedExecutableOnlineScript ScriptToDelay)
+        {
+            lock (ListDelayedOnlineCommand)
+            {
+                ListDelayedOnlineCommand.Add(ScriptToDelay);
+            }
         }
     }
 }

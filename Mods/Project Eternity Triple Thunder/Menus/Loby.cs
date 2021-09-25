@@ -36,6 +36,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private InteractiveButton ShowSUVRoomsFilter;
         private InteractiveButton ShowDMRoomsFilter;
         private InteractiveButton ShowCTFRoomsFilter;
+
         private InteractiveButton ShowAllRoomsFilter;
 
         private InteractiveButton InfoButton;
@@ -69,20 +70,25 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             RoomType = RoomInformations.RoomTypeMission;
             DicAllRoom = new Dictionary<string, RoomInformations>();
+            ListChatHistory = new List<string>();
 
-            Dictionary<string, OnlineScript> DicOnlineScripts = new Dictionary<string, OnlineScript>();
+            Dictionary<string, OnlineScript> DicOnlineGameClientScripts = new Dictionary<string, OnlineScript>();
+            Dictionary<string, OnlineScript> DicOnlineCommunicationClientScripts = new Dictionary<string, OnlineScript>();
 
-            OnlineGameClient = new TripleThunderOnlineClient(DicOnlineScripts);
-            OnlineCommunicationClient = new CommunicationClient();
+            OnlineGameClient = new TripleThunderOnlineClient(DicOnlineGameClientScripts);
+            OnlineCommunicationClient = new CommunicationClient(DicOnlineCommunicationClientScripts);
 
-            DicOnlineScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
-            DicOnlineScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
-            DicOnlineScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
-            DicOnlineScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
-            DicOnlineScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, this, false));
-            DicOnlineScripts.Add(CreatePlayerScriptClient.ScriptName, new CreatePlayerScriptClient(OnlineGameClient));
-            DicOnlineScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
-            DicOnlineScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
+            DicOnlineGameClientScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
+            DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
+            DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
+            DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
+            DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, this, false));
+            DicOnlineGameClientScripts.Add(CreatePlayerScriptClient.ScriptName, new CreatePlayerScriptClient(OnlineGameClient));
+            DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
+            DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
+
+            DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient, this));
+            DicOnlineCommunicationClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
         }
 
         public override void Load()
@@ -93,7 +99,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             InitOnlineCommunicationClient();
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-            ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20));
+            ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20), SendMessage);
 
             sndBGM = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/Music/Channel.mp3");
             sndBGM.SetLoop(true);
@@ -167,11 +173,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 try
                 {
-                    IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
+                    IniFile ConnectionInfo = IniFile.ReadFromFile("Connection Info.ini");
 
                     if (ListServerIP.Count == 0)
                     {
-                        ListServerIP = ConnectionInfo.ReadAllValues("GameClientInfo");
+                        ListServerIP = ConnectionInfo.ReadAllValues("Game Client Info");
                     }
 
                     int ServerIndex = RandomHelper.Next(ListServerIP.Count);
@@ -204,11 +210,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 try
                 {
-                    IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
+                    IniFile ConnectionInfo = IniFile.ReadFromFile("Connection Info.ini");
 
                     if (ListServerIP.Count == 0)
                     {
-                        ListServerIP = ConnectionInfo.ReadAllValues("CommunicationClientInfo");
+                        ListServerIP = ConnectionInfo.ReadAllValues("Communication Client Info");
                     }
 
                     int ServerIndex = RandomHelper.Next(ListServerIP.Count);
@@ -232,9 +238,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             while (TryConnecting);
         }
 
+        public void IdentifyToCommunicationServer(string PlayerName)
+        {
+            OnlineCommunicationClient.Host.Send(new IdentifyScriptClient(PlayerName));
+        }
+
         public override void Update(GameTime gameTime)
         {
             OnlineGameClient.ExecuteDelayedScripts();
+            OnlineCommunicationClient.ExecuteDelayedScripts();
 
             if (FMODSystem.sndActiveBGM != sndBGM)
             {
@@ -329,6 +341,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             PushScreen(new Shop(PlayerManager.ListLocalPlayer[0]));
         }
 
+        public void AddMessage(string Message, Color MessageColor)
+        {
+            ListChatHistory.Add(Message);
+        }
+
+        private void SendMessage(string InputMessage)
+        {
+            ChatInput.SetText(string.Empty);
+            OnlineCommunicationClient.Host.Send(new SendGlobalMessageScriptClient(InputMessage, 0, 0, 0));
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             g.Draw(sprBackground, Vector2.Zero, Color.White);
@@ -400,6 +423,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             foreach (InteractiveButton ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Draw(g);
+            }
+
+            for (int M = 0; M < ListChatHistory.Count; M++)
+            {
+                float X = 30;
+                float Y = 430 + M * fntArial12.LineSpacing;
+                g.DrawString(fntArial12, ListChatHistory[M], new Vector2(X, Y), Color.White);
             }
         }
     }

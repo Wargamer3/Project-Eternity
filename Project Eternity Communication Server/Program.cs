@@ -13,17 +13,19 @@ namespace ProjectEternity.CommunicationServer
         {
             Dictionary<string, OnlineScript> DicOnlineScripts = new Dictionary<string, OnlineScript>();
 
-            IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
-            string ConnectionChain = ConnectionInfo.ReadField("CommunicationServerInfo", "ConnectionChain");
+            IniFile ConnectionInfo = IniFile.ReadFromFile("Connection Info.ini");
+            string ConnectionChain = ConnectionInfo.ReadField("Communication Server Info", "Connection Chain");
 
             MongoDBManager Databse = new MongoDBManager();
             Databse.Init(ConnectionChain);
             Core.Online.CommunicationServer OnlineServer = new Core.Online.CommunicationServer(Databse, DicOnlineScripts);
 
+            DicOnlineScripts.Add(SendGlobalMessageScriptServer.ScriptName, new SendGlobalMessageScriptServer(OnlineServer));
+            DicOnlineScripts.Add(IdentifyScriptClient.ScriptName, new IdentifyScriptServer(OnlineServer));
 
-            string PublicIP = ConnectionInfo.ReadField("CommunicationServerInfo", "PublicIP");
-            int PublicPort = int.Parse(ConnectionInfo.ReadField("CommunicationServerInfo", "PublicPort"));
-            Trace.Listeners.Add(new TextWriterTraceListener("ServerError.log", "myListener"));
+            string PublicIP = ConnectionInfo.ReadField("Communication Server Info", "Public IP");
+            int PublicPort = int.Parse(ConnectionInfo.ReadField("Communication Server Info", "Public Port"));
+            Trace.Listeners.Add(new TextWriterTraceListener("Communication Server Error.log", "myListener"));
 
             OnlineServer.StartListening(PublicIP, PublicPort);
             Console.ReadKey();

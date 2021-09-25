@@ -42,6 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Communication Commands\Identify Script Client.cs" />
+    <Compile Include="Commands\Communication Commands\Identify Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Receive Global Message Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Send Global Message Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Send Global Message Script Client.cs" />
     <Compile Include="Commands\Force Server Change Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Character Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Room Subtype Script Server.cs" />
@@ -89,7 +94,9 @@
     <Compile Include="Commands\Redirect Script Server.cs" />
     <Compile Include="Commands\Server Manager Added Script Client.cs" />
     <Compile Include="Commands\Server Manager Added Script Server.cs" />
+    <Compile Include="Delayed Executable Online Script.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="Communication Group.cs" />
     <Compile Include="Infrastructure\Game Client Group.cs" />
     <Compile Include="Infrastructure\Game Client.cs" />
     <Compile Include="Infrastructure\Communication Client.cs" />

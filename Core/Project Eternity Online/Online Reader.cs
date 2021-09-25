@@ -90,10 +90,13 @@ namespace ProjectEternity.Core.Online
             while (CanRead)
             {
                 int OriginalReadBufferPos = ReadBufferPos;
-                OnlineScript NewScript = null;
+                string ScriptName = null;
+
+                OnlineScript NewScript;
+
                 try
                 {
-                    string ScriptName = ReadString();
+                    ScriptName = ReadString();
                     OnlineScript ReadScript = DicOnlineScripts[ScriptName].Copy();
 
                     ReadScript.Read(this);
@@ -101,7 +104,15 @@ namespace ProjectEternity.Core.Online
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError(DateTimeOffset.Now + " - Reading " + ex.Message);
+                    if (ScriptName != null)
+                    {
+                        Trace.TraceError(DateTimeOffset.Now + " - Reading " + ScriptName + " : " + ex.Message);
+                    }
+                    else
+                    {
+                        Trace.TraceError(DateTimeOffset.Now + " - Reading " + ex.Message);
+                    }
+
                     Trace.TraceError(DateTimeOffset.Now + " - Reading " + ex.StackTrace);
                     Trace.Flush();
                     ReadBufferPos = OriginalReadBufferPos;

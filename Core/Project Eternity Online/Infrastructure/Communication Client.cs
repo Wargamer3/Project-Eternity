@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online
 {
@@ -15,6 +15,19 @@ namespace ProjectEternity.Core.Online
         public List<IOnlineConnection> ListPrivateMessageGroup;
         private CancellationTokenSource CancelToken;
         private readonly Dictionary<string, OnlineScript> DicOnlineScripts;
+        protected readonly List<DelayedExecutableOnlineScript> ListDelayedOnlineCommand;
+
+        public CommunicationClient()
+            : this(new Dictionary<string, OnlineScript>())
+        {
+        }
+
+        public CommunicationClient(Dictionary<string, OnlineScript> DicOnlineScripts)
+        {
+            ListDelayedOnlineCommand = new List<DelayedExecutableOnlineScript>();
+
+            this.DicOnlineScripts = DicOnlineScripts;
+        }
 
         public void Connect(IPAddress HostAddress, int HostPort)
         {
@@ -110,6 +123,27 @@ namespace ProjectEternity.Core.Online
             //Create a groupe to allow direct messaging.
             CreateGroup();
             //Send group invite to other client
+        }
+
+        public void ExecuteDelayedScripts()
+        {
+            lock (ListDelayedOnlineCommand)
+            {
+                foreach (DelayedExecutableOnlineScript ActiveCommand in ListDelayedOnlineCommand)
+                {
+                    ActiveCommand.ExecuteOnMainThread();
+                }
+
+                ListDelayedOnlineCommand.Clear();
+            }
+        }
+
+        public void DelayOnlineScript(DelayedExecutableOnlineScript ScriptToDelay)
+        {
+            lock (ListDelayedOnlineCommand)
+            {
+                ListDelayedOnlineCommand.Add(ScriptToDelay);
+            }
         }
     }
 }

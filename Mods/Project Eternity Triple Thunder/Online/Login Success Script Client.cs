@@ -34,6 +34,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             PlayerManager.OnlinePlayerID = PlayerID;
             PlayerManager.OnlinePlayerName = PlayerName;
             PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Online, false, 0));
+            Owner.IdentifyToCommunicationServer(PlayerName);
         }
 
         protected override void Read(OnlineReader Sender)

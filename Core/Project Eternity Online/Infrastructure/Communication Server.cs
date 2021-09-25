@@ -16,9 +16,11 @@ namespace ProjectEternity.Core.Online
     public class CommunicationServer
     {
         public readonly IOnlineConnection Host;
-        public readonly List<IOnlineConnection> ListPlayer;
+        public readonly Dictionary<string, IOnlineConnection> DicPlayerByName;
         public readonly List<IOnlineConnection> ListPlayerToRemove;
-        public readonly List<Group> ListGroup;
+        public readonly List<CommunicationGroup> ListGroup;
+
+        public readonly CommunicationGroup GlobalGroup;
 
         public string IP;
         public int Port;
@@ -35,8 +37,10 @@ namespace ProjectEternity.Core.Online
 
         public CommunicationServer(IDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
         {
-            ListPlayer = new List<IOnlineConnection>();
+            DicPlayerByName = new Dictionary<string, IOnlineConnection>();
             ListPlayerToRemove = new List<IOnlineConnection>();
+            ListGroup = new List<CommunicationGroup>();
+            GlobalGroup = new CommunicationGroup();
 
             SharedWriteBuffer = new OnlineWriter();
 
@@ -80,7 +84,7 @@ namespace ProjectEternity.Core.Online
 
         public void UpdatePlayers()
         {
-            Parallel.ForEach(ListPlayer, (ActivePlayer, loopState) =>
+            Parallel.ForEach(GlobalGroup.ListGroupMember, (ActivePlayer, loopState) =>
             {
                 if (!ActivePlayer.IsConnected())
                 {
@@ -106,7 +110,7 @@ namespace ProjectEternity.Core.Online
 
             while (ListPlayerToRemove.Count > 0)
             {
-                ListPlayer.Remove(ListPlayerToRemove[0]);
+                GlobalGroup.ListGroupMember.Remove(ListPlayerToRemove[0]);
                 ListPlayerToRemove.RemoveAt(0);
             }
         }
@@ -141,22 +145,13 @@ namespace ProjectEternity.Core.Online
 
         public void OnClientConnected(IOnlineConnection NewClient)
         {
-            ListPlayer.Add(NewClient);
+            GlobalGroup.AddMember(NewClient);
             NewClient.StartReadingScriptAsync();
-            NewClient.Send(new ConnectionSuccessScriptServer());
         }
 
-        public IRoomInformations TransferRoom(string RoomID)
+        internal void Identify(IOnlineConnection NewClient)
         {
-            return Database.TransferRoom(RoomID, IP);
+            DicPlayerByName.Add(NewClient.Name, NewClient);
         }
-    }
-
-    /// <summary>
-    /// Group with direct connection to each client to avoid cross server communication.
-    /// </summary>
-    public class Group
-    {
-        List<IOnlineConnection> ListGroupMember;
     }
 }

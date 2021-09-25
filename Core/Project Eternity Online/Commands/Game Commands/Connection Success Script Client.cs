@@ -24,9 +24,9 @@ namespace ProjectEternity.Core.Online
 
         protected internal override void Execute(IOnlineConnection Host)
         {
-            IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
-            string Username = ConnectionInfo.ReadField("PlayerInfo", "Username");
-            string Password = ConnectionInfo.ReadField("PlayerInfo", "Password");
+            IniFile ConnectionInfo = IniFile.ReadFromFile("Connection Info.ini");
+            string Username = ConnectionInfo.ReadField("Player Info", "Username");
+            string Password = ConnectionInfo.ReadField("Player Info", "Password");
             Host.Send(new AskRoomListScriptClient());
             Host.Send(new AskLoginScriptClient(Username, Password));
         }

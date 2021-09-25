@@ -124,6 +124,26 @@ namespace Database
             UpdatePlayerIsLoggedIn(OnlineConnection.ID, "", 0);
         }
 
+        public PlayerPOCO ConfirmIdentity(string Login, string Password)
+        {
+            FilterDefinition<BsonDocument> LastTimeCheckedFilter = Builders<BsonDocument>.Filter.Eq("Login", Login) & Builders<BsonDocument>.Filter.Eq("Password", Password);
+            BsonDocument FoundPlayerDocument = PlayersCollection.Find(LastTimeCheckedFilter).FirstOrDefault();
+            PlayerPOCO FoundPlayer = new PlayerPOCO();
+
+            if (FoundPlayerDocument == null && PlayersCollection.Find(Builders<BsonDocument>.Filter.Eq("Login", Login)).FirstOrDefault() == null)
+            {
+                FoundPlayer.ID = FoundPlayerDocument.GetValue("_id").AsObjectId.ToString();
+                FoundPlayer.Name = FoundPlayerDocument.GetValue("Name").AsString;
+            }
+            else
+            {
+                FoundPlayer.ID = FoundPlayerDocument.GetValue("_id").AsObjectId.ToString();
+                FoundPlayer.Name = FoundPlayerDocument.GetValue("Name").AsString;
+            }
+
+            return FoundPlayer;
+        }
+
         public PlayerPOCO LogInPlayer(string Login, string Password, string OwnerServerIP, int OwnerServerPort)
         {
             FilterDefinition<BsonDocument> LastTimeCheckedFilter = Builders<BsonDocument>.Filter.Eq("Login", Login) & Builders<BsonDocument>.Filter.Eq("Password", Password);
