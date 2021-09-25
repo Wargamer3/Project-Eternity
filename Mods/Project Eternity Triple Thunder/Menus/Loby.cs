@@ -59,7 +59,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         #endregion
 
-        private readonly TripleThunderOnlineClient OnlineClient;
+        private readonly TripleThunderOnlineClient OnlineGameClient;
+        private readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
         public List<string> Messenger;
         private string RoomType;
@@ -71,55 +72,25 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Dictionary<string, OnlineScript> DicOnlineScripts = new Dictionary<string, OnlineScript>();
 
-            OnlineClient = new TripleThunderOnlineClient(DicOnlineScripts);
+            OnlineGameClient = new TripleThunderOnlineClient(DicOnlineScripts);
+            OnlineCommunicationClient = new CommunicationClient();
 
             DicOnlineScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
-            DicOnlineScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineClient));
+            DicOnlineScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
             DicOnlineScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
             DicOnlineScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
-            DicOnlineScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineClient, this, false));
-            DicOnlineScripts.Add(CreatePlayerScriptClient.ScriptName, new CreatePlayerScriptClient(OnlineClient));
+            DicOnlineScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, this, false));
+            DicOnlineScripts.Add(CreatePlayerScriptClient.ScriptName, new CreatePlayerScriptClient(OnlineGameClient));
             DicOnlineScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
-            DicOnlineScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineClient, this));
+            DicOnlineScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
         }
 
         public override void Load()
         {
-            List<string> ListServerIP = new List<string>();
-            bool TryConnecting = true;
             Trace.Listeners.Add(new TextWriterTraceListener("ClientError.log", "myListener"));
 
-            //Loop through every connections until you find a working server or none
-            do
-            {
-                try
-                {
-                    IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
-
-                    if (ListServerIP.Count == 0)
-                    {
-                        ListServerIP = ConnectionInfo.ReadAllValues("ClientInfo");
-                    }
-
-                    int ServerIndex = RandomHelper.Next(ListServerIP.Count);
-                    string[] ArraySelectedServerInfo = ListServerIP[ServerIndex].Split(',');
-                    ListServerIP.RemoveAt(ServerIndex);
-
-                    OnlineClient.Connect(IPAddress.Parse(ArraySelectedServerInfo[0]), int.Parse(ArraySelectedServerInfo[1]));
-
-                    TryConnecting = false;
-                }
-                catch (Exception)
-                {
-                    if (ListServerIP.Count == 0)
-                    {
-                        TryConnecting = false;
-                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
-                        PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
-                    }
-                }
-            }
-            while (TryConnecting);
+            InitOnlineGameClient();
+            InitOnlineCommunicationClient();
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20));
@@ -187,9 +158,83 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             SoundSystem.ReleaseSound(sndButtonClick);
         }
 
+        private void InitOnlineGameClient()
+        {
+            List<string> ListServerIP = new List<string>();
+            bool TryConnecting = true;
+            //Loop through every connections until you find a working server or none
+            do
+            {
+                try
+                {
+                    IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
+
+                    if (ListServerIP.Count == 0)
+                    {
+                        ListServerIP = ConnectionInfo.ReadAllValues("GameClientInfo");
+                    }
+
+                    int ServerIndex = RandomHelper.Next(ListServerIP.Count);
+                    string[] ArraySelectedServerInfo = ListServerIP[ServerIndex].Split(',');
+                    ListServerIP.RemoveAt(ServerIndex);
+
+                    OnlineGameClient.Connect(IPAddress.Parse(ArraySelectedServerInfo[0]), int.Parse(ArraySelectedServerInfo[1]));
+
+                    TryConnecting = false;
+                }
+                catch (Exception)
+                {
+                    if (ListServerIP.Count == 0)
+                    {
+                        TryConnecting = false;
+                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
+                        PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
+                    }
+                }
+            }
+            while (TryConnecting);
+        }
+
+        private void InitOnlineCommunicationClient()
+        {
+            List<string> ListServerIP = new List<string>();
+            bool TryConnecting = true;
+            //Loop through every connections until you find a working server or none
+            do
+            {
+                try
+                {
+                    IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
+
+                    if (ListServerIP.Count == 0)
+                    {
+                        ListServerIP = ConnectionInfo.ReadAllValues("CommunicationClientInfo");
+                    }
+
+                    int ServerIndex = RandomHelper.Next(ListServerIP.Count);
+                    string[] ArraySelectedServerInfo = ListServerIP[ServerIndex].Split(',');
+                    ListServerIP.RemoveAt(ServerIndex);
+
+                    OnlineCommunicationClient.Connect(IPAddress.Parse(ArraySelectedServerInfo[0]), int.Parse(ArraySelectedServerInfo[1]));
+
+                    TryConnecting = false;
+                }
+                catch (Exception)
+                {
+                    if (ListServerIP.Count == 0)
+                    {
+                        TryConnecting = false;
+                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
+                        PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
+                    }
+                }
+            }
+            while (TryConnecting);
+        }
+
         public override void Update(GameTime gameTime)
         {
-            OnlineClient.ExecuteDelayedScripts();
+            OnlineGameClient.ExecuteDelayedScripts();
 
             if (FMODSystem.sndActiveBGM != sndBGM)
             {
@@ -226,8 +271,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     if (MouseHelper.InputLeftButtonPressed() && !ActiveRoom.Value.IsDead)
                     {
                         Dictionary<string, OnlineScript> DicCreateRoomScript = new Dictionary<string, OnlineScript>();
-                        OnlineClient.Host.AddOrReplaceScripts(DicCreateRoomScript);
-                        OnlineClient.JoinRoom(ActiveRoom.Key);
+                        OnlineGameClient.Host.AddOrReplaceScripts(DicCreateRoomScript);
+                        OnlineGameClient.JoinRoom(ActiveRoom.Key);
                         ActiveRoom.Value.IsDead = true;
                     }
                 }
@@ -270,11 +315,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             if (RoomType == RoomInformations.RoomTypeMission)
             {
-                PushScreen(new CreateRoomMission(OnlineClient, RoomType));
+                PushScreen(new CreateRoomMission(OnlineGameClient, RoomType));
             }
             else
             {
-                PushScreen(new CreateRoomBattle(OnlineClient, RoomType));
+                PushScreen(new CreateRoomBattle(OnlineGameClient, RoomType));
             }
         }
 

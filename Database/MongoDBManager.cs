@@ -21,11 +21,8 @@ namespace Database
             LastTimeChecked = DateTime.MinValue;
         }
 
-        public void Init()
+        public void Init(string ConnectionChain)
         {
-            IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
-            string ConnectionChain = ConnectionInfo.ReadField("ServerInfo", "ConnectionChain");
-
             //If there's a dependency problem look at the config file (ie: Project Eternity Triple Thunder Server.exe.config)
             DatabaseClient = new MongoClient(ConnectionChain);
             Database = DatabaseClient.GetDatabase("TripleThunder");

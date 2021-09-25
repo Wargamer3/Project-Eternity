@@ -1,10 +1,10 @@
 ﻿using System;
-using Database;
+using System.Diagnostics;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.TripleThunderScreen.Online;
-using System.Diagnostics;
+using Database;
 
 namespace ProjectEternity.GameScreens.TripleThunderServer
 {
@@ -14,8 +14,11 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
         {
             Dictionary<string, OnlineScript> DicOnlineScripts = new Dictionary<string, OnlineScript>();
 
+            IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
+            string ConnectionChain = ConnectionInfo.ReadField("GameServerInfo", "ConnectionChain");
+
             MongoDBManager Databse = new MongoDBManager();
-            Databse.Init();
+            Databse.Init(ConnectionChain);
             GameServer OnlineServer = new GameServer(Databse, DicOnlineScripts);
 
             DicOnlineScripts.Add(AskGameDataScriptServer.ScriptName, new AskGameDataScriptServer());
@@ -26,9 +29,8 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             DicOnlineScripts.Add(SendGameDataScriptServer.ScriptName, new SendGameDataScriptServer(OnlineServer));
             DicOnlineScripts.Add(TransferRoomScriptServer.ScriptName, new TransferRoomScriptServer(OnlineServer, TripleThunderClientGroup.Template));
 
-            IniFile ConnectionInfo = IniFile.ReadFromFile("ConnectionInfo.ini");
-            string PublicIP = ConnectionInfo.ReadField("ServerInfo", "PublicIP");
-            int PublicPort = int.Parse(ConnectionInfo.ReadField("ServerInfo", "PublicPort"));
+            string PublicIP = ConnectionInfo.ReadField("GameServerInfo", "PublicIP");
+            int PublicPort = int.Parse(ConnectionInfo.ReadField("GameServerInfo", "PublicPort"));
             Trace.Listeners.Add(new TextWriterTraceListener("ServerError.log", "myListener"));
 
             OnlineServer.StartListening(PublicIP, PublicPort);

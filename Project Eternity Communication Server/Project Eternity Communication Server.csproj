@@ -50,9 +50,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
+      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Project Eternity Online\Project Eternity Online.csproj">
       <Project>{b59faa7c-e4db-4e01-82fb-3c3cda7eebd7}</Project>
       <Name>Project Eternity Online</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{4304b49f-e5a9-4e1f-8ab4-5d3cc8c33b28}</Project>
+      <Name>Database</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
