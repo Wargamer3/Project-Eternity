@@ -87,11 +87,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             throw new NotImplementedException();
         }
 
-        public PlayerPOCO ConfirmIdentity(string Login, string Password)
-        {
-            throw new NotImplementedException();
-        }
-
         public PlayerPOCO LogInPlayer(string Login, string Password, string OwnerServerIP, int OwnerServerPort)
         {
             throw new NotImplementedException();
