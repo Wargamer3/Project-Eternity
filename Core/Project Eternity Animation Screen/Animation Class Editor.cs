@@ -128,6 +128,10 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 if (ActiveLayer.ListPolygonCutter.Count > 0)
                 {
+
+                    g.End();
+                    g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise);
+
                     PolygonEffect.Texture = ActiveLayer.renderTarget;
                     PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
@@ -140,7 +144,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 }
 
                 if (IsInEditMode || ActiveLayer.ListPolygonCutter.Count <= 0)
-                    g.Draw(ActiveLayer.renderTarget, Vector2.Zero, Color.White);
+                    g.Draw(ActiveLayer.renderTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.1f);
             }
 
             g.End();
@@ -187,8 +191,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 else
                 {
                     GraphicsDevice.Clear(ClearOptions.Stencil, Color.Black, 0, 0);
+
                     g.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, AlwaysStencilState, null, null);
-                    DrawLayer(g, Parent, false, false, false, null, false);
+                    DrawLayer(g, ActiveLayer, false, false, false, Parent, false);
 
                     g.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, EqualStencilState, null, null);
                     for (int A = 0; A < ActiveLayer.ListVisibleObject.Count; A++)
