@@ -109,6 +109,7 @@
     <Compile Include="Menus\Rooms\Mission Room Informations.cs" />
     <Compile Include="Menus\Rooms\Battle Room Informations.cs" />
     <Compile Include="Menus\Rooms\Room Informations.cs" />
+    <Compile Include="Online\Communication\Player List Script Client.cs" />
     <Compile Include="Online\Communication\Receive Global Message Script Client.cs" />
     <Compile Include="Online\In Game\Create SFX Script Client.cs" />
     <Compile Include="Online\In Game\Create VFX Script Client.cs" />

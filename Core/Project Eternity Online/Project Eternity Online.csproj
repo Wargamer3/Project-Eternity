@@ -45,6 +45,9 @@
     <Compile Include="Commands\Communication Commands\Identify Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Identify Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Receive Global Message Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Ask for Player List Script Client.cs" />
+    <Compile Include="Commands\Communication Commands\Ask for Player List Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Player List Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Send Global Message Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Send Global Message Script Client.cs" />
     <Compile Include="Commands\Force Server Change Server.cs" />

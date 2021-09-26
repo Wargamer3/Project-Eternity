@@ -19,7 +19,7 @@ namespace ProjectEternity.Core.Online
 
         public override OnlineScript Copy()
         {
-            return new AskRoomListScriptServer(Owner);
+            return new RoomListScriptServer(Owner, ListRoomUpdates);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)

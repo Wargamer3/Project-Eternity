@@ -16,7 +16,7 @@ namespace ProjectEternity.Core.Online
     public class CommunicationServer
     {
         public readonly IOnlineConnection Host;
-        public readonly Dictionary<string, IOnlineConnection> DicPlayerByName;
+        private readonly Dictionary<string, IOnlineConnection> DicPlayerByName;
         public readonly List<IOnlineConnection> ListPlayerToRemove;
         public readonly List<CommunicationGroup> ListGroup;
 
@@ -149,9 +149,24 @@ namespace ProjectEternity.Core.Online
             NewClient.StartReadingScriptAsync();
         }
 
+        public List<string> GetPlayerNames()
+        {
+            List<string> ListPlayerName;
+
+            lock (DicPlayerByName)
+            {
+                ListPlayerName = new List<string>(DicPlayerByName.Keys);
+            }
+
+            return ListPlayerName;
+        }
+
         internal void Identify(IOnlineConnection NewClient)
         {
-            DicPlayerByName.Add(NewClient.Name, NewClient);
+            lock (DicPlayerByName)
+            {
+                DicPlayerByName.Add(NewClient.Name, NewClient);
+            }
         }
     }
 }
