@@ -2,32 +2,35 @@
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.TripleThunderScreen;
 
 namespace Database
 {
-    public class MongoDBManager : IDataManager
+    public class GameMongoDBManager : IGameDataManager
     {
         private DateTime LastTimeChecked;
-        private MongoClient DatabaseClient;
-        private IMongoDatabase Database;
+        private MongoClient DatabaseTripleThunderClient;
+        private MongoClient DatabaseUserInformationClient;
+        private IMongoDatabase DatabaseTripleThunder;
+        private IMongoDatabase DatabaseUserInformation;
         private IMongoCollection<BsonDocument> RoomsCollection;
         private IMongoCollection<BsonDocument> PlayersCollection;
 
-        public MongoDBManager()
+        public GameMongoDBManager()
         {
             LastTimeChecked = DateTime.MinValue;
         }
 
-        public void Init(string ConnectionChain)
+        public void Init(string ConnectionChain, string UserInformationChain)
         {
-            //If there's a dependency problem look at the config file (ie: Project Eternity Triple Thunder Server.exe.config)
-            DatabaseClient = new MongoClient(ConnectionChain);
-            Database = DatabaseClient.GetDatabase("TripleThunder");
-            RoomsCollection = Database.GetCollection<BsonDocument>("Rooms");
-            PlayersCollection = Database.GetCollection<BsonDocument>("Players");
+            //If there's a dependency problem look at the config file and remove the extra stuff that got added automically (ie: Project Eternity Triple Thunder Server.exe.config)
+            DatabaseTripleThunderClient = new MongoClient(ConnectionChain);
+            DatabaseUserInformationClient = new MongoClient(UserInformationChain);
+            DatabaseTripleThunder = DatabaseTripleThunderClient.GetDatabase("TripleThunder");
+            DatabaseUserInformation = DatabaseUserInformationClient.GetDatabase("UserInformation");
+            RoomsCollection = DatabaseTripleThunder.GetCollection<BsonDocument>("Rooms");
+            PlayersCollection = DatabaseUserInformation.GetCollection<BsonDocument>("TripleThunder");
         }
 
         public List<IRoomInformations> GetAllRoomUpdatesSinceLastTimeChecked(string ServerVersion)

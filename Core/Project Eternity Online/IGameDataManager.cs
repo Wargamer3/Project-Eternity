@@ -2,7 +2,7 @@
 
 namespace ProjectEternity.Core.Online
 {
-    public interface IDataManager
+    public interface IGameDataManager
     {
         IRoomInformations GenerateNewRoom(string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int NewOwnerServerPort, int MaxNumberOfPlayer);
         List<IRoomInformations> GetAllRoomUpdatesSinceLastTimeChecked(string ServerVersion);

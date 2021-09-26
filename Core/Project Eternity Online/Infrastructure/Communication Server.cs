@@ -27,7 +27,7 @@ namespace ProjectEternity.Core.Online
         public string IP;
         public int Port;
 
-        public readonly IDataManager Database;
+        public readonly ICommunicationDataManager Database;
         private readonly Dictionary<string, OnlineScript> DicOnlineScripts;
         private double DeltaTime = 1.0d / 60.0d;
         private double ElapsedTime = 0d;
@@ -38,7 +38,7 @@ namespace ProjectEternity.Core.Online
         private CancellationTokenSource CancelToken;
 
         private DateTimeOffset NextRoomUpdateTime;
-        public CommunicationServer(IDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
+        public CommunicationServer(ICommunicationDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
         {
             DicPlayerByName = new Dictionary<string, IOnlineConnection>();
             ListPlayerToRemove = new List<IOnlineConnection>();
@@ -193,8 +193,6 @@ namespace ProjectEternity.Core.Online
 
                 this.IP = PublicIP;
                 this.Port = ClientsPort;
-
-                Database.HandleOldData(IP, Port);
 
                 Task.Run(() => { Update(); });
             }

@@ -33,7 +33,7 @@ namespace ProjectEternity.Core.Online
 
         private DateTimeOffset NextRoomUpdateTime;
 
-        public readonly IDataManager Database;
+        public readonly IGameDataManager Database;
         public readonly OnlineWriter SharedWriteBuffer;
         private readonly Dictionary<string, OnlineScript> DicOnlineScripts;
         private double DeltaTime = 1.0d / 60.0d;
@@ -43,7 +43,7 @@ namespace ProjectEternity.Core.Online
 
         private CancellationTokenSource CancelToken;
 
-        public GameServer(IDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
+        public GameServer(IGameDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
         {
             ListPlayer = new List<IOnlineConnection>();
             ListPlayerToRemove = new List<IOnlineConnection>();

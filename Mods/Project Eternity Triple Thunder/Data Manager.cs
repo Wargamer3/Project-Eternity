@@ -4,7 +4,7 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class DataManager : IDataManager
+    public class DataManager : IGameDataManager
     {
         private DateTimeOffset LastTimeChecked;
         private int RoomIDCount;

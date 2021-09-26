@@ -15,10 +15,11 @@ namespace ProjectEternity.CommunicationServer
 
             IniFile ConnectionInfo = IniFile.ReadFromFile("Connection Info.ini");
             string ConnectionChain = ConnectionInfo.ReadField("Communication Server Info", "Connection Chain");
+            string UserInformationChain = ConnectionInfo.ReadField("User Information Info", "Connection Chain");
 
-            MongoDBManager Databse = new MongoDBManager();
-            Databse.Init(ConnectionChain);
-            Core.Online.CommunicationServer OnlineServer = new Core.Online.CommunicationServer(Databse, DicOnlineScripts);
+            CommunicationMongoDBManager Databse = new CommunicationMongoDBManager();
+            Databse.Init(ConnectionChain, UserInformationChain);
+            CommunicationServer OnlineServer = new CommunicationServer(Databse, DicOnlineScripts);
 
             DicOnlineScripts.Add(SendGlobalMessageScriptServer.ScriptName, new SendGlobalMessageScriptServer(OnlineServer));
             DicOnlineScripts.Add(IdentifyScriptClient.ScriptName, new IdentifyScriptServer(OnlineServer));

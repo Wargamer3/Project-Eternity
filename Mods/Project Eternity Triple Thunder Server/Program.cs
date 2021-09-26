@@ -16,9 +16,10 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 
             IniFile ConnectionInfo = IniFile.ReadFromFile("Connection Info.ini");
             string ConnectionChain = ConnectionInfo.ReadField("Game Server Info", "Connection Chain");
+            string UserInformationChain = ConnectionInfo.ReadField("User Information Info", "Connection Chain");
 
-            MongoDBManager Databse = new MongoDBManager();
-            Databse.Init(ConnectionChain);
+            GameMongoDBManager Databse = new GameMongoDBManager();
+            Databse.Init(ConnectionChain, UserInformationChain);
             GameServer OnlineServer = new GameServer(Databse, DicOnlineScripts);
 
             DicOnlineScripts.Add(AskGameDataScriptServer.ScriptName, new AskGameDataScriptServer());

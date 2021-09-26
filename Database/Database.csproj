@@ -100,7 +100,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MongoDBManager.cs" />
+    <Compile Include="CommunicationMongoDBManager.cs" />
+    <Compile Include="GameMongoDBManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

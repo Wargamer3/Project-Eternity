@@ -105,7 +105,8 @@
     <Compile Include="Commands\Server Manager Added Script Client.cs" />
     <Compile Include="Commands\Server Manager Added Script Server.cs" />
     <Compile Include="Delayed Executable Online Script.cs" />
-    <Compile Include="IDataManager.cs" />
+    <Compile Include="ICommunicationDataManager.cs" />
+    <Compile Include="IGameDataManager.cs" />
     <Compile Include="Communication Group.cs" />
     <Compile Include="Infrastructure\Game Client Group.cs" />
     <Compile Include="Infrastructure\Game Client.cs" />
