@@ -43,15 +43,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         #endregion
 
-        private readonly TripleThunderOnlineClient OnlineClient;
+        private readonly TripleThunderOnlineClient OnlineGameClient;
+        private readonly CommunicationClient OnlineCommunicationClient;
         private readonly string RoomType;
 
         private string RoomSubtype;
         private int MaxNumberOfPlayer;
 
-        public CreateRoomBattle(TripleThunderOnlineClient OnlineClient, string RoomType)
+        public CreateRoomBattle(TripleThunderOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, string RoomType)
         {
-            this.OnlineClient = OnlineClient;
+            this.OnlineGameClient = OnlineClient;
+            this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.RoomType = RoomType;
             RoomSubtype = "Deathmatch";
             MaxNumberOfPlayer = 8;
@@ -199,16 +201,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             OKButton.Disable();
 
-            if (OnlineClient.IsConnected)
+            if (OnlineGameClient.IsConnected)
             {
                 Dictionary<string, OnlineScript> DicCreateRoomScript = new Dictionary<string, OnlineScript>();
-                DicCreateRoomScript.Add(SendRoomIDScriptClient.ScriptName, new SendRoomIDScriptClient(OnlineClient, this, RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer));
-                OnlineClient.Host.AddOrReplaceScripts(DicCreateRoomScript);
-                OnlineClient.CreateRoom(RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer);
+                DicCreateRoomScript.Add(SendRoomIDScriptClient.ScriptName, new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, this, RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer));
+                OnlineGameClient.Host.AddOrReplaceScripts(DicCreateRoomScript);
+                OnlineGameClient.CreateRoom(RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer);
             }
             else
             {
-                PushScreen(new BattleSelect(null, new BattleRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer)));
+                PushScreen(new BattleSelect(null, null, new BattleRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer)));
                 RemoveScreen(this);
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online
 {
@@ -7,16 +8,34 @@ namespace ProjectEternity.Core.Online
     /// </summary>
     public class CommunicationGroup
     {
+        public string GroupID;
         public readonly List<IOnlineConnection> ListGroupMember;
 
-        public CommunicationGroup()
+        internal CommunicationGroup()
         {
             ListGroupMember = new List<IOnlineConnection>();
         }
 
-        public void AddMember(IOnlineConnection NewMember)
+        internal CommunicationGroup(string GroupID, IOnlineConnection GroupCreator)
+            : this()
+        {
+            this.GroupID = GroupID;
+            AddMember(GroupCreator);
+        }
+
+        internal void AddMember(IOnlineConnection NewMember)
         {
             ListGroupMember.Add(NewMember);
+        }
+
+        internal void RemoveOnlinePlayer(int MemberIndex)
+        {
+            ListGroupMember.RemoveAt(MemberIndex);
+        }
+
+        internal bool IsRunningSlow()
+        {
+            return false;
         }
     }
 }

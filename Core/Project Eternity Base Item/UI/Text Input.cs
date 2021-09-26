@@ -183,7 +183,8 @@ namespace ProjectEternity.Core.Item
                             break;
 
                         case Keys.Enter:
-                            OnConfirm(Text);
+                            if (!string.IsNullOrEmpty(Text))
+                                OnConfirm(Text);
                             break;
 
                         case Keys.Right:

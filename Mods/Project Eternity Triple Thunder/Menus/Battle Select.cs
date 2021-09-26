@@ -31,6 +31,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private Texture2D sprTeamSeparatorBlue;
         private Texture2D sprTeamSeparatorRed;
 
+        private List<string> ListChatHistory;
+        private TextInput ChatInput;
+
         private InteractiveButton ChangeRoomNameButton;
         private InteractiveButton CharacterSelectButton;
         private InteractiveButton ActivateItemButton;
@@ -66,12 +69,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public List<string> Messenger;//List of messages to draw.
 
-        private readonly TripleThunderOnlineClient OnlineClient;
+        private readonly TripleThunderOnlineClient OnlineGameClient;
+        private readonly CommunicationClient OnlineCommunicationClient;
         private bool IsHost;
 
-        public BattleSelect(TripleThunderOnlineClient OnlineClient, BattleRoomInformations Room)
+        public BattleSelect(TripleThunderOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, BattleRoomInformations Room)
         {
-            this.OnlineClient = OnlineClient;
+            this.OnlineGameClient = OnlineGameClient;
+            this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.Room = Room;
 
             if (Room.ListRoomPlayer.Count == 0)
@@ -93,6 +98,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
+            ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20), SendMessage);
 
             sprBackground = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Background Battle");
             fntTest = Content.Load<Texture2D>("Triple Thunder/HUD/Menus/Numbers White");
@@ -150,7 +156,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Room.MapPath = "Random";
             sprMapImage = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Map Icons/Random");
 
-            if (OnlineClient != null && OnlineClient.IsConnected)
+            if (OnlineGameClient != null && OnlineGameClient.IsConnected)
             {
                 DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "/Maps/Triple Thunder/Battle/");
 
@@ -158,7 +164,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 Random Random = new Random();
                 string FileName = ArrayMapFile[Random.Next(ArrayMapFile.Length)].Name;
                 FileName = FileName.Remove(FileName.Length - 4);
-                OnlineClient.Host.Send(new AskChangeMapScriptClient(Room.CurrentDifficulty, "Battle/" + FileName));
+                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.CurrentDifficulty, "Battle/" + FileName));
             }
 
             foreach (Player ActivePlayer in Room.ListRoomPlayer)
@@ -176,6 +182,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Update(GameTime gameTime)
         {
+            if (OnlineGameClient != null)
+            {
+                OnlineGameClient.ExecuteDelayedScripts();
+            }
+
+            if (OnlineCommunicationClient != null)
+            {
+                OnlineCommunicationClient.ExecuteDelayedScripts();
+            }
+
             if (FMODSystem.sndActiveBGM != sndBGM)
             {
                 sndBGM.PlayAsBGM();
@@ -185,6 +201,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 ActiveButton.Update(gameTime);
             }
+
+            ChatInput.Update(gameTime);
 
             foreach (Player ActiveRobot in Room.ListRoomPlayer)
             {
@@ -330,14 +348,25 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
+        public void AddMessage(string Message, Color MessageColor)
+        {
+            ListChatHistory.Add(Message);
+        }
+
+        private void SendMessage(string InputMessage)
+        {
+            ChatInput.SetText(string.Empty);
+            OnlineCommunicationClient.Host.Send(new SendGroupMessageScriptClient(InputMessage, 0, 0, 0));
+        }
+
         #region Button methods
 
         private void UpdateCharacter()
         {
             Player LocalPlayer = Room.GetLocalPlayer();
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
-                OnlineClient.Host.Send(new AskChangeCharacterScriptClient(LocalPlayer.Equipment.CharacterType));
+                OnlineGameClient.Host.Send(new AskChangeCharacterScriptClient(LocalPlayer.Equipment.CharacterType));
             }
             else
             {
@@ -347,7 +376,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void OpenMapSelectScreen()
         {
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
                 if (IsHost)
                 {
@@ -371,28 +400,28 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void OpenModeSelectScreen()
         {
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
                 if (IsHost)
                 {
-                    PushScreen(new BattleModeSelect(Room, this, OnlineClient));
+                    PushScreen(new BattleModeSelect(Room, this, OnlineGameClient));
                     sndButtonClick.Play();
                 }
             }
             else
             {
-                PushScreen(new BattleModeSelect(Room, this, OnlineClient));
+                PushScreen(new BattleModeSelect(Room, this, OnlineGameClient));
                 sndButtonClick.Play();
             }
         }
 
         private void KillMinus()
         {
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
                 if (IsHost)
                 {
-                    OnlineClient.Host.Send(new AskChangeRoomExtrasBattleScriptClient(Room.MaxKill - 1, Room.MaxGameLengthInMinutes));
+                    OnlineGameClient.Host.Send(new AskChangeRoomExtrasBattleScriptClient(Room.MaxKill - 1, Room.MaxGameLengthInMinutes));
                 }
             }
             else
@@ -403,11 +432,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void KillPlus()
         {
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
                 if (IsHost)
                 {
-                    OnlineClient.Host.Send(new AskChangeRoomExtrasBattleScriptClient(Room.MaxKill + 1, Room.MaxGameLengthInMinutes));
+                    OnlineGameClient.Host.Send(new AskChangeRoomExtrasBattleScriptClient(Room.MaxKill + 1, Room.MaxGameLengthInMinutes));
                 }
             }
             else
@@ -418,11 +447,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void TimeMinus()
         {
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
                 if (IsHost)
                 {
-                    OnlineClient.Host.Send(new AskChangeRoomExtrasBattleScriptClient(Room.MaxKill, Room.MaxGameLengthInMinutes - 1));
+                    OnlineGameClient.Host.Send(new AskChangeRoomExtrasBattleScriptClient(Room.MaxKill, Room.MaxGameLengthInMinutes - 1));
                 }
             }
             else
@@ -433,11 +462,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void TimePlus()
         {
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
                 if (IsHost)
                 {
-                    OnlineClient.Host.Send(new AskChangeRoomExtrasBattleScriptClient(Room.MaxKill, Room.MaxGameLengthInMinutes + 1));
+                    OnlineGameClient.Host.Send(new AskChangeRoomExtrasBattleScriptClient(Room.MaxKill, Room.MaxGameLengthInMinutes + 1));
                 }
             }
             else
@@ -448,9 +477,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void ReturnToLobby()
         {
-            if (OnlineClient != null && OnlineClient.IsConnected)
+            if (OnlineGameClient != null && OnlineGameClient.IsConnected)
             {
-                OnlineClient.Host.Send(new LeaveRoomScriptClient());
+                OnlineGameClient.Host.Send(new LeaveRoomScriptClient());
             }
 
             sndButtonClick.Play();
@@ -461,9 +490,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             sndButtonClick.Play();
 
-            if (OnlineClient != null && OnlineClient.IsConnected)
+            if (OnlineGameClient != null && OnlineGameClient.IsConnected)
             {
-                OnlineClient.StartGame();
+                OnlineGameClient.StartGame();
             }
             else
             {
@@ -493,17 +522,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             sndButtonClick.Play();
 
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
                 ReadyButton.Disable();
 
                 if (Room.GetLocalPlayer().PlayerType == Player.PlayerTypePlayer)
                 {
-                    OnlineClient.Host.Send(new AskChangePlayerTypeScriptClient(Player.PlayerTypeReady));
+                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(Player.PlayerTypeReady));
                 }
                 else
                 {
-                    OnlineClient.Host.Send(new AskChangePlayerTypeScriptClient(Player.PlayerTypePlayer));
+                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(Player.PlayerTypePlayer));
                 }
             }
         }
@@ -511,9 +540,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private void RedTeamSelected()
         {
             Player LocalPlayer = Room.GetLocalPlayer();
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
-                OnlineClient.Host.Send(new AskChangeTeamScriptClient(0));
+                OnlineGameClient.Host.Send(new AskChangeTeamScriptClient(0));
             }
             else
             {
@@ -526,9 +555,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private void BlueTeamSelected()
         {
             Player LocalPlayer = Room.GetLocalPlayer();
-            if (OnlineClient != null)
+            if (OnlineGameClient != null)
             {
-                OnlineClient.Host.Send(new AskChangeTeamScriptClient(1));
+                OnlineGameClient.Host.Send(new AskChangeTeamScriptClient(1));
             }
             else
             {
@@ -592,6 +621,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Draw(g);
             }
 
+            ChatInput.Draw(g);
+
             ModeSelectTextButton.Draw(g);
 
             g.DrawString(fntText, Room.RoomName, new Vector2(75, 7), Color.White);
@@ -619,6 +650,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
 
                 DrawPlayerBox(g, DrawX, DrawY, Room.ListRoomPlayer[P], Room.ListRoomPlayer[P].Team == 1 || !Room.UseTeams);
+            }
+
+            for (int M = 0; M < ListChatHistory.Count; M++)
+            {
+                float X = 30;
+                float Y = 430 + M * fntText.LineSpacing;
+                g.DrawString(fntText, ListChatHistory[M], new Vector2(X, Y), Color.White);
             }
         }
 

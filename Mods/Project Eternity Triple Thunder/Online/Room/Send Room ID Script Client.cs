@@ -8,7 +8,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
     {
         public const string ScriptName = "Send Room ID";
 
-        private readonly TripleThunderOnlineClient Owner;
+        private readonly TripleThunderOnlineClient OnlineGameClient;
+        private readonly CommunicationClient OnlineCommunicationClient;
         private readonly GameScreen ScreenOwner;
         private readonly string RoomName;
         private readonly string RoomType;
@@ -18,10 +19,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         private string RoomID;
         private GameScreen NewScreen;
 
-        public SendRoomIDScriptClient(TripleThunderOnlineClient Owner, GameScreen ScreenOwner, string RoomName, string RoomType, string RoomSubtype, int MaxNumberOfPlayer)
+        public SendRoomIDScriptClient(TripleThunderOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, GameScreen ScreenOwner, string RoomName, string RoomType, string RoomSubtype, int MaxNumberOfPlayer)
             : base(ScriptName)
         {
-            this.Owner = Owner;
+            this.OnlineGameClient = OnlineGameClient;
+            this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.ScreenOwner = ScreenOwner;
             this.RoomName = RoomName;
             this.RoomType = RoomType;
@@ -31,7 +33,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public override OnlineScript Copy()
         {
-            return new SendRoomIDScriptClient(Owner, ScreenOwner, RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer);
+            return new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, ScreenOwner, RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -41,10 +43,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            Owner.RoomID = RoomID;
+            OnlineGameClient.RoomID = RoomID;
             RoomInformations NewRoom;
 
-            Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
+            Dictionary<string, OnlineScript> DicNewGameServerScript = new Dictionary<string, OnlineScript>();
             IMissionSelect NewMissionSelectScreen;
 
             if (RoomType == RoomInformations.RoomTypeMission)
@@ -52,39 +54,45 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
                 MissionRoomInformations MissionRoom = new MissionRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer);
                 NewRoom = MissionRoom;
 
-                MissionSelect NewMissionSelect = new MissionSelect(Owner, MissionRoom);
+                MissionSelect NewMissionSelect = new MissionSelect(OnlineGameClient, OnlineCommunicationClient, MissionRoom);
                 NewScreen = NewMissionSelect;
                 NewMissionSelectScreen = NewMissionSelect;
 
-                DicNewScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameMissionScriptClient(Owner, ScreenOwner.ListGameScreen, MissionRoom));
-                DicNewScript.Add(ChangeRoomExtrasMissionScriptClient.ScriptName, new ChangeRoomExtrasMissionScriptClient(MissionRoom, NewMissionSelectScreen));
+                DicNewGameServerScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameMissionScriptClient(OnlineGameClient, ScreenOwner.ListGameScreen, MissionRoom));
+                DicNewGameServerScript.Add(ChangeRoomExtrasMissionScriptClient.ScriptName, new ChangeRoomExtrasMissionScriptClient(MissionRoom, NewMissionSelectScreen));
             }
             else
             {
                 BattleRoomInformations BattleRoom = new BattleRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer);
                 NewRoom = BattleRoom;
 
-                BattleSelect NewBattleSelect = new BattleSelect(Owner, BattleRoom);
+                BattleSelect NewBattleSelect = new BattleSelect(OnlineGameClient, OnlineCommunicationClient, BattleRoom);
                 NewScreen = NewBattleSelect;
                 NewMissionSelectScreen = NewBattleSelect;
 
-                DicNewScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameBattleScriptClient(Owner, ScreenOwner.ListGameScreen, BattleRoom));
-                DicNewScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasBattleScriptClient(BattleRoom, NewMissionSelectScreen));
+                DicNewGameServerScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameBattleScriptClient(OnlineGameClient, ScreenOwner.ListGameScreen, BattleRoom));
+                DicNewGameServerScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasBattleScriptClient(BattleRoom, NewMissionSelectScreen));
             }
 
-            DicNewScript.Add(PlayerJoinedScriptClient.ScriptName, new PlayerJoinedScriptClient(NewMissionSelectScreen));
-            DicNewScript.Add(PlayerLeftScriptClient.ScriptName, new PlayerLeftScriptClient(NewRoom, Owner, NewMissionSelectScreen));
-            DicNewScript.Add(ChangeCharacterScriptClient.ScriptName, new ChangeCharacterScriptClient(NewRoom, NewMissionSelectScreen));
-            DicNewScript.Add(ChangePlayerTypeScriptClient.ScriptName, new ChangePlayerTypeScriptClient(NewRoom, NewMissionSelectScreen));
-            DicNewScript.Add(ChangeTeamScriptClient.ScriptName, new ChangeTeamScriptClient(NewRoom));
-            DicNewScript.Add(ChangeMapScriptClient.ScriptName, new ChangeMapScriptClient(NewRoom, NewMissionSelectScreen));
-            DicNewScript.Add(ChangeRoomSubtypeScriptClient.ScriptName, new ChangeRoomSubtypeScriptClient(NewMissionSelectScreen));
+            DicNewGameServerScript.Add(PlayerJoinedScriptClient.ScriptName, new PlayerJoinedScriptClient(NewMissionSelectScreen));
+            DicNewGameServerScript.Add(PlayerLeftScriptClient.ScriptName, new PlayerLeftScriptClient(NewRoom, OnlineGameClient, NewMissionSelectScreen));
+            DicNewGameServerScript.Add(ChangeCharacterScriptClient.ScriptName, new ChangeCharacterScriptClient(NewRoom, NewMissionSelectScreen));
+            DicNewGameServerScript.Add(ChangePlayerTypeScriptClient.ScriptName, new ChangePlayerTypeScriptClient(NewRoom, NewMissionSelectScreen));
+            DicNewGameServerScript.Add(ChangeTeamScriptClient.ScriptName, new ChangeTeamScriptClient(NewRoom));
+            DicNewGameServerScript.Add(ChangeMapScriptClient.ScriptName, new ChangeMapScriptClient(NewRoom, NewMissionSelectScreen));
+            DicNewGameServerScript.Add(ChangeRoomSubtypeScriptClient.ScriptName, new ChangeRoomSubtypeScriptClient(NewMissionSelectScreen));
 
-            Host.AddOrReplaceScripts(DicNewScript);
+            Host.AddOrReplaceScripts(DicNewGameServerScript);
+
+            Dictionary<string, OnlineScript> DicNewCommunicationServerScript = new Dictionary<string, OnlineScript>();
+            DicNewCommunicationServerScript.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient, NewMissionSelectScreen));
+            OnlineCommunicationClient.Host.AddOrReplaceScripts(DicNewCommunicationServerScript);
+
+            OnlineCommunicationClient.Host.Send(new CreateCommunicationGroupScriptClient(RoomID));
 
             ScreenOwner.RemoveScreen(ScreenOwner);
 
-            Owner.DelayOnlineScript(this);
+            OnlineGameClient.DelayOnlineScript(this);
         }
 
         public void ExecuteOnMainThread()

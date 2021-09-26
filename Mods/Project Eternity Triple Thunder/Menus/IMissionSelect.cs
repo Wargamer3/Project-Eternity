@@ -1,4 +1,6 @@
-﻿namespace ProjectEternity.GameScreens.TripleThunderScreen
+﻿using Microsoft.Xna.Framework;
+
+namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
     public interface IMissionSelect
     {
@@ -7,5 +9,6 @@
         void UpdateSelectedMap(string CurrentDifficulty, string SelectedMapPath);
         void UpdateRoomSubtype(string RoomSubtype);
         void UpdateReadyOrHost();
+        void AddMessage(string Message, Color MessageColor);
     }
 }

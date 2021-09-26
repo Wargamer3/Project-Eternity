@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
             DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
             DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
-            DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, this, false));
+            DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
             DicOnlineGameClientScripts.Add(CreatePlayerScriptClient.ScriptName, new CreatePlayerScriptClient(OnlineGameClient));
             DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
             DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
@@ -334,11 +334,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             if (RoomType == RoomInformations.RoomTypeMission)
             {
-                PushScreen(new CreateRoomMission(OnlineGameClient, RoomType));
+                PushScreen(new CreateRoomMission(OnlineGameClient, OnlineCommunicationClient, RoomType));
             }
             else
             {
-                PushScreen(new CreateRoomBattle(OnlineGameClient, RoomType));
+                PushScreen(new CreateRoomBattle(OnlineGameClient, OnlineCommunicationClient, RoomType));
             }
         }
 

@@ -18,7 +18,9 @@ namespace ProjectEternity.Core.Online
         public readonly IOnlineConnection Host;
         private readonly Dictionary<string, IOnlineConnection> DicPlayerByName;
         public readonly List<IOnlineConnection> ListPlayerToRemove;
-        public readonly List<CommunicationGroup> ListGroup;
+        public readonly Dictionary<string, CommunicationGroup> DicCommunicationGroup;
+
+        public readonly List<string> ListGroupToRemove;
 
         public readonly CommunicationGroup GlobalGroup;
 
@@ -35,14 +37,18 @@ namespace ProjectEternity.Core.Online
 
         private CancellationTokenSource CancelToken;
 
+        private DateTimeOffset NextRoomUpdateTime;
         public CommunicationServer(IDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
         {
             DicPlayerByName = new Dictionary<string, IOnlineConnection>();
             ListPlayerToRemove = new List<IOnlineConnection>();
-            ListGroup = new List<CommunicationGroup>();
+            DicCommunicationGroup = new Dictionary<string, CommunicationGroup>();
+            ListGroupToRemove = new List<string>();
             GlobalGroup = new CommunicationGroup();
 
             SharedWriteBuffer = new OnlineWriter();
+
+            NextRoomUpdateTime = DateTimeOffset.Now;
 
             this.DicOnlineScripts = DicOnlineScripts;
 
@@ -91,7 +97,6 @@ namespace ProjectEternity.Core.Online
                     if (ActivePlayer.HasLeftServer())
                     {
                         ListPlayerToRemove.Add(ActivePlayer);
-                        Database.RemovePlayer(ListPlayerToRemove[0]);
                     }
                 }
                 else
@@ -112,6 +117,67 @@ namespace ProjectEternity.Core.Online
             {
                 GlobalGroup.ListGroupMember.Remove(ListPlayerToRemove[0]);
                 ListPlayerToRemove.RemoveAt(0);
+            }
+
+            Parallel.ForEach(DicCommunicationGroup.Values, (ActiveGroup, loopState) =>
+            {
+                if (ActiveGroup.IsRunningSlow())
+                {
+                    //Send Room to another Server
+                }
+
+                for (int P = ActiveGroup.ListGroupMember.Count - 1; P >= 0; --P)
+                {
+                    IOnlineConnection ActivePlayer = ActiveGroup.ListGroupMember[P];
+
+                    if (!ActivePlayer.IsConnected())
+                    {
+                        if (ActivePlayer.HasLeftServer())
+                        {
+                            string PlayerID = ActiveGroup.ListGroupMember[P].ID;
+                            ActiveGroup.RemoveOnlinePlayer(P);
+
+                            if (ActiveGroup.ListGroupMember.Count == 0)
+                            {
+                                ListGroupToRemove.Add(ActiveGroup.GroupID);
+                            }
+
+                            ActivePlayer.StopReadingScriptAsync();
+                        }
+                    }
+                    else
+                    {
+                        lock (ActivePlayer.ListAsyncOnlineScript)
+                        {
+                            foreach (OnlineScript ActiveScript in ActivePlayer.ListAsyncOnlineScript)
+                            {
+                                ActiveScript.Execute(ActivePlayer);
+                            }
+
+                            ActivePlayer.ListAsyncOnlineScript.Clear();
+                        }
+                    }
+                }
+            });
+
+            while (ListGroupToRemove.Count > 0)
+            {
+                DicCommunicationGroup.Remove(ListGroupToRemove[0]);
+
+                ListGroupToRemove.RemoveAt(0);
+            }
+
+            if (DateTimeOffset.Now > NextRoomUpdateTime)
+            {
+                NextRoomUpdateTime = NextRoomUpdateTime.AddSeconds(10);
+
+                SharedWriteBuffer.ClearWriteBuffer();
+                SharedWriteBuffer.WriteScript(new PlayerListScriptServer(GetPlayerNames()));
+
+                Parallel.ForEach(GlobalGroup.ListGroupMember, (ActiveMember, loopState) =>
+                {
+                    ActiveMember.SendWriteBuffer();
+                });
             }
         }
 
@@ -161,12 +227,34 @@ namespace ProjectEternity.Core.Online
             return ListPlayerName;
         }
 
-        internal void Identify(IOnlineConnection NewClient)
+        public void Identify(IOnlineConnection NewClient)
         {
             lock (DicPlayerByName)
             {
                 DicPlayerByName.Add(NewClient.Name, NewClient);
             }
+        }
+
+        public void CreateCommunicationGroup(string GroupID, IOnlineConnection GroupCreator)
+        {
+            CommunicationGroup NewGroup = new CommunicationGroup(GroupID, GroupCreator);
+
+            Dictionary<string, OnlineScript> NewDicOnlineScripts = new Dictionary<string, OnlineScript>();
+            NewDicOnlineScripts.Add(SendGroupMessageScriptServer.ScriptName, new SendGroupMessageScriptServer(this, NewGroup));
+            GroupCreator.AddOrReplaceScripts(NewDicOnlineScripts);
+            
+            DicCommunicationGroup.Add(GroupID, NewGroup);
+            ListPlayerToRemove.Add(GroupCreator);
+        }
+
+        public void JoinCommunicationGroup(string GroupID, IOnlineConnection NewMember)
+        {
+            Dictionary<string, OnlineScript> NewDicOnlineScripts = new Dictionary<string, OnlineScript>();
+            NewDicOnlineScripts.Add(SendGroupMessageScriptServer.ScriptName, new SendGroupMessageScriptServer(this, DicCommunicationGroup[GroupID]));
+            NewMember.AddOrReplaceScripts(NewDicOnlineScripts);
+
+            DicCommunicationGroup[GroupID].AddMember(NewMember);
+            ListPlayerToRemove.Add(NewMember);
         }
     }
 }
