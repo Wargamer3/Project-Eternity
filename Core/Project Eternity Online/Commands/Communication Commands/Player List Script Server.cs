@@ -7,25 +7,25 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Player List";
 
-        private readonly ICollection<string> ListPlayerName;
+        private readonly ICollection<byte[]> ListPlayerInfo;
 
-        public PlayerListScriptServer(ICollection<string> ListPlayerName)
+        public PlayerListScriptServer(ICollection<byte[]> ListPlayerInfo)
             : base(ScriptName)
         {
-            this.ListPlayerName = ListPlayerName;
+            this.ListPlayerInfo = ListPlayerInfo;
         }
 
         public override OnlineScript Copy()
         {
-            return new PlayerListScriptServer(ListPlayerName);
+            return new PlayerListScriptServer(ListPlayerInfo);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendInt32(ListPlayerName.Count);
-            foreach (string ActiveRoom in ListPlayerName)
+            WriteBuffer.AppendInt32(ListPlayerInfo.Count);
+            foreach (byte[] ActiveRoom in ListPlayerInfo)
             {
-                WriteBuffer.AppendString(ActiveRoom);
+                WriteBuffer.AppendByteArray(ActiveRoom);
             }
         }
 

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{81E0FCC6-B04E-40CA-8FFB-4381799FDAA0}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ProjectEternity.CommunicationServer</RootNamespace>
+    <RootNamespace>ProjectEternity.Communication.Server</RootNamespace>
     <AssemblyName>Project Eternity Communication Server</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ask for Player List Script Server.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

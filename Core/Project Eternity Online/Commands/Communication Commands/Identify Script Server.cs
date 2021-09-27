@@ -9,6 +9,7 @@ namespace ProjectEternity.Core.Online
         private readonly CommunicationServer OnlineCommunicationServer;
 
         private string ClientName;
+        private byte[] ClientInfo;
 
         public IdentifyScriptServer(CommunicationServer OnlineCommunicationServer)
             : base(ScriptName)
@@ -29,12 +30,13 @@ namespace ProjectEternity.Core.Online
         protected internal override void Execute(IOnlineConnection Sender)
         {
             Sender.Name = ClientName;
-            OnlineCommunicationServer.Identify(Sender);
+            OnlineCommunicationServer.Identify(Sender, ClientInfo);
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
             ClientName = Sender.ReadString();
+            ClientInfo = Sender.ReadByteArray();
         }
     }
 }

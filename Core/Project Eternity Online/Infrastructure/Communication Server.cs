@@ -16,7 +16,8 @@ namespace ProjectEternity.Core.Online
     public class CommunicationServer
     {
         public readonly IOnlineConnection Host;
-        private readonly Dictionary<string, IOnlineConnection> DicPlayerByName;
+        private readonly Dictionary<string, IOnlineConnection> DicPlayerConnectionByName;
+        private readonly Dictionary<string, byte[]> DicPlayerInfoByName;
         public readonly List<IOnlineConnection> ListPlayerToRemove;
         public readonly Dictionary<string, CommunicationGroup> DicCommunicationGroup;
 
@@ -40,7 +41,8 @@ namespace ProjectEternity.Core.Online
         private DateTimeOffset NextRoomUpdateTime;
         public CommunicationServer(ICommunicationDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
         {
-            DicPlayerByName = new Dictionary<string, IOnlineConnection>();
+            DicPlayerConnectionByName = new Dictionary<string, IOnlineConnection>();
+            DicPlayerInfoByName = new Dictionary<string, byte[]>();
             ListPlayerToRemove = new List<IOnlineConnection>();
             DicCommunicationGroup = new Dictionary<string, CommunicationGroup>();
             ListGroupToRemove = new List<string>();
@@ -213,23 +215,28 @@ namespace ProjectEternity.Core.Online
             NewClient.StartReadingScriptAsync();
         }
 
-        public List<string> GetPlayerNames()
+        public List<byte[]> GetPlayerNames()
         {
-            List<string> ListPlayerName;
+            List<byte[]> ListPlayerName;
 
-            lock (DicPlayerByName)
+            lock (DicPlayerInfoByName)
             {
-                ListPlayerName = new List<string>(DicPlayerByName.Keys);
+                ListPlayerName = new List<byte[]>(DicPlayerInfoByName.Values);
             }
 
             return ListPlayerName;
         }
 
-        public void Identify(IOnlineConnection NewClient)
+        public void Identify(IOnlineConnection NewClient, byte[] ClientInfo)
         {
-            lock (DicPlayerByName)
+            lock (DicPlayerConnectionByName)
             {
-                DicPlayerByName.Add(NewClient.Name, NewClient);
+                DicPlayerConnectionByName.Add(NewClient.Name, NewClient);
+            }
+
+            lock (DicPlayerInfoByName)
+            {
+                DicPlayerInfoByName.Add(NewClient.Name, ClientInfo);
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace ProjectEternity.Core.Online
 {
@@ -6,10 +6,13 @@ namespace ProjectEternity.Core.Online
     {
         public string ID;
         public string Name;
+        public byte[] Info;
 
         public PlayerPOCO()
         {
+            ID = string.Empty;
             Name = string.Empty;
+            Info = new byte[0];
         }
     }
 }

@@ -7,11 +7,13 @@ namespace ProjectEternity.Core.Online
         public const string ScriptName = "Identify";
 
         private readonly string ClientName;
+        private readonly byte[] ClientInfo;
 
-        public IdentifyScriptClient(string ClientName)
+        public IdentifyScriptClient(string ClientName, byte[] ClientInfo)
             : base(ScriptName)
         {
             this.ClientName = ClientName;
+            this.ClientInfo = ClientInfo;
         }
 
         public override OnlineScript Copy()
@@ -22,6 +24,7 @@ namespace ProjectEternity.Core.Online
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
             WriteBuffer.AppendString(ClientName);
+            WriteBuffer.AppendByteArray(ClientInfo);
         }
 
         protected internal override void Execute(IOnlineConnection ActivePlayer)

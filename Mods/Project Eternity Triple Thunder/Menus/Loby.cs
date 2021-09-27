@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private readonly TripleThunderOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
-        private string[] ArrayPlayerName;
+        private Player[] ArrayLobyPlayer;
         private string RoomType;
 
         public Loby()
@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             RoomType = RoomInformations.RoomTypeMission;
             DicAllRoom = new Dictionary<string, RoomInformations>();
             ListChatHistory = new List<string>();
-            ArrayPlayerName = new string[0];
+            ArrayLobyPlayer = new Player[0];
 
             Dictionary<string, OnlineScript> DicOnlineGameClientScripts = new Dictionary<string, OnlineScript>();
             Dictionary<string, OnlineScript> DicOnlineCommunicationClientScripts = new Dictionary<string, OnlineScript>();
@@ -240,14 +240,20 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             while (TryConnecting);
         }
 
-        public void IdentifyToCommunicationServer(string PlayerName)
+        public void IdentifyToCommunicationServer(string PlayerName, byte[] PlayerInfo)
         {
-            OnlineCommunicationClient.Host.Send(new IdentifyScriptClient(PlayerName));
+            if (OnlineCommunicationClient.Host != null)
+            {
+                OnlineCommunicationClient.Host.Send(new IdentifyScriptClient(PlayerName, PlayerInfo));
+            }
         }
 
         public void AskForPlayerList()
         {
-            OnlineCommunicationClient.Host.Send(new AskForPlayersScriptClient());
+            if (OnlineCommunicationClient.Host != null)
+            {
+                OnlineCommunicationClient.Host.Send(new AskForPlayersScriptClient());
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -359,9 +365,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             OnlineCommunicationClient.Host.Send(new SendGlobalMessageScriptClient(InputMessage, 0, 0, 0));
         }
 
-        public void PopulatePlayerNames(string[] ArrayPlayerName)
+        public void PopulatePlayerNames(Player[] ArrayPlayerName)
         {
-            this.ArrayPlayerName = ArrayPlayerName;
+            this.ArrayLobyPlayer = ArrayPlayerName;
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -377,6 +383,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 g.Draw(sprLicenseAll, new Rectangle(572, 16, 24, 24), new Rectangle(2 * 24, 0, 24, 24), Color.White);
             }
 
+            g.DrawString(fntArial12, "Lv." + PlayerManager.OnlinePlayerLevel, new Vector2(610, 17), Color.White);
             g.DrawString(fntArial12, PlayerManager.OnlinePlayerName, new Vector2(670, 15), Color.White);
 
             g.End();
@@ -437,11 +444,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Draw(g);
             }
 
-            for (int P = 0; P < ArrayPlayerName.Length; P++)
+            for (int P = 0; P < ArrayLobyPlayer.Length; P++)
             {
                 float X = 635;
                 float Y = 166 + P * fntArial12.LineSpacing;
-                g.DrawString(fntArial12, ArrayPlayerName[P], new Vector2(X, Y), Color.White);
+                g.DrawString(fntArial12, ArrayLobyPlayer[P].Name, new Vector2(X, Y), Color.White);
             }
 
             for (int M = 0; M < ListChatHistory.Count; M++)

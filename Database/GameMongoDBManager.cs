@@ -138,6 +138,7 @@ namespace Database
                 {
                     { "Login", Login },
                     { "Name", Login },
+                    { "Level", 1 },
                     { "CharacterType", "Jack" },
                     { "OwnerServerIP", "" },
                     { "OwnerServerPort", 0 },
@@ -164,7 +165,15 @@ namespace Database
             {
                 PlayerPOCO FoundPlayer = new PlayerPOCO();
                 FoundPlayer.ID = FoundPlayerDocument.GetValue("_id").AsObjectId.ToString();
-                FoundPlayer.Name = FoundPlayerDocument.GetValue("Name").AsString;
+                string Name = FoundPlayerDocument.GetValue("Name").AsString;
+                FoundPlayer.Name = Name;
+                ByteWriter BW = new ByteWriter();
+                BW.AppendString(Name);
+                BW.AppendInt32(FoundPlayerDocument.GetValue("Level").AsInt32);
+                BW.GetBytes();
+
+                FoundPlayer.Info = BW.GetBytes();
+                BW.ClearWriteBuffer();
                 UpdatePlayerIsLoggedIn(FoundPlayer.ID, OwnerServerIP, OwnerServerPort);
 
                 return FoundPlayer;

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using ProjectEternity.Core.Online;
+using System;
 using System.Collections.Generic;
 
-namespace ProjectEternity.Core.Online
+namespace ProjectEternity.Communication.Server
 {
     public class AskForPlayersScriptServer : OnlineScript
     {
@@ -25,16 +26,16 @@ namespace ProjectEternity.Core.Online
             throw new NotImplementedException();
         }
 
-        protected internal override void Execute(IOnlineConnection Sender)
+        protected override void Execute(IOnlineConnection Sender)
         {
-            List<string> ListPlayerName = OnlineServer.GetPlayerNames();
+            List<byte[]> ListPlayerName = OnlineServer.GetPlayerNames();
             foreach (IOnlineConnection ActiveOnlinePlayer in OnlineServer.GlobalGroup.ListGroupMember)
             {
                 ActiveOnlinePlayer.Send(new PlayerListScriptServer(ListPlayerName));
             }
         }
 
-        protected internal override void Read(OnlineReader Sender)
+        protected override void Read(OnlineReader Sender)
         {
         }
     }

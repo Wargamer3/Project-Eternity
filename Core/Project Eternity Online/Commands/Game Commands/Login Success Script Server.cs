@@ -22,7 +22,7 @@ namespace ProjectEternity.Core.Online
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
             WriteBuffer.AppendString(PlayerInfo.ID);
-            WriteBuffer.AppendString(PlayerInfo.Name);
+            WriteBuffer.AppendByteArray(PlayerInfo.Info);
         }
 
         protected internal override void Execute(IOnlineConnection ActivePlayer)

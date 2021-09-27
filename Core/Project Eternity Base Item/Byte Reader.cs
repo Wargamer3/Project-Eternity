@@ -9,7 +9,7 @@ namespace ProjectEternity.Core.Online
 
         public bool CanRead { get { return ReadBufferPos < ReadBuffer.Length; } }
 
-        public ByteReader()
+        protected ByteReader()
         {
             ReadBuffer = new byte[0];
             ReadBufferPos = 0;

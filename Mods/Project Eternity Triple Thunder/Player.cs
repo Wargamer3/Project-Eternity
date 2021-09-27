@@ -22,8 +22,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public string ConnectionID;
         public string Name;
         public string PlayerType;
+        public string Guild;
+        public byte License;
+        public byte Ranking;
         public bool IsOnline;
         public int Team;
+        public int Level;
         public uint Money;
         public GameplayTypes GameplayType;
         public RobotAnimation CharacterPreview;

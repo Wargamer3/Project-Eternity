@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
@@ -10,7 +11,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         private readonly Loby Owner;
         private readonly CommunicationClient OnlineCommunicationClient;
 
-        private string[] ArrayPlayerName;
+        private Player[] ArrayPlayerName;
 
         public PlayerListScriptClient(CommunicationClient OnlineCommunicationClient, Loby Owner)
             : base(ScriptName)
@@ -42,10 +43,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         protected override void Read(OnlineReader Sender)
         {
             int ListPlayerNameCount = Sender.ReadInt32();
-            ArrayPlayerName = new string[ListPlayerNameCount];
-            for(int P = 0; P < ListPlayerNameCount; ++P)
+            ArrayPlayerName = new Player[ListPlayerNameCount];
+            for (int P = 0; P < ListPlayerNameCount; ++P)
             {
-                ArrayPlayerName[P] = Sender.ReadString();
+                byte[] ArrayPlayerInfo = Sender.ReadByteArray();
+                ByteReader BR = new ByteReader(ArrayPlayerInfo);
+
+                ArrayPlayerName[P] = new Player(null, BR.ReadString(), Player.PlayerTypes.Online, true, 0);
+                ArrayPlayerName[P].Level = BR.ReadInt32();
+
+                BR.Clear();
             }
         }
     }

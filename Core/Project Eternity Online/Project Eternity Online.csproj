@@ -51,7 +51,6 @@
     <Compile Include="Commands\Communication Commands\Receive Group Message Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Receive Global Message Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Ask for Player List Script Client.cs" />
-    <Compile Include="Commands\Communication Commands\Ask for Player List Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Player List Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Send Group Message Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Send Group Message Script Client.cs" />

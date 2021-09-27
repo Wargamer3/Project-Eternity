@@ -11,7 +11,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         private readonly Loby Owner;
         private string PlayerID;
-        private string PlayerName;
+        private byte[] PlayerInfo;
 
         public LoginSuccessScriptClient(Loby Owner)
             : base(ScriptName)
@@ -32,16 +32,21 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         protected override void Execute(IOnlineConnection Host)
         {
             PlayerManager.OnlinePlayerID = PlayerID;
-            PlayerManager.OnlinePlayerName = PlayerName;
             PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Online, false, 0));
-            Owner.IdentifyToCommunicationServer(PlayerName);
+            ByteReader BR = new ByteReader(PlayerInfo);
+
+            PlayerManager.OnlinePlayerName = BR.ReadString();
+            PlayerManager.OnlinePlayerLevel = BR.ReadInt32();
+
+            BR.Clear();
+            Owner.IdentifyToCommunicationServer(PlayerManager.OnlinePlayerName, PlayerInfo);
             Owner.AskForPlayerList();
         }
 
         protected override void Read(OnlineReader Sender)
         {
             PlayerID = Sender.ReadString();
-            PlayerName = Sender.ReadString();
+            PlayerInfo = Sender.ReadByteArray();
         }
     }
 }

@@ -5,7 +5,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using Database;
 
-namespace ProjectEternity.CommunicationServer
+namespace ProjectEternity.Communication.Server
 {
     class Program
     {
