@@ -448,6 +448,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 float X = 635;
                 float Y = 166 + P * fntArial12.LineSpacing;
+                g.DrawString(fntArial12, "Lv." + ArrayLobbyPlayer[P].Level, new Vector2(X - 50, Y), Color.White);
                 g.DrawString(fntArial12, ArrayLobbyPlayer[P].Name, new Vector2(X, Y), Color.White);
             }
 
