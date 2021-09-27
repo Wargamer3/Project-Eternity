@@ -8,7 +8,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
     {
         public const string ScriptName = "Receive Global Message";
 
-        private readonly Loby Owner;
+        private readonly Lobby Owner;
         private readonly CommunicationClient OnlineCommunicationClient;
 
         private string Message;
@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         private byte ColorG;
         private byte ColorB;
 
-        public ReceiveGlobalMessageScriptClient(CommunicationClient OnlineCommunicationClient, Loby Owner)
+        public ReceiveGlobalMessageScriptClient(CommunicationClient OnlineCommunicationClient, Lobby Owner)
             : base(ScriptName)
         {
             this.Owner = Owner;

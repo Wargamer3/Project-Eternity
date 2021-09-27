@@ -13,7 +13,7 @@ using ProjectEternity.GameScreens.TripleThunderScreen.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class Loby : GameScreen
+    public class Lobby : GameScreen
     {
         #region Ressources
 
@@ -63,15 +63,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private readonly TripleThunderOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
-        private Player[] ArrayLobyPlayer;
+        private Player[] ArrayLobbyPlayer;
         private string RoomType;
 
-        public Loby()
+        public Lobby()
         {
             RoomType = RoomInformations.RoomTypeMission;
             DicAllRoom = new Dictionary<string, RoomInformations>();
             ListChatHistory = new List<string>();
-            ArrayLobyPlayer = new Player[0];
+            ArrayLobbyPlayer = new Player[0];
 
             Dictionary<string, OnlineScript> DicOnlineGameClientScripts = new Dictionary<string, OnlineScript>();
             Dictionary<string, OnlineScript> DicOnlineCommunicationClientScripts = new Dictionary<string, OnlineScript>();
@@ -365,9 +365,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             OnlineCommunicationClient.Host.Send(new SendGlobalMessageScriptClient(InputMessage, 0, 0, 0));
         }
 
-        public void PopulatePlayerNames(Player[] ArrayPlayerName)
+        public void PopulatePlayerNames(Player[] ArrayLobyPlayer)
         {
-            this.ArrayLobyPlayer = ArrayPlayerName;
+            this.ArrayLobbyPlayer = ArrayLobyPlayer;
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -444,11 +444,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Draw(g);
             }
 
-            for (int P = 0; P < ArrayLobyPlayer.Length; P++)
+            for (int P = 0; P < ArrayLobbyPlayer.Length; P++)
             {
                 float X = 635;
                 float Y = 166 + P * fntArial12.LineSpacing;
-                g.DrawString(fntArial12, ArrayLobyPlayer[P].Name, new Vector2(X, Y), Color.White);
+                g.DrawString(fntArial12, ArrayLobbyPlayer[P].Name, new Vector2(X, Y), Color.White);
             }
 
             for (int M = 0; M < ListChatHistory.Count; M++)

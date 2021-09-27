@@ -8,11 +8,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
     {
         public const string ScriptName = "Room List";
 
-        private readonly Loby Owner;
+        private readonly Lobby Owner;
 
         private List<RoomInformations> ListRoomUpdates;
 
-        public RoomListScriptClient(Loby Owner)
+        public RoomListScriptClient(Lobby Owner)
             : base(ScriptName)
         {
             this.Owner = Owner;

@@ -9,11 +9,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public const string ScriptName = "Login Success";
 
-        private readonly Loby Owner;
+        private readonly Lobby Owner;
         private string PlayerID;
         private byte[] PlayerInfo;
 
-        public LoginSuccessScriptClient(Loby Owner)
+        public LoginSuccessScriptClient(Lobby Owner)
             : base(ScriptName)
         {
             this.Owner = Owner;

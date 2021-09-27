@@ -8,14 +8,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         public const string ScriptName = "Join Room Failed";
 
         private readonly TripleThunderOnlineClient Owner;
-        private readonly Loby ScreenOwner;
+        private readonly Lobby ScreenOwner;
 
         private string RoomID;
         private bool RoomExist;
         private int CurrentPlayerCount;
         private int MaxNumberOfPlayer;
 
-        public JoinRoomFailedScriptClient(TripleThunderOnlineClient Owner, Loby ScreenOwner)
+        public JoinRoomFailedScriptClient(TripleThunderOnlineClient Owner, Lobby ScreenOwner)
             : base(ScriptName)
         {
             this.Owner = Owner;

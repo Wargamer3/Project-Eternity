@@ -8,12 +8,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
     {
         public const string ScriptName = "Player List";
 
-        private readonly Loby Owner;
+        private readonly Lobby Owner;
         private readonly CommunicationClient OnlineCommunicationClient;
 
-        private Player[] ArrayPlayerName;
+        private Player[] ArrayLobbyPlayer;
 
-        public PlayerListScriptClient(CommunicationClient OnlineCommunicationClient, Loby Owner)
+        public PlayerListScriptClient(CommunicationClient OnlineCommunicationClient, Lobby Owner)
             : base(ScriptName)
         {
             this.OnlineCommunicationClient = OnlineCommunicationClient;
@@ -37,20 +37,20 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public void ExecuteOnMainThread()
         {
-            Owner.PopulatePlayerNames(ArrayPlayerName);
+            Owner.PopulatePlayerNames(ArrayLobbyPlayer);
         }
 
         protected override void Read(OnlineReader Sender)
         {
             int ListPlayerNameCount = Sender.ReadInt32();
-            ArrayPlayerName = new Player[ListPlayerNameCount];
+            ArrayLobbyPlayer = new Player[ListPlayerNameCount];
             for (int P = 0; P < ListPlayerNameCount; ++P)
             {
                 byte[] ArrayPlayerInfo = Sender.ReadByteArray();
                 ByteReader BR = new ByteReader(ArrayPlayerInfo);
 
-                ArrayPlayerName[P] = new Player(null, BR.ReadString(), Player.PlayerTypes.Online, true, 0);
-                ArrayPlayerName[P].Level = BR.ReadInt32();
+                ArrayLobbyPlayer[P] = new Player(null, BR.ReadString(), Player.PlayerTypes.Online, true, 0);
+                ArrayLobbyPlayer[P].Level = BR.ReadInt32();
 
                 BR.Clear();
             }
