@@ -8,13 +8,15 @@ namespace ProjectEternity.Core.Online
 
         private readonly string ClientID;
         private readonly string ClientName;
+        private readonly bool Spectator;
         private readonly byte[] ClientInfo;
 
-        public IdentifyScriptClient(string ClientID, string ClientName, byte[] ClientInfo)
+        public IdentifyScriptClient(string ClientID, string ClientName, bool Spectator, byte[] ClientInfo)
             : base(ScriptName)
         {
             this.ClientID = ClientID;
             this.ClientName = ClientName;
+            this.Spectator = Spectator;
             this.ClientInfo = ClientInfo;
         }
 
@@ -27,6 +29,7 @@ namespace ProjectEternity.Core.Online
         {
             WriteBuffer.AppendString(ClientID);
             WriteBuffer.AppendString(ClientName);
+            WriteBuffer.AppendBoolean(Spectator);
             WriteBuffer.AppendByteArray(ClientInfo);
         }
 

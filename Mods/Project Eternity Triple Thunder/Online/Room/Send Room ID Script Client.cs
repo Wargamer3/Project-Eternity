@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             DicNewCommunicationServerScript.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
             OnlineCommunicationClient.Host.AddOrReplaceScripts(DicNewCommunicationServerScript);
 
-            OnlineCommunicationClient.Host.Send(new CreateCommunicationGroupScriptClient(RoomID));
+            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(RoomID));
 
             ScreenOwner.RemoveScreen(ScreenOwner);
 

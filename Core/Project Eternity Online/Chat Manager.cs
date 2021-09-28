@@ -35,7 +35,10 @@ namespace ProjectEternity.Core.Online
 
         public void OpenTab(string TabID, string TabName)
         {
-            DicChatHistory.Add(TabID, new ChatTab(TabName));
+            if (!DicChatHistory.ContainsKey(TabID))
+            {
+                DicChatHistory.Add(TabID, new ChatTab(TabName));
+            }
         }
 
         public void SelectTab(string ActiveTabID)

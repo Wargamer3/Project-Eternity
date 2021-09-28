@@ -1,18 +1,18 @@
 ﻿using System;
-using ProjectEternity.Core.Online;
 
-namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
+namespace ProjectEternity.Core.Online
 {
-    public class ReceiveGlobalMessageScriptClient : OnlineScript, DelayedExecutableOnlineScript
+    public class ReceiveGroupMessageScriptClient : OnlineScript, DelayedExecutableOnlineScript
     {
-        public const string ScriptName = "Receive Global Message";
+        public const string ScriptName = "Receive Group Message";
 
         private readonly CommunicationClient OnlineCommunicationClient;
 
+        private string Source;
         private string Message;
         private byte MessageColor;
 
-        public ReceiveGlobalMessageScriptClient(CommunicationClient OnlineCommunicationClient)
+        public ReceiveGroupMessageScriptClient(CommunicationClient OnlineCommunicationClient)
             : base(ScriptName)
         {
             this.OnlineCommunicationClient = OnlineCommunicationClient;
@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public override OnlineScript Copy()
         {
-            return new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient);
+            return new ReceiveGroupMessageScriptClient(OnlineCommunicationClient);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -28,18 +28,19 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             throw new NotImplementedException();
         }
 
-        protected override void Execute(IOnlineConnection Sender)
+        protected internal override void Execute(IOnlineConnection Sender)
         {
             OnlineCommunicationClient.DelayOnlineScript(this);
         }
 
         public void ExecuteOnMainThread()
         {
-            OnlineCommunicationClient.Chat.AddMessage("Global", Message, (ChatManager.MessageColors)MessageColor);
+            OnlineCommunicationClient.Chat.AddMessage(Source, Message, (ChatManager.MessageColors)MessageColor);
         }
 
-        protected override void Read(OnlineReader Sender)
+        protected internal override void Read(OnlineReader Sender)
         {
+            Source = Sender.ReadString();
             Message = Sender.ReadString();
             MessageColor = Sender.ReadByte();
         }

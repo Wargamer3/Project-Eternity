@@ -98,6 +98,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             DicOnlineCommunicationClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
             DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient));
             DicOnlineCommunicationClientScripts.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
+            DicOnlineCommunicationClientScripts.Add(ReceiveGroupInviteScriptClient.ScriptName, new ReceiveGroupInviteScriptClient(OnlineCommunicationClient));
+            DicOnlineCommunicationClientScripts.Add(ReceiveRemoteGroupInviteScriptClient.ScriptName, new ReceiveRemoteGroupInviteScriptClient(OnlineCommunicationClient));
             DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
             DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
         }
@@ -261,7 +263,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             if (OnlineCommunicationClient.Host != null)
             {
-                OnlineCommunicationClient.Host.Send(new IdentifyScriptClient(PlayerID, PlayerName, PlayerInfo));
+                OnlineCommunicationClient.Host.Send(new IdentifyScriptClient(PlayerID, PlayerName, false, PlayerInfo));
             }
         }
 
@@ -342,7 +344,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 {
                     Player ActivePlayer = ArrayLobbyPlayer[P];
                     float X = 635;
-                    float Y = 166 + P * fntArial12.LineSpacing;
+                    float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
                     if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 100
                         && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
@@ -353,7 +355,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         }
                         else if (MouseHelper.InputRightButtonPressed())
                         {
-                            OnlineCommunicationClient.Host.Send(new CreateCommunicationGroupScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID));
+                            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID));
+                            OnlineCommunicationClient.Host.Send(new SendGroupInviteScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, PlayerManager.OnlinePlayerName, ActivePlayer.ConnectionID));
                             OnlineCommunicationClient.Chat.OpenTab(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, ActivePlayer.Name);
                         }
                     }
@@ -365,7 +368,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 {
                     Player ActivePlayer = ArrayLobbyFriends[P];
                     float X = 635;
-                    float Y = 166 + P * fntArial12.LineSpacing;
+                    float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
                     if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 100
                         && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
@@ -376,7 +379,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         }
                         else if (MouseHelper.InputRightButtonPressed())
                         {
-                            OnlineCommunicationClient.Host.Send(new CreateCommunicationGroupScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID));
+                            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID));
+                            OnlineCommunicationClient.Host.Send(new SendGroupInviteScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, PlayerManager.OnlinePlayerName, ActivePlayer.ConnectionID));
                             OnlineCommunicationClient.Chat.OpenTab(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, ActivePlayer.Name);
                         }
                     }
@@ -488,7 +492,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private void SendMessage(string InputMessage)
         {
             ChatInput.SetText(string.Empty);
-            OnlineCommunicationClient.Host.Send(new SendGroupMessageScriptClient(OnlineCommunicationClient.Chat.ActiveTabID, InputMessage, ChatManager.MessageColors.White));
+            OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, InputMessage, ChatManager.MessageColors.White);
         }
 
         public void PopulatePlayers(Player[] ArrayLobbyPlayer)
@@ -629,7 +633,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 for (int P = 0; P < ArrayLobbyPlayer.Length; P++)
                 {
                     float X = 580;
-                    float Y = 166 + P * fntArial12.LineSpacing;
+                    float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
                     if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 177
                         && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
@@ -652,7 +656,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 for (int P = 0; P < ArrayLobbyFriends.Length; P++)
                 {
                     float X = 580;
-                    float Y = 166 + P * fntArial12.LineSpacing;
+                    float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
                     if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 177
                         && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)

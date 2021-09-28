@@ -107,7 +107,7 @@ namespace ProjectEternity.Core.Online
                     if (ActivePlayer.HasLeftServer())
                     {
                         ListPlayerToRemove.Add(ActivePlayer);
-                        Database.RemovePlayer(ListPlayerToRemove[0]);
+                        Database.RemovePlayer(ActivePlayer);
                     }
                 }
                 else

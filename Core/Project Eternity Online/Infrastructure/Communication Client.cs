@@ -11,10 +11,9 @@ namespace ProjectEternity.Core.Online
     {
         public IOnlineConnection Host;
         public IOnlineConnection LastTopLevel;
-        public IOnlineConnection GroupHost;
-        public List<IOnlineConnection> ListPrivateMessageGroup;
+        public Dictionary<string, CommunicationClient> DicCrossServerCommunicationByGroupID;
         private CancellationTokenSource CancelToken;
-        private readonly Dictionary<string, OnlineScript> DicOnlineScripts;
+        internal readonly Dictionary<string, OnlineScript> DicOnlineScripts;
         protected readonly List<DelayedExecutableOnlineScript> ListDelayedOnlineCommand;
         public readonly ChatManager Chat;
 
@@ -25,8 +24,11 @@ namespace ProjectEternity.Core.Online
 
         public CommunicationClient(Dictionary<string, OnlineScript> DicOnlineScripts)
         {
+            DicCrossServerCommunicationByGroupID = new Dictionary<string, CommunicationClient>();
             ListDelayedOnlineCommand = new List<DelayedExecutableOnlineScript>();
             Chat = new ChatManager();
+
+            CancelToken = new CancellationTokenSource();
 
             this.DicOnlineScripts = DicOnlineScripts;
         }
@@ -34,8 +36,6 @@ namespace ProjectEternity.Core.Online
         public void Connect(IPAddress HostAddress, int HostPort)
         {
             ChangeHost(HostAddress, HostPort);
-
-            CancelToken = new CancellationTokenSource();
 
             Task.Run(() => { UpdateLoop(); });
         }
@@ -47,14 +47,21 @@ namespace ProjectEternity.Core.Online
 
         public void ChangeHost(IPAddress HostAddress, int HostPort)
         {
-            IPEndPoint HostEndPoint = new IPEndPoint(HostAddress, HostPort);
-            TcpClient UserClient = new TcpClient();
-            UserClient.NoDelay = true;
-            UserClient.Connect(HostEndPoint);
+            try
+            {
+                IPEndPoint HostEndPoint = new IPEndPoint(HostAddress, HostPort);
+                TcpClient UserClient = new TcpClient();
+                UserClient.NoDelay = true;
+                UserClient.Connect(HostEndPoint);
 
-            // Get a client stream for reading and writing.
-            NetworkStream HostStream = UserClient.GetStream();
-            ChangeHost(new OnlineConnection(UserClient, HostStream, DicOnlineScripts));
+                // Get a client stream for reading and writing.
+                NetworkStream HostStream = UserClient.GetStream();
+                ChangeHost(new OnlineConnection(UserClient, HostStream, DicOnlineScripts));
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         public void ChangeHost(IOnlineConnection NewHost)
@@ -89,6 +96,11 @@ namespace ProjectEternity.Core.Online
                 ActiveScript.Execute(Host);
             }
 
+            foreach (CommunicationClient ActiveGroup in DicCrossServerCommunicationByGroupID.Values)
+            {
+                ActiveGroup.Update();
+            }
+
             if (!Host.IsConnected())
             {
                 OnConnectionLost();
@@ -120,6 +132,11 @@ namespace ProjectEternity.Core.Online
 
                 ListDelayedOnlineCommand.Clear();
             }
+
+            foreach (CommunicationClient ActiveGroup in DicCrossServerCommunicationByGroupID.Values)
+            {
+                ActiveGroup.ExecuteDelayedScripts();
+            }
         }
 
         public void DelayOnlineScript(DelayedExecutableOnlineScript ScriptToDelay)
@@ -130,15 +147,19 @@ namespace ProjectEternity.Core.Online
             }
         }
 
-        public void SendMessage(string Source, string Message)
+        public void SendMessage(string GroupID, string Message, ChatManager.MessageColors MessageColor)
         {
-            if (Source == "Global")
+            if (GroupID == "Global")
             {
-                Host.Send(new SendGlobalMessageScriptClient(Message, ChatManager.MessageColors.White));
+                Host.Send(new SendGlobalMessageScriptClient(Message, MessageColor));
+            }
+            else if (DicCrossServerCommunicationByGroupID.ContainsKey(GroupID))
+            {
+                DicCrossServerCommunicationByGroupID[GroupID].Host.Send(new SendGroupMessageScriptClient(GroupID, Message, MessageColor));
             }
             else
             {
-                Host.Send(new SendGroupMessageScriptClient(Source, Message, ChatManager.MessageColors.White));
+                Host.Send(new SendGroupMessageScriptClient(GroupID, Message, MessageColor));
             }
         }
 

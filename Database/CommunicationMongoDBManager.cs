@@ -36,6 +36,32 @@ namespace Database
             PlayersCollection = DatabaseUserInformation.GetCollection<BsonDocument>("TripleThunder");
         }
 
+        public void UpdatePlayerCommunicationIP(string ClientID, string CommunicationServerIP, int CommunicationServerPort)
+        {
+            if (ClientID == null)
+            {
+                return;
+            }
+
+            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ClientID));
+            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("CommunicationServerIP", CommunicationServerIP).Set("CommunicationServerPort", CommunicationServerPort);
+            PlayersCollection.UpdateOneAsync(filter, update);
+        }
+
+        public void RemovePlayer(IOnlineConnection PlayerToRemove)
+        {
+            UpdatePlayerCommunicationIP(PlayerToRemove.ID, "", 0);
+        }
+
+        public void GetPlayerCommunicationIP(string ClientID, out string CommunicationServerIP, out int CommunicationServerPort)
+        {
+            FilterDefinition<BsonDocument> LastTimeCheckedFilter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ClientID));
+            BsonDocument FoundPlayerDocument = PlayersCollection.Find(LastTimeCheckedFilter).FirstOrDefault();
+
+            CommunicationServerIP = FoundPlayerDocument.GetValue("CommunicationServerIP").AsString;
+            CommunicationServerPort = FoundPlayerDocument.GetValue("CommunicationServerPort").AsInt32;
+        }
+
         public byte[] GetClientInfo(string ClientID)
         {
             FilterDefinition<BsonDocument> LastTimeCheckedFilter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ClientID));

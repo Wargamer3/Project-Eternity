@@ -10,6 +10,7 @@ namespace ProjectEternity.Core.Online
 
         private string ClientID;
         private string ClientName;
+        private bool Spectator;
         private byte[] ClientInfo;
 
         public IdentifyScriptServer(CommunicationServer OnlineCommunicationServer)
@@ -32,13 +33,18 @@ namespace ProjectEternity.Core.Online
         {
             Sender.ID = ClientID;
             Sender.Name = ClientName;
-            OnlineCommunicationServer.Identify(Sender, ClientInfo);
+
+            if (!Spectator)
+            {
+                OnlineCommunicationServer.Identify(Sender, ClientInfo);
+            }
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
             ClientID = Sender.ReadString();
             ClientName = Sender.ReadString();
+            Spectator = Sender.ReadBoolean();
             ClientInfo = Sender.ReadByteArray();
         }
     }

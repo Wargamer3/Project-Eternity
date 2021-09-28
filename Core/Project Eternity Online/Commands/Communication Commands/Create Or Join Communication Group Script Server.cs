@@ -2,7 +2,7 @@
 
 namespace ProjectEternity.Core.Online
 {
-    public class CreateCommunicationGroupScriptServer : OnlineScript
+    public class CreateOrJoinCommunicationGroupScriptServer : OnlineScript
     {
         public const string ScriptName = "Create Communication Group";
 
@@ -10,7 +10,7 @@ namespace ProjectEternity.Core.Online
 
         private string GroupID;
 
-        public CreateCommunicationGroupScriptServer(CommunicationServer OnlineCommunicationServer)
+        public CreateOrJoinCommunicationGroupScriptServer(CommunicationServer OnlineCommunicationServer)
             : base(ScriptName)
         {
             this.OnlineCommunicationServer = OnlineCommunicationServer;
@@ -18,7 +18,7 @@ namespace ProjectEternity.Core.Online
 
         public override OnlineScript Copy()
         {
-            return new CreateCommunicationGroupScriptServer(OnlineCommunicationServer);
+            return new CreateOrJoinCommunicationGroupScriptServer(OnlineCommunicationServer);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -28,7 +28,7 @@ namespace ProjectEternity.Core.Online
 
         protected internal override void Execute(IOnlineConnection Sender)
         {
-            OnlineCommunicationServer.CreateCommunicationGroup(GroupID, Sender);
+            OnlineCommunicationServer.CreateOrJoinCommunicationGroup(GroupID, Sender);
         }
 
         protected internal override void Read(OnlineReader Sender)

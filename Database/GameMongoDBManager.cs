@@ -54,7 +54,8 @@ namespace Database
                 int MaxNumberOfPlayer = ActiveDocument.GetValue("MaxNumberOfPlayer").AsInt32;
                 bool IsDead = ActiveDocument.GetValue("IsDead").AsBoolean;
 
-                IRoomInformations NewRoom = new ServerRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, Password, OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MaxNumberOfPlayer, IsDead);
+                IRoomInformations NewRoom = new ServerRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, Password,
+                    OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MaxNumberOfPlayer, IsDead);
                 ListFoundRoom.Add(NewRoom);
             }
 
@@ -64,12 +65,13 @@ namespace Database
 
         public void HandleOldData(string OwnerServerIP, int OwnerServerPort)
         {
-            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("OwnerServerIP", OwnerServerIP) & Builders<BsonDocument>.Filter.Eq("OwnerServerPort", OwnerServerPort);
+            FilterDefinition<BsonDocument> RoomFilter = Builders<BsonDocument>.Filter.Eq("OwnerServerIP", OwnerServerIP) & Builders<BsonDocument>.Filter.Eq("OwnerServerPort", OwnerServerPort);
 
-            RoomsCollection.DeleteManyAsync(filter);
+            RoomsCollection.DeleteManyAsync(RoomFilter);
 
-            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("OwnerServerIP", "").Set("OwnerServerPort", 0);
-            PlayersCollection.UpdateManyAsync(filter, update);
+            FilterDefinition<BsonDocument> PlayerFilter = Builders<BsonDocument>.Filter.Eq("GameServerIP", OwnerServerIP) & Builders<BsonDocument>.Filter.Eq("GameServerPort", OwnerServerPort);
+            UpdateDefinition<BsonDocument> PlayerUpdate = Builders<BsonDocument>.Update.Set("GameServerIP", "").Set("GameServerPort", 0);
+            PlayersCollection.UpdateManyAsync(PlayerFilter, PlayerUpdate);
         }
 
         public IRoomInformations GenerateNewRoom(string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort, int MaxNumberOfPlayer)
@@ -122,12 +124,12 @@ namespace Database
             RoomsCollection.UpdateOneAsync(filter, update);
         }
 
-        public void RemovePlayer(IOnlineConnection OnlineConnection)
+        public void RemovePlayer(IOnlineConnection PlayerToRemove)
         {
-            UpdatePlayerIsLoggedIn(OnlineConnection.ID, "", 0);
+            UpdatePlayerIsLoggedIn(PlayerToRemove.ID, "", 0);
         }
 
-        public PlayerPOCO LogInPlayer(string Login, string Password, string OwnerServerIP, int OwnerServerPort)
+        public PlayerPOCO LogInPlayer(string Login, string Password, string GameServerIP, int GameServerPort)
         {
             FilterDefinition<BsonDocument> LastTimeCheckedFilter = Builders<BsonDocument>.Filter.Eq("Login", Login) & Builders<BsonDocument>.Filter.Eq("Password", Password);
             BsonDocument FoundPlayerDocument = PlayersCollection.Find(LastTimeCheckedFilter).FirstOrDefault();
@@ -143,8 +145,10 @@ namespace Database
                     { "License", 1 },
                     { "Guild", "" },
                     { "CharacterType", "Jack" },
-                    { "OwnerServerIP", "" },
-                    { "OwnerServerPort", 0 },
+                    { "GameServerIP", "" },
+                    { "GameServerPort", 0 },
+                    { "CommunicationServerIP", "" },
+                    { "CommunicationServerPort", 0 },
                     { "Password", Password },
                     { "NumberOfFailedConnection", 0 },
                     { "Equipment",
@@ -164,11 +168,11 @@ namespace Database
                 FoundPlayerDocument = PlayersCollection.Find(LastTimeCheckedFilter).FirstOrDefault();
             }
 
-            bool LoggedIn = !string.IsNullOrEmpty(FoundPlayerDocument.GetValue("OwnerServerIP").AsString);
+            bool LoggedIn = !string.IsNullOrEmpty(FoundPlayerDocument.GetValue("GameServerIP").AsString);
 
             if (LoggedIn)
             {
-                return LogInPlayer(Login + "1", Password, OwnerServerIP, OwnerServerPort);
+                return LogInPlayer(Login + "1", Password, GameServerIP, GameServerPort);
             }
             else
             {
@@ -183,13 +187,13 @@ namespace Database
                 FoundPlayer.Info = BW.GetBytes();
                 BW.ClearWriteBuffer();
 
-                UpdatePlayerIsLoggedIn(FoundPlayer.ID, OwnerServerIP, OwnerServerPort);
+                UpdatePlayerIsLoggedIn(FoundPlayer.ID, GameServerIP, GameServerPort);
 
                 return FoundPlayer;
             }
         }
 
-        private void UpdatePlayerIsLoggedIn(string ID, string OwnerServerIP, int OwnerServerPort)
+        private void UpdatePlayerIsLoggedIn(string ID, string GameServerIP, int GameServerPort)
         {
             if (ID == null)
             {
@@ -197,7 +201,7 @@ namespace Database
             }
 
             FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
-            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("OwnerServerIP", OwnerServerIP).Set("OwnerServerPort", OwnerServerPort);
+            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("GameServerIP", GameServerIP).Set("GameServerPort", GameServerPort);
             PlayersCollection.UpdateOneAsync(filter, update);
         }
     }
