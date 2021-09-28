@@ -478,6 +478,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 OnlineGameClient.Host.Send(new LeaveRoomScriptClient());
             }
 
+            if (OnlineCommunicationClient != null && OnlineCommunicationClient.IsConnected)
+            {
+                OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient(Room.RoomID));
+                OnlineCommunicationClient.Chat.CloseTab(Room.RoomID);
+            }
+
             sndButtonClick.Play();
             RemoveScreen(this);
         }

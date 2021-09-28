@@ -17,6 +17,8 @@ namespace ProjectEternity.Core.Online
         protected readonly List<DelayedExecutableOnlineScript> ListDelayedOnlineCommand;
         public readonly ChatManager Chat;
 
+        public bool IsConnected => Host != null && Host.IsConnected();
+
         public CommunicationClient()
             : this(new Dictionary<string, OnlineScript>())
         {
