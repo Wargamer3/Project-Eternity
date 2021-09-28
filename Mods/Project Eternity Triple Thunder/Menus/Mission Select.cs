@@ -45,7 +45,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private Texture2D sprHostText;
         private Texture2D sprReadyText;
 
-        private List<string> ListChatHistory;
         private TextInput ChatInput;
 
         private InteractiveButton ChangeRoomNameButton;
@@ -65,6 +64,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private AnimatedSprite PlayerInfoOutline;
         private AnimatedSprite QuestButton;
         private AnimatedSprite QuestOutlineButton;
+
+        private AnimatedSprite sprTabChat;
 
         private InteractiveButton[] ArrayMenuButton;
 
@@ -89,7 +90,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.Room = Room;
 
-            ListChatHistory = new List<string>();
             ListMissionInfo = new List<MissionInfo>();
             if (Room.ListRoomPlayer.Count == 0)
             {
@@ -145,6 +145,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             QuestButton = new AnimatedSprite(Content, "Triple Thunder/Menus/Wait Room/Quest Button", new Vector2(0, 0), 0, 1, 3);
             QuestOutlineButton = new AnimatedSprite(Content, "Triple Thunder/Menus/Wait Room/Quest Button Outline", new Vector2(0, 0), 0, 1, 4);
             QuestOutlineButton.SetFrame(2);
+
+            sprTabChat = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Tab Chat", new Vector2(0, 0), 0, 1, 4);
 
             QuestEasyButton.CanBeChecked = true;
             QuestNormalButton.CanBeChecked = true;
@@ -232,7 +234,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Update(gameTime);
             }
 
-            ChatInput.Update(gameTime);
+            ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
 
             MissionScrollbar.Update(gameTime);
 
@@ -531,15 +533,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             MissionInfoStartIndex = (int)ScrollbarValue;
         }
 
-        public void AddMessage(string Source, string Message, Color MessageColor)
-        {
-            ListChatHistory.Add(Message);
-        }
-
         private void SendMessage(string InputMessage)
         {
             ChatInput.SetText(string.Empty);
-            OnlineCommunicationClient.Host.Send(new SendGroupMessageScriptClient(Room.RoomID, InputMessage, ChatManager.MessageColors.White));
+            OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, InputMessage, ChatManager.MessageColors.White);
         }
 
         public override void BeginDraw(CustomSpriteBatch g)
@@ -578,7 +575,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Draw(g);
             }
 
-            ChatInput.Draw(g);
+            ChatHelper.DrawChat(g, sprTabChat, fntText, OnlineCommunicationClient.Chat, ChatInput);
 
             MissionScrollbar.Draw(g);
 
@@ -615,13 +612,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 {
                     PlayerInfoOutline.Draw(g, new Vector2(405, 140 + i * 64), Color.White);
                 }
-            }
-
-            for (int M = 0; M < ListChatHistory.Count; M++)
-            {
-                float X = 30;
-                float Y = 430 + M * fntText.LineSpacing;
-                g.DrawString(fntText, ListChatHistory[M], new Vector2(X, Y), Color.White);
             }
         }
 

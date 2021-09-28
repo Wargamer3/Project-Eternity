@@ -285,7 +285,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 sndBGM.PlayAsBGM();
             }
 
-            UpdateChat(gameTime);
+            ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
 
             Rectangle LicenseBox = new Rectangle(572, 16, 24, 24);
             if (LicenseBox.Intersects(new Rectangle(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y, 1, 1)))
@@ -385,36 +385,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         }
                     }
                 }
-            }
-        }
-
-        private void UpdateChat(GameTime gameTime)
-        {
-            ChatInput.Update(gameTime);
-
-            int T = 0;
-
-            foreach (KeyValuePair<string, ChatManager.ChatTab> ActiveTab in OnlineCommunicationClient.Chat.DicTab)
-            {
-                if (ActiveTab.Key == OnlineCommunicationClient.Chat.ActiveTabID)
-                {
-                    ++T;
-                    continue;
-                }
-
-                int X = 23 + T * 103;
-                int Y = 405;
-
-                if (MouseHelper.InputLeftButtonPressed())
-                {
-                    if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X < X + 103
-                    && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y < Y + 24)
-                    {
-                        OnlineCommunicationClient.Chat.SelectTab(ActiveTab.Key);
-                    }
-                }
-
-                ++T;
             }
         }
 
@@ -525,7 +495,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             DrawRooms(g);
-            DrawChat(g);
+            ChatHelper.DrawChat(g, sprTabChat, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
             DrawPlayers(g);
 
             foreach (InteractiveButton ActiveButton in ArrayMenuButton)
@@ -583,46 +553,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     sprRoomType.Draw(g, new Vector2(X - 38, Y + 14), Color.White);
                 }
                 ++i;
-            }
-        }
-
-        private void DrawChat(CustomSpriteBatch g)
-        {
-            ChatInput.Draw(g);
-
-            int T = 0;
-
-            foreach (KeyValuePair<string, ChatManager.ChatTab> ActiveTab in OnlineCommunicationClient.Chat.DicTab)
-            {
-                int X = 23 + T * 103;
-                int Y = 405;
-
-                if (ActiveTab.Value.Name == OnlineCommunicationClient.Chat.ActiveTabName)
-                {
-                    sprTabChat.SetFrame(3);
-                }
-                else if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X < X + 103
-                    && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y < Y + 24)
-                {
-                    sprTabChat.SetFrame(3);
-                }
-                else
-                {
-                    sprTabChat.SetFrame(0);
-                }
-
-                sprTabChat.Draw(g, new Vector2(X + 51, Y + 12), Color.White);
-                g.DrawString(fntArial12, ActiveTab.Value.Name, new Vector2(X + 32, Y + 3), Color.White);
-                ++T;
-            }
-
-            int M = 0;
-            foreach (string ActiveMessage in OnlineCommunicationClient.Chat.ListActiveTabHistory)
-            {
-                float X = 30;
-                float Y = 430 + M * fntArial12.LineSpacing;
-                g.DrawString(fntArial12, ActiveMessage, new Vector2(X, Y), Color.White);
-                ++M;
             }
         }
 

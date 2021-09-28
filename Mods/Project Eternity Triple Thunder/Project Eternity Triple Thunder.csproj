@@ -100,6 +100,7 @@
     <Compile Include="Inputs\Robot Input Manager.cs" />
     <Compile Include="Menus\Battle Mode Select.cs" />
     <Compile Include="Menus\Battle Map Select.cs" />
+    <Compile Include="Menus\Chat Helper.cs" />
     <Compile Include="Menus\Player Info.cs" />
     <Compile Include="Menus\Create Room Mission.cs" />
     <Compile Include="Menus\Game End Battle Screen.cs" />

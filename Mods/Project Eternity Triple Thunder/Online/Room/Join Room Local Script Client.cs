@@ -115,7 +115,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
             Host.AddOrReplaceScripts(DicNewGameServerScript);
 
-            OnlineCommunicationClient.Host.Send(new JoinCommunicationGroupScriptClient(RoomID));
+            OnlineCommunicationClient.Chat.InsertTab(RoomID, "Chat");
+            OnlineCommunicationClient.Chat.CloseTab("Global");
+            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(RoomID));
+            OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient("Global"));
 
             OnlineGameClient.DelayOnlineScript(this);
         }

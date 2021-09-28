@@ -31,7 +31,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private Texture2D sprTeamSeparatorBlue;
         private Texture2D sprTeamSeparatorRed;
 
-        private List<string> ListChatHistory;
         private TextInput ChatInput;
 
         private InteractiveButton ChangeRoomNameButton;
@@ -60,14 +59,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private AnimatedSprite PlayerInfo;
         private AnimatedSprite PlayerInfoOutline;
 
+        private AnimatedSprite sprTabChat;
+
         private InteractiveButton[] ArrayMenuButton;
 
         #endregion
 
         private readonly BattleRoomInformations Room;
         public Texture2D sprMapImage;
-
-        public List<string> Messenger;//List of messages to draw.
 
         private readonly TripleThunderOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
@@ -148,6 +147,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             PlayerInfoOutline = new AnimatedSprite(Content, "Triple Thunder/Menus/Wait Room/Player Info Outline", new Vector2(0, 0), 0, 1, 4);
             PlayerInfoOutline.SetFrame(2);
 
+            sprTabChat = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Tab Chat", new Vector2(0, 0), 0, 1, 4);
+
             UpdateReadyOrHost();
 
             #endregion
@@ -202,7 +203,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Update(gameTime);
             }
 
-            ChatInput.Update(gameTime);
+            ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
 
             foreach (Player ActiveRobot in Room.ListRoomPlayer)
             {
@@ -348,15 +349,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public void AddMessage(string Source, string Message, Color MessageColor)
-        {
-            ListChatHistory.Add(Message);
-        }
-
         private void SendMessage(string InputMessage)
         {
             ChatInput.SetText(string.Empty);
-            OnlineCommunicationClient.Host.Send(new SendGroupMessageScriptClient(Room.RoomID, InputMessage, ChatManager.MessageColors.White));
+            OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, InputMessage, ChatManager.MessageColors.White);
         }
 
         #region Button methods
@@ -621,7 +617,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Draw(g);
             }
 
-            ChatInput.Draw(g);
+            ChatHelper.DrawChat(g, sprTabChat, fntText, OnlineCommunicationClient.Chat, ChatInput);
 
             ModeSelectTextButton.Draw(g);
 
@@ -650,13 +646,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
 
                 DrawPlayerBox(g, DrawX, DrawY, Room.ListRoomPlayer[P], Room.ListRoomPlayer[P].Team == 1 || !Room.UseTeams);
-            }
-
-            for (int M = 0; M < ListChatHistory.Count; M++)
-            {
-                float X = 30;
-                float Y = 430 + M * fntText.LineSpacing;
-                g.DrawString(fntText, ListChatHistory[M], new Vector2(X, Y), Color.White);
             }
         }
 

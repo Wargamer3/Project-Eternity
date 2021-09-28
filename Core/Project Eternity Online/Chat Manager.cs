@@ -33,17 +33,40 @@ namespace ProjectEternity.Core.Online
             _ActiveChatTabID = "Global";
         }
 
+        public void InsertTab(string TabID, string TabName)
+        {
+            if (!DicChatHistory.ContainsKey(TabID))
+            {
+                Dictionary<string, ChatTab> NewDicChatHistory = new Dictionary<string, ChatTab>();
+                NewDicChatHistory.Add(TabID, new ChatTab(TabName));
+                foreach (KeyValuePair<string, ChatTab> ActiveTab in DicChatHistory)
+                {
+                    NewDicChatHistory.Add(ActiveTab.Key, ActiveTab.Value);
+                }
+
+                DicChatHistory = NewDicChatHistory;
+            }
+
+            _ActiveChatTabID = TabID;
+        }
+
         public void OpenTab(string TabID, string TabName)
         {
             if (!DicChatHistory.ContainsKey(TabID))
             {
                 DicChatHistory.Add(TabID, new ChatTab(TabName));
             }
+
+            _ActiveChatTabID = TabID;
         }
 
         public void SelectTab(string ActiveTabID)
         {
             _ActiveChatTabID = ActiveTabID;
+        }
+        public void CloseTab(string ActiveTabID)
+        {
+            DicChatHistory.Remove(ActiveTabID);
         }
 
         public void AddMessage(string Source, string Message, MessageColors MessageColor)
