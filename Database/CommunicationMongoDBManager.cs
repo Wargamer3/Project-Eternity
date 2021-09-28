@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using ProjectEternity.Core.Online;
@@ -33,6 +34,58 @@ namespace Database
             GlobalCollection = DatabaseCommunication.GetCollection<BsonDocument>("Global");
             PersonalCollection = DatabaseCommunication.GetCollection<BsonDocument>("Personal");
             PlayersCollection = DatabaseUserInformation.GetCollection<BsonDocument>("TripleThunder");
+        }
+
+        public byte[] GetClientInfo(string ClientID)
+        {
+            FilterDefinition<BsonDocument> LastTimeCheckedFilter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ClientID));
+            BsonDocument FoundPlayerDocument = PlayersCollection.Find(LastTimeCheckedFilter).FirstOrDefault();
+
+            ByteWriter BW = new ByteWriter();
+
+            BW.AppendByte((byte)FoundPlayerDocument.GetValue("Ranking").AsInt32);
+            BW.AppendByte((byte)FoundPlayerDocument.GetValue("License").AsInt32);
+            BW.AppendString(FoundPlayerDocument.GetValue("Guild").AsString);
+
+            byte[] ClientInfo = BW.GetBytes();
+            BW.ClearWriteBuffer();
+
+            return ClientInfo;
+        }
+
+        public void AddFriend(IOnlineConnection Sender, string ClientID)
+        {
+            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(Sender.ID));
+            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.AddToSet("Friends", new ObjectId(ClientID));
+            PlayersCollection.UpdateOneAsync(filter, update);
+        }
+
+        public List<PlayerPOCO> GetFriendList(string ClientID)
+        {
+            List<PlayerPOCO> ListFriend = new List<PlayerPOCO>();
+
+            FilterDefinition<BsonDocument> IDFilter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ClientID));
+
+            BsonDocument result = PlayersCollection.Aggregate().Match(IDFilter).Lookup("TripleThunder", "Friends", "_id", "FriendsInfo").FirstOrDefault();
+
+            BsonArray Friends = result.GetValue("FriendsInfo").AsBsonArray;
+            foreach (BsonDocument ActiveFriend in Friends)
+            {
+                PlayerPOCO FoundPlayer = new PlayerPOCO();
+                FoundPlayer.ID = ActiveFriend.GetValue("_id").AsObjectId.ToString();
+                string Name = ActiveFriend.GetValue("Name").AsString;
+                FoundPlayer.Name = Name;
+
+                ByteWriter BW = new ByteWriter();
+                BW.AppendString(Name);
+                BW.AppendInt32(ActiveFriend.GetValue("Level").AsInt32);
+                FoundPlayer.Info = BW.GetBytes();
+                BW.ClearWriteBuffer();
+
+                ListFriend.Add(FoundPlayer);
+            }
+
+            return ListFriend;
         }
     }
 }

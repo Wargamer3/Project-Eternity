@@ -44,6 +44,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             this.IsOnline = IsOnline;
             this.Team = Team;
 
+            Guild = string.Empty;
+
             GameplayType = GameplayTypes.MouseAndKeyboard;
 
             Equipment = new PlayerEquipment();
@@ -55,6 +57,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             this.Name = Name;
             this.IsOnline = IsOnline;
             this.Team = Team;
+
+            Guild = string.Empty;
 
             if (PlayerType == PlayerTypes.Offline)
             {

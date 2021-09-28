@@ -15,6 +15,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
     public class Lobby : GameScreen
     {
+        private enum PlayerListTypes { All, Friends, Guild }
+
         #region Ressources
 
         private FMODSound sndBGM;
@@ -26,7 +28,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private Texture2D sprTitleBattle;
         private Texture2D sprLicenseAll;
 
-        private List<string> ListChatHistory;
         private TextInput ChatInput;
 
         private InteractiveButton CreateARoomButton;
@@ -52,6 +53,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private InteractiveButton ShopButton;
         private InteractiveButton MetalButton;
 
+        private AnimatedSprite sprUserSelection;
+        private AnimatedSprite sprTabChat;
+
         private AnimatedSprite sprRoom;
         private AnimatedSprite sprRoomState;
         private AnimatedSprite sprRoomType;
@@ -64,14 +68,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
         private Player[] ArrayLobbyPlayer;
+        private Player[] ArrayLobbyFriends;
+        PlayerListTypes PlayerListType;
         private string RoomType;
 
         public Lobby()
         {
             RoomType = RoomInformations.RoomTypeMission;
             DicAllRoom = new Dictionary<string, RoomInformations>();
-            ListChatHistory = new List<string>();
+
             ArrayLobbyPlayer = new Player[0];
+            ArrayLobbyFriends = new Player[0];
 
             Dictionary<string, OnlineScript> DicOnlineGameClientScripts = new Dictionary<string, OnlineScript>();
             Dictionary<string, OnlineScript> DicOnlineCommunicationClientScripts = new Dictionary<string, OnlineScript>();
@@ -89,8 +96,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
 
             DicOnlineCommunicationClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
-            DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient, this));
+            DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient));
+            DicOnlineCommunicationClientScripts.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
             DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
+            DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
         }
 
         public override void Load()
@@ -134,15 +143,23 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             HelpButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Help Button", new Vector2(732, 97),
                                                             "Triple Thunder/Menus/Channel/Help Icon", new Vector2(-32, 0), 8, OnButtonOver, null);
 
-            ShowAllPlayersFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/All Players Filter", new Vector2(612, 148), OnButtonOver, null);
-            ShowFriendsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Friends Filter", new Vector2(665, 148), OnButtonOver, null);
-            ShowGuildsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Guild Filter", new Vector2(723, 148), OnButtonOver, null);
+            ShowAllPlayersFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/All Players Filter", new Vector2(612, 148), OnButtonOver, ShowAllPlayers);
+            ShowFriendsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Friends Filter", new Vector2(665, 148), OnButtonOver, ShowFriends);
+            ShowGuildsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Guild Filter", new Vector2(723, 148), OnButtonOver, ShowGuild);
             SearchPlayerButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Search Button", new Vector2(750, 472), OnButtonOver, null);
             
             MetalButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Medal Button", new Vector2(623, 514),
                                                             "Triple Thunder/Menus/Channel/Medal Icon", new Vector2(-29, 0), 6, OnButtonOver, null);
             ShopButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Shop Button", new Vector2(733, 514),
                                                             "Triple Thunder/Menus/Channel/Shop Icon", new Vector2(-25, 0), 7, OnButtonOver, OpenShop);
+
+            ShowAllPlayersFilter.CanBeChecked = true;
+            ShowFriendsFilter.CanBeChecked = true;
+            ShowGuildsFilter.CanBeChecked = true;
+            ShowAllPlayersFilter.Check();
+
+            sprUserSelection = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/User Selection", new Vector2(0, 0), 0, 1, 4);
+            sprTabChat = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Tab Chat", new Vector2(0, 0), 0, 1, 4);
 
             sprRoom = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Room", new Vector2(0, 0), 0, 1, 4);
             sprRoom.SetFrame(2);
@@ -240,11 +257,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             while (TryConnecting);
         }
 
-        public void IdentifyToCommunicationServer(string PlayerName, byte[] PlayerInfo)
+        public void IdentifyToCommunicationServer(string PlayerID, string PlayerName, byte[] PlayerInfo)
         {
             if (OnlineCommunicationClient.Host != null)
             {
-                OnlineCommunicationClient.Host.Send(new IdentifyScriptClient(PlayerName, PlayerInfo));
+                OnlineCommunicationClient.Host.Send(new IdentifyScriptClient(PlayerID, PlayerName, PlayerInfo));
             }
         }
 
@@ -266,7 +283,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 sndBGM.PlayAsBGM();
             }
 
-            ChatInput.Update(gameTime);
+            UpdateChat(gameTime);
 
             Rectangle LicenseBox = new Rectangle(572, 16, 24, 24);
             if (LicenseBox.Intersects(new Rectangle(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y, 1, 1)))
@@ -284,6 +301,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
             }
 
+            UpdateRooms();
+            UpdatePlayers();
+
+            foreach (InteractiveButton ActiveButton in ArrayMenuButton)
+            {
+                ActiveButton.Update(gameTime);
+            }
+        }
+
+        private void UpdateRooms()
+        {
             int i = 0;
             foreach (KeyValuePair<string, RoomInformations> ActiveRoom in DicAllRoom)
             {
@@ -304,14 +332,89 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 ++i;
             }
+        }
 
-            foreach (InteractiveButton ActiveButton in ArrayMenuButton)
+        private void UpdatePlayers()
+        {
+            if (PlayerListType == PlayerListTypes.All)
             {
-                ActiveButton.Update(gameTime);
+                for (int P = 0; P < ArrayLobbyPlayer.Length; P++)
+                {
+                    Player ActivePlayer = ArrayLobbyPlayer[P];
+                    float X = 635;
+                    float Y = 166 + P * fntArial12.LineSpacing;
+
+                    if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 100
+                        && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
+                    {
+                        if (MouseHelper.InputLeftButtonPressed())
+                        {
+                            PushScreen(new PlayerInfo(OnlineGameClient, OnlineCommunicationClient, ActivePlayer));
+                        }
+                        else if (MouseHelper.InputRightButtonPressed())
+                        {
+                            OnlineCommunicationClient.Host.Send(new CreateCommunicationGroupScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID));
+                            OnlineCommunicationClient.Chat.OpenTab(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, ActivePlayer.Name);
+                        }
+                    }
+                }
+            }
+            else if (PlayerListType == PlayerListTypes.Friends)
+            {
+                for (int P = 0; P < ArrayLobbyFriends.Length; P++)
+                {
+                    Player ActivePlayer = ArrayLobbyFriends[P];
+                    float X = 635;
+                    float Y = 166 + P * fntArial12.LineSpacing;
+
+                    if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 100
+                        && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
+                    {
+                        if (MouseHelper.InputLeftButtonPressed())
+                        {
+                            PushScreen(new PlayerInfo(OnlineGameClient, OnlineCommunicationClient, ActivePlayer));
+                        }
+                        else if (MouseHelper.InputRightButtonPressed())
+                        {
+                            OnlineCommunicationClient.Host.Send(new CreateCommunicationGroupScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID));
+                            OnlineCommunicationClient.Chat.OpenTab(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, ActivePlayer.Name);
+                        }
+                    }
+                }
             }
         }
 
-        internal void UpdateRooms(List<RoomInformations> ListRoomUpdates)
+        private void UpdateChat(GameTime gameTime)
+        {
+            ChatInput.Update(gameTime);
+
+            int T = 0;
+
+            foreach (KeyValuePair<string, ChatManager.ChatTab> ActiveTab in OnlineCommunicationClient.Chat.DicTab)
+            {
+                if (ActiveTab.Key == OnlineCommunicationClient.Chat.ActiveTabID)
+                {
+                    ++T;
+                    continue;
+                }
+
+                int X = 23 + T * 103;
+                int Y = 405;
+
+                if (MouseHelper.InputLeftButtonPressed())
+                {
+                    if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X < X + 103
+                    && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y < Y + 24)
+                    {
+                        OnlineCommunicationClient.Chat.SelectTab(ActiveTab.Key);
+                    }
+                }
+
+                ++T;
+            }
+        }
+
+        internal void PopulateRooms(List<RoomInformations> ListRoomUpdates)
         {
             foreach (RoomInformations ActiveRoomUpdate in ListRoomUpdates)
             {
@@ -335,6 +438,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonOver.Play();
         }
 
+        #region Buttons
+
         private void CreateARoom()
         {
             sndButtonClick.Play();
@@ -354,20 +459,46 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             PushScreen(new Shop(PlayerManager.ListLocalPlayer[0]));
         }
 
-        public void AddMessage(string Message, Color MessageColor)
+        private void ShowAllPlayers()
         {
-            ListChatHistory.Add(Message);
+            sndButtonClick.Play();
+            ShowFriendsFilter.Uncheck();
+            ShowGuildsFilter.Uncheck();
+            PlayerListType = PlayerListTypes.All;
         }
+
+        private void ShowFriends()
+        {
+            sndButtonClick.Play();
+            ShowAllPlayersFilter.Uncheck();
+            ShowGuildsFilter.Uncheck();
+            PlayerListType = PlayerListTypes.Friends;
+        }
+
+        private void ShowGuild()
+        {
+            sndButtonClick.Play();
+            ShowAllPlayersFilter.Uncheck();
+            ShowFriendsFilter.Uncheck();
+            PlayerListType = PlayerListTypes.Friends;
+        }
+
+        #endregion
 
         private void SendMessage(string InputMessage)
         {
             ChatInput.SetText(string.Empty);
-            OnlineCommunicationClient.Host.Send(new SendGlobalMessageScriptClient(InputMessage, 0, 0, 0));
+            OnlineCommunicationClient.Host.Send(new SendGroupMessageScriptClient(OnlineCommunicationClient.Chat.ActiveTabID, InputMessage, ChatManager.MessageColors.White));
         }
 
-        public void PopulatePlayerNames(Player[] ArrayLobyPlayer)
+        public void PopulatePlayers(Player[] ArrayLobbyPlayer)
         {
-            this.ArrayLobbyPlayer = ArrayLobyPlayer;
+            this.ArrayLobbyPlayer = ArrayLobbyPlayer;
+        }
+
+        public void PopulateFriends(Player[] ArrayLobbyFriends)
+        {
+            this.ArrayLobbyFriends = ArrayLobbyFriends;
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -388,8 +519,19 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             g.End();
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            ChatInput.Draw(g);
 
+            DrawRooms(g);
+            DrawChat(g);
+            DrawPlayers(g);
+
+            foreach (InteractiveButton ActiveButton in ArrayMenuButton)
+            {
+                ActiveButton.Draw(g);
+            }
+        }
+
+        private void DrawRooms(CustomSpriteBatch g)
+        {
             int i = 0;
             foreach (RoomInformations ActiveRoom in DicAllRoom.Values)
             {
@@ -438,25 +580,95 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
                 ++i;
             }
+        }
 
-            foreach (InteractiveButton ActiveButton in ArrayMenuButton)
+        private void DrawChat(CustomSpriteBatch g)
+        {
+            ChatInput.Draw(g);
+
+            int T = 0;
+
+            foreach (KeyValuePair<string, ChatManager.ChatTab> ActiveTab in OnlineCommunicationClient.Chat.DicTab)
             {
-                ActiveButton.Draw(g);
+                int X = 23 + T * 103;
+                int Y = 405;
+
+                if (ActiveTab.Value.Name == OnlineCommunicationClient.Chat.ActiveTabName)
+                {
+                    sprTabChat.SetFrame(3);
+                }
+                else if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X < X + 103
+                    && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y < Y + 24)
+                {
+                    sprTabChat.SetFrame(3);
+                }
+                else
+                {
+                    sprTabChat.SetFrame(0);
+                }
+
+                sprTabChat.Draw(g, new Vector2(X + 51, Y + 12), Color.White);
+                g.DrawString(fntArial12, ActiveTab.Value.Name, new Vector2(X + 32, Y + 3), Color.White);
+                ++T;
             }
 
-            for (int P = 0; P < ArrayLobbyPlayer.Length; P++)
-            {
-                float X = 635;
-                float Y = 166 + P * fntArial12.LineSpacing;
-                g.DrawString(fntArial12, "Lv." + ArrayLobbyPlayer[P].Level, new Vector2(X - 50, Y), Color.White);
-                g.DrawString(fntArial12, ArrayLobbyPlayer[P].Name, new Vector2(X, Y), Color.White);
-            }
-
-            for (int M = 0; M < ListChatHistory.Count; M++)
+            int M = 0;
+            foreach (string ActiveMessage in OnlineCommunicationClient.Chat.ListActiveTabHistory)
             {
                 float X = 30;
                 float Y = 430 + M * fntArial12.LineSpacing;
-                g.DrawString(fntArial12, ListChatHistory[M], new Vector2(X, Y), Color.White);
+                g.DrawString(fntArial12, ActiveMessage, new Vector2(X, Y), Color.White);
+                ++M;
+            }
+        }
+
+        private void DrawPlayers(CustomSpriteBatch g)
+        {
+            if (PlayerListType == PlayerListTypes.All)
+            {
+                for (int P = 0; P < ArrayLobbyPlayer.Length; P++)
+                {
+                    float X = 580;
+                    float Y = 166 + P * fntArial12.LineSpacing;
+
+                    if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 177
+                        && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
+                    {
+                        sprUserSelection.SetFrame(2);
+                    }
+                    else
+                    {
+                        sprUserSelection.SetFrame(0);
+                    }
+
+                    sprUserSelection.Draw(g, new Vector2(X + 88, Y + 9), Color.White);
+
+                    g.DrawString(fntArial12, "Lv." + ArrayLobbyPlayer[P].Level, new Vector2(X + 5, Y), Color.White);
+                    g.DrawString(fntArial12, ArrayLobbyPlayer[P].Name, new Vector2(X + 55, Y), Color.White);
+                }
+            }
+            else if (PlayerListType == PlayerListTypes.Friends)
+            {
+                for (int P = 0; P < ArrayLobbyFriends.Length; P++)
+                {
+                    float X = 580;
+                    float Y = 166 + P * fntArial12.LineSpacing;
+
+                    if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 177
+                        && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
+                    {
+                        sprUserSelection.SetFrame(2);
+                    }
+                    else
+                    {
+                        sprUserSelection.SetFrame(0);
+                    }
+
+                    sprUserSelection.Draw(g, new Vector2(X + 88, Y + 9), Color.White);
+
+                    g.DrawString(fntArial12, "Lv." + ArrayLobbyFriends[P].Level, new Vector2(X + 5, Y), Color.White);
+                    g.DrawString(fntArial12, ArrayLobbyFriends[P].Name, new Vector2(X + 55, Y), Color.White);
+                }
             }
         }
     }

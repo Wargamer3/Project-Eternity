@@ -26,6 +26,10 @@ namespace ProjectEternity.Communication.Server
             DicOnlineScripts.Add(AskForPlayersScriptServer.ScriptName, new AskForPlayersScriptServer(OnlineServer));
             DicOnlineScripts.Add(CreateCommunicationGroupScriptServer.ScriptName, new CreateCommunicationGroupScriptServer(OnlineServer));
             DicOnlineScripts.Add(JoinCommunicationGroupScriptServer.ScriptName, new JoinCommunicationGroupScriptServer(OnlineServer));
+            DicOnlineScripts.Add(LeaveCommunicationGroupScriptServer.ScriptName, new LeaveCommunicationGroupScriptServer(OnlineServer));
+            DicOnlineScripts.Add(AskClientInfoScriptServer.ScriptName, new AskClientInfoScriptServer(OnlineServer));
+            DicOnlineScripts.Add(AddFriendScriptServer.ScriptName, new AddFriendScriptServer(OnlineServer));
+            DicOnlineScripts.Add(SendGroupMessageScriptServer.ScriptName, new SendGroupMessageScriptServer(OnlineServer));
 
             string PublicIP = ConnectionInfo.ReadField("Communication Server Info", "Public IP");
             int PublicPort = int.Parse(ConnectionInfo.ReadField("Communication Server Info", "Public Port"));

@@ -16,14 +16,14 @@ namespace ProjectEternity.Core.Online
     public class CommunicationServer
     {
         public readonly IOnlineConnection Host;
-        private readonly Dictionary<string, IOnlineConnection> DicPlayerConnectionByName;
+        private readonly List<IOnlineConnection> ListPlayerConnection;
         private readonly Dictionary<string, byte[]> DicPlayerInfoByName;
-        public readonly List<IOnlineConnection> ListPlayerToRemove;
+
+        public readonly List<KeyValuePair<IOnlineConnection, string>> ListPlayerToRemove;
+
         public readonly Dictionary<string, CommunicationGroup> DicCommunicationGroup;
 
         public readonly List<string> ListGroupToRemove;
-
-        public readonly CommunicationGroup GlobalGroup;
 
         public string IP;
         public int Port;
@@ -39,14 +39,15 @@ namespace ProjectEternity.Core.Online
         private CancellationTokenSource CancelToken;
 
         private DateTimeOffset NextRoomUpdateTime;
+
         public CommunicationServer(ICommunicationDataManager Database, Dictionary<string, OnlineScript> DicOnlineScripts)
         {
-            DicPlayerConnectionByName = new Dictionary<string, IOnlineConnection>();
+            ListPlayerConnection = new List<IOnlineConnection>();
             DicPlayerInfoByName = new Dictionary<string, byte[]>();
-            ListPlayerToRemove = new List<IOnlineConnection>();
+            ListPlayerToRemove = new List<KeyValuePair<IOnlineConnection, string>>();
             DicCommunicationGroup = new Dictionary<string, CommunicationGroup>();
             ListGroupToRemove = new List<string>();
-            GlobalGroup = new CommunicationGroup();
+            DicCommunicationGroup.Add("Global", new CommunicationGroup());
 
             SharedWriteBuffer = new OnlineWriter();
 
@@ -92,13 +93,13 @@ namespace ProjectEternity.Core.Online
 
         public void UpdatePlayers()
         {
-            Parallel.ForEach(GlobalGroup.ListGroupMember, (ActivePlayer, loopState) =>
+            Parallel.ForEach(ListPlayerConnection, (ActivePlayer, loopState) =>
             {
                 if (!ActivePlayer.IsConnected())
                 {
                     if (ActivePlayer.HasLeftServer())
                     {
-                        ListPlayerToRemove.Add(ActivePlayer);
+                        ListPlayerToRemove.Add(new KeyValuePair<IOnlineConnection, string>(ActivePlayer, null));
                     }
                 }
                 else
@@ -117,7 +118,7 @@ namespace ProjectEternity.Core.Online
 
             while (ListPlayerToRemove.Count > 0)
             {
-                GlobalGroup.ListGroupMember.Remove(ListPlayerToRemove[0]);
+                DicCommunicationGroup[ListPlayerToRemove[0].Value].ListGroupMember.Remove(ListPlayerToRemove[0].Key);
                 ListPlayerToRemove.RemoveAt(0);
             }
 
@@ -147,18 +148,6 @@ namespace ProjectEternity.Core.Online
                             ActivePlayer.StopReadingScriptAsync();
                         }
                     }
-                    else
-                    {
-                        lock (ActivePlayer.ListAsyncOnlineScript)
-                        {
-                            foreach (OnlineScript ActiveScript in ActivePlayer.ListAsyncOnlineScript)
-                            {
-                                ActiveScript.Execute(ActivePlayer);
-                            }
-
-                            ActivePlayer.ListAsyncOnlineScript.Clear();
-                        }
-                    }
                 }
             });
 
@@ -176,7 +165,7 @@ namespace ProjectEternity.Core.Online
                 SharedWriteBuffer.ClearWriteBuffer();
                 SharedWriteBuffer.WriteScript(new PlayerListScriptServer(GetPlayerNames()));
 
-                Parallel.ForEach(GlobalGroup.ListGroupMember, (ActiveMember, loopState) =>
+                Parallel.ForEach(DicCommunicationGroup["Global"].ListGroupMember, (ActiveMember, loopState) =>
                 {
                     ActiveMember.SendWriteBuffer();
                 });
@@ -211,17 +200,26 @@ namespace ProjectEternity.Core.Online
 
         public void OnClientConnected(IOnlineConnection NewClient)
         {
-            GlobalGroup.AddMember(NewClient);
+            ListPlayerConnection.Add(NewClient);
+            DicCommunicationGroup["Global"].AddMember(NewClient);
             NewClient.StartReadingScriptAsync();
         }
 
-        public List<byte[]> GetPlayerNames()
+        public void SendGlobalMessage(string Message, ChatManager.MessageColors MessageColor)
         {
-            List<byte[]> ListPlayerName;
+            foreach (IOnlineConnection ActiveOnlinePlayer in ListPlayerConnection)
+            {
+                ActiveOnlinePlayer.Send(new ReceiveGlobalMessageScriptServer(Message, MessageColor));
+            }
+        }
+
+        public Dictionary<string, byte[]> GetPlayerNames()
+        {
+            Dictionary<string, byte[]> ListPlayerName;
 
             lock (DicPlayerInfoByName)
             {
-                ListPlayerName = new List<byte[]>(DicPlayerInfoByName.Values);
+                ListPlayerName = new Dictionary<string, byte[]>(DicPlayerInfoByName);
             }
 
             return ListPlayerName;
@@ -229,37 +227,43 @@ namespace ProjectEternity.Core.Online
 
         public void Identify(IOnlineConnection NewClient, byte[] ClientInfo)
         {
-            lock (DicPlayerConnectionByName)
+            lock (ListPlayerConnection)
             {
-                DicPlayerConnectionByName.Add(NewClient.Name, NewClient);
+                ListPlayerConnection.Add(NewClient);
             }
 
             lock (DicPlayerInfoByName)
             {
-                DicPlayerInfoByName.Add(NewClient.Name, ClientInfo);
+                DicPlayerInfoByName.Add(NewClient.ID, ClientInfo);
             }
+
+            NewClient.Send(new FriendListScriptServer(Database.GetFriendList(NewClient.ID)));
         }
 
         public void CreateCommunicationGroup(string GroupID, IOnlineConnection GroupCreator)
         {
             CommunicationGroup NewGroup = new CommunicationGroup(GroupID, GroupCreator);
-
-            Dictionary<string, OnlineScript> NewDicOnlineScripts = new Dictionary<string, OnlineScript>();
-            NewDicOnlineScripts.Add(SendGroupMessageScriptServer.ScriptName, new SendGroupMessageScriptServer(this, NewGroup));
-            GroupCreator.AddOrReplaceScripts(NewDicOnlineScripts);
-            
             DicCommunicationGroup.Add(GroupID, NewGroup);
-            ListPlayerToRemove.Add(GroupCreator);
         }
 
         public void JoinCommunicationGroup(string GroupID, IOnlineConnection NewMember)
         {
-            Dictionary<string, OnlineScript> NewDicOnlineScripts = new Dictionary<string, OnlineScript>();
-            NewDicOnlineScripts.Add(SendGroupMessageScriptServer.ScriptName, new SendGroupMessageScriptServer(this, DicCommunicationGroup[GroupID]));
-            NewMember.AddOrReplaceScripts(NewDicOnlineScripts);
-
             DicCommunicationGroup[GroupID].AddMember(NewMember);
-            ListPlayerToRemove.Add(NewMember);
+        }
+
+        public void LeaveCommunicationGroup(string GroupID, IOnlineConnection NewMember)
+        {
+            ListPlayerToRemove.Add(new KeyValuePair<IOnlineConnection, string>(NewMember, GroupID));
+        }
+
+        public byte[] GetClientInfo(string ClientID)
+        {
+            return Database.GetClientInfo(ClientID);
+        }
+
+        public void AddFriend(IOnlineConnection Sender, string FriendID)
+        {
+            Database.AddFriend(Sender, FriendID);
         }
     }
 }

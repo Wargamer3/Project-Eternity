@@ -7,23 +7,20 @@ namespace ProjectEternity.Core.Online
         public const string ScriptName = "Send Group Message";
 
         private readonly CommunicationServer OnlineServer;
-        private readonly CommunicationGroup Owner;
 
+        private string Source;
         private string Message;
-        private byte ColorR;
-        private byte ColorG;
-        private byte ColorB;
+        private byte MessageColor;
 
-        public SendGroupMessageScriptServer(CommunicationServer OnlineServer, CommunicationGroup Owner)
+        public SendGroupMessageScriptServer(CommunicationServer OnlineServer)
             : base(ScriptName)
         {
             this.OnlineServer = OnlineServer;
-            this.Owner = Owner;
         }
 
         public override OnlineScript Copy()
         {
-            return new SendGroupMessageScriptServer(OnlineServer, Owner);
+            return new SendGroupMessageScriptServer(OnlineServer);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -34,18 +31,26 @@ namespace ProjectEternity.Core.Online
         protected internal override void Execute(IOnlineConnection Sender)
         {
             string FinalMessage = Sender.Name + " : " + Message;
-            foreach (IOnlineConnection ActiveOnlinePlayer in Owner.ListGroupMember)
+
+            CommunicationGroup SourceOwner;
+            if (OnlineServer.DicCommunicationGroup.TryGetValue(Source, out SourceOwner))
             {
-                ActiveOnlinePlayer.Send(new ReceiveGroupMessageScriptServer(FinalMessage, ColorR, ColorG, ColorB));
+                foreach (IOnlineConnection ActiveOnlinePlayer in SourceOwner.ListGroupMember)
+                {
+                    ActiveOnlinePlayer.Send(new ReceiveGroupMessageScriptServer(Source, FinalMessage, (ChatManager.MessageColors)MessageColor));
+                }
+            }
+            else
+            {
+                //cross server
             }
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
+            Source = Sender.ReadString();
             Message = Sender.ReadString();
-            ColorR = Sender.ReadByte();
-            ColorG = Sender.ReadByte();
-            ColorB = Sender.ReadByte();
+            MessageColor = Sender.ReadByte();
         }
     }
 }

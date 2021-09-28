@@ -23,12 +23,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private Texture2D sprRankingChoices;
         private Texture2D sprLicenseChoices;
 
+        private InteractiveButton GeneralButton;
+        private InteractiveButton RecordButton;
         private InteractiveButton AddAsFriendButton;
         private InteractiveButton PlayTogetherButton;
-        private InteractiveButton RecordButton;
 
-        private InteractiveButton CancelButton;
-        private InteractiveButton OKButton;
+        private InteractiveButton CloseButton;
 
         private InteractiveButton[] ArrayMenuButton;
 
@@ -36,11 +36,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private readonly TripleThunderOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
+        public readonly Player ActivePlayer;
 
-        public PlayerInfo(TripleThunderOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, string PlayerName)
+        public PlayerInfo(TripleThunderOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, Player ActivePlayer)
         {
             this.OnlineGameClient = OnlineClient;
             this.OnlineCommunicationClient = OnlineCommunicationClient;
+            this.ActivePlayer = ActivePlayer;
         }
 
         public override void Load()
@@ -54,20 +56,30 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sprRankingChoices = Content.Load<Texture2D>("Triple Thunder/Menus/Player Info/Ranking");
             sprLicenseChoices = Content.Load<Texture2D>("Triple Thunder/Menus/Player Info/License");
 
-            AddAsFriendButton = new InteractiveButton(Content, "Triple Thunder/Menus/Player Info/Add As Friend", new Vector2(533, 242), OnButtonOver, SelectCaptureTheFlag);
-            PlayTogetherButton = new InteractiveButton(Content, "Triple Thunder/Menus/Player Info/Play Together", new Vector2(533, 242), OnButtonOver, SelectCaptureTheFlag);
-            RecordButton = new InteractiveButton(Content, "Triple Thunder/Menus/Player Info/Record", new Vector2(533, 242), OnButtonOver, SelectCaptureTheFlag);
+            GeneralButton = new InteractiveButton(Content, "Triple Thunder/Menus/Player Info/General", new Vector2(350, 152), OnButtonOver, SelectGeneralButton);
+            RecordButton = new InteractiveButton(Content, "Triple Thunder/Menus/Player Info/Record", new Vector2(450, 152), OnButtonOver, SelectRecordButton);
+            AddAsFriendButton = new InteractiveButton(Content, "Triple Thunder/Menus/Player Info/Add As Friend", new Vector2(350, 440), OnButtonOver, SelectAddAsFriendButton);
+            PlayTogetherButton = new InteractiveButton(Content, "Triple Thunder/Menus/Player Info/Play Together", new Vector2(450, 440), OnButtonOver, SelectPlayTogetherButton);
 
-            CancelButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/Cancel Button", new Vector2(490, 481), OnButtonOver, Cancel);
-            OKButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/OK Button", new Vector2(565, 481), OnButtonOver, CreateRoom);
+            CloseButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/Close Button", new Vector2(478, 495), OnButtonOver, Close);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
             ArrayMenuButton = new InteractiveButton[]
             {
-                AddAsFriendButton, PlayTogetherButton, RecordButton,
-                CancelButton, OKButton,
+                GeneralButton, RecordButton,
+                AddAsFriendButton, PlayTogetherButton, 
+                CloseButton,
             };
+
+            if (ActivePlayer.Ranking == 0)
+            {
+                Dictionary<string, OnlineScript> DicOnlineCommunicationClientScripts = new Dictionary<string, OnlineScript>();
+                DicOnlineCommunicationClientScripts.Add(ClientInfoScriptClient.ScriptName, new ClientInfoScriptClient(OnlineCommunicationClient, this));
+                OnlineCommunicationClient.Host.AddOrReplaceScripts(DicOnlineCommunicationClientScripts);
+
+                OnlineCommunicationClient.Host.Send(new AskClientInfoScriptClient(ActivePlayer.ConnectionID));
+            }
         }
 
         public override void Unload()
@@ -91,17 +103,24 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonOver.Play();
         }
 
-        private void SelectCaptureTheFlag()
+        private void SelectGeneralButton()
         {
         }
 
-        public void CreateRoom()
+        private void SelectRecordButton()
         {
-            sndButtonClick.Play();
-            OKButton.Disable();
         }
 
-        public void Cancel()
+        private void SelectAddAsFriendButton()
+        {
+            OnlineCommunicationClient.AddFriend(ActivePlayer.ConnectionID);
+        }
+
+        private void SelectPlayTogetherButton()
+        {
+        }
+
+        public void Close()
         {
             sndButtonClick.Play();
             RemoveScreen(this);
@@ -111,8 +130,18 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            g.Draw(sprBackground, new Vector2(Constants.Width / 2, Constants.Height / 2), null, Color.White, 0f, new Vector2(sprBackground.Width / 2, sprBackground.Height / 2), 1f, SpriteEffects.None, 0f);
+            int X = Constants.Width / 2 - sprBackground.Width / 2;
+            int Y = Constants.Height / 2 - sprBackground.Height / 2;
+            g.Draw(sprBackground, new Vector2(X, Y), Color.White);
+            g.Draw(sprOverlay, new Vector2(X + 25, Y + 92), Color.White);
 
+            g.DrawString(fntArial12, ActivePlayer.Name, new Vector2(X + 85, Y + 100), Color.White);
+            g.DrawString(fntArial12, ActivePlayer.Guild, new Vector2(X + 85, Y + 128), Color.White);
+            g.DrawString(fntArial12, ActivePlayer.Level.ToString(), new Vector2(X + 85, Y + 158), Color.White);
+
+            g.Draw(sprLicenseChoices, new Vector2(X + 60, Y + 215), new Rectangle(0, 0, sprLicenseChoices.Width, sprLicenseChoices.Height / 3), Color.White);
+            g.Draw(sprRankingChoices, new Vector2(X + 150, Y + 215), new Rectangle(0, 0, sprRankingChoices.Width, sprRankingChoices.Height / 5), Color.White);
+            
             foreach (InteractiveButton ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Draw(g);

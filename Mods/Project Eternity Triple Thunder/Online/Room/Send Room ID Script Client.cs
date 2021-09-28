@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             Host.AddOrReplaceScripts(DicNewGameServerScript);
 
             Dictionary<string, OnlineScript> DicNewCommunicationServerScript = new Dictionary<string, OnlineScript>();
-            DicNewCommunicationServerScript.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient, NewMissionSelectScreen));
+            DicNewCommunicationServerScript.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
             OnlineCommunicationClient.Host.AddOrReplaceScripts(DicNewCommunicationServerScript);
 
             OnlineCommunicationClient.Host.Send(new CreateCommunicationGroupScriptClient(RoomID));

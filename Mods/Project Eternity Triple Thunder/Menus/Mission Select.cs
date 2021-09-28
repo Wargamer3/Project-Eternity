@@ -531,7 +531,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             MissionInfoStartIndex = (int)ScrollbarValue;
         }
 
-        public void AddMessage(string Message, Color MessageColor)
+        public void AddMessage(string Source, string Message, Color MessageColor)
         {
             ListChatHistory.Add(Message);
         }
@@ -539,7 +539,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private void SendMessage(string InputMessage)
         {
             ChatInput.SetText(string.Empty);
-            OnlineCommunicationClient.Host.Send(new SendGroupMessageScriptClient(InputMessage, 0, 0, 0));
+            OnlineCommunicationClient.Host.Send(new SendGroupMessageScriptClient(Room.RoomID, InputMessage, ChatManager.MessageColors.White));
         }
 
         public override void BeginDraw(CustomSpriteBatch g)

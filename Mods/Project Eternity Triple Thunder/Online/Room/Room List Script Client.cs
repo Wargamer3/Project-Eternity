@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            Owner.UpdateRooms(ListRoomUpdates);
+            Owner.PopulateRooms(ListRoomUpdates);
         }
 
         protected override void Read(OnlineReader Sender)

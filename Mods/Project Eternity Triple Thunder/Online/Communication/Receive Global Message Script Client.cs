@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
@@ -8,24 +7,20 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
     {
         public const string ScriptName = "Receive Global Message";
 
-        private readonly Lobby Owner;
         private readonly CommunicationClient OnlineCommunicationClient;
 
         private string Message;
-        private byte ColorR;
-        private byte ColorG;
-        private byte ColorB;
+        private byte MessageColor;
 
-        public ReceiveGlobalMessageScriptClient(CommunicationClient OnlineCommunicationClient, Lobby Owner)
+        public ReceiveGlobalMessageScriptClient(CommunicationClient OnlineCommunicationClient)
             : base(ScriptName)
         {
-            this.Owner = Owner;
             this.OnlineCommunicationClient = OnlineCommunicationClient;
         }
 
         public override OnlineScript Copy()
         {
-            return new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient, Owner);
+            return new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -40,16 +35,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public void ExecuteOnMainThread()
         {
-            Color MessageColor = Color.FromNonPremultiplied(ColorR, ColorG, ColorB, 255);
-            Owner.AddMessage(Message, MessageColor);
+            OnlineCommunicationClient.Chat.AddMessage("Global", Message, (ChatManager.MessageColors)MessageColor);
         }
 
         protected override void Read(OnlineReader Sender)
         {
             Message = Sender.ReadString();
-            ColorR = Sender.ReadByte();
-            ColorG = Sender.ReadByte();
-            ColorB = Sender.ReadByte();
+            MessageColor = Sender.ReadByte();
         }
     }
 }

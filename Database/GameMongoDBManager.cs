@@ -139,6 +139,9 @@ namespace Database
                     { "Login", Login },
                     { "Name", Login },
                     { "Level", 1 },
+                    { "Ranking", 1 },
+                    { "License", 1 },
+                    { "Guild", "" },
                     { "CharacterType", "Jack" },
                     { "OwnerServerIP", "" },
                     { "OwnerServerPort", 0 },
@@ -147,8 +150,14 @@ namespace Database
                     { "Equipment",
                         new BsonArray
                         {
-                            new BsonDocument { { "Money", 0 }, { "EXP", 0 } } }
+                            new BsonDocument { { "Money", 0 }, { "EXP", 0 } }
                         }
+                    },
+                    { "Friends",
+                        new BsonArray
+                        {
+                        }
+                    }
                 };
 
                 PlayersCollection.InsertOne(document);
@@ -167,13 +176,13 @@ namespace Database
                 FoundPlayer.ID = FoundPlayerDocument.GetValue("_id").AsObjectId.ToString();
                 string Name = FoundPlayerDocument.GetValue("Name").AsString;
                 FoundPlayer.Name = Name;
+
                 ByteWriter BW = new ByteWriter();
                 BW.AppendString(Name);
                 BW.AppendInt32(FoundPlayerDocument.GetValue("Level").AsInt32);
-                BW.GetBytes();
-
                 FoundPlayer.Info = BW.GetBytes();
                 BW.ClearWriteBuffer();
+
                 UpdatePlayerIsLoggedIn(FoundPlayer.ID, OwnerServerIP, OwnerServerPort);
 
                 return FoundPlayer;

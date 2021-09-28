@@ -3,16 +3,16 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 {
-    public class PlayerListScriptClient : OnlineScript, DelayedExecutableOnlineScript
+    public class FriendListScriptClient : OnlineScript, DelayedExecutableOnlineScript
     {
-        public const string ScriptName = "Player List";
+        public const string ScriptName = "Friend List";
 
         private readonly Lobby Owner;
         private readonly CommunicationClient OnlineCommunicationClient;
 
-        private Player[] ArrayLobbyPlayer;
+        private Player[] ArrayLobbyFriend;
 
-        public PlayerListScriptClient(CommunicationClient OnlineCommunicationClient, Lobby Owner)
+        public FriendListScriptClient(CommunicationClient OnlineCommunicationClient, Lobby Owner)
             : base(ScriptName)
         {
             this.OnlineCommunicationClient = OnlineCommunicationClient;
@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public override OnlineScript Copy()
         {
-            return new PlayerListScriptClient(OnlineCommunicationClient, Owner);
+            return new FriendListScriptClient(OnlineCommunicationClient, Owner);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -36,21 +36,21 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public void ExecuteOnMainThread()
         {
-            Owner.PopulatePlayers(ArrayLobbyPlayer);
+            Owner.PopulateFriends(ArrayLobbyFriend);
         }
 
         protected override void Read(OnlineReader Sender)
         {
             int ListPlayerNameCount = Sender.ReadInt32();
-            ArrayLobbyPlayer = new Player[ListPlayerNameCount];
+            ArrayLobbyFriend = new Player[ListPlayerNameCount];
             for (int P = 0; P < ListPlayerNameCount; ++P)
             {
                 string PlayerID = Sender.ReadString();
                 byte[] ArrayPlayerInfo = Sender.ReadByteArray();
                 ByteReader BR = new ByteReader(ArrayPlayerInfo);
 
-                ArrayLobbyPlayer[P] = new Player(PlayerID, BR.ReadString(), Player.PlayerTypes.Online, true, 0);
-                ArrayLobbyPlayer[P].Level = BR.ReadInt32();
+                ArrayLobbyFriend[P] = new Player(PlayerID, BR.ReadString(), Player.PlayerTypes.Online, true, 0);
+                ArrayLobbyFriend[P].Level = BR.ReadInt32();
 
                 BR.Clear();
             }

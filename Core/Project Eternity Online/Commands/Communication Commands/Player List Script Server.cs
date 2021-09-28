@@ -7,9 +7,9 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Player List";
 
-        private readonly ICollection<byte[]> ListPlayerInfo;
+        private readonly Dictionary<string, byte[]> ListPlayerInfo;
 
-        public PlayerListScriptServer(ICollection<byte[]> ListPlayerInfo)
+        public PlayerListScriptServer(Dictionary<string, byte[]> ListPlayerInfo)
             : base(ScriptName)
         {
             this.ListPlayerInfo = ListPlayerInfo;
@@ -23,9 +23,10 @@ namespace ProjectEternity.Core.Online
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
             WriteBuffer.AppendInt32(ListPlayerInfo.Count);
-            foreach (byte[] ActiveRoom in ListPlayerInfo)
+            foreach (KeyValuePair<string, byte[]> ActivePlayerInfo in ListPlayerInfo)
             {
-                WriteBuffer.AppendByteArray(ActiveRoom);
+                WriteBuffer.AppendString(ActivePlayerInfo.Key);
+                WriteBuffer.AppendByteArray(ActivePlayerInfo.Value);
             }
         }
 

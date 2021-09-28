@@ -9,6 +9,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         void UpdateSelectedMap(string CurrentDifficulty, string SelectedMapPath);
         void UpdateRoomSubtype(string RoomSubtype);
         void UpdateReadyOrHost();
-        void AddMessage(string Message, Color MessageColor);
+        void AddMessage(string Source, string Message, Color MessageColor);
     }
 }

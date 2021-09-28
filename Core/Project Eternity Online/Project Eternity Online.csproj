@@ -42,20 +42,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chat Manager.cs" />
+    <Compile Include="Commands\Communication Commands\Add Friend Script Client.cs" />
+    <Compile Include="Commands\Communication Commands\Add Friend Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Ask Client Info Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Ask for Player List Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Leave Communication Group Script Client.cs" />
+    <Compile Include="Commands\Communication Commands\Leave Communication Group Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Join Communication Group Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Join Communication Group Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Create Communication Group Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Create Communication Group Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Identify Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Identify Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Client Info Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Friend List Server.cs" />
     <Compile Include="Commands\Communication Commands\Receive Group Message Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Receive Global Message Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Ask for Player List Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Player List Script Server.cs" />
+    <Compile Include="Commands\Communication Commands\Send Global Message Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Send Group Message Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Send Group Message Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Send Global Message Script Server.cs" />
-    <Compile Include="Commands\Communication Commands\Send Global Message Script Client.cs" />
+    <Compile Include="Commands\Communication Commands\Ask Client Info Script Client.cs" />
     <Compile Include="Commands\Force Server Change Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Character Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Room Subtype Script Server.cs" />

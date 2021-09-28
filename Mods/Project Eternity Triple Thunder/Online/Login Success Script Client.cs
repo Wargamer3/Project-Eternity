@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             PlayerManager.OnlinePlayerLevel = BR.ReadInt32();
 
             BR.Clear();
-            Owner.IdentifyToCommunicationServer(PlayerManager.OnlinePlayerName, PlayerInfo);
+            Owner.IdentifyToCommunicationServer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, PlayerInfo);
             Owner.AskForPlayerList();
         }
 

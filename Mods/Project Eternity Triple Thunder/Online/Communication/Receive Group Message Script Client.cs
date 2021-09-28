@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
@@ -8,24 +7,21 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
     {
         public const string ScriptName = "Receive Group Message";
 
-        private readonly IMissionSelect MissionSelectScreen;
         private readonly CommunicationClient OnlineCommunicationClient;
 
+        private string Source;
         private string Message;
-        private byte ColorR;
-        private byte ColorG;
-        private byte ColorB;
+        private byte MessageColor;
 
-        public ReceiveGroupMessageScriptClient(CommunicationClient OnlineCommunicationClient, IMissionSelect MissionSelectScreen)
+        public ReceiveGroupMessageScriptClient(CommunicationClient OnlineCommunicationClient)
             : base(ScriptName)
         {
-            this.MissionSelectScreen = MissionSelectScreen;
             this.OnlineCommunicationClient = OnlineCommunicationClient;
         }
 
         public override OnlineScript Copy()
         {
-            return new ReceiveGroupMessageScriptClient(OnlineCommunicationClient, MissionSelectScreen);
+            return new ReceiveGroupMessageScriptClient(OnlineCommunicationClient);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -40,16 +36,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
         public void ExecuteOnMainThread()
         {
-            Color MessageColor = Color.FromNonPremultiplied(ColorR, ColorG, ColorB, 255);
-            MissionSelectScreen.AddMessage(Message, MessageColor);
+            OnlineCommunicationClient.Chat.AddMessage(Source, Message, (ChatManager.MessageColors)MessageColor);
         }
 
         protected override void Read(OnlineReader Sender)
         {
+            Source = Sender.ReadString();
             Message = Sender.ReadString();
-            ColorR = Sender.ReadByte();
-            ColorG = Sender.ReadByte();
-            ColorB = Sender.ReadByte();
+            MessageColor = Sender.ReadByte();
         }
     }
 }

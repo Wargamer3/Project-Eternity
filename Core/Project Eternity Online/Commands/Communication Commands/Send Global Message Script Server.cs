@@ -9,9 +9,7 @@ namespace ProjectEternity.Core.Online
         private readonly CommunicationServer OnlineServer;
 
         private string Message;
-        private byte ColorR;
-        private byte ColorG;
-        private byte ColorB;
+        private byte MessageColor;
 
         public SendGlobalMessageScriptServer(CommunicationServer OnlineServer)
             : base(ScriptName)
@@ -32,18 +30,13 @@ namespace ProjectEternity.Core.Online
         protected internal override void Execute(IOnlineConnection Sender)
         {
             string FinalMessage = Sender.Name + " : " + Message;
-            foreach (IOnlineConnection ActiveOnlinePlayer in OnlineServer.GlobalGroup.ListGroupMember)
-            {
-                ActiveOnlinePlayer.Send(new ReceiveGlobalMessageScriptServer(FinalMessage, ColorR, ColorG, ColorB));
-            }
+            OnlineServer.SendGlobalMessage(FinalMessage, (ChatManager.MessageColors)MessageColor);
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
             Message = Sender.ReadString();
-            ColorR = Sender.ReadByte();
-            ColorG = Sender.ReadByte();
-            ColorB = Sender.ReadByte();
+            MessageColor = Sender.ReadByte();
         }
     }
 }

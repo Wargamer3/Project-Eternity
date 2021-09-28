@@ -2,31 +2,25 @@
 
 namespace ProjectEternity.Core.Online
 {
-    public class IdentifyScriptClient : OnlineScript
+    public class ClientInfoScriptServer : OnlineScript
     {
-        public const string ScriptName = "Identify";
+        public const string ScriptName = "Client Info";
 
-        private readonly string ClientID;
-        private readonly string ClientName;
         private readonly byte[] ClientInfo;
 
-        public IdentifyScriptClient(string ClientID, string ClientName, byte[] ClientInfo)
+        public ClientInfoScriptServer(byte[] ClientInfo)
             : base(ScriptName)
         {
-            this.ClientID = ClientID;
-            this.ClientName = ClientName;
             this.ClientInfo = ClientInfo;
         }
 
         public override OnlineScript Copy()
         {
-            throw new NotImplementedException();
+            return new ClientInfoScriptServer(ClientInfo);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendString(ClientID);
-            WriteBuffer.AppendString(ClientName);
             WriteBuffer.AppendByteArray(ClientInfo);
         }
 

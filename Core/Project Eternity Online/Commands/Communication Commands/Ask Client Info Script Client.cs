@@ -2,16 +2,14 @@
 
 namespace ProjectEternity.Core.Online
 {
-    public class ReceiveGlobalMessageScriptServer : OnlineScript
+    public class AskClientInfoScriptClient : OnlineScript
     {
-        private readonly string Message;
-        private readonly ChatManager.MessageColors MessageColor;
+        private readonly string ClientName;
 
-        public ReceiveGlobalMessageScriptServer(string Message, ChatManager.MessageColors MessageColor)
-            : base("Receive Global Message")
+        public AskClientInfoScriptClient(string ClientName)
+            : base("Ask Client Info")
         {
-            this.Message = Message;
-            this.MessageColor = MessageColor;
+            this.ClientName = ClientName;
         }
 
         public override OnlineScript Copy()
@@ -21,8 +19,7 @@ namespace ProjectEternity.Core.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendString(Message);
-            WriteBuffer.AppendByte((byte)MessageColor);
+            WriteBuffer.AppendString(ClientName);
         }
 
         protected internal override void Execute(IOnlineConnection Host)

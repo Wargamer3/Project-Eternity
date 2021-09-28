@@ -16,6 +16,7 @@ namespace ProjectEternity.Core.Online
         private CancellationTokenSource CancelToken;
         private readonly Dictionary<string, OnlineScript> DicOnlineScripts;
         protected readonly List<DelayedExecutableOnlineScript> ListDelayedOnlineCommand;
+        public readonly ChatManager Chat;
 
         public CommunicationClient()
             : this(new Dictionary<string, OnlineScript>())
@@ -25,6 +26,7 @@ namespace ProjectEternity.Core.Online
         public CommunicationClient(Dictionary<string, OnlineScript> DicOnlineScripts)
         {
             ListDelayedOnlineCommand = new List<DelayedExecutableOnlineScript>();
+            Chat = new ChatManager();
 
             this.DicOnlineScripts = DicOnlineScripts;
         }
@@ -107,24 +109,6 @@ namespace ProjectEternity.Core.Online
             }
         }
 
-        public void JoinGroup(IOnlineConnection GroupHost)
-        {
-
-        }
-
-        public void CreateGroup()
-        {
-
-        }
-
-        public void MessageOtherClient()
-        {
-            //Send message to client
-            //Create a groupe to allow direct messaging.
-            CreateGroup();
-            //Send group invite to other client
-        }
-
         public void ExecuteDelayedScripts()
         {
             lock (ListDelayedOnlineCommand)
@@ -144,6 +128,23 @@ namespace ProjectEternity.Core.Online
             {
                 ListDelayedOnlineCommand.Add(ScriptToDelay);
             }
+        }
+
+        public void SendMessage(string Source, string Message)
+        {
+            if (Source == "Global")
+            {
+                Host.Send(new SendGlobalMessageScriptClient(Message, ChatManager.MessageColors.White));
+            }
+            else
+            {
+                Host.Send(new SendGroupMessageScriptClient(Source, Message, ChatManager.MessageColors.White));
+            }
+        }
+
+        public void AddFriend(string FriendID)
+        {
+            Host.Send(new AddFriendScriptClient(FriendID));
         }
     }
 }

@@ -2,17 +2,15 @@
 
 namespace ProjectEternity.Core.Online
 {
-    public class IdentifyScriptServer : OnlineScript
+    public class AskClientInfoScriptServer : OnlineScript
     {
-        public const string ScriptName = "Identify";
+        public const string ScriptName = "Ask Client Info";
 
         private readonly CommunicationServer OnlineCommunicationServer;
 
         private string ClientID;
-        private string ClientName;
-        private byte[] ClientInfo;
 
-        public IdentifyScriptServer(CommunicationServer OnlineCommunicationServer)
+        public AskClientInfoScriptServer(CommunicationServer OnlineCommunicationServer)
             : base(ScriptName)
         {
             this.OnlineCommunicationServer = OnlineCommunicationServer;
@@ -20,7 +18,7 @@ namespace ProjectEternity.Core.Online
 
         public override OnlineScript Copy()
         {
-            return new IdentifyScriptServer(OnlineCommunicationServer);
+            return new AskClientInfoScriptServer(OnlineCommunicationServer);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -30,16 +28,13 @@ namespace ProjectEternity.Core.Online
 
         protected internal override void Execute(IOnlineConnection Sender)
         {
-            Sender.ID = ClientID;
-            Sender.Name = ClientName;
-            OnlineCommunicationServer.Identify(Sender, ClientInfo);
+            byte[] ClientInfo = OnlineCommunicationServer.GetClientInfo(ClientID);
+            Sender.Send(new ClientInfoScriptServer(ClientInfo));
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
             ClientID = Sender.ReadString();
-            ClientName = Sender.ReadString();
-            ClientInfo = Sender.ReadByteArray();
         }
     }
 }
