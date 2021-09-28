@@ -6,15 +6,18 @@ namespace ProjectEternity.Core.Online
     public class ChatManager
     {
         public enum MessageColors { White }
-        public struct ChatTab
+
+        public class ChatTab
         {
             public readonly string Name;
             public readonly Dictionary<string, MessageColors> ListChatHistory;
+            public bool HasUnreadMessages;
 
             public ChatTab(string Name)
             {
                 this.Name = Name;
                 ListChatHistory = new Dictionary<string, MessageColors>();
+                HasUnreadMessages = false;
             }
         }
 
@@ -63,7 +66,9 @@ namespace ProjectEternity.Core.Online
         public void SelectTab(string ActiveTabID)
         {
             _ActiveChatTabID = ActiveTabID;
+            DicChatHistory[_ActiveChatTabID].HasUnreadMessages = false;
         }
+
         public void CloseTab(string ActiveTabID)
         {
             DicChatHistory.Remove(ActiveTabID);
@@ -80,6 +85,11 @@ namespace ProjectEternity.Core.Online
             {
                 DicChatHistory.Add(Source, new ChatTab(Source));
                 DicChatHistory[Source].ListChatHistory.Add(Message, MessageColor);
+            }
+
+            if (Source != _ActiveChatTabID)
+            {
+                DicChatHistory[Source].HasUnreadMessages = true;
             }
         }
     }

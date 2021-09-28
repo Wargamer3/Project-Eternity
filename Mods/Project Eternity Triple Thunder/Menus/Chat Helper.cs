@@ -67,7 +67,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
 
                 sprTabChat.Draw(g, new Vector2(X + 51, Y + 12), Color.White);
-                g.DrawString(fntArial12, ActiveTab.Value.Name, new Vector2(X + 32, Y + 3), Color.White);
+                if (ActiveTab.Value.HasUnreadMessages)
+                {
+                    g.DrawString(fntArial12, ActiveTab.Value.Name + " *", new Vector2(X + 32, Y + 3), Color.White);
+                }
+                else
+                {
+                    g.DrawString(fntArial12, ActiveTab.Value.Name, new Vector2(X + 32, Y + 3), Color.White);
+                }
                 ++T;
             }
 
