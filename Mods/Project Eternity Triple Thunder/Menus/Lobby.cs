@@ -72,7 +72,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         PlayerListTypes PlayerListType;
         private string RoomType;
 
-        public Lobby()
+        public Lobby(bool UseOnline)
         {
             RoomType = RoomInformations.RoomTypeMission;
             DicAllRoom = new Dictionary<string, RoomInformations>();
@@ -80,37 +80,48 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ArrayLobbyPlayer = new Player[0];
             ArrayLobbyFriends = new Player[0];
 
-            Dictionary<string, OnlineScript> DicOnlineGameClientScripts = new Dictionary<string, OnlineScript>();
-            Dictionary<string, OnlineScript> DicOnlineCommunicationClientScripts = new Dictionary<string, OnlineScript>();
+            if (UseOnline)
+            {
+                Dictionary<string, OnlineScript> DicOnlineGameClientScripts = new Dictionary<string, OnlineScript>();
+                Dictionary<string, OnlineScript> DicOnlineCommunicationClientScripts = new Dictionary<string, OnlineScript>();
 
-            OnlineGameClient = new TripleThunderOnlineClient(DicOnlineGameClientScripts);
-            OnlineCommunicationClient = new CommunicationClient(DicOnlineCommunicationClientScripts);
+                OnlineGameClient = new TripleThunderOnlineClient(DicOnlineGameClientScripts);
+                OnlineCommunicationClient = new CommunicationClient(DicOnlineCommunicationClientScripts);
 
-            DicOnlineGameClientScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
-            DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
-            DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
-            DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
-            DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
-            DicOnlineGameClientScripts.Add(CreatePlayerScriptClient.ScriptName, new CreatePlayerScriptClient(OnlineGameClient));
-            DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
-            DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
+                DicOnlineGameClientScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
+                DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
+                DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
+                DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
+                DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
+                DicOnlineGameClientScripts.Add(CreatePlayerScriptClient.ScriptName, new CreatePlayerScriptClient(OnlineGameClient));
+                DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
+                DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
 
-            DicOnlineCommunicationClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
-            DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient));
-            DicOnlineCommunicationClientScripts.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
-            DicOnlineCommunicationClientScripts.Add(ReceiveGroupInviteScriptClient.ScriptName, new ReceiveGroupInviteScriptClient(OnlineCommunicationClient));
-            DicOnlineCommunicationClientScripts.Add(ReceiveRemoteGroupInviteScriptClient.ScriptName, new ReceiveRemoteGroupInviteScriptClient(OnlineCommunicationClient));
-            DicOnlineCommunicationClientScripts.Add(MessageListGroupScriptClient.ScriptName, new MessageListGroupScriptClient(OnlineCommunicationClient));
-            DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
-            DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
+                DicOnlineCommunicationClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
+                DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient));
+                DicOnlineCommunicationClientScripts.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
+                DicOnlineCommunicationClientScripts.Add(ReceiveGroupInviteScriptClient.ScriptName, new ReceiveGroupInviteScriptClient(OnlineCommunicationClient));
+                DicOnlineCommunicationClientScripts.Add(ReceiveRemoteGroupInviteScriptClient.ScriptName, new ReceiveRemoteGroupInviteScriptClient(OnlineCommunicationClient));
+                DicOnlineCommunicationClientScripts.Add(MessageListGroupScriptClient.ScriptName, new MessageListGroupScriptClient(OnlineCommunicationClient));
+                DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
+                DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
+            }
+            else
+            {
+                PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
+                PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
+            }
         }
 
         public override void Load()
         {
             Trace.Listeners.Add(new TextWriterTraceListener("ClientError.log", "myListener"));
 
-            InitOnlineGameClient();
-            InitOnlineCommunicationClient();
+            if (OnlineGameClient != null)
+            {
+                InitOnlineGameClient();
+                InitOnlineCommunicationClient();
+            }
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20), SendMessage);
@@ -278,15 +289,18 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Update(GameTime gameTime)
         {
-            OnlineGameClient.ExecuteDelayedScripts();
-            OnlineCommunicationClient.ExecuteDelayedScripts();
+            if (OnlineGameClient != null)
+            {
+                OnlineGameClient.ExecuteDelayedScripts();
+                OnlineCommunicationClient.ExecuteDelayedScripts();
+
+                ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
+            }
 
             if (FMODSystem.sndActiveBGM != sndBGM)
             {
                 sndBGM.PlayAsBGM();
             }
-
-            ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
 
             Rectangle LicenseBox = new Rectangle(572, 16, 24, 24);
             if (LicenseBox.Intersects(new Rectangle(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y, 1, 1)))
@@ -514,7 +528,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             DrawRooms(g);
-            ChatHelper.DrawChat(g, sprTabChat, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
+            if (OnlineCommunicationClient != null)
+            {
+                ChatHelper.DrawChat(g, sprTabChat, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
+            }
             DrawPlayers(g);
 
             foreach (InteractiveButton ActiveButton in ArrayMenuButton)

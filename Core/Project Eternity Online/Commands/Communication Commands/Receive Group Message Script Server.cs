@@ -5,13 +5,13 @@ namespace ProjectEternity.Core.Online
 {
     public class ReceiveGroupMessageScriptServer : OnlineScript
     {
-        private readonly string Source;
+        private readonly string GroupID;
         private readonly ChatManager.ChatMessage NewMessage;
 
-        public ReceiveGroupMessageScriptServer(string Source, ChatManager.ChatMessage NewMessage)
+        public ReceiveGroupMessageScriptServer(string GroupID, ChatManager.ChatMessage NewMessage)
             : base("Receive Group Message")
         {
-            this.Source = Source;
+            this.GroupID = GroupID;
             this.NewMessage = NewMessage;
         }
 
@@ -22,7 +22,7 @@ namespace ProjectEternity.Core.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendString(Source);
+            WriteBuffer.AppendString(GroupID);
             WriteBuffer.AppendString(NewMessage.Date.ToString(DateTimeFormatInfo.InvariantInfo));
             WriteBuffer.AppendString(NewMessage.Message);
             WriteBuffer.AppendByte((byte)NewMessage.MessageColor);

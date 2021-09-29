@@ -168,7 +168,7 @@ namespace ProjectEternity
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
                         Constants.graphics.ApplyChanges();
-                        PushScreen(new GameScreens.TripleThunderScreen.Lobby());
+                        PushScreen(new GameScreens.TripleThunderScreen.Lobby(true));
                         break;
                 }
             }

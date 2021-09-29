@@ -222,6 +222,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (OnlineCommunicationClient != null)
             {
                 OnlineCommunicationClient.ExecuteDelayedScripts();
+                ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
             }
 
             if (FMODSystem.sndActiveBGM != sndBGM)
@@ -233,8 +234,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 ActiveButton.Update(gameTime);
             }
-
-            ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
 
             MissionScrollbar.Update(gameTime);
 
@@ -581,7 +580,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Draw(g);
             }
 
-            ChatHelper.DrawChat(g, sprTabChat, fntText, OnlineCommunicationClient.Chat, ChatInput);
+            if (OnlineCommunicationClient != null)
+            {
+                ChatHelper.DrawChat(g, sprTabChat, fntText, OnlineCommunicationClient.Chat, ChatInput);
+            }
 
             MissionScrollbar.Draw(g);
 

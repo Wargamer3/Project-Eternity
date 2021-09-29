@@ -623,7 +623,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Draw(g);
             }
 
-            ChatHelper.DrawChat(g, sprTabChat, fntText, OnlineCommunicationClient.Chat, ChatInput);
+            if (OnlineCommunicationClient != null)
+            {
+                ChatHelper.DrawChat(g, sprTabChat, fntText, OnlineCommunicationClient.Chat, ChatInput);
+            }
 
             ModeSelectTextButton.Draw(g);
 

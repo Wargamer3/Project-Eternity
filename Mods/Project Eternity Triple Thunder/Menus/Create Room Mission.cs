@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             OKButton.Disable();
 
-            if (OnlineGameClient.IsConnected)
+            if (OnlineGameClient != null && OnlineGameClient.IsConnected)
             {
                 Dictionary<string, OnlineScript> DicCreateRoomScript = new Dictionary<string, OnlineScript>();
                 DicCreateRoomScript.Add(SendRoomIDScriptClient.ScriptName, new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, this, RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer));
