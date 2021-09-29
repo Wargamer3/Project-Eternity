@@ -9,7 +9,7 @@ namespace ProjectEternity.Core.Online
 
         private readonly CommunicationClient OnlineCommunicationClient;
 
-        private string Source;
+        private string GroupID;
         private string Date;
         private string Message;
         private byte MessageColor;
@@ -37,12 +37,14 @@ namespace ProjectEternity.Core.Online
 
         public void ExecuteOnMainThread()
         {
-            OnlineCommunicationClient.Chat.AddMessage(Source, new ChatManager.ChatMessage(DateTime.Parse(Date, DateTimeFormatInfo.InvariantInfo), Message, (ChatManager.MessageColors)MessageColor));
+            ChatManager.ChatMessage NewChatMessage = new ChatManager.ChatMessage(DateTime.Parse(Date, DateTimeFormatInfo.InvariantInfo), Message, (ChatManager.MessageColors)MessageColor);
+            OnlineCommunicationClient.Chat.AddMessage(GroupID, new ChatManager.ChatMessage(DateTime.Parse(Date, DateTimeFormatInfo.InvariantInfo), Message, (ChatManager.MessageColors)MessageColor));
+            OnlineCommunicationClient.Chat.SaveMessage(GroupID, NewChatMessage);
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
-            Source = Sender.ReadString();
+            GroupID = Sender.ReadString();
             Date = Sender.ReadString();
             Message = Sender.ReadString();
             MessageColor = Sender.ReadByte();

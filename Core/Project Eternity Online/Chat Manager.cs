@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 
 namespace ProjectEternity.Core.Online
 {
@@ -116,6 +118,16 @@ namespace ProjectEternity.Core.Online
                 DicChatHistory.Add(Source, ActiveChatTab);
             }
             ActiveChatTab.ListChatHistory.InsertRange(0, ListChatHistoryToInsert);
+        }
+
+        public void SaveMessage(string Source, ChatMessage NewMessage)
+        {
+            using (StreamWriter file = new StreamWriter("Logs/" + Source + ".txt", append: true))
+            {
+                string Date = "[" + NewMessage.Date.ToString(DateTimeFormatInfo.InvariantInfo) + "]";
+                string Color = "[" + NewMessage.MessageColor + "]";
+                file.WriteLineAsync(Date + Color + NewMessage.Message);
+            }
         }
     }
 }
