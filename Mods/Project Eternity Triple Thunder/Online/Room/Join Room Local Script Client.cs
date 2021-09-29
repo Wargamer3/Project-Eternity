@@ -117,7 +117,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
             OnlineCommunicationClient.Chat.InsertTab(RoomID, "Chat");
             OnlineCommunicationClient.Chat.CloseTab("Global");
-            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(RoomID));
+            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(RoomID, false));
             OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient("Global"));
 
             OnlineGameClient.DelayOnlineScript(this);

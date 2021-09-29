@@ -57,7 +57,9 @@
     <Compile Include="Commands\Communication Commands\Identify Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Client Info Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Friend List Server.cs" />
+    <Compile Include="Commands\Communication Commands\Message List Group Script Server.cs" />
     <Compile Include="Commands\Communication Commands\Receive Global Message Script Client.cs" />
+    <Compile Include="Commands\Communication Commands\Message List Group Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Receive Remote Group Invite Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Receive Group Invite Script Client.cs" />
     <Compile Include="Commands\Communication Commands\Receive Group Message Script Client.cs" />

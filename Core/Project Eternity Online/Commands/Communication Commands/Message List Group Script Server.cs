@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online
 {
-    public class PlayerListScriptServer : OnlineScript
+    public class MessageListGroupScriptServer : OnlineScript
     {
-        public const string ScriptName = "Player List";
+        public const string ScriptName = "Message List Group";
+        private readonly string GroupID;
+        private readonly Dictionary<string, ChatManager.MessageColors> OldMessages;
 
-        private readonly Dictionary<string, byte[]> ListPlayerInfo;
-
-        public PlayerListScriptServer(Dictionary<string, byte[]> ListPlayerInfo)
+        public MessageListGroupScriptServer(string GroupID, Dictionary<string, ChatManager.MessageColors> OldMessages)
             : base(ScriptName)
         {
-            this.ListPlayerInfo = ListPlayerInfo;
+            this.GroupID = GroupID;
+            this.OldMessages = OldMessages;
         }
 
         public override OnlineScript Copy()
@@ -22,11 +23,12 @@ namespace ProjectEternity.Core.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendInt32(ListPlayerInfo.Count);
-            foreach (KeyValuePair<string, byte[]> ActivePlayerInfo in ListPlayerInfo)
+            WriteBuffer.AppendString(GroupID);
+            WriteBuffer.AppendInt32(OldMessages.Count);
+            foreach (KeyValuePair<string, ChatManager.MessageColors> ActivePlayerInfo in OldMessages)
             {
                 WriteBuffer.AppendString(ActivePlayerInfo.Key);
-                WriteBuffer.AppendByteArray(ActivePlayerInfo.Value);
+                WriteBuffer.AppendByte((byte)ActivePlayerInfo.Value);
             }
         }
 

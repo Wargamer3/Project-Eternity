@@ -39,6 +39,11 @@ namespace ProjectEternity.Core.Online
                 {
                     ActiveOnlinePlayer.Send(new ReceiveGroupMessageScriptServer(Source, FinalMessage, (ChatManager.MessageColors)MessageColor));
                 }
+
+                if (SourceOwner.SaveLogs)
+                {
+                    OnlineServer.Database.SaveGroupMessage(DateTime.UtcNow, Source, FinalMessage, MessageColor);
+                }
             }
             else
             {

@@ -9,6 +9,7 @@ namespace ProjectEternity.Core.Online
         private readonly CommunicationServer OnlineCommunicationServer;
 
         private string GroupID;
+        private bool SaveLogs;
 
         public CreateOrJoinCommunicationGroupScriptServer(CommunicationServer OnlineCommunicationServer)
             : base(ScriptName)
@@ -28,12 +29,13 @@ namespace ProjectEternity.Core.Online
 
         protected internal override void Execute(IOnlineConnection Sender)
         {
-            OnlineCommunicationServer.CreateOrJoinCommunicationGroup(GroupID, Sender);
+            OnlineCommunicationServer.CreateOrJoinCommunicationGroup(GroupID, SaveLogs, Sender);
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
             GroupID = Sender.ReadString();
+            SaveLogs = Sender.ReadBoolean();
         }
     }
 }

@@ -92,5 +92,28 @@ namespace ProjectEternity.Core.Online
                 DicChatHistory[Source].HasUnreadMessages = true;
             }
         }
+
+        public void InsertMessages(string Source, Dictionary<string, MessageColors> DicChatHistoryToInsert)
+        {
+            ChatTab ActiveChatTab;
+            if (!DicChatHistory.TryGetValue(Source, out ActiveChatTab))
+            {
+                ActiveChatTab = new ChatTab(Source);
+                DicChatHistory.Add(Source, ActiveChatTab);
+            }
+
+            ChatTab NewChatTab = new ChatTab(ActiveChatTab.Name);
+
+            foreach (KeyValuePair<string, MessageColors> ActiveTab in DicChatHistoryToInsert)
+            {
+                NewChatTab.ListChatHistory.Add(ActiveTab.Key, ActiveTab.Value);
+            }
+            foreach (KeyValuePair<string, MessageColors> ActiveTab in ActiveChatTab.ListChatHistory)
+            {
+                NewChatTab.ListChatHistory.Add(ActiveTab.Key, ActiveTab.Value);
+            }
+
+            DicChatHistory[Source] = NewChatTab;
+        }
     }
 }

@@ -113,5 +113,33 @@ namespace Database
 
             return ListFriend;
         }
+
+        public void SaveGroupMessage(DateTime UtcNow, string GroupID, string Message, byte MessageColor)
+        {
+            BsonDocument NewEntry = new BsonDocument
+                {
+                    { "Date", UtcNow },
+                    { "GroupID", GroupID },
+                    { "Message", Message },
+                    { "MessageColor", MessageColor },
+                };
+
+            PersonalCollection.InsertOneAsync(NewEntry);
+        }
+
+        public Dictionary<string, ChatManager.MessageColors> GetGroupMessages(string GroupID)
+        {
+            FilterDefinition<BsonDocument> SourceFilter = Builders<BsonDocument>.Filter.Eq("GroupID", GroupID);
+            List<BsonDocument> ListMessages = PersonalCollection.Find(SourceFilter).ToList();
+
+            Dictionary<string, ChatManager.MessageColors> DicChatHistory = new Dictionary<string, ChatManager.MessageColors>();
+
+            foreach (BsonDocument ActiveMessage in ListMessages)
+            {
+                DicChatHistory.Add(ActiveMessage.GetValue("Message").AsString, (ChatManager.MessageColors)ActiveMessage.GetValue("MessageColor").AsInt32);
+            }
+
+            return DicChatHistory;
+        }
     }
 }

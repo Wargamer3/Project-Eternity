@@ -5,11 +5,13 @@ namespace ProjectEternity.Core.Online
     public class CreateOrJoinCommunicationGroupScriptClient : OnlineScript
     {
         private readonly string GroupID;
+        private readonly bool SaveLogs;
 
-        public CreateOrJoinCommunicationGroupScriptClient(string GroupID)
+        public CreateOrJoinCommunicationGroupScriptClient(string GroupID, bool SaveLogs)
             : base("Create Communication Group")
         {
             this.GroupID = GroupID;
+            this.SaveLogs = SaveLogs;
         }
 
         public override OnlineScript Copy()
@@ -20,6 +22,7 @@ namespace ProjectEternity.Core.Online
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
             WriteBuffer.AppendString(GroupID);
+            WriteBuffer.AppendBoolean(SaveLogs);
         }
 
         protected internal override void Execute(IOnlineConnection Host)

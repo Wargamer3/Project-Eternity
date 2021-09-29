@@ -8,16 +8,19 @@ namespace ProjectEternity.Core.Online
     /// </summary>
     public class CommunicationGroup
     {
-        public string GroupID;
+        public readonly string GroupID;
         public readonly List<IOnlineConnection> ListGroupMember;
+        public readonly bool SaveLogs;
 
-        internal CommunicationGroup()
+        internal CommunicationGroup(bool SaveLogs)
         {
+            this.SaveLogs = SaveLogs;
+
             ListGroupMember = new List<IOnlineConnection>();
         }
 
-        internal CommunicationGroup(string GroupID, IOnlineConnection GroupCreator)
-            : this()
+        internal CommunicationGroup(string GroupID, bool SaveLogs, IOnlineConnection GroupCreator)
+            : this(SaveLogs)
         {
             this.GroupID = GroupID;
             AddMember(GroupCreator);

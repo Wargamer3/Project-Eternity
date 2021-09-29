@@ -33,6 +33,7 @@ namespace ProjectEternity.Core.Online
         private readonly Dictionary<string, OnlineScript> DicOnlineScripts;
         private double DeltaTime = 1.0d / 60.0d;
         private double ElapsedTime = 0d;
+
         public readonly OnlineWriter SharedWriteBuffer;
 
         private TcpListener ClientsListener;
@@ -49,7 +50,7 @@ namespace ProjectEternity.Core.Online
             ListPlayerToRemove = new List<KeyValuePair<IOnlineConnection, string>>();
             DicCommunicationGroup = new Dictionary<string, CommunicationGroup>();
             ListGroupToRemove = new List<string>();
-            DicCommunicationGroup.Add("Global", new CommunicationGroup());
+            DicCommunicationGroup.Add("Global", new CommunicationGroup(true));
 
             SharedWriteBuffer = new OnlineWriter();
 
@@ -251,18 +252,27 @@ namespace ProjectEternity.Core.Online
             NewClient.Send(new FriendListScriptServer(Database.GetFriendList(NewClient.ID)));
         }
 
-        public void CreateOrJoinCommunicationGroup(string GroupID, IOnlineConnection GroupCreator)
+        public void CreateOrJoinCommunicationGroup(string GroupID, bool SaveLogs, IOnlineConnection GroupCreator)
         {
             lock (DicCommunicationGroup)
             {
                 if (!DicCommunicationGroup.ContainsKey(GroupID))
                 {
-                    CommunicationGroup NewGroup = new CommunicationGroup(GroupID, GroupCreator);
+                    CommunicationGroup NewGroup = new CommunicationGroup(GroupID, SaveLogs, GroupCreator);
                     DicCommunicationGroup.Add(GroupID, NewGroup);
                 }
                 else
                 {
                     DicCommunicationGroup[GroupID].AddMember(GroupCreator);
+                }
+            }
+
+            if (SaveLogs)
+            {
+                Dictionary<string, ChatManager.MessageColors> OldMessages = Database.GetGroupMessages(GroupID);
+                if (OldMessages.Count > 0)
+                {
+                    GroupCreator.Send(new MessageListGroupScriptServer(GroupID, OldMessages));
                 }
             }
         }

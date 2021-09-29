@@ -35,7 +35,7 @@ namespace ProjectEternity.Core.Online
             {
                 if (!OnlineServer.DicCommunicationGroup.ContainsKey(GroupID))
                 {
-                    OnlineServer.CreateOrJoinCommunicationGroup(GroupID, Sender);
+                    OnlineServer.CreateOrJoinCommunicationGroup(GroupID, true, Sender);
                 }
 
                 OnlineServer.JoinCommunicationGroup(GroupID, ClientToInvite);
@@ -48,7 +48,11 @@ namespace ProjectEternity.Core.Online
                 string CommunicationServerIP;
                 int CommunicationServerPort;
                 OnlineServer.Database.GetPlayerCommunicationIP(ClientToInviteID, out CommunicationServerIP, out CommunicationServerPort);
-                Sender.Send(new ReceiveRemoteGroupInviteScriptServer(GroupID, GroupName, Sender.ID, Sender.Name, ClientToInviteID, CommunicationServerIP, CommunicationServerPort));
+
+                if (OnlineServer.IP != CommunicationServerIP || OnlineServer.Port != CommunicationServerPort)
+                {
+                    Sender.Send(new ReceiveRemoteGroupInviteScriptServer(GroupID, GroupName, Sender.ID, Sender.Name, ClientToInviteID, CommunicationServerIP, CommunicationServerPort));
+                }
             }
         }
 

@@ -11,5 +11,7 @@ namespace ProjectEternity.Core.Online
         byte[] GetClientInfo(string ClientName);
         void AddFriend(IOnlineConnection Sender, string ClientName);
         List<PlayerPOCO> GetFriendList(string ClientID);
+        void SaveGroupMessage(DateTime UtcNow, string GroupID, string Message, byte MessageColor);
+        Dictionary<string, ChatManager.MessageColors> GetGroupMessages(string GroupID);
     }
 }

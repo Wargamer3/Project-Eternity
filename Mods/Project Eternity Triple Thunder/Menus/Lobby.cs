@@ -100,6 +100,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             DicOnlineCommunicationClientScripts.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
             DicOnlineCommunicationClientScripts.Add(ReceiveGroupInviteScriptClient.ScriptName, new ReceiveGroupInviteScriptClient(OnlineCommunicationClient));
             DicOnlineCommunicationClientScripts.Add(ReceiveRemoteGroupInviteScriptClient.ScriptName, new ReceiveRemoteGroupInviteScriptClient(OnlineCommunicationClient));
+            DicOnlineCommunicationClientScripts.Add(MessageListGroupScriptClient.ScriptName, new MessageListGroupScriptClient(OnlineCommunicationClient));
             DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
             DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
         }
@@ -355,9 +356,18 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         }
                         else if (MouseHelper.InputRightButtonPressed())
                         {
-                            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID));
-                            OnlineCommunicationClient.Host.Send(new SendGroupInviteScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, PlayerManager.OnlinePlayerName, ActivePlayer.ConnectionID));
-                            OnlineCommunicationClient.Chat.OpenTab(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, ActivePlayer.Name);
+                            string GroupID;
+                            if (string.Compare(PlayerManager.OnlinePlayerID, ActivePlayer.ConnectionID, StringComparison.InvariantCulture) < 0)
+                            {
+                                GroupID = PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID;
+                            }
+                            else
+                            {
+                                GroupID = ActivePlayer.ConnectionID + PlayerManager.OnlinePlayerID;
+                            }
+                            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(GroupID, true));
+                            OnlineCommunicationClient.Host.Send(new SendGroupInviteScriptClient(GroupID, PlayerManager.OnlinePlayerName, ActivePlayer.ConnectionID));
+                            OnlineCommunicationClient.Chat.OpenTab(GroupID, ActivePlayer.Name);
                         }
                     }
                 }
@@ -379,9 +389,18 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         }
                         else if (MouseHelper.InputRightButtonPressed())
                         {
-                            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID));
-                            OnlineCommunicationClient.Host.Send(new SendGroupInviteScriptClient(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, PlayerManager.OnlinePlayerName, ActivePlayer.ConnectionID));
-                            OnlineCommunicationClient.Chat.OpenTab(PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID, ActivePlayer.Name);
+                            string GroupID;
+                            if (string.Compare(PlayerManager.OnlinePlayerID, ActivePlayer.ConnectionID, StringComparison.InvariantCulture) < 0)
+                            {
+                                GroupID = PlayerManager.OnlinePlayerID + ActivePlayer.ConnectionID;
+                            }
+                            else
+                            {
+                                GroupID = ActivePlayer.ConnectionID + PlayerManager.OnlinePlayerID;
+                            }
+                            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(GroupID, true));
+                            OnlineCommunicationClient.Host.Send(new SendGroupInviteScriptClient(GroupID, PlayerManager.OnlinePlayerName, ActivePlayer.ConnectionID));
+                            OnlineCommunicationClient.Chat.OpenTab(GroupID, ActivePlayer.Name);
                         }
                     }
                 }
