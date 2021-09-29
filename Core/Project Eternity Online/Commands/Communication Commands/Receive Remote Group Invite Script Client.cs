@@ -42,7 +42,8 @@ namespace ProjectEternity.Core.Online
             OnlineCommunicationClient.DicCrossServerCommunicationByGroupID.Add(GroupID, CrossServerClient);
             CrossServerClient.Host.Send(new IdentifyScriptClient(ClientID, ClientName, true, new byte[0]));
             CrossServerClient.Host.Send(new SendGroupInviteScriptClient(GroupID, GroupName, ClientToInviteID));
-            OnlineCommunicationClient.Chat.AddMessage(GroupID, "Connected to Server: " + CommunicationServerIP + ":" + CommunicationServerPort, ChatManager.MessageColors.White);
+            string Message = "Connected to Server: " + CommunicationServerIP + ":" + CommunicationServerPort;
+            OnlineCommunicationClient.Chat.AddMessage(GroupID, new ChatManager.ChatMessage(DateTime.UtcNow, Message, ChatManager.MessageColors.Info));
         }
 
         protected internal override void Read(OnlineReader Sender)

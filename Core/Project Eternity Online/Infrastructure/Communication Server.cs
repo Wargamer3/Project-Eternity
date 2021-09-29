@@ -215,11 +215,11 @@ namespace ProjectEternity.Core.Online
             NewClient.StartReadingScriptAsync();
         }
 
-        public void SendGlobalMessage(string Message, ChatManager.MessageColors MessageColor)
+        public void SendGlobalMessage(ChatManager.ChatMessage NewMessage)
         {
             foreach (IOnlineConnection ActiveOnlinePlayer in DicPlayerByID.Values)
             {
-                ActiveOnlinePlayer.Send(new ReceiveGlobalMessageScriptServer(Message, MessageColor));
+                ActiveOnlinePlayer.Send(new ReceiveGlobalMessageScriptServer(NewMessage));
             }
         }
 
@@ -269,10 +269,10 @@ namespace ProjectEternity.Core.Online
 
             if (SaveLogs)
             {
-                Dictionary<string, ChatManager.MessageColors> OldMessages = Database.GetGroupMessages(GroupID);
-                if (OldMessages.Count > 0)
+                List<ChatManager.ChatMessage> ListOldMessages = Database.GetGroupMessages(GroupID);
+                if (ListOldMessages.Count > 0)
                 {
-                    GroupCreator.Send(new MessageListGroupScriptServer(GroupID, OldMessages));
+                    GroupCreator.Send(new MessageListGroupScriptServer(GroupID, ListOldMessages));
                 }
             }
         }

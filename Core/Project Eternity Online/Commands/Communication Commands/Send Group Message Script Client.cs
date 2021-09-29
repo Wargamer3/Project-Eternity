@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ProjectEternity.Core.Online
 {
     public class SendGroupMessageScriptClient : OnlineScript
     {
-        private readonly string Source;
-        private readonly string Message;
-        private readonly ChatManager.MessageColors MessageColor;
+        private readonly string GroupID;
+        private readonly ChatManager.ChatMessage MessageToSend;
 
-        public SendGroupMessageScriptClient(string Source, string Message, ChatManager.MessageColors MessageColor)
+        public SendGroupMessageScriptClient(string GroupID, ChatManager.ChatMessage MessageToSend)
             : base("Send Group Message")
         {
-            this.Source = Source;
-            this.Message = Message;
-            this.MessageColor = MessageColor;
+            this.GroupID = GroupID;
+            this.MessageToSend = MessageToSend;
         }
 
         public override OnlineScript Copy()
@@ -23,9 +22,10 @@ namespace ProjectEternity.Core.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendString(Source);
-            WriteBuffer.AppendString(Message);
-            WriteBuffer.AppendByte((byte)MessageColor);
+            WriteBuffer.AppendString(GroupID);
+            WriteBuffer.AppendString(MessageToSend.Date.ToString(DateTimeFormatInfo.InvariantInfo));
+            WriteBuffer.AppendString(MessageToSend.Message);
+            WriteBuffer.AppendByte((byte)MessageToSend.MessageColor);
         }
 
         protected internal override void Execute(IOnlineConnection Host)

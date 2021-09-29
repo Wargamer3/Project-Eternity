@@ -5,18 +5,33 @@ namespace ProjectEternity.Core.Online
 {
     public class ChatManager
     {
-        public enum MessageColors { White }
+        public enum MessageColors : byte { White, Info = 255 }
+
+        public struct ChatMessage
+        {
+            public readonly DateTime Date;
+            public readonly string Message;
+            public readonly MessageColors MessageColor;
+
+            public ChatMessage(DateTime Date, string Message, MessageColors MessageColor)
+            {
+                this.Date = Date;
+                this.Message = Message;
+                this.MessageColor = MessageColor;
+            }
+        }
 
         public class ChatTab
         {
             public readonly string Name;
-            public readonly Dictionary<string, MessageColors> ListChatHistory;
+            public readonly List<ChatMessage> ListChatHistory;
             public bool HasUnreadMessages;
+            public int ChatScrollUpValueInPixel;
 
             public ChatTab(string Name)
             {
                 this.Name = Name;
-                ListChatHistory = new Dictionary<string, MessageColors>();
+                ListChatHistory = new List<ChatMessage>();
                 HasUnreadMessages = false;
             }
         }
@@ -26,7 +41,8 @@ namespace ProjectEternity.Core.Online
 
         public string ActiveTabID { get { return _ActiveChatTabID; } }
         public string ActiveTabName { get { return DicChatHistory[_ActiveChatTabID].Name; } }
-        public IEnumerable<string> ListActiveTabHistory { get { return DicChatHistory[_ActiveChatTabID].ListChatHistory.Keys; } }
+        public int ActiveTabScrollUpValue { get { return DicChatHistory[_ActiveChatTabID].ChatScrollUpValueInPixel; } }
+        public List<ChatMessage> ListActiveTabHistory { get { return DicChatHistory[_ActiveChatTabID].ListChatHistory; } }
         public IEnumerable<KeyValuePair<string, ChatTab>> DicTab { get { return DicChatHistory; } }
 
         public ChatManager()
@@ -74,26 +90,7 @@ namespace ProjectEternity.Core.Online
             DicChatHistory.Remove(ActiveTabID);
         }
 
-        public void AddMessage(string Source, string Message, MessageColors MessageColor)
-        {
-            ChatTab ActiveChatTab;
-            if (DicChatHistory.TryGetValue(Source, out ActiveChatTab))
-            {
-                ActiveChatTab.ListChatHistory.Add(Message, MessageColor);
-            }
-            else
-            {
-                DicChatHistory.Add(Source, new ChatTab(Source));
-                DicChatHistory[Source].ListChatHistory.Add(Message, MessageColor);
-            }
-
-            if (Source != _ActiveChatTabID)
-            {
-                DicChatHistory[Source].HasUnreadMessages = true;
-            }
-        }
-
-        public void InsertMessages(string Source, Dictionary<string, MessageColors> DicChatHistoryToInsert)
+        public void AddMessage(string Source, ChatMessage NewMessage)
         {
             ChatTab ActiveChatTab;
             if (!DicChatHistory.TryGetValue(Source, out ActiveChatTab))
@@ -102,18 +99,23 @@ namespace ProjectEternity.Core.Online
                 DicChatHistory.Add(Source, ActiveChatTab);
             }
 
-            ChatTab NewChatTab = new ChatTab(ActiveChatTab.Name);
+            ActiveChatTab.ListChatHistory.Add(NewMessage);
 
-            foreach (KeyValuePair<string, MessageColors> ActiveTab in DicChatHistoryToInsert)
+            if (Source != _ActiveChatTabID)
             {
-                NewChatTab.ListChatHistory.Add(ActiveTab.Key, ActiveTab.Value);
+                DicChatHistory[Source].HasUnreadMessages = true;
             }
-            foreach (KeyValuePair<string, MessageColors> ActiveTab in ActiveChatTab.ListChatHistory)
-            {
-                NewChatTab.ListChatHistory.Add(ActiveTab.Key, ActiveTab.Value);
-            }
+        }
 
-            DicChatHistory[Source] = NewChatTab;
+        public void InsertMessages(string Source, List<ChatMessage> ListChatHistoryToInsert)
+        {
+            ChatTab ActiveChatTab;
+            if (!DicChatHistory.TryGetValue(Source, out ActiveChatTab))
+            {
+                ActiveChatTab = new ChatTab(Source);
+                DicChatHistory.Add(Source, ActiveChatTab);
+            }
+            ActiveChatTab.ListChatHistory.InsertRange(0, ListChatHistoryToInsert);
         }
     }
 }

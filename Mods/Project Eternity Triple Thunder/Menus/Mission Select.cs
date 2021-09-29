@@ -542,7 +542,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private void SendMessage(string InputMessage)
         {
             ChatInput.SetText(string.Empty);
-            OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, InputMessage, ChatManager.MessageColors.White);
+            OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));
         }
 
         public override void BeginDraw(CustomSpriteBatch g)

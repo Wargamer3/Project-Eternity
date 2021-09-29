@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ProjectEternity.Core.Online
 {
@@ -9,15 +10,15 @@ namespace ProjectEternity.Core.Online
 
         private readonly CommunicationClient OnlineCommunicationClient;
 
-        private string Source;
-        private Dictionary<string, ChatManager.MessageColors> DicChatHistory;
+        private string GroupID;
+        public readonly List<ChatManager.ChatMessage> ListChatHistory;
 
         public MessageListGroupScriptClient(CommunicationClient OnlineCommunicationClient)
             : base(ScriptName)
         {
             this.OnlineCommunicationClient = OnlineCommunicationClient;
 
-            DicChatHistory = new Dictionary<string, ChatManager.MessageColors>();
+            ListChatHistory = new List<ChatManager.ChatMessage>();
         }
 
         public override OnlineScript Copy()
@@ -37,19 +38,20 @@ namespace ProjectEternity.Core.Online
 
         public void ExecuteOnMainThread()
         {
-            OnlineCommunicationClient.Chat.InsertMessages(Source, DicChatHistory);
+            OnlineCommunicationClient.Chat.InsertMessages(GroupID, ListChatHistory);
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
-            Source = Sender.ReadString();
+            GroupID = Sender.ReadString();
             int MessageCount = Sender.ReadInt32();
             for (int M = 0; M < MessageCount; ++M)
             {
+                string Date = Sender.ReadString();
                 string Message = Sender.ReadString();
                 byte MessageColor = Sender.ReadByte();
 
-                DicChatHistory.Add(Message, (ChatManager.MessageColors)MessageColor);
+                ListChatHistory.Add(new ChatManager.ChatMessage(DateTime.Parse(Date, DateTimeFormatInfo.InvariantInfo), Message, (ChatManager.MessageColors)MessageColor));
             }
         }
     }

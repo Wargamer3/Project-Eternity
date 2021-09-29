@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ProjectEternity.Core.Online
 {
@@ -8,6 +9,7 @@ namespace ProjectEternity.Core.Online
 
         private readonly CommunicationServer OnlineServer;
 
+        private string Date;
         private string Message;
         private byte MessageColor;
 
@@ -30,11 +32,12 @@ namespace ProjectEternity.Core.Online
         protected internal override void Execute(IOnlineConnection Sender)
         {
             string FinalMessage = Sender.Name + " : " + Message;
-            OnlineServer.SendGlobalMessage(FinalMessage, (ChatManager.MessageColors)MessageColor);
+            OnlineServer.SendGlobalMessage(new ChatManager.ChatMessage(DateTime.Parse(Date, DateTimeFormatInfo.InvariantInfo), FinalMessage, (ChatManager.MessageColors)MessageColor));
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
+            Date = Sender.ReadString();
             Message = Sender.ReadString();
             MessageColor = Sender.ReadByte();
         }

@@ -78,13 +78,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ++T;
             }
 
-            int M = 0;
-            foreach (string ActiveMessage in Chat.ListActiveTabHistory)
+            int LineSpacing = fntArial12.LineSpacing;
+            int LastMessageIndex = Math.Max(0, Chat.ListActiveTabHistory.Count - Chat.ActiveTabScrollUpValue / LineSpacing);
+            int FirstMessageIndex = Math.Max(0, LastMessageIndex - 4);
+
+            for (int M = FirstMessageIndex, i = 0; M < LastMessageIndex; ++M, ++i)
             {
+                ChatManager.ChatMessage ActiveMessage = Chat.ListActiveTabHistory[M];
                 float X = 30;
-                float Y = 430 + M * fntArial12.LineSpacing;
-                g.DrawString(fntArial12, ActiveMessage, new Vector2(X, Y), Color.White);
-                ++M;
+                float Y = 430 + i * fntArial12.LineSpacing - Chat.ActiveTabScrollUpValue;
+                g.DrawString(fntArial12, ActiveMessage.Message, new Vector2(X, Y), Color.White);
             }
         }
     }

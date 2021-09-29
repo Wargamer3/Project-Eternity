@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ProjectEternity.Core.Online
 {
     public class ReceiveGroupMessageScriptServer : OnlineScript
     {
         private readonly string Source;
-        private readonly string Message;
-        private readonly ChatManager.MessageColors MessageColor;
+        private readonly ChatManager.ChatMessage NewMessage;
 
-        public ReceiveGroupMessageScriptServer(string Source, string Message, ChatManager.MessageColors MessageColor)
+        public ReceiveGroupMessageScriptServer(string Source, ChatManager.ChatMessage NewMessage)
             : base("Receive Group Message")
         {
             this.Source = Source;
-            this.Message = Message;
-            this.MessageColor = MessageColor;
+            this.NewMessage = NewMessage;
         }
 
         public override OnlineScript Copy()
@@ -24,8 +23,9 @@ namespace ProjectEternity.Core.Online
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
             WriteBuffer.AppendString(Source);
-            WriteBuffer.AppendString(Message);
-            WriteBuffer.AppendByte((byte)MessageColor);
+            WriteBuffer.AppendString(NewMessage.Date.ToString(DateTimeFormatInfo.InvariantInfo));
+            WriteBuffer.AppendString(NewMessage.Message);
+            WriteBuffer.AppendByte((byte)NewMessage.MessageColor);
         }
 
         protected internal override void Execute(IOnlineConnection Host)

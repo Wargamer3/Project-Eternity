@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ProjectEternity.Core.Online
 {
@@ -8,7 +9,8 @@ namespace ProjectEternity.Core.Online
 
         private readonly CommunicationServer OnlineServer;
 
-        private string Source;
+        private string GroupID;
+        private string Date;
         private string Message;
         private byte MessageColor;
 
@@ -33,16 +35,17 @@ namespace ProjectEternity.Core.Online
             string FinalMessage = Sender.Name + " : " + Message;
 
             CommunicationGroup SourceOwner;
-            if (OnlineServer.DicCommunicationGroup.TryGetValue(Source, out SourceOwner))
+            if (OnlineServer.DicCommunicationGroup.TryGetValue(GroupID, out SourceOwner))
             {
+                DateTime MessageDate = DateTime.Parse(Date, DateTimeFormatInfo.InvariantInfo);
                 foreach (IOnlineConnection ActiveOnlinePlayer in SourceOwner.ListGroupMember)
                 {
-                    ActiveOnlinePlayer.Send(new ReceiveGroupMessageScriptServer(Source, FinalMessage, (ChatManager.MessageColors)MessageColor));
+                    ActiveOnlinePlayer.Send(new ReceiveGroupMessageScriptServer(GroupID, new ChatManager.ChatMessage(MessageDate, Message, (ChatManager.MessageColors)MessageColor)));
                 }
 
                 if (SourceOwner.SaveLogs)
                 {
-                    OnlineServer.Database.SaveGroupMessage(DateTime.UtcNow, Source, FinalMessage, MessageColor);
+                    OnlineServer.Database.SaveGroupMessage(MessageDate, GroupID, FinalMessage, MessageColor);
                 }
             }
             else
@@ -53,7 +56,8 @@ namespace ProjectEternity.Core.Online
 
         protected internal override void Read(OnlineReader Sender)
         {
-            Source = Sender.ReadString();
+            GroupID = Sender.ReadString();
+            Date = Sender.ReadString();
             Message = Sender.ReadString();
             MessageColor = Sender.ReadByte();
         }

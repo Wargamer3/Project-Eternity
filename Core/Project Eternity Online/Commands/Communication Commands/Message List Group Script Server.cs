@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online
@@ -7,13 +8,13 @@ namespace ProjectEternity.Core.Online
     {
         public const string ScriptName = "Message List Group";
         private readonly string GroupID;
-        private readonly Dictionary<string, ChatManager.MessageColors> OldMessages;
+        public readonly List<ChatManager.ChatMessage> ListChatHistory;
 
-        public MessageListGroupScriptServer(string GroupID, Dictionary<string, ChatManager.MessageColors> OldMessages)
+        public MessageListGroupScriptServer(string GroupID, List<ChatManager.ChatMessage> ListChatHistory)
             : base(ScriptName)
         {
             this.GroupID = GroupID;
-            this.OldMessages = OldMessages;
+            this.ListChatHistory = ListChatHistory;
         }
 
         public override OnlineScript Copy()
@@ -24,11 +25,12 @@ namespace ProjectEternity.Core.Online
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
             WriteBuffer.AppendString(GroupID);
-            WriteBuffer.AppendInt32(OldMessages.Count);
-            foreach (KeyValuePair<string, ChatManager.MessageColors> ActivePlayerInfo in OldMessages)
+            WriteBuffer.AppendInt32(ListChatHistory.Count);
+            foreach (ChatManager.ChatMessage ActiveMessage in ListChatHistory)
             {
-                WriteBuffer.AppendString(ActivePlayerInfo.Key);
-                WriteBuffer.AppendByte((byte)ActivePlayerInfo.Value);
+                WriteBuffer.AppendString(ActiveMessage.Date.ToString(DateTimeFormatInfo.InvariantInfo));
+                WriteBuffer.AppendString(ActiveMessage.Message);
+                WriteBuffer.AppendByte((byte)ActiveMessage.MessageColor);
             }
         }
 

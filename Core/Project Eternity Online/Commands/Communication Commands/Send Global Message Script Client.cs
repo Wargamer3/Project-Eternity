@@ -1,17 +1,16 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ProjectEternity.Core.Online
 {
     public class SendGlobalMessageScriptClient : OnlineScript
     {
-        private readonly string Message;
-        private readonly ChatManager.MessageColors MessageColor;
+        private readonly ChatManager.ChatMessage MessageToSend;
 
-        public SendGlobalMessageScriptClient(string Message, ChatManager.MessageColors MessageColor)
+        public SendGlobalMessageScriptClient(ChatManager.ChatMessage MessageToSend)
             : base("Send Global Message")
         {
-            this.Message = Message;
-            this.MessageColor = MessageColor;
+            this.MessageToSend = MessageToSend;
         }
 
         public override OnlineScript Copy()
@@ -21,8 +20,9 @@ namespace ProjectEternity.Core.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendString(Message);
-            WriteBuffer.AppendByte((byte)MessageColor);
+            WriteBuffer.AppendString(MessageToSend.Date.ToString(DateTimeFormatInfo.InvariantInfo));
+            WriteBuffer.AppendString(MessageToSend.Message);
+            WriteBuffer.AppendByte((byte)MessageToSend.MessageColor);
         }
 
         protected internal override void Execute(IOnlineConnection Host)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ProjectEternity.Core.Online
 {
@@ -9,6 +10,7 @@ namespace ProjectEternity.Core.Online
         private readonly CommunicationClient OnlineCommunicationClient;
 
         private string Source;
+        private string Date;
         private string Message;
         private byte MessageColor;
 
@@ -35,12 +37,13 @@ namespace ProjectEternity.Core.Online
 
         public void ExecuteOnMainThread()
         {
-            OnlineCommunicationClient.Chat.AddMessage(Source, Message, (ChatManager.MessageColors)MessageColor);
+            OnlineCommunicationClient.Chat.AddMessage(Source, new ChatManager.ChatMessage(DateTime.Parse(Date, DateTimeFormatInfo.InvariantInfo), Message, (ChatManager.MessageColors)MessageColor));
         }
 
         protected internal override void Read(OnlineReader Sender)
         {
             Source = Sender.ReadString();
+            Date = Sender.ReadString();
             Message = Sender.ReadString();
             MessageColor = Sender.ReadByte();
         }

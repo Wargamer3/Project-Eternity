@@ -127,19 +127,22 @@ namespace Database
             PersonalCollection.InsertOneAsync(NewEntry);
         }
 
-        public Dictionary<string, ChatManager.MessageColors> GetGroupMessages(string GroupID)
+        public List<ChatManager.ChatMessage> GetGroupMessages(string GroupID)
         {
             FilterDefinition<BsonDocument> SourceFilter = Builders<BsonDocument>.Filter.Eq("GroupID", GroupID);
             List<BsonDocument> ListMessages = PersonalCollection.Find(SourceFilter).ToList();
 
-            Dictionary<string, ChatManager.MessageColors> DicChatHistory = new Dictionary<string, ChatManager.MessageColors>();
+            List<ChatManager.ChatMessage> ListChatHistory = new List<ChatManager.ChatMessage>();
 
             foreach (BsonDocument ActiveMessage in ListMessages)
             {
-                DicChatHistory.Add(ActiveMessage.GetValue("Message").AsString, (ChatManager.MessageColors)ActiveMessage.GetValue("MessageColor").AsInt32);
+                DateTime Date = ActiveMessage.GetValue("Date").ToUniversalTime();
+                string Message = ActiveMessage.GetValue("Message").AsString;
+                ChatManager.MessageColors MessageColor = (ChatManager.MessageColors)ActiveMessage.GetValue("MessageColor").AsInt32;
+                ListChatHistory.Add(new ChatManager.ChatMessage(Date, Message, MessageColor));
             }
 
-            return DicChatHistory;
+            return ListChatHistory;
         }
     }
 }

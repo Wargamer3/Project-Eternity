@@ -149,19 +149,19 @@ namespace ProjectEternity.Core.Online
             }
         }
 
-        public void SendMessage(string GroupID, string Message, ChatManager.MessageColors MessageColor)
+        public void SendMessage(string GroupID, ChatManager.ChatMessage MessageToSend)
         {
             if (GroupID == "Global")
             {
-                Host.Send(new SendGlobalMessageScriptClient(Message, MessageColor));
+                Host.Send(new SendGlobalMessageScriptClient(MessageToSend));
             }
             else if (DicCrossServerCommunicationByGroupID.ContainsKey(GroupID))
             {
-                DicCrossServerCommunicationByGroupID[GroupID].Host.Send(new SendGroupMessageScriptClient(GroupID, Message, MessageColor));
+                DicCrossServerCommunicationByGroupID[GroupID].Host.Send(new SendGroupMessageScriptClient(GroupID, MessageToSend));
             }
             else
             {
-                Host.Send(new SendGroupMessageScriptClient(GroupID, Message, MessageColor));
+                Host.Send(new SendGroupMessageScriptClient(GroupID, MessageToSend));
             }
         }
 
