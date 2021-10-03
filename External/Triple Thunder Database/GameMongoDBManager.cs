@@ -5,7 +5,7 @@ using MongoDB.Driver;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.TripleThunderScreen;
 
-namespace Database
+namespace Database.TripleThunder
 {
     public class GameMongoDBManager : IGameDataManager
     {

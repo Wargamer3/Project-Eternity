@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.TripleThunderScreen.Online;
-using Database;
+using Database.TripleThunder;
 
 namespace ProjectEternity.GameScreens.TripleThunderServer
 {

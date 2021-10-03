@@ -106,6 +106,11 @@
       <Name>Database</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\External\Triple Thunder Database\Triple Thunder Database.csproj">
+      <Project>{e9d61af1-db9e-4751-8c0a-a799cdbe2d14}</Project>
+      <Name>Triple Thunder Database</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Triple Thunder\Project Eternity Triple Thunder.csproj">
       <Project>{d2aff601-4df2-466b-91eb-3aa010668360}</Project>
       <Name>Project Eternity Triple Thunder</Name>
