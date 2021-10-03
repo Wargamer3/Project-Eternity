@@ -134,7 +134,7 @@
       <Name>Project Eternity Unit</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Roslyn\Roslyn.csproj">
+    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">
       <Project>{4eeea09d-cfbc-43a7-9491-1d7738fc49e7}</Project>
       <Name>Roslyn</Name>
       <Private>False</Private>

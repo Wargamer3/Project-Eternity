@@ -61,8 +61,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Roslyn\Roslyn.csproj">
-      <Project>{4EEEA09D-CFBC-43A7-9491-1D7738FC49E7}</Project>
+    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">
+      <Project>{4eeea09d-cfbc-43a7-9491-1d7738fc49e7}</Project>
       <Name>Roslyn</Name>
       <Private>False</Private>
     </ProjectReference>

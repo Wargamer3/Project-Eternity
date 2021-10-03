@@ -60,7 +60,7 @@
       <Name>Project Eternity Online</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Database\Database.csproj">
+    <ProjectReference Include="..\External\Database\Database.csproj">
       <Project>{4304b49f-e5a9-4e1f-8ab4-5d3cc8c33b28}</Project>
       <Name>Database</Name>
       <Private>False</Private>

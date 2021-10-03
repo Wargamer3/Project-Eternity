@@ -56,8 +56,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft Content Builder\Microsoft Content Builder.csproj">
-      <Project>{E10F9F43-11F8-4280-B4FF-F50AD02D8F8B}</Project>
+    <ProjectReference Include="..\External\Microsoft Content Builder\Microsoft Content Builder.csproj">
+      <Project>{e10f9f43-11f8-4280-b4ff-f50ad02d8f8b}</Project>
       <Name>Microsoft Content Builder</Name>
       <Private>False</Private>
     </ProjectReference>

@@ -80,6 +80,11 @@
     <Compile Include="Selectors.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">
+      <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
+      <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
       <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
       <Name>Project Eternity Control Helper</Name>
@@ -93,11 +98,6 @@
     <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
       <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
       <Name>Project Eternity Base Editor</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\FMOD\FMOD.csproj">
-      <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
-      <Name>FMOD</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Base Item\Project Eternity Base Item.csproj">

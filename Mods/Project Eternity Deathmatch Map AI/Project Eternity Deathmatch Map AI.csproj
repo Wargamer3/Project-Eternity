@@ -127,11 +127,6 @@
       <Name>Project Eternity Unit</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\FMOD\FMOD.csproj">
-      <Project>{DFB48E6D-A44C-4784-89A3-86F21A108531}</Project>
-      <Name>FMOD</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
       <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
       <Name>Project Eternity Battle Map</Name>

@@ -110,14 +110,14 @@
     <Compile Include="Text Helper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">
+      <Project>{4eeea09d-cfbc-43a7-9491-1d7738fc49e7}</Project>
+      <Name>Roslyn</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
       <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
       <Name>Project Eternity Control Helper</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Roslyn\Roslyn.csproj">
-      <Project>{4EEEA09D-CFBC-43A7-9491-1D7738FC49E7}</Project>
-      <Name>Roslyn</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

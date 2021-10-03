@@ -270,11 +270,6 @@
       <Name>Project Eternity GUI</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Roslyn\Roslyn.csproj">
-      <Project>{4eeea09d-cfbc-43a7-9491-1d7738fc49e7}</Project>
-      <Name>Roslyn</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Units\Project Eternity Unit Conquest\Project Eternity Unit Conquest.csproj">
       <Project>{EF17745E-1116-499C-94D0-5D3607EE8FA4}</Project>
       <Name>Project Eternity Unit Conquest</Name>
