@@ -82,17 +82,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             CaptureTheFlagButton.CanBeChecked = true;
             DeathmatchButton.CanBeChecked = true;
             SurvivalButton.CanBeChecked = true;
-            DeathmatchButton.Check();
+            DeathmatchButton.Select();
 
             MaxPlayers2Button.CanBeChecked = true;
             MaxPlayers4Button.CanBeChecked = true;
             MaxPlayers6Button.CanBeChecked = true;
             MaxPlayers8Button.CanBeChecked = true;
-            MaxPlayers8Button.Check();
+            MaxPlayers8Button.Select();
 
             TeamBalanceOnButton.CanBeChecked = true;
             TeamBalanceOffButton.CanBeChecked = true;
-            TeamBalanceOffButton.Check();
+            TeamBalanceOffButton.Select();
 
             CancelButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/Cancel Button", new Vector2(490, 481), OnButtonOver, Cancel);
             OKButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/OK Button", new Vector2(565, 481), OnButtonOver, CreateRoom);
@@ -138,60 +138,60 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void SelectCaptureTheFlag()
         {
-            DeathmatchButton.Uncheck();
-            SurvivalButton.Uncheck();
+            DeathmatchButton.Unselect();
+            SurvivalButton.Unselect();
 
             RoomSubtype = "Capture The Flag";
         }
 
         private void SelectDeathmatch()
         {
-            CaptureTheFlagButton.Uncheck();
-            SurvivalButton.Uncheck();
+            CaptureTheFlagButton.Unselect();
+            SurvivalButton.Unselect();
 
             RoomSubtype = "Deathmatch";
         }
 
         private void SelectSurvival()
         {
-            CaptureTheFlagButton.Uncheck();
-            DeathmatchButton.Uncheck();
+            CaptureTheFlagButton.Unselect();
+            DeathmatchButton.Unselect();
 
             RoomSubtype = "Survival";
         }
 
         private void MaxPlayers2()
         {
-            MaxPlayers4Button.Uncheck();
-            MaxPlayers6Button.Uncheck();
-            MaxPlayers8Button.Uncheck();
+            MaxPlayers4Button.Unselect();
+            MaxPlayers6Button.Unselect();
+            MaxPlayers8Button.Unselect();
 
             MaxNumberOfPlayer = 2;
         }
 
         private void MaxPlayers4()
         {
-            MaxPlayers2Button.Uncheck();
-            MaxPlayers6Button.Uncheck();
-            MaxPlayers8Button.Uncheck();
+            MaxPlayers2Button.Unselect();
+            MaxPlayers6Button.Unselect();
+            MaxPlayers8Button.Unselect();
 
             MaxNumberOfPlayer = 4;
         }
 
         private void MaxPlayers6()
         {
-            MaxPlayers2Button.Uncheck();
-            MaxPlayers4Button.Uncheck();
-            MaxPlayers8Button.Uncheck();
+            MaxPlayers2Button.Unselect();
+            MaxPlayers4Button.Unselect();
+            MaxPlayers8Button.Unselect();
 
             MaxNumberOfPlayer = 6;
         }
 
         private void MaxPlayers8()
         {
-            MaxPlayers2Button.Uncheck();
-            MaxPlayers4Button.Uncheck();
-            MaxPlayers6Button.Uncheck();
+            MaxPlayers2Button.Unselect();
+            MaxPlayers4Button.Unselect();
+            MaxPlayers6Button.Unselect();
 
             MaxNumberOfPlayer = 8;
         }

@@ -19,72 +19,7 @@ using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class MovementAnimations
-    {
-        public List<float> ListPosX;
-        public List<float> ListPosY;
-        public List<UnitMapComponent> ListMovingMapUnit;
-
-        public MovementAnimations()
-        {
-            ListPosX = new List<float>();
-            ListPosY = new List<float>();
-            ListMovingMapUnit = new List<UnitMapComponent>();
-        }
-
-        public void Add(float PosX, float PosY, UnitMapComponent MovingMapUnit)
-        {
-            ListPosX.Add(PosX);
-            ListPosY.Add(PosY);
-            ListMovingMapUnit.Add(MovingMapUnit);
-        }
-
-        public bool Contains(UnitMapComponent MovingMapUnit)
-        {
-            return ListMovingMapUnit.Contains(MovingMapUnit);
-        }
-
-        public int IndexOf(UnitMapComponent MovingMapUnit)
-        {
-            for (int i = ListMovingMapUnit.Count - 1; i >= 0; --i)
-            {
-                if (ListMovingMapUnit.IndexOf(MovingMapUnit) >= 0)
-                    return ListMovingMapUnit.IndexOf(MovingMapUnit);
-            }
-            return -1;
-        }
-
-        public int Count
-        {
-            get
-            {
-                return ListPosX.Count;
-            }
-        }
-
-        public void RemoveAt(int Index)
-        {
-            ListPosX.RemoveAt(Index);
-            ListPosY.RemoveAt(Index);
-            ListMovingMapUnit.RemoveAt(Index);
-        }
-    }
-
-    public abstract class BattleMapCutsceneScriptHolder : CutsceneScriptHolder
-    {
-        public abstract class BattleMapScript : CutsceneActionScript
-        {
-            protected BattleMap Map;
-
-            protected BattleMapScript(BattleMap Map, int ScriptWidth, int ScriptHeight, string Name, string[] NameTriggers, string[] NameEvents)
-                : base(ScriptWidth, ScriptHeight, Name, NameTriggers, NameEvents)
-            {
-                this.Map = Map;
-            }
-        }
-    }
-
-    public abstract partial class BattleMap : GameScreen
+    public abstract partial class BattleMap : GameScreen, IOnlineGame
     {
         #region Enum definition
 
@@ -1100,5 +1035,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 OnlinePlayers.ExecuteAndSend(new Online.BattleMapLobyScriptHolder.SkipSquadMovementScript(this));
             }
         }
+
+        public abstract byte[] GetSnapshotData();
+        public abstract void Update(double ElapsedSeconds);
+        public abstract void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer);
     }
 }

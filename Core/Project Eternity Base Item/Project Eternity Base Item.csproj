@@ -94,6 +94,7 @@
     <Compile Include="Ini File.cs" />
     <Compile Include="Byte Writer.cs" />
     <Compile Include="Byte Reader.cs" />
+    <Compile Include="UI\IUIElement.cs" />
     <Compile Include="UI\Interactive Button.cs" />
     <Compile Include="Particle system\Particle Settings.cs" />
     <Compile Include="Particle system\Particle System.cs" />

@@ -15,7 +15,8 @@ namespace ProjectEternity
 {
     public sealed class GameSelection : GameScreen
     {
-        private enum MenuChoices { Normal, SuperTreeWar, Intermission, Multiplayer, WorldMap, Conquest, SorcererStreet, Racing, SuperTank, TripleThunder };
+        private enum MenuChoices { Normal, SuperTreeWar, Intermission, MultiplayerClassic, MultiplayerLobby, MultiplayerLobbyOffline,
+            WorldMap, Conquest, SorcererStreet, Racing, SuperTank, TripleThunderOnline, TripleThunderOffline };
 
         private int SelectedChoice = 0;
 
@@ -45,14 +46,14 @@ namespace ProjectEternity
                 sndSelection.Play();
 
                 if (SelectedChoice == -1)
-                    SelectedChoice = 9;
+                    SelectedChoice = 12;
             }
             else if (InputHelper.InputDownPressed())
             {
                 SelectedChoice++;
                 sndSelection.Play();
 
-                if (SelectedChoice == 10)
+                if (SelectedChoice == 13)
                     SelectedChoice = 0;
             }
             else if (InputHelper.InputConfirmPressed())
@@ -130,8 +131,28 @@ namespace ProjectEternity
                         PushScreen(new IntermissionScreen());
                         break;
 
-                    case MenuChoices.Multiplayer:
+                    case MenuChoices.MultiplayerClassic:
                         PushScreen(new MultiplayerScreen());
+                        break;
+
+                    case MenuChoices.MultiplayerLobby:
+                        Constants.Width = 800;
+                        Constants.Height = 600;
+                        Constants.ScreenSize = 0;
+                        Constants.graphics.PreferredBackBufferWidth = Constants.Width;
+                        Constants.graphics.PreferredBackBufferHeight = Constants.Height;
+                        Constants.graphics.ApplyChanges();
+                        PushScreen(new Lobby(true));
+                        break;
+
+                    case MenuChoices.MultiplayerLobbyOffline:
+                        Constants.Width = 800;
+                        Constants.Height = 600;
+                        Constants.ScreenSize = 0;
+                        Constants.graphics.PreferredBackBufferWidth = Constants.Width;
+                        Constants.graphics.PreferredBackBufferHeight = Constants.Height;
+                        Constants.graphics.ApplyChanges();
+                        PushScreen(new Lobby(false));
                         break;
 
                     case MenuChoices.WorldMap:
@@ -161,7 +182,7 @@ namespace ProjectEternity
                         PushScreen(new GameScreens.SuperTankScreen.SuperTank2());
                         break;
 
-                    case MenuChoices.TripleThunder:
+                    case MenuChoices.TripleThunderOnline:
                         Constants.Width = 800;
                         Constants.Height = 600;
                         Constants.ScreenSize = 0;
@@ -169,6 +190,16 @@ namespace ProjectEternity
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
                         Constants.graphics.ApplyChanges();
                         PushScreen(new GameScreens.TripleThunderScreen.Lobby(true));
+                        break;
+
+                    case MenuChoices.TripleThunderOffline:
+                        Constants.Width = 800;
+                        Constants.Height = 600;
+                        Constants.ScreenSize = 0;
+                        Constants.graphics.PreferredBackBufferWidth = Constants.Width;
+                        Constants.graphics.PreferredBackBufferHeight = Constants.Height;
+                        Constants.graphics.ApplyChanges();
+                        PushScreen(new GameScreens.TripleThunderScreen.Lobby(false));
                         break;
                 }
             }
@@ -184,13 +215,16 @@ namespace ProjectEternity
             TextHelper.DrawText(g, "Normal", new Vector2(50, 50), Color.White);
             TextHelper.DrawText(g, "Super Tree Wars", new Vector2(50, 50 + LineHeight * 1), Color.White);
             TextHelper.DrawText(g, "Intermission", new Vector2(50, 50 + LineHeight * 2), Color.White);
-            TextHelper.DrawText(g, "Multiplayer", new Vector2(50, 50 + LineHeight * 3), Color.White);
-            TextHelper.DrawText(g, "World Map", new Vector2(50, 50 + LineHeight * 4), Color.White);
-            TextHelper.DrawText(g, "Conquest", new Vector2(50, 50 + LineHeight * 5), Color.White);
-            TextHelper.DrawText(g, "Sorcerer Street", new Vector2(50, 50 + LineHeight * 6), Color.White);
-            TextHelper.DrawText(g, "Racing", new Vector2(50, 50 + LineHeight * 7), Color.White);
-            TextHelper.DrawText(g, "Super Tank", new Vector2(50, 50 + LineHeight * 8), Color.White);
-            TextHelper.DrawText(g, "Triple Thunder", new Vector2(50, 50 + LineHeight * 9), Color.White);
+            TextHelper.DrawText(g, "Multiplayer Classic", new Vector2(50, 50 + LineHeight * 3), Color.White);
+            TextHelper.DrawText(g, "Multiplayer Lobby Online", new Vector2(50, 50 + LineHeight * 4), Color.White);
+            TextHelper.DrawText(g, "Multiplayer Lobby Offline", new Vector2(50, 50 + LineHeight * 5), Color.White);
+            TextHelper.DrawText(g, "World Map", new Vector2(50, 50 + LineHeight * 6), Color.White);
+            TextHelper.DrawText(g, "Conquest", new Vector2(50, 50 + LineHeight * 7), Color.White);
+            TextHelper.DrawText(g, "Sorcerer Street", new Vector2(50, 50 + LineHeight * 8), Color.White);
+            TextHelper.DrawText(g, "Racing", new Vector2(50, 50 + LineHeight * 9), Color.White);
+            TextHelper.DrawText(g, "Super Tank", new Vector2(50, 50 + LineHeight * 10), Color.White);
+            TextHelper.DrawText(g, "Triple Thunder Online", new Vector2(50, 50 + LineHeight * 11), Color.White);
+            TextHelper.DrawText(g, "Triple Thunder Offline", new Vector2(50, 50 + LineHeight * 12), Color.White);
 
             g.Draw(sprPixel, new Rectangle(50, 50 + SelectedChoice * LineHeight, Constants.Width - 100, LineHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
         }

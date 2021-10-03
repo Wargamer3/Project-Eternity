@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
-using ProjectEternity.GameScreens.AnimationScreen;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.SorcererStreetScreen;
 
 namespace ProjectEternity.UnitTests.SorcererStreetTests

@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Text;
 using System.Reflection;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Collections.Generic;
 using Roslyn;
 using Microsoft.Xna.Framework;
@@ -14,6 +12,7 @@ using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -237,7 +236,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Clear everything.
             ListBackgroundsPath = new List<string>();
             ListForegroundsPath = new List<string>();
-            FileStream FS = new FileStream("Content/Maps/Deathmatch Maps/" + BattleMapPath + ".pem", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Maps/Deathmatch/" + BattleMapPath + ".pem", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -793,7 +792,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActivateAutomaticSkills(CurrentSquad, CurrentSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName);
             UpdateMapEvent(EventTypeUnitMoved, 0);
         }
-        
+
+        public override byte[] GetSnapshotData()
+        {
+            return new byte[0];
+        }
+
+        public override void Update(double ElapsedSeconds)
+        {
+            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
+            for (int L = 0; L < ListLayer.Count; L++)
+            {
+                ListLayer[L].Update(UpdateTime);
+            }
+        }
+
+        public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection activePlayer)
+        {
+
+        }
+
         public override string ToString()
         {
             return "Deathmatch Mode";

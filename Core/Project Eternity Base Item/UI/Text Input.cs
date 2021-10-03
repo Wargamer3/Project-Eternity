@@ -7,7 +7,7 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.Core.Item
 {
-    public class TextInput
+    public class TextInput : IUIElement
     {
         public delegate void OnConfirmDelegate(string InputMessage);
 
@@ -68,10 +68,7 @@ namespace ProjectEternity.Core.Item
             {
                 if (MouseHelper.InputLeftButtonPressed())
                 {
-                    IsActive = true;
-                    IsCursorVisible = true;
-                    BlinkingTimer = 0d;
-                    MessageSelectionCursorIndex = MessageCursorIndex;
+                    Select();
 
                     int MouseCursorPosition = GetMouseCursorPosition();
                     MessageCursorIndex = MouseCursorPosition;
@@ -101,8 +98,7 @@ namespace ProjectEternity.Core.Item
             }
             else if (MouseHelper.InputLeftButtonPressed())
             {
-                IsActive = false;
-                MessageSelectionCursorIndex = MessageCursorIndex;
+                Unselect();
             }
 
             if (IsActive)
@@ -390,6 +386,28 @@ namespace ProjectEternity.Core.Item
             TextVisible = Text;
             MessageCursorIndex = 0;
             UpdateMessengerCursor();
+        }
+
+        public void Select()
+        {
+            IsActive = true;
+            IsCursorVisible = true;
+            BlinkingTimer = 0d;
+            MessageSelectionCursorIndex = MessageCursorIndex;
+        }
+
+        public void Unselect()
+        {
+            IsActive = false;
+            MessageSelectionCursorIndex = MessageCursorIndex;
+        }
+
+        public void Enable()
+        {
+        }
+
+        public void Disable()
+        {
         }
 
         public void Draw(CustomSpriteBatch g)

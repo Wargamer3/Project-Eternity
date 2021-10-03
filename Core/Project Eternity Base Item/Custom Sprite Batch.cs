@@ -102,6 +102,18 @@ namespace ProjectEternity.Core
             DrawString(spriteFont, Text, Position, TextColor, 0, new Vector2(TextWidth, 0), 1, SpriteEffects.None, 0);
         }
 
+        public void DrawStringVerticallyAligned(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor)
+        {
+            int TextHeight = (int)spriteFont.MeasureString(Text).Y / 2;
+            DrawString(spriteFont, Text, Position, TextColor, 0, new Vector2(0, TextHeight), 1, SpriteEffects.None, 0);
+        }
+
+        public void DrawStringCentered(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor)
+        {
+            Vector2 TextSize = spriteFont.MeasureString(Text);
+            DrawString(spriteFont, Text, Position, TextColor, 0, new Vector2((int)TextSize.X / 2, (int)TextSize.Y / 2), 1, SpriteEffects.None, 0);
+        }
+
         public void DrawStringRightAligned(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor)
         {
             int TextWidth = (int)spriteFont.MeasureString(Text).X;

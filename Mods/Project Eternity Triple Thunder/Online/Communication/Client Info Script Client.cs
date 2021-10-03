@@ -7,14 +7,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
     {
         public const string ScriptName = "Client Info";
 
-        private readonly PlayerInfo Owner;
+        private readonly PlayerInfoScreen Owner;
         private readonly CommunicationClient OnlineCommunicationClient;
 
         private byte PlayerRanking;
         private byte PlayerLicense;
         private string PlayerGuild;
 
-        public ClientInfoScriptClient(CommunicationClient OnlineCommunicationClient, PlayerInfo Owner)
+        public ClientInfoScriptClient(CommunicationClient OnlineCommunicationClient, PlayerInfoScreen Owner)
             : base(ScriptName)
         {
             this.OnlineCommunicationClient = OnlineCommunicationClient;

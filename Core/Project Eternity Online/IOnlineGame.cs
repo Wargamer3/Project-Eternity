@@ -8,6 +8,6 @@ namespace ProjectEternity.Core.Online
 
         void Update(double ElapsedSeconds);
 
-        void RemoveOnlinePlayer(string PlayerID, IOnlineConnection activePlayer);
+        void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer);
     }
 }

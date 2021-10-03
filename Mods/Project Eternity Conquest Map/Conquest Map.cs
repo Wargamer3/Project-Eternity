@@ -11,6 +11,7 @@ using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.AI;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {/*en gros, le but du jeu ce joue principalement sur la capture de batiment, les ville serve a créé de l'argent, les port a créé des bateau, les caserne a créé des unité de terre etc...
@@ -1351,6 +1352,25 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             while (SameIDFound);
 
             return NewUnitID;
+        }
+
+        public override byte[] GetSnapshotData()
+        {
+            return new byte[0];
+        }
+
+        public override void Update(double ElapsedSeconds)
+        {
+            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
+            for (int L = 0; L < ListLayer.Count; L++)
+            {
+                ListLayer[L].Update(UpdateTime);
+            }
+        }
+
+        public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer)
+        {
+
         }
     }
 }

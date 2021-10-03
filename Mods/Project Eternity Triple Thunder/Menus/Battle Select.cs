@@ -132,6 +132,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             BlueTeamButton = new InteractiveButton(Content, "Triple Thunder/Menus/Wait Room/Blue Team Button", new Vector2(300, 65), OnButtonOver, BlueTeamSelected);
             BlueTeamButton.CanBeChecked = true;
             RedTeamButton.Select();
+            RedTeamSelected();
             KillPlusButton = new InteractiveButton(Content, "Triple Thunder/Menus/Wait Room/Plus Button", new Vector2(638, 300), OnButtonOver, KillPlus);
             KillMinusButton = new InteractiveButton(Content, "Triple Thunder/Menus/Wait Room/Minus Button", new Vector2(752, 300), OnButtonOver, KillMinus);
             TimePlusButton = new InteractiveButton(Content, "Triple Thunder/Menus/Wait Room/Plus Button", new Vector2(638, 324), OnButtonOver, TimePlus);
@@ -551,7 +552,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 LocalPlayer.Team = 0;
             }
 
-            BlueTeamButton.Uncheck();
+            BlueTeamButton.Unselect();
         }
 
         private void BlueTeamSelected()
@@ -565,7 +566,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 LocalPlayer.Team = 0;
             }
-            RedTeamButton.Uncheck();
+            RedTeamButton.Unselect();
         }
 
         #endregion

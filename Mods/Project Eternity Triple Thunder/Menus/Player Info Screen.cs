@@ -10,7 +10,7 @@ using ProjectEternity.GameScreens.TripleThunderScreen.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class PlayerInfo : GameScreen
+    public class PlayerInfoScreen : GameScreen
     {
         #region Ressources
 
@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private readonly CommunicationClient OnlineCommunicationClient;
         public readonly Player ActivePlayer;
 
-        public PlayerInfo(TripleThunderOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, Player ActivePlayer)
+        public PlayerInfoScreen(TripleThunderOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, Player ActivePlayer)
         {
             this.OnlineGameClient = OnlineClient;
             this.OnlineCommunicationClient = OnlineCommunicationClient;

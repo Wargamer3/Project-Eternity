@@ -3,7 +3,7 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.Core.Item
 {
-    public class InteractiveButton
+    public class InteractiveButton : IUIElement
     {
         public delegate void OnOver();
         private readonly OnOver OnOverDelegate;
@@ -71,57 +71,50 @@ namespace ProjectEternity.Core.Item
             {
                 if (ButtonCollsionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                 {
-                    if (!IsHover && ((CanBeChecked && !IsChecked) || (!CanBeChecked)))
-                    {
-                        Button.SetFrame(2);
-                        if (OnOverDelegate != null)
-                        {
-                            OnOverDelegate();
-                        }
-                    }
+                    Hover();
 
-                    if (Icon != null)
-                    {
-                        Icon.FramesPerSecond = 8;
-                    }
-                    if (MouseHelper.InputLeftButtonPressed() && OnClickDelegate != null)
+                    if (MouseHelper.InputLeftButtonPressed())
                     {
                         Select();
+                        if (OnClickDelegate != null)
+                        {
+                            OnClickDelegate();
+                        }
                     }
                 }
                 else
                 {
-                    Unselect();
+                    if (!CanBeChecked || !IsChecked)
+                    {
+                        Unselect();
+                    }
                 }
+            }
+        }
+
+        public void Hover()
+        {
+            if (!IsHover && ((CanBeChecked && !IsChecked) || (!CanBeChecked)))
+            {
+                Button.SetFrame(2);
+                if (OnOverDelegate != null)
+                {
+                    OnOverDelegate();
+                }
+            }
+
+            if (Icon != null)
+            {
+                Icon.FramesPerSecond = 8;
             }
         }
 
         public void Select()
         {
             Button.SetFrame(3);
-            OnClickDelegate();
-        }
-
-        public void Check()
-        {
-            Button.SetFrame(3);
         }
 
         public void Unselect()
-        {
-            if (!CanBeChecked || !IsChecked)
-            {
-                Button.SetFrame(0);
-
-                if (Icon != null)
-                {
-                    Icon.RestartAnimation();
-                    Icon.FramesPerSecond = 0;
-                }
-            }
-        }
-
-        public void Uncheck()
         {
             Button.SetFrame(0);
 

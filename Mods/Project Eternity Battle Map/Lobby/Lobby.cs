@@ -9,9 +9,9 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.GameScreens.TripleThunderScreen.Online;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
-namespace ProjectEternity.GameScreens.TripleThunderScreen
+namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class Lobby : GameScreen
     {
@@ -30,28 +30,21 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private TextInput ChatInput;
 
-        private InteractiveButton CreateARoomButton;
-        private InteractiveButton QuickStartButton;
+        private BoxButton CreateARoomButton;
+        private BoxButton QuickStartButton;
         private InteractiveButton WaitingRoomOnlyButton;
 
-        private InteractiveButton ShowSUVRoomsFilter;
-        private InteractiveButton ShowDMRoomsFilter;
-        private InteractiveButton ShowCTFRoomsFilter;
+        private BoxButton InfoButton;
+        private BoxButton RankingButton;
+        private BoxButton OptionsButton;
+        private BoxButton HelpButton;
 
-        private InteractiveButton ShowAllRoomsFilter;
+        private BoxButton ShowAllPlayersFilter;
+        private BoxButton ShowFriendsFilter;
+        private BoxButton ShowGuildsFilter;
 
-        private InteractiveButton InfoButton;
-        private InteractiveButton RankingButton;
-        private InteractiveButton OptionsButton;
-        private InteractiveButton HelpButton;
-
-        private InteractiveButton ShowAllPlayersFilter;
-        private InteractiveButton ShowFriendsFilter;
-        private InteractiveButton ShowGuildsFilter;
-        private InteractiveButton SearchPlayerButton;
-
-        private InteractiveButton ShopButton;
-        private InteractiveButton MetalButton;
+        private BoxButton ShopButton;
+        private BoxButton MetalButton;
 
         private AnimatedSprite sprUserSelection;
         private AnimatedSprite sprTabChat;
@@ -60,21 +53,19 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private AnimatedSprite sprRoomState;
         private AnimatedSprite sprRoomType;
 
-        private InteractiveButton[] ArrayMenuButton;
+        private BoxButton[] ArrayMenuButton;
 
         #endregion
 
-        private readonly TripleThunderOnlineClient OnlineGameClient;
+        private readonly BattleMapOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
         private Player[] ArrayLobbyPlayer;
         private Player[] ArrayLobbyFriends;
         PlayerListTypes PlayerListType;
-        private string RoomType;
 
         public Lobby(bool UseOnline)
         {
-            RoomType = RoomInformations.RoomTypeMission;
             DicAllRoom = new Dictionary<string, RoomInformations>();
 
             ArrayLobbyPlayer = new Player[0];
@@ -85,26 +76,24 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 Dictionary<string, OnlineScript> DicOnlineGameClientScripts = new Dictionary<string, OnlineScript>();
                 Dictionary<string, OnlineScript> DicOnlineCommunicationClientScripts = new Dictionary<string, OnlineScript>();
 
-                OnlineGameClient = new TripleThunderOnlineClient(DicOnlineGameClientScripts);
+                OnlineGameClient = new BattleMapOnlineClient(DicOnlineGameClientScripts);
                 OnlineCommunicationClient = new CommunicationClient(DicOnlineCommunicationClientScripts);
 
                 DicOnlineGameClientScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
                 DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
-                DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
-                DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
-                DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
-                DicOnlineGameClientScripts.Add(CreatePlayerScriptClient.ScriptName, new CreatePlayerScriptClient(OnlineGameClient));
-                DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
-                DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
+                //DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
+                //DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
+                //DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
+                //DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
+                //DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
 
-                DicOnlineCommunicationClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
                 DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(ReceiveGroupInviteScriptClient.ScriptName, new ReceiveGroupInviteScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(ReceiveRemoteGroupInviteScriptClient.ScriptName, new ReceiveRemoteGroupInviteScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(MessageListGroupScriptClient.ScriptName, new MessageListGroupScriptClient(OnlineCommunicationClient));
-                DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
-                DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
+                //DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
+                //DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
             }
             else
             {
@@ -137,35 +126,21 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sprLicenseAll = Content.Load<Texture2D>("Triple Thunder/Menus/Channel/License All");
             sprTitleBattle = Content.Load<Texture2D>("Triple Thunder/Menus/Channel/Title Battle");
 
-            CreateARoomButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Create A Room Button", new Vector2(190, 99),
-                                                                    "Triple Thunder/Menus/Channel/Create A Room Icon", new Vector2(-25, -9), 20, OnButtonOver, CreateARoom);
-            QuickStartButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Quick Start Button", new Vector2(87, 98),
-                                                                    "Triple Thunder/Menus/Channel/Quick Start Icon", new Vector2(-25, 2), 7, OnButtonOver, null);
+            QuickStartButton = new BoxButton(new Rectangle(47, 70, 100, 45), fntArial12, "Quick Start", OnButtonOver, null);
+            CreateARoomButton = new BoxButton(new  Rectangle(150, 70, 100, 45), fntArial12, "Create\n\ra Room", OnButtonOver, CreateARoom);
             WaitingRoomOnlyButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Waiting Room Only", new Vector2(447, 85), OnButtonOver, null);
 
-            ShowSUVRoomsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Show SUV Rooms", new Vector2(327, 125), OnButtonOver, null);
-            ShowDMRoomsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Show DM Rooms", new Vector2(390, 125), OnButtonOver, null);
-            ShowCTFRoomsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Show CTR Rooms", new Vector2(453, 125), OnButtonOver, null);
-            ShowAllRoomsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Show All Rooms", new Vector2(511, 125), OnButtonOver, null);
+            InfoButton = new BoxButton(new Rectangle(572, 40, 100, 35), fntArial12, "Info", OnButtonOver, null);
+            RankingButton = new BoxButton(new Rectangle(682, 40, 100, 35), fntArial12, "Ranking", OnButtonOver, null);
+            OptionsButton = new BoxButton(new Rectangle(572, 74, 100, 35), fntArial12, "Options", OnButtonOver, null);
+            HelpButton = new BoxButton(new Rectangle(682, 74, 100, 35), fntArial12, "Help", OnButtonOver, null);
 
-            InfoButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Info Button", new Vector2(622, 63),
-                                                            "Triple Thunder/Menus/Channel/Info Icon", new Vector2(-32, -6), 11, OnButtonOver, null);
-            RankingButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Ranking Button", new Vector2(732, 63),
-                                                                "Triple Thunder/Menus/Channel/Ranking Icon", new Vector2(-32, -2), 10, OnButtonOver, null);
-            OptionsButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Option Button", new Vector2(622, 97),
-                                                                "Triple Thunder/Menus/Channel/Option Icon", new Vector2(-32, 0), 6, OnButtonOver, null);
-            HelpButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Help Button", new Vector2(732, 97),
-                                                            "Triple Thunder/Menus/Channel/Help Icon", new Vector2(-32, 0), 8, OnButtonOver, null);
-
-            ShowAllPlayersFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/All Players Filter", new Vector2(612, 148), OnButtonOver, ShowAllPlayers);
-            ShowFriendsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Friends Filter", new Vector2(665, 148), OnButtonOver, ShowFriends);
-            ShowGuildsFilter = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Guild Filter", new Vector2(723, 148), OnButtonOver, ShowGuild);
-            SearchPlayerButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Search Button", new Vector2(750, 472), OnButtonOver, null);
+            ShowAllPlayersFilter = new BoxButton(new Rectangle(572, 148, 60, 25), fntArial12, "All", OnButtonOver, ShowAllPlayers);
+            ShowFriendsFilter = new BoxButton(new Rectangle(572 + 62, 148, 60, 25), fntArial12, "Friends", OnButtonOver, ShowFriends);
+            ShowGuildsFilter = new BoxButton(new Rectangle(572 + 62 + 62, 148, 60, 25), fntArial12, "Guild", OnButtonOver, ShowGuild);
             
-            MetalButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Medal Button", new Vector2(623, 514),
-                                                            "Triple Thunder/Menus/Channel/Medal Icon", new Vector2(-29, 0), 6, OnButtonOver, null);
-            ShopButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Shop Button", new Vector2(733, 514),
-                                                            "Triple Thunder/Menus/Channel/Shop Icon", new Vector2(-25, 0), 7, OnButtonOver, OpenShop);
+            MetalButton = new BoxButton(new Rectangle(572, 514, 100, 45), fntArial12, "Inventory", OnButtonOver, null);
+            ShopButton = new BoxButton(new Rectangle(682, 514, 100, 45), fntArial12, "Shop", OnButtonOver, OpenShop);
 
             ShowAllPlayersFilter.CanBeChecked = true;
             ShowFriendsFilter.CanBeChecked = true;
@@ -180,12 +155,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sprRoomState = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Room State_strip2", new Vector2(0, 0), 0);
             sprRoomType = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Room Type", new Vector2(0, 0), 0, 3, 1);
 
-            ArrayMenuButton = new InteractiveButton[]
+            ArrayMenuButton = new BoxButton[]
             {
-                CreateARoomButton, QuickStartButton, WaitingRoomOnlyButton,
-                ShowSUVRoomsFilter, ShowDMRoomsFilter, ShowCTFRoomsFilter, ShowAllRoomsFilter,
+                CreateARoomButton, QuickStartButton,
                 InfoButton, RankingButton, OptionsButton, HelpButton,
-                ShowAllPlayersFilter, ShowFriendsFilter, ShowGuildsFilter, SearchPlayerButton,
+                ShowAllPlayersFilter, ShowFriendsFilter, ShowGuildsFilter,
                 ShopButton, MetalButton,
             };
         }
@@ -302,26 +276,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 sndBGM.PlayAsBGM();
             }
 
-            Rectangle LicenseBox = new Rectangle(572, 16, 24, 24);
-            if (LicenseBox.Intersects(new Rectangle(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y, 1, 1)))
-            {
-                if (MouseHelper.InputLeftButtonPressed())
-                {
-                    if (RoomType == RoomInformations.RoomTypeMission)
-                    {
-                        RoomType = RoomInformations.RoomTypeBattle;
-                    }
-                    else
-                    {
-                        RoomType = RoomInformations.RoomTypeMission;
-                    }
-                }
-            }
-
             UpdateRooms();
             UpdatePlayers();
 
-            foreach (InteractiveButton ActiveButton in ArrayMenuButton)
+            foreach (BoxButton ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Update(gameTime);
             }
@@ -366,7 +324,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     {
                         if (MouseHelper.InputLeftButtonPressed())
                         {
-                            PushScreen(new PlayerInfoScreen(OnlineGameClient, OnlineCommunicationClient, ActivePlayer));
+
                         }
                         else if (MouseHelper.InputRightButtonPressed())
                         {
@@ -399,7 +357,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     {
                         if (MouseHelper.InputLeftButtonPressed())
                         {
-                            PushScreen(new PlayerInfoScreen(OnlineGameClient, OnlineCommunicationClient, ActivePlayer));
                         }
                         else if (MouseHelper.InputRightButtonPressed())
                         {
@@ -449,21 +406,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void CreateARoom()
         {
+            PushScreen(new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, ""));
             sndButtonClick.Play();
-            if (RoomType == RoomInformations.RoomTypeMission)
-            {
-                PushScreen(new CreateRoomMission(OnlineGameClient, OnlineCommunicationClient, RoomType));
-            }
-            else
-            {
-                PushScreen(new CreateRoomBattle(OnlineGameClient, OnlineCommunicationClient, RoomType));
-            }
         }
 
         private void OpenShop()
         {
             sndButtonClick.Play();
-            PushScreen(new Shop(PlayerManager.ListLocalPlayer[0]));
         }
 
         private void ShowAllPlayers()
@@ -510,16 +459,43 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            g.End();
+            g.Begin();
             g.Draw(sprBackground, Vector2.Zero, Color.White);
-            if (RoomType == RoomInformations.RoomTypeMission)
-            {
-                g.Draw(sprLicenseAll, new Rectangle(572, 16, 24, 24), new Rectangle(1 * 24, 0, 24, 24), Color.White);
-            }
-            else
-            {
-                g.Draw(sprTitleBattle, new Vector2(160, 16), Color.White);
-                g.Draw(sprLicenseAll, new Rectangle(572, 16, 24, 24), new Rectangle(2 * 24, 0, 24, 24), Color.White);
-            }
+
+            int LeftSideWidth = (int)(Constants.Width * 0.7);
+            int TopSectionHeight = (int)(Constants.Height * 0.1);
+            int MiddleSectionY = TopSectionHeight;
+            int MiddleSectionHeight = (int)(Constants.Height * 0.6);
+            int RoomSectionY = (int)(MiddleSectionY + MiddleSectionHeight * 0.2);
+            int RoomSectionHeight = MiddleSectionHeight - (RoomSectionY - MiddleSectionY);
+            int BottomSectionY = MiddleSectionY + MiddleSectionHeight;
+
+            //Left side
+            DrawBox(g, new Vector2(0, 0), LeftSideWidth, TopSectionHeight, Color.White);
+            g.DrawString(fntArial12, "Player 1", new Vector2(10, 15), Color.White);
+            g.DrawString(fntArial12, "Player 2", new Vector2(110, 15), Color.White);
+            g.DrawString(fntArial12, "Player 3", new Vector2(210, 15), Color.White);
+            g.DrawString(fntArial12, "Player 4", new Vector2(310, 15), Color.White);
+            DrawBox(g, new Vector2(0, MiddleSectionY), LeftSideWidth, MiddleSectionHeight - RoomSectionHeight, Color.White);
+            DrawBox(g, new Vector2(0, RoomSectionY), LeftSideWidth, RoomSectionHeight, Color.White);
+            g.DrawString(fntArial12, "Room List", new Vector2(5, RoomSectionY + 5), Color.White);
+            DrawBox(g, new Vector2(0, BottomSectionY), LeftSideWidth, Constants.Height - BottomSectionY, Color.White);
+            g.DrawString(fntArial12, "Chat", new Vector2(5, BottomSectionY + 5), Color.White);
+
+            int RightSideWidth = Constants.Width - LeftSideWidth;
+            int PlayerInfoHeight = (int)(Constants.Height * 0.2);
+            int PlayerListY = PlayerInfoHeight;
+            int PlayerListHeight = (int)(Constants.Height * 0.6);
+            int InventoryShopListY = PlayerListY + PlayerListHeight;
+            int InventoryShopListHeight = Constants.Height - InventoryShopListY;
+
+            //Right side
+            DrawBox(g, new Vector2(LeftSideWidth, 0), RightSideWidth, PlayerListY, Color.White);
+            DrawBox(g, new Vector2(LeftSideWidth, PlayerListY), RightSideWidth, PlayerListHeight, Color.White);
+            DrawBox(g, new Vector2(LeftSideWidth, InventoryShopListY), RightSideWidth, InventoryShopListHeight, Color.White);
+            g.DrawString(fntArial12, "Inventory*Shop", new Vector2(LeftSideWidth + 5, InventoryShopListY + 5), Color.White);
+
 
             g.DrawString(fntArial12, "Lv." + PlayerManager.OnlinePlayerLevel, new Vector2(610, 17), Color.White);
             g.DrawString(fntArial12, PlayerManager.OnlinePlayerName, new Vector2(670, 15), Color.White);
@@ -534,7 +510,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
             DrawPlayers(g);
 
-            foreach (InteractiveButton ActiveButton in ArrayMenuButton)
+            foreach (BoxButton ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Draw(g);
             }

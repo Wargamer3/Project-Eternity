@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Battle Map Cutscene Script Holder.cs" />
     <Compile Include="Editor\Extra Layer Attributes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,10 +92,22 @@
     <Compile Include="Intermission Screen\Data Screen.cs" />
     <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
     <Compile Include="Editor\ITileAttributes.cs" />
+    <Compile Include="Lobby\Game Preparation Screen.cs" />
+    <Compile Include="Lobby\Box Drop Down Button.cs" />
+    <Compile Include="Lobby\Create Room Screen.cs" />
+    <Compile Include="Lobby\PVP Room Informations.cs" />
     <Compile Include="Map Layer.cs" />
     <Compile Include="Menus\Attacks Menu.cs" />
+    <Compile Include="Lobby\Chat Helper.cs" />
+    <Compile Include="Lobby\Box Button.cs" />
+    <Compile Include="Lobby\Lobby.cs" />
+    <Compile Include="Lobby\Player Manager.cs" />
+    <Compile Include="Lobby\Player.cs" />
+    <Compile Include="Lobby\Room Informations.cs" />
     <Compile Include="Movement Algorithm Tile.cs" />
+    <Compile Include="Movement Animations.cs" />
     <Compile Include="Online\Online Scripts.cs" />
+    <Compile Include="Online\Battle Map Online Client.cs" />
     <Compile Include="Team Lists\Roster Unit.cs" />
     <Compile Include="Team Lists\Roster Character.cs" />
     <Compile Include="Team Lists\Roster.cs" />

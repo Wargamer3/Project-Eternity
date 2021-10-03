@@ -9,6 +9,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
 {
@@ -482,6 +483,25 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }
 
             return ObstacleFound;
+        }
+
+        public override byte[] GetSnapshotData()
+        {
+            return new byte[0];
+        }
+
+        public override void Update(double ElapsedSeconds)
+        {
+            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
+            for (int L = 0; L < ListLayer.Count; L++)
+            {
+                ListLayer[L].Update(UpdateTime);
+            }
+        }
+
+        public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer)
+        {
+
         }
 
         public override void BeginDraw(CustomSpriteBatch g)

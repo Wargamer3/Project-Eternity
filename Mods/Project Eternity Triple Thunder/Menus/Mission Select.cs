@@ -419,8 +419,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void OnEasySelected()
         {
-            QuestNormalButton.Uncheck();
-            QuestHardButton.Uncheck();
+            QuestNormalButton.Unselect();
+            QuestHardButton.Unselect();
 
             ChangeDifficulty("Easy");
 
@@ -432,8 +432,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void OnNormalSelected()
         {
-            QuestEasyButton.Uncheck();
-            QuestHardButton.Uncheck();
+            QuestEasyButton.Unselect();
+            QuestHardButton.Unselect();
 
             ChangeDifficulty("Normal");
 
@@ -445,8 +445,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private void OnHardSelected()
         {
-            QuestEasyButton.Uncheck();
-            QuestNormalButton.Uncheck();
+            QuestEasyButton.Unselect();
+            QuestNormalButton.Unselect();
 
             ChangeDifficulty("Hard");
 

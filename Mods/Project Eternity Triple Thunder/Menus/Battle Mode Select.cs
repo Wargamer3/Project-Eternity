@@ -56,15 +56,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (Room.RoomSubtype == "Deathmatch")
             {
-                DeathmatchButton.Check();
+                DeathmatchButton.Select();
             }
             else if (Room.RoomSubtype == "Capture The Flag")
             {
-                CaptureTheFlagButton.Check();
+                CaptureTheFlagButton.Select();
             }
             else if (Room.RoomSubtype == "Survival")
             {
-                SurvivalButton.Check();
+                SurvivalButton.Select();
             }
         }
 
@@ -92,8 +92,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 Owner.UpdateRoomSubtype("Deathmatch");
             }
 
-            CaptureTheFlagButton.Uncheck();
-            SurvivalButton.Uncheck();
+            CaptureTheFlagButton.Unselect();
+            SurvivalButton.Unselect();
         }
 
         private void OnCaptureTheFlagSelected()
@@ -107,8 +107,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 Owner.UpdateRoomSubtype("Capture The Flag");
             }
 
-            DeathmatchButton.Uncheck();
-            SurvivalButton.Uncheck();
+            DeathmatchButton.Unselect();
+            SurvivalButton.Unselect();
         }
 
         private void OnSurvivalSelected()
@@ -122,8 +122,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 Owner.UpdateRoomSubtype("Survival");
             }
 
-            DeathmatchButton.Uncheck();
-            CaptureTheFlagButton.Uncheck();
+            DeathmatchButton.Unselect();
+            CaptureTheFlagButton.Unselect();
         }
 
         private void Close()
