@@ -22,7 +22,7 @@ namespace Database
             LastTimeChecked = DateTime.MinValue;
         }
 
-        public void Init(string ConnectionChain, string UserInformationChain)
+        public void Init(string ConnectionChain, string UserInformationChain, string UserInformationCollectionName)
         {
             //If there's a dependency problem look at the config file and remove the extra stuff that got added automically (ie: Project Eternity Triple Thunder Server.exe.config)
             DatabaseCommunicationClient = new MongoClient(ConnectionChain);
@@ -33,7 +33,7 @@ namespace Database
 
             GlobalCollection = DatabaseCommunication.GetCollection<BsonDocument>("Global");
             PersonalCollection = DatabaseCommunication.GetCollection<BsonDocument>("Personal");
-            PlayersCollection = DatabaseUserInformation.GetCollection<BsonDocument>("TripleThunder");
+            PlayersCollection = DatabaseUserInformation.GetCollection<BsonDocument>(UserInformationCollectionName);
         }
 
         public void UpdatePlayerCommunicationIP(string ClientID, string CommunicationServerIP, int CommunicationServerPort)

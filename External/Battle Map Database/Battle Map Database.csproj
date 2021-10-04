@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E9D61AF1-DB9E-4751-8C0A-A799CDBE2D14}</ProjectGuid>
+    <ProjectGuid>{F21BD401-EDD0-4B99-A62D-19A909F4B728}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Database.TripleThunder</RootNamespace>
-    <AssemblyName>Triple Thunder Database</AssemblyName>
+    <RootNamespace>Database.BattleMap</RootNamespace>
+    <AssemblyName>Battle Map Database</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
@@ -124,9 +124,9 @@
       <Name>Project Eternity Online</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mods\Project Eternity Triple Thunder\Project Eternity Triple Thunder.csproj">
-      <Project>{d2aff601-4df2-466b-91eb-3aa010668360}</Project>
-      <Name>Project Eternity Triple Thunder</Name>
+    <ProjectReference Include="..\..\Mods\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
+      <Name>Project Eternity Battle Map</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

@@ -18,7 +18,8 @@ namespace ProjectEternity.Communication.Server
             string UserInformationChain = ConnectionInfo.ReadField("User Information Info", "Connection Chain");
 
             CommunicationMongoDBManager Databse = new CommunicationMongoDBManager();
-            Databse.Init(ConnectionChain, UserInformationChain);
+            Databse.Init(ConnectionChain, UserInformationChain, "BattleMap");
+            //Databse.Init(ConnectionChain, UserInformationChain, "TripleThunder");
             CommunicationServer OnlineServer = new CommunicationServer(Databse, DicOnlineScripts);
 
             DicOnlineScripts.Add(SendGlobalMessageScriptServer.ScriptName, new SendGlobalMessageScriptServer(OnlineServer));

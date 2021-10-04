@@ -96,6 +96,7 @@
     <Compile Include="Lobby\Box Drop Down Button.cs" />
     <Compile Include="Lobby\Create Room Screen.cs" />
     <Compile Include="Lobby\PVP Room Informations.cs" />
+    <Compile Include="Lobby\Server Room Informations.cs" />
     <Compile Include="Map Layer.cs" />
     <Compile Include="Menus\Attacks Menu.cs" />
     <Compile Include="Lobby\Chat Helper.cs" />
