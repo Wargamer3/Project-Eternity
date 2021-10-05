@@ -90,6 +90,7 @@
     <Compile Include="Commands\Game Commands\Ask Join Room Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Login Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Login Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Room List Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Character Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Room Subtype Script Server .cs" />
     <Compile Include="Commands\Game Commands\Change Map Script Server.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Commands\Game Commands\Login Success Script Server.cs" />
     <Compile Include="Commands\Game Commands\Player Left Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Room List Script Client.cs" />
-    <Compile Include="Commands\Game Commands\Ask Room List Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Start Game Script Client.cs" />
     <Compile Include="Commands\Game Commands\Create Room Script Client.cs" />
     <Compile Include="Commands\Game Commands\Create Room Script Server.cs" />

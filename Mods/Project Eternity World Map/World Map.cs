@@ -63,12 +63,12 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         {
         }
 
-        public WorldMap(string BattleMapPath, int GameMode, List<Squad> ListSpawnSquad)
+        public WorldMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
             : base()
         {
             this.BattleMapPath = BattleMapPath;
             this.GameMode = GameMode;
-            this.ListSpawnSquad = ListSpawnSquad;
+            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
             RequireDrawFocus = false;
 
             CursorPosition = new Vector3(9, 13, 0);

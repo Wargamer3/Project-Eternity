@@ -10,6 +10,9 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -46,13 +49,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BoxButton ShopButton;
         private BoxButton MetalButton;
 
-        private AnimatedSprite sprUserSelection;
-        private AnimatedSprite sprTabChat;
-
-        private AnimatedSprite sprRoom;
-        private AnimatedSprite sprRoomState;
-        private AnimatedSprite sprRoomType;
-
         private BoxButton[] ArrayMenuButton;
 
         #endregion
@@ -60,16 +56,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly BattleMapOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
-        private Player[] ArrayLobbyPlayer;
-        private Player[] ArrayLobbyFriends;
+        private OnlinePlayer[] ArrayLobbyPlayer;
+        private OnlinePlayer[] ArrayLobbyFriends;
         PlayerListTypes PlayerListType;
 
         public Lobby(bool UseOnline)
         {
             DicAllRoom = new Dictionary<string, RoomInformations>();
 
-            ArrayLobbyPlayer = new Player[0];
-            ArrayLobbyFriends = new Player[0];
+            ArrayLobbyPlayer = new OnlinePlayer[0];
+            ArrayLobbyFriends = new OnlinePlayer[0];
 
             if (UseOnline)
             {
@@ -81,24 +77,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 DicOnlineGameClientScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
                 DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
-                //DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
-                //DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
-                //DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
-                //DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
-                //DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
+                DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
+                DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
+                DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
+                DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
+                DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
 
                 DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(ReceiveGroupInviteScriptClient.ScriptName, new ReceiveGroupInviteScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(ReceiveRemoteGroupInviteScriptClient.ScriptName, new ReceiveRemoteGroupInviteScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(MessageListGroupScriptClient.ScriptName, new MessageListGroupScriptClient(OnlineCommunicationClient));
-                //DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
-                //DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
-            }
-            else
-            {
-                PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
-                PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
+                DicOnlineCommunicationClientScripts.Add(PlayerListScriptClient.ScriptName, new PlayerListScriptClient(OnlineCommunicationClient, this));
+                DicOnlineCommunicationClientScripts.Add(FriendListScriptClient.ScriptName, new FriendListScriptClient(OnlineCommunicationClient, this));
             }
         }
 
@@ -106,10 +97,30 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Trace.Listeners.Add(new TextWriterTraceListener("ClientError.log", "myListener"));
 
+            PlayerManager.DicUnitType = Unit.LoadAllUnits();
+            PlayerManager.DicRequirement = BaseSkillRequirement.LoadAllRequirements();
+            PlayerManager.DicEffect = BaseEffect.LoadAllEffects();
+            PlayerManager.DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            PlayerManager.DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
+
             if (OnlineGameClient != null)
             {
                 InitOnlineGameClient();
                 InitOnlineCommunicationClient();
+            }
+            else
+            {
+                OnlinePlayer NewPlayer = new OnlinePlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayer.PlayerTypes.Online, false, 0);
+                Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                Character NewCharacter = new Character("Original/Greg", Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                NewCharacter.Level = 1;
+                NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
+
+                Squad NewSquad = new Squad("Squad", NewUnit);
+
+                NewPlayer.ListSquadToSpawn.Add(NewSquad);
+                PlayerManager.ListLocalPlayer.Add(NewPlayer);
+                PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
             }
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
@@ -135,9 +146,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OptionsButton = new BoxButton(new Rectangle(572, 74, 100, 35), fntArial12, "Options", OnButtonOver, null);
             HelpButton = new BoxButton(new Rectangle(682, 74, 100, 35), fntArial12, "Help", OnButtonOver, null);
 
-            ShowAllPlayersFilter = new BoxButton(new Rectangle(572, 148, 60, 25), fntArial12, "All", OnButtonOver, ShowAllPlayers);
-            ShowFriendsFilter = new BoxButton(new Rectangle(572 + 62, 148, 60, 25), fntArial12, "Friends", OnButtonOver, ShowFriends);
-            ShowGuildsFilter = new BoxButton(new Rectangle(572 + 62 + 62, 148, 60, 25), fntArial12, "Guild", OnButtonOver, ShowGuild);
+            ShowAllPlayersFilter = new BoxButton(new Rectangle(572, 130, 60, 25), fntArial12, "All", OnButtonOver, ShowAllPlayers);
+            ShowFriendsFilter = new BoxButton(new Rectangle(572 + 62, 130, 60, 25), fntArial12, "Friends", OnButtonOver, ShowFriends);
+            ShowGuildsFilter = new BoxButton(new Rectangle(572 + 62 + 62, 130, 60, 25), fntArial12, "Guild", OnButtonOver, ShowGuild);
             
             MetalButton = new BoxButton(new Rectangle(572, 514, 100, 45), fntArial12, "Inventory", OnButtonOver, null);
             ShopButton = new BoxButton(new Rectangle(682, 514, 100, 45), fntArial12, "Shop", OnButtonOver, OpenShop);
@@ -146,14 +157,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ShowFriendsFilter.CanBeChecked = true;
             ShowGuildsFilter.CanBeChecked = true;
             ShowAllPlayersFilter.Select();
-
-            sprUserSelection = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/User Selection", new Vector2(0, 0), 0, 1, 4);
-            sprTabChat = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Tab Chat", new Vector2(0, 0), 0, 1, 4);
-
-            sprRoom = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Room", new Vector2(0, 0), 0, 1, 4);
-            sprRoom.SetFrame(2);
-            sprRoomState = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Room State_strip2", new Vector2(0, 0), 0);
-            sprRoomType = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Room Type", new Vector2(0, 0), 0, 3, 1);
 
             ArrayMenuButton = new BoxButton[]
             {
@@ -200,7 +203,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (ListServerIP.Count == 0)
                     {
                         TryConnecting = false;
-                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
+                        PlayerManager.ListLocalPlayer.Add(new OnlinePlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayer.PlayerTypes.Offline, false, 0));
                         PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
                     }
                 }
@@ -234,12 +237,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 catch (Exception)
                 {
-                    if (ListServerIP.Count == 0)
-                    {
-                        TryConnecting = false;
-                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
-                        PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
-                    }
                 }
             }
             while (TryConnecting);
@@ -287,14 +284,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void UpdateRooms()
         {
+            int BoxWidth = (int)(Constants.Width * 0.3);
+            int BoxHeight = (int)(Constants.Height * 0.1);
+
             int i = 0;
             foreach (KeyValuePair<string, RoomInformations> ActiveRoom in DicAllRoom)
             {
-                int X = 148 + (i % 2) * 248;
-                int Y = 169 + (i / 2) * 60;
+                float X = 18 + (i % 2) * BoxWidth;
+                float Y = 139 + (i / 2) * BoxHeight;
 
-                if (MouseHelper.MouseStateCurrent.X >= X - sprRoom.Origin.X && MouseHelper.MouseStateCurrent.X <= X + sprRoom.Origin.X
-                    && MouseHelper.MouseStateCurrent.Y >= Y - sprRoom.Origin.Y && MouseHelper.MouseStateCurrent.Y <= Y + sprRoom.Origin.Y)
+                if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + BoxWidth
+                    && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + BoxHeight)
                 {
                     if (MouseHelper.InputLeftButtonPressed() && !ActiveRoom.Value.IsDead)
                     {
@@ -315,7 +315,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 for (int P = 0; P < ArrayLobbyPlayer.Length; P++)
                 {
-                    Player ActivePlayer = ArrayLobbyPlayer[P];
+                    OnlinePlayer ActivePlayer = ArrayLobbyPlayer[P];
                     float X = 635;
                     float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
@@ -348,7 +348,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 for (int P = 0; P < ArrayLobbyFriends.Length; P++)
                 {
-                    Player ActivePlayer = ArrayLobbyFriends[P];
+                    OnlinePlayer ActivePlayer = ArrayLobbyFriends[P];
                     float X = 635;
                     float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
@@ -447,12 +447,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));
         }
 
-        public void PopulatePlayers(Player[] ArrayLobbyPlayer)
+        public void PopulatePlayers(OnlinePlayer[] ArrayLobbyPlayer)
         {
             this.ArrayLobbyPlayer = ArrayLobbyPlayer;
         }
 
-        public void PopulateFriends(Player[] ArrayLobbyFriends)
+        public void PopulateFriends(OnlinePlayer[] ArrayLobbyFriends)
         {
             this.ArrayLobbyFriends = ArrayLobbyFriends;
         }
@@ -479,9 +479,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntArial12, "Player 4", new Vector2(310, 15), Color.White);
             DrawBox(g, new Vector2(0, MiddleSectionY), LeftSideWidth, MiddleSectionHeight - RoomSectionHeight, Color.White);
             DrawBox(g, new Vector2(0, RoomSectionY), LeftSideWidth, RoomSectionHeight, Color.White);
-            g.DrawString(fntArial12, "Room List", new Vector2(5, RoomSectionY + 5), Color.White);
             DrawBox(g, new Vector2(0, BottomSectionY), LeftSideWidth, Constants.Height - BottomSectionY, Color.White);
-            g.DrawString(fntArial12, "Chat", new Vector2(5, BottomSectionY + 5), Color.White);
 
             int RightSideWidth = Constants.Width - LeftSideWidth;
             int PlayerInfoHeight = (int)(Constants.Height * 0.2);
@@ -506,7 +504,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawRooms(g);
             if (OnlineCommunicationClient != null)
             {
-                ChatHelper.DrawChat(g, sprTabChat, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
+                ChatHelper.DrawChat(g, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
             }
             DrawPlayers(g);
 
@@ -521,49 +519,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int i = 0;
             foreach (RoomInformations ActiveRoom in DicAllRoom.Values)
             {
-                float X = 148 + (i % 2) * 248;
-                float Y = 169 + (i / 2) * 60;
+                int BoxWidth = (int)(Constants.Width * 0.3);
+                int BoxHeight = (int)(Constants.Height * 0.1);
+                float X = 18 + (i % 2) * BoxWidth;
+                float Y = 139 + (i / 2) * BoxHeight;
 
-                if (MouseHelper.MouseStateCurrent.X >= X - sprRoom.Origin.X && MouseHelper.MouseStateCurrent.X <= X + sprRoom.Origin.X
-                    && MouseHelper.MouseStateCurrent.Y >= Y - sprRoom.Origin.Y && MouseHelper.MouseStateCurrent.Y <= Y + sprRoom.Origin.Y)
-                {
-                    sprRoom.SetFrame(2);
-                }
-                else
-                {
-                    sprRoom.SetFrame(0);
-                }
+                DrawBox(g, new Vector2(X, Y), (int)(Constants.Width * 0.3), (int)(Constants.Height * 0.1), Color.White);
 
-                sprRoom.Draw(g, new Vector2(X, Y), Color.White);
-                g.DrawString(fntArial12, ActiveRoom.RoomName, new Vector2(X - 70, Y - 18), Color.White);
-                g.DrawString(fntArial12, ActiveRoom.CurrentPlayerCount.ToString(), new Vector2(X - 5, Y), Color.White);
-                g.DrawString(fntArial12, ActiveRoom.MaxNumberOfPlayer.ToString(), new Vector2(X + 20, Y), Color.White);
+                if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + BoxWidth
+                    && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + BoxHeight)
+                {
+                    g.Draw(sprPixel, new Rectangle((int)X + 4, (int)Y + 4, BoxWidth - 8, BoxHeight - 8), Color.FromNonPremultiplied(255, 255, 255, 127));
+                }
+                g.DrawString(fntArial12, "001", new Vector2(X +10, Y - 18 + 30), Color.White);
 
-                if (ActiveRoom.IsPlaying)
-                {
-                    sprRoomState.SetFrame(0);
-                }
-                else
-                {
-                    sprRoomState.SetFrame(1);
-                }
-                sprRoomState.Draw(g, new Vector2(X + 65, Y + 8), Color.White);
+                g.DrawString(fntArial12, ActiveRoom.RoomName, new Vector2(X + 50, Y + 12), Color.White);
+                g.DrawString(fntArial12, ActiveRoom.CurrentPlayerCount.ToString(), new Vector2(X + 115, Y + 30), Color.White);
+                g.DrawString(fntArial12, "/", new Vector2(X + 130, Y + 30), Color.White);
+                g.DrawString(fntArial12, ActiveRoom.MaxNumberOfPlayer.ToString(), new Vector2(X + 140, Y + 30), Color.White);
 
-                if (ActiveRoom.RoomSubtype == "Deathmatch")
-                {
-                    sprRoomType.SetFrame(0);
-                    sprRoomType.Draw(g, new Vector2(X - 38, Y + 14), Color.White);
-                }
-                else if (ActiveRoom.RoomSubtype == "Capture The Flag")
-                {
-                    sprRoomType.SetFrame(1);
-                    sprRoomType.Draw(g, new Vector2(X - 38, Y + 14), Color.White);
-                }
-                else if (ActiveRoom.RoomSubtype == "Survival")
-                {
-                    sprRoomType.SetFrame(2);
-                    sprRoomType.Draw(g, new Vector2(X - 38, Y + 14), Color.White);
-                }
+                g.DrawString(fntArial12, "Waiting", new Vector2(X + 160, Y + 30), Color.FromNonPremultiplied(0, 255, 0, 255));
+
+                g.DrawString(fntArial12, "Campaign", new Vector2(X + 20, Y + 30), Color.Yellow);
                 ++i;
             }
         }
@@ -580,14 +557,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 177
                         && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
                     {
-                        sprUserSelection.SetFrame(2);
-                    }
-                    else
-                    {
-                        sprUserSelection.SetFrame(0);
                     }
 
-                    sprUserSelection.Draw(g, new Vector2(X + 88, Y + 9), Color.White);
+                    DrawBox(g, new Vector2(X, Y), 175, 20, Color.White);
 
                     g.DrawString(fntArial12, "Lv." + ArrayLobbyPlayer[P].Level, new Vector2(X + 5, Y), Color.White);
                     g.DrawString(fntArial12, ArrayLobbyPlayer[P].Name, new Vector2(X + 55, Y), Color.White);
@@ -603,14 +575,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X <= X + 177
                         && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y <= Y + fntArial12.LineSpacing)
                     {
-                        sprUserSelection.SetFrame(2);
                     }
-                    else
-                    {
-                        sprUserSelection.SetFrame(0);
-                    }
-
-                    sprUserSelection.Draw(g, new Vector2(X + 88, Y + 9), Color.White);
 
                     g.DrawString(fntArial12, "Lv." + ArrayLobbyFriends[P].Level, new Vector2(X + 5, Y), Color.White);
                     g.DrawString(fntArial12, ArrayLobbyFriends[P].Name, new Vector2(X + 55, Y), Color.White);

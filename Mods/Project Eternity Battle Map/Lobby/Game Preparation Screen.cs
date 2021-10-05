@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (Room.ListRoomPlayer.Count == 0)
             {
-                PlayerManager.ListLocalPlayer[0].PlayerType = Player.PlayerTypeHost;
+                PlayerManager.ListLocalPlayer[0].PlayerType = OnlinePlayer.PlayerTypeHost;
                 Room.AddLocalPlayer(PlayerManager.ListLocalPlayer[0]);
             }
         }
@@ -106,7 +106,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sprHostText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Host Text");
             sprReadyText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Ready Text");
 
-            int LeftSideWidth = (int)(Constants.Width * 0.6);
+            int LeftSideWidth = (int)(Constants.Width * 0.7);
             int RoomNameHeight = (int)(Constants.Height * 0.05);
             int PlayerZoneY = RoomNameHeight;
             int PlayerZoneHeight = (int)(Constants.Height * 0.65);
@@ -210,25 +210,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F1))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, false, 0);
+                OnlinePlayer NewPlayer = new OnlinePlayer("", "", OnlinePlayer.PlayerTypes.Player, false, 0);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller1;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F2))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, false, 0);
+                OnlinePlayer NewPlayer = new OnlinePlayer("", "", OnlinePlayer.PlayerTypes.Player, false, 0);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller2;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F3))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, false, 0);
+                OnlinePlayer NewPlayer = new OnlinePlayer("", "", OnlinePlayer.PlayerTypes.Player, false, 0);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller3;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F4))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, false, 0);
+                OnlinePlayer NewPlayer = new OnlinePlayer("", "", OnlinePlayer.PlayerTypes.Player, false, 0);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller4;
             }
@@ -237,7 +237,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void AssignButtons()
         {
             IsHost = false;
-            foreach (Player ActivePlayer in Room.GetLocalPlayers())
+            foreach (OnlinePlayer ActivePlayer in Room.GetLocalPlayers())
             {
                 if (ActivePlayer.IsHost())
                 {
@@ -263,7 +263,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void AddPlayer(Player NewPlayer)
+        public void AddPlayer(OnlinePlayer NewPlayer)
         {
             Room.ListRoomPlayer.Add(NewPlayer);
             
@@ -279,7 +279,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver.Play();
         }
 
-        public void UpdateCharacter(Player PlayerToUpdate)
+        public void UpdateCharacter(OnlinePlayer PlayerToUpdate)
         {
             if (Room.GetLocalPlayer() == PlayerToUpdate)
             {
@@ -294,9 +294,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 bool IsEveryoneReady = true;
 
-                foreach (Player ActivePlayer in Room.ListRoomPlayer)
+                foreach (OnlinePlayer ActivePlayer in Room.ListRoomPlayer)
                 {
-                    if (ActivePlayer.PlayerType != Player.PlayerTypeHost && ActivePlayer.PlayerType != Player.PlayerTypeReady)
+                    if (ActivePlayer.PlayerType != OnlinePlayer.PlayerTypeHost && ActivePlayer.PlayerType != OnlinePlayer.PlayerTypeReady)
                     {
                         IsEveryoneReady = false;
                     }
@@ -356,18 +356,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
+                Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
+                for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
+                {
+                    DicSpawnSquadByPlayer.Add(Room.ListRoomPlayer[P].Name, Room.ListRoomPlayer[P].ListSquadToSpawn);
+                }
+
                 BattleMap NewMap;
 
                 if (Room.MapPath == "Random")
                 {
-                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(ActiveMapInfo.MapPath, 1, new List<Squad>());
-                    PushScreen(NewMap);
+                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(ActiveMapInfo.MapPath, 1, DicSpawnSquadByPlayer);
                 }
                 else
                 {
-                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(ActiveMapInfo.MapPath, 1, new List<Squad>());
-                    PushScreen(NewMap);
+                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(ActiveMapInfo.MapPath, 1, DicSpawnSquadByPlayer);
                 }
+                NewMap.Load();
+                NewMap.Init();
+                NewMap.TogglePreview(true);
+                ListGameScreen.Insert(0, NewMap);
             }
         }
 
@@ -379,23 +387,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ReadyButton.Disable();
 
-                if (Room.GetLocalPlayer().PlayerType == Player.PlayerTypePlayer)
+                if (Room.GetLocalPlayer().PlayerType == OnlinePlayer.PlayerTypePlayer)
                 {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(Player.PlayerTypeReady));
+                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(OnlinePlayer.PlayerTypeReady));
                 }
                 else
                 {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(Player.PlayerTypePlayer));
+                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(OnlinePlayer.PlayerTypePlayer));
                 }
             }
         }
 
         #endregion
 
-
         public override void Draw(CustomSpriteBatch g)
         {
-            int LeftSideWidth = (int)(Constants.Width * 0.6);
+            int LeftSideWidth = (int)(Constants.Width * 0.7);
             int RoomNameHeight = (int)(Constants.Height * 0.05);
             int PlayerZoneY = RoomNameHeight;
             int PlayerZoneHeight = (int)(Constants.Height * 0.65);
@@ -406,7 +413,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Room Name:", new Vector2(5, 7), Color.White);
             g.DrawString(fntText, Room.RoomName, new Vector2(95, 7), Color.White);
             DrawBox(g, new Vector2(0, PlayerZoneY), LeftSideWidth, PlayerZoneHeight, Color.White);
-            g.DrawString(fntText, "Player List", new Vector2(5, PlayerZoneY + 7), Color.White);
             DrawBox(g, new Vector2(0, ChatZoneY), LeftSideWidth, ChatZoneHeight, Color.White);
             g.DrawString(fntText, "Chat", new Vector2(10, ChatZoneY + 10), Color.White);
 
@@ -445,7 +451,49 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (OnlineCommunicationClient != null)
             {
-                ChatHelper.DrawChat(g, sprTabChat, fntText, OnlineCommunicationClient.Chat, ChatInput);
+                ChatHelper.DrawChat(g, fntText, OnlineCommunicationClient.Chat, ChatInput);
+            }
+
+            for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
+            {
+                int DrawX = 15 ;
+                int DrawY = 45 + P * 64;
+
+                DrawPlayerBox(g, DrawX, DrawY, Room.ListRoomPlayer[P], Room.ListRoomPlayer[P].Team == 1 || !Room.UseTeams);
+            }
+        }
+
+        private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, OnlinePlayer PlayerToDraw, bool IsBlue)
+        {
+            Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX,
+                                                            DrawY,
+                                                            220,
+                                                            66);
+
+            if (PlayerInfoCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+            {
+                g.Draw(sprPixel, new Rectangle(DrawX - 5, DrawY - 5, 230, 76), Color.FromNonPremultiplied(255, 255, 255, 127));
+            }
+
+            DrawBox(g, new Vector2(DrawX, DrawY), 50, 25, Color.White);
+            DrawBox(g, new Vector2(DrawX + 50, DrawY), 50, 25, Color.White);
+            DrawBox(g, new Vector2(DrawX + 100, DrawY), 220, 25, Color.White);
+
+            g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 57, DrawY + 5), Color.White);
+            g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 110, DrawY + 5), Color.White);
+
+            foreach (Squad ActiveSquad in PlayerToDraw.ListSquadToSpawn)
+            {
+                g.Draw(ActiveSquad[0].SpriteMap, new Rectangle(DrawX + 337, DrawY - 3, 32, 32), Color.White);
+            }
+
+            if (PlayerToDraw.PlayerType == OnlinePlayer.PlayerTypeHost)
+            {
+                g.DrawString(fntText, "Host", new Vector2(DrawX + 6, DrawY + 5), Color.White);
+            }
+            else if (PlayerToDraw.PlayerType == OnlinePlayer.PlayerTypeReady)
+            {
+                g.DrawString(fntText, "Ready", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }
         }
     }

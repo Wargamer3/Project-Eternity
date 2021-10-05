@@ -39,7 +39,10 @@ namespace ProjectEternity.Core.Online
         {
             ChangeHost(HostAddress, HostPort);
 
-            Task.Run(() => { UpdateLoop(); });
+            if (Host != null)
+            {
+                Task.Run(() => { UpdateLoop(); });
+            }
         }
 
         public void ConnectToKnownIP()

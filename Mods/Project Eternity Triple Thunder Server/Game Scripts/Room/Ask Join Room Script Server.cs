@@ -6,7 +6,7 @@ using ProjectEternity.GameScreens.TripleThunderScreen.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderServer
 {
-    public class AskJoinRoomScriptServer : Core.Online.AskJoinRoomScriptServer
+    public class AskJoinRoomScriptServer : Core.Online.BaseAskJoinRoomScriptServer
     {
         public AskJoinRoomScriptServer(GameServer Owner)
             : base(Owner)

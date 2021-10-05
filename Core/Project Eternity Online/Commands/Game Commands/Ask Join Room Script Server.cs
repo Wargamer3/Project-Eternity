@@ -2,19 +2,19 @@
 
 namespace ProjectEternity.Core.Online
 {
-    public abstract class AskJoinRoomScriptServer : OnlineScript
+    public abstract class BaseAskJoinRoomScriptServer : OnlineScript
     {
         public const string ScriptName = "Ask Join Room";
 
         protected readonly GameServer Owner;
         private string RoomID;
 
-        public AskJoinRoomScriptServer(GameServer Owner)
+        public BaseAskJoinRoomScriptServer(GameServer Owner)
             : this(Owner, null)
         {
         }
 
-        public AskJoinRoomScriptServer(GameServer Owner, string RoomID)
+        public BaseAskJoinRoomScriptServer(GameServer Owner, string RoomID)
             : base(ScriptName)
         {
             this.Owner = Owner;

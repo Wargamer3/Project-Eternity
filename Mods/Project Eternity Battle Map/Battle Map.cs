@@ -138,7 +138,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Vector3 CameraPosition;
 
         public List<EventPoint> ListSingleplayerSpawns;
-        protected List<Squad> ListSpawnSquad;
+        protected Dictionary<string, List<Squad>> DicSpawnSquadByPlayer;
         public List<EventPoint> ListMultiplayerSpawns;
         public Color[] ArrayMultiplayerColor;
         public List<MapSwitchPoint> ListMapSwitchPoint;
@@ -470,7 +470,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (DicBattmeMapType.Count > 0 && !string.IsNullOrEmpty(NewMapSwitchPoint.SwitchMapPath)
                     && ListSubMap.Find(x => x.BattleMapPath == NewMapSwitchPoint.SwitchMapPath) == null)
                 {
-                    BattleMap NewMap = DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(NewMapSwitchPoint.SwitchMapPath, 0, new List<Squad>());
+                    BattleMap NewMap = DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(NewMapSwitchPoint.SwitchMapPath, 0, new Dictionary<string, List<Squad>>());
                     NewMap.ListGameScreen = ListGameScreen;
                     NewMap.ListSubMap = ListSubMap;
                     NewMap.Load();

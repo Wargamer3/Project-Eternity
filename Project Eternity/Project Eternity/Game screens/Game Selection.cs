@@ -63,7 +63,7 @@ namespace ProjectEternity
                     case MenuChoices.Normal:
                         int OldNumberOfGameScreen = ListGameScreen.Count;
                         StreamReader BR = new StreamReader("Content/Map path.ini");
-                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), 0, new List<Core.Units.Squad>());
+                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), 0, new Dictionary<string, List<Core.Units.Squad>>());
                         BR.Close();
                         NewMap.ListGameScreen = ListGameScreen;
                         NewMap.PlayerRoster = new Roster();
@@ -95,7 +95,7 @@ namespace ProjectEternity
 
                     case MenuChoices.SuperTreeWar:
                         int OldNumberOfGameScreenSTW = ListGameScreen.Count;
-                        DeathmatchMap NewMapSTW = new DeathmatchMap("Super Tree Wars/Holy Temple", 0, new List<Core.Units.Squad>());
+                        DeathmatchMap NewMapSTW = new DeathmatchMap("Super Tree Wars/Holy Temple", 0, new Dictionary<string, List<Core.Units.Squad>>());
                         NewMapSTW.ListGameScreen = ListGameScreen;
                         NewMapSTW.PlayerRoster = new Roster();
                         NewMapSTW.PlayerRoster.LoadRoster();
@@ -156,7 +156,7 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.WorldMap:
-                        PushScreen(new WorldMap("Test Map", 0, new List<Core.Units.Squad>()));
+                        PushScreen(new WorldMap("Test Map", 0, new Dictionary<string, List<Core.Units.Squad>>()));
                         break;
 
                     case MenuChoices.Conquest:

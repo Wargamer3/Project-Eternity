@@ -1,14 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public enum GameplayTypes { None, MouseAndKeyboard, Controller1, Controller2, Controller3, Controller4 }
 
-    public class Player
+    public class OnlinePlayer
     {
         public const string PlayerTypeOffline = "Offline";
         public const string PlayerTypeOnline = "Online";
@@ -33,7 +35,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public IOnlineConnection OnlineClient;//Used by the server
 
-        public Player(string ID, string Name, string PlayerType, bool IsOnline, int Team)
+        public List<Squad> ListSquadToSpawn;
+
+        public OnlinePlayer(string ID, string Name, string PlayerType, bool IsOnline, int Team)
         {
             this.ConnectionID = ID;
             this.Name = Name;
@@ -42,11 +46,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Team = Team;
 
             Guild = string.Empty;
+            ListSquadToSpawn = new List<Squad>();
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
         }
 
-        public Player(string ID, string Name, PlayerTypes PlayerType, bool IsOnline, int Team)
+        public OnlinePlayer(string ID, string Name, PlayerTypes PlayerType, bool IsOnline, int Team)
         {
             this.ConnectionID = ID;
             this.Name = Name;
@@ -54,6 +59,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Team = Team;
 
             Guild = string.Empty;
+            ListSquadToSpawn = new List<Squad>();
 
             if (PlayerType == PlayerTypes.Offline)
             {

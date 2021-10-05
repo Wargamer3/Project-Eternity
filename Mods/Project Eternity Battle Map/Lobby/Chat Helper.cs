@@ -41,32 +41,34 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public static void DrawChat(CustomSpriteBatch g, AnimatedSprite sprTabChat, SpriteFont fntArial12, ChatManager Chat, TextInput ChatInput)
+        public static void DrawChat(CustomSpriteBatch g, SpriteFont fntArial12, ChatManager Chat, TextInput ChatInput)
         {
             ChatInput.Draw(g);
 
             int T = 0;
 
+            GameScreen.DrawBox(g, new Vector2(5, 448), 550, 148, Color.White);
+            GameScreen.DrawBox(g, new Vector2(5, 568), 550, 28, Color.White);
+
             foreach (KeyValuePair<string, ChatManager.ChatTab> ActiveTab in Chat.DicTab)
             {
-                int X = 23 + T * 103;
-                int Y = 405;
+                int X = 5 + T * 103;
+                int Y = 425;
 
                 if (ActiveTab.Value.Name == Chat.ActiveTabName)
                 {
-                    sprTabChat.SetFrame(3);
+                    GameScreen.DrawBox(g, new Vector2(X, Y), 102, 24, Color.White);
                 }
                 else if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X < X + 103
                     && MouseHelper.MouseStateCurrent.Y >= Y && MouseHelper.MouseStateCurrent.Y < Y + 24)
                 {
-                    sprTabChat.SetFrame(3);
+                    GameScreen.DrawBox(g, new Vector2(X, Y), 102, 24, Color.White);
                 }
                 else
                 {
-                    sprTabChat.SetFrame(0);
+                    GameScreen.DrawBox(g, new Vector2(X, Y + 2), 102, 22, Color.White);
                 }
 
-                sprTabChat.Draw(g, new Vector2(X + 51, Y + 12), Color.White);
                 if (ActiveTab.Value.HasUnreadMessages)
                 {
                     g.DrawString(fntArial12, ActiveTab.Value.Name + " *", new Vector2(X + 32, Y + 3), Color.White);

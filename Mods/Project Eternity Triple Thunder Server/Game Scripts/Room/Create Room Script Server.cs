@@ -6,7 +6,7 @@ using ProjectEternity.GameScreens.TripleThunderScreen.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderServer
 {
-    public class CreateRoomTripleThunderScriptServer : CreateRoomScriptServer
+    public class CreateRoomTripleThunderScriptServer : BaseCreateRoomScriptServer
     {
         private readonly GameServer Owner;
         private readonly GameClientGroup ClientGroupTemplate;

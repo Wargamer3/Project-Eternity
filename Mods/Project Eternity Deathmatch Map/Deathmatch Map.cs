@@ -144,18 +144,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         public DeathmatchMap(string BattleMapPath)
-            : this(BattleMapPath, 0, new List<Squad>())
+            : this(BattleMapPath, 0, new Dictionary<string, List<Squad>>())
         {
             base.Init();
             ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
         }
 
-        public DeathmatchMap(string BattleMapPath, int GameMode, List<Squad> ListSpawnSquad)
+        public DeathmatchMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
             : this()
         {
             this.BattleMapPath = BattleMapPath;
             this.GameMode = GameMode;
-            this.ListSpawnSquad = ListSpawnSquad;
+            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
 
             CursorPosition = new Vector3(9, 13, 0);
             CursorPositionVisible = CursorPosition;

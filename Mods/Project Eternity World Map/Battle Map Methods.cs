@@ -23,9 +23,9 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, List<Squad> ListSpawnSquad)
+        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
         {
-            return new WorldMap(BattleMapPath, GameMode, ListSpawnSquad);
+            return new WorldMap(BattleMapPath, GameMode, DicSpawnSquadByPlayer);
         }
 
         public override GameScreen GetMultiplayerScreen()

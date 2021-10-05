@@ -84,14 +84,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
             Host.AddOrReplaceScripts(DicNewGameServerScript);
 
-            Dictionary<string, OnlineScript> DicNewCommunicationServerScript = new Dictionary<string, OnlineScript>();
-            DicNewCommunicationServerScript.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
-            OnlineCommunicationClient.Host.AddOrReplaceScripts(DicNewCommunicationServerScript);
+            if (OnlineCommunicationClient.Host != null)
+            {
+                Dictionary<string, OnlineScript> DicNewCommunicationServerScript = new Dictionary<string, OnlineScript>();
+                DicNewCommunicationServerScript.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
+                OnlineCommunicationClient.Host.AddOrReplaceScripts(DicNewCommunicationServerScript);
 
-            OnlineCommunicationClient.Chat.InsertTab(RoomID, "Chat");
-            OnlineCommunicationClient.Chat.CloseTab("Global");
-            OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(RoomID, false));
-            OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient("Global"));
+                OnlineCommunicationClient.Chat.InsertTab(RoomID, "Chat");
+                OnlineCommunicationClient.Chat.CloseTab("Global");
+                OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(RoomID, false));
+                OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient("Global"));
+            }
 
             ScreenOwner.RemoveScreen(ScreenOwner);
 

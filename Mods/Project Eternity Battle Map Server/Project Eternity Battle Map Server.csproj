@@ -43,6 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Online Helper.cs" />
+    <Compile Include="Online\Create Game Script Server.cs" />
+    <Compile Include="Online\Room\Ask Change Character Script Server.cs" />
+    <Compile Include="Online\Room\Ask Change Player Type Script Server.cs" />
+    <Compile Include="Online\Room\Ask Change Room Extras Battle Script Server.cs" />
+    <Compile Include="Online\Room\Ask Change Room Extras Mission Script Server.cs" />
+    <Compile Include="Online\Room\Ask Change Team Script Server.cs" />
+    <Compile Include="Online\Room\Ask Join Room Script Server.cs" />
+    <Compile Include="Online\Room\Ask Start Game Battle Script Server.cs" />
+    <Compile Include="Online\Room\Change Room Extras Battle Script Server.cs" />
+    <Compile Include="Online\Room\Change Room Extras Mission Script Server .cs" />
+    <Compile Include="Online\Room\Create Room Script Server.cs" />
+    <Compile Include="Online\Room\Join Room Local Script Server.cs" />
+    <Compile Include="Online\Room\Leave Room Script Server.cs" />
+    <Compile Include="Online\Room\Player Joined Script Server.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -63,6 +78,11 @@
     <ProjectReference Include="..\..\External\Battle Map Database\Battle Map Database.csproj">
       <Project>{f21bd401-edd0-4b99-a62d-19a909f4b728}</Project>
       <Name>Battle Map Database</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
+      <Name>Project Eternity Battle Map</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

@@ -399,7 +399,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, List<Squad> ListSpawnSquad)
+        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
         {
             return new SorcererStreetMap(BattleMapPath, GameMode);
         }

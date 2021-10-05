@@ -15,7 +15,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract BattleMap LoadTemporaryMap(BinaryReader BR);
 
-        public abstract BattleMap GetNewMap(string BattleMapPath, int GameMode, List<Squad> ListSpawnSquad);
+        public abstract BattleMap GetNewMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer);
 
         public abstract string GetMapType();
 

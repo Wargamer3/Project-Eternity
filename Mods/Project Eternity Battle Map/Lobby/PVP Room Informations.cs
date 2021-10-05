@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -13,6 +14,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             MaxKill = 20;
             MaxGameLengthInMinutes = 10;
+        }
+        public PVPRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID, byte[] RoomData)
+            : base(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapName, ListLocalPlayerID)
+        {
         }
 
         public PVPRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort, int MaxNumberOfPlayer)

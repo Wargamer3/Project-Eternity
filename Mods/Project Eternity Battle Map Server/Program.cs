@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using Database.BattleMap;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
-namespace ProjectEternity.GameScreens.TripleThunderServer
+namespace ProjectEternity.GameScreens.BattleMap.Server
 {
     class Program
     {
@@ -23,7 +24,10 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 
             DicOnlineScripts.Add(AskGameDataScriptServer.ScriptName, new AskGameDataScriptServer());
             DicOnlineScripts.Add(AskLoginScriptServer.ScriptName, new AskLoginScriptServer(OnlineServer));
+            DicOnlineScripts.Add(BaseAskJoinRoomScriptServer.ScriptName, new AskJoinRoomScriptServer(OnlineServer));
             DicOnlineScripts.Add(AskRoomListScriptServer.ScriptName, new AskRoomListScriptServer(OnlineServer));
+            DicOnlineScripts.Add(BaseCreateRoomScriptServer.ScriptName, new CreateRoomScriptServer(OnlineServer, BattleMapClientGroup.Template));
+            DicOnlineScripts.Add(TransferRoomScriptServer.ScriptName, new TransferRoomScriptServer(OnlineServer, BattleMapClientGroup.Template));
 
             string PublicIP = ConnectionInfo.ReadField("Game Server Info", "Public IP");
             int PublicPort = int.Parse(ConnectionInfo.ReadField("Game Server Info", "Public Port"));

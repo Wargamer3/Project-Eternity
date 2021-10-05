@@ -122,12 +122,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
         }
 
-        public ConquestMap(string BattleMapPath, int GameMode, List<Squad> ListSpawnSquad)
+        public ConquestMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
             : base()
         {
             this.BattleMapPath = BattleMapPath;
             this.GameMode = GameMode;
-            this.ListSpawnSquad = ListSpawnSquad;
+            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
             RequireDrawFocus = false;
             Pathfinder = new MovementAlgorithmConquest(this);
             ListPlayer = new List<Player>();
@@ -1304,9 +1304,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, List<Squad> ListSpawnSquad)
+        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
         {
-            return new ConquestMap(BattleMapPath, GameMode, ListSpawnSquad);
+            return new ConquestMap(BattleMapPath, GameMode, DicSpawnSquadByPlayer);
         }
 
         public override string GetMapType()

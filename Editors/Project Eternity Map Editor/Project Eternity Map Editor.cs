@@ -120,7 +120,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathDeathmatchMaps }, "Maps/Deathmatch Maps/", new string[] { ".pem" }, typeof(ProjectEternityMapEditor)),
+                new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathDeathmatchMaps }, "Maps/Deathmatch/", new string[] { ".pem" }, typeof(ProjectEternityMapEditor)),
                 new EditorInfo(new string[] { GUIRootPathMapBGM }, "Maps/BGM/", new string[] { ".mp3" }, typeof(ProjectEternityMusicPlayerEditor), false)
             };
 
@@ -136,10 +136,10 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void LoadMap(string Path)
         {
-            string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(29);
+            string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(24);
 
             BattleMapViewer.Preload();
-            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, 0, new List<Core.Units.Squad>());
+            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, 0, new Dictionary<string, List<Core.Units.Squad>>());
             Helper = new DeathmatchMapHelper(NewMap);
             InitMap(NewMap);
 

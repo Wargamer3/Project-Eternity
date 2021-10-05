@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online
 {
-    public class CreateRoomScriptServer : OnlineScript
+    public abstract class BaseCreateRoomScriptServer : OnlineScript
     {
         public const string ScriptName = "Create Room";
 
@@ -16,16 +16,11 @@ namespace ProjectEternity.Core.Online
         private int MaxNumberOfPlayer;
         public GameClientGroup CreatedGroup;
 
-        public CreateRoomScriptServer(GameServer Owner, GameClientGroup ClientGroupTemplate)
+        public BaseCreateRoomScriptServer(GameServer Owner, GameClientGroup ClientGroupTemplate)
             : base(ScriptName)
         {
             this.Owner = Owner;
             this.ClientGroupTemplate = ClientGroupTemplate;
-        }
-
-        public override OnlineScript Copy()
-        {
-            return new CreateRoomScriptServer(Owner, ClientGroupTemplate);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)

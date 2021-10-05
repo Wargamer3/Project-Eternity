@@ -24,9 +24,9 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
 
             DicOnlineScripts.Add(AskGameDataScriptServer.ScriptName, new AskGameDataScriptServer());
             DicOnlineScripts.Add(AskLoginScriptServer.ScriptName, new AskLoginScriptServer(OnlineServer));
-            DicOnlineScripts.Add(Core.Online.AskJoinRoomScriptServer.ScriptName, new AskJoinRoomScriptServer(OnlineServer));
+            DicOnlineScripts.Add(BaseAskJoinRoomScriptServer.ScriptName, new AskJoinRoomScriptServer(OnlineServer));
             DicOnlineScripts.Add(AskRoomListScriptServer.ScriptName, new AskRoomListScriptServer(OnlineServer));
-            DicOnlineScripts.Add(CreateRoomTripleThunderScriptServer.ScriptName, new CreateRoomTripleThunderScriptServer(OnlineServer, TripleThunderClientGroup.Template));
+            DicOnlineScripts.Add(BaseCreateRoomScriptServer.ScriptName, new CreateRoomTripleThunderScriptServer(OnlineServer, TripleThunderClientGroup.Template));
             DicOnlineScripts.Add(SendGameDataScriptServer.ScriptName, new SendGameDataScriptServer(OnlineServer));
             DicOnlineScripts.Add(TransferRoomScriptServer.ScriptName, new TransferRoomScriptServer(OnlineServer, TripleThunderClientGroup.Template));
 
