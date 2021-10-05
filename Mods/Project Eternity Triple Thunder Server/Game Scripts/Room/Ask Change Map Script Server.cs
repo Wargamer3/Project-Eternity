@@ -1,18 +1,20 @@
 ﻿using System;
+using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.TripleThunderScreen;
 
-namespace ProjectEternity.Core.Online
+namespace ProjectEternity.GameScreens.TripleThunderServer
 {
     public class AskChangeMapScriptServer : OnlineScript
     {
         public const string ScriptName = "Ask Change Map";
 
-        private readonly IRoomInformations Owner;
+        private readonly RoomInformations Owner;
         private readonly GameServer OnlineServer;
 
         private string CurrentDifficulty;
         private string MissionPath;
 
-        public AskChangeMapScriptServer(IRoomInformations Owner, GameServer OnlineServer)
+        public AskChangeMapScriptServer(RoomInformations Owner, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;
@@ -29,7 +31,7 @@ namespace ProjectEternity.Core.Online
             throw new NotImplementedException();
         }
 
-        protected internal override void Execute(IOnlineConnection Sender)
+        protected override void Execute(IOnlineConnection Sender)
         {
             Owner.MapPath = MissionPath;
             for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
@@ -40,7 +42,7 @@ namespace ProjectEternity.Core.Online
             }
         }
 
-        protected internal override void Read(OnlineReader Sender)
+        protected override void Read(OnlineReader Sender)
         {
             CurrentDifficulty = Sender.ReadString();
             MissionPath = Sender.ReadString();

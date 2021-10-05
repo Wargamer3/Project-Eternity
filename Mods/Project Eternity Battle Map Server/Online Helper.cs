@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen.Online
+namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public static class OnlineHelper
     {
-        public static Dictionary<string, OnlineScript> GetRoomScriptsServer(RoomInformations NewRoom, GameServer Owner)
+        public static Dictionary<string, OnlineScript> GetRoomScriptsServer(PVPRoomInformations NewRoom, GameServer Owner)
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 
@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             return DicNewScript;
         }
 
-        public static Dictionary<string, OnlineScript> GetTripleThunderScriptsServer(GameClientGroup ActiveGroup, OnlinePlayer ActivePlayer)
+        public static Dictionary<string, OnlineScript> GetBattleMapScriptsServer(GameClientGroup ActiveGroup, OnlinePlayer ActivePlayer)
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 

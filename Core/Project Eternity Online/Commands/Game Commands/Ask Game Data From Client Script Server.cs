@@ -1,14 +1,11 @@
 ﻿using System;
-using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.Core.Online
 {
-    public class AskGameDataScriptServer : OnlineScript
+    public class AskGameDataFromClientScriptServer : OnlineScript
     {
-        public const string ScriptName = "Ask Game Data";
-
-        public AskGameDataScriptServer()
-            : base(ScriptName)
+        public AskGameDataFromClientScriptServer()
+            : base("Ask Game Data From Client")
         {
         }
 
@@ -21,7 +18,7 @@ namespace ProjectEternity.Core.Online
         {
         }
 
-        protected internal override void Execute(IOnlineConnection ActivePlayer)
+        protected internal override void Execute(IOnlineConnection Host)
         {
             throw new NotImplementedException();
         }

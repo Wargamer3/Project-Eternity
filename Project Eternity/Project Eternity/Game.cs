@@ -279,9 +279,8 @@ namespace ProjectEternity
             for (int F = 0; F < Files.Length; F++)
             {
                 Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
-                Type[] types = null;
                 //Get every classes in it.
-                types = ass.GetTypes();
+                Type[] types = ass.GetTypes();
                 for (int t = 0; t < types.Count(); t++)
                 {
                     //Look if the class inherit from Unit somewhere.

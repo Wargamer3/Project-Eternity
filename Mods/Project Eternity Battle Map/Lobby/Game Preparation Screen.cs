@@ -130,24 +130,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             sprTabChat = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Tab Chat", new Vector2(0, 0), 0, 1, 4);
 
+            #endregion
+
             UpdateReadyOrHost();
 
             LoadMaps();
 
-            #endregion
-
-            Room.MapPath = "Random";
             sprMapImage = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Map Icons/Random");
 
             if (OnlineGameClient != null && OnlineGameClient.IsConnected)
             {
-                DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "/Maps/Triple Thunder/Battle/");
-
-                FileInfo[] ArrayMapFile = MapDirectory.GetFiles("*.ttm");
-                Random Random = new Random();
-                string FileName = ArrayMapFile[Random.Next(ArrayMapFile.Length)].Name;
-                FileName = FileName.Remove(FileName.Length - 4);
-                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.CurrentDifficulty, "Battle/" + FileName));
+                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.MapType, Room.MapPath));
             }
         }
 
@@ -169,6 +162,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         FileName = FileName.Substring(0, FileName.Length - 4);
                         DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapType, FilePath, "", null));
                         ActiveMapInfo = DicMapInfoByPath[FilePath];
+                        Room.MapType = ActiveMapInfo.MapType;
+                        Room.MapPath = ActiveMapInfo.MapPath;
                     }
                 }
             }
@@ -372,6 +367,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(ActiveMapInfo.MapPath, 1, DicSpawnSquadByPlayer);
                 }
+
                 NewMap.Load();
                 NewMap.Init();
                 NewMap.TogglePreview(true);

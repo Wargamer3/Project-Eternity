@@ -14,9 +14,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public string RoomName { get; }
         public string RoomType { get; }
         public string RoomSubtype { get; set; }
+        public string MapPath { get; set; }
         public bool IsPlaying { get; set; }
         public string Password { get; set; }
-        public string MapPath { get; set; }
         public bool UseTeams { get; set; }
         public List<IOnlineConnection> ListOnlinePlayer { get; }
         public int CurrentPlayerCount { get; set; }

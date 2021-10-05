@@ -22,7 +22,6 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             Databse.Init(ConnectionChain, UserInformationChain);
             GameServer OnlineServer = new GameServer(Databse, DicOnlineScripts);
 
-            DicOnlineScripts.Add(AskGameDataScriptServer.ScriptName, new AskGameDataScriptServer());
             DicOnlineScripts.Add(AskLoginScriptServer.ScriptName, new AskLoginScriptServer(OnlineServer));
             DicOnlineScripts.Add(BaseAskJoinRoomScriptServer.ScriptName, new AskJoinRoomScriptServer(OnlineServer));
             DicOnlineScripts.Add(AskRoomListScriptServer.ScriptName, new AskRoomListScriptServer(OnlineServer));

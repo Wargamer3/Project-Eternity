@@ -400,6 +400,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battle Map Database", "External\Battle Map Database\Battle Map Database.csproj", "{F21BD401-EDD0-4B99-A62D-19A909F4B728}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Battle Map Server", "Mods\Project Eternity Battle Map Server\Project Eternity Battle Map Server.csproj", "{E23B75A9-B6AE-44EF-A91E-5A3E08062DF0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{25BFEC13-3A4E-4F04-81EF-4E372555F9CA} = {25BFEC13-3A4E-4F04-81EF-4E372555F9CA}
+		{24157076-0F9F-4FAB-8E32-76B4320C28B9} = {24157076-0F9F-4FAB-8E32-76B4320C28B9}
+		{1A6E23C4-0FFD-4C13-9FC5-3675F82F9251} = {1A6E23C4-0FFD-4C13-9FC5-3675F82F9251}
+		{E91E70D4-DA94-403B-952B-8E3EB630E8E0} = {E91E70D4-DA94-403B-952B-8E3EB630E8E0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

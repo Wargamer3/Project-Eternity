@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen.Online
+namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public class AskJoinRoomScriptServer : BaseAskJoinRoomScriptServer
     {
@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void OnJoinRoomLocal(IOnlineConnection Sender, string RoomID, GameClientGroup ActiveGroup)
         {
-            RoomInformations JoinedRoom = (RoomInformations)ActiveGroup.Room;
+            PVPRoomInformations JoinedRoom = (PVPRoomInformations)ActiveGroup.Room;
             List<OnlinePlayer> ListJoiningPlayerInfo = JoinedRoom.GetOnlinePlayer(Sender);
 
             foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListOnlinePlayer)
@@ -33,10 +33,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetRoomScriptsServer(JoinedRoom, Owner);
 
-            PVPRoomInformations MissionRoom = (PVPRoomInformations)JoinedRoom;
-
-            DicNewScript.Add(AskStartGameBattleScriptServer.ScriptName, new AskStartGameBattleScriptServer(MissionRoom, (BattleMapClientGroup)ActiveGroup, Owner));
-            DicNewScript.Add(AskChangeRoomExtrasMissionScriptServer.ScriptName, new AskChangeRoomExtrasMissionScriptServer(MissionRoom));
+            DicNewScript.Add(AskStartGameBattleScriptServer.ScriptName, new AskStartGameBattleScriptServer(JoinedRoom, (Online.BattleMapClientGroup)ActiveGroup, Owner));
+            DicNewScript.Add(AskChangeRoomExtrasMissionScriptServer.ScriptName, new AskChangeRoomExtrasMissionScriptServer(JoinedRoom));
 
             Sender.AddOrReplaceScripts(DicNewScript);
 

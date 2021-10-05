@@ -22,7 +22,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private string MapPath;
         private byte[] RoomData;
         private bool HasGame;
-        private List<OnlinePlayer> ListPlayer;
         private GamePreparationScreen NewScreen;
 
         public JoinRoomLocalScriptClient(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, GameScreen ScreenOwner, bool RemoveOwner = false)
@@ -35,7 +34,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             HasGame = false;
             ListJoiningPlayerID = new List<string>();
-            ListPlayer = new List<OnlinePlayer>();
         }
 
         public override OnlineScript Copy()
@@ -64,13 +62,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 DicNewGameServerScript = OnlineHelper.GetTripleThunderScriptsClient(OnlineGameClient);
                 Host.IsGameReady = true;*/
             }
-            PVPRoomInformations MissionRoom = new PVPRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapPath, ListJoiningPlayerID, RoomData);
+            PVPRoomInformations MissionRoom = new PVPRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapPath, ListJoiningPlayerID, ScreenOwner.Content, RoomData);
 
             NewRoom = MissionRoom;
 
             NewScreen = new GamePreparationScreen(OnlineGameClient, OnlineCommunicationClient, MissionRoom);
 
-            //DicNewGameServerScript.Add(CreateGameMissionScriptClient.ScriptName, new CreateGameMissionScriptClient(OnlineGameClient, ScreenOwner.ListGameScreen, MissionRoom));
+            DicNewGameServerScript.Add(CreateGameScriptClient.ScriptName, new CreateGameScriptClient(OnlineGameClient, ScreenOwner.ListGameScreen, MissionRoom));
             DicNewGameServerScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasMissionScriptClient(MissionRoom, NewScreen));
 
             if (HasGame)

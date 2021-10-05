@@ -79,13 +79,11 @@
     <Compile Include="Commands\Force Server Change Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Character Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Room Subtype Script Server.cs" />
-    <Compile Include="Commands\Game Commands\Ask Change Map Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Player Type Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Room Subtype Script Client.cs" />
-    <Compile Include="Commands\Game Commands\Ask Change Map Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Team Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Game Data Script Client.cs" />
-    <Compile Include="Commands\Game Commands\Ask Game Data Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Ask Game Data From Client Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Join Room Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Join Room Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Login Script Client.cs" />
@@ -93,7 +91,6 @@
     <Compile Include="Commands\Game Commands\Ask Room List Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Character Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Room Subtype Script Server .cs" />
-    <Compile Include="Commands\Game Commands\Change Map Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Player Type Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Team Script Server.cs" />
     <Compile Include="Commands\Game Commands\Connection Success Script Client.cs" />

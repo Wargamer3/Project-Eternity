@@ -16,6 +16,7 @@ using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -123,7 +124,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<string> ListTerrainType;//Used to store the types of the terrain used.
 
         public bool IsInit = false;
-        protected bool IsStarted = false;
         public Point TileSize;
         public Point MapSize;
         public int ActiveLayerIndex;
@@ -163,6 +163,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected BattleContext GlobalBattleContext;
         protected UnitQuickLoadEffectContext GlobalQuickLoadContext;
+
+        public BattleMapOnlineClient OnlineClient;
+        public GameServer OnlineServer;
+        public BattleMapClientGroup GameGroup;
+        public bool IsServer { get { return GameScreen.GraphicsDevice == null; } }
 
         #region Screen shaking
 
@@ -303,60 +308,79 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
-            sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
-            sndSelection = new FMODSound(FMODSystem, "Content/SFX/Selection.mp3");
-            sndCancel = new FMODSound(FMODSystem, "Content/SFX/Cancel.mp3");
+            if (!IsServer)
+            {
+                sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
+                sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
+                sndSelection = new FMODSound(FMODSystem, "Content/SFX/Selection.mp3");
+                sndCancel = new FMODSound(FMODSystem, "Content/SFX/Cancel.mp3");
 
-            #region Init outline shader.
+                #region Init outline shader.
 
-            fxOutline = Content.Load<Effect>("Shaders/Outline");
-            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, -1f);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+                fxOutline = Content.Load<Effect>("Shaders/Outline");
+                Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, -1f);
+                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
 
-            Matrix projectionMatrix = HalfPixelOffset * Projection;
+                Matrix projectionMatrix = HalfPixelOffset * Projection;
 
-            fxOutline.Parameters["World"].SetValue(Matrix.Identity);
-            fxOutline.Parameters["View"].SetValue(Matrix.Identity);
-            fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
+                fxOutline.Parameters["World"].SetValue(Matrix.Identity);
+                fxOutline.Parameters["View"].SetValue(Matrix.Identity);
+                fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
 
-            fxOutline.Parameters["TextureOffset"].SetValue(new Vector2(1, 1));
+                fxOutline.Parameters["TextureOffset"].SetValue(new Vector2(1, 1));
 
-            #endregion
+                #endregion
 
-            #region Fonts
+                #region Fonts
 
-            fntPhaseNumber = Content.Load<SpriteFont>("Battle/Phase/Number");
-            fntPhaseNumber.Spacing = -5;
-            fntUnitAttack = Content.Load<SpriteFont>("Fonts/Arial16");
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-            fntArial10 = Content.Load<SpriteFont>("Fonts/Arial10");
-            fntArial9 = Content.Load<SpriteFont>("Fonts/Arial9");
-            fntNumbers = Content.Load<SpriteFont>("Fonts/VFfont");
-            fntBattleMenuText = Content.Load<SpriteFont>("Fonts/Battle Menu Text");
-            fntAccuracyNormal = Content.Load<SpriteFont>("Fonts/Accuracy Normal");
-            fntAccuracySmall = Content.Load<SpriteFont>("Fonts/Accuracy Small");
-            fntNonDemoDamage = Content.Load<SpriteFont>("Fonts/Battle Damage");
-            fntNonDemoDamage.Spacing = -5;
-            fntBattleNumberSmall = Content.Load<SpriteFont>("Fonts/Battle Numbers Small");
-            fntBattleNumberSmall.Spacing = -3;
+                fntPhaseNumber = Content.Load<SpriteFont>("Battle/Phase/Number");
+                fntPhaseNumber.Spacing = -5;
+                fntUnitAttack = Content.Load<SpriteFont>("Fonts/Arial16");
+                fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+                fntArial10 = Content.Load<SpriteFont>("Fonts/Arial10");
+                fntArial9 = Content.Load<SpriteFont>("Fonts/Arial9");
+                fntNumbers = Content.Load<SpriteFont>("Fonts/VFfont");
+                fntBattleMenuText = Content.Load<SpriteFont>("Fonts/Battle Menu Text");
+                fntAccuracyNormal = Content.Load<SpriteFont>("Fonts/Accuracy Normal");
+                fntAccuracySmall = Content.Load<SpriteFont>("Fonts/Accuracy Small");
+                fntNonDemoDamage = Content.Load<SpriteFont>("Fonts/Battle Damage");
+                fntNonDemoDamage.Spacing = -5;
+                fntBattleNumberSmall = Content.Load<SpriteFont>("Fonts/Battle Numbers Small");
+                fntBattleNumberSmall.Spacing = -3;
 
-            #endregion
+                #endregion
 
-            StatusMenu = new StatusMenuScreen(this);
-            AttackPicker.Load();
-            fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
+                StatusMenu = new StatusMenuScreen(this);
+                AttackPicker.Load();
+                fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
 
-            fxGrayscale = Content.Load<Effect>("Shaders/Grayscale");
+                fxGrayscale = Content.Load<Effect>("Shaders/Grayscale");
 
-            sprEllipse = Content.Load<Texture2D>("Ellipse");
-            sprCursor = Content.Load<Texture2D>("Battle/Reticle");
-            sprUnitHover = Content.Load<Texture2D>("Units/Unit Hover");
+                sprEllipse = Content.Load<Texture2D>("Ellipse");
+                sprCursor = Content.Load<Texture2D>("Battle/Reticle");
+                sprUnitHover = Content.Load<Texture2D>("Units/Unit Hover");
 
-            sprPhaseBackground = Content.Load<Texture2D>("Battle/Phase/Background");
-            sprPhasePlayer = Content.Load<Texture2D>("Battle/Phase/Player");
-            sprPhaseEnemy = Content.Load<Texture2D>("Battle/Phase/Enemy");
-            sprPhaseTurn = Content.Load<Texture2D>("Battle/Phase/Turn");
+                sprPhaseBackground = Content.Load<Texture2D>("Battle/Phase/Background");
+                sprPhasePlayer = Content.Load<Texture2D>("Battle/Phase/Player");
+                sprPhaseEnemy = Content.Load<Texture2D>("Battle/Phase/Enemy");
+                sprPhaseTurn = Content.Load<Texture2D>("Battle/Phase/Turn");
+
+                sprCursorTerrainSelection = Content.Load<Texture2D>("Battle/Cursor/Terrain Selection");
+
+                #region Bars
+
+                sprBarSmallBackground = Content.Load<Texture2D>("Battle/Bars/Small Bar");
+                sprBarSmallEN = Content.Load<Texture2D>("Battle/Bars/Small Energy");
+                sprBarSmallHP = Content.Load<Texture2D>("Battle/Bars/Small Health");
+                sprBarLargeBackground = Content.Load<Texture2D>("Battle/Bars/Large Bar");
+                sprBarLargeEN = Content.Load<Texture2D>("Battle/Bars/Large Energy");
+                sprBarLargeHP = Content.Load<Texture2D>("Battle/Bars/Large Health");
+                sprBarExtraLargeBackground = Content.Load<Texture2D>("Battle/Bars/Extra Long Bar");
+                sprBarExtraLargeEN = Content.Load<Texture2D>("Battle/Bars/Extra Long Energy");
+                sprBarExtraLargeHP = Content.Load<Texture2D>("Battle/Bars/Extra Long Health");
+
+                #endregion
+            }
 
             LoadMapScripts();
             LoadEffects();
@@ -365,22 +389,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             LoadSkillRequirements();
             LoadScripts();
             LoadUnits();
-
-            sprCursorTerrainSelection = Content.Load<Texture2D>("Battle/Cursor/Terrain Selection");
-
-            #region Bars
-
-            sprBarSmallBackground = Content.Load<Texture2D>("Battle/Bars/Small Bar");
-            sprBarSmallEN = Content.Load<Texture2D>("Battle/Bars/Small Energy");
-            sprBarSmallHP = Content.Load<Texture2D>("Battle/Bars/Small Health");
-            sprBarLargeBackground = Content.Load<Texture2D>("Battle/Bars/Large Bar");
-            sprBarLargeEN = Content.Load<Texture2D>("Battle/Bars/Large Energy");
-            sprBarLargeHP = Content.Load<Texture2D>("Battle/Bars/Large Health");
-            sprBarExtraLargeBackground = Content.Load<Texture2D>("Battle/Bars/Extra Long Bar");
-            sprBarExtraLargeEN = Content.Load<Texture2D>("Battle/Bars/Extra Long Energy");
-            sprBarExtraLargeHP = Content.Load<Texture2D>("Battle/Bars/Extra Long Health");
-
-            #endregion
         }
 
         protected void LoadMapScripts()
@@ -742,9 +750,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ScreenSize = new Point(Constants.Width / TileSize.X, Constants.Height / TileSize.Y);
 
             UpdateMapEvent(EventTypeGame, 0);
-            IsStarted = true;
             IsInit = true;
             RequireDrawFocus = false;
+        }
+
+        public void InitOnlineServer(GameServer OnlineServer, BattleMapClientGroup GameGroup)
+        {
+            this.OnlineServer = OnlineServer;
+            this.GameGroup = GameGroup;
+        }
+
+        public void InitOnlineClient(BattleMapOnlineClient OnlineClient)
+        {
+            this.OnlineClient = OnlineClient;
         }
 
         public void UpdateCursorVisiblePosition(GameTime gameTime)

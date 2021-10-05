@@ -95,11 +95,14 @@
     <Compile Include="Lobby\Game Preparation Screen.cs" />
     <Compile Include="Lobby\Box Drop Down Button.cs" />
     <Compile Include="Lobby\Create Room Screen.cs" />
+    <Compile Include="Lobby\Loading Screen.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
     <Compile Include="Online\Login Success Script Client.cs" />
+    <Compile Include="Online\Online Helper.cs" />
     <Compile Include="Online\Player Left Script Client.cs" />
     <Compile Include="Lobby\PVP Room Informations.cs" />
+    <Compile Include="Online\Room\Ask Change Map Script Client.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Script Client.cs" />
     <Compile Include="Online\Room\Change Character Script Client.cs" />
     <Compile Include="Online\Room\Change Map Script Client.cs" />
@@ -108,6 +111,7 @@
     <Compile Include="Online\Room\Change Room Extras Mission Script Client.cs" />
     <Compile Include="Online\Room\Change Room Subtype Script Client.cs" />
     <Compile Include="Online\Room\Change Team Script Client.cs" />
+    <Compile Include="Online\Room\Create Game Script Client.cs" />
     <Compile Include="Online\Room\Join Room Failed Script Client.cs" />
     <Compile Include="Online\Room\Join Room Local Script Client.cs" />
     <Compile Include="Online\Room\Player Joined Script Client.cs" />

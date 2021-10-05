@@ -1,7 +1,8 @@
 ﻿using System;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen.Online
+namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public class AskChangePlayerTypeScriptServer : OnlineScript
     {

@@ -204,7 +204,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             base.Load();
-            LoadPreBattleMenu();
+            if (!IsServer)
+            {
+                LoadPreBattleMenu();
+            }
             LoadMap();
             LoadMapAssets();
             LoadDeathmatchAIScripts();
@@ -216,19 +219,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             SpiritMenu = new SpiritMenu(this);
-            SpiritMenu.Load();
+            if (!IsServer)
+            {
+                SpiritMenu.Load();
+            }
 
             BattleMapMenu = new MapMenu(this);
-            BattleMapMenu.Load(Content, FMODSystem);
+            if (!IsServer)
+            {
+                BattleMapMenu.Load(Content, FMODSystem);
+            }
 
             UnitDeploymentScreen = new UnitDeploymentScreen(PlayerRoster);
-            UnitDeploymentScreen.Load(Content);
+            if (!IsServer)
+            {
+                UnitDeploymentScreen.Load(Content);
+            }
 
             NonDemoScreen = new NonDemoScreen(this);
-            NonDemoScreen.Load();
+            if (!IsServer)
+            {
+                NonDemoScreen.Load();
 
-            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-            fntArial16 = Content.Load<SpriteFont>("Fonts/Arial16");
+                fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+                fntArial16 = Content.Load<SpriteFont>("Fonts/Arial16");
+            }
         }
 
         private void LoadMap()
@@ -485,6 +500,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     UpdateCursorVisiblePosition(gameTime);
                 }
+            }
+        }
+
+        public override void Update(double ElapsedSeconds)
+        {
+            if (!IsInit)
+            {
+                Load();
+
+                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                {
+                    ActivePlayer.Send(new ServerIsReadyScriptServer());
+                }
+                IsInit = true;
+            }
+
+            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
+            for (int L = 0; L < ListLayer.Count; L++)
+            {
+                ListLayer[L].Update(UpdateTime);
             }
         }
 
@@ -796,15 +831,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override byte[] GetSnapshotData()
         {
             return new byte[0];
-        }
-
-        public override void Update(double ElapsedSeconds)
-        {
-            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
-            for (int L = 0; L < ListLayer.Count; L++)
-            {
-                ListLayer[L].Update(UpdateTime);
-            }
         }
 
         public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection activePlayer)

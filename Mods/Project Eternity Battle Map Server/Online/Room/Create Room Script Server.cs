@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen.Online
+namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public class CreateRoomScriptServer : BaseCreateRoomScriptServer
     {
@@ -30,16 +31,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         {
             base.Execute(Sender);
 
-            RoomInformations NewRoom = (RoomInformations)CreatedGroup.Room;
+            PVPRoomInformations NewRoom = (PVPRoomInformations)CreatedGroup.Room;
 
             foreach (IOnlineConnection ActivePlayer in CreatedGroup.Room.ListOnlinePlayer)
             {
                 //Add Game Specific scripts
                 Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetRoomScriptsServer(NewRoom, Owner);
-                PVPRoomInformations MissionRoom = (PVPRoomInformations)NewRoom;
 
-                DicNewScript.Add(AskStartGameBattleScriptServer.ScriptName, new AskStartGameBattleScriptServer(MissionRoom, (BattleMapClientGroup)CreatedGroup, Owner));
-                DicNewScript.Add(AskChangeRoomExtrasMissionScriptServer.ScriptName, new AskChangeRoomExtrasMissionScriptServer(MissionRoom));
+                DicNewScript.Add(AskStartGameBattleScriptServer.ScriptName, new AskStartGameBattleScriptServer(NewRoom, (BattleMapClientGroup)CreatedGroup, Owner));
+                DicNewScript.Add(AskChangeRoomExtrasMissionScriptServer.ScriptName, new AskChangeRoomExtrasMissionScriptServer(NewRoom));
 
                 ActivePlayer.AddOrReplaceScripts(DicNewScript);
             }

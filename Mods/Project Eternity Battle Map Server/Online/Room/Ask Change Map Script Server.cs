@@ -1,24 +1,28 @@
-﻿using System;
-using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
+﻿using ProjectEternity.Core.Online;
+using System;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
-    public class AskChangeRoomExtrasMissionScriptServer : OnlineScript
+    public class AskChangeMapScriptServer : OnlineScript
     {
-        public const string ScriptName = "Ask Change Room Extras";
+        public const string ScriptName = "Ask Change Map";
 
         private readonly PVPRoomInformations Owner;
+        private readonly GameServer OnlineServer;
 
-        public AskChangeRoomExtrasMissionScriptServer(PVPRoomInformations Owner)
+        private string MapType;
+        private string MapPath;
+
+        public AskChangeMapScriptServer(PVPRoomInformations Owner, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;
+            this.OnlineServer = OnlineServer;
         }
 
         public override OnlineScript Copy()
         {
-            return new AskChangeRoomExtrasMissionScriptServer(Owner);
+            return new AskChangeMapScriptServer(Owner, OnlineServer);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -28,18 +32,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void Execute(IOnlineConnection Sender)
         {
-            //TODO: Update database
-
+            Owner.MapType = MapType;
+            Owner.MapPath = MapPath;
             for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
             {
                 IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
 
-                ActiveOnlinePlayer.Send(new ChangeRoomExtrasMissionScriptServer());
+                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapType, MapPath));
             }
         }
 
         protected override void Read(OnlineReader Sender)
         {
+            MapType = Sender.ReadString();
+            MapPath = Sender.ReadString();
         }
     }
 }

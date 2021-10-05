@@ -1,7 +1,7 @@
 ﻿using System;
 using ProjectEternity.Core.Online;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen.Online
+namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public class CreateGameScriptServer : OnlineScript
     {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Units;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen.Online
+namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public class AskStartGameBattleScriptServer : OnlineScript
     {
@@ -32,9 +34,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Sender)
         {
-            //FightingZone NewGame = new FightingZone(Owner.MapPath, Owner.UseTeams, OnlineServer, CreatedGroup);
+            Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
+            for (int P = 0; P < Owner.ListRoomPlayer.Count; ++P)
+            {
+                DicSpawnSquadByPlayer.Add(Owner.ListRoomPlayer[P].Name, Owner.ListRoomPlayer[P].ListSquadToSpawn);
+            }
 
-            //CreatedGroup.SetGame(NewGame);
+            BattleMap NewMap;
+
+            if (CreatedGroup.Room.MapPath == "Random")
+            {
+                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(Owner.MapPath, 1, DicSpawnSquadByPlayer);
+            }
+            else
+            {
+                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(Owner.MapPath, 1, DicSpawnSquadByPlayer);
+            }
+
+            NewMap.InitOnlineServer(OnlineServer, CreatedGroup);
+            CreatedGroup.SetGame(NewMap);
 
             for (int P = 0; P < CreatedGroup.Room.ListOnlinePlayer.Count; P++)
             {
@@ -45,7 +63,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 //NewGame.AddLocalCharacter(ActivePlayer);
 
                 //Add Game Specific scripts
-                Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetTripleThunderScriptsServer(CreatedGroup, ActivePlayer);
+                Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsServer(CreatedGroup, ActivePlayer);
                 ActiveOnlinePlayer.AddOrReplaceScripts(DicNewScript);
             }
 

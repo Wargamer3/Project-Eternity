@@ -47,6 +47,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game Scripts\Room\Ask Change Map Script Server.cs" />
     <Compile Include="Game Scripts\Room\Ask Change Player Type Script Server.cs" />
     <Compile Include="Game Scripts\Room\Ask Change Room Extras Battle Script Server.cs" />
     <Compile Include="Game Scripts\Room\Ask Change Room Extras Mission Script Server.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Game Scripts\Room\Ask Change Character Script Server.cs" />
     <Compile Include="Game Scripts\Room\Ask Start Game Battle Script Server.cs" />
     <Compile Include="Game Scripts\Room\Ask Start Game Mission Script Server.cs" />
+    <Compile Include="Game Scripts\Room\Change Map Script Server.cs" />
     <Compile Include="Game Scripts\Room\Change Room Extras Battle Script Server.cs" />
     <Compile Include="Game Scripts\Room\Change Room Extras Mission Script Server .cs" />
     <Compile Include="Game Scripts\In Game\Create Enemy Script Server.cs" />

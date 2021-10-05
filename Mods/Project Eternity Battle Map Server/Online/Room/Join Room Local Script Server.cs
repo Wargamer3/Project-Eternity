@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen.Online
+namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public class JoinRoomLocalScriptServer : OnlineScript
     {

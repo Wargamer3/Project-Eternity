@@ -46,12 +46,14 @@
     <Compile Include="Online Helper.cs" />
     <Compile Include="Online\Create Game Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Character Script Server.cs" />
+    <Compile Include="Online\Room\Ask Change Map Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Player Type Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Battle Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Mission Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Team Script Server.cs" />
     <Compile Include="Online\Room\Ask Join Room Script Server.cs" />
     <Compile Include="Online\Room\Ask Start Game Battle Script Server.cs" />
+    <Compile Include="Online\Room\Change Map Script Server.cs" />
     <Compile Include="Online\Room\Change Room Extras Battle Script Server.cs" />
     <Compile Include="Online\Room\Change Room Extras Mission Script Server .cs" />
     <Compile Include="Online\Room\Create Room Script Server.cs" />
@@ -70,9 +72,19 @@
       <Name>Project Eternity Base Item</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{DD46B019-61BA-4F24-A7E1-EF212C27CDCE}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Online\Project Eternity Online.csproj">
       <Project>{b59faa7c-e4db-4e01-82fb-3c3cda7eebd7}</Project>
       <Name>Project Eternity Online</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\External\Battle Map Database\Battle Map Database.csproj">

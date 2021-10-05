@@ -5,13 +5,41 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using Database.BattleMap;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using System.Reflection;
+using System.IO;
 
-namespace ProjectEternity.GameScreens.BattleMap.Server
+namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     class Program
     {
         static void Main(string[] args)
         {
+            string[] Files = Directory.GetFiles("Mods", "*.dll");
+            for (int F = 0; F < Files.Length; F++)
+            {
+                Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                //Get every classes in it.
+                Type[] types = ass.GetTypes();
+                for (int t = 0; t < types.Length; t++)
+                {
+                    //Look if the class inherit from Unit somewhere.
+                    Type ObjectType = types[t].BaseType;
+                    bool InstanceIsBaseObject = ObjectType == typeof(BattleMap);
+                    while (ObjectType != null && ObjectType != typeof(BattleMap))
+                    {
+                        ObjectType = ObjectType.BaseType;
+                        if (ObjectType == null)
+                            InstanceIsBaseObject = false;
+                    }
+                    //If this class is from BaseEditor, load it.
+                    if (InstanceIsBaseObject)
+                    {
+                        BattleMap instance = Activator.CreateInstance(types[t]) as BattleMap;
+                        BattleMap.DicBattmeMapType.Add(instance.GetMapType(), instance);
+                    }
+                }
+            }
+
             Dictionary<string, OnlineScript> DicOnlineScripts = new Dictionary<string, OnlineScript>();
 
             IniFile ConnectionInfo = IniFile.ReadFromFile("Connection Info.ini");
@@ -22,7 +50,6 @@ namespace ProjectEternity.GameScreens.BattleMap.Server
             Databse.Init(ConnectionChain, UserInformationChain);
             GameServer OnlineServer = new GameServer(Databse, DicOnlineScripts);
 
-            DicOnlineScripts.Add(AskGameDataScriptServer.ScriptName, new AskGameDataScriptServer());
             DicOnlineScripts.Add(AskLoginScriptServer.ScriptName, new AskLoginScriptServer(OnlineServer));
             DicOnlineScripts.Add(BaseAskJoinRoomScriptServer.ScriptName, new AskJoinRoomScriptServer(OnlineServer));
             DicOnlineScripts.Add(AskRoomListScriptServer.ScriptName, new AskRoomListScriptServer(OnlineServer));

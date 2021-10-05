@@ -8,9 +8,9 @@ namespace ProjectEternity.Core.Online
         string RoomName { get; }
         string RoomType { get; }
         string RoomSubtype { get; set; }
+        string MapPath { get; set; }
         bool IsPlaying { get; set; }
         string Password { get; }
-        string MapPath { get; set; }
         int CurrentPlayerCount { get; }
         int MaxNumberOfPlayer { get; }
         string OwnerServerIP { get; }

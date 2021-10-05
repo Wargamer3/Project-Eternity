@@ -116,6 +116,7 @@
     <Compile Include="Online\Communication\Player List Script Client.cs" />
     <Compile Include="Online\In Game\Create SFX Script Client.cs" />
     <Compile Include="Online\In Game\Create VFX Script Client.cs" />
+    <Compile Include="Online\Room\Ask Change Map Script Client.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Script Client.cs" />
     <Compile Include="Online\Room\Change Room Extras Mission Script Client.cs" />
     <Compile Include="Online\Room\Change Room Extras Battle Script Client.cs" />

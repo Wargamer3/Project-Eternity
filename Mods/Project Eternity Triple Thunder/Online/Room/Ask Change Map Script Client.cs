@@ -1,6 +1,7 @@
 ﻿using System;
+using ProjectEternity.Core.Online;
 
-namespace ProjectEternity.Core.Online
+namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 {
     public class AskChangeMapScriptClient : OnlineScript
     {
@@ -25,12 +26,12 @@ namespace ProjectEternity.Core.Online
             WriteBuffer.AppendString(NewMapName);
         }
 
-        protected internal override void Execute(IOnlineConnection Host)
+        protected override void Execute(IOnlineConnection Host)
         {
             throw new NotImplementedException();
         }
 
-        protected internal override void Read(OnlineReader Sender)
+        protected override void Read(OnlineReader Sender)
         {
             throw new NotImplementedException();
         }

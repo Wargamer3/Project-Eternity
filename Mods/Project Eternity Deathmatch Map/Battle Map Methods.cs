@@ -319,7 +319,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Initialise the ScreenSize based on the map loaded.
             ScreenSize = new Point(Constants.Width / TileSize.X, Constants.Height / TileSize.Y);
 
-            IsStarted = true;
             IsInit = true;
             RequireDrawFocus = false;
 

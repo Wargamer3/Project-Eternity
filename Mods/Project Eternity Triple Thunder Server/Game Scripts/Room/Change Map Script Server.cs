@@ -1,6 +1,7 @@
 ﻿using System;
+using ProjectEternity.Core.Online;
 
-namespace ProjectEternity.Core.Online
+namespace ProjectEternity.GameScreens.TripleThunderServer
 {
     public class ChangeMapScriptServer : OnlineScript
     {
@@ -27,12 +28,12 @@ namespace ProjectEternity.Core.Online
             WriteBuffer.AppendString(MissionPath);
         }
 
-        protected internal override void Execute(IOnlineConnection Sender)
+        protected override void Execute(IOnlineConnection Sender)
         {
             throw new NotImplementedException();
         }
 
-        protected internal override void Read(OnlineReader Sender)
+        protected override void Read(OnlineReader Sender)
         {
             throw new NotImplementedException();
         }

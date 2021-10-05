@@ -47,7 +47,7 @@ namespace ProjectEternity.Core.Online
                 GameClientGroup NewRoom = ClientGroupTemplate.CreateFromTemplate(Owner.TransferRoom(RoomID));
                 Owner.DicTransferingRoom.Add(RoomID, NewRoom);
                 NewRoom.Room.AddOnlinePlayer(ActivePlayer, "Host");
-                ActivePlayer.Send(new AskGameDataScriptServer());
+                ActivePlayer.Send(new AskGameDataFromClientScriptServer());
             }
         }
 
