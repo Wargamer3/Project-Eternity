@@ -123,7 +123,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         Map.sndConfirm.Play();
                     }
-                    else if (InputHelper.InputCancelPressed() && Map.ListPlayer[ActivePlayerIndex].IsHuman)//Can't cancel out of AI attacks.
+                    else if (InputHelper.InputCancelPressed() && Map.ListPlayer[ActivePlayerIndex].IsPlayerControlled)//Can't cancel out of AI attacks.
                     {
                         CancelPanel();
                     }

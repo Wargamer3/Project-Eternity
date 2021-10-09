@@ -64,7 +64,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListSpawnSquad = new List<Squad>();
                 Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
                 DicSpawnSquadByPlayer.Add("Player", ListSpawnSquad);
-                NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(BattleMap.NextMapPath, 0, DicSpawnSquadByPlayer);
+                NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(0);
+                NewMap.BattleMapPath = BattleMap.NextMapPath;
+                NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
                 NewMap.ListGameScreen = ListGameScreen;
                 NewMap.PlayerRoster = PlayerRoster;
                 NewMap.Load();

@@ -395,13 +395,26 @@ namespace ProjectEternity.Core.Units
         {
             BW.Write(UnitTypeName);
             BW.Write(RelativePath);
+            BW.Write(TeamEventID);
+
             BW.Write(HP);
             BW.Write(EN);
 
-            BW.Write(ArrayCharacterActive.Length);
-            for (int C = 0; C < ArrayCharacterActive.Length; ++C)
+            if (string.IsNullOrEmpty(TeamEventID))
             {
-                ArrayCharacterActive[C].QuickSave(BW);
+                BW.Write(ArrayCharacterActive.Length);
+                for (int C = 0; C < ArrayCharacterActive.Length; ++C)
+                {
+                    BW.Write(ArrayCharacterActive[C].FullName);
+                    ArrayCharacterActive[C].QuickSave(BW);
+                }
+            }
+            else
+            {
+                for (int C = 0; C < ArrayCharacterActive.Length; ++C)
+                {
+                    ArrayCharacterActive[C].QuickSave(BW);
+                }
             }
 
             DoQuickSave(BW);
@@ -415,30 +428,27 @@ namespace ProjectEternity.Core.Units
             _HP = BR.ReadInt32();
             _EN = BR.ReadInt32();
 
-            int ArrayCharacterActiveLength = BR.ReadInt32();
-            ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
-            for (int C = 0; C < ArrayCharacterActive.Length; ++C)
+            if (string.IsNullOrEmpty(TeamEventID))
             {
-                ArrayCharacterActive[C] = Character.QuickLoadFromFile(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                int ArrayCharacterActiveLength = BR.ReadInt32();
+                ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
+                for (int C = 0; C < ArrayCharacterActive.Length; ++C)
+                {
+                    ArrayCharacterActive[C] = Character.QuickLoadFromFile(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                }
+            }
+            else
+            {
+                for (int C = 0; C < ArrayCharacterActive.Length; ++C)
+                {
+                    ArrayCharacterActive[C].QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                }
             }
 
             DoQuickLoad(BR, Content);
         }
 
         protected abstract void DoQuickLoad(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content);
-
-        public static Unit QuickLoadFromFile(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,
-            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
-        {
-            string UnitType = BR.ReadString();
-            string UnitName = BR.ReadString();
-
-            Unit NewUnit = Unit.FromType(UnitType, UnitName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-            NewUnit.QuickLoad(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-
-            return NewUnit;
-        }
 
         public void Init()
         {

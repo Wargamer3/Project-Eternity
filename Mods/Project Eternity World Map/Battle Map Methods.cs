@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
@@ -23,7 +21,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public override BattleMap GetNewMap(int GameMode)
         {
             return new WorldMap(BattleMapPath, GameMode, DicSpawnSquadByPlayer);
         }

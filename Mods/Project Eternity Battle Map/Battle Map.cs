@@ -74,6 +74,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Texture2D sprPhaseBackground;
         public Texture2D sprPhasePlayer;
         public Texture2D sprPhaseEnemy;
+
         public Texture2D sprPhaseTurn;
 
         public StatusMenuScreen StatusMenu;
@@ -104,7 +105,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string MapName;
         public string BattleMapPath;
         public int GameMode;
-        public OnlineConfiguration OnlinePlayers;
         public bool IsFrozen;
         public static string NextMapType = string.Empty;
         public static string NextMapPath = string.Empty;
@@ -138,7 +138,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Vector3 CameraPosition;
 
         public List<EventPoint> ListSingleplayerSpawns;
-        protected Dictionary<string, List<Squad>> DicSpawnSquadByPlayer;
+        public Dictionary<string, List<Squad>> DicSpawnSquadByPlayer;
         public List<EventPoint> ListMultiplayerSpawns;
         public Color[] ArrayMultiplayerColor;
         public List<MapSwitchPoint> ListMapSwitchPoint;
@@ -164,9 +164,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected BattleContext GlobalBattleContext;
         protected UnitQuickLoadEffectContext GlobalQuickLoadContext;
 
+        //Classic P2P online
+        public OnlineConfiguration OnlinePlayers;
+
+        //Server based online
         public BattleMapOnlineClient OnlineClient;
         public GameServer OnlineServer;
         public BattleMapClientGroup GameGroup;
+        public bool IsOfflineOrServer { get { return OnlineClient == null; } }
         public bool IsServer { get { return GameScreen.GraphicsDevice == null; } }
 
         #region Screen shaking
@@ -478,7 +483,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (DicBattmeMapType.Count > 0 && !string.IsNullOrEmpty(NewMapSwitchPoint.SwitchMapPath)
                     && ListSubMap.Find(x => x.BattleMapPath == NewMapSwitchPoint.SwitchMapPath) == null)
                 {
-                    BattleMap NewMap = DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(NewMapSwitchPoint.SwitchMapPath, 0, new Dictionary<string, List<Squad>>());
+                    BattleMap NewMap = DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(0);
+                    NewMap.BattleMapPath = NewMapSwitchPoint.SwitchMapPath;
                     NewMap.ListGameScreen = ListGameScreen;
                     NewMap.ListSubMap = ListSubMap;
                     NewMap.Load();
@@ -1053,9 +1059,5 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 OnlinePlayers.ExecuteAndSend(new Online.BattleMapLobyScriptHolder.SkipSquadMovementScript(this));
             }
         }
-
-        public abstract byte[] GetSnapshotData();
-        public abstract void Update(double ElapsedSeconds);
-        public abstract void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer);
     }
 }

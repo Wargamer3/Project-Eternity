@@ -248,25 +248,25 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F1))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, false, 0);
+                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, 0);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller1;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F2))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, false, 0);
+                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, 0);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller2;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F3))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player,  false, 0);
+                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, 0);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller3;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F4))
             {
-                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, false, 0);
+                Player NewPlayer = new Player("", "", Player.PlayerTypes.Player, 0);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller4;
             }

@@ -65,7 +65,6 @@
     <Compile Include="Game Scripts\In Game\Create Player Script Server.cs" />
     <Compile Include="Game Scripts\Room\Create Room Script Server.cs" />
     <Compile Include="Game Scripts\In Game\Create VFX Script Server.cs" />
-    <Compile Include="Game Scripts\In Game\Finished Loading Script Server.cs" />
     <Compile Include="Game Scripts\Room\Join Room Local Script Server.cs" />
     <Compile Include="Game Scripts\Room\Leave Room Script Server.cs" />
     <Compile Include="Game Scripts\Room\Player Joined Script Server.cs" />

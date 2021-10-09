@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public void ComputeTargetPlayerOffense(Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, int ActivePlayerIndex, Squad TargetSquad, SupportSquadHolder TargetSquadSupport, int TargetPlayerIndex)
         {
-            if (ListPlayer[ActivePlayerIndex].IsHuman)
+            if (ListPlayer[ActivePlayerIndex].IsPlayerControlled)
             {
                 ActionPanelHumanAttack PlayerDefence = new ActionPanelHumanAttack(this, ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
                 ListActionMenuChoice.Add(PlayerDefence);
@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void ComputeTargetPlayerDefence(Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, int ActivePlayerIndex, Squad TargetSquad, SupportSquadHolder TargetSquadSupport, int TargetPlayerIndex)
         {
-            if (ListPlayer[TargetPlayerIndex].IsHuman)
+            if (ListPlayer[TargetPlayerIndex].IsPlayerControlled)
             {
                 ActionPanelHumanDefend PlayerDefence = new ActionPanelHumanDefend(this, ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
                 ListActionMenuChoice.Add(PlayerDefence);

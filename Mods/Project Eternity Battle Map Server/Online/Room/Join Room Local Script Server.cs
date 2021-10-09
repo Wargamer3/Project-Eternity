@@ -11,10 +11,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         private readonly string RoomID;
         private readonly string CurrentDifficulty;
-        private readonly List<OnlinePlayer> ListJoiningPlayer;
+        private readonly List<BattleMapPlayer> ListJoiningPlayer;
         private readonly GameClientGroup ActiveGroup;
 
-        public JoinRoomLocalScriptServer(string RoomID, string CurrentDifficulty, List<OnlinePlayer> ListJoiningPlayer, GameClientGroup ActiveGroup)
+        public JoinRoomLocalScriptServer(string RoomID, string CurrentDifficulty, List<BattleMapPlayer> ListJoiningPlayer, GameClientGroup ActiveGroup)
             : base(ScriptName)
         {
             this.RoomID = RoomID;

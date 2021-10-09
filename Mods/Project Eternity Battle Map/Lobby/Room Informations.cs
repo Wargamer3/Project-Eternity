@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Online;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -28,7 +29,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public string CurrentDifficulty;
 
-        public readonly List<OnlinePlayer> ListRoomPlayer;
+        public readonly List<BattleMapPlayer> ListRoomPlayer;
 
         private readonly List<string> ListLocalPlayerID;
 
@@ -38,7 +39,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.IsDead = IsDead;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
-            ListRoomPlayer = new List<OnlinePlayer>();
+            ListRoomPlayer = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
             RoomName = string.Empty;
             RoomType = string.Empty;
@@ -61,7 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.CurrentPlayerCount = CurrentClientCount;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
-            ListRoomPlayer = new List<OnlinePlayer>();
+            ListRoomPlayer = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
             CurrentDifficulty = "Easy";
             UseTeams = true;
@@ -79,7 +80,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.RoomSubtype = RoomSubtype;
             this.CurrentDifficulty = CurrentDifficulty;
             this.MapPath = MapName;
-            this.ListRoomPlayer = new List<OnlinePlayer>();
+            this.ListRoomPlayer = new List<BattleMapPlayer>();
             this.ListLocalPlayerID = ListLocalPlayerID;
             UseTeams = true;
         }
@@ -99,13 +100,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.IsDead = IsDead;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
-            ListRoomPlayer = new List<OnlinePlayer>();
+            ListRoomPlayer = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
             CurrentDifficulty = "Easy";
             UseTeams = true;
         }
 
-        public void AddLocalPlayer(OnlinePlayer NewPlayer)
+        public void AddLocalPlayer(BattleMapPlayer NewPlayer)
         {
             ListRoomPlayer.Add(NewPlayer);
             ListLocalPlayerID.Add(NewPlayer.ConnectionID);
@@ -115,7 +116,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
         {
             ListOnlinePlayer.Add(NewPlayer);
-            OnlinePlayer NewRoomPlayer = new OnlinePlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0);
+            BattleMapPlayer NewRoomPlayer = new BattleMapPlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue);
+            NewRoomPlayer.OnlineClient = NewPlayer;
             NewRoomPlayer.GameplayType = GameplayTypes.None;
             ListRoomPlayer.Add(NewRoomPlayer);
             CurrentPlayerCount = ListRoomPlayer.Count;
@@ -155,9 +157,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             HandleHostChange();
         }
 
-        public OnlinePlayer GetLocalPlayer()
+        public BattleMapPlayer GetLocalPlayer()
         {
-            foreach (OnlinePlayer LocalPlayer in ListRoomPlayer)
+            foreach (BattleMapPlayer LocalPlayer in ListRoomPlayer)
             {
                 if (ListLocalPlayerID.Contains(LocalPlayer.ConnectionID))
                 {
@@ -168,11 +170,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return null;
         }
 
-        public List<OnlinePlayer> GetLocalPlayers()
+        public List<BattleMapPlayer> GetLocalPlayers()
         {
-            List<OnlinePlayer> ListLocalPlayer = new List<OnlinePlayer>();
+            List<BattleMapPlayer> ListLocalPlayer = new List<BattleMapPlayer>();
 
-            foreach (OnlinePlayer LocalPlayer in ListRoomPlayer)
+            foreach (BattleMapPlayer LocalPlayer in ListRoomPlayer)
             {
                 if (ListLocalPlayerID.Contains(LocalPlayer.ConnectionID))
                 {
@@ -183,11 +185,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return ListLocalPlayer;
         }
 
-        public List<OnlinePlayer> GetOnlinePlayer(IOnlineConnection Sender)
+        public List<BattleMapPlayer> GetOnlinePlayer(IOnlineConnection Sender)
         {
-            List<OnlinePlayer> ListPlayerInfo = new List<OnlinePlayer>();
+            List<BattleMapPlayer> ListPlayerInfo = new List<BattleMapPlayer>();
 
-            foreach (OnlinePlayer ActiveOnlinePlayer in ListRoomPlayer)
+            foreach (BattleMapPlayer ActiveOnlinePlayer in ListRoomPlayer)
             {
                 if (ActiveOnlinePlayer.ConnectionID == Sender.ID)
                 {
@@ -207,9 +209,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             bool HasHost = false;
 
-            foreach (OnlinePlayer ActiveOnlinePlayer in ListRoomPlayer)
+            foreach (BattleMapPlayer ActiveOnlinePlayer in ListRoomPlayer)
             {
-                if (ActiveOnlinePlayer.PlayerType == OnlinePlayer.PlayerTypeHost)
+                if (ActiveOnlinePlayer.OnlinePlayerType == BattleMapPlayer.PlayerTypeHost)
                 {
                     HasHost = true;
                 }
@@ -218,11 +220,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (!HasHost)
             {
                 int RandomNewHostIndex = RandomHelper.Next(ListRoomPlayer.Count);
-                ListRoomPlayer[RandomNewHostIndex].PlayerType = OnlinePlayer.PlayerTypeHost;
+                ListRoomPlayer[RandomNewHostIndex].OnlinePlayerType = BattleMapPlayer.PlayerTypeHost;
 
                 for (int P = 0; P < ListOnlinePlayer.Count; ++P)
                 {
-                    ListOnlinePlayer[P].Send(new ChangePlayerTypeScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, OnlinePlayer.PlayerTypeHost));
+                    ListOnlinePlayer[P].Send(new ChangePlayerTypeScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, BattleMapPlayer.PlayerTypeHost));
                 }
             }
         }
@@ -238,7 +240,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         BW.Write(ListRoomPlayer[P].ConnectionID);
                         BW.Write(ListRoomPlayer[P].Name);
-                        BW.Write(ListRoomPlayer[P].PlayerType);
+                        BW.Write(ListRoomPlayer[P].OnlinePlayerType);
                         BW.Write(ListRoomPlayer[P].Team);
                     }
 

@@ -43,7 +43,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
             for (int P = 0; P < ListJoiningPlayerInfoCount; P++)
             {
-                Player JoiningPlayer = new Player(Sender.ReadString(), Sender.ReadString(), Player.PlayerTypes.Player, true, 0);
+                Player JoiningPlayer = new Player(Sender.ReadString(), Sender.ReadString(), Player.PlayerTypes.Player, 0);
                 JoiningPlayer.Equipment.CharacterType = Sender.ReadString();
                 ListJoiningPlayer.Add(JoiningPlayer);
             }

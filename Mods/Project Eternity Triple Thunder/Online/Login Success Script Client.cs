@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         protected override void Execute(IOnlineConnection Host)
         {
             PlayerManager.OnlinePlayerID = PlayerID;
-            PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Online, false, 0));
+            PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Online, 0));
             ByteReader BR = new ByteReader(PlayerInfo);
 
             PlayerManager.OnlinePlayerName = BR.ReadString();

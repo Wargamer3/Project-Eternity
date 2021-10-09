@@ -124,6 +124,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FileStream FS = new FileStream("SRWE Save.bin", FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);
 
+            SaveProgression(BW, PlayerRoster);
+
+            FS.Close();
+            BW.Close();
+        }
+
+        public static void SaveProgression(BinaryWriter BW, Roster PlayerRoster)
+        {
             BW.Write(BattleMap.NextMapType);
             BW.Write(BattleMap.NextMapPath);
 
@@ -148,9 +156,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 BW.Write(ActivePart);
             }
-
-            FS.Close();
-            BW.Close();
         }
 
         public static void LoadProgression(Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
@@ -159,6 +164,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FileStream FS = new FileStream("SRWE Save.bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS);
 
+            LoadProgression(BR, PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+            FS.Close();
+            BR.Close();
+        }
+
+        public static void LoadProgression(BinaryReader BR, Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        {
             BattleMap.DicGlobalVariables.Clear();
             BattleMap.DicRouteChoices.Clear();
 
@@ -197,9 +211,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     SystemList.ListPart.Add(LoadedPartPath, new UnitConsumablePart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
                 }
             }
-
-            FS.Close();
-            BR.Close();
         }
     }
 }

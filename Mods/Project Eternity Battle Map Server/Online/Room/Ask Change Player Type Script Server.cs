@@ -30,11 +30,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void Execute(IOnlineConnection Sender)
         {
-            foreach (OnlinePlayer ActivePlayer in Owner.ListRoomPlayer)
+            foreach (BattleMapPlayer ActivePlayer in Owner.ListRoomPlayer)
             {
                 if (ActivePlayer.ConnectionID == Sender.ID)
                 {
-                    ActivePlayer.PlayerType = NewPlayerType;
+                    ActivePlayer.OnlinePlayerType = NewPlayerType;
                 }
             }
 

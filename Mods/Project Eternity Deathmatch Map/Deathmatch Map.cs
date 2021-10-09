@@ -16,6 +16,7 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -50,8 +51,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         private SpriteFont fntArial16;
 
-        private List<GameScreen> ListNextAnimationScreen;
+        private List<Player> ListLocalPlayerInfo;
         public List<Player> ListPlayer;
+        public List<Player> ListLocalPlayer { get { return ListLocalPlayerInfo; } }
+        public List<Player> ListAllPlayer { get { return ListPlayer; } }
+
+        private List<GameScreen> ListNextAnimationScreen;
         public List<DelayedAttack> ListDelayedAttack;
         public MovementAlgorithm Pathfinder;
         public List<MapLayer> ListLayer;
@@ -131,6 +136,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             FormulaParser.ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
             ListPlayer = new List<Player>();
+            ListLocalPlayerInfo = new List<Player>();
             RequireFocus = false;
             RequireDrawFocus = true;
             Pathfinder = new MovementAlgorithmDeathmatch(this);
@@ -143,19 +149,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListTerrainType.Add(UnitStats.TerrainSpace);
         }
 
-        public DeathmatchMap(string BattleMapPath)
-            : this(BattleMapPath, 0, new Dictionary<string, List<Squad>>())
-        {
-            base.Init();
-            ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
-        }
-
-        public DeathmatchMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public DeathmatchMap(int GameMode)
             : this()
         {
-            this.BattleMapPath = BattleMapPath;
             this.GameMode = GameMode;
-            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
 
             CursorPosition = new Vector3(9, 13, 0);
             CursorPositionVisible = CursorPosition;
@@ -169,6 +166,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMapSwitchPoint = new List<MapSwitchPoint>();
             CameraPosition = Vector3.Zero;
             ActiveSquadIndex = -1;
+        }
+
+        public DeathmatchMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+            : this(GameMode)
+        {
+            this.BattleMapPath = BattleMapPath;
+            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
         }
 
         public override void Save(string FilePath)
@@ -244,6 +248,100 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
                 fntArial16 = Content.Load<SpriteFont>("Fonts/Arial16");
             }
+        }
+
+        public override void Load(byte[] ArrayGameData)
+        {
+            ByteReader BR = new ByteReader(ArrayGameData);
+
+            int ListCharacterCount = BR.ReadInt32();
+            for (int P = 0; P < ListCharacterCount; ++P)
+            {
+                string PlayerID = BR.ReadString();
+                string PlayerName = BR.ReadString();
+                int PlayerTeam = BR.ReadInt32();
+                Color PlayerColor = Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255);
+
+                byte LocalPlayerIndex = BR.ReadByte();
+
+                Player NewPlayer;
+                if (PlayerManager.OnlinePlayerID == PlayerID)
+                {
+                    NewPlayer = new Player(PlayerManager.ListLocalPlayer[LocalPlayerIndex]);
+                    AddLocalCharacter(NewPlayer);
+                    //NewPlayer.InputManagerHelper = new PlayerRobotInputManager();
+                    //NewPlayer.UpdateControls(GameplayTypes.MouseAndKeyboard);
+                }
+                else
+                {
+                    NewPlayer = new Player(PlayerName, "Online", true, true, PlayerTeam, PlayerColor);
+                    NewPlayer.LocalPlayerIndex = LocalPlayerIndex;
+                    ListAllPlayer.Add(NewPlayer);
+                }
+
+                NewPlayer.ListSquadToSpawn.Clear();
+                int ArraySquadLength = BR.ReadInt32();
+                for (int S = 0; S < ArraySquadLength; ++S)
+                {
+                    float SquadX = BR.ReadFloat();
+                    float SquadY = BR.ReadFloat();
+
+                    int UnitsInSquad = BR.ReadInt32();
+                    Unit[] ArrayNewUnit = new Unit[UnitsInSquad];
+                    for (int U = 0; U < UnitsInSquad; ++U)
+                    {
+                        string UnitTypeName = BR.ReadString();
+                        string RelativePath = BR.ReadString();
+
+                        ArrayNewUnit[U] = PlayerManager.DicUnitType[UnitTypeName].FromFile(RelativePath, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+
+                        int ArrayCharacterLength = BR.ReadInt32();
+                        ArrayNewUnit[U] .ArrayCharacterActive = new Character[UnitsInSquad];
+                        for (int C = 0; C < ArrayCharacterLength; ++C)
+                        {
+                            string CharacterPath = BR.ReadString();
+                            ArrayNewUnit[U].ArrayCharacterActive[C] = new Character(CharacterPath, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                            ArrayNewUnit[U].ArrayCharacterActive[C].Level = 1;
+                        }
+                    }
+
+                    Unit Leader = ArrayNewUnit[0];
+
+                    Unit WingmanA = null;
+                    if (UnitsInSquad > 1)
+                    {
+                        WingmanA = ArrayNewUnit[1];
+
+                    }
+
+                    Unit WingmanB = null;
+                    if (UnitsInSquad > 2)
+                    {
+                        WingmanB = ArrayNewUnit[2];
+
+                    }
+                    Squad NewSquad = new Squad("", Leader, WingmanA, WingmanB);
+                    NewSquad.SetPosition(new Vector3(SquadX, SquadY, 0));
+                    NewPlayer.ListSquadToSpawn.Add(NewSquad);
+                }
+            }
+
+            BattleMapPath = BR.ReadString();
+
+            Load();
+            for (int P = 0; P < ListPlayer.Count; P++)
+            {
+                Player ActivePlayer = ListPlayer[P];
+                foreach (Squad ActiveSquad in ActivePlayer.ListSquadToSpawn)
+                {
+                    ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                    SpawnSquad(P, ActiveSquad, 0, ActiveSquad.Position);
+                }
+            }
+            Init();
+            TogglePreview(true);
+
+            BR.Clear();
         }
 
         private void LoadMap()
@@ -395,6 +493,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public override void AddLocalPlayer(BattleMapPlayer NewPlayer)
+        {
+            Player NewDeahtmatchPlayer = new Player(NewPlayer);
+            ListPlayer.Add(NewDeahtmatchPlayer);
+            ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);
+        }
+
+        public void AddLocalCharacter(Player NewLocalCharacter)
+        {
+            ListPlayer.Add(NewLocalCharacter);
+            ListLocalPlayerInfo.Add(NewLocalCharacter);
+        }
+
         public override void TogglePreview(bool UsePreview)
         {
             foreach (MapLayer ActiveMapLayer in ListLayer)
@@ -437,6 +548,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (GameMode == 1)
             {
                 OnlinePlayers.Update();
+            }
+            else if (GameMode == 2)
+            {
             }
 
             if (!IsFrozen)
@@ -493,7 +607,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         MoveSquad();
                     }
-                    else if (GameMode == 0 || (GameMode == 1 && !ListPlayer[ActivePlayerIndex].IsOnline))
+                    else if (GameMode == 0 || (GameMode > 0 && !ListPlayer[ActivePlayerIndex].IsOnline))
                     {
                         ListActionMenuChoice.Last().Update(gameTime);
                     }
@@ -508,12 +622,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (!IsInit)
             {
                 Load();
+                Init();
+                TogglePreview(true);
 
                 foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
                 {
                     ActivePlayer.Send(new ServerIsReadyScriptServer());
                 }
-                IsInit = true;
             }
 
             GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
@@ -830,7 +945,47 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override byte[] GetSnapshotData()
         {
-            return new byte[0];
+            ByteWriter BW = new ByteWriter();
+
+            BW.AppendInt32(ListAllPlayer.Count);
+            foreach (Player ActivePlayer in ListAllPlayer)
+            {
+                BW.AppendString(ActivePlayer.OnlineClient.ID);
+                BW.AppendString(ActivePlayer.Name);
+                BW.AppendInt32(ActivePlayer.Team);
+                BW.AppendByte(ActivePlayer.Color.R);
+                BW.AppendByte(ActivePlayer.Color.G);
+                BW.AppendByte(ActivePlayer.Color.B);
+
+                BW.AppendByte(ActivePlayer.LocalPlayerIndex);
+
+                BW.AppendInt32(ActivePlayer.ListSquadToSpawn.Count);
+                foreach (Squad ActiveSquad in ActivePlayer.ListSquadToSpawn)
+                {
+                    BW.AppendFloat(ActiveSquad.X);
+                    BW.AppendFloat(ActiveSquad.Y);
+
+                    BW.AppendInt32(ActiveSquad.UnitsInSquad);
+                    for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
+                    {
+                        Unit ActiveUnit = ActiveSquad.At(U);
+                        BW.AppendString(ActiveUnit.UnitTypeName);
+                        BW.AppendString(ActiveUnit.RelativePath);
+
+                        BW.AppendInt32(ActiveUnit.ArrayCharacterActive.Length);
+                        for (int C = 0; C < ActiveUnit.ArrayCharacterActive.Length; ++C)
+                        {
+                            BW.AppendString(ActiveUnit.ArrayCharacterActive[C].FullName);
+                        }
+                    }
+                }
+            }
+
+            BW.AppendString(BattleMapPath);
+
+            byte[] Data = BW.GetBytes();
+            BW.ClearWriteBuffer();
+            return Data;
         }
 
         public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection activePlayer)

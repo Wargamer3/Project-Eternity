@@ -7,6 +7,8 @@ using Database.BattleMap;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
 using System.Reflection;
 using System.IO;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
@@ -39,6 +41,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                     }
                 }
             }
+            PlayerManager.DicUnitType = Unit.LoadAllUnits();
+            PlayerManager.DicRequirement = BaseSkillRequirement.LoadAllRequirements();
+            PlayerManager.DicEffect = BaseEffect.LoadAllEffects();
+            PlayerManager.DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
+            PlayerManager.DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
             Dictionary<string, OnlineScript> DicOnlineScripts = new Dictionary<string, OnlineScript>();
 

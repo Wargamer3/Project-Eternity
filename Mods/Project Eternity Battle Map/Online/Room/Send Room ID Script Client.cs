@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             DicNewGameServerScript.Add(PlayerJoinedScriptClient.ScriptName, new PlayerJoinedScriptClient(NewMissionSelectScreen));
             DicNewGameServerScript.Add(PlayerLeftScriptClient.ScriptName, new PlayerLeftScriptClient(MissionRoom, OnlineGameClient, NewMissionSelectScreen));
-            DicNewGameServerScript.Add(ChangeCharacterScriptClient.ScriptName, new ChangeCharacterScriptClient(MissionRoom, NewMissionSelectScreen));
+            DicNewGameServerScript.Add(ChangeLoadoutScriptClient.ScriptName, new ChangeLoadoutScriptClient(MissionRoom, NewMissionSelectScreen));
             DicNewGameServerScript.Add(ChangePlayerTypeScriptClient.ScriptName, new ChangePlayerTypeScriptClient(MissionRoom, NewMissionSelectScreen));
             DicNewGameServerScript.Add(ChangeTeamScriptClient.ScriptName, new ChangeTeamScriptClient(MissionRoom));
             DicNewGameServerScript.Add(ChangeMapScriptClient.ScriptName, new ChangeMapScriptClient(MissionRoom, NewMissionSelectScreen));
@@ -78,6 +78,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(RoomID, false));
                 OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient("Global"));
             }
+
+            Host.Send(new AskChangeLoadoutScriptClient(PlayerManager.ListLocalPlayer[0]));
 
             ScreenOwner.RemoveScreen(ScreenOwner);
 

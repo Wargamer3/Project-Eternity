@@ -199,7 +199,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.UpdateMapEvent(BattleMap.EventTypePhase, 0);
             Map.ListActionMenuChoice.RemoveAllActionPanels();//Will also remove this panel
 
-            if (!ActivePlayer.IsHuman)
+            if (!ActivePlayer.IsPlayerControlled)
             {
                 Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerAIStep(Map));
             }
@@ -233,7 +233,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             g.Draw(Map.sprPhaseBackground, Vector2.Zero, Color.White);
 
-            if (Map.ListPlayer[Map.ActivePlayerIndex].IsHuman)
+            if (Map.ListPlayer[Map.ActivePlayerIndex].IsPlayerControlled)
                 g.Draw(Map.sprPhasePlayer, Vector2.Zero, Color.White);
             else
                 g.Draw(Map.sprPhaseEnemy, Vector2.Zero, Color.White);

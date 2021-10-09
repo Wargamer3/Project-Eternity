@@ -122,12 +122,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
         }
 
-        public ConquestMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
-            : base()
+        public ConquestMap(int GameMode)
         {
-            this.BattleMapPath = BattleMapPath;
             this.GameMode = GameMode;
-            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
             RequireDrawFocus = false;
             Pathfinder = new MovementAlgorithmConquest(this);
             ListPlayer = new List<Player>();
@@ -169,8 +166,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListTileSet = new List<Texture2D>();
             this.CameraPosition = Vector3.Zero;
 
-            this.BattleMapPath = BattleMapPath;
             this.ListPlayer = new List<Player>();
+        }
+
+        public ConquestMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+            : this(GameMode)
+        {
+            this.BattleMapPath = BattleMapPath;
+            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
         }
         
         public override void Save(string FilePath)
@@ -218,6 +221,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             PopulateBuildingChoice();
             PopulateUnitDamageWeapon1();
             PopulateUnitDamageWeapon2();
+        }
+
+        public override void Load(byte[] ArrayGameData)
+        {
         }
 
         public void LoadMap(bool BackgroundOnly = false)
@@ -1041,6 +1048,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DicBuildingChoice["Vehicle"].Add("Rig");
         }
 
+        public override void AddLocalPlayer(BattleMapPlayer NewPlayer)
+        {
+            /*Player NewDeahtmatchPlayer = new Player(NewPlayer);
+            ListPlayer.Add(NewDeahtmatchPlayer);
+            ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
+        }
+
         public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
         {
             return CheckForUnitAtPosition(PlayerIndex, Position, Displacement) >= 0;
@@ -1304,9 +1318,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public override BattleMap GetNewMap(int GameMode)
         {
-            return new ConquestMap(BattleMapPath, GameMode, DicSpawnSquadByPlayer);
+            return new ConquestMap(GameMode);
         }
 
         public override string GetMapType()

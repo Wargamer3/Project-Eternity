@@ -6,11 +6,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 {
     public static class OnlineHelper
     {
-        public static Dictionary<string, OnlineScript> GetTripleThunderScriptsClient(BattleMapOnlineClient Owner)
+        public static Dictionary<string, OnlineScript> GetBattleMapScriptsClient(BattleMapOnlineClient Owner)
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 
-            //DicNewScript.Add(ReceiveGameDataScriptClient.ScriptName, new ReceiveGameDataScriptClient(Owner));
+            DicNewScript.Add(ReceiveGameDataScriptClient.ScriptName, new ReceiveGameDataScriptClient(Owner));
+            DicNewScript.Add(MoveCursorScriptClient.ScriptName, new MoveCursorScriptClient(Owner));
             //DicNewScript.Add(GameEndedScriptClient.ScriptName, new GameEndedScriptClient(Owner));
 
             return DicNewScript;

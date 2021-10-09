@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
                 byte[] ArrayPlayerInfo = Sender.ReadByteArray();
                 ByteReader BR = new ByteReader(ArrayPlayerInfo);
 
-                ArrayLobbyFriend[P] = new Player(PlayerID, BR.ReadString(), Player.PlayerTypes.Online, true, 0);
+                ArrayLobbyFriend[P] = new Player(PlayerID, BR.ReadString(), Player.PlayerTypes.Online, 0);
                 ArrayLobbyFriend[P].Level = BR.ReadInt32();
 
                 BR.Clear();

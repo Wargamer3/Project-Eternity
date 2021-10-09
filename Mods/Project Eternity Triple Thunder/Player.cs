@@ -25,7 +25,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public string Guild;
         public byte License;
         public byte Ranking;
-        public bool IsOnline;
         public int Team;
         public int Level;
         public uint Money;
@@ -36,12 +35,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public RobotAnimation InGameRobot;
         public IOnlineConnection OnlineClient;//Used by the server
 
-        public Player(string ID, string Name, string PlayerType, bool IsOnline, int Team)
+        public Player(string ID, string Name, string PlayerType, int Team)
         {
             this.ConnectionID = ID;
             this.Name = Name;
             this.PlayerType = PlayerType;
-            this.IsOnline = IsOnline;
             this.Team = Team;
 
             Guild = string.Empty;
@@ -51,11 +49,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Equipment = new PlayerEquipment();
         }
 
-        public Player(string ID, string Name, PlayerTypes PlayerType, bool IsOnline, int Team)
+        public Player(string ID, string Name, PlayerTypes PlayerType, int Team)
         {
             this.ConnectionID = ID;
             this.Name = Name;
-            this.IsOnline = IsOnline;
             this.Team = Team;
 
             Guild = string.Empty;

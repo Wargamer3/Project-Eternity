@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -195,6 +194,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
                 }
+            }
+
+            if (!IsOfflineOrServer)
+            {
+                OnlineClient.Host.Send(new MoveCursorScriptClient(CursorPosition.X, CursorPosition.Y));
             }
 
             return CursorMoved;

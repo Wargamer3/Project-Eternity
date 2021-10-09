@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (Room.ListRoomPlayer.Count == 0)
             {
-                PlayerManager.ListLocalPlayer[0].PlayerType = OnlinePlayer.PlayerTypeHost;
+                PlayerManager.ListLocalPlayer[0].OnlinePlayerType = BattleMapPlayer.PlayerTypeHost;
                 Room.AddLocalPlayer(PlayerManager.ListLocalPlayer[0]);
             }
         }
@@ -205,25 +205,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F1))
             {
-                OnlinePlayer NewPlayer = new OnlinePlayer("", "", OnlinePlayer.PlayerTypes.Player, false, 0);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer("", "", BattleMapPlayer.PlayerTypes.Player, false, 0, true, Color.Blue);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller1;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F2))
             {
-                OnlinePlayer NewPlayer = new OnlinePlayer("", "", OnlinePlayer.PlayerTypes.Player, false, 0);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer("", "", BattleMapPlayer.PlayerTypes.Player, false, 0, true, Color.Blue);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller2;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F3))
             {
-                OnlinePlayer NewPlayer = new OnlinePlayer("", "", OnlinePlayer.PlayerTypes.Player, false, 0);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer("", "", BattleMapPlayer.PlayerTypes.Player, false, 0, true, Color.Blue);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller3;
             }
             else if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.F4))
             {
-                OnlinePlayer NewPlayer = new OnlinePlayer("", "", OnlinePlayer.PlayerTypes.Player, false, 0);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer("", "", BattleMapPlayer.PlayerTypes.Player, false, 0, true, Color.Blue);
                 Room.AddLocalPlayer(NewPlayer);
                 NewPlayer.GameplayType = GameplayTypes.Controller4;
             }
@@ -232,7 +232,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void AssignButtons()
         {
             IsHost = false;
-            foreach (OnlinePlayer ActivePlayer in Room.GetLocalPlayers())
+            foreach (BattleMapPlayer ActivePlayer in Room.GetLocalPlayers())
             {
                 if (ActivePlayer.IsHost())
                 {
@@ -258,7 +258,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void AddPlayer(OnlinePlayer NewPlayer)
+        public void AddPlayer(BattleMapPlayer NewPlayer)
         {
             Room.ListRoomPlayer.Add(NewPlayer);
             
@@ -274,7 +274,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver.Play();
         }
 
-        public void UpdateCharacter(OnlinePlayer PlayerToUpdate)
+        public void UpdateCharacter(BattleMapPlayer PlayerToUpdate)
         {
             if (Room.GetLocalPlayer() == PlayerToUpdate)
             {
@@ -289,9 +289,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 bool IsEveryoneReady = true;
 
-                foreach (OnlinePlayer ActivePlayer in Room.ListRoomPlayer)
+                foreach (BattleMapPlayer ActivePlayer in Room.ListRoomPlayer)
                 {
-                    if (ActivePlayer.PlayerType != OnlinePlayer.PlayerTypeHost && ActivePlayer.PlayerType != OnlinePlayer.PlayerTypeReady)
+                    if (ActivePlayer.OnlinePlayerType != BattleMapPlayer.PlayerTypeHost && ActivePlayer.OnlinePlayerType != BattleMapPlayer.PlayerTypeReady)
                     {
                         IsEveryoneReady = false;
                     }
@@ -361,13 +361,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (Room.MapPath == "Random")
                 {
-                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(ActiveMapInfo.MapPath, 1, DicSpawnSquadByPlayer);
+                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(2);
                 }
                 else
                 {
-                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(ActiveMapInfo.MapPath, 1, DicSpawnSquadByPlayer);
+                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(2);
                 }
 
+                NewMap.BattleMapPath = ActiveMapInfo.MapPath;
+                NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
                 NewMap.Load();
                 NewMap.Init();
                 NewMap.TogglePreview(true);
@@ -383,13 +385,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ReadyButton.Disable();
 
-                if (Room.GetLocalPlayer().PlayerType == OnlinePlayer.PlayerTypePlayer)
+                if (Room.GetLocalPlayer().OnlinePlayerType == BattleMapPlayer.PlayerTypePlayer)
                 {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(OnlinePlayer.PlayerTypeReady));
+                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(BattleMapPlayer.PlayerTypeReady));
                 }
                 else
                 {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(OnlinePlayer.PlayerTypePlayer));
+                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(BattleMapPlayer.PlayerTypePlayer));
                 }
             }
         }
@@ -459,7 +461,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, OnlinePlayer PlayerToDraw, bool IsBlue)
+        private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, BattleMapPlayer PlayerToDraw, bool IsBlue)
         {
             Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX,
                                                             DrawY,
@@ -483,11 +485,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.Draw(ActiveSquad[0].SpriteMap, new Rectangle(DrawX + 337, DrawY - 3, 32, 32), Color.White);
             }
 
-            if (PlayerToDraw.PlayerType == OnlinePlayer.PlayerTypeHost)
+            if (PlayerToDraw.OnlinePlayerType == BattleMapPlayer.PlayerTypeHost)
             {
                 g.DrawString(fntText, "Host", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }
-            else if (PlayerToDraw.PlayerType == OnlinePlayer.PlayerTypeReady)
+            else if (PlayerToDraw.OnlinePlayerType == BattleMapPlayer.PlayerTypeReady)
             {
                 g.DrawString(fntText, "Ready", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }

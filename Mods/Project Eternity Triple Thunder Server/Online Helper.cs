@@ -26,8 +26,6 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 
-            DicNewScript.Add(FinishedLoadingScriptServer.ScriptName, new FinishedLoadingScriptServer(ActiveGroup));
-            DicNewScript.Add(SendPlayerUpdateScriptServer.ScriptName, new SendPlayerUpdateScriptServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer));
             DicNewScript.Add(ShootBulletScriptServer.ScriptName, new ShootBulletScriptServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer));
             DicNewScript.Add(AskTripleThunderGameDataScriptServer.ScriptName, new AskTripleThunderGameDataScriptServer((TripleThunderClientGroup)ActiveGroup));
             DicNewScript.Add(CreateSFXScriptServer.ScriptName, new CreateSFXScriptServer((TripleThunderClientGroup)ActiveGroup));

@@ -56,16 +56,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly BattleMapOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
-        private OnlinePlayer[] ArrayLobbyPlayer;
-        private OnlinePlayer[] ArrayLobbyFriends;
+        private BattleMapPlayer[] ArrayLobbyPlayer;
+        private BattleMapPlayer[] ArrayLobbyFriends;
         PlayerListTypes PlayerListType;
 
         public Lobby(bool UseOnline)
         {
             DicAllRoom = new Dictionary<string, RoomInformations>();
 
-            ArrayLobbyPlayer = new OnlinePlayer[0];
-            ArrayLobbyFriends = new OnlinePlayer[0];
+            ArrayLobbyPlayer = new BattleMapPlayer[0];
+            ArrayLobbyFriends = new BattleMapPlayer[0];
 
             if (UseOnline)
             {
@@ -110,13 +110,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                OnlinePlayer NewPlayer = new OnlinePlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayer.PlayerTypes.Online, false, 0);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
                 Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
                 Character NewCharacter = new Character("Original/Greg", Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                 NewCharacter.Level = 1;
                 NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
 
                 Squad NewSquad = new Squad("Squad", NewUnit);
+                NewSquad.IsPlayerControlled = true;
 
                 NewPlayer.ListSquadToSpawn.Add(NewSquad);
                 PlayerManager.ListLocalPlayer.Add(NewPlayer);
@@ -203,7 +204,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (ListServerIP.Count == 0)
                     {
                         TryConnecting = false;
-                        PlayerManager.ListLocalPlayer.Add(new OnlinePlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayer.PlayerTypes.Offline, false, 0));
+                        PlayerManager.ListLocalPlayer.Add(new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, BattleMapPlayer.PlayerTypes.Offline, false, 0, true, Color.Blue));
                         PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
                     }
                 }
@@ -315,7 +316,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 for (int P = 0; P < ArrayLobbyPlayer.Length; P++)
                 {
-                    OnlinePlayer ActivePlayer = ArrayLobbyPlayer[P];
+                    BattleMapPlayer ActivePlayer = ArrayLobbyPlayer[P];
                     float X = 635;
                     float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
@@ -348,7 +349,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 for (int P = 0; P < ArrayLobbyFriends.Length; P++)
                 {
-                    OnlinePlayer ActivePlayer = ArrayLobbyFriends[P];
+                    BattleMapPlayer ActivePlayer = ArrayLobbyFriends[P];
                     float X = 635;
                     float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
@@ -447,12 +448,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));
         }
 
-        public void PopulatePlayers(OnlinePlayer[] ArrayLobbyPlayer)
+        public void PopulatePlayers(BattleMapPlayer[] ArrayLobbyPlayer)
         {
             this.ArrayLobbyPlayer = ArrayLobbyPlayer;
         }
 
-        public void PopulateFriends(OnlinePlayer[] ArrayLobbyFriends)
+        public void PopulateFriends(BattleMapPlayer[] ArrayLobbyFriends)
         {
             this.ArrayLobbyFriends = ArrayLobbyFriends;
         }

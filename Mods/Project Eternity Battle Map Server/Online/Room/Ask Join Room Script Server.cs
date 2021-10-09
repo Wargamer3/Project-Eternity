@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         protected override void OnJoinRoomLocal(IOnlineConnection Sender, string RoomID, GameClientGroup ActiveGroup)
         {
             PVPRoomInformations JoinedRoom = (PVPRoomInformations)ActiveGroup.Room;
-            List<OnlinePlayer> ListJoiningPlayerInfo = JoinedRoom.GetOnlinePlayer(Sender);
+            List<BattleMapPlayer> ListJoiningPlayerInfo = JoinedRoom.GetOnlinePlayer(Sender);
 
             foreach (IOnlineConnection ActivePlayer in ActiveGroup.Room.ListOnlinePlayer)
             {

@@ -98,13 +98,16 @@
     <Compile Include="Lobby\Loading Screen.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
+    <Compile Include="Online\Game\Move Cursor Script Client.cs" />
+    <Compile Include="Online\Game\Receive Game Data Script Client.cs" />
     <Compile Include="Online\Login Success Script Client.cs" />
     <Compile Include="Online\Online Helper.cs" />
     <Compile Include="Online\Player Left Script Client.cs" />
     <Compile Include="Lobby\PVP Room Informations.cs" />
+    <Compile Include="Online\Room\Ask Change Loadout Script Client.cs" />
     <Compile Include="Online\Room\Ask Change Map Script Client.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Script Client.cs" />
-    <Compile Include="Online\Room\Change Character Script Client.cs" />
+    <Compile Include="Online\Room\Change Loadout Script Client.cs" />
     <Compile Include="Online\Room\Change Map Script Client.cs" />
     <Compile Include="Online\Room\Change Player Type Script Client.cs" />
     <Compile Include="Online\Room\Change Room Extras Battle Script Client.cs" />
@@ -124,7 +127,7 @@
     <Compile Include="Lobby\Box Button.cs" />
     <Compile Include="Lobby\Lobby.cs" />
     <Compile Include="Lobby\Player Manager.cs" />
-    <Compile Include="Lobby\OnlinePlayer.cs" />
+    <Compile Include="Lobby\BattleMapPlayer.cs" />
     <Compile Include="Lobby\Room Informations.cs" />
     <Compile Include="Movement Algorithm Tile.cs" />
     <Compile Include="Movement Animations.cs" />

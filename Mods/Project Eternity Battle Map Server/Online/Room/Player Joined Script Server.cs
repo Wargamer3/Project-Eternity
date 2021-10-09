@@ -9,9 +9,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Player Joined";
 
-        private readonly List<OnlinePlayer> ListJoiningPlayerInfo;
+        private readonly List<BattleMapPlayer> ListJoiningPlayerInfo;
 
-        public PlayerJoinedScriptServer(List<OnlinePlayer> ListJoiningPlayerInfo)
+        public PlayerJoinedScriptServer(List<BattleMapPlayer> ListJoiningPlayerInfo)
             : base(ScriptName)
         {
             this.ListJoiningPlayerInfo = ListJoiningPlayerInfo;
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
             WriteBuffer.AppendInt32(ListJoiningPlayerInfo.Count);
-            foreach (OnlinePlayer JoiningPlayer in ListJoiningPlayerInfo)
+            foreach (BattleMapPlayer JoiningPlayer in ListJoiningPlayerInfo)
             {
                 WriteBuffer.AppendString(JoiningPlayer.ConnectionID);
                 WriteBuffer.AppendString(JoiningPlayer.Name);

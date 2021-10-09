@@ -40,10 +40,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (!HasAskedForInfo)
                 {
-                    ScreenToLoad.Load();
-                    ScreenToLoad.Init();
-                    ScreenToLoad.TogglePreview(true);
-
                     Client.SetGame(ScreenToLoad);
                     Client.Host.Send(new AskGameDataScriptClient());
                     HasAskedForInfo = true;

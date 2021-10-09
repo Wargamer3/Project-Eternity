@@ -128,7 +128,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             //Begin attack.
                             case BattleMenuChoices.Start:
-                                if (Map.ListPlayer[TargetPlayerIndex].IsHuman)
+                                if (Map.ListPlayer[TargetPlayerIndex].IsPlayerControlled)
                                     Map.InitPlayerDefence(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
                                 else
                                 {
@@ -222,7 +222,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             Map.BattleMenuStage = BattleMenuStages.Default;
                             ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad,
                                 TargetSquad.CurrentLeader, TargetSquad, TargetSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
-                            if (!Map.ListPlayer[TargetPlayerIndex].IsHuman)
+                            if (!Map.ListPlayer[TargetPlayerIndex].IsPlayerControlled)
                             {
                                 PrepareDefenseSquadForBattle(Map, ActiveSquad, TargetSquad);
                             }

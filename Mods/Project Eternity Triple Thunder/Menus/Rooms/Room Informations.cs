@@ -114,7 +114,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
         {
             ListOnlinePlayer.Add(NewPlayer);
-            Player NewRoomPlayer = new Player(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0);
+            Player NewRoomPlayer = new Player(NewPlayer.ID, NewPlayer.Name, PlayerType, 0);
             NewRoomPlayer.Equipment.CharacterType = "Jack";
             NewRoomPlayer.GameplayType = GameplayTypes.None;
             ListRoomPlayer.Add(NewRoomPlayer);

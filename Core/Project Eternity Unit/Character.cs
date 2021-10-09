@@ -565,7 +565,6 @@ namespace ProjectEternity.Core.Characters
 
         public void QuickSave(BinaryWriter BW)
         {
-            BW.Write(FullName);
             BW.Write(EXP);
             BW.Write(Kills);
             BW.Write(Level);

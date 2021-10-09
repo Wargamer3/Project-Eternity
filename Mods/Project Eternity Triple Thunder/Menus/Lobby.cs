@@ -108,7 +108,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
             else
             {
-                PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
+                PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, 0));
                 PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
             }
         }
@@ -226,7 +226,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     if (ListServerIP.Count == 0)
                     {
                         TryConnecting = false;
-                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
+                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, 0));
                         PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
                     }
                 }
@@ -263,7 +263,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     if (ListServerIP.Count == 0)
                     {
                         TryConnecting = false;
-                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, false, 0));
+                        PlayerManager.ListLocalPlayer.Add(new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, Player.PlayerTypes.Offline, 0));
                         PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
                     }
                 }

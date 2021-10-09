@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
@@ -10,7 +11,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public enum GameplayTypes { None, MouseAndKeyboard, Controller1, Controller2, Controller3, Controller4 }
 
-    public class OnlinePlayer
+    public class BattleMapPlayer
     {
         public const string PlayerTypeOffline = "Offline";
         public const string PlayerTypeOnline = "Online";
@@ -23,7 +24,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public string ConnectionID;
         public string Name;
-        public string PlayerType;
         public string Guild;
         public byte License;
         public byte Ranking;
@@ -31,19 +31,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int Team;
         public int Level;
         public uint Money;
+        public bool IsPlayerControlled;
+        public Color Color;
         public GameplayTypes GameplayType;
+        public byte LocalPlayerIndex;
 
+        public string OnlinePlayerType;
         public IOnlineConnection OnlineClient;//Used by the server
 
         public List<Squad> ListSquadToSpawn;
 
-        public OnlinePlayer(string ID, string Name, string PlayerType, bool IsOnline, int Team)
+        public BattleMapPlayer(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
         {
             this.ConnectionID = ID;
             this.Name = Name;
-            this.PlayerType = PlayerType;
+            this.OnlinePlayerType = OnlinePlayerType;
             this.IsOnline = IsOnline;
             this.Team = Team;
+            this.IsPlayerControlled = IsPlayerControlled;
+            this.Color = Color;
 
             Guild = string.Empty;
             ListSquadToSpawn = new List<Squad>();
@@ -51,42 +57,66 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             GameplayType = GameplayTypes.MouseAndKeyboard;
         }
 
-        public OnlinePlayer(string ID, string Name, PlayerTypes PlayerType, bool IsOnline, int Team)
+        public BattleMapPlayer(string ID, string Name, PlayerTypes OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
         {
             this.ConnectionID = ID;
             this.Name = Name;
             this.IsOnline = IsOnline;
             this.Team = Team;
+            this.IsPlayerControlled = IsPlayerControlled;
+            this.Color = Color;
 
             Guild = string.Empty;
             ListSquadToSpawn = new List<Squad>();
 
-            if (PlayerType == PlayerTypes.Offline)
+            if (OnlinePlayerType == PlayerTypes.Offline)
             {
-                this.PlayerType = PlayerTypeOffline;
+                this.OnlinePlayerType = PlayerTypeOffline;
             }
-            else if (PlayerType == PlayerTypes.Online)
+            else if (OnlinePlayerType == PlayerTypes.Online)
             {
-                this.PlayerType = PlayerTypeOnline;
+                this.OnlinePlayerType = PlayerTypeOnline;
             }
-            else if (PlayerType == PlayerTypes.Host)
+            else if (OnlinePlayerType == PlayerTypes.Host)
             {
-                this.PlayerType = PlayerTypeHost;
+                this.OnlinePlayerType = PlayerTypeHost;
             }
-            else if (PlayerType == PlayerTypes.Player)
+            else if (OnlinePlayerType == PlayerTypes.Player)
             {
-                this.PlayerType = PlayerTypePlayer;
+                this.OnlinePlayerType = PlayerTypePlayer;
             }
-            else if (PlayerType == PlayerTypes.Ready)
+            else if (OnlinePlayerType == PlayerTypes.Ready)
             {
-                this.PlayerType = PlayerTypeReady;
+                this.OnlinePlayerType = PlayerTypeReady;
             }
             else
             {
-                this.PlayerType = PlayerTypeSpectator;
+                this.OnlinePlayerType = PlayerTypeSpectator;
             }
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
+        }
+
+        public BattleMapPlayer(BattleMapPlayer Clone)
+        {
+            ConnectionID = Clone.ConnectionID;
+            Name = Clone.Name;
+            Guild = Clone.Guild;
+            License = Clone.License;
+            Ranking = Clone.Ranking;
+            IsOnline = Clone.IsOnline;
+            Team = Clone.Team;
+            Level = Clone.Level;
+            Money = Clone.Money;
+            IsPlayerControlled = Clone.IsPlayerControlled;
+            Color = Clone.Color;
+            GameplayType = Clone.GameplayType;
+            LocalPlayerIndex = Clone.LocalPlayerIndex;
+
+            OnlinePlayerType = Clone.OnlinePlayerType;
+            OnlineClient = Clone.OnlineClient;
+
+            ListSquadToSpawn = Clone.ListSquadToSpawn;
         }
 
         public void LoadLocally(ContentManager Content)
@@ -122,7 +152,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public bool IsHost()
         {
-            return PlayerType == PlayerTypeHost || PlayerType == PlayerTypeOffline;
+            return OnlinePlayerType == PlayerTypeHost || OnlinePlayerType == PlayerTypeOffline;
         }
     }
 }

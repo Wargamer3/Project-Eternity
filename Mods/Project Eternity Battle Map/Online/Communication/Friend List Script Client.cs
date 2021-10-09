@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Online
@@ -10,7 +11,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private readonly Lobby Owner;
         private readonly CommunicationClient OnlineCommunicationClient;
 
-        private OnlinePlayer[] ArrayLobbyFriend;
+        private BattleMapPlayer[] ArrayLobbyFriend;
 
         public FriendListScriptClient(CommunicationClient OnlineCommunicationClient, Lobby Owner)
             : base(ScriptName)
@@ -42,14 +43,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         protected override void Read(OnlineReader Sender)
         {
             int ListPlayerNameCount = Sender.ReadInt32();
-            ArrayLobbyFriend = new OnlinePlayer[ListPlayerNameCount];
+            ArrayLobbyFriend = new BattleMapPlayer[ListPlayerNameCount];
             for (int P = 0; P < ListPlayerNameCount; ++P)
             {
                 string PlayerID = Sender.ReadString();
                 byte[] ArrayPlayerInfo = Sender.ReadByteArray();
                 ByteReader BR = new ByteReader(ArrayPlayerInfo);
 
-                ArrayLobbyFriend[P] = new OnlinePlayer(PlayerID, BR.ReadString(), OnlinePlayer.PlayerTypes.Online, true, 0);
+                ArrayLobbyFriend[P] = new BattleMapPlayer(PlayerID, BR.ReadString(), BattleMapPlayer.PlayerTypes.Online, true, 0, true, Color.Blue);
                 ArrayLobbyFriend[P].Level = BR.ReadInt32();
 
                 BR.Clear();

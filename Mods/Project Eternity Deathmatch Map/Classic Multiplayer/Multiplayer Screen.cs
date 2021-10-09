@@ -8,11 +8,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen.Online;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -112,7 +112,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Load()
         {
             NewMap = new DeathmatchMap(null, 1, null);
-            DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "\\Maps\\Deathmatch Maps");
+            DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "\\Maps\\Deathmatch");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             MaxItemToDraw = (Constants.Height - 100) / fntArial12.LineSpacing - 1;
@@ -495,8 +495,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case MenuChoices.PlayerList:
                     if (InputHelper.InputConfirmPressed())
                     {
-                        if ((OnlinePlayers.IsHost && NewMap.ListPlayer[ActivePlayerIndex].PlayerType != "Online") ||
-                            (NewMap.ListPlayer[ActivePlayerIndex].IsOnline && NewMap.ListPlayer[ActivePlayerIndex].PlayerType == "Open"))
+                        if ((OnlinePlayers.IsHost && NewMap.ListPlayer[ActivePlayerIndex].OnlinePlayerType != "Online") ||
+                            (NewMap.ListPlayer[ActivePlayerIndex].IsOnline && NewMap.ListPlayer[ActivePlayerIndex].OnlinePlayerType == "Open"))
                         {
                             Stage = MenuChoices.PlayerEdit;
                             CurrentSelection = MenuChoices.PlayerType;
@@ -558,13 +558,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case MenuChoices.PlayerType:
                     if (InputHelper.InputConfirmPressed())
                     {
-                        if (NewMap.ListPlayer[ActivePlayerIndex].PlayerType != ListPlayerType[PlayerChoiceSubMenuIndex])
+                        if (NewMap.ListPlayer[ActivePlayerIndex].OnlinePlayerType != ListPlayerType[PlayerChoiceSubMenuIndex])
                         {
-                            NewMap.ListPlayer[ActivePlayerIndex].PlayerType = ListPlayerType[PlayerChoiceSubMenuIndex];
-                            if (NewMap.ListPlayer[ActivePlayerIndex].PlayerType == "Human")
-                                NewMap.ListPlayer[ActivePlayerIndex].IsHuman = true;
+                            NewMap.ListPlayer[ActivePlayerIndex].OnlinePlayerType = ListPlayerType[PlayerChoiceSubMenuIndex];
+                            if (NewMap.ListPlayer[ActivePlayerIndex].OnlinePlayerType == "Human")
+                                NewMap.ListPlayer[ActivePlayerIndex].IsPlayerControlled = true;
 
-                            if (NewMap.ListPlayer[ActivePlayerIndex].PlayerType == "Online")
+                            if (NewMap.ListPlayer[ActivePlayerIndex].OnlinePlayerType == "Online")
                                 NewMap.ListPlayer[ActivePlayerIndex].IsOnline = true;
                             else
                                 NewMap.ListPlayer[ActivePlayerIndex].IsOnline = false;
@@ -778,11 +778,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawBox(g, new Vector2(0, 26), Constants.Width - 200, Constants.Height - 130, Color.White);
             for (int P = 0; P < NewMap.ListPlayer.Count; P++)
             {
-                if (NewMap.ListPlayer[P].IsOnline && NewMap.ListPlayer[P].PlayerType != "Open")
+                if (NewMap.ListPlayer[P].IsOnline && NewMap.ListPlayer[P].OnlinePlayerType != "Open")
                     g.DrawString(fntArial12, "Online", new Vector2(5, 25 + P * fntArial12.LineSpacing), Color.Black);
                 else
-                    g.DrawString(fntArial12, NewMap.ListPlayer[P].PlayerType, new Vector2(5, 30 + P * fntArial12.LineSpacing), Color.Black);
-                if (NewMap.ListPlayer[P].PlayerType == "Closed")
+                    g.DrawString(fntArial12, NewMap.ListPlayer[P].OnlinePlayerType, new Vector2(5, 30 + P * fntArial12.LineSpacing), Color.Black);
+                if (NewMap.ListPlayer[P].OnlinePlayerType == "Closed")
                     continue;
 
                 g.DrawString(fntArial12, NewMap.ListPlayer[P].Name, new Vector2(100, 30 + P * fntArial12.LineSpacing), Color.Black);

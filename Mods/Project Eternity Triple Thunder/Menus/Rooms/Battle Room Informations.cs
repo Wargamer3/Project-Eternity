@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     int NumberOfPlayers = BR.ReadInt32();
                     for (int P = 0; P < NumberOfPlayers; ++P)
                     {
-                        Player NewPlayer = new Player(BR.ReadString(), BR.ReadString(), BR.ReadString(), true, BR.ReadInt32());
+                        Player NewPlayer = new Player(BR.ReadString(), BR.ReadString(), BR.ReadString(), BR.ReadInt32());
                         NewPlayer.Equipment.CharacterType = BR.ReadString();
                         ListRoomPlayer.Add(NewPlayer);
                     }

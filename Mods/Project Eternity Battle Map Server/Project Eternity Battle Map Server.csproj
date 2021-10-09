@@ -33,6 +33,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,14 +48,18 @@
   <ItemGroup>
     <Compile Include="Online Helper.cs" />
     <Compile Include="Online\Create Game Script Server.cs" />
-    <Compile Include="Online\Room\Ask Change Character Script Server.cs" />
+    <Compile Include="Online\Game\Ask Game Data Script Server.cs" />
+    <Compile Include="Online\Game\Receive Game Data Script Server.cs" />
+    <Compile Include="Online\Room\Ask Change Loadout Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Map Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Player Type Script Server.cs" />
+    <Compile Include="Online\Game\Move Cursor Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Battle Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Mission Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Team Script Server.cs" />
     <Compile Include="Online\Room\Ask Join Room Script Server.cs" />
     <Compile Include="Online\Room\Ask Start Game Battle Script Server.cs" />
+    <Compile Include="Online\Room\Change Loadout Script Server.cs" />
     <Compile Include="Online\Room\Change Map Script Server.cs" />
     <Compile Include="Online\Room\Change Room Extras Battle Script Server.cs" />
     <Compile Include="Online\Room\Change Room Extras Mission Script Server .cs" />

@@ -44,23 +44,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
             if (CreatedGroup.Room.MapPath == "Random")
             {
-                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(Owner.MapPath, 1, DicSpawnSquadByPlayer);
+                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(2);
             }
             else
             {
-                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(Owner.MapPath, 1, DicSpawnSquadByPlayer);
+                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(2);
             }
 
+            NewMap.ListGameScreen = new List<GameScreen>();
+            NewMap.BattleMapPath = Owner.MapPath;
+            NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
             NewMap.InitOnlineServer(OnlineServer, CreatedGroup);
             CreatedGroup.SetGame(NewMap);
 
             for (int P = 0; P < CreatedGroup.Room.ListOnlinePlayer.Count; P++)
             {
                 IOnlineConnection ActiveOnlinePlayer = CreatedGroup.Room.ListOnlinePlayer[P];
-                OnlinePlayer ActivePlayer = Owner.ListRoomPlayer[P];
+                BattleMapPlayer ActivePlayer = Owner.ListRoomPlayer[P];
                 ActivePlayer.OnlineClient = ActiveOnlinePlayer;
 
-                //NewGame.AddLocalCharacter(ActivePlayer);
+                NewMap.AddLocalPlayer(ActivePlayer);
 
                 //Add Game Specific scripts
                 Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsServer(CreatedGroup, ActivePlayer);

@@ -62,13 +62,11 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             : base()
         {
         }
-
-        public WorldMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public WorldMap(int GameMode)
             : base()
         {
-            this.BattleMapPath = BattleMapPath;
             this.GameMode = GameMode;
-            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
+
             RequireDrawFocus = false;
 
             CursorPosition = new Vector3(9, 13, 0);
@@ -89,9 +87,14 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             ListLayer = new List<MapLayer>();
             this.CameraPosition = Vector3.Zero;
 
-            this.BattleMapPath = BattleMapPath;
             this.ListPlayer = new List<Player>();
-            this.GameMode = GameMode;
+        }
+
+        public WorldMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+            : this(GameMode)
+        {
+            this.BattleMapPath = BattleMapPath;
+            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
         }
 
         public override void Save(string FilePath)
@@ -153,6 +156,10 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             TogglePreview(true);
         }
 
+        public override void Load(byte[] ArrayGameData)
+        {
+        }
+
         private void LoadMap(bool BackgroundOnly = false)
         {
             ListTileSet = new List<Texture2D>();
@@ -207,6 +214,12 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }
         }
 
+        public override void AddLocalPlayer(BattleMapPlayer NewPlayer)
+        {
+            /*Player NewDeahtmatchPlayer = new Player(NewPlayer);
+            ListPlayer.Add(NewDeahtmatchPlayer);
+            ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
+        }
 
         public override void TogglePreview(bool UsePreview)
         {

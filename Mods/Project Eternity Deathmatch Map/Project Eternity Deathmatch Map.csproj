@@ -117,6 +117,7 @@
     <Compile Include="Battle Formulas.cs" />
     <Compile Include="Battle Previewer.cs" />
     <Compile Include="Deathmatch Map Helper.cs" />
+    <Compile Include="Lobby Multiplayer\Deathmatch Online Client.cs" />
     <Compile Include="Terrain\Camera 3D.cs" />
     <Compile Include="Deathmatch Context.cs" />
     <Compile Include="Deathmatch Map Requirement.cs" />
@@ -135,8 +136,8 @@
     <Compile Include="Menus\Result Menu.cs" />
     <Compile Include="Menus\Consumable Part Menu.cs" />
     <Compile Include="Movement Algorithm Deathmatch .cs" />
-    <Compile Include="Online\Loby Scripts.cs" />
-    <Compile Include="Online\Online Scripts.cs" />
+    <Compile Include="Classic Multiplayer\Loby Scripts.cs" />
+    <Compile Include="Classic Multiplayer\Online Scripts.cs" />
     <Compile Include="Deathmatch Map.cs" />
     <Compile Include="Battle Map Methods.cs" />
     <Compile Include="Player.cs" />
@@ -147,7 +148,7 @@
     <Compile Include="Terrain\Sub Map Layer.cs" />
     <Compile Include="Terrain\Tile 3D.cs" />
     <Compile Include="Deathmatch Unit.cs" />
-    <Compile Include="Online\Multiplayer Screen.cs" />
+    <Compile Include="Classic Multiplayer\Multiplayer Screen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit Deployment Screen.cs" />
   </ItemGroup>
@@ -213,6 +214,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             DicNewGameServerScript.Add(PlayerJoinedScriptClient.ScriptName, new PlayerJoinedScriptClient(NewScreen));
             DicNewGameServerScript.Add(PlayerLeftScriptClient.ScriptName, new PlayerLeftScriptClient(NewRoom, OnlineGameClient, NewScreen));
-            DicNewGameServerScript.Add(ChangeCharacterScriptClient.ScriptName, new ChangeCharacterScriptClient(NewRoom, NewScreen));
+            DicNewGameServerScript.Add(ChangeLoadoutScriptClient.ScriptName, new ChangeLoadoutScriptClient(NewRoom, NewScreen));
             DicNewGameServerScript.Add(ChangePlayerTypeScriptClient.ScriptName, new ChangePlayerTypeScriptClient(NewRoom, NewScreen));
             DicNewGameServerScript.Add(ChangeTeamScriptClient.ScriptName, new ChangeTeamScriptClient(NewRoom));
             DicNewGameServerScript.Add(ChangeMapScriptClient.ScriptName, new ChangeMapScriptClient(NewRoom, NewScreen));
@@ -93,6 +93,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 OnlineCommunicationClient.Host.Send(new CreateOrJoinCommunicationGroupScriptClient(RoomID, false));
                 OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient("Global"));
             }
+
+            Host.Send(new AskChangeLoadoutScriptClient(PlayerManager.ListLocalPlayer[0]));
 
             OnlineGameClient.DelayOnlineScript(this);
         }

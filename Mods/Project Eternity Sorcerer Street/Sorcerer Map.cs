@@ -142,11 +142,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ListPlayer = new List<Player>();
         }
 
-        public SorcererStreetMap(string BattleMapPath, int GameMode)
+        public SorcererStreetMap(int GameMode)
             : this()
         {
-            this.BattleMapPath = BattleMapPath;
             this.GameMode = GameMode;
+        }
+
+        public SorcererStreetMap(string BattleMapPath, int GameMode)
+            : this(GameMode)
+        {
+            this.BattleMapPath = BattleMapPath;
         }
         
         public override void Save(string FilePath)
@@ -191,6 +196,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             OnNewTurn();
         }
 
+        public override void Load(byte[] ArrayGameData)
+        {
+        }
+
         public void LoadMap(bool BackgroundOnly = false)
         {
             //Clear everything.
@@ -233,6 +242,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ListLayer.Add(new MapLayer(this, null, null, BR));
                 }
             }
+        }
+        public override void AddLocalPlayer(BattleMapPlayer NewPlayer)
+        {
+            //Player NewDeahtmatchPlayer = new Player(NewPlayer);
+            //ListPlayer.Add(NewDeahtmatchPlayer);
+            //ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);
         }
 
         public void EndPlayerPhase()
@@ -399,9 +414,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public override BattleMap GetNewMap(int GameMode)
         {
-            return new SorcererStreetMap(BattleMapPath, GameMode);
+            return new SorcererStreetMap(GameMode);
         }
 
         public override string GetMapType()

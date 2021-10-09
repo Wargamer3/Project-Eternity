@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
@@ -12,13 +13,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         private readonly GamePreparationScreen NewMissionSelectScreen;
 
-        private List<OnlinePlayer> ListJoiningPlayer;
+        private List<BattleMapPlayer> ListJoiningPlayer;
 
         public PlayerJoinedScriptClient(GamePreparationScreen NewMissionSelectScreen)
             : base(ScriptName)
         {
             this.NewMissionSelectScreen = NewMissionSelectScreen;
-            ListJoiningPlayer = new List<OnlinePlayer>();
+            ListJoiningPlayer = new List<BattleMapPlayer>();
         }
 
         public override OnlineScript Copy()
@@ -33,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            foreach (OnlinePlayer JoiningPlayer in ListJoiningPlayer)
+            foreach (BattleMapPlayer JoiningPlayer in ListJoiningPlayer)
             {
                 Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", NewMissionSelectScreen.Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
                 Character NewCharacter = new Character("Original/Greg", NewMissionSelectScreen.Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
@@ -54,7 +55,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             for (int P = 0; P < ListJoiningPlayerInfoCount; P++)
             {
-                OnlinePlayer JoiningPlayer = new OnlinePlayer(Sender.ReadString(), Sender.ReadString(), OnlinePlayer.PlayerTypes.Player, true, 0);
+                BattleMapPlayer JoiningPlayer = new BattleMapPlayer(Sender.ReadString(), Sender.ReadString(), BattleMapPlayer.PlayerTypes.Player, true, 0, true, Color.Blue);
 
                 ListJoiningPlayer.Add(JoiningPlayer);
             }

@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             for (int i = 0; i < ListAllCharacterIDCount; ++i)
             {
                 uint RobotID = Sender.ReadUInt32();
-                Player NewPlayer = new Player(Sender.ReadString(), Sender.ReadString(), Player.PlayerTypes.Online, true, Sender.ReadInt32());
+                Player NewPlayer = new Player(Sender.ReadString(), Sender.ReadString(), Player.PlayerTypes.Online, Sender.ReadInt32());
                 DicAllPlayer.Add(RobotID, NewPlayer);
             }
 

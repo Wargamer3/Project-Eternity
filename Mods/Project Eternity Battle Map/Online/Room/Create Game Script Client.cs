@@ -33,29 +33,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
-            for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
-            {
-                DicSpawnSquadByPlayer.Add(Room.ListRoomPlayer[P].Name, Room.ListRoomPlayer[P].ListSquadToSpawn);
-            }
-
-            BattleMap NewMap;
-
-            if (Room.MapPath == "Random")
-            {
-                NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.MapPath, 1, DicSpawnSquadByPlayer);
-            }
-            else
-            {
-                NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.MapPath, 1, DicSpawnSquadByPlayer);
-            }
+            BattleMap NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(2);
 
             NewMap.InitOnlineClient(Owner);
 
             NewMap.ListGameScreen = ListGameScreen;
             NewMap.PushScreen(new LoadingScreen(NewMap, Owner));
 
-            Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetTripleThunderScriptsClient(Owner);
+            Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsClient(Owner);
 
             Host.AddOrReplaceScripts(DicNewScript);
         }

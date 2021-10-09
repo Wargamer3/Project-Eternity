@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -32,7 +33,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     int NumberOfPlayers = BR.ReadInt32();
                     for (int P = 0; P < NumberOfPlayers; ++P)
                     {
-                        OnlinePlayer NewPlayer = new OnlinePlayer(BR.ReadString(), BR.ReadString(), BR.ReadString(), true, BR.ReadInt32());
+                        BattleMapPlayer NewPlayer = new BattleMapPlayer(BR.ReadString(), BR.ReadString(), BR.ReadString(), true, BR.ReadInt32(), BR.ReadBoolean(),
+                            Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
                         Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
                         Character NewCharacter = new Character("Original/Greg", Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                         NewCharacter.Level = 1;
@@ -69,8 +71,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         BW.Write(ListRoomPlayer[P].ConnectionID);
                         BW.Write(ListRoomPlayer[P].Name);
-                        BW.Write(ListRoomPlayer[P].PlayerType);
+                        BW.Write(ListRoomPlayer[P].OnlinePlayerType);
                         BW.Write(ListRoomPlayer[P].Team);
+                        BW.Write(ListRoomPlayer[P].IsPlayerControlled);
+                        BW.Write(ListRoomPlayer[P].Color.R);
+                        BW.Write(ListRoomPlayer[P].Color.G);
+                        BW.Write(ListRoomPlayer[P].Color.B);
                     }
 
                     return MS.ToArray();

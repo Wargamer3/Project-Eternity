@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             string PlayerType = Sender.ReadString();
             int PlayerTeam = Sender.ReadInt32();
 
-            Player PlayerInfo = new Player(PlayerID, PlayerName, PlayerType, true, PlayerTeam);
+            Player PlayerInfo = new Player(PlayerID, PlayerName, PlayerType, PlayerTeam);
 
             PlayerInfo.Equipment.CharacterType = Sender.ReadString();
             /*PlayerInfo.Equipment.EquipedBooster =*/Sender.ReadString();

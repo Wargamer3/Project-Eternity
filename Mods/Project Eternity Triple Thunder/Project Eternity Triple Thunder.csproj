@@ -131,7 +131,7 @@
     <Compile Include="Online\Infrastructure\Triple Thunder Client Group.cs" />
     <Compile Include="Online\Room\Join Room Failed Script Client.cs" />
     <Compile Include="Online\Online Helper.cs" />
-    <Compile Include="Online\Receive Game Data Script Client.cs" />
+    <Compile Include="Online\In Game\Receive Game Data Script Client.cs" />
     <Compile Include="Online\In Game\Send Player Respawn Script Client.cs" />
     <Compile Include="Online\In Game\Send Player Respawn Script Server.cs" />
     <Compile Include="Sounds\ISFXGenerator.cs" />
@@ -148,7 +148,6 @@
     <Compile Include="Online\Create Game Mission Script Client.cs" />
     <Compile Include="Online\Create Enemy Script Client.cs" />
     <Compile Include="Online\Create Player Script Client.cs" />
-    <Compile Include="Online\Finished Loading Script Client.cs" />
     <Compile Include="Online\Room\Join Room Local Script Client.cs" />
     <Compile Include="Online\Login Success Script Client.cs" />
     <Compile Include="Online\Room\Player Joined Script Client.cs" />

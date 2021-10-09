@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using ProjectEternity.Core.Characters;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Characters;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 {
     public class LoginSuccessScriptClient : OnlineScript
     {
-        private delegate void SafeCallDelegate(IOnlineConnection Host);
-
         public const string ScriptName = "Login Success";
 
         private readonly Lobby Owner;
@@ -36,14 +34,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         {
             PlayerManager.OnlinePlayerID = PlayerID;
 
-            OnlinePlayer NewPlayer = InitPlayer();
+            BattleMapPlayer NewPlayer = InitPlayer();
             PlayerManager.ListLocalPlayer.Add(NewPlayer);
 
             Owner.IdentifyToCommunicationServer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, PlayerInfo);
             Owner.AskForPlayerList();
         }
 
-        private OnlinePlayer InitPlayer()
+        private BattleMapPlayer InitPlayer()
         {
             ByteReader BR = new ByteReader(PlayerInfo);
 
@@ -58,10 +56,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
 
             Squad NewSquad = new Squad("Squad", NewUnit);
+            NewSquad.IsPlayerControlled = true;
 
-            OnlinePlayer NewPlayer = new OnlinePlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayer.PlayerTypes.Online, false, 0);
+            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
             NewPlayer.ListSquadToSpawn.Add(NewSquad);
-
             return NewPlayer;
         }
 

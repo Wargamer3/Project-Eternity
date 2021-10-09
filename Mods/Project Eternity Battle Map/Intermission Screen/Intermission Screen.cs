@@ -274,6 +274,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             PlayerRoster.SaveTeam(BW);
 
+            BW.Write(SystemList.ListPart.Count);
+            foreach (string ActivePart in SystemList.ListPart.Keys)
+            {
+                BW.Write(ActivePart);
+            }
+
             FS.Close();
             BW.Close();
         }
@@ -286,9 +292,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BattleMap.DicRouteChoices.Clear();
 
             PlayerRoster.TeamCharacters.Clear();
-
             PlayerRoster.TeamUnits.Clear();
-
             PlayerRoster.TeamSquads.Clear();
 
             BattleMap.NextMapType = BR.ReadString();
