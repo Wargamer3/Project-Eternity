@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -18,6 +20,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            Map.CursorPosition.X = BR.ReadFloat();
+            Map.CursorPosition.Y = BR.ReadFloat();
+            Map.CameraPosition.X = BR.ReadFloat();
+            Map.CameraPosition.Y = BR.ReadFloat();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendFloat(Map.CursorPosition.X);
+            BW.AppendFloat(Map.CursorPosition.Y);
+            BW.AppendFloat(Map.CameraPosition.X);
+            BW.AppendFloat(Map.CameraPosition.Y);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelTileStatus(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

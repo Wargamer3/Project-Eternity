@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -8,14 +9,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelBattleAttackAnimationPhase : BattleMapActionPanel
     {
+        private const string PanelName = "BattleAttackAnimationPhase";
+
         private readonly SorcererStreetMap Map;
-        private readonly string AttackAnimationPath;
-        private readonly bool LeftSideAttackRightSide;
+        private string AttackAnimationPath;
+        private bool LeftSideAttackRightSide;
 
         private AnimationScreen AttackAnimation;
 
+        public ActionPanelBattleAttackAnimationPhase(SorcererStreetMap Map)
+            : base(PanelName, Map.ListActionMenuChoice, false)
+        {
+            this.Map = Map;
+        }
+
         public ActionPanelBattleAttackAnimationPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, string AttackAnimationPath, bool LeftSideAttackRightSide)
-            : base("Battle Attack Animation Phase", ListActionMenuChoice, false)
+            : base(PanelName, ListActionMenuChoice, false)
         {
             this.Map = Map;
             this.AttackAnimationPath = AttackAnimationPath;
@@ -66,7 +75,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override void OnCancelPanel()
         {
         }
-        
+
+        public override void DoRead(ByteReader BR)
+        {
+            AttackAnimationPath = BR.ReadString();
+            LeftSideAttackRightSide = BR.ReadBoolean();
+            OnSelect();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendString(AttackAnimationPath);
+            BW.AppendBoolean(LeftSideAttackRightSide);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelBattleAttackAnimationPhase(Map);
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
         }

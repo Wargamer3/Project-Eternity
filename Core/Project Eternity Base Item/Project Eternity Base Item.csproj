@@ -74,8 +74,9 @@
     <Compile Include="3D\Cross Arrow 3D.cs" />
     <Compile Include="3D\Object 3D.cs" />
     <Compile Include="3D\Arrow 3D.cs" />
-    <Compile Include="Action Menu.cs" />
+    <Compile Include="Action Panel.cs" />
     <Compile Include="3D\Camera 3D.cs" />
+    <Compile Include="Action Panel Holder.cs" />
     <Compile Include="Animated Sprite.cs" />
     <Compile Include="Collision Zone.cs" />
     <Compile Include="Effects\Base Automatic Skill.cs" />

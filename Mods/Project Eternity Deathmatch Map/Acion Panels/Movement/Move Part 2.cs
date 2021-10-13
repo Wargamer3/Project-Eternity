@@ -1,22 +1,34 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelMovePart2 : ActionPanelDeathmatch
     {
-        private readonly Squad ActiveSquad;
-        private readonly int ActivePlayerIndex;
-        private readonly bool IsPostAttack;
+        private const string PanelName = "Move2";
 
-        public ActionPanelMovePart2(DeathmatchMap Map, Squad ActiveSquad, int ActivePlayerIndex, bool IsPostAttack)
-            : base("Move2", Map)
+        private int ActivePlayerIndex;
+        private int ActiveSquadIndex;
+        private Squad ActiveSquad;
+        private bool IsPostAttack;
+
+        public ActionPanelMovePart2(DeathmatchMap Map)
+            : base(PanelName, Map, false)
         {
-            this.ActiveSquad = ActiveSquad;
+        }
+
+        public ActionPanelMovePart2(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, bool IsPostAttack)
+            : base(PanelName, Map)
+        {
             this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveSquadIndex = ActiveSquadIndex;
             this.IsPostAttack = IsPostAttack;
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
         public override void OnSelect()
@@ -32,8 +44,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActiveSquad.CurrentLeader.CanAttack)
                 {
-                    ListNextChoice.Add(new ActionPanelAttackPart1(false,
-                        ActiveSquad, ActivePlayerIndex, Map));
+                    ListNextChoice.Add(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, false));
                 }
 
                 if (ActiveSquad.CurrentLeader.Boosts.PostMovementModifier.Spirit)
@@ -41,7 +52,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ListNextChoice.Add(new ActionPanelSpirit(Map, ActiveSquad));
                 }
 
-                ActiveSquad.CurrentLeader.OnMenuMovement(ActiveSquad, Map.ListActionMenuChoice);
+                ActiveSquad.CurrentLeader.OnMenuMovement(ActivePlayerIndex, ActiveSquad, Map.ListActionMenuChoice);
 
                 int SquadIndex = Map.CheckForSquadAtPosition(Map.ActivePlayerIndex, Map.CursorPosition, Vector3.Zero);
                 if (SquadIndex >= 0 && Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex] != ActiveSquad)
@@ -95,6 +106,38 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else if (MouseHelper.MouseMoved())
             {
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
+            Map.CursorPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+
+            //Movement initialisation.
+            Map.MovementAnimation.Add(ActiveSquad.X, ActiveSquad.Y, ActiveSquad);
+
+            //Move the Unit to the cursor position
+            ActiveSquad.SetPosition(Map.CursorPosition);
+
+            Map.CursorPosition = ActiveSquad.Position;
+            Map.CursorPositionVisible = Map.CursorPosition;
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
+            BW.AppendFloat(Map.CursorPosition.X);
+            BW.AppendFloat(Map.CursorPosition.Y);
+            BW.AppendFloat(Map.CursorPosition.Z);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelMovePart2(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

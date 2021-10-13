@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     //Update Effect based on Turns.
                     for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)
                     {
-                        ActiveSquad[U].OnTurnEnd(ActiveSquad);
+                        ActiveSquad[U].OnTurnEnd(ActivePlayerIndex, ActiveSquad);
                     }
                 }
             }

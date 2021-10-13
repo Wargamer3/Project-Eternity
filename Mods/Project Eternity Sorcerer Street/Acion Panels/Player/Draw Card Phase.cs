@@ -3,26 +3,42 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelDrawCardPhase : ActionPanelSorcererStreet
     {
+        private const string PanelName = "DrawCard";
+
         private enum AnimationPhases { IntroAnimation, CardSummary, Outro }
 
-        private readonly Player ActivePlayer;
+        private int ActivePlayerIndex;
+        private Player ActivePlayer;
         private Card DrawnCard;
         private AnimationPhases AnimationPhase;
         private float RotationTimer;
         private const float AnimationTime = 2 * MathHelper.TwoPi - MathHelper.PiOver2;
+        bool IsInit = false;
 
-        public ActionPanelDrawCardPhase(SorcererStreetMap Map, Player ActivePlayer)
-            : base("Draw Card", Map, false)
+        public ActionPanelDrawCardPhase(SorcererStreetMap Map)
+            : base(PanelName, Map, false)
         {
-            this.ActivePlayer = ActivePlayer;
+        }
+
+        public ActionPanelDrawCardPhase(SorcererStreetMap Map, int ActivePlayerIndex)
+            : base(PanelName, Map, false)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
         public override void OnSelect()
+        {
+        }
+
+        private void Init()
         {
             AnimationPhase = AnimationPhases.IntroAnimation;
             DrawnCard = ActivePlayer.ListRemainingCardInDeck[0];
@@ -33,12 +49,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ActivePlayer.ListRemainingCardInDeck.Count == 0)
             {
-                AddToPanelListAndSelect(new ActionPanelRefillDeckPhase(Map, ActivePlayer));
+                AddToPanelListAndSelect(new ActionPanelRefillDeckPhase(Map, ActivePlayerIndex));
             }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!IsInit)
+            {
+                Init();
+            }
+
             if (AnimationPhase == AnimationPhases.IntroAnimation)
             {
                 RotationTimer += 0.1f;
@@ -67,11 +88,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void FinishPhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelSpellCardSelectionPhase(Map, ActivePlayer));
+            AddToPanelListAndSelect(new ActionPanelSpellCardSelectionPhase(Map, ActivePlayerIndex));
         }
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            AnimationPhase = AnimationPhases.IntroAnimation;
+
+            ActivePlayerIndex = BR.ReadInt32();
+
+            int ListCardInHandCount = BR.ReadInt32();
+            ActivePlayer.ListCardInHand.Clear();
+            for (int C = 0; C < ListCardInHandCount; ++C)
+            {
+                ActivePlayer.ListCardInHand.Add(Card.LoadCard(BR.ReadString(), Map.Content));
+            }
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActivePlayer.ListCardInHand.Count);
+            for (int C = 0; C < ActivePlayer.ListCardInHand.Count; ++C)
+            {
+                BW.AppendString(ActivePlayer.ListCardInHand[C].Path);
+            }
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelDrawCardPhase(Map);
         }
 
         private void DrawIntro(CustomSpriteBatch g)

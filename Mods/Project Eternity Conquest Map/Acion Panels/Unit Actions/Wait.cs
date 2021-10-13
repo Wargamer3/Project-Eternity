@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Units.Conquest;
 
@@ -24,6 +26,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelWait(Map, null);
         }
 
         public override void Draw(CustomSpriteBatch g)

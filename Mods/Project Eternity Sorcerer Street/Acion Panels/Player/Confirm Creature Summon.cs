@@ -1,21 +1,32 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelConfirmCreatureSummon : ActionPanelSorcererStreet
     {
-        private readonly Player ActivePlayer;
+        private const string PanelName = "ConfirmCreatureSummon";
+
+        private int ActivePlayerIndex;
+        private Player ActivePlayer;
         private readonly CreatureCard ActiveCard;
 
         private int CursorIndex;
 
-        public ActionPanelConfirmCreatureSummon(SorcererStreetMap Map, Player ActivePlayer, CreatureCard ActiveCard)
-            : base("Confirm Creature Summon", Map, false)
+        public ActionPanelConfirmCreatureSummon(SorcererStreetMap Map)
+            : base(PanelName, Map, false)
         {
-            this.ActivePlayer = ActivePlayer;
+        }
+
+        public ActionPanelConfirmCreatureSummon(SorcererStreetMap Map, int ActivePlayerIndex, CreatureCard ActiveCard)
+            : base(PanelName, Map, false)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveCard = ActiveCard;
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
         public override void OnSelect()
@@ -63,6 +74,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelConfirmCreatureSummon(Map);
         }
 
         private void DrawIntro(CustomSpriteBatch g)

@@ -42,6 +42,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsClient(Owner);
 
+            DicNewScript.Add(OpenMenuScriptClient.ScriptName, new OpenMenuScriptClient(Owner, NewMap.GetOnlineActionPanel()));
+
             Host.AddOrReplaceScripts(DicNewScript);
         }
 

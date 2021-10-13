@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Units.Conquest;
 
@@ -9,10 +11,17 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class ActionPanelAIMoveTowardEnemy : ActionPanelConquest
     {
+        private const string PanelName = "AIMoveTowardEnemy";
+
         private UnitConquest ActiveUnit;
 
+        public ActionPanelAIMoveTowardEnemy(ConquestMap Map)
+            : base(PanelName, Map)
+        {
+        }
+
         public ActionPanelAIMoveTowardEnemy(ConquestMap Map, UnitConquest ActiveUnit)
-            : base("AI Move Toward Enemy", Map)
+            : base(PanelName, Map)
         {
             this.ActiveUnit = ActiveUnit;
         }
@@ -75,6 +84,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAIMoveTowardEnemy(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

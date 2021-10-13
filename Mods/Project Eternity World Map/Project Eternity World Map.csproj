@@ -62,6 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Battle Map Methods.cs" />
+    <Compile Include="Constructions\Upgrade Power Supply.cs" />
+    <Compile Include="Constructions\Set Waypoint.cs" />
+    <Compile Include="Constructions\Spawn Ninja.cs" />
+    <Compile Include="Constructions\Upgrade Factory.cs" />
     <Compile Include="Constructions\Unit Factory.cs" />
     <Compile Include="Constructions\Power Supply.cs" />
     <Compile Include="Factions.cs" />
@@ -69,7 +73,8 @@
     <Compile Include="Map 2D.cs" />
     <Compile Include="Map Consumable.cs" />
     <Compile Include="Map Layer.cs" />
-    <Compile Include="Menus\Construction Menu.cs" />
+    <Compile Include="Menus\Select Construction.cs" />
+    <Compile Include="Menus\Place New Construction.cs" />
     <Compile Include="Menus\Action Panel.cs" />
     <Compile Include="Menus\Player Menu.cs" />
     <Compile Include="Movement Algorithm.cs" />

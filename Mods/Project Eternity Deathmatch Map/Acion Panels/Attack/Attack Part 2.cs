@@ -3,22 +3,33 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelAttackPart2 : ActionPanelDeathmatch
     {
-        private Squad ActiveSquad;
+        private const string PanelName = "Attack2";
+
         private int ActivePlayerIndex;
+        private int ActiveSquadIndex;
+        private Squad ActiveSquad;
         public List<Vector3> AttackChoice;
         private BattlePreviewer BattlePreview;
 
-        public ActionPanelAttackPart2(DeathmatchMap Map, Squad ActiveSquad, int ActivePlayerIndex)
-            : base("Attack2", Map)
+        public ActionPanelAttackPart2(DeathmatchMap Map)
+            : base(PanelName, Map)
         {
-            this.ActiveSquad = ActiveSquad;
+        }
+
+        public ActionPanelAttackPart2(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+            : base(PanelName, Map)
+        {
             this.ActivePlayerIndex = ActivePlayerIndex;
-            BattlePreview = new BattlePreviewer(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack);
+            this.ActiveSquadIndex = ActiveSquadIndex;
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
         }
 
         public override void OnSelect()
@@ -68,7 +79,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
                             TargetSquadSupport.PrepareDefenceSupport(Map, P, Map.ListPlayer[P].ListSquad[TargetSelect]);
 
-                            Map.ComputeTargetPlayerDefence(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, Map.ListPlayer[P].ListSquad[TargetSelect], TargetSquadSupport, P);
+                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, P, TargetSelect, TargetSquadSupport);
 
                             break;
                         }
@@ -81,10 +92,58 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 bool CursorMoved = Map.UpdateMapNavigation();
                 if (CursorMoved)
                 {
-                    BattlePreview = new BattlePreviewer(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack);
+                    BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
                 }
                 BattlePreview.UpdateUnitDisplay();
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
+            int AttackChoiceCount = BR.ReadInt32();
+            AttackChoice = new List<Vector3>(AttackChoiceCount);
+            for (int A = 0; A < AttackChoiceCount; ++A)
+            {
+                AttackChoice.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0f));
+            }
+
+            bool IsBattlePreviewOpen = BR.ReadBoolean();
+            if (IsBattlePreviewOpen)
+            {
+                int PlayerIndex = BR.ReadInt32();
+                int SquadIndex = BR.ReadInt32();
+                BattlePreview = new BattlePreviewer(Map, PlayerIndex, SquadIndex, null);
+            }
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
+            BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
+            BW.AppendInt32(AttackChoice.Count);
+
+            for (int A = 0; A < AttackChoice.Count; ++A)
+            {
+                BW.AppendFloat(AttackChoice[A].X);
+                BW.AppendFloat(AttackChoice[A].Y);
+            }
+
+            BW.AppendBoolean(BattlePreview != null);
+            if (BattlePreview != null)
+            {
+                BW.AppendInt32(BattlePreview.PlayerIndex);
+                BW.AppendInt32(BattlePreview.SquadIndex);
+            }
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAttackPart2(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

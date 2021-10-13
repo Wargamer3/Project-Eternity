@@ -1,16 +1,25 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelFly : ActionPanelDeathmatch
     {
+        private const string PanelName = "Fly";
+
         private Squad ActiveSquad;
 
+        public ActionPanelFly(DeathmatchMap Map)
+            : base(PanelName, Map)
+        {
+        }
+
         public ActionPanelFly(DeathmatchMap Map, Squad ActiveSquad)
-            : base("Fly", Map)
+            : base(PanelName, Map)
         {
             this.ActiveSquad = ActiveSquad;
         }
@@ -25,6 +34,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelFly(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

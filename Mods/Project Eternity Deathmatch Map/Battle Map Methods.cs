@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FMOD;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.AnimationScreen;
@@ -561,6 +563,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override string GetMapType()
         {
             return "Deathmatch";
+        }
+
+        public override Dictionary<string, ActionPanel> GetOnlineActionPanel()
+        {
+            Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
+
+            Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity Deathmatch Map.dll"));
+            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelDeathmatch), this);
+            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+            {
+                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+            }
+
+            Dictionary<string, BattleMapActionPanel> DicActionPanelUnit = BattleMapActionPanel.LoadFromAssemblyFiles(Directory.GetFiles("Units/Deathmatch Map", "*.dll"), typeof(ActionPanelDeathmatch), this);
+            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelUnit)
+            {
+                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+            }
+
+            return DicActionPanel;
         }
     }
 }

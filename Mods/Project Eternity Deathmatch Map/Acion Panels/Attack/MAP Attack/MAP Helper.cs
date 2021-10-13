@@ -1,23 +1,31 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelAttackMAP : ActionPanelDeathmatch
     {
-        private readonly Squad ActiveSquad;
+        private const string PanelName = "AttackMAP";
+
         private readonly int ActivePlayerIndex;
+        private readonly int ActiveSquadIndex;
         private readonly Attack CurrentAttack;
 
-        public ActionPanelAttackMAP(DeathmatchMap Map, Squad ActiveSquad, int ActivePlayerIndex)
-            : base("AttackMAP", Map)
+        public ActionPanelAttackMAP(DeathmatchMap Map)
+            : base(PanelName, Map)
         {
-            this.ActiveSquad = ActiveSquad;
+        }
+
+        public ActionPanelAttackMAP(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+            : base(PanelName, Map)
+        {
             this.ActivePlayerIndex = ActivePlayerIndex;
-            CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
+            this.ActiveSquadIndex = ActiveSquadIndex;
+            CurrentAttack = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex].CurrentLeader.CurrentAttack;
         }
 
         public override void OnSelect()
@@ -26,15 +34,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (CurrentAttack.MAPAttributes.Property == WeaponMAPProperties.Spread)
                 {
-                    AddToPanelListAndSelect(new ActionPanelAttackMAPSpread(Map, ActiveSquad, ActivePlayerIndex));
+                    AddToPanelListAndSelect(new ActionPanelAttackMAPSpread(Map, ActivePlayerIndex, ActiveSquadIndex));
                 }
                 else if (CurrentAttack.MAPAttributes.Property == WeaponMAPProperties.Direction)
                 {
-                    AddToPanelListAndSelect(new ActionPanelAttackMAPDirection(Map, ActiveSquad, ActivePlayerIndex));
+                    AddToPanelListAndSelect(new ActionPanelAttackMAPDirection(Map, ActivePlayerIndex, ActiveSquadIndex));
                 }
                 else if (CurrentAttack.MAPAttributes.Property == WeaponMAPProperties.Targeted)
                 {
-                    AddToPanelListAndSelect(new ActionPanelAttackMAPTargeted(Map, ActiveSquad));
+                    AddToPanelListAndSelect(new ActionPanelAttackMAPTargeted(Map, ActivePlayerIndex, ActiveSquadIndex));
                 }
                 RemoveFromPanelList(this);
             }
@@ -42,6 +50,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAttackMAP(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

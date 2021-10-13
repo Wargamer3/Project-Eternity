@@ -4,36 +4,49 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelMainMenu : ActionPanelDeathmatch
     {
-        private Squad ActiveSquad;
-        private int ActivePlayerIndex;
+        private const string PanelName = "Menu";
 
-        public ActionPanelMainMenu(DeathmatchMap Map, Squad ActiveSquad, int ActiveSquadIndex)
-            : base("Menu", Map)
+        private int ActivePlayerIndex;
+        private int ActiveSquadIndex;
+
+        private Squad ActiveSquad;
+
+        public ActionPanelMainMenu(DeathmatchMap Map)
+            : base(PanelName, Map)
         {
-            this.ActiveSquad = ActiveSquad;
-            this.ActivePlayerIndex = ActiveSquadIndex;
+        }
+
+        public ActionPanelMainMenu(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+            : base(PanelName, Map)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveSquadIndex = ActiveSquadIndex;
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
         public override void OnSelect()
         {
-            Map.ActiveSquadIndex = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
-            ListNextChoice.Clear();
+            Map.ActiveSquadIndex = ActiveSquadIndex;
 
             //Update weapons to decide if the attack choice is drawn.
-            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[Map.ActivePlayerIndex].Team, ActiveSquad.CanMove);
+            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, ActiveSquad.CanMove);
+
+            ListNextChoice.Clear();
 
             if (ActiveSquad.CanMove)
             {
-                AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, Map.CursorPosition, Map.CameraPosition, ActiveSquad, ActivePlayerIndex));
+                AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, ActivePlayerIndex, ActiveSquadIndex, Map.CursorPosition, Map.CameraPosition));
                 if (ActiveSquad.CurrentLeader.CanAttack)
                 {
-                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(ActiveSquad.CanMove, ActiveSquad, ActivePlayerIndex, Map));
+                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CanMove));
                 }
                 AddChoiceToCurrentPanel(new ActionPanelSpirit(Map, ActiveSquad));
                 new ActionPanelConsumableParts(Map, this, ActiveSquad).OnSelect();
@@ -52,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActiveSquad.CurrentWingmanA != null)
                     AddChoiceToCurrentPanel(new ActionPanelFormation(Map, ActiveSquad));
 
-                List<ActionPanel> DicOptionalPanel = ActiveSquad.OnMenuSelect(Map.ListActionMenuChoice);
+                List<ActionPanel> DicOptionalPanel = ActiveSquad.OnMenuSelect(ActivePlayerIndex, Map.ListActionMenuChoice);
                 foreach (ActionPanel OptionalPanel in DicOptionalPanel)
                 {
                     AddChoiceToCurrentPanel(OptionalPanel);
@@ -128,6 +141,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void DoUpdate(GameTime gameTime)
         {
             NavigateThroughNextChoices(Map.sndSelection, Map.sndConfirm);
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            Map.ActiveSquadIndex = ActiveSquadIndex;
+
+            //Update weapons to decide if the attack choice is drawn.
+            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, ActiveSquad.CanMove);
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelMainMenu(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

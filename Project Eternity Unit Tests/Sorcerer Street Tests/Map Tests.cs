@@ -30,7 +30,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             Player DummyPlayer = new Player("Player 1", "Human", true, false, 0, new Card[0]);
             SorcererStreetMap DummyMap = CreateDummyMap();
-            ActionPanelGainPhase GainPhase = new ActionPanelGainPhase(DummyMap, DummyPlayer);
+            ActionPanelGainPhase GainPhase = new ActionPanelGainPhase(DummyMap, 0);
 
             Assert.AreEqual(0, DummyPlayer.Magic);
             GainPhase.OnSelect();
@@ -42,7 +42,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             Player DummyPlayer = new Player("Player 1", "Human", true, false, 0, new Card[] { new Card(), new Card(), new Card() });
             SorcererStreetMap DummyMap = CreateDummyMap();
-            ActionPanelDrawCardPhase DrawCardPhase = new ActionPanelDrawCardPhase(DummyMap, DummyPlayer);
+            ActionPanelDrawCardPhase DrawCardPhase = new ActionPanelDrawCardPhase(DummyMap, 0);
 
             Assert.AreEqual(3, DummyPlayer.ListRemainingCardInDeck.Count);
             Assert.AreEqual(0, DummyPlayer.ListCardInHand.Count);
@@ -56,7 +56,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             Player DummyPlayer = new Player("Player 1", "Human", true, false, 0, new Card[] { new Card(), new Card(), new Card() });
             SorcererStreetMap DummyMap = CreateDummyMap();
-            ActionPanelRefillDeckPhase RefillDeckPhase = new ActionPanelRefillDeckPhase(DummyMap, DummyPlayer);
+            ActionPanelRefillDeckPhase RefillDeckPhase = new ActionPanelRefillDeckPhase(DummyMap, 0);
 
             DummyPlayer.ListRemainingCardInDeck.Clear();
             Assert.AreEqual(0, DummyPlayer.ListRemainingCardInDeck.Count);
@@ -69,7 +69,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             Player DummyPlayer = new Player("Player 1", "Human", true, false, 0, new Card[0]);
             SorcererStreetMap DummyMap = CreateDummyMap();
-            ActionPanelCardSelectionPhase SpellSelectionPhase = new ActionPanelSpellCardSelectionPhase(DummyMap, DummyPlayer);
+            ActionPanelCardSelectionPhase SpellSelectionPhase = new ActionPanelSpellCardSelectionPhase(DummyMap, 0);
 
             DummyPlayer.ListCardInHand.Add(new Card());
             DummyPlayer.ListCardInHand.Add(new Card());
@@ -85,7 +85,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             Player DummyPlayer = new Player("Player 1", "Human", true, false, 0, new Card[0]);
             DummyPlayer.CurrentDirection = Player.Directions.Right;
             SorcererStreetMap DummyMap = CreateDummyMap();
-            ActionPanelRollDicePhase RollDicePhase = new ActionPanelRollDicePhase(DummyMap, DummyPlayer);
+            ActionPanelRollDicePhase RollDicePhase = new ActionPanelRollDicePhase(DummyMap, 0);
 
             RollDicePhase.RollDice();
 
@@ -97,7 +97,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             Player DummyPlayer = new Player("Player 1", "Human", true, false, 0, new Card[0]);
             SorcererStreetMap DummyMap = CreateDummyMap();
-            ActionPanelRollDicePhase RollDicePhase = new ActionPanelRollDicePhase(DummyMap, DummyPlayer);
+            ActionPanelRollDicePhase RollDicePhase = new ActionPanelRollDicePhase(DummyMap, 0);
 
             RollDicePhase.RollDice();
 
@@ -111,7 +111,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyPlayer.CurrentDirection = Player.Directions.Right;
             SorcererStreetMap DummyMap = CreateDummyMap();
             DummyMap.ListPlayer.Add(DummyPlayer);
-            ActionPanelMovementPhase MovementPhase = new ActionPanelMovementPhase(DummyMap, DummyPlayer, 3);
+            ActionPanelMovementPhase MovementPhase = new ActionPanelMovementPhase(DummyMap, 0, 3);
 
             DummyMap.ListActionMenuChoice.AddToPanelListAndSelect(MovementPhase);
 
@@ -147,7 +147,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             Player DummyPlayer = new Player("Player 1", "Human", true, false, 0, new Card[0]);
             SorcererStreetMap DummyMap = CreateDummyMap();
-            ActionPanelDiscardCardPhase DiscardCardPhase = new ActionPanelDiscardCardPhase(DummyMap, DummyPlayer, 6);
+            ActionPanelDiscardCardPhase DiscardCardPhase = new ActionPanelDiscardCardPhase(DummyMap, 0, 6);
             
             DiscardCardPhase.OnSelect();
         }

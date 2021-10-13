@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -15,12 +17,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ListAISquad = new List<Squad>();
 
-            //Keep a list of Squad in memory so we won't use Squad that would be spawned in this phase
-            for (int U = 0; U < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; U++)
+            if (Map.ListPlayer.Count > 0)
             {
-                if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].CurrentLeader != null && Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].SquadAI != null && !Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].IsPlayerControlled)
+                //Keep a list of Squad in memory so we won't use Squad that would be spawned in this phase
+                for (int U = 0; U < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; U++)
                 {
-                    ListAISquad.Add(Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U]);
+                    if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].CurrentLeader != null && Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].SquadAI != null && !Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].IsPlayerControlled)
+                    {
+                        ListAISquad.Add(Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U]);
+                    }
                 }
             }
         }
@@ -70,6 +75,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 RemoveAllSubActionPanels();
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPlayerPrePhaseAIStep(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

@@ -1,9 +1,18 @@
-﻿namespace ProjectEternity.GameScreens.SorcererStreetScreen
+﻿using ProjectEternity.Core.Item;
+
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelCreatureCardSelectionPhase : ActionPanelCardSelectionPhase
     {
-        public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map, Player ActivePlayer)
-            : base(Map.ListActionMenuChoice, Map, ActivePlayer, CreatureCard.CreatureCardType, "End turn")
+        private const string PanelName = "CreatureCardSelection";
+
+        public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map)
+            : base(PanelName, Map)
+        {
+        }
+
+        public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map, int ActivePlayerIndex)
+            : base(PanelName, Map.ListActionMenuChoice, Map, ActivePlayerIndex, CreatureCard.CreatureCardType, "End turn")
         {
         }
 
@@ -11,6 +20,11 @@
         {
             RemoveAllActionPanels();
             Map.EndPlayerPhase();
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelCreatureCardSelectionPhase(Map);
         }
     }
 }

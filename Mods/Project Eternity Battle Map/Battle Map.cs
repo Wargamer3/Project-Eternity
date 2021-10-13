@@ -216,7 +216,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListBackgroundsPath = new List<string>();
             ListForeground = new List<AnimationBackground>();
             ListForegroundsPath = new List<string>();
-            ListActionMenuChoice = new ActionPanelHolder();
+            ListActionMenuChoice = new BattleMapActionPanelHolder(this);
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
             
             VictoryCondition = "";

@@ -77,12 +77,14 @@
     <Compile Include="Battle Animation Screen.cs" />
     <Compile Include="Conquest Map.cs" />
     <Compile Include="Battle Formulas.cs" />
+    <Compile Include="Cutscene Script Holder.cs" />
     <Compile Include="Map Layer.cs" />
     <Compile Include="Overlays.cs" />
     <Compile Include="Map Interaction.cs" />
     <Compile Include="Drawable Grids.cs" />
     <Compile Include="Movement Algorithm Conquest.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Terrain Conquest.cs" />
     <Compile Include="Unit Delegates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

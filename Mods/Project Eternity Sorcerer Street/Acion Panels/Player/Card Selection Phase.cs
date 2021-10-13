@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -14,7 +14,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private enum AnimationPhases { IntroAnimation, CardSelection }
 
         protected readonly SorcererStreetMap Map;
-        private readonly Player ActivePlayer;
+        protected int ActivePlayerIndex;
+        protected Player ActivePlayer;
         private readonly string CardType;
         private AnimationPhases AnimationPhase;
         private int CardCursorIndex;
@@ -22,14 +23,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private float MaxAnimationScale;
         private string EndCardText;//Card on the far right used to close the pannel.
 
-        public ActionPanelCardSelectionPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, Player ActivePlayer, string CardType, string EndCardText = "")
-            : base("Card Selection", ListActionMenuChoice, false)
+        public ActionPanelCardSelectionPhase(string Name, SorcererStreetMap Map)
+            : base(Name, Map.ListActionMenuChoice, false)
         {
             this.Map = Map;
-            this.ActivePlayer = ActivePlayer;
+
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            MaxAnimationScale = 1.1f;
+        }
+
+        public ActionPanelCardSelectionPhase(string Name, ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, int ActivePlayerIndex, string CardType, string EndCardText = "")
+            : base(Name, ListActionMenuChoice, false)
+        {
+            this.Map = Map;
+            this.ActivePlayerIndex = ActivePlayerIndex;
             this.CardType = CardType;
             this.EndCardText = EndCardText;
 
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             MaxAnimationScale = 1.1f;
         }
 
@@ -96,7 +107,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void PrepareToRollDice()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelRollDicePhase(Map, ActivePlayer));
+            AddToPanelListAndSelect(new ActionPanelRollDicePhase(Map, ActivePlayerIndex));
         }
         
         protected override void OnCancelPanel()
@@ -105,7 +116,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public virtual void OnCardSelected(Card CardSelected)
         {
-            ActionPanelSorcererStreet NextPanel = CardSelected.ActivateOnMap(Map, ActivePlayer);
+            ActionPanelSorcererStreet NextPanel = CardSelected.ActivateOnMap(Map, ActivePlayerIndex);
             if (NextPanel != null)
             {
                 //Spin card to card view screen
@@ -119,6 +130,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public virtual void OnEndCardSelected()
         { }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
 
         public void DrawIntro(CustomSpriteBatch g)
         {

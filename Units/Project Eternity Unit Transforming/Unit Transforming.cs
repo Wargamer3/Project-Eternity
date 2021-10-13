@@ -157,7 +157,7 @@ namespace ProjectEternity.Core.Units.Transforming
             return true;
         }
 
-        public override void OnTurnEnd(Squad ActiveSquad)
+        public override void OnTurnEnd(int ActivePlayerIndex, Squad ActiveSquad)
         {
             if (TimeRemaining >= 1)
             {
@@ -166,17 +166,17 @@ namespace ProjectEternity.Core.Units.Transforming
             }
         }
 
-        public override List<ActionPanel> OnMenuMovement(Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        public override List<ActionPanel> OnMenuMovement(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
             if (Boosts.PostMovementModifier.Transform)
             {
-                return new List<ActionPanel>() { new ActionPanelTransform(Map, ActiveSquad) };
+                return new List<ActionPanel>() { new ActionPanelTransform(Map, ActivePlayerIndex, ActiveSquad) };
             }
 
             return null;
         }
 
-        public override List<ActionPanel> OnMenuSelect(Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
             int NumberOfTransformingUnitsInSquad = 0;
             for (int U = Map.ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
@@ -191,7 +191,7 @@ namespace ProjectEternity.Core.Units.Transforming
 
             if (NumberOfTransformingUnitsInSquad >= 1)
             {
-                return new List<ActionPanel>() { new ActionPanelTransform(Map, ActiveSquad) };
+                return new List<ActionPanel>() { new ActionPanelTransform(Map, ActivePlayerIndex, ActiveSquad) };
             }
 
             return new List<ActionPanel>();

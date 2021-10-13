@@ -19,7 +19,13 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             {
                 Tuple<int, int> Target = (Tuple<int, int>)ArrayReferences[0].ReferencedScript.GetContent();
                 Info.Map.TargetPlayerIndex = Target.Item1;
-                Info.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAIAttackBehavior(Info.Map, Info.ActiveSquad, Info.Map.ActivePlayerIndex, Target));
+
+                Info.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAIAttackBehavior(
+                    Info.Map,
+                    Info.Map.ActivePlayerIndex,
+                    Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].ListSquad.IndexOf(Info.ActiveSquad),
+                    Target));
+
                 IsCompleted = false;
                 Result = new List<object>() { "break" };
             }

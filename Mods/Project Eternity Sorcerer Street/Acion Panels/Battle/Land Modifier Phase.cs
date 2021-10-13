@@ -2,22 +2,33 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelBattleLandModifierPhase : BattleMapActionPanel
     {
+        private const string PanelName = "BattleLandModifierPhase";
+
         private readonly SorcererStreetMap Map;
-        private readonly TerrainSorcererStreet ActiveTerrain;
+        private SorcererStreetUnit PlayerUnit;
+        private TerrainSorcererStreet ActiveTerrain;
 
         private bool HasTerrainBonus;
 
-        public ActionPanelBattleLandModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, TerrainSorcererStreet ActiveTerrain)
-            : base("Battle Land Modifier Phase", ListActionMenuChoice, false)
+        public ActionPanelBattleLandModifierPhase(SorcererStreetMap Map)
+            : base(PanelName, Map.ListActionMenuChoice, false)
         {
             this.Map = Map;
-            this.ActiveTerrain = ActiveTerrain;
+        }
+
+        public ActionPanelBattleLandModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, SorcererStreetUnit PlayerUnit)
+            : base(PanelName, ListActionMenuChoice, false)
+        {
+            this.Map = Map;
+            this.PlayerUnit = PlayerUnit;
+            this.ActiveTerrain = Map.GetTerrain(PlayerUnit);
         }
 
         public override void OnSelect()
@@ -91,6 +102,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            float X = BR.ReadFloat();
+            float Y = BR.ReadFloat();
+            int LayerIndex = BR.ReadInt32();
+            Map.GetTerrain((int)X, (int)Y, LayerIndex);
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendFloat(PlayerUnit.X);
+            BW.AppendFloat(PlayerUnit.Y);
+            BW.AppendInt32(PlayerUnit.LayerIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelBattleLandModifierPhase(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

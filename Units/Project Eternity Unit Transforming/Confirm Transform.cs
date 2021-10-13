@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.Core.Units.Transforming
@@ -8,6 +10,11 @@ namespace ProjectEternity.Core.Units.Transforming
         private readonly UnitTransforming TransformingUnit;
         private readonly int TransformationChoice;
         private readonly Squad ActiveSquad;
+
+        public ActionPanelConfirmTransform(DeathmatchMap Map)
+            : base("Dummy", Map)
+        {
+        }
 
         public ActionPanelConfirmTransform(UnitTransforming TransformingUnit, int TransformationChoice, Squad ActiveSquad, DeathmatchMap Map, bool CanTransform)
             : base(TransformingUnit.ArrayTransformingUnit[TransformationChoice].UnitTransformed.ItemName, Map)
@@ -27,6 +34,19 @@ namespace ProjectEternity.Core.Units.Transforming
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelConfirmTransform(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

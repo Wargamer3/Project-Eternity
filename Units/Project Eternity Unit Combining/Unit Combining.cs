@@ -148,7 +148,7 @@ namespace ProjectEternity.Core.Units.Combining
             SpriteUnit = OriginalUnit.SpriteUnit;
         }
 
-        public override List<ActionPanel> OnMenuSelect(Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
             if (!Combined)
             {

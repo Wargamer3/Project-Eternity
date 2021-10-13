@@ -1,18 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelViewMap : ActionPanelSorcererStreet
     {
-        private readonly Player ActivePlayer;
-
         private Vector2 CursorPosition;
 
-        public ActionPanelViewMap(SorcererStreetMap Map, Player ActivePlayer)
+        public ActionPanelViewMap(SorcererStreetMap Map)
             : base("View Map", Map, true)
         {
-            this.ActivePlayer = ActivePlayer;
         }
 
         public override void OnSelect()
@@ -25,6 +24,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelViewMap(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

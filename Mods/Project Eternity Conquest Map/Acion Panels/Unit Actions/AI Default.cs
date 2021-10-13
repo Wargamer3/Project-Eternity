@@ -1,18 +1,35 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units.Conquest;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class ActionPanelAIDefault : ActionPanelConquest
     {
+        private const string PanelName = "AI Default";
+
         public ActionPanelAIDefault(ConquestMap Map)
-            : base("AI Default", Map)
+            : base(PanelName, Map)
         {
         }
 
         public override void OnSelect()
         {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAIDefault(Map);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -33,11 +50,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 //Capture building on self
                 if (UnitTerrain.CapturedPlayerIndex != Map.ActivePlayerIndex)
                 {
-                    AddToPanelListAndSelect(new ActionPanelCapture(Map, ActiveUnit));
+                    AddToPanelListAndSelect(new ActionPanelCapture(Map, Map.ActivePlayerIndex, U));
                 }
                 else
                 {
-                    AddToPanelListAndSelect(new ActionPanelAIAttack(Map, ActiveUnit));
+                    AddToPanelListAndSelect(new ActionPanelAIAttack(Map, Map.ActivePlayerIndex, U));
                 }
             }
 

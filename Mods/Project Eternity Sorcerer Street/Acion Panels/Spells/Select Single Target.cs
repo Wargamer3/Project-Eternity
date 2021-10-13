@@ -1,17 +1,16 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen.Acion_Panels
 {
     public class ActionPanelSelectSingleSpellTarget : ActionPanelSorcererStreet
     {
-        private readonly Player ActivePlayer;
-
-        public ActionPanelSelectSingleSpellTarget(SorcererStreetMap Map, Player ActivePlayer)
+        public ActionPanelSelectSingleSpellTarget(SorcererStreetMap Map)
             : base("Select Single Spell Target", Map, true)
         {
-            this.ActivePlayer = ActivePlayer;
         }
 
         public override void OnSelect()
@@ -35,6 +34,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Acion_Panels
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelSelectSingleSpellTarget(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

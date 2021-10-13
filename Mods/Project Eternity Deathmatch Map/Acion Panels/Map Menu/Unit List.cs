@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelUnitList : ActionPanelDeathmatch
     {
+        private const string PanelName = "Unit List";
+
         private Texture2D sprBarLargeBackground;
         private Texture2D sprBarLargeEN;
         private Texture2D sprBarLargeHP;
@@ -28,11 +32,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private const int UnitListMaxPerPage = 5;
         private List<Tuple<Unit, Vector3>> ListMapMenuUnitPosition;
 
+        public ActionPanelUnitList(DeathmatchMap Map)
+            : base(PanelName, Map, false)
+        {
+            this.sprBarLargeBackground = MapMenu.sprBarLargeBackground;
+            this.sprBarLargeEN = MapMenu.sprBarLargeEN;
+            this.sprBarLargeHP = MapMenu.sprBarLargeHP;
+            this.sprMapMenuBackground = MapMenu.sprMapMenuBackground;
+
+            this.sprLand = MapMenu.sprLand;
+            this.sprSea = MapMenu.sprSea;
+            this.sprSky = MapMenu.sprSky;
+            this.sprSpace = MapMenu.sprSpace;
+
+            this.fntFinlanderFont = Map.fntFinlanderFont;
+
+            ListMapMenuUnitPosition = new List<Tuple<Unit, Vector3>>();
+        }
+
         public ActionPanelUnitList(DeathmatchMap Map,
             Texture2D sprBarLargeBackground, Texture2D sprBarLargeEN, Texture2D sprBarLargeHP, Texture2D sprMapMenuBackground,
             Texture2D sprLand, Texture2D sprSea, Texture2D sprSky, Texture2D sprSpace,
             SpriteFont fntFinlanderFont)
-            : base("Unit List", Map, false)
+            : base(PanelName, Map, false)
         {
             this.sprBarLargeBackground = sprBarLargeBackground;
             this.sprBarLargeEN = sprBarLargeEN;
@@ -97,6 +119,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 MapUnitListCurrentPage += (MapUnitListCurrentPage < MapUnitListCurrentPageMax) ? 1 : 0;
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            OnSelect();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelUnitList(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

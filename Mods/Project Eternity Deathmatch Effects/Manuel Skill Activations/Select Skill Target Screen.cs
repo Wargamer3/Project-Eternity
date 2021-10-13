@@ -48,7 +48,7 @@ namespace ProjectEternity.Core.Skill
                 {
                     if (BattlePreview == null)
                     {
-                        BattlePreview = new BattlePreviewer(Map, Map.ListPlayer[P].ListSquad[CursorSelect], null);
+                        BattlePreview = new BattlePreviewer(Map, P, CursorSelect, null);
                     }
                     BattlePreview.UpdateUnitDisplay();
                 }

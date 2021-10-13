@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
@@ -104,6 +107,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Y = Constants.Height - MenuHeight;
             //Draw the menu cursor.
             g.Draw(GameScreen.sprPixel, new Rectangle(X, 9 + Y + ActionMenuCursor * PannelHeight, ActionMenuWidth - 20, PannelHeight - 5), Color.FromNonPremultiplied(255, 255, 255, 200));
+        }
+
+        public static Dictionary<string, BattleMapActionPanel> LoadFromAssembly(Assembly ActiveAssembly, Type TypeOfRequirement, params object[] Args)
+        {
+            Dictionary<string, BattleMapActionPanel> DicRequirement = new Dictionary<string, BattleMapActionPanel>();
+            List<BattleMapActionPanel> ListSkillEffect = ReflectionHelper.GetObjectsFromBaseTypes<BattleMapActionPanel>(TypeOfRequirement, ActiveAssembly.GetTypes(), Args);
+
+            foreach (BattleMapActionPanel Instance in ListSkillEffect)
+            {
+                DicRequirement.Add(Instance.Name, Instance);
+            }
+
+            return DicRequirement;
+        }
+
+        public static Dictionary<string, BattleMapActionPanel> LoadFromAssemblyFiles(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
+        {
+            Dictionary<string, BattleMapActionPanel> DicRequirement = new Dictionary<string, BattleMapActionPanel>();
+
+            for (int F = 0; F < ArrayFilePath.Length; F++)
+            {
+                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in LoadFromAssembly(ActiveAssembly, TypeOfRequirement, Args))
+                {
+                    DicRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
+            }
+
+            return DicRequirement;
         }
     }
 }

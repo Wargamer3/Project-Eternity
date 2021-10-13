@@ -1,16 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelChooseTerritory : ActionPanelSorcererStreet
     {
-        private readonly Player ActivePlayer;
+        private const string PanelName = "ChooseTerritory";
 
-        public ActionPanelChooseTerritory(SorcererStreetMap Map, Player ActivePlayer)
-            : base("Choose Territory", Map, false)
+        private int ActivePlayerIndex;
+        private Player ActivePlayer;
+
+        public ActionPanelChooseTerritory(SorcererStreetMap Map)
+            : base(PanelName, Map, false)
         {
-            this.ActivePlayer = ActivePlayer;
+        }
+
+        public ActionPanelChooseTerritory(SorcererStreetMap Map, int ActivePlayerIndex)
+            : base(PanelName, Map, false)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
         public override void OnSelect()
@@ -23,6 +34,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelChooseTerritory(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

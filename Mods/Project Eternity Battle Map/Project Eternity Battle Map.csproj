@@ -96,9 +96,11 @@
     <Compile Include="Lobby\Box Drop Down Button.cs" />
     <Compile Include="Lobby\Create Room Screen.cs" />
     <Compile Include="Lobby\Loading Screen.cs" />
+    <Compile Include="Menus\Battle Map Action Panel Holder.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
     <Compile Include="Online\Game\Move Cursor Script Client.cs" />
+    <Compile Include="Online\Game\Open Menu Script Client.cs" />
     <Compile Include="Online\Game\Receive Game Data Script Client.cs" />
     <Compile Include="Online\Login Success Script Client.cs" />
     <Compile Include="Online\Online Helper.cs" />
@@ -168,7 +170,7 @@
     <Compile Include="Intermission Screen\Pilot Swap.cs" />
     <Compile Include="Intermission Screen\Shop.cs" />
     <Compile Include="Intermission Screen\Squad Selection Screen.cs" />
-    <Compile Include="Menus\Action Menu.cs" />
+    <Compile Include="Menus\Battle Map Action Panel.cs" />
     <Compile Include="Menus\RouteMenu.cs" />
     <Compile Include="Movement Algorithm.cs" />
     <Compile Include="PopUpInputBox.cs" />

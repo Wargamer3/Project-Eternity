@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.Core.ProjectileParams;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.Core.Magic
 {
@@ -108,6 +109,21 @@ namespace ProjectEternity.Core.Magic
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override ActionPanel Copy()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Draw(CustomSpriteBatch g)

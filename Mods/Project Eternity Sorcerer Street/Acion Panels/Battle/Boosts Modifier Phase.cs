@@ -1,23 +1,39 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelBattleBoostsModifierPhase : BattleMapActionPanel
     {
+        private const string PanelName = "BattleBoostsModifierPhase";
+
         public static string RequirementName = "Sorcerer Street Boosts Phase";
 
         private readonly SorcererStreetMap Map;
 
+        public ActionPanelBattleBoostsModifierPhase(SorcererStreetMap Map)
+            : base(PanelName, Map.ListActionMenuChoice, false)
+        {
+            this.Map = Map;
+        }
+
         public ActionPanelBattleBoostsModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base("Battle Boosts Modifier Phase", ListActionMenuChoice, false)
+            : base(PanelName, ListActionMenuChoice, false)
         {
             this.Map = Map;
         }
 
         public override void OnSelect()
+        {
+            Init();
+
+            ContinueBattlePhase();
+        }
+
+        private void Init()
         {
             for (int X = 0; X < Map.MapSize.X; ++X)
             {
@@ -45,8 +61,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                 }
             }
-
-            ContinueBattlePhase();
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -66,6 +80,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            Init();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelBattleBoostsModifierPhase(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

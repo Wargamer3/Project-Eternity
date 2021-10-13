@@ -5,18 +5,31 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelHubStep : ActionPanelDeathmatch
     {
+        private const string PanelName = "ActionPanelHubStep";
+
+        private int ActivePlayerIndex;
+        private int ActiveSquadIndex;
         private Squad HubSquad;
 
-        public ActionPanelHubStep(DeathmatchMap Map, Squad ActiveSquad)
-            : base("ActionPanelHubStep", Map, false)
+        public ActionPanelHubStep(DeathmatchMap Map)
+            : base(PanelName, Map, false)
         {
-            this.HubSquad = ActiveSquad;
+        }
+
+        public ActionPanelHubStep(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+            : base(PanelName, Map, false)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveSquadIndex = ActiveSquadIndex;
+
+            this.HubSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
         public override void OnSelect()
@@ -56,7 +69,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     Map.CursorPosition = CollidingSquad.Position;
                     Map.CursorPositionVisible = Map.CursorPosition;
-                    List<ActionPanel> SquadSelect = CollidingSquad.OnMenuSelect(Map.ListActionMenuChoice);
+                    List<ActionPanel> SquadSelect = CollidingSquad.OnMenuSelect(ActivePlayerIndex, Map.ListActionMenuChoice);
                     foreach (ActionPanel ActivePanel in SquadSelect)
                     {
                         Map.ListActionMenuChoice.Add(ActivePanel);
@@ -90,6 +103,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Map.CameraPosition.Y += 0.1f;
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
+            HubSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            throw new NotImplementedException();
         }
 
         private Squad CheckHubSquad(Vector3 Position)

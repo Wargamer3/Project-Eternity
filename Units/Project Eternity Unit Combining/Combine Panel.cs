@@ -1,15 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using static ProjectEternity.GameScreens.DeathmatchMapScreen.DeathmatchMap;
 
 namespace ProjectEternity.Core.Units.Combining
 {
     public class ActionPanelCombine : ActionPanelDeathmatch
     {
+        private const string PanelName = "Combine";
+
         private UnitCombining ActiveUnit;
 
+        public ActionPanelCombine(DeathmatchMap Map)
+            : base(PanelName, Map)
+        {
+        }
+
         public ActionPanelCombine(DeathmatchMap Map, UnitCombining ActiveUnit)
-            : base("Combine", Map)
+            : base(PanelName, Map)
         {
             this.ActiveUnit = ActiveUnit;
         }
@@ -41,30 +49,17 @@ namespace ProjectEternity.Core.Units.Combining
         {
         }
 
-        public override void Draw(CustomSpriteBatch g)
+        public override void DoRead(ByteReader BR)
         {
         }
-    }
 
-    public class ActionPanelSplit : ActionPanelDeathmatch
-    {
-        private UnitCombining ActiveUnit;
-
-        public ActionPanelSplit(DeathmatchMap Map, UnitCombining ActiveUnit)
-            : base("Split", Map)
+        public override void DoWrite(ByteWriter BW)
         {
-            this.ActiveUnit = ActiveUnit;
         }
 
-        public override void OnSelect()
+        protected override ActionPanel Copy()
         {
-            ActiveUnit.Uncombine();
-
-            RemoveAllSubActionPanels();
-        }
-
-        public override void DoUpdate(GameTime gameTime)
-        {
+            return new ActionPanelCombine(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 using System.Collections.Generic;
 
@@ -8,11 +9,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelDebug : ActionPanelDeathmatch
     {
+        private const string PanelName = "Info";
+
         Squad ActiveSquad;
         private List<List<BaseEffect>> ListSquadEffect;
 
+        public ActionPanelDebug(DeathmatchMap Map)
+            : base(PanelName, Map)
+        {
+        }
+
         public ActionPanelDebug(Squad ActiveSquad, DeathmatchMap Map)
-            : base("Info", Map)
+            : base(PanelName, Map)
         {
             this.ActiveSquad = ActiveSquad;
         }
@@ -33,6 +41,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelDebug(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

@@ -1,65 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.Core.Item
 {
-    public class ActionPanelHolder
-    {
-        private readonly List<ActionPanel> ListActionPanel;
-
-        public ActionPanelHolder()
-        {
-            ListActionPanel = new List<ActionPanel>();
-        }
-
-        public void Add(ActionPanel NewActionPanel)
-        {
-            ListActionPanel.Add(NewActionPanel);
-        }
-
-        public void AddToPanelListAndSelect(ActionPanel Panel)
-        {
-            ListActionPanel.Add(Panel);
-            Panel.OnSelect();
-        }
-
-        public void Remove(ActionPanel NewActionPanel)
-        {
-            ListActionPanel.Remove(NewActionPanel);
-        }
-
-        public void RemoveAllActionPanels()
-        {
-            ListActionPanel.Clear();
-        }
-
-        public void RemoveAllSubActionPanels()
-        {
-            if (ListActionPanel.Count > 1)
-            {
-                ListActionPanel.RemoveRange(1, ListActionPanel.Count - 1);
-            }
-        }
-
-        public ActionPanel Last()
-        {
-            return ListActionPanel.Last();
-        }
-
-        public bool HasMainPanel
-        {
-            get { return ListActionPanel.Count > 0; }
-        }
-
-        public bool HasSubPanels
-        {
-            get { return ListActionPanel.Count > 1; }
-        }
-    }
-
     /// <summary>
     /// Used to make menus.
     /// </summary>
@@ -83,11 +29,12 @@ namespace ProjectEternity.Core.Item
 
         public ActionPanel(string Name, ActionPanelHolder ListActionMenuChoice, bool CanCancel)
         {
-            this.CanCancel = CanCancel;
             this.Name = Name;
             this.ListActionMenuChoice = ListActionMenuChoice;
-            this.IsEnabled = true;
+            this.CanCancel = CanCancel;
+
             ActionMenuWidth = MinActionMenuWidth;
+            IsEnabled = true;
 
             ListNextChoice = new List<ActionPanel>();
             if (ListActionMenuChoice.HasMainPanel)
@@ -102,6 +49,11 @@ namespace ProjectEternity.Core.Item
         public virtual void AddChoiceToCurrentPanel(ActionPanel Panel)
         {
             ListNextChoice.Add(Panel);
+        }
+
+        public virtual void AddChoicesToCurrentPanel(ActionPanel[] ArrayPanel)
+        {
+            ListNextChoice.AddRange(ArrayPanel);
         }
 
         public void AddToPanelListAndSelect(ActionPanel Panel)
@@ -182,7 +134,50 @@ namespace ProjectEternity.Core.Item
             }
         }
 
+        public List<ActionPanel> GetActionPanels()
+        {
+            return ListActionMenuChoice.GetActionPanels();
+        }
+
         protected abstract void OnCancelPanel();
+
+        public static ActionPanel Read(ByteReader BR, Dictionary<string, ActionPanel> DicActionPanel)
+        {
+            string NewActionPanelName = BR.ReadString();
+
+            ActionPanel NewActionPanel = DicActionPanel[NewActionPanelName].Copy();
+
+            NewActionPanel.DoRead(BR);
+
+            int ListActionPanelCount = BR.ReadInt32();
+            ActionPanel[] ListActionPanel = new ActionPanel[ListActionPanelCount];
+            for (int A = 0; A < ListActionPanelCount; ++A)
+            {
+                ListActionPanel[A] = Read(BR, DicActionPanel);
+            }
+
+            NewActionPanel.AddChoicesToCurrentPanel(ListActionPanel);
+
+            return NewActionPanel;
+
+        }
+
+        public abstract void DoRead(ByteReader BR);
+
+        public void Write(ByteWriter BW)
+        {
+            BW.AppendString(Name);
+            DoWrite(BW);
+            BW.AppendInt32(ListNextChoice.Count);
+            foreach (ActionPanel ActiveNextActionPanel in ListNextChoice)
+            {
+                ActiveNextActionPanel.Write(BW);
+            }
+        }
+
+        public abstract void DoWrite(ByteWriter BW);
+
+        protected abstract ActionPanel Copy();
 
         public abstract void Draw(CustomSpriteBatch g);
     }

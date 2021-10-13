@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
@@ -41,6 +43,19 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                     }
                 }
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPlayerHumanStep(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

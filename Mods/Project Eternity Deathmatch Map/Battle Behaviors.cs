@@ -10,33 +10,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public partial class DeathmatchMap
     {
-        public void ComputeTargetPlayerOffense(Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, int ActivePlayerIndex, Squad TargetSquad, SupportSquadHolder TargetSquadSupport, int TargetPlayerIndex)
+        public void ComputeTargetPlayerOffense(int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport, int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
         {
             if (ListPlayer[ActivePlayerIndex].IsPlayerControlled)
             {
-                ActionPanelHumanAttack PlayerDefence = new ActionPanelHumanAttack(this, ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
+                ActionPanelHumanAttack PlayerDefence = new ActionPanelHumanAttack(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
                 ListActionMenuChoice.Add(PlayerDefence);
                 PlayerDefence.OnSelect();
             }
             else
             {
                 //Begin attack.
-                InitPlayerDefence(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
+                InitPlayerDefence(ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex], ActiveSquadSupport, ActivePlayerIndex, ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex], TargetSquadSupport, TargetPlayerIndex);
             }
         }
 
-        public void ComputeTargetPlayerDefence(Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, int ActivePlayerIndex, Squad TargetSquad, SupportSquadHolder TargetSquadSupport, int TargetPlayerIndex)
+        public void ComputeTargetPlayerDefence(int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport, int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
         {
             if (ListPlayer[TargetPlayerIndex].IsPlayerControlled)
             {
-                ActionPanelHumanDefend PlayerDefence = new ActionPanelHumanDefend(this, ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
+                ActionPanelHumanDefend PlayerDefence = new ActionPanelHumanDefend(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
                 ListActionMenuChoice.Add(PlayerDefence);
                 PlayerDefence.OnSelect();
             }
             else
             {
                 //Skip defense
-                ComputeTargetPlayerOffense(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
+                ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
             }
         }
 

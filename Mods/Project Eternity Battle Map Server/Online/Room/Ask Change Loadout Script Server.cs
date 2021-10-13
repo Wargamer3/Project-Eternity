@@ -97,7 +97,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                             }
                         }
 
-                        ActivePlayer.ListSquadToSpawn.Add(new Squad("", Leader, WingmanA, WingmanB));
+                        Squad NewSquad = new Squad("", Leader, WingmanA, WingmanB);
+                        NewSquad.IsPlayerControlled = true;
+                        ActivePlayer.ListSquadToSpawn.Add(NewSquad);
                     }
                     
                     for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)

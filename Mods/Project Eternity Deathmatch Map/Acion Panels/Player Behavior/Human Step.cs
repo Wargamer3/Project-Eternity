@@ -1,15 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelPlayerHumanStep : ActionPanelDeathmatch
     {
+        private const string PanelName = "PlayerHumanStep";
+
         BattlePreviewer BattlePreview;
 
         public ActionPanelPlayerHumanStep(DeathmatchMap Map)
-            : base("PlayerHumanStep", Map, false)
+            : base(PanelName, Map, false)
         {
         }
 
@@ -34,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (BattlePreview == null)
                     {
-                        BattlePreview = new BattlePreviewer(Map, Map.ListPlayer[P].ListSquad[CursorSelect], null);
+                        BattlePreview = new BattlePreviewer(Map, P, CursorSelect, null);
                     }
                     BattlePreview.UpdateUnitDisplay();
                 }
@@ -70,8 +74,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (CursorSelect >= 0)
                     {
                         UnitFound = true;
-                        ActionPanelMainMenu NewActionMenu = new ActionPanelMainMenu(Map, Map.ListPlayer[P].ListSquad[CursorSelect], P);
-                        AddToPanelList(NewActionMenu);
+                        ActionPanelMainMenu NewActionMenu = new ActionPanelMainMenu(Map, P, CursorSelect);
 
                         if (P == Map.ActivePlayerIndex && Map.ListPlayer[P].ListSquad[CursorSelect].IsPlayerControlled)//Player controlled Squad.
                         {
@@ -81,6 +84,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             NewActionMenu.AddChoiceToCurrentPanel(new ActionPanelStatus(Map, Map.ListPlayer[P].ListSquad[CursorSelect]));
                         }
+
+                        AddToPanelList(NewActionMenu);
                     }
 
                     #endregion
@@ -94,6 +99,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.sndConfirm.Play();
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            bool IsBattlePreviewOpen = BR.ReadBoolean();
+            if (IsBattlePreviewOpen)
+            {
+                int PlayerIndex = BR.ReadInt32();
+                int SquadIndex = BR.ReadInt32();
+                BattlePreview = new BattlePreviewer(Map, PlayerIndex, SquadIndex, null);
+            }
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendBoolean(BattlePreview != null);
+            if (BattlePreview != null)
+            {
+                BW.AppendInt32(BattlePreview.PlayerIndex);
+                BW.AppendInt32(BattlePreview.SquadIndex);
+            }
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPlayerHumanStep(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

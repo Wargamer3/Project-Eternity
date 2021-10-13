@@ -1,17 +1,28 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelGainPhase : ActionPanelSorcererStreet
     {
-        private readonly Player ActivePlayer;
+        private const string PanelName = "GainPhase";
 
-        public ActionPanelGainPhase(SorcererStreetMap Map, Player ActivePlayer)
-            : base("Gain Phase", Map, false)
+        private int ActivePlayerIndex;
+        private Player ActivePlayer;
+
+        public ActionPanelGainPhase(SorcererStreetMap Map)
+            : base(PanelName, Map, false)
         {
-            this.ActivePlayer = ActivePlayer;
+        }
+
+        public ActionPanelGainPhase(SorcererStreetMap Map, int ActivePlayerIndex)
+            : base(PanelName, Map, false)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
         public override void OnSelect()
@@ -27,11 +38,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void FinishPhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelDrawCardPhase(Map, ActivePlayer));
+            AddToPanelListAndSelect(new ActionPanelDrawCardPhase(Map, ActivePlayerIndex));
         }
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActivePlayer.Magic = BR.ReadInt32();
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActivePlayer.Magic);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelGainPhase(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

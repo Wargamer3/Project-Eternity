@@ -95,16 +95,16 @@ namespace ProjectEternity.Core.Units.Builder
             }
         }
 
-        public override void OnTurnEnd(Squad ActiveSquad)
+        public override void OnTurnEnd(int ActivePlayerIndex, Squad ActiveSquad)
         {
         }
 
-        public override List<ActionPanel> OnMenuMovement(Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        public override List<ActionPanel> OnMenuMovement(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
             return null;
         }
 
-        public override List<ActionPanel> OnMenuSelect(Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
             return new List<ActionPanel>() { new ActionPanelBuild(Map, this) };
         }

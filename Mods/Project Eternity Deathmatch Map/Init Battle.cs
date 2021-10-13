@@ -280,19 +280,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad.EndTurn();
 
             bool HasAfterAttack = false;
-            ActionPanelDeathmatch AfterAttack = new ActionPanelMainMenu(this, ActiveSquad, AttackerPlayerIndex);
+            ActionPanelDeathmatch AfterAttack = new ActionPanelMainMenu(this, AttackerPlayerIndex, ActiveSquadIndex);
 
             if (ActiveSquad.CurrentLeader.Boosts.PostAttackModifier.Attack)
             {
                 HasAfterAttack = true;
-                AfterAttack.AddChoiceToCurrentPanel(new ActionPanelAttackPart1(ActiveSquad.CanMove, ActiveSquad, AttackerPlayerIndex, this));
+                AfterAttack.AddChoiceToCurrentPanel(new ActionPanelAttackPart1(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CanMove));
             }
 
             if (ActiveSquad.CurrentLeader.Boosts.PostAttackModifier.Move)
             {
                 HasAfterAttack = true;
                 CursorPosition = ActiveSquad.Position;
-                AfterAttack.AddChoiceToCurrentPanel(new ActionPanelMovePart1(this, ActiveSquad.Position, CameraPosition, ActiveSquad, AttackerPlayerIndex, true));
+                AfterAttack.AddChoiceToCurrentPanel(new ActionPanelMovePart1(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.Position, CameraPosition, true));
             }
 
             if (HasAfterAttack)

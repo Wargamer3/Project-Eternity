@@ -1,93 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class TerrainSorcererStreet : Terrain
-    {
-        public const string FireElement = "Fire";
-        public const string WaterElement = "Water";
-        public const string EarthElement = "Earth";
-        public const string AirElement = "Air";
-        public const string EastGate = "East Gate";
-        public const string WestGate = "Weast Gate";
-        public const string SouthGate = "South Gate";
-        public const string NorthGate = "North Gate";
-
-        public CreatureCard DefendingCreature;
-        public Player Owner;
-        public int TerrainLevel;
-
-        public TerrainSorcererStreet(Terrain Other)
-            : base(Other)
-        {
-            TerrainTypeIndex = Other.TerrainTypeIndex;
-            TerrainLevel = 0;
-        }
-
-        /// <summary>
-        /// Used to create the empty array of the map.
-        /// </summary>
-        public TerrainSorcererStreet(int XPos, int YPos)
-            : base(XPos, YPos)
-        {
-            TerrainTypeIndex = 0;
-            MVMoveCost = 1;
-            TerrainLevel = 0;
-        }
-        
-        public TerrainSorcererStreet(int XPos, int YPos, int TerrainTypeIndex)
-            : base(XPos, YPos)
-        {
-            this.TerrainTypeIndex = TerrainTypeIndex;
-            TerrainLevel = 0;
-        }
-
-        public override void Save(BinaryWriter BW)
-        {
-            BW.Write(TerrainTypeIndex);
-        }
-
-        public virtual void OnSelect(SorcererStreetMap Map, Player ActivePlayer)
-        {
-
-        }
-    }
-
-    public abstract class SorcererStreetMapCutsceneScriptHolder : CutsceneScriptHolder
-    {
-        public abstract class SorcererStreetMapScript : CutsceneActionScript
-        {
-            protected SorcererStreetMap Map;
-
-            protected SorcererStreetMapScript(SorcererStreetMap Map, int ScriptWidth, int ScriptHeight, string Name, string[] NameTriggers, string[] NameEvents)
-                : base(ScriptWidth, ScriptHeight, Name, NameTriggers, NameEvents)
-            {
-                this.Map = Map;
-            }
-        }
-
-        public abstract class SorcererStreetDataContainer : CutsceneDataContainer
-        {
-            protected SorcererStreetMap Map;
-
-            protected SorcererStreetDataContainer(SorcererStreetMap Map, int ScriptWidth, int ScriptHeight, string Name)
-                : base(ScriptWidth, ScriptHeight, Name)
-            {
-                this.Map = Map;
-            }
-        }
-    }
-
     public partial class SorcererStreetMap : BattleMap
     {
         public Texture2D sprArrowUp;
@@ -323,7 +249,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 MoveSquad();
             }
-            else if (GameMode == 1)
+            else if (GameMode > 0)
             {
                 if (!ListPlayer[ActivePlayerIndex].IsOnline)
                 {
@@ -336,7 +262,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (ListPlayer[ActivePlayerIndex].IsHuman)
                     {
-                        ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerDefault(this, ListPlayer[ActivePlayerIndex]));
+                        ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerDefault(this, ActivePlayerIndex));
                     }
                     else
                     {
@@ -441,6 +367,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer)
         {
 
+        }
+
+        public override Dictionary<string, ActionPanel> GetOnlineActionPanel()
+        {
+            Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
+
+            Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity Sorcerer Street.dll"));
+            Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelSorcererStreet), this);
+            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+            {
+                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+            }
+
+            return DicActionPanel;
         }
     }
 }

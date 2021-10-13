@@ -9,6 +9,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class ActionPanelBattleStartPhase : GameScreen
     {
         private readonly SorcererStreetMap Map;
+        private readonly int ActivePlayerIndex;
         private readonly Player ActivePlayer;
         private readonly CreatureCard Invader;
 
@@ -21,10 +22,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly float Scale = 0.5f;
         private readonly SimpleAnimation Background;
 
-        public ActionPanelBattleStartPhase(SorcererStreetMap Map, Player ActivePlayer, CreatureCard Invader)
+        public ActionPanelBattleStartPhase(SorcererStreetMap Map, int ActivePlayerIndex, CreatureCard Invader)
         {
             this.Map = Map;
-            this.ActivePlayer = ActivePlayer;
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             this.Invader = Invader;
 
             ListActionMenuChoice = new ActionPanelHolder();
@@ -55,7 +57,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.GlobalSorcererStreetBattleContext.DefenderCard.Position = new Vector2(Constants.Width - 210, 30);
             Map.GlobalSorcererStreetBattleContext.DefenderCard.Scale = new Vector2(0.5f);
 
-            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleItemSelectionPhase(ListActionMenuChoice, Map, ActivePlayer));
+            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleItemSelectionPhase(ListActionMenuChoice, Map, ActivePlayerIndex));
         }
 
         public override void Update(GameTime gameTime)

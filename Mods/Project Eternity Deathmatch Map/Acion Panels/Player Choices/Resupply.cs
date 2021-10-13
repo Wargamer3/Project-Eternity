@@ -4,18 +4,26 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelResupply : ActionPanelDeathmatch
     {
+        private const string PanelName = "Resupply";
+
         private readonly Squad ActiveSquad;
         private readonly ActionPanel Owner;
         private List<Vector3> ListMVChoice;
 
+        public ActionPanelResupply(DeathmatchMap Map)
+            : base(PanelName, Map)
+        {
+        }
+
         public ActionPanelResupply(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
-            : base("Resupply", Map)
+            : base(PanelName, Map)
         {
             this.ActiveSquad = ActiveSquad;
             this.Owner = Owner;
@@ -157,6 +165,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            int AttackChoiceCount = BR.ReadInt32();
+            ListMVChoice = new List<Vector3>(AttackChoiceCount);
+            for (int M = 0; M < AttackChoiceCount; ++M)
+            {
+                ListMVChoice.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0f));
+            }
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ListMVChoice.Count);
+
+            for (int M = 0; M < ListMVChoice.Count; ++M)
+            {
+                BW.AppendFloat(ListMVChoice[M].X);
+                BW.AppendFloat(ListMVChoice[M].Y);
+            }
+        }
+
+        protected override ActionPanel Copy()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Draw(CustomSpriteBatch g)

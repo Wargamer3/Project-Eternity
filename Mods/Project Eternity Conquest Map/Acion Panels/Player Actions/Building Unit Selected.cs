@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units.Conquest;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
@@ -51,6 +53,21 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     Map.sndCancel.Play();
                 }
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            Map.BuildingMenuCursor = BR.ReadInt32();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(Map.BuildingMenuCursor);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPlayerBuildingUnitSelected(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

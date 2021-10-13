@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Content = GameScreen.ContentFallback;
                 }
 
-                if (Content != null && !string.IsNullOrEmpty(_SpawnUnitName))
+                if (!string.IsNullOrEmpty(_SpawnUnitName))
                 {
                     string[] UnitInfo = _SpawnUnitName.Split(new[] { "/" }, StringSplitOptions.None);
                     _SpawnUnit = Unit.FromType(UnitInfo[0], _SpawnUnitName.Remove(0, UnitInfo[0].Length + 1), Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);

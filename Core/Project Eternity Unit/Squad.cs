@@ -194,13 +194,13 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public override List<ActionPanel> OnMenuSelect(ActionPanelHolder ListActionMenuChoice)
+        public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, ActionPanelHolder ListActionMenuChoice)
         {
             List<ActionPanel> DicActionPanel = new List<ActionPanel>();
 
             for (int U = UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                foreach (ActionPanel OptionalPanel in ArrayUnit[U].OnMenuSelect(this, ListActionMenuChoice))
+                foreach (ActionPanel OptionalPanel in ArrayUnit[U].OnMenuSelect(ActivePlayerIndex, this, ListActionMenuChoice))
                 {
                     if (OptionalPanel != null && !DicActionPanel.Contains(OptionalPanel))
                     {

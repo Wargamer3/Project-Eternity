@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void UpdateMapEvent(string EventType, int Index)
         {
-            if (GameMode == 1)
+            if (GameMode > 0 && !IsOfflineOrServer)
                 return;
 
             for (int E = ListMapEvent.Count - 1; E >= 0; --E)

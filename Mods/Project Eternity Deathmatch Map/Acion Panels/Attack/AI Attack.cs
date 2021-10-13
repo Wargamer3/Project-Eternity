@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -10,8 +12,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelAIAttackBehavior : ActionPanelDeathmatch
     {
+        private const string PanelName = "AI Attack Behavior";
+
         private Squad ActiveSquad;
         private int ActivePlayerIndex;
+        private int ActiveSquadIndex;
         private SupportSquadHolder ActiveSquadSupport;
         private Squad TargetSquad;
         private SupportSquadHolder TargetSquadSupport;
@@ -23,12 +28,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Vector2 AICursorNextPosition;
         public List<Vector3> AttackChoice;
 
-        public ActionPanelAIAttackBehavior(DeathmatchMap Map, Squad ActiveSquad, int ActivePlayerIndex, Tuple<int, int> Target)
-            : base("AI Attack Behavior", Map)
+        public ActionPanelAIAttackBehavior(DeathmatchMap Map)
+            : base(PanelName, Map)
         {
-            this.ActiveSquad = ActiveSquad;
+        }
+
+        public ActionPanelAIAttackBehavior(DeathmatchMap Map,  int ActivePlayerIndex, int ActiveSquadIndex, Tuple<int, int> Target)
+            : base(PanelName, Map)
+        {
             this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveSquadIndex = ActiveSquadIndex;
             this.Target = Target;
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
         public override void OnSelect()
@@ -116,16 +128,46 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                         else
                         {
-                            Map.ComputeTargetPlayerDefence(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, Target.Item1);
+                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, Target.Item1, Target.Item2, TargetSquadSupport);
                         }
                     }
                 }
                 else
                 {
-                    Map.ComputeTargetPlayerDefence(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, Target.Item1);
+                    Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, Target.Item1, Target.Item2, TargetSquadSupport);
                 }
                 AITimer = AITimerBase;
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
+            Target = new Tuple<int, int>(BR.ReadInt32(), BR.ReadInt32());
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            TargetSquad = Map.ListPlayer[Target.Item1].ListSquad[Target.Item2];
+            Map.TargetPlayerIndex = Target.Item1;
+
+            ActiveSquadSupport = new SupportSquadHolder();
+            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, TargetSquad);
+            TargetSquadSupport = new SupportSquadHolder();
+            TargetSquadSupport.PrepareDefenceSupport(Map, Target.Item1, TargetSquad);
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
+
+            BW.AppendInt32(Target.Item1);
+            BW.AppendInt32(Target.Item2);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAIAttackBehavior(Map);
         }
 
         private void PrepareToAttack()

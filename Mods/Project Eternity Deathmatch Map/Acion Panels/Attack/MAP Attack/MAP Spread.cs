@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
@@ -10,19 +12,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelAttackMAPSpread : ActionPanelDeathmatch
     {
-        private readonly Squad ActiveSquad;
+        private const string PanelName = "AttackMAPSpread";
+
+        private Squad ActiveSquad;
         private int ActivePlayerIndex;
-        private readonly Attack CurrentAttack;
+        private int ActiveSquadIndex;
+        private Attack CurrentAttack;
         public List<Vector3> AttackChoice;
         private BattlePreviewer BattlePreview;
 
-        public ActionPanelAttackMAPSpread(DeathmatchMap Map, Squad ActiveSquad, int ActivePlayerIndex)
-            : base("Attack MAP Spread", Map)
+        public ActionPanelAttackMAPSpread(DeathmatchMap Map)
+            : base(PanelName, Map)
         {
-            this.ActiveSquad = ActiveSquad;
+        }
+
+        public ActionPanelAttackMAPSpread(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+            : base(PanelName, Map)
+        {
             this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveSquadIndex = ActiveSquadIndex;
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
-            BattlePreview = new BattlePreviewer(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack);
+            BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
         }
 
         public override void OnSelect()
@@ -64,6 +75,43 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             Map.ListLayer[Map.ActiveLayerIndex].LayerGrid.AddDrawablePoints(AttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
+            int AttackChoiceCount = BR.ReadInt32();
+            AttackChoice = new List<Vector3>(AttackChoiceCount);
+            for (int A = 0; A < AttackChoiceCount; ++A)
+            {
+                AttackChoice.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0f));
+            }
+
+            CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
+            Map.BattleMenuOffenseFormationChoice = FormationChoices.ALL;
+            BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
+            BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
+            BW.AppendInt32(AttackChoice.Count);
+
+            for (int A = 0; A < AttackChoice.Count; ++A)
+            {
+                BW.AppendFloat(AttackChoice[A].X);
+                BW.AppendFloat(AttackChoice[A].Y);
+            }
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAttackMAPSpread(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

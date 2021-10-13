@@ -13,17 +13,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly DeathmatchMap Map;
         private readonly Squad ActiveSquad;
         private readonly Attack ActiveAttack;
+        public readonly int PlayerIndex;
+        public readonly int SquadIndex;
 
         private int UnitDisplayCounter;
 
-        public BattlePreviewer(DeathmatchMap Map, Squad ActiveSquad, Attack ActiveAttack)
+        public BattlePreviewer(DeathmatchMap Map, int PlayerIndex, int SquadIndex, Attack ActiveAttack)
         {
             this.Map = Map;
-            this.ActiveSquad = ActiveSquad;
+            this.PlayerIndex = PlayerIndex;
+            this.SquadIndex = SquadIndex;
             this.ActiveAttack = ActiveAttack;
+
+            ActiveSquad = Map.ListPlayer[PlayerIndex].ListSquad[SquadIndex];
+
             if (ActiveAttack != null)
             {
-                this.ActiveSquad.CurrentLeader.AttackIndex = this.ActiveSquad.CurrentLeader.ListAttack.IndexOf(ActiveAttack);
+                ActiveSquad.CurrentLeader.AttackIndex = ActiveSquad.CurrentLeader.ListAttack.IndexOf(ActiveAttack);
             }
         }
 

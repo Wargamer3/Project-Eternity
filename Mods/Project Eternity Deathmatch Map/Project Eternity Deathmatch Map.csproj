@@ -83,7 +83,7 @@
     <Compile Include="Acion Panels\Map Menu\Unit List.cs" />
     <Compile Include="Acion Panels\Map Menu\End Turn.cs" />
     <Compile Include="Acion Panels\Map Switch Menu.cs" />
-    <Compile Include="Acion Panels\Attack\Init MAP Attack.cs" />
+    <Compile Include="Acion Panels\Attack\Init Delayed MAP Attack.cs" />
     <Compile Include="Acion Panels\Hub Menu.cs" />
     <Compile Include="Acion Panels\Movement\Board.cs" />
     <Compile Include="Acion Panels\Movement\Deploy.cs" />

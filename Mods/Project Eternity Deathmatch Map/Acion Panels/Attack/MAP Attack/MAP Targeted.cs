@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.ControlHelper;
 
@@ -9,17 +11,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelAttackMAPTargeted : ActionPanelDeathmatch
     {
-        private readonly Squad ActiveSquad;
-        private readonly Attack CurrentAttack;
+        private const string PanelName = "AttackMAPTargeted";
+
+        private Squad ActiveSquad;
+        private int ActivePlayerIndex;
+        private int ActiveSquadIndex;
+        private Attack CurrentAttack;
         public List<Vector3> AttackChoice;
         private BattlePreviewer BattlePreview;
 
-        public ActionPanelAttackMAPTargeted(DeathmatchMap Map, Squad ActiveSquad)
-            : base("Attack MAP Targeted", Map)
+        public ActionPanelAttackMAPTargeted(DeathmatchMap Map)
+            : base(PanelName, Map)
         {
-            this.ActiveSquad = ActiveSquad;
+        }
+
+        public ActionPanelAttackMAPTargeted(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+            : base(PanelName, Map)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveSquadIndex = ActiveSquadIndex;
+            AttackChoice = new List<Vector3>();
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
-            BattlePreview = new BattlePreviewer(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack);
+            BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
         }
 
         public override void OnSelect()
@@ -61,6 +76,40 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
+            int AttackChoiceCount = BR.ReadInt32();
+            AttackChoice = new List<Vector3>(AttackChoiceCount);
+            for (int A = 0; A < AttackChoiceCount; ++A)
+            {
+                AttackChoice.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0f));
+            }
+
+            CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
+            BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
+            BW.AppendInt32(AttackChoice.Count);
+
+            for (int A = 0; A < AttackChoice.Count; ++A)
+            {
+                BW.AppendFloat(AttackChoice[A].X);
+                BW.AppendFloat(AttackChoice[A].Y);
+            }
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAttackMAPTargeted(Map);
+        }
         public override void Draw(CustomSpriteBatch g)
         {
             for (int X = 0; X < CurrentAttack.MAPAttributes.ListChoice.Count; X++)

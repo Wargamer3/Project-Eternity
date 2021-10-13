@@ -1,18 +1,27 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelFormation : ActionPanelDeathmatch
     {
+        private const string PanelName = "Formation";
+
         private int ActionMenuSwitchSquadCursor;
         private Squad ActiveSquad;
 
+        public ActionPanelFormation(DeathmatchMap Map)
+            : base(PanelName, Map)
+        {
+        }
+
         public ActionPanelFormation(DeathmatchMap Map, Squad ActiveSquad)
-            : base("Formation", Map)
+            : base(PanelName, Map)
         {
             this.ActiveSquad = ActiveSquad;
         }
@@ -126,6 +135,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (InputHelper.InputCancelPressed())
             {
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActionMenuSwitchSquadCursor = BR.ReadInt32();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActionMenuSwitchSquadCursor);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelFormation(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units.Conquest;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -9,12 +11,24 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class ActionPanelAIAttack : ActionPanelConquest
     {
+        private const string PanelName = "AIAttack";
+
+        private int ActivePlayerIndex;
+        private int ActiveUnitIndex;
         private UnitConquest ActiveUnit;
 
-        public ActionPanelAIAttack(ConquestMap Map, UnitConquest ActiveUnit)
-            : base("AIAttack", Map)
+        public ActionPanelAIAttack(ConquestMap Map)
+            : base(PanelName, Map)
         {
-            this.ActiveUnit = ActiveUnit;
+        }
+
+        public ActionPanelAIAttack(ConquestMap Map, int ActivePlayerIndex, int ActiveUnitIndex)
+            : base(PanelName, Map)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveUnitIndex = ActiveUnitIndex;
+
+            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveUnitIndex];
         }
 
         public override void OnSelect()
@@ -85,6 +99,25 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 AddToPanelListAndSelect(new ActionPanelAIMoveTowardEnemy(Map, ActiveUnit));
             }
+        }
+
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveUnitIndex = BR.ReadInt32();
+            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveUnitIndex];
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveUnitIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAIAttack(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

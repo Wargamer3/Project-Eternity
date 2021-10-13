@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         public IRoomInformations Room => _Room;
 
-        public BattleMap TripleThunderGame { get { return _CurrentGame; } }
+        public BattleMap BattleMapGame { get { return _CurrentGame; } }
 
         private BattleMapClientGroup()
         {

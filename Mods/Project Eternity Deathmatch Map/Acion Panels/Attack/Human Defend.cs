@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
@@ -10,23 +12,37 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelHumanDefend : ActionPanelDeathmatch
     {
+        private const string PanelName = "HumanDefend";
+
+        private int ActivePlayerIndex;
+        private int ActiveSquadIndex;
         private Squad ActiveSquad;
         private SupportSquadHolder ActiveSquadSupport;
-        private int ActivePlayerIndex;
+
+        private int TargetPlayerIndex;
+        private int TargetSquadIndex;
         private Squad TargetSquad;
         private SupportSquadHolder TargetSquadSupport;
-        private int TargetPlayerIndex;
 
-        public ActionPanelHumanDefend(DeathmatchMap Map, Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, int ActivePlayerIndex,
-            Squad TargetSquad, SupportSquadHolder TargetSquadSupport, int TargetPlayerIndex)
-            : base("Human Defend", Map, false)
+        public ActionPanelHumanDefend(DeathmatchMap Map)
+            : base(PanelName, Map, false)
         {
-            this.ActiveSquad = ActiveSquad;
-            this.ActiveSquadSupport = ActiveSquadSupport;
+        }
+
+        public ActionPanelHumanDefend(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport,
+             int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
+            : base(PanelName, Map, false)
+        {
             this.ActivePlayerIndex = ActivePlayerIndex;
-            this.TargetSquad = TargetSquad;
-            this.TargetSquadSupport = TargetSquadSupport;
+            this.ActiveSquadIndex = ActiveSquadIndex;
+            this.ActiveSquadSupport = ActiveSquadSupport;
+
             this.TargetPlayerIndex = TargetPlayerIndex;
+            this.TargetSquadIndex = TargetSquadIndex;
+            this.TargetSquadSupport = TargetSquadSupport;
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
         }
 
         public override void OnSelect()
@@ -87,7 +103,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         switch (Map.BattleMenuCursorIndex)
                         {
                             case BattleMenuChoices.Start:
-                                Map.ComputeTargetPlayerOffense(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
+                                Map.ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
                                 break;
 
                             case BattleMenuChoices.Action:
@@ -458,6 +474,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     #endregion
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
+
+            TargetPlayerIndex = BR.ReadInt32();
+            TargetSquadIndex = BR.ReadInt32();
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
+
+            BW.AppendInt32(TargetPlayerIndex);
+            BW.AppendInt32(TargetSquadIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelHumanDefend(Map);
         }
 
         protected override void OnCancelPanel()

@@ -32,7 +32,12 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 IsCompleted = true;
                 if (_AttackAfterMoving)
                 {
-                    Info.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAIAttackBehavior(Info.Map, Info.ActiveSquad, Info.Map.ActivePlayerIndex, (Tuple<int, int>)ArrayReferences[0].ReferencedScript.GetContent()));
+                    Info.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAIAttackBehavior(
+                        Info.Map,
+                        Info.Map.ActivePlayerIndex,
+                        Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].ListSquad.IndexOf(Info.ActiveSquad),
+                        (Tuple<int, int>)ArrayReferences[0].ReferencedScript.GetContent()));
+
                     IsCompleted = false;
                     Result = new List<object>() { "break" };
                 }

@@ -14,6 +14,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             : base(Name, Map.ListActionMenuChoice, CanCancel)
         {
             this.Map = Map;
+
             MenuX = (int)(Map.CursorPosition.X + 1 - Map.CameraPosition.X) * Map.TileSize.X;
             MenuY = (int)(Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
 

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -9,11 +10,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelMapSwitch : ActionPanelDeathmatch
     {
+        private const string PanelName = "Map Switch";
+
         private Squad ActiveSquad;
         private MapSwitchPoint ActiveSwitchPoint;
 
+        public ActionPanelMapSwitch(DeathmatchMap Map)
+            : base(PanelName, Map, false)
+        {
+        }
+
         public ActionPanelMapSwitch(DeathmatchMap Map, Squad ActiveSquad, MapSwitchPoint ActiveSwitchPoint)
-            : base("Map Switch", Map, false)
+            : base(PanelName, Map, false)
         {
             this.ActiveSquad = ActiveSquad;
             this.ActiveSwitchPoint = ActiveSwitchPoint;
@@ -71,6 +79,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             return ListActiveSubMaps;
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelMapSwitch(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

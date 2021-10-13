@@ -1,79 +1,28 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.GameScreens;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using System;
-using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Units.Builder
 {
-    public class ActionPanelBuild : ActionPanelDeathmatch
-    {
-        private int SelectedUnitIndex;
-        UnitBuilder ActiveUnit;
-
-        public ActionPanelBuild(DeathmatchMap Map, UnitBuilder ActiveUnit)
-                : base("Build", Map, true)
-        {
-            this.ActiveUnit = ActiveUnit;
-        }
-
-        public override void OnSelect()
-        {
-            SelectedUnitIndex = 0;
-        }
-
-        public override void DoUpdate(GameTime gameTime)
-        {
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
-            {
-                AddToPanelListAndSelect(new ActionPanelBuildUnit(Map, ActiveUnit));
-                Map.sndConfirm.Play();
-            }
-            else if (InputHelper.InputCancelPressed() || MouseHelper.InputRightButtonReleased())
-            {
-            }
-            else if (InputHelper.InputUpPressed())
-            {
-                SelectedUnitIndex -= (SelectedUnitIndex > 0) ? 1 : 0;
-                Map.sndSelection.Play();
-            }
-            else if (InputHelper.InputDownPressed())
-            {
-                SelectedUnitIndex += (SelectedUnitIndex < 0) ? 1 : 0;
-                Map.sndSelection.Play();
-            }
-        }
-
-        public override void Draw(CustomSpriteBatch g)
-        {
-            int X = (int)(Map.CursorPosition.X + 1 - Map.CameraPosition.X) * Map.TileSize.X;
-            int Y = (int)(Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
-
-            if (X + MinActionMenuWidth + MinActionMenuWidth >= Constants.Width)
-                X = Constants.Width - MinActionMenuWidth - MinActionMenuWidth;
-            
-            for (int U = 0; U < 1; ++U)
-            {
-                GameScreen.DrawBox(g, new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), MinActionMenuWidth, PannelHeight, Color.White);
-                TextHelper.DrawText(g, "Electric Wall", new Vector2(X + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
-            }
-            g.Draw(GameScreen.sprPixel, new Rectangle(X + MinActionMenuWidth, Y + SelectedUnitIndex * PannelHeight, 50, 20), Color.FromNonPremultiplied(255, 255, 255, 128));
-        }
-
-        protected override void OnCancelPanel()
-        {
-        }
-    }
-
     public class ActionPanelBuildUnit : ActionPanelDeathmatch
     {
+        private const string PanelName = "Build2";
+
         List<Vector3> ListBuildSpot;
         UnitBuilder ActiveUnit;
 
+        public ActionPanelBuildUnit(DeathmatchMap Map)
+                : base(PanelName, Map, true)
+        {
+        }
+
         public ActionPanelBuildUnit(DeathmatchMap Map, UnitBuilder ActiveUnit)
-                : base("Build", Map, true)
+                : base(PanelName, Map, true)
         {
             this.ActiveUnit = ActiveUnit;
         }
@@ -147,6 +96,32 @@ namespace ProjectEternity.Core.Units.Builder
                 }
             }
             return ListOtherSquad;
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            int ListBuildSpotCount = BR.ReadInt32();
+            ListBuildSpot = new List<Vector3>(ListBuildSpotCount);
+            for (int B = 0; B < ListBuildSpotCount; ++B)
+            {
+                ListBuildSpot.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
+            }
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ListBuildSpot.Count);
+            for (int B = 0; B < ListBuildSpot.Count; ++B)
+            {
+                BW.AppendFloat(ListBuildSpot[B].X);
+                BW.AppendFloat(ListBuildSpot[B].Y);
+                BW.AppendFloat(ListBuildSpot[B].Z);
+            }
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelBuildUnit(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

@@ -63,8 +63,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionPanelTranform2WingmanTurn.cs" />
+    <Compile Include="ActionPanelTranform2WingmanWill.cs" />
+    <Compile Include="ActionPanelTransform2Wingman.cs" />
+    <Compile Include="ActionPanelTransformPickUnit.cs" />
     <Compile Include="Confirm Transform.cs" />
-    <Compile Include="Transform Panels.cs" />
+    <Compile Include="Transform Panel.cs" />
     <Compile Include="Unit Transforming.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

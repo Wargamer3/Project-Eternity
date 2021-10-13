@@ -1,16 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelObjectives : ActionPanelDeathmatch
     {
+        private const string PanelName = "Objectives";
+
         private SpriteFont fntFinlanderFont;
 
+        public ActionPanelObjectives(DeathmatchMap Map)
+            : base(PanelName, Map, false)
+        {
+            this.fntFinlanderFont = Map.fntFinlanderFont;
+        }
+
         public ActionPanelObjectives(DeathmatchMap Map, SpriteFont fntFinlanderFont)
-            : base("Objectives", Map, false)
+            : base(PanelName, Map, false)
         {
             this.fntFinlanderFont = fntFinlanderFont;
         }
@@ -26,6 +36,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Reset the cursor.
                 RemoveFromPanelList(this);
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelObjectives(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

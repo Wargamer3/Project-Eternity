@@ -1,17 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelPlayerDefault : ActionPanelSorcererStreet
     {
-        private readonly Player ActivePlayer;
+        private const string PanelName = "PlayerDefault";
 
-        public ActionPanelPlayerDefault(SorcererStreetMap Map, Player ActivePlayer)
-            : base("Player Default", Map, false)
+        private int ActivePlayerIndex;
+
+        public ActionPanelPlayerDefault(SorcererStreetMap Map)
+            : base(PanelName, Map, false)
         {
-            this.ActivePlayer = ActivePlayer;
+        }
+
+        public ActionPanelPlayerDefault(SorcererStreetMap Map, int ActivePlayerIndex)
+            : base(PanelName, Map, false)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
         }
 
         public override void OnSelect()
@@ -23,12 +32,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (InputHelper.InputConfirmPressed())
             {
                 RemoveFromPanelList(this);
-                AddToPanelList(new ActionPanelGainPhase(Map, ActivePlayer));
+                AddToPanelList(new ActionPanelGainPhase(Map, ActivePlayerIndex));
             }
         }
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPlayerDefault(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

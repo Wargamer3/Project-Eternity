@@ -1,6 +1,8 @@
 ﻿using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -10,13 +12,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     public class ActionPanelPhaseEnd : ActionPanelConquest
     {
         private int PhaseTime;
-        private bool SendToHost;
 
-        public ActionPanelPhaseEnd(ConquestMap Map, bool SendToHost)
+        public ActionPanelPhaseEnd(ConquestMap Map)
             : base("PhaseEnd", Map)
         {
             PhaseTime = 120;
-            this.SendToHost = SendToHost;
         }
 
         public override void OnSelect()
@@ -46,10 +46,24 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
         }
+        public override void DoRead(ByteReader BR)
+        {
+            PhaseTime = 120;
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPhaseEnd(Map);
+        }
 
         public override void Draw(CustomSpriteBatch g)
         {
             TextHelper.DrawText(g, "New Phase", new Vector2(100, 100), Color.White);
         }
+
     }
 }

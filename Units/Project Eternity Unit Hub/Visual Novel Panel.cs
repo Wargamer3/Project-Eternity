@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.VisualNovelScreen;
 
 namespace ProjectEternity.Core.Units.Hub
@@ -18,6 +19,19 @@ namespace ProjectEternity.Core.Units.Hub
         public override void DoUpdate(GameTime gameTime)
         {
             ActiveVisualNovel.Update(gameTime);
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelVisualNovel(null, null);
         }
 
         public override void Draw(CustomSpriteBatch g)

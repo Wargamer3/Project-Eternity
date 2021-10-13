@@ -34,7 +34,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyTerrain.DefendingCreature = DummyDefenderCard;
             DummyTerrain.Owner = DummyPlayer2;
 
-            ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, DummyPlayer1, DummyInvaderCard);
+            ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, 0, DummyInvaderCard);
             BattleStartPhase.Load();
 
             Assert.AreEqual(DummyInvaderCard, DummyMap.GlobalSorcererStreetBattleContext.Invader);
@@ -61,7 +61,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyTerrain.DefendingCreature = DummyDefenderCard;
             DummyTerrain.Owner = DummyPlayer2;
 
-            ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, DummyPlayer1, DummyInvaderCard);
+            ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, 0, DummyInvaderCard);
             BattleStartPhase.Load();
 
             ActionPanelBattleAttackPhase BattleAttackPhase = new ActionPanelBattleAttackPhase(DummyMap.ListActionMenuChoice, DummyMap);

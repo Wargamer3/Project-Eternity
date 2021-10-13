@@ -1,16 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelInfo : ActionPanelSorcererStreet
     {
-        private readonly Player ActivePlayer;
-
-        public ActionPanelInfo(SorcererStreetMap Map, Player ActivePlayer)
+        public ActionPanelInfo(SorcererStreetMap Map)
             : base("Info", Map, false)
         {
-            this.ActivePlayer = ActivePlayer;
         }
 
         public override void OnSelect()
@@ -23,6 +22,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelInfo(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

@@ -650,14 +650,14 @@ namespace ProjectEternity.Core.Units
         /// 
         /// </summary>
         /// <param name="ActiveSquad">Can be null if not using a Squad</param>
-        public virtual void OnPlayerPhaseStart(Squad ActiveSquad)
+        public virtual void OnPlayerPhaseStart(int ActivePlayerIndex, Squad ActiveSquad)
         { }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ActiveSquad">Can be null if not using a Squad</param>
-        public virtual void OnTurnEnd(Squad ActiveSquad)
+        public virtual void OnTurnEnd(int ActivePlayerIndex, Squad ActiveSquad)
         { }
 
         /// <summary>
@@ -665,7 +665,7 @@ namespace ProjectEternity.Core.Units
         /// </summary>
         /// <param name="ActiveSquad">Can be null if not using a Squad</param>
         /// <param name="ListActionMenuChoice">Action Panel Holder</param>
-        public virtual List<ActionPanel> OnMenuMovement(Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        public virtual List<ActionPanel> OnMenuMovement(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         { return new List<ActionPanel>(); }
 
         /// <summary>
@@ -673,7 +673,7 @@ namespace ProjectEternity.Core.Units
         /// </summary>
         /// <param name="ActiveSquad">Can be null if not using a Squad</param>
         /// <param name="ListActionMenuChoice">Action Panel Holder</param>
-        public virtual List<ActionPanel> OnMenuSelect(Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        public virtual List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         { return new List<ActionPanel>(); }
 
         public static Unit LoadUnitWithProgress(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,

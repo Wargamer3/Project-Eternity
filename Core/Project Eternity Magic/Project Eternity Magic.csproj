@@ -58,6 +58,7 @@
     <Compile Include="Magic User.cs" />
     <Compile Include="Magic.cs" />
     <Compile Include="Magic Projectile.cs" />
+    <Compile Include="Magic Attributes Editon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

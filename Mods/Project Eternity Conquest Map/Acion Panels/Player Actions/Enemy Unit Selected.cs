@@ -1,17 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class ActionPanelPlayerEnemyUnitSelected : ActionPanelConquest
     {
-        private UnitConquest ActiveUnit;
-
-        public ActionPanelPlayerEnemyUnitSelected(ConquestMap Map, UnitConquest ActiveUnit)
+        public ActionPanelPlayerEnemyUnitSelected(ConquestMap Map)
             : base("Player Enemy Unit Selected", Map)
         {
-            this.ActiveUnit = ActiveUnit;
         }
 
         public override void OnSelect()
@@ -20,6 +18,21 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPlayerEnemyUnitSelected(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

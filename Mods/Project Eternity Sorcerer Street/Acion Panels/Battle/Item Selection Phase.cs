@@ -4,12 +4,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelBattleItemSelectionPhase : ActionPanelCardSelectionPhase
     {
-        private readonly Player ActivePlayer;
+        private const string PanelName = "BattleItemSelection";
 
-        public ActionPanelBattleItemSelectionPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, Player ActivePlayer)
-            : base(ListActionMenuChoice, Map, ActivePlayer, "Item", "End")
+        public ActionPanelBattleItemSelectionPhase(SorcererStreetMap Map)
+            : base(PanelName, Map)
         {
-            this.ActivePlayer = ActivePlayer;
+        }
+
+        public ActionPanelBattleItemSelectionPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, int ActivePlayerIndex)
+            : base(PanelName, ListActionMenuChoice, Map, ActivePlayerIndex, "Item", "End")
+        {
         }
 
         public override void OnCardSelected(Card CardSelected)
@@ -20,7 +24,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             RemoveFromPanelList(this);
             //Flip the item cards to reveal their content then start the battle
-            AddToPanelListAndSelect(new ActionPanelBattleLandModifierPhase(ListActionMenuChoice, Map, Map.GetTerrain(ActivePlayer.GamePiece)));
+            AddToPanelListAndSelect(new ActionPanelBattleLandModifierPhase(ListActionMenuChoice, Map, ActivePlayer.GamePiece));
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelBattleItemSelectionPhase(Map);
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.RacingScreen
 {
@@ -41,6 +42,19 @@ namespace ProjectEternity.GameScreens.RacingScreen
             {
                 ActiveVehicule.Turn(gameTime, 1);
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Draw(CustomSpriteBatch g)

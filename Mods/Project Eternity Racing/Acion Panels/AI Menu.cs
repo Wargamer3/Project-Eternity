@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.RacingScreen
 {
@@ -25,6 +27,21 @@ namespace ProjectEternity.GameScreens.RacingScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -163,6 +180,21 @@ namespace ProjectEternity.GameScreens.RacingScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            throw new NotImplementedException();
         }
     }
 }

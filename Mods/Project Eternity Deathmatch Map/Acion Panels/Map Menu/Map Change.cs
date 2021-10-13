@@ -2,18 +2,30 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelMapChange : ActionPanelDeathmatch
     {
+        private const string PanelName = "Change Map";
+
         private SpriteFont fntFinlanderFont;
 
         private List<BattleMapScreen.BattleMap> ListMapChangeChoice;
 
+        public ActionPanelMapChange(DeathmatchMap Map)
+            : base(PanelName, Map)
+        {
+            this.fntFinlanderFont = Map.fntFinlanderFont;
+
+            ListMapChangeChoice = new List<BattleMapScreen.BattleMap>();
+        }
+
         public ActionPanelMapChange(DeathmatchMap Map, SpriteFont fntFinlanderFont)
-            : base("Change Map", Map)
+            : base(PanelName, Map)
         {
             this.fntFinlanderFont = fntFinlanderFont;
 
@@ -45,6 +57,34 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActionMenuCursor >= ListMapChangeChoice.Count)
                     ActionMenuCursor = 0;
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActionMenuCursor = BR.ReadInt32();
+            int ListMapChangeChoiceCount = BR.ReadInt32();
+            ListMapChangeChoice = new List<BattleMapScreen.BattleMap>(ListMapChangeChoiceCount);
+            for (int C = 0; C < ListMapChangeChoice.Count; ++C)
+            {
+                DeathmatchMap NewMap = new DeathmatchMap();
+                NewMap.MapName = BR.ReadString();
+                ListMapChangeChoice.Add(NewMap);
+            }
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActionMenuCursor);
+            BW.AppendInt32(ListMapChangeChoice.Count);
+            for (int C = 0; C < ListMapChangeChoice.Count; ++C)
+            {
+                BW.AppendString(ListMapChangeChoice[C].MapName);
+            }
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelMapChange(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

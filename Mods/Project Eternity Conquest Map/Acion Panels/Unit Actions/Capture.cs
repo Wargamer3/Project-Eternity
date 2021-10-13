@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Units.Conquest;
 
@@ -8,12 +10,24 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class ActionPanelCapture : ActionPanelConquest
     {
+        private const string PanelName = "Capture";
+
+        private int ActivePlayerIndex;
+        private int ActiveUnitIndex;
         private UnitConquest ActiveUnit;
 
-        public ActionPanelCapture(ConquestMap Map, UnitConquest ActiveUnit)
-            : base("Capture", Map)
+        public ActionPanelCapture(ConquestMap Map)
+            : base(PanelName, Map)
         {
-            this.ActiveUnit = ActiveUnit;
+        }
+
+        public ActionPanelCapture(ConquestMap Map, int ActivePlayerIndex, int ActiveUnitIndex)
+            : base(PanelName, Map)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveUnitIndex = ActiveUnitIndex;
+
+            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveUnitIndex];
         }
 
         public override void OnSelect()
@@ -34,6 +48,24 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveUnitIndex = BR.ReadInt32();
+            ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveUnitIndex];
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveUnitIndex);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelCapture(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

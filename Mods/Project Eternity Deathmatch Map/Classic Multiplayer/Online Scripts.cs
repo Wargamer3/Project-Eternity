@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Characters;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
 {

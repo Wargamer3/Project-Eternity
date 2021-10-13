@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -8,14 +10,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private enum CreatureCommands { LevelLand, CreatureMovement, TerrainChange }
 
-        private readonly Player ActivePlayer;
-
         private int CursorIndex;
 
-        public ActionPanelTerrainLevelUpCommands(SorcererStreetMap Map, Player ActivePlayer)
+        public ActionPanelTerrainLevelUpCommands(SorcererStreetMap Map)
             : base("Terrain Commands", Map, false)
         {
-            this.ActivePlayer = ActivePlayer;
         }
 
         public override void OnSelect()
@@ -42,6 +41,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelTerrainLevelUpCommands(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

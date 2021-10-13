@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Units.Conquest;
 
@@ -9,12 +11,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
     public class ActionPanelAttack : ActionPanelConquest
     {
+        private const string PanelName = "Attack";
+
         private UnitConquest ActiveUnit;
         private List<Tuple<int, int>> ListSquadFound;
         private int AttackIndex;
 
+        public ActionPanelAttack(ConquestMap Map)
+            : base(PanelName, Map)
+        {
+        }
+
         public ActionPanelAttack(ConquestMap Map, UnitConquest ActiveUnit, List<Tuple<int, int>> ListSquadFound, int AttackIndex)
-            : base("Attack", Map)
+            : base(PanelName, Map)
         {
             this.ActiveUnit = ActiveUnit;
             this.ListSquadFound = ListSquadFound;
@@ -63,6 +72,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelAttack(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

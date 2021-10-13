@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -78,6 +80,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddToPanelListAndSelect(PhaseEnd);
                 }
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPlayerAIStep(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

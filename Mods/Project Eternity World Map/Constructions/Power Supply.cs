@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
 {
-    public class PowerSupply : Construction
+    public partial class PowerSupply : Construction
     {
         public PowerSupply(Texture2D MenuIcon, AnimatedSprite Sprite, List<Texture2D> ListInteraction, int MaxHP)
             : base("Power supply", MenuIcon, Sprite, ListInteraction, MaxHP, Price: 100, BuildingTime: 1)
@@ -36,7 +35,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             switch (InteractionIndex)
             {
                 case 0:
-                    return new ActionPanelUpgrade(Map, this);
+                    return new ActionPanelUpgradePowerSupply(Map, this);
             }
 
             return null;
@@ -44,31 +43,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
         public override void DrawExtraMenuInformation(CustomSpriteBatch g, WorldMap Map)
         {
-        }
-        public class ActionPanelUpgrade : ActionPanelWorldMap
-        {
-            PowerSupply ActivePowerSupply;
-
-            public ActionPanelUpgrade(WorldMap Map, PowerSupply ActivePowerSupply)
-                : base("Upgrade Factory", Map, false)
-            {
-                this.ActivePowerSupply = ActivePowerSupply;
-            }
-
-            public override void OnSelect()
-            {
-                ++ActivePowerSupply.UpgadeLevel;
-                RemoveFromPanelList(this);
-            }
-
-            public override void DoUpdate(GameTime gameTime)
-            {
-            }
-
-
-            public override void Draw(CustomSpriteBatch g)
-            {
-            }
         }
     }
 }

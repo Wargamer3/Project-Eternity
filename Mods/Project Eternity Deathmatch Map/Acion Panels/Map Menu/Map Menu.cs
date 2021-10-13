@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.DeathmatchMap;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -16,7 +18,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         protected Texture2D sprMenuHighlight;
         protected Texture2D sprCursorConfirmEndNo;
         protected Texture2D sprCursorConfirmEndYes;
-        protected Texture2D sprMapMenuBackground;
+        public static Texture2D sprMapMenuBackground;
 
         public static Texture2D sprBarLargeBackground;
         public static Texture2D sprBarLargeEN;
@@ -121,6 +123,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return Map.BattleMapMenu;
         }
 
         public override void Draw(CustomSpriteBatch g)

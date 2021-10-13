@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.Conquest;
 
@@ -33,11 +35,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     {
                         if (P == Map.ActivePlayerIndex)//Ally.
                         {
-                            AddToPanelListAndSelect(new ActionPanelMoveUnit(Map, Map.ListPlayer[P].ListUnit[CursorSelect]));
+                            AddToPanelListAndSelect(new ActionPanelMoveUnit(Map, P, CursorSelect));
                         }
                         else//Enemy.
                         {
-                            AddToPanelListAndSelect(new ActionPanelPlayerEnemyUnitSelected(Map, Map.ListPlayer[P].ListUnit[CursorSelect]));
+                            AddToPanelListAndSelect(new ActionPanelPlayerEnemyUnitSelected(Map));
                         }
                     }
                 }
@@ -59,6 +61,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         protected override void OnCancelPanel()
         {
             AddToPanelListAndSelect(new ActionPanelPlayerMainMenu(Map));
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPlayerDefault(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

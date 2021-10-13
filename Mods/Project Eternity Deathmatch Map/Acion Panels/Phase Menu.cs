@@ -5,6 +5,8 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -151,7 +153,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
 
-                    ActiveSquad[U].OnPlayerPhaseStart(ActiveSquad);
+                    ActiveSquad[U].OnPlayerPhaseStart(Map.ActivePlayerIndex, ActiveSquad);
                 }
             }
         }
@@ -192,6 +194,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     StartPlayerPhase(Map, Map.ListPlayer[Map.ActivePlayerIndex]);
                 }
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            PhaseTime = 120;
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelPhaseChange(Map);
         }
 
         public static void StartPlayerPhase(DeathmatchMap Map, Player ActivePlayer)

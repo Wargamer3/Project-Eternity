@@ -1,15 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelDeployAtPosition : ActionPanelDeathmatch
     {
+        private const string PanelName = "Deploy 2";
+
         private Squad ActiveSquad;
 
+        public ActionPanelDeployAtPosition(DeathmatchMap Map)
+            : base(PanelName, Map, false)
+        {
+        }
+
         public ActionPanelDeployAtPosition(DeathmatchMap Map, Squad ActiveSquad)
-            : base("Deploy 2", Map, false)
+            : base(PanelName, Map, false)
         {
             this.ActiveSquad = ActiveSquad;
         }
@@ -22,6 +31,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Remove(ActiveSquad);
             RemoveAllSubActionPanels();
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelDeployAtPosition(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

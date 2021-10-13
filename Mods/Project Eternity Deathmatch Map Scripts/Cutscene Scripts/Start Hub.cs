@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (Map.ListPlayer[P].ListSquad[U].ID == _UnitToMoveID)
                         {
                             Map.ListActionMenuChoice.RemoveAllActionPanels();
-                            Map.ListActionMenuChoice.Add(new ActionPanelHubStep(Map, Map.ListPlayer[P].ListSquad[U]));
+                            Map.ListActionMenuChoice.Add(new ActionPanelHubStep(Map, P, U));
                             IsEnded = true;
                             return;
                         }

@@ -4,17 +4,27 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelEndTurn : ActionPanelDeathmatch
     {
+        private const string PanelName = "End Turn";
+
         private int ConfirmMenuChoice;
         private Texture2D sprCursorConfirmEndNo;
         private Texture2D sprCursorConfirmEndYes;
 
+        public ActionPanelEndTurn(DeathmatchMap Map)
+            : base(PanelName, Map, false)
+        {
+            ConfirmMenuChoice = 0;
+        }
+
         public ActionPanelEndTurn(DeathmatchMap Map, Texture2D sprCursorConfirmEndNo, Texture2D sprCursorConfirmEndYes)
-            : base("End Turn", Map, false)
+            : base(PanelName, Map, false)
         {
             this.sprCursorConfirmEndNo = sprCursorConfirmEndNo;
             this.sprCursorConfirmEndYes = sprCursorConfirmEndYes;
@@ -57,6 +67,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ConfirmMenuChoice == 0)
                     ConfirmMenuChoice = 1;
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            ConfirmMenuChoice = BR.ReadInt32();
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            BW.AppendInt32(ConfirmMenuChoice);
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelEndTurn(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

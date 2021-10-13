@@ -2,12 +2,15 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelBattleAttackPhase : BattleMapActionPanel
     {
+        private const string PanelName = "BattleAttackPhase";
+
         private enum AttackSequences { FirstAttack, SecondAttack, End };
         public const string BeforeAttackRequirement = "Sorcerer Street Before Attack";
         public const string BeforeDefenseRequirement = "Sorcerer Street Before Defense";
@@ -22,8 +25,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CreatureCard SecondAttacker;
         public ItemCard SecondAttackerItem;
 
+        public ActionPanelBattleAttackPhase(SorcererStreetMap Map)
+            : base(PanelName, Map.ListActionMenuChoice, false)
+        {
+            this.Map = Map;
+        }
+
         public ActionPanelBattleAttackPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base("Battle Attack Phase", ListActionMenuChoice, false)
+            : base(PanelName, ListActionMenuChoice, false)
         {
             this.Map = Map;
         }
@@ -97,8 +106,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void ExecutePreAttack(CreatureCard Attacker, CreatureCard Defender)
         {
-            ActionPanelSorcererStreet AttackerActivationScreen = Attacker.ActivateInBattle(Map, Map.GlobalSorcererStreetBattleContext.InvaderPlayer);
-            ActionPanelSorcererStreet DefenderActivationScreen = Defender.ActivateInBattle(Map, Map.GlobalSorcererStreetBattleContext.DefenderPlayer);
+            ActionPanelSorcererStreet AttackerActivationScreen = Attacker.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.InvaderPlayer));
+            ActionPanelSorcererStreet DefenderActivationScreen = Defender.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.DefenderPlayer));
 
             if (PlayAnimations && DefenderActivationScreen != null)
             {
@@ -220,6 +229,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void OnCancelPanel()
         {
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            AttackSequence = AttackSequences.FirstAttack;
+            DetermineAttackOrder(out FirstAttacker, out SecondAttacker);
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelBattleAttackPhase(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

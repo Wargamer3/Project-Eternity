@@ -56,6 +56,9 @@
     <Compile Include="Acion Panels\Battle\Land Modifier Phase.cs" />
     <Compile Include="Acion Panels\Battle\Start Phase.cs" />
     <Compile Include="Acion Panels\Battle\Attack Animation Phase.cs" />
+    <Compile Include="Acion Panels\Player\Choose Direction.cs" />
+    <Compile Include="Acion Panels\Player\Pay Toll Phase.cs" />
+    <Compile Include="Acion Panels\Player\Discard Card Phase.cs" />
     <Compile Include="Acion Panels\Player\Card Selection Phase.cs" />
     <Compile Include="Acion Panels\Player\Confirm Creature Summon.cs" />
     <Compile Include="Acion Panels\Player\Creature Card Selection Phase.cs" />
@@ -65,7 +68,7 @@
     <Compile Include="Acion Panels\Player\Refill Deck Phase.cs" />
     <Compile Include="Acion Panels\Player\Roll Dice Phase.cs" />
     <Compile Include="Acion Panels\Player\Spell Card Selection Phase.cs" />
-    <Compile Include="Acion Panels\Player\Player Actions.cs" />
+    <Compile Include="Acion Panels\Player\Movement Phase.cs" />
     <Compile Include="Acion Panels\Spells\Select Single Target.cs" />
     <Compile Include="Acion Panels\Terrain\Choose Territory.cs" />
     <Compile Include="Acion Panels\Terrain\Gate Commands.cs" />
@@ -77,8 +80,11 @@
     <Compile Include="Acion Panels\Terrain\End Player Phase.cs" />
     <Compile Include="Animation Screen.cs" />
     <Compile Include="Camera 3D.cs" />
-    <Compile Include="Card.cs" />
+    <Compile Include="Cards\Card.cs" />
     <Compile Include="Battle Context.cs" />
+    <Compile Include="Cards\Creature Card.cs" />
+    <Compile Include="Cards\Item Card.cs" />
+    <Compile Include="Cards\Spell Card.cs" />
     <Compile Include="Map 2D.cs" />
     <Compile Include="Map 3D.cs" />
     <Compile Include="Map Layer.cs" />
@@ -87,7 +93,9 @@
     <Compile Include="Sorcerer Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sorcerer Street Unit.cs" />
+    <Compile Include="Cutscene Script Holder.cs" />
     <Compile Include="Terrains.cs" />
+    <Compile Include="Terrain Sorcerer Street.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">

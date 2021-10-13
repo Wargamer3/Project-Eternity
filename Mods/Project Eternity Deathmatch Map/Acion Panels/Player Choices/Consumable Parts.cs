@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
 
@@ -10,12 +11,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
     public class ActionPanelConsumableParts : ActionPanelDeathmatch
     {
+        private const string PanelName = "Parts";
+
         private Squad ActiveSquad;
         private readonly ActionPanel Owner;
         private bool IsInit;
 
+        public ActionPanelConsumableParts(DeathmatchMap Map)
+            : base(PanelName, Map)
+        {
+            IsInit = false;
+        }
+
         public ActionPanelConsumableParts(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
-            : base("Parts", Map)
+            : base(PanelName, Map)
         {
             this.Owner = Owner;
             this.ActiveSquad = ActiveSquad;
@@ -49,6 +58,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.CursorPosition = ActiveSquad.Position;
                 CancelPanel();
             }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+        }
+
+        protected override ActionPanel Copy()
+        {
+            return new ActionPanelConsumableParts(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

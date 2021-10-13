@@ -4,11 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
 {
-    public class UnitFactory : Construction
+    public partial class UnitFactory : Construction
     {
         public List<Unit> ListSpawnUnit;
         public Vector3 Waypoint;
@@ -75,116 +74,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }
 
             return null;
-        }
-
-        public class ActionPanelUpgrade : ActionPanelWorldMap
-        {
-            UnitFactory ActiveFactory;
-
-            public ActionPanelUpgrade(WorldMap Map, UnitFactory ActiveFactory)
-                : base("Upgrade Factory", Map, false)
-            {
-                this.ActiveFactory = ActiveFactory;
-            }
-
-            public override void OnSelect()
-            {
-                ++ActiveFactory.UpgadeLevel;
-                RemoveFromPanelList(this);
-            }
-
-            public override void DoUpdate(GameTime gameTime)
-            {
-            }
-
-
-            public override void Draw(CustomSpriteBatch g)
-            {
-            }
-        }
-
-        public class ActionPanelSpawnNinja : ActionPanelWorldMap
-        {
-            UnitFactory ActiveFactory;
-
-            public ActionPanelSpawnNinja(WorldMap Map, UnitFactory ActiveFactory)
-                : base("Spawn Ninja From Factory", Map, false)
-            {
-                this.ActiveFactory = ActiveFactory;
-            }
-
-            public override void OnSelect()
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    UnitMap SpawnUnit = new UnitMap(Unit.FromType(ActiveFactory.ListSpawnUnit[0].UnitTypeName, ActiveFactory.ListSpawnUnit[0].UnitStat.Name, Map.Content, Map.DicUnitType,
-                        Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget));
-                    SpawnUnit.ActiveUnit.ArrayCharacterActive = new Core.Characters.Character[0];
-
-                    Vector3 StartPosition;
-
-                    //No waypoint found.
-                    if (ActiveFactory.Waypoint.X == -1)
-                    {
-                        //Unit hidden in the Construction
-                        StartPosition = ActiveFactory.Position;
-                    }
-                    else//Waypoint found
-                    {
-                        StartPosition = ActiveFactory.Waypoint;
-                    }
-                    
-                    Map.SpawnUnit(Map.ActivePlayerIndex, SpawnUnit, ActiveFactory.Position, StartPosition);
-                }
-
-                RemoveFromPanelList(this);
-            }
-
-            public override void DoUpdate(GameTime gameTime)
-            {
-            }
-
-
-            public override void Draw(CustomSpriteBatch g)
-            {
-            }
-        }
-
-        public class ActionPanelSetWaypoint : ActionPanelWorldMap
-        {
-            UnitFactory ActiveFactory;
-
-            public ActionPanelSetWaypoint(WorldMap Map, UnitFactory ActiveFactory)
-                : base("Set Waypoint Factory", Map, false)
-            {
-                this.ActiveFactory = ActiveFactory;
-            }
-
-            public override void OnSelect()
-            {
-            }
-
-            public override void DoUpdate(GameTime gameTime)
-            {
-                Map.MoveCursor();
-
-                if (InputHelper.InputConfirmPressed())
-                {
-                    ActiveFactory.Waypoint = Map.CursorPosition;
-                    Map.sndConfirm.Play();
-                    RemoveFromPanelList(this);
-                }
-                else if (InputHelper.InputCancelPressed())
-                {
-                    Map.sndCancel.Play();
-                }
-            }
-
-
-            public override void Draw(CustomSpriteBatch g)
-            {
-                g.Draw(Map.sprWaypoint, new Vector2((Map.CursorPosition.X - Map.CameraPosition.X) * Map.TileSize.X, (Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y), Color.White);
-            }
         }
     }
 }

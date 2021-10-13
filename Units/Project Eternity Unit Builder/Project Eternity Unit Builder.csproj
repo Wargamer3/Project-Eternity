@@ -48,8 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Builder Panels.cs" />
+    <Compile Include="Build Panel.cs" />
     <Compile Include="Unit Builder.cs" />
   </ItemGroup>
   <ItemGroup>

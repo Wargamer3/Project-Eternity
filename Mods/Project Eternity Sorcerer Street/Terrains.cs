@@ -10,19 +10,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         }
 
-        public override void OnSelect(SorcererStreetMap Map, Player ActivePlayer)
+        public override void OnSelect(SorcererStreetMap Map, int ActivePlayerIndex)
         {
             if (DefendingCreature == null)
             {
-                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelCreatureCardSelectionPhase(Map, ActivePlayer));
+                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelCreatureCardSelectionPhase(Map, ActivePlayerIndex));
             }
-            else if (Owner.Team == ActivePlayer.Team)
+            else if (Owner.Team == Map.ListPlayer[ActivePlayerIndex].Team)
             {
-                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelTerrainLevelUpCommands(Map, ActivePlayer));
+                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelTerrainLevelUpCommands(Map));
             }
             else
             {
-                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPayTollPhase(Map, ActivePlayer, this));
+                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPayTollPhase(Map, ActivePlayerIndex, this));
             }
         }
     }
@@ -35,9 +35,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         }
 
-        public override void OnSelect(SorcererStreetMap Map, Player ActivePlayer)
+        public override void OnSelect(SorcererStreetMap Map, int ActivePlayerIndex)
         {
-            Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelGateCommands(Map, ActivePlayer));
+            Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelGateCommands(Map, ActivePlayerIndex));
         }
     }
 }
