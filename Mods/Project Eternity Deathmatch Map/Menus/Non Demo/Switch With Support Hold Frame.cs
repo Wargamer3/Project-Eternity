@@ -5,17 +5,16 @@ using static ProjectEternity.GameScreens.DeathmatchMapScreen.NonDemoScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    class NonDemoSwitchWithSupportFrame : NonDemoBattleUnitFrame
+    class NonDemoSwitchWithSupportHoldFrame : NonDemoBattleUnitFrame
     {
-        public NonDemoSwitchWithSupportFrame(NonDemoBattleUnitFrame OtherFrame, bool IsRight)
+        public NonDemoSwitchWithSupportHoldFrame(NonDemoBattleUnitFrame OtherFrame, bool IsRight)
             : base(OtherFrame.Map, OtherFrame.SharedUnitStats, OtherFrame.PositionX, OtherFrame.PositionY, IsRight)
         {
         }
 
         public override void Draw(CustomSpriteBatch g, int NonDemoAnimationTimer)
         {
-            int LeaderPosY = 50 - (int)(NonDemoAnimationTimer / NonDemoBattleFrame.SwitchLength * 50);
-            float DrawPositionY = PositionY - LeaderPosY;
+            float DrawPositionY = PositionY - 50;
 
             DrawBackgroundBox(g, PositionX, DrawPositionY);
 

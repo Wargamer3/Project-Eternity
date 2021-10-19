@@ -12,23 +12,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        protected override void DoDraw(CustomSpriteBatch g, int NonDemoAnimationTimer)
+        public override void Draw(CustomSpriteBatch g, int NonDemoAnimationTimer)
         {
             int SupportPosX = 150 - (int)(NonDemoAnimationTimer / NonDemoBattleFrame.SwitchLength * 120);
+
+            float DrawPositionX;
+
             if (IsRight)
             {
-                float DrawPositionX = PositionX + SupportPosX;
-
-                g.Draw(SharedUnitStats.SharedUnit.SpriteMap, new Vector2(
-                    DrawPositionX + 2, PositionY + 8), Color.White);
+                DrawPositionX = PositionX + SupportPosX;
             }
             else
             {
-                float DrawPositionX = PositionX - SupportPosX;
-
-                g.Draw(SharedUnitStats.SharedUnit.SpriteMap, new Vector2(
-                    DrawPositionX + 2, PositionY + 8), Color.White);
+                DrawPositionX = PositionX - SupportPosX;
             }
+
+            DrawBackgroundBox(g, DrawPositionX, PositionY);
+
+            g.Draw(SharedUnitStats.SharedUnit.SpriteMap, new Vector2(
+                DrawPositionX + 2, PositionY + 8), Color.White);
         }
     }
 }

@@ -15,19 +15,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public class NonDemoSharedUnitStats
         {
-            public int StartingHP;
-            public int StartingEN;
-            public int EndEN;
+            public readonly int StartingHP;
+            public readonly int StartingEN;
+            public readonly int EndEN;
             public readonly Unit SharedUnit;
             public readonly BattleResult AttackerSquadResult;
+
+            public int VisibleHP;
+            public int VisibleEN;
 
             public NonDemoSharedUnitStats(Unit SharedUnit, BattleResult AttackerSquadResult)
             {
                 this.SharedUnit = SharedUnit;
                 this.AttackerSquadResult = AttackerSquadResult;
 
-                StartingHP = SharedUnit.HP;
-                StartingEN = SharedUnit.EN;
+                VisibleHP = StartingHP = SharedUnit.HP;
+                VisibleEN = StartingEN = SharedUnit.EN;
                 EndEN = AttackerSquadResult.AttackAttackerFinalEN;
             }
         }
@@ -120,62 +123,61 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ArrayDefenderHP[i] = DefendingSquad[i].HP;
             }
 
-            NonDemoBattleFrame DefaultNonDemoBattleFrame = GetDefaultNonDemoBattleFrame(AttackingSquad, AttackingSupport.ActiveSquadSupport, DefendingSquad, DefendingSupport.ActiveSquadSupport, IsRightAttacking);
+            NonDemoBattleFrame DefaultNonDemoBattleFrame = GetDefaultNonDemoBattleFrame(AttackerSquadResult, AttackingSquad, AttackingSupport.ActiveSquadSupport,
+                                                            DefenderSquadResult, DefendingSquad, DefendingSupport.ActiveSquadSupport, IsRightAttacking);
 
             ListNonDemoBattleFrame.Add(DefaultNonDemoBattleFrame);
 
-            FillCombatAnimations(AttackingSquad, AttackingSupport.ActiveSquadSupport, AttackerSquadResult, AttackerFormation,
+            FillCombatAnimations(DefaultNonDemoBattleFrame, AttackingSquad, AttackingSupport.ActiveSquadSupport, AttackerSquadResult, AttackerFormation,
                 DefendingSquad, DefendingSupport.ActiveSquadSupport, IsRightAttacking, ref ArrayDefenderHP, ArrayAttackerHP);
 
             if (ArrayDefenderHP[0] > 0 && CanDefenderCounter && DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
-                FillCombatAnimations(DefendingSquad, null, DefenderSquadResult, DefenderFormation,
+                FillCombatAnimations(DefaultNonDemoBattleFrame, DefendingSquad, null, DefenderSquadResult, DefenderFormation,
                     AttackingSquad, null, !IsRightAttacking, ref ArrayAttackerHP, ArrayDefenderHP);
             }
 
             if (AttackerSquadResult.ResultSupportAttack.Target != null)
             {
-                int i = 0;
-                NonDemoBattleFrame SupportNonDemoBattleFrame = GetSwitchWithLeaderFrame(DefaultNonDemoBattleFrame, IsRightAttacking);
-                ListNonDemoBattleFrame.Add(SupportNonDemoBattleFrame);
+                ListNonDemoBattleFrame.Add(GetSwitchWithLeaderFrame(DefaultNonDemoBattleFrame, IsRightAttacking));
+                NonDemoBattleFrame SupportNonDemoBattleFrame = GetSwitchWithLeaderHoldFrame(DefaultNonDemoBattleFrame, IsRightAttacking);
 
                 ListNonDemoBattleFrame.Add(GetStartFrame(SupportNonDemoBattleFrame, NonDemoUnitStancePositions.Support, IsRightAttacking));
 
-                NonDemoBattleFrame AttackNonDemoBattleFrame = GetAttackFrame(DefaultNonDemoBattleFrame, NonDemoUnitStancePositions.Support, IsRightAttacking);
+                NonDemoBattleFrame AttackNonDemoBattleFrame = GetAttackFrame(SupportNonDemoBattleFrame, NonDemoUnitStancePositions.Support, IsRightAttacking);
 
                 if (AttackerSquadResult.ResultSupportAttack.AttackMissed)
                 {
-                    ListNonDemoBattleFrame.Add(GetMissedFrame(AttackNonDemoBattleFrame, AttackerSquadResult, i, i, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+                    ListNonDemoBattleFrame.Add(GetMissedFrame(AttackNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
                 }
                 else
                 {
                     if (AttackerSquadResult.ResultSupportAttack.AttackWasCritical)
-                        ListNonDemoBattleFrame.Add(GetCriticalFrame(AttackNonDemoBattleFrame, AttackerSquadResult, i, i, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+                    {
+                        ListNonDemoBattleFrame.Add(GetCriticalFrame(AttackNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+                    }
 
                     NonDemoBattleFrame GetHitNonDemoBattleFrame = GetGetHitFrame(AttackNonDemoBattleFrame, AttackerSquadResult, NonDemoUnitStancePositions.Leader, IsRightAttacking);
 
                     ListNonDemoBattleFrame.Add(GetHitNonDemoBattleFrame);
                 }
 
-                ListNonDemoBattleFrame.Add(GetEndFrame(DefaultNonDemoBattleFrame, NonDemoUnitStancePositions.Support, IsRightAttacking));
+                ListNonDemoBattleFrame.Add(GetEndFrame(SupportNonDemoBattleFrame, NonDemoUnitStancePositions.Support, IsRightAttacking));
             }
         }
 
-        private void FillCombatAnimations(Squad Attacker, Squad AttackerSupport, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
+        private void FillCombatAnimations(NonDemoBattleFrame DefaultNonDemoBattleFrame, Squad Attacker, Squad AttackerSupport, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
             Squad Defender, Squad DefenderSupport, bool IsRightAttacking, ref int[] ArrayDefenderHP, int[] ArrayAttackerHP)
         {
-            NonDemoBattleFrame DefaultNonDemoBattleFrame = GetDefaultNonDemoBattleFrame(Attacker, AttackerSupport, Defender, DefenderSupport, IsRightAttacking);
-
             bool LeaderHit = false;
 
             if (AttackerFormation == FormationChoices.Spread)
             {
-                FillCombatAnimationsSpread(DefaultNonDemoBattleFrame, Attacker, AttackerResult, AttackerFormation, Defender, DefenderSupport, IsRightAttacking, ref ArrayDefenderHP, ArrayAttackerHP);
+                FillCombatAnimationsWingmansSpread(DefaultNonDemoBattleFrame, Attacker, AttackerResult, AttackerFormation, Defender, DefenderSupport, IsRightAttacking, ref ArrayDefenderHP, ArrayAttackerHP);
             }
             else if (AttackerFormation == FormationChoices.Focused)
             {
-                FillCombatAnimationsFocused(DefaultNonDemoBattleFrame, ref LeaderHit, Attacker, AttackerResult, AttackerFormation, Defender, DefenderSupport, IsRightAttacking, ref ArrayDefenderHP, ArrayAttackerHP);
-
+                FillCombatAnimationsWingmansFocused(DefaultNonDemoBattleFrame, ref LeaderHit, Attacker, AttackerResult, AttackerFormation, Defender, DefenderSupport, IsRightAttacking, ref ArrayDefenderHP, ArrayAttackerHP);
             }
             else if (ArrayAttackerHP[0] > 0 && Attacker.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack && AttackerFormation == FormationChoices.ALL)
             {
@@ -187,7 +189,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             FillCombatAnimationsLeader(DefaultNonDemoBattleFrame, LeaderHit, Attacker, AttackerSupport, AttackerResult, AttackerFormation, Defender, DefenderSupport, IsRightAttacking, ref ArrayDefenderHP, ArrayAttackerHP);
         }
 
-        private void FillCombatAnimationsSpread(NonDemoBattleFrame DefaultNonDemoBattleFrame, Squad Attacker, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
+        private void FillCombatAnimationsWingmansSpread(NonDemoBattleFrame DefaultNonDemoBattleFrame, Squad Attacker, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
             Squad Defender, Squad DefenderSupport, bool IsRightAttacking, ref int[] ArrayDefenderHP, int[] ArrayAttackerHP)
         {
             bool UseWingmans = false;
@@ -287,7 +289,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private void FillCombatAnimationsFocused(NonDemoBattleFrame DefaultNonDemoBattleFrame, ref bool LeaderHit, Squad Attacker, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
+        private void FillCombatAnimationsWingmansFocused(NonDemoBattleFrame DefaultNonDemoBattleFrame, ref bool LeaderHit, Squad Attacker, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
             Squad Defender, Squad DefenderSupport, bool IsRightAttacking, ref int[] ArrayDefenderHP, int[] ArrayAttackerHP)
         {
             NonDemoUnitStancePositions Targets = NonDemoUnitStancePositions.Leader;
@@ -518,7 +520,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private NonDemoBattleFrame GetDefaultNonDemoBattleFrame(Squad AttackingSquad, Squad AttackingSupport, Squad DefendingSquad, Squad DefendingSupport, bool IsAttackerOnRight)
+        private NonDemoBattleFrame GetDefaultNonDemoBattleFrame(SquadBattleResult AttackerSquadResult, Squad AttackingSquad, Squad AttackingSupport, SquadBattleResult DefenderSquadResult, Squad DefendingSquad, Squad DefendingSupport, bool IsAttackerOnRight)
         {
             NonDemoBattleFrameSquad AttackingSquadFrame = new NonDemoBattleFrameSquad();
             NonDemoBattleFrameSquad DefendingSquadFrame = new NonDemoBattleFrameSquad();
@@ -691,26 +693,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             if ((Attackers & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
             {
-                AttackingFrame.SupportStance = new NonDemoStartFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                AttackingFrame.SupportStance = new NonDemoStartSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
             }
 
-            return new NonDemoBattleFrame(NonDemoStartFrame.FrameLength, DefendingFrame, AttackingFrame);
+            return new NonDemoBattleFrame(NonDemoStartFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
         private NonDemoBattleFrame GetAttackFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Attackers, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
-            NonDemoBattleFrameSquad DefendingFrame;
 
             if (IsRightAttacking)
             {
                 AttackingFrame = PreviousBattleFrame.RightStance.Copy();
-                DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
             }
             else
             {
                 AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
-                DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
             if ((Attackers & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
@@ -727,10 +726,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             if ((Attackers & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
             {
-                AttackingFrame.SupportStance = new NonDemoAttackFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                AttackingFrame.SupportStance = new NonDemoAttackSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
             }
 
-            return new NonDemoBattleFrame(NonDemoAttackFrame.FrameLength, DefendingFrame, AttackingFrame);
+            if (IsRightAttacking)
+            {
+                return new NonDemoBattleFrame(NonDemoAttackFrame.FrameLength, AttackingFrame, PreviousBattleFrame.LeftStance);
+            }
+            else
+            {
+                return new NonDemoBattleFrame(NonDemoAttackFrame.FrameLength, PreviousBattleFrame.RightStance, AttackingFrame);
+            }
         }
 
         private NonDemoBattleFrame GetEndFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Attackers, bool IsRightAttacking)
@@ -763,10 +769,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             if ((Attackers & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
             {
-                AttackingFrame.SupportStance = new NonDemoEndFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                AttackingFrame.SupportStance = new NonDemoEndSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
             }
 
-            return new NonDemoBattleFrame(NonDemoEndFrame.FrameLength, DefendingFrame, AttackingFrame);
+            return new NonDemoBattleFrame(NonDemoEndFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
         private NonDemoBattleFrame GetGetHitFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
@@ -803,10 +809,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
             {
                 DefendingFrame.SupportStance = new NonDemoGetHitFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntNonDemoDamage,
-                    Result.ArrayResult[2].AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
+                    Result.ResultSupportAttack.AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
             }
 
-            return new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, DefendingFrame, AttackingFrame);
+            return new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
         private NonDemoBattleFrame GetMissedFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
@@ -818,7 +824,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int i = Start; i <= End && i < Result.ArrayResult.Length; i++)
             {
-                if (!Result.ArrayResult[i].AttackWasCritical)
+                if (!Result.ArrayResult[i].AttackMissed)
                 {
                     AllMissed = false;
                 }
@@ -826,41 +832,46 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (AllMissed)
             {
-                NonDemoBattleFrameSquad AttackingFrame;
-                NonDemoBattleFrameSquad DefendingFrame;
-
-                if (IsRightAttacking)
-                {
-                    AttackingFrame = PreviousBattleFrame.RightStance.Copy();
-                    DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
-                }
-                else
-                {
-                    AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
-                    DefendingFrame = PreviousBattleFrame.RightStance.Copy();
-                }
-
-                if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
-                {
-                    DefendingFrame.LeaderStance = new NonDemoGetMissedFrame(DefendingFrame.LeaderStance, !IsRightAttacking, sprNonDemoMiss);
-                }
-                if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-                {
-                    DefendingFrame.WingmanAStance = new NonDemoGetMissedFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, sprNonDemoMiss);
-                }
-                if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-                {
-                    DefendingFrame.WingmanBStance = new NonDemoGetMissedFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, sprNonDemoMiss);
-                }
-                if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-                {
-                    DefendingFrame.SupportStance = new NonDemoGetMissedFrame(DefendingFrame.SupportStance, !IsRightAttacking, sprNonDemoMiss);
-                }
-
-                return new NonDemoBattleFrame(NonDemoGetMissedFrame.FrameLength, DefendingFrame, AttackingFrame);
+                return GetMissedFrame(PreviousBattleFrame, Targets, IsRightAttacking);
             }
 
             return null;
+        }
+
+        private NonDemoBattleFrame GetMissedFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        {
+            NonDemoBattleFrameSquad AttackingFrame;
+            NonDemoBattleFrameSquad DefendingFrame;
+
+            if (IsRightAttacking)
+            {
+                AttackingFrame = PreviousBattleFrame.RightStance.Copy();
+                DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
+            }
+            else
+            {
+                AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
+                DefendingFrame = PreviousBattleFrame.RightStance.Copy();
+            }
+
+            if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+            {
+                DefendingFrame.LeaderStance = new NonDemoGetMissedFrame(DefendingFrame.LeaderStance, !IsRightAttacking, sprNonDemoMiss);
+            }
+            if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
+            {
+                DefendingFrame.WingmanAStance = new NonDemoGetMissedFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, sprNonDemoMiss);
+            }
+            if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
+            {
+                DefendingFrame.WingmanBStance = new NonDemoGetMissedFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, sprNonDemoMiss);
+            }
+            if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
+            {
+                DefendingFrame.SupportStance = new NonDemoGetMissedFrame(DefendingFrame.SupportStance, !IsRightAttacking, sprNonDemoMiss);
+            }
+
+            return new NonDemoBattleFrame(NonDemoGetMissedFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
         private NonDemoBattleFrame GetSwordCutOrShootDownFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
@@ -966,41 +977,46 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (AllCritical)
             {
-                NonDemoBattleFrameSquad AttackingFrame;
-                NonDemoBattleFrameSquad DefendingFrame;
-
-                if (IsRightAttacking)
-                {
-                    AttackingFrame = PreviousBattleFrame.RightStance.Copy();
-                    DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
-                }
-                else
-                {
-                    AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
-                    DefendingFrame = PreviousBattleFrame.RightStance.Copy();
-                }
-
-                if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
-                {
-                    DefendingFrame.LeaderStance = new NonDemoGetCriticalHitFrame(DefendingFrame.LeaderStance, !IsRightAttacking, sprNonDemoCritical);
-                }
-                if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-                {
-                    DefendingFrame.WingmanAStance = new NonDemoGetCriticalHitFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, sprNonDemoCritical);
-                }
-                if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-                {
-                    DefendingFrame.WingmanBStance = new NonDemoGetCriticalHitFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, sprNonDemoCritical);
-                }
-                if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-                {
-                    DefendingFrame.SupportStance = new NonDemoGetCriticalHitFrame(DefendingFrame.SupportStance, !IsRightAttacking, sprNonDemoCritical);
-                }
-
-                return new NonDemoBattleFrame(NonDemoGetCriticalHitFrame.FrameLength, DefendingFrame, AttackingFrame);
+                return GetCriticalFrame(PreviousBattleFrame, Targets, IsRightAttacking);
             }
 
             return null;
+        }
+
+        private NonDemoBattleFrame GetCriticalFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        {
+            NonDemoBattleFrameSquad AttackingFrame;
+            NonDemoBattleFrameSquad DefendingFrame;
+
+            if (IsRightAttacking)
+            {
+                AttackingFrame = PreviousBattleFrame.RightStance.Copy();
+                DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
+            }
+            else
+            {
+                AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
+                DefendingFrame = PreviousBattleFrame.RightStance.Copy();
+            }
+
+            if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+            {
+                DefendingFrame.LeaderStance = new NonDemoGetCriticalHitFrame(DefendingFrame.LeaderStance, !IsRightAttacking, sprNonDemoCritical);
+            }
+            if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
+            {
+                DefendingFrame.WingmanAStance = new NonDemoGetCriticalHitFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, sprNonDemoCritical);
+            }
+            if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
+            {
+                DefendingFrame.WingmanBStance = new NonDemoGetCriticalHitFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, sprNonDemoCritical);
+            }
+            if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
+            {
+                DefendingFrame.SupportStance = new NonDemoGetCriticalHitFrame(DefendingFrame.SupportStance, !IsRightAttacking, sprNonDemoCritical);
+            }
+
+            return new NonDemoBattleFrame(NonDemoGetCriticalHitFrame.FrameLength, DefendingFrame, AttackingFrame);
         }
 
         private NonDemoBattleFrame GetShieldFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
@@ -1114,23 +1130,53 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private NonDemoBattleFrame GetSwitchWithLeaderFrame(NonDemoBattleFrame PreviousBattleFrame, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
-            NonDemoBattleFrameSquad DefendingFrame;
 
             if (IsRightAttacking)
             {
                 AttackingFrame = PreviousBattleFrame.RightStance.Copy();
-                DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
             }
             else
             {
                 AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
-                DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
             AttackingFrame.LeaderStance = new NonDemoSwitchWithSupportFrame(AttackingFrame.LeaderStance, IsRightAttacking);
             AttackingFrame.SupportStance = new NonDemoSwitchWithLeaderFrame(AttackingFrame.SupportStance, IsRightAttacking);
 
-            return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, DefendingFrame, AttackingFrame);
+            if (IsRightAttacking)
+            {
+                return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, AttackingFrame, PreviousBattleFrame.LeftStance);
+            }
+            else
+            {
+                return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, PreviousBattleFrame.RightStance, AttackingFrame);
+            }
+        }
+
+        private NonDemoBattleFrame GetSwitchWithLeaderHoldFrame(NonDemoBattleFrame PreviousBattleFrame, bool IsRightAttacking)
+        {
+            NonDemoBattleFrameSquad AttackingFrame;
+
+            if (IsRightAttacking)
+            {
+                AttackingFrame = PreviousBattleFrame.RightStance.Copy();
+            }
+            else
+            {
+                AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
+            }
+
+            AttackingFrame.LeaderStance = new NonDemoSwitchWithSupportHoldFrame(AttackingFrame.LeaderStance, IsRightAttacking);
+            AttackingFrame.SupportStance = new NonDemoSwitchWithLeaderHoldFrame(AttackingFrame.SupportStance, IsRightAttacking);
+
+            if (IsRightAttacking)
+            {
+                return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, AttackingFrame, PreviousBattleFrame.LeftStance);
+            }
+            else
+            {
+                return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, PreviousBattleFrame.RightStance, AttackingFrame);
+            }
         }
 
         private NonDemoBattleFrame GetSwitchBackWithLeaderFrame(NonDemoBattleFrame PreviousBattleFrame, bool IsRightAttacking)
@@ -1152,12 +1198,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             AttackingFrame.LeaderStance = new NonDemoSwitchBackWithSupportFrame(AttackingFrame.LeaderStance, IsRightAttacking);
             AttackingFrame.SupportStance = new NonDemoSwitchBackWithLeaderFrame(AttackingFrame.SupportStance, IsRightAttacking);
 
-            return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, DefendingFrame, AttackingFrame);
+            return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, AttackingFrame, DefendingFrame);
         }
 
         public override void Update(GameTime gameTime)
         {
-            //--NonDemoAnimationTimer;
+            --NonDemoAnimationTimer;
             if (Constants.ShowAnimation)//Animation was cancelled, show the non demo 2 times faster.
                 --NonDemoAnimationTimer;
 

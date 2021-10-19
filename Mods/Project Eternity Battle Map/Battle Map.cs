@@ -737,7 +737,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             string BattleMapPath = BR.ReadString();
             string MapAssembly = BR.ReadString();
             Type MapType = Type.GetType(MapAssembly);
-            BattleMap NewMap = (BattleMap)Activator.CreateInstance(MapType, BattleMapPath);
+            BattleMap NewMap = (BattleMap)Activator.CreateInstance(MapType, 0);
+            NewMap.BattleMapPath = BattleMapPath;
             NewMap.ListGameScreen = ListGameScreen;
             NewMap.LoadTemporaryMap(BR);
 

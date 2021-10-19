@@ -14,8 +14,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        protected override void DoDraw(CustomSpriteBatch g, int NonDemoAnimationTimer)
+        public override void Draw(CustomSpriteBatch g, int NonDemoAnimationTimer)
         {
+            DrawBackgroundBox(g, PositionX, PositionY);
+
             if (IsRight)
             {
                 g.Draw(SharedUnitStats.SharedUnit.SpriteMap, new Vector2(

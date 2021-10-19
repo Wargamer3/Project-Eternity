@@ -21,8 +21,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.BarrierName = OtherFrame.SharedUnitStats.AttackerSquadResult.Barrier;
         }
 
-        protected override void DoDraw(CustomSpriteBatch g, int NonDemoAnimationTimer)
+        public override void Draw(CustomSpriteBatch g, int NonDemoAnimationTimer)
         {
+            DrawBackgroundBox(g, PositionX, PositionY);
+
             g.Draw(SharedUnitStats.SharedUnit.SpriteMap, new Vector2(
                 PositionX + 2, PositionY + 8), Color.White);
 

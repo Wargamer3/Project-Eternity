@@ -37,17 +37,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnEnd()
         {
-            SharedUnitStats.StartingHP = Math.Max(SharedUnitStats.SharedUnit.Boosts.HPMinModifier, SharedUnitStats.StartingHP - Damage);
+            SharedUnitStats.VisibleHP = Math.Max(SharedUnitStats.SharedUnit.Boosts.HPMinModifier, SharedUnitStats.VisibleHP - Damage);
 
-            sprExplosion.Position.X = PositionX;
-            sprExplosion.Position.Y = PositionY;
+            sprExplosion.Position.X = PositionX + 16;
+            sprExplosion.Position.Y = PositionY + 16;
             sprExplosion.RestartAnimation();
 
             sndNonDemoAttack.Play();
         }
 
-        protected override void DoDraw(CustomSpriteBatch g, int NonDemoAnimationTimer)
+        public override void Draw(CustomSpriteBatch g, int NonDemoAnimationTimer)
         {
+            DrawBackgroundBox(g, PositionX, PositionY);
+
             g.Draw(SharedUnitStats.SharedUnit.SpriteMap, new Vector2(
                 PositionX + 2, PositionY + 8), Color.White);
 

@@ -313,9 +313,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Roster PlayerRoster = new Roster();
             PlayerRoster.LoadRoster();
-            DataScreen.LoadProgression(BR, PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             Load();
+            DataScreen.LoadProgression(BR, PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
             //Initialise the ScreenSize based on the map loaded.
