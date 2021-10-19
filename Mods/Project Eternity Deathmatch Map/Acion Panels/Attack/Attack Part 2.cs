@@ -71,10 +71,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 return;
                             }
 
-                            Map.PrepareSquadsForBattle(ActiveSquad, Map.ListPlayer[P].ListSquad[TargetSelect]);
+                            Map.PrepareSquadsForBattle(ActivePlayerIndex, ActiveSquadIndex,P, TargetSelect);
 
                             SupportSquadHolder ActiveSquadSupport = new SupportSquadHolder();
-                            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, Map.ListPlayer[P].ListSquad[TargetSelect]);
+                            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, P, TargetSelect);
 
                             SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
                             TargetSquadSupport.PrepareDefenceSupport(Map, P, Map.ListPlayer[P].ListSquad[TargetSelect]);

@@ -14,9 +14,9 @@ using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -60,7 +60,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public MovementAlgorithm Pathfinder;
         public List<MapLayer> ListLayer;
 
-        private List<GameScreen> ListNextAnimationScreen;
         public NonDemoScreen NonDemoScreen;
         public SpiritMenu SpiritMenu;
         public MapMenu BattleMapMenu;
@@ -156,8 +155,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             CursorPosition = new Vector3(9, 13, 0);
             CursorPositionVisible = CursorPosition;
-
-            ListNextAnimationScreen = new List<GameScreen>();
 
             ListTileSet = new List<Texture2D>();
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
@@ -598,28 +595,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ListLayer[0].LayerGrid = ListLayer[0].OriginalLayerGrid;
                 }
 
-                if (ListNextAnimationScreen.Count > 0)
+                if (!IsInit)
                 {
-                    PushScreen(ListNextAnimationScreen[0]);
-                    ListNextAnimationScreen.Remove(ListNextAnimationScreen[0]);
+                    Init();
                 }
-                else
+                else if (MovementAnimation.Count > 0)
                 {
-                    if (!IsInit)
-                    {
-                        Init();
-                    }
-                    else if (MovementAnimation.Count > 0)
-                    {
-                        MoveSquad();
-                    }
-                    else if (GameMode == 0 || (GameMode > 0 && !ListPlayer[ActivePlayerIndex].IsOnline))
-                    {
-                        ListActionMenuChoice.Last().Update(gameTime);
-                    }
+                    MoveSquad();
+                }
+                else if (GameMode == 0 || (GameMode > 0 && !ListPlayer[ActivePlayerIndex].IsOnline))
+                {
+                    ListActionMenuChoice.Last().Update(gameTime);
+                }
 
-                    UpdateCursorVisiblePosition(gameTime);
-                }
+                UpdateCursorVisiblePosition(gameTime);
             }
         }
 

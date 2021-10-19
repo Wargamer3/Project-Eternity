@@ -141,9 +141,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
 
                     SquadBattleResult AttackingResult = Map.CalculateFinalHP(RightSquad, null, 0,
-                                                                            FormationChoices.Focused, LeftSquad, null, 1, true, true);
+                                                                            FormationChoices.Focused, LeftSquad, null, Map.TargetPlayerIndex, Map.TargetSquadIndex, true, true);
                     AttackingResult.ArrayResult[0].AttackMissed = false;
                     AttackingResult.ArrayResult[0].AttackDamage = AttackingUnitAttackDamage;
+                    AttackingResult.ArrayResult[0].SetTarget(Map.TargetPlayerIndex, Map.TargetSquadIndex, 0, Map.TargetSquad.CurrentLeader);
 
                     AnimationScreen.AnimationUnitStats UnitStats = new AnimationScreen.AnimationUnitStats(RightSquad, LeftSquad, true);
 

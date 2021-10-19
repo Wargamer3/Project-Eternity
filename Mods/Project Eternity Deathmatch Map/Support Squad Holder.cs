@@ -1,7 +1,7 @@
-﻿using ProjectEternity.Core.Units;
-using ProjectEternity.GameScreens.BattleMapScreen;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ProjectEternity.Core.Units;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -39,8 +39,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListSquadSupport.Clear();
         }
 
-        public void PrepareAttackSupport(DeathmatchMap Map, int ActivePlayerIndex, Squad AttackingSquad, Squad DefendingSquad)
+        public void PrepareAttackSupport(DeathmatchMap Map, int ActivePlayerIndex, Squad AttackingSquad, int DefendingPlayerIndex, int DefendingSquadIndex)
         {
+            Squad DefendingSquad = Map.ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
+
             Clear();
 
             Player ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
@@ -85,7 +87,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                                 if (Accuracy > 0)
                                 {
-                                    BattleMap.BattleResult Result = Map.DamageFormula(AttackerSupportUnit, ActivePlayer.ListSquad[SquadIndex], 1, Defender, DefendingSquad, Defender.BattleDefenseChoice, true);
+                                    BattleMap.BattleResult Result = Map.DamageFormula(AttackerSupportUnit, ActivePlayer.ListSquad[SquadIndex], 1, DefendingPlayerIndex, DefendingSquadIndex, 0, Defender.BattleDefenseChoice, true);
 
                                     if (Result.AttackDamage > BestDamage)
                                     {

@@ -20,7 +20,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
@@ -40,7 +40,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Defend, EnemySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(-1, EnemySquad.CurrentLeader.AttackIndex);
@@ -60,7 +60,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Defend, EnemySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(-1, EnemySquad.CurrentLeader.AttackIndex);
@@ -80,7 +80,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Evade, EnemySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(-1, EnemySquad.CurrentLeader.AttackIndex);
@@ -113,7 +113,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Defend, DummySquad.CurrentWingmanA.BattleDefenseChoice);
@@ -149,7 +149,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Defend, DummySquad.CurrentWingmanA.BattleDefenseChoice);
@@ -185,7 +185,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Defend, DummySquad.CurrentWingmanA.BattleDefenseChoice);
@@ -221,7 +221,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Defend, DummySquad.CurrentWingmanA.BattleDefenseChoice);
@@ -257,7 +257,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Defend, DummySquad.CurrentWingmanA.BattleDefenseChoice);
@@ -293,7 +293,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Defend, DummySquad.CurrentWingmanA.BattleDefenseChoice);
@@ -327,7 +327,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Focused;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
 
@@ -363,7 +363,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
 
@@ -399,7 +399,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
-            DummyMap.PrepareSquadsForBattle(DummySquad, EnemySquad);
+            DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, DummySquad.CurrentLeader.BattleDefenseChoice);
 

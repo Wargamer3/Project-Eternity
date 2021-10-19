@@ -514,7 +514,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
                 if (Map.TargetPlayerIndex != IncomingDefendingPlayerIndex)
                     throw new Exception("Computing online defence pattern has failed");
 
-                DeathmatchMap.PrepareDefenseSquadForBattle(Map, Map.ActiveSquad, Map.TargetSquad);
+                DeathmatchMap.PrepareDefenseSquadForBattle(Map, Map.ActivePlayerIndex, Map.ActiveSquadIndex, Map.TargetPlayerIndex, Map.TargetSquadIndex);
                 DeathmatchMap.PrepareAttackSquadForBattle(Map, Map.ActiveSquad, Map.TargetSquad);
             }
 

@@ -1,5 +1,4 @@
-﻿using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
+﻿using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -21,6 +20,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
         [TestInitialize()]
         public void Initialize()
         {
+            DummyMap.ListPlayer.Clear();
         }
 
         private Squad CreateDummySquad()

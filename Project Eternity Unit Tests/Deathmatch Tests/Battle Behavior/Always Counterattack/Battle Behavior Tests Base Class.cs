@@ -20,6 +20,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
         [TestInitialize()]
         public void Initialize()
         {
+            DummyMap.ListPlayer.Clear();
         }
 
         private Squad CreateDummySquad()

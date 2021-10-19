@@ -42,12 +42,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (UnitDisplayCounter == 70)
                 {
                     UnitDisplayCounter = 0;
-                    int UnitIndex = -1;
+                    int SquadIndex = -1;
 
-                    for (int P = 0; P < Map.ListPlayer.Count && UnitIndex == -1; P++)
+                    for (int P = 0; P < Map.ListPlayer.Count && SquadIndex == -1; P++)
                     {
-                        UnitIndex = Map.CheckForSquadAtPosition(P, Map.CursorPosition, Vector3.Zero);
-                        if (UnitIndex >= 0)
+                        SquadIndex = Map.CheckForSquadAtPosition(P, Map.CursorPosition, Vector3.Zero);
+                        if (SquadIndex >= 0)
                         {
                             if (P == Map.ActivePlayerIndex)
                             {
@@ -58,21 +58,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 BoxColor = Color.Red;
                             }
 
-                            Squad DefendingSquad = Map.ListPlayer[P].ListSquad[UnitIndex];
+                            Squad DefendingSquad = Map.ListPlayer[P].ListSquad[SquadIndex];
                             Map.TargetPlayerIndex = P;
-                            Map.TargetSquadIndex = UnitIndex;
+                            Map.TargetSquadIndex = SquadIndex;
 
                             if (ActiveAttack != null)
                             {
                                 SupportSquadHolder ActiveSquadSupport = new SupportSquadHolder();
                                 SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
 
-                                ActiveSquadSupport.PrepareAttackSupport(Map, Map.ActivePlayerIndex, ActiveSquad, DefendingSquad);
+                                ActiveSquadSupport.PrepareAttackSupport(Map, PlayerIndex, ActiveSquad, P, SquadIndex);
                                 TargetSquadSupport.PrepareDefenceSupport(Map, P, DefendingSquad);
 
                                 BattleResult = Map.CalculateFinalHP(ActiveSquad, ActiveSquadSupport.ActiveSquadSupport, Map.ActivePlayerIndex,
                                                                         FormationChoices.Focused,
-                                                                        DefendingSquad, TargetSquadSupport.ActiveSquadSupport, P, true, false);
+                                                                        DefendingSquad, TargetSquadSupport.ActiveSquadSupport,
+                                                                        P, SquadIndex, true, false);
                             }
                             else
                             {
@@ -80,7 +81,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 for(int U = 0; U < DefendingSquad.UnitsAliveInSquad; ++U)
                                 {
                                     BattleResult.ArrayResult[U] = new BattleResult();
-                                    BattleResult.ArrayResult[U].Target = DefendingSquad[U];
+                                    BattleResult.ArrayResult[U].SetTarget(P, SquadIndex, U, DefendingSquad[U]);
                                 }
                             }
                         }

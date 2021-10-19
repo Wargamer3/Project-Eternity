@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             else if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
             {
-                Map.SelectMAPEnemies(ActiveSquad, ActivePlayerIndex, AttackChoice);
+                Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, AttackChoice);
                 Map.sndConfirm.Play();
 
             }

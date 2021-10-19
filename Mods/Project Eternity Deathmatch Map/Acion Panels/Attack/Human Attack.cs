@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void OnSelect()
         {
             //Attack Support
-            ActiveSquadSupport.PrepareAttackSupport(Map, Map.ActivePlayerIndex, ActiveSquad, TargetSquad);
+            ActiveSquadSupport.PrepareAttackSupport(Map, Map.ActivePlayerIndex, ActiveSquad, TargetPlayerIndex, TargetSquadIndex);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -234,7 +234,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 TargetSquad.CurrentLeader, TargetSquad, TargetSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
                             if (!Map.ListPlayer[TargetPlayerIndex].IsPlayerControlled)
                             {
-                                PrepareDefenseSquadForBattle(Map, ActiveSquad, TargetSquad);
+                                PrepareDefenseSquadForBattle(Map, ActivePlayerIndex, ActiveSquadIndex, TargetPlayerIndex, TargetSquadIndex);
                             }
 
                             Map.sndConfirm.Play();
@@ -292,7 +292,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
 
                         //Simulate defense reaction.
-                        PrepareDefenseSquadForBattle(Map, ActiveSquad, TargetSquad);
+                        PrepareDefenseSquadForBattle(Map, ActivePlayerIndex, ActiveSquadIndex, TargetPlayerIndex, TargetSquadIndex);
                         PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
 
                         Map.BattleMenuStage = BattleMenuStages.Default;
@@ -376,7 +376,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (ActiveSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
                         {
                             //Simulate defense reaction.
-                            PrepareDefenseSquadForBattle(Map, ActiveSquad, TargetSquad);
+                            PrepareDefenseSquadForBattle(Map, ActivePlayerIndex, ActiveSquadIndex, TargetPlayerIndex, TargetSquadIndex);
 
                             if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Spread)
                             {
@@ -515,20 +515,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void StartBattle()
         {
-            if (Map.IsOfflineOrServer)
-            {
-                if (Map.ListPlayer[TargetPlayerIndex].IsPlayerControlled)
-                    Map.InitPlayerDefence(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
-                else
-                {
-                    Map.InitPlayerAttack(ActiveSquad, ActiveSquadSupport, ActivePlayerIndex, TargetSquad, TargetSquadSupport, TargetPlayerIndex);
-                    ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
-                }
-            }
-            else
-            {
-                AddToPanelListAndSelect(new ActionPanelStartBattleOnline(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport));
-            }
+            AddToPanelListAndSelect(new ActionPanelStartBattleOnline(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false));
         }
 
         public override void DoRead(ByteReader BR)
@@ -563,7 +550,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            Map.BattleSumaryAttackDraw(g, TargetSquad, TargetSquadSupport, ActiveSquad, ActiveSquadSupport);
+            Map.BattleSumaryAttackDraw(g, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport);
         }
     }
 }

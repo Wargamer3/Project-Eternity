@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
-using System.Net.Sockets;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online

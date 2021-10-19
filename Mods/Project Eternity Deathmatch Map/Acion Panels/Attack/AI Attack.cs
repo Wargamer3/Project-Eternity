@@ -52,7 +52,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PrepareToAttack();
 
             ActiveSquadSupport = new SupportSquadHolder();
-            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, TargetSquad);
+            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, Target.Item1, Target.Item2);
             TargetSquadSupport = new SupportSquadHolder();
             TargetSquadSupport.PrepareDefenceSupport(Map, Target.Item1, TargetSquad);
         }
@@ -120,7 +120,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             Map.GlobalDeathmatchContext.ArrayAttackPosition = AttackChoice.ToArray();
 
-                            Map.AttackWithMAPAttack(ActiveSquad, ActivePlayerIndex, ListMAPAttackTarget);
+                            Map.AttackWithMAPAttack( ActivePlayerIndex, ActiveSquadIndex, ListMAPAttackTarget);
 
                             //Remove Ammo if needed.
                             if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)
@@ -151,7 +151,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.TargetPlayerIndex = Target.Item1;
 
             ActiveSquadSupport = new SupportSquadHolder();
-            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, TargetSquad);
+            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, Target.Item1, Target.Item2);
             TargetSquadSupport = new SupportSquadHolder();
             TargetSquadSupport.PrepareDefenceSupport(Map, Target.Item1, TargetSquad);
         }
@@ -228,7 +228,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             //Simulate defense reaction.
-            DeathmatchMap.PrepareDefenseSquadForBattle(Map, ActiveSquad, TargetSquad);
+            DeathmatchMap.PrepareDefenseSquadForBattle(Map, ActivePlayerIndex, ActiveSquadIndex, Target.Item1, Target.Item2);
             //Compute the Attacker's accuracy and Wingmans reaction.
             DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
         }

@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acion Panels\Attack\Start Battle Online.cs" />
     <Compile Include="Acion Panels\Attack\Human Attack.cs" />
     <Compile Include="Acion Panels\Attack\Human Defend.cs" />
     <Compile Include="Acion Panels\Attack\Attack Part 2.cs" />
@@ -124,7 +125,6 @@
     <Compile Include="Deathmatch Map Timeline.cs" />
     <Compile Include="Delayed Attack.cs" />
     <Compile Include="Formula Parser.cs" />
-    <Compile Include="Init Battle.cs" />
     <Compile Include="Terrain\Cube Map 3D.cs" />
     <Compile Include="Terrain\Map 2D.cs" />
     <Compile Include="Map Interaction.cs" />

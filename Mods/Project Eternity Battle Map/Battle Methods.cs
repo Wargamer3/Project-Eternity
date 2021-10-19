@@ -80,7 +80,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public string Barrier;
             public bool AttackWasCritical;
             public int AttackAttackerFinalEN;
-            public Unit Target;
+            public int TargetPlayerIndex;
+            public int TargetSquadIndex;
+            public int TargetUnitIndex;
+            private Unit _Target;
+            public Unit Target { get { return _Target; } }
+            public void SetTarget(int TargetPlayerIndex, int TargetSquadIndex, int TargetUnitIndex, Unit Target)
+            {
+                this.TargetPlayerIndex = TargetPlayerIndex;
+                this.TargetSquadIndex = TargetSquadIndex;
+                this.TargetUnitIndex = TargetUnitIndex;
+
+                _Target = Target;
+            }
         }
 
         public struct SquadBattleResult
@@ -126,11 +138,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         public BattleResult DamageFormula(Unit Attacker, float DamageModifier, int Attack,
-            Unit Defender, Unit.BattleDefenseChoices DefenseChoice, bool NullifyAttack, int Defense, bool CalculateCritical = false)
+            int TargetPlayerIndex, int TargetSquadIndex, int TargetUnitIndex, Unit Defender, Unit.BattleDefenseChoices DefenseChoice,
+            bool NullifyAttack, int Defense, bool CalculateCritical = false)
         {
             //FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) + Additive Final Damage Bonuses) * Final Damage Multiplier Bonuses
             BattleResult Result = new BattleResult();
-            Result.Target = Defender;
+            Result.SetTarget(TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Defender);
 
             if (NullifyAttack)
             {

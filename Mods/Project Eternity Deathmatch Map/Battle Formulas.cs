@@ -54,8 +54,11 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
         }
 
         public BattleResult DamageFormula(Unit Attacker, Squad AttackerSquad, float DamageModifier,
-            Unit Defender, Squad DefenderSquad, Unit.BattleDefenseChoices DefenseChoice, bool CalculateCritical)
+            int TargetPlayerIndex, int TargetSquadIndex, int TargetUnitIndex, Unit.BattleDefenseChoices DefenseChoice, bool CalculateCritical)
         {
+            Squad DefenderSquad = ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
+            Unit Defender = DefenderSquad[TargetUnitIndex];
+
             string AttackerTerrainType;
             string DefenderTerrainType;
             Terrain DefenderTerrain;
@@ -86,7 +89,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             int Attack = AttackFormula(Attacker, AttackerTerrainType);
             int Defense = DefenseFormula(Defender, DefenderTerrainType, DefenderTerrain);
 
-            BattleResult Result = DamageFormula(Attacker, DamageModifier, Attack, Defender, DefenseChoice, NullifyAttack, Defense, CalculateCritical);
+            BattleResult Result = DamageFormula(Attacker, DamageModifier, Attack, TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Defender, DefenseChoice, NullifyAttack, Defense, CalculateCritical);
 
             return Result;
         }
@@ -346,8 +349,12 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return Output;
         }
 
-        private BattleResult GetBattleResult(Unit Attacker, Squad AttackerSquad, float DamageModifier, Unit Defender, Squad DefenderSquad, bool ActivateSkills, bool CalculateCritical)
+        private BattleResult GetBattleResult(Unit Attacker, Squad AttackerSquad, float DamageModifier,
+            int TargetPlayerIndex, int TargetSquadIndex, int TargetUnitIndex, bool ActivateSkills, bool CalculateCritical)
         {
+            Squad DefenderSquad = ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
+            Unit Defender = DefenderSquad[TargetUnitIndex];
+
             ActivateAutomaticSkills(AttackerSquad, Attacker, DeathmatchSkillRequirement.BeforeAttackRequirementName, DefenderSquad, Defender);
             ActivateAutomaticSkills(DefenderSquad, Defender, DeathmatchSkillRequirement.BeforeGettingAttackedRequirementName, AttackerSquad, Attacker);
             
@@ -367,7 +374,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     ActivateAutomaticSkills(DefenderSquad, Defender, DeathmatchSkillRequirement.BeforeGettingHitRequirementName, AttackerSquad, Attacker);
                 }
 
-                Result = DamageFormula(Attacker, AttackerSquad, DamageModifier, Defender, DefenderSquad, Defender.BattleDefenseChoice, CalculateCritical);
+                Result = DamageFormula(Attacker, AttackerSquad, DamageModifier, TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Defender.BattleDefenseChoice, CalculateCritical);
             }
             else
             {
@@ -380,10 +387,11 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 Result = new BattleResult();
                 Result.AttackDamage = 0;
                 Result.AttackMissed = true;
+                Result.SetTarget(TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Defender);
             }
 
             Result.Accuracy = BaseHitRate;
-            Result.Target = Defender;
+
             //Remove EN from the weapon cost.
             if (Attacker.CurrentAttack.ENCost > 0)
             {
@@ -652,7 +660,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
         }
 
         public SquadBattleResult CalculateFinalHP(Squad Attacker, Squad SupportAttacker, int AttackerPlayerIndex, FormationChoices AttackerFormationChoice,
-            Squad Defender, Squad SupportDefender, int DefenderPlayerIndex, bool ActivateSkills, bool CalculateCritical)
+            Squad Defender, Squad SupportDefender, int DefenderPlayerIndex, int DefenderSquadIndex, bool ActivateSkills, bool CalculateCritical)
         {
             SquadBattleResult SquadResult = new SquadBattleResult(new BattleResult[Attacker.UnitsAliveInSquad]);
 
@@ -662,7 +670,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 TargetSquad = SupportDefender;
             }
             
-            GlobalBattleContext.Result.Target = null;
+            GlobalBattleContext.Result.SetTarget(-1, -1, -1, null);
             GlobalBattleContext.SupportAttack = null;
             GlobalBattleContext.SupportDefend = null;
 
@@ -681,7 +689,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             {
                 if (Attacker.CurrentLeader.CurrentAttack != null)
                 {
-                    TotalLeaderDamage = GetBattleResult(Attacker.CurrentLeader, Attacker, 1, TargetSquad.CurrentLeader, TargetSquad, false, CalculateCritical).AttackDamage;
+                    TotalLeaderDamage = GetBattleResult(Attacker.CurrentLeader, Attacker, 1, DefenderPlayerIndex, DefenderSquadIndex, 0, false, CalculateCritical).AttackDamage;
                 }
 
                 ActivateAutomaticSkills(Attacker, Attacker.CurrentLeader, DeathmatchSkillRequirement.BattleStartRequirementName, TargetSquad, TargetSquad.CurrentLeader);
@@ -706,8 +714,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     {
                         if (Attacker[i].CurrentAttack != null && DefenderHP >= 0)
                         {
-                            TotalLeaderDamage += GetBattleResult(Attacker[i], Attacker, WingmanDamageModifier,
-                                                                        TargetSquad.CurrentLeader, TargetSquad, false, CalculateCritical).AttackDamage;
+                            TotalLeaderDamage += GetBattleResult(Attacker[i], Attacker, WingmanDamageModifier, DefenderPlayerIndex, DefenderSquadIndex, 0, false, CalculateCritical).AttackDamage;
 
                             DefenderHP = TargetSquad.CurrentLeader.ComputeRemainingHPAfterDamage(TotalLeaderDamage);
 
@@ -740,7 +747,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             if (Attacker.CurrentLeader.CurrentAttack != null)
             {
-                SquadResult.ArrayResult[0] = GetBattleResult(Attacker.CurrentLeader, Attacker, 1, TargetSquad.CurrentLeader, TargetSquad, ActivateSkills, CalculateCritical);
+                SquadResult.ArrayResult[0] = GetBattleResult(Attacker.CurrentLeader, Attacker, 1, DefenderPlayerIndex, DefenderSquadIndex, 0, ActivateSkills, CalculateCritical);
             }
 
             TotalLeaderDamage = SquadResult.ArrayResult[0].AttackDamage;
@@ -751,8 +758,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 {
                     if (Attacker[i].CurrentAttack != null)
                     {
-                        SquadResult.ArrayResult[i] = GetBattleResult(Attacker[i], Attacker, WingmanDamageModifier,
-                                                                    TargetSquad[i], TargetSquad, ActivateSkills, CalculateCritical);
+                        SquadResult.ArrayResult[i] = GetBattleResult(Attacker[i], Attacker, WingmanDamageModifier, DefenderPlayerIndex, DefenderSquadIndex, i, ActivateSkills, CalculateCritical);
                     }
                 }
             }
@@ -764,8 +770,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 {
                     if (Attacker[i].CurrentAttack != null && DefenderHP >= 0)
                     {
-                        SquadResult.ArrayResult[i] = GetBattleResult(Attacker[i], Attacker, WingmanDamageModifier,
-                                                                    TargetSquad.CurrentLeader, TargetSquad, ActivateSkills, CalculateCritical);
+                        SquadResult.ArrayResult[i] = GetBattleResult(Attacker[i], Attacker, WingmanDamageModifier, DefenderPlayerIndex, DefenderSquadIndex, 0, ActivateSkills, CalculateCritical);
 
                         TotalLeaderDamage += SquadResult.ArrayResult[i].AttackDamage;
 
@@ -777,8 +782,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             {
                 for (int i = 1; i < TargetSquad.UnitsAliveInSquad; i++)
                 {
-                    SquadResult.ArrayResult[i] = GetBattleResult(Attacker.CurrentLeader, Attacker, 1,
-                                                                TargetSquad[i], TargetSquad, ActivateSkills, CalculateCritical);
+                    SquadResult.ArrayResult[i] = GetBattleResult(Attacker.CurrentLeader, Attacker, 1, DefenderPlayerIndex, DefenderSquadIndex, i, ActivateSkills, CalculateCritical);
                 }
             }
 
@@ -790,7 +794,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     ActivateAutomaticSkills(SupportAttacker, SupportAttacker.CurrentLeader, DeathmatchSkillRequirement.SupportAttackRequirementName, TargetSquad);
                 }
                 
-                SquadResult.ResultSupportAttack = GetBattleResult(SupportAttacker.CurrentLeader, SupportAttacker, 0.75f, TargetSquad.CurrentLeader, TargetSquad, ActivateSkills, CalculateCritical);
+                SquadResult.ResultSupportAttack = GetBattleResult(SupportAttacker.CurrentLeader, SupportAttacker, 0.75f, DefenderPlayerIndex, DefenderSquadIndex, 0, ActivateSkills, CalculateCritical);
             }
 
             if (ActivateSkills)

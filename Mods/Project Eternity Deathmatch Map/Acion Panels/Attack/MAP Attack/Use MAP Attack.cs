@@ -56,14 +56,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     break;
 
                 case WeaponMAPProperties.Direction:
-                    Map.SelectMAPEnemies(ActiveSquad, ActivePlayerIndex, AttackChoice);
+                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, AttackChoice);
                     Map.sndConfirm.Play();
                     break;
 
                 case WeaponMAPProperties.Targeted:
                     if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
                     {
-                        Map.SelectMAPEnemies(ActiveSquad, ActivePlayerIndex, AttackChoice);
+                        Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, AttackChoice);
                         Map.sndConfirm.Play();
                     }
                     else

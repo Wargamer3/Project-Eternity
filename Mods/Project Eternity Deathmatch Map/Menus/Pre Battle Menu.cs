@@ -148,8 +148,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void BattleSumaryAttackDraw(CustomSpriteBatch g, Squad DefendingSquad, SupportSquadHolder TargetSquadSupport, Squad AttackingSquad, SupportSquadHolder AttackingSupport)
+        public void BattleSumaryAttackDraw(CustomSpriteBatch g,
+            int DefendingPlayerIndex, int DefendingSquadIndex, SupportSquadHolder TargetSquadSupport,
+            int AttackingPlayerIndex, int AttackingSquadIndex, SupportSquadHolder AttackingSupport)
         {
+            Squad AttackingSquad = ListPlayer[AttackingPlayerIndex].ListSquad[AttackingSquadIndex];
+            Squad DefendingSquad = ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
+
             g.Draw(sprBattleMenuBackground, Vector2.Zero, Color.White);
             BattleSumaryDrawSquadLeft(g, DefendingSquad, BattleMenuDefenseFormationChoice, TargetSquadSupport.ActiveSquadSupport);
 
@@ -158,7 +163,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (AttackingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
                 int AttackDamage = DamageFormula(AttackingSquad.CurrentLeader, AttackingSquad, 1f,
-                    DefendingSquad.CurrentLeader, DefendingSquad, DefendingSquad.CurrentLeader.BattleDefenseChoice, false)
+                    DefendingPlayerIndex, DefendingSquadIndex, 0,
+                    DefendingSquad.CurrentLeader.BattleDefenseChoice, false)
                     .AttackDamage;
 
                 g.DrawString(fntFinlanderFont, AttackDamage.ToString() + "( " + (int)(AttackDamage * 1.2) + " )",
@@ -168,7 +174,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
                 int AttackDamage = DamageFormula(DefendingSquad.CurrentLeader, DefendingSquad, 1f,
-                    AttackingSquad.CurrentLeader, AttackingSquad, AttackingSquad.CurrentLeader.BattleDefenseChoice, false)
+                    AttackingPlayerIndex, AttackingSquadIndex, 0,
+                    AttackingSquad.CurrentLeader.BattleDefenseChoice, false)
                     .AttackDamage;
 
                 g.DrawString(fntFinlanderFont, AttackDamage.ToString() + "( " + (int)(AttackDamage * 1.2) + " )",
@@ -235,8 +242,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void BattleSumaryDefenceDraw(CustomSpriteBatch g, Squad AttackingSquad, SupportSquadHolder ActiveSquadSupport, Squad DefendingSquad, SupportSquadHolder TargetSquadSupport)
+        public void BattleSumaryDefenceDraw(CustomSpriteBatch g,
+            int AttackingPlayerIndex, int AttackingSquadIndex, SupportSquadHolder ActiveSquadSupport,
+            int DefendingPlayerIndex, int DefendingSquadIndex, SupportSquadHolder TargetSquadSupport)
         {
+            Squad AttackingSquad = ListPlayer[AttackingPlayerIndex].ListSquad[AttackingSquadIndex];
+            Squad DefendingSquad = ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
+
             g.Draw(sprBattleMenuBackground, Vector2.Zero, Color.White);
             BattleSumaryDrawSquadLeft(g, AttackingSquad, BattleMenuOffenseFormationChoice, ActiveSquadSupport.ActiveSquadSupport);
             
@@ -245,7 +257,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
                 int AttackDamage = DamageFormula(DefendingSquad.CurrentLeader, DefendingSquad, 1f,
-                    AttackingSquad.CurrentLeader, AttackingSquad, AttackingSquad.CurrentLeader.BattleDefenseChoice, false)
+                    AttackingPlayerIndex, AttackingSquadIndex, 0,
+                    AttackingSquad.CurrentLeader.BattleDefenseChoice, false)
                     .AttackDamage;
 
                 g.DrawString(fntFinlanderFont, AttackDamage.ToString() + "( " + (int)(AttackDamage * 1.2) + " )",
@@ -255,7 +268,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (AttackingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
                 int AttackDamage = DamageFormula(AttackingSquad.CurrentLeader, AttackingSquad, 1f,
-                    DefendingSquad.CurrentLeader, DefendingSquad, DefendingSquad.CurrentLeader.BattleDefenseChoice, false)
+                    DefendingPlayerIndex, DefendingSquadIndex, 0,
+                    DefendingSquad.CurrentLeader.BattleDefenseChoice, false)
                     .AttackDamage;
 
                 g.DrawString(fntFinlanderFont, AttackDamage.ToString() + "( " + (int)(AttackDamage * 1.2) + " )",
