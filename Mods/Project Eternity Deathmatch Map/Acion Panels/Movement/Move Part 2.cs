@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActiveSquadIndex;
         private Squad ActiveSquad;
         private bool IsPostAttack;
+        private Vector3 CursorPosition;
 
         public ActionPanelMovePart2(DeathmatchMap Map)
             : base(PanelName, Map, false)
@@ -27,6 +28,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.IsPostAttack = IsPostAttack;
+
+            CursorPosition = Map.CursorPosition;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
@@ -112,7 +115,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            Map.CursorPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
+            CursorPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
+            Map.CursorPosition = CursorPosition;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
 
@@ -130,9 +134,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
-            BW.AppendFloat(Map.CursorPosition.X);
-            BW.AppendFloat(Map.CursorPosition.Y);
-            BW.AppendFloat(Map.CursorPosition.Z);
+            BW.AppendFloat(CursorPosition.X);
+            BW.AppendFloat(CursorPosition.Y);
+            BW.AppendFloat(CursorPosition.Z);
         }
 
         protected override ActionPanel Copy()

@@ -20,6 +20,7 @@ namespace ProjectEternity.Core.Item
         public int ActionMenuCursor;
         private readonly bool CanCancel;
         public bool IsEnabled;
+        public bool SendBackToSender;
 
         // List of ActionPanel shared through every ActionPanel objects.
         protected readonly ActionPanelHolder ListActionMenuChoice;
@@ -35,6 +36,7 @@ namespace ProjectEternity.Core.Item
 
             ActionMenuWidth = MinActionMenuWidth;
             IsEnabled = true;
+            SendBackToSender = false;
 
             ListNextChoice = new List<ActionPanel>();
             if (ListActionMenuChoice.HasMainPanel)

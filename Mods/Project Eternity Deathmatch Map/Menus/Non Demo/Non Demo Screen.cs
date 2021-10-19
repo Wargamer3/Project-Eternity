@@ -1028,7 +1028,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int i = Start; i <= End && i < Result.ArrayResult.Length; i++)
             {
-                if (Result.ArrayResult[i].Barrier == null)
+                if (string.IsNullOrEmpty(Result.ArrayResult[i].Barrier))
                 {
                     AllShield = false;
                 }
@@ -1082,7 +1082,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int i = Start; i <= End && i < Result.ArrayResult.Length; i++)
             {
-                if (Result.ArrayResult[i].Barrier == null)
+                if (string.IsNullOrEmpty(Result.ArrayResult[i].Barrier))
                 {
                     AllBarrier = false;
                 }
@@ -1221,7 +1221,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     NonDemoAnimationTimer = ListNonDemoBattleFrame[CurrentNonDemoBattleFrame].FrameLength;
 
                     ListNonDemoBattleFrame[CurrentNonDemoBattleFrame].OnEnd();
-				}
+                }
             }
         }
 

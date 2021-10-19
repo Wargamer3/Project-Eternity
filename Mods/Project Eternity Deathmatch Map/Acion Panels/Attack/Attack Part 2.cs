@@ -28,6 +28,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
+
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
         }
@@ -118,6 +119,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int SquadIndex = BR.ReadInt32();
                 BattlePreview = new BattlePreviewer(Map, PlayerIndex, SquadIndex, null);
             }
+
+            Map.CursorPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
         }
 
         public override void DoWrite(ByteWriter BW)
@@ -139,6 +142,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.AppendInt32(BattlePreview.PlayerIndex);
                 BW.AppendInt32(BattlePreview.SquadIndex);
             }
+
+            BW.AppendFloat(Map.CursorPosition.X);
+            BW.AppendFloat(Map.CursorPosition.Y);
+            BW.AppendFloat(Map.CursorPosition.Z);
         }
 
         protected override ActionPanel Copy()

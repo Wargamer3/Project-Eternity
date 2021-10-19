@@ -15,7 +15,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelStartBattleOnline : ActionPanelDeathmatch
     {
-        private const string PanelName = "StartBattleOnline ";
+        private const string PanelName = "StartBattleOnline";
 
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
@@ -38,6 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(PanelName, Map, false)
         {
             ListNextAnimationScreen = new List<GameScreen>();
+            SendBackToSender = true;
         }
 
         public ActionPanelStartBattleOnline(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport,
@@ -53,6 +54,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.TargetSquadSupport = TargetSquadSupport;
 
             this.IsDefending = IsDefending;
+
+            SendBackToSender = true;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
@@ -83,33 +86,114 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.PushScreen(ListNextAnimationScreen[0]);
                 ListNextAnimationScreen.Remove(ListNextAnimationScreen[0]);
             }
+            else
+            {
+                ListActionMenuChoice.RemoveAllSubActionPanels();
+            }
         }
 
         public override void DoRead(ByteReader BR)
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             ActiveSquadSupport = new SupportSquadHolder();
+            ActiveSquad.CurrentLeader.BattleDefenseChoice = (Unit.BattleDefenseChoices)BR.ReadByte();
+            ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
 
             TargetPlayerIndex = BR.ReadInt32();
             TargetSquadIndex = BR.ReadInt32();
+            TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
             TargetSquadSupport = new SupportSquadHolder();
+            TargetSquad.CurrentLeader.BattleDefenseChoice = (Unit.BattleDefenseChoices)BR.ReadByte();
+            TargetSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
 
             IsDefending = BR.ReadBoolean();
 
             Map.BattleMenuStage = (BattleMenuStages)BR.ReadByte();
 
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
-            TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
+            if (Map.IsServer)
+            {
+            }
+            else
+            {
+                int AttackingResultArrayResultLength = BR.ReadInt32();
+                AttackingResult.ArrayResult = new BattleResult[AttackingResultArrayResultLength];
+
+                for (int R = 0; R < AttackingResultArrayResultLength; ++R)
+                {
+                    AttackingResult.ArrayResult[R] = new BattleResult();
+                    AttackingResult.ArrayResult[R].Accuracy = BR.ReadInt32();
+                    AttackingResult.ArrayResult[R].AttackAttackerFinalEN = BR.ReadInt32();
+                    AttackingResult.ArrayResult[R].AttackDamage = BR.ReadInt32();
+                    AttackingResult.ArrayResult[R].AttackMissed = BR.ReadBoolean();
+                    AttackingResult.ArrayResult[R].AttackShootDown = BR.ReadBoolean();
+                    AttackingResult.ArrayResult[R].AttackSwordCut = BR.ReadBoolean();
+                    AttackingResult.ArrayResult[R].AttackWasCritical = BR.ReadBoolean();
+                    AttackingResult.ArrayResult[R].Barrier = BR.ReadString();
+                    AttackingResult.ArrayResult[R].Shield = BR.ReadBoolean();
+
+                    int TargetPlayerIndex = BR.ReadInt32();
+                    int TargetSquadIndex = BR.ReadInt32();
+                    int TargetUnitIndex = BR.ReadInt32();
+
+                    AttackingResult.ArrayResult[R].TargetPlayerIndex = TargetPlayerIndex;
+                    AttackingResult.ArrayResult[R].TargetSquadIndex = TargetSquadIndex;
+                    AttackingResult.ArrayResult[R].TargetUnitIndex = TargetUnitIndex;
+
+                    AttackingResult.ArrayResult[R].SetTarget(TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex][TargetUnitIndex]);
+                }
+
+                int DefendingResultArrayResultLength = BR.ReadInt32();
+                DefendingResult.ArrayResult = new BattleResult[DefendingResultArrayResultLength];
+
+                for (int R = 0; R < DefendingResultArrayResultLength; ++R)
+                {
+                    DefendingResult.ArrayResult[R] = new BattleResult();
+                    DefendingResult.ArrayResult[R].Accuracy = BR.ReadInt32();
+                    DefendingResult.ArrayResult[R].AttackAttackerFinalEN = BR.ReadInt32();
+                    DefendingResult.ArrayResult[R].AttackDamage = BR.ReadInt32();
+                    DefendingResult.ArrayResult[R].AttackMissed = BR.ReadBoolean();
+                    DefendingResult.ArrayResult[R].AttackShootDown = BR.ReadBoolean();
+                    DefendingResult.ArrayResult[R].AttackSwordCut = BR.ReadBoolean();
+                    DefendingResult.ArrayResult[R].AttackWasCritical = BR.ReadBoolean();
+                    DefendingResult.ArrayResult[R].Barrier = BR.ReadString();
+                    DefendingResult.ArrayResult[R].Shield = BR.ReadBoolean();
+
+                    int TargetPlayerIndex = BR.ReadInt32();
+                    int TargetSquadIndex = BR.ReadInt32();
+                    int TargetUnitIndex = BR.ReadInt32();
+
+                    DefendingResult.ArrayResult[R].TargetPlayerIndex = TargetPlayerIndex;
+                    DefendingResult.ArrayResult[R].TargetSquadIndex = TargetSquadIndex;
+                    DefendingResult.ArrayResult[R].TargetUnitIndex = TargetUnitIndex;
+
+                    DefendingResult.ArrayResult[R].SetTarget(TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex][TargetUnitIndex]);
+                }
+            }
+
+            if (IsDefending || Map.ListPlayer[TargetPlayerIndex].IsPlayerControlled)
+            {
+                InitPlayerDefence();
+            }
+            else
+            {
+                InitPlayerAttack();
+                ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
+            }
         }
 
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
+            BW.AppendByte((byte)ActiveSquad.CurrentLeader.BattleDefenseChoice);
+            BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
 
             BW.AppendInt32(TargetPlayerIndex);
             BW.AppendInt32(TargetSquadIndex);
+            BW.AppendByte((byte)TargetSquad.CurrentLeader.BattleDefenseChoice);
+            BW.AppendInt32(TargetSquad.CurrentLeader.AttackIndex);
 
             BW.AppendBoolean(IsDefending);
 
@@ -194,13 +278,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             bool ShowAnimation = Constants.ShowAnimation && FinalActiveSquad.CurrentLeader.CurrentAttack.GetAttackAnimations(FormulaParser.ActiveParser).Start.AnimationName != null;
             ListNextAnimationScreen.Clear();
             Map.NonDemoScreen.ListNonDemoBattleFrame.Clear();
-            ListActionMenuChoice.RemoveAllSubActionPanels();
 
-            AttackingResult = Map.CalculateFinalHP(FinalActiveSquad, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
+            if (Map.IsOfflineOrServer)
+            {
+                AttackingResult = Map.CalculateFinalHP(FinalActiveSquad, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
                                                                     Map.BattleMenuOffenseFormationChoice, FinalTargetSquad, FinalTargetSquadSupport.ActiveSquadSupport,
                                                                     FinalTargetPlayerIndex, FinalTargetSquadIndex, true, true);
 
-            DefendingResult = new SquadBattleResult(new BattleResult[1] { new BattleResult() });
+                DefendingResult = new SquadBattleResult(new BattleResult[1] { new BattleResult() });
+            }
+            else
+            {
+                Map.CalculateFinalHP(FinalActiveSquad, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
+                                                                       Map.BattleMenuOffenseFormationChoice, FinalTargetSquad, FinalTargetSquadSupport.ActiveSquadSupport,
+                                                                       FinalTargetPlayerIndex, FinalTargetSquadIndex, true, true);
+            }
 
             AnimationScreen.AnimationUnitStats UnitStats = new AnimationScreen.AnimationUnitStats(FinalActiveSquad, FinalTargetSquad, IsActiveSquadOnRight);
             if (ShowAnimation)
@@ -220,9 +312,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Counter.
                 if (FinalTargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
                 {
-                    DefendingResult = Map.CalculateFinalHP(FinalTargetSquad, null, FinalTargetPlayerIndex,
+                    if (Map.IsOfflineOrServer)
+                    {
+                        DefendingResult = Map.CalculateFinalHP(FinalTargetSquad, null, FinalTargetPlayerIndex,
                                                         Map.BattleMenuDefenseFormationChoice, FinalActiveSquad, null,
                                                         FinalActivePlayerIndex, FinalActiveSquadIndex, true, true);
+                    }
+                    else
+                    {
+                        Map.CalculateFinalHP(FinalTargetSquad, null, FinalTargetPlayerIndex,
+                                                        Map.BattleMenuDefenseFormationChoice, FinalActiveSquad, null,
+                                                        FinalActivePlayerIndex, FinalActiveSquadIndex, true, true);
+                    }
 
                     if (ShowAnimation)
                     {
@@ -238,20 +339,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            if (ShowAnimation)
+            if (Map.IsClient)
             {
-                Map.PushScreen(ListNextAnimationScreen[0]);
-                ListNextAnimationScreen.RemoveAt(0);
-                ListNextAnimationScreen.Add(new EndBattleAnimationScreen(Map, FinalActiveSquad, FinalActiveSquadSupport, FinalActivePlayerIndex,
-                    FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, AttackingResult, DefendingResult));
-            }
-            else
-            {
-                Map.NonDemoScreen.InitNonDemo(FinalActiveSquad, FinalActiveSquadSupport, FinalActivePlayerIndex, AttackingResult, Map.BattleMenuOffenseFormationChoice,
-                    FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, DefendingResult, Map.BattleMenuDefenseFormationChoice, IsActiveSquadOnRight);
+                if (ShowAnimation)
+                {
+                    Map.PushScreen(ListNextAnimationScreen[0]);
+                    ListNextAnimationScreen.RemoveAt(0);
+                    ListNextAnimationScreen.Add(new EndBattleAnimationScreen(Map, FinalActiveSquad, FinalActiveSquadSupport, FinalActivePlayerIndex,
+                        FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, AttackingResult, DefendingResult));
+                }
+                else
+                {
+                    Map.NonDemoScreen.InitNonDemo(FinalActiveSquad, FinalActiveSquadSupport, FinalActivePlayerIndex, AttackingResult, Map.BattleMenuOffenseFormationChoice,
+                        FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, DefendingResult, Map.BattleMenuDefenseFormationChoice, IsActiveSquadOnRight);
 
-                Map.NonDemoScreen.Alive = true;
-                Map.ListGameScreen.Insert(0, Map.NonDemoScreen);
+                    Map.NonDemoScreen.Alive = true;
+                    Map.ListGameScreen.Insert(0, Map.NonDemoScreen);
+                }
             }
 
             //AttackingSquad Activations.
@@ -268,42 +372,48 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost);
             FinalActiveSquad.EndTurn();
 
-            bool HasAfterAttack = false;
-            ActionPanelDeathmatch AfterAttack = new ActionPanelMainMenu(Map, FinalActivePlayerIndex, FinalActiveSquadIndex);
-
-            if (FinalActiveSquad.CurrentLeader.Boosts.PostAttackModifier.Attack)
+            if (Map.IsClient)
             {
-                HasAfterAttack = true;
-                AfterAttack.AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad.CanMove));
-            }
+                bool HasAfterAttack = false;
+                ActionPanelDeathmatch AfterAttack = new ActionPanelMainMenu(Map, FinalActivePlayerIndex, FinalActiveSquadIndex);
 
-            if (FinalActiveSquad.CurrentLeader.Boosts.PostAttackModifier.Move)
-            {
-                HasAfterAttack = true;
-                Map.CursorPosition = FinalActiveSquad.Position;
-                AfterAttack.AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad.Position, Map.CameraPosition, true));
-            }
+                if (FinalActiveSquad.CurrentLeader.Boosts.PostAttackModifier.Attack)
+                {
+                    HasAfterAttack = true;
+                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad.CanMove));
+                }
 
-            if (HasAfterAttack)
-            {
-                AfterAttack.AddChoiceToCurrentPanel(new ActionPanelWait(Map, FinalActiveSquad));
-                ListActionMenuChoice.Add(AfterAttack);
+                if (FinalActiveSquad.CurrentLeader.Boosts.PostAttackModifier.Move)
+                {
+                    HasAfterAttack = true;
+                    Map.CursorPosition = FinalActiveSquad.Position;
+                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad.Position, Map.CameraPosition, true));
+                }
+
+                if (HasAfterAttack)
+                {
+                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelWait(Map, FinalActiveSquad));
+                    ListActionMenuChoice.Add(AfterAttack);
+                }
             }
         }
 
         public void InitPlayerAttack()
         {
-            //Play battle theme.
-            if (ActiveSquad.CurrentLeader.BattleTheme == null || ActiveSquad.CurrentLeader.BattleThemeName != GameScreen.FMODSystem.sndActiveBGMName)
+            if (Map.IsClient)
             {
-                if (ActiveSquad.CurrentLeader.BattleTheme != null)
+                //Play battle theme.
+                if (ActiveSquad.CurrentLeader.BattleTheme == null || ActiveSquad.CurrentLeader.BattleThemeName != GameScreen.FMODSystem.sndActiveBGMName)
                 {
-                    if (GameScreen.FMODSystem.sndActiveBGM != null)
-                        GameScreen.FMODSystem.sndActiveBGM.Stop();
+                    if (ActiveSquad.CurrentLeader.BattleTheme != null)
+                    {
+                        if (GameScreen.FMODSystem.sndActiveBGM != null)
+                            GameScreen.FMODSystem.sndActiveBGM.Stop();
 
-                    ActiveSquad.CurrentLeader.BattleTheme.SetLoop(true);
-                    ActiveSquad.CurrentLeader.BattleTheme.PlayAsBGM();
-                    GameScreen.FMODSystem.sndActiveBGMName = ActiveSquad.CurrentLeader.BattleThemeName;
+                        ActiveSquad.CurrentLeader.BattleTheme.SetLoop(true);
+                        ActiveSquad.CurrentLeader.BattleTheme.PlayAsBGM();
+                        GameScreen.FMODSystem.sndActiveBGMName = ActiveSquad.CurrentLeader.BattleThemeName;
+                    }
                 }
             }
 
@@ -312,17 +422,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void InitPlayerDefence()
         {
-            //Play battle theme.
-            if (TargetSquad.CurrentLeader.BattleTheme == null || TargetSquad.CurrentLeader.BattleThemeName != GameScreen.FMODSystem.sndActiveBGMName)
+            if (Map.IsClient)
             {
-                if (TargetSquad.CurrentLeader.BattleTheme != null)
+                //Play battle theme.
+                if (TargetSquad.CurrentLeader.BattleTheme == null || TargetSquad.CurrentLeader.BattleThemeName != GameScreen.FMODSystem.sndActiveBGMName)
                 {
-                    if (GameScreen.FMODSystem.sndActiveBGM != null)
-                        GameScreen.FMODSystem.sndActiveBGM.Stop();
+                    if (TargetSquad.CurrentLeader.BattleTheme != null)
+                    {
+                        if (GameScreen.FMODSystem.sndActiveBGM != null)
+                            GameScreen.FMODSystem.sndActiveBGM.Stop();
 
-                    TargetSquad.CurrentLeader.BattleTheme.SetLoop(true);
-                    TargetSquad.CurrentLeader.BattleTheme.PlayAsBGM();
-                    GameScreen.FMODSystem.sndActiveBGMName = TargetSquad.CurrentLeader.BattleThemeName;
+                        TargetSquad.CurrentLeader.BattleTheme.SetLoop(true);
+                        TargetSquad.CurrentLeader.BattleTheme.PlayAsBGM();
+                        GameScreen.FMODSystem.sndActiveBGMName = TargetSquad.CurrentLeader.BattleThemeName;
+                    }
                 }
             }
 

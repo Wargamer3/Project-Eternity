@@ -172,7 +172,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public GameServer OnlineServer;
         public BattleMapClientGroup GameGroup;
         public bool IsOfflineOrServer { get { return OnlineClient == null; } }
+        public bool IsOnlineClient { get { return OnlineClient != null; } }
         public bool IsServer { get { return GameScreen.GraphicsDevice == null; } }
+        public bool IsClient { get { return GameScreen.GraphicsDevice != null; } }
 
         #region Screen shaking
 
