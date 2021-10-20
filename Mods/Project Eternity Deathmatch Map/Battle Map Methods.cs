@@ -113,7 +113,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].At(U).ReinitializeMembers(DicUnitType[ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].At(U).UnitTypeName]);
                             }
                             ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                            SpawnSquad(0, ActivePlayer.ListSquadToSpawn[SpawnSquadIndex], 0, ListMultiplayerSpawns[S].Position);
+                            SpawnSquad(PlayerIndex - 1, ActivePlayer.ListSquadToSpawn[SpawnSquadIndex], 0, ListMultiplayerSpawns[S].Position);
                             ++SpawnSquadIndex;
                             if (SpawnSquadIndex >= ActivePlayer.ListSquadToSpawn.Count)
                             {
