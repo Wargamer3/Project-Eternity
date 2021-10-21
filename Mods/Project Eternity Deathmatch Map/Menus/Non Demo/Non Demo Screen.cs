@@ -157,7 +157,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ListNonDemoBattleFrame.Add(GetCriticalFrame(AttackNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
                     }
 
-                    NonDemoBattleFrame GetHitNonDemoBattleFrame = GetGetHitFrame(AttackNonDemoBattleFrame, AttackerSquadResult, NonDemoUnitStancePositions.Leader, IsRightAttacking);
+                    NonDemoBattleFrame GetHitNonDemoBattleFrame = GetGetHitAttackSupportFrame(AttackNonDemoBattleFrame, AttackerSquadResult.ResultSupportAttack, IsRightAttacking);
 
                     ListNonDemoBattleFrame.Add(GetHitNonDemoBattleFrame);
                 }
@@ -815,6 +815,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
+        private NonDemoBattleFrame GetGetHitAttackSupportFrame(NonDemoBattleFrame PreviousBattleFrame, BattleResult Result, bool IsRightAttacking)
+        {
+            NonDemoBattleFrameSquad AttackingFrame;
+            NonDemoBattleFrameSquad DefendingFrame;
+
+            if (IsRightAttacking)
+            {
+                AttackingFrame = PreviousBattleFrame.RightStance.Copy();
+                DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
+            }
+            else
+            {
+                AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
+                DefendingFrame = PreviousBattleFrame.RightStance.Copy();
+            }
+
+            DefendingFrame.LeaderStance = new NonDemoGetHitFrame(DefendingFrame.LeaderStance, !IsRightAttacking, Map.fntNonDemoDamage,
+                Result.AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
+
+            return new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, AttackingFrame, DefendingFrame);
+        }
+
         private NonDemoBattleFrame GetMissedFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
         {
             if (End == -1)
@@ -1214,7 +1236,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Animation finished.
                 if (++CurrentNonDemoBattleFrame >= ListNonDemoBattleFrame.Count)
                 {
-                    NonDemoBattleFinished();
+                     NonDemoBattleFinished();
                 }
                 else
                 {
