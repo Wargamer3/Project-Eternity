@@ -13,9 +13,9 @@ using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    public class ActionPanelStartBattleOnline : ActionPanelDeathmatch
+    public class ActionPanelStartBattle : ActionPanelDeathmatch
     {
-        private const string PanelName = "StartBattleOnline";
+        private const string PanelName = "StartBattle";
 
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
@@ -34,14 +34,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private List<GameScreen> ListNextAnimationScreen;
 
-        public ActionPanelStartBattleOnline(DeathmatchMap Map)
+        public ActionPanelStartBattle(DeathmatchMap Map)
             : base(PanelName, Map, false)
         {
             ListNextAnimationScreen = new List<GameScreen>();
             SendBackToSender = true;
         }
 
-        public ActionPanelStartBattleOnline(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport,
+        public ActionPanelStartBattle(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport,
              int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport, bool IsDefending)
             : base(PanelName, Map, false)
         {
@@ -243,7 +243,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelStartBattleOnline(Map);
+            return new ActionPanelStartBattle(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

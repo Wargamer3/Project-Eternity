@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattleOnline(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, true));
+                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, true));
             }
         }
 
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PrepareDefenseSquadForBattle(this, ActivePlayerIndex, ActiveSquadIndex, TargetPlayerIndex, TargetSquadIndex);
             PrepareAttackSquadForBattle(this, ActiveSquad, TargetSquad);
 
-            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattleOnline(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false ));
+            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false ));
         }
 
         public void AttackWithMAPAttack(int ActivePlayerIndex, int ActiveSquadIndex, Stack<Tuple<int, int>> ListMAPAttackTarget)
@@ -84,7 +84,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
             TargetSquadSupport.PrepareDefenceSupport(this, FirstEnemy.Item1, ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2]);
 
-            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattleOnline(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, FirstEnemy.Item1, FirstEnemy.Item2, TargetSquadSupport, false));
+            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, FirstEnemy.Item1, FirstEnemy.Item2, TargetSquadSupport, false));
 
             PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2].Position));
             ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);

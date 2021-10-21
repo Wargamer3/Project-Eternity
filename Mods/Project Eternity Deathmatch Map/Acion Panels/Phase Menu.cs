@@ -241,15 +241,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.UpdateMapEvent(BattleMap.EventTypePhase, 0);
             Map.ListActionMenuChoice.RemoveAllActionPanels();//Will also remove this panel
 
-            if (!ActivePlayer.IsPlayerControlled)
-            {
-                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerAIStep(Map));
-            }
-            else
-            {
-                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerHumanStep(Map));
-            }
-
             bool AIControlledSquadFound = false;
             for (int U = 0; U < ActivePlayer.ListSquad.Count; U++)
             {
@@ -263,6 +254,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (AIControlledSquadFound)
             {
                 Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerPrePhaseAIStep(Map));
+            }
+            else
+            {
+                if (!ActivePlayer.IsPlayerControlled)
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerAIStep(Map));
+                }
+                else
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerHumanStep(Map));
+                }
             }
         }
 

@@ -514,7 +514,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void StartBattle()
         {
-            AddToPanelListAndSelect(new ActionPanelStartBattleOnline(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false));
+            AddToPanelListAndSelect(new ActionPanelStartBattle(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false));
         }
 
         public override void DoRead(ByteReader BR)

@@ -73,7 +73,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (UnitsNotUpdatedCount == 0)
             {
-                RemoveAllSubActionPanels();
+                RemoveAllActionPanels();
+
+                if (!Map.ListPlayer[Map.ActivePlayerIndex].IsPlayerControlled)
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerAIStep(Map));
+                }
+                else
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerHumanStep(Map));
+                }
             }
         }
 

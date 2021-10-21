@@ -66,7 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Acion Panels\Attack\Start Battle Online.cs" />
+    <Compile Include="Acion Panels\Attack\Start Battle.cs" />
     <Compile Include="Acion Panels\Attack\Human Attack.cs" />
     <Compile Include="Acion Panels\Attack\Human Defend.cs" />
     <Compile Include="Acion Panels\Attack\Attack Part 2.cs" />
