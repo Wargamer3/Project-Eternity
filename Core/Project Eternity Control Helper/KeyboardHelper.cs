@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace ProjectEternity.Core.ControlHelper
 {
@@ -269,6 +270,12 @@ namespace ProjectEternity.Core.ControlHelper
         public static bool KeyHold(Keys K)
         {
             return PlayerState.IsKeyDown(K);
+        }
+
+        internal static void ResetState()
+        {
+            PlayerState = new KeyboardState();
+            PlayerStateLast = new KeyboardState();
         }
     }
 }

@@ -192,5 +192,11 @@
         }
 
         #endregion
+
+        public static void ResetState()
+        {
+            KeyboardHelper.ResetState();
+            MouseHelper.ResetState();
+        }
     }
 }

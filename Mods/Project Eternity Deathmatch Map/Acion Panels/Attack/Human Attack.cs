@@ -534,9 +534,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             TargetSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
 
             Map.BattleMenuStage = (BattleMenuStages)BR.ReadByte();
-
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
-            TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
         }
 
         public override void DoWrite(ByteWriter BW)

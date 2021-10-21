@@ -144,7 +144,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<MapSwitchPoint> ListMapSwitchPoint;
         public List<BattleMap> ListSubMap;
 
-        public readonly ActionPanelHolder ListActionMenuChoice;
+        public ActionPanelHolder ListActionMenuChoice;
         public Stack<Tuple<int, int>> ListMAPAttackTarget;//Player index, Squad index.
         
         public int ActivePlayerIndex;//Tell which team is playing.
@@ -218,7 +218,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListBackgroundsPath = new List<string>();
             ListForeground = new List<AnimationBackground>();
             ListForegroundsPath = new List<string>();
-            ListActionMenuChoice = new BattleMapActionPanelHolder(this);
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
             
             VictoryCondition = "";

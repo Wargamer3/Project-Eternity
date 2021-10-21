@@ -144,9 +144,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
 
             protected override void Execute(IOnlineConnection Host)
             {
-                ActionPanelPhaseChange PhaseEnd = new ActionPanelPhaseChange(Map);
-                Map.ListActionMenuChoice.Add(PhaseEnd);
-                PhaseEnd.OnSelect();
+                Map.ListActionMenuChoice.RemoveAllActionPanels();
+                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPhaseChange(Map));
             }
 
             protected override void Read(OnlineReader Sender)

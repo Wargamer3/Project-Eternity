@@ -21,6 +21,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(PanelName, Map, false)
         {
             ConfirmMenuChoice = 0;
+            sprCursorConfirmEndNo = MapMenu.sprCursorConfirmEndNo;
+            sprCursorConfirmEndYes = MapMenu.sprCursorConfirmEndYes;
         }
 
         public ActionPanelEndTurn(DeathmatchMap Map, Texture2D sprCursorConfirmEndNo, Texture2D sprCursorConfirmEndYes)
@@ -44,9 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ConfirmMenuChoice == 0)
                 {
                     RemoveAllActionPanels();
-                    ActionPanelPhaseChange PhaseEnd = new ActionPanelPhaseChange(Map);
-                    Map.ListActionMenuChoice.Add(PhaseEnd);
-                    PhaseEnd.OnSelect();
+                    AddToPanelListAndSelect(new ActionPanelPhaseChange(Map));
                 }
                 else if (ConfirmMenuChoice == 1)
                 {

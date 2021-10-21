@@ -75,6 +75,7 @@
     <Compile Include="Acion Panels\Attack\MAP Attack\Use MAP Attack.cs" />
     <Compile Include="Acion Panels\Attack\MAP Attack\MAP Targeted.cs" />
     <Compile Include="Acion Panels\Attack\MAP Attack\MAP Spread.cs" />
+    <Compile Include="Acion Panels\Action Panel Holder Deathmatch.cs" />
     <Compile Include="Acion Panels\Debug Menu.cs" />
     <Compile Include="Acion Panels\Map Menu\Log Screen.cs" />
     <Compile Include="Acion Panels\Map Menu\Map Change.cs" />

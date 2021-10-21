@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -16,21 +17,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     public class ActionPanelPhaseChange : ActionPanelDeathmatch
     {
         private int PhaseTime;
+        private bool HasBeenSelected;
+        private int StartingPlayerIndex;
 
         public ActionPanelPhaseChange(DeathmatchMap Map)
             : base("PhaseEnd", Map, false)
         {
             PhaseTime = 120;
+            HasBeenSelected = false;
+            StartingPlayerIndex = Map.ActivePlayerIndex;
         }
 
         public override void OnSelect()
         {
-            Map.ListActionMenuChoice.RemoveAllActionPanels();//Will also remove this panel
-            Map.ListActionMenuChoice.Add(this);
+            HasBeenSelected = true;
             List<BattleMap> ListActiveSubMaps = ActionPanelMapSwitch.GetActiveSubMaps(Map);
             if (ListActiveSubMaps.Count <= 1)
             {
                 EndPlayerPhase(Map);
+                if (Map.IsServer)
+                {
+                    StartPlayerPhase(Map, Map.ListPlayer[Map.ActivePlayerIndex]);
+                }
             }
             else
             {
@@ -92,7 +100,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Reset the cursor.
             Map.ActiveSquadIndex = -1;
 
-            if (GameScreen.FMODSystem.sndActiveBGMName != Map.sndBattleThemeName && !string.IsNullOrEmpty(Map.sndBattleThemeName))
+            if (Map.IsClient && GameScreen.FMODSystem.sndActiveBGMName != Map.sndBattleThemeName && !string.IsNullOrEmpty(Map.sndBattleThemeName))
             {
                 Map.sndBattleTheme.Stop();
                 Map.sndBattleTheme.SetLoop(true);
@@ -196,13 +204,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            DoUpdate(gameTime);
+        }
+
         public override void DoRead(ByteReader BR)
         {
             PhaseTime = 120;
+            HasBeenSelected = BR.ReadBoolean();
+            int NewActivePlayerIndex = BR.ReadInt32();
+            if (Map.IsOnlineClient)
+            {
+                Map.ActivePlayerIndex = NewActivePlayerIndex;
+            }
+
+            if (HasBeenSelected)
+            {
+                OnSelect();
+            }
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            BW.AppendBoolean(HasBeenSelected);
+            BW.AppendInt32(StartingPlayerIndex);
         }
 
         protected override ActionPanel Copy()

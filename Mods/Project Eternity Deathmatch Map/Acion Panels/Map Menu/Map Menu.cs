@@ -16,8 +16,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected Texture2D sprMenuText;
         protected Texture2D sprMenuHighlight;
-        protected Texture2D sprCursorConfirmEndNo;
-        protected Texture2D sprCursorConfirmEndYes;
+        public static Texture2D sprCursorConfirmEndNo;
+        public static Texture2D sprCursorConfirmEndYes;
         public static Texture2D sprMapMenuBackground;
 
         public static Texture2D sprBarLargeBackground;
@@ -127,6 +127,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoRead(ByteReader BR)
         {
+            ActionMenuCursor = 0;
+            ListNextChoice.Clear();
         }
 
         public override void DoWrite(ByteWriter BW)

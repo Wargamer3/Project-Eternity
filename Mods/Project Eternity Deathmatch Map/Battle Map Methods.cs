@@ -19,7 +19,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Init()
         {
             base.Init();
-            ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
+
+            if (IsClient)
+            {
+                ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
+            }
 
             if (GameMode == 0)
             {

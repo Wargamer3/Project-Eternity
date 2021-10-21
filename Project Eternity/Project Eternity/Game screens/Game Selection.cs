@@ -58,6 +58,8 @@ namespace ProjectEternity
             }
             else if (InputHelper.InputConfirmPressed())
             {
+                InputHelper.ResetState();
+
                 switch ((MenuChoices)SelectedChoice)
                 {
                     case MenuChoices.Normal:

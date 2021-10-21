@@ -53,8 +53,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);
                 Map.BattleMenuOffenseFormationChoice = FormationChoices.ALL;
             }
-
-            Map.sndConfirm.Play();
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -476,25 +474,46 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            if (Map.IsActivePlayerLocal(TargetPlayerIndex))
+            {
+                Update(gameTime);
+            }
+        }
+
         public override void DoRead(ByteReader BR)
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            ActiveSquadSupport = new SupportSquadHolder();
+            ActiveSquad.CurrentLeader.BattleDefenseChoice = (Unit.BattleDefenseChoices)BR.ReadByte();
+            ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
 
             TargetPlayerIndex = BR.ReadInt32();
             TargetSquadIndex = BR.ReadInt32();
-
-            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
+            TargetSquadSupport = new SupportSquadHolder();
+            TargetSquad.CurrentLeader.BattleDefenseChoice = (Unit.BattleDefenseChoices)BR.ReadByte();
+            TargetSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
+
+            Map.BattleMenuStage = (BattleMenuStages)BR.ReadByte();
         }
 
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
+            BW.AppendByte((byte)ActiveSquad.CurrentLeader.BattleDefenseChoice);
+            BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
 
             BW.AppendInt32(TargetPlayerIndex);
             BW.AppendInt32(TargetSquadIndex);
+            BW.AppendByte((byte)TargetSquad.CurrentLeader.BattleDefenseChoice);
+            BW.AppendInt32(TargetSquad.CurrentLeader.AttackIndex);
+
+            BW.AppendByte((byte)Map.BattleMenuStage);
         }
 
         protected override ActionPanel Copy()

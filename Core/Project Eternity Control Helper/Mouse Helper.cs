@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace ProjectEternity.Core.ControlHelper
 {
@@ -95,6 +96,12 @@ namespace ProjectEternity.Core.ControlHelper
         {
             return MouseStateCurrent.X < 0 || MouseStateCurrent.X > Constants.Width ||
                 MouseStateCurrent.Y < 0 || MouseStateCurrent.Y > Constants.Height;
+        }
+
+        internal static void ResetState()
+        {
+            MouseStateCurrent = new MouseState();
+            MouseStateLast = new MouseState();
         }
     }
 }

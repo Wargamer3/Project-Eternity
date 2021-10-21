@@ -122,6 +122,14 @@ namespace ProjectEternity.Core.Item
             }
         }
 
+        /// <summary>
+        /// UpdatePassive is called when Update is not
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public virtual void UpdatePassive(GameTime gameTime)
+        {
+        }
+
         public abstract void DoUpdate(GameTime gameTime);
 
         public void CancelPanel()

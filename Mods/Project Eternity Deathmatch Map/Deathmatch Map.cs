@@ -132,6 +132,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.GlobalBattleContext = GlobalDeathmatchContext = GlobalBattleContext;
             GlobalDeathmatchContext.Map = this;
 
+            ListActionMenuChoice = new ActionPanelHolderDeathmatch(this);
             FormulaParser.ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
             ListPlayer = new List<Player>();
@@ -603,9 +604,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     MoveSquad();
                 }
-                else if (GameMode == 0 || (GameMode > 0 && !ListPlayer[ActivePlayerIndex].IsOnline))
+                else if (GameMode == 0)
                 {
                     ListActionMenuChoice.Last().Update(gameTime);
+                }
+                else
+                {
+                    if (!ListPlayer[ActivePlayerIndex].IsOnline)
+                    {
+                        ListActionMenuChoice.Last().Update(gameTime);
+                    }
+                    else if (ListPlayer[ActivePlayerIndex].IsOnline)
+                    {
+                        ListActionMenuChoice.Last().UpdatePassive(gameTime);
+                    }
                 }
 
                 UpdateCursorVisiblePosition(gameTime);
@@ -659,6 +671,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int L = 0; L < ListLayer.Count; L++)
             {
                 ListLayer[L].Update(UpdateTime);
+            }
+
+            if (!ListPlayer[ActivePlayerIndex].IsPlayerControlled && ListActionMenuChoice.HasMainPanel)
+            {
+                ListActionMenuChoice.Last().Update(UpdateTime);
             }
         }
 
@@ -1017,6 +1034,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection activePlayer)
         {
 
+        }
+
+        public bool IsActivePlayerLocal(int PlayerIndex)
+        {
+            return ListLocalPlayerInfo.Contains(ListPlayer[PlayerIndex]);
         }
 
         public override string ToString()
