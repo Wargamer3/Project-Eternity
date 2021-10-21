@@ -742,6 +742,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             NewMap.BattleMapPath = BattleMapPath;
             NewMap.ListGameScreen = ListGameScreen;
             NewMap.LoadTemporaryMap(BR);
+            NewMap.TogglePreview(true);
 
             FS.Close();
             BR.Close();
