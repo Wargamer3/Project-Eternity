@@ -142,7 +142,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
                 Point NewMapSize = Point.Zero;
                 BR.BaseStream.Seek(0, SeekOrigin.Begin);
-                string MapName = ActiveFile.FullName.Substring(0, ActiveFile.FullName.Length - 4).Substring(ActiveFile.FullName.LastIndexOf("Maps") + 5);
+                string MapName = ActiveFile.FullName.Substring(0, ActiveFile.FullName.Length - 4).Substring(ActiveFile.FullName.LastIndexOf("Maps") + 16);
                 NewMapSize.X = BR.ReadInt32();
                 NewMapSize.Y = BR.ReadInt32();
                 int TileSizeX = BR.ReadInt32();
