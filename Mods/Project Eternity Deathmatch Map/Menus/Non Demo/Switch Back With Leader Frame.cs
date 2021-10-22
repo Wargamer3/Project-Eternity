@@ -20,11 +20,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (IsRight)
             {
-                DrawPositionX = PositionX + SupportPosX;
+                DrawPositionX = PositionX - 120 + SupportPosX;
             }
             else
             {
-                DrawPositionX = PositionX - SupportPosX;
+                DrawPositionX = PositionX + 120 - SupportPosX;
             }
 
             DrawBackgroundBox(g, DrawPositionX, PositionY);

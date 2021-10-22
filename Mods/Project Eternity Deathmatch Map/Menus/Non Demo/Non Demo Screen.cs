@@ -454,7 +454,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListNonDemoBattleFrame.Add(GetEndFrame(DefaultNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
         }
 
-        private void FillCombatAnimationsLeader(NonDemoBattleFrame DefaultNonDemoBattleFrame, bool EnemyLeaderHit ,Squad Attacker, Squad AttackerSupport, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
+        private void FillCombatAnimationsLeader(NonDemoBattleFrame DefaultNonDemoBattleFrame, bool EnemyLeaderAlreadyAttacked, Squad Attacker, Squad AttackerSupport, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
             Squad Defender, Squad DefenderSupport, bool IsRightAttacking, ref int[] ArrayDefenderHP, int[] ArrayAttackerHP)
         {
             if (ArrayDefenderHP[0] > 0 && Attacker.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
@@ -473,17 +473,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 else
                 {
-                    if (!EnemyLeaderHit)
+                    if (!EnemyLeaderAlreadyAttacked && DefenderSupport != null)
                     {
-                        if (DefendingSupport.ActiveSquadSupport != null)
-                        {
-                            NonDemoBattleFrame SupportNonDemoBattleFrame = GetSwitchWithLeaderFrame(AttackNonDemoBattleFrame, IsRightAttacking);
-                            ListNonDemoBattleFrame.Add(SupportNonDemoBattleFrame);
-                            Targets = NonDemoUnitStancePositions.Support;
-                            AttackNonDemoBattleFrame = SupportNonDemoBattleFrame;
-                        }
+                        ListNonDemoBattleFrame.Add(GetSwitchSupportDefenceWithLeaderFrame(AttackNonDemoBattleFrame, IsRightAttacking));
+                        Targets = NonDemoUnitStancePositions.Support;
+                        AttackNonDemoBattleFrame = GetSwitchSupportDefenceWithLeaderHoldFrame(AttackNonDemoBattleFrame, IsRightAttacking);
                     }
-                    EnemyLeaderHit = true;
+
+                    EnemyLeaderAlreadyAttacked = true;
                     NonDemoBattleFrame CriticalFrame = GetCriticalFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
                     if (CriticalFrame != null)
                     {
@@ -505,10 +502,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ArrayDefenderHP[i] = Math.Max(Defender.CurrentLeader.Boosts.HPMinModifier, ArrayDefenderHP[i] - AttackerResult.ArrayResult[i].AttackDamage);
                 }
 
-                if (EnemyLeaderHit && DefendingSupport.ActiveSquadSupport != null)
+                if (EnemyLeaderAlreadyAttacked && DefenderSupport != null)
                 {
-                    NonDemoBattleFrame SupportNonDemoBattleFrame = GetSwitchBackWithLeaderFrame(AttackNonDemoBattleFrame, IsRightAttacking);
+                    NonDemoBattleFrame SupportNonDemoBattleFrame = GetSwitchSupportDefenceBackWithLeaderFrame(AttackNonDemoBattleFrame, IsRightAttacking);
                     ListNonDemoBattleFrame.Add(SupportNonDemoBattleFrame);
+                    AttackNonDemoBattleFrame = DefaultNonDemoBattleFrame;
                 }
 
                 ListNonDemoBattleFrame.Add(GetEndFrame(AttackNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
@@ -808,8 +806,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
             {
-                DefendingFrame.SupportStance = new NonDemoGetHitFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntNonDemoDamage,
-                    Result.ResultSupportAttack.AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
+                DefendingFrame.SupportStance = new NonDemoGetHitSupportDefenceFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntNonDemoDamage,
+                    Result.ArrayResult[0].AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
             }
 
             return new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, AttackingFrame, DefendingFrame);
@@ -1201,7 +1199,59 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private NonDemoBattleFrame GetSwitchBackWithLeaderFrame(NonDemoBattleFrame PreviousBattleFrame, bool IsRightAttacking)
+        private NonDemoBattleFrame GetSwitchSupportDefenceWithLeaderFrame(NonDemoBattleFrame PreviousBattleFrame, bool IsRightAttacking)
+        {
+            NonDemoBattleFrameSquad DefendingFrame;
+
+            if (IsRightAttacking)
+            {
+                DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
+            }
+            else
+            {
+                DefendingFrame = PreviousBattleFrame.RightStance.Copy();
+            }
+
+            DefendingFrame.LeaderStance = new NonDemoSwitchWithSupportFrame(DefendingFrame.LeaderStance, !IsRightAttacking);
+            DefendingFrame.SupportStance = new NonDemoSwitchWithLeaderFrame(DefendingFrame.SupportStance, !IsRightAttacking);
+
+            if (IsRightAttacking)
+            {
+                return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, PreviousBattleFrame.RightStance, DefendingFrame);
+            }
+            else
+            {
+                return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, DefendingFrame, PreviousBattleFrame.LeftStance);
+            }
+        }
+
+        private NonDemoBattleFrame GetSwitchSupportDefenceWithLeaderHoldFrame(NonDemoBattleFrame PreviousBattleFrame, bool IsRightAttacking)
+        {
+            NonDemoBattleFrameSquad DefendingFrame;
+
+            if (IsRightAttacking)
+            {
+                DefendingFrame = PreviousBattleFrame.LeftStance.Copy();
+            }
+            else
+            {
+                DefendingFrame = PreviousBattleFrame.RightStance.Copy();
+            }
+
+            DefendingFrame.LeaderStance = new NonDemoSwitchWithSupportHoldFrame(DefendingFrame.LeaderStance, !IsRightAttacking);
+            DefendingFrame.SupportStance = new NonDemoSwitchWithLeaderHoldFrame(DefendingFrame.SupportStance, !IsRightAttacking);
+
+            if (IsRightAttacking)
+            {
+                return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, PreviousBattleFrame.RightStance, DefendingFrame);
+            }
+            else
+            {
+                return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, DefendingFrame, PreviousBattleFrame.LeftStance);
+            }
+        }
+
+        private NonDemoBattleFrame GetSwitchSupportDefenceBackWithLeaderFrame(NonDemoBattleFrame PreviousBattleFrame, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
             NonDemoBattleFrameSquad DefendingFrame;
@@ -1217,8 +1267,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            AttackingFrame.LeaderStance = new NonDemoSwitchBackWithSupportFrame(AttackingFrame.LeaderStance, IsRightAttacking);
-            AttackingFrame.SupportStance = new NonDemoSwitchBackWithLeaderFrame(AttackingFrame.SupportStance, IsRightAttacking);
+            DefendingFrame.LeaderStance = new NonDemoSwitchBackWithSupportFrame(DefendingFrame.LeaderStance, !IsRightAttacking);
+            DefendingFrame.SupportStance = new NonDemoSwitchBackWithLeaderFrame(DefendingFrame.SupportStance, !IsRightAttacking);
 
             return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, AttackingFrame, DefendingFrame);
         }
@@ -1236,7 +1286,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Animation finished.
                 if (++CurrentNonDemoBattleFrame >= ListNonDemoBattleFrame.Count)
                 {
-                     NonDemoBattleFinished();
+                    NonDemoBattleFinished();
                 }
                 else
                 {

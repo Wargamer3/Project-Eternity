@@ -124,6 +124,7 @@
     <Compile Include="Menus\Non Demo\Attack Frame.cs" />
     <Compile Include="Menus\Non Demo\End Support Frame.cs" />
     <Compile Include="Menus\Non Demo\Get Critical Hit Frame.cs" />
+    <Compile Include="Menus\Non Demo\Get Hit Support Defence Frame.cs" />
     <Compile Include="Menus\Non Demo\Get Shoot Down Frame.cs" />
     <Compile Include="Menus\Non Demo\Barrier Frame.cs" />
     <Compile Include="Menus\Non Demo\Start Support Frame.cs" />
