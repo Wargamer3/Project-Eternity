@@ -399,6 +399,11 @@ namespace ProjectEternity.Core.Units
 
             BW.Write(HP);
             BW.Write(EN);
+            BW.Write(_UnitStat.HPUpgrades.Value);
+            BW.Write(_UnitStat.ENUpgrades.Value);
+            BW.Write(_UnitStat.ArmorUpgrades.Value);
+            BW.Write(_UnitStat.MobilityUpgrades.Value);
+            BW.Write(_UnitStat.AttackUpgrades.Value);
 
             if (string.IsNullOrEmpty(TeamEventID))
             {
@@ -427,6 +432,11 @@ namespace ProjectEternity.Core.Units
         {
             _HP = BR.ReadInt32();
             _EN = BR.ReadInt32();
+            _UnitStat.HPUpgrades.Value = BR.ReadInt32();
+            _UnitStat.ENUpgrades.Value = BR.ReadInt32();
+            _UnitStat.ArmorUpgrades.Value = BR.ReadInt32();
+            _UnitStat.MobilityUpgrades.Value = BR.ReadInt32();
+            _UnitStat.AttackUpgrades.Value = BR.ReadInt32();
 
             if (string.IsNullOrEmpty(TeamEventID))
             {
@@ -449,6 +459,39 @@ namespace ProjectEternity.Core.Units
         }
 
         protected abstract void DoQuickLoad(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content);
+
+        public static Unit LoadUnitWithProgress(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,
+            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        {
+            string UnitFullName = BR.ReadString();
+            string UnitTypeName = BR.ReadString();
+            string TeamEventID = BR.ReadString();
+            Unit NewUnit = Unit.FromType(UnitTypeName, UnitFullName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            NewUnit.TeamEventID = TeamEventID;
+
+            int ArrayCharacterActiveLength = BR.ReadInt32();
+            NewUnit.ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
+            for (int C = 0; C < ArrayCharacterActiveLength; C++)
+            {
+                NewUnit.ArrayCharacterActive[C] = Character.LoadCharacterWithProgression(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            }
+
+            return NewUnit;
+        }
+
+        public void Save(BinaryWriter BW)
+        {
+            BW.Write(RelativePath);
+            BW.Write(UnitTypeName);
+            BW.Write(TeamEventID);
+
+            BW.Write(ArrayCharacterActive.Length);
+            for (int C = 0; C < ArrayCharacterActive.Length; C++)
+            {
+                ArrayCharacterActive[C].SaveProgression(BW);
+            }
+        }
 
         public void Init()
         {
@@ -675,39 +718,6 @@ namespace ProjectEternity.Core.Units
         /// <param name="ListActionMenuChoice">Action Panel Holder</param>
         public virtual List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         { return new List<ActionPanel>(); }
-
-        public static Unit LoadUnitWithProgress(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,
-            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
-        {
-            string UnitFullName = BR.ReadString();
-            string UnitTypeName = BR.ReadString();
-            string TeamEventID = BR.ReadString();
-            Unit NewUnit = Unit.FromType(UnitTypeName, UnitFullName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-            NewUnit.TeamEventID = TeamEventID;
-
-            int ArrayCharacterActiveLength = BR.ReadInt32();
-            NewUnit.ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
-            for (int C = 0; C < ArrayCharacterActiveLength; C++)
-            {
-                NewUnit.ArrayCharacterActive[C] = Character.LoadCharacterWithProgression(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-            }
-
-            return NewUnit;
-        }
-
-        public void Save(BinaryWriter BW)
-        {
-            BW.Write(RelativePath);
-            BW.Write(UnitTypeName);
-            BW.Write(TeamEventID);
-
-            BW.Write(ArrayCharacterActive.Length);
-            for (int C = 0; C < ArrayCharacterActive.Length; C++)
-            {
-                ArrayCharacterActive[C].SaveProgression(BW);
-            }
-        }
 
         public abstract GameScreens.GameScreen GetCustomizeScreen();
 

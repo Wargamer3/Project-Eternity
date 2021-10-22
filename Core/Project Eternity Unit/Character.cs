@@ -589,6 +589,7 @@ namespace ProjectEternity.Core.Characters
         {
             Character NewCharacter = new Character(BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             NewCharacter.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            NewCharacter.InitStats();
             return NewCharacter;
         }
 
