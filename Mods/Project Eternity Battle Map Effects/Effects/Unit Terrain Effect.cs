@@ -37,12 +37,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _CanDowngrade = BR.ReadBoolean();
         }
 
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+            base.DoQuickLoad(BR);
+
+            LastEvaluationResult = BR.ReadInt32();
+        }
+
         protected override void Save(BinaryWriter BW)
         {
             BW.Write(_Terrain);
             BW.Write((byte)_NumberType);
             BW.Write(_Value);
             BW.Write(_CanDowngrade);
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
+            base.DoQuickSave(BW);
+
+            BW.Write(LastEvaluationResult);
         }
 
         protected override string DoExecuteEffect()

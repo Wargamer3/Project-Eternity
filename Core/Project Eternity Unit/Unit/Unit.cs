@@ -422,6 +422,8 @@ namespace ProjectEternity.Core.Units
                 }
             }
 
+            Boosts.QuickSave(BW);
+
             DoQuickSave(BW);
         }
 
@@ -454,6 +456,8 @@ namespace ProjectEternity.Core.Units
                     ArrayCharacterActive[C].QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 }
             }
+
+            Boosts.QuickLoad(BR);
 
             DoQuickLoad(BR, Content);
         }

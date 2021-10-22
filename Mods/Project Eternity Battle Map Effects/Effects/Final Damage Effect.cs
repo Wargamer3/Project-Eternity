@@ -14,16 +14,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private Operators.NumberTypes _NumberType;
         private string _FinalDamageValue;
-        private string LastEvaluationResult = null;
+        private string LastEvaluationResult;
 
         public FinalDamageEffect()
             : base(Name, true)
         {
+            LastEvaluationResult = string.Empty;
         }
 
         public FinalDamageEffect(UnitEffectParams Params)
             : base(Name, true, Params)
         {
+            LastEvaluationResult = string.Empty;
         }
 
         protected override void Load(BinaryReader BR)
@@ -32,10 +34,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _FinalDamageValue = BR.ReadString();
         }
 
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+            base.DoQuickLoad(BR);
+
+            LastEvaluationResult = BR.ReadString();
+        }
+
         protected override void Save(BinaryWriter BW)
         {
             BW.Write((byte)_NumberType);
             BW.Write(_FinalDamageValue);
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
+            base.DoQuickSave(BW);
+
+            BW.Write(LastEvaluationResult);
         }
 
         protected override string DoExecuteEffect()

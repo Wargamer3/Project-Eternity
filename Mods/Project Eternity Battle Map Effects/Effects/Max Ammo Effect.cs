@@ -30,9 +30,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _MaxAmmoValue = BR.ReadString();
         }
 
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+            base.DoQuickLoad(BR);
+
+            LastEvaluationResult = BR.ReadInt32();
+        }
+
         protected override void Save(BinaryWriter BW)
         {
             BW.Write(_MaxAmmoValue);
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
+            base.DoQuickSave(BW);
+
+            BW.Write(LastEvaluationResult);
         }
 
         protected override string DoExecuteEffect()

@@ -35,11 +35,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _Value = BR.ReadString();
         }
 
+        protected override void DoQuickLoad(BinaryReader BR)
+        {
+            base.DoQuickLoad(BR);
+
+            LastEvaluationResult = BR.ReadString();
+        }
+
         protected override void Save(BinaryWriter BW)
         {
             BW.Write((byte)_UnitStat);
             BW.Write((byte)_NumberType);
             BW.Write(_Value);
+        }
+
+        protected override void DoQuickSave(BinaryWriter BW)
+        {
+            base.DoQuickSave(BW);
+
+            BW.Write(LastEvaluationResult);
         }
 
         protected override string DoExecuteEffect()
