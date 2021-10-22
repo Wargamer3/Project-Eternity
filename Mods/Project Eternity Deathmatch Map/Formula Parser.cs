@@ -88,15 +88,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
 
                     case "atk":
-                        if (Map.ActiveSquad == null)
+                        if (Map.GlobalDeathmatchContext.EffectOwnerSquad == null)
                             throw new Exception(Input + " is invalid");
-                        return UnitStatFromUnit(Map.ActiveSquad.CurrentLeader, Map.ActiveSquad, Expression[1]);
+                        return UnitStatFromUnit(Map.GlobalDeathmatchContext.EffectOwnerUnit, Map.GlobalDeathmatchContext.EffectOwnerSquad, Expression[1]);
 
                     case "def":
                     case "defender":
-                        if (Map.TargetSquad == null)
+                        if (Map.GlobalDeathmatchContext.EffectTargetSquad == null)
                             throw new Exception(Input + " is invalid");
-                        return UnitStatFromUnit(Map.TargetSquad.CurrentLeader, Map.TargetSquad, Expression[1]);
+                        return UnitStatFromUnit(Map.GlobalDeathmatchContext.EffectTargetUnit, Map.GlobalDeathmatchContext.EffectTargetSquad, Expression[1]);
 
                     default:
                         if (Expression[0].Contains("player"))
