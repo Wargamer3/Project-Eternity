@@ -32,23 +32,42 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             for (int i = 0; i <= TimelineIndexMax; ++i)
             {
                 //Crop the text before drawing it.
-                string TextBuffer = Owner.Timeline[i].Text.Replace("\r", "").Replace("\n", "");
-                TextBuffer = TextHelper.FitToWidth(fntFinlanderFont, TextBuffer, Constants.Width - 100)[0];
+                string[] ArrayText = Owner.Timeline[i].Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                string TextBuffer;
+                if (ArrayText.Length > 1)
+                {
+                    TextBuffer = TextHelper.FitToWidth(fntFinlanderFont, ArrayText[0] + ": " + ArrayText[1], Constants.Width - 100)[0];
+                }
+                else
+                {
+                    TextBuffer = TextHelper.FitToWidth(fntFinlanderFont, Owner.Timeline[i].Text, Constants.Width - 100)[0];
+                }
                 ListDialogSummary.Add(TextBuffer);
             }
+
+            CurosorIndex = TimelineIndexMax - 1;
+            SummaryStartIndex = Math.Max(0, TimelineIndexMax - 10);
         }
 
         public override void Update(GameTime gameTime)
         {
             if (InputHelper.InputUpPressed())
             {
-                SummaryStartIndex -= SummaryStartIndex > 0 ? 1 : 0;
-                Owner.CurrentDialog = Owner.Timeline[SummaryStartIndex];
+                CurosorIndex -= CurosorIndex > 0 ? 1 : 0;
+                if (CurosorIndex < SummaryStartIndex)
+                {
+                    SummaryStartIndex -= SummaryStartIndex > 0 ? 1 : 0;
+                }
+                Owner.CurrentDialog = Owner.Timeline[CurosorIndex];
             }
             else if (InputHelper.InputDownPressed())
             {
-                SummaryStartIndex += SummaryStartIndex <= TimelineIndexMax - 1 ? 1 : 0;
-                Owner.CurrentDialog = Owner.Timeline[SummaryStartIndex];
+                CurosorIndex += CurosorIndex <= TimelineIndexMax - 1 ? 1 : 0;
+                if (CurosorIndex >= SummaryStartIndex + 11)
+                {
+                    SummaryStartIndex += SummaryStartIndex <= TimelineIndexMax - 1 ? 1 : 0;
+                }
+                Owner.CurrentDialog = Owner.Timeline[CurosorIndex];
             }
             else if (InputHelper.InputCancelPressed())
             {
@@ -60,13 +79,13 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
         {
             DrawBox(g, new Vector2(50, 50), Constants.Width - 100, Constants.Height - 200, Color.White);
 
-            for (int i = SummaryStartIndex, CurrentText = 0; i < ListDialogSummary.Count && CurrentText <= 5; ++i, ++CurrentText)
+            for (int i = SummaryStartIndex, CurrentText = 0; i < ListDialogSummary.Count && CurrentText <= 11; ++i, ++CurrentText)
             {
                 if (i == CurosorIndex)
                 {
                     g.Draw(sprPixel,
                         new Rectangle(55,
-                        55 + (CurrentText * fntFinlanderFont.LineSpacing + 2),
+                        55 + (CurrentText * (fntFinlanderFont.LineSpacing + 2)),
                         Constants.Width - 110,
                         fntFinlanderFont.LineSpacing + 2), 
                         Color.FromNonPremultiplied(255, 255, 255, 100));
