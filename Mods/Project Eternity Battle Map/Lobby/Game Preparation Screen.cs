@@ -322,6 +322,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void OpenRoomSettingsScreen()
         {
+            PushScreen(new GameOptionsScreen(Room));
         }
 
         private void ReturnToLobby()

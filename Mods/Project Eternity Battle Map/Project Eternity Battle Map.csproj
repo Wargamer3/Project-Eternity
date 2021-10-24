@@ -92,10 +92,17 @@
     <Compile Include="Intermission Screen\Data Screen.cs" />
     <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
     <Compile Include="Editor\ITileAttributes.cs" />
+    <Compile Include="Lobby\Game Options Gametype Screen.cs" />
+    <Compile Include="Lobby\Game Options Mutators Screen.cs" />
+    <Compile Include="Lobby\Game Options Game Rules Screen.cs" />
+    <Compile Include="Lobby\Game Options Bot Config Screen.cs" />
+    <Compile Include="Lobby\Game Options Select Map Screen.cs" />
+    <Compile Include="Lobby\Game Options Screen.cs" />
     <Compile Include="Lobby\Game Preparation Screen.cs" />
-    <Compile Include="Lobby\Box Drop Down Button.cs" />
+    <Compile Include="Lobby\UI\Box Drop Down Button.cs" />
     <Compile Include="Lobby\Create Room Screen.cs" />
     <Compile Include="Lobby\Loading Screen.cs" />
+    <Compile Include="Lobby\UI\Box Scrollbar.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
     <Compile Include="Online\Game\Move Cursor Script Client.cs" />
@@ -125,7 +132,7 @@
     <Compile Include="Map Layer.cs" />
     <Compile Include="Menus\Attacks Menu.cs" />
     <Compile Include="Lobby\Chat Helper.cs" />
-    <Compile Include="Lobby\Box Button.cs" />
+    <Compile Include="Lobby\UI\Box Button.cs" />
     <Compile Include="Lobby\Lobby.cs" />
     <Compile Include="Lobby\Player Manager.cs" />
     <Compile Include="Lobby\BattleMapPlayer.cs" />
