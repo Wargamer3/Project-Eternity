@@ -89,7 +89,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Unselect()
         {
-            ButtonState = ButtonStates.Idle;
+            if (!IsDisabled)
+            {
+                ButtonState = ButtonStates.Idle;
+            }
         }
 
         public void Disable()

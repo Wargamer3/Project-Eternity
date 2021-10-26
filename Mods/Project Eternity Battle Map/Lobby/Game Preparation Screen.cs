@@ -15,24 +15,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class GamePreparationScreen : GameScreen
     {
-        private struct MapInfo
-        {
-            public readonly string MapName;
-            public readonly string MapType;
-            public readonly string MapPath;
-            public readonly string MapDescription;
-            public readonly Texture2D MapImage;
-
-            public MapInfo(string MapName, string MapType, string MapPath, string MapDescription, Texture2D MapImage)
-            {
-                this.MapName = MapName;
-                this.MapType = MapType;
-                this.MapPath = MapPath;
-                this.MapDescription = MapDescription;
-                this.MapImage = MapImage;
-            }
-        }
-
         #region Ressources
 
         private FMODSound sndBGM;
@@ -66,9 +48,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly RoomInformations Room;
         public Texture2D sprMapImage;
 
-        private Dictionary<string, MapInfo> DicMapInfoByPath;
-        private MapInfo ActiveMapInfo;
-
         private readonly BattleMapOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
         private bool IsHost;
@@ -78,8 +57,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.OnlineGameClient = OnlineGameClient;
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.Room = Room;
-
-            DicMapInfoByPath = new Dictionary<string, MapInfo>();
 
             if (Room.ListRoomPlayer.Count == 0)
             {
@@ -132,41 +109,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             #endregion
 
+            StartButton.Disable();
+
             UpdateReadyOrHost();
 
-            LoadMaps();
-
             sprMapImage = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Map Icons/Random");
-
-            if (OnlineGameClient != null && OnlineGameClient.IsConnected)
-            {
-                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.MapType, Room.MapPath));
-            }
-        }
-
-        private void LoadMaps()
-        {
-            string RootDirectory = Content.RootDirectory + "/Maps/";
-
-            foreach (string ActiveMultiplayerFolder in Directory.EnumerateDirectories(Content.RootDirectory + "/Maps/", "Multiplayer", SearchOption.AllDirectories))
-            {
-                foreach (string ActiveCampaignFolder in Directory.EnumerateDirectories(ActiveMultiplayerFolder, "Campaign", SearchOption.AllDirectories))
-                {
-                    foreach (string ActiveFile in Directory.EnumerateFiles(ActiveCampaignFolder, "*.pem", SearchOption.AllDirectories))
-                    {
-                        string MapType = ActiveMultiplayerFolder.Substring(RootDirectory.Length);
-                        MapType = MapType.Substring(0, MapType.Length - "Multiplayer/".Length);
-                        string FilePath = ActiveFile.Substring(RootDirectory.Length + MapType.Length + 1);
-                        FilePath = FilePath.Substring(0, FilePath.Length - 4);
-                        string FileName = ActiveFile.Substring(ActiveCampaignFolder.Length + 1);
-                        FileName = FileName.Substring(0, FileName.Length - 4);
-                        DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapType, FilePath, "", null));
-                        ActiveMapInfo = DicMapInfoByPath[FilePath];
-                        Room.MapType = ActiveMapInfo.MapType;
-                        Room.MapPath = ActiveMapInfo.MapPath;
-                    }
-                }
-            }
         }
 
         public override void Unload()
@@ -265,8 +212,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateReadyOrHost();
         }
 
-        public void UpdateSelectedMap(string CurrentDifficulty, string SelectedMapPath)
+        public void UpdateSelectedMap(string MapName, string MapType, string MapPath)
         {
+            Room.MapName = MapName;
+            Room.MapType = MapType;
+            Room.MapPath = MapPath;
         }
 
         private void OnButtonOver()
@@ -297,7 +247,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                if (IsEveryoneReady)
+                if (IsEveryoneReady && Room.MapPath != null)
                 {
                     StartButton.Enable();
                 }
@@ -318,11 +268,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));
         }
 
+        public void OptionsClosed()
+        {
+            UpdateReadyOrHost();
+
+            if (OnlineGameClient != null)
+            {
+                ReadyButton.Disable();
+
+                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.MapName, Room.MapType, Room.MapPath));
+            }
+        }
+
         #region Button methods
 
         private void OpenRoomSettingsScreen()
         {
-            PushScreen(new GameOptionsScreen(Room));
+            PushScreen(new GameOptionsScreen(Room, this));
         }
 
         private void ReturnToLobby()
@@ -362,14 +324,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (Room.MapPath == "Random")
                 {
-                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(2);
+                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(2);
                 }
                 else
                 {
-                    NewMap = BattleMap.DicBattmeMapType[ActiveMapInfo.MapType].GetNewMap(2);
+                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(2);
                 }
 
-                NewMap.BattleMapPath = ActiveMapInfo.MapPath;
+                NewMap.BattleMapPath = Room.MapPath;
                 NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
                 NewMap.Load();
                 NewMap.Init();
@@ -436,7 +398,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprMapImage, new Vector2(LeftSideWidth + (RightSideWidth - sprMapImage.Width) / 2, GameModeY), Color.White);
             GameModeY += 85;
             g.DrawString(fntText, "Map:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            g.DrawStringMiddleAligned(fntText, ActiveMapInfo.MapName, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
+            if (Room.MapPath != null)
+            {
+                g.DrawStringMiddleAligned(fntText, Room.MapName, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
+            }
             GameModeY += 15;
             g.DrawString(fntText, "Details:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
             GameModeY += 15;

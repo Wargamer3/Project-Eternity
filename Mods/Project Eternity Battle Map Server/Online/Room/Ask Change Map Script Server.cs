@@ -10,6 +10,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private readonly PVPRoomInformations Owner;
         private readonly GameServer OnlineServer;
 
+        private string MapName;
         private string MapType;
         private string MapPath;
 
@@ -32,18 +33,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void Execute(IOnlineConnection Sender)
         {
+            Owner.MapName = MapName;
             Owner.MapType = MapType;
             Owner.MapPath = MapPath;
             for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
             {
                 IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
 
-                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapType, MapPath));
+                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath));
             }
         }
 
         protected override void Read(OnlineReader Sender)
         {
+            MapName = Sender.ReadString();
             MapType = Sender.ReadString();
             MapPath = Sender.ReadString();
         }

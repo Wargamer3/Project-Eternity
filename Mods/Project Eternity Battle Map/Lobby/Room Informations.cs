@@ -13,8 +13,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public string RoomID { get; }//Only contains a value for locally create Rooms, if the Room is on another server the ID should be null.
         public string RoomName { get; }
-        public string RoomType { get; }
+        public string RoomType { get; set; }
         public string RoomSubtype { get; set; }
+        public string MapName { get; set; }
         public string MapType { get; set; }
         public string MapPath { get; set; }
         public bool IsPlaying { get; set; }

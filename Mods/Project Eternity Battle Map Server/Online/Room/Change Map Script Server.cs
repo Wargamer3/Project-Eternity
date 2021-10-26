@@ -7,12 +7,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Change Map";
 
+        private readonly string MapName;
         private readonly string MapType;
         private readonly string MapPath;
 
-        public ChangeMapScriptServer(string MapType, string MapPath)
+        public ChangeMapScriptServer(string MapName, string MapType, string MapPath)
             : base(ScriptName)
         {
+            this.MapName = MapName;
             this.MapType = MapType;
             this.MapPath = MapPath;
         }
@@ -24,6 +26,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
+            WriteBuffer.AppendString(MapName);
             WriteBuffer.AppendString(MapType);
             WriteBuffer.AppendString(MapPath);
         }

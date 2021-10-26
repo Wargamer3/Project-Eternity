@@ -5,12 +5,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 {
     public class AskChangeMapScriptClient : OnlineScript
     {
+        private readonly string MapName;
         private readonly string MapType;
         private readonly string MapPath;
 
-        public AskChangeMapScriptClient(string MapType, string MapPath)
+        public AskChangeMapScriptClient(string MapName, string MapType, string MapPath)
             : base("Ask Change Map")
         {
+            this.MapName = MapName;
             this.MapType = MapType;
             this.MapPath = MapPath;
         }
@@ -22,6 +24,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
+            WriteBuffer.AppendString(MapName);
             WriteBuffer.AppendString(MapType);
             WriteBuffer.AppendString(MapPath);
         }

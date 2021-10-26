@@ -10,7 +10,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private readonly RoomInformations Owner;
         private readonly GamePreparationScreen MissionSelectScreen;
 
-        private string CurrentDifficulty;
+        private string MapName;
+        private string MapType;
         private string MissionPath;
 
         public ChangeMapScriptClient(RoomInformations Owner, GamePreparationScreen MissionSelectScreen)
@@ -32,12 +33,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            MissionSelectScreen.UpdateSelectedMap(CurrentDifficulty, MissionPath);
+            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MissionPath);
         }
 
         protected override void Read(OnlineReader Sender)
         {
-            CurrentDifficulty = Sender.ReadString();
+            MapName = Sender.ReadString();
+            MapType = Sender.ReadString();
             MissionPath = Sender.ReadString();
         }
     }

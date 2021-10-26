@@ -34,8 +34,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         private SpriteFont fntText;
+        private BoxScrollbar GametypeScrollbar;
 
         private readonly RoomInformations Room;
+        private readonly GameOptionsScreen Owner;
 
         int PanelY = (int)(Constants.Height * 0.15);
         int PanelWidth = (int)(Constants.Width * 0.4);
@@ -44,13 +46,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int LeftPanelX = (int)(Constants.Width * 0.03);
 
         private GametypeCategory[] ArrayGametypeCategory;
-        private BoxScrollbar GametypeScrollbar;
         private int GametypeScrollbarValue;
         private Gametype SelectedGametype;
 
-        public GameOptionsGametypeScreen(RoomInformations Room)
+        public GameOptionsGametypeScreen(RoomInformations Room, GameOptionsScreen Owner)
         {
             this.Room = Room;
+            this.Owner = Owner;
         }
 
         public override void Load()
@@ -100,7 +102,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void SelectGametype()
         {
-            float DrawY = PanelY;
+            float DrawY = PanelY + 5;
             int CurrentIndex = 0;
             for (int G = 0; G < ArrayGametypeCategory.Length; ++G)
             {
@@ -123,9 +125,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CurrentIndex >= GametypeScrollbarValue)
                 {
                     if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20)
+                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20
+                        && InputHelper.InputConfirmPressed())
                     {
                         SelectedGametype = ActiveCategory.ArrayGametype[G];
+                        Room.RoomType = SelectedGametype.Name;
+                        Owner.OnGametypeUpdate();
                         return true;
                     }
 
@@ -163,7 +168,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int PreviewBoxHeight = (int)(PanelHeight * 0.4);
 
             int DescriptionBoxY = PreviewBoxY + PreviewBoxHeight + 10;
-            int DescriptionHeight = (int)(PanelHeight * 0.5);
+            int DescriptionHeight = PanelHeight - (DescriptionBoxY - PanelY) - 10;
 
             int DescriptionBoxNameOffset = (int)(RightPanelContentWidth * 0.25);
             int DescriptionBoxNameX = RightPanelContentX + DescriptionBoxNameOffset;
