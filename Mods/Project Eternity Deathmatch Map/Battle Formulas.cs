@@ -502,7 +502,11 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             if (!HasRecap)
             {
+                GlobalBattleContext.SetContext(ActiveSquad, ActiveSquad.CurrentLeader, ActiveSquad.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot);
+
                 UpdateMapEvent(EventTypeOnBattle, 1);
+
+                GlobalBattleContext.SetContext(null, null, null, null, null, null);
 
                 //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)
                 Attacker.UpdateSquad();
@@ -545,7 +549,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             LevelUpMenu BattleRecap = null;
             if (Attacker.CurrentAttack != null && !ListDeadDefender.Contains(Result.Target))
             {
-                FinalizeAttack(Attacker, Result);
+                FinalizeAttack(AttackerSquad, Attacker, Result);
 
                 //Will Gains
                 if (Result.Target.HP <= 0)
@@ -640,7 +644,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             }
         }
 
-        private void FinalizeAttack(Unit UnitAttacker, BattleResult Result)
+        private void FinalizeAttack(Squad SquadAttacker, Unit UnitAttacker, BattleResult Result)
         {
             Result.Target.DamageUnit(Result.AttackDamage);
 
@@ -655,8 +659,8 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             int PilotPoint = 0;
             UnitAttacker.PilotPilotPoints += (int)(PilotPoint * UnitAttacker.Boosts.PPMultiplier);
             
-            ActivateAutomaticSkills(null, UnitAttacker, string.Empty, null, UnitAttacker);
-            ActivateAutomaticSkills(null, Result.Target, string.Empty, null, Result.Target);
+            ActivateAutomaticSkills(SquadAttacker, UnitAttacker, string.Empty, SquadAttacker, UnitAttacker);
+            ActivateAutomaticSkills(ListPlayer[Result.TargetPlayerIndex].ListSquad[Result.TargetSquadIndex], Result.Target, string.Empty, null, Result.Target);
         }
 
         public SquadBattleResult CalculateFinalHP(Squad Attacker, Squad SupportAttacker, int AttackerPlayerIndex, FormationChoices AttackerFormationChoice,

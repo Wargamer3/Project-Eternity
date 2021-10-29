@@ -205,6 +205,10 @@ namespace ProjectEternity
                         break;
                 }
             }
+            else if (InputHelper.InputCancelPressed())
+            {
+                RemoveScreen(this);
+            }
         }
 
         public override void Draw(CustomSpriteBatch g)

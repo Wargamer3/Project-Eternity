@@ -61,16 +61,28 @@ namespace ProjectEternity.GameScreens
                     case MenuChoices.Fullscreen:
                         if (Constants.WindowType == Constants.WindowTypes.Original)
                             break;
+
                         Constants.graphics.IsFullScreen = !Constants.graphics.IsFullScreen;
                         Constants.graphics.ApplyChanges();
                         break;
 
                     case MenuChoices.ScreenSize:
+
                         if (Constants.WindowType == Constants.WindowTypes.Original)
                             break;
+
                         Constants.ScreenSize--;
+
                         if (Constants.ScreenSize < 0)
                             Constants.ScreenSize = Constants.ScreenSizes.Length - 1;
+
+                        bool WasFullScreen = Constants.graphics.IsFullScreen;
+
+                        if (Constants.graphics.IsFullScreen)
+                        {
+                            Constants.graphics.IsFullScreen = false;
+                            Constants.graphics.ApplyChanges();
+                        }
 
                         switch (Constants.ScreenSizes[Constants.ScreenSize])
                         {
@@ -85,6 +97,12 @@ namespace ProjectEternity.GameScreens
                                 break;
                         }
                         Constants.graphics.ApplyChanges();
+
+                        if (WasFullScreen)
+                        {
+                            Constants.graphics.IsFullScreen = true;
+                            Constants.graphics.ApplyChanges();
+                        }
 
                         UpdateScreenSettings(SpriteBatch);
                         break;

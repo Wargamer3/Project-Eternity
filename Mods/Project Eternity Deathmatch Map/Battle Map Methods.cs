@@ -315,7 +315,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BattleMap LoadTemporaryMap(BinaryReader BR)
         {
-            Roster PlayerRoster = new Roster();
+            PlayerRoster = new Roster();
             PlayerRoster.LoadRoster();
 
             Load();

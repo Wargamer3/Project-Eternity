@@ -80,7 +80,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int S = 0; S < ActiveMap.ListPlayer[P].ListSquad.Count; S++)
                 {
-                    ActiveMap.ListPlayer[P].ListSquad[S].DrawOverlayOnMap(g, ActiveMap.ListPlayer[P].ListSquad[S].Position);
+                    if (!ActiveMap.ListPlayer[P].ListSquad[S].IsDead)
+                    {
+                        ActiveMap.ListPlayer[P].ListSquad[S].DrawOverlayOnMap(g, ActiveMap.ListPlayer[P].ListSquad[S].Position);
+                    }
                 }
             }
         }

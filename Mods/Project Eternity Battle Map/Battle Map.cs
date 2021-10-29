@@ -161,7 +161,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
         public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
-        protected BattleContext GlobalBattleContext;
+        public BattleContext GlobalBattleContext;
         protected UnitQuickLoadEffectContext GlobalQuickLoadContext;
 
         //Classic P2P online

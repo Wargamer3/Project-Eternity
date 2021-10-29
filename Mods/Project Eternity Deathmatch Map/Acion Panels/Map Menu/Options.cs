@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void OnSelect()
         {
             Map.PushScreen(new OptionMenu());
+            RemoveFromPanelList(this);
         }
 
         public override void DoUpdate(GameTime gameTime)
