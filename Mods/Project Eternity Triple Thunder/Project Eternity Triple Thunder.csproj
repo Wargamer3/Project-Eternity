@@ -112,6 +112,12 @@
     <Compile Include="Menus\Rooms\Mission Room Informations.cs" />
     <Compile Include="Menus\Rooms\Battle Room Informations.cs" />
     <Compile Include="Menus\Rooms\Room Informations.cs" />
+    <Compile Include="Menus\Shop\Shop Item Base Screen.cs" />
+    <Compile Include="Menus\Shop\Shop Other Screen.cs" />
+    <Compile Include="Menus\Shop\Shop Items Screen.cs" />
+    <Compile Include="Menus\Shop\Shop Equipment Screen.cs" />
+    <Compile Include="Menus\Shop\Shop Weapons Screen.cs" />
+    <Compile Include="Menus\Shop\Shop Characters Screen.cs" />
     <Compile Include="Online\Communication\Client Info Script Client.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
