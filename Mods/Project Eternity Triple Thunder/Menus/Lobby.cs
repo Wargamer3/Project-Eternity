@@ -471,7 +471,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private void OpenShop()
         {
             sndButtonClick.Play();
-            PushScreen(new Shop(PlayerManager.ListLocalPlayer[0]));
+            PushScreen(new ShopScreen(PlayerManager.ListLocalPlayer[0]));
         }
 
         private void ShowAllPlayers()

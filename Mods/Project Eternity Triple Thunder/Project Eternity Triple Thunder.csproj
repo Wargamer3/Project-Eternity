@@ -150,7 +150,7 @@
     <Compile Include="Menus\Character Select.cs" />
     <Compile Include="Menus\Create Room Battle.cs" />
     <Compile Include="Menus\Lobby.cs" />
-    <Compile Include="Menus\Shop.cs" />
+    <Compile Include="Menus\Shop\Shop Screen.cs" />
     <Compile Include="Menus\Mission Select.cs" />
     <Compile Include="Online\Create Game Mission Script Client.cs" />
     <Compile Include="Online\Create Enemy Script Client.cs" />

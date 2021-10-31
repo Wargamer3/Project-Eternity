@@ -9,7 +9,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class Shop : GameScreen
+    public class ShopScreen : GameScreen
     {
         private enum ShopFilters { Characters, Equipment, Weapons, Items, Other }
 
@@ -43,7 +43,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private GameScreen[] ArrayShopScreen;
         private GameScreen ActiveShopScreen;
 
-        public Shop(Player Owner)
+        public ShopScreen(Player Owner)
         {
             this.Owner = Owner;
             PlayerInventory = Owner.Equipment;
