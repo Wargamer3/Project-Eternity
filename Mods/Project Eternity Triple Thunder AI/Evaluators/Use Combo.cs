@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
                 else
                 {
-                    CurrentRobot.UseCombo(gameTime, AttackInputs.LightPress, CurrentRobot.Weapons.ActivePrimaryWeapons[_WeaponIndex], false);
+                    CurrentRobot.UseCombo(gameTime, AttackInputs.LightPress, CurrentRobot.PrimaryWeapons.ActiveWeapons[_WeaponIndex], false);
                 }
 
                 Result = new List<object>();

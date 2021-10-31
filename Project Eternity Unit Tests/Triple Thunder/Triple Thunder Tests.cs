@@ -162,7 +162,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
                                                             DummyMap.DicEffect[ShootWeaponEffect.Name].Copy());
 
             RobotContext.Target = CreateDummyRobot();
-            RobotContext.TargetWeapon = RobotContext.Target.Weapons.ActivePrimaryWeapons[0];
+            RobotContext.TargetWeapon = RobotContext.Target.PrimaryWeapons.ActiveWeapons[0];
 
             DummySkill.AddSkillEffectsToTarget("Shoot");
             List<BaseEffect> ListActiveEffect = RobotContext.Target.Effects.GetActiveEffects("Dummy");
@@ -207,7 +207,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
                                                             ShootEffect2);
 
             RobotContext.Target = CreateDummyRobot();
-            RobotContext.TargetWeapon = RobotContext.Target.Weapons.ActivePrimaryWeapons[0];
+            RobotContext.TargetWeapon = RobotContext.Target.PrimaryWeapons.ActiveWeapons[0];
 
             List<BaseAutomaticSkill> ListSkill = new List<BaseAutomaticSkill>() { DummyInitShootSkill1, DummyInitShootSkill2 };
             for (int i = 0; i < ListSkill.Count; i++)

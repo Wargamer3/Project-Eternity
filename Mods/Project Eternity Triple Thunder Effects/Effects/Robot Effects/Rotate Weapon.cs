@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.LocalContext.Target.Weapons.ActivePrimaryWeapons[_ActiveWeaponIndex].WeaponAngle = _Angle;
+            Params.LocalContext.Target.PrimaryWeapons.ActiveWeapons[_ActiveWeaponIndex].WeaponAngle = _Angle;
 
             return null;
         }

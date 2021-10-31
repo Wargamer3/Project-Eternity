@@ -51,10 +51,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             WriteBuffer.AppendFloat(ActivePlayer.Speed.Y);
             WriteBuffer.AppendString(ActivePlayer.ActiveMovementStance);
 
-            WriteBuffer.AppendInt32(ActivePlayer.Weapons.ActivePrimaryWeapons.Count);
-            for (int W = 0; W < ActivePlayer.Weapons.ActivePrimaryWeapons.Count; W++)
+            WriteBuffer.AppendInt32(ActivePlayer.PrimaryWeapons.ActiveWeapons.Count);
+            for (int W = 0; W < ActivePlayer.PrimaryWeapons.ActiveWeapons.Count; W++)
             {
-                WriteBuffer.AppendFloat(ActivePlayer.Weapons.ActivePrimaryWeapons[W].WeaponAngle);
+                WriteBuffer.AppendFloat(ActivePlayer.PrimaryWeapons.ActiveWeapons[W].WeaponAngle);
             }
         }
 
@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
                 for (int W = 0; W < WeaponCount; W++)
                 {
-                    ActivePlayer.Weapons.ActivePrimaryWeapons[W].WeaponAngle = ListWeaponAngle[W];
+                    ActivePlayer.PrimaryWeapons.ActiveWeapons[W].WeaponAngle = ListWeaponAngle[W];
                     ActivePlayer.UpdatePrimaryWeaponAngle(ListWeaponAngle[W], W);
                 }
             }

@@ -135,7 +135,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     }
                     else if (OwnerWeapon != null)
                     {
-                        int i = Owner.Weapons.ActivePrimaryWeapons.IndexOf(OwnerWeapon);
+                        int i = Owner.PrimaryWeapons.ActiveWeapons.IndexOf(OwnerWeapon);
                         Owner.Shoot(Position, OwnerWeapon, i);
                     }
                 }

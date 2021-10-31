@@ -794,7 +794,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     {
                         ActiveSpawn.IsUsed = true;
                         RobotAnimation SpawnedPlayer = ActiveSpawn.SpawnPlayer(NewPlayer, ListLayer[LayerIndex], PlayerSFXGenerator, CameraBounds);
-                        SpawnedPlayer.Weapons.ActivateSecondaryWeapon();
+
+                        string WeaponName = SpawnedPlayer.SecondaryWeapons.GetWeaponName(0);
+                        SpawnedPlayer.SecondaryWeapons.UseWeapon(WeaponName);
 
                         ListLayer[LayerIndex].SpawnRobot(ID, SpawnedPlayer);
                         SpawnedPlayer.SetIdle();
@@ -811,7 +813,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             RobotAnimation SpawnedPlayer = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, ListLayer[LayerIndex], Position, 0, NewPlayer.Equipment, PlayerSFXGenerator, new List<Weapon>());
 
-            SpawnedPlayer.Weapons.ActivateSecondaryWeapon();
+            string WeaponName = SpawnedPlayer.SecondaryWeapons.GetWeaponName(0);
+            SpawnedPlayer.SecondaryWeapons.UseWeapon(WeaponName);
 
             ListLayer[LayerIndex].SpawnRobot(ID, SpawnedPlayer);
             SpawnedPlayer.SetIdle();
@@ -1276,13 +1279,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 g.Draw(sprGaugeHUDHP, new Rectangle(32, MainCharacter.Camera.Height - 44, (int)(MainCharacter.HP / (float)MainCharacter.MaxHP * sprGaugeHUDHP.Width), sprGaugeHUDHP.Height), Color.White);
                 g.Draw(sprGaugeBoost, new Rectangle(59, MainCharacter.Camera.Height - 19, (int)(MainCharacter.Equipment.EquipedBooster.JetpackFuel / (float)MainCharacter.Equipment.EquipedBooster.JetpackFuelMax * sprGaugeBoost.Width), sprGaugeBoost.Height), Color.White);
 
-                g.Draw(sprGaugeGrenade, new Rectangle(395, MainCharacter.Camera.Height - 44 - MainCharacter.Weapons.SecondaryCharge + sprGaugeGrenade.Height, sprGaugeGrenade.Width, MainCharacter.Weapons.SecondaryCharge), Color.White);
+                g.Draw(sprGaugeGrenade, new Rectangle(395, MainCharacter.Camera.Height - 44 - MainCharacter.SecondaryWeapons.Charge + sprGaugeGrenade.Height, sprGaugeGrenade.Width, MainCharacter.SecondaryWeapons.Charge), Color.White);
 
-                if (MainCharacter.Weapons.ActivePrimaryWeapons[0].AmmoPerMagazine > 0)
+                if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].AmmoPerMagazine > 0)
                 {
-                    if (MainCharacter.Weapons.ActivePrimaryWeapons[0].ActiveCombo != null && MainCharacter.Weapons.ActivePrimaryWeapons[0].CurrentAnimation != null)
+                    if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].ActiveCombo != null && MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation != null)
                     {
-                        AnimationClass ShootingAnimation = MainCharacter.Weapons.ActivePrimaryWeapons[0].CurrentAnimation;
+                        AnimationClass ShootingAnimation = MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation;
                         int RecoilValue = (int)(ShootingAnimation.ActiveKeyFrame / (float)ShootingAnimation.LoopEnd * sprGaugeDelay.Height);
                         g.Draw(sprGaugeDelay, new Rectangle(352, MainCharacter.Camera.Height - 42 - RecoilValue + sprGaugeDelay.Height, sprGaugeDelay.Width, RecoilValue), Color.White);
                     }
@@ -1291,20 +1294,20 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         g.Draw(sprGaugeDelay, new Rectangle(352, MainCharacter.Camera.Height - 42, sprGaugeDelay.Width, sprGaugeDelay.Height), Color.White);
                     }
 
-                    if (MainCharacter.Weapons.ActivePrimaryWeapons[0].IsReloading && MainCharacter.Weapons.ActivePrimaryWeapons[0].CurrentAnimation != null)
+                    if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].IsReloading && MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation != null)
                     {
-                        AnimationClass ReloadAnimation = MainCharacter.Weapons.ActivePrimaryWeapons[0].CurrentAnimation;
+                        AnimationClass ReloadAnimation = MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation;
                         int ReloadValue = (int)(ReloadAnimation.ActiveKeyFrame / (float)ReloadAnimation.LoopEnd * sprGaugeReload.Height);
                         g.Draw(sprGaugeReload, new Rectangle(191, MainCharacter.Camera.Height - 42 - ReloadValue + sprGaugeReload.Height, sprGaugeReload.Width, ReloadValue), Color.White);
                     }
                     else
                     {
-                        int RemainingAmmoValue = (int)(MainCharacter.Weapons.ActivePrimaryWeapons[0].AmmoCurrent / MainCharacter.Weapons.ActivePrimaryWeapons[0].AmmoPerMagazine * sprGaugeReload.Height);
+                        int RemainingAmmoValue = (int)(MainCharacter.PrimaryWeapons.ActiveWeapons[0].AmmoCurrent / MainCharacter.PrimaryWeapons.ActiveWeapons[0].AmmoPerMagazine * sprGaugeReload.Height);
                         g.Draw(sprGaugeReload, new Rectangle(191, MainCharacter.Camera.Height - 42 - RemainingAmmoValue + sprGaugeReload.Height, sprGaugeReload.Width, RemainingAmmoValue), Color.White);
                     }
 
-                    g.DrawString(fntNumberBullet, MainCharacter.Weapons.ActivePrimaryWeapons[0].AmmoCurrent.ToString(), new Vector2(216, MainCharacter.Camera.Height - 39), Color.White);
-                    g.DrawString(fntNumberBulletSmall, MainCharacter.Weapons.ActivePrimaryWeapons[0].AmmoPerMagazine.ToString(), new Vector2(231, MainCharacter.Camera.Height - 25), Color.White);
+                    g.DrawString(fntNumberBullet, MainCharacter.PrimaryWeapons.ActiveWeapons[0].AmmoCurrent.ToString(), new Vector2(216, MainCharacter.Camera.Height - 39), Color.White);
+                    g.DrawString(fntNumberBulletSmall, MainCharacter.PrimaryWeapons.ActiveWeapons[0].AmmoPerMagazine.ToString(), new Vector2(231, MainCharacter.Camera.Height - 25), Color.White);
                 }
 
                 g.Draw(sprHUDGrenadeForground, new Vector2(407, MainCharacter.Camera.Height - 56), Color.White);
@@ -1366,20 +1369,20 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                             BW.Write(ActiveEnemy.Position.Y);
 
                             int ExtraWeaponCount = 0;
-                            for (int W = 0; W < ActiveEnemy.Weapons.ActivePrimaryWeapons.Count; ++W)
+                            for (int W = 0; W < ActiveEnemy.PrimaryWeapons.ActiveWeapons.Count; ++W)
                             {
-                                if (ActiveEnemy.Weapons.ActivePrimaryWeapons[W].IsExtra)
+                                if (ActiveEnemy.PrimaryWeapons.ActiveWeapons[W].IsExtra)
                                 {
                                     ++ExtraWeaponCount;
                                 }
                             }
 
                             BW.Write(ExtraWeaponCount);
-                            for (int W = 0; W < ActiveEnemy.Weapons.ActivePrimaryWeapons.Count; ++W)
+                            for (int W = 0; W < ActiveEnemy.PrimaryWeapons.ActiveWeapons.Count; ++W)
                             {
-                                if (ActiveEnemy.Weapons.ActivePrimaryWeapons[W].IsExtra)
+                                if (ActiveEnemy.PrimaryWeapons.ActiveWeapons[W].IsExtra)
                                 {
-                                    BW.Write(ActiveEnemy.Weapons.ActivePrimaryWeapons[W].WeaponPath);
+                                    BW.Write(ActiveEnemy.PrimaryWeapons.ActiveWeapons[W].WeaponPath);
                                 }
                             }
                         }

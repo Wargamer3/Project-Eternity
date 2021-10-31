@@ -48,19 +48,19 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             int ListWeaponCount = BR.ReadInt32();
 
-            Weapons = new WeaponHolder(ListWeaponCount);
+            PrimaryWeapons = new WeaponHolder(ListWeaponCount);
             for (int W = 0; W < ListWeaponCount; ++W)
             {
                 string WeaponName = BR.ReadString();
-                Weapons.AddWeaponToStash(new Weapon(WeaponName, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
+                PrimaryWeapons.AddWeaponToStash(new Weapon(WeaponName, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
             }
 
             if (ListExtraWeapon != null)
             {
                 foreach (Weapon ActiveWeapon in ListExtraWeapon)
                 {
-                    Weapons.AddWeaponToStash(ActiveWeapon);
-                    Weapons.UseWeapon(ActiveWeapon);
+                    PrimaryWeapons.AddWeaponToStash(ActiveWeapon);
+                    PrimaryWeapons.UseWeapon(ActiveWeapon);
                 }
             }
 
@@ -75,9 +75,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Update(new GameTime());
             SetIdle();
 
-            if (!Weapons.HasActiveWeapons)
+            if (!PrimaryWeapons.HasActiveWeapons)
             {
-                if (Weapons.HasWeapons)
+                if (PrimaryWeapons.HasWeapons)
                     ChangeWeapon(0);
                 else
                     ChangeWeapon(-1);
@@ -237,16 +237,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (MouseHelper.InputRightButtonPressed())
             {
-                Owner.HolsterAndReplaceWeapon(Owner.Weapons.ActiveSecondaryWeapons[0]);
+                Owner.HolsterAndReplaceWeapon(Owner.SecondaryWeapons.ActiveWeapons[0]);
             }
             else if (MouseHelper.InputRightButtonReleased())
             {
-                Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.Weapons.ActiveSecondaryWeapons[0], true);
+                Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.SecondaryWeapons.ActiveWeapons[0], true);
                 Owner.UnholsterWeaponsIfNeeded();
             }
             else if (MouseHelper.InputRightButtonHold())
             {
-                Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.Weapons.ActiveSecondaryWeapons[0], false);
+                Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.SecondaryWeapons.ActiveWeapons[0], false);
             }
         }
     }

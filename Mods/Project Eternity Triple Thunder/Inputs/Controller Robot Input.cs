@@ -106,16 +106,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (MouseHelper.InputRightButtonPressed())
             {
-                Owner.HolsterAndReplaceWeapon(Owner.Weapons.ActiveSecondaryWeapons[0]);
+                Owner.HolsterAndReplaceWeapon(Owner.SecondaryWeapons.ActiveWeapons[0]);
             }
             else if (MouseHelper.InputRightButtonReleased())
             {
-                Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.Weapons.ActiveSecondaryWeapons[0], true);
+                Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.SecondaryWeapons.ActiveWeapons[0], true);
                 Owner.UnholsterWeaponsIfNeeded();
             }
             else if (MouseHelper.InputRightButtonHold())
             {
-                Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.Weapons.ActiveSecondaryWeapons[0], false);
+                Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.SecondaryWeapons.ActiveWeapons[0], false);
             }
         }
     }

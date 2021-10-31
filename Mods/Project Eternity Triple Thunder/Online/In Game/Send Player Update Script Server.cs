@@ -64,10 +64,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             WriteBuffer.AppendFloat(ActiveRobot.Speed.Y);
             WriteBuffer.AppendString(ActiveRobot.ActiveMovementStance);
 
-            WriteBuffer.AppendInt32(ActiveRobot.Weapons.ActivePrimaryWeapons.Count);
-            for (int W = 0; W < ActiveRobot.Weapons.ActivePrimaryWeapons.Count; W++)
+            WriteBuffer.AppendInt32(ActiveRobot.PrimaryWeapons.ActiveWeapons.Count);
+            for (int W = 0; W < ActiveRobot.PrimaryWeapons.ActiveWeapons.Count; W++)
             {
-                WriteBuffer.AppendFloat(ActiveRobot.Weapons.ActivePrimaryWeapons[W].WeaponAngle);
+                WriteBuffer.AppendFloat(ActiveRobot.PrimaryWeapons.ActiveWeapons[W].WeaponAngle);
             }
         }
 
@@ -92,7 +92,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
 
                 for (int W = 0; W < WeaponCount; W++)
                 {
-                    ActivePlayer.InGameRobot.Weapons.ActivePrimaryWeapons[W].WeaponAngle = ListWeaponAngle[W];
+                    ActivePlayer.InGameRobot.PrimaryWeapons.ActiveWeapons[W].WeaponAngle = ListWeaponAngle[W];
                     ActivePlayer.InGameRobot.UpdatePrimaryWeaponAngle(ListWeaponAngle[W], W);
                 }
             }

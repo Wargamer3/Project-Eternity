@@ -100,9 +100,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (KeyboardHelper.KeyPressed(Keys.R))
             {
-                for (int W = 0; W < Owner.Weapons.ActivePrimaryWeapons.Count; W++)
+                for (int W = 0; W < Owner.PrimaryWeapons.ActiveWeapons.Count; W++)
                 {
-                    Weapon ActiveWeapon = Owner.Weapons.ActivePrimaryWeapons[W];
+                    Weapon ActiveWeapon = Owner.PrimaryWeapons.ActiveWeapons[W];
                     if (ActiveWeapon.ReloadCombo != null && ActiveWeapon.ActiveCombo == null)
                     {
                         ActiveWeapon.ActiveCombo = ActiveWeapon.NoneCombo;
@@ -129,9 +129,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 if (MouseHelper.InputRightButtonPressed())
                 {
-                    if (Owner.Weapons.ActiveSecondaryWeapons.Count > 0)
+                    if (Owner.SecondaryWeapons.ActiveWeapons.Count > 0)
                     {
-                        Owner.HolsterAndReplaceWeapon(Owner.Weapons.ActiveSecondaryWeapons[0]);
+                        Owner.HolsterAndReplaceWeapon(Owner.SecondaryWeapons.ActiveWeapons[0]);
                     }
                     else
                     {
@@ -140,18 +140,18 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
                 else if (MouseHelper.InputRightButtonReleased())
                 {
-                    if (Owner.Weapons.ActiveSecondaryWeapons.Count > 0)
+                    if (Owner.SecondaryWeapons.ActiveWeapons.Count > 0)
                     {
-                        Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.Weapons.ActiveSecondaryWeapons[0], true);
+                        Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.SecondaryWeapons.ActiveWeapons[0], true);
                         Owner.UnholsterWeaponsIfNeeded();
                         GrenadeCooldown = 1;
                     }
                 }
                 else if (MouseHelper.InputRightButtonHold())
                 {
-                    if (Owner.Weapons.ActiveSecondaryWeapons.Count > 0)
+                    if (Owner.SecondaryWeapons.ActiveWeapons.Count > 0)
                     {
-                        Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.Weapons.ActiveSecondaryWeapons[0], false);
+                        Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.SecondaryWeapons.ActiveWeapons[0], false);
                     }
                     else
                     {

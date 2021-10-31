@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 RobotAnimation CurrentRobot = Info.Owner;
 
                 float FinalAngle = MathHelper.ToRadians((float)TargetAngle);
-                CurrentRobot.Weapons.ActivePrimaryWeapons[_WeaponIndex].WeaponAngle = FinalAngle;
+                CurrentRobot.PrimaryWeapons.ActiveWeapons[_WeaponIndex].WeaponAngle = FinalAngle;
                 CurrentRobot.UpdatePrimaryWeaponAngle(FinalAngle, _WeaponIndex);
 
                 Result = new List<object>();
