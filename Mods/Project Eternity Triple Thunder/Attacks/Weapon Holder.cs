@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Item;
 
@@ -23,6 +24,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public int PrimaryCharge { get { return PrimaryWeaponCharge; } }
         public int SecondaryCharge { get { return SecondaryWeaponCharge; } }
         public bool HasHolsteredWeapons { get { return ListHolstereddPrimaryWeapon.Count > 0; } }
+        public int HolsteredWeaponsCount { get { return ListHolstereddPrimaryWeapon.Count; } }
 
         public WeaponHolder(int ListWeaponCount)
         {
@@ -55,15 +57,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
             for (int W = 0; W < ListActiveSecondaryWeapon.Count; ++W)
             {
-                ListActiveSecondaryWeapon[W] = new Weapon(ListActiveSecondaryWeapon[W].Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                ListActiveSecondaryWeapon[W] = new Weapon(ListActiveSecondaryWeapon[W].WeaponPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             for (int W = 0; W < ListActivePrimaryWeapon.Count; ++W)
             {
-                ListActivePrimaryWeapon[W] = DicWeaponByName[ListActivePrimaryWeapon[W].Name];
+                ListActivePrimaryWeapon[W] = DicWeaponByName[ListActivePrimaryWeapon[W].WeaponPath];
             }
             for (int W = 0; W < ListHolstereddPrimaryWeapon.Count; ++W)
             {
-                ListHolstereddPrimaryWeapon[W] = DicWeaponByName[ListHolstereddPrimaryWeapon[W].Name];
+                ListHolstereddPrimaryWeapon[W] = DicWeaponByName[ListHolstereddPrimaryWeapon[W].WeaponPath];
             }
         }
 
@@ -125,8 +127,25 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void AddWeaponToStash(Weapon NewWeapon)
         {
-            DicWeaponByName.Add(NewWeapon.Name, NewWeapon);
-            ListWeaponByIndex.Add(NewWeapon.Name);
+            DicWeaponByName.Add(NewWeapon.WeaponPath, NewWeapon);
+            ListWeaponByIndex.Add(NewWeapon.WeaponPath);
+        }
+
+        public List<WeaponDrop> DropActiveWeapon(Vector2 Position, Layer CurrentLayer)
+        {
+            List<WeaponDrop> ListDroppedWeapon = new List<WeaponDrop>();
+
+            foreach (Weapon WeaponToDrop in ListActivePrimaryWeapon)
+            {
+                DicWeaponByName.Remove(WeaponToDrop.WeaponPath);
+                ListWeaponByIndex.Remove(WeaponToDrop.WeaponPath);
+
+                ListDroppedWeapon.Add(new WeaponDrop(WeaponToDrop.sprMapIcon, WeaponToDrop.WeaponName, CurrentLayer, Position, WeaponToDrop.WeaponAngle));
+            }
+
+            RemoveAllActiveWeapons();
+
+            return ListDroppedWeapon;
         }
 
         public void ChargePrimaryWeapon(int ChargeAmount, int MaxCharge)

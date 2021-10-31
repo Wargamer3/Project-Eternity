@@ -20,8 +20,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
     public partial class FightingZone : GameScreen, IOnlineGame
     {
-        public uint NextID { get { return _NextID++; } }
-        private uint _NextID = 0;
+        public uint NextRobotID { get { return _NextRobotID++; } }
+        private uint _NextRobotID = 0;
+        public uint NextDroppedWeaponID { get { return _NextDroppedWeaponID++; } }
+        private uint _NextDroppedWeaponID = 0;
 
         #region Ressources
 
@@ -277,7 +279,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 foreach (Player PlayerInfo in ListLocalPlayerInfo)
                 {
-                    AddPlayerFromSpawn(PlayerInfo, NextID + (uint.MaxValue - 100), false, out _);
+                    AddPlayerFromSpawn(PlayerInfo, NextRobotID + (uint.MaxValue - 100), false, out _);
 
                     if (ListLocalPlayerInfo.Count == 2)
                     {
@@ -1377,7 +1379,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                             {
                                 if (ActiveEnemy.Weapons.ActivePrimaryWeapons[W].IsExtra)
                                 {
-                                    BW.Write(ActiveEnemy.Weapons.ActivePrimaryWeapons[W].Name);
+                                    BW.Write(ActiveEnemy.Weapons.ActivePrimaryWeapons[W].WeaponPath);
                                 }
                             }
                         }

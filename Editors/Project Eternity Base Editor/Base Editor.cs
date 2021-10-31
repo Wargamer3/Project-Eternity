@@ -159,8 +159,6 @@ namespace ProjectEternity.Core.Editor
 
         public static string GetItemPathInRoot(string RootPath, string ItemPath)
         {
-            List<string> ListItems = new List<string>();
-
             MenuFilter OutMenu;
             GetMenuItemsFromRoot(RootPath, out OutMenu);
             if (OutMenu == null)

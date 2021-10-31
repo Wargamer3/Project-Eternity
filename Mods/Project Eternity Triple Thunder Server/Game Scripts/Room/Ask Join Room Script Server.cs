@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
                     ActivePlayer.OnlineClient = Sender;
 
                     int LayerIndex;
-                    CurrentGame.AddPlayerFromSpawn(ActivePlayer, CurrentGame.NextID + (uint.MaxValue - 100), true, out LayerIndex);
+                    CurrentGame.AddPlayerFromSpawn(ActivePlayer, CurrentGame.NextRobotID + (uint.MaxValue - 100), true, out LayerIndex);
 
                     //Add Game Specific scripts
                     DicNewScript = OnlineHelper.GetTripleThunderScriptsServer((TripleThunderClientGroup)ActiveGroup, ActivePlayer);

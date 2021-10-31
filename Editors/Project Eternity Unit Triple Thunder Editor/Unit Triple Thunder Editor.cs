@@ -194,7 +194,41 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
         private void btnAddWeapon_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AddWeapon;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderWeapons));
+            IEnumerable<ItemContainer> Items = GetItemsByRoot(GUIRootPathTripleThunderWeapons);
+            MenuFilter OutMenu = new MenuFilter();
+            OutMenu.ListItem = new Dictionary<string, string>();
+
+
+            foreach (ItemContainer ActiveItemContainer in Items)
+            {
+                foreach (KeyValuePair<string, string> ActiveItem in ActiveItemContainer.ListItem)
+                {
+                    string Name = FilePath.Substring(29);
+                    Name = Name.Substring(0, Name.Length - 4);
+
+                    if (ActiveItem.Key.StartsWith(Name))
+                    {
+                        if (ActiveItem.Key.StartsWith(Name + "/Weapons"))
+                        {
+                            string WeaponName = ActiveItem.Key.Substring(24);
+                            OutMenu.ListItem.Add(WeaponName, WeaponName);
+                        }
+                        else if (ActiveItem.Key.StartsWith(Name + "/Grenades"))
+                        {
+                            string WeaponName = ActiveItem.Key.Substring(25);
+                            OutMenu.ListItem.Add(WeaponName, WeaponName);
+                        }
+                    }
+                }
+            }
+
+            ItemSelector ItemSelectorMenu = new ItemSelector(OutMenu, true);
+
+            ItemSelectorMenu.TopMost = true;
+            ItemSelectorMenu.ShowDialog();
+            //Item selected, call the ItemsSelected method.
+            if (ItemSelectorMenu.DialogResult == System.Windows.Forms.DialogResult.OK)
+                ListMenuItemsSelected(ItemSelectorMenu.GetResult());
         }
 
         private void btnRemoveWeapon_Click(object sender, EventArgs e)
@@ -213,27 +247,30 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
             string Name;
             for (int I = 0; I < Items.Count; I++)
             {
-                Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
                 switch (ItemSelectionChoice)
                 {
                     case ItemSelectionChoices.DefaultWeapon:
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
                         txtDefaultWeapon.Text = Name;
                         break;
 
                     case ItemSelectionChoices.CrouchWeapon:
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
                         txtCrouchWeapon.Text = Name;
                         break;
 
                     case ItemSelectionChoices.RollWeapon:
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
                         txtRollWeapon.Text = Name;
                         break;
 
                     case ItemSelectionChoices.ProneWeapon:
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
                         txtProneWeapon.Text = Name;
                         break;
 
                     case ItemSelectionChoices.AddWeapon:
-                        lstWeapons.Items.Add(Name);
+                        lstWeapons.Items.Add(Items[I]);
                         break;
                 }
             }

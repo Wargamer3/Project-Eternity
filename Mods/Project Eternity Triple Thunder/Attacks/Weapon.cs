@@ -7,6 +7,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.GameScreens.AnimationScreen;
 using FMOD;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
@@ -81,7 +82,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public enum ProjectileTypes { Hitscan, Projectile }
 
-        public readonly string Name;
+        public readonly string WeaponPath;
+        public string WeaponName;
         public bool IsExtra;
 
         public Combo NoneCombo;
@@ -120,6 +122,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public ProjectileInfo ActiveProjectileInfo;
 
         public AnimationClass CurrentAnimation;
+        public Texture2D sprMapIcon;
         private List<BaseAutomaticSkill> ListActiveSkill;
         public bool HasSkills => ListActiveSkill.Count > 0;
         public bool CanBeUsed { get { return AmmoPerMagazine == 0 || (AmmoPerMagazine > 0 && AmmoCurrent > 0); } }
@@ -167,7 +170,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public Weapon(string Path, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            this.Name = Path;
+            this.WeaponPath = Path;
             FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + Path + ".ttw", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
@@ -265,6 +268,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (Content == null)
             { return; }
 
+            string WeaponPath = "Animations/Sprites/Triple Thunder/Weapons/" + WeaponName;
+            if (File.Exists("Content/" + WeaponPath + ".xnb"))
+            {
+                sprMapIcon = Content.Load<Texture2D>(WeaponPath);
+            }
+
             if (ActiveProjectileInfo != null)
             {
                 ActiveProjectileInfo.Load(Content);
@@ -306,7 +315,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ListAttack.Add(NewAttack);
             }
 
-            Owner.CreateAttackBox(Name, GunNozzlePosition, ListAttack);
+            Owner.CreateAttackBox(WeaponPath, GunNozzlePosition, ListAttack);
         }
 
         private void InitSkillChainTarget(BaseAutomaticSkill ActiveSkill, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)

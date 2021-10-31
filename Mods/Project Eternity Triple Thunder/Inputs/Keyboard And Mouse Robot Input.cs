@@ -110,6 +110,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
                 Owner.Reload();
             }
+            else if (KeyboardHelper.KeyPressed(Keys.LeftShift) || KeyboardHelper.KeyPressed(Keys.RightShift))
+            {
+                Owner.DropActiveWeapons();
+            }
             else if (MouseHelper.InputLeftButtonPressed())
             {
                 Owner.UnholsterWeaponsIfNeeded();

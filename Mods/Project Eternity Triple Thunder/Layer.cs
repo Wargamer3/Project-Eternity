@@ -20,6 +20,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public List<Vehicle> ListVehicle;
         public readonly List<RobotAnimation> ListRobotToAdd;
         private List<uint> ListRobotToRemove;
+        public Dictionary<uint, WeaponDrop> DicWeaponDrop;
+        public readonly List<WeaponDrop> ListWeaponDropToAdd;
+        private List<uint> ListWeaponDropToRemove;
         public List<Projectile> ListAttackCollisionBox;
         public Polygon GroundLevelCollision;
         public List<SimpleAnimation> ListImages;
@@ -55,9 +58,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListSpawnPointNoTeam = new List<SpawnPoint>();
             ListVisualEffects = new List<SimpleAnimation>();
             DicRobot = new Dictionary<uint, RobotAnimation>();
+            DicWeaponDrop = new Dictionary<uint, WeaponDrop>();
             ListVehicle = new List<Vehicle>();
             ListRobotToAdd = new List<RobotAnimation>();
             ListRobotToRemove = new List<uint>();
+            ListWeaponDropToAdd = new List<WeaponDrop>();
+            ListWeaponDropToRemove = new List<uint>();
             GroundLevelCollision = new Polygon();
             ListAttackCollisionBox = new List<Projectile>();
             this.Owner = Owner;
@@ -274,6 +280,35 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
             }
 
+            #region Weapon Drop Update
+
+            foreach (WeaponDrop ActiveWeaponDrop in DicWeaponDrop.Values)
+            {
+                if (!ActiveWeaponDrop.IsAlive)
+                    continue;
+
+                ActiveWeaponDrop.Update(gameTime);
+
+                UpdateWeaponDropCollisionWithWorld(ActiveWeaponDrop);
+
+                ActiveWeaponDrop.Move(gameTime);
+            }
+
+            foreach (WeaponDrop RobotToAdd in ListWeaponDropToAdd)
+            {
+                AddDroppedWeapon(RobotToAdd);
+            }
+
+            ListWeaponDropToAdd.Clear();
+
+            for (int R = ListWeaponDropToRemove.Count - 1; R >= 0; R--)
+            {
+                DicWeaponDrop.Remove(ListWeaponDropToRemove[R]);
+                ListWeaponDropToRemove.RemoveAt(R);
+            }
+
+            #endregion
+
             #region Robot Update
 
             foreach (RobotAnimation ActiveRobot in DicRobot.Values)
@@ -333,7 +368,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             if (Owner.IsOfflineOrServer)
             {
-                SpawnRobot(Owner.NextID, RobotToSpawn);
+                SpawnRobot(Owner.NextRobotID, RobotToSpawn);
             }
         }
 
@@ -341,7 +376,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             if (Owner.IsOfflineOrServer)
             {
-                SpawnVehicle(Owner.NextID, VehicleToSpawn);
+                SpawnVehicle(Owner.NextRobotID, VehicleToSpawn);
             }
         }
 
@@ -493,7 +528,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public HashSet<WorldPolygon> GetCollidingWorldObjects(AttackBox ActiveAttackBox)
+        public HashSet<WorldPolygon> GetCollidingWorldObjects(Projectile ActiveAttackBox)
         {
             return WorldCollisions.GetCollidableObjects(ActiveAttackBox.Collision);
         }
@@ -540,6 +575,35 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 {
                     Owner.PlayerSFXGenerator.PlayBulletHitObjectSound();
                 }
+            }
+        }
+
+        public void UpdateWeaponDropCollisionWithWorld(WeaponDrop ActiveWeaponDrop)
+        {
+            PolygonCollisionResult FinalCollisionResult = new PolygonCollisionResult(Vector2.Zero, -1);
+            PolygonCollisionResult FinalCollisionGroundResult = new PolygonCollisionResult(Vector2.Zero, -1);
+            Polygon FinalCollisionPolygon = null;
+
+            foreach (WorldPolygon ActivePolygon in GetCollidingWorldObjects(ActiveWeaponDrop))
+            {
+                foreach (Polygon CollisionPolygon in ActiveWeaponDrop.Collision.ListCollisionPolygon)
+                {
+                    PolygonCollisionResult CollisionGroundResult;
+                    PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(CollisionPolygon, ActivePolygon.Collision.ListCollisionPolygon[0], ActiveWeaponDrop.Speed, out CollisionGroundResult);
+
+                    if (FinalCollisionResult.Distance < 0 || (CollisionResult.Distance >= 0 && CollisionResult.Distance > FinalCollisionResult.Distance))
+                    {
+                        FinalCollisionResult = CollisionResult;
+                        FinalCollisionGroundResult = CollisionGroundResult;
+                        FinalCollisionPolygon = ActivePolygon.Collision.ListCollisionPolygon[0];
+                    }
+                }
+            }
+
+            if (FinalCollisionResult.Distance >= 0)
+            {
+                ActiveWeaponDrop.Speed = Vector2.Zero;
+                ActiveWeaponDrop.UpdateSkills(TripleThunderAttackRequirement.OnGroundCollisionAttackName);
             }
         }
 
@@ -647,6 +711,25 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 Owner.OnlineClient.Host.Send(new ShootBulletScriptClient(OwnerID, Owner.ListLayer.IndexOf(this), WeaponName, GunNozzlePosition, ListAttack));
             }
+        }
+
+        public void AddDroppedWeapon(WeaponDrop DroppedWeapon)
+        {
+            if (Owner.IsOfflineOrServer)
+            {
+                AddDroppedWeapon(Owner.NextDroppedWeaponID, DroppedWeapon);
+            }
+        }
+
+        public void AddDroppedWeapon(uint ID, WeaponDrop DroppedWeapon)
+        {
+            DroppedWeapon.ID = ID;
+            DicWeaponDrop.Add(ID, DroppedWeapon);
+        }
+
+        public void RemoveDroppedWeapon(WeaponDrop DroppedWeaponToRemove)
+        {
+            ListWeaponDropToRemove.Add(DroppedWeaponToRemove.ID);
         }
 
         public void CreateExplosion(Vector2 ExplosionCenter, RobotAnimation RobotOwner, Weapon.ExplosionOptions ExplosionAttributes, Vector2 CollisionGroundResult)
@@ -757,6 +840,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             foreach (SimpleAnimation ActiveAnimation in ListImages)
             {
                 ActiveAnimation.Draw(g);
+            }
+
+            foreach (WeaponDrop ActiveWeaponDrop in DicWeaponDrop.Values)
+            {
+                ActiveWeaponDrop.Draw(g);
             }
 
             foreach (AttackBox ActiveCollision in ListAttackCollisionBox)

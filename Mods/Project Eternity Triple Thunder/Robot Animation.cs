@@ -184,14 +184,24 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             for (int W = 0; W < ListWeaponCount; ++W)
             {
                 string WeaponName = BR.ReadString();
+                Weapon NewWeapon;
+                string WeaponPath = Name + "/Weapons/" + WeaponName;
+                if (!File.Exists("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw"))
+                {
+                    WeaponPath = Name + "/Grenades/" + WeaponName;
+                }
+
                 if (CurrentLayer == null)
                 {
-                    Weapons.AddWeaponToStash(new Weapon(WeaponName, null, null, null));
+                    NewWeapon = new Weapon(WeaponPath, null, null, null);
                 }
                 else
                 {
-                    Weapons.AddWeaponToStash(new Weapon(WeaponName, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
+                    NewWeapon = new Weapon(WeaponPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
                 }
+
+                NewWeapon.WeaponName = WeaponName;
+                Weapons.AddWeaponToStash(NewWeapon);
             }
 
             if (ListExtraWeapon != null)
@@ -276,7 +286,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             for (int W = 0; W < ListStanceAnimation.Count; ++W)
             {
-                ListStanceAnimation[W] = new Weapon(ListStanceAnimation[W].Name, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+                ListStanceAnimation[W] = new Weapon(ListStanceAnimation[W].WeaponPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             }
 
             Weapons.ChangeMap(CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
@@ -494,6 +504,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 Move(Speed);
             }
 
+            CheckForWeaponDrop();
+
             if (IsDynamic)
             {
                 //Ground.X is always positive.
@@ -509,6 +521,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 Equipment.Update(gameTime);
             }
+
             base.Update(gameTime);
         }
 
@@ -558,7 +571,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Equipment.OnAnyCollision(ListAllCollidingPolygon);
 
-            Vector2 MovementCorection = Vector2.Zero;
             //Floor
             if (ListFloorCollidingPolygon.Count > 0)
             {
@@ -593,6 +605,40 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
 
             return HasCollided;
+        }
+
+        private void CheckForWeaponDrop()
+        {
+            foreach (WeaponDrop ActiveWeaponDrop in CurrentLayer.DicWeaponDrop.Values)
+            {
+                if (!ActiveWeaponDrop.IsAlive || ActiveWeaponDrop.TimeAlive <= 1)
+                    return;
+
+                PolygonCollisionResult FinalCollisionResult = new PolygonCollisionResult(Vector2.Zero, -1);
+
+                foreach (Polygon ActiveCollision in Collision.ListCollisionPolygon)
+                {
+                    foreach (Polygon EnemyCollision in ActiveWeaponDrop.Collision.ListCollisionPolygon)
+                    {
+                        PolygonCollisionResult CollisionResult = Polygon.PolygonCollisionSAT(ActiveCollision, EnemyCollision, Speed);
+
+                        if (FinalCollisionResult.Distance < 0 || (CollisionResult.Distance >= 0 && CollisionResult.Distance < FinalCollisionResult.Distance))
+                            FinalCollisionResult = CollisionResult;
+                    }
+                }
+
+                if (FinalCollisionResult.Distance >= 0)
+                {
+                    if (Weapons.HolsteredWeaponsCount == 0)
+                    {
+                        PickUpDroppedWeapon(ActiveWeaponDrop);
+                        ChangeWeapon(0);
+                        ActiveWeaponDrop.IsAlive = false;
+                        CurrentLayer.RemoveDroppedWeapon(ActiveWeaponDrop);
+                        return;
+                    }
+                }
+            }
         }
 
         public void UpdateSkills(string RequirementName)
@@ -903,6 +949,45 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     }
                 }
             }
+        }
+
+        public void DropActiveWeapons()
+        {
+            foreach (WeaponDrop DroppedWeapon in Weapons.DropActiveWeapon(Position, CurrentLayer))
+            {
+                CurrentLayer.AddDroppedWeapon(DroppedWeapon);
+            }
+
+            foreach (Weapon ActiveWeapon in Weapons.ActivePrimaryWeapons)
+            {
+                RemovePartialAnimation(ActiveWeapon.ActiveWeaponCombo(ActiveMovementStance).AnimationName);
+            }
+
+            Weapons.UseWeapon(CurrentStanceAnimations);
+        }
+
+        public void PickUpDroppedWeapon(WeaponDrop WeaponToPickUp)
+        {
+            string WeaponName = WeaponToPickUp.WeaponName;
+            Weapon NewWeapon;
+            string WeaponPath = Name + "/Weapons/" + WeaponName;
+            if (!File.Exists("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw"))
+            {
+                WeaponPath = Name + "/Grenades/" + WeaponName;
+            }
+
+            if (CurrentLayer == null)
+            {
+                NewWeapon = new Weapon(WeaponPath, null, null, null);
+            }
+            else
+            {
+                NewWeapon = new Weapon(WeaponPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+            }
+
+            NewWeapon.WeaponName = WeaponName;
+            NewWeapon.Load(Content);
+            Weapons.AddWeaponToStash(NewWeapon);
         }
 
         public void FallThroughFloor()
