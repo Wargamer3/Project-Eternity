@@ -5,7 +5,7 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.Core.Item
 {
-    public class Scrollbar
+    public class Scrollbar : IUIElement
     {
         public delegate void OnScrollbarChangeDelegate(float ScrollbarValue);
 
@@ -111,6 +111,22 @@ namespace ProjectEternity.Core.Item
             }
 
             return -1;
+        }
+
+        public void Select()
+        {
+        }
+
+        public void Unselect()
+        {
+        }
+
+        public void Enable()
+        {
+        }
+
+        public void Disable()
+        {
         }
 
         public void Draw(CustomSpriteBatch g)

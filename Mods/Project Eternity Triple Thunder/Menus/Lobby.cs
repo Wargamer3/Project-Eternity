@@ -60,7 +60,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private AnimatedSprite sprRoomState;
         private AnimatedSprite sprRoomType;
 
-        private InteractiveButton[] ArrayMenuButton;
+        private Scrollbar RoomsScrollbar;
+
+        private IUIElement[] ArrayMenuButton;
 
         #endregion
 
@@ -71,6 +73,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private Player[] ArrayLobbyFriends;
         PlayerListTypes PlayerListType;
         private string RoomType;
+        private int RoomScrollbarStartIndex;
 
         public Lobby(bool UseOnline)
         {
@@ -167,6 +170,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ShopButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Shop Button", new Vector2(733, 514),
                                                             "Triple Thunder/Menus/Channel/Shop Icon", new Vector2(-25, 0), 7, OnButtonOver, OpenShop);
 
+            RoomsScrollbar = new Scrollbar(Content.Load<Texture2D>("Triple Thunder/Menus/Common/Scrollbar 2"), new Vector2(530, 142), 235, 0, OnRoomsScrollbarChange);
+
             ShowAllPlayersFilter.CanBeChecked = true;
             ShowFriendsFilter.CanBeChecked = true;
             ShowGuildsFilter.CanBeChecked = true;
@@ -180,13 +185,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sprRoomState = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Room State_strip2", new Vector2(0, 0), 0);
             sprRoomType = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Room Type", new Vector2(0, 0), 0, 3, 1);
 
-            ArrayMenuButton = new InteractiveButton[]
+            ArrayMenuButton = new IUIElement[]
             {
                 CreateARoomButton, QuickStartButton, WaitingRoomOnlyButton,
                 ShowSUVRoomsFilter, ShowDMRoomsFilter, ShowCTFRoomsFilter, ShowAllRoomsFilter,
                 InfoButton, RankingButton, OptionsButton, HelpButton,
                 ShowAllPlayersFilter, ShowFriendsFilter, ShowGuildsFilter, SearchPlayerButton,
-                ShopButton, MetalButton,
+                ShopButton, MetalButton, RoomsScrollbar,
             };
         }
 
@@ -321,7 +326,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             UpdateRooms();
             UpdatePlayers();
 
-            foreach (InteractiveButton ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Update(gameTime);
             }
@@ -438,6 +443,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     DicAllRoom.Add(ActiveRoomUpdate.RoomID, ActiveRoomUpdate);
                 }
             }
+
+            int ScrollValue = Math.Max(0, DicAllRoom.Count) / 2;
+            RoomsScrollbar.ChangeMaxValue(ScrollValue);
         }
 
         private void OnButtonOver()
@@ -492,6 +500,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         #endregion
 
+        private void OnRoomsScrollbarChange(float ScrollbarValue)
+        {
+            RoomScrollbarStartIndex = (int)ScrollbarValue;
+        }
+
         private void SendMessage(string InputMessage)
         {
             ChatInput.SetText(string.Empty);
@@ -534,7 +547,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
             DrawPlayers(g);
 
-            foreach (InteractiveButton ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Draw(g);
             }
