@@ -101,7 +101,7 @@
     <Compile Include="Inputs\Robot Input Manager.cs" />
     <Compile Include="Menus\Battle Mode Select.cs" />
     <Compile Include="Menus\Battle Map Select.cs" />
-    <Compile Include="Menus\Buy Weapon.cs" />
+    <Compile Include="Menus\Shop\Buy Weapon.cs" />
     <Compile Include="Menus\Chat Helper.cs" />
     <Compile Include="Menus\Player Info Screen.cs" />
     <Compile Include="Menus\Create Room Mission.cs" />
@@ -147,8 +147,8 @@
     <Compile Include="Magic\Magic Core Fireball.cs" />
     <Compile Include="Magic\Triple Thunder Magic.cs" />
     <Compile Include="Map Scripting.cs" />
-    <Compile Include="Menus\Buy Equipment.cs" />
-    <Compile Include="Menus\Buy Character.cs" />
+    <Compile Include="Menus\Shop\Buy Equipment.cs" />
+    <Compile Include="Menus\Shop\Buy Character.cs" />
     <Compile Include="Menus\Character Select.cs" />
     <Compile Include="Menus\Create Room Battle.cs" />
     <Compile Include="Menus\Lobby.cs" />
