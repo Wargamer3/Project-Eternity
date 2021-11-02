@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
                 ListExtraWeapon.Add(new Weapon(ListWeapons[W], ActiveLayer.DicRequirement, ActiveLayer.DicEffect, ActiveLayer.DicAutomaticSkillTarget));
             }
 
-            RobotAnimation EnemyRobot = new RobotAnimation(EnemyPath, ActiveLayer, Position, Team, new PlayerEquipment(), ActiveLayer.PlayerSFXGenerator, ListExtraWeapon);
+            RobotAnimation EnemyRobot = new RobotAnimation(EnemyPath, ActiveLayer, Position, Team, new PlayerInventory(), ActiveLayer.PlayerSFXGenerator, ListExtraWeapon);
             EnemyRobot.ID = PlayerID;
 
             if (EnemyRobot.Content != null)

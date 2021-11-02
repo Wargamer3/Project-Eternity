@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private List<RobotAnimation> ListUser;
         private string CaptureRule;
 
-        public Vehicle(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerEquipment Equipment, ISFXGenerator PlayerSFXGenerator, List<Weapon> ListExtraWeapon)
+        public Vehicle(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerInventory Equipment, ISFXGenerator PlayerSFXGenerator, List<Weapon> ListExtraWeapon)
             : base(Name, CurrentLayer, Position, Team, new EquipmentLoadout(), PlayerSFXGenerator)
         {
             ListUser = new List<RobotAnimation>();

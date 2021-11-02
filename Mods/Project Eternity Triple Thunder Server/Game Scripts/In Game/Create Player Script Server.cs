@@ -49,7 +49,15 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             }
 
             WriteBuffer.AppendString(GamePlayerToWrite.Equipment.GrenadeType);
-            WriteBuffer.AppendString(GamePlayerToWrite.Equipment.ExtraWeaponType);
+
+            if (GamePlayerToWrite.Equipment.EquipedSecondaryWeapon != null)
+            {
+                WriteBuffer.AppendString(GamePlayerToWrite.Equipment.EquipedSecondaryWeapon.Name);
+            }
+            else
+            {
+                WriteBuffer.AppendString("");
+            }
 
             if (GamePlayerToWrite.Equipment.EquipedWeaponOption != null)
             {

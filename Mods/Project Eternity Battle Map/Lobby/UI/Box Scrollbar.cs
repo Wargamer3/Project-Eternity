@@ -63,7 +63,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
             }
-            else if (MouseHelper.InputLeftButtonPressed())
+
+            if (MouseHelper.InputLeftButtonReleased())
             {
                 MovingScrollbarSelectionPoint = -1;
             }
@@ -89,7 +90,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private bool IsInsideScrollbarBar(Vector2 PositionToCheck)
         {
             if (PositionToCheck.X >= Position.X && PositionToCheck.Y >= Position.Y + SectionSize
-                && PositionToCheck.X <= Position.X + Width && PositionToCheck.Y <= Height - SectionSize)
+                && PositionToCheck.X <= Position.X + Width && PositionToCheck.Y <= Position.Y + Height - SectionSize)
             {
                 if (PositionToCheck.Y > ScrollbarBarPositionY && PositionToCheck.Y <= ScrollbarBarPositionY + ScrollbarBarHeight)
                 {

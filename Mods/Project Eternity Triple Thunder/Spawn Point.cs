@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ListExtraWeapon.Add(new Weapon(_ListWeapons[W], Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
-            Vehicle NewVehicle = new Vehicle(_VehiclePath, Owner, SpawnLocation, Team, new PlayerEquipment(), Owner.PlayerSFXGenerator, ListExtraWeapon);
+            Vehicle NewVehicle = new Vehicle(_VehiclePath, Owner, SpawnLocation, Team, new PlayerInventory(), Owner.PlayerSFXGenerator, ListExtraWeapon);
             NewVehicle.InputManagerHelper = new VehicleInputManager();
 
             NewVehicle.UpdateControls(NewPlayer.GameplayType, CameraBounds);

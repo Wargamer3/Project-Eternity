@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             PlayerInfo.Equipment.CharacterType = Sender.ReadString();
             /*PlayerInfo.Equipment.EquipedBooster =*/Sender.ReadString();
             PlayerInfo.Equipment.GrenadeType = Sender.ReadString();
-            PlayerInfo.Equipment.ExtraWeaponType = Sender.ReadString();
+            /*PlayerInfo.Equipment.EquipedSecondaryWeapon = */Sender.ReadString();
             /*PlayerInfo.Equipment.EquipedWeaponOption =*/ Sender.ReadString();
             /*PlayerInfo.Equipment.EquipedArmor =*/Sender.ReadString();
 

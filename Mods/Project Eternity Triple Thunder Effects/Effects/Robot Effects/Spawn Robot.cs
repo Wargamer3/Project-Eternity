@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
 
             //TODO: Create the robot on load to avoid loading assets when this effect is called.
-            RobotAnimation NewRobot = new RobotAnimation(_RobotPath, Owner, Params.LocalContext.Target.Position + _Offset, _Team, new PlayerEquipment(), Owner.PlayerSFXGenerator, ListExtraWeapon);
+            RobotAnimation NewRobot = new RobotAnimation(_RobotPath, Owner, Params.LocalContext.Target.Position + _Offset, _Team, new PlayerInventory(), Owner.PlayerSFXGenerator, ListExtraWeapon);
 
             if (!string.IsNullOrEmpty(AIPath))
             {

@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private readonly MenuEquipment EquipmentToBuy;
         private readonly Player Owner;
-        private readonly PlayerEquipment PlayerInventory;
+        private readonly PlayerInventory PlayerInventory;
 
         public BuyEquipment(MenuEquipment EquipmentToBuy, Player Owner)
         {

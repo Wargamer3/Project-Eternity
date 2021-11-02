@@ -361,7 +361,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                             }
 
                             //TODO: support vehicles
-                            RobotAnimation NewRobot = new RobotAnimation(PlayerName, ActiveLayer, PlayerPosition, PlayerTeam, new PlayerEquipment(), PlayerSFXGenerator, ListExtraWeapon);
+                            RobotAnimation NewRobot = new RobotAnimation(PlayerName, ActiveLayer, PlayerPosition, PlayerTeam, new PlayerInventory(), PlayerSFXGenerator, ListExtraWeapon);
                             if (ListLocalCharacterID.Contains(PlayerID))
                             {
                                 Player NewPlayer = PlayerManager.ListLocalPlayer[LocalPlayerIndex++];

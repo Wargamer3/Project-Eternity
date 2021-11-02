@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             EquipedBooster = new DummyJetpack();
         }
 
-        public EquipmentLoadout(PlayerEquipment Equipment, RobotAnimation Owner)
+        public EquipmentLoadout(PlayerInventory Equipment, RobotAnimation Owner)
         {
             if (Equipment.EquipedArmor != null && Equipment.EquipedArmor.Name == "Armor 1")
             {

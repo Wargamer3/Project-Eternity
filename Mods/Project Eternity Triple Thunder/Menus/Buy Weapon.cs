@@ -7,7 +7,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class BuyCharacter : GameScreen
+    public class BuyWeapon : GameScreen
     {
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
@@ -19,13 +19,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private InteractiveButton BuyButton;
         private InteractiveButton CancelButton;
 
-        private readonly CharacterMenuEquipment CharacterToBuy;
+        private readonly WeaponMenuEquipment EquipmentToBuy;
         private readonly Player Owner;
         private readonly PlayerInventory PlayerInventory;
 
-        public BuyCharacter(CharacterMenuEquipment CharacterToBuy, Player Owner)
+        public BuyWeapon(WeaponMenuEquipment EquipmentToBuy, Player Owner)
         {
-            this.CharacterToBuy = CharacterToBuy;
+            this.EquipmentToBuy = EquipmentToBuy;
             this.Owner = Owner;
             PlayerInventory = Owner.Equipment;
         }
@@ -37,8 +37,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
 
-            sprBackground = Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Buy Character Background");
-            sprHeader = Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Buy Character Text");
+            sprBackground = Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Buy Weapon Background");
+            sprHeader = Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Buy Weapon Text");
 
             BuyButton = new InteractiveButton(Content, "Triple Thunder/Menus/Shop/Buy Button", new Vector2(568, 462), OnButtonOver, Buy);
             CancelButton = new InteractiveButton(Content, "Triple Thunder/Menus/Common/Cancel Button", new Vector2(488, 462), OnButtonOver, Cancel);
@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private void Buy()
         {
             sndButtonClick.Play();
-            PlayerInventory.ListCharacter.Add(CharacterToBuy);
+            PlayerInventory.ListWeapon.Add(EquipmentToBuy);
             Owner.SaveLocally();
             RemoveScreen(this);
         }
@@ -79,11 +79,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             g.Draw(sprBackground, new Vector2(Constants.Width / 2, Constants.Height / 2), null, Color.White, 0f, new Vector2(sprBackground.Width / 2, sprBackground.Height / 2), 1f, SpriteEffects.None, 0f);
             g.Draw(sprHeader, new Vector2(196, 122), Color.White);
-            g.Draw(CharacterToBuy.sprFull, new Vector2(215, 172), Color.White);
-            g.DrawStringMiddleAligned(fntText, CharacterToBuy.Name, new Vector2(513, 175), Color.White);
-            g.DrawString(fntText, "5", new Vector2(473, 199), Color.White);
-            g.DrawString(fntText, "6", new Vector2(515, 199), Color.White);
-            g.DrawString(fntText, "4", new Vector2(557, 199), Color.White);
+            g.Draw(EquipmentToBuy.sprFull, new Vector2(223, 175), Color.White);
+            g.DrawString(fntText, EquipmentToBuy.Category, new Vector2(227, 288), Color.White);
+            g.DrawString(fntText, EquipmentToBuy.Name, new Vector2(227, 311), Color.White);
+            g.DrawStringRightAligned(fntText, EquipmentToBuy.Price + "CR", new Vector2(577, 311), Color.White);
+            g.DrawString(fntText, "Lv." + EquipmentToBuy.MinLevel, new Vector2(385, 336), Color.White);
 
             BuyButton.Draw(g);
             CancelButton.Draw(g);

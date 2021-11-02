@@ -27,4 +27,20 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
         }
     }
+
+    public class WeaponMenuEquipment : MenuEquipment
+    {
+        public readonly Texture2D sprText;
+
+        public readonly string Category;
+        public readonly int MinLevel;
+
+        public WeaponMenuEquipment(string Name, string Category, int MinLevel, int Price, Texture2D sprText, Texture2D sprIcon, Texture2D sprPortrait)
+            : base(Name, EquipmentTypes.Weapon, Price, sprIcon, sprPortrait)
+        {
+            this.Category = Category;
+            this.MinLevel = MinLevel;
+            this.sprText = sprText;
+        }
+    }
 }

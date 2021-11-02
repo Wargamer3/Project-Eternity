@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Online;
@@ -31,7 +30,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public GameplayTypes GameplayType;
         public RobotAnimation CharacterPreview;
 
-        public PlayerEquipment Equipment;
+        public PlayerInventory Equipment;
         public RobotAnimation InGameRobot;
         public IOnlineConnection OnlineClient;//Used by the server
 
@@ -46,7 +45,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
 
-            Equipment = new PlayerEquipment();
+            Equipment = new PlayerInventory();
         }
 
         public Player(string ID, string Name, PlayerTypes PlayerType, int Team)
@@ -84,7 +83,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
 
-            Equipment = new PlayerEquipment();
+            Equipment = new PlayerInventory();
         }
 
         public void LoadLocally(ContentManager Content)
@@ -101,92 +100,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Enum.TryParse(BR.ReadString(), out GameplayType);
             Money = BR.ReadUInt32();
 
-            LoadCharacters(BR, Content);
-            LoadEquipment(BR, Content);
-            LoadItems(BR, Content);
-            LoadWeapons(BR, Content);
-
-            Equipment.CharacterType = BR.ReadString();
-            Equipment.GrenadeType = BR.ReadString();
-            Equipment.ExtraWeaponType = BR.ReadString();
-
-            string EquipedEtc = BR.ReadString();
-            string EquipedHead = BR.ReadString();
-            string EquipedArmor = BR.ReadString();
-            string EquipedWeaponOption = BR.ReadString();
-            string EquipedBooster = BR.ReadString();
-            string EquipedShoes = BR.ReadString();
-
-            InitArmor(EquipedArmor);
+            Equipment.Load(BR, Content);
 
             BR.Close();
             FS.Close();
-        }
-
-        private void LoadCharacters(BinaryReader BR, ContentManager Content)
-        {
-            int ListCharacterCount = BR.ReadInt32();
-            for (int C = 0; C < ListCharacterCount; ++C)
-            {
-                string CharacterName = BR.ReadString();
-                switch (CharacterName)
-                {
-                    case "Soul":
-                        Equipment.ListCharacter.Add(new CharacterMenuEquipment("Soul", 100, null, Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Player Soul Portrait")));
-                        break;
-                }
-            }
-        }
-
-        private void LoadEquipment(BinaryReader BR, ContentManager Content)
-        {
-            int ListEquipmentCount = BR.ReadInt32();
-            for (int C = 0; C < ListEquipmentCount; ++C)
-            {
-                string EquipmentName = BR.ReadString();
-                switch (EquipmentName)
-                {
-                    case "Armor 1":
-                        Equipment.ListEquipment.Add(new MenuEquipment("Armor 1", EquipmentTypes.Armor, 150, Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Armor 01 Icon"), Content.Load<Texture2D>("Triple Thunder/Menus/Shop/Icons/Armor 01 Full")));
-                        break;
-                }
-            }
-        }
-
-        private void LoadItems(BinaryReader BR, ContentManager Content)
-        {
-            int ListItemCount = BR.ReadInt32();
-            for (int C = 0; C < ListItemCount; ++C)
-            {
-                string ItemName = BR.ReadString();
-                switch (ItemName)
-                {
-                }
-            }
-        }
-
-        private void LoadWeapons(BinaryReader BR, ContentManager Content)
-        {
-            int ListWeaponCount = BR.ReadInt32();
-            for (int C = 0; C < ListWeaponCount; ++C)
-            {
-                string WeaponName = BR.ReadString();
-                switch (WeaponName)
-                {
-                }
-            }
-        }
-
-        private void InitArmor(string ArmorToEquip)
-        {
-            for (int E = 0; E < Equipment.ListEquipment.Count; E++)
-            {
-                MenuEquipment ActiveEquipment = Equipment.ListEquipment[E];
-                if (ActiveEquipment.Name == ArmorToEquip)
-                {
-                    Equipment.SetArmor(ActiveEquipment);
-                }
-            }
         }
 
         public void SaveLocally()
@@ -198,87 +115,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             BW.Write(GameplayType.ToString());
             BW.Write(Money);
 
-            BW.Write(Equipment.ListCharacter.Count);
-            foreach (CharacterMenuEquipment ActiveCharacter in Equipment.ListCharacter)
-            {
-                BW.Write(ActiveCharacter.Name);
-            }
-
-            BW.Write(Equipment.ListEquipment.Count);
-            foreach (MenuEquipment ActiveEquipment in Equipment.ListEquipment)
-            {
-                BW.Write(ActiveEquipment.Name);
-            }
-
-            BW.Write(Equipment.ListItem.Count);
-            foreach (MenuEquipment ActiveEquipment in Equipment.ListItem)
-            {
-                BW.Write(ActiveEquipment.Name);
-            }
-
-            BW.Write(Equipment.ListWeapon.Count);
-            foreach (MenuEquipment ActiveEquipment in Equipment.ListWeapon)
-            {
-                BW.Write(ActiveEquipment.Name);
-            }
-
-            BW.Write(Equipment.CharacterType);
-            BW.Write(Equipment.GrenadeType);
-            BW.Write(Equipment.ExtraWeaponType);
-
-            if (Equipment.EquipedEtc == null)
-            {
-                BW.Write("");
-            }
-            else
-            {
-                BW.Write(Equipment.EquipedEtc.Name);
-            }
-
-            if (Equipment.EquipedHead == null)
-            {
-                BW.Write("");
-            }
-            else
-            {
-                BW.Write(Equipment.EquipedHead.Name);
-            }
-
-            if (Equipment.EquipedArmor == null)
-            {
-                BW.Write("");
-            }
-            else
-            {
-                BW.Write(Equipment.EquipedArmor.Name);
-            }
-
-            if (Equipment.EquipedWeaponOption == null)
-            {
-                BW.Write("");
-            }
-            else
-            {
-                BW.Write(Equipment.EquipedWeaponOption.Name);
-            }
-
-            if (Equipment.EquipedBooster == null)
-            {
-                BW.Write("");
-            }
-            else
-            {
-                BW.Write(Equipment.EquipedBooster.Name);
-            }
-
-            if (Equipment.EquipedShoes == null)
-            {
-                BW.Write("");
-            }
-            else
-            {
-                BW.Write(Equipment.EquipedShoes.Name);
-            }
+            Equipment.SaveLocally(BW);
 
             BW.Close();
             FS.Close();
@@ -287,102 +124,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public bool IsHost()
         {
             return PlayerType == PlayerTypeHost || PlayerType == PlayerTypeOffline;
-        }
-    }
-
-    public class PlayerEquipment
-    {
-        public List<CharacterMenuEquipment> ListCharacter;
-        public List<MenuEquipment> ListEquipment;
-        public List<MenuEquipment> ListItem;
-        public List<MenuEquipment> ListWeapon;
-
-        public string CharacterType;
-        public string GrenadeType;
-        public string ExtraWeaponType;
-        public MenuEquipment EquipedEtc;
-        public MenuEquipment EquipedHead;
-        public MenuEquipment EquipedArmor;
-        public MenuEquipment EquipedWeaponOption;
-        public MenuEquipment EquipedBooster;
-        public MenuEquipment EquipedShoes;
-
-        public PlayerEquipment()
-        {
-            ListCharacter = new List<CharacterMenuEquipment>();
-            ListEquipment = new List<MenuEquipment>();
-            ListItem = new List<MenuEquipment>();
-            ListWeapon = new List<MenuEquipment>();
-
-            CharacterType = "Jack";
-            GrenadeType = string.Empty;
-            ExtraWeaponType = string.Empty;
-        }
-
-        public void SetEtc(MenuEquipment EtcToEquip)
-        {
-            if (EquipedEtc != null)
-            {
-                ListEquipment.Add(EquipedEtc);
-            }
-
-            EquipedEtc = EtcToEquip;
-            ListEquipment.Remove(EtcToEquip);
-        }
-
-        public void SetHead(MenuEquipment HeadToEquip)
-        {
-            if (EquipedHead != null)
-            {
-                ListEquipment.Add(EquipedHead);
-            }
-
-            EquipedHead = HeadToEquip;
-            ListEquipment.Remove(HeadToEquip);
-        }
-
-        public void SetArmor(MenuEquipment ArmorToEquip)
-        {
-            if (EquipedArmor != null)
-            {
-                ListEquipment.Add(EquipedArmor);
-            }
-
-            EquipedArmor = ArmorToEquip;
-            ListEquipment.Remove(ArmorToEquip);
-        }
-
-        public void SetWeaponOption(MenuEquipment WeaponOptionToEquip)
-        {
-            if (EquipedWeaponOption != null)
-            {
-                ListEquipment.Add(EquipedWeaponOption);
-            }
-
-            EquipedWeaponOption = WeaponOptionToEquip;
-            ListEquipment.Remove(WeaponOptionToEquip);
-        }
-
-        public void SetBooster(MenuEquipment BoosterToEquip)
-        {
-            if (EquipedBooster != null)
-            {
-                ListEquipment.Add(EquipedBooster);
-            }
-
-            EquipedBooster = BoosterToEquip;
-            ListEquipment.Remove(BoosterToEquip);
-        }
-
-        public void SetShoes(MenuEquipment ShoesToEquip)
-        {
-            if (EquipedShoes != null)
-            {
-                ListEquipment.Add(EquipedShoes);
-            }
-
-            EquipedShoes = ShoesToEquip;
-            ListEquipment.Remove(ShoesToEquip);
         }
     }
 }

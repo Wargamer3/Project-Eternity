@@ -33,6 +33,8 @@ namespace ProjectEternity.Core.Item
             this.ScrollbarValueMax = Math.Max(0, ScrollbarValueMax);
             this.OnScrollbarChange = OnScrollbarChange;
 
+            MovingScrollbarSelectionPoint = -1;
+
             Width = sprScrollbar.Width / 4;
             SectionSize = sprScrollbar.Height / 4;
             ScrollbarBarHeight = SectionSize;
@@ -65,7 +67,8 @@ namespace ProjectEternity.Core.Item
                     }
                 }
             }
-            else if (MouseHelper.InputLeftButtonPressed())
+
+            if (MouseHelper.InputLeftButtonReleased())
             {
                 MovingScrollbarSelectionPoint = -1;
             }
@@ -91,7 +94,7 @@ namespace ProjectEternity.Core.Item
         private bool IsInsideScrollbarBar(Vector2 PositionToCheck)
         {
             if (PositionToCheck.X >= Position.X && PositionToCheck.Y >= Position.Y + SectionSize
-                && PositionToCheck.X <= Position.X + Width && PositionToCheck.Y <= Height - SectionSize)
+                && PositionToCheck.X <= Position.X + Width && PositionToCheck.Y <= Position.Y + Height - SectionSize)
             {
                 if (PositionToCheck.Y > ScrollbarBarPositionY && PositionToCheck.Y <= ScrollbarBarPositionY + ScrollbarBarHeight)
                 {

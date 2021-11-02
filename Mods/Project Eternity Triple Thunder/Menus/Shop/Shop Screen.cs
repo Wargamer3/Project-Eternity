@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private ShopFilters ShopFilter;
 
         private readonly Player Owner;
-        private readonly PlayerEquipment PlayerInventory;
+        private readonly PlayerInventory PlayerInventory;
 
         private GameScreen[] ArrayShopScreen;
         private GameScreen ActiveShopScreen;
@@ -75,6 +75,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ItemsFilterButton = new InteractiveButton(Content, "Triple Thunder/Menus/Shop/Items Filter", new Vector2(225, 102), OnButtonOver, FilterItems);
             OthersFilterButton = new InteractiveButton(Content, "Triple Thunder/Menus/Shop/Others Filter", new Vector2(281, 102), OnButtonOver, FilterOther);
 
+            CharacterFilterButton.CanBeChecked = true;
+            EquipmentFilterButton.CanBeChecked = true;
+            WeaponsFilterButton.CanBeChecked = true;
+            ItemsFilterButton.CanBeChecked = true;
+            OthersFilterButton.CanBeChecked = true;
+
+            CharacterFilterButton.Select();
+
             ArrayMenuButton = new InteractiveButton[]
             {
                 BackToLobbyButton,
@@ -94,6 +102,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             foreach (GameScreen ActiveScreen in ArrayShopScreen)
             {
                 ActiveScreen.Content = Content;
+                ActiveScreen.ListGameScreen = ListGameScreen;
                 ActiveScreen.Load();
             }
 
@@ -145,6 +154,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             ShopFilter = ShopFilters.Characters;
             ActiveShopScreen = ArrayShopScreen[0];
+
+            EquipmentFilterButton.Unselect();
+            WeaponsFilterButton.Unselect();
+            ItemsFilterButton.Unselect();
+            OthersFilterButton.Unselect();
+
         }
 
         private void FilterEquipment()
@@ -152,6 +167,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             ShopFilter = ShopFilters.Equipment;
             ActiveShopScreen = ArrayShopScreen[1];
+
+            CharacterFilterButton.Unselect();
+            WeaponsFilterButton.Unselect();
+            ItemsFilterButton.Unselect();
+            OthersFilterButton.Unselect();
         }
 
         private void FilterWeapons()
@@ -159,6 +179,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             ShopFilter = ShopFilters.Weapons;
             ActiveShopScreen = ArrayShopScreen[2];
+
+            CharacterFilterButton.Unselect();
+            EquipmentFilterButton.Unselect();
+            ItemsFilterButton.Unselect();
+            OthersFilterButton.Unselect();
         }
 
         private void FilterItems()
@@ -166,6 +191,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             ShopFilter = ShopFilters.Items;
             ActiveShopScreen = ArrayShopScreen[3];
+
+            CharacterFilterButton.Unselect();
+            EquipmentFilterButton.Unselect();
+            WeaponsFilterButton.Unselect();
+            OthersFilterButton.Unselect();
         }
 
         private void FilterOther()
@@ -173,6 +203,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sndButtonClick.Play();
             ShopFilter = ShopFilters.Other;
             ActiveShopScreen = ArrayShopScreen[4];
+
+            CharacterFilterButton.Unselect();
+            EquipmentFilterButton.Unselect();
+            WeaponsFilterButton.Unselect();
+            ItemsFilterButton.Unselect();
         }
 
         #endregion

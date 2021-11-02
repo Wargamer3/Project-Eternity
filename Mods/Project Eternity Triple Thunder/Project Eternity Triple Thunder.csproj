@@ -101,6 +101,7 @@
     <Compile Include="Inputs\Robot Input Manager.cs" />
     <Compile Include="Menus\Battle Mode Select.cs" />
     <Compile Include="Menus\Battle Map Select.cs" />
+    <Compile Include="Menus\Buy Weapon.cs" />
     <Compile Include="Menus\Chat Helper.cs" />
     <Compile Include="Menus\Player Info Screen.cs" />
     <Compile Include="Menus\Create Room Mission.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Online\In Game\Receive Game Data Script Client.cs" />
     <Compile Include="Online\In Game\Send Player Respawn Script Client.cs" />
     <Compile Include="Online\In Game\Send Player Respawn Script Server.cs" />
+    <Compile Include="Player Inventory.cs" />
     <Compile Include="Sounds\ISFXGenerator.cs" />
     <Compile Include="Magic\Magic Core Fireball.cs" />
     <Compile Include="Magic\Triple Thunder Magic.cs" />
@@ -154,7 +156,7 @@
     <Compile Include="Menus\Mission Select.cs" />
     <Compile Include="Online\Create Game Mission Script Client.cs" />
     <Compile Include="Online\Create Enemy Script Client.cs" />
-    <Compile Include="Online\Create Player Script Client.cs" />
+    <Compile Include="Online\In Game\Create Player Script Client.cs" />
     <Compile Include="Online\Room\Join Room Local Script Client.cs" />
     <Compile Include="Online\Login Success Script Client.cs" />
     <Compile Include="Online\Room\Player Joined Script Client.cs" />

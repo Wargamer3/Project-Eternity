@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         #endregion
 
         protected readonly Player Owner;
-        private readonly PlayerEquipment PlayerInventory;
+        private readonly PlayerInventory PlayerInventory;
         
         private MenuEquipment DragAndDropEquipment;
 

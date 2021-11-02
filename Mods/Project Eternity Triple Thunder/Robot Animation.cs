@@ -137,7 +137,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             this.Equipment = Equipment;
         }
 
-        public RobotAnimation(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerEquipment Equipment, ISFXGenerator PlayerSFXGenerator, List<Weapon> ListExtraWeapon)
+        public RobotAnimation(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerInventory Equipment, ISFXGenerator PlayerSFXGenerator, List<Weapon> ListExtraWeapon)
             : this()
         {
             this.PlayerSFXGenerator = PlayerSFXGenerator.Copy();
