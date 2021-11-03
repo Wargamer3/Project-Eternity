@@ -82,6 +82,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public enum ProjectileTypes { Hitscan, Projectile }
 
+        public readonly string OwnerName;
         public readonly string WeaponPath;
         public string WeaponName;
         public bool IsExtra;
@@ -168,17 +169,36 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             NumberOfProjectiles = 1;
         }
 
-        public Weapon(string Path, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        public Weapon(string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            this.WeaponPath = Path;
-            FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + Path + ".ttw", FileMode.Open, FileAccess.Read);
+            this.OwnerName = OwnerName;
+            this.WeaponPath = WeaponPath;
+            FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
-            string NoneComboName = BR.ReadString();
-            string MovingComboName = BR.ReadString();
-            string RunningComboName = BR.ReadString();
-            string DashComboName = BR.ReadString();
-            string AirborneComboName = BR.ReadString();
+            string NoneComboName;
+            string MovingComboName ;
+            string RunningComboName;
+            string DashComboName;
+            string AirborneComboName;
+
+            if (IsCharacterAnimation)
+            {
+                NoneComboName = WeaponPath + "/Idle";
+                MovingComboName = WeaponPath + "/Move";
+                RunningComboName = WeaponPath + "/Move";
+                DashComboName = WeaponPath + "/Move";
+                AirborneComboName = WeaponPath + "/Idle";
+            }
+            else
+            {
+                NoneComboName = WeaponPath + "/Holding";
+                MovingComboName = WeaponPath + "/Holding";
+                RunningComboName = WeaponPath + "/Holding";
+                DashComboName = WeaponPath + "/Holding";
+                AirborneComboName = WeaponPath + "/Holding";
+            }
 
             Damage = BR.ReadSingle();
             MaxDurability = BR.ReadSingle();
@@ -244,19 +264,19 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     ReloadCombo = new Combo(ReloadAnimation);
             }
 
-            if (!string.IsNullOrEmpty(NoneComboName))
+            if (!string.IsNullOrEmpty(NoneComboName) && File.Exists("Content/Triple Thunder/Combos/" + NoneComboName + ".ttc"))
                 NoneCombo = new Combo(NoneComboName);
 
-            if (!string.IsNullOrEmpty(MovingComboName))
+            if (!string.IsNullOrEmpty(MovingComboName) && File.Exists("Content/Triple Thunder/Combos/" + MovingComboName + ".ttc"))
                 MovingCombo = new Combo(MovingComboName);
 
-            if (!string.IsNullOrEmpty(RunningComboName))
+            if (!string.IsNullOrEmpty(RunningComboName) && File.Exists("Content/Triple Thunder/Combos/" + RunningComboName + ".ttc"))
                 RunningCombo = new Combo(RunningComboName);
 
-            if (!string.IsNullOrEmpty(DashComboName))
+            if (!string.IsNullOrEmpty(DashComboName) && File.Exists("Content/Triple Thunder/Combos/" + DashComboName + ".ttc"))
                 DashCombo = new Combo(DashComboName);
 
-            if (!string.IsNullOrEmpty(AirborneComboName))
+            if (!string.IsNullOrEmpty(AirborneComboName) && File.Exists("Content/Triple Thunder/Combos/" + AirborneComboName + ".ttc"))
                 AirborneCombo = new Combo(AirborneComboName);
 
             BR.Close();

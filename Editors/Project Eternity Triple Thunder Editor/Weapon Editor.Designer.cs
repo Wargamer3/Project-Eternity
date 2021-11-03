@@ -28,14 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbAnimations = new System.Windows.Forms.GroupBox();
-            this.rbAirborne = new System.Windows.Forms.RadioButton();
-            this.rbDash = new System.Windows.Forms.RadioButton();
-            this.rbRunning = new System.Windows.Forms.RadioButton();
-            this.rbMoving = new System.Windows.Forms.RadioButton();
-            this.rbNone = new System.Windows.Forms.RadioButton();
-            this.txtCombo = new System.Windows.Forms.TextBox();
-            this.btnSelectCombo = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExplosionAttributes = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +51,8 @@
             this.lblAmmoPerMagazine = new System.Windows.Forms.Label();
             this.txtAmmoPerMagazine = new System.Windows.Forms.NumericUpDown();
             this.gbRangedProperties = new System.Windows.Forms.GroupBox();
+            this.lblRecoilRecoverySpeed = new System.Windows.Forms.Label();
+            this.txtRecoilRecoverySpeed = new System.Windows.Forms.NumericUpDown();
             this.txtDamage = new System.Windows.Forms.NumericUpDown();
             this.lblDamage = new System.Windows.Forms.Label();
             this.txtProjectile = new System.Windows.Forms.TextBox();
@@ -72,9 +66,6 @@
             this.txtMaxRecoil = new System.Windows.Forms.NumericUpDown();
             this.lblRecoil = new System.Windows.Forms.Label();
             this.txtRecoil = new System.Windows.Forms.NumericUpDown();
-            this.lblRecoilRecoverySpeed = new System.Windows.Forms.Label();
-            this.txtRecoilRecoverySpeed = new System.Windows.Forms.NumericUpDown();
-            this.gbAnimations.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.gbWeaponProperties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxAngle)).BeginInit();
@@ -83,103 +74,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmoRegen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmoPerMagazine)).BeginInit();
             this.gbRangedProperties.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtRecoilRecoverySpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDamage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtNumberOfProjectiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxRecoil)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtRecoil)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtRecoilRecoverySpeed)).BeginInit();
             this.SuspendLayout();
-            // 
-            // gbAnimations
-            // 
-            this.gbAnimations.Controls.Add(this.rbAirborne);
-            this.gbAnimations.Controls.Add(this.rbDash);
-            this.gbAnimations.Controls.Add(this.rbRunning);
-            this.gbAnimations.Controls.Add(this.rbMoving);
-            this.gbAnimations.Controls.Add(this.rbNone);
-            this.gbAnimations.Controls.Add(this.txtCombo);
-            this.gbAnimations.Controls.Add(this.btnSelectCombo);
-            this.gbAnimations.Location = new System.Drawing.Point(12, 27);
-            this.gbAnimations.Name = "gbAnimations";
-            this.gbAnimations.Size = new System.Drawing.Size(270, 93);
-            this.gbAnimations.TabIndex = 1;
-            this.gbAnimations.TabStop = false;
-            this.gbAnimations.Text = "Animations";
-            // 
-            // rbAirborne
-            // 
-            this.rbAirborne.AutoSize = true;
-            this.rbAirborne.Location = new System.Drawing.Point(6, 42);
-            this.rbAirborne.Name = "rbAirborne";
-            this.rbAirborne.Size = new System.Drawing.Size(64, 17);
-            this.rbAirborne.TabIndex = 16;
-            this.rbAirborne.Text = "Airborne";
-            this.rbAirborne.UseVisualStyleBackColor = true;
-            this.rbAirborne.CheckedChanged += new System.EventHandler(this.rbAnimations_CheckedChanged);
-            // 
-            // rbDash
-            // 
-            this.rbDash.AutoSize = true;
-            this.rbDash.Location = new System.Drawing.Point(200, 19);
-            this.rbDash.Name = "rbDash";
-            this.rbDash.Size = new System.Drawing.Size(50, 17);
-            this.rbDash.TabIndex = 15;
-            this.rbDash.Text = "Dash";
-            this.rbDash.UseVisualStyleBackColor = true;
-            this.rbDash.CheckedChanged += new System.EventHandler(this.rbAnimations_CheckedChanged);
-            // 
-            // rbRunning
-            // 
-            this.rbRunning.AutoSize = true;
-            this.rbRunning.Location = new System.Drawing.Point(129, 19);
-            this.rbRunning.Name = "rbRunning";
-            this.rbRunning.Size = new System.Drawing.Size(65, 17);
-            this.rbRunning.TabIndex = 14;
-            this.rbRunning.Text = "Running";
-            this.rbRunning.UseVisualStyleBackColor = true;
-            this.rbRunning.CheckedChanged += new System.EventHandler(this.rbAnimations_CheckedChanged);
-            // 
-            // rbMoving
-            // 
-            this.rbMoving.AutoSize = true;
-            this.rbMoving.Location = new System.Drawing.Point(63, 19);
-            this.rbMoving.Name = "rbMoving";
-            this.rbMoving.Size = new System.Drawing.Size(60, 17);
-            this.rbMoving.TabIndex = 10;
-            this.rbMoving.Text = "Moving";
-            this.rbMoving.UseVisualStyleBackColor = true;
-            this.rbMoving.CheckedChanged += new System.EventHandler(this.rbAnimations_CheckedChanged);
-            // 
-            // rbNone
-            // 
-            this.rbNone.AutoSize = true;
-            this.rbNone.Checked = true;
-            this.rbNone.Location = new System.Drawing.Point(6, 19);
-            this.rbNone.Name = "rbNone";
-            this.rbNone.Size = new System.Drawing.Size(42, 17);
-            this.rbNone.TabIndex = 6;
-            this.rbNone.TabStop = true;
-            this.rbNone.Text = "Idle";
-            this.rbNone.UseVisualStyleBackColor = true;
-            this.rbNone.CheckedChanged += new System.EventHandler(this.rbAnimations_CheckedChanged);
-            // 
-            // txtCombo
-            // 
-            this.txtCombo.Location = new System.Drawing.Point(6, 65);
-            this.txtCombo.Name = "txtCombo";
-            this.txtCombo.ReadOnly = true;
-            this.txtCombo.Size = new System.Drawing.Size(146, 20);
-            this.txtCombo.TabIndex = 1;
-            // 
-            // btnSelectCombo
-            // 
-            this.btnSelectCombo.Location = new System.Drawing.Point(158, 63);
-            this.btnSelectCombo.Name = "btnSelectCombo";
-            this.btnSelectCombo.Size = new System.Drawing.Size(106, 23);
-            this.btnSelectCombo.TabIndex = 1;
-            this.btnSelectCombo.Text = "Select combo";
-            this.btnSelectCombo.UseVisualStyleBackColor = true;
-            this.btnSelectCombo.Click += new System.EventHandler(this.btnSelectCombo_Click);
             // 
             // menuStrip1
             // 
@@ -221,7 +121,7 @@
             this.gbWeaponProperties.Controls.Add(this.txtMinAngle);
             this.gbWeaponProperties.Controls.Add(this.lblMaxDurability);
             this.gbWeaponProperties.Controls.Add(this.txtMaxDurability);
-            this.gbWeaponProperties.Location = new System.Drawing.Point(13, 123);
+            this.gbWeaponProperties.Location = new System.Drawing.Point(12, 33);
             this.gbWeaponProperties.Name = "gbWeaponProperties";
             this.gbWeaponProperties.Size = new System.Drawing.Size(269, 216);
             this.gbWeaponProperties.TabIndex = 6;
@@ -433,6 +333,22 @@
             this.gbRangedProperties.TabStop = false;
             this.gbRangedProperties.Text = "Ranged Properties";
             // 
+            // lblRecoilRecoverySpeed
+            // 
+            this.lblRecoilRecoverySpeed.AutoSize = true;
+            this.lblRecoilRecoverySpeed.Location = new System.Drawing.Point(6, 151);
+            this.lblRecoilRecoverySpeed.Name = "lblRecoilRecoverySpeed";
+            this.lblRecoilRecoverySpeed.Size = new System.Drawing.Size(113, 13);
+            this.lblRecoilRecoverySpeed.TabIndex = 39;
+            this.lblRecoilRecoverySpeed.Text = "Recoil recovery speed";
+            // 
+            // txtRecoilRecoverySpeed
+            // 
+            this.txtRecoilRecoverySpeed.Location = new System.Drawing.Point(143, 149);
+            this.txtRecoilRecoverySpeed.Name = "txtRecoilRecoverySpeed";
+            this.txtRecoilRecoverySpeed.Size = new System.Drawing.Size(120, 20);
+            this.txtRecoilRecoverySpeed.TabIndex = 38;
+            // 
             // txtDamage
             // 
             this.txtDamage.Location = new System.Drawing.Point(143, 19);
@@ -550,22 +466,6 @@
             this.txtRecoil.Size = new System.Drawing.Size(120, 20);
             this.txtRecoil.TabIndex = 20;
             // 
-            // lblRecoilRecoverySpeed
-            // 
-            this.lblRecoilRecoverySpeed.AutoSize = true;
-            this.lblRecoilRecoverySpeed.Location = new System.Drawing.Point(6, 151);
-            this.lblRecoilRecoverySpeed.Name = "lblRecoilRecoverySpeed";
-            this.lblRecoilRecoverySpeed.Size = new System.Drawing.Size(113, 13);
-            this.lblRecoilRecoverySpeed.TabIndex = 39;
-            this.lblRecoilRecoverySpeed.Text = "Recoil recovery speed";
-            // 
-            // txtRecoilRecoverySpeed
-            // 
-            this.txtRecoilRecoverySpeed.Location = new System.Drawing.Point(143, 149);
-            this.txtRecoilRecoverySpeed.Name = "txtRecoilRecoverySpeed";
-            this.txtRecoilRecoverySpeed.Size = new System.Drawing.Size(120, 20);
-            this.txtRecoilRecoverySpeed.TabIndex = 38;
-            // 
             // WeaponEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -574,11 +474,8 @@
             this.Controls.Add(this.gbRangedProperties);
             this.Controls.Add(this.gbWeaponProperties);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.gbAnimations);
             this.Name = "WeaponEditor";
             this.Text = "Triple Thunder Weapon Editor";
-            this.gbAnimations.ResumeLayout(false);
-            this.gbAnimations.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.gbWeaponProperties.ResumeLayout(false);
@@ -590,26 +487,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmoPerMagazine)).EndInit();
             this.gbRangedProperties.ResumeLayout(false);
             this.gbRangedProperties.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtRecoilRecoverySpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDamage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtNumberOfProjectiles)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxRecoil)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtRecoil)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtRecoilRecoverySpeed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox gbAnimations;
-        private System.Windows.Forms.RadioButton rbAirborne;
-        private System.Windows.Forms.RadioButton rbDash;
-        private System.Windows.Forms.RadioButton rbRunning;
-        private System.Windows.Forms.RadioButton rbMoving;
-        private System.Windows.Forms.RadioButton rbNone;
-        private System.Windows.Forms.TextBox txtCombo;
-        private System.Windows.Forms.Button btnSelectCombo;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
         private System.Windows.Forms.GroupBox gbWeaponProperties;

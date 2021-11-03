@@ -9,26 +9,16 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
 {
     public partial class WeaponEditor : BaseEditor
     {
-        private enum ItemSelectionChoices { MovementCombo, ReloadCombo, SkillChain };
+        private enum ItemSelectionChoices { ReloadCombo, SkillChain };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
-        private string NoneCombo;
-        private string MovingCombo;
-        private string RunningCombo;
-        private string DashCombo;
-        private string AirborneCombo;
         private ProjectileEditor ProjectileDetailEditor;
         private Weapon.ExplosionOptions ExplosionAttributes;
 
         public WeaponEditor()
         {
             InitializeComponent();
-            NoneCombo = "";
-            MovingCombo = "";
-            RunningCombo = "";
-            DashCombo = "";
-            AirborneCombo = "";
             ProjectileDetailEditor = new ProjectileEditor();
             ExplosionAttributes = new Weapon.ExplosionOptions();
             ExplosionAttributes.ExplosionAnimation = new GameScreens.AnimationScreen.SimpleAnimation();
@@ -63,12 +53,6 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
             //Create the Part file.
             FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
-
-            BW.Write(NoneCombo);
-            BW.Write(MovingCombo);
-            BW.Write(RunningCombo);
-            BW.Write(DashCombo);
-            BW.Write(AirborneCombo);
 
             BW.Write((float)txtDamage.Value);
             BW.Write((float)txtMaxDurability.Value);
@@ -129,12 +113,6 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
             FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + Name + ".ttw", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
-            NoneCombo = BR.ReadString();
-            MovingCombo = BR.ReadString();
-            RunningCombo = BR.ReadString();
-            DashCombo = BR.ReadString();
-            AirborneCombo = BR.ReadString();
-
             txtDamage.Value = (decimal)BR.ReadSingle();
             txtMaxDurability.Value = (decimal)BR.ReadSingle();
             txtMinAngle.Value = (decimal)BR.ReadSingle();
@@ -178,14 +156,6 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
 
             BR.Close();
             FS.Close();
-
-            txtCombo.Text = NoneCombo;
-        }
-
-        private void btnSelectCombo_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.MovementCombo;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderCombos));
         }
 
         private void btnReloadAnimation_Click(object sender, EventArgs e)
@@ -194,38 +164,10 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
             ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderCombos));
         }
 
-        private void btnMapImage_Click(object sender, EventArgs e)
-        {
-        }
-
         private void btnSelectSkillChain_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.SkillChain;
             ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderSkillChains));
-        }
-
-        private void rbAnimations_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbNone.Checked)
-            {
-                txtCombo.Text = NoneCombo;
-            }
-            else if (rbMoving.Checked)
-            {
-                txtCombo.Text = MovingCombo;
-            }
-            else if (rbRunning.Checked)
-            {
-                txtCombo.Text = RunningCombo;
-            }
-            else if (rbDash.Checked)
-            {
-                txtCombo.Text = DashCombo;
-            }
-            else if (rbAirborne.Checked)
-            {
-                txtCombo.Text = AirborneCombo;
-            }
         }
 
         private void ckUseRangedProperties_CheckedChanged(object sender, EventArgs e)
@@ -284,32 +226,6 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
             {
                 switch (ItemSelectionChoice)
                 {
-                    case ItemSelectionChoices.MovementCombo:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(30);
-
-                        txtCombo.Text = Name;
-                        if (rbNone.Checked)
-                        {
-                            NoneCombo = Name;
-                        }
-                        else if (rbMoving.Checked)
-                        {
-                            MovingCombo = Name;
-                        }
-                        else if (rbRunning.Checked)
-                        {
-                            RunningCombo = Name;
-                        }
-                        else if (rbDash.Checked)
-                        {
-                            DashCombo = Name;
-                        }
-                        else if (rbAirborne.Checked)
-                        {
-                            AirborneCombo = Name;
-                        }
-                        break;
-
                     case ItemSelectionChoices.ReloadCombo:
                         Name = Items[I].Substring(0, Items[0].Length - 4).Substring(30);
 

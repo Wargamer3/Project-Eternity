@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             List<Weapon> ListExtraWeapon = new List<Weapon>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
-                ListExtraWeapon.Add(new Weapon(_ListWeapons[W], Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
+                ListExtraWeapon.Add(new Weapon(_RobotPath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
             RobotAnimation NewRobot = new RobotAnimation(_RobotPath, Owner, _Position, _Team, new PlayerInventory(), Owner.PlayerSFXGenerator, ListExtraWeapon);

@@ -168,11 +168,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 {
                     if (CurrentLayer == null)
                     {
-                        ListStanceAnimation.Add(new Weapon(ExtraAnimationPath, null, null, null));
+                        ListStanceAnimation.Add(new Weapon(Name, ExtraAnimationPath, true, null, null, null));
                     }
                     else
                     {
-                        ListStanceAnimation.Add(new Weapon(ExtraAnimationPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
+                        ListStanceAnimation.Add(new Weapon(Name, ExtraAnimationPath, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
                     }
                 }
             }
@@ -197,11 +197,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (CurrentLayer == null)
                 {
-                    NewWeapon = new Weapon(WeaponPath, null, null, null);
+                    NewWeapon = new Weapon(Name, WeaponPath, false, null, null, null);
                 }
                 else
                 {
-                    NewWeapon = new Weapon(WeaponPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+                    NewWeapon = new Weapon(Name, WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
                 }
 
                 NewWeapon.WeaponName = WeaponName;
@@ -298,7 +298,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             for (int W = 0; W < ListStanceAnimation.Count; ++W)
             {
-                ListStanceAnimation[W] = new Weapon(ListStanceAnimation[W].WeaponPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+                ListStanceAnimation[W] = new Weapon(Name, ListStanceAnimation[W].WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             }
 
             PrimaryWeapons.ChangeMap(CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
@@ -991,11 +991,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (CurrentLayer == null)
             {
-                NewWeapon = new Weapon(WeaponPath, null, null, null);
+                NewWeapon = new Weapon(Name, WeaponPath, false, null, null, null);
             }
             else
             {
-                NewWeapon = new Weapon(WeaponPath, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+                NewWeapon = new Weapon(Name, WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             }
 
             NewWeapon.WeaponName = WeaponName;
@@ -1304,7 +1304,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public Weapon CreateWeapon(string WeaponName)
         {
-            Weapon NewWeapon = new Weapon(WeaponName, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+            Weapon NewWeapon = new Weapon(Name, WeaponName, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             NewWeapon.Load(Content);
             return NewWeapon;
         }
