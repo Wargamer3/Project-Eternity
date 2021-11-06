@@ -8,7 +8,7 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
 {
     public partial class UnitTripleThunderEditor : BaseEditor
     {
-        private enum ItemSelectionChoices { DefaultWeapon, CrouchWeapon, RollWeapon, ProneWeapon, AddWeapon, };
+        private enum ItemSelectionChoices { AddWeapon, };
 
         private ItemSelectionChoices ItemSelectionChoice;
         private UnitSounds UnitSoundsDialog;
@@ -54,13 +54,6 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
             BW.Write((float)txtJumpSpeed.Value);
             BW.Write(cbHasKnockback.Checked);
             BW.Write(cbIsDynamic.Checked);
-
-
-            BW.Write(4);
-            BW.Write(txtDefaultWeapon.Text);
-            BW.Write(txtCrouchWeapon.Text);
-            BW.Write(txtRollWeapon.Text);
-            BW.Write(txtProneWeapon.Text);
 
             BW.Write(lstWeapons.Items.Count);
             for (int W = 0; W < lstWeapons.Items.Count; ++W)
@@ -117,12 +110,6 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
             cbHasKnockback.Checked = BR.ReadBoolean();
             cbIsDynamic.Checked = BR.ReadBoolean();
 
-            int ExtraAnimationsCount = BR.ReadInt32();
-            txtDefaultWeapon.Text = BR.ReadString();
-            txtCrouchWeapon.Text = BR.ReadString();
-            txtRollWeapon.Text = BR.ReadString();
-            txtProneWeapon.Text = BR.ReadString();
-
             int lstWeaponsCount = BR.ReadInt32();
             for (int W = 0; W < lstWeaponsCount; ++W)
             {
@@ -165,30 +152,6 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
         private void tsmSounds_Click(object sender, EventArgs e)
         {
             UnitSoundsDialog.ShowDialog();
-        }
-
-        private void btnSelectWeapon_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.DefaultWeapon;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderWeapons));
-        }
-
-        private void btnSelectCrouchWeapon_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.CrouchWeapon;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderWeapons));
-        }
-
-        private void btnSelectRollWeapon_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.RollWeapon;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderWeapons));
-        }
-
-        private void btnSelectProneWeapon_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.ProneWeapon;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderWeapons));
         }
 
         private void btnAddWeapon_Click(object sender, EventArgs e)
@@ -249,26 +212,6 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
             {
                 switch (ItemSelectionChoice)
                 {
-                    case ItemSelectionChoices.DefaultWeapon:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
-                        txtDefaultWeapon.Text = Name;
-                        break;
-
-                    case ItemSelectionChoices.CrouchWeapon:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
-                        txtCrouchWeapon.Text = Name;
-                        break;
-
-                    case ItemSelectionChoices.RollWeapon:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
-                        txtRollWeapon.Text = Name;
-                        break;
-
-                    case ItemSelectionChoices.ProneWeapon:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(31);
-                        txtProneWeapon.Text = Name;
-                        break;
-
                     case ItemSelectionChoices.AddWeapon:
                         lstWeapons.Items.Add(Items[I]);
                         break;

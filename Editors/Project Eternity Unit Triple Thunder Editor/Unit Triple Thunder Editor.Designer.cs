@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbDefaultWeapon = new System.Windows.Forms.GroupBox();
-            this.txtDefaultWeapon = new System.Windows.Forms.TextBox();
-            this.btnSelectWeapon = new System.Windows.Forms.Button();
             this.gbUnitStats = new System.Windows.Forms.GroupBox();
             this.lblJumpSpeed = new System.Windows.Forms.Label();
             this.txtJumpSpeed = new System.Windows.Forms.NumericUpDown();
@@ -51,16 +48,6 @@
             this.btnAddWeapon = new System.Windows.Forms.Button();
             this.btnRemoveWeapon = new System.Windows.Forms.Button();
             this.lstWeapons = new System.Windows.Forms.ListBox();
-            this.gbCrouchWeapon = new System.Windows.Forms.GroupBox();
-            this.txtCrouchWeapon = new System.Windows.Forms.TextBox();
-            this.btnSelectCrouchWeapon = new System.Windows.Forms.Button();
-            this.gbRollWeapon = new System.Windows.Forms.GroupBox();
-            this.txtRollWeapon = new System.Windows.Forms.TextBox();
-            this.btnSelectRollWeapon = new System.Windows.Forms.Button();
-            this.gbProneWeapon = new System.Windows.Forms.GroupBox();
-            this.txtProneWeapon = new System.Windows.Forms.TextBox();
-            this.btnSelectProneWeapon = new System.Windows.Forms.Button();
-            this.gbDefaultWeapon.SuspendLayout();
             this.gbUnitStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtJumpSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTopSpeed)).BeginInit();
@@ -69,39 +56,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxHP)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.gbCrouchWeapon.SuspendLayout();
-            this.gbRollWeapon.SuspendLayout();
-            this.gbProneWeapon.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // gbDefaultWeapon
-            // 
-            this.gbDefaultWeapon.Controls.Add(this.txtDefaultWeapon);
-            this.gbDefaultWeapon.Controls.Add(this.btnSelectWeapon);
-            this.gbDefaultWeapon.Location = new System.Drawing.Point(12, 211);
-            this.gbDefaultWeapon.Name = "gbDefaultWeapon";
-            this.gbDefaultWeapon.Size = new System.Drawing.Size(322, 50);
-            this.gbDefaultWeapon.TabIndex = 0;
-            this.gbDefaultWeapon.TabStop = false;
-            this.gbDefaultWeapon.Text = "Default Weapon Animations";
-            // 
-            // txtDefaultWeapon
-            // 
-            this.txtDefaultWeapon.Location = new System.Drawing.Point(6, 21);
-            this.txtDefaultWeapon.Name = "txtDefaultWeapon";
-            this.txtDefaultWeapon.ReadOnly = true;
-            this.txtDefaultWeapon.Size = new System.Drawing.Size(146, 20);
-            this.txtDefaultWeapon.TabIndex = 1;
-            // 
-            // btnSelectWeapon
-            // 
-            this.btnSelectWeapon.Location = new System.Drawing.Point(158, 19);
-            this.btnSelectWeapon.Name = "btnSelectWeapon";
-            this.btnSelectWeapon.Size = new System.Drawing.Size(154, 23);
-            this.btnSelectWeapon.TabIndex = 1;
-            this.btnSelectWeapon.Text = "Select Weapon Animations";
-            this.btnSelectWeapon.UseVisualStyleBackColor = true;
-            this.btnSelectWeapon.Click += new System.EventHandler(this.btnSelectWeapon_Click);
             // 
             // gbUnitStats
             // 
@@ -286,7 +241,7 @@
             this.groupBox3.Controls.Add(this.lstWeapons);
             this.groupBox3.Location = new System.Drawing.Point(340, 27);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(154, 259);
+            this.groupBox3.Size = new System.Drawing.Size(154, 178);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Weapons";
@@ -295,7 +250,7 @@
             // 
             this.btnAddWeapon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddWeapon.Location = new System.Drawing.Point(6, 197);
+            this.btnAddWeapon.Location = new System.Drawing.Point(6, 116);
             this.btnAddWeapon.Name = "btnAddWeapon";
             this.btnAddWeapon.Size = new System.Drawing.Size(142, 23);
             this.btnAddWeapon.TabIndex = 3;
@@ -307,7 +262,7 @@
             // 
             this.btnRemoveWeapon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveWeapon.Location = new System.Drawing.Point(6, 226);
+            this.btnRemoveWeapon.Location = new System.Drawing.Point(6, 145);
             this.btnRemoveWeapon.Name = "btnRemoveWeapon";
             this.btnRemoveWeapon.Size = new System.Drawing.Size(142, 23);
             this.btnRemoveWeapon.TabIndex = 2;
@@ -323,113 +278,20 @@
             this.lstWeapons.FormattingEnabled = true;
             this.lstWeapons.Location = new System.Drawing.Point(6, 19);
             this.lstWeapons.Name = "lstWeapons";
-            this.lstWeapons.Size = new System.Drawing.Size(142, 160);
+            this.lstWeapons.Size = new System.Drawing.Size(142, 69);
             this.lstWeapons.TabIndex = 0;
-            // 
-            // gbCrouchWeapon
-            // 
-            this.gbCrouchWeapon.Controls.Add(this.txtCrouchWeapon);
-            this.gbCrouchWeapon.Controls.Add(this.btnSelectCrouchWeapon);
-            this.gbCrouchWeapon.Location = new System.Drawing.Point(12, 267);
-            this.gbCrouchWeapon.Name = "gbCrouchWeapon";
-            this.gbCrouchWeapon.Size = new System.Drawing.Size(322, 50);
-            this.gbCrouchWeapon.TabIndex = 2;
-            this.gbCrouchWeapon.TabStop = false;
-            this.gbCrouchWeapon.Text = "Crouch Weapon Animations";
-            // 
-            // txtCrouchWeapon
-            // 
-            this.txtCrouchWeapon.Location = new System.Drawing.Point(6, 21);
-            this.txtCrouchWeapon.Name = "txtCrouchWeapon";
-            this.txtCrouchWeapon.ReadOnly = true;
-            this.txtCrouchWeapon.Size = new System.Drawing.Size(146, 20);
-            this.txtCrouchWeapon.TabIndex = 1;
-            // 
-            // btnSelectCrouchWeapon
-            // 
-            this.btnSelectCrouchWeapon.Location = new System.Drawing.Point(158, 19);
-            this.btnSelectCrouchWeapon.Name = "btnSelectCrouchWeapon";
-            this.btnSelectCrouchWeapon.Size = new System.Drawing.Size(154, 23);
-            this.btnSelectCrouchWeapon.TabIndex = 1;
-            this.btnSelectCrouchWeapon.Text = "Select Weapon Animations";
-            this.btnSelectCrouchWeapon.UseVisualStyleBackColor = true;
-            this.btnSelectCrouchWeapon.Click += new System.EventHandler(this.btnSelectCrouchWeapon_Click);
-            // 
-            // gbRollWeapon
-            // 
-            this.gbRollWeapon.Controls.Add(this.txtRollWeapon);
-            this.gbRollWeapon.Controls.Add(this.btnSelectRollWeapon);
-            this.gbRollWeapon.Location = new System.Drawing.Point(12, 323);
-            this.gbRollWeapon.Name = "gbRollWeapon";
-            this.gbRollWeapon.Size = new System.Drawing.Size(322, 50);
-            this.gbRollWeapon.TabIndex = 3;
-            this.gbRollWeapon.TabStop = false;
-            this.gbRollWeapon.Text = "Roll Weapon Animations";
-            // 
-            // txtRollWeapon
-            // 
-            this.txtRollWeapon.Location = new System.Drawing.Point(6, 21);
-            this.txtRollWeapon.Name = "txtRollWeapon";
-            this.txtRollWeapon.ReadOnly = true;
-            this.txtRollWeapon.Size = new System.Drawing.Size(146, 20);
-            this.txtRollWeapon.TabIndex = 1;
-            // 
-            // btnSelectRollWeapon
-            // 
-            this.btnSelectRollWeapon.Location = new System.Drawing.Point(158, 19);
-            this.btnSelectRollWeapon.Name = "btnSelectRollWeapon";
-            this.btnSelectRollWeapon.Size = new System.Drawing.Size(154, 23);
-            this.btnSelectRollWeapon.TabIndex = 1;
-            this.btnSelectRollWeapon.Text = "Select Weapon Animations";
-            this.btnSelectRollWeapon.UseVisualStyleBackColor = true;
-            this.btnSelectRollWeapon.Click += new System.EventHandler(this.btnSelectRollWeapon_Click);
-            // 
-            // gbProneWeapon
-            // 
-            this.gbProneWeapon.Controls.Add(this.txtProneWeapon);
-            this.gbProneWeapon.Controls.Add(this.btnSelectProneWeapon);
-            this.gbProneWeapon.Location = new System.Drawing.Point(12, 379);
-            this.gbProneWeapon.Name = "gbProneWeapon";
-            this.gbProneWeapon.Size = new System.Drawing.Size(322, 50);
-            this.gbProneWeapon.TabIndex = 4;
-            this.gbProneWeapon.TabStop = false;
-            this.gbProneWeapon.Text = "Prone Weapon Animations";
-            // 
-            // txtProneWeapon
-            // 
-            this.txtProneWeapon.Location = new System.Drawing.Point(6, 21);
-            this.txtProneWeapon.Name = "txtProneWeapon";
-            this.txtProneWeapon.ReadOnly = true;
-            this.txtProneWeapon.Size = new System.Drawing.Size(146, 20);
-            this.txtProneWeapon.TabIndex = 1;
-            // 
-            // btnSelectProneWeapon
-            // 
-            this.btnSelectProneWeapon.Location = new System.Drawing.Point(158, 19);
-            this.btnSelectProneWeapon.Name = "btnSelectProneWeapon";
-            this.btnSelectProneWeapon.Size = new System.Drawing.Size(154, 23);
-            this.btnSelectProneWeapon.TabIndex = 1;
-            this.btnSelectProneWeapon.Text = "Select Weapon Animations";
-            this.btnSelectProneWeapon.UseVisualStyleBackColor = true;
-            this.btnSelectProneWeapon.Click += new System.EventHandler(this.btnSelectProneWeapon_Click);
             // 
             // UnitTripleThunderEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(504, 441);
-            this.Controls.Add(this.gbProneWeapon);
-            this.Controls.Add(this.gbRollWeapon);
-            this.Controls.Add(this.gbCrouchWeapon);
+            this.ClientSize = new System.Drawing.Size(504, 217);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.gbUnitStats);
-            this.Controls.Add(this.gbDefaultWeapon);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "UnitTripleThunderEditor";
             this.Text = "Triple Thunder Unit Editor";
-            this.gbDefaultWeapon.ResumeLayout(false);
-            this.gbDefaultWeapon.PerformLayout();
             this.gbUnitStats.ResumeLayout(false);
             this.gbUnitStats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtJumpSpeed)).EndInit();
@@ -440,22 +302,12 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.gbCrouchWeapon.ResumeLayout(false);
-            this.gbCrouchWeapon.PerformLayout();
-            this.gbRollWeapon.ResumeLayout(false);
-            this.gbRollWeapon.PerformLayout();
-            this.gbProneWeapon.ResumeLayout(false);
-            this.gbProneWeapon.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox gbDefaultWeapon;
-        private System.Windows.Forms.Button btnSelectWeapon;
-        private System.Windows.Forms.TextBox txtDefaultWeapon;
         private System.Windows.Forms.GroupBox gbUnitStats;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
@@ -471,15 +323,6 @@
         private System.Windows.Forms.NumericUpDown txtTopSpeed;
         private System.Windows.Forms.Label lblAccel;
         private System.Windows.Forms.NumericUpDown txtAcceleration;
-        private System.Windows.Forms.GroupBox gbCrouchWeapon;
-        private System.Windows.Forms.TextBox txtCrouchWeapon;
-        private System.Windows.Forms.Button btnSelectCrouchWeapon;
-        private System.Windows.Forms.GroupBox gbRollWeapon;
-        private System.Windows.Forms.TextBox txtRollWeapon;
-        private System.Windows.Forms.Button btnSelectRollWeapon;
-        private System.Windows.Forms.GroupBox gbProneWeapon;
-        private System.Windows.Forms.TextBox txtProneWeapon;
-        private System.Windows.Forms.Button btnSelectProneWeapon;
         private System.Windows.Forms.CheckBox cbHasKnockback;
         private System.Windows.Forms.CheckBox cbIsDynamic;
         private System.Windows.Forms.Label lblJumpSpeed;

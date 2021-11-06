@@ -159,23 +159,30 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             HasKnockback = BR.ReadBoolean();
             IsDynamic = BR.ReadBoolean();
 
-            int ListExtraAnimationCount = BR.ReadInt32();
-            ListStanceAnimation = new List<Weapon>(ListExtraAnimationCount);
-            for (int W = 0; W < ListExtraAnimationCount; ++W)
+            Dictionary<string, BaseSkillRequirement> DicRequirement = null;
+            Dictionary<string, BaseEffect> DicEffect = null;
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = null;
+
+            if (CurrentLayer != null)
             {
-                string ExtraAnimationPath = BR.ReadString();
-                if (!string.IsNullOrEmpty(ExtraAnimationPath))
-                {
-                    if (CurrentLayer == null)
-                    {
-                        ListStanceAnimation.Add(new Weapon(Name, ExtraAnimationPath, true, null, null, null));
-                    }
-                    else
-                    {
-                        ListStanceAnimation.Add(new Weapon(Name, ExtraAnimationPath, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
-                    }
-                }
+                DicRequirement = CurrentLayer.DicRequirement;
+                DicEffect = CurrentLayer.DicEffect;
+                DicAutomaticSkillTarget = CurrentLayer.DicAutomaticSkillTarget;
             }
+
+            ListStanceAnimation = new List<Weapon>(4);
+
+            if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Default" + ".ttw"))
+                ListStanceAnimation.Add(new Weapon(Name, Name + "/Default", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+
+            if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Crouch" + ".ttw"))
+                ListStanceAnimation.Add(new Weapon(Name, Name + "/Crouch", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+
+            if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Roll" + ".ttw"))
+                ListStanceAnimation.Add(new Weapon(Name, Name + "/Roll", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+
+            if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Prone" + ".ttw"))
+                ListStanceAnimation.Add(new Weapon(Name, Name + "/Prone", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
 
             CurrentStanceAnimations = StandingAnimations;
 
