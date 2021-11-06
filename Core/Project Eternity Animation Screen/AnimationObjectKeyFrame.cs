@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.IO;
+using System.ComponentModel;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.AnimationScreen
@@ -203,7 +204,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             }
             set
             {
-                _DrawingDepth = value;
+                _DrawingDepth = MathHelper.Clamp(value, 0f, 1f);
             }
         }
 
