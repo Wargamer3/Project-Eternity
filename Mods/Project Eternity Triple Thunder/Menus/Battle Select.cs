@@ -204,7 +204,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ActiveButton.Update(gameTime);
             }
 
-            ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
+            if (OnlineCommunicationClient != null)
+            {
+                ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
+            }
 
             foreach (Player ActiveRobot in Room.ListRoomPlayer)
             {

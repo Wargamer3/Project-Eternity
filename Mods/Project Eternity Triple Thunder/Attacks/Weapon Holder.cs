@@ -97,15 +97,26 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             return ListWeaponByIndex[WeaponIndex];
         }
 
-        public bool HasActiveWeapon(Weapon ActiveWeapon)
+        public bool HasActiveWeapon(string ActiveWeaponName)
         {
-            return ListActiveWeapon.Contains(ActiveWeapon);
+            return DicWeaponByName.ContainsKey(ActiveWeaponName);
         }
 
         public void AddWeaponToStash(Weapon NewWeapon)
         {
             DicWeaponByName.Add(NewWeapon.WeaponPath, NewWeapon);
             ListWeaponByIndex.Add(NewWeapon.WeaponPath);
+        }
+
+        public void DropActiveWeapon()
+        {
+            foreach (Weapon WeaponToDrop in ListActiveWeapon)
+            {
+                DicWeaponByName.Remove(WeaponToDrop.WeaponPath);
+                ListWeaponByIndex.Remove(WeaponToDrop.WeaponPath);
+            }
+
+            RemoveAllActiveWeapons();
         }
 
         public List<WeaponDrop> DropActiveWeapon(Vector2 Position, Layer CurrentLayer)

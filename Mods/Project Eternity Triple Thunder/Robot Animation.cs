@@ -651,8 +651,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 {
                     if (PrimaryWeapons.HolsteredWeaponsCount == 0)
                     {
-                        PickUpDroppedWeapon(ActiveWeaponDrop);
-                        ChangeWeapon(0);
+                        ReplacePrimaryWeapon(ActiveWeaponDrop.WeaponName);
                         ActiveWeaponDrop.IsAlive = false;
                         CurrentLayer.RemoveDroppedWeapon(ActiveWeaponDrop);
                         return;
@@ -889,39 +888,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public void ChangeWeapon(Weapon WeaponToUse)
-        {
-            if (WeaponToUse == null)//Unequip weapon
-            {
-                foreach (Weapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
-                {
-                    RemovePartialAnimation(ActiveWeapon.ActiveWeaponCombo(ActiveMovementStance).AnimationName);
-                }
-
-                PrimaryWeapons.RemoveAllActiveWeapons();
-                PrimaryWeapons.UseWeapon(CurrentStanceAnimations);
-            }
-            else if (!PrimaryWeapons.HasActiveWeapon(WeaponToUse))
-            {
-                foreach (Weapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
-                {
-                    RemovePartialAnimation(ActiveWeapon.ActiveWeaponCombo(ActiveMovementStance).AnimationName);
-                }
-
-                PrimaryWeapons.RemoveAllActiveWeapons();
-                PrimaryWeapons.UseWeapon(WeaponToUse);
-
-                WeaponToUse.CurrentAnimation = null;
-                Combo ActiveWeaponCombo = WeaponToUse.ActiveWeaponCombo(ActiveMovementStance);
-                ActiveWeaponCombo.Reset();
-                UseNextCombo(true, WeaponToUse);
-                if (WeaponToUse.CurrentAnimation == null)
-                {
-                    ActivatePartialWeapon(WeaponToUse, WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
-                }
-            }
-        }
-
         public void HolsterAndReplaceWeapon(Weapon WeaponToUse)
         {
             foreach (Weapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
@@ -986,14 +952,33 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             PrimaryWeapons.UseWeapon(CurrentStanceAnimations);
         }
 
-        public void PickUpDroppedWeapon(WeaponDrop WeaponToPickUp)
+        public void ReplacePrimaryWeapon(string WeaponToPickUpName)
         {
-            string WeaponName = WeaponToPickUp.WeaponName;
+            if (PrimaryWeapons.HasActiveWeapon(WeaponToPickUpName))
+            {
+                return;
+            }
+
+            if (PrimaryWeapons.HasActiveWeapons)
+            {
+                foreach (Weapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+                {
+                    RemovePartialAnimation(ActiveWeapon.ActiveWeaponCombo(ActiveMovementStance).AnimationName);
+                }
+
+                PrimaryWeapons.DropActiveWeapon();
+            }
+
+            EquipWeapon(WeaponToPickUpName);
+        }
+
+        public void EquipWeapon(string WeaponToEquipName)
+        {
             Weapon NewWeapon;
-            string WeaponPath = Name + "/Weapons/" + WeaponName;
+            string WeaponPath = Name + "/Weapons/" + WeaponToEquipName;
             if (!File.Exists("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw"))
             {
-                WeaponPath = Name + "/Grenades/" + WeaponName;
+                WeaponPath = Name + "/Grenades/" + WeaponToEquipName;
             }
 
             if (CurrentLayer == null)
@@ -1005,9 +990,23 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 NewWeapon = new Weapon(Name, WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             }
 
-            NewWeapon.WeaponName = WeaponName;
+            NewWeapon.WeaponName = WeaponToEquipName;
             NewWeapon.Load(Content);
             PrimaryWeapons.AddWeaponToStash(NewWeapon);
+
+            ChangeWeapon(0);
+
+            Weapon WeaponToUse = PrimaryWeapons.GetWeapon(WeaponPath);
+            WeaponToUse.CurrentAnimation = null;
+            Combo ActiveWeaponCombo = WeaponToUse.ActiveWeaponCombo(ActiveMovementStance);
+            ActiveWeaponCombo.Reset();
+
+            UseNextCombo(true, WeaponToUse);
+
+            if (WeaponToUse.CurrentAnimation == null)
+            {
+                ActivatePartialWeapon(WeaponToUse, WeaponToUse.ComboByName(ActiveMovementStance).AnimationName);
+            }
         }
 
         public void FallThroughFloor()

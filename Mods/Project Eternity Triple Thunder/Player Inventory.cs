@@ -23,6 +23,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public MenuEquipment EquipedShoes;
 
         public WeaponMenuEquipment[] ArrayEquipedPrimaryWeapon;
+        public string EquipedPrimaryWeapon;
         public WeaponMenuEquipment EquipedSecondaryWeapon;
 
         public PlayerInventory()

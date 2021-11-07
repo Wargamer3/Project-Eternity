@@ -10,6 +10,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private Rectangle ResumeButtonLocation;
         private Rectangle ExitButtonLocation;
 
+        public PauseMenu()
+        {
+
+        }
+
         public override void Load()
         {
             int X = Constants.Width / 2 - Constants.Width / 8;

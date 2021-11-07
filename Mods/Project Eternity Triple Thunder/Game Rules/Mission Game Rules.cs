@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
@@ -30,6 +32,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Update(GameTime gameTime)
         {
+            if (KeyboardHelper.KeyPressed(Keys.Escape))
+            {
+                Map.PushScreen(new PauseMenu());
+            }
         }
 
         public override void OnKill(RobotAnimation KillerPlayer, RobotAnimation KilledPlayer)

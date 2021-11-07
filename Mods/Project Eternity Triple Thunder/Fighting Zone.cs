@@ -252,13 +252,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 Rules.Init();
             }
 
-            if (!IsServer)
-            {
-                LoadRessources();
-
-                Propulsor.Load(Content, GraphicsDevice, Constants.Width, Constants.Height);
-            }
-
             LoadMap();
 
             if (!IsServer && !UsePreview && !string.IsNullOrEmpty(BGMPath))
@@ -279,6 +272,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 foreach (Player PlayerInfo in ListLocalPlayerInfo)
                 {
+                    PlayerInfo.Equipment.EquipedPrimaryWeapon = null;
+
                     AddPlayerFromSpawn(PlayerInfo, NextRobotID + (uint.MaxValue - 100), false, out _);
 
                     if (ListLocalPlayerInfo.Count == 2)
@@ -316,6 +311,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         }
                     }
                 }
+            }
+
+            if (!IsServer)
+            {
+                LoadRessources();
+
+                Propulsor.Load(Content, GraphicsDevice, Constants.Width, Constants.Height);
             }
         }
 
@@ -598,11 +600,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (KeyboardHelper.KeyPressed(Keys.Escape))
-            {
-                PushScreen(new PauseMenu());
-            }
-
             UpdateLevelChange(gameTime);
 
             Propulsor.ParticleSystem.Update(gameTime.ElapsedGameTime.TotalSeconds);
@@ -913,8 +910,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void RespawnRobot(int LayerIndex, uint PlayerID, float PositionX, float PositionY, int PlayerHP)
         {
-            bool HasRespawn = false;
-
             foreach (Player ActivePlayer in ListLocalPlayerInfo)
             {
                 if (ActivePlayer.InGameRobot.ID == PlayerID)
@@ -923,23 +918,24 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     ActivePlayer.InGameRobot.ChangeLayer(ListLayer[LayerIndex]);
                     ActivePlayer.InGameRobot.Move(Movement);
                     ActivePlayer.InGameRobot.HP = PlayerHP;
+                    if (ActivePlayer.Equipment.EquipedPrimaryWeapon != null && ActivePlayer.InGameRobot.PrimaryWeapons.HasWeapons)
+                    {
+                        ActivePlayer.InGameRobot.ReplacePrimaryWeapon(ActivePlayer.Equipment.EquipedPrimaryWeapon);
+                    }
                     return;
                 }
             }
 
-            if (!HasRespawn)
+            foreach (Layer ActiveLayer in ListLayer)
             {
-                foreach (Layer ActiveLayer in ListLayer)
+                foreach (RobotAnimation ActiveRobot in ActiveLayer.DicRobot.Values)
                 {
-                    foreach (RobotAnimation ActiveRobot in ActiveLayer.DicRobot.Values)
+                    if (ActiveRobot.ID == PlayerID)
                     {
-                        if (ActiveRobot.ID == PlayerID)
-                        {
-                            Vector2 Movement = new Vector2(PositionX - ActiveRobot.Position.X, PositionY - ActiveRobot.Position.Y);
-                            ActiveRobot.ChangeLayer(ListLayer[LayerIndex]);
-                            ActiveRobot.Move(Movement);
-                            ActiveRobot.HP = PlayerHP;
-                        }
+                        Vector2 Movement = new Vector2(PositionX - ActiveRobot.Position.X, PositionY - ActiveRobot.Position.Y);
+                        ActiveRobot.ChangeLayer(ListLayer[LayerIndex]);
+                        ActiveRobot.Move(Movement);
+                        ActiveRobot.HP = PlayerHP;
                     }
                 }
             }

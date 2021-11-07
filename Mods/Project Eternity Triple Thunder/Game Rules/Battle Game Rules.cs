@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
@@ -71,12 +72,22 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             sprGUIScoreTop = Content.Load<Texture2D>("Triple Thunder/HUD/GUI Score Top");
             sprGUIScoreBottom = Content.Load<Texture2D>("Triple Thunder/HUD/GUI Score Bottom");
             sprGUIScoreMyInfo = Content.Load<Texture2D>("Triple Thunder/HUD/GUI Score My Info");
+
+            if (Map.ListLocalPlayer.Count > 0)
+            {
+                Map.PushScreen(new WeaponSelectionScreen(Map.ListLocalPlayer[0]));
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (KeyboardHelper.KeyPressed(Keys.Escape))
+            {
+                Map.PushScreen(new WeaponSelectionScreen(Map.ListLocalPlayer[0]));
+            }
+
             ShowRoomSummary = false;
-            if (KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.Tab))
+            if (KeyboardHelper.KeyHold(Keys.Tab))
             {
                 ShowRoomSummary = true;
             }

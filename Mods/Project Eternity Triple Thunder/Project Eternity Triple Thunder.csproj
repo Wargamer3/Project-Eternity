@@ -92,6 +92,7 @@
     <Compile Include="Game Rules\Mission Game Rules.cs" />
     <Compile Include="Game Rules\Battle Game Rules.cs" />
     <Compile Include="Game Rules\Game Rules.cs" />
+    <Compile Include="HUD\Weapon Selection Screen.cs" />
     <Compile Include="Inputs\Controller Robot Input.cs" />
     <Compile Include="Inputs\Keyboard And Mouse Robot Input.cs" />
     <Compile Include="Inputs\Null Robot Input.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Inputs\Robot Input Manager.cs" />
     <Compile Include="Menus\Battle Mode Select.cs" />
     <Compile Include="Menus\Battle Map Select.cs" />
+    <Compile Include="Menus\Weapon Limit.cs" />
     <Compile Include="Menus\Shop\Buy Weapon.cs" />
     <Compile Include="Menus\Chat Helper.cs" />
     <Compile Include="Menus\Player Info Screen.cs" />
@@ -171,12 +173,12 @@
     <Compile Include="Online\In Game\Send Player Update Script Client.cs" />
     <Compile Include="Online\In Game\Send Player Update Script Server.cs" />
     <Compile Include="Online\Triple Thunder Online Client.cs" />
-    <Compile Include="Pause Menu.cs" />
+    <Compile Include="HUD\Pause Menu.cs" />
     <Compile Include="Player Manager.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Prop.cs" />
     <Compile Include="Inputs\Robot Input.cs" />
-    <Compile Include="Scrolling Text Overlay.cs" />
+    <Compile Include="HUD\Scrolling Text Overlay.cs" />
     <Compile Include="Selectors.cs" />
     <Compile Include="Sounds\Mute SFX Generator.cs" />
     <Compile Include="Sounds\SFX Generator.cs" />
