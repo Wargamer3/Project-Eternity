@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -21,7 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputConfirmPressed())
+            if (ActiveInputManager.InputConfirmPressed())
             {
                 CancelPanel();
             }

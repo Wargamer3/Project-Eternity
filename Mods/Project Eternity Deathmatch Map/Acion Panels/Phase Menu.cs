@@ -6,7 +6,6 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -188,7 +187,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (PhaseTime >= 0)
             {
-                if (InputHelper.InputConfirmPressed() || InputHelper.InputCancelPressed() || InputHelper.InputSkipPressed())
+                if (ActiveInputManager.InputConfirmPressed() || ActiveInputManager.InputCancelPressed() || ActiveInputManager.InputSkipPressed())
                     PhaseTime = 0;
                 else
                     PhaseTime--;

@@ -2,7 +2,6 @@
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -10,7 +9,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         private const string PanelName = "PlayerHumanStep";
 
-        BattlePreviewer BattlePreview;
+        private BattlePreviewer BattlePreview;
 
         public ActionPanelPlayerHumanStep(DeathmatchMap Map)
             : base(PanelName, Map, false)
@@ -44,22 +43,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            if (InputHelper.InputCancelPressed())
+            if (ActiveInputManager.InputCancelPressed())
             {
                 AddToPanelListAndSelect(Map.BattleMapMenu);
 
                 Map.ActiveSquadIndex = -1;
                 Map.sndConfirm.Play();
             }
-            else if (InputHelper.InputConfirmPressed())
+            else if (ActiveInputManager.InputConfirmPressed())
             {
-                if (MouseHelper.InputLeftButtonReleased())
-                {
-                    if (MouseHelper.MouseStateCurrent.X < 0 || MouseHelper.MouseStateCurrent.X > Constants.Width ||
-                        MouseHelper.MouseStateCurrent.Y < 0 || MouseHelper.MouseStateCurrent.Y > Constants.Height)
-                        return;
-                }
-
                 Map.ActiveSquadIndex = -1;
                 Map.TargetSquadIndex = -1;
                 bool UnitFound = false;

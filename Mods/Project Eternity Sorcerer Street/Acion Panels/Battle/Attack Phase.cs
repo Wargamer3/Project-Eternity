@@ -26,13 +26,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public ItemCard SecondAttackerItem;
 
         public ActionPanelBattleAttackPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, false)
+            : base(PanelName, Map.ListActionMenuChoice, null, false)
         {
             this.Map = Map;
         }
 
         public ActionPanelBattleAttackPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base(PanelName, ListActionMenuChoice, false)
+            : base(PanelName, ListActionMenuChoice, null, false)
         {
             this.Map = Map;
         }

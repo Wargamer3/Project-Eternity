@@ -45,8 +45,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            int YStep = 25;
+            int YStart = 122;
+
             //Move the cursor.
-            if (InputHelper.InputUpPressed())
+            if (ActiveInputManager.InputUpPressed())
             {
                 --ActiveSquad.CurrentLeader.AttackIndex;
                 if (ActiveSquad.CurrentLeader.AttackIndex < 0)
@@ -54,7 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.sndSelection.Play();
             }
-            else if (InputHelper.InputDownPressed())
+            else if (ActiveInputManager.InputDownPressed())
             {
                 ++ActiveSquad.CurrentLeader.AttackIndex;
                 if (ActiveSquad.CurrentLeader.AttackIndex >= ActiveSquad.CurrentLeader.ListAttack.Count)
@@ -62,22 +65,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.sndSelection.Play();
             }
-            else if (MouseHelper.MouseMoved())
+            else if (ActiveInputManager.InputMovePressed())
             {
-                int YStep = 25;
-                int YStart = 122;
-
-                if (MouseHelper.MouseStateCurrent.Y >= YStart)
+                for (int A = 0; A < ActiveSquad.CurrentLeader.ListAttack.Count; A++)
                 {
-                    int NewValue = (MouseHelper.MouseStateCurrent.Y - YStart) / YStep;
-                    if (NewValue >= 0 && NewValue < ActiveSquad.CurrentLeader.ListAttack.Count)
+                    if (ActiveInputManager.IsInZone(0, YStart + A * YStep, Constants.Width, YStart + (A + 1) * YStep))
                     {
-                        ActiveSquad.CurrentLeader.AttackIndex = NewValue;
+                        ActiveSquad.CurrentLeader.AttackIndex = A;
+                        break;
                     }
                 }
             }
             //Exit the weapon panel.
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            if (ActiveInputManager.InputConfirmPressed()
+                && ActiveInputManager.IsInZone(0, YStart + ActiveSquad.CurrentLeader.AttackIndex * YStep, Constants.Width, YStart + (ActiveSquad.CurrentLeader.AttackIndex + 1) * YStep))
             {
                 if (ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)
                 {

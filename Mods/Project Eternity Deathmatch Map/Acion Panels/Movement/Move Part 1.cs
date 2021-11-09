@@ -5,7 +5,6 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -56,14 +55,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Map.ListLayer[Map.ActiveLayerIndex].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
             Map.CursorControl();//Move the cursor
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            if (ActiveInputManager.InputConfirmPressed())
             {
-                if (MouseHelper.InputLeftButtonReleased())
-                {
-                    if (MouseHelper.MouseStateCurrent.X < 0 || MouseHelper.MouseStateCurrent.X > Constants.Width ||
-                        MouseHelper.MouseStateCurrent.Y < 0 || MouseHelper.MouseStateCurrent.Y > Constants.Height)
-                        return;
-                }
                 if (ListMVChoice.Contains(Map.CursorPosition))
                 {
                     ListNextChoice.Clear();

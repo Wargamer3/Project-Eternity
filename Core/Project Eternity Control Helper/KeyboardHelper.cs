@@ -277,5 +277,50 @@ namespace ProjectEternity.Core.ControlHelper
             PlayerState = new KeyboardState();
             PlayerStateLast = new KeyboardState();
         }
+
+        public static bool InputLeftPressed()
+        {
+            return InputPressed(InputLeftStatus);
+        }
+
+        public static bool InputRightPressed()
+        {
+            return InputPressed(InputRightStatus);
+        }
+
+        public static bool InputUpPressed()
+        {
+            return InputPressed(InputUpStatus);
+        }
+
+        public static bool InputDownPressed()
+        {
+            return InputPressed(InputDownStatus);
+        }
+
+        public static bool InputConfirmPressed()
+        {
+            return InputPressed(InputConfirmStatus);
+        }
+
+        public static bool InputCancelPressed()
+        {
+            return InputPressed(InputCancelStatus);
+        }
+
+        public static bool InputCommand1Pressed()
+        {
+            return InputPressed(InputCommand1Status);
+        }
+
+        public static bool InputCommand2Pressed()
+        {
+            return InputPressed(InputCommand2Status);
+        }
+
+        public static bool InputSkipPressed()
+        {
+            return InputPressed(InputSkipStatus);
+        }
     }
 }

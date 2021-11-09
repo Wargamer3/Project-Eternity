@@ -6,7 +6,6 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -89,21 +88,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputCancelPressed())
+            if (ActiveInputManager.InputCancelPressed())
             {
                 RemoveFromPanelList(this);
             }
-            else if (InputHelper.InputConfirmPressed())
+            else if (ActiveInputManager.InputConfirmPressed())
             {
                 Map.CursorPosition = ListMapMenuUnitPosition[MapUnitListChoice].Item2;
                 Map.CursorPositionVisible = Map.CursorPosition;
                 Map.PushScreen(new BattleMapScreen.CenterOnSquadCutscene(Map.CenterCamera, Map, Map.CursorPosition));
             }
-            else if (InputHelper.InputUpPressed())
+            else if (ActiveInputManager.InputUpPressed())
             {
                 MapUnitListChoice -= (MapUnitListChoice > 0) ? 1 : 0;
             }
-            else if (InputHelper.InputDownPressed())
+            else if (ActiveInputManager.InputDownPressed())
             {
                 ++MapUnitListChoice;
                 if (MapUnitListChoice >= UnitListMaxPerPage)
@@ -111,11 +110,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else if ((MapUnitListCurrentPage - 1) * UnitListMaxPerPage + MapUnitListChoice >= ListMapMenuUnitPosition.Count)
                     MapUnitListChoice = (ListMapMenuUnitPosition.Count - 1) % UnitListMaxPerPage;
             }
-            else if (InputHelper.InputLeftPressed())
+            else if (ActiveInputManager.InputLeftPressed())
             {
                 MapUnitListCurrentPage -= (MapUnitListCurrentPage > 1) ? 1 : 0;
             }
-            else if (InputHelper.InputRightPressed())
+            else if (ActiveInputManager.InputRightPressed())
             {
                 MapUnitListCurrentPage += (MapUnitListCurrentPage < MapUnitListCurrentPageMax) ? 1 : 0;
             }

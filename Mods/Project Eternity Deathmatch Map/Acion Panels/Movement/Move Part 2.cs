@@ -3,7 +3,6 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -82,32 +81,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            if (ActiveInputManager.InputConfirmPressed())
             {//Make sure the mouse is inside the menu.
-                if (MouseHelper.InputLeftButtonReleased())
-                {
-                }
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
 
                 Map.sndConfirm.Play();
             }
-            else if (InputHelper.InputCancelPressed() || MouseHelper.InputRightButtonReleased())
+            else if (ActiveInputManager.InputCancelPressed())
             {
             }
-            if (InputHelper.InputUpPressed())
+            if (ActiveInputManager.InputUpPressed())
             {
                 ActionMenuCursor -= (ActionMenuCursor > 0) ? 1 : 0;
 
                 Map.sndSelection.Play();
             }
-            else if (InputHelper.InputDownPressed() && ActiveSquad.CurrentLeader.CanAttack)
+            else if (ActiveInputManager.InputDownPressed() && ActiveSquad.CurrentLeader.CanAttack)
             {
                 ActionMenuCursor += (ActionMenuCursor < ListNextChoice.Count - 1) ? 1 : 0;
 
                 Map.sndSelection.Play();
-            }
-            else if (MouseHelper.MouseMoved())
-            {
             }
         }
 

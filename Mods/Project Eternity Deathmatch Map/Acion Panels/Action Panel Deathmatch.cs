@@ -12,19 +12,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         protected DeathmatchMap Map;
 
         public ActionPanelDeathmatch(string Name, DeathmatchMap Map, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, CanCancel)
+            : this(Name, Map, Map.ListPlayer[Map.ActivePlayerIndex].InputManager, CanCancel)
+        {
+        }
+
+        public ActionPanelDeathmatch(string Name, DeathmatchMap Map, PlayerInput ActiveInputManager, bool CanCancel = true)
+            : base(Name, Map.ListActionMenuChoice, ActiveInputManager, CanCancel)
         {
             this.Map = Map;
 
-            MenuX = (int)((Map.CursorPosition.X - Map.CameraPosition.X + 1) * Map.TileSize.X);
-            MenuY = (int)((Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y);
+            BaseMenuX = (int)((Map.CursorPosition.X - Map.CameraPosition.X + 1) * Map.TileSize.X);
+            BaseMenuY = (int)((Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y);
 
-            if (MenuX + MinActionMenuWidth >= Constants.Width)
-                MenuX = Constants.Width - MinActionMenuWidth;
+            if (BaseMenuX + MinActionMenuWidth >= Constants.Width)
+                BaseMenuX = Constants.Width - MinActionMenuWidth;
 
             int MenuHeight = ListNextChoice.Count * PannelHeight + 6 * 2;
-            if (MenuY + MenuHeight >= Constants.Height)
-                MenuY = Constants.Height - MenuHeight;
+            if (BaseMenuY + MenuHeight >= Constants.Height)
+                BaseMenuY = Constants.Height - MenuHeight;
+
+            UpdateFinalMenuPosition();
         }
 
         protected override void OnCancelPanel()

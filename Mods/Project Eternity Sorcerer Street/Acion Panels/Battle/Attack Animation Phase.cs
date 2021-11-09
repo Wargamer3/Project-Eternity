@@ -18,13 +18,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private AnimationScreen AttackAnimation;
 
         public ActionPanelBattleAttackAnimationPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, false)
+            : base(PanelName, Map.ListActionMenuChoice, null, false)
         {
             this.Map = Map;
         }
 
         public ActionPanelBattleAttackAnimationPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, string AttackAnimationPath, bool LeftSideAttackRightSide)
-            : base(PanelName, ListActionMenuChoice, false)
+            : base(PanelName, ListActionMenuChoice, null, false)
         {
             this.Map = Map;
             this.AttackAnimationPath = AttackAnimationPath;

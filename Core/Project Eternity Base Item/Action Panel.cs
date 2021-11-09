@@ -25,8 +25,11 @@ namespace ProjectEternity.Core.Item
         // List of ActionPanel shared through every ActionPanel objects.
         protected readonly ActionPanelHolder ListActionMenuChoice;
 
-        public int MenuX;
-        public int MenuY;
+        public int BaseMenuX;
+        public int BaseMenuY;
+        public int FinalMenuX;
+        public int FinalMenuY;
+        public int MenuHeight;
 
         public ActionPanel(string Name, ActionPanelHolder ListActionMenuChoice, bool CanCancel)
         {
@@ -43,8 +46,10 @@ namespace ProjectEternity.Core.Item
             {
                 ActionPanel LastPanel = ListActionMenuChoice.Last();
 
-                MenuX = LastPanel.MenuX;
-                MenuY = LastPanel.MenuY;
+                BaseMenuX = LastPanel.BaseMenuX;
+                BaseMenuY = LastPanel.BaseMenuY;
+                FinalMenuX = LastPanel.BaseMenuX;
+                FinalMenuX = LastPanel.BaseMenuY;
             }
         }
 

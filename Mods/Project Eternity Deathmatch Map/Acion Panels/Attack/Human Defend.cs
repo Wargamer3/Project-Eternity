@@ -4,7 +4,6 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
-using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.DeathmatchMap;
 
@@ -25,13 +24,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private SupportSquadHolder TargetSquadSupport;
 
         public ActionPanelHumanDefend(DeathmatchMap Map)
-            : base(PanelName, Map, false)
+            : base(PanelName, Map, Map.ListPlayer[Map.TargetPlayerIndex].InputManager, false)
         {
         }
 
         public ActionPanelHumanDefend(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport,
              int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
-            : base(PanelName, Map, false)
+            : base(PanelName, Map, Map.ListPlayer[Map.TargetPlayerIndex].InputManager, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
@@ -59,418 +58,422 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             switch (Map.BattleMenuStage)
             {
-                #region Default
-
                 case BattleMenuStages.Default:
-                    if (InputHelper.InputLeftPressed())
-                    {
-                        Map.BattleMenuCursorIndex--;
-
-                        if (Map.BattleMenuCursorIndex == BattleMenuChoices.Formation)
-                        {//Can't pick Formation. (No wingmans or ALL attack)
-                            if (TargetSquad.UnitsAliveInSquad == 1 || Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL)
-                                Map.BattleMenuCursorIndex = BattleMenuChoices.Action;
-                        }
-                        else if (Map.BattleMenuCursorIndex < BattleMenuChoices.Start)
-                            Map.BattleMenuCursorIndex = BattleMenuChoices.Demo;
-
-                        Map.sndSelection.Play();
-                    }
-                    else if (InputHelper.InputRightPressed())
-                    {
-                        Map.BattleMenuCursorIndex++;
-
-                        if (Map.BattleMenuCursorIndex == BattleMenuChoices.Formation)
-                        {//Can't pick Formation. (No wingmans or ALL attack)
-                            if (TargetSquad.UnitsAliveInSquad == 1 || Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL)
-                                Map.BattleMenuCursorIndex = BattleMenuChoices.Support;
-                        }
-                        else if (Map.BattleMenuCursorIndex > BattleMenuChoices.Demo)
-                            Map.BattleMenuCursorIndex = BattleMenuChoices.Start;
-
-                        Map.sndSelection.Play();
-                    }
-                    else if (InputHelper.InputCommand2Pressed())
-                    {
-                        Constants.ShowAnimation = !Constants.ShowAnimation;
-
-                        Map.sndSelection.Play();
-                    }
-                    if (InputHelper.InputConfirmPressed())
-                    {
-                        switch (Map.BattleMenuCursorIndex)
-                        {
-                            case BattleMenuChoices.Start:
-                                Map.ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
-                                break;
-
-                            case BattleMenuChoices.Action:
-                                Map.BattleMenuCursorIndexSecond = 0;
-                                if (TargetSquad.UnitsAliveInSquad == 1)
-                                {
-                                    Map.BattleMenuStage = BattleMenuStages.ChooseDefense;
-                                    Map.BattleMenuCursorIndexSecond = (int)TargetSquad.CurrentLeader.BattleDefenseChoice;
-                                }
-                                else
-                                {
-                                    Map.BattleMenuStage = BattleMenuStages.ChooseSquadMember;//Choose squad member.
-                                }
-                                break;
-
-                            case BattleMenuChoices.Formation:
-                                if (Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL)
-                                {
-                                    Map.BattleMenuCursorIndexSecond = (int)Map.BattleMenuDefenseFormationChoice;
-                                    Map.BattleMenuStage = BattleMenuStages.ChooseFormation;
-                                }
-                                break;
-
-                            case BattleMenuChoices.Support:
-                                Map.BattleMenuCursorIndexSecond = 0;
-                                Map.BattleMenuStage = BattleMenuStages.ChooseSupport;
-                                break;
-
-                            case BattleMenuChoices.Demo:
-                                Constants.ShowAnimation = !Constants.ShowAnimation;
-                                break;
-                        }
-
-                        Map.sndConfirm.Play();
-                    }
-                    else if (InputHelper.InputCancelPressed() && Map.ListPlayer[ActivePlayerIndex].IsPlayerControlled)//Can't cancel out of AI attacks.
-                    {
-                        CancelPanel();
-                    }
+                    UpdateBaseMenu(gameTime);
                     break;
-
-                #endregion
-
-                #region Choose defense
 
                 case DeathmatchMap.BattleMenuStages.ChooseDefense:
-                    if (InputHelper.InputUpPressed())
-                    {
-                        Map.BattleMenuCursorIndexSecond -= Map.BattleMenuCursorIndexSecond > 0 ? 1 : 0;
-                        Map.sndSelection.Play();
-                    }
-                    else if (InputHelper.InputDownPressed())
-                    {
-                        Map.BattleMenuCursorIndexSecond += Map.BattleMenuCursorIndexSecond < 2 ? 1 : 0;
-                        Map.sndSelection.Play();
-                    }
-                    if (InputHelper.InputConfirmPressed())
-                    {
-                        if (Map.BattleMenuCursorIndexSecond == 0)
-                        {
-                            TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, ActiveSquad.Position, ActiveSquad.ArrayMapSize, ActiveSquad.CurrentMovement, true);
-                            Map.WeaponIndexOld = TargetSquad.CurrentLeader.AttackIndex;
-                            TargetSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
-                            Map.BattleMenuStage = BattleMenuStages.ChooseAttack;
-                        }
-                        else if (Map.BattleMenuCursorIndexSecond == 1)
-                        {
-                            TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                            Map.BattleMenuStage = BattleMenuStages.Default;
-                            ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad, TargetSquad.CurrentLeader, TargetSquad, Unit.BattleDefenseChoices.Defend).ToString() + "%";
-                        }
-                        else if (Map.BattleMenuCursorIndexSecond == 2)
-                        {
-                            TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
-                            Map.BattleMenuStage = BattleMenuStages.Default;
-                            ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad, TargetSquad.CurrentLeader, TargetSquad, Unit.BattleDefenseChoices.Evade).ToString() + "%";
-                        }
-
-                        Map.sndConfirm.Play();
-                    }
+                    UpdateDefenseSelection(gameTime);
                     break;
-
-                #endregion
-
-                #region Choose formation
 
                 case BattleMenuStages.ChooseFormation:
-                    if (InputHelper.InputUpPressed())
-                    {
-                        Map.BattleMenuCursorIndexSecond += Map.BattleMenuCursorIndexSecond < 1 ? 1 : 0;
-                        Map.sndSelection.Play();
-                    }
-                    else if (InputHelper.InputDownPressed())
-                    {
-                        Map.BattleMenuCursorIndexSecond -= Map.BattleMenuCursorIndexSecond > 0 ? 1 : 0;
-                        Map.sndSelection.Play();
-                    }
-                    if (InputHelper.InputConfirmPressed())
-                    {
-                        if (Map.BattleMenuCursorIndexSecond == 0)
-                            Map.BattleMenuDefenseFormationChoice = FormationChoices.Focused;
-                        else if (Map.BattleMenuCursorIndexSecond == 1)
-                            Map.BattleMenuDefenseFormationChoice = FormationChoices.Spread;
-
-                        Map.UpdateWingmansSelection(TargetSquad, ActiveSquad, Map.BattleMenuDefenseFormationChoice);
-
-                        Map.BattleMenuStage = BattleMenuStages.Default;
-                        Map.sndConfirm.Play();
-                    }
+                    UpdateFormationSelection(gameTime);
                     break;
 
-                #endregion
-
-                #region Choose attack
-
-                case BattleMenuStages.ChooseAttack://Attack selection.
-                                                   //Move the cursor.
-                    if (InputHelper.InputUpPressed())
-                    {
-                        --TargetSquad.CurrentLeader.AttackIndex;
-                        if (TargetSquad.CurrentLeader.AttackIndex < 0)
-                            TargetSquad.CurrentLeader.AttackIndex = TargetSquad.CurrentLeader.ListAttack.Count - 1;
-
-                        Map.sndSelection.Play();
-                    }
-                    else if (InputHelper.InputDownPressed())
-                    {
-                        ++TargetSquad.CurrentLeader.AttackIndex;
-                        if (TargetSquad.CurrentLeader.AttackIndex >= TargetSquad.CurrentLeader.ListAttack.Count)
-                            TargetSquad.CurrentLeader.AttackIndex = 0;
-
-                        Map.sndSelection.Play();
-                    }
-                    //Exit the weapon panel.
-                    if (InputHelper.InputConfirmPressed())
-                    {
-                        if (TargetSquad.CurrentLeader.CurrentAttack.CanAttack)
-                        {
-                            TargetSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-
-                            if (TargetSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)
-                            {
-                                Map.BattleMenuDefenseFormationChoice = FormationChoices.ALL;
-
-                                if (TargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack &&
-                                    TargetSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)
-                                {
-                                    Map.BattleMenuDefenseFormationChoice = FormationChoices.ALL;
-
-                                    if (TargetSquad.CurrentWingmanA != null)
-                                        TargetSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-
-                                    if (ActiveSquad.CurrentWingmanA != null)
-                                    {
-                                        TargetSquad.CurrentLeader.MAPAttackAccuracyA = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
-                                            ActiveSquad.CurrentWingmanA, ActiveSquad, ActiveSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
-                                    }
-                                    else
-                                        TargetSquad.CurrentLeader.MAPAttackAccuracyA = "0%";
-
-                                    if (TargetSquad.CurrentWingmanB != null)
-                                        TargetSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-
-                                    if (ActiveSquad.CurrentWingmanB != null)
-                                    {
-                                        TargetSquad.CurrentLeader.MAPAttackAccuracyB = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
-                                            ActiveSquad.CurrentWingmanB, ActiveSquad, ActiveSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
-                                    }
-                                    else
-                                        TargetSquad.CurrentLeader.MAPAttackAccuracyB = "0%";
-                                }
-                            }
-                            else
-                            {
-                                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL)
-                                    Map.BattleMenuDefenseFormationChoice = FormationChoices.Focused;
-
-                                Map.UpdateWingmansSelection(TargetSquad, ActiveSquad, Map.BattleMenuOffenseFormationChoice);
-                            }
-                            Map.BattleMenuStage = BattleMenuStages.Default;
-
-                            TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-
-                            //Simulate offense reaction.
-                            PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
-                            //The Defense Leader now attack.
-                            TargetSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
-                                ActiveSquad.CurrentLeader, ActiveSquad, Unit.BattleDefenseChoices.Attack).ToString() + "%";
-
-                            Map.sndConfirm.Play();
-                        }
-                        else
-                        {
-                            Map.sndDeny.Play();
-                        }
-                    }
-                    else if (InputHelper.InputCancelPressed())
-                    {
-                        Map.BattleMenuStage = BattleMenuStages.Default;
-                        Map.sndCancel.Play();
-                    }
+                case BattleMenuStages.ChooseAttack:
+                    UpdateAttackSelection(gameTime);
                     break;
-
-                #endregion
-
-                #region Choose squad member
 
                 case BattleMenuStages.ChooseSquadMember:
-
-                    if (InputHelper.InputDownPressed())
-                    {
-                        Map.BattleMenuCursorIndexSecond += Map.BattleMenuCursorIndexSecond < TargetSquad.UnitsAliveInSquad - 1 ? 1 : 0;
-                        Map.sndSelection.Play();
-                    }
-                    else if (InputHelper.InputUpPressed())
-                    {
-                        Map.BattleMenuCursorIndexSecond -= Map.BattleMenuCursorIndexSecond > 0 ? 1 : 0;
-                        Map.sndSelection.Play();
-                    }
-                    if (InputHelper.InputConfirmPressed())
-                    {
-                        if (Map.BattleMenuCursorIndexSecond == 0)
-                            Map.BattleMenuCursorIndexThird = (int)TargetSquad.CurrentLeader.BattleDefenseChoice;
-                        else if (Map.BattleMenuCursorIndexSecond == 1)
-                            Map.BattleMenuCursorIndexThird = (int)TargetSquad.CurrentWingmanA.BattleDefenseChoice;
-                        else if (Map.BattleMenuCursorIndexSecond == 2)
-                            Map.BattleMenuCursorIndexThird = (int)TargetSquad.CurrentWingmanB.BattleDefenseChoice;
-
-                        Map.BattleMenuStage = BattleMenuStages.ChooseSquadMemberDefense;
-                        Map.sndConfirm.Play();
-                    }
+                    UpdateSquadMemberSelection(gameTime);
                     break;
 
-                #endregion
-
-                #region Choose squad member defense
-
                 case BattleMenuStages.ChooseSquadMemberDefense:
+                    UpdateSquadMemberDefenseSelection(gameTime);
+                    break;
 
-                    if (InputHelper.InputUpPressed())
-                    {
-                        Map.BattleMenuCursorIndexThird++;
-                        if (Map.BattleMenuCursorIndexSecond > 0 && Map.BattleMenuCursorIndexThird >= 3 &&
-                            (!TargetSquad[Map.BattleMenuCursorIndexSecond].CanAttack || TargetSquad.CurrentLeader.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack || Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL))
-                            Map.BattleMenuCursorIndexThird = 1;
-                        else if (Map.BattleMenuCursorIndexThird >= 3)
-                            Map.BattleMenuCursorIndexThird = 0;
+                case BattleMenuStages.ChooseSupport:
+                    UpdateSupportSelection(gameTime);
+                    break;
+            }
+        }
 
-                        Map.sndSelection.Play();
-                    }
-                    else if (InputHelper.InputDownPressed())
-                    {
-                        Map.BattleMenuCursorIndexThird--;
-                        if (Map.BattleMenuCursorIndexSecond > 0 && Map.BattleMenuCursorIndexThird <= 0 &&
-                            (!TargetSquad[Map.BattleMenuCursorIndexSecond].CanAttack || TargetSquad.CurrentLeader.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack || Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL))
-                            Map.BattleMenuCursorIndexThird = 2;
-                        else if (Map.BattleMenuCursorIndexThird < 0)
-                            Map.BattleMenuCursorIndexThird = 2;
+        private void UpdateBaseMenu(GameTime gameTime)
+        {
+            if (ActiveInputManager.InputLeftPressed())
+            {
+                Map.BattleMenuCursorIndex--;
 
-                        Map.sndSelection.Play();
-                    }
-                    if (InputHelper.InputConfirmPressed())
-                    {
-                        if ((Unit.BattleDefenseChoices)Map.BattleMenuCursorIndexThird == Unit.BattleDefenseChoices.Attack)
+                if (Map.BattleMenuCursorIndex == BattleMenuChoices.Formation)
+                {//Can't pick Formation. (No wingmans or ALL attack)
+                    if (TargetSquad.UnitsAliveInSquad == 1 || Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL)
+                        Map.BattleMenuCursorIndex = BattleMenuChoices.Action;
+                }
+                else if (Map.BattleMenuCursorIndex < BattleMenuChoices.Start)
+                    Map.BattleMenuCursorIndex = BattleMenuChoices.Demo;
+
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputRightPressed())
+            {
+                Map.BattleMenuCursorIndex++;
+
+                if (Map.BattleMenuCursorIndex == BattleMenuChoices.Formation)
+                {//Can't pick Formation. (No wingmans or ALL attack)
+                    if (TargetSquad.UnitsAliveInSquad == 1 || Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL)
+                        Map.BattleMenuCursorIndex = BattleMenuChoices.Support;
+                }
+                else if (Map.BattleMenuCursorIndex > BattleMenuChoices.Demo)
+                    Map.BattleMenuCursorIndex = BattleMenuChoices.Start;
+
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputCommand2Pressed())
+            {
+                Constants.ShowAnimation = !Constants.ShowAnimation;
+
+                Map.sndSelection.Play();
+            }
+            if (ActiveInputManager.InputConfirmPressed())
+            {
+                switch (Map.BattleMenuCursorIndex)
+                {
+                    case BattleMenuChoices.Start:
+                        Map.ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
+                        break;
+
+                    case BattleMenuChoices.Action:
+                        Map.BattleMenuCursorIndexSecond = 0;
+                        if (TargetSquad.UnitsAliveInSquad == 1)
                         {
-                            if (Map.BattleMenuCursorIndexSecond == 0)
-                            {
-                                TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, ActiveSquad.Position, ActiveSquad.ArrayMapSize, ActiveSquad.CurrentMovement, TargetSquad.CanMove);
-
-                                Map.WeaponIndexOld = TargetSquad.CurrentLeader.AttackIndex;
-                                TargetSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
-                                Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.ChooseAttack;
-                            }
-                            else
-                            {
-                                TargetSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-
-                                //Simulate offense reaction.
-                                DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
-
-                                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread)
-                                {
-                                    if (Map.BattleMenuCursorIndexSecond == 1)
-                                    {
-                                        TargetSquad.CurrentWingmanA.AttackIndex = TargetSquad.CurrentWingmanA.PLAAttack;
-                                        TargetSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanA, TargetSquad,
-                                           ActiveSquad.CurrentWingmanA, ActiveSquad, ActiveSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
-                                    }
-                                    else if (Map.BattleMenuCursorIndexSecond == 2)
-                                    {
-                                        TargetSquad.CurrentWingmanB.AttackIndex = TargetSquad.CurrentWingmanB.PLAAttack;
-                                        TargetSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanB, TargetSquad,
-                                            ActiveSquad.CurrentWingmanB, ActiveSquad, ActiveSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
-                                    }
-                                }
-                                else if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Focused)
-                                {
-                                    if (Map.BattleMenuCursorIndexSecond == 1)
-                                    {
-                                        TargetSquad.CurrentWingmanA.AttackIndex = TargetSquad.CurrentWingmanA.PLAAttack;
-                                        TargetSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanA, TargetSquad,
-                                            ActiveSquad.CurrentLeader, ActiveSquad, ActiveSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
-                                    }
-                                    else if (Map.BattleMenuCursorIndexSecond == 2)
-                                    {
-                                        TargetSquad.CurrentWingmanB.AttackIndex = TargetSquad.CurrentWingmanB.PLAAttack;
-                                        TargetSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanB, TargetSquad,
-                                            ActiveSquad.CurrentLeader, ActiveSquad, ActiveSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
-                                    }
-                                }
-                                Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.Default;
-                            }
-                        }
-                        else if (Map.BattleMenuCursorIndexSecond == 0)
-                        {
-                            TargetSquad.CurrentLeader.BattleDefenseChoice = (Unit.BattleDefenseChoices)Map.BattleMenuCursorIndexThird;
-                            Map.BattleMenuDefenseFormationChoice = FormationChoices.Focused;
-
-                            //Simulate offense reaction.
-                            DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
-
-                            if (TargetSquad.CurrentWingmanA != null && TargetSquad.CurrentWingmanA.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
-                                TargetSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                            if (TargetSquad.CurrentWingmanB != null && TargetSquad.CurrentWingmanB.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
-                                TargetSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-
-                            Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.Default;
+                            Map.BattleMenuStage = BattleMenuStages.ChooseDefense;
+                            Map.BattleMenuCursorIndexSecond = (int)TargetSquad.CurrentLeader.BattleDefenseChoice;
                         }
                         else
                         {
-                            TargetSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice = (Unit.BattleDefenseChoices)Map.BattleMenuCursorIndexThird;
-                            //Simulate offense reaction.
-                            DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
-                            Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.Default;
+                            Map.BattleMenuStage = BattleMenuStages.ChooseSquadMember;//Choose squad member.
                         }
+                        break;
 
-                        Map.sndConfirm.Play();
-                    }
-                    break;
+                    case BattleMenuChoices.Formation:
+                        if (Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL)
+                        {
+                            Map.BattleMenuCursorIndexSecond = (int)Map.BattleMenuDefenseFormationChoice;
+                            Map.BattleMenuStage = BattleMenuStages.ChooseFormation;
+                        }
+                        break;
 
-                #endregion
+                    case BattleMenuChoices.Support:
+                        Map.BattleMenuCursorIndexSecond = 0;
+                        Map.BattleMenuStage = BattleMenuStages.ChooseSupport;
+                        break;
 
-                #region Choose support
+                    case BattleMenuChoices.Demo:
+                        Constants.ShowAnimation = !Constants.ShowAnimation;
+                        break;
+                }
 
-                case BattleMenuStages.ChooseSupport:
-                    if (InputHelper.InputUpPressed())
+                Map.sndConfirm.Play();
+            }
+            else if (ActiveInputManager.InputCancelPressed() && Map.ListPlayer[ActivePlayerIndex].IsPlayerControlled)//Can't cancel out of AI attacks.
+            {
+                CancelPanel();
+            }
+        }
+
+        private void UpdateDefenseSelection(GameTime gameTime)
+        {
+            if (ActiveInputManager.InputUpPressed())
+            {
+                Map.BattleMenuCursorIndexSecond -= Map.BattleMenuCursorIndexSecond > 0 ? 1 : 0;
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputDownPressed())
+            {
+                Map.BattleMenuCursorIndexSecond += Map.BattleMenuCursorIndexSecond < 2 ? 1 : 0;
+                Map.sndSelection.Play();
+            }
+            if (ActiveInputManager.InputConfirmPressed())
+            {
+                if (Map.BattleMenuCursorIndexSecond == 0)
+                {
+                    TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, ActiveSquad.Position, ActiveSquad.ArrayMapSize, ActiveSquad.CurrentMovement, true);
+                    Map.WeaponIndexOld = TargetSquad.CurrentLeader.AttackIndex;
+                    TargetSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
+                    Map.BattleMenuStage = BattleMenuStages.ChooseAttack;
+                }
+                else if (Map.BattleMenuCursorIndexSecond == 1)
+                {
+                    TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                    Map.BattleMenuStage = BattleMenuStages.Default;
+                    ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad, TargetSquad.CurrentLeader, TargetSquad, Unit.BattleDefenseChoices.Defend).ToString() + "%";
+                }
+                else if (Map.BattleMenuCursorIndexSecond == 2)
+                {
+                    TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
+                    Map.BattleMenuStage = BattleMenuStages.Default;
+                    ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad, TargetSquad.CurrentLeader, TargetSquad, Unit.BattleDefenseChoices.Evade).ToString() + "%";
+                }
+
+                Map.sndConfirm.Play();
+            }
+        }
+
+        private void UpdateFormationSelection(GameTime gameTime)
+        {
+            if (ActiveInputManager.InputUpPressed())
+            {
+                Map.BattleMenuCursorIndexSecond += Map.BattleMenuCursorIndexSecond < 1 ? 1 : 0;
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputDownPressed())
+            {
+                Map.BattleMenuCursorIndexSecond -= Map.BattleMenuCursorIndexSecond > 0 ? 1 : 0;
+                Map.sndSelection.Play();
+            }
+            if (ActiveInputManager.InputConfirmPressed())
+            {
+                if (Map.BattleMenuCursorIndexSecond == 0)
+                    Map.BattleMenuDefenseFormationChoice = FormationChoices.Focused;
+                else if (Map.BattleMenuCursorIndexSecond == 1)
+                    Map.BattleMenuDefenseFormationChoice = FormationChoices.Spread;
+
+                Map.UpdateWingmansSelection(TargetSquad, ActiveSquad, Map.BattleMenuDefenseFormationChoice);
+
+                Map.BattleMenuStage = BattleMenuStages.Default;
+                Map.sndConfirm.Play();
+            }
+        }
+
+        private void UpdateAttackSelection(GameTime gameTime)
+        {
+            if (ActiveInputManager.InputUpPressed())
+            {
+                --TargetSquad.CurrentLeader.AttackIndex;
+                if (TargetSquad.CurrentLeader.AttackIndex < 0)
+                    TargetSquad.CurrentLeader.AttackIndex = TargetSquad.CurrentLeader.ListAttack.Count - 1;
+
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputDownPressed())
+            {
+                ++TargetSquad.CurrentLeader.AttackIndex;
+                if (TargetSquad.CurrentLeader.AttackIndex >= TargetSquad.CurrentLeader.ListAttack.Count)
+                    TargetSquad.CurrentLeader.AttackIndex = 0;
+
+                Map.sndSelection.Play();
+            }
+            //Exit the weapon panel.
+            if (ActiveInputManager.InputConfirmPressed())
+            {
+                if (TargetSquad.CurrentLeader.CurrentAttack.CanAttack)
+                {
+                    TargetSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+
+                    if (TargetSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)
                     {
-                        --TargetSquadSupport.ActiveSquadSupportIndex;
-                        if (TargetSquadSupport.ActiveSquadSupportIndex < -1)
-                            TargetSquadSupport.ActiveSquadSupportIndex = TargetSquadSupport.Count - 1;
+                        Map.BattleMenuDefenseFormationChoice = FormationChoices.ALL;
 
-                        Map.sndSelection.Play();
+                        if (TargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack &&
+                            TargetSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)
+                        {
+                            Map.BattleMenuDefenseFormationChoice = FormationChoices.ALL;
+
+                            if (TargetSquad.CurrentWingmanA != null)
+                                TargetSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+
+                            if (ActiveSquad.CurrentWingmanA != null)
+                            {
+                                TargetSquad.CurrentLeader.MAPAttackAccuracyA = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
+                                    ActiveSquad.CurrentWingmanA, ActiveSquad, ActiveSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
+                            }
+                            else
+                                TargetSquad.CurrentLeader.MAPAttackAccuracyA = "0%";
+
+                            if (TargetSquad.CurrentWingmanB != null)
+                                TargetSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+
+                            if (ActiveSquad.CurrentWingmanB != null)
+                            {
+                                TargetSquad.CurrentLeader.MAPAttackAccuracyB = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
+                                    ActiveSquad.CurrentWingmanB, ActiveSquad, ActiveSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
+                            }
+                            else
+                                TargetSquad.CurrentLeader.MAPAttackAccuracyB = "0%";
+                        }
                     }
-                    else if (InputHelper.InputDownPressed())
+                    else
                     {
-                        ++TargetSquadSupport.ActiveSquadSupportIndex;
-                        if (TargetSquadSupport.ActiveSquadSupportIndex >= TargetSquadSupport.Count)
-                            TargetSquadSupport.ActiveSquadSupportIndex = -1;
+                        if (Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL)
+                            Map.BattleMenuDefenseFormationChoice = FormationChoices.Focused;
 
-                        Map.sndSelection.Play();
+                        Map.UpdateWingmansSelection(TargetSquad, ActiveSquad, Map.BattleMenuOffenseFormationChoice);
                     }
-                    else if (InputHelper.InputConfirmPressed())
+                    Map.BattleMenuStage = BattleMenuStages.Default;
+
+                    TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+
+                    //Simulate offense reaction.
+                    PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+                    //The Defense Leader now attack.
+                    TargetSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
+                        ActiveSquad.CurrentLeader, ActiveSquad, Unit.BattleDefenseChoices.Attack).ToString() + "%";
+
+                    Map.sndConfirm.Play();
+                }
+                else
+                {
+                    Map.sndDeny.Play();
+                }
+            }
+            else if (ActiveInputManager.InputCancelPressed())
+            {
+                Map.BattleMenuStage = BattleMenuStages.Default;
+                Map.sndCancel.Play();
+            }
+        }
+
+        private void UpdateSquadMemberSelection(GameTime gameTime)
+        {
+            if (ActiveInputManager.InputDownPressed())
+            {
+                Map.BattleMenuCursorIndexSecond += Map.BattleMenuCursorIndexSecond < TargetSquad.UnitsAliveInSquad - 1 ? 1 : 0;
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputUpPressed())
+            {
+                Map.BattleMenuCursorIndexSecond -= Map.BattleMenuCursorIndexSecond > 0 ? 1 : 0;
+                Map.sndSelection.Play();
+            }
+            if (ActiveInputManager.InputConfirmPressed())
+            {
+                if (Map.BattleMenuCursorIndexSecond == 0)
+                    Map.BattleMenuCursorIndexThird = (int)TargetSquad.CurrentLeader.BattleDefenseChoice;
+                else if (Map.BattleMenuCursorIndexSecond == 1)
+                    Map.BattleMenuCursorIndexThird = (int)TargetSquad.CurrentWingmanA.BattleDefenseChoice;
+                else if (Map.BattleMenuCursorIndexSecond == 2)
+                    Map.BattleMenuCursorIndexThird = (int)TargetSquad.CurrentWingmanB.BattleDefenseChoice;
+
+                Map.BattleMenuStage = BattleMenuStages.ChooseSquadMemberDefense;
+                Map.sndConfirm.Play();
+            }
+        }
+
+        private void UpdateSquadMemberDefenseSelection(GameTime gameTime)
+        {
+            if (ActiveInputManager.InputUpPressed())
+            {
+                Map.BattleMenuCursorIndexThird++;
+                if (Map.BattleMenuCursorIndexSecond > 0 && Map.BattleMenuCursorIndexThird >= 3 &&
+                    (!TargetSquad[Map.BattleMenuCursorIndexSecond].CanAttack || TargetSquad.CurrentLeader.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack || Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL))
+                    Map.BattleMenuCursorIndexThird = 1;
+                else if (Map.BattleMenuCursorIndexThird >= 3)
+                    Map.BattleMenuCursorIndexThird = 0;
+
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputDownPressed())
+            {
+                Map.BattleMenuCursorIndexThird--;
+                if (Map.BattleMenuCursorIndexSecond > 0 && Map.BattleMenuCursorIndexThird <= 0 &&
+                    (!TargetSquad[Map.BattleMenuCursorIndexSecond].CanAttack || TargetSquad.CurrentLeader.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack || Map.BattleMenuDefenseFormationChoice == FormationChoices.ALL))
+                    Map.BattleMenuCursorIndexThird = 2;
+                else if (Map.BattleMenuCursorIndexThird < 0)
+                    Map.BattleMenuCursorIndexThird = 2;
+
+                Map.sndSelection.Play();
+            }
+            if (ActiveInputManager.InputConfirmPressed())
+            {
+                if ((Unit.BattleDefenseChoices)Map.BattleMenuCursorIndexThird == Unit.BattleDefenseChoices.Attack)
+                {
+                    if (Map.BattleMenuCursorIndexSecond == 0)
                     {
-                        Map.BattleMenuStage = BattleMenuStages.Default;
-                        Map.sndConfirm.Play();
-                    }
-                    break;
+                        TargetSquad.CurrentLeader.UpdateNonMAPAttacks(TargetSquad.Position, ActiveSquad.Position, ActiveSquad.ArrayMapSize, ActiveSquad.CurrentMovement, TargetSquad.CanMove);
 
-                    #endregion
+                        Map.WeaponIndexOld = TargetSquad.CurrentLeader.AttackIndex;
+                        TargetSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
+                        Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.ChooseAttack;
+                    }
+                    else
+                    {
+                        TargetSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+
+                        //Simulate offense reaction.
+                        DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+
+                        if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread)
+                        {
+                            if (Map.BattleMenuCursorIndexSecond == 1)
+                            {
+                                TargetSquad.CurrentWingmanA.AttackIndex = TargetSquad.CurrentWingmanA.PLAAttack;
+                                TargetSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanA, TargetSquad,
+                                   ActiveSquad.CurrentWingmanA, ActiveSquad, ActiveSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
+                            }
+                            else if (Map.BattleMenuCursorIndexSecond == 2)
+                            {
+                                TargetSquad.CurrentWingmanB.AttackIndex = TargetSquad.CurrentWingmanB.PLAAttack;
+                                TargetSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanB, TargetSquad,
+                                    ActiveSquad.CurrentWingmanB, ActiveSquad, ActiveSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
+                            }
+                        }
+                        else if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Focused)
+                        {
+                            if (Map.BattleMenuCursorIndexSecond == 1)
+                            {
+                                TargetSquad.CurrentWingmanA.AttackIndex = TargetSquad.CurrentWingmanA.PLAAttack;
+                                TargetSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanA, TargetSquad,
+                                    ActiveSquad.CurrentLeader, ActiveSquad, ActiveSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
+                            }
+                            else if (Map.BattleMenuCursorIndexSecond == 2)
+                            {
+                                TargetSquad.CurrentWingmanB.AttackIndex = TargetSquad.CurrentWingmanB.PLAAttack;
+                                TargetSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanB, TargetSquad,
+                                    ActiveSquad.CurrentLeader, ActiveSquad, ActiveSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
+                            }
+                        }
+                        Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.Default;
+                    }
+                }
+                else if (Map.BattleMenuCursorIndexSecond == 0)
+                {
+                    TargetSquad.CurrentLeader.BattleDefenseChoice = (Unit.BattleDefenseChoices)Map.BattleMenuCursorIndexThird;
+                    Map.BattleMenuDefenseFormationChoice = FormationChoices.Focused;
+
+                    //Simulate offense reaction.
+                    DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+
+                    if (TargetSquad.CurrentWingmanA != null && TargetSquad.CurrentWingmanA.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
+                        TargetSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                    if (TargetSquad.CurrentWingmanB != null && TargetSquad.CurrentWingmanB.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
+                        TargetSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+
+                    Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.Default;
+                }
+                else
+                {
+                    TargetSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice = (Unit.BattleDefenseChoices)Map.BattleMenuCursorIndexThird;
+                    //Simulate offense reaction.
+                    DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+                    Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.Default;
+                }
+
+                Map.sndConfirm.Play();
+            }
+        }
+
+        private void UpdateSupportSelection(GameTime gameTime)
+        {
+            if (ActiveInputManager.InputUpPressed())
+            {
+                --TargetSquadSupport.ActiveSquadSupportIndex;
+                if (TargetSquadSupport.ActiveSquadSupportIndex < -1)
+                    TargetSquadSupport.ActiveSquadSupportIndex = TargetSquadSupport.Count - 1;
+
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputDownPressed())
+            {
+                ++TargetSquadSupport.ActiveSquadSupportIndex;
+                if (TargetSquadSupport.ActiveSquadSupportIndex >= TargetSquadSupport.Count)
+                    TargetSquadSupport.ActiveSquadSupportIndex = -1;
+
+                Map.sndSelection.Play();
+            }
+            else if (ActiveInputManager.InputConfirmPressed())
+            {
+                Map.BattleMenuStage = BattleMenuStages.Default;
+                Map.sndConfirm.Play();
             }
         }
 

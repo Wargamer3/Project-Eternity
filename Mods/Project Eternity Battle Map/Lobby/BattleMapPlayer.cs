@@ -9,8 +9,6 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public enum GameplayTypes { None, MouseAndKeyboard, Controller1, Controller2, Controller3, Controller4 }
-
     public class BattleMapPlayer
     {
         public const string PlayerTypeOffline = "Offline";
@@ -34,6 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool IsPlayerControlled;
         public Color Color;
         public GameplayTypes GameplayType;
+        public PlayerInput InputManager;
         public byte LocalPlayerIndex;
 
         public string OnlinePlayerType;
@@ -55,6 +54,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListSquadToSpawn = new List<Squad>();
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
+            InputManager = new KeyboardInput();
         }
 
         public BattleMapPlayer(string ID, string Name, PlayerTypes OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
@@ -95,6 +95,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
+            InputManager = new KeyboardInput();
         }
 
         public BattleMapPlayer(BattleMapPlayer Clone)
@@ -111,6 +112,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             IsPlayerControlled = Clone.IsPlayerControlled;
             Color = Clone.Color;
             GameplayType = Clone.GameplayType;
+            InputManager = Clone.InputManager;
             LocalPlayerIndex = Clone.LocalPlayerIndex;
 
             OnlinePlayerType = Clone.OnlinePlayerType;

@@ -18,13 +18,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private bool HasTerrainBonus;
 
         public ActionPanelBattleLandModifierPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, false)
+            : base(PanelName, Map.ListActionMenuChoice, null, false)
         {
             this.Map = Map;
         }
 
         public ActionPanelBattleLandModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, SorcererStreetUnit PlayerUnit)
-            : base(PanelName, ListActionMenuChoice, false)
+            : base(PanelName, ListActionMenuChoice, null, false)
         {
             this.Map = Map;
             this.PlayerUnit = PlayerUnit;

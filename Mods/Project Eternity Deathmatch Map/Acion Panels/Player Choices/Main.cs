@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 //Add the squad options.
                 if (ActiveSquad.CurrentWingmanA != null)
-                    AddChoiceToCurrentPanel(new ActionPanelFormation(Map, ActiveSquad));
+                    AddChoiceToCurrentPanel(new ActionPanelFormation(Map, ActivePlayerIndex, ActiveSquadIndex));
 
                 List<ActionPanel> DicOptionalPanel = ActiveSquad.OnMenuSelect(ActivePlayerIndex, Map.ListActionMenuChoice);
                 foreach (ActionPanel OptionalPanel in DicOptionalPanel)

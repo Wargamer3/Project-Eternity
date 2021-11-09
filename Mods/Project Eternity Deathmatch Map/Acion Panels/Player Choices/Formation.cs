@@ -4,7 +4,6 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -12,6 +11,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         private const string PanelName = "Formation";
 
+        private int ActivePlayerIndex;
+        private int ActiveSquadIndex;
         private int ActionMenuSwitchSquadCursor;
         private Squad ActiveSquad;
 
@@ -20,10 +21,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public ActionPanelFormation(DeathmatchMap Map, Squad ActiveSquad)
+        public ActionPanelFormation(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
             : base(PanelName, Map)
         {
-            this.ActiveSquad = ActiveSquad;
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
         public override void OnSelect()
@@ -33,7 +34,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void DoUpdate(GameTime gameTime)
         {
             //Move up or down in the menu.
-            if (InputHelper.InputUpPressed())
+            if (ActiveInputManager.InputUpPressed())
             {
                 --ActionMenuSwitchSquadCursor;
                 if (ActiveSquad.UnitsAliveInSquad == 2)
@@ -47,7 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ActionMenuSwitchSquadCursor = 5;
                 }
             }
-            else if (InputHelper.InputDownPressed())
+            else if (ActiveInputManager.InputDownPressed())
             {
                 ++ActionMenuSwitchSquadCursor;
                 if (ActiveSquad.UnitsAliveInSquad == 2)
@@ -61,7 +62,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ActionMenuSwitchSquadCursor = 0;
                 }
             }
-            if (InputHelper.InputConfirmPressed())
+            if (ActiveInputManager.InputConfirmPressed())
             {
                 int OldLeader = 0;
                 int OldWingmanA = 1;
@@ -132,18 +133,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
             }
-            if (InputHelper.InputCancelPressed())
-            {
-            }
         }
 
         public override void DoRead(ByteReader BR)
         {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActiveSquadIndex = BR.ReadInt32();
             ActionMenuSwitchSquadCursor = BR.ReadInt32();
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveSquadIndex);
             BW.AppendInt32(ActionMenuSwitchSquadCursor);
         }
 

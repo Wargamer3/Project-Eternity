@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.DeathmatchMap;
@@ -39,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         #endregion
 
         public MapMenu(DeathmatchMap Map)
-                : base("Map Menu", Map, true)
+                : base("Map Menu", Map, null, true)
         {
         }
 
@@ -70,6 +69,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
+            ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
+
             ActionMenuCursor = 0;
             ListNextChoice.Clear();
             AddChoiceToCurrentPanel(new ActionPanelEndTurn(Map, sprCursorConfirmEndNo, sprCursorConfirmEndYes));
@@ -92,34 +93,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputUpPressed())
+            if (ActiveInputManager.InputUpPressed())
             {
                 ActionMenuCursor -= (ActionMenuCursor > 0) ? 1 : 0;
                 sndSelection.Play();
             }
-            else if (InputHelper.InputDownPressed())
+            else if (ActiveInputManager.InputDownPressed())
             {
                 ActionMenuCursor += ActionMenuCursor < ListNextChoice.Count ? 1 : 0;
                 sndSelection.Play();
             }
-            else if (MouseHelper.MouseMoved())
+            else if (ActiveInputManager.InputMovePressed())
             {
                 int X = 490;
-                int Y = 10;
 
-                if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X < X + MinActionMenuWidth
-                    && MouseHelper.MouseStateCurrent.Y >= Y + 6 && MouseHelper.MouseStateCurrent.Y < Y + ListNextChoice.Count * 22 - 12)
+                for (int C = 0; C < ListNextChoice.Count; ++C)
                 {
-                    int NewValue = (MouseHelper.MouseStateCurrent.Y - Y - 6) / fntFinlanderFont.LineSpacing;
-                    if (NewValue != ActionMenuCursor)
+                    int Y = 10 + C * fntFinlanderFont.LineSpacing;
+                    if (ActiveInputManager.IsInZone(X, Y + 6, X + MinActionMenuWidth, Y + fntFinlanderFont.LineSpacing))
                     {
-                        ActionMenuCursor = NewValue;
-
+                        ActionMenuCursor = C;
                         sndSelection.Play();
+                        break;
                     }
                 }
             }
-            else if (InputHelper.InputConfirmPressed())
+            else if (ActiveInputManager.InputConfirmPressed())
             {
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
             }

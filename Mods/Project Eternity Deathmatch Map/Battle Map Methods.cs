@@ -20,11 +20,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             base.Init();
 
-            if (IsClient)
-            {
-                ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
-            }
-
             if (GameMode == 0)
             {
                 ListPlayer.Clear();
@@ -128,6 +123,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     ++PlayerIndex;
                 }
+            }
+
+
+            if (IsClient)
+            {
+                ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
             }
 
             OnNewTurn();
@@ -321,7 +322,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Load();
             DataScreen.LoadProgression(BR, PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
-            ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
             //Initialise the ScreenSize based on the map loaded.
             ScreenSize = new Point(Constants.Width / TileSize.X, Constants.Height / TileSize.Y);
 
@@ -550,6 +550,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListMapScript[S].Load(BR);
             }
+
+            ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
 
             return this;
         }

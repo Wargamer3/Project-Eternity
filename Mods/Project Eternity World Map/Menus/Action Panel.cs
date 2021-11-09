@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         protected WorldMap Map;
 
         public ActionPanelWorldMap(string Name, WorldMap Map, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, CanCancel)
+            : base(Name, Map.ListActionMenuChoice, null, CanCancel)
         {
             this.Map = Map;
         }

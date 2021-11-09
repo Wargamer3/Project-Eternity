@@ -2,10 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
-using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -41,7 +40,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputConfirmPressed())
+            if (ActiveInputManager.InputConfirmPressed())
             {
                 if (ConfirmMenuChoice == 0)
                 {
@@ -53,16 +52,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     RemoveFromPanelList(this);
                 }
             }
-            else if (InputHelper.InputCancelPressed())
+            else if (ActiveInputManager.InputCancelPressed())
             {
                 RemoveFromPanelList(this);
             }
-            else if (InputHelper.InputLeftPressed())
+            else if (ActiveInputManager.InputLeftPressed())
             {
                 if (ConfirmMenuChoice == 1)
                     ConfirmMenuChoice = 0;
             }
-            else if (InputHelper.InputRightPressed())
+            else if (ActiveInputManager.InputRightPressed())
             {
                 if (ConfirmMenuChoice == 0)
                     ConfirmMenuChoice = 1;

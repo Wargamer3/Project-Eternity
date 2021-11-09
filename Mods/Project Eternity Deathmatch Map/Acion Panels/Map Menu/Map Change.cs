@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -39,19 +38,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputConfirmPressed())
+            if (ActiveInputManager.InputConfirmPressed())
             {
                 Map.ListGameScreen.Remove(Map);
                 Map.ListGameScreen.Insert(0, ListMapChangeChoice[ActionMenuCursor]);
                 RemoveAllSubActionPanels();
             }
-            if (InputHelper.InputUpPressed())
+            if (ActiveInputManager.InputUpPressed())
             {
                 --ActionMenuCursor;
                 if (ActionMenuCursor < 0)
                     ActionMenuCursor = ListMapChangeChoice.Count - 1;
             }
-            else if (InputHelper.InputDownPressed())
+            else if (ActiveInputManager.InputDownPressed())
             {
                 ++ActionMenuCursor;
                 if (ActionMenuCursor >= ListMapChangeChoice.Count)

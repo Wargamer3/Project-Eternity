@@ -15,13 +15,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly SorcererStreetMap Map;
 
         public ActionPanelBattleBoostsModifierPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, false)
+            : base(PanelName, Map.ListActionMenuChoice, null, false)
         {
             this.Map = Map;
         }
 
         public ActionPanelBattleBoostsModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base(PanelName, ListActionMenuChoice, false)
+            : base(PanelName, ListActionMenuChoice, null, false)
         {
             this.Map = Map;
         }

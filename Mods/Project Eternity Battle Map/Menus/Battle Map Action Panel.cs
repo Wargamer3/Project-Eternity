@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -14,56 +13,68 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     /// </summary>
     public abstract class BattleMapActionPanel : ActionPanel
     {
-        public BattleMapActionPanel(string Name, ActionPanelHolder ListActionMenuChoice, bool CanCancel)
+        protected PlayerInput ActiveInputManager;
+
+        public BattleMapActionPanel(string Name, ActionPanelHolder ListActionMenuChoice, PlayerInput ActiveInputManager, bool CanCancel)
             : base(Name, ListActionMenuChoice, CanCancel)
         {
+            this.ActiveInputManager = ActiveInputManager;
         }
 
         public override void AddChoiceToCurrentPanel(ActionPanel Panel)
         {
             base.AddChoiceToCurrentPanel(Panel);
             ActionMenuWidth = Math.Max(ActionMenuWidth, (int)TextHelper.fntShadowFont.MeasureString(Panel.Name).X + 35);
+            UpdateFinalMenuPosition();
+        }
+
+        public override void AddChoicesToCurrentPanel(ActionPanel[] ArrayPanel)
+        {
+            base.AddChoicesToCurrentPanel(ArrayPanel);
+            UpdateFinalMenuPosition();
+        }
+
+        protected void UpdateFinalMenuPosition()
+        {
+            FinalMenuX = BaseMenuX;
+            FinalMenuY = BaseMenuY;
+
+            if (FinalMenuX + ActionMenuWidth >= Constants.Width)
+                FinalMenuX = Constants.Width - ActionMenuWidth;
+
+            MenuHeight = (ListNextChoice.Count) * PannelHeight + 6 * 2;
+            if (FinalMenuY + MenuHeight >= Constants.Height)
+                FinalMenuY = Constants.Height - MenuHeight;
         }
 
         protected void NavigateThroughNextChoices(FMOD.FMODSound sndSelection, FMOD.FMODSound sndConfirm)
         {
-            if (InputHelper.InputUpPressed())
+            if (ActiveInputManager.InputUpPressed())
             {
                 ActionMenuCursor -= (ActionMenuCursor > 0) ? 1 : 0;
 
                 sndSelection.Play();
             }
-            else if (InputHelper.InputDownPressed())
+            else if (ActiveInputManager.InputDownPressed())
             {
                 ActionMenuCursor += (ActionMenuCursor < ListNextChoice.Count - 1) ? 1 : 0;
 
                 sndSelection.Play();
             }
-            else if (MouseHelper.MouseMoved())
+            else if (ActiveInputManager.InputMovePressed())
             {
-                int X = MenuX;
-                int Y = MenuY;
-
-                if (X + ActionMenuWidth >= Constants.Width)
-                    X = Constants.Width - ActionMenuWidth;
-
-                int MenuHeight = (ListNextChoice.Count) * PannelHeight + 6 * 2;
-                if (Y + MenuHeight >= Constants.Height)
-                    Y = Constants.Height - MenuHeight;
-
-                if (MouseHelper.MouseStateCurrent.X >= X && MouseHelper.MouseStateCurrent.X < X + MinActionMenuWidth
-                    && MouseHelper.MouseStateCurrent.Y >= Y + 6 && MouseHelper.MouseStateCurrent.Y < Y + MenuHeight - 12)
+                for (int C = 0; C < ListNextChoice.Count; C++)
                 {
-                    int NewValue = (MouseHelper.MouseStateCurrent.Y - Y - 6) / PannelHeight;
-                    if (NewValue != ActionMenuCursor)
+                    if (ActiveInputManager.IsInZone(FinalMenuX, FinalMenuY + 6 + C * PannelHeight, FinalMenuX + ActionMenuWidth, FinalMenuY + 6 + (C + 1) * PannelHeight))
                     {
-                        ActionMenuCursor = NewValue;
-
+                        ActionMenuCursor = C;
                         sndSelection.Play();
+                        break;
                     }
                 }
             }
-            else if (InputHelper.InputConfirmPressed())
+            else if (ActiveInputManager.InputConfirmPressed()
+                && ActiveInputManager.IsInZone(FinalMenuX, FinalMenuY + 6 + ActionMenuCursor * PannelHeight, FinalMenuX + ActionMenuWidth, FinalMenuY + 6 + (ActionMenuCursor + 1) * PannelHeight))
             {
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
                 sndConfirm.Play();
@@ -73,15 +84,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void DrawNextChoice(CustomSpriteBatch g)
         {
             //Draw the action panel.
-            int X = MenuX;
-            int Y = MenuY;
-
-            if (X + ActionMenuWidth >= Constants.Width)
-                X = Constants.Width - ActionMenuWidth;
-
-            int MenuHeight = (ListNextChoice.Count) * PannelHeight + 6 * 2;
-            if (Y + MenuHeight >= Constants.Height)
-                Y = Constants.Height - MenuHeight;
+            int X = FinalMenuX;
+            int Y = FinalMenuY;
 
             X += 20;
             GameScreen.DrawBox(g, new Vector2(X, Y), ActionMenuWidth, MenuHeight, Color.White);
@@ -102,7 +106,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Y += PannelHeight;
             }
 
-            Y = MenuY;
+            Y = BaseMenuY;
             if (Y + MenuHeight >= Constants.Height)
                 Y = Constants.Height - MenuHeight;
             //Draw the menu cursor.

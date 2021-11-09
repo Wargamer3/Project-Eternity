@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -31,7 +30,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputConfirmPressed() || InputHelper.InputCancelPressed())
+            if (ActiveInputManager.InputConfirmPressed() || ActiveInputManager.InputCancelPressed())
             {
                 //Reset the cursor.
                 RemoveFromPanelList(this);

@@ -15,13 +15,13 @@ namespace ProjectEternity.Units.Magic
         private BattleMap Map;
 
         public ActionPanelSpellSelection(BattleMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, true)
+            : base(PanelName, Map.ListActionMenuChoice, null, true)
         {
             this.Map = Map;
         }
 
         public ActionPanelSpellSelection(BattleMap Map, UnitMagic ActiveUnit)
-            : base(PanelName, Map.ListActionMenuChoice, true)
+            : base(PanelName, Map.ListActionMenuChoice, null, true)
         {
             this.Map = Map;
             this.ActiveUnit = ActiveUnit;

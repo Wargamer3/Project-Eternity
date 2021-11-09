@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -128,14 +127,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorControl();//Move the cursor
             Map.ListLayer[Map.ActiveLayerIndex].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
 
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            if (ActiveInputManager.InputConfirmPressed())
             {
-                if (MouseHelper.InputLeftButtonReleased())
-                {
-                    if (MouseHelper.MouseStateCurrent.X < 0 || MouseHelper.MouseStateCurrent.X > Constants.Width ||
-                        MouseHelper.MouseStateCurrent.Y < 0 || MouseHelper.MouseStateCurrent.Y > Constants.Height)
-                        return;
-                }
                 //Find if a current player Unit is under the cursor.
                 int CursorSelect = Map.CheckForSquadAtPosition(Map.ActivePlayerIndex, Map.CursorPosition, Vector3.Zero);
 

@@ -108,7 +108,6 @@
     <Compile Include="Acion Panels\Player Choices\Tile Status.cs" />
     <Compile Include="Acion Panels\Player Choices\Wait.cs" />
     <Compile Include="Acion Panels\Phase Menu.cs" />
-    <Compile Include="Acion Panels\Player Behavior\Player Menu.cs" />
     <Compile Include="Acion Panels\Attack\Attack Part 1.cs" />
     <Compile Include="Acion Panels\Movement\Move Part 2.cs" />
     <Compile Include="Acion Panels\Player Choices\Spirit.cs" />

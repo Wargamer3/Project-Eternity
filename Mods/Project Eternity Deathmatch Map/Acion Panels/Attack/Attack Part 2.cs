@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
-using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -42,7 +41,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Map.ListLayer[Map.ActiveLayerIndex].LayerGrid.AddDrawablePoints(AttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
 
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            if (ActiveInputManager.InputConfirmPressed())
             {
                 int TargetSelect = 0;
                 //Verify if the cursor is over one of the possible MV position.
