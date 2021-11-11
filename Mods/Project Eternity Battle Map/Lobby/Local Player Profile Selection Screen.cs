@@ -39,32 +39,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
-            ListPlayerProfile = new List<string>();
-            ListPlayerProfile.Add("Wargamer");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer2");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer1");
-            ListPlayerProfile.Add("Wargamer3333");
+            ListPlayerProfile = BattleMapPlayer.GetProfileNames();
 
             int MenuWidth = (int)(Constants.Width * 0.45);
             int MenuHeight = (int)(Constants.Height * 0.45);

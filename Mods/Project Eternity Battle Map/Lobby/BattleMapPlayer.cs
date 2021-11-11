@@ -123,15 +123,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void LoadLocally(ContentManager Content)
         {
-            if (!File.Exists("Triple Thunder Save File.bin"))
+            if (!File.Exists("User data/Profiles/Battle Map/Last Selected Profile.txt"))
             {
+                File.WriteAllText("User data/Profiles/Battle Map/Last Selected Profile.txt", "Player 1", Encoding.UTF8);
+                Name = "Player 1";
                 SaveLocally();
+                return;
             }
 
-            FileStream FS = new FileStream("Triple Thunder Save File.bin", FileMode.Open, FileAccess.Read);
+            Name = File.ReadAllText("User data/Profiles/Battle Map/Last Selected Profile.txt", Encoding.UTF8);
+            FileStream FS = new FileStream("User data/Profiles/Battle Map/" + Name + ".bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
-            Name = BR.ReadString();
             Enum.TryParse(BR.ReadString(), out GameplayType);
             Money = BR.ReadUInt32();
 
@@ -141,15 +144,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void SaveLocally()
         {
-            FileStream FS = new FileStream("Triple Thunder Save File.bin", FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream FS = new FileStream("User data/Profiles/Battle Map/" + Name + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
-            BW.Write(Name);
             BW.Write(GameplayType.ToString());
             BW.Write(Money);
 
             BW.Close();
             FS.Close();
+        }
+
+        public static List<string> GetProfileNames()
+        {
+            List<string> ListProfileName = new List<string>();
+
+            DirectoryInfo MapDirectory = new DirectoryInfo("User data/Profiles/Battle Map");
+
+            FileInfo[] ArrayMapFile = MapDirectory.GetFiles("*.bin");
+            foreach (FileInfo ActiveFile in ArrayMapFile)
+            {
+                string FileName = ActiveFile.Name.Remove(ActiveFile.Name.Length - 4);
+                ListProfileName.Add(FileName);
+            }
+            return ListProfileName;
         }
 
         public bool IsHost()

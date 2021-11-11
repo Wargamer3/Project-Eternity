@@ -58,10 +58,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.Room = Room;
 
+
             if (Room.ListRoomPlayer.Count == 0)
             {
-                PlayerManager.ListLocalPlayer[0].OnlinePlayerType = BattleMapPlayer.PlayerTypeHost;
-                Room.AddLocalPlayer(PlayerManager.ListLocalPlayer[0]);
+                foreach (BattleMapPlayer ActivePlayer in PlayerManager.ListLocalPlayer)
+                {
+                    ActivePlayer.OnlinePlayerType = BattleMapPlayer.PlayerTypeHost;
+                    Room.AddLocalPlayer(ActivePlayer);
+                }
             }
         }
 
