@@ -33,6 +33,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private TextInput ChatInput;
 
+        private BoxButton LocalPlayerSelectionButton;
+
         private BoxButton CreateARoomButton;
         private BoxButton QuickStartButton;
         private InteractiveButton WaitingRoomOnlyButton;
@@ -110,7 +112,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
                 Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
                 Character NewCharacter = new Character("Original/Greg", Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                 NewCharacter.Level = 1;
@@ -138,6 +140,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sprLicenseAll = Content.Load<Texture2D>("Triple Thunder/Menus/Channel/License All");
             sprTitleBattle = Content.Load<Texture2D>("Triple Thunder/Menus/Channel/Title Battle");
 
+            LocalPlayerSelectionButton = new BoxButton(new Rectangle(400, 8, 120, 45), fntArial12, "Local Players\r\nManagement", OnButtonOver, SelectLocalPlayers);
+
             QuickStartButton = new BoxButton(new Rectangle(47, 70, 100, 45), fntArial12, "Quick Start", OnButtonOver, null);
             CreateARoomButton = new BoxButton(new  Rectangle(150, 70, 100, 45), fntArial12, "Create\n\ra Room", OnButtonOver, CreateARoom);
             WaitingRoomOnlyButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Waiting Room Only", new Vector2(447, 85), OnButtonOver, null);
@@ -161,7 +165,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayMenuButton = new BoxButton[]
             {
-                CreateARoomButton, QuickStartButton,
+                LocalPlayerSelectionButton, CreateARoomButton, QuickStartButton,
                 InfoButton, RankingButton, OptionsButton, HelpButton,
                 ShowAllPlayersFilter, ShowFriendsFilter, ShowGuildsFilter,
                 ShopButton, MetalButton,
@@ -404,6 +408,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         #region Buttons
+
+        private void SelectLocalPlayers()
+        {
+            PushScreen(new LocalPlayerSelectionScreen());
+            sndButtonClick.Play();
+        }
 
         private void CreateARoom()
         {

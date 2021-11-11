@@ -1,12 +1,12 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class BoxScrollbar
+    public class BoxScrollbar: IUIElement
     {
         public delegate void OnScrollbarChangeDelegate(float ScrollbarValue);
 
@@ -110,6 +110,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return -1;
+        }
+
+        public void Select()
+        {
+        }
+
+        public void Unselect()
+        {
+        }
+
+        public void Enable()
+        {
+        }
+
+        public void Disable()
+        {
         }
 
         public void Draw(CustomSpriteBatch g)

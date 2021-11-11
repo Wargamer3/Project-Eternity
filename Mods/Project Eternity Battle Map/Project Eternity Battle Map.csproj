@@ -101,6 +101,8 @@
     <Compile Include="Lobby\Game Options Select Map Screen.cs" />
     <Compile Include="Lobby\Game Options Screen.cs" />
     <Compile Include="Lobby\Game Preparation Screen.cs" />
+    <Compile Include="Lobby\Local Player Profile Selection Screen.cs" />
+    <Compile Include="Lobby\Local Player Selection Screen.cs" />
     <Compile Include="Lobby\UI\Box Drop Down Button.cs" />
     <Compile Include="Lobby\Create Room Screen.cs" />
     <Compile Include="Lobby\Loading Screen.cs" />
