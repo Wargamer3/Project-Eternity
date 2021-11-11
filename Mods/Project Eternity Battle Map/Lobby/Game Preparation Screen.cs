@@ -334,6 +334,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 NewMap.BattleMapPath = Room.MapPath;
                 NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
                 NewMap.ListGameScreen = ListGameScreen;
+                foreach (BattleMapPlayer ActivePlayer in PlayerManager.ListLocalPlayer)
+                {
+                    NewMap.AddLocalPlayer(ActivePlayer);
+                }
                 NewMap.Load();
                 NewMap.Init();
                 NewMap.TogglePreview(true);
