@@ -10,62 +10,25 @@ using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class ComboWeapon : WeaponBase
+    public class SimpleWeapon : WeaponBase
     {
-        private Combo NoneCombo;
-        private Combo MovingCombo;
-        private Combo RunningCombo;
-        private Combo DashCombo;
-        private Combo AirborneCombo;
-        private Combo ActiveCombo;
-        private Combo NextCombo;
-        private Combo ReloadCombo;
+        private string HoldingAnimationName;
+        private string ShootingAnimationName;
+        private string ReloadAnimationName;
 
-        /// <summary>
-        /// Used by tests
-        /// </summary>
-        /// <param name="Damage"></param>
-        /// <param name="AffectedByGravity"></param>
-        /// <param name="ProjectileSpeed"></param>
-        public ComboWeapon(float Damage, bool AffectedByGravity, float ProjectileSpeed)
-            : base(null, null)
-        {
-            this.Damage = Damage;
-            ActiveProjectileInfo = new ProjectileInfo();
-            ActiveProjectileInfo.AffectedByGravity = AffectedByGravity;
-            ActiveProjectileInfo.ProjectileSpeed = ProjectileSpeed;
-            NumberOfProjectiles = 1;
-        }
+        public AnimationTypes AnimationType;
+        public ComboRotationTypes ComboRotationType;
+        public bool InstantActivation;
 
-        public ComboWeapon(string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
+        bool IsShooting;
+        bool IsShootingNext;
+
+        public SimpleWeapon(string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(OwnerName, WeaponPath)
         {
             FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
-
-            string NoneComboName;
-            string MovingComboName;
-            string RunningComboName;
-            string DashComboName;
-            string AirborneComboName;
-
-            if (IsCharacterAnimation)
-            {
-                NoneComboName = WeaponPath + "/Idle";
-                MovingComboName = WeaponPath + "/Move";
-                RunningComboName = WeaponPath + "/Move";
-                DashComboName = WeaponPath + "/Move";
-                AirborneComboName = WeaponPath + "/Idle";
-            }
-            else
-            {
-                NoneComboName = WeaponPath + "/Holding";
-                MovingComboName = WeaponPath + "/Holding";
-                RunningComboName = WeaponPath + "/Holding";
-                DashComboName = WeaponPath + "/Holding";
-                AirborneComboName = WeaponPath + "/Holding";
-            }
 
             Damage = BR.ReadSingle();
             MaxDurability = BR.ReadSingle();
@@ -113,7 +76,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 RecoilRecoverySpeed = BR.ReadSingle();
                 NumberOfProjectiles = BR.ReadInt32();
                 ProjectileType = (ProjectileTypes)BR.ReadInt32();
-                string ReloadAnimation = BR.ReadString();
 
                 if (ProjectileType == ProjectileTypes.Projectile)
                 {
@@ -126,25 +88,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     NozzleFlashAnimation.Path = "Fire 1_strip5";
                     NozzleFlashAnimation.IsLooped = false;
                 }
-
-                if (!string.IsNullOrEmpty(ReloadAnimation))
-                    ReloadCombo = new Combo(ReloadAnimation);
             }
-
-            if (!string.IsNullOrEmpty(NoneComboName) && File.Exists("Content/Triple Thunder/Combos/" + NoneComboName + ".ttc"))
-                NoneCombo = new Combo(NoneComboName);
-
-            if (!string.IsNullOrEmpty(MovingComboName) && File.Exists("Content/Triple Thunder/Combos/" + MovingComboName + ".ttc"))
-                MovingCombo = new Combo(MovingComboName);
-
-            if (!string.IsNullOrEmpty(RunningComboName) && File.Exists("Content/Triple Thunder/Combos/" + RunningComboName + ".ttc"))
-                RunningCombo = new Combo(RunningComboName);
-
-            if (!string.IsNullOrEmpty(DashComboName) && File.Exists("Content/Triple Thunder/Combos/" + DashComboName + ".ttc"))
-                DashCombo = new Combo(DashComboName);
-
-            if (!string.IsNullOrEmpty(AirborneComboName) && File.Exists("Content/Triple Thunder/Combos/" + AirborneComboName + ".ttc"))
-                AirborneCombo = new Combo(AirborneComboName);
 
             BR.Close();
             FS.Close();
@@ -205,98 +149,32 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Owner.CreateAttackBox(WeaponPath, GunNozzlePosition, ListAttack);
         }
 
-        public Combo GetActiveWeaponCombo(string ActiveMovementStance)
-        {
-            switch (ActiveMovementStance)
-            {
-                case "None":
-                    return NoneCombo;
-
-                case "Walking":
-                    return MovingCombo;
-
-                case "Running":
-                    return RunningCombo;
-
-                case "Dash":
-                    return DashCombo;
-
-                case "Airborne":
-                    if (AirborneCombo == null)
-                        return NoneCombo;
-                    return AirborneCombo;
-
-                default:
-                    return NoneCombo;
-            }
-        }
-
         public override string GetAnimationName(string ActiveMovementStance)
         {
-            switch (ActiveMovementStance)
-            {
-                case "None":
-                    return NoneCombo.AnimationName;
-
-                case "Moving":
-                    return MovingCombo.AnimationName;
-
-                case "Running":
-                    return RunningCombo.AnimationName;
-
-                case "Dash":
-                    return DashCombo.AnimationName;
-
-                case "Airborne":
-                    if (AirborneCombo == null)
-                        return NoneCombo.AnimationName;
-                    return AirborneCombo.AnimationName;
-
-                default:
-                    return NoneCombo.AnimationName;
-            }
+            return HoldingAnimationName;
         }
 
         public override AnimationTypes GetAnimationType(string ActiveMovementStance)
         {
-            if (ActiveCombo == null)
-            {
-                return AnimationTypes.Null;
-            }
-
-            return GetActiveWeaponCombo(ActiveMovementStance).AnimationType;
+            return AnimationType;
         }
 
         public override string GetDefaultAnimationName()
         {
-            return NoneCombo.AnimationName;
+            return HoldingAnimationName;
         }
 
         public override void ResetAnimationToIdle()
         {
-            ActiveCombo = NoneCombo;
         }
 
         public override void ResetAnimation(string ActiveMovementStance)
         {
-            Combo ActiveWeaponCombo = GetActiveWeaponCombo(ActiveMovementStance);
-            ActiveWeaponCombo.Reset();
         }
 
         public override bool CanRotateTowardMouse(string ActiveMovementStance)
         {
-            bool RotateTowardMouse = true;
-
-            if (GetActiveWeaponCombo(ActiveMovementStance) != null)
-            {
-                RotateTowardMouse = GetActiveWeaponCombo(ActiveMovementStance).ComboRotationType != ComboRotationTypes.None;
-            }
-            if (ActiveCombo != null)
-            {
-                RotateTowardMouse = ActiveCombo.ComboRotationType != ComboRotationTypes.None;
-            }
-
-            return RotateTowardMouse;
+            return ComboRotationType != ComboRotationTypes.None;
         }
 
         public override void UpdateWeaponAngle(float Angle, string ActiveMovementStance, VisibleTimeline WeaponSlotTimeline, RobotAnimation Owner)
@@ -305,14 +183,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 return;
 
             VisibleTimeline WeaponTimeline = CurrentAnimation.AnimationOrigin;
-            Combo ActiveWeaponCombo = GetActiveWeaponCombo(ActiveMovementStance);
+            ComboRotationTypes ActiveComboRotationTypes = ComboRotationTypes.RotateAroundWeaponSlot;
 
-            if (ActiveWeaponCombo != null && WeaponSlotTimeline != null)
+            if (WeaponSlotTimeline != null)
             {
                 float TranslationX = WeaponTimeline.Position.X;
                 float TranslationY = WeaponTimeline.Position.Y;
 
-                if (ActiveWeaponCombo.ComboRotationType == ComboRotationTypes.RotateAroundWeaponSlot)
+                if (ActiveComboRotationTypes == ComboRotationTypes.RotateAroundWeaponSlot)
                 {
                     CurrentAnimation.TransformationMatrix =
                         Matrix.CreateTranslation(-TranslationX, -TranslationY, 0)
@@ -320,7 +198,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         * Matrix.CreateTranslation(WeaponSlotTimeline.Position.X,
                                                    WeaponSlotTimeline.Position.Y, 0);
                 }
-                else if (ActiveWeaponCombo.ComboRotationType == ComboRotationTypes.RotateAroundRobot)
+                else if (ActiveComboRotationTypes == ComboRotationTypes.RotateAroundRobot)
                 {
                     Vector2 WeaponOffset = WeaponSlotTimeline.Position - Owner.AnimationOrigin.Position;
                     float ExtraAngle = (float)Math.Atan2(WeaponOffset.Y, WeaponOffset.X);
@@ -358,25 +236,24 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             IsReloading = true;
             AmmoCurrent = AmmoPerMagazine;
-            if (ReloadCombo != null)
+            if (CanBeReloaded())
             {
-                NextCombo = ReloadCombo;
                 InitiateFollowingAttack(true, ActiveMovementStance, Owner);
             }
         }
 
         public override bool CanBeReloaded()
         {
-            return ReloadCombo != null;
+            return true;
         }
 
         public override void OnPartialAnimationLoopEnd(PartialAnimation ActivePartialAnimation, string ActiveMovementStance, RobotAnimation Owner)
         {
             if (IsReloading)
             {
-                if (ReloadCombo != null)
+                if (CanBeReloaded())
                 {
-                    if (CurrentAnimation.AnimationPath == ReloadCombo.AnimationName)
+                    if (CurrentAnimation.AnimationPath == ReloadAnimationName)
                     {
                         IsReloading = false;
                         Owner.ActivatePartialWeapon(this, GetAnimationName(ActiveMovementStance));
@@ -400,42 +277,30 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     Owner.ActivatePartialWeapon(this, GetAnimationName(ActiveMovementStance));
                 }
             }
-            else
-            {
-
-            }
         }
 
         public override bool InitiateAttack(GameTime gameTime, AttackInputs AttackInput, MovementInputs CurrentMovementInput, string ActiveMovementStance, bool ForceCombo, RobotAnimation Owner)
         {
-            //Only get the next combo if it is not set to avoid overriding it.
-            if (NextCombo == null)
+            if (!IsShootingNext)
             {
-                // Already using a combo, fetch the next combo.
-                if (ActiveCombo != null)
+                if (IsShooting)
                 {
-                    NextCombo = ActiveCombo.GetNextCombo(AttackInput, CurrentMovementInput, gameTime, ForceCombo, Owner);
+                    IsShootingNext = true;
 
-                    if (NextCombo != null && NextCombo.InstantActivation)
+                    if (InstantActivation)
                     {
-                        InitiateFollowingAttack(NextCombo.AnimationType == AnimationTypes.PartialAnimation, ActiveMovementStance, Owner);
+                        InitiateFollowingAttack(AnimationType == AnimationTypes.PartialAnimation, ActiveMovementStance, Owner);
+                        return true;
                     }
                 }
                 //First use of a combo, use it immediatly.
                 else
                 {
-                    Combo ActiveWeaponCombo = GetActiveWeaponCombo(ActiveMovementStance);
+                    IsShootingNext = true;
+                    IsShooting = true;
 
-                    if (ActiveWeaponCombo != null)
-                    {
-                        NextCombo = ActiveWeaponCombo.GetNextCombo(AttackInput, CurrentMovementInput, gameTime, ForceCombo, Owner);
-                        if (NextCombo != null)
-                        {
-                            ActiveCombo = ActiveWeaponCombo;
-                            InitiateFollowingAttack(NextCombo.AnimationType == AnimationTypes.PartialAnimation, ActiveMovementStance, Owner);
-                            return true;
-                        }
-                    }
+                    InitiateFollowingAttack(AnimationType == AnimationTypes.PartialAnimation, ActiveMovementStance, Owner);
+                    return true;
                 }
             }
 
@@ -452,44 +317,39 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             bool CanUseNextCombo = false;
 
-            if (ActiveCombo != null)
+            if (IsShooting)
             {
-                if (ActiveCombo.AnimationType == AnimationTypes.PartialAnimation == IsPartialAnimation)
+                if (AnimationType == AnimationTypes.PartialAnimation == IsPartialAnimation)
                 {
                     CanUseNextCombo = true;
                 }
                 else
                 {
-                    Combo ActiveWeaponCombo = GetActiveWeaponCombo(ActiveMovementStance);
-
-                    if (ActiveWeaponCombo != null)
+                    if ((AnimationType == AnimationTypes.PartialAnimation) == IsPartialAnimation)
                     {
-                        if ((ActiveCombo.AnimationType == AnimationTypes.PartialAnimation) == IsPartialAnimation)
-                        {
-                            CanUseNextCombo = true;
-                            ActiveWeaponCombo.Reset();
-                        }
+                        CanUseNextCombo = true;
                     }
                 }
 
-                if (CanUseNextCombo && NextCombo != null)
+                if (CanUseNextCombo)
                 {
-                    if (NextCombo.AnimationType == AnimationTypes.PartialAnimation)
+                    if (AnimationType == AnimationTypes.PartialAnimation)
                     {
-                        Owner.RemovePartialAnimation(ActiveCombo.AnimationName);
-                        Owner.ActivatePartialWeapon(this, NextCombo.AnimationName);
+                        Owner.RemovePartialAnimation(HoldingAnimationName);
+                        Owner.RemovePartialAnimation(ShootingAnimationName);
+                        Owner.ActivatePartialWeapon(this, ShootingAnimationName);
                         CurrentAnimation.ActiveKeyFrame++;
                     }
                     else
                     {
                         Owner.LockAnimation = true;
-                        Owner.ActivatePartialWeapon(this, NextCombo.AnimationName);
+                        Owner.ActivatePartialWeapon(this, ShootingAnimationName);
                     }
                 }
             }
 
-            ActiveCombo = NextCombo;
-            NextCombo = null;
+            IsShooting = IsShootingNext;
+            IsShootingNext = false;
         }
 
         public override void UpdateSkills(string RequirementName)

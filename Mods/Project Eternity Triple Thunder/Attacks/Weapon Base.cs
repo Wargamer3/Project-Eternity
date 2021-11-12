@@ -91,6 +91,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public abstract string GetAnimationName(string ActiveMovementStance);
         public abstract AnimationTypes GetAnimationType(string ActiveMovementStance);
         public abstract string GetDefaultAnimationName();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="AttackInput"></param>
+        /// <param name="ActiveWeapon"></param>
+        /// <returns>Returns true if the attack was used.</returns>
         public abstract bool InitiateAttack(GameTime gameTime, AttackInputs AttackInput, MovementInputs CurrentMovementInput, string ActiveMovementStance, bool ForceCombo, RobotAnimation Owner);
         public abstract void InitiateFollowingAttack(bool IsPartialAnimation, string ActiveMovementStance, RobotAnimation Owner);
         public abstract void OnPartialAnimationLoopEnd(PartialAnimation ActivePartialAnimation, string ActiveMovementStance, RobotAnimation Owner);

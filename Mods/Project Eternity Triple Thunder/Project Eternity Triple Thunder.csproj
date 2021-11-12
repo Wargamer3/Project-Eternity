@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attacks\Simple Weapon.cs" />
     <Compile Include="Attacks\Weapon Base.cs" />
     <Compile Include="Attacks\Explosion Options.cs" />
     <Compile Include="Attacks\Weapon Drop.cs" />
