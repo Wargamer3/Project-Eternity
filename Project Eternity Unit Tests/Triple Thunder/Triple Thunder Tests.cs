@@ -59,9 +59,9 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
 
         private RobotAnimation CreateDummyRobot()
         {
-            Weapon DummyWeapon = new Weapon(5, false, 1);
+            ComboWeapon DummyWeapon = new ComboWeapon(5, false, 1);
 
-            RobotAnimation NewRobotAnimation = new RobotAnimation(DummyMap.ListLayer[0], Vector2.Zero, 0, new List<Weapon>() { DummyWeapon });
+            RobotAnimation NewRobotAnimation = new RobotAnimation(DummyMap.ListLayer[0], Vector2.Zero, 0, new List<ComboWeapon>() { DummyWeapon });
 
             NewRobotAnimation.MaxHP = 100;
             NewRobotAnimation.MaxEN = 50;
@@ -85,7 +85,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
 
             AttackContext.Owner = CreateDummyRobot();
-            AttackContext.OwnerProjectile = new HitscanBox(0, new Weapon.ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
+            AttackContext.OwnerProjectile = new HitscanBox(0, new ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
 
             DummySkill.AddSkillEffectsToTarget(string.Empty);
         }
@@ -99,7 +99,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
 
             AttackContext.Owner = CreateDummyRobot();
-            AttackContext.OwnerProjectile = new HitscanBox(0, new Weapon.ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
+            AttackContext.OwnerProjectile = new HitscanBox(0, new ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
 
             DummySkill.AddSkillEffectsToTarget("Shoot");
             List<BaseEffect> ListActiveEffect = AttackContext.Owner.Effects.GetActiveEffects("Dummy");
@@ -115,7 +115,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
 
             AttackContext.Owner = CreateDummyRobot();
-            AttackContext.OwnerProjectile = new HitscanBox(0, new Weapon.ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
+            AttackContext.OwnerProjectile = new HitscanBox(0, new ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
 
             DummySkill.AddSkillEffectsToTarget(string.Empty);
             List<BaseEffect> ListActiveEffect = AttackContext.Owner.Effects.GetActiveEffects("Dummy");
@@ -131,7 +131,7 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
                                                             DummyMap.DicEffect[LaunchAttackEffect.Name].Copy());
 
             AttackContext.Owner = CreateDummyRobot();
-            AttackContext.OwnerProjectile = new HitscanBox(0, new Weapon.ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
+            AttackContext.OwnerProjectile = new HitscanBox(0, new ExplosionOptions(), AttackContext.Owner, Vector2.Zero, 0);
             DummySkill.AddSkillEffectsToTarget(string.Empty);
 
             AttackContext.OwnerProjectile.Update(new GameTime(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1)));

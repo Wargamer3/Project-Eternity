@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Magic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Magic
 {
@@ -12,7 +11,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Magic
         MagicUserParams MagicParams;
         public IMagicUser Parent;
 
-        public InvisibleFireball(float Damage, Weapon.ExplosionOptions ExplosionAttributes, RobotAnimation Owner, Vector2 Position, float Angle,
+        public InvisibleFireball(float Damage, ExplosionOptions ExplosionAttributes, RobotAnimation Owner, Vector2 Position, float Angle,
             MagicUserParams MagicParams, IMagicUser Parent)
             : base(Damage, ExplosionAttributes, Owner, Position, Angle)
         {
@@ -93,7 +92,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Magic
         protected override string DoExecuteEffect()
         {
             Owner.NumberOfExecutions++;
-            InvisibleFireball NewFireball = new InvisibleFireball(5, new Weapon.ExplosionOptions(), AttackParams.LocalContext.Owner, AttackParams.SharedParams.OwnerPosition, 0,
+            InvisibleFireball NewFireball = new InvisibleFireball(5, new ExplosionOptions(), AttackParams.LocalContext.Owner, AttackParams.SharedParams.OwnerPosition, 0,
                 MagicParams, this);
 
             //Clone the following skills so they are not share by every bullets.

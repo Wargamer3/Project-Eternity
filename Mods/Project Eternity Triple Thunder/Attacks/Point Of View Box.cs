@@ -9,7 +9,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
     public class PointOfViewBox : AttackBox
     {
         public PointOfViewBox(Vector2 Position, Vector2 Destination)
-            : base(0, new Weapon.ExplosionOptions(), null, false)
+            : base(0, new ExplosionOptions(), null, false)
         {
             float MinX = Position.X;
             float MinY = Position.Y;

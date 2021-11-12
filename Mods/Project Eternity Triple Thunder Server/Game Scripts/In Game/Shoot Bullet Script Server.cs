@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
         {
             Layer ActiveLayer = ActiveGame.ListLayer[LayerIndex];
             RobotAnimation ActivePlayer = ActiveLayer.DicRobot[OwnerID];
-            Weapon ActiveWeapon = ActivePlayer.PrimaryWeapons.GetWeapon(WeaponName);
+            ComboWeapon ActiveWeapon = ActivePlayer.PrimaryWeapons.GetWeapon(WeaponName);
 
             foreach (Vector2 ActiveSpeed in ListSpeed)
             {

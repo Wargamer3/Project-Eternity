@@ -46,15 +46,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private SimpleAnimation TrailAnimation;
         private ProjectileInfo ActiveProjectileInfo;
 
-        public ProjectileBox(float Damage, Weapon.ExplosionOptions ExplosionAttributes, RobotAnimation Owner,
+        public ProjectileBox(float Damage, ExplosionOptions ExplosionAttributes, RobotAnimation Owner,
             Vector2 Position, Vector2 Size, float Angle, ProjectileInfo ActiveProjectileInfo)
             : base(Damage, ExplosionAttributes, Owner, false)
         {
             this.ActiveProjectileInfo = ActiveProjectileInfo;
-            if (ActiveProjectileInfo.RotatationAllowed)
-            {
-                this.Angle = Angle;
-            }
             this.AffectedByGravity = ActiveProjectileInfo.AffectedByGravity;
 
             this.Speed = new Vector2((float)Math.Cos(Angle) * ActiveProjectileInfo.ProjectileSpeed, (float)Math.Sin(Angle) * ActiveProjectileInfo.ProjectileSpeed);
@@ -66,6 +62,20 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 TrailAnimation = ActiveProjectileInfo.TrailAnimation.Copy();
                 TrailAnimation.Position = Position;
+            }
+            if (ActiveProjectileInfo.RotatationAllowed)
+            {
+                this.Angle = Angle;
+
+                if (ProjectileAnimation != null)
+                {
+                    ProjectileAnimation.Angle = Angle;
+                }
+
+                if (TrailAnimation != null)
+                {
+                    TrailAnimation.Angle = Angle;
+                }
             }
 
             Owner.SetAttackContext(this, Owner, Angle, Position);

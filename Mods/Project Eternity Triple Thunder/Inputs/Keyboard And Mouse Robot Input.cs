@@ -102,10 +102,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 for (int W = 0; W < Owner.PrimaryWeapons.ActiveWeapons.Count; W++)
                 {
-                    Weapon ActiveWeapon = Owner.PrimaryWeapons.ActiveWeapons[W];
-                    if (ActiveWeapon.ReloadCombo != null && ActiveWeapon.ActiveCombo == null)
+                    ComboWeapon ActiveWeapon = Owner.PrimaryWeapons.ActiveWeapons[W];
+                    if (ActiveWeapon.CanBeReloaded())
                     {
-                        ActiveWeapon.ActiveCombo = ActiveWeapon.NoneCombo;
+                        ActiveWeapon.ResetAnimationToIdle();
                     }
                 }
                 Owner.Reload();
@@ -117,12 +117,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             else if (MouseHelper.InputLeftButtonPressed())
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightPress);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightPress);
             }
             else if (MouseHelper.InputLeftButtonHold())
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightHold);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightHold);
             }
 
             if (GrenadeCooldown <= 0)
@@ -135,14 +135,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     }
                     else
                     {
-                        Owner.UseCombo(gameTime, AttackInputs.HeavyPress);
+                        Owner.InitiateAttack(gameTime, AttackInputs.HeavyPress);
                     }
                 }
                 else if (MouseHelper.InputRightButtonReleased())
                 {
                     if (Owner.SecondaryWeapons.ActiveWeapons.Count > 0)
                     {
-                        Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.SecondaryWeapons.ActiveWeapons[0], true);
+                        Owner.SecondaryWeapons.ActiveWeapons[0].InitiateAttack(gameTime, AttackInputs.HeavyPress, Owner.CurrentMovementInput, Owner.ActiveMovementStance, true, Owner);
                         Owner.UnholsterWeaponsIfNeeded();
                         GrenadeCooldown = 1;
                     }
@@ -151,11 +151,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 {
                     if (Owner.SecondaryWeapons.ActiveWeapons.Count > 0)
                     {
-                        Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.SecondaryWeapons.ActiveWeapons[0], false);
+                        Owner.SecondaryWeapons.ActiveWeapons[0].InitiateAttack(gameTime, AttackInputs.HeavyHold, Owner.CurrentMovementInput, Owner.ActiveMovementStance, false, Owner);
                     }
                     else
                     {
-                        Owner.UseCombo(gameTime, AttackInputs.HeavyHold);
+                        Owner.InitiateAttack(gameTime, AttackInputs.HeavyHold);
                     }
                 }
             }

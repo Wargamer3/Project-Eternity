@@ -350,7 +350,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Owner.GlobalRobotContext.SetRobotContext(this, ActiveRobotAnimation);
         }
 
-        public void SetRobotContext(RobotAnimation ActiveRobotAnimation, Weapon ActiveWeapon, float Angle, Vector2 Position)
+        public void SetRobotContext(RobotAnimation ActiveRobotAnimation, ComboWeapon ActiveWeapon, float Angle, Vector2 Position)
         {
             Owner.GlobalRobotContext.SetRobotContext(this, ActiveRobotAnimation, ActiveWeapon, Angle, Position);
         }
@@ -732,7 +732,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListWeaponDropToRemove.Add(DroppedWeaponToRemove.ID);
         }
 
-        public void CreateExplosion(Vector2 ExplosionCenter, RobotAnimation RobotOwner, Weapon.ExplosionOptions ExplosionAttributes, Vector2 CollisionGroundResult)
+        public void CreateExplosion(Vector2 ExplosionCenter, RobotAnimation RobotOwner, ExplosionOptions ExplosionAttributes, Vector2 CollisionGroundResult)
         {
             foreach (KeyValuePair<uint, RobotAnimation> ActiveRobotPair in DicRobot)
             {

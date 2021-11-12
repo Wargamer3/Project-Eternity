@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override RobotAnimation SpawnPlayer(Player NewPlayer, Layer Owner, ISFXGenerator PlayerSFXGenerator, Rectangle CameraBounds)
         {
-            RobotAnimation NewRobot = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, Owner, SpawnLocation, Team, NewPlayer.Equipment, PlayerSFXGenerator, new List<Weapon>());
+            RobotAnimation NewRobot = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, Owner, SpawnLocation, Team, NewPlayer.Equipment, PlayerSFXGenerator, new List<ComboWeapon>());
             NewRobot.InputManagerHelper = new PlayerRobotInputManager();
 
             NewRobot.UpdateControls(NewPlayer.GameplayType, CameraBounds);
@@ -134,10 +134,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override RobotAnimation SpawnPlayer(Player NewPlayer, Layer Owner, ISFXGenerator PlayerSFXGenerator, Rectangle CameraBounds)
         {
-            List<Weapon> ListExtraWeapon = new List<Weapon>();
+            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
-                ListExtraWeapon.Add(new Weapon(_VehiclePath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
+                ListExtraWeapon.Add(new ComboWeapon(_VehiclePath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
             Vehicle NewVehicle = new Vehicle(_VehiclePath, Owner, SpawnLocation, Team, new PlayerInventory(), Owner.PlayerSFXGenerator, ListExtraWeapon);

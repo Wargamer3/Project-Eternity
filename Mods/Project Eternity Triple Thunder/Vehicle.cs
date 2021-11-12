@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private List<RobotAnimation> ListUser;
         private string CaptureRule;
 
-        public Vehicle(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerInventory Equipment, ISFXGenerator PlayerSFXGenerator, List<Weapon> ListExtraWeapon)
+        public Vehicle(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerInventory Equipment, ISFXGenerator PlayerSFXGenerator, List<ComboWeapon> ListExtraWeapon)
             : base(Name, CurrentLayer, Position, Team, new EquipmentLoadout(), PlayerSFXGenerator)
         {
             ListUser = new List<RobotAnimation>();
@@ -34,13 +34,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             IsDynamic = BR.ReadBoolean();
 
             int ListExtraAnimationCount = BR.ReadInt32();
-            ListStanceAnimation = new List<Weapon>(ListExtraAnimationCount);
+            ListStanceAnimation = new List<ComboWeapon>(ListExtraAnimationCount);
             for (int W = 0; W < ListExtraAnimationCount; ++W)
             {
                 string ExtraAnimationPath = BR.ReadString();
                 if (!string.IsNullOrEmpty(ExtraAnimationPath))
                 {
-                    ListStanceAnimation.Add(new Weapon(Name, ExtraAnimationPath, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
+                    ListStanceAnimation.Add(new ComboWeapon(Name, ExtraAnimationPath, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
                 }
             }
 
@@ -53,12 +53,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             for (int W = 0; W < ListWeaponCount; ++W)
             {
                 string WeaponName = BR.ReadString();
-                PrimaryWeapons.AddWeaponToStash(new Weapon(Name, WeaponName, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
+                PrimaryWeapons.AddWeaponToStash(new ComboWeapon(Name, WeaponName, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
             }
 
             if (ListExtraWeapon != null)
             {
-                foreach (Weapon ActiveWeapon in ListExtraWeapon)
+                foreach (ComboWeapon ActiveWeapon in ListExtraWeapon)
                 {
                     PrimaryWeapons.AddWeaponToStash(ActiveWeapon);
                     PrimaryWeapons.UseWeapon(ActiveWeapon);
@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Load();
 
-            SetAnimation(StandingAnimations.NoneCombo.AnimationName);
+            SetAnimation(StandingAnimations.GetDefaultAnimationName());
             CurrentMovementInput = MovementInputs.None;
             ActiveMovementStance = "None";
             Update(new GameTime());
@@ -228,12 +228,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (Controller.IsButtonPressed(ShootButtons))
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightPress);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightPress);
             }
             else if (Controller.IsButtonDown(ShootButtons))
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightHold);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightHold);
             }
 
             if (MouseHelper.InputRightButtonPressed())
@@ -242,12 +242,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
             else if (MouseHelper.InputRightButtonReleased())
             {
-                Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.SecondaryWeapons.ActiveWeapons[0], true);
+                Owner.SecondaryWeapons.ActiveWeapons[0].InitiateAttack(gameTime, AttackInputs.HeavyPress, Owner.CurrentMovementInput, Owner.ActiveMovementStance, true, Owner);
                 Owner.UnholsterWeaponsIfNeeded();
             }
             else if (MouseHelper.InputRightButtonHold())
             {
-                Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.SecondaryWeapons.ActiveWeapons[0], false);
+                Owner.SecondaryWeapons.ActiveWeapons[0].InitiateAttack(gameTime, AttackInputs.HeavyHold, Owner.CurrentMovementInput, Owner.ActiveMovementStance, false, Owner);
             }
         }
     }
@@ -298,12 +298,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (MouseHelper.InputLeftButtonPressed())
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightPress);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightPress);
             }
             else if (MouseHelper.InputLeftButtonHold())
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightHold);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightHold);
             }
         }
     }
@@ -357,12 +357,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (MouseHelper.InputLeftButtonPressed())
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightPress);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightPress);
             }
             else if (MouseHelper.InputLeftButtonHold())
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightHold);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightHold);
             }
         }
     }

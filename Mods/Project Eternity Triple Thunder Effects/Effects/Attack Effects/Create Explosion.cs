@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
     {
         public static string Name = "Create Explosion";
         
-        public Weapon.ExplosionOptions _ExplosionAttributes;
+        public ExplosionOptions _ExplosionAttributes;
 
         public CreateExplosionEffect()
             : this(null)
@@ -22,13 +22,13 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public CreateExplosionEffect(TripleThunderAttackParams Params)
             : base(Name, false, Params)
         {
-            _ExplosionAttributes = new Weapon.ExplosionOptions();
+            _ExplosionAttributes = new ExplosionOptions();
             _ExplosionAttributes.ExplosionAnimation = new SimpleAnimation();
         }
 
         protected override void Load(BinaryReader BR)
         {
-            _ExplosionAttributes = new Weapon.ExplosionOptions(BR);
+            _ExplosionAttributes = new ExplosionOptions(BR);
             if (_ExplosionAttributes.ExplosionAnimation.Path != string.Empty && Params != null && Params.SharedParams.Content != null)
             {
                 _ExplosionAttributes.ExplosionAnimation.Load(Params.SharedParams.Content, "Animations/Sprites/");
@@ -72,7 +72,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         [Editor(typeof(Selectors.ExplosionOptionsSelector), typeof(UITypeEditor)),
         CategoryAttribute("Effect Attributes"),
         DescriptionAttribute("")]
-        public Weapon.ExplosionOptions ExplosionAttributes
+        public ExplosionOptions ExplosionAttributes
         {
             get
             {

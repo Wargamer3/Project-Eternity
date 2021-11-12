@@ -53,6 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attacks\ComboWeaponBase.cs" />
+    <Compile Include="Attacks\Explosion Options.cs" />
     <Compile Include="Attacks\Weapon Drop.cs" />
     <Compile Include="Attacks\Attack Box.cs" />
     <Compile Include="AI.cs" />
@@ -191,7 +193,7 @@
     <Compile Include="Robot Animation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vehicle.cs" />
-    <Compile Include="Attacks\Weapon.cs" />
+    <Compile Include="Attacks\ComboWeapon.cs" />
     <Compile Include="World Polygon.cs" />
   </ItemGroup>
   <ItemGroup>

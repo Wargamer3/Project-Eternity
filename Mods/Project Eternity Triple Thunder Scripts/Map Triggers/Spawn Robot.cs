@@ -66,10 +66,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Layer Owner = Map.ListLayer[_LayerIndex];
 
-            List<Weapon> ListExtraWeapon = new List<Weapon>();
+            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
-                ListExtraWeapon.Add(new Weapon(_RobotPath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
+                ListExtraWeapon.Add(new ComboWeapon(_RobotPath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
             RobotAnimation NewRobot = new RobotAnimation(_RobotPath, Owner, _Position, _Team, new PlayerInventory(), Owner.PlayerSFXGenerator, ListExtraWeapon);

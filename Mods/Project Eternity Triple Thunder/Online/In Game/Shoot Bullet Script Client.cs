@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         public void ExecuteOnMainThread()
         {
             RobotAnimation ActivePlayer = Owner.TripleThunderGame.ListLayer[LayerIndex].DicRobot[OwnerID];
-            Weapon ActiveWeapon = ActivePlayer.PrimaryWeapons.GetWeapon(WeaponName);
+            ComboWeapon ActiveWeapon = ActivePlayer.PrimaryWeapons.GetWeapon(WeaponName);
 
             foreach (Vector2 ActiveSpeed in ListSpeed)
             {

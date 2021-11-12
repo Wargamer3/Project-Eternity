@@ -206,10 +206,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (string.IsNullOrEmpty(_RobotPath))
                 return;
 
-            List<Weapon> ListExtraWeapon = new List<Weapon>();
+            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
-                ListExtraWeapon.Add(new Weapon(_RobotPath, _ListWeapons[W], false, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
+                ListExtraWeapon.Add(new ComboWeapon(_RobotPath, _ListWeapons[W], false, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
             NewRobot = new RobotAnimation(_RobotPath, Owner, _Position, _Team, new PlayerInventory(), Owner.PlayerSFXGenerator, ListExtraWeapon);
@@ -333,10 +333,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (string.IsNullOrEmpty(_VehiclePath))
                 return;
 
-            List<Weapon> ListExtraWeapon = new List<Weapon>();
+            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
-                ListExtraWeapon.Add(new Weapon(_VehiclePath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
+                ListExtraWeapon.Add(new ComboWeapon(_VehiclePath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
             Vehicle NewVehicle = new Vehicle(_VehiclePath, Owner, _Position, _Team, new PlayerInventory(), Owner.PlayerSFXGenerator, ListExtraWeapon);

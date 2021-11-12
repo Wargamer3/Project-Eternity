@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         }
     }
 
-    public enum AnimationTypes { FullAnimation, PartialAnimation, SkeletonAnimation }
+    public enum AnimationTypes { FullAnimation, PartialAnimation, SkeletonAnimation, Null }
     public enum ComboRotationTypes { None, RotateAroundWeaponSlot, RotateAroundRobot }
 
     public abstract class AttackBox : Projectile
@@ -36,9 +36,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public List<RobotAnimation> ListAttackedRobots;//List of robot already attacked.
         public RobotAnimation Owner;
         public bool FollowOwner { get; }
-        public Weapon.ExplosionOptions ExplosionAttributes;
+        public ExplosionOptions ExplosionAttributes;
 
-        public AttackBox(float Damage, Weapon.ExplosionOptions ExplosionAttributes, RobotAnimation Owner, bool FollowOwner)
+        public AttackBox(float Damage, ExplosionOptions ExplosionAttributes, RobotAnimation Owner, bool FollowOwner)
             : base()
         {
             ListAttackedRobots = new List<RobotAnimation>();
@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListAttackedRobots.Add(Owner);
         }
 
-        public AttackBox(float Damage, Weapon.ExplosionOptions ExplosionAttributes, RobotAnimation Owner, double Lifetime, bool FollowOwner)
+        public AttackBox(float Damage, ExplosionOptions ExplosionAttributes, RobotAnimation Owner, double Lifetime, bool FollowOwner)
             : base(Lifetime)
         {
             ListAttackedRobots = new List<RobotAnimation>();

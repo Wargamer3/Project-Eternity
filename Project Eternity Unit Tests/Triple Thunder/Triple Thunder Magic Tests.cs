@@ -47,9 +47,9 @@ namespace ProjectEternity.UnitTests.TripleThunderTests
 
         private RobotAnimation CreateDummyRobot()
         {
-            Weapon DummyWeapon = new Weapon(5, false, 1);
+            ComboWeapon DummyWeapon = new ComboWeapon(5, false, 1);
 
-            RobotAnimation NewRobotAnimation = new RobotAnimation(DummyMap.ListLayer[0], Vector2.Zero, 0, new List<Weapon>() { DummyWeapon });
+            RobotAnimation NewRobotAnimation = new RobotAnimation(DummyMap.ListLayer[0], Vector2.Zero, 0, new List<ComboWeapon>() { DummyWeapon });
 
             NewRobotAnimation.MaxHP = 100;
             NewRobotAnimation.MaxEN = 50;

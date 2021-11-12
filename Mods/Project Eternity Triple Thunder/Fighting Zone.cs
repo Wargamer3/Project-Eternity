@@ -354,12 +354,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                                 ListEnememyWeapon.Add(BR.ReadString());
                             }
 
-                            List<Weapon> ListExtraWeapon = null;
+                            List<ComboWeapon> ListExtraWeapon = null;
 
-                            ListExtraWeapon = new List<Weapon>();
+                            ListExtraWeapon = new List<ComboWeapon>();
                             for (int W = 0; W < ListEnememyWeapon.Count; ++W)
                             {
-                                ListExtraWeapon.Add(new Weapon(PlayerName, ListEnememyWeapon[W], true, ActiveLayer.DicRequirement, ActiveLayer.DicEffect, ActiveLayer.DicAutomaticSkillTarget));
+                                ListExtraWeapon.Add(new ComboWeapon(PlayerName, ListEnememyWeapon[W], true, ActiveLayer.DicRequirement, ActiveLayer.DicEffect, ActiveLayer.DicAutomaticSkillTarget));
                             }
 
                             //TODO: support vehicles
@@ -808,7 +808,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void AddPlayer(Player NewPlayer, int LayerIndex, Vector2 Position, uint ID)
         {
-            RobotAnimation SpawnedPlayer = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, ListLayer[LayerIndex], Position, 0, NewPlayer.Equipment, PlayerSFXGenerator, new List<Weapon>());
+            RobotAnimation SpawnedPlayer = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, ListLayer[LayerIndex], Position, 0, NewPlayer.Equipment, PlayerSFXGenerator, new List<ComboWeapon>());
 
             string WeaponName = SpawnedPlayer.SecondaryWeapons.GetWeaponName(0);
             SpawnedPlayer.SecondaryWeapons.UseWeapon(WeaponName);
@@ -1279,7 +1279,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].AmmoPerMagazine > 0)
                 {
-                    if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].ActiveCombo != null && MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation != null)
+                    if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation != null)
                     {
                         AnimationClass ShootingAnimation = MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation;
                         int RecoilValue = (int)(ShootingAnimation.ActiveKeyFrame / (float)ShootingAnimation.LoopEnd * sprGaugeDelay.Height);

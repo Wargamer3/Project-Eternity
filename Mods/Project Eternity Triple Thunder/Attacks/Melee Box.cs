@@ -6,7 +6,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
     public class MeleeBox : AttackBox
     {
         public MeleeBox(float Damage, RobotAnimation Owner, double Lifetime, bool FollowOwner)
-            : base(Damage, new Weapon.ExplosionOptions(), Owner, Lifetime, FollowOwner)
+            : base(Damage, new ExplosionOptions(), Owner, Lifetime, FollowOwner)
         {
         }
 

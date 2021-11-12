@@ -96,12 +96,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (Controller.IsButtonPressed(ShootButtons))
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightPress);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightPress);
             }
             else if (Controller.IsButtonDown(ShootButtons))
             {
                 Owner.UnholsterWeaponsIfNeeded();
-                Owner.UseCombo(gameTime, AttackInputs.LightHold);
+                Owner.InitiateAttack(gameTime, AttackInputs.LightHold);
             }
 
             if (MouseHelper.InputRightButtonPressed())
@@ -110,12 +110,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
             else if (MouseHelper.InputRightButtonReleased())
             {
-                Owner.UseCombo(gameTime, AttackInputs.HeavyPress, Owner.SecondaryWeapons.ActiveWeapons[0], true);
+                Owner.SecondaryWeapons.ActiveWeapons[0].InitiateAttack(gameTime, AttackInputs.HeavyPress, Owner.CurrentMovementInput, Owner.ActiveMovementStance, true, Owner);
                 Owner.UnholsterWeaponsIfNeeded();
             }
             else if (MouseHelper.InputRightButtonHold())
             {
-                Owner.UseCombo(gameTime, AttackInputs.HeavyHold, Owner.SecondaryWeapons.ActiveWeapons[0], false);
+                Owner.SecondaryWeapons.ActiveWeapons[0].InitiateAttack(gameTime, AttackInputs.HeavyHold, Owner.CurrentMovementInput, Owner.ActiveMovementStance, false, Owner);
             }
         }
     }

@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     provider.GetService(typeof(IWindowsFormsEditorService));
                 if (svc != null)
                 {
-                    Weapon.ExplosionOptions ActiveParams = (Weapon.ExplosionOptions)value;
+                    ExplosionOptions ActiveParams = (ExplosionOptions)value;
                     ExplosionAttributesEditor NewEditor = new ExplosionAttributesEditor(ActiveParams);
                     if (NewEditor.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                         value = NewEditor.ExplosionAttributes;

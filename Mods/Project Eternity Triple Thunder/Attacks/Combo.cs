@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -93,5 +94,64 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             CurrentInputIndex = 0;
         }
+
+        public Combo GetNextCombo(AttackInputs CurrentAttackInput, MovementInputs CurrentMovementInput, GameTime gameTime, bool ForceCombo, RobotAnimation Owner)
+        {
+            for (int C = 0; C < ListNextCombo.Count; C++)
+            {
+                bool InputComplete = ForceCombo;
+                InputChoice ActiveInputChoice = ListNextCombo[C].ListInputChoice[ListNextCombo[C].CurrentInputIndex];
+
+                bool AttackInputAccepted = false;
+                if (ActiveInputChoice.AttackInput != AttackInputs.None
+                    && (ActiveInputChoice.AttackInput == AttackInputs.AnyHold || ActiveInputChoice.AttackInput == AttackInputs.AnyPress || ActiveInputChoice.AttackInput == CurrentAttackInput))
+                {
+                    AttackInputAccepted = true;
+                }
+
+                bool MovementInputAccepted = false;
+                if (ActiveInputChoice.MovementInput == MovementInputs.Any || ActiveInputChoice.MovementInput == CurrentMovementInput)
+                {
+                    MovementInputAccepted = true;
+                }
+
+                bool NextInputDelayAccepted = false;
+                if (ActiveInputChoice.CurrentDelay >= ActiveInputChoice.NextInputDelay)
+                    NextInputDelayAccepted = true;
+                else
+                    ActiveInputChoice.CurrentDelay += gameTime.ElapsedGameTime.Milliseconds;
+
+                bool FrameLimitAccepted = false;
+                int ComboKeyFrame = Owner.ActiveKeyFrame;
+                if (AnimationType == AnimationTypes.PartialAnimation)
+                {
+                    int a = Owner.GetPartialAnimationKeyFrame(AnimationName);
+                    if (a >= 0)
+                    {
+                        ComboKeyFrame = a;
+                    }
+                }
+                if (ComboKeyFrame >= ListStart[C] && ComboKeyFrame <= ListEnd[C])
+                    FrameLimitAccepted = true;
+
+                if (AttackInputAccepted && MovementInputAccepted && NextInputDelayAccepted && FrameLimitAccepted)
+                {
+                    ListNextCombo[C].CurrentInputIndex++;
+                    if (ListNextCombo[C].CurrentInputIndex >= ListNextCombo[C].ListInputChoice.Count)
+                    {
+                        InputComplete = true;
+                    }
+                }
+
+                if (InputComplete)
+                {
+                    ListNextCombo[C].Reset();
+                    return ListNextCombo[C];
+                }
+            }
+
+            return null;
+        }
+
     }
 }

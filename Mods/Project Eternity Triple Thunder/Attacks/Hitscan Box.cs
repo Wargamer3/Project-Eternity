@@ -11,7 +11,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private const float HitscanLength = 10;
         private readonly float Angle;
 
-        public HitscanBox(float Damage, Weapon.ExplosionOptions ExplosionAttributes, RobotAnimation Owner, Vector2 Position, float Angle)
+        public HitscanBox(float Damage, ExplosionOptions ExplosionAttributes, RobotAnimation Owner, Vector2 Position, float Angle)
             : base(Damage, ExplosionAttributes, Owner, false)
         {
             this.Angle = Angle;

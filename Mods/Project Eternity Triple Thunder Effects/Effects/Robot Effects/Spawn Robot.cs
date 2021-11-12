@@ -73,10 +73,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Layer Owner = Params.LocalContext.ActiveLayer;
 
-            List<Weapon> ListExtraWeapon = new List<Weapon>();
+            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
-                ListExtraWeapon.Add(new Weapon(_RobotPath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
+                ListExtraWeapon.Add(new ComboWeapon(_RobotPath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
             //TODO: Create the robot on load to avoid loading assets when this effect is called.

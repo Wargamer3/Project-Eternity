@@ -26,11 +26,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (_WeaponIndex == -1)
                 {
-                    CurrentRobot.UseCombo(gameTime, AttackInputs.LightPress);
+                    CurrentRobot.InitiateAttack(gameTime, AttackInputs.LightPress);
                 }
                 else
                 {
-                    CurrentRobot.UseCombo(gameTime, AttackInputs.LightPress, CurrentRobot.PrimaryWeapons.ActiveWeapons[_WeaponIndex], false);
+                    CurrentRobot.PrimaryWeapons.ActiveWeapons[_WeaponIndex].InitiateAttack(gameTime, AttackInputs.LightPress, CurrentRobot.CurrentMovementInput, CurrentRobot.ActiveMovementStance, false, CurrentRobot);
                 }
 
                 Result = new List<object>();

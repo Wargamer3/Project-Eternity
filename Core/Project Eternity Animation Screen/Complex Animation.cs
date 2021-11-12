@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             return TempAnimation;
         }
 
-        protected void RemovePartialAnimation(string ActivePartialAnimation)
+        public void RemovePartialAnimation(string ActivePartialAnimation)
         {
             int Index = ListActivePartialAnimationName.IndexOf(ActivePartialAnimation);
             if (Index >= 0)
@@ -129,7 +129,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             }
         }
 
-        protected void RemovePartialAnimation(PartialAnimation ActivePartialAnimation)
+        public void RemovePartialAnimation(PartialAnimation ActivePartialAnimation)
         {
             int Index = ListActivePartialAnimation.IndexOf(ActivePartialAnimation);
             if (Index >= 0)
@@ -278,6 +278,17 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             for (int F = 0; F < ActivePartialAnimation.ActiveKeyFrame; F++)
                 ActivePartialAnimation.UpdateKeyFrame(F);
+        }
+
+        public int GetPartialAnimationKeyFrame(string AnimationName)
+        {
+            for (int P = ListActivePartialAnimation.Count - 1; P >= 0; --P)
+            {
+                if (ListActivePartialAnimation[P].AnimationPath == AnimationName)
+                    return ListActivePartialAnimation[P].ActiveKeyFrame;
+            }
+
+            return -1;
         }
 
         public override void Init()

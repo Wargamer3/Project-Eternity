@@ -9,14 +9,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private enum ItemSelectionChoices { AnimationProjectile, TextureProjectile, Sound };
 
         private ItemSelectionChoices ItemSelectionChoice;
-        public Weapon.ExplosionOptions ExplosionAttributes;
+        public ExplosionOptions ExplosionAttributes;
         
         public ExplosionAttributesEditor()
         {
             InitializeComponent();
         }
 
-        public ExplosionAttributesEditor(Weapon.ExplosionOptions ExplosionAttributes)
+        public ExplosionAttributesEditor(ExplosionOptions ExplosionAttributes)
             : this()
         {
             this.ExplosionAttributes = ExplosionAttributes;

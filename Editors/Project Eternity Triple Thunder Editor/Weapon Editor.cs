@@ -14,13 +14,13 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
         private ItemSelectionChoices ItemSelectionChoice;
 
         private ProjectileEditor ProjectileDetailEditor;
-        private Weapon.ExplosionOptions ExplosionAttributes;
+        private ExplosionOptions ExplosionAttributes;
 
         public WeaponEditor()
         {
             InitializeComponent();
             ProjectileDetailEditor = new ProjectileEditor();
-            ExplosionAttributes = new Weapon.ExplosionOptions();
+            ExplosionAttributes = new ExplosionOptions();
             ExplosionAttributes.ExplosionAnimation = new GameScreens.AnimationScreen.SimpleAnimation();
         }
 
@@ -120,7 +120,7 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
             ckUseRangedProperties.Checked = BR.ReadBoolean();
             txtSkillChain.Text = BR.ReadString();
 
-            ExplosionAttributes = new Weapon.ExplosionOptions(BR);
+            ExplosionAttributes = new ExplosionOptions(BR);
 
             if (ckUseRangedProperties.Checked)
             {
