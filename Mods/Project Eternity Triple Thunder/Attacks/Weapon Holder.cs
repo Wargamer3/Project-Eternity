@@ -8,31 +8,31 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
     public class WeaponHolder
     {
-        private readonly List<ComboWeapon> ListActiveWeapon;
-        private readonly Dictionary<string, ComboWeapon> DicWeaponByName;
-        private readonly List<ComboWeapon> ListHolsteredWeapon;
+        private readonly List<WeaponBase> ListActiveWeapon;
+        private readonly Dictionary<string, WeaponBase> DicWeaponByName;
+        private readonly List<WeaponBase> ListHolsteredWeapon;
 
         private int WeaponCharge;
         private List<string> ListWeaponByIndex;
 
         public bool HasActiveWeapons { get { return ListActiveWeapon.Count > 0; } }
         public bool HasWeapons { get { return DicWeaponByName.Count > 0; } }
-        public List<ComboWeapon> ActiveWeapons { get { return ListActiveWeapon; } }
+        public List<WeaponBase> ActiveWeapons { get { return ListActiveWeapon; } }
         public int Charge { get { return WeaponCharge; } }
         public bool HasHolsteredWeapons { get { return ListHolsteredWeapon.Count > 0; } }
         public int HolsteredWeaponsCount { get { return ListHolsteredWeapon.Count; } }
 
         public WeaponHolder(int ListWeaponCount)
         {
-            DicWeaponByName = new Dictionary<string, ComboWeapon>(ListWeaponCount);
-            ListActiveWeapon = new List<ComboWeapon>();
+            DicWeaponByName = new Dictionary<string, WeaponBase>(ListWeaponCount);
+            ListActiveWeapon = new List<WeaponBase>();
             ListWeaponByIndex = new List<string>(ListWeaponCount);
-            ListHolsteredWeapon = new List<ComboWeapon>(ListWeaponCount);
+            ListHolsteredWeapon = new List<WeaponBase>(ListWeaponCount);
         }
 
         public void Load(ContentManager Content)
         {
-            foreach (ComboWeapon ActiveWeapon in DicWeaponByName.Values)
+            foreach (WeaponBase ActiveWeapon in DicWeaponByName.Values)
             {
                 ActiveWeapon.Load(Content);
             }
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             //Don't remove secondary weapons as you can't equip them
         }
 
-        public void UseWeapon(ComboWeapon WeaponToUse)
+        public void UseWeapon(WeaponBase WeaponToUse)
         {
             ListActiveWeapon.Add(WeaponToUse);
         }
@@ -78,16 +78,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListActiveWeapon.Add(DicWeaponByName[WeaponName]);
         }
 
-        public List<ComboWeapon> UseHolsteredWeapons()
+        public List<WeaponBase> UseHolsteredWeapons()
         {
             ListActiveWeapon.AddRange(ListHolsteredWeapon);
-            List<ComboWeapon> ListUnHolsteredWeapon = new List<ComboWeapon>(ListHolsteredWeapon);
+            List<WeaponBase> ListUnHolsteredWeapon = new List<WeaponBase>(ListHolsteredWeapon);
             ListHolsteredWeapon.Clear();
 
             return ListUnHolsteredWeapon;
         }
 
-        public ComboWeapon GetWeapon(string WeaponName)
+        public WeaponBase GetWeapon(string WeaponName)
         {
             return DicWeaponByName[WeaponName];
         }
@@ -102,7 +102,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             return DicWeaponByName.ContainsKey(ActiveWeaponName);
         }
 
-        public void AddWeaponToStash(ComboWeapon NewWeapon)
+        public void AddWeaponToStash(WeaponBase NewWeapon)
         {
             DicWeaponByName.Add(NewWeapon.WeaponPath, NewWeapon);
             ListWeaponByIndex.Add(NewWeapon.WeaponPath);
@@ -110,7 +110,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void DropActiveWeapon()
         {
-            foreach (ComboWeapon WeaponToDrop in ListActiveWeapon)
+            foreach (WeaponBase WeaponToDrop in ListActiveWeapon)
             {
                 DicWeaponByName.Remove(WeaponToDrop.WeaponPath);
                 ListWeaponByIndex.Remove(WeaponToDrop.WeaponPath);
@@ -123,7 +123,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             List<WeaponDrop> ListDroppedWeapon = new List<WeaponDrop>();
 
-            foreach (ComboWeapon WeaponToDrop in ListActiveWeapon)
+            foreach (WeaponBase WeaponToDrop in ListActiveWeapon)
             {
                 DicWeaponByName.Remove(WeaponToDrop.WeaponPath);
                 ListWeaponByIndex.Remove(WeaponToDrop.WeaponPath);

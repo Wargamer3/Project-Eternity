@@ -206,7 +206,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (string.IsNullOrEmpty(_RobotPath))
                 return;
 
-            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
+            List<WeaponBase> ListExtraWeapon = new List<WeaponBase>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
                 ListExtraWeapon.Add(new ComboWeapon(_RobotPath, _ListWeapons[W], false, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));

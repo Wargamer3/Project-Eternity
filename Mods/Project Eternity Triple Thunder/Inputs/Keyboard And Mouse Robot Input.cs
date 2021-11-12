@@ -102,7 +102,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 for (int W = 0; W < Owner.PrimaryWeapons.ActiveWeapons.Count; W++)
                 {
-                    ComboWeapon ActiveWeapon = Owner.PrimaryWeapons.ActiveWeapons[W];
+                    WeaponBase ActiveWeapon = Owner.PrimaryWeapons.ActiveWeapons[W];
                     if (ActiveWeapon.CanBeReloaded())
                     {
                         ActiveWeapon.ResetAnimationToIdle();

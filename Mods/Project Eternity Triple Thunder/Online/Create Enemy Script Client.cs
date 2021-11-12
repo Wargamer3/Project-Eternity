@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
             if (string.IsNullOrEmpty(EnemyPath))
                 return;
 
-            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
+            List<WeaponBase> ListExtraWeapon = new List<WeaponBase>();
             for (int W = 0; W < ListWeapons.Count; ++W)
             {
                 ListExtraWeapon.Add(new ComboWeapon(EnemyPath, ListWeapons[W], true, ActiveLayer.DicRequirement, ActiveLayer.DicEffect, ActiveLayer.DicAutomaticSkillTarget));

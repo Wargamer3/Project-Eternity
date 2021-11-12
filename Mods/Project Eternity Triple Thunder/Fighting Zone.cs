@@ -354,9 +354,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                                 ListEnememyWeapon.Add(BR.ReadString());
                             }
 
-                            List<ComboWeapon> ListExtraWeapon = null;
-
-                            ListExtraWeapon = new List<ComboWeapon>();
+                            List<WeaponBase> ListExtraWeapon = new List<WeaponBase>();
                             for (int W = 0; W < ListEnememyWeapon.Count; ++W)
                             {
                                 ListExtraWeapon.Add(new ComboWeapon(PlayerName, ListEnememyWeapon[W], true, ActiveLayer.DicRequirement, ActiveLayer.DicEffect, ActiveLayer.DicAutomaticSkillTarget));
@@ -808,7 +806,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void AddPlayer(Player NewPlayer, int LayerIndex, Vector2 Position, uint ID)
         {
-            RobotAnimation SpawnedPlayer = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, ListLayer[LayerIndex], Position, 0, NewPlayer.Equipment, PlayerSFXGenerator, new List<ComboWeapon>());
+            RobotAnimation SpawnedPlayer = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, ListLayer[LayerIndex], Position, 0, NewPlayer.Equipment, PlayerSFXGenerator, new List<WeaponBase>());
 
             string WeaponName = SpawnedPlayer.SecondaryWeapons.GetWeaponName(0);
             SpawnedPlayer.SecondaryWeapons.UseWeapon(WeaponName);

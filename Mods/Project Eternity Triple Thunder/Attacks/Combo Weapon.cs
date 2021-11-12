@@ -1,20 +1,17 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Effects;
-using ProjectEternity.GameScreens.AnimationScreen;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using ProjectEternity.Core.Item;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class ComboWeapon : ComboWeaponBase
+    public class ComboWeapon : WeaponBase
     {
-        public enum ProjectileTypes { Hitscan, Projectile }
-
         private Combo NoneCombo;
         private Combo MovingCombo;
         private Combo RunningCombo;
@@ -208,7 +205,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Owner.CreateAttackBox(WeaponPath, GunNozzlePosition, ListAttack);
         }
 
-        public override Combo GetActiveWeaponCombo(string ActiveMovementStance)
+        public Combo GetActiveWeaponCombo(string ActiveMovementStance)
         {
             switch (ActiveMovementStance)
             {

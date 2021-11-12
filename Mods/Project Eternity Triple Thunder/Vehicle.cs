@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             IsDynamic = BR.ReadBoolean();
 
             int ListExtraAnimationCount = BR.ReadInt32();
-            ListStanceAnimation = new List<ComboWeapon>(ListExtraAnimationCount);
+            ListStanceAnimation = new List<WeaponBase>(ListExtraAnimationCount);
             for (int W = 0; W < ListExtraAnimationCount; ++W)
             {
                 string ExtraAnimationPath = BR.ReadString();

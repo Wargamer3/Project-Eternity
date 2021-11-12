@@ -1,16 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 using ProjectEternity.GameScreens.AnimationScreen;
-using System.Collections.Generic;
-using static ProjectEternity.GameScreens.TripleThunderScreen.ComboWeapon;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public abstract class ComboWeaponBase
+    public abstract class WeaponBase
     {
+        public enum ProjectileTypes { Hitscan, Projectile }
+
         public readonly string OwnerName;
         public readonly string WeaponPath;
         public string WeaponName;
@@ -48,7 +49,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public bool HasSkills => ListActiveSkill.Count > 0;
         public bool CanBeUsed { get { return AmmoPerMagazine == 0 || (AmmoPerMagazine > 0 && AmmoCurrent > 0); } }
 
-        public ComboWeaponBase(string OwnerName, string WeaponPath)
+        public WeaponBase(string OwnerName, string WeaponPath)
         {
             this.OwnerName = OwnerName;
             this.WeaponPath = WeaponPath;
@@ -87,7 +88,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public abstract void Load(ContentManager Content);
         public abstract bool CanBeReloaded();
         public abstract bool CanRotateTowardMouse(string ActiveMovementStance);
-        public abstract Combo GetActiveWeaponCombo(string ActiveMovementStance);
         public abstract string GetAnimationName(string ActiveMovementStance);
         public abstract AnimationTypes GetAnimationType(string ActiveMovementStance);
         public abstract string GetDefaultAnimationName();

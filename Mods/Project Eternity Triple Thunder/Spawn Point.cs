@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override RobotAnimation SpawnPlayer(Player NewPlayer, Layer Owner, ISFXGenerator PlayerSFXGenerator, Rectangle CameraBounds)
         {
-            RobotAnimation NewRobot = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, Owner, SpawnLocation, Team, NewPlayer.Equipment, PlayerSFXGenerator, new List<ComboWeapon>());
+            RobotAnimation NewRobot = new RobotAnimation("Characters/" + NewPlayer.Equipment.CharacterType, Owner, SpawnLocation, Team, NewPlayer.Equipment, PlayerSFXGenerator, new List<WeaponBase>());
             NewRobot.InputManagerHelper = new PlayerRobotInputManager();
 
             NewRobot.UpdateControls(NewPlayer.GameplayType, CameraBounds);

@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         private readonly RobotAnimation Owner;
         private bool _ShootSecondaryWeapon;
-        private ComboWeapon OwnerWeapon;
+        private WeaponBase OwnerWeapon;
 
         public GunNozzleTimeline()
             : base(TimelineType, "New Gun Nozzle")

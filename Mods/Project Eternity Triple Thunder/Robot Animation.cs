@@ -43,15 +43,15 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public CollisionObject<RobotAnimation> Collision => CollisionBox;
 
         public bool LockAnimation;
-        protected ComboWeapon CurrentStanceAnimations;
-        protected ComboWeapon StandingAnimations { get { return ListStanceAnimation[0]; } }
-        protected ComboWeapon CrouchAnimations { get { return ListStanceAnimation.Count > 1 ? ListStanceAnimation[1] : null; } }
-        protected ComboWeapon RollAnimations { get { return ListStanceAnimation.Count > 2 ? ListStanceAnimation[2] : null; } }
-        protected ComboWeapon ProneAnimations { get { return ListStanceAnimation.Count > 3 ? ListStanceAnimation[3] : null; } }
+        protected WeaponBase CurrentStanceAnimations;
+        protected WeaponBase StandingAnimations { get { return ListStanceAnimation[0]; } }
+        protected WeaponBase CrouchAnimations { get { return ListStanceAnimation.Count > 1 ? ListStanceAnimation[1] : null; } }
+        protected WeaponBase RollAnimations { get { return ListStanceAnimation.Count > 2 ? ListStanceAnimation[2] : null; } }
+        protected WeaponBase ProneAnimations { get { return ListStanceAnimation.Count > 3 ? ListStanceAnimation[3] : null; } }
         public WeaponHolder PrimaryWeapons;
         public WeaponHolder SecondaryWeapons;
-        protected List<ComboWeapon> ListStanceAnimation;
-        public ComboWeapon ActiveAddedWeapon;
+        protected List<WeaponBase> ListStanceAnimation;
+        public WeaponBase ActiveAddedWeapon;
         public MovementInputs CurrentMovementInput;
         public string ActiveAttackStance;
         public string ActiveMovementStance;
@@ -106,7 +106,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         /// <param name="Position"></param>
         /// <param name="Team"></param>
         /// <param name="ListWeapon"></param>
-        public RobotAnimation(Layer CurrentLayer, Vector2 Position, int Team, List<ComboWeapon> ListWeapon)
+        public RobotAnimation(Layer CurrentLayer, Vector2 Position, int Team, List<WeaponBase> ListWeapon)
             : this()
         {
             this.CurrentLayer = CurrentLayer;
@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (ListWeapon != null)
             {
                 PrimaryWeapons = new WeaponHolder(ListWeapon.Count);
-                foreach (ComboWeapon ActiveWeapon in ListWeapon)
+                foreach (WeaponBase ActiveWeapon in ListWeapon)
                 {
                     PrimaryWeapons.AddWeaponToStash(ActiveWeapon);
                 }
@@ -137,7 +137,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             this.Equipment = Equipment;
         }
 
-        public RobotAnimation(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerInventory Equipment, ISFXGenerator PlayerSFXGenerator, List<ComboWeapon> ListExtraWeapon)
+        public RobotAnimation(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerInventory Equipment, ISFXGenerator PlayerSFXGenerator, List<WeaponBase> ListExtraWeapon)
             : this()
         {
             this.PlayerSFXGenerator = PlayerSFXGenerator.Copy();
@@ -170,7 +170,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 DicAutomaticSkillTarget = CurrentLayer.DicAutomaticSkillTarget;
             }
 
-            ListStanceAnimation = new List<ComboWeapon>(4);
+            ListStanceAnimation = new List<WeaponBase>(4);
 
             if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Default" + ".ttw"))
                 ListStanceAnimation.Add(new ComboWeapon(Name, Name + "/Default", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
@@ -193,7 +193,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             for (int W = 0; W < ListWeaponCount; ++W)
             {
                 string WeaponName = BR.ReadString();
-                ComboWeapon NewWeapon;
+                WeaponBase NewWeapon;
                 string WeaponPath = Name + "/Weapons/" + WeaponName;
                 bool IsGrenade = false;
                 if (!File.Exists("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw"))
@@ -224,7 +224,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (ListExtraWeapon != null)
             {
-                foreach (ComboWeapon ActiveWeapon in ListExtraWeapon)
+                foreach (WeaponBase ActiveWeapon in ListExtraWeapon)
                 {
                     ActiveWeapon.IsExtra = true;
                     PrimaryWeapons.AddWeaponToStash(ActiveWeapon);
@@ -443,7 +443,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void SetRobotAnimation(string ActiveMovementStance)
         {
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 if (ActiveWeapon.GetAnimationType(ActiveMovementStance) == AnimationTypes.FullAnimation)
                 {
@@ -664,7 +664,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             CurrentLayer.SetRobotContext(this);
 
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 ActiveWeapon.UpdateSkills(RequirementName);
             }
@@ -675,7 +675,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             return CurrentLayer.GetMapVariable(VariableName);
         }
 
-        public void SetRobotContext(ComboWeapon ActiveWeapon, float Angle, Vector2 Position)
+        public void SetRobotContext(WeaponBase ActiveWeapon, float Angle, Vector2 Position)
         {
             CurrentLayer.SetRobotContext(this, ActiveWeapon, Angle, Position);
         }
@@ -698,7 +698,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void InitiateAttack(GameTime gameTime, AttackInputs AttackInput)
         {
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 if (ActiveWeapon.InitiateAttack(gameTime, AttackInput, CurrentMovementInput, ActiveMovementStance, false, this))
                     break;
@@ -709,7 +709,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             if (WeaponIndex == -1)//Unequip weapon
             {
-                foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+                foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
                 {
                     RemovePartialAnimation(ActiveWeapon.GetAnimationName(ActiveMovementStance));
                 }
@@ -722,7 +722,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 string WeaponName = PrimaryWeapons.GetWeaponName(WeaponIndex);
                 PrimaryWeapons.RemoveAllActiveWeapons();
                 PrimaryWeapons.UseWeapon(WeaponName);
-                ComboWeapon WeaponToUse = PrimaryWeapons.GetWeapon(WeaponName);
+                WeaponBase WeaponToUse = PrimaryWeapons.GetWeapon(WeaponName);
 
                 WeaponToUse.CurrentAnimation = null;
                 WeaponToUse.ResetAnimation(ActiveMovementStance);
@@ -735,9 +735,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public void HolsterAndReplaceWeapon(ComboWeapon WeaponToUse)
+        public void HolsterAndReplaceWeapon(WeaponBase WeaponToUse)
         {
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 RemovePartialAnimation(ActiveWeapon.GetAnimationName(ActiveMovementStance));
             }
@@ -761,16 +761,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 if (PrimaryWeapons.ActiveWeapons.Contains(SecondaryWeapons.ActiveWeapons[0]))
                 {
-                    foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+                    foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
                     {
                         RemovePartialAnimation(ActiveWeapon.GetAnimationName(ActiveMovementStance));
                     }
                     PrimaryWeapons.RemoveAllActiveWeapons();
                 }
 
-                List<ComboWeapon> ListUnHolsteredWeapon = PrimaryWeapons.UseHolsteredWeapons();
+                List<WeaponBase> ListUnHolsteredWeapon = PrimaryWeapons.UseHolsteredWeapons();
 
-                foreach (ComboWeapon WeaponToUse in ListUnHolsteredWeapon)
+                foreach (WeaponBase WeaponToUse in ListUnHolsteredWeapon)
                 {
                     WeaponToUse.CurrentAnimation = null;
                     WeaponToUse.ResetAnimation(ActiveMovementStance);
@@ -791,7 +791,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 CurrentLayer.AddDroppedWeapon(DroppedWeapon);
             }
 
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 RemovePartialAnimation(ActiveWeapon.GetAnimationName(ActiveMovementStance));
             }
@@ -808,7 +808,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (PrimaryWeapons.HasActiveWeapons)
             {
-                foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+                foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
                 {
                     RemovePartialAnimation(ActiveWeapon.GetAnimationName(ActiveMovementStance));
                 }
@@ -821,7 +821,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void EquipWeapon(string WeaponToEquipName)
         {
-            ComboWeapon NewWeapon;
+            WeaponBase NewWeapon;
             string WeaponPath = Name + "/Weapons/" + WeaponToEquipName;
             if (!File.Exists("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw"))
             {
@@ -843,7 +843,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             ChangeWeapon(0);
 
-            ComboWeapon WeaponToUse = PrimaryWeapons.GetWeapon(WeaponPath);
+            WeaponBase WeaponToUse = PrimaryWeapons.GetWeapon(WeaponPath);
             WeaponToUse.CurrentAnimation = null;
             WeaponToUse.ResetAnimation(ActiveMovementStance);
 
@@ -893,7 +893,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             if (UseSecondaryWeapon)
             {
                 int i = 0;
-                foreach (ComboWeapon ActiveWeapon in SecondaryWeapons.ActiveWeapons)
+                foreach (WeaponBase ActiveWeapon in SecondaryWeapons.ActiveWeapons)
                 {
                     Shoot(GunNozzlePosition, ActiveWeapon, i++);
                 }
@@ -903,7 +903,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             else
             {
                 int i = 0;
-                foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+                foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
                 {
                     Shoot(GunNozzlePosition, ActiveWeapon, i++);
                 }
@@ -912,7 +912,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public void Shoot(Vector2 GunNozzlePosition, ComboWeapon ActiveWeapon, int WeaponIndex)
+        public void Shoot(Vector2 GunNozzlePosition, WeaponBase ActiveWeapon, int WeaponIndex)
         {
             bool CanShoot;
 
@@ -1025,7 +1025,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void Reload()
         {
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 ActiveWeapon.Reload(ActiveMovementStance, this);
             }
@@ -1077,7 +1077,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             LockAnimation = false;
             base.OnLoopEnd();
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 if (ActiveWeapon.GetAnimationType(ActiveMovementStance) == AnimationTypes.FullAnimation)
                 {
@@ -1089,11 +1089,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         protected override void OnPartialAnimationLoopEnd(PartialAnimation ActivePartialAnimation)
         {
             RemovePartialAnimation(ActivePartialAnimation);
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 ActiveWeapon.OnPartialAnimationLoopEnd(ActivePartialAnimation, ActiveMovementStance, this);
             }
-            foreach (ComboWeapon ActiveWeapon in SecondaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in SecondaryWeapons.ActiveWeapons)
             {
                 if (ActiveWeapon.CurrentAnimation == ActivePartialAnimation)
                 {
@@ -1107,7 +1107,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public void ActivatePartialWeapon(ComboWeapon ActiveWeapon, string AnimationName)
+        public void ActivatePartialWeapon(WeaponBase ActiveWeapon, string AnimationName)
         {
             ActiveAddedWeapon = ActiveWeapon;
             ActiveWeapon.CurrentAnimation = AddPartialAnimation(AnimationName);
@@ -1117,9 +1117,9 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         #endregion
 
-        public ComboWeapon CreateWeapon(string WeaponName)
+        public WeaponBase CreateWeapon(string WeaponName)
         {
-            ComboWeapon NewWeapon = new ComboWeapon(Name, WeaponName, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+            WeaponBase NewWeapon = new ComboWeapon(Name, WeaponName, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             NewWeapon.Load(Content);
             return NewWeapon;
         }
@@ -1164,7 +1164,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public void UpdateAllWeaponsAngle(Vector2 Target)
         {
             int W = 0;
-            foreach (ComboWeapon ActiveWeapon in PrimaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in PrimaryWeapons.ActiveWeapons)
             {
                 bool RotateTowardMouse = ActiveWeapon.CanRotateTowardMouse(ActiveMovementStance);
 
@@ -1190,7 +1190,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
 
             W = 0;
-            foreach (ComboWeapon ActiveWeapon in SecondaryWeapons.ActiveWeapons)
+            foreach (WeaponBase ActiveWeapon in SecondaryWeapons.ActiveWeapons)
             {
                 bool RotateTowardMouse = ActiveWeapon.CanRotateTowardMouse(ActiveMovementStance);
 
@@ -1218,7 +1218,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void UpdatePrimaryWeaponAngle(float Angle, int WeaponIndex)
         {
-            ComboWeapon ActiveWeapon = PrimaryWeapons.ActiveWeapons[WeaponIndex];
+            WeaponBase ActiveWeapon = PrimaryWeapons.ActiveWeapons[WeaponIndex];
 
             VisibleTimeline WeaponSlotTimeline;
             DicActiveAnimationObject.TryGetValue("Weapon Slot " + (WeaponIndex + 1), out WeaponSlotTimeline);
@@ -1227,7 +1227,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void UpdateSecondaryWeaponAngle(float Angle, int WeaponIndex)
         {
-            ComboWeapon ActiveWeapon = SecondaryWeapons.ActiveWeapons[WeaponIndex];
+            WeaponBase ActiveWeapon = SecondaryWeapons.ActiveWeapons[WeaponIndex];
 
             VisibleTimeline WeaponSlotTimeline;
             DicActiveAnimationObject.TryGetValue("Weapon Slot " + (WeaponIndex + 1), out WeaponSlotTimeline);

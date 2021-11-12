@@ -9,7 +9,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public static string Name = "Launch Attack";
 
         private string _WeaponName;
-        private ComboWeapon WeaponToUse;
+        private WeaponBase WeaponToUse;
 
         public LaunchAttackEffect()
             : this(null)

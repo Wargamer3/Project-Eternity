@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public FightingZone Map;
         public Layer ActiveLayer;
         public RobotAnimation Target;
-        public ComboWeapon TargetWeapon;
+        public WeaponBase TargetWeapon;
         public float TargetWeaponAngle;
         public Vector2 TargetWeaponPosition;
 
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
         }
 
-        public void SetRobotContext(Layer ActiveLayer, RobotAnimation ActiveRobotAnimation, ComboWeapon ActiveWeapon, float Angle, Vector2 Position)
+        public void SetRobotContext(Layer ActiveLayer, RobotAnimation ActiveRobotAnimation, WeaponBase ActiveWeapon, float Angle, Vector2 Position)
         {
             this.ActiveLayer = ActiveLayer;
             Target = ActiveRobotAnimation;

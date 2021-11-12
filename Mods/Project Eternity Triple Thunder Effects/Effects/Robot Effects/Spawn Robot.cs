@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Layer Owner = Params.LocalContext.ActiveLayer;
 
-            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
+            List<WeaponBase> ListExtraWeapon = new List<WeaponBase>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
                 ListExtraWeapon.Add(new ComboWeapon(_RobotPath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));

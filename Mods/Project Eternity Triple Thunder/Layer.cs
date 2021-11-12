@@ -350,7 +350,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Owner.GlobalRobotContext.SetRobotContext(this, ActiveRobotAnimation);
         }
 
-        public void SetRobotContext(RobotAnimation ActiveRobotAnimation, ComboWeapon ActiveWeapon, float Angle, Vector2 Position)
+        public void SetRobotContext(RobotAnimation ActiveRobotAnimation, WeaponBase ActiveWeapon, float Angle, Vector2 Position)
         {
             Owner.GlobalRobotContext.SetRobotContext(this, ActiveRobotAnimation, ActiveWeapon, Angle, Position);
         }
