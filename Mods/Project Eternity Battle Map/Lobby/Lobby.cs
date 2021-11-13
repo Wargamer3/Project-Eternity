@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BoxButton ShowGuildsFilter;
 
         private BoxButton ShopButton;
-        private BoxButton MetalButton;
+        private BoxButton InventoryButton;
 
         private BoxButton[] ArrayMenuButton;
 
@@ -155,7 +155,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ShowFriendsFilter = new BoxButton(new Rectangle(572 + 62, 130, 60, 25), fntArial12, "Friends", OnButtonOver, ShowFriends);
             ShowGuildsFilter = new BoxButton(new Rectangle(572 + 62 + 62, 130, 60, 25), fntArial12, "Guild", OnButtonOver, ShowGuild);
             
-            MetalButton = new BoxButton(new Rectangle(572, 514, 100, 45), fntArial12, "Inventory", OnButtonOver, null);
+            InventoryButton = new BoxButton(new Rectangle(572, 514, 100, 45), fntArial12, "Inventory", OnButtonOver, OpenInventory);
             ShopButton = new BoxButton(new Rectangle(682, 514, 100, 45), fntArial12, "Shop", OnButtonOver, OpenShop);
 
             ShowAllPlayersFilter.CanBeChecked = true;
@@ -168,7 +168,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 LocalPlayerSelectionButton, CreateARoomButton, QuickStartButton,
                 InfoButton, RankingButton, OptionsButton, HelpButton,
                 ShowAllPlayersFilter, ShowFriendsFilter, ShowGuildsFilter,
-                ShopButton, MetalButton,
+                ShopButton, InventoryButton,
             };
         }
 
@@ -418,6 +418,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void CreateARoom()
         {
             PushScreen(new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, ""));
+            sndButtonClick.Play();
+        }
+
+        private void OpenInventory()
+        {
+            PushScreen(new InventoryScreen());
             sndButtonClick.Play();
         }
 
