@@ -423,6 +423,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void OpenShop()
         {
+            PushScreen(new ShopScreen());
             sndButtonClick.Play();
         }
 
