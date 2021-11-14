@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
@@ -13,7 +12,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         protected WorldMap Map;
 
         public ActionPanelWorldMap(string Name, WorldMap Map, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, null, CanCancel)
+            : base(Name, Map.ListActionMenuChoice, new KeyboardInput(), CanCancel)
         {
             this.Map = Map;
         }

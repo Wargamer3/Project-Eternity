@@ -237,6 +237,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
             ListSubMap = new List<BattleMap>();
+            DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
 
             GlobalBattleContext = new BattleContext();
             GlobalQuickLoadContext = new UnitQuickLoadEffectContext();

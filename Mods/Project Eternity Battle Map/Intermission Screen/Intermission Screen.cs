@@ -7,9 +7,9 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.MultiForm;
-using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

@@ -28,6 +28,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetMap()
         {
             RequireDrawFocus = false;
+            ListActionMenuChoice = new ActionPanelHolder();
             Pathfinder = new MovementAlgorithmSorcererStreet(this);
             ListPlayer = new List<Player>();
             GlobalSorcererStreetBattleContext = new SorcererStreetBattleContext();

@@ -43,6 +43,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             this.GameMode = GameMode;
             RequireDrawFocus = false;
+            ListActionMenuChoice = new ActionPanelHolder();
             Pathfinder = new MovementAlgorithmConquest(this);
             ListPlayer = new List<Player>();
             ListLayer = new List<MapLayer>();

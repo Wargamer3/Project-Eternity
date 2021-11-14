@@ -8,7 +8,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected SorcererStreetMap Map;
 
         public ActionPanelSorcererStreet(string Name, SorcererStreetMap Map, bool CanCancel = true)
-            : base(Name, Map.ListActionMenuChoice, null, CanCancel)
+            : base(Name, Map.ListActionMenuChoice, new KeyboardInput(), CanCancel)
         {
             this.Map = Map;
         }

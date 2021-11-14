@@ -36,10 +36,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-        }
-
-        private void Init()
-        {
             AnimationPhase = AnimationPhases.IntroAnimation;
             DrawnCard = ActivePlayer.ListRemainingCardInDeck[0];
 
@@ -55,11 +51,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (!IsInit)
-            {
-                Init();
-            }
-
             if (AnimationPhase == AnimationPhases.IntroAnimation)
             {
                 RotationTimer += 0.1f;

@@ -10,6 +10,7 @@ using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
 {
@@ -69,6 +70,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
             RequireDrawFocus = false;
 
+            ListActionMenuChoice = new ActionPanelHolder();
             CursorPosition = new Vector3(9, 13, 0);
             ListTerrainType = new List<string>();
             ListTerrainType.Add("Air");
