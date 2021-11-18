@@ -22,6 +22,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private double Progress;
         private AnimationScreen Owner;
+        public RenderTarget2D renderTarget;//Buffer used to render the AnimationLayer.
 
         public UITimeline()
             : this(null, "Deathmatch UI")
@@ -105,7 +106,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             List<VisibleTimeline> ReturnValue = new List<VisibleTimeline>();
 
             UITimeline NewUITimeline = new UITimeline(Owner, ActiveAnimation.Content);
-            NewUITimeline.Position = new Vector2(535, 170);
+            NewUITimeline.Position = new Vector2(0, 0);
             NewUITimeline.SpawnFrame = KeyFrame;
             NewUITimeline.DeathFrame = KeyFrame + 10;
             NewUITimeline.IsUsed = true;//Disable the spawner as we spawn the Marker manually.
@@ -165,10 +166,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
-        }
+            if (renderTarget == null || renderTarget.Width != g.GraphicsDevice.PresentationParameters.BackBufferWidth ||
+                renderTarget.Height != g.GraphicsDevice.PresentationParameters.BackBufferHeight)
+            {
+                renderTarget = new RenderTarget2D(
+                    g.GraphicsDevice,
+                    g.GraphicsDevice.PresentationParameters.BackBufferWidth,
+                    g.GraphicsDevice.PresentationParameters.BackBufferHeight);
+            }
 
-        public override void Draw(CustomSpriteBatch g, bool IsInEditMode)
-        {
+            g.GraphicsDevice.SetRenderTarget(renderTarget);
+            g.GraphicsDevice.Clear(Color.Transparent);
+
             if (Owner == null)
             {
                 DrawUI(g);
@@ -177,6 +186,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Owner.DrawUI(g);
             }
+        }
+
+        public override void Draw(CustomSpriteBatch g, bool IsInEditMode)
+        {
+            SpriteEffects ActiveEffect = SpriteEffects.None;
+            if (ScaleFactor.X < 0)
+                ActiveEffect = SpriteEffects.FlipHorizontally;
+            if (ScaleFactor.Y < 0)
+                ActiveEffect |= SpriteEffects.FlipVertically;
+
+            g.Draw(renderTarget,
+                new Vector2(Position.X, Position.Y),
+                null, Color.FromNonPremultiplied(255, 255, 255, Alpha),
+                Angle, new Vector2(Origin.X, Origin.Y),
+                new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect, DrawingDepth);
         }
 
         public void DrawUI(CustomSpriteBatch g)
@@ -205,7 +229,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.Draw(GameScreen.sprPixel, new Rectangle(PosX + 7, 30, 32, 32), Color.White);
             g.Draw(sprInfinity, new Vector2((Width - sprInfinity.Width) / 2, 15), Color.White);
 
-            GameScreen.DrawBox(g, new Vector2(0, Height - AnimationClass.VNBoxHeight), Width, AnimationClass.VNBoxHeight, Color.White);
+            GameScreen.DrawBox(g, new Vector2(0, Constants.Height - AnimationClass.VNBoxHeight), Width, AnimationClass.VNBoxHeight, Color.White);
 
             g.End();
             g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
@@ -217,6 +241,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         [CategoryAttribute("Animated Bitmap Attributes"),
         DescriptionAttribute(".")]
-        public override int Height { get { return Constants.Height; } }
+        public override int Height { get { return 84; } }
     }
 }
