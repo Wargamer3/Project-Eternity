@@ -592,7 +592,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveAnimationBackground.Draw(g, Constants.Width, Constants.Height);
             g.Begin();
 
-            for (int A = ListAnimationLayer.Count - 1; A >= 0; --A)
+            for (int A = 0; A < ListAnimationLayer.Count; A++)
             {
                 if (ListAnimationLayer[A].ListPolygonCutter.Count > 0)
                 {
