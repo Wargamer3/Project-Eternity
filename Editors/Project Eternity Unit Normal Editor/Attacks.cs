@@ -368,27 +368,31 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 {
                     case ItemSelectionChoices.Attack:
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(16);
+
                         if (Name != null)
                         {
+                            string AttackName = Name.Substring(UnitName.Length + 1);
+
                             if (lstAttack.Items.Contains(Name))
                             {
                                 MessageBox.Show("This attack is already listed.\r\n" + Name);
                                 return;
                             }
+
                             Attack NewAttack = new Attack(Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                             NewAttack.Animations.Add(new AttackContext());
 
-                            NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(Name + "/Start");
-                            NewAttack.Animations[0].Animations.EndHit = new Core.Units.AnimationInfo(Name + "/End Hit");
-                            NewAttack.Animations[0].Animations.EndMiss = new Core.Units.AnimationInfo(Name + "/End Miss");
-                            NewAttack.Animations[0].Animations.EndDestroyed = new Core.Units.AnimationInfo(Name + "/End Destroyed");
-                            NewAttack.Animations[0].Animations.EndBlocked = new Core.Units.AnimationInfo(Name + "/End Blocked");
-                            NewAttack.Animations[0].Animations.EndParried = new Core.Units.AnimationInfo(Name + "/End Parried");
-                            NewAttack.Animations[0].Animations.EndShootDown = new Core.Units.AnimationInfo(Name + "/End Shoot Down");
-                            NewAttack.Animations[0].Animations.EndNegated = new Core.Units.AnimationInfo(Name + "/End Negated");
+                            NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/Start");
+                            NewAttack.Animations[0].Animations.EndHit = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/End Hit");
+                            NewAttack.Animations[0].Animations.EndMiss = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/End Miss");
+                            NewAttack.Animations[0].Animations.EndDestroyed = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/End Destroyed");
+                            NewAttack.Animations[0].Animations.EndBlocked = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/End Blocked");
+                            NewAttack.Animations[0].Animations.EndParried = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/End Parried");
+                            NewAttack.Animations[0].Animations.EndShootDown = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/End Shoot Down");
+                            NewAttack.Animations[0].Animations.EndNegated = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/End Negated");
 
                             _ListAttack.Add(NewAttack);
-                            lstAttack.Items.Add(Name);
+                            lstAttack.Items.Add(AttackName);
                         }
                         break;
 
