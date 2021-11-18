@@ -85,6 +85,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override void SpawnItem(AnimationClass ActiveAnimation, AnimationClass.AnimationLayer ActiveLayer, int KeyFrame)
         {
+            EventKeyFrameOld = KeyFrame;
             ActiveAnimation.OnVisibleTimelineSpawn(ActiveLayer, this);
         }
 
