@@ -210,6 +210,13 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             return ReturnValue;
         }
 
+        public override void SpawnItem(AnimationClass ActiveAnimation, AnimationClass.AnimationLayer ActiveLayer, int KeyFrame)
+        {
+            base.SpawnItem(ActiveAnimation, ActiveLayer, KeyFrame);
+
+            ParticleSystem.ClearParticles();
+        }
+
         public override void UpdateAnimationObject(int KeyFrame)
         {
             double TimeElapsedInSeconds = 1 / 60d;
