@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.GameScreens.AnimationScreen
@@ -23,17 +17,27 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             {
                 lstQuoteSet.Items.Add("Quote Set " + (lstQuoteSet.Items.Count + 1));
             }
+
             lstQuoteSet.SelectedIndex = 0;
+
+            if (ActiveQuote.Target == Quote.Targets.Attacker)
+            {
+                rbAttacker.Checked = true;
+            }
+            else if (ActiveQuote.Target == Quote.Targets.Defender)
+            {
+                rbDefender.Checked = true;
+            }
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
         }
 
         private void rbTarget_CheckedChanged(object sender, EventArgs e)
@@ -72,7 +76,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             if (lstQuoteSet.SelectedIndex >= 0)
             {
                 ActiveQuote.SelectedQuoteSet = lstQuoteSet.SelectedIndex;
-                if (ActiveQuote.ActiveQuoteSet.QuoteStyle == QuoteSet.QuoteStyles.MoveIn)
+                if (ActiveQuote.ActiveQuoteSet.QuoteStyle == QuoteSet.QuoteStyles.BattleStart)
                 {
                     rbQuoteSetMoveIn.Checked = true;
                 }
@@ -159,7 +163,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             }
             else if (rbQuoteSetMoveIn.Checked)
             {
-                ActiveQuote.ActiveQuoteSet.QuoteStyle = QuoteSet.QuoteStyles.MoveIn;
+                ActiveQuote.ActiveQuoteSet.QuoteStyle = QuoteSet.QuoteStyles.BattleStart;
             }
             else if (rbQuoteSetReaction.Checked)
             {

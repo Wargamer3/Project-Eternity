@@ -303,6 +303,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         case QuoteSet.QuoteStyles.Reaction:
                             QuoteTypes ActiveQuoteType = QuoteTypes.Damaged;
+                            if (BattleResult.ArrayResult[0].AttackMissed)
+                            {
+                                ActiveQuoteType = QuoteTypes.Dodge;
+                            }
+
                             ActiveQuoteTuple = GetQuote(ActiveQuoteType, ActivePilot, EnemyPilot, UseRandomIndex, ref QuoteIndex);
                             ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 500);
                             ActiveQuote.PortraitPath = ActiveQuoteTuple.Item1;
@@ -320,7 +325,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteSet.CustomText, 500);
                             break;
 
-                        case QuoteSet.QuoteStyles.MoveIn:
+                        case QuoteSet.QuoteStyles.BattleStart:
                             ActiveQuoteTuple = GetQuote(QuoteTypes.BattleStart, ActivePilot, EnemyPilot, UseRandomIndex, ref QuoteIndex);
                             ActiveQuote.ActiveText = TextHelper.FitToWidth(fntFinlanderFont, ActiveQuoteTuple.Item2, 500);
                             ActiveQuote.PortraitPath = ActiveQuoteTuple.Item1;

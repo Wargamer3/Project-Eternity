@@ -2,7 +2,7 @@
 {
     public class QuoteSet
     {
-        public enum QuoteStyles { MoveIn, Reaction, QuoteSet, Custom };
+        public enum QuoteStyles { BattleStart, Reaction, QuoteSet, Custom };
 
         public enum QuoteSetChoices { Random, Fixed };
 
@@ -15,7 +15,7 @@
 
         public QuoteSet()
         {
-            QuoteStyle = QuoteStyles.MoveIn;
+            QuoteStyle = QuoteStyles.BattleStart;
             QuoteSetName = "";
             QuoteSetUseLast = false;
             QuoteSetChoice = QuoteSetChoices.Random;
