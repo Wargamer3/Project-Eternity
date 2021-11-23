@@ -165,10 +165,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (NextEvent != null)
             {
                 Progress = (KeyFrame - EventKeyFrameOld) / (float)(NextEventKeyFrame - EventKeyFrameOld);
+                int OldDamageCurrent = DamageCurrent;
                 DamageCurrent = DamageOld + (int)(DamageChangeValue * Progress);
                 if (Owner != null)
                 {
-                    Owner.DamageEnemyUnit((int)DamageChangeValue);
+                    Owner.DamageEnemyUnit(DamageCurrent - OldDamageCurrent);
                 }
 
                 UpdateAnimationSprite(KeyFrame);
@@ -201,7 +202,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     else
                         NextEvent = null;
                 }
-                else if (Owner != null && (!ActiveKeyFrame.IsProgressive || KeyFrame == SpawnFrame))
+                if (Owner != null && (!ActiveKeyFrame.IsProgressive || KeyFrame == SpawnFrame))
                 {
                     Owner.DamageEnemyUnit(DamageCurrent);
                 }
