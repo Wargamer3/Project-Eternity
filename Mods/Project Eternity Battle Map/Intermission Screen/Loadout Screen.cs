@@ -60,26 +60,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Keep the map in cache in case the player goes back and forth between menus.
             if (NewMap == null)
             {
-                int OldNumberOfGameScreen = ListGameScreen.Count;
-                ListSpawnSquad = new List<Squad>();
-                Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
-                DicSpawnSquadByPlayer.Add("Player", ListSpawnSquad);
-                NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(0);
-                NewMap.BattleMapPath = BattleMap.NextMapPath;
-                NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
-                NewMap.ListGameScreen = ListGameScreen;
-                NewMap.PlayerRoster = PlayerRoster;
-                NewMap.Load();
-                NewMap.Init();
-                NewMap.TogglePreview(true);
-
-                //Remove any GameScreen created by the map so they don't show up immediately.
-                ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);
-                for (int S = ListGameScreen.Count - 1 - OldNumberOfGameScreen; S >= 0; --S)
-                {
-                    ListGameScreenCreatedByMap.Add(ListGameScreen[S]);
-                    ListGameScreen.RemoveAt(S);
-                }
+                LoadMap(ListGameScreen, PlayerRoster);
             }
 
             ListSingleplayerSpawns = new List<EventPoint>();
@@ -89,6 +70,30 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     ListSingleplayerSpawns.Add(ActiveSpawn);
                 }
+            }
+        }
+
+        public static void LoadMap(List<GameScreen> ListGameScreen, Roster PlayerRoster)
+        {
+            int OldNumberOfGameScreen = ListGameScreen.Count;
+            ListSpawnSquad = new List<Squad>();
+            Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
+            DicSpawnSquadByPlayer.Add("Player", ListSpawnSquad);
+            NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(0);
+            NewMap.BattleMapPath = BattleMap.NextMapPath;
+            NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
+            NewMap.ListGameScreen = ListGameScreen;
+            NewMap.PlayerRoster = PlayerRoster;
+            NewMap.Load();
+            NewMap.Init();
+            NewMap.TogglePreview(true);
+
+            //Remove any GameScreen created by the map so they don't show up immediately.
+            ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);
+            for (int S = ListGameScreen.Count - 1 - OldNumberOfGameScreen; S >= 0; --S)
+            {
+                ListGameScreenCreatedByMap.Add(ListGameScreen[S]);
+                ListGameScreen.RemoveAt(S);
             }
         }
 
@@ -120,19 +125,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (ListSpawnSquad.Count == ListSingleplayerSpawns.Count)
                     {
-                        RemoveAllScreens();
-
-                        ListGameScreen.Insert(0, NewMap);
-                        NewMap.Update(gameTime);
-
-                        for (int S = 0; S < ListGameScreenCreatedByMap.Count; ++S)
-                        {
-                            ListGameScreen.Insert(0, ListGameScreenCreatedByMap[S]);
-                            ListGameScreenCreatedByMap[S].Update(gameTime);
-                        }
-
-                        ListGameScreenCreatedByMap.Clear();
-                        NewMap = null;
+                        StartMap(this, gameTime);
                     }
                     else
                     {
@@ -149,6 +142,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (InputHelper.InputCancelPressed() || InputHelper.InputConfirmPressed())
                     Stage--;
             }
+        }
+
+        public static void StartMap(GameScreen Owner, GameTime gameTime)
+        {
+            Owner.RemoveAllScreens();
+
+            Owner.ListGameScreen.Insert(0, NewMap);
+            NewMap.Update(gameTime);
+
+            for (int S = 0; S < ListGameScreenCreatedByMap.Count; ++S)
+            {
+                Owner.ListGameScreen.Insert(0, ListGameScreenCreatedByMap[S]);
+                ListGameScreenCreatedByMap[S].Update(gameTime);
+            }
+
+            ListGameScreenCreatedByMap.Clear();
+            NewMap = null;
         }
 
         public override void Draw(CustomSpriteBatch g)
