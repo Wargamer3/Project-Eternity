@@ -312,7 +312,7 @@ namespace ProjectEternity.Core.Units
             ArrayUnit[CurrentLeaderIndex] = NewLeader;
         }
 
-        public static Squad LoadSquadWithProgression(BinaryReader BR, ContentManager Content, Dictionary<string, Unit> DicUnitType,
+        public static Squad LoadSquadWithProgression(BinaryReader BR, List<Character> ListTeamCharacter, ContentManager Content, Dictionary<string, Unit> DicUnitType,
             Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
@@ -323,15 +323,15 @@ namespace ProjectEternity.Core.Units
             bool IsWingmanBLocked = BR.ReadBoolean();
 
             int UnitsInSquad = BR.ReadInt32();
-            Unit NewLeader = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            Unit NewLeader = Unit.LoadUnitWithProgress(BR, ListTeamCharacter, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             Unit NewWingmanA = null;
             Unit NewWingmanB = null;
 
             if (UnitsInSquad >= 2)
-                NewWingmanA = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                NewWingmanA = Unit.LoadUnitWithProgress(BR, ListTeamCharacter, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             if (UnitsInSquad >= 3)
-                NewWingmanB = Unit.LoadUnitWithProgress(BR, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                NewWingmanB = Unit.LoadUnitWithProgress(BR, ListTeamCharacter, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             Squad NewSquad = new Squad(SquadName, NewLeader, NewWingmanA, NewWingmanB);
             NewSquad.IsNameLocked = IsNameLocked;

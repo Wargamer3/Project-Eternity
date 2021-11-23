@@ -464,7 +464,7 @@ namespace ProjectEternity.Core.Units
 
         protected abstract void DoQuickLoad(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content);
 
-        public static Unit LoadUnitWithProgress(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,
+        public static Unit LoadUnitWithProgress(BinaryReader BR, List<Character> ListTeamCharacter, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,
             Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
@@ -478,7 +478,27 @@ namespace ProjectEternity.Core.Units
             NewUnit.ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
             for (int C = 0; C < ArrayCharacterActiveLength; C++)
             {
-                NewUnit.ArrayCharacterActive[C] = Character.LoadCharacterWithProgression(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                string CharacterFullName = BR.ReadString();
+                Character CorrespondingCharacter = null;
+                foreach (Character ActiveCharacter in ListTeamCharacter)
+                {
+                    if (ActiveCharacter.FullName == CharacterFullName)
+                    {
+                        CorrespondingCharacter = ActiveCharacter;
+                        break;
+                    }
+                }
+
+                if (CorrespondingCharacter != null)
+                {
+                    CorrespondingCharacter.LoadProgression(BR);
+                    NewUnit.ArrayCharacterActive[C] = CorrespondingCharacter;
+
+                }
+                else
+                {
+                    NewUnit.ArrayCharacterActive[C] = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                }
             }
 
             return NewUnit;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -70,7 +71,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void Load(BinaryReader BR, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public void Load(BinaryReader BR, List<Character> ListTeamCharacter, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             Clear();
@@ -80,7 +81,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 bool IsPresent = BR.ReadBoolean();
                 bool IsEvent = BR.ReadBoolean();
-                Squad LoadedSquad = Squad.LoadSquadWithProgression(BR, GameScreen.ContentFallback, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                Squad LoadedSquad = Squad.LoadSquadWithProgression(BR, ListTeamCharacter, GameScreen.ContentFallback, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
                 if (IsPresent)
                 {

@@ -81,7 +81,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 bool IsPresent = BR.ReadBoolean();
                 bool IsEvent = BR.ReadBoolean();
 
-                Character LoadedCharacter = Character.LoadCharacterWithProgression(BR, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                string CharacterFullName = BR.ReadString();
+                Character LoadedCharacter = new Character(CharacterFullName, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+                LoadedCharacter.LoadProgression(BR);
 
                 if (IsPresent)
                 {

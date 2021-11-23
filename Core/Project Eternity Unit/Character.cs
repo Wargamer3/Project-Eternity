@@ -548,19 +548,13 @@ namespace ProjectEternity.Core.Characters
             }
         }
 
-        public static Character LoadCharacterWithProgression(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        public void LoadProgression(BinaryReader BR)
         {
-            string CharacterFullName = BR.ReadString();
-            Character NewCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-
-            NewCharacter.Level = BR.ReadInt32();
-            NewCharacter.EXP = BR.ReadInt32();
-            NewCharacter.Kills = BR.ReadInt32();
-            NewCharacter.PilotPoints = BR.ReadInt32();
-            NewCharacter.InitStats();
-
-            return NewCharacter;
+            Level = BR.ReadInt32();
+            EXP = BR.ReadInt32();
+            Kills = BR.ReadInt32();
+            PilotPoints = BR.ReadInt32();
+            InitStats();
         }
 
         public void QuickSave(BinaryWriter BW)

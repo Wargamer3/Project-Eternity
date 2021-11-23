@@ -146,8 +146,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             TeamCharacters.Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-            TeamUnits.Load(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-            TeamSquads.Load(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            TeamUnits.Load(BR, TeamCharacters.ListAll, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            TeamSquads.Load(BR, TeamCharacters.ListAll, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             CreateCharacterRosterDependencies();
             CreateUnitRosterDependencies();
