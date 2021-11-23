@@ -420,7 +420,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 {
                     if (e.X < TimelineStartX && TimelineResizeSide == TimelineResizeSides.None)
                     {
-                        if (ActiveTimelineEvent != null && TimelineDragDropSelectedItemIndex >= 0)
+                        if (ActiveTimelineEvent != null && TimelineDragDropSelectedItemIndex >= 0 && ActiveLayer != ActiveAnimation.ListAnimationLayer.EngineLayer)
                         {
                             TimelineDragDropInsertIndex = -2;
                             DoDragDrop(ActiveTimelineEvent, DragDropEffects.Move);
@@ -434,7 +434,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                                 PlaybackEndKeyFrame = MouseFrame;
                         }
                         else
+                        {
                             OnKeyFrameChange(MouseFrame);
+                        }
                     }
                     else if (ActiveTimelineEvent != null)
                     {
@@ -452,7 +454,19 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                             case TimelineResizeSides.Left:
                                 if (MouseFrame >= ActiveTimelineEvent.DeathFrame || MouseFrame < 0)
+                                {
                                     return;
+                                }
+                                else if (ActiveLayer == ActiveAnimation.ListAnimationLayer.EngineLayer)
+                                {
+                                    if (ActiveTimelineEvent.TryGetValue(MouseFrameOriginal, out _) && (MouseFrame < ActiveTimelineEvent.DeathFrame || MouseFrame < ActiveTimelineEvent.SpawnFrame))
+                                    {
+                                        ActiveTimelineEvent.MoveKeyFrame(MouseFrameOriginal, MouseFrame);
+                                        MouseEventOriginal = e;
+                                        break;
+                                    }
+                                    return;
+                                }
 
                                 if (ActiveTimelineEvent.TryGetValue(MouseFrame, out ExistingKeyFrameObject))
                                     ActiveTimelineEvent.DeleteKeyFrame(MouseFrame);
@@ -482,7 +496,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                             #region Right
 
                             case TimelineResizeSides.Right:
-                                if (ActiveTimelineEvent.SpawnFrame >= MouseFrame || MouseFrame < ActiveTimelineEvent.SpawnFrame)
+                                if (ActiveTimelineEvent.SpawnFrame >= MouseFrame || MouseFrame < ActiveTimelineEvent.SpawnFrame || ActiveLayer == ActiveAnimation.ListAnimationLayer.EngineLayer)
                                     return;
 
                                 ActiveTimelineEvent.GetSurroundingKeyFrames(MouseFrame - 1, out _, out NextKeyFrame);
@@ -503,7 +517,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                             #region All
 
                             case TimelineResizeSides.All:
-                                if (MouseFrame < ActiveTimelineEvent.SpawnFrame)
+                                if (MouseFrame < ActiveTimelineEvent.SpawnFrame || ActiveLayer == ActiveAnimation.ListAnimationLayer.EngineLayer)
                                     return;
 
                                 MouseEventOld = e;
