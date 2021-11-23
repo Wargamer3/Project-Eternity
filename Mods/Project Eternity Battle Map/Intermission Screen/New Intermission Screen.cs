@@ -197,11 +197,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawStringRightAligned(fntArial15, BattleMap.NextMapPath, new Vector2(630, Y + 3), Color.White);
             Y += fntArial15.LineSpacing;
             g.DrawString(fntArial15, "Skill Points", new Vector2(10, Y + 3), Color.White);
-            g.DrawStringRightAligned(fntArial15, "XX", new Vector2(340, Y + 3), Color.White);
-            g.DrawString(fntArial15, "Deploy XX units", new Vector2(350, Y + 3), Color.White);
+            g.DrawStringRightAligned(fntArial15, "0", new Vector2(340, Y + 3), Color.White);
+            g.DrawString(fntArial15, "Deploy 0 units", new Vector2(350, Y + 3), Color.White);
             Y += fntArial15.LineSpacing;
             g.DrawString(fntArial15, "Cleared Stages", new Vector2(10, Y + 3), Color.White);
-            g.DrawStringRightAligned(fntArial15, "XX", new Vector2(340, Y + 3), Color.White);
+            g.DrawStringRightAligned(fntArial15, BattleMap.ClearedStages.ToString(), new Vector2(340, Y + 3), Color.White);
             g.DrawString(fntArial15, "Turns", new Vector2(350, Y + 3), Color.White);
 
             Y = fntArial26.LineSpacing - 1;

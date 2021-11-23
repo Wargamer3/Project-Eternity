@@ -108,6 +108,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool IsFrozen;
         public static string NextMapType = string.Empty;
         public static string NextMapPath = string.Empty;
+        public static int ClearedStages = 0;
         public string VictoryCondition;
         public string LossCondition;
         public string SkillPoint;

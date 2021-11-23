@@ -27,6 +27,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
+                BattleMap.ClearedStages++;
                 Map.RemoveScreen(Map);
                 GameScreen.FMODSystem.sndActiveBGM.Stop();
                 Map.PushScreen(new NewIntermissionScreen(Map.PlayerRoster));
