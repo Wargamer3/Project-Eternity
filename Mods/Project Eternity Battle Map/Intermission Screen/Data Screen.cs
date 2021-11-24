@@ -121,7 +121,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void SaveProgression()
         {
             //Create the Part file.
-            FileStream FS = new FileStream("SRWE Save.bin", FileMode.Create, FileAccess.Write);
+            FileStream FS = new FileStream("User Data/Saves/SRWE Save.bin", FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);
 
             SaveProgression(BW, PlayerRoster);
@@ -162,7 +162,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static void LoadProgression(Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            FileStream FS = new FileStream("SRWE Save.bin", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("User Data/Saves/SRWE Save.bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS);
 
             LoadProgression(BR, PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);

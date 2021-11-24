@@ -734,7 +734,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         
         public static BattleMap LoadTemporaryMap(List<GameScreen> ListGameScreen)
         {
-            FileStream FS = new FileStream("TempSave.sav", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("User Data/Saves/TempSave.sav", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
             string BattleMapPath = BR.ReadString();

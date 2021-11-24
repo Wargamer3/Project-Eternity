@@ -111,7 +111,7 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.QuickLoad:
-                        if (File.Exists("TempSave.sav"))
+                        if (File.Exists("User Data/Saves/TempSave.sav"))
                         {
                             sndIntroSong.Stop();
                             sndConfirm.Play();
@@ -135,7 +135,7 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.LoadGame:
-                        if (File.Exists("SRWE Save.bin"))
+                        if (File.Exists("User Data/Saves/SRWE Save.bin"))
                         {
                             sndIntroSong.Stop();
                             sndConfirm.Play();

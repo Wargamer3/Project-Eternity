@@ -193,7 +193,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         public override void SaveTemporaryMap()
         {
-            FileStream FS = new FileStream("TempSave.sav", FileMode.Create, FileAccess.Write);
+            FileStream FS = new FileStream("User Data/Saves/TempSave.sav", FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);
 
             BW.Write(BattleMapPath);
