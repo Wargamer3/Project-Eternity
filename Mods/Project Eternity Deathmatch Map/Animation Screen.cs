@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     RightUnitEN = ActiveSquad.CurrentLeader.EN;
                     RightUnitENMax = ActiveSquad.CurrentLeader.MaxEN;
                     LeftUnitEN = EnemySquad.CurrentLeader.EN;
-                    LeftUnitENMax = ActiveSquad.CurrentLeader.MaxEN;
+                    LeftUnitENMax = EnemySquad.CurrentLeader.MaxEN;
                 }
                 else
                 {
