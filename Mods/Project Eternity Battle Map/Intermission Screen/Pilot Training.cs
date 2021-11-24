@@ -103,11 +103,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Link characters to Intermission Unit
             for (int U = 0; U < ListPresentUnit.Count; U++)
             {
-                for (int P = 0; P < ListPresentUnit[U].MaxCharacter; P++)
+                for (int P = 0; P < ListPresentUnit[U].ArrayCharacterActive.Length; P++)
                 {
-                    for (int i = 1; i < ListCharacterInfo.Count; i++)
+                    for (int i = 0; i < ListCharacterInfo.Count; i++)
                     {
-                        if (ListPresentUnit[U].ArrayCharacterActive[P] != null && ListPresentCharacter[i - 1] == ListPresentUnit[U].ArrayCharacterActive[P])
+                        if (ListPresentUnit[U].ArrayCharacterActive[P] != null && ListPresentCharacter[i] == ListPresentUnit[U].ArrayCharacterActive[P])
                         {
                             ListCharacterInfo[i].UnitIndex = U;
                             break;
@@ -157,19 +157,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ++PilotChoice;
                 if (PilotChoice >= MaxPerPage)
                     PilotChoice = MaxPerPage - 1;
-                else if ((CurrentPage - 1) * MaxPerPage + PilotChoice >= ListPresentUnit.Count)
-                    PilotChoice = Math.Max(0, (ListPresentUnit.Count - 1) % MaxPerPage);
+                else if ((CurrentPage - 1) * MaxPerPage + PilotChoice >= ListCharacterInfo.Count)
+                    PilotChoice = Math.Max(0, (ListCharacterInfo.Count - 1) % MaxPerPage);
 
                 sndSelection.Play();
             }
             else if (InputHelper.InputLeftPressed())
             {
                 CurrentPage -= (CurrentPage > 1) ? 1 : 0;
+                if ((CurrentPage - 1) * MaxPerPage + PilotChoice >= ListCharacterInfo.Count)
+                    PilotChoice = Math.Max(0, (ListCharacterInfo.Count - 1) % MaxPerPage);
                 sndSelection.Play();
             }
             else if (InputHelper.InputRightPressed())
             {
                 CurrentPage += (CurrentPage < PageMax) ? 1 : 0;
+                if ((CurrentPage - 1) * MaxPerPage + PilotChoice >= ListCharacterInfo.Count)
+                    PilotChoice = Math.Max(0, (ListCharacterInfo.Count - 1) % MaxPerPage);
                 sndSelection.Play();
             }
         }
@@ -186,7 +190,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case 1:
-                    Character ActiveCharacter = ListPresentCharacter[PilotChoice];
+                    Character ActiveCharacter = ListPresentCharacter[(CurrentPage - 1) * MaxPerPage + PilotChoice];
 
                     DrawBox(g, new Vector2(10, 20), 104, 150, Color.White);
                     g.Draw(sprPixel, new Rectangle(20, 13, 84, 84), Color.Gray);
@@ -252,11 +256,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int UnitIndex = (CurrentPage - 1) * MaxPerPage;
             for (int U = 0; U + UnitIndex < ListCharacterInfo.Count && U < MaxPerPage; U++)
             {
-                var ActiveCharacterInfo = ListCharacterInfo[U];
+                var ActiveCharacterInfo = ListCharacterInfo[U + UnitIndex];
                 int Offset = ListCharacterInfo.Count - ListPresentCharacter.Count;
                 if (U - Offset >= 0)
                 {
-                    Character ActiveCharacter = ListPresentCharacter[U - Offset];
+                    Character ActiveCharacter = ListPresentCharacter[U + UnitIndex - Offset];
 
                     g.DrawString(fntFinlanderFont, ActiveCharacter.Name, new Vector2(X, Y), Color.White);
                     g.DrawStringRightAligned(fntFinlanderFont, ActiveCharacter.Level.ToString(), new Vector2(230, Y), Color.White);
@@ -270,8 +274,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (ActiveCharacterInfo.UnitIndex >= 0)
                 {
                     Unit ActiveUnit = ListPresentUnit[ActiveCharacterInfo.UnitIndex];
-                    g.Draw(ActiveUnit.SpriteMap, new Vector2(350, Y), Color.White);
-                    g.DrawString(fntFinlanderFont, ActiveUnit.RelativePath, new Vector2(380, Y), Color.White);
+                    g.Draw(ActiveUnit.SpriteMap, new Vector2(355, Y), Color.White);
+                    g.DrawString(fntFinlanderFont, ActiveUnit.ItemName, new Vector2(385, Y), Color.White);
                     TextHelper.DrawTextRightAligned(g, ActiveUnit.MaxHP.ToString(), new Vector2(600, Y), Color.White);
                 }
                 else
