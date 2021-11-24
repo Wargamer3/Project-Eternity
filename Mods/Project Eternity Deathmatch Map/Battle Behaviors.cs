@@ -1192,6 +1192,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             bool IsActiveSquadOnRight = BattleAnimationType == AnimationScreen.BattleAnimationTypes.RightAttackLeft || BattleAnimationType == AnimationScreen.BattleAnimationTypes.LeftConteredByRight;
             bool HorionztalMirror = BattleAnimationType == AnimationScreen.BattleAnimationTypes.RightConteredByLeft || BattleAnimationType == AnimationScreen.BattleAnimationTypes.LeftAttackRight;
+            bool IsCounter = BattleAnimationType == AnimationScreen.BattleAnimationTypes.RightConteredByLeft || BattleAnimationType == AnimationScreen.BattleAnimationTypes.LeftConteredByRight;
+
             Squad NonDemoRightSquad;
             Squad NonDemoRightSupport;
             Squad NonDemoLeftSquad;
@@ -1254,8 +1256,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             AttackAnimations AttackerAnimations = ActiveAttack.GetAttackAnimations(FormulaParser.ActiveParser);
-            ListNextAnimationScreen.Add(CreateAnimation(AttackingSquad.CurrentLeader.Animations.MoveFoward, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror));
 
+            if (!IsCounter)
+            {
+                ListNextAnimationScreen.Add(CreateAnimation(AttackingSquad.CurrentLeader.Animations.MoveFoward, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror));
+            }
             ListNextAnimationScreen.Add(CreateAnimation(AttackerAnimations.Start, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, ExtraTextIntro, HorionztalMirror));
 
             if (BattleResult.ArrayResult[0].AttackMissed)
