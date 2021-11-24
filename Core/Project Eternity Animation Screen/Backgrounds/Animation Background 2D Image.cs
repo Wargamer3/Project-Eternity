@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                     g.Draw(sprBackground,
                         new Vector2(FinalX + X * _RepeatXOffset, FinalY + Y * _RepeatYOffset),
-                        null, _Color, 0, SpriteCenter, 1, FlipEffect, _Depth);
+                        null, _Color, 0, SpriteCenter, _Scale, FlipEffect, _Depth);
 
                     if (_FlipOnRepeatY)
                     {

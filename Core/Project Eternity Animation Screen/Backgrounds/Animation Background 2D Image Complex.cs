@@ -130,7 +130,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     Vector2 FinalPos = new Vector2(FinalX + X * _RepeatXOffset, FinalY + Y * _RepeatYOffset);
                     g.Draw(BackgroundChain.sprBackground,
                         FinalPos,
-                        null, _Color, 0, SpriteCenter, 1, FlipEffect, _Depth);
+                        null, _Color, 0, SpriteCenter, _Scale, FlipEffect, _Depth);
 
                     foreach (AnimationBackgroundLink ActiveLink in BackgroundChain.ListBackgroundLink)
                     {
