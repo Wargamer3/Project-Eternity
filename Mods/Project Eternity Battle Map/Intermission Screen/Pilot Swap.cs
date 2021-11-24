@@ -93,24 +93,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 PilotList.UpdateMenu(gameTime);
                 if (InputHelper.InputConfirmPressed())
                 {
-                    int CharacterIndex = PilotList.PilotChoice + (PilotList.CurrentPage - 1) * PilotListScreen.MaxPerPage;
-                    PilotListScreen.CharacterInfo SelectedCharacter = PilotList.SelectedCharacter;
-                    if (SelectedCharacter.UnitIndex != -1)
+                    int SelectedOtherCharacterIndex = PilotList.PilotChoice + (PilotList.CurrentPage - 1) * PilotListScreen.MaxPerPage;
+                    PilotListScreen.CharacterInfo OtherSelectedCharacter = PilotList.SelectedCharacter;
+                    if (OtherSelectedCharacter.UnitIndex != -1)
                     {
-                        Unit OldUnit = ListPresentUnit[SelectedCharacter.UnitIndex];
-                        int OldCharacterIndex = Array.IndexOf(OldUnit.ArrayCharacterActive, ListPresentUnit[CharacterIndex - 1]);
-                        OldUnit.ArrayCharacterActive[OldCharacterIndex] = null;
+                        Unit OtherUnit = ListPresentUnit[OtherSelectedCharacter.UnitIndex];
+                        int OtherUnitCharacterIndex = Array.IndexOf(OtherUnit.ArrayCharacterActive, ListPresentCharacter[SelectedOtherCharacterIndex - 1]);
+                        OtherUnit.ArrayCharacterActive[OtherUnitCharacterIndex] = null;
+                        OtherSelectedCharacter.UnitIndex = -1;
                     }
-                    //If the selection is not empty, add the pilot.
-                    if (CharacterIndex > 0)
+
+                    //Assign pilot
+                    if (SelectedOtherCharacterIndex > 0)
                     {
-                        SelectedUnit.ArrayCharacterActive[CursorIndexSubMenu] = ListPresentCharacter[CharacterIndex - 1];
-                        SelectedCharacter.UnitIndex = UnitList.UnitSelectionMenu.SelectedIndex;
+                        SelectedUnit.ArrayCharacterActive[CursorIndexSubMenu] = ListPresentCharacter[SelectedOtherCharacterIndex - 1];
+                        OtherSelectedCharacter.UnitIndex = UnitList.UnitSelectionMenu.SelectedIndex;
                     }
-                    else
+                    else//Unassign pilot
                     {
                         SelectedUnit.ArrayCharacterActive[CursorIndexSubMenu] = null;
-                        SelectedCharacter.UnitIndex = -1;
+                        PilotList.ListCharacterInfo[CursorIndexSubMenu + 1].UnitIndex = -1;
                     }
                     Stage = -1;
                 }
@@ -140,12 +142,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     UnitList.DrawMenu(g);
 
                     //Draw sub menu.
-                    g.Draw(sprPixel, new Rectangle(47, 83 + UnitList.UnitSelectionMenu.SelectedItemIndex * 38, 150, SelectedUnit.MaxCharacter * fntArial12.LineSpacing + 5), Color.DarkBlue);
+                    DrawBox(g, new Vector2(47, 83 + UnitList.UnitSelectionMenu.SelectedItemIndex * 38), 150, SelectedUnit.MaxCharacter * fntArial12.LineSpacing + 5, Color.White);
                     //Draw cursor.
                     g.Draw(sprPixel, new Rectangle(52, 86 + UnitList.UnitSelectionMenu.SelectedItemIndex * 38 + CursorIndexSubMenu * fntArial12.LineSpacing, 136, 1), Color.FromNonPremultiplied(127, 107, 0, 255));
                     g.Draw(sprPixel, new Rectangle(52, 103 + UnitList.UnitSelectionMenu.SelectedItemIndex * 38 + CursorIndexSubMenu * fntArial12.LineSpacing, 136, 1), Color.FromNonPremultiplied(127, 107, 0, 255));
 
-                    for (int C = 0; C < SelectedUnit.MaxCharacter; C++)
+                    for (int C = 0; C < SelectedUnit.ArrayCharacterActive.Length; C++)
                     {
                         if (SelectedUnit.ArrayCharacterActive.Length == 0 || SelectedUnit.ArrayCharacterActive[C] == null)
                             g.DrawString(fntArial12, "------", new Vector2(50, 83 + UnitList.UnitSelectionMenu.SelectedItemIndex * 38 + C * fntArial12.LineSpacing), Color.White);
