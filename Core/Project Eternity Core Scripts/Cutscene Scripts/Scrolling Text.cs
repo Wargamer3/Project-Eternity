@@ -79,7 +79,7 @@ namespace ProjectEternity.Core.Scripts
                 float XPos = 320;
                 float YPos = 630 + Progression;
 
-                TextHelper.DrawTextMultiline(g, TextHelper.fntShadowFont, ListText, _TextAlign, XPos, YPos, TextMaxWidthInPixel);
+                TextHelper.DrawTextMultiline(g, ListText, _TextAlign, XPos, YPos, TextMaxWidthInPixel);
 
                 g.End();
                 g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);

@@ -109,6 +109,54 @@ namespace ProjectEternity.Core
             g.DrawString(fntWhiteFont, Text, Position, TextColor, 0, new Vector2(TextWidth, 0), 1, SpriteEffects.None, 0);
         }
 
+        public static void DrawTextMultiline(CustomSpriteBatch g, List<string> ListText, TextAligns TextAlign, float XPos, float YPos, int TextMaxWidthInPixel)
+        {
+            float YOffset = 0;
+
+            if (TextAlign == TextAligns.Left)
+            {
+                XPos -= TextMaxWidthInPixel / 2;
+                foreach (string ActiveLine in ListText)
+                {
+                    DrawText(g, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White);
+                    YOffset += fntShadowFont.LineSpacing;
+                }
+            }
+            else if (TextAlign == TextAligns.Right)
+            {
+                XPos += TextMaxWidthInPixel / 2;
+                foreach (string ActiveLine in ListText)
+                {
+                    DrawTextRightAligned(g, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White);
+                    YOffset += fntShadowFont.LineSpacing;
+                }
+            }
+            else if (TextAlign == TextAligns.Center)
+            {
+                foreach (string ActiveLine in ListText)
+                {
+                    DrawTextMiddleAligned(g, ActiveLine, new Vector2(XPos, YPos + YOffset), Color.White);
+                    YOffset += fntShadowFont.LineSpacing;
+                }
+            }
+            else if (TextAlign == TextAligns.Justified)
+            {
+                XPos -= TextMaxWidthInPixel / 2;
+
+                foreach (string ActiveLine in ListText)
+                {
+                    float TextWidth = fntShadowFont.MeasureString(ActiveLine).X;
+                    float ScaleFactor = TextMaxWidthInPixel / TextWidth;
+                    for (int C = 0; C < ActiveLine.Length; ++C)
+                    {
+                        float Offset = fntShadowFont.MeasureString(ActiveLine.Substring(0, C)).X;
+                        DrawText(g, ActiveLine[C].ToString(), new Vector2(XPos + Offset * ScaleFactor, YPos + YOffset), Color.White);
+                    }
+                    YOffset += fntShadowFont.LineSpacing;
+                }
+            }
+        }
+
         public static void DrawTextMultiline(CustomSpriteBatch g, SpriteFont TextFont, List<string> ListText, TextAligns TextAlign, float XPos, float YPos, int TextMaxWidthInPixel)
         {
             float YOffset = 0;
