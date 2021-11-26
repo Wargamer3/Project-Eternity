@@ -927,7 +927,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             for (int L = 0; L < ListAnimationLayer.Count; L++)
             {
-                var ActiveLayer = ListAnimationLayer[L];
+                AnimationLayer ActiveLayer = ListAnimationLayer[L];
 
                 for (int A = 0; A < ActiveLayer.ListVisibleObject.Count; A++)
                 {

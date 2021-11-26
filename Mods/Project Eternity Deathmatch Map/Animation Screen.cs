@@ -542,7 +542,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveCharacterSprite.ActiveAnimation.BeginDraw(g);
             }
 
-            for (int L = 0; L < ListAnimationLayer.Count; L++)
+            for (int L = 0; L < ListAnimationLayer.BasicLayerCount; L++)
             {
                 if (ListAnimationLayer[L].renderTarget.Width != GraphicsDevice.PresentationParameters.BackBufferWidth ||
                     ListAnimationLayer[L].renderTarget.Height != GraphicsDevice.PresentationParameters.BackBufferHeight)
@@ -598,7 +598,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveAnimationBackground.Draw(g, Constants.Width, Constants.Height);
             g.Begin();
 
-            for (int A = 0; A < ListAnimationLayer.Count; A++)
+            for (int A = 0; A < ListAnimationLayer.BasicLayerCount; A++)
             {
                 if (ListAnimationLayer[A].ListPolygonCutter.Count > 0)
                 {

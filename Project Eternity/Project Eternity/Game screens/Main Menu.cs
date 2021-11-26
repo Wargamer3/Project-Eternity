@@ -14,10 +14,6 @@ using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity
 {
-    /// <summary>
-    /// This is the first menu to appear, where you you can choose to start a new game,
-    /// load a game or continue the last one.
-    /// </summary>
     public sealed class MainMenu : GameScreen
     {
         private enum MenuChoices { NewGame = 0, LoadGame, QuickLoad, Option, Encyclopedia };
@@ -36,10 +32,6 @@ namespace ProjectEternity
         private FMODSound sndSelection;
         private FMODSound sndDeny;
 
-        /// <summary>
-        /// Create a new Main Menu screen
-        /// </summary>
-        /// <param name="Game">Requires the main form of the project to have access to its members.</param>
         public MainMenu()
             : base()
         {

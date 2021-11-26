@@ -186,6 +186,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Owner.DrawUI(g);
             }
+
+            g.GraphicsDevice.SetRenderTarget(null);
         }
 
         public override void Draw(CustomSpriteBatch g, bool IsInEditMode)
