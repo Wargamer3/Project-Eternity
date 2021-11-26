@@ -105,6 +105,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string MapName;
         public string BattleMapPath;
         public int GameMode;
+        public IGameRule GameRule;
         public bool IsFrozen;
         public static string NextMapType = string.Empty;
         public static string NextMapPath = string.Empty;

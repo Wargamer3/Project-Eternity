@@ -132,6 +132,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.GlobalBattleContext = GlobalDeathmatchContext = GlobalBattleContext;
             GlobalDeathmatchContext.Map = this;
 
+            GameRule = new DefaultGameRule(this);
             ListActionMenuChoice = new ActionPanelHolderDeathmatch(this);
             FormulaParser.ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;

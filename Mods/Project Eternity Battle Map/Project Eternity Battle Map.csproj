@@ -89,6 +89,7 @@
     <Compile Include="Editor\Tile Attributes.Designer.cs">
       <DependentUpon>Tile Attributes.cs</DependentUpon>
     </Compile>
+    <Compile Include="IGameRule.cs" />
     <Compile Include="Inputs\Keyboard Input.cs" />
     <Compile Include="Inputs\Player Input.cs" />
     <Compile Include="Intermission Screen\Data Screen.cs" />

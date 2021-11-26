@@ -642,6 +642,8 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     }
                 }
             }
+
+            GameRule.OnSquadDefeated(DefenderPlayerIndex, Defender, DeadDefender);
         }
 
         private void FinalizeAttack(Squad SquadAttacker, Unit UnitAttacker, BattleResult Result)
