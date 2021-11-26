@@ -9,63 +9,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public bool InputLeftPressed()
         {
-            if (!IsInZone(0, 0, Constants.Width, Constants.Height))
-            {
-                return false;
-            }
-
             return KeyboardHelper.InputLeftPressed();
         }
 
         public bool InputRightPressed()
         {
-            if (!IsInZone(0, 0, Constants.Width, Constants.Height))
-            {
-                return false;
-            }
-
             return KeyboardHelper.InputRightPressed();
         }
 
         public bool InputUpPressed()
         {
-            if (!IsInZone(0, 0, Constants.Width, Constants.Height))
-            {
-                return false;
-            }
-
             return KeyboardHelper.InputUpPressed();
         }
 
         public bool InputDownPressed()
         {
-            if (!IsInZone(0, 0, Constants.Width, Constants.Height))
-            {
-                return false;
-            }
-
             return KeyboardHelper.InputDownPressed();
         }
 
         public bool InputMovePressed()
         {
-            if (!IsInZone(0, 0, Constants.Width, Constants.Height))
-            {
-                return false;
-            }
-
             return KeyboardHelper.InputLeftPressed() || KeyboardHelper.InputRightPressed() || KeyboardHelper.InputUpPressed() || KeyboardHelper.InputDownPressed()
-                || MouseHelper.MouseMoved();
+                || (IsInZone(0, 0, Constants.Width, Constants.Height) && MouseHelper.MouseMoved());
         }
 
         public bool InputConfirmPressed()
         {
-            if (!IsInZone(0, 0, Constants.Width, Constants.Height))
-            {
-                return false;
-            }
-
-            return KeyboardHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonPressed();
+            return KeyboardHelper.InputConfirmPressed() || (IsInZone(0, 0, Constants.Width, Constants.Height) && MouseHelper.InputLeftButtonPressed());
         }
 
         public bool InputCancelPressed()
@@ -75,7 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return false;
             }
 
-            return KeyboardHelper.InputCancelPressed() || MouseHelper.InputRightButtonPressed();
+            return KeyboardHelper.InputCancelPressed() || (IsInZone(0, 0, Constants.Width, Constants.Height) && MouseHelper.InputRightButtonPressed());
         }
 
         public bool InputCommand1Pressed()
