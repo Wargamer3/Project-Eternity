@@ -196,7 +196,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ScaleFactor.Y < 0)
                 ActiveEffect |= SpriteEffects.FlipVertically;
 
-            if (Owner.IsLeftAttacking)
+            if (Owner != null && Owner.IsLeftAttacking)
             {
                 if (ScaleFactor.X < 0)
                 {
