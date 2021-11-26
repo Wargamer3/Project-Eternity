@@ -1121,7 +1121,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void GetLeftRightSquads(bool IsActiveSquadOnRight,
+        private void GetLeftRightSquads(bool IsActiveSquadOnRight,
             Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, Squad TargetSquad, SupportSquadHolder TargetSquadSupport,
             out Squad NonDemoRightSquad, out Squad NonDemoRightSupport,
             out Squad NonDemoLeftSquad, out Squad NonDemoLeftSupport)
@@ -1159,7 +1159,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public AnimationScreen CreateAnimation(string AnimationName, DeathmatchMap Map, Squad ActiveSquad, Squad EnemySquad, Attack ActiveAttack,
+        private AnimationScreen CreateAnimation(string AnimationName, DeathmatchMap Map, Squad ActiveSquad, Squad EnemySquad, Attack ActiveAttack,
             SquadBattleResult BattleResult, AnimationScreen.AnimationUnitStats UnitStats, AnimationBackground ActiveTerrain, string ExtraText, bool IsLeftAttacking)
         {
             AnimationScreen NewAnimationScreen = new AnimationScreen(AnimationName, Map, ActiveSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveTerrain, ExtraText, IsLeftAttacking);
@@ -1167,7 +1167,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return NewAnimationScreen;
         }
 
-        public AnimationScreen CreateAnimation(AnimationInfo Info, DeathmatchMap Map, Squad ActiveSquad, Squad EnemySquad, Attack ActiveAttack,
+        private AnimationScreen CreateAnimation(AnimationInfo Info, DeathmatchMap Map, Squad ActiveSquad, Squad EnemySquad, Attack ActiveAttack,
             SquadBattleResult BattleResult, AnimationScreen.AnimationUnitStats UnitStats, AnimationBackground ActiveTerrain, string ExtraText, bool IsLeftAttacking)
         {
             AnimationScreen NewAnimationScreen = new AnimationScreen(Info.AnimationName, Map, ActiveSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveTerrain, ExtraText, IsLeftAttacking);
@@ -1186,7 +1186,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         public List<GameScreen> GenerateNextAnimationScreens(Squad ActiveSquad, SupportSquadHolder ActiveSquadSupport, Squad TargetSquad, SupportSquadHolder TargetSquadSupport,
-            AnimationScreen.AnimationUnitStats UnitStats, AnimationScreen.BattleAnimationTypes BattleAnimationType, SquadBattleResult AttackingResult)
+            AnimationScreen.AnimationUnitStats UnitStats, AnimationScreen.BattleAnimationTypes BattleAnimationType, SquadBattleResult AttackingResult, out AnimationBackground TargetSquadBackground, AnimationBackground OldAttackerBackground)
         {
             List<GameScreen> ListNextAnimationScreen = new List<GameScreen>();
 
@@ -1225,14 +1225,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             string ExtraTextKill = EnemySquad.CurrentLeader.ItemName + " is destroyed!";
 
             AnimationBackground ActiveSquadBackground;
-            AnimationBackground TargetSquadBackground;
+            TargetSquadBackground = null;
 
             string ActiveSquadBackgroundPath = "Backgrounds 2D/Empty";
             string TargetSquadBackgroundPath = "Backgrounds 2D/Empty";
-            DrawableTile ActiveSquadTile = GetTile(ActiveSquad);
-            DrawableTile TargetSquadTile = GetTile(TargetSquad);
-            Terrain ActiveSquadTerrain = GetTerrain(ActiveSquad);
-            Terrain TargetSquadTerrain = GetTerrain(TargetSquad);
+            DrawableTile ActiveSquadTile = GetTile(AttackingSquad);
+            DrawableTile TargetSquadTile = GetTile(EnemySquad);
+            Terrain ActiveSquadTerrain = GetTerrain(AttackingSquad);
+            Terrain TargetSquadTerrain = GetTerrain(EnemySquad);
 
             if (ActiveSquadTerrain.BattleBackgroundAnimationIndex >= 0)
             {
@@ -1244,7 +1244,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 TargetSquadBackgroundPath = ListTilesetPreset[TargetSquadTile.Tileset].ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleBackgroundAnimationIndex];
             }
 
-            ActiveSquadBackground = new AnimationBackground2D(ActiveSquadBackgroundPath, Content, GraphicsDevice);
+            if (OldAttackerBackground != null)
+            {
+                ActiveSquadBackground = OldAttackerBackground;
+            }
+            else
+            {
+                ActiveSquadBackground = new AnimationBackground2D(ActiveSquadBackgroundPath, Content, GraphicsDevice);
+            }
 
             if (ActiveSquadBackgroundPath == TargetSquadBackgroundPath)
             {
@@ -1261,6 +1268,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListNextAnimationScreen.Add(CreateAnimation(AttackingSquad.CurrentLeader.Animations.MoveFoward, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror));
             }
+
             ListNextAnimationScreen.Add(CreateAnimation(AttackerAnimations.Start, this, AttackingSquad, EnemySquad, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, ExtraTextIntro, HorionztalMirror));
 
             if (BattleResult.ArrayResult[0].AttackMissed)
@@ -1272,16 +1280,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 // Check for support
                 if (EnemySupport != null)
                 {
-                    ListNextAnimationScreen.Add(CreateAnimation("Default Animations/Support In", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror));
+                    ListNextAnimationScreen.Add(CreateAnimation("Default Animations/Support In", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, TargetSquadBackground, "", HorionztalMirror));
                     if (BattleResult.ArrayResult[0].Target.ComputeRemainingHPAfterDamage(BattleResult.ArrayResult[0].AttackDamage) > 0)
                     {
-                        ListNextAnimationScreen.Add(CreateAnimation(AttackerAnimations.EndHit, this, AttackingSquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror));
-                        ListNextAnimationScreen.Add(CreateAnimation("Default Animations/Support Out", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror));
+                        ListNextAnimationScreen.Add(CreateAnimation(AttackerAnimations.EndHit, this, AttackingSquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, TargetSquadBackground, "", HorionztalMirror));
+                        ListNextAnimationScreen.Add(CreateAnimation("Default Animations/Support Out", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, TargetSquadBackground, "", HorionztalMirror));
                     }
                     else
                     {
-                        ListNextAnimationScreen.Add(CreateAnimation(AttackerAnimations.EndDestroyed, this, AttackingSquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror));
-                        ListNextAnimationScreen.Add(CreateAnimation("Default Animations/Support Destroyed", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, ActiveSquadBackground, "", HorionztalMirror));
+                        ListNextAnimationScreen.Add(CreateAnimation(AttackerAnimations.EndDestroyed, this, AttackingSquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, TargetSquadBackground, "", HorionztalMirror));
+                        ListNextAnimationScreen.Add(CreateAnimation("Default Animations/Support Destroyed", this, EnemySquad, EnemySupport, ActiveAttack, BattleResult, UnitStats, TargetSquadBackground, "", HorionztalMirror));
                     }
                 }
                 else

@@ -7,6 +7,7 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.DeathmatchMap;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -292,16 +293,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             AnimationScreen.AnimationUnitStats UnitStats = new AnimationScreen.AnimationUnitStats(FinalActiveSquad, FinalTargetSquad, IsActiveSquadOnRight);
+            AnimationBackground TargetSquadBackground = null;
             if (ShowAnimation)
             {
+                AnimationScreen.BattleAnimationTypes BattleAnimationType = AnimationScreen.BattleAnimationTypes.LeftAttackRight;
+
                 if (IsActiveSquadOnRight)
                 {
-                    ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, AnimationScreen.BattleAnimationTypes.RightAttackLeft, AttackingResult));
+                    BattleAnimationType = AnimationScreen.BattleAnimationTypes.RightAttackLeft;
                 }
-                else
-                {
-                    ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, AnimationScreen.BattleAnimationTypes.LeftAttackRight, AttackingResult));
-                }
+
+                ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, BattleAnimationType, AttackingResult, out TargetSquadBackground, null));
             }
 
             if (AttackingResult.ArrayResult[0].Target.ComputeRemainingHPAfterDamage(AttackingResult.ArrayResult[0].AttackDamage) > 0)
@@ -324,14 +326,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (ShowAnimation)
                     {
+                        AnimationScreen.BattleAnimationTypes BattleAnimationType = AnimationScreen.BattleAnimationTypes.LeftConteredByRight;
+
                         if (IsActiveSquadOnRight)
                         {
-                            ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, AnimationScreen.BattleAnimationTypes.RightConteredByLeft, DefendingResult));
+                            BattleAnimationType = AnimationScreen.BattleAnimationTypes.RightConteredByLeft;
                         }
-                        else
-                        {
-                            ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, AnimationScreen.BattleAnimationTypes.LeftConteredByRight, DefendingResult));
-                        }
+
+                        ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, BattleAnimationType, DefendingResult, out _, TargetSquadBackground));
                     }
                 }
             }
