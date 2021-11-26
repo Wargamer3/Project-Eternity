@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private bool IsLoaded;
 
         public AnimationScreen(string AnimationPath, DeathmatchMap Map, Squad AttackingSquad, Squad EnemySquad, Attack ActiveAttack,
-            BattleMap.SquadBattleResult BattleResult, AnimationUnitStats UnitStats, AnimationBackground ActiveAnimationBackground, string ExtraText, bool IsLeftAttacking)
+            BattleMap.SquadBattleResult BattleResult, AnimationUnitStats UnitStats, AnimationBackground ActiveAnimationBackground, AnimationBackground ActiveAnimationForeground, string ExtraText, bool IsLeftAttacking)
             : base(AnimationPath)
         {
             RequireFocus = false;
@@ -96,6 +96,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.BattleResult = BattleResult;
             this.UnitStats = UnitStats;
             this.ActiveAnimationBackground = ActiveAnimationBackground;
+            this.ActiveAnimationForeground = ActiveAnimationForeground;
             this.ExtraText = ExtraText;
             this.IsLeftAttacking = IsLeftAttacking;
 
@@ -619,6 +620,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         g.Draw(ListAnimationLayer[A].renderTarget, Vector2.Zero, Color.White);
                     }
+                }
+
+                if (A == 0 && ActiveAnimationForeground != null)
+                {
+                    g.End();
+                    if (ActiveAnimationForeground != null)
+                        ActiveAnimationForeground.Draw(g, Constants.Width, Constants.Height);
+                    g.Begin();
                 }
             }
         }

@@ -150,11 +150,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (IsCounterattack)
                     {
-                        ListNextAnimationScreen = Map.GenerateNextAnimationScreens(RightSquad, new SupportSquadHolder(), LeftSquad, new SupportSquadHolder(), UnitStats, AnimationScreen.BattleAnimationTypes.RightConteredByLeft, AttackingResult, out _, null);
+                        ListNextAnimationScreen = Map.GenerateNextAnimationScreens(RightSquad, new SupportSquadHolder(), LeftSquad, new SupportSquadHolder(), UnitStats,
+                            AnimationScreen.BattleAnimationTypes.RightConteredByLeft, AttackingResult, out _, null, out _, null);
                     }
                     else
                     {
-                        ListNextAnimationScreen = Map.GenerateNextAnimationScreens(RightSquad, new SupportSquadHolder(), LeftSquad, new SupportSquadHolder(), UnitStats, AnimationScreen.BattleAnimationTypes.RightAttackLeft, AttackingResult, out _, null);
+                        ListNextAnimationScreen = Map.GenerateNextAnimationScreens(RightSquad, new SupportSquadHolder(), LeftSquad, new SupportSquadHolder(), UnitStats,
+                            AnimationScreen.BattleAnimationTypes.RightAttackLeft, AttackingResult, out _, null, out _, null);
                     }
 
                     Map.PushScreen(ListNextAnimationScreen[0]);

@@ -120,6 +120,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public TerrainBonus[] ListBonus;//Bonuses the terrain can give.
         public int[] ListBonusValue;//Value of the bonuses.
         public int BattleBackgroundAnimationIndex;
+        public int BattleForegroundAnimationIndex;
 
         /// <summary>
         /// Used to create the empty array of the map.
@@ -134,6 +135,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListBonus = (TerrainBonus[])Other.ListBonus.Clone();
             this.ListBonusValue = (int[])Other.ListBonusValue.Clone();
             this.BattleBackgroundAnimationIndex = Other.BattleBackgroundAnimationIndex;
+            this.BattleForegroundAnimationIndex = Other.BattleForegroundAnimationIndex;
         }
 
         /// <summary>
@@ -149,6 +151,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListBonus = ListBonus = new TerrainBonus[0];
             this.ListBonusValue = ListBonusValue = new int[0];
             this.BattleBackgroundAnimationIndex = -1;
+            this.BattleForegroundAnimationIndex = -1;
         }
 
         /// <summary>
@@ -163,8 +166,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="ListBonus">Bonuses the terrain can give.</param>
         /// <param name="ListBonusValue">//Value of the bonuses.</param>
         public Terrain(int XPos, int YPos, int TerrainTypeIndex, int MVEnterCost, int MVMoveCost,
-            TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue,
-            int BattleBackgroundAnimationIndex)
+            TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue)
             : this(XPos, YPos)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
@@ -173,7 +175,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListActivation = ListActivation;
             this.ListBonus = ListBonus;
             this.ListBonusValue = ListBonusValue;
-            this.BattleBackgroundAnimationIndex = BattleBackgroundAnimationIndex;
+            this.BattleBackgroundAnimationIndex = -1;
+            this.BattleForegroundAnimationIndex = -1;
         }
 
         public Terrain(BinaryReader BR, float XPos, float YPos)

@@ -173,7 +173,7 @@ namespace ProjectEternity.UnitTests
 
             DummyAnimation = new AnimationScreen("", DummyMap, DummySquad,
                 EnemySquad, DummySquad.CurrentLeader.CurrentAttack,
-                new GameScreens.BattleMapScreen.BattleMap.SquadBattleResult(), new AnimationScreen.AnimationUnitStats(DummySquad, EnemySquad, false), null, "", false);
+                new GameScreens.BattleMapScreen.BattleMap.SquadBattleResult(), new AnimationScreen.AnimationUnitStats(DummySquad, EnemySquad, false), null, null, "", false);
 
             DummyAnimation.ListAnimationLayer = new AnimationClass.AnimationLayerHolder();
             DummyAnimation.ListAnimationLayer.EngineLayer = AnimationClass.GameEngineLayer.EmptyGameEngineLayer(DummyAnimation);
@@ -210,7 +210,7 @@ namespace ProjectEternity.UnitTests
 
             DummyTimeline.AnimationMarker = new AnimationScreen("", DummyMap, DummySquad,
                 EnemySquad, DummySquad.CurrentLeader.CurrentAttack,
-                new GameScreens.BattleMapScreen.BattleMap.SquadBattleResult(), new AnimationScreen.AnimationUnitStats(DummySquad, EnemySquad, false), null, "", false);
+                new GameScreens.BattleMapScreen.BattleMap.SquadBattleResult(), new AnimationScreen.AnimationUnitStats(DummySquad, EnemySquad, false), null, null, "", false);
 
             DummyTimeline.AnimationMarker.ListAnimationLayer = new AnimationClass.AnimationLayerHolder();
             DummyTimeline.AnimationMarker.ListAnimationLayer.EngineLayer = AnimationClass.GameEngineLayer.EmptyGameEngineLayer(DummyTimeline.AnimationMarker);

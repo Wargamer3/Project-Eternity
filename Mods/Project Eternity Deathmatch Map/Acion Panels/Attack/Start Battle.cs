@@ -294,6 +294,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             AnimationScreen.AnimationUnitStats UnitStats = new AnimationScreen.AnimationUnitStats(FinalActiveSquad, FinalTargetSquad, IsActiveSquadOnRight);
             AnimationBackground TargetSquadBackground = null;
+            AnimationBackground TargetSquadForeground = null;
             if (ShowAnimation)
             {
                 AnimationScreen.BattleAnimationTypes BattleAnimationType = AnimationScreen.BattleAnimationTypes.LeftAttackRight;
@@ -303,7 +304,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     BattleAnimationType = AnimationScreen.BattleAnimationTypes.RightAttackLeft;
                 }
 
-                ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, BattleAnimationType, AttackingResult, out TargetSquadBackground, null));
+                ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, BattleAnimationType,
+                    AttackingResult, out TargetSquadBackground, null, out TargetSquadForeground, null));
             }
 
             if (AttackingResult.ArrayResult[0].Target.ComputeRemainingHPAfterDamage(AttackingResult.ArrayResult[0].AttackDamage) > 0)
@@ -333,7 +335,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             BattleAnimationType = AnimationScreen.BattleAnimationTypes.RightConteredByLeft;
                         }
 
-                        ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats, BattleAnimationType, DefendingResult, out _, TargetSquadBackground));
+                        ListNextAnimationScreen.AddRange(Map.GenerateNextAnimationScreens(FinalActiveSquad, FinalActiveSquadSupport, FinalTargetSquad, FinalTargetSquadSupport, UnitStats,
+                            BattleAnimationType, DefendingResult, out _, TargetSquadBackground, out _, TargetSquadForeground));
                     }
                 }
             }

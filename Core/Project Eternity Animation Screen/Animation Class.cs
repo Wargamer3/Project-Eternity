@@ -596,6 +596,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         protected BasicEffect PolygonEffect;
         protected AlphaTestEffect AlphaEffect;
         public AnimationBackground ActiveAnimationBackground;
+        public AnimationBackground ActiveAnimationForeground;
         public Matrix TransformationMatrix;
 
         public static readonly BlendState NegativeBlendState = new BlendState()
@@ -886,6 +887,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             if (ActiveAnimationBackground != null)
                 ActiveAnimationBackground.Update(gameTime);
+
+            if (ActiveAnimationForeground != null)
+                ActiveAnimationForeground.Update(gameTime);
 
             UpdateKeyFrame(ActiveKeyFrame);
             ActiveKeyFrame++;
