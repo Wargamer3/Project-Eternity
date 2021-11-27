@@ -76,6 +76,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMapMenuUnitPosition.Clear();
             foreach (Squad ActiveSquad in Map.ListPlayer[Map.ActivePlayerIndex].ListSquad)
             {
+                if (ActiveSquad.IsDead)
+                {
+                    continue;
+                }
+
                 ListMapMenuUnitPosition.Add(new Tuple<Unit, Vector3>(ActiveSquad.CurrentLeader, ActiveSquad.Position));
                 if (ActiveSquad.CurrentWingmanA != null)
                     ListMapMenuUnitPosition.Add(new Tuple<Unit, Vector3>(ActiveSquad.CurrentWingmanA, ActiveSquad.Position));
