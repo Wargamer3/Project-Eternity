@@ -467,7 +467,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprPixel, new Rectangle(RightPos + 20, RightPosY + 13, 84, 84), Color.Gray);
             g.Draw(sprPixel, new Rectangle(RightPos + 22, RightPosY + 15, 80, 80), Color.White);
             g.Draw(ActiveUnit.Pilot.sprPortrait, new Vector2(RightPos + 22, RightPosY + 15), Color.White);
-            g.DrawStringMiddleAligned(fntFinlanderFont, ActiveUnit.PilotName, new Vector2(RightPos + 62, RightPosY + 100), Color.White);
+            TextHelper.DrawTextMultiline(g, fntFinlanderFont, TextHelper.FitToWidth(fntFinlanderFont, ActiveUnit.PilotName, 100), TextHelper.TextAligns.Center, RightPos + 62, RightPosY + 100, 100);
 
             CurrentY = 266;
 
