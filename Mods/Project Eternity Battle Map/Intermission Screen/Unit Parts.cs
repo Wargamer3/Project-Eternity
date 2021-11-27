@@ -349,6 +349,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void UpdatePartSelectionPart1()
         {
+            if (SelectedUnit.ArrayParts.Length == 0)
+                return;
+
             if (InputHelper.InputUpPressed())
             {
                 if (CursorIndexUnitPart > 0)
@@ -503,19 +506,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(SelectedUnit.SpriteUnit, new Vector2(StartX + 30, 100), Color.White);
 
             int Y = 155;
-            DrawBox(g, new Vector2(StartX + 10, Y + LineSpacing), 310, 85, Color.White);
-            for (int P = 0; P < SelectedUnit.ArrayParts.Length; ++P)
+            if (SelectedUnit.ArrayParts.Length > 0)
             {
-                if (SelectedUnit.ArrayParts[P] != null)
+                DrawBox(g, new Vector2(StartX + 10, Y + LineSpacing), 310, 85, Color.White);
+                for (int P = 0; P < SelectedUnit.ArrayParts.Length; ++P)
                 {
-                    g.DrawString(fntFinlanderFont, SelectedUnit.ArrayParts[P].Name, new Vector2(StartX + 15, Y += LineSpacing), Color.White);
+                    if (SelectedUnit.ArrayParts[P] != null)
+                    {
+                        g.DrawString(fntFinlanderFont, SelectedUnit.ArrayParts[P].Name, new Vector2(StartX + 15, Y += LineSpacing), Color.White);
+                    }
+                    else
+                    {
+                        g.DrawString(fntFinlanderFont, "None", new Vector2(StartX + 15, Y += LineSpacing), Color.White);
+                    }
                 }
-                else
-                {
-                    g.DrawString(fntFinlanderFont, "None", new Vector2(StartX + 15, Y += LineSpacing), Color.White);
-                }
+                g.Draw(sprPixel, new Rectangle(StartX + 15, 180 + CursorIndexUnitPart * LineSpacing, 300, LineSpacing), Color.FromNonPremultiplied(255, 255, 255, 127));
             }
-            g.Draw(sprPixel, new Rectangle(StartX + 15, 180 + CursorIndexUnitPart * LineSpacing, 300, LineSpacing), Color.FromNonPremultiplied(255, 255, 255, 127));
 
             Y += 15;
             DrawBox(g, new Vector2(StartX + 10, Y + LineSpacing), 310, 215, Color.White);
