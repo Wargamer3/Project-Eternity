@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (Items == null)
                 return;
 
-            string MapLogicName = Items[0].Substring(0, Items[0].Length - 4).Substring(29);
+            string MapLogicName = Items[0].Substring(0, Items[0].Length - 4).Substring(24);
             BattleMapViewer.Preload();
             DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, 0, new Dictionary<string, List<Core.Units.Squad>>());
             BattleMapViewer.ActiveMap = NewMap;

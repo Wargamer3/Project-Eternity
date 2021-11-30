@@ -414,7 +414,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            for (int L = ListAnimationLayer.Count - 1; L >= 0; --L)
+            for (int L = 0; L < ListAnimationLayer.BasicLayerCount; ++L)
             {
                 g.Draw(ListAnimationLayer[L].renderTarget, Vector2.Zero, Color.White);
             }

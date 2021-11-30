@@ -202,7 +202,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int YStep = 25;
 
                 g.DrawString(fntFinlanderFont, "Power", new Vector2(350, YStart - 25), Color.Yellow);
-                for (int i = 0; i < SelectedUnit.ListAttack.Count && i <= 8; i++, i++)
+                for (int i = 0; i < SelectedUnit.ListAttack.Count && i <= 8; i++)
                 {
                     int CurrentPower = SelectedUnit.ListAttack[i].GetPower(SelectedUnit);
                     SelectedUnit.UnitStat.AttackUpgrades.Value += AttackUpgradeCount;

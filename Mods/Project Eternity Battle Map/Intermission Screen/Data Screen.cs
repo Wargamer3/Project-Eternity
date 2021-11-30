@@ -199,6 +199,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             PlayerRoster.LoadTeam(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
+            SystemList.ListPart.Clear();
             int ListPartCount = BR.ReadInt32();
             for (int P = 0; P < ListPartCount; P++)
             {

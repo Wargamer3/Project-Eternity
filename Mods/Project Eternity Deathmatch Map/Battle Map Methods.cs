@@ -293,12 +293,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int S = 0; S < ListPlayer[P].ListSquad.Count; S++)
                 {
-                    for (int U = 0; U < ListPlayer[P].ListSquad[S].UnitsInSquad; ++U)
+                    if (!ListPlayer[P].ListSquad[S].IsDead)
                     {
-                        for (int C = 0; C < ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive.Length; C++)
+                        for (int U = 0; U < ListPlayer[P].ListSquad[S].UnitsInSquad; ++U)
                         {
-                            Character ActiveCharacter = ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive[C];
-                            ActiveCharacter.Effects.QuickSave(BW);
+                            for (int C = 0; C < ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive.Length; C++)
+                            {
+                                Character ActiveCharacter = ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive[C];
+                                ActiveCharacter.Effects.QuickSave(BW);
+                            }
                         }
                     }
                 }
@@ -522,12 +525,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int S = 0; S < ListPlayer[P].ListSquad.Count; S++)
                 {
-                    for (int U = 0; U < ListPlayer[P].ListSquad[S].UnitsInSquad; ++U)
+                    if (!ListPlayer[P].ListSquad[S].IsDead)
                     {
-                        for (int C = 0; C < ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive.Length; C++)
+                        for (int U = 0; U < ListPlayer[P].ListSquad[S].UnitsInSquad; ++U)
                         {
-                            Character ActiveCharacter = ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive[C];
-                            ActiveCharacter.Effects.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                            for (int C = 0; C < ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive.Length; C++)
+                            {
+                                Character ActiveCharacter = ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive[C];
+                                ActiveCharacter.Effects.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                            }
                         }
                     }
                 }
