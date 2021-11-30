@@ -1,4 +1,8 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using ProjectEternity.Core;
+using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -11,6 +15,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public DefaultGameRule(DeathmatchMap Owner)
         {
             this.Owner = Owner;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (KeyboardHelper.KeyPressed(Keys.U))
+            {
+                Owner.PushScreen(new GameOverMenu());
+            }
         }
 
         public void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad, Unit UnitDefeated)
@@ -48,6 +60,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Owner.PushScreen(new GameOverMenu());
             }
+        }
+
+        public void BeginDraw(CustomSpriteBatch g)
+        {
+
+        }
+
+        public void Draw(CustomSpriteBatch g)
+        {
+
         }
     }
 }

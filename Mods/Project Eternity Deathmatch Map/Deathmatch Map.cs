@@ -608,6 +608,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else if (GameMode == 0)
                 {
                     ListActionMenuChoice.Last().Update(gameTime);
+                    GameRule.Update(gameTime);
                 }
                 else
                 {
@@ -752,6 +753,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 g.Begin();
             }
+
+            GameRule.Draw(g);
 
             if (IsOnTop)
             {
