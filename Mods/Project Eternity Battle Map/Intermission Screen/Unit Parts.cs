@@ -414,9 +414,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     PartInfo ActivePartInfo = ListPartInfo[CursorIndexListPart - 1];
                     if (ActivePartInfo.ActivePart.Quantity > 0)
                     {
-                        if (ActivePartInfo.ListUnit.Count == ActivePartInfo.ActivePart.Quantity && !SelectedUnit.ArrayParts.Contains(ActivePartInfo.ActivePart))
+                        if (ActivePartInfo.ListUnit.Count == ActivePartInfo.ActivePart.Quantity)
                         {
-                            Stage = 2;
+                            if (SelectedUnit.ArrayParts.Contains(ActivePartInfo.ActivePart))
+                            {
+                                int IndexOfPart = Array.IndexOf(SelectedUnit.ArrayParts, ActivePartInfo.ActivePart);
+                                SelectedUnit.ArrayParts[IndexOfPart] = null;
+                                SelectedUnit.ArrayParts[CursorIndexUnitPart] = ActivePartInfo.ActivePart;
+
+                                Stage = 0;
+                            }
+                            else
+                            {
+                                Stage = 2;
+                            }
                         }
                         else
                         {
@@ -438,13 +449,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorIndexListPartUnits > 0)
                     CursorIndexListPartUnits--;
                 else
-                    CursorIndexListPartUnits = ActivePartInfo.ListUnit.Count;
+                    CursorIndexListPartUnits = ActivePartInfo.ListUnit.Count - 1;
 
                 UpdatePartsEffects();
             }
             else if (InputHelper.InputDownPressed())
             {
-                if (CursorIndexListPartUnits + 1 < ActivePartInfo.ListUnit.Count + 1)
+                if (CursorIndexListPartUnits + 1 < ActivePartInfo.ListUnit.Count)
                     CursorIndexListPartUnits++;
                 else
                     CursorIndexListPartUnits = 0;
@@ -502,7 +513,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DrawUnitInfo(CustomSpriteBatch g, int StartX)
         {
-            g.DrawString(fntFinlanderFont, SelectedUnit.RelativePath, new Vector2(StartX + 15, 40), Color.White);
+            g.DrawString(fntFinlanderFont, SelectedUnit.ItemName, new Vector2(StartX + 15, 40), Color.White);
             g.Draw(SelectedUnit.SpriteUnit, new Vector2(StartX + 30, 100), Color.White);
 
             int Y = 155;
@@ -596,7 +607,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int U = 0; U < ActivePartInfo.ListUnit.Count; ++U)
             {
-                g.DrawString(fntFinlanderFont, ActivePartInfo.ListUnit[U].RelativePath, new Vector2(10, 55 + LineSpacing * U), Color.White);
+                g.DrawString(fntFinlanderFont, ActivePartInfo.ListUnit[U].ItemName, new Vector2(10, 55 + LineSpacing * U), Color.White);
             }
 
             g.Draw(sprPixel, new Rectangle(10, 61 + CursorIndexListPartUnits * LineSpacing, 305, LineSpacing), Color.FromNonPremultiplied(255, 255, 255, 127));
