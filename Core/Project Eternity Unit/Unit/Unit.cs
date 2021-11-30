@@ -473,6 +473,11 @@ namespace ProjectEternity.Core.Units
             string TeamEventID = BR.ReadString();
             Unit NewUnit = Unit.FromType(UnitTypeName, UnitFullName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             NewUnit.TeamEventID = TeamEventID;
+            NewUnit.UnitStat.HPUpgrades.Value = BR.ReadInt32();
+            NewUnit.UnitStat.ENUpgrades.Value = BR.ReadInt32();
+            NewUnit.UnitStat.ArmorUpgrades.Value = BR.ReadInt32();
+            NewUnit.UnitStat.MobilityUpgrades.Value = BR.ReadInt32();
+            NewUnit.UnitStat.AttackUpgrades.Value = BR.ReadInt32();
 
             int ArrayCharacterActiveLength = BR.ReadInt32();
             NewUnit.ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
@@ -509,6 +514,11 @@ namespace ProjectEternity.Core.Units
             BW.Write(RelativePath);
             BW.Write(UnitTypeName);
             BW.Write(TeamEventID);
+            BW.Write(_UnitStat.HPUpgrades.Value);
+            BW.Write(_UnitStat.ENUpgrades.Value);
+            BW.Write(_UnitStat.ArmorUpgrades.Value);
+            BW.Write(_UnitStat.MobilityUpgrades.Value);
+            BW.Write(_UnitStat.AttackUpgrades.Value);
 
             BW.Write(ArrayCharacterActive.Length);
             for (int C = 0; C < ArrayCharacterActive.Length; C++)
