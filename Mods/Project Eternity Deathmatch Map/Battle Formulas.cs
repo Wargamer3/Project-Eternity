@@ -554,6 +554,12 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 //Will Gains
                 if (Result.Target.HP <= 0)
                 {
+                    if (AttackerPlayerIndex == 0)
+                    {
+                        int Money = 500;
+                        Constants.Money += (int)(Money * Attacker.Boosts.MoneyMultiplier);
+                    }
+
                     BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, AttackerSquad, ListPlayer[AttackerPlayerIndex].IsPlayerControlled);
                     BattleRecap.TotalExpGained += (int)((Result.Target.Pilot.EXPValue + Result.Target.UnitStat.EXPValue) * Attacker.Boosts.EXPMultiplier);
 
@@ -656,8 +662,6 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             UnitAttacker.ConsumeEN(UnitAttacker.EN - Result.AttackAttackerFinalEN);
 
-            int Money = 0;
-            Constants.Money += (int)(Money * UnitAttacker.Boosts.MoneyMultiplier);
             int PilotPoint = 0;
             UnitAttacker.PilotPilotPoints += (int)(PilotPoint * UnitAttacker.Boosts.PPMultiplier);
             
