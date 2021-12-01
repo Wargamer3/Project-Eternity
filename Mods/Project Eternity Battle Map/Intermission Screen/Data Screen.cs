@@ -135,6 +135,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(BattleMap.NextMapType);
             BW.Write(BattleMap.NextMapPath);
             BW.Write(BattleMap.ClearedStages);
+            BW.Write(Constants.Money);
 
             BW.Write(BattleMap.DicGlobalVariables.Count);
             foreach (KeyValuePair<string, string> GlobalVariable in BattleMap.DicGlobalVariables)
@@ -180,6 +181,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BattleMap.NextMapType = BR.ReadString();
             BattleMap.NextMapPath = BR.ReadString();
             BattleMap.ClearedStages = BR.ReadInt32();
+            Constants.Money = BR.ReadInt32();
 
             int DicGlobalVariablesCount = BR.ReadInt32();
             for (int R = 0; R < DicGlobalVariablesCount; R++)

@@ -172,7 +172,6 @@ namespace ProjectEternity
             SplashScreen.SetStatus("Initializing Roslyn");
             SkillEffect.LoadAllEffects();
             SplashScreen.SetStatus("Initializing Graphics");
-            Constants.Money = 100000;
             BattleMap.DicGlobalVariables = new Dictionary<string, string>();
             BattleMap.DicRouteChoices = new Dictionary<string, int>();
             GameScreen.LoadHelpers(Content);
