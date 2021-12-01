@@ -3,7 +3,6 @@ using System.Text;
 using System.ComponentModel;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Skill;
 
 namespace ProjectEternity.Core.Parts
@@ -49,7 +48,7 @@ namespace ProjectEternity.Core.Parts
         {
             return PartTypes.Standard;
         }
-        
+
         public override void ActivatePassiveBuffs()
         {
             foreach (BaseSkillActivation Activation in Skill.ListSkillLevel[0].ListActivation)
@@ -93,6 +92,14 @@ namespace ProjectEternity.Core.Parts
             get
             {
                 return Skill.Name;
+            }
+        }
+
+        public override string Description
+        {
+            get
+            {
+                return Skill.Description;
             }
         }
     }

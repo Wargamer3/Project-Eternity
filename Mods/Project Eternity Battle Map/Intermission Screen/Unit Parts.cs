@@ -591,6 +591,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             Y = 305;
             DrawBox(g, new Vector2(325, Y + 20), 310, 150, Color.White);
+            if (CursorIndexListPart > 0)
+            {
+                TextHelper.DrawTextMultiline(g, fntFinlanderFont,
+                    TextHelper.FitToWidth(fntFinlanderFont,
+                        ListPartInfo[CursorIndexListPart - 1].ActivePart.Description, 300),
+                    TextHelper.TextAligns.Left, 335, Y + 25, 0);
+            }
 
             if (ShowListPartCursor)
             {

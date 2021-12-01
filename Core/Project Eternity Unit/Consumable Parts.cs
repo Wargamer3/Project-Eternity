@@ -33,5 +33,13 @@ namespace ProjectEternity.Core.Parts
                 return Spirit.Name;
             }
         }
+
+        public override string Description
+        {
+            get
+            {
+                return Spirit.Description;
+            }
+        }
     }
 }

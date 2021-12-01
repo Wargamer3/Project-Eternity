@@ -11,6 +11,7 @@ namespace ProjectEternity.Core.Parts
         public PartTypes PartType;
 
         public abstract string Name { get; }
+        public abstract string Description { get; }
 
         public int Quantity = 1;
         
