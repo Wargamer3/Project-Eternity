@@ -984,7 +984,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         CurrentSquad.CurrentWingmanB.ConsumeEN((int)GetTerrain(CurrentSquad).MovementCost);
                 }
             }
-            ActivateAutomaticSkills(CurrentSquad, CurrentSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName);
+            ActivateAutomaticSkills(CurrentSquad, CurrentSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName, CurrentSquad, CurrentSquad.CurrentLeader);
             UpdateMapEvent(EventTypeUnitMoved, 0);
         }
 

@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void ActivateAutomaticSkills(Squad ActiveSquad, Unit ActiveUnit, string SkillRequirementToActivate, Squad TargetSquad = null, Unit TargetUnit = null)
+        public void ActivateAutomaticSkills(Squad ActiveSquad, Unit ActiveUnit, string SkillRequirementToActivate, Squad TargetSquad, Unit TargetUnit)
         {
             Character TargetPilot;
             if (TargetUnit != null)

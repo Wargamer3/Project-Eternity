@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             for (int U = 0; U < ListPlayer[ActivePlayerIndex].ListUnit.Count; U++)
             {
                 UnitConquest ActiveUnit = ListPlayer[ActivePlayerIndex].ListUnit[U];
-                ActivateAutomaticSkills(null, ListPlayer[ActivePlayerIndex].ListUnit[U], "Player Phase Start Requirement");
+                ActivateAutomaticSkills(null, ListPlayer[ActivePlayerIndex].ListUnit[U], "Player Phase Start Requirement", null, ListPlayer[ActivePlayerIndex].ListUnit[U]);
 
                 //Repair passive bonus.
                 if (ActiveUnit.Boosts.RepairModifier)

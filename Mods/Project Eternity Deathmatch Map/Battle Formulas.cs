@@ -750,8 +750,8 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
                 if (SupportDefender != null)
                 {
-                    ActivateAutomaticSkills(SupportDefender, SupportDefender.CurrentLeader, DeathmatchSkillRequirement.BattleStartRequirementName, Attacker);
-                    ActivateAutomaticSkills(SupportDefender, SupportDefender.CurrentLeader, DeathmatchSkillRequirement.SupportDefendRequirementName, Attacker);
+                    ActivateAutomaticSkills(SupportDefender, SupportDefender.CurrentLeader, DeathmatchSkillRequirement.BattleStartRequirementName, Attacker, null);
+                    ActivateAutomaticSkills(SupportDefender, SupportDefender.CurrentLeader, DeathmatchSkillRequirement.SupportDefendRequirementName, Attacker, null);
                 }
             }
 
@@ -800,8 +800,8 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             {
                 if (ActivateSkills)
                 {
-                    ActivateAutomaticSkills(SupportAttacker, SupportAttacker.CurrentLeader, DeathmatchSkillRequirement.BattleStartRequirementName, TargetSquad);
-                    ActivateAutomaticSkills(SupportAttacker, SupportAttacker.CurrentLeader, DeathmatchSkillRequirement.SupportAttackRequirementName, TargetSquad);
+                    ActivateAutomaticSkills(SupportAttacker, SupportAttacker.CurrentLeader, DeathmatchSkillRequirement.BattleStartRequirementName, TargetSquad, null);
+                    ActivateAutomaticSkills(SupportAttacker, SupportAttacker.CurrentLeader, DeathmatchSkillRequirement.SupportAttackRequirementName, TargetSquad, null);
                 }
                 
                 SquadResult.ResultSupportAttack = GetBattleResult(SupportAttacker.CurrentLeader, SupportAttacker, 0.75f, DefenderPlayerIndex, DefenderSquadIndex, 0, ActivateSkills, CalculateCritical);
