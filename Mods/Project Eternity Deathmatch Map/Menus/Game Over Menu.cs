@@ -10,8 +10,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         #region Ressources
 
-        private SpriteFont fntFinlanderFont;
-
         #endregion
 
         #region Variables
@@ -26,8 +24,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Load()
         {
-            fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
-
             GameOverAnimation = new SimpleAnimation();
             GameOverAnimation.IsAnimated = true;
             GameOverAnimation.Path = "Game Over";

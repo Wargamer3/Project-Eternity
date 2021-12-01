@@ -92,7 +92,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     LoadedUnit.TeamTags.AddTag("Event");
                 }
-
                 Add(LoadedUnit);
             }
         }

@@ -8,7 +8,6 @@ using ProjectEternity.Core.Scripts;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-
     public sealed partial class DeathmatchCutsceneScriptHolder
     {
         public class ScriptMoveSquad : DeathmatchMapScript
