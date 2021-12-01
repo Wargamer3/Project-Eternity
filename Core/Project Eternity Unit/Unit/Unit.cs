@@ -405,6 +405,18 @@ namespace ProjectEternity.Core.Units
             BW.Write(_UnitStat.MobilityUpgrades.Value);
             BW.Write(_UnitStat.AttackUpgrades.Value);
 
+            for (int P = 0; P < ArrayParts.Length; ++P)
+            {
+                if (ArrayParts[P] != null)
+                {
+                    BW.Write(ArrayParts[P].Name);
+                }
+                else
+                {
+                    BW.Write("");
+                }
+            }
+
             if (string.IsNullOrEmpty(TeamEventID))
             {
                 BW.Write(ArrayCharacterActive.Length);
@@ -439,6 +451,11 @@ namespace ProjectEternity.Core.Units
             _UnitStat.ArmorUpgrades.Value = BR.ReadInt32();
             _UnitStat.MobilityUpgrades.Value = BR.ReadInt32();
             _UnitStat.AttackUpgrades.Value = BR.ReadInt32();
+
+            for (int P = 0; P < ArrayParts.Length; ++P)
+            {
+                string PartName = BR.ReadString();
+            }
 
             if (string.IsNullOrEmpty(TeamEventID))
             {
@@ -478,6 +495,11 @@ namespace ProjectEternity.Core.Units
             NewUnit.UnitStat.ArmorUpgrades.Value = BR.ReadInt32();
             NewUnit.UnitStat.MobilityUpgrades.Value = BR.ReadInt32();
             NewUnit.UnitStat.AttackUpgrades.Value = BR.ReadInt32();
+
+            for (int P = 0; P < NewUnit.ArrayParts.Length; ++P)
+            {
+                string PartName = BR.ReadString();
+            }
 
             int ArrayCharacterActiveLength = BR.ReadInt32();
             NewUnit.ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
@@ -519,6 +541,18 @@ namespace ProjectEternity.Core.Units
             BW.Write(_UnitStat.ArmorUpgrades.Value);
             BW.Write(_UnitStat.MobilityUpgrades.Value);
             BW.Write(_UnitStat.AttackUpgrades.Value);
+
+            for (int P = 0; P < ArrayParts.Length; ++P)
+            {
+                if (ArrayParts[P] != null)
+                {
+                    BW.Write(ArrayParts[P].Name);
+                }
+                else
+                {
+                    BW.Write("");
+                }
+            }
 
             BW.Write(ArrayCharacterActive.Length);
             for (int C = 0; C < ArrayCharacterActive.Length; C++)
