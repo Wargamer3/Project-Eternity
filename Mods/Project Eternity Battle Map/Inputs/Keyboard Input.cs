@@ -29,13 +29,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public bool InputMovePressed()
         {
-            return KeyboardHelper.InputLeftPressed() || KeyboardHelper.InputRightPressed() || KeyboardHelper.InputUpPressed() || KeyboardHelper.InputDownPressed()
-                || (IsInZone(0, 0, Constants.Width, Constants.Height) && MouseHelper.MouseMoved());
+            return IsInZone(0, 0, Constants.Width, Constants.Height) && MouseHelper.MouseMoved();
         }
 
         public bool InputConfirmPressed()
         {
             return KeyboardHelper.InputConfirmPressed() || (IsInZone(0, 0, Constants.Width, Constants.Height) && MouseHelper.InputLeftButtonPressed());
+        }
+
+        public bool InputConfirmPressed(float MinX, float MinY, float MaxX, float MaxY)
+        {
+            return KeyboardHelper.InputConfirmPressed() || (IsInZone(MinX, MinY, MaxX, MaxY) && MouseHelper.InputLeftButtonPressed());
         }
 
         public bool InputCancelPressed()

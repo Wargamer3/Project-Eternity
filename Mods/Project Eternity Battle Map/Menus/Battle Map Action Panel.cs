@@ -67,14 +67,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (ActiveInputManager.IsInZone(FinalMenuX, FinalMenuY + 6 + C * PannelHeight, FinalMenuX + ActionMenuWidth, FinalMenuY + 6 + (C + 1) * PannelHeight))
                     {
-                        ActionMenuCursor = C;
-                        sndSelection.Play();
+                        if (ActionMenuCursor != C)
+                        {
+                            ActionMenuCursor = C;
+                            sndSelection.Play();
+                        }
                         break;
                     }
                 }
             }
-            else if (ActiveInputManager.InputConfirmPressed()
-                && ActiveInputManager.IsInZone(FinalMenuX, FinalMenuY + 6 + ActionMenuCursor * PannelHeight, FinalMenuX + ActionMenuWidth, FinalMenuY + 6 + (ActionMenuCursor + 1) * PannelHeight))
+            else if (ActiveInputManager.InputConfirmPressed(FinalMenuX, FinalMenuY + 6 + ActionMenuCursor * PannelHeight,
+                FinalMenuX + ActionMenuWidth, FinalMenuY + 6 + (ActionMenuCursor + 1) * PannelHeight))
             {
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
                 sndConfirm.Play();

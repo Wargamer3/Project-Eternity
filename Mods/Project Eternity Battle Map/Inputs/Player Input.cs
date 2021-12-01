@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -13,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         bool InputUpPressed();
         bool InputMovePressed();
         bool InputConfirmPressed();
+        bool InputConfirmPressed(float MinX, float MinY, float MaxX, float MaxY);
         bool InputCancelPressed();
         bool InputCommand1Pressed();
         bool InputCommand2Pressed();
