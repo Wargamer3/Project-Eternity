@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListNextChoice.Clear();
             if (IsPostAttack)
             {
-                ListNextChoice.Add(new ActionPanelWait(Map, ActiveSquad));
+                AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad));
             }
             else
             {
@@ -46,12 +46,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActiveSquad.CurrentLeader.CanAttack)
                 {
-                    ListNextChoice.Add(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, false));
+                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, false));
                 }
 
                 if (ActiveSquad.CurrentLeader.Boosts.PostMovementModifier.Spirit)
                 {
-                    ListNextChoice.Add(new ActionPanelSpirit(Map, ActiveSquad));
+                    AddChoiceToCurrentPanel(new ActionPanelSpirit(Map, ActiveSquad));
                 }
 
                 ActiveSquad.CurrentLeader.OnMenuMovement(ActivePlayerIndex, ActiveSquad, Map.ListActionMenuChoice);
@@ -59,11 +59,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int SquadIndex = Map.CheckForSquadAtPosition(Map.ActivePlayerIndex, Map.CursorPosition, Vector3.Zero);
                 if (SquadIndex >= 0 && Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex] != ActiveSquad)
                 {
-                    ListNextChoice.Add(new ActionPanelBoard(Map, Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex], ActiveSquad));
+                    AddChoiceToCurrentPanel(new ActionPanelBoard(Map, Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex], ActiveSquad));
                 }
                 else
                 {
-                    ListNextChoice.Add(new ActionPanelWait(Map, ActiveSquad));
+                    AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad));
                 }
 
                 new ActionPanelRepair(Map, this, ActiveSquad).OnSelect();
