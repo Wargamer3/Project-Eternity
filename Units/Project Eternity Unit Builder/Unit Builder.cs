@@ -40,6 +40,7 @@ namespace ProjectEternity.Core.Units.Builder
             : base(Name)
         {
             this.Map = Map;
+            this.ItemName = Name;
 
             FileStream FS = new FileStream("Content/Units/Builder/" + Name + ".peu", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);

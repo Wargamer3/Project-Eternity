@@ -46,6 +46,7 @@ namespace ProjectEternity.Core.Units.MultiForm
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name)
         {
+            this.ItemName = Name;
             this.OriginalName = Name;
             HPPercentage = 1;
             ENPercentage = 1;

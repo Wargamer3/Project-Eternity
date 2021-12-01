@@ -73,6 +73,7 @@ namespace ProjectEternity.Units.Magic
             : base(Name)
         {
             this.Map = Map;
+            this.ItemName = Name;
             ArrayCharacterActive = new Core.Characters.Character[0];
             ListMagicSpell = new List<MagicSpell>();
             GlobalProjectileContext = new ProjectileContext();
