@@ -35,24 +35,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             public override void Update(GameTime gameTime)
             {
-                for (int T = 0; T < ListTerrainDamageLocation.Count; T++)
+                foreach (Player ActivePlayer in Map.ListPlayer)
                 {
-                    Vector2 ActivePosition = ListTerrainDamageLocation[T];
-                    int X = (int)ActivePosition.X;
-                    int Y = (int)ActivePosition.Y;
-                    foreach (Player ActivePlayer in Map.ListPlayer)
+                    foreach (Core.Units.Squad ActiveSquad in ActivePlayer.ListSquad)
                     {
-                        foreach (Core.Units.Squad ActiveSquad in ActivePlayer.ListSquad)
+                        if (ListTerrainDamageLocation.Contains(new Vector2(ActiveSquad.Position.X, ActiveSquad.Position.Y)))
                         {
-                            if (ListTerrainDamageLocation.Contains(new Vector2(ActiveSquad.Position.X, ActiveSquad.Position.Y)))
+                            for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; ++U)
                             {
-                                for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; ++U)
-                                {
-                                    ActiveSquad[U].DamageUnit(_Damage);
-                                }
-
-                                ActiveSquad.UpdateSquad();
+                                ActiveSquad[U].DamageUnit(_Damage);
                             }
+
+                            ActiveSquad.UpdateSquad();
                         }
                     }
                 }
