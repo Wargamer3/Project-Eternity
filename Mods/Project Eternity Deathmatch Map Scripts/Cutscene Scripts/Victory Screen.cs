@@ -15,7 +15,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             public ScriptVictoryScreen(DeathmatchMap Map)
-                : base(Map, 100, 50, "Victory Screen", new string[0], new string[0])
+                : base(Map, 100, 50, "Victory Screen", new string[] { "Start Screen" }, new string[0])
             {
             }
 
