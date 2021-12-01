@@ -1745,7 +1745,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
                     #region Legs
 
                     case ItemSelectionChoices.LegsShell:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(27);
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(22);
                         Part NewLegsShell = new Part(Name, PartTypes.Shell);
                         if (NewLegsShell != null)
                         {
@@ -1760,7 +1760,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
                         break;
 
                     case ItemSelectionChoices.LegsStrength:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(27);
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(22);
                         Part NewLegsStrength = new Part(Name, PartTypes.Strength);
                         if (NewLegsStrength != null)
                         {
