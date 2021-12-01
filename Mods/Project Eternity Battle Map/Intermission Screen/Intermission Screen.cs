@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UnitEquipmentAvailable = false;
 
             PlayerRoster = new Roster();
-            LoadProgression();
+            PlayerRoster.LoadRoster();
 
             List<Unit> ListPresentUnit = PlayerRoster.TeamUnits.GetPresent();
 

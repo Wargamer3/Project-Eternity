@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Player NewPlayer = new Player("Player", "Human", true, false, 0, Color.Blue);
                 ListPlayer.Add(NewPlayer);
 
-                if (DicSpawnSquadByPlayer.Count > 0)
+                if (DicSpawnSquadByPlayer.Count > 0 && DicSpawnSquadByPlayer["Player"].Count > 0)
                 {
                     int SpawnSquadIndex = 0;
                     for (int S = 0; S < ListSingleplayerSpawns.Count; S++)

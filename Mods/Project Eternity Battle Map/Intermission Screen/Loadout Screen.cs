@@ -123,7 +123,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else if (InputHelper.InputConfirmPressed())
                 {
-                    if (ListSpawnSquad.Count == ListSingleplayerSpawns.Count)
+                    if (ListSpawnSquad.Count == ListSingleplayerSpawns.Count || ListPresentSquad.Count == 0)
                     {
                         StartMap(this, gameTime);
                     }
