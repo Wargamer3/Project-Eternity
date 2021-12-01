@@ -61,11 +61,36 @@ namespace ProjectEternity
 
             if (EllapsedTime >= 10)
             {
-                RemoveScreen(this);
+                int OldNumberOfGameScreen = ListGameScreen.Count;
                 MultiplayerScreen Autoplay = new MultiplayerScreen();
                 Autoplay.Load();
                 Constants.ShowAnimation = false;
-                PushScreen(Autoplay.LoadAutoplay());
+                DeathmatchMap NewMap = Autoplay.LoadAutoplay();
+                NewMap.ListGameScreen = ListGameScreen;
+                NewMap.Load();
+                NewMap.Init();
+                NewMap.TogglePreview(true);
+
+                //Remove any GameScreen created by the map so they don't show up immediately.
+                List<GameScreen> ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);
+                for (int S = ListGameScreen.Count - 1 - OldNumberOfGameScreen; S >= 0; --S)
+                {
+                    ListGameScreenCreatedByMap.Add(ListGameScreen[S]);
+                    ListGameScreen.RemoveAt(S);
+                }
+
+                RemoveAllScreens();
+                ListGameScreen.Insert(0, NewMap);
+                NewMap.Update(gameTime);
+
+                for (int S = 0; S < ListGameScreenCreatedByMap.Count; ++S)
+                {
+                    ListGameScreen.Insert(0, ListGameScreenCreatedByMap[S]);
+                    ListGameScreenCreatedByMap[S].Update(gameTime);
+                }
+
+                ListGameScreenCreatedByMap.Clear();
+
             }
 
             if (InputHelper.InputUpPressed())
@@ -96,9 +121,38 @@ namespace ProjectEternity
                         sndIntroSong.Stop();
                         sndConfirm.Play();
 
-                        /*StreamReader BR = new StreamReader("Content/Map path.ini");
-                        PushScreen(new DeathmatchMap(BR.ReadLine(), 0, new List<Squad>()));
-                        BR.Close();*/
+                        /*
+
+                        int OldNumberOfGameScreen = ListGameScreen.Count;
+                        StreamReader BR = new StreamReader("Content/Map path.ini");
+                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), 0, new Dictionary<string, List<Core.Units.Squad>>());
+                        BR.Close();
+                        NewMap.ListGameScreen = ListGameScreen;
+                        NewMap.PlayerRoster = new Roster();
+                        NewMap.PlayerRoster.LoadRoster();
+                        NewMap.Load();
+                        NewMap.Init();
+                        NewMap.TogglePreview(true);
+
+                        //Remove any GameScreen created by the map so they don't show up immediately.
+                        List<GameScreen> ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);
+                        for (int S = ListGameScreen.Count - 1 - OldNumberOfGameScreen; S >= 0; --S)
+                        {
+                            ListGameScreenCreatedByMap.Add(ListGameScreen[S]);
+                            ListGameScreen.RemoveAt(S);
+                        }
+
+                        RemoveAllScreens();
+                        ListGameScreen.Insert(0, NewMap);
+                        NewMap.Update(gameTime);
+
+                        for (int S = 0; S < ListGameScreenCreatedByMap.Count; ++S)
+                        {
+                            ListGameScreen.Insert(0, ListGameScreenCreatedByMap[S]);
+                            ListGameScreenCreatedByMap[S].Update(gameTime);
+                        }
+
+                        ListGameScreenCreatedByMap.Clear();*/
                         PushScreen(new GameSelection());
                         break;
 
