@@ -77,8 +77,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
             //Exit the weapon panel.
-            if (ActiveInputManager.InputConfirmPressed()
-                && ActiveInputManager.IsInZone(0, YStart + ActiveSquad.CurrentLeader.AttackIndex * YStep, Constants.Width, YStart + (ActiveSquad.CurrentLeader.AttackIndex + 1) * YStep))
+            if (ActiveInputManager.InputConfirmPressed(0, YStart + ActiveSquad.CurrentLeader.AttackIndex * YStep, Constants.Width, YStart + (ActiveSquad.CurrentLeader.AttackIndex + 1) * YStep))
             {
                 if (ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)
                 {
