@@ -127,7 +127,8 @@ namespace ProjectEternity.Core.Units.Transforming
 
                 this.ActiveUnitIndex = NewActiveUnitIndex;
             }
-            else if (ArrayOriginalCharacter.Length != ArrayCharacterActive.Length)
+
+            if (ArrayOriginalCharacter.Length != ArrayCharacterActive.Length)
             {
                 ArrayOriginalCharacter = new Character[ArrayCharacterActive.Length];
                 for (int C = 0; C < ArrayCharacterActive.Length; ++C)
@@ -135,7 +136,7 @@ namespace ProjectEternity.Core.Units.Transforming
                     ArrayOriginalCharacter[C] = ArrayCharacterActive[C];
                 }
             }
-            
+
             _UnitStat = ArrayTransformingUnit[NewActiveUnitIndex].UnitTransformed.UnitStat;
 
             if (ArrayCharacterActive.Length > 0)
@@ -265,6 +266,7 @@ namespace ProjectEternity.Core.Units.Transforming
 
         public override void DoInit()
         {
+            ChangeUnit(0);
         }
 
         public override GameScreens.GameScreen GetCustomizeScreen()
