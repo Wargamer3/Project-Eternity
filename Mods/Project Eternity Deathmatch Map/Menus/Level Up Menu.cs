@@ -116,13 +116,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 string[] PartByType = PartDropPath.Split('/');
                 ListDropPart.Add(PartByType[PartByType.Length - 1]);
-                if (PartByType[0] == "Standard Parts")
+                if (SystemList.ListPart.ContainsKey(PartDropPath))
                 {
-                    SystemList.ListPart.Add(PartDropPath, new UnitStandardPart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget));
+                    SystemList.ListPart[PartDropPath].Quantity++;
                 }
-                else if (PartByType[0] == "Consumable Parts")
+                else
                 {
-                    SystemList.ListPart.Add(PartDropPath, new UnitConsumablePart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget));
+                    if (PartByType[0] == "Standard Parts")
+                    {
+                        SystemList.ListPart.Add(PartDropPath, new UnitStandardPart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget));
+                    }
+                    else if (PartByType[0] == "Consumable Parts")
+                    {
+                        SystemList.ListPart.Add(PartDropPath, new UnitConsumablePart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget));
+                    }
                 }
             }
         }
