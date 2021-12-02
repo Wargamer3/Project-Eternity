@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -10,6 +11,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.MultiForm;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -75,6 +77,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             PlayerRoster = new Roster();
             PlayerRoster.LoadRoster();
+            foreach (RosterUnit ActiveUnit in PlayerRoster.DicRosterUnit.Values)
+            {
+                Unit NewUnit = Unit.FromType(ActiveUnit.UnitTypeName, ActiveUnit.FilePath, GameScreen.ContentFallback, DicUnitType, DicRequirement,
+                    DicEffect, DicAutomaticSkillTarget);
+
+                NewUnit.TeamTags.AddTag("Present");
+                NewUnit.TeamTags.AddTag("Event");
+                PlayerRoster.TeamUnits.Add(NewUnit);
+            }
+
+            foreach (RosterCharacter ActiveCharacter in PlayerRoster.DicRosterCharacter.Values)
+            {
+                Character NewCharacter = new Character(ActiveCharacter.FilePath, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+                NewCharacter.TeamTags.AddTag("Present");
+                NewCharacter.TeamTags.AddTag("Event");
+
+                PlayerRoster.TeamCharacters.Add(NewCharacter);
+            }
 
             List<Unit> ListPresentUnit = PlayerRoster.TeamUnits.GetPresent();
 
