@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int U = 0; U + UnitIndex < NumberOfItems && U < MaxPerPage; U++)
             {
-                DrawMenuItem(g, U, X, Y);
+                DrawMenuItem(g, U + UnitIndex, X, Y);
                 Y += LineSpacing;
             }
         }
