@@ -97,11 +97,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
                             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
-                            int PosX = (int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X;
-                            int PosY = (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y;
-                            if (PosX < BattleMapViewer.ActiveMap.MapSize.X && PosY < BattleMapViewer.ActiveMap.MapSize.Y)
+                            if (MouseX >= 0 && MouseY >= 0 && MouseX < BattleMapViewer.ActiveMap.MapSize.X && MouseY < BattleMapViewer.ActiveMap.MapSize.Y)
                             {
-                                Helper.ReplaceTerrain(PosX, PosY, PresetTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                                Helper.ReplaceTerrain(MouseX, MouseY, PresetTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
 
                                 Helper.ReplaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
                                     PresetTile, BattleMapViewer.ActiveMap.ActiveLayerIndex);
@@ -134,49 +132,57 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void SelectTilesToReplace(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (BattleMapViewer.ActiveMap != null)
             {
-                int FinalX = e.X / BattleMapViewer.ActiveMap.TileSize.X;
-                int FinalY = e.Y / BattleMapViewer.ActiveMap.TileSize.X;
+                Vector3 MapPreviewStartingPos = new Vector3(
+                    BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
+                    BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
+                    BattleMapViewer.ActiveMap.CameraPosition.Z);
 
-                if (FinalX < 0 || FinalX >= BattleMapViewer.ActiveMap.MapSize.X
-                    || FinalY < 0 || FinalY >= BattleMapViewer.ActiveMap.MapSize.Y)
+                if (e.Button == MouseButtons.Left)
                 {
-                    return;
-                }
+                    int FinalX = (int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X;
+                    int FinalY = (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y;
 
-                for (int S = 0; S < BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Count; S++)
-                {
-                    if (BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.X == FinalX && BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.Y == FinalY)
+                    if (FinalX < 0 || FinalX >= BattleMapViewer.ActiveMap.MapSize.X
+                        || FinalY < 0 || FinalY >= BattleMapViewer.ActiveMap.MapSize.Y)
                     {
                         return;
                     }
-                }
 
-                BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Add(new EventPoint(new Vector3(FinalX, FinalY, 0), BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Count.ToString(), 255, 255, 255));
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                int FinalX = e.X / BattleMapViewer.ActiveMap.TileSize.X;
-                int FinalY = e.Y / BattleMapViewer.ActiveMap.TileSize.X;
-
-                if (FinalX < 0 || FinalX >= BattleMapViewer.ActiveMap.MapSize.X
-                    || FinalY < 0 || FinalY >= BattleMapViewer.ActiveMap.MapSize.Y)
-                {
-                    return;
-                }
-
-                for (int S = 0; S < BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Count; S++)
-                {
-                    if (BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.X == FinalX && BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.Y == FinalY)
+                    for (int S = 0; S < BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Count; S++)
                     {
-                        if (TerrainAttribute.ListTerrainChangeLocation.Count > 0)
+                        if (BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.X == FinalX && BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.Y == FinalY)
                         {
-                            TerrainAttribute.ListTerrainChangeLocation.RemoveAt(S);
-                            TerrainAttribute.ListTileChangeLocation.RemoveAt(S);
+                            return;
                         }
-                        BattleMapViewer.ActiveMap.ListSingleplayerSpawns.RemoveAt(S);
+                    }
+
+                    BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Add(new EventPoint(new Vector3(FinalX, FinalY, 0), BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Count.ToString(), 255, 255, 255));
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    int FinalX = e.X / BattleMapViewer.ActiveMap.TileSize.X;
+                    int FinalY = e.Y / BattleMapViewer.ActiveMap.TileSize.X;
+
+                    if (FinalX < 0 || FinalX >= BattleMapViewer.ActiveMap.MapSize.X
+                        || FinalY < 0 || FinalY >= BattleMapViewer.ActiveMap.MapSize.Y)
+                    {
                         return;
+                    }
+
+                    for (int S = 0; S < BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Count; S++)
+                    {
+                        if (BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.X == FinalX && BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.Y == FinalY)
+                        {
+                            if (TerrainAttribute.ListTerrainChangeLocation.Count > 0)
+                            {
+                                TerrainAttribute.ListTerrainChangeLocation.RemoveAt(S);
+                                TerrainAttribute.ListTileChangeLocation.RemoveAt(S);
+                            }
+                            BattleMapViewer.ActiveMap.ListSingleplayerSpawns.RemoveAt(S);
+                            return;
+                        }
                     }
                 }
             }
