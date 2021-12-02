@@ -345,6 +345,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 NewMap.Load();
                 NewMap.Init();
                 NewMap.TogglePreview(true);
+                RemoveAllScreens();
                 ListGameScreen.Insert(0, NewMap);
             }
         }
