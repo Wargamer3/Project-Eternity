@@ -21,7 +21,7 @@ namespace ProjectEternity.Units.Magic
         }
 
         public ActionPanelSpellSelection(BattleMap Map, UnitMagic ActiveUnit)
-            : base(PanelName, Map.ListActionMenuChoice, null, true)
+            : base(PanelName, Map.ListActionMenuChoice, new KeyboardInput(), true)
         {
             this.Map = Map;
             this.ActiveUnit = ActiveUnit;
