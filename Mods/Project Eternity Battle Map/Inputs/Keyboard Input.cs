@@ -44,11 +44,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public bool InputCancelPressed()
         {
-            if (!IsInZone(0, 0, Constants.Width, Constants.Height))
-            {
-                return false;
-            }
-
             return KeyboardHelper.InputCancelPressed() || (IsInZone(0, 0, Constants.Width, Constants.Height) && MouseHelper.InputRightButtonPressed());
         }
 
