@@ -296,6 +296,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (CurrentSelection == MenuChoices.StartGame && OnlinePlayers.IsHost)
                         {
                             PushScreen(NewMap);
+                            NewMap.TogglePreview(false);
                             RemoveScreen(this);
                         }
                         else if (CurrentSelection == MenuChoices.JoinGame)
