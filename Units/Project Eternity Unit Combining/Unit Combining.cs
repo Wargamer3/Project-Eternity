@@ -45,6 +45,7 @@ namespace ProjectEternity.Core.Units.Combining
             Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name, Map)
         {
+            ItemName = Name;
             Combined = false;
 
             FileStream FS = new FileStream("Content/Units/Combining/" + Name + ".peu", FileMode.Open, FileAccess.Read);
