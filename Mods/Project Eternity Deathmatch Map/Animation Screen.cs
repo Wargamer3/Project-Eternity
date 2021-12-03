@@ -645,7 +645,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawStringRightAligned(fntFinlanderFont, UnitStats.LeftUnitHP + "/" + UnitStats.LeftUnitHPMax, new Vector2(PosX + 242, 17), Color.White);
             g.DrawString(fntFinlanderFont, "EN", new Vector2(PosX + 40, 40), Color.Yellow);
             g.DrawStringRightAligned(fntFinlanderFont, UnitStats.LeftUnitEN + "/" + UnitStats.LeftUnitENMax, new Vector2(PosX + 242, 37), Color.White);
-            g.Draw(LeftSquad.CurrentLeader.SpriteMap, new Vector2(PosX + 7, 30), Color.White);
+            g.Draw(LeftSquad.CurrentLeader.SpriteMap, new Rectangle(PosX + 7, 30, 32, 32), new Rectangle(0, 0, LeftSquad.CurrentLeader.SpriteMap.Width, LeftSquad.CurrentLeader.SpriteMap.Height), Color.White);
 
             PosX = Constants.Width / 2 + 68;
             DrawBox(g, new Vector2(Constants.Width / 2, 0), Constants.Width / 2, 84, Color.Blue);
@@ -655,7 +655,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawStringRightAligned(fntFinlanderFont, UnitStats.RightUnitHP + "/" + UnitStats.RightUnitHPMax, new Vector2(PosX + 242, 17), Color.White);
             g.DrawString(fntFinlanderFont, "EN", new Vector2(PosX + 40, 40), Color.Yellow);
             g.DrawStringRightAligned(fntFinlanderFont, UnitStats.RightUnitEN + "/" + UnitStats.RightUnitENMax, new Vector2(PosX + 242, 37), Color.White);
-            g.Draw(RightSquad.CurrentLeader.SpriteMap, new Vector2(PosX + 7, 30), Color.White);
+            g.Draw(RightSquad.CurrentLeader.SpriteMap, new Rectangle(PosX + 7, 30, 32, 32), new Rectangle(0, 0, RightSquad.CurrentLeader.SpriteMap.Width, RightSquad.CurrentLeader.SpriteMap.Height), Color.White);
             g.Draw(sprInfinity, new Vector2((Constants.Width - sprInfinity.Width) / 2, 15), Color.White);
 
             DrawBox(g, new Vector2(0, Constants.Height - VNBoxHeight), Constants.Width, VNBoxHeight, Color.White);
