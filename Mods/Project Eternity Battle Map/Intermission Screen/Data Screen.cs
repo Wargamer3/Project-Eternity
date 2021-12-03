@@ -8,8 +8,8 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -29,12 +29,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private int CursorIndex;
 
-        public Dictionary<string, Unit> DicUnitType;
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
-        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-        public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
-
         public DataScreen(Roster PlayerRoster)
         {
             this.PlayerRoster = PlayerRoster;
@@ -51,12 +45,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
             sndSelection = new FMODSound(FMODSystem, "Content/SFX/Selection.mp3");
             sndCancel = new FMODSound(FMODSystem, "Content/SFX/Cancel.mp3");
-
-            DicUnitType = Unit.LoadAllUnits();
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
         }
 
         public override void Update(GameTime gameTime)
@@ -83,11 +71,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (CursorIndex == 0)
                 {
-                    SaveProgression();
+                    PushScreen(new DataSaveScreen(PlayerRoster));
                 }
                 else if (CursorIndex == 1)
                 {
-                    LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                    PushScreen(new DataLoadScreen(PlayerRoster));
                 }
                 else if (CursorIndex == 2)
                 {

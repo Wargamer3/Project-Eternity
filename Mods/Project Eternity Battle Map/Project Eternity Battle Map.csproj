@@ -92,9 +92,11 @@
     <Compile Include="IGameRule.cs" />
     <Compile Include="Inputs\Keyboard Input.cs" />
     <Compile Include="Inputs\Player Input.cs" />
+    <Compile Include="Intermission Screen\Data Load Screen.cs" />
     <Compile Include="Intermission Screen\Data Screen.cs" />
     <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
     <Compile Include="Editor\ITileAttributes.cs" />
+    <Compile Include="Intermission Screen\Data Save Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Gametype Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Mutators Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Game Rules Screen.cs" />
