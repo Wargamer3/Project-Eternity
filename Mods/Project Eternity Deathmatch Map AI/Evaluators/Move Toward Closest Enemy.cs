@@ -44,7 +44,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 }
 
                 DistanceMax = 99999;
-                List<Vector3> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<Vector3> ListMVChoice = FilterMVChoice(Info.Map.GetMVChoice(Info.ActiveSquad));
                 int FinalMV = 0;
                 //If for some reason, there's no target on to move at, don't move.
                 if (TargetSquad != null)
@@ -83,6 +83,37 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 Result = new List<object>();
                 IsCompleted = true;
             }
+
+            private List<Vector3> FilterMVChoice(List<Vector3> ListMVChoice)
+            {
+                List<Vector3> ListFinalMVChoice = new List<Vector3>();
+
+                foreach (Vector3 ActiveMVChoice in ListMVChoice)
+                {
+                    bool CanMove = true;
+                    for (int CurrentSquadOffsetX = 0; CurrentSquadOffsetX < Info.ActiveSquad.ArrayMapSize.GetLength(0) && CanMove; ++CurrentSquadOffsetX)
+                    {
+                        for (int CurrentSquadOffsetY = 0; CurrentSquadOffsetY < Info.ActiveSquad.ArrayMapSize.GetLength(1) && CanMove; ++CurrentSquadOffsetY)
+                        {
+                            float RealX = ActiveMVChoice.X + CurrentSquadOffsetX;
+                            float RealY = ActiveMVChoice.Y + CurrentSquadOffsetY;
+
+                            if (!ListMVChoice.Contains(new Vector3((int)RealX, (int)RealY, (int)Info.ActiveSquad.Position.Z)))
+                            {
+                                CanMove = false;
+                            }
+                        }
+                    }
+
+                    if (CanMove)
+                    {
+                        ListFinalMVChoice.Add(ActiveMVChoice);
+                    }
+                }
+
+                return ListFinalMVChoice;
+            }
+
 
             public override AIScript CopyScript()
             {

@@ -24,10 +24,10 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             {
                 //Movement initialisation.
                 Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad);
-                List<Unit> ListChoice = new List<Unit>();
 
                 float DistanceMax = 99999;
                 List<Vector3> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                ListMVChoice = FilterMVChoice(ListMVChoice);
                 int FinalMV = 0;
                 //If for some reason, there's no target on to move at, don't move.
                 //Remove everything that is closer then DistanceMax.
@@ -64,6 +64,36 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 base.Load(BR);
 
                 _TargetPosition = new Vector2(BR.ReadSingle(), BR.ReadSingle());
+            }
+
+            private List<Vector3> FilterMVChoice(List<Vector3> ListMVChoice)
+            {
+                List<Vector3> ListFinalMVChoice = new List<Vector3>();
+
+                foreach (Vector3 ActiveMVChoice in ListMVChoice)
+                {
+                    bool CanMove = true;
+                    for (int CurrentSquadOffsetX = 0; CurrentSquadOffsetX < Info.ActiveSquad.ArrayMapSize.GetLength(0) && CanMove; ++CurrentSquadOffsetX)
+                    {
+                        for (int CurrentSquadOffsetY = 0; CurrentSquadOffsetY < Info.ActiveSquad.ArrayMapSize.GetLength(1) && CanMove; ++CurrentSquadOffsetY)
+                        {
+                            float RealX = ActiveMVChoice.X + CurrentSquadOffsetX;
+                            float RealY = ActiveMVChoice.Y + CurrentSquadOffsetY;
+
+                            if (!ListMVChoice.Contains(new Vector3((int)RealX, (int)RealY, (int)Info.ActiveSquad.Position.Z)))
+                            {
+                                CanMove = false;
+                            }
+                        }
+                    }
+
+                    if (CanMove)
+                    {
+                        ListFinalMVChoice.Add(ActiveMVChoice);
+                    }
+                }
+
+                return ListFinalMVChoice;
             }
 
             public override void Save(BinaryWriter BW)

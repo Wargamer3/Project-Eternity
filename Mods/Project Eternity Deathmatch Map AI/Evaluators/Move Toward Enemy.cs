@@ -72,6 +72,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                         ListRealChoice.RemoveAt(M--);
                 }
 
+                ListRealChoice = FilterMVChoice(ListRealChoice);
                 //Must find a spot to move if got there, just to make sure it won't crash in case of logic error.
                 if (ListRealChoice.Count != 0)
                 {
@@ -99,6 +100,36 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 base.Load(BR);
 
                 _AttackAfterMoving = BR.ReadBoolean();
+            }
+
+            private List<Vector3> FilterMVChoice(List<Vector3> ListMVChoice)
+            {
+                List<Vector3> ListFinalMVChoice = new List<Vector3>();
+
+                foreach (Vector3 ActiveMVChoice in ListMVChoice)
+                {
+                    bool CanMove = true;
+                    for (int CurrentSquadOffsetX = 0; CurrentSquadOffsetX < Info.ActiveSquad.ArrayMapSize.GetLength(0) && CanMove; ++CurrentSquadOffsetX)
+                    {
+                        for (int CurrentSquadOffsetY = 0; CurrentSquadOffsetY < Info.ActiveSquad.ArrayMapSize.GetLength(1) && CanMove; ++CurrentSquadOffsetY)
+                        {
+                            float RealX = ActiveMVChoice.X + CurrentSquadOffsetX;
+                            float RealY = ActiveMVChoice.Y + CurrentSquadOffsetY;
+
+                            if (!ListMVChoice.Contains(new Vector3((int)RealX, (int)RealY, (int)Info.ActiveSquad.Position.Z)))
+                            {
+                                CanMove = false;
+                            }
+                        }
+                    }
+
+                    if (CanMove)
+                    {
+                        ListFinalMVChoice.Add(ActiveMVChoice);
+                    }
+                }
+
+                return ListFinalMVChoice;
             }
 
             public override void Save(BinaryWriter BW)
