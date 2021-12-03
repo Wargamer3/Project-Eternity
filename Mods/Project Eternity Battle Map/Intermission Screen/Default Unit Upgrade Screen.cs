@@ -69,7 +69,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (UpgradeTotalCost <= Constants.Money)
                 {
-                    UpgradeTotalCost = 0;
                     SelectedUnit.UnitStat.HPUpgrades.Value += HPUpgradeCount;
                     SelectedUnit.UnitStat.ENUpgrades.Value += ENUpgradeCount;
                     SelectedUnit.UnitStat.ArmorUpgrades.Value += ArmorUpgradeCount;
@@ -81,6 +80,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     ArmorUpgradeCount = 0;
                     MobilityUpgradeCount = 0;
                     AttackUpgradeCount = 0;
+                    Constants.Money -= UpgradeTotalCost;
+                    UpdateCost();
                 }
             }
             else if (InputHelper.InputUpPressed())
