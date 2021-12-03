@@ -89,6 +89,7 @@
             this.tsmDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmRename = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmProperties = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmClone = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -187,7 +188,7 @@
             // tsmUnitTester
             // 
             this.tsmUnitTester.Name = "tsmUnitTester";
-            this.tsmUnitTester.Size = new System.Drawing.Size(75, 20);
+            this.tsmUnitTester.Size = new System.Drawing.Size(74, 20);
             this.tsmUnitTester.Text = "Unit Tester";
             this.tsmUnitTester.Click += new System.EventHandler(this.tsmUnitTester_Click);
             // 
@@ -272,54 +273,62 @@
             this.cmsItemMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmNew,
             this.tsmNewFolder,
+            this.tsmClone,
             this.tsmEdit,
             this.tsmDelete,
             this.tsmRename,
             this.tsmProperties});
             this.cmsItemMenu.Name = "cmsItemProperties";
-            this.cmsItemMenu.Size = new System.Drawing.Size(133, 136);
+            this.cmsItemMenu.Size = new System.Drawing.Size(181, 180);
             // 
             // tsmNew
             // 
             this.tsmNew.Name = "tsmNew";
-            this.tsmNew.Size = new System.Drawing.Size(132, 22);
+            this.tsmNew.Size = new System.Drawing.Size(180, 22);
             this.tsmNew.Text = "New";
             this.tsmNew.Click += new System.EventHandler(this.tsmNew_Click);
             // 
             // tsmNewFolder
             // 
             this.tsmNewFolder.Name = "tsmNewFolder";
-            this.tsmNewFolder.Size = new System.Drawing.Size(132, 22);
+            this.tsmNewFolder.Size = new System.Drawing.Size(180, 22);
             this.tsmNewFolder.Text = "New folder";
             this.tsmNewFolder.Click += new System.EventHandler(this.tsmNewFolder_Click);
             // 
             // tsmEdit
             // 
             this.tsmEdit.Name = "tsmEdit";
-            this.tsmEdit.Size = new System.Drawing.Size(132, 22);
+            this.tsmEdit.Size = new System.Drawing.Size(180, 22);
             this.tsmEdit.Text = "Edit";
             this.tsmEdit.Click += new System.EventHandler(this.tsmEdit_Click);
             // 
             // tsmDelete
             // 
             this.tsmDelete.Name = "tsmDelete";
-            this.tsmDelete.Size = new System.Drawing.Size(132, 22);
+            this.tsmDelete.Size = new System.Drawing.Size(180, 22);
             this.tsmDelete.Text = "Delete";
             this.tsmDelete.Click += new System.EventHandler(this.tsmDelete_Click);
             // 
             // tsmRename
             // 
             this.tsmRename.Name = "tsmRename";
-            this.tsmRename.Size = new System.Drawing.Size(132, 22);
+            this.tsmRename.Size = new System.Drawing.Size(180, 22);
             this.tsmRename.Text = "Rename";
             this.tsmRename.Click += new System.EventHandler(this.tsmRename_Click);
             // 
             // tsmProperties
             // 
             this.tsmProperties.Name = "tsmProperties";
-            this.tsmProperties.Size = new System.Drawing.Size(132, 22);
+            this.tsmProperties.Size = new System.Drawing.Size(180, 22);
             this.tsmProperties.Text = "Properties";
             this.tsmProperties.Click += new System.EventHandler(this.tsmProperties_Click);
+            // 
+            // tsmClone
+            // 
+            this.tsmClone.Name = "tsmClone";
+            this.tsmClone.Size = new System.Drawing.Size(180, 22);
+            this.tsmClone.Text = "Clone";
+            this.tsmClone.Click += new System.EventHandler(this.tsmClone_Click);
             // 
             // GUI
             // 
@@ -365,6 +374,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmRosterEditor;
         private System.Windows.Forms.ToolStripMenuItem tsmSystemList;
         public System.Windows.Forms.TreeView tvItems;
+        private System.Windows.Forms.ToolStripMenuItem tsmClone;
     }
 }
 

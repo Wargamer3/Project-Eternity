@@ -444,6 +444,43 @@ namespace ProjectEternity.GUI
             return NewItem;
         }
 
+        public TreeNode CloneItem(TreeNode EditorNode)
+        {
+            TreeNode ActiveNode = EditorNode;
+
+            if (EditorNode.Tag == null)
+                EditorNode = EditorNode.Parent;
+
+            EditorInfo Editor = (EditorInfo)EditorNode.Tag;
+
+            string NewItemName = ActiveNode.Text;
+            if (EditorNode.Nodes.ContainsKey(NewItemName))
+            {
+                int SameItemCount = 1;
+                while (EditorNode.Nodes.ContainsKey(NewItemName + " (" + SameItemCount + ")"))
+                    SameItemCount++;
+
+                NewItemName += " (" + SameItemCount + ")";
+            }
+
+            string NewItemPath = GetFilePathForItem(Editor, NewItemName);
+            TreeNode NewItem = new TreeNode(NewItemName);
+            NewItem.Name = NewItem.Text;
+            EditorNode.Nodes.Add(NewItem);
+
+            foreach (string GUIPath in Editor.ArrayLogicPath)
+            {
+                ItemContainer Container = GetItemContainerByPath(GUIPath, Editor.ItemContainer.ContainerGUIPath);
+
+                Container.ListItem.Add(Editor.FolderPath + NewItemName, NewItemPath);
+            }
+
+            string FilePath = GetFilePathForItemNode(ActiveNode);
+            File.Copy(FilePath, NewItemPath);
+
+            return NewItem;
+        }
+
         public TreeNode CreateNewFolder(TreeNode EditorNode)
         {
             if (EditorNode.Tag == null)
@@ -627,6 +664,7 @@ namespace ProjectEternity.GUI
                     if (mySelectedNode.Tag == null)
                     {
                         tsmEdit.Visible = true;
+                        tsmClone.Visible = true;
                         tsmDelete.Visible = true;
                         tsmRename.Visible = true;
                         tsmProperties.Visible = true;
@@ -638,6 +676,7 @@ namespace ProjectEternity.GUI
                     else
                     {
                         tsmEdit.Visible = false;
+                        tsmClone.Visible = false;
                         if (((EditorInfo)mySelectedNode.Tag).IsFolder)
                         {
                             tsmDelete.Visible = true;
@@ -672,6 +711,17 @@ namespace ProjectEternity.GUI
         private void tsmNewFolder_Click(object sender, EventArgs e)
         {
             TreeNode NewItem = CreateNewFolder(tvItems.SelectedNode);
+            tvItems.LabelEdit = true;
+            tvItems.SelectedNode = NewItem;
+
+            NewItem.BeginEdit();
+        }
+
+        #endregion
+
+        private void tsmClone_Click(object sender, EventArgs e)
+        {
+            TreeNode NewItem = CloneItem(tvItems.SelectedNode);
             tvItems.LabelEdit = true;
             tvItems.SelectedNode = NewItem;
 
@@ -724,7 +774,5 @@ namespace ProjectEternity.GUI
             NewTester.LoadData();
             NewTester.Show();
         }
-
-        #endregion
     }
 }
