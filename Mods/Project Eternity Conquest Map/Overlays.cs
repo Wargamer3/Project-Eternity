@@ -2,6 +2,7 @@
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -48,7 +49,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 for (int U = 0; U < Map.ListPlayer[P].ListUnit.Count; U++)
                 {
-                    FogOfWarIntensityFinder.UpdatePath(FogOfWarMap[(int)Map.ListPlayer[P].ListUnit[U].X, (int)Map.ListPlayer[P].ListUnit[U].Y], Map.ListPlayer[P].ListUnit[U].Components, Map.ListPlayer[P].ListUnit[U].UnitStat, 10);
+                    FogOfWarIntensityFinder.UpdatePath(new List<MovementAlgorithmTile>() { FogOfWarMap[(int)Map.ListPlayer[P].ListUnit[U].X, (int)Map.ListPlayer[P].ListUnit[U].Y] }, Map.ListPlayer[P].ListUnit[U].Components, Map.ListPlayer[P].ListUnit[U].UnitStat, 10);
                 }
             }
         }

@@ -66,19 +66,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return ListSuccessors;
         }
 
-        public List<MovementAlgorithmTile> FindPath(MovementAlgorithmTile AStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement)
+        public List<MovementAlgorithmTile> FindPath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement)
         {
             ResetNodes();
 
-            return UpdatePath(AStartNode, MapComponent, UnitStat, MaxMovement);
+            return UpdatePath(ListAStartNode, MapComponent, UnitStat, MaxMovement);
         }
 
-        public List<MovementAlgorithmTile> UpdatePath(MovementAlgorithmTile AStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement)
+        public List<MovementAlgorithmTile> UpdatePath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement)
         {
             MovementAlgorithmTile CurrentNode;
 
-            ListOpenNode.Add(AStartNode);
-            ListAllNode.Add(AStartNode);
+            foreach (MovementAlgorithmTile AStartNode in ListAStartNode)
+            {
+                ListOpenNode.Add(AStartNode);
+                ListAllNode.Add(AStartNode);
+            }
 
             while (ListOpenNode.Count > 0)
             {

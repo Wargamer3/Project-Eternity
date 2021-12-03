@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorControl();//Move the cursor
             if (ActiveInputManager.InputConfirmPressed())
             {
-                if (ListMVChoice.Contains(Map.CursorPosition))
+                if (CheckIfUnitCanMove())
                 {
                     ListNextChoice.Clear();
 
@@ -66,6 +66,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Map.sndConfirm.Play();
                 }
             }
+        }
+
+        private bool CheckIfUnitCanMove()
+        {
+            if (ListMVChoice.Contains(Map.CursorPosition))
+            {
+                for (int CurrentSquadOffsetX = 0; CurrentSquadOffsetX < ActiveSquad.ArrayMapSize.GetLength(0); ++CurrentSquadOffsetX)
+                {
+                    for (int CurrentSquadOffsetY = 0; CurrentSquadOffsetY < ActiveSquad.ArrayMapSize.GetLength(1); ++CurrentSquadOffsetY)
+                    {
+                        float RealX = Map.CursorPosition.X + CurrentSquadOffsetX;
+                        float RealY = Map.CursorPosition.Y + CurrentSquadOffsetY;
+
+                        if (!ListMVChoice.Contains(new Vector3((int)RealX, (int)RealY, (int)ActiveSquad.Position.Z)))
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         protected override void OnCancelPanel()

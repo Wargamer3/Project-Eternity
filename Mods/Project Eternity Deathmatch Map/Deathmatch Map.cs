@@ -540,7 +540,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public Terrain GetTerrain(UnitMapComponent ActiveUnit)
         {
-            return GetTerrain(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.LayerIndex);
+            return ListLayer[ActiveUnit.LayerIndex].ArrayTerrain[(int)ActiveUnit.X, (int)ActiveUnit.Y];
+        }
+
+        public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit)
+        {
+            List<MovementAlgorithmTile> ListTerrainFound = new List<MovementAlgorithmTile>();
+            for (int X = 0; X < ActiveUnit.ArrayMapSize.GetLength(0); ++X)
+            {
+                for (int Y = 0; Y < ActiveUnit.ArrayMapSize.GetLength(1); ++Y)
+                {
+                    if (ActiveUnit.ArrayMapSize[X, Y])
+                    {
+                        ListTerrainFound.Add(ListLayer[ActiveUnit.LayerIndex].ArrayTerrain[(int)ActiveUnit.X + X, (int)ActiveUnit.Y + Y]);
+                    }
+                }
+            }
+            return ListTerrainFound;
         }
 
         public DrawableTile GetTile(UnitMapComponent ActiveUnit)
@@ -919,33 +935,42 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int Y = -StartingMV; Y <= StartingMV; Y++)
                 {
-                    if (CurrentSquad.X + X < 0 || CurrentSquad.X + X >= MapSize.X || CurrentSquad.Y + Y < 0 || CurrentSquad.Y + Y >= MapSize.Y)
-                        continue;
+                    for (int CurrentSquadOffsetX = 0; CurrentSquadOffsetX < CurrentSquad.ArrayMapSize.GetLength(0); ++CurrentSquadOffsetX)
+                    {
+                        for (int CurrentSquadOffsetY = 0; CurrentSquadOffsetY < CurrentSquad.ArrayMapSize.GetLength(1); ++CurrentSquadOffsetY)
+                        {
+                            float RealX = CurrentSquad.X + CurrentSquadOffsetX;
+                            float RealY = CurrentSquad.Y + CurrentSquadOffsetY;
 
-                    GetTerrain(CurrentSquad.X + X, CurrentSquad.Y + Y, CurrentSquad.LayerIndex).Parent = null;
+                            if (RealX + X < 0 || RealX + X >= MapSize.X || RealY + Y < 0 || RealY + Y >= MapSize.Y)
+                                continue;
 
-                    bool UnitFound = false;
+                            GetTerrain(RealX + X, RealY + Y, CurrentSquad.LayerIndex).Parent = null;
 
-                    for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
-                    {//Only check for enemies, can move through allies, can't move through ennemies.
-                        if (ListPlayer[P].Team == ListPlayer[ActivePlayerIndex].Team)
-                            continue;
+                            bool UnitFound = false;
 
-                        //Check if there's a Unit.
-                        //If a Unit was found.
-                        if (CheckForObstacleAtPosition(P, CurrentSquad.Position, new Vector3(X, Y, 0)))
-                            UnitFound = true;
+                            for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
+                            {//Only check for enemies, can move through allies, can't move through ennemies.
+                                if (ListPlayer[P].Team == ListPlayer[ActivePlayerIndex].Team)
+                                    continue;
+
+                                //Check if there's a Unit.
+                                //If a Unit was found.
+                                if (CheckForObstacleAtPosition(P, new Vector3(RealX, RealY, CurrentSquad.Position.Z), new Vector3(X, Y, 0)))
+                                    UnitFound = true;
+                            }
+                            //If there is an enemy Unit.
+                            if (UnitFound)
+                                GetTerrain(RealX + X, RealY + Y, CurrentSquad.LayerIndex).MovementCost = -1;//Make it impossible to go there.
+                            else
+                                GetTerrain(RealX + X, RealY + Y, CurrentSquad.LayerIndex).MovementCost = 0;
+                        }
                     }
-                    //If there is an enemy Unit.
-                    if (UnitFound)
-                        GetTerrain(CurrentSquad.X + X, CurrentSquad.Y + Y, CurrentSquad.LayerIndex).MovementCost = -1;//Make it impossible to go there.
-                    else
-                        GetTerrain(CurrentSquad.X + X, CurrentSquad.Y + Y, CurrentSquad.LayerIndex).MovementCost = 0;
                 }
             }
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetTerrain(CurrentSquad.X, CurrentSquad.Y, CurrentSquad.LayerIndex), CurrentSquad, CurrentSquad.CurrentLeader.UnitStat, StartingMV);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(CurrentSquad), CurrentSquad, CurrentSquad.CurrentLeader.UnitStat, StartingMV);
 
             List<Vector3> MovementChoice = new List<Vector3>();
 
@@ -977,11 +1002,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (CurrentSquad.CurrentMovement == UnitStats.TerrainAir)
                 {
-                    CurrentSquad.CurrentLeader.ConsumeEN((int)GetTerrain(CurrentSquad).MovementCost);
+                    CurrentSquad.CurrentLeader.ConsumeEN(1);
                     if (CurrentSquad.CurrentWingmanA != null)
-                        CurrentSquad.CurrentWingmanA.ConsumeEN((int)GetTerrain(CurrentSquad).MovementCost);
+                        CurrentSquad.CurrentWingmanA.ConsumeEN(1);
                     if (CurrentSquad.CurrentWingmanB != null)
-                        CurrentSquad.CurrentWingmanB.ConsumeEN((int)GetTerrain(CurrentSquad).MovementCost);
+                        CurrentSquad.CurrentWingmanB.ConsumeEN(1);
                 }
             }
             ActivateAutomaticSkills(CurrentSquad, CurrentSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName, CurrentSquad, CurrentSquad.CurrentLeader);

@@ -1073,7 +1073,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetTerrain((int)Position.X, (int)Position.Y, CurrentUnit.Components.LayerIndex), CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath( new List<MovementAlgorithmTile>() { (MovementAlgorithmTile)GetTerrain((int)Position.X, (int)Position.Y, CurrentUnit.Components.LayerIndex) }, CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost);
 
             List<Vector3> ListMVChoice = new List<Vector3>();
             for (int i = 0; i < ListAllNode.Count; i++)
