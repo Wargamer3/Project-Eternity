@@ -20,6 +20,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private SpriteFont fntFinlanderFont;
         private Texture2D sprArrow;
+        private RenderTarget2D RenderTargetSkills;
+        private RenderTarget2D RenderTargetSpirits;
 
         #endregion
 
@@ -53,6 +55,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly int PilotOriginalDEF;
         private readonly int PilotOriginalEVA;
         private readonly int PilotOriginalHIT;
+
+        private bool NeedToScrollSkills;
+        private float ScrollTextOffsetSkill;
+        private float ScrollTextOffsetMaxSkill;
+        private bool NeedToScrollSpirits;
+        private float ScrollTextOffsetSpirits;
+        private float ScrollTextOffsetMaxSpirits;
+
+        private const int SpiritTextMaxSize = 160;
+        private const float ScrollingTextPixelPerSecondSpeed = 10;
 
         #endregion
 
@@ -153,13 +165,50 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Load()
         {
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
-            sprArrow = Content.Load<Texture2D>("Status Screen/Arrow"); 
+            sprArrow = Content.Load<Texture2D>("Status Screen/Arrow");
+
+            ScrollTextOffsetMaxSkill = GetMaxOffsetSkills(SpiritTextMaxSize);
+            ScrollTextOffsetSkill = 0;
+            if (ScrollTextOffsetMaxSkill > 0)
+            {
+                NeedToScrollSkills = true;
+            }
+
+            ScrollTextOffsetMaxSpirits = GetMaxOffsetSpirits(SpiritTextMaxSize);
+            ScrollTextOffsetSpirits = 0;
+            if (ScrollTextOffsetMaxSpirits > 0)
+            {
+                NeedToScrollSpirits = true;
+            }
 
             LevelUp();
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (ShowLevelUp)
+            {
+                if (NeedToScrollSkills)
+                {
+                    ScrollTextOffsetSkill += (float)(gameTime.ElapsedGameTime.TotalSeconds) * ScrollingTextPixelPerSecondSpeed;
+
+                    if (ScrollTextOffsetSkill > ScrollTextOffsetMaxSkill + 20)
+                    {
+                        ScrollTextOffsetSkill = -10;
+                    }
+                }
+
+                if (NeedToScrollSpirits)
+                {
+                    ScrollTextOffsetSpirits += (float)(gameTime.ElapsedGameTime.TotalSeconds) * ScrollingTextPixelPerSecondSpeed;
+
+                    if (ScrollTextOffsetSkill > ScrollTextOffsetMaxSkill + 20)
+                    {
+                        ScrollTextOffsetSkill = -10;
+                    }
+                }
+            }
+
             if (InputHelper.InputConfirmReleased())
             {
                 if (Pilot.Level != OriginalPilotLevel && !ShowLevelUp)
@@ -190,6 +239,78 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             TargetSquadSupport.ActiveSquadSupport.UpdateSquad();
                     }
                 }
+            }
+        }
+
+        private float GetMaxOffsetSkills(int MaxTextSize)
+        {
+            float Offset = 0;
+
+            for (int S = 0; S < OwnerSquad.CurrentLeader.Pilot.ArrayPilotSkill.Length; S++)
+            {
+                float TextLength = fntFinlanderFont.MeasureString(OwnerSquad.CurrentLeader.Pilot.ArrayPilotSkill[S].Name).X - MaxTextSize;
+                if (TextLength > Offset)
+                {
+                    Offset = TextLength;
+                }
+            }
+
+            return Offset;
+        }
+
+        private float GetMaxOffsetSpirits(int MaxTextSize)
+        {
+            float Offset = 0;
+
+            for (int S = 0; S < 6; S++)
+            {
+                if (S < OwnerSquad.CurrentLeader.Pilot.ArrayPilotSpirit.Length && OwnerSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].IsUnlocked)
+                {
+                    float TextLength = fntFinlanderFont.MeasureString(OwnerSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name).X - MaxTextSize;
+                    if (TextLength > Offset)
+                    {
+                        Offset = TextLength;
+                    }
+                }
+            }
+
+            return Offset;
+        }
+
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            if (NeedToScrollSkills)
+            {
+                if (RenderTargetSkills == null)
+                {
+                    RenderTargetSkills = new RenderTarget2D(
+                        g.GraphicsDevice,
+                        SpiritTextMaxSize,
+                        180);
+                }
+
+                g.GraphicsDevice.SetRenderTarget(RenderTargetSkills);
+                g.GraphicsDevice.Clear(Color.Transparent);
+                g.Begin();
+                DrawSkills(g, 0, 0, true);
+                g.End();
+            }
+
+            if (NeedToScrollSpirits)
+            {
+                if (RenderTargetSpirits == null)
+                {
+                    RenderTargetSpirits = new RenderTarget2D(
+                        g.GraphicsDevice,
+                        SpiritTextMaxSize,
+                        180);
+                }
+
+                g.GraphicsDevice.SetRenderTarget(RenderTargetSkills);
+                g.GraphicsDevice.Clear(Color.Transparent);
+                g.Begin();
+                DrawSpirits(g, ScrollTextOffsetSpirits, 0, true);
+                g.End();
             }
         }
 
@@ -284,6 +405,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawString(fntFinlanderFont, "EXP", new Vector2(190, Y += 25), Color.White);
             g.DrawString(fntFinlanderFont, Pilot.EXP.ToString(), new Vector2(250, Y), Color.White);
             g.DrawString(fntFinlanderFont, "NEXT " + (Pilot.NextEXP - Pilot.EXP), new Vector2(320, Y), Color.White);
+            g.DrawString(fntFinlanderFont, "GAINED " + TotalExpGained, new Vector2(450, Y), Color.White);
             g.DrawString(fntFinlanderFont, "SP", new Vector2(190, Y += 25), Color.White);
             if (Pilot.MaxSP != OriginalPilotSP)
             {
@@ -307,43 +429,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawBox(g, new Vector2(416, Y), 194, 160, Color.Green);
             Y += 2;
 
-            for (int i = 0; i < Pilot.ArrayPilotSkill.Length; ++i)
-            {
-                if (Pilot.ArrayPilotSkill[i].CurrentLevel >= 0)
-                {
-                    if (!ArrayOriginalPilotSkill[i])
-                    {
-                        g.DrawString(fntFinlanderFont, Pilot.ArrayPilotSkill[i].Name, new Vector2(40, Y + i * 25), Color.LightGreen);
-                    }
-                    else
-                    {
-                        g.DrawString(fntFinlanderFont, Pilot.ArrayPilotSkill[i].Name, new Vector2(40, Y + i * 25), Color.White);
-                    }
-                }
-                else
-                {
-                    g.DrawString(fntFinlanderFont, "---", new Vector2(40, Y + i * 25), Color.White);
-                }
-            }
-
-            for (int i = 0; i < Pilot.ArrayPilotSpirit.Length; ++i)
-            {
-                if (Pilot.ArrayPilotSpirit[i].IsUnlocked)
-                {
-                    if (!ArrayOriginalPilotSpirit[i])
-                    {
-                        g.DrawString(fntFinlanderFont, Pilot.ArrayPilotSpirit[i].Name, new Vector2(233, Y + i * 25), Color.LightGreen);
-                    }
-                    else
-                    {
-                        g.DrawString(fntFinlanderFont, Pilot.ArrayPilotSpirit[i].Name, new Vector2(233, Y + i * 25), Color.White);
-                    }
-                }
-                else
-                {
-                    g.DrawString(fntFinlanderFont, "---", new Vector2(233, Y + i * 25), Color.White);
-                }
-            }
+            DrawSkills(g, 40, Y, false);
+            DrawSpirits(g, 233, Y, false);
 
             DrawStat(g, Y, "MEL", PilotOriginalMEL, Pilot.MEL);
             DrawStat(g, Y + 25, "RNG", PilotOriginalRNG, Pilot.RNG);
@@ -351,6 +438,73 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawStat(g, Y + 75, "DEF", PilotOriginalDEF, Pilot.DEF);
             DrawStat(g, Y + 100, "EVA", PilotOriginalEVA, Pilot.EVA);
             DrawStat(g, Y + 125, "HIT", PilotOriginalHIT, Pilot.HIT);
+        }
+
+        private void DrawSkills(CustomSpriteBatch g, float X, float Y, bool IsBeginDraw)
+        {
+            if (NeedToScrollSkills && !IsBeginDraw)
+            {
+                g.Draw(RenderTargetSkills, new Vector2(X, Y), Color.White);
+            }
+            else
+            {
+                for (int S = 0; S < Pilot.ArrayPilotSkill.Length; ++S)
+                {
+                    if (Pilot.ArrayPilotSkill[S].CurrentLevel >= 0)
+                    {
+                        Color DrawColor = Color.White;
+
+                        if (!ArrayOriginalPilotSkill[S])
+                        {
+                            DrawColor = Color.LightGreen;
+                        }
+
+                        if (fntFinlanderFont.MeasureString(Pilot.ArrayPilotSkill[S].Name).X > SpiritTextMaxSize)
+                        {
+                            g.DrawString(fntFinlanderFont, Pilot.ArrayPilotSkill[S].Name,
+                                new Vector2(X - Math.Max(0, ScrollTextOffsetSkill), Y + S * 30), Color.White);
+                        }
+                        else
+                        {
+                            g.DrawString(fntFinlanderFont, Pilot.ArrayPilotSkill[S].Name, new Vector2(X, Y + S * 25), DrawColor);
+                        }
+                    }
+                    else
+                    {
+                        g.DrawString(fntFinlanderFont, "---", new Vector2(X, Y + S * 25), Color.White);
+                    }
+                }
+            }
+        }
+
+        private void DrawSpirits(CustomSpriteBatch g, float X, float Y, bool IsBeginDraw)
+        {
+            if (NeedToScrollSpirits && !IsBeginDraw)
+            {
+                g.Draw(RenderTargetSpirits, new Vector2(X, Y), Color.White);
+            }
+            else
+            {
+                for (int i = 0; i < Pilot.ArrayPilotSpirit.Length; ++i)
+                {
+                    if (Pilot.ArrayPilotSpirit[i].IsUnlocked)
+                    {
+                        Color DrawColor = Color.White;
+
+                        if (!ArrayOriginalPilotSpirit[i])
+                        {
+                            DrawColor = Color.LightGreen;
+                        }
+
+                        g.DrawString(fntFinlanderFont, Pilot.ArrayPilotSpirit[i].Name, new Vector2(X, Y + i * 25), DrawColor);
+                    }
+                    else
+                    {
+                        g.DrawString(fntFinlanderFont, "---", new Vector2(X, Y + i * 25), Color.White);
+                    }
+
+                }
+            }
         }
 
         private void DrawStat(CustomSpriteBatch g, int Y, string StatName, int OriginalStat, int NewStat)

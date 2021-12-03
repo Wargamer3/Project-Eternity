@@ -6,6 +6,7 @@ using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
+using System;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -33,6 +34,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private FMODSound sndCancel;
 
         private Texture2D sprBackground;
+        private RenderTarget2D RenderTargetSkills;
+        private RenderTarget2D RenderTargetSpirits;
 
         private SpriteFont fntFinlanderFont;
 
@@ -46,6 +49,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int SelectedUnitAbilityIndex;
         private int AttackCursorIndex;
         private int AttackAttributeIndex;
+
+        private bool NeedToScrollSkills;
+        private float ScrollTextOffsetSkill;
+        private float ScrollTextOffsetMaxSkill;
+        private bool NeedToScrollSpirits;
+        private float ScrollTextOffsetSpirits;
+        private float ScrollTextOffsetMaxSpirits;
+
+        private const int SpiritTextMaxSize = 160;
+        private const float ScrollingTextPixelPerSecondSpeed = 10;
 
         public StatusMenuScreen(BattleMap Map)
         {
@@ -64,6 +77,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             AttackCursorIndex = 0;
             AttackAttributeIndex = -1;
             Alive = true;
+
+            if (IsLoaded)
+            {
+                ScrollTextOffsetMaxSkill = GetMaxOffsetSkills(SpiritTextMaxSize);
+                ScrollTextOffsetSkill = 0;
+                if (ScrollTextOffsetMaxSkill > 0)
+                {
+                    NeedToScrollSkills = true;
+                }
+
+                ScrollTextOffsetMaxSpirits = GetMaxOffsetSpirits(SpiritTextMaxSize);
+                ScrollTextOffsetSpirits = 0;
+                if (ScrollTextOffsetMaxSpirits > 0)
+                {
+                    NeedToScrollSpirits = true;
+                }
+            }
+
             PushScreen(this);
         }
 
@@ -90,11 +121,48 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 sprBackground = Content.Load<Texture2D>("Status Screen/Background Black");
 
                 fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
+
+                if (ActiveSquad != null)
+                {
+                    ScrollTextOffsetMaxSkill = GetMaxOffsetSkills(SpiritTextMaxSize);
+                    ScrollTextOffsetSkill = 0;
+                    if (ScrollTextOffsetMaxSkill > 0)
+                    {
+                        NeedToScrollSkills = true;
+                    }
+
+                    ScrollTextOffsetMaxSpirits = GetMaxOffsetSpirits(SpiritTextMaxSize);
+                    ScrollTextOffsetSpirits = 0;
+                    if (ScrollTextOffsetMaxSpirits > 0)
+                    {
+                        NeedToScrollSpirits = true;
+                    }
+                }
             }
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (NeedToScrollSkills)
+            {
+                ScrollTextOffsetSkill += (float)(gameTime.ElapsedGameTime.TotalSeconds) * ScrollingTextPixelPerSecondSpeed;
+
+                if (ScrollTextOffsetSkill > ScrollTextOffsetMaxSkill + 20)
+                {
+                    ScrollTextOffsetSkill = -10;
+                }
+            }
+
+            if (NeedToScrollSpirits)
+            {
+                ScrollTextOffsetSpirits += (float)(gameTime.ElapsedGameTime.TotalSeconds) * ScrollingTextPixelPerSecondSpeed;
+
+                if (ScrollTextOffsetSkill > ScrollTextOffsetMaxSkill + 20)
+                {
+                    ScrollTextOffsetSkill = -10;
+                }
+            }
+
             if (SecondaryMenuIndex == 0)
             {
                 if (InputHelper.InputLeftPressed())
@@ -335,6 +403,78 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             #endregion
         }
 
+        private float GetMaxOffsetSkills(int MaxTextSize)
+        {
+            float Offset = 0;
+
+            for (int S = 0; S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill.Length; S++)
+            {
+                float TextLength = fntFinlanderFont.MeasureString(ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill[S].Name).X - MaxTextSize;
+                if (TextLength > Offset)
+                {
+                    Offset = TextLength;
+                }
+            }
+
+            return Offset;
+        }
+
+        private float GetMaxOffsetSpirits(int MaxTextSize)
+        {
+            float Offset = 0;
+
+            for (int S = 0; S < 6; S++)
+            {
+                if (S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit.Length && ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].IsUnlocked)
+                {
+                    float TextLength = fntFinlanderFont.MeasureString(ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name).X - MaxTextSize;
+                    if (TextLength > Offset)
+                    {
+                        Offset = TextLength;
+                    }
+                }
+            }
+
+            return Offset;
+        }
+
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            if (NeedToScrollSkills)
+            {
+                if (RenderTargetSkills == null)
+                {
+                    RenderTargetSkills = new RenderTarget2D(
+                        g.GraphicsDevice,
+                        SpiritTextMaxSize,
+                        180);
+                }
+
+                g.GraphicsDevice.SetRenderTarget(RenderTargetSkills);
+                g.GraphicsDevice.Clear(Color.Transparent);
+                g.Begin();
+                DrawSkills(g, 0, 0, true);
+                g.End();
+            }
+
+            if (NeedToScrollSpirits)
+            {
+                if (RenderTargetSpirits == null)
+                {
+                    RenderTargetSpirits = new RenderTarget2D(
+                        g.GraphicsDevice,
+                        SpiritTextMaxSize,
+                        180);
+                }
+
+                g.GraphicsDevice.SetRenderTarget(RenderTargetSkills);
+                g.GraphicsDevice.Clear(Color.Transparent);
+                g.Begin();
+                DrawSpirits(g, ScrollTextOffsetSpirits, 0, true);
+                g.End();
+            }
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             g.Draw(sprBackground, new Vector2(0, 0), Color.White);
@@ -529,27 +669,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawBox(g, new Vector2(20, 160), 180, 40, Color.Gray);
             DrawBox(g, new Vector2(20, 200), 180, 180, Color.White);
             g.DrawString(fntFinlanderFont, "Skills", new Vector2(70, 165), Color.Yellow);
-            for (int S = 0; S < 6; S++)
-            {
-                if (S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill.Length)
-                    g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill[S].Name, new Vector2(30, 200 + S * 30), Color.White);
-                else
-                    g.DrawString(fntFinlanderFont, "---", new Vector2(30, 200 + S * 30), Color.White);
-            }
+            DrawSkills(g, 30, 200, false);
 
             DrawBox(g, new Vector2(200, 160), 180, 40, Color.Gray);
             DrawBox(g, new Vector2(200, 200), 180, 180, Color.White);
             g.DrawString(fntFinlanderFont, "Spirits", new Vector2(245, 165), Color.Yellow);
-            for (int S = 0; S < 6; S++)
-            {
-                if (S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit.Length && ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].IsUnlocked)
-                {
-                    g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name, new Vector2(210, 200 + S * 30), Color.White);
-                    g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].SPCost.ToString(), new Vector2(370, 200 + S * 30), Color.White);
-                }
-                else
-                    g.DrawString(fntFinlanderFont, "---", new Vector2(210, 200 + S * 30), Color.White);
-            }
+            DrawSpirits(g, 210, 200, false);
+
             DrawBox(g, new Vector2(380, 160), 240, 40, Color.Gray);
             DrawBox(g, new Vector2(380, 200), 240, 120, Color.White);
             g.DrawString(fntFinlanderFont, "Stats", new Vector2(475, 165), Color.Yellow);
@@ -611,6 +737,63 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Vector2 BoxPosition = new Vector2((Constants.Width - MaxBoxWidth) / 2, (Constants.Height - (int)fntFinlanderFont.MeasureString(Output).Y - 20) / 2);
                 DrawBox(g, new Vector2(BoxPosition.X - 10, BoxPosition.Y - 10), (int)MaxBoxWidth + 20, (int)fntFinlanderFont.MeasureString(Output).Y + 20, Color.White);
                 g.DrawString(fntFinlanderFont, Output, BoxPosition, Color.White);
+            }
+        }
+
+        private void DrawSkills(CustomSpriteBatch g, float X, float Y, bool IsBeginDraw)
+        {
+            if (NeedToScrollSkills && !IsBeginDraw)
+            {
+                g.Draw(RenderTargetSkills, new Vector2(X, Y), Color.White);
+            }
+            else
+            {
+                for (int S = 0; S < 6; S++)
+                {
+                    if (S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill.Length)
+                    {
+                        if (fntFinlanderFont.MeasureString(ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill[S].Name).X > SpiritTextMaxSize)
+                        {
+                            g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill[S].Name,
+                                new Vector2(X - Math.Max(0,   ScrollTextOffsetSkill), Y + S * 30), Color.White);
+                        }
+                        else
+                        {
+                            g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill[S].Name, new Vector2(X, Y + S * 30), Color.White);
+                        }
+                    }
+                    else
+                        g.DrawString(fntFinlanderFont, "---", new Vector2(X, Y + S * 30), Color.White);
+                }
+            }
+        }
+
+        private void DrawSpirits(CustomSpriteBatch g, float X, float Y, bool IsBeginDraw)
+        {
+            if (NeedToScrollSpirits && !IsBeginDraw)
+            {
+                g.Draw(RenderTargetSpirits, new Vector2(X, Y), Color.White);
+            }
+            else
+            {
+                for (int S = 0; S < 6; S++)
+                {
+                    if (S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit.Length && ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].IsUnlocked)
+                    {
+                        if (fntFinlanderFont.MeasureString(ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill[S].Name).X > SpiritTextMaxSize)
+                        {
+                            g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name,
+                                new Vector2(X - Math.Max(0, ScrollTextOffsetSpirits), Y + S * 30), Color.White);
+                        }
+                        else
+                        {
+                            g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name, new Vector2(X, Y + S * 30), Color.White);
+                        }
+                        g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].SPCost.ToString(), new Vector2(X + 160, Y + S * 30), Color.White);
+                    }
+                    else
+                        g.DrawString(fntFinlanderFont, "---", new Vector2(X, Y + S * 30), Color.White);
+                }
             }
         }
 
