@@ -57,6 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
             cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex + 1;
 
+            lstTerrainBonus.Items.Clear();
             //Load the lstTerrainBonus.
             for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)
             {
