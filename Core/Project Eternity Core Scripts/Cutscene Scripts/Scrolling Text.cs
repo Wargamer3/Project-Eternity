@@ -63,7 +63,7 @@ namespace ProjectEternity.Core.Scripts
                 else
                 {
                     Progression -= _TextSpeed;
-                    if (Progression < -630 - MaxProgression || InputHelper.InputConfirmPressed())
+                    if (Progression < -530 - MaxProgression || InputHelper.InputConfirmPressed())
                     {
                         ExecuteEvent(this, 0);
                         IsEnded = true;
@@ -77,7 +77,7 @@ namespace ProjectEternity.Core.Scripts
                 g.Begin(SpriteSortMode.Immediate, null);
 
                 float XPos = 320;
-                float YPos = 630 + Progression;
+                float YPos = 400 + Progression;
 
                 TextHelper.DrawTextMultiline(g, ListText, _TextAlign, XPos, YPos, TextMaxWidthInPixel);
 
