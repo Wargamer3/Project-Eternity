@@ -118,6 +118,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.sndSelection.Play();
             }
+            else if (ActiveInputManager.InputMovePressed())
+            {
+                if (ActiveInputManager.IsInZone(0, Constants.Height - 30, 125, Constants.Height))
+                {
+                    Map.BattleMenuCursorIndex = BattleMenuChoices.Start;
+                }
+                else if (ActiveInputManager.IsInZone(125, Constants.Height - 30, 255, Constants.Height))
+                {
+                    Map.BattleMenuCursorIndex = BattleMenuChoices.Action;
+                }
+                else if (ActiveInputManager.IsInZone(255, Constants.Height - 30, 385, Constants.Height)
+                    && (ActiveSquad.UnitsAliveInSquad > 1 && Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL))
+                {
+                    Map.BattleMenuCursorIndex = BattleMenuChoices.Formation;
+                }
+                else if (ActiveInputManager.IsInZone(385, Constants.Height - 30, 510, Constants.Height) && ActiveSquadSupport.Count > 0)
+                {
+                    Map.BattleMenuCursorIndex = BattleMenuChoices.Support;
+                }
+                else if (ActiveInputManager.IsInZone(510, Constants.Height - 30, 635, Constants.Height))
+                {
+                    Map.BattleMenuCursorIndex = BattleMenuChoices.Demo;
+                }
+            }
             else if (ActiveInputManager.InputCommand2Pressed())
             {
                 Constants.ShowAnimation = !Constants.ShowAnimation;
