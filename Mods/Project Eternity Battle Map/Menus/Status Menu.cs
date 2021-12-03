@@ -542,7 +542,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntFinlanderFont, "Spirits", new Vector2(245, 165), Color.Yellow);
             for (int S = 0; S < 6; S++)
             {
-                if (S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit.Length)
+                if (S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit.Length && ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].IsUnlocked)
                 {
                     g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name, new Vector2(210, 200 + S * 30), Color.White);
                     g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].SPCost.ToString(), new Vector2(370, 200 + S * 30), Color.White);
