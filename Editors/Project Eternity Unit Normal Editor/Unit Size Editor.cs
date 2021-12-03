@@ -22,16 +22,13 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             ListUnitSize = new List<List<bool>>(3);
             OldWidth = 0;
             OldHeight = 0;
-
-            //Create a new buffer based on the picturebox.
-            pbDrawingSurfaceGraphics = pbUnitSize.CreateGraphics();
-            this.pbSizePreviewContext = BufferedGraphicsManager.Current;
-            this.pbSizePreviewContext.MaximumBuffer = new Size(pbUnitSize.Width, pbUnitSize.Height);
-            this.pbSizePreviewGraphicDevice = pbSizePreviewContext.Allocate(pbDrawingSurfaceGraphics, new Rectangle(0, 0, pbUnitSize.Width, pbUnitSize.Height));
         }
 
         private void DrawUnitSize()
         {
+            if (pbSizePreviewContext == null)
+                return;
+
             pbSizePreviewGraphicDevice.Graphics.Clear(Color.White);
 
             if (rbCustomSizeBox.Checked)
@@ -111,8 +108,11 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 ListUnitSize.RemoveRange(0, OldWidth - NewValue);
                 OldWidth = NewValue;
             }
-
             pbUnitSize.Width = OldWidth * 32;
+
+            if (pbSizePreviewContext == null)
+                return;
+
             this.pbSizePreviewContext.MaximumBuffer = new Size(pbUnitSize.Width, pbUnitSize.Height);
             this.pbSizePreviewGraphicDevice = pbSizePreviewContext.Allocate(pbDrawingSurfaceGraphics, new Rectangle(0, 0, pbUnitSize.Width, pbUnitSize.Height));
             panel1.Refresh();
@@ -147,6 +147,10 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             }
 
             pbUnitSize.Height = NewValue * 32;
+
+            if (pbSizePreviewContext == null)
+                return;
+
             this.pbSizePreviewContext.MaximumBuffer = new Size(pbUnitSize.Width, pbUnitSize.Height);
             this.pbSizePreviewGraphicDevice = pbSizePreviewContext.Allocate(pbDrawingSurfaceGraphics, new Rectangle(0, 0, pbUnitSize.Width, pbUnitSize.Height));
             panel1.Refresh();
@@ -155,6 +159,11 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
         private void UnitSizeEditor_Shown(object sender, EventArgs e)
         {
+            //Create a new buffer based on the picturebox.
+            pbDrawingSurfaceGraphics = pbUnitSize.CreateGraphics();
+            this.pbSizePreviewContext = BufferedGraphicsManager.Current;
+            this.pbSizePreviewContext.MaximumBuffer = new Size(pbUnitSize.Width, pbUnitSize.Height);
+            this.pbSizePreviewGraphicDevice = pbSizePreviewContext.Allocate(pbDrawingSurfaceGraphics, new Rectangle(0, 0, pbUnitSize.Width, pbUnitSize.Height));
             panel1.Refresh();
             DrawUnitSize();
         }
