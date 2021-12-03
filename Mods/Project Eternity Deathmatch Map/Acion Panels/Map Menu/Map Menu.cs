@@ -112,8 +112,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     int Y = 10 + C * fntFinlanderFont.LineSpacing;
                     if (ActiveInputManager.IsInZone(X, Y + 6, X + MinActionMenuWidth, Y + fntFinlanderFont.LineSpacing))
                     {
-                        ActionMenuCursor = C;
-                        sndSelection.Play();
+                        if (ActionMenuCursor != C)
+                        {
+                            ActionMenuCursor = C;
+                            sndSelection.Play();
+                        }
                         break;
                     }
                 }

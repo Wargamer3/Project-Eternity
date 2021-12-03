@@ -19,10 +19,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Update(GameTime gameTime)
         {
-            if (KeyboardHelper.KeyPressed(Keys.U))
-            {
-                Owner.PushScreen(new GameOverMenu());
-            }
         }
 
         public void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad, Unit UnitDefeated)
