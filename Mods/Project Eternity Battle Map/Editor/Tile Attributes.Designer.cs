@@ -50,6 +50,8 @@
             this.cboBattleAnimationBackground = new System.Windows.Forms.ComboBox();
             this.btnDeleteBattleAnimationBackground = new System.Windows.Forms.Button();
             this.btnNewBattleAnimationBackground = new System.Windows.Forms.Button();
+            this.lblBattleAnimationForeground = new System.Windows.Forms.Label();
+            this.cboBattleAnimationForeground = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.txtMVEnterCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMVMoveCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).BeginInit();
@@ -272,7 +274,7 @@
             // btnDeleteBattleAnimationBackground
             // 
             this.btnDeleteBattleAnimationBackground.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDeleteBattleAnimationBackground.Location = new System.Drawing.Point(100, 177);
+            this.btnDeleteBattleAnimationBackground.Location = new System.Drawing.Point(96, 218);
             this.btnDeleteBattleAnimationBackground.Name = "btnDeleteBattleAnimationBackground";
             this.btnDeleteBattleAnimationBackground.Size = new System.Drawing.Size(75, 24);
             this.btnDeleteBattleAnimationBackground.TabIndex = 23;
@@ -283,7 +285,7 @@
             // btnNewBattleAnimationBackground
             // 
             this.btnNewBattleAnimationBackground.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnNewBattleAnimationBackground.Location = new System.Drawing.Point(12, 177);
+            this.btnNewBattleAnimationBackground.Location = new System.Drawing.Point(8, 218);
             this.btnNewBattleAnimationBackground.Name = "btnNewBattleAnimationBackground";
             this.btnNewBattleAnimationBackground.Size = new System.Drawing.Size(75, 24);
             this.btnNewBattleAnimationBackground.TabIndex = 22;
@@ -291,11 +293,32 @@
             this.btnNewBattleAnimationBackground.UseVisualStyleBackColor = true;
             this.btnNewBattleAnimationBackground.Click += new System.EventHandler(this.btnNewBattleAnimationBackground_Click);
             // 
+            // lblBattleAnimationForeground
+            // 
+            this.lblBattleAnimationForeground.AutoSize = true;
+            this.lblBattleAnimationForeground.Location = new System.Drawing.Point(12, 174);
+            this.lblBattleAnimationForeground.Name = "lblBattleAnimationForeground";
+            this.lblBattleAnimationForeground.Size = new System.Drawing.Size(136, 13);
+            this.lblBattleAnimationForeground.TabIndex = 27;
+            this.lblBattleAnimationForeground.Text = "Battle animation foreground";
+            // 
+            // cboBattleAnimationForeground
+            // 
+            this.cboBattleAnimationForeground.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboBattleAnimationForeground.FormattingEnabled = true;
+            this.cboBattleAnimationForeground.Location = new System.Drawing.Point(12, 190);
+            this.cboBattleAnimationForeground.Name = "cboBattleAnimationForeground";
+            this.cboBattleAnimationForeground.Size = new System.Drawing.Size(163, 21);
+            this.cboBattleAnimationForeground.TabIndex = 26;
+            this.cboBattleAnimationForeground.SelectedIndexChanged += new System.EventHandler(this.cboBattleAnimationForeground_SelectedIndexChanged);
+            // 
             // TileAttributes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(449, 279);
+            this.Controls.Add(this.lblBattleAnimationForeground);
+            this.Controls.Add(this.cboBattleAnimationForeground);
             this.Controls.Add(this.lblBattleAnimationBackground);
             this.Controls.Add(this.cboBattleAnimationBackground);
             this.Controls.Add(this.btnDeleteBattleAnimationBackground);
@@ -352,5 +375,7 @@
         private System.Windows.Forms.ComboBox cboBattleAnimationBackground;
         private System.Windows.Forms.Button btnDeleteBattleAnimationBackground;
         private System.Windows.Forms.Button btnNewBattleAnimationBackground;
+        private System.Windows.Forms.Label lblBattleAnimationForeground;
+        private System.Windows.Forms.ComboBox cboBattleAnimationForeground;
     }
 }

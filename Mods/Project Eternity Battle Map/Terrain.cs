@@ -199,6 +199,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             BattleBackgroundAnimationIndex = BR.ReadInt32();
+            BattleForegroundAnimationIndex = BR.ReadInt32();
         }
 
         public virtual void Save(BinaryWriter BW)
@@ -216,6 +217,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             BW.Write(BattleBackgroundAnimationIndex);
+            BW.Write(BattleForegroundAnimationIndex);
         }
     }
 }

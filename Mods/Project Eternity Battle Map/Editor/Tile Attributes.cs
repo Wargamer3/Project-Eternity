@@ -53,9 +53,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 cboBattleAnimationBackground.Items.Add(ActivePath);
             }
+            cboBattleAnimationForeground.Items.Clear();
+            cboBattleAnimationForeground.Items.Add("None");
+            foreach (string ActivePath in ActivePreset.ListBattleBackgroundAnimationPath)
+            {
+                cboBattleAnimationForeground.Items.Add(ActivePath);
+            }
 
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
             cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex + 1;
+            cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex + 1;
 
             lstTerrainBonus.Items.Clear();
             //Load the lstTerrainBonus.
@@ -194,6 +201,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ActiveTerrain.BattleBackgroundAnimationIndex = cboBattleAnimationBackground.SelectedIndex - 1;
         }
 
+        private void cboBattleAnimationForeground_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActiveTerrain.BattleForegroundAnimationIndex = cboBattleAnimationForeground.SelectedIndex - 1;
+        }
+
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.BattleBackgroundAnimation;
@@ -205,6 +217,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (cboBattleAnimationBackground.SelectedIndex >= 0)
             {
                 cboBattleAnimationBackground.Items.RemoveAt(cboBattleAnimationBackground.SelectedIndex);
+            }
+            if (cboBattleAnimationForeground.SelectedIndex >= 0)
+            {
+                cboBattleAnimationForeground.Items.RemoveAt(cboBattleAnimationForeground.SelectedIndex);
             }
         }
 
@@ -222,8 +238,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         if (BackgroundPath != null)
                         {
                             BackgroundPath = BackgroundPath.Substring(0, BackgroundPath.Length - 5).Substring(19);
+
                             ActivePreset.ListBattleBackgroundAnimationPath.Add(BackgroundPath);
                             cboBattleAnimationBackground.Items.Add(BackgroundPath);
+                            cboBattleAnimationForeground.Items.Add(BackgroundPath);
                         }
                         break;
                 }
