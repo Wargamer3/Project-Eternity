@@ -173,16 +173,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListStanceAnimation = new List<WeaponBase>(4);
 
             if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Default" + ".ttw"))
-                ListStanceAnimation.Add(new ComboWeapon(Name, Name + "/Default", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+                ListStanceAnimation.Add(WeaponBase.CreateFromFile(Name, Name + "/Default", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
 
             if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Crouch" + ".ttw"))
-                ListStanceAnimation.Add(new ComboWeapon(Name, Name + "/Crouch", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+                ListStanceAnimation.Add(WeaponBase.CreateFromFile(Name, Name + "/Crouch", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
 
             if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Roll" + ".ttw"))
-                ListStanceAnimation.Add(new ComboWeapon(Name, Name + "/Roll", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+                ListStanceAnimation.Add(WeaponBase.CreateFromFile(Name, Name + "/Roll", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
 
             if (File.Exists("Content/Triple Thunder/Weapons/" + Name + "/Prone" + ".ttw"))
-                ListStanceAnimation.Add(new ComboWeapon(Name, Name + "/Prone", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+                ListStanceAnimation.Add(WeaponBase.CreateFromFile(Name, Name + "/Prone", true, DicRequirement, DicEffect, DicAutomaticSkillTarget));
 
             CurrentStanceAnimations = StandingAnimations;
 
@@ -204,11 +204,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (CurrentLayer == null)
                 {
-                    NewWeapon = new ComboWeapon(Name, WeaponPath, false, null, null, null);
+                    NewWeapon = WeaponBase.CreateFromFile(Name, WeaponPath, false, null, null, null);
                 }
                 else
                 {
-                    NewWeapon = new ComboWeapon(Name, WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+                    NewWeapon = WeaponBase.CreateFromFile(Name, WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
                 }
 
                 NewWeapon.WeaponName = WeaponName;
@@ -305,7 +305,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             for (int W = 0; W < ListStanceAnimation.Count; ++W)
             {
-                ListStanceAnimation[W] = new ComboWeapon(Name, ListStanceAnimation[W].WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+                ListStanceAnimation[W] = WeaponBase.CreateFromFile(Name, ListStanceAnimation[W].WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             }
 
             PrimaryWeapons.ChangeMap(CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
@@ -830,11 +830,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (CurrentLayer == null)
             {
-                NewWeapon = new ComboWeapon(Name, WeaponPath, false, null, null, null);
+                NewWeapon = WeaponBase.CreateFromFile(Name, WeaponPath, false, null, null, null);
             }
             else
             {
-                NewWeapon = new ComboWeapon(Name, WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+                NewWeapon = WeaponBase.CreateFromFile(Name, WeaponPath, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             }
 
             NewWeapon.WeaponName = WeaponToEquipName;
@@ -1119,7 +1119,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public WeaponBase CreateWeapon(string WeaponName)
         {
-            WeaponBase NewWeapon = new ComboWeapon(Name, WeaponName, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
+            WeaponBase NewWeapon = WeaponBase.CreateFromFile(Name, WeaponName, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget);
             NewWeapon.Load(Content);
             return NewWeapon;
         }
@@ -1176,7 +1176,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 ActiveWeapon.WeaponAngle = Angle;
 
-                if (Angle > -MathHelper.PiOver2 && Angle < MathHelper.PiOver2)
+                if (Angle <= -MathHelper.PiOver2 || Angle >= MathHelper.PiOver2)
                 {
                     ActiveSpriteEffects = SpriteEffects.None;
                 }
@@ -1202,7 +1202,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 ActiveWeapon.WeaponAngle = Angle;
 
-                if (Angle > -MathHelper.PiOver2 && Angle < MathHelper.PiOver2)
+                if (Angle <= -MathHelper.PiOver2 || Angle >= MathHelper.PiOver2)
                 {
                     ActiveSpriteEffects = SpriteEffects.None;
                 }

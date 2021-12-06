@@ -23,75 +23,22 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         bool IsShooting;
         bool IsShootingNext;
 
-        public SimpleWeapon(string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
+        public SimpleWeapon(BinaryReader BR, string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
-            : base(OwnerName, WeaponPath)
+            : base(BR, OwnerName, WeaponPath, DicRequirement, DicEffects, DicAutomaticSkillTarget)
         {
-            FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw", FileMode.Open, FileAccess.Read);
-            BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
-
-            Damage = BR.ReadSingle();
-            MaxDurability = BR.ReadSingle();
-            MinAngle = BR.ReadSingle();
-            MaxAngle = BR.ReadSingle();
-            bool UseRangedProperties = BR.ReadBoolean();
-            string SkillChainName = BR.ReadString();
-
-            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
+            if (IsCharacterAnimation)
             {
-                FileStream FSSkillChain = new FileStream("Content/Triple Thunder/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
-                BinaryReader BRSkillChain = new BinaryReader(FSSkillChain, Encoding.UTF8);
-                BRSkillChain.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                int tvSkillsNodesCount = BRSkillChain.ReadInt32();
-                ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
-                for (int N = 0; N < tvSkillsNodesCount; ++N)
-                {
-                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
-
-                    InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
-
-                    ListActiveSkill.Add(ActiveSkill);
-                }
-
-                BRSkillChain.Close();
-                FSSkillChain.Close();
+                AnimationType = AnimationTypes.FullAnimation;
             }
             else
             {
-                ListActiveSkill = new List<BaseAutomaticSkill>();
+                AnimationType = AnimationTypes.PartialAnimation;
+                ComboRotationType = ComboRotationTypes.RotateAroundWeaponSlot;
+                HoldingAnimationName = "Triple Thunder/" + WeaponPath + "/Holding";
+                ShootingAnimationName = "Triple Thunder/" + WeaponPath + "/Shooting";
+                ReloadAnimationName = "Triple Thunder/" + WeaponPath + "/Reloading";
             }
-
-            ExplosionAttributes = new ExplosionOptions(BR);
-
-            if (UseRangedProperties)
-            {
-                AmmoPerMagazine = BR.ReadSingle();
-
-                AmmoCurrent = AmmoPerMagazine;
-
-                AmmoRegen = BR.ReadSingle();
-                Recoil = BR.ReadSingle();
-                MaxRecoil = BR.ReadSingle();
-                RecoilRecoverySpeed = BR.ReadSingle();
-                NumberOfProjectiles = BR.ReadInt32();
-                ProjectileType = (ProjectileTypes)BR.ReadInt32();
-
-                if (ProjectileType == ProjectileTypes.Projectile)
-                {
-                    ProjectileSize = new Vector2(5, 2);
-                    ActiveProjectileInfo = new ProjectileInfo(BR);
-                    ArrayProjectileInfo = new ProjectileInfo[1] { ActiveProjectileInfo };
-
-                    NozzleFlashAnimation = new SimpleAnimation();
-                    NozzleFlashAnimation.Name = "Nozzle Flash";
-                    NozzleFlashAnimation.Path = "Fire 1_strip5";
-                    NozzleFlashAnimation.IsLooped = false;
-                }
-            }
-
-            BR.Close();
-            FS.Close();
         }
 
         public override void Load(ContentManager Content)
@@ -285,7 +232,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 if (IsShooting)
                 {
-                    IsShootingNext = true;
+                    IsShootingNext = CurrentAnimation.ActiveKeyFrame >= CurrentAnimation.LoopEnd - 1;
 
                     if (InstantActivation)
                     {
@@ -317,7 +264,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             bool CanUseNextCombo = false;
 
-            if (IsShooting)
+            if (IsShooting || IsReloading)
             {
                 if (AnimationType == AnimationTypes.PartialAnimation == IsPartialAnimation)
                 {
@@ -331,7 +278,22 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     }
                 }
 
-                if (CanUseNextCombo)
+                if (CanUseNextCombo && IsReloading)
+                {
+                    if (AnimationType == AnimationTypes.PartialAnimation)
+                    {
+                        Owner.RemovePartialAnimation(HoldingAnimationName);
+                        Owner.RemovePartialAnimation(ShootingAnimationName);
+                        Owner.ActivatePartialWeapon(this, ReloadAnimationName);
+                        CurrentAnimation.ActiveKeyFrame++;
+                    }
+                    else
+                    {
+                        Owner.LockAnimation = true;
+                        Owner.ActivatePartialWeapon(this, ReloadAnimationName);
+                    }
+                }
+                else if (CanUseNextCombo && IsShootingNext)
                 {
                     if (AnimationType == AnimationTypes.PartialAnimation)
                     {

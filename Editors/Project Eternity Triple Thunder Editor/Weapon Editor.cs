@@ -9,7 +9,7 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
 {
     public partial class WeaponEditor : BaseEditor
     {
-        private enum ItemSelectionChoices { ReloadCombo, SkillChain };
+        private enum ItemSelectionChoices { SkillChain };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
@@ -54,6 +54,7 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
             FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
+            BW.Write(cbWeaponType.SelectedIndex);
             BW.Write((float)txtDamage.Value);
             BW.Write((float)txtMaxDurability.Value);
             BW.Write((float)txtMinAngle.Value);
@@ -72,7 +73,6 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
                 BW.Write((float)txtRecoilRecoverySpeed.Value);
                 BW.Write((int)txtNumberOfProjectiles.Value);
                 BW.Write(cbProjectileType.SelectedIndex);
-                BW.Write(txtReloadAnimation.Text);
 
                 if (cbProjectileType.SelectedIndex > 0)
                 {
@@ -113,6 +113,7 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
             FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + Name + ".ttw", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
+            cbWeaponType.SelectedIndex = BR.ReadInt32();
             txtDamage.Value = (decimal)BR.ReadSingle();
             txtMaxDurability.Value = (decimal)BR.ReadSingle();
             txtMinAngle.Value = (decimal)BR.ReadSingle();
@@ -131,7 +132,6 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
                 txtRecoilRecoverySpeed.Value = (decimal)BR.ReadSingle();
                 txtNumberOfProjectiles.Value = BR.ReadInt32();
                 cbProjectileType.SelectedIndex = BR.ReadInt32();
-                txtReloadAnimation.Text = BR.ReadString();
 
                 if (cbProjectileType.SelectedIndex > 0)
                 {
@@ -156,12 +156,6 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
 
             BR.Close();
             FS.Close();
-        }
-
-        private void btnReloadAnimation_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.ReloadCombo;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathTripleThunderCombos));
         }
 
         private void btnSelectSkillChain_Click(object sender, EventArgs e)
@@ -226,12 +220,6 @@ namespace ProjectEternity.Editors.TripleThunderWeaponEditor
             {
                 switch (ItemSelectionChoice)
                 {
-                    case ItemSelectionChoices.ReloadCombo:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(30);
-
-                        txtReloadAnimation.Text = Name;
-                        break;
-
                     case ItemSelectionChoices.SkillChain:
                         if (Items[I] == null)
                         {

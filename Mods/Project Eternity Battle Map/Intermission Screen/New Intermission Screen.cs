@@ -60,16 +60,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Menu[0].IsAvailable[0] = true;
             Menu[0].IsAvailable[1] = true;
-            Menu[0].IsAvailable[2] = true;
+            Menu[0].IsAvailable[2] = false;
 
             Menu[1].IsAvailable[0] = true;
             Menu[1].IsAvailable[1] = true;
             Menu[1].IsAvailable[2] = true;
             Menu[1].IsAvailable[3] = true;
 
-            Menu[2].IsAvailable[0] = true;
-            Menu[2].IsAvailable[1] = true;
-            Menu[2].IsAvailable[2] = true;
+            Menu[2].IsAvailable[0] = false;
+            Menu[2].IsAvailable[1] = false;
+            Menu[2].IsAvailable[2] = false;
             Menu[2].IsAvailable[3] = true;
             Menu[2].IsAvailable[4] = true;
 
@@ -86,11 +86,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int U = 0; U < ListPresentUnit.Count; ++U)
             {
-                var ActiveUnit = ListPresentUnit[U] as UnitMultiForm;
+                UnitMultiForm ActiveUnit = ListPresentUnit[U] as UnitMultiForm;
                 if (ActiveUnit != null)
                 {
                     UnitEquipmentAvailable = true;
                 }
+
+                ListPresentUnit[U].Init();
             }
             Menu[1].IsAvailable[3] = UnitEquipmentAvailable;
         }
@@ -121,7 +123,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case MenuChoice.PilotSwap:
-                        PushScreen(new PilotSwapScreen(PlayerRoster));
+                        if (Menu[0].IsAvailable[2])
+                        {
+                            PushScreen(new PilotSwapScreen(PlayerRoster));
+                        }
                         break;
 
                     case MenuChoice.UnitStatus:
@@ -144,7 +149,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case MenuChoice.Shop:
-                        PushScreen(new Shop());
+                        if (Menu[2].IsAvailable[0])
+                        {
+                            PushScreen(new Shop());
+                        }
                         break;
 
                     case MenuChoice.Data:

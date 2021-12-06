@@ -357,7 +357,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                             List<WeaponBase> ListExtraWeapon = new List<WeaponBase>();
                             for (int W = 0; W < ListEnememyWeapon.Count; ++W)
                             {
-                                ListExtraWeapon.Add(new ComboWeapon(PlayerName, ListEnememyWeapon[W], true, ActiveLayer.DicRequirement, ActiveLayer.DicEffect, ActiveLayer.DicAutomaticSkillTarget));
+                                ListExtraWeapon.Add(WeaponBase.CreateFromFile(PlayerName, ListEnememyWeapon[W], true, ActiveLayer.DicRequirement, ActiveLayer.DicEffect, ActiveLayer.DicAutomaticSkillTarget));
                             }
 
                             //TODO: support vehicles

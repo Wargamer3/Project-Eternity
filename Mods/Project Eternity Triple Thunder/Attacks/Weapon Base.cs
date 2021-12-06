@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.GameScreens.AnimationScreen;
+using System.IO;
+using System.Text;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
@@ -32,6 +34,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         protected float MinAngle;
         protected float MaxAngle;
         protected float MaxDurability;
+        protected bool UseRangedProperties;
 
         //Ranged attributes
         protected float Damage;
@@ -53,6 +56,71 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             this.OwnerName = OwnerName;
             this.WeaponPath = WeaponPath;
+        }
+
+        public WeaponBase(BinaryReader BR, string OwnerName, string WeaponPath, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            : this(OwnerName, WeaponPath)
+        {
+            Damage = BR.ReadSingle();
+            MaxDurability = BR.ReadSingle();
+            MinAngle = BR.ReadSingle();
+            MaxAngle = BR.ReadSingle();
+            UseRangedProperties = BR.ReadBoolean();
+            string SkillChainName = BR.ReadString();
+
+            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
+            {
+                FileStream FSSkillChain = new FileStream("Content/Triple Thunder/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
+                BinaryReader BRSkillChain = new BinaryReader(FSSkillChain, Encoding.UTF8);
+                BRSkillChain.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int tvSkillsNodesCount = BRSkillChain.ReadInt32();
+                ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
+                for (int N = 0; N < tvSkillsNodesCount; ++N)
+                {
+                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+
+                    InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
+
+                    ListActiveSkill.Add(ActiveSkill);
+                }
+
+                BRSkillChain.Close();
+                FSSkillChain.Close();
+            }
+            else
+            {
+                ListActiveSkill = new List<BaseAutomaticSkill>();
+            }
+
+            ExplosionAttributes = new ExplosionOptions(BR);
+
+            if (UseRangedProperties)
+            {
+                AmmoPerMagazine = BR.ReadSingle();
+
+                AmmoCurrent = AmmoPerMagazine;
+
+                AmmoRegen = BR.ReadSingle();
+                Recoil = BR.ReadSingle();
+                MaxRecoil = BR.ReadSingle();
+                RecoilRecoverySpeed = BR.ReadSingle();
+                NumberOfProjectiles = BR.ReadInt32();
+                ProjectileType = (ProjectileTypes)BR.ReadInt32();
+
+                if (ProjectileType == ProjectileTypes.Projectile)
+                {
+                    ProjectileSize = new Vector2(5, 2);
+                    ActiveProjectileInfo = new ProjectileInfo(BR);
+                    ArrayProjectileInfo = new ProjectileInfo[1] { ActiveProjectileInfo };
+
+                    NozzleFlashAnimation = new SimpleAnimation();
+                    NozzleFlashAnimation.Name = "Nozzle Flash";
+                    NozzleFlashAnimation.Path = "Fire 1_strip5";
+                    NozzleFlashAnimation.IsLooped = false;
+                }
+            }
         }
 
         protected void InitSkillChainTarget(BaseAutomaticSkill ActiveSkill, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
@@ -109,5 +177,30 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public abstract void Shoot(RobotAnimation Owner, Vector2 GunNozzlePosition, float Angle, List<BaseAutomaticSkill> ListFollowingSkill);
         public abstract void UpdateSkills(string RequirementName);
         public abstract void UpdateWeaponAngle(float Angle, string ActiveMovementStance, VisibleTimeline WeaponSlotTimeline, RobotAnimation Owner);
+
+        public static WeaponBase CreateFromFile(string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw", FileMode.Open, FileAccess.Read);
+            BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
+
+            WeaponBase NewWeapon = null;
+
+            int WeaponType = BR.ReadInt32();
+
+            if (WeaponType == 0)
+            {
+                NewWeapon = new ComboWeapon(BR, OwnerName, WeaponPath, IsCharacterAnimation, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+            }
+            else if (WeaponType == 1)
+            {
+                NewWeapon = new SimpleWeapon(BR, OwnerName, WeaponPath, IsCharacterAnimation, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+            }
+
+            BR.Close();
+            FS.Close();
+
+            return NewWeapon;
+        }
     }
 }

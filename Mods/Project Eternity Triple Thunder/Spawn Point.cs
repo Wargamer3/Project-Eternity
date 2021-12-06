@@ -134,10 +134,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public override RobotAnimation SpawnPlayer(Player NewPlayer, Layer Owner, ISFXGenerator PlayerSFXGenerator, Rectangle CameraBounds)
         {
-            List<ComboWeapon> ListExtraWeapon = new List<ComboWeapon>();
+            List<WeaponBase> ListExtraWeapon = new List<WeaponBase>();
             for (int W = 0; W < _ListWeapons.Count; ++W)
             {
-                ListExtraWeapon.Add(new ComboWeapon(_VehiclePath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
+                ListExtraWeapon.Add(WeaponBase.CreateFromFile(_VehiclePath, _ListWeapons[W], true, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget));
             }
 
             Vehicle NewVehicle = new Vehicle(_VehiclePath, Owner, SpawnLocation, Team, new PlayerInventory(), Owner.PlayerSFXGenerator, ListExtraWeapon);

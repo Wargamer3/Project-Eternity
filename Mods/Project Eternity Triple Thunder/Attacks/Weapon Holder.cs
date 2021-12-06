@@ -43,7 +43,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             List<string> ListWeaponName = new List<string>(DicWeaponByName.Keys);
             for (int W = 0; W < ListWeaponName.Count; ++W)
             {
-                DicWeaponByName[ListWeaponName[W]] = new ComboWeapon(DicWeaponByName[ListWeaponName[W]].OwnerName, ListWeaponName[W], true, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                DicWeaponByName[ListWeaponName[W]] = WeaponBase.CreateFromFile(DicWeaponByName[ListWeaponName[W]].OwnerName, ListWeaponName[W], true, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             for (int W = 0; W < ListActiveWeapon.Count; ++W)
             {

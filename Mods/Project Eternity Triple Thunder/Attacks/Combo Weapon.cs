@@ -37,12 +37,17 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             NumberOfProjectiles = 1;
         }
 
-        public ComboWeapon(string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
+        public ComboWeapon(BinaryReader BR, string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
-            : base(OwnerName, WeaponPath)
+            : base(BR, OwnerName, WeaponPath, DicRequirement, DicEffects, DicAutomaticSkillTarget)
         {
-            FileStream FS = new FileStream("Content/Triple Thunder/Weapons/" + WeaponPath + ".ttw", FileMode.Open, FileAccess.Read);
-            BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
+            if (UseRangedProperties)
+            {
+                string ReloadAnimation = WeaponPath + "/Reloading";
+
+                if (File.Exists("Content/Triple Thunder/Combos/" + ReloadAnimation + ".ttc"))
+                    ReloadCombo = new Combo(ReloadAnimation);
+            }
 
             string NoneComboName;
             string MovingComboName;
@@ -67,70 +72,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 AirborneComboName = WeaponPath + "/Holding";
             }
 
-            Damage = BR.ReadSingle();
-            MaxDurability = BR.ReadSingle();
-            MinAngle = BR.ReadSingle();
-            MaxAngle = BR.ReadSingle();
-            bool UseRangedProperties = BR.ReadBoolean();
-            string SkillChainName = BR.ReadString();
-
-            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
-            {
-                FileStream FSSkillChain = new FileStream("Content/Triple Thunder/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
-                BinaryReader BRSkillChain = new BinaryReader(FSSkillChain, Encoding.UTF8);
-                BRSkillChain.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                int tvSkillsNodesCount = BRSkillChain.ReadInt32();
-                ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
-                for (int N = 0; N < tvSkillsNodesCount; ++N)
-                {
-                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
-
-                    InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
-
-                    ListActiveSkill.Add(ActiveSkill);
-                }
-
-                BRSkillChain.Close();
-                FSSkillChain.Close();
-            }
-            else
-            {
-                ListActiveSkill = new List<BaseAutomaticSkill>();
-            }
-
-            ExplosionAttributes = new ExplosionOptions(BR);
-
-            if (UseRangedProperties)
-            {
-                AmmoPerMagazine = BR.ReadSingle();
-
-                AmmoCurrent = AmmoPerMagazine;
-
-                AmmoRegen = BR.ReadSingle();
-                Recoil = BR.ReadSingle();
-                MaxRecoil = BR.ReadSingle();
-                RecoilRecoverySpeed = BR.ReadSingle();
-                NumberOfProjectiles = BR.ReadInt32();
-                ProjectileType = (ProjectileTypes)BR.ReadInt32();
-                string ReloadAnimation = BR.ReadString();
-
-                if (ProjectileType == ProjectileTypes.Projectile)
-                {
-                    ProjectileSize = new Vector2(5, 2);
-                    ActiveProjectileInfo = new ProjectileInfo(BR);
-                    ArrayProjectileInfo = new ProjectileInfo[1] { ActiveProjectileInfo };
-
-                    NozzleFlashAnimation = new SimpleAnimation();
-                    NozzleFlashAnimation.Name = "Nozzle Flash";
-                    NozzleFlashAnimation.Path = "Fire 1_strip5";
-                    NozzleFlashAnimation.IsLooped = false;
-                }
-
-                if (!string.IsNullOrEmpty(ReloadAnimation))
-                    ReloadCombo = new Combo(ReloadAnimation);
-            }
-
             if (!string.IsNullOrEmpty(NoneComboName) && File.Exists("Content/Triple Thunder/Combos/" + NoneComboName + ".ttc"))
                 NoneCombo = new Combo(NoneComboName);
 
@@ -145,9 +86,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             if (!string.IsNullOrEmpty(AirborneComboName) && File.Exists("Content/Triple Thunder/Combos/" + AirborneComboName + ".ttc"))
                 AirborneCombo = new Combo(AirborneComboName);
-
-            BR.Close();
-            FS.Close();
         }
 
         public override void Load(ContentManager Content)

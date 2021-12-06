@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private List<RobotAnimation> ListUser;
         private string CaptureRule;
 
-        public Vehicle(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerInventory Equipment, ISFXGenerator PlayerSFXGenerator, List<ComboWeapon> ListExtraWeapon)
+        public Vehicle(string Name, Layer CurrentLayer, Vector2 Position, int Team, PlayerInventory Equipment, ISFXGenerator PlayerSFXGenerator, List<WeaponBase> ListExtraWeapon)
             : base(Name, CurrentLayer, Position, Team, new EquipmentLoadout(), PlayerSFXGenerator)
         {
             ListUser = new List<RobotAnimation>();
@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 string ExtraAnimationPath = BR.ReadString();
                 if (!string.IsNullOrEmpty(ExtraAnimationPath))
                 {
-                    ListStanceAnimation.Add(new ComboWeapon(Name, ExtraAnimationPath, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
+                    ListStanceAnimation.Add(WeaponBase.CreateFromFile(Name, ExtraAnimationPath, true, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
                 }
             }
 
@@ -53,7 +53,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             for (int W = 0; W < ListWeaponCount; ++W)
             {
                 string WeaponName = BR.ReadString();
-                PrimaryWeapons.AddWeaponToStash(new ComboWeapon(Name, WeaponName, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
+                PrimaryWeapons.AddWeaponToStash(WeaponBase.CreateFromFile(Name, WeaponName, false, CurrentLayer.DicRequirement, CurrentLayer.DicEffect, CurrentLayer.DicAutomaticSkillTarget));
             }
 
             if (ListExtraWeapon != null)
