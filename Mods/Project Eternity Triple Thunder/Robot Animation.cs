@@ -957,7 +957,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 float Angle = ActiveWeapon.WeaponAngle;
 
-                if (ActiveSpriteEffects == SpriteEffects.FlipHorizontally)
+                if (ActiveSpriteEffects != SpriteEffects.FlipHorizontally)
                 {
                     WeaponOffsetX = -WeaponOffsetX;
                 }
@@ -968,7 +968,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 double LenghtDirY2 = Math.Sin(Angle + MathHelper.ToRadians(90)) * OffsetY;
 
                 Vector2 RealGunNozzlePosition = Position + new Vector2(WeaponOffsetX, WeaponOffsetY)
-                    + new Vector2((float)(LenghtDirX + LenghtDirX2), (float)(LenghtDirY + LenghtDirY2));
+                    - new Vector2((float)(LenghtDirX + LenghtDirX2), (float)(LenghtDirY + LenghtDirY2));
 
                 SetRobotContext(ActiveWeapon, Angle, RealGunNozzlePosition);
 
@@ -1186,7 +1186,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     Angle = MathHelper.Pi - Angle;
                 }
 
-                UpdatePrimaryWeaponAngle(Angle, W++);
+                UpdatePrimaryWeaponAngle(Angle + MathHelper.Pi, W++);
             }
 
             W = 0;
