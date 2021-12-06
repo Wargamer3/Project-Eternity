@@ -163,38 +163,79 @@ namespace ProjectEternity.Editors.VisualNovelEditor
             for (int D = 0; D < VisualNovelViewer.ActiveVisualNovel.ListDialog.Count; D++)
             {
                 lstDialogs.Items.Add(" -  - ");
-                //Update its text in the lists.
+            }
+
+            for (int D = 0; D < VisualNovelViewer.ActiveVisualNovel.ListDialog.Count; D++)
+            {
                 UpdatelstTimelineText(D);
             }
         }
 
+        private bool GetRealIndex(Dialog StartingDialog, int DialogIndex, ref int RealIndex)
+        {
+            if (StartingDialog == null)
+            {
+                foreach (Dialog ActiveTimelineDialog in VisualNovelViewer.ActiveVisualNovel.Timeline)
+                {
+                    if (GetRealIndex(ActiveTimelineDialog, DialogIndex, ref RealIndex))
+                    {
+                        return true;
+                    }
+
+                    ++RealIndex;
+                }
+            }
+            else
+            {
+                if (RealIndex == DialogIndex)
+                {
+                    RealIndex = VisualNovelViewer.ActiveVisualNovel.ListDialog.IndexOf(StartingDialog);
+                    return true;
+                }
+
+                foreach (int FollowingDialogIndex in StartingDialog.ListNextDialog)
+                {
+                    ++RealIndex;
+
+                    if (RealIndex == DialogIndex)
+                    {
+                        RealIndex = FollowingDialogIndex;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private void UpdatelstTimelineText(int Index)
         {
+            int RealIndex = 0;
+            GetRealIndex(null, Index, ref RealIndex);
+
             string LeftCharacterText = "";
             string RightCharacterText = "";
             string BackgroundText = "";
             //Add a * before the LeftCharacter name to show it's the one selected.
-            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].ActiveBustCharacterState == Dialog.ActiveBustCharacterStates.Left)
+            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].ActiveBustCharacterState == Dialog.ActiveBustCharacterStates.Left)
                 LeftCharacterText += "*";
             //Add its name.
-            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].LeftCharacter != null)
-                LeftCharacterText += VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].LeftCharacter.Name;
+            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].LeftCharacter != null)
+                LeftCharacterText += VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].LeftCharacter.Name;
 
             //Add a * before the RightCharacter name to show it's the one selected.
-            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].ActiveBustCharacterState == Dialog.ActiveBustCharacterStates.Right)
+            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].ActiveBustCharacterState == Dialog.ActiveBustCharacterStates.Right)
                 RightCharacterText += "*";
             //Add its name.
-            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].RightCharacter != null)
-                RightCharacterText += VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].RightCharacter.Name;
+            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].RightCharacter != null)
+                RightCharacterText += VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].RightCharacter.Name;
 
             //Add the Background name.
-            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].Back != null)
-                BackgroundText += VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].Back.Name;
+            if (VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].Back != null)
+                BackgroundText += VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].Back.Name;
             //Set the final text in the lstDialogs.
-            lstDialogs.Items[Index] = (Index + 1) + " - " + LeftCharacterText + " - " + RightCharacterText + " - " + BackgroundText + VisualNovelViewer.ActiveVisualNovel.ListDialog[Index].Text;
+            lstDialogs.Items[Index] = (RealIndex + 1) + " - " + LeftCharacterText + " - " + RightCharacterText + " - " + BackgroundText + VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex].Text;
 
-            //Set the final text in the lstScripts
-            int IndexScript = VisualNovelViewer.ActiveVisualNovel.ListDialog.IndexOf(VisualNovelViewer.ActiveVisualNovel.ListDialog[Index]);
         }
 
         //Sort the Dialogs in the timeline.
@@ -348,8 +389,11 @@ namespace ProjectEternity.Editors.VisualNovelEditor
         private void lstTimeline_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstDialogs.SelectedIndex >= 0 && LastTimelineIndex != lstDialogs.SelectedIndex)
-            {//Update the combo box with the new Dialog data.
-                DialogSelected(VisualNovelViewer.ActiveVisualNovel.ListDialog[lstDialogs.SelectedIndex]);
+            {
+                int RealIndex = 0;
+                GetRealIndex(null, lstDialogs.SelectedIndex, ref RealIndex);
+                //Update the combo box with the new Dialog data.
+                DialogSelected(VisualNovelViewer.ActiveVisualNovel.ListDialog[RealIndex]);
             }
         }
 
