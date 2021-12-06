@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Globalization;
 using System.ComponentModel;
 using ProjectEternity.Core;
@@ -55,7 +56,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             LastEvaluationResult = FinalySupportAttackValue;
 
             Params.LocalContext.EffectTargetUnit.Boosts.SupportAttackModifierMax += FinalySupportAttackValue;
-            Params.LocalContext.EffectTargetUnit.Boosts.SupportAttackModifier += FinalySupportAttackValue;
+            Params.LocalContext.EffectTargetUnit.Boosts.SupportAttackModifier =
+                Math.Min(Params.LocalContext.EffectTargetUnit.Boosts.SupportAttackModifierMax, Params.LocalContext.EffectTargetUnit.Boosts.SupportAttackModifier + FinalySupportAttackValue);
 
             if (EvaluationResult != _SupportAttackValue)
             {

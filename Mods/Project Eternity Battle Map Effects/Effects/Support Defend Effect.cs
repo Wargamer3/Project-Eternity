@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Globalization;
 using System.ComponentModel;
 using ProjectEternity.Core;
@@ -54,7 +55,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int FinalSupportDefendValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
             LastEvaluationResult = FinalSupportDefendValue;
             Params.LocalContext.EffectTargetUnit.Boosts.SupportDefendModifierMax += FinalSupportDefendValue;
-            Params.LocalContext.EffectTargetUnit.Boosts.SupportDefendModifier += FinalSupportDefendValue;
+            Params.LocalContext.EffectTargetUnit.Boosts.SupportDefendModifier =
+                Math.Min(Params.LocalContext.EffectTargetUnit.Boosts.SupportDefendModifierMax, Params.LocalContext.EffectTargetUnit.Boosts.SupportDefendModifier + FinalSupportDefendValue);
 
             if (EvaluationResult != _SupportDefendValue)
             {
