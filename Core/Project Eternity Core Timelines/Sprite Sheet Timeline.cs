@@ -149,9 +149,17 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             SpriteSheetHelperDialog.SpriteSheetViewer.DicActiveSpriteSheetBitmap.Clear();
             if (SpriteSheetHelperDialog.ShowDialog() == DialogResult.OK && SpriteSheetHelperDialog.SpriteSheetViewer.DicActiveSpriteSheetBitmap.Count > 0)
             {
+                int Index = 1;
                 foreach (KeyValuePair<Tuple<int, int>, SpriteSheetTimeline> ActiveBitmap in SpriteSheetHelperDialog.SpriteSheetViewer.DicActiveSpriteSheetBitmap)
                 {
                     SpriteSheetTimeline NewSpawnSpriteSheetBitmap = ActiveBitmap.Value;
+
+                    string[] ArraySpriteSheetName = NewSpawnSpriteSheetBitmap.SpriteSheetName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                    NewSpawnSpriteSheetBitmap.Name = ArraySpriteSheetName[ArraySpriteSheetName.Length - 1];
+                    if (SpriteSheetHelperDialog.SpriteSheetViewer.DicActiveSpriteSheetBitmap.Count > 1)
+                    {
+                        NewSpawnSpriteSheetBitmap.Name += " " + Index;
+                    }
 
                     NewSpawnSpriteSheetBitmap.Position = new Vector2(535, 170);
                     NewSpawnSpriteSheetBitmap.SpawnFrame = KeyFrame;
@@ -162,6 +170,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                                                         true, -1));
 
                     ReturnValue.Add(NewSpawnSpriteSheetBitmap);
+
+                    ++Index;
                 }
             }
 
