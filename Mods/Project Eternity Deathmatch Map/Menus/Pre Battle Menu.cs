@@ -64,9 +64,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             DrawBox(g, new Vector2(CurrentX, MenuPositionY), MenuWith, MenuHeight, Color.Black);
             if (Constants.ShowAnimation)
-                g.DrawStringMiddleAligned(fntFinlanderFont, "Demo: ON", new Vector2(DistanceBetweenMenu * 4 - MenuOffset + MenuWith * 4 + MenuWith / 2, MenuPositionY), Color.White);
+                g.DrawStringMiddleAligned(fntFinlanderFont, "Demo: ON", new Vector2(DistanceBetweenMenu * 5 - MenuOffset + MenuWith * 4 + MenuWith / 2, MenuPositionY), Color.White);
             else
-                g.DrawStringMiddleAligned(fntFinlanderFont, "Demo: OFF", new Vector2(DistanceBetweenMenu * 4 - MenuOffset + MenuWith * 4 + MenuWith / 2, MenuPositionY), Color.White);
+                g.DrawStringMiddleAligned(fntFinlanderFont, "Demo: OFF", new Vector2(DistanceBetweenMenu * 5 - MenuOffset + MenuWith * 4 + MenuWith / 2, MenuPositionY), Color.White);
 
             g.Draw(sprPixel, new Rectangle(DistanceBetweenMenu - MenuOffset + (DistanceBetweenMenu + MenuWith) * (int)BattleMenuCursorIndex, MenuPositionY, MenuWith, MenuHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
 
@@ -77,73 +77,77 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     break;
 
                 case BattleMenuStages.ChooseDefense:
-                    DrawBox(g, new Vector2(225, 45), 100, 30, Color.Black);
-                    g.DrawString(fntFinlanderFont, "Attack", new Vector2(235, 45), Color.White);
-                    DrawBox(g, new Vector2(225, 75), 100, 30, Color.Black);
-                    g.DrawString(fntFinlanderFont, "Defend", new Vector2(235, 75), Color.White);
-                    DrawBox(g, new Vector2(225, 105), 100, 30, Color.Black);
-                    g.DrawString(fntFinlanderFont, "Evade", new Vector2(235, 105), Color.White);
-                    g.Draw(sprPixel, new Rectangle(225, 45 + BattleMenuCursorIndexSecond * 30, 100, 30), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    CurrentX = Constants.Width - 415;
+                    DrawBox(g, new Vector2(CurrentX, 45), 100, 30, Color.Black);
+                    g.DrawString(fntFinlanderFont, "Attack", new Vector2(CurrentX + 10, 45), Color.White);
+                    DrawBox(g, new Vector2(CurrentX, 75), 100, 30, Color.Black);
+                    g.DrawString(fntFinlanderFont, "Defend", new Vector2(CurrentX + 10, 75), Color.White);
+                    DrawBox(g, new Vector2(CurrentX, 105), 100, 30, Color.Black);
+                    g.DrawString(fntFinlanderFont, "Evade", new Vector2(CurrentX + 10, 105), Color.White);
+                    g.Draw(sprPixel, new Rectangle(CurrentX, 45 + BattleMenuCursorIndexSecond * 30, 100, 30), Color.FromNonPremultiplied(255, 255, 255, 127));
                     break;
 
                 case BattleMenuStages.ChooseSquadMemberDefense:
+                    CurrentX = Constants.Width - 415;
                     switch (BattleMenuCursorIndexSecond)
                     {
                         case 0:
-                            g.Draw(sprPixel, new Rectangle(325, 45, 310, 80), Color.FromNonPremultiplied(255, 255, 255, 127));
-                            DrawBox(g, new Vector2(225, 45), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Attack", new Vector2(235, 45), Color.White);
-                            DrawBox(g, new Vector2(225, 75), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Defend", new Vector2(235, 75), Color.White);
-                            DrawBox(g, new Vector2(225, 105), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Evade", new Vector2(235, 105), Color.White);
+                            g.Draw(sprPixel, new Rectangle(CurrentX + 100, 45, 310, 80), Color.FromNonPremultiplied(255, 255, 255, 127));
+                            DrawBox(g, new Vector2(CurrentX, 45), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Attack", new Vector2(CurrentX + 10, 45), Color.White);
+                            DrawBox(g, new Vector2(CurrentX, 75), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Defend", new Vector2(CurrentX + 10, 75), Color.White);
+                            DrawBox(g, new Vector2(CurrentX, 105), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Evade", new Vector2(CurrentX + 10, 105), Color.White);
                             break;
 
                         case 1:
-                            g.Draw(sprPixel, new Rectangle(325, 230, 310, 65), Color.FromNonPremultiplied(255, 255, 255, 127));
-                            DrawBox(g, new Vector2(225, 230), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Attack", new Vector2(235, 230), Color.White);
-                            DrawBox(g, new Vector2(225, 260), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Defend", new Vector2(235, 260), Color.White);
-                            DrawBox(g, new Vector2(225, 290), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Evade", new Vector2(235, 290), Color.White);
+                            g.Draw(sprPixel, new Rectangle(CurrentX + 100, 230, 310, 65), Color.FromNonPremultiplied(255, 255, 255, 127));
+                            DrawBox(g, new Vector2(CurrentX, 230), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Attack", new Vector2(CurrentX + 10, 230), Color.White);
+                            DrawBox(g, new Vector2(CurrentX, 260), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Defend", new Vector2(CurrentX + 10, 260), Color.White);
+                            DrawBox(g, new Vector2(CurrentX, 290), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Evade", new Vector2(CurrentX + 10, 290), Color.White);
                             break;
 
                         case 2:
-                            g.Draw(sprPixel, new Rectangle(325, 300, 310, 65), Color.FromNonPremultiplied(255, 255, 255, 127));
-                            DrawBox(g, new Vector2(225, 300), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Attack", new Vector2(235, 300), Color.White);
-                            DrawBox(g, new Vector2(225, 330), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Defend", new Vector2(235, 330), Color.White);
-                            DrawBox(g, new Vector2(225, 360), 100, 30, Color.Black);
-                            g.DrawString(fntFinlanderFont, "Evade", new Vector2(235, 360), Color.White);
+                            g.Draw(sprPixel, new Rectangle(CurrentX + 100, 300, 310, 65), Color.FromNonPremultiplied(255, 255, 255, 127));
+                            DrawBox(g, new Vector2(CurrentX, 300), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Attack", new Vector2(CurrentX + 10, 300), Color.White);
+                            DrawBox(g, new Vector2(CurrentX, 330), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Defend", new Vector2(CurrentX + 10, 330), Color.White);
+                            DrawBox(g, new Vector2(CurrentX, 360), 100, 30, Color.Black);
+                            g.DrawString(fntFinlanderFont, "Evade", new Vector2(CurrentX + 10, 360), Color.White);
                             break;
                     }
                     break;
 
                 case BattleMenuStages.ChooseSquadMember:
+                    CurrentX = Constants.Width - 315;
                     switch (BattleMenuCursorIndexSecond)
                     {
                         case 0:
-                            g.Draw(sprPixel, new Rectangle(325, 45, 310, 80), Color.FromNonPremultiplied(255, 255, 255, 127));
+                            g.Draw(sprPixel, new Rectangle(CurrentX, 45, 310, 80), Color.FromNonPremultiplied(255, 255, 255, 127));
                             break;
 
                         case 1:
-                            g.Draw(sprPixel, new Rectangle(325, 230, 310, 65), Color.FromNonPremultiplied(255, 255, 255, 127));
+                            g.Draw(sprPixel, new Rectangle(CurrentX, 230, 310, 65), Color.FromNonPremultiplied(255, 255, 255, 127));
                             break;
 
                         case 2:
-                            g.Draw(sprPixel, new Rectangle(325, 300, 310, 65), Color.FromNonPremultiplied(255, 255, 255, 127));
+                            g.Draw(sprPixel, new Rectangle(CurrentX, 300, 310, 65), Color.FromNonPremultiplied(255, 255, 255, 127));
                             break;
                     }
                     break;
 
                 case BattleMenuStages.ChooseFormation:
-                    DrawBox(g, new Vector2(255, 390), MenuWith, MenuHeight, Color.Black);
-                    g.DrawString(fntFinlanderFont, "Focused", new Vector2(265, 390), Color.White);
-                    DrawBox(g, new Vector2(255, 420), MenuWith, MenuHeight, Color.Black);
-                    g.DrawString(fntFinlanderFont, "Spread", new Vector2(265, 420), Color.White);
-                    g.Draw(sprPixel, new Rectangle(255, 390 + BattleMenuCursorIndexSecond * 30, MenuWith, MenuHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    CurrentX = Constants.Width - 385;
+                    DrawBox(g, new Vector2(CurrentX, 390), MenuWith, MenuHeight, Color.Black);
+                    g.DrawString(fntFinlanderFont, "Focused", new Vector2(CurrentX + 10, 390), Color.White);
+                    DrawBox(g, new Vector2(CurrentX, 420), MenuWith, MenuHeight, Color.Black);
+                    g.DrawString(fntFinlanderFont, "Spread", new Vector2(CurrentX + 10, 420), Color.White);
+                    g.Draw(sprPixel, new Rectangle(CurrentX, 390 + BattleMenuCursorIndexSecond * 30, MenuWith, MenuHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
                     break;
             }
         }
@@ -155,7 +159,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Squad AttackingSquad = ListPlayer[AttackingPlayerIndex].ListSquad[AttackingSquadIndex];
             Squad DefendingSquad = ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
 
-            g.Draw(sprBattleMenuBackground, Vector2.Zero, Color.White);
+            g.Draw(sprBattleMenuBackground, new Rectangle(0, 0, Constants.Width, Constants.Height), null, Color.White);
             BattleSumaryDrawSquadLeft(g, DefendingSquad, BattleMenuDefenseFormationChoice, TargetSquadSupport.ActiveSquadSupport);
 
             BattleSumaryDrawSquadRight(g, AttackingSquad, BattleMenuOffenseFormationChoice);
@@ -249,7 +253,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Squad AttackingSquad = ListPlayer[AttackingPlayerIndex].ListSquad[AttackingSquadIndex];
             Squad DefendingSquad = ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
 
-            g.Draw(sprBattleMenuBackground, Vector2.Zero, Color.White);
+            g.Draw(sprBattleMenuBackground, new Rectangle(0,0, Constants.Width, Constants.Height), null, Color.White);
             BattleSumaryDrawSquadLeft(g, AttackingSquad, BattleMenuOffenseFormationChoice, ActiveSquadSupport.ActiveSquadSupport);
             
             BattleSumaryDrawSquadRight(g, DefendingSquad, BattleMenuDefenseFormationChoice);
@@ -262,7 +266,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     .AttackDamage;
 
                 g.DrawString(fntFinlanderFont, AttackDamage.ToString() + "( " + (int)(AttackDamage * 1.2) + " )",
-                new Vector2(Constants.Width - 300, 230), Color.White);
+                new Vector2(Constants.Width - 300, 230),Color.White);
             }
 
             if (AttackingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
@@ -456,7 +460,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected void BattleSumaryDrawSquadRight(CustomSpriteBatch g, Squad SquadRight, FormationChoices RightFormation)
         {
-            int DrawX = Constants.Width / 2 + 5;
+            int DrawX = Constants.Width - 315;
             int DrawY = 45;
 
             #region Leader
