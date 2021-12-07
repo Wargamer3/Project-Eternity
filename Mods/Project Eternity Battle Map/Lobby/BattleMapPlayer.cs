@@ -100,6 +100,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public BattleMapPlayer(BattleMapPlayer Clone)
         {
+            if (Clone == null)
+                return;
+
             ConnectionID = Clone.ConnectionID;
             Name = Clone.Name;
             Guild = Clone.Guild;

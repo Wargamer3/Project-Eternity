@@ -338,14 +338,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 NewMap.BattleMapPath = Room.MapPath;
                 NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
                 NewMap.ListGameScreen = ListGameScreen;
-                foreach (BattleMapPlayer ActivePlayer in PlayerManager.ListLocalPlayer)
+
+                for (int P = 0; P < 10; P++)
                 {
-                    NewMap.AddLocalPlayer(ActivePlayer);
+                    if (P < PlayerManager.ListLocalPlayer.Count)
+                    {
+                        BattleMapPlayer ActivePlayer = PlayerManager.ListLocalPlayer[P];
+                        NewMap.AddLocalPlayer(ActivePlayer);
+                    }
+                    else//Fill with empty players to ensure the enemy player is always player 10+
+                    {
+                        NewMap.AddLocalPlayer(null);
+                    }
                 }
+                RemoveAllScreens();
                 NewMap.Load();
                 NewMap.Init();
                 NewMap.TogglePreview(true);
-                RemoveAllScreens();
                 ListGameScreen.Insert(0, NewMap);
             }
         }

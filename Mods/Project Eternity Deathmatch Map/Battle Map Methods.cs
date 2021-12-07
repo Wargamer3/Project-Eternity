@@ -101,6 +101,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int PlayerIndex = 1;
                 foreach (Player ActivePlayer in ListPlayer)
                 {
+                    if (ActivePlayer.ListSquadToSpawn == null)
+                        continue;
+
                     string PlayerTag = PlayerIndex.ToString();
                     int SpawnSquadIndex = 0;
                     for (int S = 0; S < ListMultiplayerSpawns.Count; S++)

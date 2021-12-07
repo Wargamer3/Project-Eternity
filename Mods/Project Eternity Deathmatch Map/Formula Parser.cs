@@ -110,6 +110,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 Player ActivePlayer = Map.ListPlayer[PlayerIndex];
                                 switch (Expression[1])
                                 {
+                                    case "count":
                                     case "squadcount":
                                     case "squadcountalive":
                                     case "squad count":
