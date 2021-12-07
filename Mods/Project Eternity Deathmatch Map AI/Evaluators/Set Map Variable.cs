@@ -26,10 +26,10 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 string VariableNameLower = VariableName.ToLower();
                 double Value = (double)Input;
 
-                if (!BattleMap.DicMapVariables.ContainsKey(VariableNameLower))
+                if (!Info.Map.DicMapVariables.ContainsKey(VariableNameLower))
                 {
                     if (SignOperator == Operators.SignOperators.Equal)
-                        BattleMap.DicMapVariables.Add(VariableNameLower, Value);
+                        Info.Map.DicMapVariables.Add(VariableNameLower, Value);
                     else
                         throw new Exception(SignOperator.ToString() + " can't be used on " + VariableNameLower + " as this variable is unassigned.");
                 }
@@ -38,27 +38,27 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     switch (SignOperator)
                     {
                         case Operators.SignOperators.Equal:
-                            BattleMap.DicMapVariables[VariableNameLower] = Value;
+                            Info.Map.DicMapVariables[VariableNameLower] = Value;
                             break;
 
                         case Operators.SignOperators.PlusEqual:
-                            BattleMap.DicMapVariables[VariableNameLower] += Value;
+                            Info.Map.DicMapVariables[VariableNameLower] += Value;
                             break;
 
                         case Operators.SignOperators.MinusEqual:
-                            BattleMap.DicMapVariables[VariableNameLower] -= Value;
+                            Info.Map.DicMapVariables[VariableNameLower] -= Value;
                             break;
 
                         case Operators.SignOperators.MultiplicatedEqual:
-                            BattleMap.DicMapVariables[VariableNameLower] *= Value;
+                            Info.Map.DicMapVariables[VariableNameLower] *= Value;
                             break;
 
                         case Operators.SignOperators.DividedEqual:
-                            BattleMap.DicMapVariables[VariableNameLower] /= Value;
+                            Info.Map.DicMapVariables[VariableNameLower] /= Value;
                             break;
 
                         case Operators.SignOperators.ModuloEqual:
-                            BattleMap.DicMapVariables[VariableNameLower] %= Value;
+                            Info.Map.DicMapVariables[VariableNameLower] %= Value;
                             break;
                     }
                 }

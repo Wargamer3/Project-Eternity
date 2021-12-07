@@ -84,7 +84,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 return Map.ActivePlayerIndex.ToString();
 
                             default:
-                                return BattleMap.DicMapVariables[Expression[1]].ToString();
+                                return Map.DicMapVariables[Expression[1]].ToString();
                         }
 
                     case "atk":

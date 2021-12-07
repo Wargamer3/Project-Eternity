@@ -41,10 +41,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Update(int Index)
         {
             string VariableNameLower = VariableName.ToLower();
-            if (!BattleMap.DicMapVariables.ContainsKey(VariableNameLower))
+            if (!Map.DicMapVariables.ContainsKey(VariableNameLower))
             {
                 if (SignOperator == Operators.SignOperators.Equal)
-                    BattleMap.DicMapVariables.Add(VariableNameLower, Value);
+                    Map.DicMapVariables.Add(VariableNameLower, Value);
                 else
                     throw new Exception(SignOperator.ToString() + " can't be used on " + VariableNameLower + " as this variable is unassigned.");
             }
@@ -53,27 +53,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 switch (SignOperator)
                 {
                     case Operators.SignOperators.Equal:
-                        BattleMap.DicMapVariables[VariableNameLower] = Value;
+                        Map.DicMapVariables[VariableNameLower] = Value;
                         break;
 
                     case Operators.SignOperators.PlusEqual:
-                        BattleMap.DicMapVariables[VariableNameLower] += Value;
+                        Map.DicMapVariables[VariableNameLower] += Value;
                         break;
 
                     case Operators.SignOperators.MinusEqual:
-                        BattleMap.DicMapVariables[VariableNameLower] -= Value;
+                        Map.DicMapVariables[VariableNameLower] -= Value;
                         break;
 
                     case Operators.SignOperators.MultiplicatedEqual:
-                        BattleMap.DicMapVariables[VariableNameLower] *= Value;
+                        Map.DicMapVariables[VariableNameLower] *= Value;
                         break;
 
                     case Operators.SignOperators.DividedEqual:
-                        BattleMap.DicMapVariables[VariableNameLower] /= Value;
+                        Map.DicMapVariables[VariableNameLower] /= Value;
                         break;
 
                     case Operators.SignOperators.ModuloEqual:
-                        BattleMap.DicMapVariables[VariableNameLower] %= Value;
+                        Map.DicMapVariables[VariableNameLower] %= Value;
                         break;
                 }
             }

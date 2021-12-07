@@ -18,7 +18,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             public object GetContent()
             {
-                return BattleMap.DicMapVariables[_VariableName];
+                return Info.Map.DicMapVariables[_VariableName];
             }
 
             public override AIScript CopyScript()

@@ -46,9 +46,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 switch (Expression[0])
                 {
-                    case "map":
-                    case "game":
-                        return BattleMap.DicMapVariables[Expression[1]].ToString();
+                    case "global":
+                        return BattleMap.DicGlobalVariables[Expression[1]].ToString();
 
                     case "atk":
                         return UnitStatFromUnit(ActiveUnit, Expression[1]);

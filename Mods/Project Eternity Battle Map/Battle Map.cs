@@ -113,7 +113,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string VictoryCondition;
         public string LossCondition;
         public string SkillPoint;
-        public static Dictionary<string, double> DicMapVariables;
+        public Dictionary<string, double> DicMapVariables;
         public static Dictionary<string, string> DicGlobalVariables;
         public static Dictionary<string, int> DicRouteChoices;
         public static Dictionary<string, BattleMap> DicBattmeMapType = new Dictionary<string, BattleMap>();
