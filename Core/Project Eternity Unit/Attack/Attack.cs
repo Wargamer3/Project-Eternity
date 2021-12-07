@@ -295,15 +295,15 @@ namespace ProjectEternity.Core.Attacks
             return false;
         }
 
-        public int GetPower(Unit Owner)
+        public int GetPower(Unit Owner, FormulaParser ActiveParser)
         {
             if (Owner != null)
             {
-                return (int)(Convert.ToInt32(FormulaParser.ActiveParser.Evaluate(PowerFormula)) * (1 + Owner.UnitStat.AttackUpgrades.Value * 0.05));
+                return (int)(Convert.ToInt32(ActiveParser.Evaluate(PowerFormula)) * (1 + Owner.UnitStat.AttackUpgrades.Value * 0.05));
             }
             else
             {
-                return Convert.ToInt32(FormulaParser.ActiveParser.Evaluate(PowerFormula));
+                return Convert.ToInt32(ActiveParser.Evaluate(PowerFormula));
             }
         }
 

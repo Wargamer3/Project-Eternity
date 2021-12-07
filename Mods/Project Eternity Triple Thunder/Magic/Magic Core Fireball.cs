@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Magic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen.Magic
 {
@@ -115,7 +116,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Magic
         {
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
         }
 

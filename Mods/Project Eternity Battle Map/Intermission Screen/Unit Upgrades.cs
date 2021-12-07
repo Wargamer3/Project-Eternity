@@ -11,8 +11,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private List<Unit> ListPresentUnit;
 
-        public UnitUpgradesScreen(Roster PlayerRoster)
-            : base(PlayerRoster)
+        public UnitUpgradesScreen(Roster PlayerRoster, FormulaParser ActiveParser)
+            : base(PlayerRoster, ActiveParser)
         {
         }
 
@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 GameScreen CustomizeScreen = SelectedUnit.GetCustomizeScreen();
 
                 if (CustomizeScreen == null)
-                    CustomizeScreen = new DefaultUnitUpgradesScreen(SelectedUnit);
+                    CustomizeScreen = new DefaultUnitUpgradesScreen(SelectedUnit, ActiveParser);
 
                 PushScreen(CustomizeScreen);
             }

@@ -18,7 +18,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.AutoDodgeModifier);
 
@@ -37,7 +37,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.NullifyDamageModifier);
 
@@ -60,7 +60,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.PostMovementModifier.Attack);
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.PostMovementModifier.Transform);
@@ -89,7 +89,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.PostAttackModifier.Attack);
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.PostAttackModifier.Transform);
@@ -116,7 +116,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.AreEqual(0, GlobalDeathmatchContext.EffectOwnerUnit.Boosts.ExtraActionsPerTurn);
 
@@ -136,7 +136,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             DummySkill.AddSkillEffectsToTarget(string.Empty);
         }
@@ -152,7 +152,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.AreEqual(0, GlobalDeathmatchContext.EffectOwnerUnit.ListIgnoreSkill.Count);
 
@@ -171,7 +171,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.RepairModifier);
 
@@ -190,7 +190,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.ResupplyModifier);
 
@@ -209,7 +209,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.Boosts.ShieldModifier);
 
@@ -229,7 +229,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.AreEqual(0, GlobalDeathmatchContext.EffectOwnerUnit.Boosts.ParryModifier.Count);
 
@@ -249,7 +249,7 @@ namespace ProjectEternity.UnitTests
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot);
+            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, null);
 
             Assert.AreEqual(0, GlobalDeathmatchContext.EffectOwnerUnit.Boosts.NullifyAttackModifier.Count);
 

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using ProjectEternity.Core.Item;
 using System.Collections.Generic;
+using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -47,7 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             LocalContext.Map = GlobalContext.Map;
             LocalContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
-                GlobalContext.EffectTargetSquad, GlobalContext.EffectTargetUnit, GlobalContext.EffectTargetCharacter);
+                GlobalContext.EffectTargetSquad, GlobalContext.EffectTargetUnit, GlobalContext.EffectTargetCharacter, GlobalContext.ActiveParser);
 
             LocalContext.Result = GlobalContext.Result;
             LocalContext.EnemyResult = GlobalContext.EnemyResult;
@@ -120,7 +121,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 LifetimeTypeValue = -1;
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
         }
 

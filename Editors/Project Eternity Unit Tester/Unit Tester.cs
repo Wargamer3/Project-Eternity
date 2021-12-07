@@ -578,7 +578,7 @@ namespace ProjectEternity.Editors.UnitTester
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(16);
                         Attack NewWeapon = new Attack(Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
-                        txtWeaponDamage.Value = NewWeapon.GetPower(null);
+                        txtWeaponDamage.Value = NewWeapon.GetPower(null, null);
                         txtWeaponAccuracy.Value = NewWeapon.Accuracy;
 
                         if (NewWeapon.Style == WeaponStyle.M)

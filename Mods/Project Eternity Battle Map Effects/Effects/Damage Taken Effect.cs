@@ -33,9 +33,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _DamageTakenValue = BR.ReadString();
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
-            base.DoQuickLoad(BR);
+            base.DoQuickLoad(BR, ActiveParser);
 
             LastEvaluationResult = BR.ReadString();
         }
@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             string EvaluationResult;
 
-            EvaluationResult = FormulaParser.ActiveParser.Evaluate(_DamageTakenValue);
+            EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_DamageTakenValue);
             LastEvaluationResult = EvaluationResult;
 
             string ExtraText = string.Empty;

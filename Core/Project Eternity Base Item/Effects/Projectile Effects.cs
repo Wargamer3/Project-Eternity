@@ -29,7 +29,7 @@ namespace ProjectEternity.Core.Effects
             }
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
         }
 

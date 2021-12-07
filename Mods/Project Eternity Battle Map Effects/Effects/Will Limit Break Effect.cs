@@ -29,9 +29,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _LimitBreakValue = BR.ReadString();
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
-            base.DoQuickLoad(BR);
+            base.DoQuickLoad(BR, ActiveParser);
 
             LastEvaluationResult = BR.ReadInt32();
         }
@@ -50,12 +50,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_LimitBreakValue);
+            string EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_LimitBreakValue);
             LastEvaluationResult = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
             Params.LocalContext.EffectTargetCharacter.MaxWill += LastEvaluationResult;
 
             if (EvaluationResult != _LimitBreakValue)
-                return "Max Will increased by " + (int)double.Parse(FormulaParser.ActiveParser.Evaluate(_LimitBreakValue), CultureInfo.InvariantCulture) + " (" + _LimitBreakValue + ")";
+                return "Max Will increased by " + (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture) + " (" + _LimitBreakValue + ")";
             else
                 return "Max Will increased by " + _LimitBreakValue;
         }

@@ -109,6 +109,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public Dictionary<string, MapEvent> DicMapEvent = new Dictionary<string, MapEvent>();
         public Dictionary<string, MapCondition> DicMapCondition = new Dictionary<string, MapCondition>();
         public Dictionary<string, MapTrigger> DicMapTrigger = new Dictionary<string, MapTrigger>();
+        public FormulaParser ActiveParser;
         public List<MapScript> ListMapScript;
         public List<MapEvent> ListMapEvent;
 
@@ -134,7 +135,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             this.GlobalAttackContext = GlobalAttackContext;
 
             DicMapVariables = new Dictionary<string, double>();
-            FormulaParser.ActiveParser = new FightingZoneFormulaParser(this);
+            ActiveParser = new FightingZoneFormulaParser(this);
             AttackParams = new TripleThunderAttackParams(GlobalAttackContext);
             AttackParams.SharedParams.Content = Content;
             ListLayer = new List<Layer>();

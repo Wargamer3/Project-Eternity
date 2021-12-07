@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_HPRegenValue);
+            string EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_HPRegenValue);
 
             string ExtraText = string.Empty;
 

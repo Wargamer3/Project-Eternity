@@ -13,6 +13,8 @@ namespace ProjectEternity.Core.Effects
         private Unit _EffectTargetUnit;
         private Character _EffectTargetCharacter;
 
+        private FormulaParser _ActiveParser;
+
         public Squad EffectOwnerSquad { get { return _EffectOwnerSquad; } }
         public Unit EffectOwnerUnit { get { return _EffectOwnerUnit; } }
         public Character EffectOwnerCharacter { get { return _EffectOwnerCharacter; } }
@@ -20,9 +22,10 @@ namespace ProjectEternity.Core.Effects
         public Squad EffectTargetSquad { get { return _EffectTargetSquad; } }
         public Unit EffectTargetUnit { get { return _EffectTargetUnit; } }
         public Character EffectTargetCharacter { get { return _EffectTargetCharacter; } }
+        public FormulaParser ActiveParser { get { return _ActiveParser; } }
 
         public void SetContext(Squad EffectOwnerSquad, Unit EffectOwnerUnit, Character EffectOwnerCharacter,
-            Squad EffectTargetSquad, Unit EffectTargetUnit, Character EffectTargetCharacter)
+            Squad EffectTargetSquad, Unit EffectTargetUnit, Character EffectTargetCharacter, FormulaParser ActiveParser)
         {
             _EffectOwnerSquad = EffectOwnerSquad;
             _EffectOwnerUnit = EffectOwnerUnit;
@@ -31,6 +34,8 @@ namespace ProjectEternity.Core.Effects
             _EffectTargetSquad = EffectTargetSquad;
             _EffectTargetUnit = EffectTargetUnit;
             _EffectTargetCharacter = EffectTargetCharacter;
+
+            _ActiveParser = ActiveParser;
         }
     }
 }

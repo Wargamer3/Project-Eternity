@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int U = GlobalContext.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
                 GlobalContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
-                    GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerSquad[U], GlobalContext.EffectTargetUnit.Pilot);
+                    GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerSquad[U], GlobalContext.EffectTargetUnit.Pilot, GlobalContext.ActiveParser);
                 
                 GlobalContext.EffectTargetUnit.Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
             }

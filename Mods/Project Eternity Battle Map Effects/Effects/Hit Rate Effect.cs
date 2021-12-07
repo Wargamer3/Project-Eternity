@@ -30,9 +30,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _HitRateValue = BR.ReadString();
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
-            base.DoQuickLoad(BR);
+            base.DoQuickLoad(BR, ActiveParser);
 
             LastEvaluationResult = BR.ReadInt32();
         }
@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             string EvaluationResult;
             int EvaluationValue;
 
-            EvaluationResult = FormulaParser.ActiveParser.Evaluate(_HitRateValue);
+            EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_HitRateValue);
             EvaluationValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
             LastEvaluationResult = EvaluationValue;
 

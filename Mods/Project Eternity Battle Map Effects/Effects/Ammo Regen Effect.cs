@@ -53,7 +53,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_AmmoRegenValue);
+            string EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_AmmoRegenValue);
 
             string ExtraText = "";
             if (EvaluationResult != _AmmoRegenValue)

@@ -21,14 +21,14 @@ namespace ProjectEternity.Core.Skill
             if (Context.EffectOwnerSquad.CurrentLeader == null || Context.EffectOwnerSquad.CurrentLeader.Pilot == null || Context.EffectOwnerSquad.IsDead)
                 return false;
 
-            Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter);
+            Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.Map.ActiveParser);
             
             return ActiveSkill.CanActivateEffectsOnTarget(Context.EffectOwnerCharacter.Effects);
         }
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
-            Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter);
+            Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.Map.ActiveParser);
 
             AddAndExecuteEffect(ActiveSkill, Context.EffectOwnerCharacter.Effects);
             Context.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;

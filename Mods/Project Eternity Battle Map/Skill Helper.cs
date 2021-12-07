@@ -22,12 +22,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else
                 TargetPilot = null;
 
-            GlobalBattleContext.SetContext(ActiveSquad, ActiveUnit, null, TargetSquad, TargetUnit, TargetPilot);
+            GlobalBattleContext.SetContext(ActiveSquad, ActiveUnit, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
             
             // Character Skills
             for (int C = 0; C < ActiveUnit.ArrayCharacterActive.Length; C++)
             {
-                GlobalBattleContext.SetContext(ActiveSquad, ActiveUnit, ActiveUnit.ArrayCharacterActive[C], TargetSquad, TargetUnit, TargetPilot);
+                GlobalBattleContext.SetContext(ActiveSquad, ActiveUnit, ActiveUnit.ArrayCharacterActive[C], TargetSquad, TargetUnit, TargetPilot, ActiveParser);
 
                 for (int S = 0; S < ActiveUnit.ArrayCharacterActive[C].ArrayPilotSkill.Length; S++)
                 {
@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            GlobalBattleContext.SetContext(ActiveSquad, ActiveUnit, ActiveUnit.Pilot, TargetSquad, TargetUnit, TargetPilot);
+            GlobalBattleContext.SetContext(ActiveSquad, ActiveUnit, ActiveUnit.Pilot, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
             
             // Unit Abilities
             for (int S = 0; S < ActiveUnit.ArrayUnitAbility.Length; S++)
@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Reset active effects in case an effect was removed.
             ActiveUnit.ReactivateEffects();
 
-            GlobalBattleContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot);
+            GlobalBattleContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
 
         }
     }

@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             GameRule = new DefaultGameRule(this);
             ListActionMenuChoice = new ActionPanelHolderDeathmatch(this);
-            FormulaParser.ActiveParser = new DeathmatchFormulaParser(this);
+            ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
             ListPlayer = new List<Player>();
             ListLocalPlayerInfo = new List<Player>();

@@ -33,7 +33,7 @@ namespace ProjectEternity.Core.Skill
                             continue;
 
                         Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
-                            Context.Map.ListPlayer[P].ListSquad[Squad], Context.Map.ListPlayer[P].ListSquad[Squad][U], Context.Map.ListPlayer[P].ListSquad[Squad][U].Pilot);
+                            Context.Map.ListPlayer[P].ListSquad[Squad], Context.Map.ListPlayer[P].ListSquad[Squad][U], Context.Map.ListPlayer[P].ListSquad[Squad][U].Pilot, Context.Map.ActiveParser);
                         
                         if (ActiveSkill.CanActivateEffectsOnTarget(Context.Map.ListPlayer[P].ListSquad[Squad][U].Pilot.Effects))
                             return true;

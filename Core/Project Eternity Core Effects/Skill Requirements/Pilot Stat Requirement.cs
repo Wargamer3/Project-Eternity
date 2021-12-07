@@ -27,7 +27,7 @@ namespace ProjectEternity.Core.Effects
 
         public override bool CanActivatePassive()
         {
-            int PilotStat = int.Parse(FormulaParser.ActiveParser.Evaluate(EffectValue), CultureInfo.InvariantCulture);
+            int PilotStat = int.Parse(GlobalContext.ActiveParser.Evaluate(EffectValue), CultureInfo.InvariantCulture);
             switch (StatusType)
             {
                 case StatusTypes.MEL:

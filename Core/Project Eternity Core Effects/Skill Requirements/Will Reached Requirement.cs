@@ -26,7 +26,7 @@ namespace ProjectEternity.Core.Effects
 
         public override bool CanActivatePassive()
         {
-            int WillFinal = int.Parse(FormulaParser.ActiveParser.Evaluate(Will), CultureInfo.InvariantCulture);
+            int WillFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(Will), CultureInfo.InvariantCulture);
             return Operators.CompareValue(LogicOperator, GlobalContext.EffectOwnerUnit.Pilot.Will, WillFinal);
         }
 

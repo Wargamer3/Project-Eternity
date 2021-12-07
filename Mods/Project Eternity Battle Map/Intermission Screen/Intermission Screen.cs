@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, BaseEffect> DicEffect;
         public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
         public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
-
+        public FormulaParser ActiveParser;
         public IntermissionScreen()
             : base()
         {
@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            FormulaParser.ActiveParser = new IntermissionScreenFormulaParser();
+            ActiveParser = new IntermissionScreenFormulaParser();
 
             Menu = new PartMenu[] { new PartMenu("Start battle", new string[] { }),
                                     new PartMenu("View", new string[] {"Pilot View", "Unit View", "Parts View" }),
@@ -193,7 +193,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             }
                             else if (SubMenu == 1)//Unit
                             {
-                                PushScreen(new UnitUpgradesScreen(PlayerRoster));
+                                PushScreen(new UnitUpgradesScreen(PlayerRoster, ActiveParser));
                             }
                             else if (SubMenu == 2)//Unit
                             {
@@ -204,11 +204,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             }
                             else if (SubMenu == 3)//Pilot
                             {
-                                PushScreen(new PilotSwapScreen(PlayerRoster));
+                                PushScreen(new PilotSwapScreen(PlayerRoster, ActiveParser));
                             }
                             else if (SubMenu == 4)//Parts
                             {
-                                PushScreen(new UnitPartsScreen(PlayerRoster));
+                                PushScreen(new UnitPartsScreen(PlayerRoster, ActiveParser));
                             }
                             else if (SubMenu == 5)//Shop
                             {

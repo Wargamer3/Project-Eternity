@@ -25,7 +25,9 @@ namespace ProjectEternity.Core.Skill
                 if (Context.EffectOwnerSquad[U] == null || Context.EffectOwnerSquad[U].Pilot == null)
                     continue;
 
-                Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerSquad[U].Pilot);
+                Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
+                    Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerSquad[U].Pilot,
+                    Context.Map.ActiveParser);
                 
                 if (ActiveSkill.CanActivateEffectsOnTarget(Context.EffectOwnerSquad[U].Pilot.Effects))
                     return true;
@@ -38,7 +40,9 @@ namespace ProjectEternity.Core.Skill
         {
             for (int U = Context.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerSquad[U].Pilot);
+                Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
+                    Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerSquad[U].Pilot,
+                    Context.Map.ActiveParser);
 
                 AddAndExecuteEffect(ActiveSkill, Context.EffectOwnerSquad[U].Pilot.Effects);
                 Context.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;

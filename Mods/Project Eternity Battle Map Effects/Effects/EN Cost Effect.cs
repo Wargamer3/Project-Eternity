@@ -29,9 +29,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _ENCostValue = BR.ReadString();
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
-            base.DoQuickLoad(BR);
+            base.DoQuickLoad(BR, ActiveParser);
 
             LastEvaluationResult = BR.ReadInt32();
         }
@@ -50,8 +50,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_ENCostValue);
-            int EvaluationValue = (int)double.Parse(FormulaParser.ActiveParser.Evaluate(_ENCostValue), CultureInfo.InvariantCulture);
+            string EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_ENCostValue);
+            int EvaluationValue = (int)double.Parse(Params.GlobalContext.ActiveParser.Evaluate(_ENCostValue), CultureInfo.InvariantCulture);
             LastEvaluationResult = EvaluationValue;
 
             Params.LocalContext.EffectTargetUnit.Boosts.ENCostModifier = EvaluationValue;

@@ -69,21 +69,21 @@ namespace ProjectEternity.Core.Item
             return NewSkillEffect;
         }
 
-        public static BaseEffect FromQuickSaveFile(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public static BaseEffect FromQuickSaveFile(BinaryReader BR, FormulaParser ActiveParser, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             string EffectName = BR.ReadString();
 
             BaseEffect NewSkillEffect = DicEffect[EffectName].Copy();
 
-            NewSkillEffect.QuickLoad(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            NewSkillEffect.QuickLoad(BR, ActiveParser, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             return NewSkillEffect;
         }
 
         protected abstract void Load(BinaryReader BR);
 
-        protected void QuickLoad(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        protected void QuickLoad(BinaryReader BR, FormulaParser ActiveParser, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             string LifetimeType = BR.ReadString();
@@ -111,10 +111,10 @@ namespace ProjectEternity.Core.Item
             this.MaximumStack = MaximumStack;
             this.Range = Range;
 
-            DoQuickLoad(BR);
+            DoQuickLoad(BR, ActiveParser);
         }
 
-        protected abstract void DoQuickLoad(BinaryReader BR);
+        protected abstract void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser);
 
         protected abstract void Save(BinaryWriter BW);
 

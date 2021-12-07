@@ -1302,7 +1302,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 TargetSquadForeground = new AnimationBackground2D(TargetSquadForegroundPath, Content, GraphicsDevice);
             }
 
-            AttackAnimations AttackerAnimations = ActiveAttack.GetAttackAnimations(FormulaParser.ActiveParser);
+            AttackAnimations AttackerAnimations = ActiveAttack.GetAttackAnimations(ActiveParser);
 
             if (!IsCounter)
             {

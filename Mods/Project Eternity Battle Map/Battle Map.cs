@@ -117,6 +117,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static Dictionary<string, string> DicGlobalVariables;
         public static Dictionary<string, int> DicRouteChoices;
         public static Dictionary<string, BattleMap> DicBattmeMapType = new Dictionary<string, BattleMap>();
+        public FormulaParser ActiveParser;
 
         public Vector3 CursorPosition;
         public Vector3 CursorPositionVisible;
@@ -229,7 +230,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DicMapVariables = new Dictionary<string, double>();
             MovementAnimation = new MovementAnimations();
-            AttackPicker = new AttacksMenu();
+            AttackPicker = new AttacksMenu(ActiveParser);
 
             ListMapScript = new List<MapScript>();
             ListMapEvent = new List<MapEvent>();

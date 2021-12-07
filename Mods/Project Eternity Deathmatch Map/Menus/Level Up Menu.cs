@@ -221,11 +221,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (UpdateBattleEventsOnClose)
                     {
-                        Map.GlobalBattleContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot);
+                        Map.GlobalBattleContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Map.ActiveParser);
 
                         Map.UpdateMapEvent(BattleMap.EventTypeOnBattle, 1);
 
-                        Map.GlobalBattleContext.SetContext(null, null, null, null, null, null);
+                        Map.GlobalBattleContext.SetContext(null, null, null, null, null, null, Map.ActiveParser);
                     }
 
                     //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)

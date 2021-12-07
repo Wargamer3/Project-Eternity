@@ -28,7 +28,7 @@ namespace ProjectEternity.Core.Skill
                         continue;
 
                     Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
-                        Context.Map.ListPlayer[P].ListSquad[Squad], Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader, Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot);
+                        Context.Map.ListPlayer[P].ListSquad[Squad], Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader, Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot, Context.Map.ActiveParser);
                     
                     if (ActiveSkill.CanActivateEffectsOnTarget(Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot.Effects))
                         return true;

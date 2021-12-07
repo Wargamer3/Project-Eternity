@@ -49,7 +49,7 @@ namespace ProjectEternity.Core.Magic
             }
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
         }
 

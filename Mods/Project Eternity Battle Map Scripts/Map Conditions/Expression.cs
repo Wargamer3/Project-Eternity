@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(int Index)
         {
-            string ExpressionFinal = FormulaParser.ActiveParser.Evaluate(Expression);
+            string ExpressionFinal = Map.ActiveParser.Evaluate(Expression);
             if (ExpressionFinal == "1")
                 Map.ExecuteFollowingScripts(this, 0);
             else

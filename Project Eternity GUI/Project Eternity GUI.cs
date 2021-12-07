@@ -30,7 +30,6 @@ namespace ProjectEternity.GUI
 
             if (LoadContent)
             {
-                FormulaParser.ActiveParser = new GUIFormulaParser();
                 SplashScreen.SetStatus("Initializing Graphics");
                 RootGraphicDevice = new GUIGraphicDevice();
                 GameScreens.GameScreen.LoadHelpers(RootGraphicDevice.Content);

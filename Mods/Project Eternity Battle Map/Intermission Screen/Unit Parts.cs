@@ -64,8 +64,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BattleContext GlobalBattleContext;
         private UnitQuickLoadEffectContext GlobalQuickLoadContext;
 
-        public UnitPartsScreen(Roster PlayerRoster)
-            : base(PlayerRoster)
+        public UnitPartsScreen(Roster PlayerRoster, FormulaParser ActiveParser)
+            : base(PlayerRoster, ActiveParser)
         {
             CursorIndexUnitPart = 0;
             Stage = -1;
@@ -320,7 +320,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             SelectedUnit.ActivePassiveBuffs();
             if (CursorIndexListPart > 0)
             {
-                GlobalBattleContext.SetContext(null, SelectedUnit, SelectedUnit.Pilot, null, SelectedUnit, SelectedUnit.Pilot);
+                GlobalBattleContext.SetContext(null, SelectedUnit, SelectedUnit.Pilot, null, SelectedUnit, SelectedUnit.Pilot, ActiveParser);
                 UnitPart ActivePart = SystemList.ListPart.ElementAt(CursorIndexListPart - 1).Value;
                 ActivePart.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 ActivePart.ActivatePassiveBuffs();

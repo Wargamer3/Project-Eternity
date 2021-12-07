@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public sealed class PilotSwapScreen : GameScreen
     {
         private readonly Roster PlayerRoster;
+        private readonly FormulaParser ActiveParser;
 
         int CursorIndexSubMenu;
 
@@ -31,10 +32,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         int Stage;
 
-        public PilotSwapScreen(Roster PlayerRoster)
+        public PilotSwapScreen(Roster PlayerRoster, FormulaParser ActiveParser)
             : base()
         {
             this.PlayerRoster = PlayerRoster;
+            this.ActiveParser = ActiveParser;
 
             CursorIndexSubMenu = 0;
             Stage = -1;
@@ -49,7 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
 
-            UnitList = new UnitListScreen(PlayerRoster);
+            UnitList = new UnitListScreen(PlayerRoster, ActiveParser);
             UnitList.Load();
             PilotList = new PilotListScreen(PlayerRoster);
             PilotList.Load();

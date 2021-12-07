@@ -17,7 +17,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             public object GetContent()
             {
-                IEnumerable<Attack> ListAttackOrderedByPower = Info.ActiveSquad.CurrentLeader.ListAttack.OrderByDescending(weapon => weapon.GetPower(Info.ActiveSquad.CurrentLeader));
+                IEnumerable<Attack> ListAttackOrderedByPower = Info.ActiveSquad.CurrentLeader.ListAttack.OrderByDescending(weapon => weapon.GetPower(Info.ActiveSquad.CurrentLeader, Info.Map.ActiveParser));
                 List<object> ListAttack = new List<object>();
                 foreach (Attack ActiveAttack in ListAttackOrderedByPower)
                 {

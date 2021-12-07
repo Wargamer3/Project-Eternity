@@ -6,8 +6,6 @@ namespace ProjectEternity.Core
 {
     public abstract class FormulaParser
     {
-        public static FormulaParser ActiveParser;
-
         public string Evaluate(string Expression)
         {
             if (Expression.StartsWith("//C#"))

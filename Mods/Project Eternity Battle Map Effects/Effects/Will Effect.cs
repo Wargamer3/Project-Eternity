@@ -32,9 +32,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _WillValue = BR.ReadString();
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
-            base.DoQuickLoad(BR);
+            base.DoQuickLoad(BR, ActiveParser);
 
             LastEvaluationResult = BR.ReadString();
         }
@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_WillValue);
+            string EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_WillValue);
             LastEvaluationResult = EvaluationResult;
             Character TargetCharacter = Params.LocalContext.EffectTargetCharacter;
 

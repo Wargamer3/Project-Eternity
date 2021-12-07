@@ -187,7 +187,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 for (int C = 0; C < ActiveSquad[U].ArrayCharacterActive.Length; C++)
                 {
-                    Map.GlobalDeathmatchContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null);
+                    Map.GlobalDeathmatchContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null, Map.ActiveParser);
 
                     PilotSpiritActivation[U][C] = new List<ManualSkill>();
 
@@ -199,7 +199,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            Map.GlobalDeathmatchContext.SetContext(null, null, null, null, null, null);
+            Map.GlobalDeathmatchContext.SetContext(null, null, null, null, null, null, Map.ActiveParser);
         }
 
         public override void Update(GameTime gameTime)
@@ -272,7 +272,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int S = 0; S < PilotSpiritActivation[U][C].Count; ++S)
                         {
-                            Map.GlobalDeathmatchContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null);
+                            Map.GlobalDeathmatchContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null, Map.ActiveParser);
 
                             ManualSkill SpiritToActivate = PilotSpiritActivation[U][C][S];
 
@@ -298,7 +298,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
 
-                Map.GlobalDeathmatchContext.SetContext(null, null, null, null, null, null);
+                Map.GlobalDeathmatchContext.SetContext(null, null, null, null, null, null, Map.ActiveParser);
 
                 Map.sndConfirm.Play();
             }

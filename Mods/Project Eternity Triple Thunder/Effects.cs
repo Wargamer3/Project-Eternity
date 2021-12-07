@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
         }
 
@@ -164,7 +164,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
         }
 

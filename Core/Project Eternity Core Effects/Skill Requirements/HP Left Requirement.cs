@@ -29,12 +29,12 @@ namespace ProjectEternity.Core.Effects
         {
             if (_NumberType == Operators.NumberTypes.Absolute)
             {
-                int HPLeftFinal = int.Parse(FormulaParser.ActiveParser.Evaluate(HPLeft), CultureInfo.InvariantCulture);
+                int HPLeftFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(HPLeft), CultureInfo.InvariantCulture);
                 return Operators.CompareValue(LogicOperator, GlobalContext.EffectOwnerUnit.HP, HPLeftFinal);
             }
             else
             {
-                int ExpectedHPPercent = int.Parse(FormulaParser.ActiveParser.Evaluate(HPLeft), CultureInfo.InvariantCulture);
+                int ExpectedHPPercent = int.Parse(GlobalContext.ActiveParser.Evaluate(HPLeft), CultureInfo.InvariantCulture);
                 int HPPercent = (GlobalContext.EffectOwnerUnit.HP * 100) / GlobalContext.EffectOwnerUnit.MaxHP;
                 return Operators.CompareValue(LogicOperator, HPPercent, ExpectedHPPercent);
             }

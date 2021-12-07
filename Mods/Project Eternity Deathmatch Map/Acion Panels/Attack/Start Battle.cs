@@ -273,7 +273,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 FinalTargetSquadSupport = ActiveSquadSupport;
             }
 
-            bool ShowAnimation = Constants.ShowAnimation && FinalActiveSquad.CurrentLeader.CurrentAttack.GetAttackAnimations(FormulaParser.ActiveParser).Start.AnimationName != null;
+            bool ShowAnimation = Constants.ShowAnimation && FinalActiveSquad.CurrentLeader.CurrentAttack.GetAttackAnimations(Map.ActiveParser).Start.AnimationName != null;
             ListNextAnimationScreen.Clear();
             Map.NonDemoScreen.ListNonDemoBattleFrame.Clear();
 

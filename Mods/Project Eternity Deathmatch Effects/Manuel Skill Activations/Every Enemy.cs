@@ -33,7 +33,7 @@ namespace ProjectEternity.Core.Skill
                             continue;
 
                         Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
-                            Context.Map.ListPlayer[P].ListSquad[Squad], Context.Map.ListPlayer[P].ListSquad[Squad][U], Context.Map.ListPlayer[P].ListSquad[Squad][U].Pilot);
+                            Context.Map.ListPlayer[P].ListSquad[Squad], Context.Map.ListPlayer[P].ListSquad[Squad][U], Context.Map.ListPlayer[P].ListSquad[Squad][U].Pilot, Context.Map.ActiveParser);
 
                         if (ActiveSkill.CanActivateEffectsOnTarget(Context.Map.ListPlayer[P].ListSquad[Squad][U].Pilot.Effects))
                             return true;
@@ -56,7 +56,7 @@ namespace ProjectEternity.Core.Skill
                     for (int U = Context.Map.ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
                     {
                         Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
-                            Context.Map.ListPlayer[P].ListSquad[S], Context.Map.ListPlayer[P].ListSquad[S][U], Context.Map.ListPlayer[P].ListSquad[S][U].Pilot);
+                            Context.Map.ListPlayer[P].ListSquad[S], Context.Map.ListPlayer[P].ListSquad[S][U], Context.Map.ListPlayer[P].ListSquad[S][U].Pilot, Context.Map.ActiveParser);
 
                         AddAndExecuteEffect(ActiveSkill, Context.Map.ListPlayer[P].ListSquad[S][U].Pilot.Effects);
                     }

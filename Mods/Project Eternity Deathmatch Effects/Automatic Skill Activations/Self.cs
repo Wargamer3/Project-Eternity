@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override bool CanExecuteEffectOnTarget(BaseEffect ActiveSkillEffect)
         {
             GlobalContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
-                GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter);
+                GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter, GlobalContext.ActiveParser);
 
             return ActiveSkillEffect.CanActivate();
         }
@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             GlobalContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter, 
-                GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter);
+                GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter, GlobalContext.ActiveParser);
 
             GlobalContext.EffectTargetUnit.Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
         }

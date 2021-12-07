@@ -17,7 +17,7 @@ DEFENSE = ((Robot Armor Stat * ((Pilot Will + Pilot Def)/200) * Defense Side Ter
 
 FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) + Additive Final Damage Bonuses) * Final Damage Multiplier Bonuses
     */
-        public static int AttackFormula(Unit Attacker, int WeaponTerrain)
+        public static int AttackFormula(Unit Attacker, int WeaponTerrain, FormulaParser ActiveParser)
         {
             int PilotMorale = Attacker.PilotMorale;
             int PilotPower;
@@ -27,7 +27,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             else
                 PilotPower = Attacker.PilotRNG;
 
-            int AttackFormula = (int)(Attacker.CurrentAttack.GetPower(Attacker) * (PilotMorale + PilotPower) / 200f * (1 + WeaponTerrain / 100f));
+            int AttackFormula = (int)(Attacker.CurrentAttack.GetPower(Attacker, ActiveParser) * (PilotMorale + PilotPower) / 200f * (1 + WeaponTerrain / 100f));
             return AttackFormula;
         }
 
@@ -35,7 +35,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
         {
             int WeaponTerrain = Attacker.CurrentAttack.TerrainAttribute(AttackerTerrainType);
             
-            return AttackFormula(Attacker, WeaponTerrain);
+            return AttackFormula(Attacker, WeaponTerrain, ActiveParser);
         }
 
         public static int DefenseFormula(int Armor, int PilotMorale, int DefenderPilotDEF, int DefenderTerrain)
@@ -502,11 +502,11 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             if (!HasRecap)
             {
-                GlobalBattleContext.SetContext(ActiveSquad, ActiveSquad.CurrentLeader, ActiveSquad.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot);
+                GlobalBattleContext.SetContext(ActiveSquad, ActiveSquad.CurrentLeader, ActiveSquad.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, ActiveParser);
 
                 UpdateMapEvent(EventTypeOnBattle, 1);
 
-                GlobalBattleContext.SetContext(null, null, null, null, null, null);
+                GlobalBattleContext.SetContext(null, null, null, null, null, null, ActiveParser);
 
                 //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)
                 Attacker.UpdateSquad();

@@ -26,9 +26,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Texture2D sprAttackTypeMAP;
         private Texture2D sprAttackTypePLA;
 
-        public AttacksMenu()
-        {
+        private FormulaParser ActiveParser;
 
+        public AttacksMenu(FormulaParser ActiveParser)
+        {
+            this.ActiveParser = ActiveParser;
         }
 
         public AttacksMenu(Texture2D sprLand, Texture2D sprSea, Texture2D sprSky, Texture2D sprSpace,
@@ -153,7 +155,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (DrawAll)
                 {
-                    g.DrawString(ActiveFont, ActiveUnit.ListAttack[i].GetPower(ActiveUnit).ToString(),
+                    g.DrawString(ActiveFont, ActiveUnit.ListAttack[i].GetPower(ActiveUnit, ActiveParser).ToString(),
                         new Vector2(XStart + 315, YStart + CurPos * YStep), ColorBrush);
 
                     int RangeMaximum = ActiveUnit.ListAttack[i].RangeMaximum;

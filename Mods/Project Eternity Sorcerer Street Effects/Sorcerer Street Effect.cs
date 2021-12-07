@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -28,7 +29,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
         }
 

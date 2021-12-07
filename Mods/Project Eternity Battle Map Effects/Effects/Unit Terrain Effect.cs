@@ -37,9 +37,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _CanDowngrade = BR.ReadBoolean();
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
-            base.DoQuickLoad(BR);
+            base.DoQuickLoad(BR, ActiveParser);
 
             LastEvaluationResult = BR.ReadInt32();
         }
@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_Value);
+            string EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_Value);
             int FinalValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
             LastEvaluationResult = FinalValue;
 

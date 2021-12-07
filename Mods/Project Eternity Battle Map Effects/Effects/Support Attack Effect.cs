@@ -30,9 +30,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             _SupportAttackValue = BR.ReadString();
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
-            base.DoQuickLoad(BR);
+            base.DoQuickLoad(BR, ActiveParser);
 
             LastEvaluationResult = BR.ReadInt32();
         }
@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = FormulaParser.ActiveParser.Evaluate(_SupportAttackValue);
+            string EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_SupportAttackValue);
             int FinalySupportAttackValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
             LastEvaluationResult = FinalySupportAttackValue;
 

@@ -71,7 +71,7 @@ namespace ProjectEternity.Core.Effects
                 LifetimeTypeValue = -1;
         }
 
-        protected override void DoQuickLoad(BinaryReader BR)
+        protected override void DoQuickLoad(BinaryReader BR, FormulaParser ActiveParser)
         {
             uint EffectOwnerSquadID = BR.ReadUInt32();
             int EffectOwnerUnitIndex = BR.ReadInt32();
@@ -89,7 +89,7 @@ namespace ProjectEternity.Core.Effects
             Unit EffectTargetUnit = EffectTargetSquad.At(EffectTargetUnitIndex);
             Character EffectTargetCharacter = EffectTargetUnit.ArrayCharacterActive[EffectTargetCharacterIndex];
 
-            Params.GlobalContext.SetContext(EffectOwnerSquad, EffectOwnerUnit, EffectOwnerCharacter, EffectTargetSquad, EffectTargetUnit, EffectTargetCharacter);
+            Params.GlobalContext.SetContext(EffectOwnerSquad, EffectOwnerUnit, EffectOwnerCharacter, EffectTargetSquad, EffectTargetUnit, EffectTargetCharacter, ActiveParser);
             Params.CopyGlobalIntoLocal();
         }
 

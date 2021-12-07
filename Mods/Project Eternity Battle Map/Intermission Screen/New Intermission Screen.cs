@@ -41,10 +41,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private List<Unit> ListPresentUnit;
         private List<Character> ListPresentCharacter;
 
+        FormulaParser ActiveParser;
+
         public NewIntermissionScreen(Roster PlayerRoster)
             : base()
         {
             this.PlayerRoster = PlayerRoster;
+            ActiveParser = new IntermissionScreenFormulaParser();
 
             this.RequireDrawFocus = true;
         }
@@ -125,20 +128,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     case MenuChoice.PilotSwap:
                         if (Menu[0].IsAvailable[2])
                         {
-                            PushScreen(new PilotSwapScreen(PlayerRoster));
+                            PushScreen(new PilotSwapScreen(PlayerRoster, ActiveParser));
                         }
                         break;
 
                     case MenuChoice.UnitStatus:
-                        PushScreen(new UnitListScreen(PlayerRoster));
+                        PushScreen(new UnitListScreen(PlayerRoster, ActiveParser));
                         break;
 
                     case MenuChoice.UnitUpgrade:
-                        PushScreen(new UnitUpgradesScreen(PlayerRoster));
+                        PushScreen(new UnitUpgradesScreen(PlayerRoster, ActiveParser));
                         break;
 
                     case MenuChoice.UnitParts:
-                        PushScreen(new UnitPartsScreen(PlayerRoster));
+                        PushScreen(new UnitPartsScreen(PlayerRoster, ActiveParser));
                         break;
 
                     case MenuChoice.UnitEquipment:

@@ -32,11 +32,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int UpgradeTotalCost;
 
         private Unit SelectedUnit;
+        private FormulaParser ActiveParser;
 
-        public DefaultUnitUpgradesScreen(Unit SelectedUnit)
+        public DefaultUnitUpgradesScreen(Unit SelectedUnit, FormulaParser ActiveParser)
             : base()
         {
             this.SelectedUnit = SelectedUnit;
+            this.ActiveParser = ActiveParser;
 
             ArrayUpgradeCount = new int[5] { 0, 0, 0, 0, 0 };
 
@@ -53,7 +55,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             sprMapMenuBackground = Content.Load<Texture2D>("Status Screen/Background Black");
 
-            AttackPicker = new AttacksMenu();
+            AttackPicker = new AttacksMenu(ActiveParser);
             AttackPicker.Load();
 
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
@@ -205,9 +207,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawString(fntFinlanderFont, "Power", new Vector2(350, YStart - 25), Color.Yellow);
                 for (int i = 0; i < SelectedUnit.ListAttack.Count && i <= 8; i++)
                 {
-                    int CurrentPower = SelectedUnit.ListAttack[i].GetPower(SelectedUnit);
+                    int CurrentPower = SelectedUnit.ListAttack[i].GetPower(SelectedUnit, ActiveParser);
                     SelectedUnit.UnitStat.AttackUpgrades.Value += AttackUpgradeCount;
-                    int NextPower = SelectedUnit.ListAttack[i].GetPower(SelectedUnit);
+                    int NextPower = SelectedUnit.ListAttack[i].GetPower(SelectedUnit, ActiveParser);
                     SelectedUnit.UnitStat.AttackUpgrades.Value -= AttackUpgradeCount;
 
                     g.DrawStringRightAligned(fntFinlanderFont, CurrentPower.ToString(), new Vector2(400, YStart + i * YStep), Color.White);

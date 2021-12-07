@@ -37,14 +37,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public DrawableMenu UnitSelectionMenu;
 
         private List<Unit> ListPresentUnit;
-
+        protected FormulaParser ActiveParser;
 
         public Unit SelectedUnit { get { return ListPresentUnit[UnitSelectionMenu.SelectedIndex]; } }
 
-        public UnitListScreen(Roster PlayerRoster)
+        public UnitListScreen(Roster PlayerRoster, FormulaParser ActiveParser)
             : base()
         {
             this.PlayerRoster = PlayerRoster;
+            this.ActiveParser = ActiveParser;
 
             Stage = 0;
         }
