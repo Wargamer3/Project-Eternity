@@ -20,8 +20,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public ComboRotationTypes ComboRotationType;
         public bool InstantActivation;
 
-        bool IsShooting;
+        bool _IsShooting;
         bool IsShootingNext;
+
+        public override bool IsShooting => _IsShooting;
 
         public SimpleWeapon(BinaryReader BR, string OwnerName, string WeaponPath, bool IsCharacterAnimation, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
@@ -230,7 +232,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             if (!IsShootingNext)
             {
-                if (IsShooting)
+                if (_IsShooting)
                 {
                     IsShootingNext = CurrentAnimation.ActiveKeyFrame >= CurrentAnimation.LoopEnd - 1;
 
@@ -244,7 +246,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 else
                 {
                     IsShootingNext = true;
-                    IsShooting = true;
+                    _IsShooting = true;
 
                     InitiateFollowingAttack(AnimationType == AnimationTypes.PartialAnimation, ActiveMovementStance, Owner);
                     return true;
@@ -310,7 +312,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
             }
 
-            IsShooting = IsShootingNext;
+            _IsShooting = IsShootingNext;
             IsShootingNext = false;
         }
 

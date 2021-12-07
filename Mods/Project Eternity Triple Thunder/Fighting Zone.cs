@@ -1277,7 +1277,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].AmmoPerMagazine > 0)
                 {
-                    if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation != null)
+                    if (MainCharacter.PrimaryWeapons.ActiveWeapons[0].IsShooting && MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation != null)
                     {
                         AnimationClass ShootingAnimation = MainCharacter.PrimaryWeapons.ActiveWeapons[0].CurrentAnimation;
                         int RecoilValue = (int)(ShootingAnimation.ActiveKeyFrame / (float)ShootingAnimation.LoopEnd * sprGaugeDelay.Height);

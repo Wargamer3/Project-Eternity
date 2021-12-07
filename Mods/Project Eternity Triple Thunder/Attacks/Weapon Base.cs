@@ -19,6 +19,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public string WeaponName;
         public bool IsExtra;
         public float WeaponAngle;
+        public abstract bool IsShooting { get; }
 
         public ExplosionOptions ExplosionAttributes;
         public float AmmoCurrent;

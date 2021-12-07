@@ -21,6 +21,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         private Combo NextCombo;
         private Combo ReloadCombo;
 
+        public override bool IsShooting => ActiveCombo != null;
+
         /// <summary>
         /// Used by tests
         /// </summary>
