@@ -59,19 +59,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
 
-            Gametype GametypeCampaign = new Gametype("Campaign", "Classic mission based mode, no respawn", null);
-            Gametype GametypeHorde = new Gametype("Horde", "Wave survival mode, respawn at the start of each wave", null);
+            Gametype GametypeCampaign = new Gametype("Campaign", "Classic mission based mode, no respawn.", null);
+            Gametype GametypeHorde = new Gametype("Horde", "Wave survival mode, respawn at the start of each wave.", null);
+            Gametype GametypeBaseDefense = new Gametype("Base Defense", "Wave survival mode, respawn at the start of each wave. Must defend a base by building turrets.", null);
 
-            Gametype GametypeDeathmatch = new Gametype("Deathmatch", "Gain points for kills and assists, respawn on death", null);
-            Gametype GametypeObjective = new Gametype("Objective", "One team must complete objectives while another prevent them", null);
-            Gametype GametypeAssault = new Gametype("Assault", "Team deathmatch with limited respawns", null);
-            Gametype GametypeConquest = new Gametype("Conquest", "Teams must fight to capture respawn bases that give them points. The starting base may or may not be capturable", null);
-            Gametype GametypeOnslaught = new Gametype("Onslaught", "Teams must fight to capture respawn bases that give them access to the enemy base's core. Last team with a core win", null);
-            Gametype GametypeKingOfTheHill = new Gametype("King Of The Hill", "Hold a position without enemies to win points", null);
-            Gametype GametypeBunny = new Gametype("Bunny", "Unit that holds the flag become the bunny and gets points for kills, everyone else try to kill the bunny", null);
-            Gametype GametypeFreezeTag = new Gametype("Freeze Tag", "Killing an enemy freeze him, when every enemies are frozen you win. Teamates can unfreeze allie by staying next to them for 2 turns", null);
-            Gametype GametypeJailbreak = new Gametype("Jailbreak", "Killing an enemy send him to your prison, capture everyone to win. Teamates can be freed by standing on a switch", null);
-            Gametype GametypeMutant = new Gametype("Mutant", "First kill transform you into the mutant, a unit with overpowered stats and attacks. Only the Mutant can kill or be killed", null);
+            Gametype GametypeDeathmatch = new Gametype("Deathmatch", "Gain points for kills and assists, respawn on death.", null);
+            Gametype GametypeObjective = new Gametype("Objective", "One team must complete objectives while another prevent them.", null);
+            Gametype GametypeAssault = new Gametype("Assault", "Team deathmatch with limited respawns.", null);
+            Gametype GametypeConquest = new Gametype("Conquest", "Teams must fight to capture respawn bases that give them points. The starting base may or may not be capturable.", null);
+            Gametype GametypeOnslaught = new Gametype("Onslaught", "Teams must fight to capture respawn bases that give them access to the enemy base's core. Last team with a core win.", null);
+            Gametype GametypeKingOfTheHill = new Gametype("King Of The Hill", "Hold a position without enemies to win points.", null);
+            Gametype GametypeBunny = new Gametype("Bunny", "Unit that holds the flag become the bunny and gets points for kills, everyone else try to kill the bunny.", null);
+            Gametype GametypeFreezeTag = new Gametype("Freeze Tag", "Killing an enemy freeze him, when every enemies are frozen you win. Teamates can unfreeze allie by staying next to them for 2 turns.", null);
+            Gametype GametypeJailbreak = new Gametype("Jailbreak", "Killing an enemy send him to your prison, capture everyone to win. Teamates can be freed by standing on a switch.", null);
+            Gametype GametypeMutant = new Gametype("Mutant", "First kill transform you into the mutant, a unit with overpowered stats and attacks. Only the Mutant can kill or be killed.", null);
             Gametype GametypeKaiju = new Gametype("Kaiju", "One player controls giant monsters while the other players use their units.", null);
 
             SelectedGametype = GametypeCampaign;
