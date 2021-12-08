@@ -143,7 +143,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private List<ActionPanel> GetPropPanelsOnUnitSelected(UnitMapComponent SelectedUnit)
+        private List<ActionPanel> GetPropPanelsOnUnitSelected(Squad SelectedUnit)
         {
             List<ActionPanel> ListPanel = new List<ActionPanel>();
 

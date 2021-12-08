@@ -86,19 +86,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPositionVisible = Map.CursorPosition;
         }
 
-        private List<ActionPanel> GetPropPanelsOnUnitStop(UnitMapComponent StoppedUnit)
+        private List<ActionPanel> GetPropPanelsOnUnitStop(Squad StoppedUnit)
         {
             List<ActionPanel> ListPanel = new List<ActionPanel>();
 
             foreach (InteractiveProp ActiveProp in Map.ListProp)
             {
-                ListPanel.AddRange(ActiveProp.OnUnitStop(StoppedUnit));
+                ListPanel.AddRange(ActiveProp.OnUnitBeforeStop(StoppedUnit, CursorPosition));
             }
             return ListPanel;
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
+            NavigateThroughNextChoices(Map.sndSelection, Map.sndConfirm);
+
             if (ActiveInputManager.InputConfirmPressed())
             {//Make sure the mouse is inside the menu.
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);

@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 int PosX = RandomHelper.Random.Next(Map.MapSize.X);
                 int PosY = RandomHelper.Random.Next(Map.MapSize.Y);
-                HPCrate NewCrate = new HPCrate(new Microsoft.Xna.Framework.Vector3(5, 10, 0), Map);
+                HealthCrate NewCrate = new HealthCrate(new Microsoft.Xna.Framework.Vector3(5, 10, 0), Map);
                 NewCrate.Load(Map.Content);
                 Map.ListProp.Add(NewCrate);
                 IsEnded = true;

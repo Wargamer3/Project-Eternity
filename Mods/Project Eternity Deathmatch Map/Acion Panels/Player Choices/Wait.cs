@@ -5,6 +5,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -30,6 +31,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad).MovementCost);
             ActiveSquad.EndTurn();
             ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
+
+            foreach (InteractiveProp ActiveProp in Map.ListProp)
+            {
+                ActiveProp.OnUnitStop(ActiveSquad);
+            }
 
             Map.ActiveSquadIndex = -1;
             RemoveAllSubActionPanels();
