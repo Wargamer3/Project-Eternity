@@ -71,6 +71,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddChoiceToCurrentPanel(OptionalPanel);
                 }
 
+                foreach (ActionPanel OptionalPanel in GetPropPanelsOnUnitSelected(ActiveSquad))
+                {
+                    AddChoiceToCurrentPanel(OptionalPanel);
+                }
+
                 if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainLand)
                     && ActiveSquad.CurrentMovement != UnitStats.TerrainLand
                     && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == UnitStats.TerrainLand)
@@ -136,6 +141,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddChoiceToCurrentPanel(new ActionPanelMapSwitch(Map, ActiveSquad, ActivePoint));
                 }
             }
+        }
+
+        private List<ActionPanel> GetPropPanelsOnUnitSelected(UnitMapComponent SelectedUnit)
+        {
+            List<ActionPanel> ListPanel = new List<ActionPanel>();
+
+            foreach (InteractiveProp ActiveProp in Map.ListProp)
+            {
+                ListPanel.AddRange(ActiveProp.OnUnitSelected(SelectedUnit));
+            }
+
+            return ListPanel;
         }
 
         public override void DoUpdate(GameTime gameTime)

@@ -136,6 +136,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<AnimationBackground> ListBackground;
         public List<string> ListForegroundsPath;
         public List<AnimationBackground> ListForeground;
+        public List<InteractiveProp> ListProp;
 
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
         public Vector3 CameraPosition;
@@ -221,6 +222,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListBackgroundsPath = new List<string>();
             ListForeground = new List<AnimationBackground>();
             ListForegroundsPath = new List<string>();
+            ListProp = new List<InteractiveProp>();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
             
             VictoryCondition = "";

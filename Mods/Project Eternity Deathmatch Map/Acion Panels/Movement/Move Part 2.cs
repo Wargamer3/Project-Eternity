@@ -3,6 +3,8 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
+using System.Collections.Generic;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -66,6 +68,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad));
                 }
 
+                foreach (ActionPanel OptionalPanel in GetPropPanelsOnUnitStop(ActiveSquad))
+                {
+                    AddChoiceToCurrentPanel(OptionalPanel);
+                }
+
                 new ActionPanelRepair(Map, this, ActiveSquad).OnSelect();
             }
 
@@ -77,6 +84,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             Map.CursorPosition = ActiveSquad.Position;
             Map.CursorPositionVisible = Map.CursorPosition;
+        }
+
+        private List<ActionPanel> GetPropPanelsOnUnitStop(UnitMapComponent StoppedUnit)
+        {
+            List<ActionPanel> ListPanel = new List<ActionPanel>();
+
+            foreach (InteractiveProp ActiveProp in Map.ListProp)
+            {
+                ListPanel.AddRange(ActiveProp.OnUnitStop(StoppedUnit));
+            }
+            return ListPanel;
         }
 
         public override void DoUpdate(GameTime gameTime)

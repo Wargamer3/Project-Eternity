@@ -151,6 +151,7 @@
     <Compile Include="Online\Online Scripts.cs" />
     <Compile Include="Online\Battle Map Online Client.cs" />
     <Compile Include="Online\Battle Map Client Group.cs" />
+    <Compile Include="Props\Interactive Prop.cs" />
     <Compile Include="Team Lists\Roster Unit.cs" />
     <Compile Include="Team Lists\Roster Character.cs" />
     <Compile Include="Team Lists\Roster.cs" />
