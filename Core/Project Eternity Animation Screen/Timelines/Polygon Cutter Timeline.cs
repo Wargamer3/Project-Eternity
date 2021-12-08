@@ -328,7 +328,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                     if (PolygonCutterType == PolygonCutterTypes.Crop)
                     {
-                        ListPolygon[P].ComputeColorAndUVCoordinates(AnimationClass.GraphicsDevice.PresentationParameters.BackBufferWidth, AnimationClass.GraphicsDevice.PresentationParameters.BackBufferHeight);
+                        ListPolygon[P].ComputeColorAndUVCoordinates(ActiveLayer.Owner.ScreenWidth, ActiveLayer.Owner.ScreenHeight);
                     }
                     ListPolygon[P].ComputePerpendicularAxis();
                     ListPolygon[P].UpdateWorldPosition(Position, Angle);

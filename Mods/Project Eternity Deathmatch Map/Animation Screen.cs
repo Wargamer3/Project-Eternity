@@ -355,8 +355,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 ListAnimationLayer[L].renderTarget = new RenderTarget2D(
                     GraphicsDevice,
-                    GraphicsDevice.PresentationParameters.BackBufferWidth,
-                    GraphicsDevice.PresentationParameters.BackBufferHeight);
+                    ScreenWidth,
+                    ScreenHeight);
 
                 #endregion
             }
@@ -544,13 +544,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int L = 0; L < ListAnimationLayer.BasicLayerCount; L++)
             {
-                if (ListAnimationLayer[L].renderTarget.Width != GraphicsDevice.PresentationParameters.BackBufferWidth ||
-                    ListAnimationLayer[L].renderTarget.Height != GraphicsDevice.PresentationParameters.BackBufferHeight)
+                if (ListAnimationLayer[L].renderTarget.Width != ScreenWidth ||
+                    ListAnimationLayer[L].renderTarget.Height != ScreenHeight)
                 {
                     ListAnimationLayer[L].renderTarget = new RenderTarget2D(
                         GraphicsDevice,
-                        GraphicsDevice.PresentationParameters.BackBufferWidth,
-                        GraphicsDevice.PresentationParameters.BackBufferHeight);
+                        ScreenWidth,
+                        ScreenHeight);
                 }
 
                 for (int M = 0; M < ListAnimationLayer[L].ListActiveMarker.Count; M++)
@@ -560,13 +560,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     for (int i = 0; i < ActiveMarkerAnimation.ListAnimationLayer.Count; i++)
                     {
                         if (ActiveMarkerAnimation.ListAnimationLayer[i].renderTarget == null ||
-                            ActiveMarkerAnimation.ListAnimationLayer[i].renderTarget.Width != GraphicsDevice.PresentationParameters.BackBufferWidth ||
-                            ActiveMarkerAnimation.ListAnimationLayer[i].renderTarget.Height != GraphicsDevice.PresentationParameters.BackBufferHeight)
+                            ActiveMarkerAnimation.ListAnimationLayer[i].renderTarget.Width != ScreenWidth ||
+                            ActiveMarkerAnimation.ListAnimationLayer[i].renderTarget.Height != ScreenHeight)
                         {
                             ActiveMarkerAnimation.ListAnimationLayer[i].renderTarget = new RenderTarget2D(
                                 GraphicsDevice,
-                                GraphicsDevice.PresentationParameters.BackBufferWidth,
-                                GraphicsDevice.PresentationParameters.BackBufferHeight);
+                                ScreenWidth,
+                                ScreenHeight);
                         }
                     }
                 }
@@ -593,10 +593,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            g.End();
             if (ActiveAnimationBackground != null)
+            {
+                g.End();
                 ActiveAnimationBackground.Draw(g, Constants.Width, Constants.Height);
-            g.Begin();
+                g.Begin();
+            }
 
             for (int A = 0; A < ListAnimationLayer.BasicLayerCount; A++)
             {
@@ -614,20 +616,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (IsLeftAttacking)
                     {
-                        g.Draw(ListAnimationLayer[A].renderTarget, new Vector2(Constants.Width / 2, Constants.Height / 2), null, Color.White, 0, new Vector2(Constants.Width / 2, Constants.Height / 2), 1, SpriteEffects.FlipHorizontally, 0);
+                        g.Draw(ListAnimationLayer[A].renderTarget, new Rectangle(Constants.Width / 2, Constants.Height / 2, Constants.Width, Constants.Height), null, Color.White, 0, new Vector2(ScreenWidth / 2, ScreenHeight / 2), SpriteEffects.FlipHorizontally, 0);
                     }
                     else
                     {
-                        g.Draw(ListAnimationLayer[A].renderTarget, Vector2.Zero, Color.White);
+                        g.Draw(ListAnimationLayer[A].renderTarget, new Rectangle(0, 0, Constants.Width, Constants.Height), null, Color.White);
                     }
                 }
 
                 if (A == 0 && ActiveAnimationForeground != null)
                 {
-                    g.End();
                     if (ActiveAnimationForeground != null)
+                    {
+                        g.End();
                         ActiveAnimationForeground.Draw(g, Constants.Width, Constants.Height);
-                    g.Begin();
+                        g.Begin();
+                    }
                 }
             }
         }
@@ -637,7 +641,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.End();
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-            DrawBox(g, new Vector2(0, 0), Constants.Width / 2, 84, Color.Red);
+            DrawBox(g, new Vector2(0, 0), ScreenWidth / 2, 84, Color.Red);
             int PosX = 0;
             DrawBar(g, sprBarExtraLargeBackground, sprBarExtraLargeHP, new Vector2(PosX + 75, 30), UnitStats.LeftUnitHP, UnitStats.LeftUnitHPMax);
             DrawBar(g, sprBarExtraLargeBackground, sprBarExtraLargeEN, new Vector2(PosX + 75, 50), UnitStats.LeftUnitEN, UnitStats.LeftUnitENMax);
@@ -647,8 +651,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawStringRightAligned(fntFinlanderFont, UnitStats.LeftUnitEN + "/" + UnitStats.LeftUnitENMax, new Vector2(PosX + 242, 37), Color.White);
             g.Draw(LeftSquad.CurrentLeader.SpriteMap, new Rectangle(PosX + 7, 30, 32, 32), new Rectangle(0, 0, LeftSquad.CurrentLeader.SpriteMap.Width, LeftSquad.CurrentLeader.SpriteMap.Height), Color.White);
 
-            PosX = Constants.Width / 2 + 68;
-            DrawBox(g, new Vector2(Constants.Width / 2, 0), Constants.Width / 2, 84, Color.Blue);
+            PosX = ScreenWidth / 2 + 68;
+            DrawBox(g, new Vector2(ScreenWidth / 2, 0), ScreenWidth / 2, 84, Color.Blue);
             DrawBar(g, sprBarExtraLargeBackground, sprBarExtraLargeHP, new Vector2(PosX + 75, 30), UnitStats.RightUnitHP, UnitStats.RightUnitHPMax);
             DrawBar(g, sprBarExtraLargeBackground, sprBarExtraLargeEN, new Vector2(PosX + 75, 50), UnitStats.RightUnitEN, UnitStats.RightUnitENMax);
             g.DrawString(fntFinlanderFont, "HP", new Vector2(PosX + 40, 20), Color.Yellow);
@@ -656,9 +660,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawString(fntFinlanderFont, "EN", new Vector2(PosX + 40, 40), Color.Yellow);
             g.DrawStringRightAligned(fntFinlanderFont, UnitStats.RightUnitEN + "/" + UnitStats.RightUnitENMax, new Vector2(PosX + 242, 37), Color.White);
             g.Draw(RightSquad.CurrentLeader.SpriteMap, new Rectangle(PosX + 7, 30, 32, 32), new Rectangle(0, 0, RightSquad.CurrentLeader.SpriteMap.Width, RightSquad.CurrentLeader.SpriteMap.Height), Color.White);
-            g.Draw(sprInfinity, new Vector2((Constants.Width - sprInfinity.Width) / 2, 15), Color.White);
+            g.Draw(sprInfinity, new Vector2((ScreenWidth - sprInfinity.Width) / 2, 15), Color.White);
 
-            DrawBox(g, new Vector2(0, Constants.Height - VNBoxHeight), Constants.Width, VNBoxHeight, Color.White);
+            DrawBox(g, new Vector2(0, ScreenHeight - VNBoxHeight), ScreenWidth, VNBoxHeight, Color.White);
 
             if (ActiveCharacterSprite != null)
             {
@@ -669,7 +673,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         int OriginX = (int)ActiveCharacterSprite.ActiveAnimation.AnimationOrigin.Position.X;
 
                         g.Draw(ActiveCharacterSprite.ActiveAnimation.ListAnimationLayer[L].renderTarget,
-                            new Vector2(0, Constants.Height - VNBoxHeight), null, Color.White, 0,
+                            new Vector2(0, ScreenHeight - VNBoxHeight), null, Color.White, 0,
                             new Vector2(OriginX, ActiveCharacterSprite.ActiveAnimation.AnimationOrigin.Position.Y),
                             new Vector2(1, 1), SpriteEffects.None, 0);
                     }
@@ -677,22 +681,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else
                 {
                     g.Draw(ActiveCharacterSprite.StaticSprite,
-                        new Rectangle(20, Constants.Height - VNBoxHeight + 15, ActiveCharacterSprite.StaticSprite.Width, ActiveCharacterSprite.StaticSprite.Height),
+                        new Rectangle(20, ScreenHeight - VNBoxHeight + 15, ActiveCharacterSprite.StaticSprite.Width, ActiveCharacterSprite.StaticSprite.Height),
                         new Rectangle(0, 0, ActiveCharacterSprite.StaticSprite.Width, ActiveCharacterSprite.StaticSprite.Height), Color.White, 0, Vector2.Zero, SpriteEffects.FlipHorizontally, 0);
                 }
             }
             if (ActiveCharacterName != null)
             {
-                g.DrawString(fntFinlanderFont, ActiveCharacterName, new Vector2(105, Constants.Height - VNBoxHeight + 8), Color.White);
+                g.DrawString(fntFinlanderFont, ActiveCharacterName, new Vector2(105, ScreenHeight - VNBoxHeight + 8), Color.White);
 
                 if (ActiveQuoteSet != null)
                 {
-                    TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, Constants.Height - VNBoxHeight + 38, 500);
+                    TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, ScreenHeight - VNBoxHeight + 38, 500);
                 }
             }
             else if (ActiveQuoteSet != null)
             {
-                TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, Constants.Height - VNBoxHeight + 10, 500);
+                TextHelper.DrawTextMultiline(g, fntFinlanderFont, ActiveQuoteSet, TextHelper.TextAligns.Left, 360, ScreenHeight - VNBoxHeight + 10, 500);
             }
 
             g.End();

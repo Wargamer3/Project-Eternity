@@ -145,7 +145,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             //Draw the action panel.
-            int X = 490;
+            int X = Constants.Width - 150;
             int Y = 10;
             GameScreen.DrawBox(g, new Vector2(X, Y), 150, ListNextChoice.Count * 22, Color.White);
             //g.Draw(sprMenuText, new Vector2(X, Y), Color.White);

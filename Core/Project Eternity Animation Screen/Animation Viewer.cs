@@ -1235,8 +1235,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             for (int L = 0; L < ActiveAnimation.ListAnimationLayer.Count; L++)
             {
-                if (ActiveAnimation.ListAnimationLayer[L].renderTarget == null || ActiveAnimation.ListAnimationLayer[L].renderTarget.Width != GraphicsDevice.PresentationParameters.BackBufferWidth ||
-                    ActiveAnimation.ListAnimationLayer[L].renderTarget.Height != GraphicsDevice.PresentationParameters.BackBufferHeight)
+                if (ActiveAnimation.ListAnimationLayer[L].renderTarget == null
+                    || ActiveAnimation.ListAnimationLayer[L].renderTarget.Width != GraphicsDevice.PresentationParameters.BackBufferWidth
+                    ||  ActiveAnimation.ListAnimationLayer[L].renderTarget.Height != GraphicsDevice.PresentationParameters.BackBufferHeight)
                 {
                     ActiveAnimation.ListAnimationLayer[L].renderTarget = new RenderTarget2D(
                         g.GraphicsDevice,

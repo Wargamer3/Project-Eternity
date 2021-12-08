@@ -274,15 +274,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public static void DrawPhaseStartOverlay(CustomSpriteBatch g, DeathmatchMap Map)
         {
-            g.Draw(Map.sprPhaseBackground, Vector2.Zero, Color.White);
+            g.Draw(Map.sprPhaseBackground, new Rectangle(0, 0, Constants.Width, Constants.Height), Color.White);
+
+            float PosX = (Constants.Width - Map.sprPhaseBackground.Width) / 2;
 
             if (Map.ListPlayer[Map.ActivePlayerIndex].IsPlayerControlled)
-                g.Draw(Map.sprPhasePlayer, Vector2.Zero, Color.White);
+                g.Draw(Map.sprPhasePlayer, new Vector2(PosX, 0), Color.White);
             else
-                g.Draw(Map.sprPhaseEnemy, Vector2.Zero, Color.White);
+                g.Draw(Map.sprPhaseEnemy, new Vector2(PosX, 0), Color.White);
 
-            g.Draw(Map.sprPhaseTurn, Vector2.Zero, Color.White);
-            g.DrawStringMiddleAligned(Map.fntPhaseNumber, Map.GameTurn.ToString(), new Vector2(308, 292), Color.White);
+            g.Draw(Map.sprPhaseTurn, new Vector2(PosX, 0), Color.White);
+            g.DrawStringMiddleAligned(Map.fntPhaseNumber, Map.GameTurn.ToString(), new Vector2(PosX + 308, 292), Color.White);
         }
     }
 }

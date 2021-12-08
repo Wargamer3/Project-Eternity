@@ -303,7 +303,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override void Draw(CustomSpriteBatch g, bool IsInEditMode)
         {
-            if (g.GraphicsDevice.PresentationParameters.BackBufferWidth != RenderWidth || g.GraphicsDevice.PresentationParameters.BackBufferHeight != RenderHeight)
+            if (g.GraphicsDevice.PresentationParameters.BackBufferWidth != RenderWidth
+                || g.GraphicsDevice.PresentationParameters.BackBufferHeight != RenderHeight)
             {
                 RenderWidth = g.GraphicsDevice.PresentationParameters.BackBufferWidth;
                 RenderHeight = g.GraphicsDevice.PresentationParameters.BackBufferHeight;

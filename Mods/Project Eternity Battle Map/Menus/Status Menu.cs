@@ -477,7 +477,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            g.Draw(sprBackground, new Vector2(0, 0), Color.White);
+            g.Draw(sprBackground, new Rectangle(0, 0, Constants.Width, Constants.Height), Color.White);
             DrawTop(g);
 
             switch (StatusPannel)
@@ -509,8 +509,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(ActiveUnit.SpriteUnit, new Vector2(240, 280 - ActiveUnit.SpriteUnit.Height), Color.White);
 
             int BottomWidth = 504 - 100;
-            int BottomPositionY = 288;
+            int BottomPositionY = Constants.Height - 192;
             int BottomHeight = 182;
+
+            int RightWidth = (Constants.Width - 10) / 5;
+            int RightPosY = 50;
+            int RightPosX = Constants.Width - 131;
+            int RightHeight = Constants.Height - RightPosY - 10;
+
+            int MiddlePosX = 5 + BottomWidth;
+            int MiddleWidth = RightPosX - MiddlePosX;
+
             DrawBox(g, new Vector2(5, BottomPositionY), BottomWidth, BottomHeight, Color.White);
 
             int DistanceBetweenText = 16;
@@ -544,29 +553,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
             {
-                g.Draw(sprSky, new Vector2(CurrentX, 420), Color.White);
+                g.Draw(sprSky, new Vector2(CurrentX, Constants.Height - 60), Color.White);
                 CurrentX += 50;
             }
             if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
             {
-                g.Draw(sprLand, new Vector2(CurrentX, 420), Color.White);
+                g.Draw(sprLand, new Vector2(CurrentX, Constants.Height - 60), Color.White);
                 CurrentX += 50;
             }
             if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
             {
-                g.Draw(sprSea, new Vector2(CurrentX, 420), Color.White);
+                g.Draw(sprSea, new Vector2(CurrentX, Constants.Height - 60), Color.White);
                 CurrentX += 50;
             }
             if (ActiveUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
             {
-                g.Draw(sprSpace, new Vector2(CurrentX, 420), Color.White);
+                g.Draw(sprSpace, new Vector2(CurrentX, Constants.Height - 60), Color.White);
                 CurrentX += 50;
             }
 
-            int MiddleWidth = 100;
-            int MiddlePosX = 5 + BottomWidth;
 
-            int CurrentY = 306;
+            int CurrentY = Constants.Height - 174;
 
             DrawBox(g, new Vector2(MiddlePosX, BottomPositionY), MiddleWidth, BottomHeight, Color.White);
 
@@ -597,42 +604,37 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else
                 g.DrawString(fntFinlanderFont, ActiveUnit.TerrainLetterAttribute(UnitStats.TerrainSpace) + " + " + ActiveUnit.Pilot.TerrainGrade.TerrainGradeSpace, new Vector2(MiddlePosX + 34, CurrentY), Color.White);
 
-            int RightWidth = (Constants.Width - 10) / 5;
-            int RightPosY = 50;
-            int RightPos = 509;
+            DrawBox(g, new Vector2(RightPosX, RightPosY), RightWidth, RightHeight, Color.White);
 
-            int RightHeight = Constants.Height - RightPosY - 10;
-            DrawBox(g, new Vector2(RightPos, RightPosY), RightWidth, RightHeight, Color.White);
-
-            g.Draw(sprPixel, new Rectangle(RightPos + 20, RightPosY + 13, 84, 84), Color.Gray);
-            g.Draw(sprPixel, new Rectangle(RightPos + 22, RightPosY + 15, 80, 80), Color.White);
-            g.Draw(ActiveUnit.Pilot.sprPortrait, new Vector2(RightPos + 22, RightPosY + 15), Color.White);
-            TextHelper.DrawTextMultiline(g, fntFinlanderFont, TextHelper.FitToWidth(fntFinlanderFont, ActiveUnit.PilotName, 100), TextHelper.TextAligns.Center, RightPos + 62, RightPosY + 100, 100);
+            g.Draw(sprPixel, new Rectangle(RightPosX + 20, RightPosY + 13, 84, 84), Color.Gray);
+            g.Draw(sprPixel, new Rectangle(RightPosX + 22, RightPosY + 15, 80, 80), Color.White);
+            g.Draw(ActiveUnit.Pilot.sprPortrait, new Vector2(RightPosX + 22, RightPosY + 15), Color.White);
+            TextHelper.DrawTextMultiline(g, fntFinlanderFont, TextHelper.FitToWidth(fntFinlanderFont, ActiveUnit.PilotName, 100), TextHelper.TextAligns.Center, RightPosX + 62, RightPosY + 100, 100);
 
             CurrentY = 266;
 
-            g.DrawString(fntFinlanderFont, "Lvl", new Vector2(525, CurrentY), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotLevel.ToString(), new Vector2(620, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, "Lvl", new Vector2(RightPosX + 16, CurrentY), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotLevel.ToString(), new Vector2(RightPosX + 111, CurrentY), Color.White);
 
             CurrentY += DistanceBetweenText + fntFinlanderFont.LineSpacing;
 
-            g.DrawString(fntFinlanderFont, "Will", new Vector2(525, CurrentY), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotMorale.ToString(), new Vector2(620, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, "Will", new Vector2(RightPosX + 16, CurrentY), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotMorale.ToString(), new Vector2(RightPosX + 111, CurrentY), Color.White);
 
             CurrentY += DistanceBetweenText + fntFinlanderFont.LineSpacing;
 
-            g.DrawString(fntFinlanderFont, "SP", new Vector2(525, CurrentY), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotSP.ToString(), new Vector2(620, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, "SP", new Vector2(RightPosX + 16, CurrentY), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotSP.ToString(), new Vector2(RightPosX + 111, CurrentY), Color.White);
 
             CurrentY += DistanceBetweenText + fntFinlanderFont.LineSpacing;
 
-            g.DrawString(fntFinlanderFont, "PP", new Vector2(525, CurrentY), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotPilotPoints.ToString(), new Vector2(620, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, "PP", new Vector2(RightPosX + 16, CurrentY), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotPilotPoints.ToString(), new Vector2(RightPosX + 111, CurrentY), Color.White);
 
             CurrentY += DistanceBetweenText + fntFinlanderFont.LineSpacing;
 
-            g.DrawString(fntFinlanderFont, "Next", new Vector2(525, CurrentY), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotNextEXP.ToString(), new Vector2(620, CurrentY), Color.White);
+            g.DrawString(fntFinlanderFont, "Next", new Vector2(RightPosX + 16, CurrentY), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.PilotNextEXP.ToString(), new Vector2(RightPosX + 111, CurrentY), Color.White);
         }
 
         public void DrawPilot(CustomSpriteBatch g)

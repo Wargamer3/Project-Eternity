@@ -1003,7 +1003,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                         int OriginX = (int)ActiveMarkerOrigin.Position.X;
                         if ((ActiveEffect & SpriteEffects.FlipHorizontally) == SpriteEffects.FlipHorizontally)
-                            OriginX = Constants.Width - (int)ActiveMarkerOrigin.Position.X;
+                            OriginX = ScreenWidth - (int)ActiveMarkerOrigin.Position.X;
 
                         g.Draw(ActiveMarkerAnimation.ListAnimationLayer[ActiveMarkerAnimation.ListAnimationLayer.BasicLayerCount - L - 1].renderTarget,
                             new Vector2(ActiveLayer.ListActiveMarker[M].Position.X, ActiveLayer.ListActiveMarker[M].Position.Y), null, Color.White, 0,

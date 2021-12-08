@@ -198,6 +198,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ScaleFactor.Y < 0)
                 ActiveEffect |= SpriteEffects.FlipVertically;
 
+            float OriginX = (int)Origin.X;
             if (Owner != null && Owner.IsLeftAttacking)
             {
                 if (ScaleFactor.X < 0)
@@ -207,13 +208,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else
                 {
                     ActiveEffect = SpriteEffects.FlipHorizontally;
+                    if ((ActiveEffect & SpriteEffects.FlipHorizontally) == SpriteEffects.FlipHorizontally)
+                        OriginX = Constants.Width - 640;
                 }
             }
 
             g.Draw(renderTarget,
                 new Vector2(Position.X, Position.Y),
                 null, Color.FromNonPremultiplied(255, 255, 255, Alpha),
-                Angle, new Vector2(Origin.X, Origin.Y),
+                Angle, new Vector2(OriginX, Origin.Y),
                 new Vector2(Math.Abs(ScaleFactor.X), Math.Abs(ScaleFactor.Y)), ActiveEffect, DrawingDepth);
         }
 

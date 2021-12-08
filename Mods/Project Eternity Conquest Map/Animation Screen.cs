@@ -83,8 +83,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                 ListAnimationLayer[L].renderTarget = new RenderTarget2D(
                     GraphicsDevice,
-                    GraphicsDevice.PresentationParameters.BackBufferWidth,
-                    GraphicsDevice.PresentationParameters.BackBufferHeight);
+                    ScreenWidth,
+                    ScreenHeight);
 
                 #endregion
             }
