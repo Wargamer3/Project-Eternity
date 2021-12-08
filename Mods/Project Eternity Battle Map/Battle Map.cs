@@ -231,7 +231,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DicMapVariables = new Dictionary<string, double>();
             MovementAnimation = new MovementAnimations();
-            AttackPicker = new AttacksMenu(ActiveParser);
 
             ListMapScript = new List<MapScript>();
             ListMapEvent = new List<MapEvent>();
@@ -321,6 +320,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!IsServer)
             {
+                AttackPicker = new AttacksMenu(ActiveParser);
+
                 sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
                 sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
                 sndSelection = new FMODSound(FMODSystem, "Content/SFX/Selection.mp3");
