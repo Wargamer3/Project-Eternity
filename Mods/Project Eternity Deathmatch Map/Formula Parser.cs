@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -110,6 +109,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 Player ActivePlayer = Map.ListPlayer[PlayerIndex];
                                 switch (Expression[1])
                                 {
+                                    case "exist":
+                                    case "exists":
+                                        if (ActivePlayer.Team >= 0)
+                                        {
+                                            return "1";
+                                        }
+                                        else
+                                        {
+                                            return "0";
+                                        }
                                     case "count":
                                     case "squadcount":
                                     case "squadcountalive":

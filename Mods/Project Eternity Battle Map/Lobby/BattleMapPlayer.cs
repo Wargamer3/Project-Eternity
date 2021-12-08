@@ -11,6 +11,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class BattleMapPlayer
     {
+        public const string PlayerTypeNA = "N/A";
         public const string PlayerTypeOffline = "Offline";
         public const string PlayerTypeOnline = "Online";
         public const string PlayerTypeHost = "Host";
@@ -101,7 +102,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleMapPlayer(BattleMapPlayer Clone)
         {
             if (Clone == null)
+            {
+                Team = -1;
+                OnlinePlayerType = PlayerTypeNA;
                 return;
+            }
 
             ConnectionID = Clone.ConnectionID;
             Name = Clone.Name;
