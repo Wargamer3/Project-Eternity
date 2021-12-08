@@ -30,12 +30,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             BW.Write(VariableName);
             BW.Write(Value);
+            BW.Write((byte)SignOperator);
         }
 
         public override void Load(BinaryReader BR)
         {
             VariableName = BR.ReadString();
             Value = BR.ReadDouble();
+            SignOperator = (Operators.SignOperators)BR.ReadByte();
         }
 
         public override void Update(int Index)
