@@ -204,6 +204,9 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                     ActiveZone.ListZoneTile.Add(new Vector3(PointX, PointY, PointZ));
                 }
             }
+
+            FS.Close();
+            BR.Close();
         }
 
         protected void LoadMapGrid(BinaryReader BR)
