@@ -17,6 +17,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public readonly int SquadIndex;
 
         private int UnitDisplayCounter;
+        private const int TimeToDisplay = 20;
 
         public BattlePreviewer(DeathmatchMap Map, int PlayerIndex, int SquadIndex, Attack ActiveAttack)
         {
@@ -35,11 +36,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void UpdateUnitDisplay()
         {
-            if (UnitDisplayCounter < 70)
+            if (UnitDisplayCounter < TimeToDisplay)
             {
                 ++UnitDisplayCounter;
 
-                if (UnitDisplayCounter == 70)
+                if (UnitDisplayCounter == TimeToDisplay)
                 {
                     UnitDisplayCounter = 0;
                     int SquadIndex = -1;
