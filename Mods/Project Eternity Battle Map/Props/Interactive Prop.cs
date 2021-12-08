@@ -43,9 +43,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private Texture2D sprCrate;
 
-        public HPCrate(Vector3 Position)
+        private BattleMap Map;
+
+        public HPCrate(Vector3 Position, BattleMap Map)
             : base("HP Crate", Position, new bool[,] { { true } }, false)
         {
+            this.Map = Map;
         }
 
         public override void Load(ContentManager Content)
@@ -81,7 +84,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            g.Draw(sprCrate, new Vector2(Position.X, Position.Y), Color.White);
+            float PosX = (Position.X - Map.CameraPosition.X) * Map.TileSize.X;
+            float PosY = (Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+
+            g.Draw(sprCrate, new Vector2(PosX, PosY), Color.White);
         }
     }
 }
