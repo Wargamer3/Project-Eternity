@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 {
@@ -33,7 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            BattleMap NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(2);
+            BattleMap NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.RoomType);
 
             NewMap.InitOnlineClient(Owner);
 

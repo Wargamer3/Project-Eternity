@@ -206,7 +206,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                WorldMap NewMap = new WorldMap(MapLogicName, 0, null);
+                WorldMap NewMap = new WorldMap(MapLogicName, string.Empty, null);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap));
                 BattleMapViewer.ActiveMap.ArrayMultiplayerColor = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
@@ -231,7 +231,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
         {
             string Name = MapPath.Substring(0, MapPath.Length - 4).Substring(MapPath.LastIndexOf("Maps") + 5);
             BattleMapViewer.Preload();
-            WorldMap ActiveWorldMap = new WorldMap(Name, 0, null);
+            WorldMap ActiveWorldMap = new WorldMap(Name, string.Empty, null);
             Helper = new WorldMapHelper(ActiveWorldMap);
 
             InitMap(ActiveWorldMap);

@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(int GameMode)
+        public override BattleMap GetNewMap(string GameMode)
         {
             return new WorldMap(BattleMapPath, GameMode, DicSpawnSquadByPlayer);
         }

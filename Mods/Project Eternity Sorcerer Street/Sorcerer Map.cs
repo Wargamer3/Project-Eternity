@@ -69,13 +69,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ListPlayer = new List<Player>();
         }
 
-        public SorcererStreetMap(int GameMode)
+        public SorcererStreetMap(string GameMode)
             : this()
         {
-            this.GameMode = GameMode;
         }
 
-        public SorcererStreetMap(string BattleMapPath, int GameMode)
+        public SorcererStreetMap(string BattleMapPath, string GameMode)
             : this(GameMode)
         {
             this.BattleMapPath = BattleMapPath;
@@ -250,13 +249,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 MoveSquad();
             }
-            else if (GameMode > 0)
-            {
-                if (!ListPlayer[ActivePlayerIndex].IsOnline)
-                {
-
-                }
-            }
             else if (ListPlayer.Count > 0)
             {
                 if (!ListActionMenuChoice.HasMainPanel)
@@ -341,7 +333,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(int GameMode)
+        public override BattleMap GetNewMap(string GameMode)
         {
             return new SorcererStreetMap(GameMode);
         }

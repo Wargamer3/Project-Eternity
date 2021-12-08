@@ -118,6 +118,10 @@
     <Compile Include="Battle Formulas.cs" />
     <Compile Include="Battle Previewer.cs" />
     <Compile Include="Deathmatch Map Helper.cs" />
+    <Compile Include="Rules\Classic MP Game Rule.cs" />
+    <Compile Include="Rules\Campaign Game Rule.cs" />
+    <Compile Include="Rules\Lobby MP Game Rule.cs" />
+    <Compile Include="Rules\Horde Game Rule.cs" />
     <Compile Include="Rules\Default Game Rule.cs" />
     <Compile Include="Lobby Multiplayer\Deathmatch Online Client.cs" />
     <Compile Include="Menus\Victory Menu.cs" />

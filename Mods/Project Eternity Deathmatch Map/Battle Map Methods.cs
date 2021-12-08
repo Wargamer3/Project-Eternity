@@ -19,115 +19,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Init()
         {
             base.Init();
-
-            if (GameMode == 0)
-            {
-                ListPlayer.Clear();
-
-                Player NewPlayer = new Player("Player", "Human", true, false, 0, Color.Blue);
-                ListPlayer.Add(NewPlayer);
-
-                if (DicSpawnSquadByPlayer.Count > 0 && DicSpawnSquadByPlayer["Player"].Count > 0)
-                {
-                    int SpawnSquadIndex = 0;
-                    for (int S = 0; S < ListSingleplayerSpawns.Count; S++)
-                    {
-                        if (ListSingleplayerSpawns[S].Tag == "P")
-                        {
-                            for (int U = 0; U < DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].UnitsInSquad; ++U)
-                            {
-                                DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].At(U).ReinitializeMembers(DicUnitType[DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].At(U).UnitTypeName]);
-                            }
-                            DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                            SpawnSquad(0, DicSpawnSquadByPlayer["Player"][SpawnSquadIndex], 0, ListSingleplayerSpawns[S].Position);
-                            ++SpawnSquadIndex;
-                        }
-                    }
-                }
-            }
-            else if (GameMode == 1)
-            {
-                for (int P = 0; P < ListPlayer.Count; P++)
-                {
-                    ListPlayer[P].Color = ArrayMultiplayerColor[P];
-
-                    for (int S = 0; S < ListPlayer[P].ListSpawnPoint.Count; S++)
-                    {
-                        if (string.IsNullOrEmpty(ListPlayer[P].ListSpawnPoint[S].LeaderTypeName))
-                            continue;
-
-                        Unit NewLeaderUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].LeaderTypeName, ListPlayer[P].ListSpawnPoint[S].LeaderName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-                        Character NewLeaderPilot = new Character(ListPlayer[P].ListSpawnPoint[S].LeaderPilot, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                        NewLeaderPilot.Level = 1;
-                        NewLeaderUnit.ArrayCharacterActive = new Character[1] { NewLeaderPilot };
-
-                        Unit NewWingmanAUnit = null;
-                        Unit NewWingmanBUnit = null;
-
-                        if (!string.IsNullOrEmpty(ListPlayer[P].ListSpawnPoint[S].WingmanAName))
-                        {
-                            NewWingmanAUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].WingmanATypeName, ListPlayer[P].ListSpawnPoint[S].WingmanAName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-                            Character NewWingmanAPilot = new Character(ListPlayer[P].ListSpawnPoint[S].WingmanAPilot, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                            NewWingmanAPilot.Level = 1;
-                            NewWingmanAUnit.ArrayCharacterActive = new Character[1] { NewWingmanAPilot };
-                        }
-
-                        if (!string.IsNullOrEmpty(ListPlayer[P].ListSpawnPoint[S].WingmanBName))
-                        {
-                            NewWingmanBUnit = Unit.FromType(ListPlayer[P].ListSpawnPoint[S].WingmanBTypeName, ListPlayer[P].ListSpawnPoint[S].WingmanBName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-                            Character NewWingmanBPilot = new Character(ListPlayer[P].ListSpawnPoint[S].WingmanBPilot, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                            NewWingmanBPilot.Level = 1;
-                            NewWingmanBUnit.ArrayCharacterActive = new Character[1] { NewWingmanBPilot };
-                        }
-
-                        Squad NewSquad = new Squad("", NewLeaderUnit, NewWingmanAUnit, NewWingmanBUnit);
-
-                        if (!ListPlayer[P].IsPlayerControlled)
-                        {
-                            NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(this, NewSquad));
-                            NewSquad.SquadAI.Load("SRWE Enemy AI");
-                        }
-                        else
-                        {
-                            NewSquad.IsPlayerControlled = true;
-                        }
-
-                        SpawnSquad(P, NewSquad, 0, ListPlayer[P].ListSpawnPoint[S].Position);
-                    }
-                }
-            }
-            else if (GameMode == 2 && IsOfflineOrServer)
-            {
-                int PlayerIndex = 1;
-                foreach (Player ActivePlayer in ListPlayer)
-                {
-                    if (ActivePlayer.ListSquadToSpawn == null)
-                        continue;
-
-                    string PlayerTag = PlayerIndex.ToString();
-                    int SpawnSquadIndex = 0;
-                    for (int S = 0; S < ListMultiplayerSpawns.Count; S++)
-                    {
-                        if (ListMultiplayerSpawns[S].Tag == PlayerTag)
-                        {
-                            for (int U = 0; U < ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].UnitsInSquad; ++U)
-                            {
-                                ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].At(U).ReinitializeMembers(DicUnitType[ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].At(U).UnitTypeName]);
-                            }
-                            ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                            SpawnSquad(PlayerIndex - 1, ActivePlayer.ListSquadToSpawn[SpawnSquadIndex], 0, ListMultiplayerSpawns[S].Position);
-                            ++SpawnSquadIndex;
-                            if (SpawnSquadIndex >= ActivePlayer.ListSquadToSpawn.Count)
-                            {
-                                break;
-                            }
-                        }
-                    }
-
-                    ++PlayerIndex;
-                }
-            }
-
+            GameRule.Init();
 
             if (IsClient)
             {
@@ -218,7 +110,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.Write(CameraPosition.Y);
 
             BW.Write(ActivePlayerIndex);
-            BW.Write(GameMode);
             BW.Write(GameTurn);
             BW.Write(VictoryCondition);
             BW.Write(LossCondition);
@@ -348,7 +239,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             CameraPosition.Y = BR.ReadSingle();
 
             ActivePlayerIndex = BR.ReadInt32();
-            GameMode = BR.ReadInt32();
             GameTurn = BR.ReadInt32();
 
             VictoryCondition = BR.ReadString();
@@ -570,7 +460,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new MultiplayerScreen();
         }
 
-        public override BattleMap GetNewMap(int GameMode)
+        public override BattleMap GetNewMap(string GameMode)
         {
             return new DeathmatchMap(GameMode);
         }

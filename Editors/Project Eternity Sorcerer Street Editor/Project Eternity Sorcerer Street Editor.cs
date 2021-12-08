@@ -185,7 +185,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                SorcererStreetMap NewMap = new SorcererStreetMap(FilePath, 0);
+                SorcererStreetMap NewMap = new SorcererStreetMap(FilePath, string.Empty);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap));
                 BattleMapViewer.ActiveMap.ArrayMultiplayerColor = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
@@ -211,7 +211,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(29);
 
             BattleMapViewer.Preload();
-            SorcererStreetMap ActiveMap = new SorcererStreetMap(MapLogicName, 0);
+            SorcererStreetMap ActiveMap = new SorcererStreetMap(MapLogicName, string.Empty);
             Helper = new SorcererStreetMapHelper(ActiveMap);
             InitMap(ActiveMap);
 

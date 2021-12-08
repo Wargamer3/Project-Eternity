@@ -183,6 +183,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public static void FinishAIPlayerTurn(DeathmatchMap Map)
+        {
+            List<BattleMap> ListActiveSubMaps = ActionPanelMapSwitch.GetActiveSubMaps(Map);
+            if (ListActiveSubMaps.Count <= 1)
+            {
+                Map.ListActionMenuChoice.RemoveAllActionPanels();
+                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPhaseChange(Map));
+            }
+            else//Look for sub maps to update before ending turn.
+            {
+                foreach (BattleMap ActiveMap in ListActiveSubMaps)
+                {
+                    if (ActiveMap != Map && ActiveMap.ActivePlayerIndex == Map.ActivePlayerIndex)
+                    {
+                        ActionPanelPhaseChange.EndPlayerPhase(Map);
+                        Map.ListGameScreen.Remove(Map);
+                        Map.ListGameScreen.Insert(0, ActiveMap);
+                        return;
+                    }
+                }
+
+                Map.ListActionMenuChoice.RemoveAllActionPanels();
+                //No sub map to be updated, should never get up to this point.
+                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPhaseChange(Map));
+            }
+        }
+
         public override void DoUpdate(GameTime gameTime)
         {
             if (PhaseTime >= 0)

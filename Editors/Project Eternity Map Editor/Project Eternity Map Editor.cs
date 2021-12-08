@@ -105,7 +105,7 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                DeathmatchMap NewMap = new DeathmatchMap(FilePath, 0, null);
+                DeathmatchMap NewMap = new DeathmatchMap(FilePath, string.Empty, null);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap));
                 BattleMapViewer.ActiveMap.ArrayMultiplayerColor = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
@@ -139,7 +139,7 @@ namespace ProjectEternity.Editors.MapEditor
             string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(24);
 
             BattleMapViewer.Preload();
-            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, 0, new Dictionary<string, List<Core.Units.Squad>>());
+            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty, new Dictionary<string, List<Core.Units.Squad>>());
             Helper = new DeathmatchMapHelper(NewMap);
             InitMap(NewMap);
 

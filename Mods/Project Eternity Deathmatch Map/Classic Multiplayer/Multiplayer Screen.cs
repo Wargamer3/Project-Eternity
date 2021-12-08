@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Load()
         {
-            NewMap = new DeathmatchMap(null, 1, null);
+            NewMap = new DeathmatchMap(null, "Classic", null);
             DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "\\Maps\\Deathmatch");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
@@ -246,7 +246,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Random Random = new Random();
             MapAttributes ActiveMapAttributes = ListMap.Where(x => x.Name == "Autoplay").First();
-            DeathmatchMap Autoplay = new DeathmatchMap(ActiveMapAttributes.Name, 1, null);
+            DeathmatchMap Autoplay = new DeathmatchMap(ActiveMapAttributes.Name, "Classic", null);
             Autoplay.ListGameScreen = ListGameScreen;
             while (Autoplay.ListPlayer.Count < ActiveMapAttributes.MaxNumberOfPlayers)
             {

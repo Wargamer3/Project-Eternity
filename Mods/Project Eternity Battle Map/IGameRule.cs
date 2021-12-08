@@ -6,8 +6,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public interface IGameRule
     {
+        void Init();
         void Update(GameTime gameTime);
-        void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad, Unit UnitDefeated);
+        void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad);
         void BeginDraw(CustomSpriteBatch g);
         void Draw(CustomSpriteBatch g);
     }

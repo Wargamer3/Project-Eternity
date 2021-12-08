@@ -39,9 +39,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
         }
 
-        public ConquestMap(int GameMode)
+        public ConquestMap(string GameMode)
         {
-            this.GameMode = GameMode;
             RequireDrawFocus = false;
             ListActionMenuChoice = new ActionPanelHolder();
             Pathfinder = new MovementAlgorithmConquest(this);
@@ -87,7 +86,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             this.ListPlayer = new List<Player>();
         }
 
-        public ConquestMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public ConquestMap(string BattleMapPath, string GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
             : this(GameMode)
         {
             this.BattleMapPath = BattleMapPath;
@@ -1143,11 +1142,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 MoveSquad();
             }
-            else if (GameMode == 1)
-            {
-                if (!ListPlayer[ActivePlayerIndex].IsOnline)
-                    ListPlayer[ActivePlayerIndex].PlayerStep(gameTime);
-            }
             else
             {
                 if (!ListActionMenuChoice.HasMainPanel)
@@ -1236,7 +1230,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(int GameMode)
+        public override BattleMap GetNewMap(string GameMode)
         {
             return new ConquestMap(GameMode);
         }

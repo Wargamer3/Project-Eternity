@@ -96,7 +96,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         int OldNumberOfGameScreen = ListGameScreen.Count;
                         StreamReader BR = new StreamReader("Content/Map path.ini");
-                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), 0, new Dictionary<string, List<Squad>>());
+                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), string.Empty, new Dictionary<string, List<Squad>>());
                         BR.Close();
                         NewMap.ListGameScreen = ListGameScreen;
                         NewMap.PlayerRoster = new Roster();

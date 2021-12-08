@@ -56,29 +56,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (UnitsNotUpdatedCount == 0)
             {
-                List<BattleMap> ListActiveSubMaps = ActionPanelMapSwitch.GetActiveSubMaps(Map);
-                if (ListActiveSubMaps.Count <= 1)
-                {
-                    RemoveAllActionPanels();
-                    AddToPanelListAndSelect(new ActionPanelPhaseChange(Map));
-                }
-                else//Look for sub maps to update before ending turn.
-                {
-                    foreach (BattleMap ActiveMap in ListActiveSubMaps)
-                    {
-                        if (ActiveMap != Map && ActiveMap.ActivePlayerIndex == Map.ActivePlayerIndex)
-                        {
-                            ActionPanelPhaseChange.EndPlayerPhase(Map);
-                            Map.ListGameScreen.Remove(Map);
-                            Map.ListGameScreen.Insert(0, ActiveMap);
-                            return;
-                        }
-                    }
-
-                    RemoveAllActionPanels();
-                    //No sub map to be updated, should never get up to this point.
-                    AddToPanelListAndSelect(new ActionPanelPhaseChange(Map));
-                }
+                ActionPanelPhaseChange.EndPlayerPhase(Map);
             }
         }
 

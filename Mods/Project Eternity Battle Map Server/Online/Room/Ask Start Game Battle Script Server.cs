@@ -44,11 +44,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
             if (CreatedGroup.Room.MapPath == "Random")
             {
-                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(2);
+                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(Owner.RoomType);
             }
             else
             {
-                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(2);
+                NewMap = BattleMap.DicBattmeMapType[Owner.MapType].GetNewMap(Owner.RoomType);
             }
 
             NewMap.ListGameScreen = new List<GameScreen>();

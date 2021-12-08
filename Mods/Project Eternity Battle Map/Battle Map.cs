@@ -104,7 +104,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static float WingmanDamageModifier = 0.75f;
         public string MapName;
         public string BattleMapPath;
-        public int GameMode;
         public IGameRule GameRule;
         public bool IsFrozen;
         public static string NextMapType = string.Empty;
@@ -490,7 +489,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (DicBattmeMapType.Count > 0 && !string.IsNullOrEmpty(NewMapSwitchPoint.SwitchMapPath)
                     && ListSubMap.Find(x => x.BattleMapPath == NewMapSwitchPoint.SwitchMapPath) == null)
                 {
-                    BattleMap NewMap = DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(0);
+                    BattleMap NewMap = DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(string.Empty);
                     NewMap.BattleMapPath = NewMapSwitchPoint.SwitchMapPath;
                     NewMap.ListGameScreen = ListGameScreen;
                     NewMap.ListSubMap = ListSubMap;

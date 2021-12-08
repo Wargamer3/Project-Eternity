@@ -185,7 +185,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                ConquestMap NewMap = new ConquestMap(FilePath, 0, null);
+                ConquestMap NewMap = new ConquestMap(FilePath, string.Empty, null);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap));
                 BattleMapViewer.ActiveMap.ArrayMultiplayerColor = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
@@ -211,7 +211,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(22);
 
             BattleMapViewer.Preload();
-            ConquestMap ActiveConquestMap = new ConquestMap(MapLogicName, 0, null);
+            ConquestMap ActiveConquestMap = new ConquestMap(MapLogicName, string.Empty, null);
             Helper = new ConquestMapHelper(ActiveConquestMap);
             InitMap(ActiveConquestMap);
 

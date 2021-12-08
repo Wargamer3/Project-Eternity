@@ -150,11 +150,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListTerrainType.Add(UnitStats.TerrainSpace);
         }
 
-        public DeathmatchMap(int GameMode)
+        public DeathmatchMap(string GameMode)
             : this()
         {
-            this.GameMode = GameMode;
-
             CursorPosition = new Vector3(9, 13, 0);
             CursorPositionVisible = CursorPosition;
 
@@ -165,9 +163,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMapSwitchPoint = new List<MapSwitchPoint>();
             CameraPosition = Vector3.Zero;
             ActiveSquadIndex = -1;
+
+            switch (GameMode)
+            {
+                case "":
+                    GameRule = new DefaultGameRule(this);
+                    break;
+
+                case "Classic":
+                    GameRule = new ClassicMPGameRule(this);
+                    break;
+
+                case "Campaign":
+                    GameRule = new CampaignGameRule(this);
+                    break;
+
+                case "Horde":
+                    GameRule = new HordeGameRule(this);
+                    break;
+            }
         }
 
-        public DeathmatchMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public DeathmatchMap(string BattleMapPath, string GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
             : this(GameMode)
         {
             this.BattleMapPath = BattleMapPath;
@@ -566,14 +583,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (GameMode == 1)
-            {
-                OnlinePlayers.Update();
-            }
-            else if (GameMode == 2)
-            {
-            }
-
             if (!IsFrozen)
             {
                 for (int B = 0; B < ListBackground.Count; ++B)
@@ -626,21 +635,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     MoveSquad();
                 }
-                else if (GameMode == 0)
-                {
-                    ListActionMenuChoice.Last().Update(gameTime);
-                    GameRule.Update(gameTime);
-                }
                 else
                 {
-                    if (!ListPlayer[ActivePlayerIndex].IsOnline)
-                    {
-                        ListActionMenuChoice.Last().Update(gameTime);
-                    }
-                    else if (ListPlayer[ActivePlayerIndex].IsOnline)
-                    {
-                        ListActionMenuChoice.Last().UpdatePassive(gameTime);
-                    }
+                    GameRule.Update(gameTime);
                 }
 
                 UpdateCursorVisiblePosition(gameTime);

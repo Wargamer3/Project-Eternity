@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract BattleMap LoadTemporaryMap(BinaryReader BR);
 
-        public abstract BattleMap GetNewMap(int GameMode);
+        public abstract BattleMap GetNewMap(string GameMode);
 
         public abstract string GetMapType();
 

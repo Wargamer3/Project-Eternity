@@ -63,11 +63,10 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             : base()
         {
         }
-        public WorldMap(int GameMode)
+
+        public WorldMap(string GameMode)
             : base()
         {
-            this.GameMode = GameMode;
-
             RequireDrawFocus = false;
 
             ListActionMenuChoice = new ActionPanelHolder();
@@ -92,7 +91,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             this.ListPlayer = new List<Player>();
         }
 
-        public WorldMap(string BattleMapPath, int GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public WorldMap(string BattleMapPath, string GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
             : this(GameMode)
         {
             this.BattleMapPath = BattleMapPath;
@@ -253,7 +252,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 MoveSquad();
             }
-            else if (GameMode == 0)
+            else
             {
                 if (!ListActionMenuChoice.HasMainPanel)
                 {

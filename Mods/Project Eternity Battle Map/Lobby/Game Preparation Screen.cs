@@ -328,11 +328,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (Room.MapPath == "Random")
                 {
-                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(2);
+                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.RoomType);
                 }
                 else
                 {
-                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(2);
+                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.RoomType);
                 }
 
                 NewMap.BattleMapPath = Room.MapPath;
