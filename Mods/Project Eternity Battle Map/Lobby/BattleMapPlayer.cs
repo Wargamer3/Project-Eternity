@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string OnlinePlayerType;
         public IOnlineConnection OnlineClient;//Used by the server
 
-        public List<Squad> ListSquadToSpawn;
+        public PlayerInventory Inventory;
 
         public BattleMapPlayer(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
         {
@@ -52,7 +52,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Color = Color;
 
             Guild = string.Empty;
-            ListSquadToSpawn = new List<Squad>();
+            Inventory = new PlayerInventory();
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
             InputManager = new KeyboardInput();
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Color = Color;
 
             Guild = string.Empty;
-            ListSquadToSpawn = new List<Squad>();
+            Inventory = new PlayerInventory();
 
             if (OnlinePlayerType == PlayerTypes.Offline)
             {
@@ -126,7 +126,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnlinePlayerType = Clone.OnlinePlayerType;
             OnlineClient = Clone.OnlineClient;
 
-            ListSquadToSpawn = Clone.ListSquadToSpawn;
+            Inventory = Clone.Inventory;
         }
 
         public void LoadLocally(ContentManager Content)

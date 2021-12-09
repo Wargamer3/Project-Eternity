@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
             for (int P = 0; P < Owner.ListRoomPlayer.Count; ++P)
             {
-                DicSpawnSquadByPlayer.Add(Owner.ListRoomPlayer[P].Name, Owner.ListRoomPlayer[P].ListSquadToSpawn);
+                DicSpawnSquadByPlayer.Add(Owner.ListRoomPlayer[P].Name, Owner.ListRoomPlayer[P].Inventory.ActiveLoadout.ListSquad);
             }
 
             BattleMap NewMap;

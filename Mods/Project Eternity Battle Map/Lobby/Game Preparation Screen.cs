@@ -321,7 +321,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
                 for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
                 {
-                    DicSpawnSquadByPlayer.Add(Room.ListRoomPlayer[P].Name, Room.ListRoomPlayer[P].ListSquadToSpawn);
+                    DicSpawnSquadByPlayer.Add(Room.ListRoomPlayer[P].Name, Room.ListRoomPlayer[P].Inventory.ActiveLoadout.ListSquad);
                 }
 
                 BattleMap NewMap;
@@ -465,7 +465,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 57, DrawY + 5), Color.White);
             g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 110, DrawY + 5), Color.White);
 
-            foreach (Squad ActiveSquad in PlayerToDraw.ListSquadToSpawn)
+            foreach (Squad ActiveSquad in PlayerToDraw.Inventory.ActiveLoadout.ListSquad)
             {
                 g.Draw(ActiveSquad[0].SpriteMap, new Rectangle(DrawX + 337, DrawY - 3, 32, 32), Color.White);
             }

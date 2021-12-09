@@ -121,7 +121,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Squad NewSquad = new Squad("Squad", NewUnit);
                 NewSquad.IsPlayerControlled = true;
 
-                NewPlayer.ListSquadToSpawn.Add(NewSquad);
+                NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
+
                 PlayerManager.ListLocalPlayer.Add(NewPlayer);
                 PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
             }

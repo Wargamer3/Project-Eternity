@@ -299,7 +299,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 NewPlayer.IsPlayerControlled = IsPlayerControlled;
-                NewPlayer.ListSquadToSpawn.Clear();
+                NewPlayer.Inventory.ActiveLoadout.ListSquad.Clear();
                 int ArraySquadLength = BR.ReadInt32();
                 for (int S = 0; S < ArraySquadLength; ++S)
                 {
@@ -344,7 +344,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Squad NewSquad = new Squad("", Leader, WingmanA, WingmanB);
                     NewSquad.SetPosition(new Vector3(SquadX, SquadY, 0));
                     NewSquad.IsPlayerControlled = SquadIsPlayerControlled;
-                    NewPlayer.ListSquadToSpawn.Add(NewSquad);
+                    NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
                 }
             }
 
@@ -354,7 +354,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int P = 0; P < ListPlayer.Count; P++)
             {
                 Player ActivePlayer = ListPlayer[P];
-                foreach (Squad ActiveSquad in ActivePlayer.ListSquadToSpawn)
+                foreach (Squad ActiveSquad in ActivePlayer.Inventory.ActiveLoadout.ListSquad)
                 {
                     ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                     SpawnSquad(P, ActiveSquad, 0, ActiveSquad.Position);

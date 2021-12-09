@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                         Squad NewSquad = new Squad("Squad", NewUnit);
 
-                        NewPlayer.ListSquadToSpawn.Add(NewSquad);
+                        NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
 
                         ListRoomPlayer.Add(NewPlayer);
                     }

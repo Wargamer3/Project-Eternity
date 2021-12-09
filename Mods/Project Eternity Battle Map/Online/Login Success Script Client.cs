@@ -59,7 +59,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             NewSquad.IsPlayerControlled = true;
 
             BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
-            NewPlayer.ListSquadToSpawn.Add(NewSquad);
+
+            NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
+
             return NewPlayer;
         }
 

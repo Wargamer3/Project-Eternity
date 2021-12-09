@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             {
                 if (ActivePlayer.ConnectionID == Sender.ID && ActivePlayer.LocalPlayerIndex == LocalPlayerIndex)
                 {
-                    ActivePlayer.ListSquadToSpawn.Clear();
+                    ActivePlayer.Inventory.ActiveLoadout.ListSquad.Clear();
 
                     foreach (SquadLoadout ActiveSquad in ArrayNewSquad)
                     {
@@ -99,7 +99,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                             }
                         }
 
-                        ActivePlayer.ListSquadToSpawn.Add(new Squad("", Leader, WingmanA, WingmanB));
+                        ActivePlayer.Inventory.ActiveLoadout.ListSquad.Add(new Squad("", Leader, WingmanA, WingmanB));
                     }
                 }
             }

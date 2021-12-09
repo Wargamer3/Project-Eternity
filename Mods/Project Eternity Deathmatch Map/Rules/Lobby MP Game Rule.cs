@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int PlayerIndex = 1;
                 foreach (Player ActivePlayer in Owner.ListPlayer)
                 {
-                    if (ActivePlayer.ListSquadToSpawn == null)
+                    if (ActivePlayer.Inventory == null)
                         continue;
 
                     string PlayerTag = PlayerIndex.ToString();
@@ -31,14 +31,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Owner.ListMultiplayerSpawns[S].Tag == PlayerTag)
                         {
-                            for (int U = 0; U < ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].UnitsInSquad; ++U)
+                            for (int U = 0; U < ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].UnitsInSquad; ++U)
                             {
-                                ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].At(U).UnitTypeName]);
+                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).UnitTypeName]);
                             }
-                            ActivePlayer.ListSquadToSpawn[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                            Owner.SpawnSquad(PlayerIndex - 1, ActivePlayer.ListSquadToSpawn[SpawnSquadIndex], 0, Owner.ListMultiplayerSpawns[S].Position);
+                            ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                            Owner.SpawnSquad(PlayerIndex - 1, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, Owner.ListMultiplayerSpawns[S].Position);
                             ++SpawnSquadIndex;
-                            if (SpawnSquadIndex >= ActivePlayer.ListSquadToSpawn.Count)
+                            if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
                             {
                                 break;
                             }

@@ -25,8 +25,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         {
             WriteBuffer.AppendByte(ActivePlayer.LocalPlayerIndex);
 
-            WriteBuffer.AppendInt32(ActivePlayer.ListSquadToSpawn.Count);
-            foreach (Squad ActiveSquad in ActivePlayer.ListSquadToSpawn)
+            WriteBuffer.AppendInt32(ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count);
+            foreach (Squad ActiveSquad in ActivePlayer.Inventory.ActiveLoadout.ListSquad)
             {
                 WriteBuffer.AppendInt32(ActiveSquad.UnitsInSquad);
                 for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)

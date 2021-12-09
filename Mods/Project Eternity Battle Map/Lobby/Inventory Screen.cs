@@ -8,10 +8,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     class InventoryScreen : GameScreen
     {
+        private enum InventoryCategories { Units, Characters, Equipment, Consumable }
+
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
 
         private SpriteFont fntArial12;
+
+        private BattleMapPlayer ActivePlayer;
+
+        public InventoryScreen()
+        {
+            ActivePlayer = PlayerManager.ListLocalPlayer[0];
+        }
 
         public override void Load()
         {
