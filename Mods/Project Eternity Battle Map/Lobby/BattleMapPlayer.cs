@@ -149,7 +149,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Enum.TryParse(BR.ReadString(), out GameplayType);
             Money = BR.ReadUInt32();
 
-            InitFirstTimeInventory();
+            Inventory.Load(BR, Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+
             BR.Close();
             FS.Close();
         }
@@ -185,6 +186,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Write(GameplayType.ToString());
             BW.Write(Money);
+
+            Inventory.Save(BW);
 
             BW.Close();
             FS.Close();

@@ -96,6 +96,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (PlayerInfoCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                     {
                         Owner.ActivePlayer.Inventory.ListSquadLoadout[SqaudLoatoutIndex].ListSquad[SquadSlotIndex] = DragAndDropEquipment;
+                        Owner.ActivePlayer.SaveLocally();
                     }
                 }
 
