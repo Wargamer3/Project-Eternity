@@ -113,15 +113,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else
             {
                 BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
-                Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                Character NewCharacter = new Character("Original/Greg", GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                NewCharacter.Level = 1;
-                NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
-
-                Squad NewSquad = new Squad("Squad", NewUnit);
-                NewSquad.IsPlayerControlled = true;
-
-                NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
 
                 PlayerManager.ListLocalPlayer.Add(NewPlayer);
                 PlayerManager.ListLocalPlayer[0].LoadLocally(Content);

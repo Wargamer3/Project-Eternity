@@ -104,9 +104,13 @@
     <Compile Include="Lobby\Game Options\Game Options Select Map Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Screen.cs" />
     <Compile Include="Lobby\Game Preparation Screen.cs" />
+    <Compile Include="Lobby\Inventory\Equipment Screen.cs" />
+    <Compile Include="Lobby\Inventory\Consumable Screen.cs" />
+    <Compile Include="Lobby\Inventory\Character Screen.cs" />
+    <Compile Include="Lobby\Inventory\Squad Screen.cs" />
     <Compile Include="Lobby\Local Player Profile Selection Screen.cs" />
     <Compile Include="Lobby\Local Player Selection Screen.cs" />
-    <Compile Include="Lobby\Inventory Screen.cs" />
+    <Compile Include="Lobby\Inventory\Inventory Screen.cs" />
     <Compile Include="Lobby\Player\Player Inventory.cs" />
     <Compile Include="Lobby\Shop Screen.cs" />
     <Compile Include="Lobby\UI\Box Drop Down Button.cs" />

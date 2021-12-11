@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -135,6 +137,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 File.WriteAllText("User data/Profiles/Battle Map/Last Selected Profile.txt", "Player 1", Encoding.UTF8);
                 Name = "Player 1";
+                InitFirstTimeInventory();
                 SaveLocally();
                 return;
             }
@@ -146,8 +149,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Enum.TryParse(BR.ReadString(), out GameplayType);
             Money = BR.ReadUInt32();
 
+            InitFirstTimeInventory();
             BR.Close();
             FS.Close();
+        }
+
+        private void InitFirstTimeInventory()
+        {
+            IniFile IniDefaultUnits = IniFile.ReadFromFile("Content/Battle Lobby Default Units.ini");
+
+            foreach (string ActiveKey in IniDefaultUnits.ReadAllKeys())
+            {
+                string UnitPath = IniDefaultUnits.ReadField(ActiveKey, "Path");
+                string Pilot = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
+
+                Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                Character NewCharacter = new Character(Pilot, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                NewCharacter.Level = 1;
+                NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
+
+                Squad NewSquad = new Squad("Squad", NewUnit);
+                NewSquad.IsPlayerControlled = true;
+
+                Inventory.ListOwnedSquad.Add(NewSquad);
+                Inventory.ListOwnedCharacter.Add(NewCharacter);
+            }
+
+            Inventory.ActiveLoadout.ListSquad.Add(Inventory.ListOwnedSquad[0]);
         }
 
         public void SaveLocally()

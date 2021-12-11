@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Item
 {
@@ -48,6 +48,11 @@ namespace ProjectEternity.Core.Item
         public string ReadField(string Header, string Field)
         {
             return DicFieldValueByHeader[Header][Field];
+        }
+
+        public List<string> ReadAllKeys()
+        {
+            return new List<string>(DicFieldValueByHeader.Keys);
         }
 
         public List<string> ReadAllValues(string Header)
