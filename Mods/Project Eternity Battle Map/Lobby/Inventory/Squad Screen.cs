@@ -18,6 +18,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private readonly InventoryScreen Owner;
 
+        private int MaxLoadouts;
         private int LoadoutSize;
 
         private Squad DragAndDropEquipment;
@@ -28,6 +29,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public InventorySquadScreen(InventoryScreen Owner)
         {
             this.Owner = Owner;
+            MaxLoadouts = 0;
+            LoadoutSize = 0;
         }
 
         public override void Load()
@@ -40,11 +43,40 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             IniFile IniUnlocks = IniFile.ReadFromFile("Content/Battle Lobby Unlocks.ini");
             foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Slots"))
             {
+                if (Owner.ActivePlayer.Level >= int.Parse(RequiredLevel))
+                {
+                    ++MaxLoadouts;
+                }
             }
 
-            LoadoutSize = 1;
             foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Sizes"))
             {
+                if (Owner.ActivePlayer.Level >= int.Parse(RequiredLevel))
+                {
+                    ++LoadoutSize;
+                }
+            }
+
+            for (int L = 0; L < MaxLoadouts; ++L)
+            {
+                SquadLoadout ActiveLoadout;
+                if (L >= Owner.ActivePlayer.Inventory.ListSquadLoadout.Count)
+                {
+                    ActiveLoadout = new SquadLoadout();
+                    Owner.ActivePlayer.Inventory.ListSquadLoadout.Add(ActiveLoadout);
+                }
+                else
+                {
+                    ActiveLoadout = Owner.ActivePlayer.Inventory.ListSquadLoadout[L];
+                }
+
+                for (int S = 0; S < LoadoutSize; S++)
+                {
+                    if (S >= ActiveLoadout.ListSquad.Count)
+                    {
+                        ActiveLoadout.ListSquad.Add(null);
+                    }
+                }
             }
         }
 
@@ -84,14 +116,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (InputHelper.InputConfirmReleased())
             {
-                int X = (MouseHelper.MouseStateCurrent.X - DrawX) / 50;
+                int X = (MouseHelper.MouseStateCurrent.X - DrawX) / 40;
                 int Y = (MouseHelper.MouseStateCurrent.Y - DrawY) / 40;
 
                 int SquadSlotIndex = X;
                 int SqaudLoatoutIndex = Y;
                 if (SqaudLoatoutIndex < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count && SquadSlotIndex < LoadoutSize)
                 {
-                    Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX + X * 50, DrawY + Y * 40, 38, 38);
+                    Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX + X * 40, DrawY + Y * 40, 38, 38);
 
                     if (PlayerInfoCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                     {
@@ -134,18 +166,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntArial12, "Loadouts", new Vector2(10, InventoryScreen.TopSectionHeight + 5), Color.White);
 
             int DrawY = InventoryScreen.MiddleSectionY + 5;
-            for (int i = 0; i < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count; ++i)
+            for (int L = 0; L < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count; ++L)
             {
                 DrawBox(g, new Vector2(5, DrawY), InventoryScreen.LeftSideWidth - 10, 45, Color.White);
                 DrawBox(g, new Vector2(InventoryScreen.LeftSideWidth - 95, DrawY + 5), 85, 35, Color.White);
                 g.DrawString(fntArial12, "Rename", new Vector2(InventoryScreen.LeftSideWidth - 88, DrawY + 11), Color.White);
-                g.DrawString(fntArial12, "Loadout " + (i + 1), new Vector2(11, DrawY + 11), Color.White);
+                g.DrawString(fntArial12, "Loadout " + (L + 1), new Vector2(11, DrawY + 11), Color.White);
 
                 int DrawX = 101;
-                foreach (Squad ActiveSquad in Owner.ActivePlayer.Inventory.ListSquadLoadout[i].ListSquad)
+                for (int S = 0; S < Owner.ActivePlayer.Inventory.ListSquadLoadout[L].ListSquad.Count; S++)
                 {
                     DrawBox(g, new Vector2(DrawX, DrawY + 4), 38, 38, Color.White);
-                    g.Draw(ActiveSquad.CurrentLeader.SpriteMap, new Vector2(DrawX + 3, DrawY + 7), Color.White);
+
+                    Squad ActiveSquad = Owner.ActivePlayer.Inventory.ListSquadLoadout[L].ListSquad[S];
+                    if (ActiveSquad != null)
+                    {
+                        g.Draw(ActiveSquad.CurrentLeader.SpriteMap, new Vector2(DrawX + 3, DrawY + 7), Color.White);
+                    }
+
                     if (DragAndDropEquipment != null)
                     {
                         g.Draw(sprPixel, new Rectangle(DrawX, DrawY + 4, 38, 38), Color.FromNonPremultiplied(255, 255, 255, 127));

@@ -39,6 +39,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
+                string CharacterFullName = BR.ReadString();
+                Character LoadedCharacter = new Character(CharacterFullName, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                LoadedCharacter.Level = 1;
+
+                LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
+
                 Squad NewSquad = new Squad("Squad", LoadedUnit);
                 NewSquad.IsPlayerControlled = true;
 
@@ -68,11 +74,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 for (int S = 0; S < NewSquadLoadoutSquadCount; ++S)
                 {
                     string RelativePath = BR.ReadString();
+
+                    if (string.IsNullOrEmpty(RelativePath))
+                    {
+                        NewSquadLoadout.ListSquad.Add(null);
+                        continue;
+                    }
+
                     string UnitTypeName = BR.ReadString();
+                    string CharacterFullName = BR.ReadString();
 
                     Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
-                    string CharacterFullName = BR.ReadString();
                     Character LoadedCharacter = new Character(CharacterFullName, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                     LoadedCharacter.Level = 1;
 
@@ -93,6 +106,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 BW.Write(ListOwnedSquad[S].CurrentLeader.RelativePath);
                 BW.Write(ListOwnedSquad[S].CurrentLeader.UnitTypeName);
+                BW.Write(ListOwnedSquad[S].CurrentLeader.Pilot.FullName);
             }
 
             BW.Write(ListOwnedCharacter.Count);
@@ -107,9 +121,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BW.Write(ListSquadLoadout[L].ListSquad.Count);
                 for (int S = 0; S < ListSquadLoadout[L].ListSquad.Count; ++S)
                 {
-                    BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.RelativePath);
-                    BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.UnitTypeName);
-                    BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.Pilot.FullName);
+                    if (ListSquadLoadout[L].ListSquad[S] == null)
+                    {
+                        BW.Write(string.Empty);
+                    }
+                    else
+                    {
+                        BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.RelativePath);
+                        BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.UnitTypeName);
+                        BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.Pilot.FullName);
+                    }
                 }
             }
         }
