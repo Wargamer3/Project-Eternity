@@ -71,6 +71,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LobbyVictoryScreen NewLobbyVictoryScreen = new LobbyVictoryScreen(ListGains);
             Owner.PushScreen(NewLobbyVictoryScreen);
         }
+
         public void OnManualDefeat()
         {
         }

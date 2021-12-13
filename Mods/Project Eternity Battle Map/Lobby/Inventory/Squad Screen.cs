@@ -25,7 +25,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected bool IsDragDropActive { get { return DragAndDropEquipment != null; } }
 
-
         public InventorySquadScreen(InventoryScreen Owner)
         {
             this.Owner = Owner;

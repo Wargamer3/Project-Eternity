@@ -122,7 +122,7 @@
     <Compile Include="Rules\Campaign Game Rule.cs" />
     <Compile Include="Rules\Lobby MP Game Rule.cs" />
     <Compile Include="Rules\Horde Game Rule.cs" />
-    <Compile Include="Rules\Default Game Rule.cs" />
+    <Compile Include="Rules\Single Player Game Rule.cs" />
     <Compile Include="Lobby Multiplayer\Deathmatch Online Client.cs" />
     <Compile Include="Menus\Victory Menu.cs" />
     <Compile Include="Menus\Main Menu.cs" />

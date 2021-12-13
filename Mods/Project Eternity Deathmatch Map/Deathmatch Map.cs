@@ -132,7 +132,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.GlobalBattleContext = GlobalDeathmatchContext = GlobalBattleContext;
             GlobalDeathmatchContext.Map = this;
 
-            GameRule = new DefaultGameRule(this);
+            GameRule = new SinglePlayerGameRule(this);
             ListActionMenuChoice = new ActionPanelHolderDeathmatch(this);
             ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
@@ -167,7 +167,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             switch (GameMode)
             {
                 case "":
-                    GameRule = new DefaultGameRule(this);
+                    GameRule = new SinglePlayerGameRule(this);
                     break;
 
                 case "Classic":

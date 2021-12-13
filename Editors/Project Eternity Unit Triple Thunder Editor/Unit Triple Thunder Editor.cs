@@ -161,7 +161,6 @@ namespace ProjectEternity.Editors.UnitTripleThunderEditor
             MenuFilter OutMenu = new MenuFilter();
             OutMenu.ListItem = new Dictionary<string, string>();
 
-
             foreach (ItemContainer ActiveItemContainer in Items)
             {
                 foreach (KeyValuePair<string, string> ActiveItem in ActiveItemContainer.ListItem)

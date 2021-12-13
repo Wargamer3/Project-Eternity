@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FMOD;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen

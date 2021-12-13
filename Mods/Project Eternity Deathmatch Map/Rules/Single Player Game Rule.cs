@@ -6,11 +6,11 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    class DefaultGameRule : IGameRule
+    class SinglePlayerGameRule : IGameRule
     {
         private readonly DeathmatchMap Owner;
 
-        public DefaultGameRule(DeathmatchMap Owner)
+        public SinglePlayerGameRule(DeathmatchMap Owner)
         {
             this.Owner = Owner;
         }
