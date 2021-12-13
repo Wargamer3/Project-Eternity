@@ -77,6 +77,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
+        public void OnManualVictory()
+        {
+        }
+
+        public void OnManualDefeat()
+        {
+        }
+
         public void BeginDraw(CustomSpriteBatch g)
         {
 

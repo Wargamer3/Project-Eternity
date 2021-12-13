@@ -97,6 +97,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public void OnManualVictory()
+        {
+            BattleMap.ClearedStages++;
+            GameScreen.FMODSystem.sndActiveBGM.Stop();
+            NewIntermissionScreen NewIntermissionScreen = new NewIntermissionScreen(Owner.PlayerRoster);
+            Owner.RemoveAllScreens();
+            Owner.PushScreen(NewIntermissionScreen);
+        }
+
+        public void OnManualDefeat()
+        {
+        }
+
         public void BeginDraw(CustomSpriteBatch g)
         {
 

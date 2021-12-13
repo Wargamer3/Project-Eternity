@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
@@ -53,6 +54,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public virtual void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad)
         {
 
+        }
+
+        public void OnManualVictory()
+        {
+            List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
+            foreach (Player ActivePlayer in Owner.ListLocalPlayer)
+            {
+                LobbyVictoryScreen.PlayerGains NewGains = new LobbyVictoryScreen.PlayerGains();
+                NewGains.Exp = 100;
+                NewGains.Money = 100;
+
+                ListGains.Add(NewGains);
+            }
+
+            LobbyVictoryScreen NewLobbyVictoryScreen = new LobbyVictoryScreen(ListGains);
+            Owner.PushScreen(NewLobbyVictoryScreen);
+        }
+        public void OnManualDefeat()
+        {
         }
 
         public virtual void Update(GameTime gameTime)

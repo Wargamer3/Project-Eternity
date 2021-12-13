@@ -59,6 +59,7 @@
     <Compile Include="Cutscene Scripts\Spawn Health Crate.cs" />
     <Compile Include="Cutscene Scripts\Evaluate Variable.cs" />
     <Compile Include="Cutscene Scripts\Flash Cursor.cs" />
+    <Compile Include="Cutscene Scripts\Trigger Defeat.cs" />
     <Compile Include="Map Conditions\Active Player.cs" />
     <Compile Include="Map Conditions\Gate.cs" />
     <Compile Include="Map Triggers\Asign Variable.cs" />
@@ -74,9 +75,8 @@
     <Compile Include="Cutscene Scripts\Change Map Theme.cs" />
     <Compile Include="Cutscene Scripts\Character Event Flag.cs" />
     <Compile Include="Cutscene Scripts\Define Global Pilot Unit.cs" />
-    <Compile Include="Cutscene Scripts\End Map.cs" />
+    <Compile Include="Cutscene Scripts\Trigger Victory.cs" />
     <Compile Include="Cutscene Scripts\Fade To Black.cs" />
-    <Compile Include="Cutscene Scripts\Launch Intermission Screen.cs" />
     <Compile Include="Cutscene Scripts\Launch Next Map.cs" />
     <Compile Include="Cutscene Scripts\Move Cursor.cs" />
     <Compile Include="Cutscene Scripts\Play Map Theme.cs" />

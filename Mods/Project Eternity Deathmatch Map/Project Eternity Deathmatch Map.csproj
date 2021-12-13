@@ -150,6 +150,7 @@
     <Compile Include="Menus\Non Demo\Get Missed Frame.cs" />
     <Compile Include="Menus\Non Demo\Non Demo Battle Frame.cs" />
     <Compile Include="Menus\Game Over Menu.cs" />
+    <Compile Include="Rules\Lobby Victory Screen.cs" />
     <Compile Include="Terrain\Camera 3D.cs" />
     <Compile Include="Deathmatch Context.cs" />
     <Compile Include="Deathmatch Map Requirement.cs" />
