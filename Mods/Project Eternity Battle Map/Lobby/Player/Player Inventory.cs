@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 string CharacterFullName = BR.ReadString();
-                Character LoadedCharacter = new Character(CharacterFullName, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 LoadedCharacter.Level = 1;
 
                 LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int C = 0; C < ListOwnedCharacterCount; ++C)
             {
                 string CharacterFullName = BR.ReadString();
-                Character LoadedCharacter = new Character(CharacterFullName, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 LoadedCharacter.Level = 1;
 
                 ListOwnedCharacter.Add(LoadedCharacter);
@@ -86,7 +86,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
-                    Character LoadedCharacter = new Character(CharacterFullName, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                    Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                     LoadedCharacter.Level = 1;
 
                     LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
@@ -97,6 +97,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     NewSquadLoadout.ListSquad.Add(NewSquad);
                 }
             }
+
+            ActiveLoadout = ListSquadLoadout[0];
         }
 
         public void Save(BinaryWriter BW)

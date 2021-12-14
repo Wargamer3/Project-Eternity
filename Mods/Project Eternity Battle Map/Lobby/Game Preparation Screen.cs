@@ -465,9 +465,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 57, DrawY + 5), Color.White);
             g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 110, DrawY + 5), Color.White);
 
-            foreach (Squad ActiveSquad in PlayerToDraw.Inventory.ActiveLoadout.ListSquad)
+            for (int S = 0; S < PlayerToDraw.Inventory.ActiveLoadout.ListSquad.Count; S++)
             {
-                g.Draw(ActiveSquad[0].SpriteMap, new Rectangle(DrawX + 337, DrawY - 3, 32, 32), Color.White);
+                if (PlayerToDraw.Inventory.ActiveLoadout.ListSquad[S] != null)
+                {
+                    g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSquad[S][0].SpriteMap, new Rectangle(DrawX + 337 + S * 40, DrawY - 3, 32, 32), Color.White);
+                }
             }
 
             if (PlayerToDraw.OnlinePlayerType == BattleMapPlayer.PlayerTypeHost)

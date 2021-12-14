@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
 
                 PlayerManager.ListLocalPlayer.Add(NewPlayer);
-                PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
+                PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);
             }
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
@@ -201,7 +201,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         TryConnecting = false;
                         PlayerManager.ListLocalPlayer.Add(new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, BattleMapPlayer.PlayerTypes.Offline, false, 0, true, Color.Blue));
-                        PlayerManager.ListLocalPlayer[0].LoadLocally(Content);
+                        PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);
                     }
                 }
             }

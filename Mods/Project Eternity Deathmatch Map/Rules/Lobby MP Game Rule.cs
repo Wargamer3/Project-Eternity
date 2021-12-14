@@ -32,13 +32,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Owner.ListMultiplayerSpawns[S].Tag == PlayerTag)
                         {
+                            if (ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex] == null)
+                            {
+                                ++SpawnSquadIndex;
+                                continue;
+                            }
+
                             for (int U = 0; U < ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].UnitsInSquad; ++U)
                             {
                                 ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).UnitTypeName]);
                             }
+
                             ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
                             Owner.SpawnSquad(PlayerIndex - 1, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, Owner.ListMultiplayerSpawns[S].Position);
                             ++SpawnSquadIndex;
+
                             if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
                             {
                                 break;
@@ -59,7 +67,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void OnManualVictory()
         {
             List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
-            foreach (Player ActivePlayer in Owner.ListLocalPlayer)
+            foreach (Player ActivePlayer in Owner.ListAllPlayer)
             {
                 LobbyVictoryScreen.PlayerGains NewGains = new LobbyVictoryScreen.PlayerGains();
                 NewGains.Exp = 100;
@@ -68,7 +76,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListGains.Add(NewGains);
             }
 
-            LobbyVictoryScreen NewLobbyVictoryScreen = new LobbyVictoryScreen(ListGains);
+            LobbyVictoryScreen NewLobbyVictoryScreen = new LobbyVictoryScreen(Owner, ListGains);
             Owner.PushScreen(NewLobbyVictoryScreen);
         }
 
