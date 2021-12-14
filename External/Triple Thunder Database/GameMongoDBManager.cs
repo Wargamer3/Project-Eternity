@@ -50,12 +50,13 @@ namespace Database.TripleThunder
                 string Password = ActiveDocument.GetValue("Password").AsString;
                 string OwnerServerIP = ActiveDocument.GetValue("OwnerServerIP").AsString;
                 int OwnerServerPort = ActiveDocument.GetValue("OwnerServerPort").AsInt32;
-                int CurrentPlayerCount = ActiveDocument.GetValue("CurrentPlayerCount").AsInt32;
-                int MaxNumberOfPlayer = ActiveDocument.GetValue("MaxNumberOfPlayer").AsInt32;
+                byte CurrentPlayerCount = (byte)ActiveDocument.GetValue("CurrentPlayerCount").AsInt32;
+                byte MinNumberOfPlayer = (byte)ActiveDocument.GetValue("MaxNumberOfPlayer").AsInt32;
+                byte MaxNumberOfPlayer = (byte)ActiveDocument.GetValue("MaxNumberOfPlayer").AsInt32;
                 bool IsDead = ActiveDocument.GetValue("IsDead").AsBoolean;
 
                 IRoomInformations NewRoom = new ServerRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, Password,
-                    OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MaxNumberOfPlayer, IsDead);
+                    OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MinNumberOfPlayer, MaxNumberOfPlayer, IsDead);
                 ListFoundRoom.Add(NewRoom);
             }
 
@@ -74,7 +75,7 @@ namespace Database.TripleThunder
             PlayersCollection.UpdateManyAsync(PlayerFilter, PlayerUpdate);
         }
 
-        public IRoomInformations GenerateNewRoom(string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort, int MaxNumberOfPlayer)
+        public IRoomInformations GenerateNewRoom(string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
         {
             BsonDocument document = new BsonDocument
             {
@@ -87,6 +88,7 @@ namespace Database.TripleThunder
                 { "OwnerServerIP", OwnerServerIP },
                 { "OwnerServerPort", OwnerServerPort },
                 { "CurrentPlayerCount", 1 },
+                { "MinNumberOfPlayer", MinNumberOfPlayer },
                 { "MaxNumberOfPlayer", MaxNumberOfPlayer },
                 { "IsDead", false },
             };
@@ -95,11 +97,11 @@ namespace Database.TripleThunder
 
             if (RoomType == RoomInformations.RoomTypeMission)
             {
-                return new MissionRoomInformations(document.GetValue("_id").AsObjectId.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MaxNumberOfPlayer);
+                return new MissionRoomInformations(document.GetValue("_id").AsObjectId.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
             }
             else if (RoomType == RoomInformations.RoomTypeBattle)
             {
-                return new BattleRoomInformations(document.GetValue("_id").AsObjectId.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MaxNumberOfPlayer);
+                return new BattleRoomInformations(document.GetValue("_id").AsObjectId.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
             }
 
             return null;
@@ -117,7 +119,7 @@ namespace Database.TripleThunder
             return null;
         }
 
-        public void UpdatePlayerCountInRoom(string RoomID, int CurrentPlayerCount)
+        public void UpdatePlayerCountInRoom(string RoomID, byte CurrentPlayerCount)
         {
             FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(RoomID));
             UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("CurrentPlayerCount", CurrentPlayerCount).Set("LastUpdate", DateTime.Now);

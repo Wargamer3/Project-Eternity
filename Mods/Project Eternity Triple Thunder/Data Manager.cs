@@ -43,18 +43,18 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             return ListRoomFound;
         }
 
-        public IRoomInformations GenerateNewRoom(string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort, int MaxNumberOfPlayer)
+        public IRoomInformations GenerateNewRoom(string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
         {
             DateTimeOffset CurrentTime = DateTimeOffset.Now;
 
             RoomInformations NewRoom = null;
             if (RoomType == RoomInformations.RoomTypeMission)
             {
-                NewRoom = new MissionRoomInformations(RoomIDCount++.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MaxNumberOfPlayer);
+                NewRoom = new MissionRoomInformations(RoomIDCount++.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
             }
             else if (RoomType == RoomInformations.RoomTypeBattle)
             {
-                NewRoom = new BattleRoomInformations(RoomIDCount++.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MaxNumberOfPlayer);
+                NewRoom = new BattleRoomInformations(RoomIDCount++.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
             }
 
             if (ListRoom.ContainsKey(CurrentTime))
@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
         }
 
-        public void UpdatePlayerCountInRoom(string RoomID, int CurrentPlayerCount)
+        public void UpdatePlayerCountInRoom(string RoomID, byte CurrentPlayerCount)
         {
         }
 

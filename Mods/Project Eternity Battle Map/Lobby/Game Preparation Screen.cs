@@ -351,7 +351,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         NewMap.AddLocalPlayer(null);
                     }
                 }
-                RemoveAllScreens();
+
                 NewMap.Load();
                 NewMap.Init();
                 NewMap.TogglePreview(true);
@@ -382,6 +382,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            g.End();
+            g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
             int LeftSideWidth = (int)(Constants.Width * 0.7);
             int RoomNameHeight = (int)(Constants.Height * 0.05);
             int PlayerZoneY = RoomNameHeight;
@@ -412,7 +415,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawStringMiddleAligned(fntText, "Campaign", new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
             GameModeY += 15;
             g.DrawString(fntText, "Players:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            g.DrawStringMiddleAligned(fntText, "4", new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
+            if (Room.MinNumberOfPlayer != Room.MaxNumberOfPlayer)
+            {
+                g.DrawStringMiddleAligned(fntText, Room.MinNumberOfPlayer + " - " + Room.MaxNumberOfPlayer, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
+            }
+            else
+            {
+                g.DrawStringMiddleAligned(fntText, Room.MinNumberOfPlayer.ToString(), new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
+            }
             GameModeY += 125;
             g.Draw(sprMapImage, new Vector2(LeftSideWidth + (RightSideWidth - sprMapImage.Width) / 2, GameModeY), Color.White);
             GameModeY += 85;
@@ -450,13 +460,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX,
                                                             DrawY,
-                                                            220,
-                                                            66);
-
-            if (PlayerInfoCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
-            {
-                g.Draw(sprPixel, new Rectangle(DrawX - 5, DrawY - 5, 230, 76), Color.FromNonPremultiplied(255, 255, 255, 127));
-            }
+                                                            320,
+                                                            25);
 
             DrawBox(g, new Vector2(DrawX, DrawY), 50, 25, Color.White);
             DrawBox(g, new Vector2(DrawX + 50, DrawY), 50, 25, Color.White);
@@ -480,6 +485,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else if (PlayerToDraw.OnlinePlayerType == BattleMapPlayer.PlayerTypeReady)
             {
                 g.DrawString(fntText, "Ready", new Vector2(DrawX + 6, DrawY + 5), Color.White);
+            }
+
+            if (PlayerInfoCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+            {
+                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, 320, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
             }
         }
     }

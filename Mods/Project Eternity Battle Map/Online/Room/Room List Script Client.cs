@@ -54,10 +54,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                     string RoomType = Sender.ReadString();
                     string RoomSubtype = Sender.ReadString();
                     bool IsPlaying = Sender.ReadBoolean();
-                    int MaxPlayer = Sender.ReadInt32();
-                    int CurrentClientCount = Sender.ReadInt32();
+                    byte MinPlayer = Sender.ReadByte();
+                    byte MaxPlayer = Sender.ReadByte();
+                    byte CurrentClientCount = Sender.ReadByte();
 
-                    ListRoomUpdates.Add(new ServerRoomInformations(RoomID, Name, RoomType, RoomSubtype, IsPlaying, MaxPlayer, CurrentClientCount));
+                    ListRoomUpdates.Add(new ServerRoomInformations(RoomID, Name, RoomType, RoomSubtype, IsPlaying, MinPlayer, MaxPlayer, CurrentClientCount));
                 }
             }
         }

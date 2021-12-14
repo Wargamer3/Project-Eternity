@@ -14,12 +14,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private readonly string RoomName;
         private readonly string RoomType;
         private readonly string RoomSubtype;
-        private readonly int MaxNumberOfPlayer;
+        private readonly byte MinNumberOfPlayer;
+        private readonly byte MaxNumberOfPlayer;
 
         private string RoomID;
         private GameScreen NewScreen;
 
-        public SendRoomIDScriptClient(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, GameScreen ScreenOwner, string RoomName, string RoomType, string RoomSubtype, int MaxNumberOfPlayer)
+        public SendRoomIDScriptClient(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, GameScreen ScreenOwner,
+            string RoomName, string RoomType, string RoomSubtype, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
             : base(ScriptName)
         {
             this.OnlineGameClient = OnlineGameClient;
@@ -28,12 +30,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             this.RoomName = RoomName;
             this.RoomType = RoomType;
             this.RoomSubtype = RoomSubtype;
+            this.MinNumberOfPlayer = MinNumberOfPlayer;
             this.MaxNumberOfPlayer = MaxNumberOfPlayer;
         }
 
         public override OnlineScript Copy()
         {
-            return new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, ScreenOwner, RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer);
+            return new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, ScreenOwner, RoomName, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -48,7 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             Dictionary<string, OnlineScript> DicNewGameServerScript = new Dictionary<string, OnlineScript>();
             GamePreparationScreen NewMissionSelectScreen;
 
-            PVPRoomInformations MissionRoom = new PVPRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer);
+            PVPRoomInformations MissionRoom = new PVPRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer);
 
             GamePreparationScreen NewMissionSelect = new GamePreparationScreen(OnlineGameClient, OnlineCommunicationClient, MissionRoom);
             NewScreen = NewMissionSelect;

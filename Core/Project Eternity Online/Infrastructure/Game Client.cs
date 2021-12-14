@@ -127,9 +127,9 @@ namespace ProjectEternity.Core.Online
             }
         }
 
-        public void CreateRoom(string RoomName, string RoomType, string RoomSubtype, int MaxNumberOfPlayer)
+        public void CreateRoom(string RoomName, string RoomType, string RoomSubtype, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
         {
-            Host.Send(new CreateRoomScriptClient(RoomName, RoomType, RoomSubtype, MaxNumberOfPlayer));
+            Host.Send(new CreateRoomScriptClient(RoomName, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer));
         }
 
         public void JoinRoom(string RoomID)

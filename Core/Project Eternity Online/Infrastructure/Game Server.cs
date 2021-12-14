@@ -152,7 +152,7 @@ namespace ProjectEternity.Core.Online
                         {
                             string PlayerID = ActiveGroup.Room.ListOnlinePlayer[P].ID;
                             ActiveGroup.Room.RemoveOnlinePlayer(P);
-                            Database.UpdatePlayerCountInRoom(ActiveGroup.Room.RoomID, ActiveGroup.Room.ListOnlinePlayer.Count);
+                            Database.UpdatePlayerCountInRoom(ActiveGroup.Room.RoomID, (byte)ActiveGroup.Room.ListOnlinePlayer.Count);
 
                             if (ActiveGroup.Room.ListOnlinePlayer.Count == 0)
                             {

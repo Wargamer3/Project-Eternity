@@ -25,8 +25,9 @@ namespace ProjectEternity.Core.Online
             WriteBuffer.AppendBoolean(RoomToJoin != null);
             if (RoomToJoin != null)
             {
-                WriteBuffer.AppendInt32(RoomToJoin.CurrentPlayerCount);
-                WriteBuffer.AppendInt32(RoomToJoin.MaxNumberOfPlayer);
+                WriteBuffer.AppendByte(RoomToJoin.CurrentPlayerCount);
+                WriteBuffer.AppendByte(RoomToJoin.MinNumberOfPlayer);
+                WriteBuffer.AppendByte(RoomToJoin.MaxNumberOfPlayer);
             }
         }
 

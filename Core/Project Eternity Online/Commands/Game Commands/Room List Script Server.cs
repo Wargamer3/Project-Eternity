@@ -36,8 +36,9 @@ namespace ProjectEternity.Core.Online
                     WriteBuffer.AppendString(ActiveRoom.RoomType);
                     WriteBuffer.AppendString(ActiveRoom.RoomSubtype);
                     WriteBuffer.AppendBoolean(ActiveRoom.IsPlaying);
-                    WriteBuffer.AppendInt32(ActiveRoom.MaxNumberOfPlayer);
-                    WriteBuffer.AppendInt32(ActiveRoom.CurrentPlayerCount);
+                    WriteBuffer.AppendByte(ActiveRoom.MinNumberOfPlayer);
+                    WriteBuffer.AppendByte(ActiveRoom.MaxNumberOfPlayer);
+                    WriteBuffer.AppendByte(ActiveRoom.CurrentPlayerCount);
                 }
             }
         }

@@ -13,7 +13,8 @@ namespace ProjectEternity.Core.Online
         private string RoomName;
         private string RoomType;
         private string RoomSubtype;
-        private int MaxNumberOfPlayer;
+        private byte MinNumberOfPlayer;
+        private byte MaxNumberOfPlayer;
         public GameClientGroup CreatedGroup;
 
         public BaseCreateRoomScriptServer(GameServer Owner, GameClientGroup ClientGroupTemplate)
@@ -30,7 +31,7 @@ namespace ProjectEternity.Core.Online
 
         protected internal override void Execute(IOnlineConnection Sender)
         {
-            IRoomInformations CreatedRoom = Owner.Database.GenerateNewRoom(RoomName, RoomType, RoomSubtype, "", Owner.IP, Owner.Port, MaxNumberOfPlayer);
+            IRoomInformations CreatedRoom = Owner.Database.GenerateNewRoom(RoomName, RoomType, RoomSubtype, "", Owner.IP, Owner.Port, MinNumberOfPlayer, MaxNumberOfPlayer);
 
             CreatedGroup = ClientGroupTemplate.CreateFromTemplate(CreatedRoom);
             CreatedGroup.Room.AddOnlinePlayer(Sender, "Host");
@@ -60,7 +61,8 @@ namespace ProjectEternity.Core.Online
             RoomName = Sender.ReadString();
             RoomType = Sender.ReadString();
             RoomSubtype = Sender.ReadString();
-            MaxNumberOfPlayer = Sender.ReadInt32();
+            MinNumberOfPlayer = Sender.ReadByte();
+            MaxNumberOfPlayer = Sender.ReadByte();
         }
     }
 }

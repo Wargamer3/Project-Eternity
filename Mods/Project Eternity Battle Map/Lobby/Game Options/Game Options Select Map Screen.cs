@@ -17,6 +17,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public readonly string MapType;
             public readonly string MapPath;
             public readonly Point NewMapSize;
+            public readonly byte PlayersMin;
+            public readonly byte PlayersMax;
             public readonly string MapPlayers;
             public readonly string MapDescription;
             public readonly Texture2D MapImage;
@@ -27,6 +29,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 this.MapType = MapType;
                 this.MapPath = MapPath;
                 this.NewMapSize = NewMapSize;
+                this.PlayersMin = PlayersMin;
+                this.PlayersMax = PlayersMax;
                 this.MapDescription = MapDescription;
                 this.MapImage = MapImage;
                 if (PlayersMin != PlayersMax)
@@ -104,6 +108,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Room.MapName = ActiveMapInfo.MapName;
             Room.MapType = ActiveMapInfo.MapType;
             Room.MapPath = ActiveMapInfo.MapPath;
+            Room.MinNumberOfPlayer = ActiveMapInfo.PlayersMin;
+            Room.MaxNumberOfPlayer = ActiveMapInfo.PlayersMax;
         }
 
         public void UpdateMaps()

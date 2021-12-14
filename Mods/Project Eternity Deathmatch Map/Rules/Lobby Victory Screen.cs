@@ -27,13 +27,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private SpriteFont fntArial12;
 
-        DeathmatchMap Owner;
-        private List<PlayerGains> ListPlayerGains;
+        private double TimeToLiveInSeconds;
+
+        private readonly DeathmatchMap Owner;
+        private readonly List<PlayerGains> ListPlayerGains;
 
         public LobbyVictoryScreen(DeathmatchMap Owner, List<PlayerGains> ListPlayerGains)
         {
             this.Owner = Owner;
             this.ListPlayerGains = ListPlayerGains;
+
+            TimeToLiveInSeconds = 5;
         }
 
         public override void Load()
@@ -43,6 +47,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            TimeToLiveInSeconds -= gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (TimeToLiveInSeconds <= 0)
+            {
+                RemoveScreen(Owner);
+                RemoveScreen(this);
+
+                if (Owner.OnlineClient != null)
+                {
+                    Owner.OnlineClient.Host.IsGameReady = false;
+                }
+            }
         }
 
         public override void Draw(CustomSpriteBatch g)

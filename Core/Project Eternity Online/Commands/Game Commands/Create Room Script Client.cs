@@ -7,14 +7,16 @@ namespace ProjectEternity.Core.Online
         private readonly string RoomName;
         private readonly string RoomType;
         private readonly string RoomSubtype;
-        private readonly int MaxNumberOfPlayer;
+        private readonly byte MinNumberOfPlayer;
+        private readonly byte MaxNumberOfPlayer;
 
-        public CreateRoomScriptClient(string RoomName, string RoomType, string RoomSubtype, int MaxNumberOfPlayer)
+        public CreateRoomScriptClient(string RoomName, string RoomType, string RoomSubtype, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
             : base("Create Room")
         {
             this.RoomName = RoomName;
             this.RoomType = RoomType;
             this.RoomSubtype = RoomSubtype;
+            this.MinNumberOfPlayer = MinNumberOfPlayer;
             this.MaxNumberOfPlayer = MaxNumberOfPlayer;
         }
 
@@ -28,7 +30,8 @@ namespace ProjectEternity.Core.Online
             WriteBuffer.AppendString(RoomName);
             WriteBuffer.AppendString(RoomType);
             WriteBuffer.AppendString(RoomSubtype);
-            WriteBuffer.AppendInt32(MaxNumberOfPlayer);
+            WriteBuffer.AppendByte(MinNumberOfPlayer);
+            WriteBuffer.AppendByte(MaxNumberOfPlayer);
         }
 
         protected internal override void Execute(IOnlineConnection Host)

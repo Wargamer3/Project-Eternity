@@ -54,7 +54,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly string RoomType;
 
         private string RoomSubtype;
-        private int MaxNumberOfPlayer;
+        private byte MinNumberOfPlayer;
+        private byte MaxNumberOfPlayer;
 
         public CreateRoomScreen(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, string RoomType)
         {
@@ -62,6 +63,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.RoomType = RoomType;
             RoomSubtype = "Deathmatch";
+            MinNumberOfPlayer = 1;
             MaxNumberOfPlayer = 8;
         }
 
@@ -153,15 +155,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 Dictionary<string, OnlineScript> DicCreateRoomScript = new Dictionary<string, OnlineScript>();
 
-                DicCreateRoomScript.Add(SendRoomIDScriptClient.ScriptName, new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, this, RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer));
+                DicCreateRoomScript.Add(SendRoomIDScriptClient.ScriptName, new SendRoomIDScriptClient(OnlineGameClient, OnlineCommunicationClient, this,
+                    RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer));
                 
                 OnlineGameClient.Host.AddOrReplaceScripts(DicCreateRoomScript);
 
-                OnlineGameClient.CreateRoom(RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer);
+                OnlineGameClient.CreateRoom(RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer);
             }
             else
             {
-                PushScreen(new GamePreparationScreen(null, null, new PVPRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MaxNumberOfPlayer)));
+                PushScreen(new GamePreparationScreen(null, null, new PVPRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
                 RemoveScreen(this);
             }
         }

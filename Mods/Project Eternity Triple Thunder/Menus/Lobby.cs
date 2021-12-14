@@ -120,12 +120,6 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             Trace.Listeners.Add(new TextWriterTraceListener("ClientError.log", "myListener"));
 
-            if (OnlineGameClient != null)
-            {
-                InitOnlineGameClient();
-                InitOnlineCommunicationClient();
-            }
-
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20), SendMessage);
 
@@ -193,6 +187,12 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 ShowAllPlayersFilter, ShowFriendsFilter, ShowGuildsFilter, SearchPlayerButton,
                 ShopButton, MetalButton, RoomsScrollbar,
             };
+
+            if (OnlineGameClient != null)
+            {
+                InitOnlineGameClient();
+                InitOnlineCommunicationClient();
+            }
         }
 
         public override void Unload()

@@ -22,8 +22,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string Password { get; set; }
         public bool UseTeams { get; set; }
         public List<IOnlineConnection> ListOnlinePlayer { get; }
-        public int CurrentPlayerCount { get; set; }
-        public int MaxNumberOfPlayer { get; set; }
+        public byte CurrentPlayerCount { get; set; }
+        public byte MinNumberOfPlayer { get; set; }
+        public byte MaxNumberOfPlayer { get; set; }
         public string OwnerServerIP { get; }
         public int OwnerServerPort { get; }
         public bool IsDead { get; set; }//Used when the DataManager need to tell that a Room is deleted.
@@ -53,12 +54,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxNumberOfPlayer = 0;
         }
 
-        public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, int MaxPlayer, int CurrentClientCount)
+        public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, byte MinPlayer, byte MaxPlayer, byte CurrentClientCount)
         {
             this.RoomID = RoomID;
             this.RoomName = RoomName;
             this.RoomType = RoomType;
             this.RoomSubtype = RoomSubtype;
+            this.MinNumberOfPlayer = MinPlayer;
             this.MaxNumberOfPlayer = MaxPlayer;
             this.CurrentPlayerCount = CurrentClientCount;
 
@@ -86,7 +88,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UseTeams = true;
         }
 
-        public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort, int CurrentPlayerCount, int MaxNumberOfPlayer, bool IsDead)
+        public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort,
+            byte CurrentPlayerCount, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, bool IsDead)
         {
             this.RoomID = RoomID;
             this.RoomName = RoomName;
@@ -97,6 +100,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.OwnerServerIP = OwnerServerIP;
             this.OwnerServerPort = OwnerServerPort;
             this.CurrentPlayerCount = CurrentPlayerCount;
+            this.MinNumberOfPlayer = MinNumberOfPlayer;
             this.MaxNumberOfPlayer = MaxNumberOfPlayer;
             this.IsDead = IsDead;
 
@@ -111,7 +115,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             ListRoomPlayer.Add(NewPlayer);
             ListLocalPlayerID.Add(NewPlayer.ConnectionID);
-            CurrentPlayerCount = ListRoomPlayer.Count;
+            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 
         public void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
@@ -121,7 +125,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             NewRoomPlayer.OnlineClient = NewPlayer;
             NewRoomPlayer.GameplayType = GameplayTypes.None;
             ListRoomPlayer.Add(NewRoomPlayer);
-            CurrentPlayerCount = ListRoomPlayer.Count;
+            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 
         public void RemovePlayer(IOnlineConnection OnlinePlayerToRemove)
@@ -140,7 +144,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            CurrentPlayerCount = ListRoomPlayer.Count;
+            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
             HandleHostChange();
         }
 
@@ -154,7 +158,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 IsDead = true;
             }
 
-            CurrentPlayerCount = ListRoomPlayer.Count;
+            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
             HandleHostChange();
         }
 

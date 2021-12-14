@@ -105,19 +105,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerManager.DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
             PlayerManager.DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
-            if (OnlineGameClient != null)
-            {
-                InitOnlineGameClient();
-                InitOnlineCommunicationClient();
-            }
-            else
-            {
-                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
-
-                PlayerManager.ListLocalPlayer.Add(NewPlayer);
-                PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);
-            }
-
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20), SendMessage);
 
@@ -162,6 +149,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ShowAllPlayersFilter, ShowFriendsFilter, ShowGuildsFilter,
                 ShopButton, InventoryButton,
             };
+
+            if (OnlineGameClient != null)
+            {
+                InitOnlineGameClient();
+                InitOnlineCommunicationClient();
+            }
+            else
+            {
+                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
+
+                PlayerManager.ListLocalPlayer.Add(NewPlayer);
+                PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);
+            }
         }
 
         public override void Unload()

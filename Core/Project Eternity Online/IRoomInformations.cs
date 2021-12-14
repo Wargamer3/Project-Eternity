@@ -11,8 +11,9 @@ namespace ProjectEternity.Core.Online
         string MapPath { get; set; }
         bool IsPlaying { get; set; }
         string Password { get; }
-        int CurrentPlayerCount { get; }
-        int MaxNumberOfPlayer { get; }
+        byte CurrentPlayerCount { get; }
+        byte MinNumberOfPlayer { get; }
+        byte MaxNumberOfPlayer { get; }
         string OwnerServerIP { get; }
         int OwnerServerPort { get; }
         bool IsDead { get; }//Used when the DataManager need to tell that a Room is deleted.

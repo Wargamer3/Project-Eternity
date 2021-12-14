@@ -12,8 +12,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         private string RoomID;
         private bool RoomExist;
-        private int CurrentPlayerCount;
-        private int MaxNumberOfPlayer;
+        private byte CurrentPlayerCount;
+        private byte MinNumberOfPlayer;
+        private byte MaxNumberOfPlayer;
 
         public JoinRoomFailedScriptClient(BattleMapOnlineClient Owner, Lobby ScreenOwner)
             : base(ScriptName)
@@ -37,6 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             if (RoomExist)
             {
                 ScreenOwner.DicAllRoom[RoomID].CurrentPlayerCount = CurrentPlayerCount;
+                ScreenOwner.DicAllRoom[RoomID].MinNumberOfPlayer = MinNumberOfPlayer;
                 ScreenOwner.DicAllRoom[RoomID].MaxNumberOfPlayer = MaxNumberOfPlayer;
             }
             else
@@ -58,8 +60,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             if (RoomExist)
             {
-                CurrentPlayerCount = Sender.ReadInt32();
-                MaxNumberOfPlayer = Sender.ReadInt32();
+                CurrentPlayerCount = Sender.ReadByte();
+                MinNumberOfPlayer = Sender.ReadByte();
+                MaxNumberOfPlayer = Sender.ReadByte();
             }
         }
     }

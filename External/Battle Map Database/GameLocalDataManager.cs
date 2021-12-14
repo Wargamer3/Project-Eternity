@@ -52,11 +52,11 @@ namespace Database.BattleMap
         {
         }
 
-        public IRoomInformations GenerateNewRoom(string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort, int MaxNumberOfPlayer)
+        public IRoomInformations GenerateNewRoom(string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
         {
             DateTimeOffset CurrentTime = DateTimeOffset.Now;
 
-            RoomInformations NewRoom = new PVPRoomInformations(RoomIDCount++.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MaxNumberOfPlayer);
+            RoomInformations NewRoom = new PVPRoomInformations(RoomIDCount++.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
 
             if (ListRoom.ContainsKey(CurrentTime))
             {
@@ -98,7 +98,7 @@ namespace Database.BattleMap
             throw new NotImplementedException();
         }
 
-        public void UpdatePlayerCountInRoom(string RoomID, int CurrentPlayerCount)
+        public void UpdatePlayerCountInRoom(string RoomID, byte CurrentPlayerCount)
         {
             foreach (List<RoomInformations> ListRoomInfo in ListRoom.Values)
             {

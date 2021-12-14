@@ -9,13 +9,14 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
         }
 
-        public ServerRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, int MaxPlayer, int CurrentClientCount)
-            : base(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, MaxPlayer, CurrentClientCount)
+        public ServerRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, byte CurrentPlayerCount)
+            : base(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, MinNumberOfPlayer, MaxNumberOfPlayer, CurrentPlayerCount)
         {
         }
 
-        public ServerRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort, int CurrentPlayerCount, int MaxNumberOfPlayer, bool IsDead)
-            : base(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, Password, OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MaxNumberOfPlayer, IsDead)
+        public ServerRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort,
+            byte CurrentPlayerCount, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, bool IsDead)
+            : base(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, Password, OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MinNumberOfPlayer, MaxNumberOfPlayer, IsDead)
         {
         }
     }

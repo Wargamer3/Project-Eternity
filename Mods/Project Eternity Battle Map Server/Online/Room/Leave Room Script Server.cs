@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         {
             OnlineServer.ListPlayer.Add(Sender);
             Owner.RemovePlayer(Sender);
-            OnlineServer.Database.UpdatePlayerCountInRoom(Owner.RoomID, Owner.ListOnlinePlayer.Count);
+            OnlineServer.Database.UpdatePlayerCountInRoom(Owner.RoomID, (byte)Owner.ListOnlinePlayer.Count);
 
             if (Owner.ListOnlinePlayer.Count == 0)
             {
