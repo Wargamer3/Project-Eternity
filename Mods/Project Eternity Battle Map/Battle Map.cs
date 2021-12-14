@@ -139,6 +139,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
         public Vector3 CameraPosition;
+        public byte PlayersMin;
+        public byte PlayersMax;
+        public string Description;
 
         public List<EventPoint> ListSingleplayerSpawns;
         public Dictionary<string, List<Squad>> DicSpawnSquadByPlayer;
@@ -223,7 +226,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListForegroundsPath = new List<string>();
             ListProp = new List<InteractiveProp>();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
-            
+
+            Description = "";
             VictoryCondition = "";
             LossCondition = "";
             SkillPoint = "";
@@ -267,6 +271,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Write((int)CameraPosition.X);
             BW.Write((int)CameraPosition.Y);
+
+            BW.Write(PlayersMin);
+            BW.Write(PlayersMax);
+
+            BW.Write(Description);
 
             BW.Write(ListBackgroundsPath.Count);
             for (int B = 0; B < ListBackgroundsPath.Count; B++)
@@ -428,6 +437,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CameraPosition.Y = BR.ReadInt32();
             CursorPosition = CameraPosition;
             CursorPositionVisible = CursorPosition;
+
+            PlayersMin = BR.ReadByte();
+            PlayersMax = BR.ReadByte();
+
+            Description = BR.ReadString();
 
             int ListBackgroundsPathCount = BR.ReadInt32();
             for (int B = 0; B < ListBackgroundsPathCount; B++)

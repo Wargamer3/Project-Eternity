@@ -945,12 +945,12 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void mapPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MapStatistics MS = new MapStatistics(ActiveMap.MapName, ActiveMap.MapSize, ActiveMap.TileSize, ActiveMap.CameraPosition);
+            MapStatistics MS = new MapStatistics(ActiveMap.MapName, ActiveMap.MapSize, ActiveMap.TileSize, ActiveMap.CameraPosition, ActiveMap.PlayersMin, ActiveMap.PlayersMax, ActiveMap.Description);
             if (MS.ShowDialog() == DialogResult.OK)
             {
-                Point MapSize = MS.MapSize;
-                Point TileSize = MS.TileSize;
-                Vector3 CameraPosition = MS.CameraStartPosition;
+                Point MapSize = new Point((int)MS.txtMapWidth.Value, (int)MS.txtMapHeight.Value);
+                Point TileSize = new Point((int)MS.txtTileWidth.Value, (int)MS.txtTileHeight.Value);
+                Vector3 CameraPosition = new Vector3((float)MS.txtCameraStartPositionX.Value, (float)MS.txtCameraStartPositionY.Value, 0);
 
                 if (TileSize.X != ActiveMap.TileSize.X || TileSize.Y != ActiveMap.TileSize.Y)
                 {
@@ -964,8 +964,11 @@ namespace ProjectEternity.Editors.MapEditor
 
                     ActiveMap.TileSize = new Point(TileSize.X, TileSize.Y);
                 }
-                
+
                 ActiveMap.CameraPosition = CameraPosition;
+                ActiveMap.PlayersMin = (byte)MS.txtPlayersMin.Value;
+                ActiveMap.PlayersMax = (byte)MS.txtPlayersMax.Value;
+                ActiveMap.Description = MS.txtDescription.Text;
 
                 Point TilePos = TilesetViewer.ActiveTile;
                 Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];

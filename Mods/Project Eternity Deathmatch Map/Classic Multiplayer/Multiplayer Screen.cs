@@ -151,6 +151,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int CameraPositionX = BR.ReadInt32();
                 int CameraPositionY = BR.ReadInt32();
 
+                byte PlayersMin = BR.ReadByte();
+                byte PlayersMax = BR.ReadByte();
+
+                string Description = BR.ReadString();
+
                 int ListBackgroundsPathCount = BR.ReadInt32();
                 for (int B = 0; B < ListBackgroundsPathCount; B++)
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,16 +16,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public readonly string MapName;
             public readonly string MapType;
             public readonly string MapPath;
+            public readonly Point NewMapSize;
+            public readonly string MapPlayers;
             public readonly string MapDescription;
             public readonly Texture2D MapImage;
 
-            public MapInfo(string MapName, string MapType, string MapPath, string MapDescription, Texture2D MapImage)
+            public MapInfo(string MapName, string MapType, string MapPath, Point NewMapSize, byte PlayersMin, byte PlayersMax, string MapDescription, Texture2D MapImage)
             {
                 this.MapName = MapName;
                 this.MapType = MapType;
                 this.MapPath = MapPath;
+                this.NewMapSize = NewMapSize;
                 this.MapDescription = MapDescription;
                 this.MapImage = MapImage;
+                if (PlayersMin != PlayersMax)
+                {
+                    MapPlayers = PlayersMin + "-" + PlayersMax + " Players";
+                }
+                else
+                {
+                    MapPlayers = PlayersMin + " Players";
+                }
             }
         }
 
@@ -116,7 +128,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         FilePath = FilePath.Substring(0, FilePath.Length - 4);
                         string FileName = ActiveFile.Substring(ActiveCampaignFolder.Length + 1);
                         FileName = FileName.Substring(0, FileName.Length - 4);
-                        DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapType, FilePath, "", null));
+
+                        FileStream FS = new FileStream(ActiveFile, FileMode.Open, FileAccess.Read);
+                        BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
+                        Point NewMapSize = Point.Zero;
+                        BR.BaseStream.Seek(0, SeekOrigin.Begin);
+                        NewMapSize.X = BR.ReadInt32();
+                        NewMapSize.Y = BR.ReadInt32();
+                        int TileSizeX = BR.ReadInt32();
+                        int TileSizeY = BR.ReadInt32();
+
+                        int CameraPositionX = BR.ReadInt32();
+                        int CameraPositionY = BR.ReadInt32();
+
+                        byte PlayersMin = BR.ReadByte();
+                        byte PlayersMax = BR.ReadByte();
+
+                        string Description = BR.ReadString();
+
+                        BR.Close();
+                        FS.Close();
+
+                        DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapType, FilePath, NewMapSize, PlayersMin, PlayersMax, Description, null));
                     }
                 }
             }
@@ -168,9 +201,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawBox(g, new Vector2(RightPanelContentX, DescriptionBoxY), RightPanelContentWidth, DescriptionHeight, Color.White);
             DrawBox(g, new Vector2(DescriptionBoxNameX, DescriptionBoxY), DescriptionBoxNameWidth, 30, Color.White);
 
-            g.DrawStringCentered(fntText, "2-8 Players", new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2, PreviewBoxY + PreviewBoxHeight + 10 + DescriptionBoxNameHeight / 2), Color.White);
             if (ActiveMapInfo.MapName != null)
             {
+                g.DrawStringCentered(fntText, ActiveMapInfo.MapPlayers,
+                    new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
+                        PreviewBoxY + PreviewBoxHeight + DescriptionBoxNameHeight / 2), Color.White);
+                g.DrawStringCentered(fntText, "Size: " + ActiveMapInfo.NewMapSize.X + " x " + ActiveMapInfo.NewMapSize.Y,
+                    new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
+                        PreviewBoxY + PreviewBoxHeight + 20 + DescriptionBoxNameHeight / 2), Color.White);
                 g.DrawStringCentered(fntText, ActiveMapInfo.MapName, new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2, DescriptionBoxY + DescriptionBoxNameHeight / 2), Color.White);
 
                 float DescriptionY = DescriptionBoxY + DescriptionBoxNameHeight;
@@ -178,7 +216,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     g.DrawString(fntText, ActiveLine, new Vector2(RightPanelContentX + 5, DescriptionY), Color.White);
                     DescriptionY += 20;
-
                 }
             }
         }

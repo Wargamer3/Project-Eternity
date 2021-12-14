@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.MapEditor
 {
     public partial class MapStatistics : Form
     {
-        public Microsoft.Xna.Framework.Point MapSize;
-        public Microsoft.Xna.Framework.Point TileSize;
-        public Microsoft.Xna.Framework.Vector3 CameraStartPosition;
         public List<string> ListBackgroundsPath;
         public List<string> ListForegroundsPath;
 
         private enum ItemSelectionChoices { Backgrounds, Foregrounds };
         ItemSelectionChoices ItemSelectionChoice;
 
-        public MapStatistics(string MapName, Microsoft.Xna.Framework.Point MapSize, Microsoft.Xna.Framework.Point TileSize, Microsoft.Xna.Framework.Vector3 CameraStartPosition)
+        public MapStatistics(string MapName, Microsoft.Xna.Framework.Point MapSize, Microsoft.Xna.Framework.Point TileSize, Microsoft.Xna.Framework.Vector3 CameraStartPosition,
+            byte PlayersMin, byte PlayersMax, string Description)
         {
             InitializeComponent();
             txtMapName.Text = MapName;
@@ -26,18 +24,15 @@ namespace ProjectEternity.Editors.MapEditor
             txtTileHeight.Text = TileSize.Y.ToString();
             txtCameraStartPositionX.Value = (int)CameraStartPosition.X;
             txtCameraStartPositionY.Value = (int)CameraStartPosition.Y;
+            txtPlayersMin.Value = PlayersMin;
+            txtPlayersMax.Value = PlayersMax;
+            txtDescription.Text = Description;
             ListBackgroundsPath = new List<string>();
             ListForegroundsPath = new List<string>();
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {
-            MapSize.X = Convert.ToInt32(txtMapWidth.Text);
-            MapSize.Y = Convert.ToInt32(txtMapHeight.Text);
-            TileSize.X = Convert.ToInt32(txtTileWidth.Text);
-            TileSize.Y = Convert.ToInt32(txtTileHeight.Text);
-            CameraStartPosition.X = Convert.ToInt32(txtCameraStartPositionX.Value);
-            CameraStartPosition.Y = Convert.ToInt32(txtCameraStartPositionY.Value);
             DialogResult = DialogResult.OK;
         }
 
@@ -80,14 +75,12 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnSetBackgrounds_Click(object sender, EventArgs e)
         {
-            ListBackgroundsPath.Clear();
             ItemSelectionChoice = ItemSelectionChoices.Backgrounds;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll, "Select which backgrounds to use.", true));
         }
 
         private void btnSetForegrounds_Click(object sender, EventArgs e)
         {
-            ListForegroundsPath.Clear();
             ItemSelectionChoice = ItemSelectionChoices.Foregrounds;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll, "Select which foregrounds to use.", true));
         }
