@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BoxButton ShopButton;
         private BoxButton InventoryButton;
 
-        private BoxButton[] ArrayMenuButton;
+        private IUIElement[] ArrayMenuButton;
 
         #endregion
 
@@ -142,7 +142,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ShowGuildsFilter.CanBeChecked = true;
             ShowAllPlayersFilter.Select();
 
-            ArrayMenuButton = new BoxButton[]
+            ArrayMenuButton = new IUIElement[]
             {
                 LocalPlayerSelectionButton, CreateARoomButton, QuickStartButton,
                 InfoButton, RankingButton, OptionsButton, HelpButton,
@@ -273,7 +273,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateRooms();
             UpdatePlayers();
 
-            foreach (BoxButton ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Update(gameTime);
             }
@@ -518,7 +518,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             DrawPlayers(g);
 
-            foreach (BoxButton ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Draw(g);
             }

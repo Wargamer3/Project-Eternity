@@ -48,6 +48,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BoxScrollbar MapScrollbar;
 
         private readonly RoomInformations Room;
+        private readonly GameOptionsScreen OptionsScreen;
         private readonly GamePreparationScreen Owner;
 
         private Dictionary<string, MapInfo> DicMapInfoByPath;
@@ -60,9 +61,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         int LeftPanelX = (int)(Constants.Width * 0.03);
 
-        public GameOptionsSelectMapScreen(RoomInformations Room, GamePreparationScreen Owner)
+        public GameOptionsSelectMapScreen(RoomInformations Room, GameOptionsScreen OptionsScreen, GamePreparationScreen Owner)
         {
             this.Room = Room;
+            this.OptionsScreen = OptionsScreen;
             this.Owner = Owner;
 
             DicMapInfoByPath = new Dictionary<string, MapInfo>();
@@ -84,7 +86,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             MapScrollbar.Update(gameTime);
 
-            float DrawY = PanelY;
+            float DrawY = PanelY + 5;
             int CurrentIndex = 0;
             foreach (MapInfo ActiveMap in DicMapInfoByPath.Values)
             {
@@ -107,6 +109,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void SelectMap(MapInfo MapInfoToSelect)
         {
             ActiveMapInfo = MapInfoToSelect;
+            OptionsScreen.OnMapUpdate();
             Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapType, ActiveMapInfo.MapPath, ActiveMapInfo.PlayersMin, ActiveMapInfo.PlayersMax);
         }
 

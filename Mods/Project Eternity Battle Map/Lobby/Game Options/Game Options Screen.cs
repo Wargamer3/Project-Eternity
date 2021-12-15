@@ -30,6 +30,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private GameScreen ActiveTab;
         private GameScreen[] ArrayOptionTab;
         private GameOptionsSelectMapScreen SelectMapScreen;
+        private GameOptionsGameRulesScreen SelectGameRuleScreen;
 
         public GameOptionsScreen(RoomInformations Room, GamePreparationScreen Owner)
         {
@@ -45,8 +46,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayOptionTab = new GameScreen[5];
             ArrayOptionTab[0] = new GameOptionsGametypeScreen(Room, this);
-            ArrayOptionTab[1] = SelectMapScreen = new GameOptionsSelectMapScreen(Room, Owner);
-            ArrayOptionTab[2] = new GameOptionsGameRulesScreen(Room);
+            ArrayOptionTab[1] = SelectMapScreen = new GameOptionsSelectMapScreen(Room, this, Owner);
+            ArrayOptionTab[2] = SelectGameRuleScreen = new GameOptionsGameRulesScreen(Room);
             ArrayOptionTab[3] = new GameOptionsMutatorsScreen(Room);
             ArrayOptionTab[4] = new GameOptionsBotConfigScreen(Room);
 
@@ -176,6 +177,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             SelectMapScreen.UpdateMaps();
             SelectMapButton.Enable();
+            MutatorsButton.Enable();
+        }
+
+        public void OnMapUpdate()
+        {
+            GameRulesButton.Enable();
         }
 
         public override void Draw(CustomSpriteBatch g)
