@@ -113,6 +113,7 @@
     <Compile Include="Lobby\Inventory\Inventory Screen.cs" />
     <Compile Include="Lobby\Player\Player Inventory.cs" />
     <Compile Include="Lobby\Shop Screen.cs" />
+    <Compile Include="Lobby\UI\Box Numeric Up Down.cs" />
     <Compile Include="Lobby\UI\Box Drop Down Button.cs" />
     <Compile Include="Lobby\Create Room Screen.cs" />
     <Compile Include="Lobby\Loading Screen.cs" />

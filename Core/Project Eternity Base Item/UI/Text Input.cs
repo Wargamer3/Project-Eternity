@@ -15,12 +15,12 @@ namespace ProjectEternity.Core.Item
         private Texture2D sprCursor;
         private SpriteFont fntText;
 
-        private Vector2 TextInputPosition;
-        private Vector2 TextInputSize;
+        protected Vector2 TextInputPosition;
+        protected Vector2 TextInputSize;
 
         private OnConfirmDelegate OnConfirm;
 
-        private bool IsActive;
+        protected bool IsActive;
         private bool DigitsOnly;
 
         public string Text { get; private set; }
@@ -61,7 +61,7 @@ namespace ProjectEternity.Core.Item
             IsCursorVisible = true;
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             if (MouseHelper.MouseStateCurrent.X >= TextInputPosition.X && MouseHelper.MouseStateCurrent.Y >= TextInputPosition.Y
                 && MouseHelper.MouseStateCurrent.X <= TextInputPosition.X + TextInputSize.X && MouseHelper.MouseStateCurrent.Y <= TextInputPosition.Y + TextInputSize.Y)
@@ -410,7 +410,7 @@ namespace ProjectEternity.Core.Item
         {
         }
 
-        public void Draw(CustomSpriteBatch g)
+        public virtual void Draw(CustomSpriteBatch g)
         {
             if (MessageSelectionCursorIndex >= 0 && MessageSelectionCursorIndex != MessageCursorIndex)
             {
