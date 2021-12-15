@@ -13,6 +13,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private string MapName;
         private string MapType;
         private string MapPath;
+        private byte MinNumberOfPlayer;
+        private byte MaxNumberOfPlayer;
 
         public AskChangeMapScriptServer(PVPRoomInformations Owner, GameServer OnlineServer)
             : base(ScriptName)
@@ -36,11 +38,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             Owner.MapName = MapName;
             Owner.MapType = MapType;
             Owner.MapPath = MapPath;
+            Owner.MinNumberOfPlayer = MinNumberOfPlayer;
+            Owner.MaxNumberOfPlayer = MaxNumberOfPlayer;
             for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
             {
                 IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
 
-                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath));
+                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath, MinNumberOfPlayer, MaxNumberOfPlayer));
             }
         }
 
@@ -49,6 +53,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             MapName = Sender.ReadString();
             MapType = Sender.ReadString();
             MapPath = Sender.ReadString();
+            MinNumberOfPlayer = Sender.ReadByte();
+            MaxNumberOfPlayer = Sender.ReadByte();
         }
     }
 }

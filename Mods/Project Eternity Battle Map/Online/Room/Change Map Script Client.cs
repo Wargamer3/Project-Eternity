@@ -13,6 +13,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private string MapName;
         private string MapType;
         private string MissionPath;
+        private byte MinNumberOfPlayer;
+        private byte MaxNumberOfPlayer;
 
         public ChangeMapScriptClient(RoomInformations Owner, GamePreparationScreen MissionSelectScreen)
             : base(ScriptName)
@@ -33,7 +35,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MissionPath);
+            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MissionPath, MinNumberOfPlayer, MaxNumberOfPlayer);
         }
 
         protected override void Read(OnlineReader Sender)
@@ -41,6 +43,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             MapName = Sender.ReadString();
             MapType = Sender.ReadString();
             MissionPath = Sender.ReadString();
+            MinNumberOfPlayer = Sender.ReadByte();
+            MaxNumberOfPlayer = Sender.ReadByte();
         }
     }
 }

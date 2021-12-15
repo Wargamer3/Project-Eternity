@@ -209,6 +209,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 ListMap.Add(new MapAttributes(MapName, ActiveFile.FullName, new Point(NewMapSize.X, NewMapSize.Y), ListPlayerTag.Count, ListSpawns, ArrayColor));
                 FS.Close();
+                BR.Close();
             }
 
             #endregion

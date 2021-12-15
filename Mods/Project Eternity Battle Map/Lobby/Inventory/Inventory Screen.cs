@@ -43,6 +43,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public InventoryScreen()
         {
             ActivePlayer = PlayerManager.ListLocalPlayer[0];
+            ActivePlayer.Level = 50;
 
             LeftSideWidth = (int)(Constants.Width * 0.5);
             TopSectionHeight = (int)(Constants.Height * 0.1);

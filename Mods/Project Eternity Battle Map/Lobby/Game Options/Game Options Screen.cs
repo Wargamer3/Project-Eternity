@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayOptionTab = new GameScreen[5];
             ArrayOptionTab[0] = new GameOptionsGametypeScreen(Room, this);
-            ArrayOptionTab[1] = SelectMapScreen = new GameOptionsSelectMapScreen(Room);
+            ArrayOptionTab[1] = SelectMapScreen = new GameOptionsSelectMapScreen(Room, Owner);
             ArrayOptionTab[2] = new GameOptionsGameRulesScreen(Room);
             ArrayOptionTab[3] = new GameOptionsMutatorsScreen(Room);
             ArrayOptionTab[4] = new GameOptionsBotConfigScreen(Room);

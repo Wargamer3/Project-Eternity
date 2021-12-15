@@ -107,7 +107,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CancelButton = new BoxButton(new Rectangle(ButtonCancelX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "Cancel", OnButtonOver, Cancel);
             OKButton = new BoxButton(new Rectangle(ButtonOKX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "OK", OnButtonOver, CreateRoom);
 
-            RoomNameInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(RoomInfoX + 64, RoomInfoY + 15), new Vector2(314, 20));
+            RoomNameInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(RoomInfoX + 74, RoomInfoY + 20), new Vector2(314, 20));
             PasswordInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(BoxX + 280, BoxY + 90), new Vector2(84, 20), null, true);
 
             RoomNameInput.SetText("Let's have fun!");
