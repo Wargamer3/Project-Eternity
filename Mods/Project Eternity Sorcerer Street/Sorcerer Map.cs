@@ -205,6 +205,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void TogglePreview(bool UsePreview)
         {
+            ShowUnits = !ShowUnits;
+
             for (int i = 0; i < ListLayer.Count; ++i)
             {
                 if (UsePreview)
@@ -216,8 +218,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     ListLayer[i].LayerGrid = ListLayer[i].OriginalLayerGrid;
                 }
-
-                ListLayer[i].LayerGrid.TogglePreview(UsePreview);
             }
         }
 

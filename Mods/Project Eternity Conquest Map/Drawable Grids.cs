@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
@@ -11,8 +10,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     {
         private readonly ConquestMap ActiveMap;
 
-        public ConquestMap2D(ConquestMap Map, BattleMapOverlay MapOverlay)
-            : base(Map, MapOverlay)
+        public ConquestMap2D(ConquestMap Map)
+            : base(Map)
         {
             ActiveMap = Map;
 
@@ -29,8 +28,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ReplaceGrid(ArrayTile);
         }
 
-        public ConquestMap2D(ConquestMap Map, BattleMapOverlay MapOverlay, BinaryReader BR)
-            : base(Map, MapOverlay)
+        public ConquestMap2D(ConquestMap Map, BinaryReader BR)
+            : base(Map)
         {
             ActiveMap = Map;
 
@@ -56,28 +55,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 for (int S = 0; S < ActiveMap.ListPlayer[P].ListUnit.Count; S++)
                 {
                     DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListUnit[S].Components, !ActiveMap.ListPlayer[P].ListUnit[S].CanMove && P == ActiveMap.ActivePlayerIndex);
-                }
-            }
-        }
-
-        public override void BeginDrawNightOverlay(CustomSpriteBatch g)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-                for (int S = 0; S < ActiveMap.ListPlayer[P].ListUnit.Count; S++)
-                {
-                    ActiveMap.ListPlayer[P].ListUnit[S].Components.DrawTimeOfDayOverlayOnMap(g, ActiveMap.ListPlayer[P].ListUnit[S].Position, 24);
-                }
-            }
-        }
-
-        public override void DrawNightOverlay(CustomSpriteBatch g)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-                for (int S = 0; S < ActiveMap.ListPlayer[P].ListUnit.Count; S++)
-                {
-                    ActiveMap.ListPlayer[P].ListUnit[S].Components.DrawOverlayOnMap(g, ActiveMap.ListPlayer[P].ListUnit[S].Position);
                 }
             }
         }

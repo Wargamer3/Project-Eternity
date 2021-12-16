@@ -73,19 +73,5 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
         }
-
-        public override void BeginDrawNightOverlay(CustomSpriteBatch g)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-            }
-        }
-
-        public override void DrawNightOverlay(CustomSpriteBatch g)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-            }
-        }
     }
 }

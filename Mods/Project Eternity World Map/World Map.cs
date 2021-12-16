@@ -227,10 +227,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
         public override void TogglePreview(bool UsePreview)
         {
-            foreach (MapLayer ActiveMapLayer in ListLayer)
-            {
-                ActiveMapLayer.LayerGrid.TogglePreview(UsePreview);
-            }
+            ShowUnits = !ShowUnits;
 
             if (!UsePreview)
             {

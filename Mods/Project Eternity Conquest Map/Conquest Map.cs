@@ -123,6 +123,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             LoadMap();
             LoadMapAssets();
             LoadConquestAIScripts();
+            MapOverlay = new FogOfWarGridOverlay(this);
 
             var ConquestScripts = CutsceneScriptHolder.LoadAllScripts(typeof(ConquestMapCutsceneScriptHolder), this);
             foreach (CutsceneScript ActiveListScript in ConquestScripts.Values)
@@ -199,10 +200,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void TogglePreview(bool UsePreview)
         {
-            for (int i = 0; i < ListLayer.Count; ++i)
-            {
-                ListLayer[i].LayerGrid.TogglePreview(UsePreview);
-            }
+            ShowUnits = !ShowUnits;
         }
 
         public void PopulateUnitMovementCost()
@@ -1129,6 +1127,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            if (ShowUnits)
+            {
+                MapOverlay.Update(gameTime);
+            }
             for (int i = 0; i < ListLayer.Count; ++i)
             {
                 ListLayer[i].Update(gameTime);
@@ -1167,6 +1169,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             GraphicsDevice.Clear(Color.Black);
 
+            if (ShowUnits && MapOverlay != null)
+            {
+                MapOverlay.BeginDraw(g);
+            }
+
             if (ShowAllLayers)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
@@ -1194,6 +1201,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             else
             {
                 ListLayer[ActiveLayerIndex].Draw(g);
+            }
+
+            if (ShowUnits)
+            {
+                if (ShowUnits && MapOverlay != null)
+                {
+                    MapOverlay.Draw(g);
+
+                    MapOverlay.EndDraw(g);
+                }
             }
 
             if (IsOnTop)

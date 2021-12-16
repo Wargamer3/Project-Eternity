@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-            LayerGrid = new ConquestMap2D(Map, new FogOfWarGridOverlay(Map));
+            LayerGrid = new ConquestMap2D(Map);
         }
 
         public MapLayer(ConquestMap Map, BinaryReader BR)
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
 
-            LayerGrid = new ConquestMap2D(Map, new FogOfWarGridOverlay(Map), BR);
+            LayerGrid = new ConquestMap2D(Map, BR);
         }
 
         public void Save(BinaryWriter BW)

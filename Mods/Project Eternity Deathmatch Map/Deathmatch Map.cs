@@ -532,10 +532,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void TogglePreview(bool UsePreview)
         {
-            foreach (MapLayer ActiveMapLayer in ListLayer)
-            {
-                ActiveMapLayer.LayerGrid.TogglePreview(UsePreview);
-            }
+            ShowUnits = !ShowUnits;
 
             if (!UsePreview)
             {
@@ -587,6 +584,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (!IsFrozen)
             {
+                if (ShowUnits)
+                {
+                    MapOverlay.Update(gameTime);
+                }
+
                 for (int B = 0; B < ListBackground.Count; ++B)
                 {
                     ListBackground[B].Update(gameTime);
@@ -706,6 +708,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             GraphicsDevice.Clear(Color.Black);
 
+            if (ShowUnits && MapOverlay != null)
+            {
+                MapOverlay.BeginDraw(g);
+                BeginDrawNightOverlay(g);
+            }
+
             if (ShowAllLayers)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
@@ -767,6 +775,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else
             {
                 ListLayer[ActiveLayerIndex].Draw(g);
+            }
+
+            if (ShowUnits)
+            {
+                if (ShowUnits && MapOverlay != null)
+                {
+                    MapOverlay.Draw(g);
+
+                    DrawNightOverlay(g);
+
+                    MapOverlay.EndDraw(g);
+                }
             }
 
             if (ListForeground.Count > 0)
@@ -844,6 +864,34 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             #endregion
+        }
+
+        public void BeginDrawNightOverlay(CustomSpriteBatch g)
+        {
+            for (int P = 0; P < ListPlayer.Count; P++)
+            {
+                for (int S = 0; S < ListPlayer[P].ListSquad.Count; S++)
+                {
+                    if (ListPlayer[P].ListSquad[S].CurrentLeader != null)
+                    {
+                        ListPlayer[P].ListSquad[S].DrawTimeOfDayOverlayOnMap(g, ListPlayer[P].ListSquad[S].Position, 24);
+                    }
+                }
+            }
+        }
+
+        public void DrawNightOverlay(CustomSpriteBatch g)
+        {
+            for (int P = 0; P < ListPlayer.Count; P++)
+            {
+                for (int S = 0; S < ListPlayer[P].ListSquad.Count; S++)
+                {
+                    if (!ListPlayer[P].ListSquad[S].IsDead)
+                    {
+                        ListPlayer[P].ListSquad[S].DrawOverlayOnMap(g, ListPlayer[P].ListSquad[S].Position);
+                    }
+                }
+            }
         }
 
         public void CenterCamera()

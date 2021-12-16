@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
@@ -44,7 +45,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void Save(BinaryWriter BW);
         void Load(BinaryReader BR);
         void Update(GameTime gameTime);
-        void TogglePreview(bool UsePreview);
         void RemoveTileset(int TilesetIndex);
         void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor);
         void BeginDraw(CustomSpriteBatch g);
@@ -55,7 +55,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public abstract class Map2D : DrawableGrid
     {
         private BattleMap Map;
-        private BattleMapOverlay MapOverlay;
         private Dictionary<Color, List<Vector3>> DicDrawablePointPerColor;
 
         protected Point MapSize { get { return Map.MapSize; } }
@@ -66,21 +65,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private DrawableTile[,] ArrayTile;
 
-        public bool ShowUnits;
         public float Depth;
 
         public Map2D(BattleMap Map)
         {
             this.Map = Map;
-            MapOverlay = new DayNightCycleColorOnly();
             DicDrawablePointPerColor = new Dictionary<Color, List<Vector3>>();
             Depth = 1f;
-        }
-
-        public Map2D(BattleMap Map, BattleMapOverlay MapOverlay)
-            : this(Map)
-        {
-            this.MapOverlay = MapOverlay;
         }
 
         public void Save(BinaryWriter BW)
@@ -130,17 +121,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Update(GameTime gameTime)
         {
-            if (ShowUnits)
-            {
-                MapOverlay.Update(gameTime);
-            }
-
             DicDrawablePointPerColor.Clear();
-        }
-
-        public void TogglePreview(bool UsePreview)
-        {
-            ShowUnits = !ShowUnits;
         }
 
         public void RemoveTileset(int TilesetIndex)
@@ -164,11 +145,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void BeginDraw(CustomSpriteBatch g)
         {
-            if (ShowUnits && MapOverlay != null)
-            {
-                MapOverlay.BeginDraw(g);
-                BeginDrawNightOverlay(g);
-            }
         }
 
         public void Draw(CustomSpriteBatch g)
@@ -183,27 +159,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            if (ShowUnits)
+            if (Map.ShowUnits)
             {
                 DrawDrawablePoints(g);
 
                 DrawPlayers(g);
 
-                if (ShowUnits && MapOverlay != null)
-                {
-                    MapOverlay.Draw(g);
-
-                    DrawNightOverlay(g);
-
-                    MapOverlay.EndDraw(g);
-                }
-
                 DrawCursor(g);
             }
         }
         
-        public abstract void BeginDrawNightOverlay(CustomSpriteBatch g);
-        public abstract void DrawNightOverlay(CustomSpriteBatch g);
         public abstract void DrawPlayers(CustomSpriteBatch g);
         
         public void DrawUnitMap(CustomSpriteBatch g, Color PlayerColor, UnitMapComponent ActiveSquad, bool IsGreyed)

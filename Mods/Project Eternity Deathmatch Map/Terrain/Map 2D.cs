@@ -60,34 +60,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public override void BeginDrawNightOverlay(CustomSpriteBatch g)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-                for (int S = 0; S < ActiveMap.ListPlayer[P].ListSquad.Count; S++)
-                {
-                    if (ActiveMap.ListPlayer[P].ListSquad[S].CurrentLeader != null)
-                    {
-                        ActiveMap.ListPlayer[P].ListSquad[S].DrawTimeOfDayOverlayOnMap(g, ActiveMap.ListPlayer[P].ListSquad[S].Position, 24);
-                    }
-                }
-            }
-        }
-
-        public override void DrawNightOverlay(CustomSpriteBatch g)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-                for (int S = 0; S < ActiveMap.ListPlayer[P].ListSquad.Count; S++)
-                {
-                    if (!ActiveMap.ListPlayer[P].ListSquad[S].IsDead)
-                    {
-                        ActiveMap.ListPlayer[P].ListSquad[S].DrawOverlayOnMap(g, ActiveMap.ListPlayer[P].ListSquad[S].Position);
-                    }
-                }
-            }
-        }
-
         private void DrawDelayedAttacks(CustomSpriteBatch g)
         {
             int BorderX = (int)(TileSize.X * 0.1);

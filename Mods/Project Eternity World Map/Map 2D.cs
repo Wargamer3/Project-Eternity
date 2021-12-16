@@ -62,27 +62,5 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 }
             }
         }
-
-        public override void BeginDrawNightOverlay(CustomSpriteBatch g)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-                for (int S = 0; S < ActiveMap.ListPlayer[P].ListUnit.Count; S++)
-                {
-                    ActiveMap.ListPlayer[P].ListUnit[S].DrawTimeOfDayOverlayOnMap(g, ActiveMap.ListPlayer[P].ListUnit[S].Position, 24);
-                }
-            }
-        }
-
-        public override void DrawNightOverlay(CustomSpriteBatch g)
-        {
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-                for (int S = 0; S < ActiveMap.ListPlayer[P].ListUnit.Count; S++)
-                {
-                    ActiveMap.ListPlayer[P].ListUnit[S].DrawOverlayOnMap(g, ActiveMap.ListPlayer[P].ListUnit[S].Position);
-                }
-            }
-        }
     }
 }

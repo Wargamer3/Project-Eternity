@@ -130,6 +130,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Point MapSize;
         public int ActiveLayerIndex;
         public bool ShowAllLayers;
+        public BattleMapOverlay MapOverlay;
+        public bool ShowUnits;
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
         public List<string> ListBackgroundsPath;
         public List<AnimationBackground> ListBackground;
@@ -219,6 +221,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnlinePlayers = new OnlineConfiguration();
 
             GameTurn = 0;
+            MapOverlay = new DayNightCycleColorOnly();
             ListTileSet = new List<Texture2D>();
             ListBackground = new List<AnimationBackground>();
             ListBackgroundsPath = new List<string>();
