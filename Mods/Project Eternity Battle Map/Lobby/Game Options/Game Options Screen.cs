@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     class GameOptionsScreen : GameScreen
     {
         private SpriteFont fntText;
-        private FMODSound sndButtonOver;
-        private FMODSound sndButtonClick;
+        public FMODSound sndButtonOver;
+        public FMODSound sndButtonClick;
 
         private BoxButton GametypeButton;
         private BoxButton SelectMapButton;
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayOptionTab[0] = new GameOptionsGametypeScreen(Room, this);
             ArrayOptionTab[1] = SelectMapScreen = new GameOptionsSelectMapScreen(Room, this, Owner);
             ArrayOptionTab[2] = SelectGameRuleScreen = new GameOptionsGameRulesScreen(Room);
-            ArrayOptionTab[3] = new GameOptionsMutatorsScreen(Room);
+            ArrayOptionTab[3] = new GameOptionsMutatorsScreen(Room, this);
             ArrayOptionTab[4] = new GameOptionsBotConfigScreen(Room);
 
             for (int T = 0; T < ArrayOptionTab.Length; ++T)

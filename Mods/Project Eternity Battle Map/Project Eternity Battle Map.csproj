@@ -118,6 +118,7 @@
     <Compile Include="Lobby\Create Room Screen.cs" />
     <Compile Include="Lobby\Loading Screen.cs" />
     <Compile Include="Lobby\UI\Box Scrollbar.cs" />
+    <Compile Include="Mutators\Mutator.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
     <Compile Include="Online\Game\Move Cursor Script Client.cs" />
