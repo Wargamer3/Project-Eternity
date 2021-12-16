@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.AdventureScreen
             return PlayerCollisions.GetCollidableObjects(ActiveExplosion.Collision);
         }
 
-        public void Save(BinaryWriter bW)
+        public void Save(BinaryWriter BW)
         {
             throw new NotImplementedException();
         }

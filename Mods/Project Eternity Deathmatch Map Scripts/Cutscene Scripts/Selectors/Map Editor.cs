@@ -472,7 +472,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 return;
                             }
 
-                            BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + TileName));
+                            BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Texture2D>("Maps/Tilesets/" + TileName));
                             //Add the file name to the tile combo box.
                             cboTiles.Items.Add(TileName);
                             TerrainAttribute.ListTileset.Add(TileName);

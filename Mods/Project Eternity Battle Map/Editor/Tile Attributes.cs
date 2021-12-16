@@ -99,6 +99,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ActiveTerrain.MVEnterCost = Convert.ToInt32(txtMVEnterCost.Text);
         }
 
+        private void txtHeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (txtHeight.Text.Length == 0)
+                ActiveTerrain.Position.Z = 0;
+            else
+                ActiveTerrain.Position.Z = Convert.ToInt32(txtHeight.Text);
+        }
+
         private void txtMVMoveCost_TextChanged(object sender, EventArgs e)
         {
             if (txtMVMoveCost.Text.Length == 0)

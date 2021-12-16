@@ -52,9 +52,12 @@
             this.btnNewBattleAnimationBackground = new System.Windows.Forms.Button();
             this.lblBattleAnimationForeground = new System.Windows.Forms.Label();
             this.cboBattleAnimationForeground = new System.Windows.Forms.ComboBox();
+            this.txtHeight = new System.Windows.Forms.NumericUpDown();
+            this.lblHeight = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.txtMVEnterCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMVMoveCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // cboTerrainType
@@ -65,7 +68,9 @@
             "Air",
             "Land",
             "Sea",
-            "Space"});
+            "Space",
+            "Wall",
+            "Void"});
             this.cboTerrainType.Location = new System.Drawing.Point(12, 25);
             this.cboTerrainType.Name = "cboTerrainType";
             this.cboTerrainType.Size = new System.Drawing.Size(121, 21);
@@ -92,7 +97,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 94);
+            this.label3.Location = new System.Drawing.Point(100, 49);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 13);
             this.label3.TabIndex = 4;
@@ -221,20 +226,20 @@
             0,
             -2147483648});
             this.txtMVEnterCost.Name = "txtMVEnterCost";
-            this.txtMVEnterCost.Size = new System.Drawing.Size(100, 20);
+            this.txtMVEnterCost.Size = new System.Drawing.Size(72, 20);
             this.txtMVEnterCost.TabIndex = 17;
             this.txtMVEnterCost.ValueChanged += new System.EventHandler(this.txtMVEnterCost_TextChanged);
             // 
             // txtMVMoveCost
             // 
-            this.txtMVMoveCost.Location = new System.Drawing.Point(15, 111);
+            this.txtMVMoveCost.Location = new System.Drawing.Point(103, 66);
             this.txtMVMoveCost.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             -2147483648});
             this.txtMVMoveCost.Name = "txtMVMoveCost";
-            this.txtMVMoveCost.Size = new System.Drawing.Size(100, 20);
+            this.txtMVMoveCost.Size = new System.Drawing.Size(72, 20);
             this.txtMVMoveCost.TabIndex = 18;
             this.txtMVMoveCost.ValueChanged += new System.EventHandler(this.txtMVMoveCost_TextChanged);
             // 
@@ -312,11 +317,30 @@
             this.cboBattleAnimationForeground.TabIndex = 26;
             this.cboBattleAnimationForeground.SelectedIndexChanged += new System.EventHandler(this.cboBattleAnimationForeground_SelectedIndexChanged);
             // 
+            // txtHeight
+            // 
+            this.txtHeight.Location = new System.Drawing.Point(15, 105);
+            this.txtHeight.Name = "txtHeight";
+            this.txtHeight.Size = new System.Drawing.Size(72, 20);
+            this.txtHeight.TabIndex = 29;
+            this.txtHeight.ValueChanged += new System.EventHandler(this.txtHeight_ValueChanged);
+            // 
+            // lblHeight
+            // 
+            this.lblHeight.AutoSize = true;
+            this.lblHeight.Location = new System.Drawing.Point(12, 88);
+            this.lblHeight.Name = "lblHeight";
+            this.lblHeight.Size = new System.Drawing.Size(38, 13);
+            this.lblHeight.TabIndex = 28;
+            this.lblHeight.Text = "Height";
+            // 
             // TileAttributes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(449, 279);
+            this.Controls.Add(this.txtHeight);
+            this.Controls.Add(this.lblHeight);
             this.Controls.Add(this.lblBattleAnimationForeground);
             this.Controls.Add(this.cboBattleAnimationForeground);
             this.Controls.Add(this.lblBattleAnimationBackground);
@@ -346,6 +370,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtMVEnterCost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMVMoveCost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtHeight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,5 +402,7 @@
         private System.Windows.Forms.Button btnNewBattleAnimationBackground;
         private System.Windows.Forms.Label lblBattleAnimationForeground;
         private System.Windows.Forms.ComboBox cboBattleAnimationForeground;
+        private System.Windows.Forms.NumericUpDown txtHeight;
+        private System.Windows.Forms.Label lblHeight;
     }
 }

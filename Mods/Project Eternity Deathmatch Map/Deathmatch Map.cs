@@ -148,6 +148,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListTerrainType.Add(UnitStats.TerrainLand);
             ListTerrainType.Add(UnitStats.TerrainSea);
             ListTerrainType.Add(UnitStats.TerrainSpace);
+            ListTerrainType.Add(UnitStats.TerrainWall);
+            ListTerrainType.Add(UnitStats.TerrainVoid);
         }
 
         public DeathmatchMap(string GameMode)

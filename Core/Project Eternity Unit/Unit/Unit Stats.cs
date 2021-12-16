@@ -13,6 +13,8 @@ namespace ProjectEternity.Core.Units
         public const string TerrainSea = "Sea";
         public const string TerrainAir = "Air";
         public const string TerrainSpace = "Space";
+        public const string TerrainWall = "Wall";
+        public const string TerrainVoid = "Void";
         public const string TerrainUnderground = "Underground";
         public const string TerrainUnderwater = "Underwater";
 
