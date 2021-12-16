@@ -74,6 +74,8 @@
             this.rbAttackTypeSolidShot = new System.Windows.Forms.RadioButton();
             this.rbAttackTypeBlank = new System.Windows.Forms.RadioButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.lblPostMovementAccuracyMalus = new System.Windows.Forms.Label();
+            this.txtPostMovementAccuracyMalus = new System.Windows.Forms.NumericUpDown();
             this.cbShootDown = new System.Windows.Forms.CheckBox();
             this.cbSwordCut = new System.Windows.Forms.CheckBox();
             this.cbPostMovement = new System.Windows.Forms.CheckBox();
@@ -127,6 +129,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementAccuracyMalus)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -156,15 +159,16 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 183);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 226);
+            this.groupBox1.Size = new System.Drawing.Size(178, 226);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Stats";
             // 
             // txtDamage
             // 
+            this.txtDamage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDamage.Controls.Add(this.btnEditDamage);
-            this.txtDamage.Location = new System.Drawing.Point(94, 18);
+            this.txtDamage.Location = new System.Drawing.Point(72, 18);
             this.txtDamage.Name = "txtDamage";
             this.txtDamage.Size = new System.Drawing.Size(100, 20);
             this.txtDamage.TabIndex = 33;
@@ -185,7 +189,8 @@
             // 
             // txtCritical
             // 
-            this.txtCritical.Location = new System.Drawing.Point(136, 201);
+            this.txtCritical.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCritical.Location = new System.Drawing.Point(114, 201);
             this.txtCritical.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -202,7 +207,8 @@
             // 
             // txtAccuracy
             // 
-            this.txtAccuracy.Location = new System.Drawing.Point(136, 175);
+            this.txtAccuracy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAccuracy.Location = new System.Drawing.Point(114, 175);
             this.txtAccuracy.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -219,7 +225,8 @@
             // 
             // txtMaximumRange
             // 
-            this.txtMaximumRange.Location = new System.Drawing.Point(136, 149);
+            this.txtMaximumRange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMaximumRange.Location = new System.Drawing.Point(114, 149);
             this.txtMaximumRange.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -231,7 +238,8 @@
             // 
             // txtMinimumRange
             // 
-            this.txtMinimumRange.Location = new System.Drawing.Point(136, 123);
+            this.txtMinimumRange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMinimumRange.Location = new System.Drawing.Point(114, 123);
             this.txtMinimumRange.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -243,7 +251,8 @@
             // 
             // txtMoraleRequirement
             // 
-            this.txtMoraleRequirement.Location = new System.Drawing.Point(136, 97);
+            this.txtMoraleRequirement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMoraleRequirement.Location = new System.Drawing.Point(114, 97);
             this.txtMoraleRequirement.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -255,7 +264,8 @@
             // 
             // txtMaximumAmmo
             // 
-            this.txtMaximumAmmo.Location = new System.Drawing.Point(136, 71);
+            this.txtMaximumAmmo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMaximumAmmo.Location = new System.Drawing.Point(114, 71);
             this.txtMaximumAmmo.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -267,7 +277,8 @@
             // 
             // txtENCost
             // 
-            this.txtENCost.Location = new System.Drawing.Point(95, 45);
+            this.txtENCost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtENCost.Location = new System.Drawing.Point(73, 45);
             this.txtENCost.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -359,9 +370,9 @@
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Location = new System.Drawing.Point(218, 282);
+            this.groupBox3.Location = new System.Drawing.Point(196, 282);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(157, 127);
+            this.groupBox3.Size = new System.Drawing.Size(199, 127);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Other stats";
@@ -476,7 +487,7 @@
             this.groupBox2.Controls.Add(this.rbNone);
             this.groupBox2.Controls.Add(this.rbPLA);
             this.groupBox2.Controls.Add(this.rbMAP);
-            this.groupBox2.Location = new System.Drawing.Point(381, 238);
+            this.groupBox2.Location = new System.Drawing.Point(401, 238);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(128, 140);
             this.groupBox2.TabIndex = 2;
@@ -580,7 +591,7 @@
             this.groupBox4.Controls.Add(this.rbAttackTypeEnergyShot);
             this.groupBox4.Controls.Add(this.rbAttackTypeSolidShot);
             this.groupBox4.Controls.Add(this.rbAttackTypeBlank);
-            this.groupBox4.Location = new System.Drawing.Point(381, 27);
+            this.groupBox4.Location = new System.Drawing.Point(401, 27);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(128, 205);
             this.groupBox4.TabIndex = 5;
@@ -677,22 +688,46 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.lblPostMovementAccuracyMalus);
+            this.groupBox6.Controls.Add(this.txtPostMovementAccuracyMalus);
             this.groupBox6.Controls.Add(this.cbShootDown);
             this.groupBox6.Controls.Add(this.cbSwordCut);
             this.groupBox6.Controls.Add(this.cbPostMovement);
-            this.groupBox6.Location = new System.Drawing.Point(218, 183);
+            this.groupBox6.Location = new System.Drawing.Point(196, 183);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(151, 93);
+            this.groupBox6.Size = new System.Drawing.Size(199, 93);
             this.groupBox6.TabIndex = 4;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Secondary properties";
             // 
+            // lblPostMovementAccuracyMalus
+            // 
+            this.lblPostMovementAccuracyMalus.AutoSize = true;
+            this.lblPostMovementAccuracyMalus.Location = new System.Drawing.Point(6, 40);
+            this.lblPostMovementAccuracyMalus.Name = "lblPostMovementAccuracyMalus";
+            this.lblPostMovementAccuracyMalus.Size = new System.Drawing.Size(85, 13);
+            this.lblPostMovementAccuracyMalus.TabIndex = 36;
+            this.lblPostMovementAccuracyMalus.Text = "Accuracy malus:";
+            // 
+            // txtPostMovementAccuracyMalus
+            // 
+            this.txtPostMovementAccuracyMalus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPostMovementAccuracyMalus.Location = new System.Drawing.Point(97, 38);
+            this.txtPostMovementAccuracyMalus.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.txtPostMovementAccuracyMalus.Name = "txtPostMovementAccuracyMalus";
+            this.txtPostMovementAccuracyMalus.Size = new System.Drawing.Size(58, 20);
+            this.txtPostMovementAccuracyMalus.TabIndex = 35;
+            // 
             // cbShootDown
             // 
             this.cbShootDown.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbShootDown.Location = new System.Drawing.Point(6, 66);
+            this.cbShootDown.Location = new System.Drawing.Point(101, 64);
             this.cbShootDown.Name = "cbShootDown";
-            this.cbShootDown.Size = new System.Drawing.Size(106, 17);
+            this.cbShootDown.Size = new System.Drawing.Size(89, 17);
             this.cbShootDown.TabIndex = 34;
             this.cbShootDown.Text = "Shoot Down:";
             this.cbShootDown.UseVisualStyleBackColor = true;
@@ -700,9 +735,9 @@
             // cbSwordCut
             // 
             this.cbSwordCut.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbSwordCut.Location = new System.Drawing.Point(6, 43);
+            this.cbSwordCut.Location = new System.Drawing.Point(6, 64);
             this.cbSwordCut.Name = "cbSwordCut";
-            this.cbSwordCut.Size = new System.Drawing.Size(106, 17);
+            this.cbSwordCut.Size = new System.Drawing.Size(89, 17);
             this.cbSwordCut.TabIndex = 33;
             this.cbSwordCut.Text = "Sword Cut:";
             this.cbSwordCut.UseVisualStyleBackColor = true;
@@ -712,7 +747,7 @@
             this.cbPostMovement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cbPostMovement.Location = new System.Drawing.Point(6, 20);
             this.cbPostMovement.Name = "cbPostMovement";
-            this.cbPostMovement.Size = new System.Drawing.Size(106, 17);
+            this.cbPostMovement.Size = new System.Drawing.Size(107, 17);
             this.cbPostMovement.TabIndex = 30;
             this.cbPostMovement.Text = "Post Movement:";
             this.cbPostMovement.UseVisualStyleBackColor = true;
@@ -723,7 +758,7 @@
             this.tsmSave});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(907, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(927, 24);
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -794,6 +829,7 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox7.Controls.Add(this.txtPilotSkill4Level);
             this.groupBox7.Controls.Add(this.txtPilotSkill3Level);
             this.groupBox7.Controls.Add(this.txtPilotSkill2Level);
@@ -822,7 +858,7 @@
             this.groupBox7.Controls.Add(this.label13);
             this.groupBox7.Controls.Add(this.label21);
             this.groupBox7.Controls.Add(this.btnSetSkill1);
-            this.groupBox7.Location = new System.Drawing.Point(515, 27);
+            this.groupBox7.Location = new System.Drawing.Point(535, 27);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(386, 174);
             this.groupBox7.TabIndex = 32;
@@ -1106,7 +1142,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(907, 416);
+            this.ClientSize = new System.Drawing.Size(927, 416);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.menuStrip1);
@@ -1135,6 +1171,8 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementAccuracyMalus)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox5.ResumeLayout(false);
@@ -1238,6 +1276,8 @@
         private System.Windows.Forms.TextBox txtDamage;
         private System.Windows.Forms.Button btnEditDamage;
         public System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.Label lblPostMovementAccuracyMalus;
+        private System.Windows.Forms.NumericUpDown txtPostMovementAccuracyMalus;
     }
 }
 

@@ -39,13 +39,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblPartsSlots = new System.Windows.Forms.Label();
             this.txtPartsSlots = new System.Windows.Forms.NumericUpDown();
-            this.txtBaseMovement = new System.Windows.Forms.TextBox();
-            this.txtBaseMobility = new System.Windows.Forms.TextBox();
-            this.txtBaseArmor = new System.Windows.Forms.TextBox();
-            this.txtBaseEN = new System.Windows.Forms.TextBox();
-            this.txtBaseHP = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lvlMovement = new System.Windows.Forms.Label();
+            this.lblMobility = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -96,6 +91,13 @@
             this.rbSizeLLL = new System.Windows.Forms.RadioButton();
             this.gbAttacks = new System.Windows.Forms.GroupBox();
             this.btnEditAttack = new System.Windows.Forms.Button();
+            this.txtBaseHP = new System.Windows.Forms.NumericUpDown();
+            this.txtBaseEN = new System.Windows.Forms.NumericUpDown();
+            this.txtBaseArmor = new System.Windows.Forms.NumericUpDown();
+            this.txtBaseMobility = new System.Windows.Forms.NumericUpDown();
+            this.txtBaseMovement = new System.Windows.Forms.NumericUpDown();
+            this.txtMaxClimb = new System.Windows.Forms.NumericUpDown();
+            this.lblMaxClimb = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtPartsSlots)).BeginInit();
@@ -109,6 +111,12 @@
             this.cboUnderwater.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.gbAttacks.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseHP)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseEN)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseArmor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMobility)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMovement)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxClimb)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -179,15 +187,17 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.lblPartsSlots);
-            this.groupBox1.Controls.Add(this.txtPartsSlots);
+            this.groupBox1.Controls.Add(this.txtMaxClimb);
+            this.groupBox1.Controls.Add(this.lblMaxClimb);
             this.groupBox1.Controls.Add(this.txtBaseMovement);
             this.groupBox1.Controls.Add(this.txtBaseMobility);
             this.groupBox1.Controls.Add(this.txtBaseArmor);
             this.groupBox1.Controls.Add(this.txtBaseEN);
             this.groupBox1.Controls.Add(this.txtBaseHP);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.lblPartsSlots);
+            this.groupBox1.Controls.Add(this.txtPartsSlots);
+            this.groupBox1.Controls.Add(this.lvlMovement);
+            this.groupBox1.Controls.Add(this.lblMobility);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label6);
@@ -201,7 +211,7 @@
             // lblPartsSlots
             // 
             this.lblPartsSlots.AutoSize = true;
-            this.lblPartsSlots.Location = new System.Drawing.Point(6, 145);
+            this.lblPartsSlots.Location = new System.Drawing.Point(6, 99);
             this.lblPartsSlots.Name = "lblPartsSlots";
             this.lblPartsSlots.Size = new System.Drawing.Size(60, 13);
             this.lblPartsSlots.TabIndex = 11;
@@ -209,7 +219,7 @@
             // 
             // txtPartsSlots
             // 
-            this.txtPartsSlots.Location = new System.Drawing.Point(174, 143);
+            this.txtPartsSlots.Location = new System.Drawing.Point(174, 97);
             this.txtPartsSlots.Maximum = new decimal(new int[] {
             4,
             0,
@@ -229,63 +239,28 @@
             0,
             0});
             // 
-            // txtBaseMovement
+            // lvlMovement
             // 
-            this.txtBaseMovement.Location = new System.Drawing.Point(121, 117);
-            this.txtBaseMovement.Name = "txtBaseMovement";
-            this.txtBaseMovement.Size = new System.Drawing.Size(143, 20);
-            this.txtBaseMovement.TabIndex = 9;
+            this.lvlMovement.AutoSize = true;
+            this.lvlMovement.Location = new System.Drawing.Point(6, 73);
+            this.lvlMovement.Name = "lvlMovement";
+            this.lvlMovement.Size = new System.Drawing.Size(60, 13);
+            this.lvlMovement.TabIndex = 4;
+            this.lvlMovement.Text = "Movement:";
             // 
-            // txtBaseMobility
+            // lblMobility
             // 
-            this.txtBaseMobility.Location = new System.Drawing.Point(121, 91);
-            this.txtBaseMobility.Name = "txtBaseMobility";
-            this.txtBaseMobility.Size = new System.Drawing.Size(143, 20);
-            this.txtBaseMobility.TabIndex = 8;
-            // 
-            // txtBaseArmor
-            // 
-            this.txtBaseArmor.Location = new System.Drawing.Point(121, 65);
-            this.txtBaseArmor.Name = "txtBaseArmor";
-            this.txtBaseArmor.Size = new System.Drawing.Size(143, 20);
-            this.txtBaseArmor.TabIndex = 7;
-            // 
-            // txtBaseEN
-            // 
-            this.txtBaseEN.Location = new System.Drawing.Point(121, 39);
-            this.txtBaseEN.Name = "txtBaseEN";
-            this.txtBaseEN.Size = new System.Drawing.Size(143, 20);
-            this.txtBaseEN.TabIndex = 6;
-            // 
-            // txtBaseHP
-            // 
-            this.txtBaseHP.Location = new System.Drawing.Point(121, 13);
-            this.txtBaseHP.Name = "txtBaseHP";
-            this.txtBaseHP.Size = new System.Drawing.Size(143, 20);
-            this.txtBaseHP.TabIndex = 5;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 120);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(87, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Base Movement:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 94);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(72, 13);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Base Mobility:";
+            this.lblMobility.AutoSize = true;
+            this.lblMobility.Location = new System.Drawing.Point(150, 47);
+            this.lblMobility.Name = "lblMobility";
+            this.lblMobility.Size = new System.Drawing.Size(45, 13);
+            this.lblMobility.TabIndex = 3;
+            this.lblMobility.Text = "Mobility:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 68);
+            this.label3.Location = new System.Drawing.Point(6, 47);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 13);
             this.label3.TabIndex = 2;
@@ -294,7 +269,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 42);
+            this.label2.Location = new System.Drawing.Point(150, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 1;
@@ -303,7 +278,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 16);
+            this.label6.Location = new System.Drawing.Point(6, 21);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(52, 13);
             this.label6.TabIndex = 0;
@@ -832,6 +807,87 @@
             this.btnEditAttack.UseVisualStyleBackColor = true;
             this.btnEditAttack.Click += new System.EventHandler(this.btnEditAttacks_Click);
             // 
+            // txtBaseHP
+            // 
+            this.txtBaseHP.Location = new System.Drawing.Point(88, 19);
+            this.txtBaseHP.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseHP.Name = "txtBaseHP";
+            this.txtBaseHP.Size = new System.Drawing.Size(56, 20);
+            this.txtBaseHP.TabIndex = 12;
+            // 
+            // txtBaseEN
+            // 
+            this.txtBaseEN.Location = new System.Drawing.Point(208, 19);
+            this.txtBaseEN.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseEN.Name = "txtBaseEN";
+            this.txtBaseEN.Size = new System.Drawing.Size(56, 20);
+            this.txtBaseEN.TabIndex = 13;
+            // 
+            // txtBaseArmor
+            // 
+            this.txtBaseArmor.Location = new System.Drawing.Point(88, 45);
+            this.txtBaseArmor.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseArmor.Name = "txtBaseArmor";
+            this.txtBaseArmor.Size = new System.Drawing.Size(56, 20);
+            this.txtBaseArmor.TabIndex = 14;
+            // 
+            // txtBaseMobility
+            // 
+            this.txtBaseMobility.Location = new System.Drawing.Point(208, 45);
+            this.txtBaseMobility.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseMobility.Name = "txtBaseMobility";
+            this.txtBaseMobility.Size = new System.Drawing.Size(56, 20);
+            this.txtBaseMobility.TabIndex = 15;
+            // 
+            // txtBaseMovement
+            // 
+            this.txtBaseMovement.Location = new System.Drawing.Point(88, 71);
+            this.txtBaseMovement.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseMovement.Name = "txtBaseMovement";
+            this.txtBaseMovement.Size = new System.Drawing.Size(56, 20);
+            this.txtBaseMovement.TabIndex = 16;
+            // 
+            // txtMaxClimb
+            // 
+            this.txtMaxClimb.Location = new System.Drawing.Point(208, 71);
+            this.txtMaxClimb.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtMaxClimb.Name = "txtMaxClimb";
+            this.txtMaxClimb.Size = new System.Drawing.Size(56, 20);
+            this.txtMaxClimb.TabIndex = 18;
+            // 
+            // lblMaxClimb
+            // 
+            this.lblMaxClimb.AutoSize = true;
+            this.lblMaxClimb.Location = new System.Drawing.Point(144, 73);
+            this.lblMaxClimb.Name = "lblMaxClimb";
+            this.lblMaxClimb.Size = new System.Drawing.Size(58, 13);
+            this.lblMaxClimb.TabIndex = 17;
+            this.lblMaxClimb.Text = "Max Climb:";
+            // 
             // UnitNormalEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -869,6 +925,12 @@
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.gbAttacks.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseHP)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseEN)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseArmor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMobility)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMovement)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxClimb)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -882,13 +944,8 @@
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox txtBaseMovement;
-        private System.Windows.Forms.TextBox txtBaseMobility;
-        private System.Windows.Forms.TextBox txtBaseArmor;
-        private System.Windows.Forms.TextBox txtBaseEN;
-        private System.Windows.Forms.TextBox txtBaseHP;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lvlMovement;
+        private System.Windows.Forms.Label lblMobility;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label6;
@@ -944,5 +1001,12 @@
         private System.Windows.Forms.ToolStripMenuItem tsmExport;
         private System.Windows.Forms.ToolStripMenuItem tsmDetails;
         private System.Windows.Forms.CheckBox cboMovementUnderwater;
+        private System.Windows.Forms.NumericUpDown txtBaseEN;
+        private System.Windows.Forms.NumericUpDown txtBaseHP;
+        private System.Windows.Forms.NumericUpDown txtBaseMobility;
+        private System.Windows.Forms.NumericUpDown txtBaseArmor;
+        private System.Windows.Forms.NumericUpDown txtBaseMovement;
+        private System.Windows.Forms.NumericUpDown txtMaxClimb;
+        private System.Windows.Forms.Label lblMaxClimb;
     }
 }
