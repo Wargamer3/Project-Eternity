@@ -6,8 +6,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         protected override bool Spherical { get { return true; } }
 
-        public SphericalMap3D(DeathmatchMap Map, GraphicsDevice g)
-            : base(Map, g)
+        public SphericalMap3D(DeathmatchMap Map, int LayerIndex, GraphicsDevice g)
+            : base(Map, LayerIndex, g)
         {
         }
     }

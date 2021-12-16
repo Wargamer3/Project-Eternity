@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         protected virtual bool Spherical { get { return false; } }
 
-        public CubeMap3D(DeathmatchMap Map, GraphicsDevice g)
-            : base(Map, g)
+        public CubeMap3D(DeathmatchMap Map, int LayerIndex, GraphicsDevice g)
+            : base(Map, LayerIndex, g)
         {
         }
 
@@ -239,7 +239,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Vector3 Normal = Vector3.Cross(C - B, B - A);
             Normal.Normalize();
 
-            float Z = Map.GetTerrain(X, Y, Map.ActiveLayerIndex).Position.Z;
+            float Z = Map.GetTerrain(X, Y, LayerIndex).Position.Z;
 
             for (int V = ActiveTile.ArrayVertex.Length - 1; V >= 0; --V)
             {
@@ -249,7 +249,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Create slope right
             if (X + 1 < Map.MapSize.X)
             {
-                float ZRight = Map.GetTerrain(X + 1, Y, Map.ActiveLayerIndex).Position.Z;
+                float ZRight = Map.GetTerrain(X + 1, Y, LayerIndex).Position.Z;
 
                 if (Z != ZRight)
                 {
@@ -267,7 +267,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Create slope down
             if (Y + 1 < Map.MapSize.Y)
             {
-                float ZDown = Map.GetTerrain(X, Y + 1, Map.ActiveLayerIndex).Position.Z;
+                float ZDown = Map.GetTerrain(X, Y + 1, LayerIndex).Position.Z;
 
                 if (Z != ZDown)
                 {
@@ -290,7 +290,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Vector3 C = ActiveTile.ArrayVertex[2].Position;
             Vector3 D = ActiveTile.ArrayVertex[3].Position;
 
-            float Z = Map.GetTerrain(X, Y, Map.ActiveLayerIndex).Position.Z;
+            float Z = Map.GetTerrain(X, Y, LayerIndex).Position.Z;
 
             for (int V = ActiveTile.ArrayVertex.Length - 1; V >= 0; --V)
             {
@@ -300,7 +300,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Create slopes (right)
             if (X + 1 < Map.MapSize.X)
             {
-                float ZRight = Map.GetTerrain(X + 1, Y, Map.ActiveLayerIndex).Position.Z;
+                float ZRight = Map.GetTerrain(X + 1, Y, LayerIndex).Position.Z;
 
                 if (Z != ZRight)
                 {
@@ -319,7 +319,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Create slope down
             if (Y + 1 < Map.MapSize.Y)
             {
-                float ZDown = Map.GetTerrain(X, Y + 1, Map.ActiveLayerIndex).Position.Z;
+                float ZDown = Map.GetTerrain(X, Y + 1, LayerIndex).Position.Z;
 
                 if (Z != ZDown)
                 {

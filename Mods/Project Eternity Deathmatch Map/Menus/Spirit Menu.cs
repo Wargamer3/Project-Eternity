@@ -263,7 +263,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ListSelectedSpirit[0].Range > 0)
                 {
                     List<Vector3> ListMVChoice = Map.ComputeRange(ActiveSquad.Position, 0, ListSelectedSpirit[0].Range);
-                    Map.ListLayer[Map.ActiveLayerIndex].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
+                    Map.ListLayer[ActiveSquad.LayerIndex].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
                 }
                 
                 for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)

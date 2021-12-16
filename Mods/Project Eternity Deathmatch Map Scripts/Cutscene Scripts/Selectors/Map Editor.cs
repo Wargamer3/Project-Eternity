@@ -81,13 +81,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
                         {//Get the Tile under the mouse base on the map starting pos.
                             Point TilePos = new Point(MouseX, MouseY);
-                            Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                            Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, 0);
 
                             TileAttributesEditor.Init(SelectedTerrain, ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex]);
 
                             if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                             {
-                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, 0);
                             }
                         }
                         //Just create a new Tile.
@@ -99,10 +99,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             if (MouseX >= 0 && MouseY >= 0 && MouseX < BattleMapViewer.ActiveMap.MapSize.X && MouseY < BattleMapViewer.ActiveMap.MapSize.Y)
                             {
-                                Helper.ReplaceTerrain(MouseX, MouseY, PresetTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                                Helper.ReplaceTerrain(MouseX, MouseY, PresetTerrain, 0);
 
                                 Helper.ReplaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                    PresetTile, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                                    PresetTile, 0);
                             }
                         }
                     }

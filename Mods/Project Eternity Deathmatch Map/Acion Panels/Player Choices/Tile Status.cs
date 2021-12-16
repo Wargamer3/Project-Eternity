@@ -51,6 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             float TileX = Map.CursorPosition.X;
             float TileY = Map.CursorPosition.Y;
+            int TileZ = (int)Math.Floor(Map.CursorPosition.Z);
 
             float DrawX = (TileX - Map.CameraPosition.X + 1) * Map.TileSize.X;
             float DrawY = (TileY - Map.CameraPosition.Y) * Map.TileSize.Y;
@@ -61,8 +62,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (DrawY + Map.sprCursorTerrainSelection.Height >= Constants.Height)
                 DrawY = Constants.Height - Map.sprCursorTerrainSelection.Height;
 
-            Terrain ActiveTerrain = Map.GetTerrain(TileX, TileY, Map.ActiveLayerIndex);
-            DrawableTile ActiveTile = Map.GetTile(TileX, TileY, Map.ActiveLayerIndex);
+            Terrain ActiveTerrain = Map.GetTerrain(TileX, TileY, TileZ);
+            DrawableTile ActiveTile = Map.GetTile(TileX, TileY, TileZ);
             g.Draw(Map.sprCursorTerrainSelection, new Vector2(DrawX, DrawY), Color.White);
             g.Draw(Map.ListTileSet[ActiveTile.Tileset], new Vector2(DrawX + 6, DrawY + 22), ActiveTile.Origin, Color.White);
             string BonusValue;

@@ -65,7 +65,7 @@ namespace ProjectEternity.Core.Units.Builder
 
                                 //Initialise the Unit stats.
                                 NewLeader.Init();
-                                Map.SpawnSquad(Map.ActiveLayerIndex, new Squad("Tower", NewLeader), 0, Position);
+                                Map.SpawnSquad(Map.ActivePlayerIndex, new Squad("Tower", NewLeader), 0, Position);
                             }
                         }
                     }

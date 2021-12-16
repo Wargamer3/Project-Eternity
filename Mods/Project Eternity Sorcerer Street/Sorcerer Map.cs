@@ -270,7 +270,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
-            if (ShowAllLayers)
+            if (ShowLayerIndex == -1)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
                 {
@@ -279,7 +279,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                ListLayer[ActiveLayerIndex].BeginDraw(g);
+                ListLayer[ShowLayerIndex].BeginDraw(g);
             }
         }
 
@@ -287,7 +287,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             g.End();
             g.Begin(SpriteSortMode.Deferred, null);
-            if (ShowAllLayers)
+            if (ShowLayerIndex == -1)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
                 {
@@ -296,7 +296,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                ListLayer[ActiveLayerIndex].Draw(g);
+                ListLayer[ShowLayerIndex].Draw(g);
             }
 
             if (IsOnTop)

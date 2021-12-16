@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     TransformationCounter -= TilesTransformationCounter;
 
-                    MapLayer ActiveLayer = Map.ListLayer[Map.ActiveLayerIndex];
+                    MapLayer ActiveLayer = Map.ListLayer[0];
 
                     for (int T = RealCurrentTransformingIndex; T < TerrainAttribute.ListTerrainChangeLocation.Count && T < RealCurrentTransformingIndex + _MinSimultaneousTiles; T++)
                     {

@@ -43,14 +43,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ListPlayer[PlayerIndex].ListSquad.Count == 0)
                 return -1;
 
-            float CurrentZ = Position.Z;
             Vector3 FinalPosition = Position + Displacement;
 
             if (FinalPosition.X < 0 || FinalPosition.X >= MapSize.X || FinalPosition.Y < 0 || FinalPosition.Y >= MapSize.Y)
                 return -1;
-
-            float ZChange = GetTerrain(FinalPosition.X, FinalPosition.Y, ActiveLayerIndex).Position.Z - Position.Z;
-            FinalPosition.Z += ZChange;
 
             int S = 0;
             bool SquadFound = false;

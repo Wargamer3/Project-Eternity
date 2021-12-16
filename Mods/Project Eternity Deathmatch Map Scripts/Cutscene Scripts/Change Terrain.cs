@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     int TilesetIndex = Map.ListTileSet.IndexOf(sprTileset);
 
-                    MapLayer ActiveLayer = Map.ListLayer[Map.ActiveLayerIndex];
+                    MapLayer ActiveLayer = Map.ListLayer[0];
 
                     for (int T = RealCurrentTransformingIndex; T < ListTerrainChangeLocation.Count && T < RealCurrentTransformingIndex + _MinSimultaneousTiles; T++)
                     {

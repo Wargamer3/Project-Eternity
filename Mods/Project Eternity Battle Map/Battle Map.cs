@@ -128,8 +128,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool IsInit = false;
         public Point TileSize;
         public Point MapSize;
-        public int ActiveLayerIndex;
-        public bool ShowAllLayers;
+        public int ShowLayerIndex;
         public BattleMapOverlay MapOverlay;
         public bool ShowUnits;
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
@@ -214,8 +213,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             MapSize = new Point(10, 10);
             TileSize = new Point(32, 32);
-            ActiveLayerIndex = 0;
-            ShowAllLayers = true;
+            ShowLayerIndex = -1;
             
             IsFrozen = false;
             OnlinePlayers = new OnlineConfiguration();

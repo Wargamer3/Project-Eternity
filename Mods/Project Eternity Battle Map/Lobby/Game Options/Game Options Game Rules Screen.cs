@@ -16,6 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BoxNumericUpDown TurnLimitTextbox;
         private BoxNumericUpDown MinPlayerTextbox;
         private BoxNumericUpDown MaxPlayerTextbox;
+        private BoxNumericUpDown MaxSquadPerPlayerTextbox;
 
         private IUIElement[] ArrayMenuButton;
 
@@ -57,10 +58,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawY += 30;
             MinPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
             MaxPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
+            DrawY += 30;
+            MaxSquadPerPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
 
             ArrayMenuButton = new IUIElement[]
             {
-                BotNumberTextbox, GoalScoreTextbox, TimeLimitTextbox, TurnLimitTextbox, MinPlayerTextbox, MaxPlayerTextbox,
+                BotNumberTextbox, GoalScoreTextbox, TimeLimitTextbox, TurnLimitTextbox, MinPlayerTextbox, MaxPlayerTextbox, MaxSquadPerPlayerTextbox,
             };
         }
 
@@ -85,7 +88,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Number of Bots", new Vector2(DrawX + 10, DrawY), Color.White);
 
             DrawY += 105;
-            DrawBox(g, new Vector2(DrawX, DrawY), PanelWidth, PanelHeight, Color.White);
+            DrawBox(g, new Vector2(DrawX, DrawY), PanelWidth, PanelHeight + 30, Color.White);
             DrawBox(g, new Vector2(DrawX, DrawY), PanelWidth, 30, Color.White);
             g.DrawString(fntText, "Game", new Vector2(DrawX + 10, DrawY + 8), Color.White);
 
@@ -96,9 +99,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Turn Limit", new Vector2(RightColumnX + 10, DrawY), Color.White);
             DrawY += 30;
             g.DrawString(fntText, "Min Players", new Vector2(DrawX + 10, DrawY), Color.White);
-            DrawBox(g, new Vector2(RightColumnX - 150, DrawY - 7), 150, 30, Color.White);
             g.DrawString(fntText, "Max Players", new Vector2(RightColumnX + 10, DrawY), Color.White);
-            DrawBox(g, new Vector2(PanelWidth - 150, DrawY - 7), 150, 30, Color.White);
+            DrawY += 30;
+            g.DrawString(fntText, "Max Squad Per Player", new Vector2(DrawX + 10, DrawY), Color.White);
 
             foreach (IUIElement ActiveButton in ArrayMenuButton)
             {

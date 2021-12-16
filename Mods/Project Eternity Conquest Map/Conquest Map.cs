@@ -990,14 +990,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             if (ListPlayer[PlayerIndex].ListUnit.Count == 0)
                 return -1;
 
-            float CurrentZ = Position.Z;
             Vector3 FinalPosition = Position + Displacement;
 
             if (FinalPosition.X < 0 || FinalPosition.X > MapSize.X || FinalPosition.Y < 0 || FinalPosition.Y > MapSize.Y)
                 return -1;
-
-            float ZChange = GetTerrain((int)FinalPosition.X, (int)FinalPosition.Y, ActiveLayerIndex).Position.Z - Position.Z;
-            FinalPosition.Z += ZChange;
 
             int S = 0;
             bool SquadFound = false;
@@ -1174,7 +1170,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 MapOverlay.BeginDraw(g);
             }
 
-            if (ShowAllLayers)
+            if (ShowLayerIndex == -1)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
                 {
@@ -1183,7 +1179,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             else
             {
-                ListLayer[ActiveLayerIndex].BeginDraw(g);
+                ListLayer[ShowLayerIndex].BeginDraw(g);
             }
 
             g.End();
@@ -1191,7 +1187,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            if (ShowAllLayers)
+            if (ShowLayerIndex == -1)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
                 {
@@ -1200,7 +1196,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             else
             {
-                ListLayer[ActiveLayerIndex].Draw(g);
+                ListLayer[ShowLayerIndex].Draw(g);
             }
 
             if (ShowUnits)

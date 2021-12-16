@@ -616,15 +616,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
                 {
-                    ListLayer[0].LayerGrid = new Map3D(this, GraphicsDevice);
+                    ListLayer[0].LayerGrid = new Map3D(this, 0, GraphicsDevice);
                 }
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.L))
                 {
-                    ListLayer[0].LayerGrid = new CubeMap3D(this, GraphicsDevice);
+                    ListLayer[0].LayerGrid = new CubeMap3D(this, 0, GraphicsDevice);
                 }
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.O))
                 {
-                    ListLayer[0].LayerGrid = new SphericalMap3D(this, GraphicsDevice);
+                    ListLayer[0].LayerGrid = new SphericalMap3D(this, 0, GraphicsDevice);
                 }
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.U))
                 {
@@ -714,7 +714,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BeginDrawNightOverlay(g);
             }
 
-            if (ShowAllLayers)
+            if (ShowLayerIndex == -1)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
                 {
@@ -723,7 +723,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                ListLayer[ActiveLayerIndex].BeginDraw(g);
+                ListLayer[ShowLayerIndex].BeginDraw(g);
             }
 
             g.End();
@@ -765,7 +765,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListProp[P].Draw(g);
             }
 
-            if (ShowAllLayers)
+            if (ShowLayerIndex == -1)
             {
                 for (int i = 0; i < ListLayer.Count; ++i)
                 {
@@ -774,7 +774,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                ListLayer[ActiveLayerIndex].Draw(g);
+                ListLayer[ShowLayerIndex].Draw(g);
             }
 
             if (ShowUnits)

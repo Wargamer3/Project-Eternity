@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, ActivePlayer.CurrentDirection == Directions.None);
+            PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, ActivePlayer.GamePiece.LayerIndex, ActivePlayer.CurrentDirection == Directions.None);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (Movement > 0)
                 {
-                    PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, true);
+                    PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, ActivePlayer.GamePiece.LayerIndex, true);
                 }
                 else
                 {
@@ -97,9 +97,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             --Movement;
         }
 
-        private void PrepareToMoveToNextTerrain(Vector3 PlayerPosition, bool AllowDirectionChange)
+        private void PrepareToMoveToNextTerrain(Vector3 PlayerPosition, int LayerIndex, bool AllowDirectionChange)
         {
-            Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, (int)PlayerPosition.X, (int)PlayerPosition.Y, ActivePlayer.CurrentDirection);
+            Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, (int)PlayerPosition.X, (int)PlayerPosition.Y, LayerIndex, ActivePlayer.CurrentDirection);
 
             if (!AllowDirectionChange)
             {
@@ -116,25 +116,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private static Dictionary<Directions, TerrainSorcererStreet> GetNextTerrains(SorcererStreetMap Map, int ActiveTerrainX, int ActiveTerrainY, Directions PlayerDirection)
+        private static Dictionary<Directions, TerrainSorcererStreet> GetNextTerrains(SorcererStreetMap Map, int ActiveTerrainX, int ActiveTerrainY, int LayerIndex, Directions PlayerDirection)
         {
             Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain = new Dictionary<Directions, TerrainSorcererStreet>();
 
             if (ActiveTerrainY - 1 >= 0)
             {
-                DicNextTerrain.Add(Directions.Up, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY - 1, Map.ActiveLayerIndex));
+                DicNextTerrain.Add(Directions.Up, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY - 1, LayerIndex));
             }
             if (ActiveTerrainY + 1 < Map.MapSize.Y)
             {
-                DicNextTerrain.Add(Directions.Down, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY + 1, Map.ActiveLayerIndex));
+                DicNextTerrain.Add(Directions.Down, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY + 1, LayerIndex));
             }
             if (ActiveTerrainX - 1 >= 0)
             {
-                DicNextTerrain.Add(Directions.Left, Map.GetTerrain(ActiveTerrainX - 1, ActiveTerrainY, Map.ActiveLayerIndex));
+                DicNextTerrain.Add(Directions.Left, Map.GetTerrain(ActiveTerrainX - 1, ActiveTerrainY, LayerIndex));
             }
             if (ActiveTerrainX + 1 < Map.MapSize.X)
             {
-                DicNextTerrain.Add(Directions.Right, Map.GetTerrain(ActiveTerrainX + 1, ActiveTerrainY, Map.ActiveLayerIndex));
+                DicNextTerrain.Add(Directions.Right, Map.GetTerrain(ActiveTerrainX + 1, ActiveTerrainY, LayerIndex));
             }
 
             Directions[] TerrainDirections = DicNextTerrain.Keys.ToArray();

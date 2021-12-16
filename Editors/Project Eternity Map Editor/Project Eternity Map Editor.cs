@@ -395,13 +395,13 @@ namespace ProjectEternity.Editors.MapEditor
                         if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
                         {//Get the Tile under the mouse base on the map starting pos.
                             Point TilePos = new Point(MouseX, MouseY);
-                            Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                            Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, lsLayers.SelectedIndex);
 
                             TileAttributesEditor.Init(SelectedTerrain, ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex]);
 
                             if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                             {
-                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, lsLayers.SelectedIndex);
                             }
                         }
                         //Just create a new Tile.
@@ -412,10 +412,10 @@ namespace ProjectEternity.Editors.MapEditor
                             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
                             Helper.ReplaceTerrain((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                PresetTerrain, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                                PresetTerrain, lsLayers.SelectedIndex);
 
                             Helper.ReplaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                PresetTile, BattleMapViewer.ActiveMap.ActiveLayerIndex);
+                                PresetTile, lsLayers.SelectedIndex);
                         }
                     }
                 }
@@ -755,7 +755,6 @@ namespace ProjectEternity.Editors.MapEditor
                 int Index = lsLayers.SelectedIndex;
                 Helper.RemoveLayer(Index);
                 lsLayers.Items.RemoveAt(Index);
-                ActiveMap.ActiveLayerIndex = 0;
             }
         }
 
@@ -801,7 +800,14 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lsLayers.SelectedIndex >= 0)
             {
-                ActiveMap.ActiveLayerIndex = lsLayers.SelectedIndex;
+                if (cbShowAllLayers.Checked)
+                {
+                    ActiveMap.ShowLayerIndex = -1;
+                }
+                else
+                {
+                    ActiveMap.ShowLayerIndex = lsLayers.SelectedIndex;
+                }
             }
         }
 
@@ -824,7 +830,14 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (ActiveMap != null)
             {
-                ActiveMap.ShowAllLayers = cbShowAllLayers.Checked;
+                if (cbShowAllLayers.Checked)
+                {
+                    ActiveMap.ShowLayerIndex = -1;
+                }
+                else
+                {
+                    ActiveMap.ShowLayerIndex = lsLayers.SelectedIndex;
+                }
             }
         }
 
@@ -1092,6 +1105,11 @@ namespace ProjectEternity.Editors.MapEditor
             foreach(object ActiveLayer in Helper.GetLayers())
             {
                 lsLayers.Items.Add(ActiveLayer);
+            }
+
+            if (lsLayers.Items.Count > 0)
+            {
+                lsLayers.SelectedIndex = 0;
             }
 
             #endregion

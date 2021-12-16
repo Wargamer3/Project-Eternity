@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override string DoExecuteEffect()
         {
-            MapLayer ActiveLayer = Params.LocalContext.Map.ListLayer[Params.LocalContext.Map.ActiveLayerIndex];
+            MapLayer ActiveLayer = Params.LocalContext.Map.ListLayer[0];
 
             foreach (Vector3 ActivePosition in Params.LocalContext.ArrayAttackPosition)
             {

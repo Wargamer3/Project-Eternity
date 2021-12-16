@@ -14,15 +14,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         protected BasicEffect PolygonEffect;
         protected float Radius;
         private DeathmatchMap Map;
+        protected int LayerIndex;
         public DeathmatchCamera Camera;
         private Texture2D sprCursor;
         private Tile3D Cursor;
         private Dictionary<Color, List<Tile3D>> DicDrawablePointPerColor;
         private Random Random;
 
-        public Map3D(DeathmatchMap Map, GraphicsDevice g)
+        public Map3D(DeathmatchMap Map, int LayerIndex, GraphicsDevice g)
         {
             this.Map = Map;
+            this.LayerIndex = LayerIndex;
             Random = new Random();
             sprCursor = Map.sprCursor;
             Camera = new DeathmatchCamera(g);
@@ -48,7 +50,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             CreateMap(Map);
 
-            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, sprCursor.Width, sprCursor.Height, Radius);
+            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, LayerIndex, sprCursor.Width, sprCursor.Height, Radius);
         }
 
         public void Save(BinaryWriter BW)
@@ -69,8 +71,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                 {
-                    Map.GetTerrain(X, Y, Map.ActiveLayerIndex).Position.Z = Random.Next(2) * 32;
-                    float Z = Map.GetTerrain(X, Y, Map.ActiveLayerIndex).Position.Z;
+                    Map.GetTerrain(X, Y, LayerIndex).Position.Z = Random.Next(2) * 32;
+                    float Z = Map.GetTerrain(X, Y, LayerIndex).Position.Z;
                     Vector3[] ArrayVertexPosition = new Vector3[4];
                     ArrayVertexPosition[0] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y);
                     ArrayVertexPosition[1] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y);
@@ -89,7 +91,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     //Create slope right
                     if (X + 1 < Map.MapSize.X)
                     {
-                        float ZRight = Map.GetTerrain(X + 1, Y, Map.ActiveLayerIndex).Position.Z;
+                        float ZRight = Map.GetTerrain(X + 1, Y, LayerIndex).Position.Z;
                         if (Z != ZRight)
                         {
                             Vector3[] ArrayVertexPositionRight = new Vector3[4];
@@ -104,7 +106,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     //Create slope down
                     if (Y + 1 < Map.MapSize.Y)
                     {
-                        float ZDown = Map.GetTerrain(X, Y + 1, Map.ActiveLayerIndex).Position.Z;
+                        float ZDown = Map.GetTerrain(X, Y + 1, LayerIndex).Position.Z;
                         if (Z != ZDown)
                         {
                             Vector3[] ArrayVertexPositionDown = new Vector3[4];
@@ -119,9 +121,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
         
-        private static Tile3D CreateCursor(DeathmatchMap Map, float X, float Y, int TextureWidth, int TextureHeight, float Radius)
+        private static Tile3D CreateCursor(DeathmatchMap Map, float X, float Y, int LayerIndex, int TextureWidth, int TextureHeight, float Radius)
         {
-            float Z = Map.GetTerrain(Math.Max(0, X), Math.Max(0, Y), Map.ActiveLayerIndex).Position.Z;
+            float Z = Map.GetTerrain(Math.Max(0, X), Math.Max(0, Y), LayerIndex).Position.Z;
 
             Vector3[] ArrayVertexPosition = new Vector3[4];
             ArrayVertexPosition[0] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y);
@@ -195,7 +197,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Update(GameTime gameTime)
         {
-            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, sprCursor.Width, sprCursor.Height, Radius);
+            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, LayerIndex, sprCursor.Width, sprCursor.Height, Radius);
             Camera.TeleportCamera(new Vector3(Map.CursorPosition.X * Map.TileSize.X - Radius, Radius * 1.2f + 200, 200 - Radius * 0.9f + Map.CursorPosition.Y * Map.TileSize.Y));
             Camera.SetRotation(0, (float)-Math.PI / 4f, 0f);
             Camera.Update(gameTime);
@@ -266,7 +268,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (Vector3 ActivePoint in ListPoint)
             {
-                ListDrawablePoint3D.Add(CreateCursor(Map, ActivePoint.X, ActivePoint.Y, 32, 32, Radius));
+                ListDrawablePoint3D.Add(CreateCursor(Map, ActivePoint.X, ActivePoint.Y, LayerIndex, 32, 32, Radius));
             }
 
             DicDrawablePointPerColor.Add(PointColor, ListDrawablePoint3D);

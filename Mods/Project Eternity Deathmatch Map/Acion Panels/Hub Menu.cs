@@ -183,7 +183,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (Vector2 ActivePosition in ListPosition)
             {
-                Terrain ActiveTerrain = Map.GetTerrain(ActivePosition.X, ActivePosition.Y, Map.ActiveLayerIndex);
+                Terrain ActiveTerrain = Map.GetTerrain(ActivePosition.X, ActivePosition.Y, 0);
                 if (ActiveTerrain.MVEnterCost < 0)
                     return false;
             }

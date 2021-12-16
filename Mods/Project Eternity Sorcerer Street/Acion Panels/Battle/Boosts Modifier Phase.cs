@@ -39,25 +39,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int Y = 0; Y < Map.MapSize.Y; ++Y)
                 {
-                    TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(X, Y, Map.ActiveLayerIndex);
-
-                    if (ActiveTerrain.TerrainTypeIndex == 0)
+                    for (int L = 0; L < Map.ListLayer.Count; ++L)
                     {
-                        continue;
-                    }
+                        TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(X, Y, L);
 
-                    if (ActiveTerrain.DefendingCreature != null)
-                    {
-                        Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-                        Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Defender;
+                        if (ActiveTerrain.TerrainTypeIndex == 0)
+                        {
+                            continue;
+                        }
 
-                        ActiveTerrain.DefendingCreature.ActivateSkill(RequirementName);
+                        if (ActiveTerrain.DefendingCreature != null)
+                        {
+                            Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Invader;
+                            Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Defender;
 
-                        Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-                        Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Invader;
+                            ActiveTerrain.DefendingCreature.ActivateSkill(RequirementName);
 
-                        ActiveTerrain.DefendingCreature.ActivateSkill(RequirementName);
+                            Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Defender;
+                            Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Invader;
 
+                            ActiveTerrain.DefendingCreature.ActivateSkill(RequirementName);
+
+                        }
                     }
                 }
             }
