@@ -183,6 +183,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case "Horde":
                     GameRule = new HordeGameRule(this);
                     break;
+
+                case "Deathmatch":
+                    GameRule = new HordeGameRule(this);
+                    break;
             }
         }
 
@@ -614,6 +618,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     return;
                 }
 
+                if (KeyboardHelper.KeyPressed(Keys.P))
+                {
+                    CameraPosition.Z += 0.1f;
+                }
+
+                if (KeyboardHelper.KeyPressed(Keys.O))
+                {
+                    CameraPosition.Z -= 0.1f;
+                }
+
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
                 {
                     ListLayer[0].LayerGrid = new Map3D(this, 0, GraphicsDevice);
@@ -736,6 +750,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return;
             }
 
+            g.GraphicsDevice.Clear(Color.Black);
+
             //Handle screen shaking.
             if (IsShaking)
             {
@@ -767,14 +783,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ShowLayerIndex == -1)
             {
-                for (int i = 0; i < ListLayer.Count; ++i)
+                for (int L = 0; L < ListLayer.Count; ++L)
                 {
-                    ListLayer[i].Draw(g);
+                    ListLayer[L].Draw(g, L);
                 }
             }
             else
             {
-                ListLayer[ShowLayerIndex].Draw(g);
+                ListLayer[ShowLayerIndex].Draw(g, ShowLayerIndex);
             }
 
             if (ShowUnits)

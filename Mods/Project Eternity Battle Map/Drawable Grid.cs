@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void RemoveTileset(int TilesetIndex);
         void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor);
         void BeginDraw(CustomSpriteBatch g);
-        void Draw(CustomSpriteBatch g);
+        void Draw(CustomSpriteBatch g, int LayerIndex, MovementAlgorithmTile[,] ArrayTerrain);
         void Reset();
     }
 
@@ -147,15 +147,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
-        public void Draw(CustomSpriteBatch g)
+        public void Draw(CustomSpriteBatch g, int LayerIndex, MovementAlgorithmTile[,] ArrayTerrain)
         {
+            float BaseHeight = LayerIndex;
+
             for (int X = ArrayTile.GetLength(0) - 1; X >= 0; --X)
             {
                 for (int Y = ArrayTile.GetLength(1) - 1; Y >= 0; --Y)
                 {
+                    Color FinalColor = Color.White;
+                    float FinalHeight = BaseHeight + ArrayTerrain[X, Y].Position.Z;
+
+                    if (FinalHeight > CameraPosition.Z)
+                    {
+                        FinalColor = Color.FromNonPremultiplied(255, 255, 255, (int)Math.Min(255, 255 - (FinalHeight - CameraPosition.Z) * 255));
+                    }
+
                     g.Draw(Map.ListTileSet[ArrayTile[X, Y].Tileset],
                         new Vector2((X - CameraPosition.X) * TileSize.X, (Y - CameraPosition.Y) * TileSize.Y), 
-                        ArrayTile[X, Y].Origin, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, Depth);
+                        ArrayTile[X, Y].Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, Depth);
                 }
             }
 

@@ -209,7 +209,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public void Draw(CustomSpriteBatch g)
+        public void Draw(CustomSpriteBatch g, int LayerIndex, MovementAlgorithmTile[,] ArrayTerrain)
         {
             PolygonEffect.View = Camera.View;
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;

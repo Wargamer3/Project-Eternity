@@ -153,15 +153,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void Draw(CustomSpriteBatch g)
+        public void Draw(CustomSpriteBatch g, int LayerIndex)
         {
             if (IsVisible)
             {
-                LayerGrid.Draw(g);
+                LayerGrid.Draw(g, LayerIndex, ArrayTerrain);
 
                 if (Map.ShowTerrainType)
                 {
-                    int IndexOfLayer = Map.ListLayer.IndexOf(this);
+                    int IndexOfLayer = LayerIndex;
                     if (Map.ShowLayerIndex >= 0 && IndexOfLayer != -1)
                     {
                         IndexOfLayer = 0;
@@ -249,7 +249,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
                 {
-                    ActiveSubLayer.Draw(g);
+                    ActiveSubLayer.Draw(g, LayerIndex);
                 }
             }
         }

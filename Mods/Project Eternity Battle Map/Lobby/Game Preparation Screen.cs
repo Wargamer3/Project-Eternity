@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private readonly RoomInformations Room;
         private Point MapSize;
-        private List<int> ListMapTeam;
+        public List<int> ListMapTeam;
         private List<TeamInfo> ListAllTeamInfo;
         private int SelectingTeam;
         public Texture2D sprMapImage;

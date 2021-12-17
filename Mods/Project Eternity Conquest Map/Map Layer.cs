@@ -132,10 +132,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 LayerGrid.BeginDraw(g);
         }
 
-        public void Draw(CustomSpriteBatch g)
+        public void Draw(CustomSpriteBatch g, int LayerIndex)
         {
             if (IsVisible)
-                LayerGrid.Draw(g);
+            {
+                LayerGrid.Draw(g, LayerIndex, ArrayTerrain);
+            }
         }
 
         public void EndDraw(CustomSpriteBatch g)

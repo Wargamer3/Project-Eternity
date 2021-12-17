@@ -1189,14 +1189,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             if (ShowLayerIndex == -1)
             {
-                for (int i = 0; i < ListLayer.Count; ++i)
+                for (int L = 0; L < ListLayer.Count; ++L)
                 {
-                    ListLayer[i].Draw(g);
+                    ListLayer[L].Draw(g, L);
                 }
             }
             else
             {
-                ListLayer[ShowLayerIndex].Draw(g);
+                ListLayer[ShowLayerIndex].Draw(g, ShowLayerIndex);
             }
 
             if (ShowUnits)
