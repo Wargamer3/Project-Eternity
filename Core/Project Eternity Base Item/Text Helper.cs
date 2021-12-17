@@ -91,8 +91,8 @@ namespace ProjectEternity.Core
 
         public static void DrawText(CustomSpriteBatch g, string Text, Vector2 Position, Color TextColor)
         {
-            g.DrawString(_fntShadowFont, Text, Position, Color.Black);
-            g.DrawString(fntWhiteFont, Text, Position, TextColor);
+            g.DrawString(_fntShadowFont, Text, Position, Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.01f);
+            g.DrawString(fntWhiteFont, Text, Position, TextColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         public static void DrawTextRightAligned(CustomSpriteBatch g, string Text, Vector2 Position, Color TextColor)

@@ -131,6 +131,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int ShowLayerIndex;
         public BattleMapOverlay MapOverlay;
         public bool ShowUnits;
+        public bool ShowTerrainType;
+        public bool ShowTerrainHeight;
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
         public List<string> ListBackgroundsPath;
         public List<AnimationBackground> ListBackground;

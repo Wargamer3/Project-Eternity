@@ -60,6 +60,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 cboBattleAnimationForeground.Items.Add(ActivePath);
             }
 
+            txtMVEnterCost.Value = ActiveTerrain.MVEnterCost;
+            txtMVMoveCost.Value = ActiveTerrain.MVMoveCost;
+            txtHeight.Value = (decimal)ActiveTerrain.Position.Z;
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
             cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex + 1;
             cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex + 1;
@@ -96,15 +99,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (txtMVEnterCost.Text.Length == 0)
                 ActiveTerrain.MVEnterCost = 0;
             else
-                ActiveTerrain.MVEnterCost = Convert.ToInt32(txtMVEnterCost.Text);
-        }
-
-        private void txtHeight_ValueChanged(object sender, EventArgs e)
-        {
-            if (txtHeight.Text.Length == 0)
-                ActiveTerrain.Position.Z = 0;
-            else
-                ActiveTerrain.Position.Z = Convert.ToInt32(txtHeight.Text);
+                ActiveTerrain.MVEnterCost = (int)txtMVEnterCost.Value;
         }
 
         private void txtMVMoveCost_TextChanged(object sender, EventArgs e)
@@ -112,7 +107,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (txtMVMoveCost.Text.Length == 0)
                 ActiveTerrain.MVMoveCost = 0;
             else
-                ActiveTerrain.MVMoveCost = Convert.ToInt32(txtMVMoveCost.Text);
+                ActiveTerrain.MVMoveCost = (int)txtMVMoveCost.Value;
+        }
+
+        private void txtHeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (txtHeight.Text.Length == 0)
+                ActiveTerrain.Position.Z = 0;
+            else
+                ActiveTerrain.Position.Z = (float)txtHeight.Value;
         }
 
         private void btnAddNewBonus_Click(object sender, EventArgs e)

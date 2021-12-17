@@ -24,6 +24,8 @@ namespace ProjectEternity.Editors.MapEditor
         private CheckBox cbShowGrid;
         private CheckBox cbPreviewMap;
         private CheckBox cbShowAllLayers;
+        private CheckBox cbShowTerrainType;
+        private CheckBox cbShowTerrainHeight;
 
         protected BattleMap ActiveMap;
         protected IMapHelper Helper;
@@ -86,6 +88,38 @@ namespace ProjectEternity.Editors.MapEditor
 
             #endregion
 
+            #region cbShowTerrainType
+
+            cbShowTerrainType = new CheckBox
+            {
+                Text = "Show terrain type"
+            };
+            //Link a CheckedChanged event to a method.
+            cbShowTerrainType.CheckedChanged += new EventHandler(cbShowTerrainType_CheckedChanged);
+            cbShowTerrainType.Checked = false;
+            //Make it 10 pixel after the last mnuToolBar item.
+            cbShowTerrainType.Padding = new Padding(10, 0, 0, 0);
+            mnuToolBar.Items.Add(new ToolStripControlHost(cbShowTerrainType));
+
+            #endregion
+
+            #region cbShowTerrainType
+
+            cbShowTerrainHeight = new CheckBox
+            {
+                Text = "Show terrain height"
+            };
+            //Link a CheckedChanged event to a method.
+            cbShowTerrainHeight.CheckedChanged += new EventHandler(cbShowTerrainHeight_CheckedChanged);
+            cbShowTerrainHeight.Checked = false;
+            //Make it 10 pixel after the last mnuToolBar item.
+            cbShowTerrainHeight.Padding = new Padding(10, 0, 0, 0);
+            mnuToolBar.Items.Add(new ToolStripControlHost(cbShowTerrainHeight));
+
+            #endregion
+
+            this.mnuToolBar.ResumeLayout(false);
+            this.mnuToolBar.PerformLayout();
             #region Scripting
 
             lstEvents.Items.Add(new MapEvent(140, 70, "Game", new string[0], new string[] { "Game Start" }));
@@ -816,6 +850,16 @@ namespace ProjectEternity.Editors.MapEditor
         private void cbShowGrid_CheckedChanged(object sender, EventArgs e)
         {
             BattleMapViewer.ShowGrid = cbShowGrid.Checked;
+        }
+
+        private void cbShowTerrainType_CheckedChanged(object sender, EventArgs e)
+        {
+            BattleMapViewer.ActiveMap.ShowTerrainType = cbShowTerrainType.Checked;
+        }
+
+        private void cbShowTerrainHeight_CheckedChanged(object sender, EventArgs e)
+        {
+            BattleMapViewer.ActiveMap.ShowTerrainHeight = cbShowTerrainHeight.Checked;
         }
 
         private void cbPreviewMap_CheckedChanged(object sender, EventArgs e)

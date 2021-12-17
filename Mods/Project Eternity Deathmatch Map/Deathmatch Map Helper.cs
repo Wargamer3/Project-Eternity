@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex)
         {
             Terrain NewTerrain = new Terrain(TerrainPreset);
-            NewTerrain.Position = new Vector3(X, Y, 0);
+            NewTerrain.Position = new Vector3(X, Y, TerrainPreset.Position.Z);
 
             ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
         }

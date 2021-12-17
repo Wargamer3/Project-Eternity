@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Texture2D sprPixel;
         private SpriteFont fntSpawnText;
         public int ViewerIndex;
-        
+
         public bool ShowGrid;
 
         private Color BrushPlayer;
@@ -197,7 +197,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawString(fntSpawnText, ActiveMap.ListSingleplayerSpawns[i].Tag,
                     new Vector2((ActiveMap.ListSingleplayerSpawns[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X + 10,
                                 (ActiveMap.ListSingleplayerSpawns[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y + 10),
-                    Color.Black);
+                    Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
 
             for (int i = 0; i < ActiveMap.ListMultiplayerSpawns.Count; i++)
@@ -210,7 +210,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawString(fntSpawnText, ActiveMap.ListMultiplayerSpawns[i].Tag,
                     new Vector2((ActiveMap.ListMultiplayerSpawns[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X + 10,
                                 (ActiveMap.ListMultiplayerSpawns[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y + 10),
-                    Color.Black);
+                    Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
 
             for (int i = 0; i < ActiveMap.ListMapSwitchPoint.Count; i++)
@@ -223,7 +223,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawString(fntSpawnText, ActiveMap.ListMapSwitchPoint[i].Tag,
                     new Vector2((ActiveMap.ListMapSwitchPoint[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X + 10,
                                 (ActiveMap.ListMapSwitchPoint[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y + 10),
-                    Color.Black);
+                    Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
 
             //Grid
