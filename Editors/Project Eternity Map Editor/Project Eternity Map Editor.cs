@@ -120,15 +120,6 @@ namespace ProjectEternity.Editors.MapEditor
 
             this.mnuToolBar.ResumeLayout(false);
             this.mnuToolBar.PerformLayout();
-            #region Scripting
-
-            lstEvents.Items.Add(new MapEvent(140, 70, "Game", new string[0], new string[] { "Game Start" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, "Phase", new string[0], new string[] { "Phase Start" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, "Turn", new string[0], new string[] { "Turn Start" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, "Unit Moved", new string[0], new string[] { "Unit Moved" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, "On Battle", new string[0], new string[] { "Battle Start", "Battle End" }));
-
-            #endregion
         }
 
         public ProjectEternityMapEditor(string FilePath, object[] Params)
@@ -348,6 +339,7 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     case 0:
                     case 1:
+                    case 4:
                         Map_MouseMove(e);
                         break;
 
@@ -380,6 +372,7 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     case 0:
                     case 1:
+                    case 4:
                         pnMapPreview_MouseMove(sender, e);
                         break;
 
@@ -458,6 +451,11 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     HandleEventPoint(MouseX, MouseY, ActiveSpawn);
                 }
+                //Spawn tab
+                else if (tabToolBox.SelectedIndex == 4)
+                {
+                    HandleProps(MouseX, MouseY);
+                }
             }
 
             #region Right click
@@ -475,6 +473,11 @@ namespace ProjectEternity.Editors.MapEditor
                     //Trigger tab
                     else if (tabToolBox.SelectedIndex == 2)
                     {
+                    }
+                    //Spawn tab
+                    else if (tabToolBox.SelectedIndex == 4)
+                    {
+                        RemoveProps(MouseX, MouseY);
                     }
                 }
             }
@@ -798,9 +801,9 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 for (int L = lsLayers.SelectedIndex; L >= 0; --L)
                 {
-                    if (lsLayers.Items[L] is IMapLayer)
+                    if (lsLayers.Items[L] is BaseMapLayer)
                     {
-                        lsLayers.Items.Insert(L + 1, Helper.CreateNewSubLayer((IMapLayer)lsLayers.Items[L]));
+                        lsLayers.Items.Insert(L + 1, Helper.CreateNewSubLayer((BaseMapLayer)lsLayers.Items[L]));
                         break;
                     }
                 }
@@ -813,9 +816,9 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 for (int L = lsLayers.SelectedIndex; L >= 0; --L)
                 {
-                    if (lsLayers.Items[L] is IMapLayer)
+                    if (lsLayers.Items[L] is BaseMapLayer)
                     {
-                        Helper.RemoveSubLayer((IMapLayer)lsLayers.Items[L], (ISubMapLayer)lsLayers.Items[lsLayers.SelectedIndex]);
+                        Helper.RemoveSubLayer((BaseMapLayer)lsLayers.Items[L], (ISubMapLayer)lsLayers.Items[lsLayers.SelectedIndex]);
                         lsLayers.Items.RemoveAt(lsLayers.SelectedIndex);
                     }
                 }
@@ -841,6 +844,66 @@ namespace ProjectEternity.Editors.MapEditor
                 else
                 {
                     ActiveMap.ShowLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Props
+
+        private void HandleProps(int X, int Y)
+        {
+            if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+            {
+                int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
+                BaseMapLayer TopLayer = (BaseMapLayer)Helper.GetLayersAndSubLayers()[TopLayerIndex];
+
+                //Loop in the Prop list to find if a Prop already exist at the X, Y position.
+                for (int P = 0; P < TopLayer.ListProp.Count; P++)
+                {
+                    if (TopLayer.ListProp[P].Position.X == X && TopLayer.ListProp[P].Position.Y == Y)
+                    {
+                        pgPropProperties.SelectedObject = TopLayer.ListProp[P];
+                        break;
+                    }
+                }
+
+                InteractiveProp ActiveProp = null;
+                if (tabPropsChoices.SelectedIndex == 0 && lsInteractiveProps.SelectedItem != null)
+                {
+                    ActiveProp = (InteractiveProp)lsInteractiveProps.SelectedItem;
+                }
+                if (tabPropsChoices.SelectedIndex == 1 && lsPhysicalProps.SelectedItem != null)
+                {
+                    ActiveProp = (InteractiveProp)lsPhysicalProps.SelectedItem;
+                }
+                if (tabPropsChoices.SelectedIndex == 2 && lsVisualProps.SelectedItem != null)
+                {
+                    ActiveProp = (InteractiveProp)lsVisualProps.SelectedItem;
+                }
+
+                ActiveProp = ActiveProp.Copy(new Vector3(X, Y, 0), TopLayerIndex);
+
+                TopLayer.ListProp.Add(ActiveProp);
+            }
+        }
+
+        private void RemoveProps(int X, int Y)
+        {
+            if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+            {
+                int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
+                BaseMapLayer TopLayer = (BaseMapLayer)Helper.GetLayersAndSubLayers()[TopLayerIndex];
+
+                //Loop in the Prop list to find if a Prop already exist at the X, Y position.
+                for (int P = 0; P < TopLayer.ListProp.Count; P++)
+                {
+                    if (TopLayer.ListProp[P].Position.X == X && TopLayer.ListProp[P].Position.Y == Y)
+                    {
+                        TopLayer.ListProp.RemoveAt(P);
+                        break;
+                    }
                 }
             }
         }
@@ -890,7 +953,7 @@ namespace ProjectEternity.Editors.MapEditor
             int RealIndex = 0;
             int LastTopLayerIndex = -1;
 
-            foreach (object ActiveLayer in Helper.GetLayers())
+            foreach (object ActiveLayer in Helper.GetLayersAndSubLayers())
             {
                 if (!(ActiveLayer is ISubMapLayer))
                 {
@@ -1132,43 +1195,10 @@ namespace ProjectEternity.Editors.MapEditor
 
             #endregion
 
-            #region Scripting
-
-            lstEvents.Items.Add(new MapEvent(140, 70, "Game", new string[0], new string[] { "Game Start" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, "Phase", new string[0], new string[] { "Phase Start" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, "Turn", new string[0], new string[] { "Turn Start" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, "Unit Moved", new string[0], new string[] { "Unit Moved" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, "On Battle", new string[0], new string[] { "Battle Start", "Battle End" }));
-
-            string[] Files = Directory.GetFiles("Scripts", "*.dll");
-            for (int F = 0; F < Files.Length; F++)
-            {
-                System.Reflection.Assembly ActiveAssembly = System.Reflection.Assembly.LoadFile(Path.GetFullPath(Files[F]));
-                List<MapCondition> ListMapCondition = ReflectionHelper.GetObjectsFromBaseTypes<MapCondition>(typeof(BattleCondition), ActiveAssembly.GetTypes());
-
-                foreach (MapCondition Instance in ListMapCondition)
-                {
-                    lstConditions.Items.Add(Instance);
-                }
-            }
-
-            Files = Directory.GetFiles("Scripts", "*.dll");
-            for (int F = 0; F < Files.Length; F++)
-            {
-                System.Reflection.Assembly ActiveAssembly = System.Reflection.Assembly.LoadFile(Path.GetFullPath(Files[F]));
-                List<MapTrigger> ListMapTrigger = ReflectionHelper.GetObjectsFromBaseTypes<MapTrigger>(typeof(BattleTrigger), ActiveAssembly.GetTypes());
-
-                foreach (MapTrigger Instance in ListMapTrigger)
-                {
-                    lstTriggers.Items.Add(Instance);
-                }
-            }
-
-            #endregion
 
             #region Layers
 
-            foreach(object ActiveLayer in Helper.GetLayers())
+            foreach(object ActiveLayer in Helper.GetLayersAndSubLayers())
             {
                 lsLayers.Items.Add(ActiveLayer);
             }
@@ -1176,6 +1206,26 @@ namespace ProjectEternity.Editors.MapEditor
             if (lsLayers.Items.Count > 0)
             {
                 lsLayers.SelectedIndex = 0;
+            }
+
+            #endregion
+
+            #region Props
+
+            foreach (InteractiveProp Instance in BattleMapViewer.ActiveMap.DicInteractiveProp.Values)
+            {
+                if (Instance.PropCategory == InteractiveProp.PropCategories.Interactive)
+                {
+                    lsInteractiveProps.Items.Add(Instance);
+                }
+                else if (Instance.PropCategory == InteractiveProp.PropCategories.Physical)
+                {
+                    lsPhysicalProps.Items.Add(Instance);
+                }
+                else if (Instance.PropCategory == InteractiveProp.PropCategories.Visual)
+                {
+                    lsVisualProps.Items.Add(Instance);
+                }
             }
 
             #endregion

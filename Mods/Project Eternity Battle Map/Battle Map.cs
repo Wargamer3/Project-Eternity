@@ -138,7 +138,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<AnimationBackground> ListBackground;
         public List<string> ListForegroundsPath;
         public List<AnimationBackground> ListForeground;
-        public List<InteractiveProp> ListProp;
 
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
         public Vector3 CameraPosition;
@@ -165,6 +164,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<MapEvent> ListMapEvent;
         public Dictionary<string, Unit> DicUnitType = new Dictionary<string, Unit>();
         public Dictionary<string, CutsceneScript> DicCutsceneScript;
+        public Dictionary<string, InteractiveProp> DicInteractiveProp = new Dictionary<string, InteractiveProp>();
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, BaseEffect> DicEffect;
         public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
@@ -227,7 +227,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListBackgroundsPath = new List<string>();
             ListForeground = new List<AnimationBackground>();
             ListForegroundsPath = new List<string>();
-            ListProp = new List<InteractiveProp>();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
 
             Description = "";
@@ -242,6 +241,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListMapScript = new List<MapScript>();
             ListMapEvent = new List<MapEvent>();
             DicCutsceneScript = new Dictionary<string, CutsceneScript>();
+            DicInteractiveProp = new Dictionary<string, InteractiveProp>();
             DicRequirement = new Dictionary<string, BaseSkillRequirement>();
             DicEffect = new Dictionary<string, BaseEffect>();
             DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
@@ -411,7 +411,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             LoadAutomaticSkillActivation();
             LoadManualSkillActivation();
             LoadSkillRequirements();
-            LoadScripts();
+            LoadCutsceneScripts();
+            LoadInteractiveProps();
             LoadUnits();
         }
 
@@ -701,7 +702,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void LoadScripts()
+        private void LoadCutsceneScripts()
         {
             ScriptingScriptHolder CoreScripts = new ScriptingScriptHolder();
             KeyValuePair<string, List<CutsceneScript>> NewScripts = CoreScripts.GetNameAndContent();
@@ -720,6 +721,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             foreach (CutsceneScript ActiveListScript in BattleMapScripts.Values)
             {
                 DicCutsceneScript.Add(ActiveListScript.Name, ActiveListScript);
+            }
+        }
+
+        private void LoadInteractiveProps()
+        {
+            Dictionary<string, InteractiveProp> BattleMapInteractiveProp = InteractiveProp.LoadProps(this);
+            foreach (InteractiveProp ActiveProp in BattleMapInteractiveProp.Values)
+            {
+                ActiveProp.Load(Content);
+                DicInteractiveProp.Add(ActiveProp.PropName, ActiveProp);
             }
         }
 

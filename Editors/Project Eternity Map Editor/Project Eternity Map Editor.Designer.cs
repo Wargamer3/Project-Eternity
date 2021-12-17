@@ -75,6 +75,16 @@
             this.btnRemoveExtraLayer = new System.Windows.Forms.Button();
             this.btnAddExtraLayer = new System.Windows.Forms.Button();
             this.lblLayers = new System.Windows.Forms.Label();
+            this.tabProps = new System.Windows.Forms.TabPage();
+            this.PropsContainer = new System.Windows.Forms.SplitContainer();
+            this.tabPropsChoices = new System.Windows.Forms.TabControl();
+            this.tabInteractiveProps = new System.Windows.Forms.TabPage();
+            this.lsInteractiveProps = new System.Windows.Forms.ListBox();
+            this.tabPhysicalProps = new System.Windows.Forms.TabPage();
+            this.lsPhysicalProps = new System.Windows.Forms.ListBox();
+            this.tabVisualProps = new System.Windows.Forms.TabPage();
+            this.lsVisualProps = new System.Windows.Forms.ListBox();
+            this.pgPropProperties = new System.Windows.Forms.PropertyGrid();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.mapPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -98,6 +108,15 @@
             this.tbEvents.SuspendLayout();
             this.tbTriggers.SuspendLayout();
             this.tabLayers.SuspendLayout();
+            this.tabProps.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PropsContainer)).BeginInit();
+            this.PropsContainer.Panel1.SuspendLayout();
+            this.PropsContainer.Panel2.SuspendLayout();
+            this.PropsContainer.SuspendLayout();
+            this.tabPropsChoices.SuspendLayout();
+            this.tabInteractiveProps.SuspendLayout();
+            this.tabPhysicalProps.SuspendLayout();
+            this.tabVisualProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -131,6 +150,7 @@
             this.tabToolBox.Controls.Add(this.tabEventPoints);
             this.tabToolBox.Controls.Add(this.tabScripting);
             this.tabToolBox.Controls.Add(this.tabLayers);
+            this.tabToolBox.Controls.Add(this.tabProps);
             this.tabToolBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabToolBox.Location = new System.Drawing.Point(0, 0);
             this.tabToolBox.Name = "tabToolBox";
@@ -651,6 +671,117 @@
             this.lblLayers.TabIndex = 19;
             this.lblLayers.Text = "Layers";
             // 
+            // tabProps
+            // 
+            this.tabProps.Controls.Add(this.PropsContainer);
+            this.tabProps.Location = new System.Drawing.Point(4, 22);
+            this.tabProps.Name = "tabProps";
+            this.tabProps.Padding = new System.Windows.Forms.Padding(3);
+            this.tabProps.Size = new System.Drawing.Size(240, 497);
+            this.tabProps.TabIndex = 5;
+            this.tabProps.Text = "Props";
+            this.tabProps.UseVisualStyleBackColor = true;
+            // 
+            // PropsContainer
+            // 
+            this.PropsContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.PropsContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PropsContainer.Location = new System.Drawing.Point(3, 3);
+            this.PropsContainer.Name = "PropsContainer";
+            this.PropsContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // PropsContainer.Panel1
+            // 
+            this.PropsContainer.Panel1.Controls.Add(this.tabPropsChoices);
+            // 
+            // PropsContainer.Panel2
+            // 
+            this.PropsContainer.Panel2.Controls.Add(this.pgPropProperties);
+            this.PropsContainer.Size = new System.Drawing.Size(234, 491);
+            this.PropsContainer.SplitterDistance = 241;
+            this.PropsContainer.TabIndex = 8;
+            // 
+            // tabPropsChoices
+            // 
+            this.tabPropsChoices.Controls.Add(this.tabInteractiveProps);
+            this.tabPropsChoices.Controls.Add(this.tabPhysicalProps);
+            this.tabPropsChoices.Controls.Add(this.tabVisualProps);
+            this.tabPropsChoices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabPropsChoices.Location = new System.Drawing.Point(0, 0);
+            this.tabPropsChoices.Multiline = true;
+            this.tabPropsChoices.Name = "tabPropsChoices";
+            this.tabPropsChoices.SelectedIndex = 0;
+            this.tabPropsChoices.Size = new System.Drawing.Size(230, 237);
+            this.tabPropsChoices.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
+            this.tabPropsChoices.TabIndex = 0;
+            // 
+            // tabInteractiveProps
+            // 
+            this.tabInteractiveProps.Controls.Add(this.lsInteractiveProps);
+            this.tabInteractiveProps.Location = new System.Drawing.Point(4, 22);
+            this.tabInteractiveProps.Name = "tabInteractiveProps";
+            this.tabInteractiveProps.Size = new System.Drawing.Size(222, 211);
+            this.tabInteractiveProps.TabIndex = 2;
+            this.tabInteractiveProps.Text = "Interactive";
+            this.tabInteractiveProps.UseVisualStyleBackColor = true;
+            // 
+            // lsInteractiveProps
+            // 
+            this.lsInteractiveProps.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsInteractiveProps.FormattingEnabled = true;
+            this.lsInteractiveProps.Location = new System.Drawing.Point(0, 0);
+            this.lsInteractiveProps.Name = "lsInteractiveProps";
+            this.lsInteractiveProps.Size = new System.Drawing.Size(222, 211);
+            this.lsInteractiveProps.TabIndex = 0;
+            // 
+            // tabPhysicalProps
+            // 
+            this.tabPhysicalProps.Controls.Add(this.lsPhysicalProps);
+            this.tabPhysicalProps.Location = new System.Drawing.Point(4, 22);
+            this.tabPhysicalProps.Name = "tabPhysicalProps";
+            this.tabPhysicalProps.Size = new System.Drawing.Size(222, 211);
+            this.tabPhysicalProps.TabIndex = 0;
+            this.tabPhysicalProps.Text = "Physical";
+            this.tabPhysicalProps.UseVisualStyleBackColor = true;
+            // 
+            // lsPhysicalProps
+            // 
+            this.lsPhysicalProps.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsPhysicalProps.FormattingEnabled = true;
+            this.lsPhysicalProps.Location = new System.Drawing.Point(0, 0);
+            this.lsPhysicalProps.Name = "lsPhysicalProps";
+            this.lsPhysicalProps.Size = new System.Drawing.Size(222, 211);
+            this.lsPhysicalProps.TabIndex = 1;
+            // 
+            // tabVisualProps
+            // 
+            this.tabVisualProps.Controls.Add(this.lsVisualProps);
+            this.tabVisualProps.Location = new System.Drawing.Point(4, 22);
+            this.tabVisualProps.Name = "tabVisualProps";
+            this.tabVisualProps.Size = new System.Drawing.Size(222, 211);
+            this.tabVisualProps.TabIndex = 1;
+            this.tabVisualProps.Text = "Visual";
+            this.tabVisualProps.UseVisualStyleBackColor = true;
+            // 
+            // lsVisualProps
+            // 
+            this.lsVisualProps.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsVisualProps.FormattingEnabled = true;
+            this.lsVisualProps.Location = new System.Drawing.Point(0, 0);
+            this.lsVisualProps.Name = "lsVisualProps";
+            this.lsVisualProps.Size = new System.Drawing.Size(222, 211);
+            this.lsVisualProps.TabIndex = 0;
+            // 
+            // pgPropProperties
+            // 
+            this.pgPropProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pgPropProperties.Location = new System.Drawing.Point(0, 0);
+            this.pgPropProperties.Name = "pgPropProperties";
+            this.pgPropProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
+            this.pgPropProperties.Size = new System.Drawing.Size(230, 242);
+            this.pgPropProperties.TabIndex = 0;
+            this.pgPropProperties.ToolbarVisible = false;
+            // 
             // tsmSave
             // 
             this.tsmSave.Name = "tsmSave";
@@ -753,6 +884,15 @@
             this.tbTriggers.ResumeLayout(false);
             this.tabLayers.ResumeLayout(false);
             this.tabLayers.PerformLayout();
+            this.tabProps.ResumeLayout(false);
+            this.PropsContainer.Panel1.ResumeLayout(false);
+            this.PropsContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PropsContainer)).EndInit();
+            this.PropsContainer.ResumeLayout(false);
+            this.tabPropsChoices.ResumeLayout(false);
+            this.tabInteractiveProps.ResumeLayout(false);
+            this.tabPhysicalProps.ResumeLayout(false);
+            this.tabVisualProps.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -822,5 +962,15 @@
         private System.Windows.Forms.Button btnAddSublayer;
         private System.Windows.Forms.CheckBox btnMapSwitches;
         private System.Windows.Forms.Label lblMapSwitches;
+        private System.Windows.Forms.TabPage tabProps;
+        private System.Windows.Forms.SplitContainer PropsContainer;
+        private System.Windows.Forms.PropertyGrid pgPropProperties;
+        private System.Windows.Forms.TabControl tabPropsChoices;
+        private System.Windows.Forms.TabPage tabInteractiveProps;
+        private System.Windows.Forms.ListBox lsInteractiveProps;
+        private System.Windows.Forms.TabPage tabPhysicalProps;
+        private System.Windows.Forms.TabPage tabVisualProps;
+        private System.Windows.Forms.ListBox lsVisualProps;
+        private System.Windows.Forms.ListBox lsPhysicalProps;
     }
 }

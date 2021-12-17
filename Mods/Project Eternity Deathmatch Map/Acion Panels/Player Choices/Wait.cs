@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad.EndTurn();
             ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
 
-            foreach (InteractiveProp ActiveProp in Map.ListProp)
+            foreach (InteractiveProp ActiveProp in Map.ListLayer[ActiveSquad.LayerIndex].ListProp)
             {
                 ActiveProp.OnUnitStop(ActiveSquad);
             }

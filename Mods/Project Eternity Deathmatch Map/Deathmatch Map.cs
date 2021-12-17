@@ -603,11 +603,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ListForeground[F].Update(gameTime);
                 }
 
-                for (int P = 0; P < ListProp.Count; ++P)
-                {
-                    ListProp[P].Update(gameTime);
-                }
-
                 foreach (MapLayer ActiveMapLayer in ListLayer)
                 {
                     ActiveMapLayer.Update(gameTime);
@@ -774,11 +769,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ListBackground[B].Draw(g, Constants.Width, Constants.Height);
                 }
                 g.Begin();
-            }
-
-            for (int P = 0; P < ListProp.Count; ++P)
-            {
-                ListProp[P].Draw(g);
             }
 
             if (ShowLayerIndex == -1)

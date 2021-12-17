@@ -7,12 +7,9 @@ using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    public class MapLayer : IMapLayer
+    public class MapLayer : BaseMapLayer
     {
         public List<SubMapLayer> ListSubLayer;
-        public int StartupDelay;
-        public int ToggleDelayOn;
-        public int ToggleDelayOff;
         public float Depth { get { return _Depth; } set { _Depth = value; if (OriginalLayerGrid != null) OriginalLayerGrid.Depth = value; } }
         private float _Depth;
 
@@ -29,6 +26,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Map = Map;
 
             ListSubLayer = new List<SubMapLayer>();
+            ListProp = new List<InteractiveProp>();
             IsVisible = true;
 
             //Tiles
@@ -50,6 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Map = Map;
 
             ListSubLayer = new List<SubMapLayer>();
+            ListProp = new List<InteractiveProp>();
 
             StartupDelay = BR.ReadInt32();
             ToggleDelayOn = BR.ReadInt32();
@@ -129,6 +128,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
+
+            for (int P = 0; P < ListProp.Count; ++P)
+            {
+                ListProp[P].Update(gameTime);
+            }
             LayerGrid.Update(gameTime);
             foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
             {
@@ -250,6 +254,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
                 {
                     ActiveSubLayer.Draw(g, LayerIndex);
+                }
+
+                for (int P = 0; P < ListProp.Count; ++P)
+                {
+                    ListProp[P].Draw(g);
                 }
             }
         }

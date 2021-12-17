@@ -110,14 +110,14 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 }
             }
 
-            public IMapLayer CreateNewLayer()
+            public BaseMapLayer CreateNewLayer()
             {
                 MapLayer NewLayer = new MapLayer(ActiveMap);
                 ActiveMap.ListLayer.Add(NewLayer);
                 return NewLayer;
             }
 
-            public ISubMapLayer CreateNewSubLayer(IMapLayer ParentLayer)
+            public ISubMapLayer CreateNewSubLayer(BaseMapLayer ParentLayer)
             {
                 SubMapLayer NewLayer = new SubMapLayer();
                 ((MapLayer)ParentLayer).ListSubLayer.Add(NewLayer);
@@ -129,7 +129,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 ActiveMap.ListLayer.RemoveAt(Index);
             }
 
-            public void RemoveSubLayer(IMapLayer ParentLayer, ISubMapLayer SubLayer)
+            public void RemoveSubLayer(BaseMapLayer ParentLayer, ISubMapLayer SubLayer)
             {
                 ((MapLayer)ParentLayer).ListSubLayer.Remove((SubMapLayer)SubLayer);
             }
@@ -157,7 +157,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 return ActiveMap.ListLayer.Count;
             }
 
-            public List<object> GetLayers()
+            public List<object> GetLayersAndSubLayers()
             {
                 List<object> ListLayers = new List<object>();
 

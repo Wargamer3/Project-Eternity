@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cutscene Scripts\Spawn Health Crate.cs" />
     <Compile Include="Cutscene Scripts\Evaluate Variable.cs" />
     <Compile Include="Cutscene Scripts\Flash Cursor.cs" />
     <Compile Include="Cutscene Scripts\Trigger Defeat.cs" />

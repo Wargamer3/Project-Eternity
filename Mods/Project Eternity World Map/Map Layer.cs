@@ -15,7 +15,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         }
     }
 
-    public class MapLayer : IMapLayer
+    public class MapLayer : BaseMapLayer
     {
         public List<SubMapLayer> ListSubLayer;
         public int StartupDelay;

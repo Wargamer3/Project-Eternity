@@ -1,10 +1,17 @@
-﻿namespace ProjectEternity.GameScreens.BattleMapScreen
+﻿using System.Collections.Generic;
+
+namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public interface IMapLayer
+    public class BaseMapLayer
     {
+        public int StartupDelay;
+        public int ToggleDelayOn;
+        public int ToggleDelayOff;
+
+        public List<InteractiveProp> ListProp;
     }
 
-    public interface ISubMapLayer : IMapLayer
+    public interface ISubMapLayer
     {
 
     }

@@ -147,7 +147,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<ActionPanel> ListPanel = new List<ActionPanel>();
 
-            foreach (InteractiveProp ActiveProp in Map.ListProp)
+            foreach (InteractiveProp ActiveProp in Map.ListLayer[ActiveSquad.LayerIndex].ListProp)
             {
                 ListPanel.AddRange(ActiveProp.OnUnitSelected(SelectedUnit));
             }

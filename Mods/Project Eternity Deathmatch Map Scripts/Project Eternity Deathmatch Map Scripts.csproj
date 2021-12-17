@@ -58,6 +58,7 @@
     <Compile Include="Cutscene Scripts\Damage Zone.cs" />
     <Compile Include="Cutscene Scripts\Edit Map.cs" />
     <Compile Include="Cutscene Scripts\Change Terrain.cs" />
+    <Compile Include="Cutscene Scripts\Spawn Health Crate.cs" />
     <Compile Include="Cutscene Scripts\Victory Screen.cs" />
     <Compile Include="Cutscene Scripts\Selectors\Map Editor Selector.cs" />
     <Compile Include="Cutscene Scripts\Selectors\Map Editor.cs">
