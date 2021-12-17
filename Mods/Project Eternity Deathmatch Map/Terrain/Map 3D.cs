@@ -71,15 +71,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                 {
-                    Map.GetTerrain(X, Y, LayerIndex).Position.Z = Random.Next(2) * 32;
-                    float Z = Map.GetTerrain(X, Y, LayerIndex).Position.Z;
+                    float Z = (-Map.GetTerrain(X, Y, LayerIndex).Position.Z - (LayerIndex * 3)) *- 32;
                     Vector3[] ArrayVertexPosition = new Vector3[4];
                     ArrayVertexPosition[0] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y);
                     ArrayVertexPosition[1] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y);
                     ArrayVertexPosition[2] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
                     ArrayVertexPosition[3] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
 
-                    Map2D GroundLayer = Map.ListLayer[0].OriginalLayerGrid;
+                    Map2D GroundLayer = Map.ListLayer[LayerIndex].OriginalLayerGrid;
                     DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                     Texture2D ActiveTileset = Map.ListTileSet[ActiveTerrain.Tileset];
                     if (!DicTile3D.ContainsKey(ActiveTileset))

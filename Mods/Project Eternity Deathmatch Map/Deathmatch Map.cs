@@ -625,7 +625,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
                 {
-                    ListLayer[0].LayerGrid = new Map3D(this, 0, GraphicsDevice);
+                    for (int L = 0; L < ListLayer.Count; ++L)
+                    {
+                        ListLayer[L].LayerGrid = new Map3D(this, L, GraphicsDevice);
+                    }
                 }
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.L))
                 {
