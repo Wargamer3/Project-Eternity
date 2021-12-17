@@ -83,14 +83,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Terrain NewTerrain = new Terrain(TerrainPreset);
             NewTerrain.Position = new Vector3(X, Y, TerrainPreset.Position.Z);
 
-            ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
+            GetRealLayer(LayerIndex).ArrayTerrain[X, Y] = NewTerrain;
         }
 
         public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex)
         {
             DrawableTile NewTile = new DrawableTile(TilePreset);
 
-            ActiveMap.ListLayer[LayerIndex].OriginalLayerGrid.ReplaceTile(X, Y, NewTile);
+            GetRealLayer(LayerIndex).OriginalLayerGrid.ReplaceTile(X, Y, NewTile);
         }
 
         public void RemoveTileset(int TilesetIndex)
@@ -104,6 +104,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        private MapLayer GetRealLayer(int LayerIndex)
+        {
+            int RealIndex = 0;
+
+            for (int L = 0; L < ActiveMap.ListLayer.Count; ++L)
+            {
+                if (LayerIndex == RealIndex)
+                {
+                    return ActiveMap.ListLayer[L];
+                }
+
+                ++RealIndex;
+
+                for (int L2 = 0; L2 < ActiveMap.ListLayer[L].ListSubLayer.Count; ++L2)
+                {
+                    if (LayerIndex == RealIndex)
+                    {
+                        return ActiveMap.ListLayer[L].ListSubLayer[L2];
+                    }
+
+                    ++RealIndex;
+                }
+            }
+            return null;
+        }
+
         public IMapLayer CreateNewLayer()
         {
             MapLayer NewLayer = new MapLayer(ActiveMap);
@@ -113,7 +139,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public ISubMapLayer CreateNewSubLayer(IMapLayer ParentLayer)
         {
-            SubMapLayer NewLayer = new SubMapLayer();
+            SubMapLayer NewLayer = new SubMapLayer(ActiveMap);
             ((MapLayer)ParentLayer).ListSubLayer.Add(NewLayer);
             return NewLayer;
         }
@@ -130,7 +156,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void EditLayer(int Index)
         {
-            MapLayer NewMapLayer = ActiveMap.ListLayer[Index];
+            MapLayer NewMapLayer = GetRealLayer(Index);
 
             ExtraLayerAttributes NewForm = new ExtraLayerAttributes(NewMapLayer.StartupDelay, NewMapLayer.ToggleDelayOn, NewMapLayer.ToggleDelayOff, NewMapLayer.Depth);
 

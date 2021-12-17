@@ -4,7 +4,7 @@
     {
     }
 
-    public interface ISubMapLayer
+    public interface ISubMapLayer : IMapLayer
     {
 
     }

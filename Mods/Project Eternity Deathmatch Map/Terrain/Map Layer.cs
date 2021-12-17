@@ -77,6 +77,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, BR);
+            int ListSubLayerCount = BR.ReadInt32();
+            ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
+            for (int L = 0; L < ListSubLayerCount; L++)
+            {
+                ListSubLayer.Add(new SubMapLayer(Map, BR));
+            }
             OriginalLayerGrid.Depth = Depth;
         }
 
@@ -96,6 +102,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             LayerGrid.Save(BW);
+            BW.Write(ListSubLayer.Count);
+            for (int L = 0; L < ListSubLayer.Count; L++)
+            {
+                ListSubLayer[L].Save(BW);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -119,6 +130,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             LayerGrid.Update(gameTime);
+            foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
+            {
+                ActiveSubLayer.Update(gameTime);
+            }
         }
 
         public void ResetGrid()
@@ -129,7 +144,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void BeginDraw(CustomSpriteBatch g)
         {
             if (IsVisible)
+            {
                 LayerGrid.BeginDraw(g);
+                foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
+                {
+                    ActiveSubLayer.BeginDraw(g);
+                }
+            }
         }
 
         public void Draw(CustomSpriteBatch g)
@@ -141,9 +162,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (Map.ShowTerrainType)
                 {
                     int IndexOfLayer = Map.ListLayer.IndexOf(this);
-                    if (Map.ShowLayerIndex >= 0)
+                    if (Map.ShowLayerIndex >= 0 && IndexOfLayer != -1)
                     {
                         IndexOfLayer = 0;
+                    }
+                    else if (IndexOfLayer == -1)
+                    {
+                        IndexOfLayer = 3;
                     }
                     float XOffset = (IndexOfLayer % 3) * Map.TileSize.X / 3;
                     float YOffset = (IndexOfLayer / 3) * Map.TileSize.Y / 3;
@@ -220,6 +245,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 (Y - Map.CameraPosition.Y) * Map.TileSize.Y + YOffset), TextColor);
                         }
                     }
+                }
+
+                foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
+                {
+                    ActiveSubLayer.Draw(g);
                 }
             }
         }

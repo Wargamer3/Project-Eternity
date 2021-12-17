@@ -840,7 +840,7 @@ namespace ProjectEternity.Editors.MapEditor
                 }
                 else
                 {
-                    ActiveMap.ShowLayerIndex = lsLayers.SelectedIndex;
+                    ActiveMap.ShowLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
                 }
             }
         }
@@ -880,9 +880,31 @@ namespace ProjectEternity.Editors.MapEditor
                 }
                 else
                 {
-                    ActiveMap.ShowLayerIndex = lsLayers.SelectedIndex;
+                    ActiveMap.ShowLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
                 }
             }
+        }
+
+        private int GetRealTopLayerIndex(int LayerIndex)
+        {
+            int RealIndex = 0;
+            int LastTopLayerIndex = -1;
+
+            foreach (object ActiveLayer in Helper.GetLayers())
+            {
+                if (!(ActiveLayer is ISubMapLayer))
+                {
+                    ++LastTopLayerIndex;
+                }
+                if (RealIndex == LayerIndex)
+                {
+                    return LastTopLayerIndex;
+                }
+
+                ++RealIndex;
+            }
+
+            return LastTopLayerIndex;
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
