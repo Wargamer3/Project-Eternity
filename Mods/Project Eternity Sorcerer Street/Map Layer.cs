@@ -160,7 +160,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (IsVisible)
             {
-                LayerGrid.Draw(g, LayerIndex, ArrayTerrain);
+                LayerGrid.Draw(g, LayerIndex, false, ArrayTerrain);
             }
         }
 

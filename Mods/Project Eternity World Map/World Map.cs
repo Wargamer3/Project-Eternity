@@ -535,7 +535,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         {
             g.End();
             g.Begin(SpriteSortMode.Deferred, null);
-            MapGrid.Draw(g, 0, ListLayer[0].ArrayTerrain);
+            MapGrid.Draw(g, 0, false, ListLayer[0].ArrayTerrain);
             int Y = Constants.Height - 30;
             DrawBox(g, new Vector2(0, Y), 400, 30, Color.White);
             TextHelper.DrawText(g, "Ressources", new Vector2(5, Y + 5), Color.White);

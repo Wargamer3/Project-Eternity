@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void RemoveTileset(int TilesetIndex);
         void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor);
         void BeginDraw(CustomSpriteBatch g);
-        void Draw(CustomSpriteBatch g, int LayerIndex, MovementAlgorithmTile[,] ArrayTerrain);
+        void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer, MovementAlgorithmTile[,] ArrayTerrain);
         void Reset();
     }
 
@@ -147,7 +147,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
-        public void Draw(CustomSpriteBatch g, int LayerIndex, MovementAlgorithmTile[,] ArrayTerrain)
+        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer, MovementAlgorithmTile[,] ArrayTerrain)
         {
             float BaseHeight = LayerIndex;
 
@@ -169,17 +169,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            if (Map.ShowUnits)
+            if (Map.ShowUnits && !IsSubLayer)
             {
                 DrawDrawablePoints(g);
 
-                DrawPlayers(g);
+                DrawPlayers(g, LayerIndex);
 
                 DrawCursor(g);
             }
         }
         
-        public abstract void DrawPlayers(CustomSpriteBatch g);
+        public abstract void DrawPlayers(CustomSpriteBatch g, int LayerIndex);
         
         public void DrawUnitMap(CustomSpriteBatch g, Color PlayerColor, UnitMapComponent ActiveSquad, bool IsGreyed)
         {

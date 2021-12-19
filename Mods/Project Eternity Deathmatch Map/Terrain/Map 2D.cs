@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Load(BR);
         }
 
-        public override void DrawPlayers(CustomSpriteBatch g)
+        public override void DrawPlayers(CustomSpriteBatch g, int LayerIndex)
         {
             DrawDelayedAttacks(g);
 
@@ -55,7 +55,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int S = 0; S < ActiveMap.ListPlayer[P].ListSquad.Count; S++)
                 {
-                    DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListSquad[S], !ActiveMap.ListPlayer[P].ListSquad[S].CanMove && P == ActiveMap.ActivePlayerIndex);
+                    if (ActiveMap.ListPlayer[P].ListSquad[S].LayerIndex == LayerIndex)
+                    {
+                        DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListSquad[S], !ActiveMap.ListPlayer[P].ListSquad[S].CanMove && P == ActiveMap.ActivePlayerIndex);
+                    }
                 }
             }
         }

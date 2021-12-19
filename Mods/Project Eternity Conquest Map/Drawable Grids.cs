@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Load(BR);
         }
 
-        public override void DrawPlayers(CustomSpriteBatch g)
+        public override void DrawPlayers(CustomSpriteBatch g, int LayerIndex)
         {
             for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
             {

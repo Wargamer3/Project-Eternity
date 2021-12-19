@@ -778,12 +778,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int L = 0; L < ListLayer.Count; ++L)
                 {
-                    ListLayer[L].Draw(g, L);
+                    ListLayer[L].Draw(g, L, false);
                 }
             }
             else
             {
-                ListLayer[ShowLayerIndex].Draw(g, ShowLayerIndex);
+                ListLayer[ShowLayerIndex].Draw(g, ShowLayerIndex, false);
             }
 
             if (ShowUnits)

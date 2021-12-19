@@ -137,7 +137,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         {
             if (IsVisible)
             {
-                LayerGrid.Draw(g, LayerIndex, ArrayTerrain);
+                LayerGrid.Draw(g, LayerIndex, false, ArrayTerrain);
             }
         }
 

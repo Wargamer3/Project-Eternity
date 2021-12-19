@@ -246,7 +246,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public void Draw(CustomSpriteBatch g, int LayerIndex, MovementAlgorithmTile[,] ArrayTerrain)
+        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer, MovementAlgorithmTile[,] ArrayTerrain)
         {
             PolygonEffect.View = Camera.View;
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
