@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -75,6 +74,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
+            int ListPropCount = BR.ReadInt32();
+            ListProp = new List<InteractiveProp>(ListPropCount);
+            for (int L = 0; L < ListPropCount; L++)
+            {
+                ListProp.Add(Map.DicInteractiveProp[BR.ReadString()].LoadCopy(BR));
+            }
+
             LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, BR);
             int ListSubLayerCount = BR.ReadInt32();
             ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
@@ -98,6 +104,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     ArrayTerrain[X, Y].Save(BW);
                 }
+            }
+
+            BW.Write(ListProp.Count);
+            for (int P = 0; P < ListProp.Count; P++)
+            {
+                ListProp[P].Save(BW);
             }
 
             LayerGrid.Save(BW);
@@ -157,11 +169,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void Draw(CustomSpriteBatch g, int LayerIndex)
+        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer)
         {
             if (IsVisible)
             {
-                LayerGrid.Draw(g, LayerIndex, ArrayTerrain);
+                LayerGrid.Draw(g, LayerIndex, IsSubLayer, ArrayTerrain);
 
                 if (Map.ShowTerrainType)
                 {
@@ -253,7 +265,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
                 {
-                    ActiveSubLayer.Draw(g, LayerIndex);
+                    ActiveSubLayer.Draw(g, LayerIndex, true);
                 }
 
                 for (int P = 0; P < ListProp.Count; ++P)

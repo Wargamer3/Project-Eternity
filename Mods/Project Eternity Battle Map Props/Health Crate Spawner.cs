@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +26,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load(ContentManager Content)
         {
             sprCrate = Content.Load<Texture2D>("Maps/Props/HP Crate");
+        }
+
+        public override void DoLoad(BinaryReader BR)
+        {
+        }
+
+        public override void DoSave(BinaryWriter BW)
+        {
         }
 
         public void HealSquad(Squad SquadToHeal)
@@ -78,12 +87,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprCrate, new Vector2(PosX, PosY), Color.White);
         }
 
-        public override InteractiveProp Copy(Vector3 Position, int LayerIndex)
+        protected override InteractiveProp Copy()
         {
             HealthCrateSpawner NewProp = new HealthCrateSpawner(Map);
 
-            NewProp.Position = Position;
-            NewProp.LayerIndex = LayerIndex;
             NewProp.sprCrate = sprCrate;
 
             return NewProp;

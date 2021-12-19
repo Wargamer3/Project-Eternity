@@ -30,6 +30,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void Load(ContentManager Content);
 
+        public InteractiveProp LoadCopy(BinaryReader BR)
+        {
+            InteractiveProp NewProp = Copy();
+
+            NewProp.Position = new Vector3(BR.ReadSingle(), BR.ReadSingle(), 0);
+            NewProp.LayerIndex = BR.ReadInt32();
+
+            NewProp.DoLoad(BR);
+
+            return NewProp;
+        }
+
+        public abstract void DoLoad(BinaryReader BR);
+
+        public void Save(BinaryWriter BW)
+        {
+            BW.Write(PropName);
+
+            BW.Write(Position.X);
+            BW.Write(Position.Y);
+            BW.Write(LayerIndex);
+
+            DoSave(BW);
+        }
+
+        public abstract void DoSave(BinaryWriter BW);
+
         public abstract void Update(GameTime gameTime);
 
         public abstract List<ActionPanel> OnUnitSelected(Squad SelectedUnit);
@@ -46,7 +73,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void Draw(CustomSpriteBatch g);
 
-        public abstract InteractiveProp Copy(Vector3 Position, int LayerIndex);
+        public InteractiveProp Copy(Vector3 Position, int LayerIndex)
+        {
+            InteractiveProp NewProp = Copy();
+
+            NewProp.Position = Position;
+            NewProp.LayerIndex = LayerIndex;
+
+            return NewProp;
+        }
+
+        protected abstract InteractiveProp Copy();
 
         public override string ToString()
         {

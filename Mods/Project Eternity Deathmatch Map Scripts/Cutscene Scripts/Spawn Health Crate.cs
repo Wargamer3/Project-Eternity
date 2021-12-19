@@ -82,6 +82,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     sprCrate = Content.Load<Texture2D>("Maps/Props/HP Crate");
                 }
 
+                public override void DoLoad(BinaryReader BR)
+                {
+                    throw new NotImplementedException();
+                }
+
+                public override void DoSave(BinaryWriter BW)
+                {
+                    throw new NotImplementedException();
+                }
+
                 public void HealSquad(Squad SquadToHeal)
                 {
                     SquadToHeal.CurrentLeader.HealUnit(SquadToHeal.CurrentLeader.MaxHP / 2);
@@ -144,7 +154,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     g.Draw(sprCrate, new Vector2(PosX, PosY), Color.White);
                 }
 
-                public override InteractiveProp Copy(Vector3 Position, int LayerIndex)
+                protected override InteractiveProp Copy()
                 {
                     throw new NotImplementedException();
                 }
