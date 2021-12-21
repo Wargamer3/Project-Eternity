@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private readonly RoomInformations Room;
         private Point MapSize;
-        public List<int> ListMapTeam;
+        public List<Color> ListMapTeam;
         private List<TeamInfo> ListAllTeamInfo;
         private int SelectingTeam;
         public Texture2D sprMapImage;
@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             UpdateReadyOrHost();
 
-            ListMapTeam = new List<int>();
+            ListMapTeam = new List<Color>();
             ListAllTeamInfo = new List<TeamInfo>();
             ListAllTeamInfo.Add(new TeamInfo("Blue Team", Color.Blue));
             ListAllTeamInfo.Add(new TeamInfo("Red Team", Color.Red));
@@ -278,38 +278,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string ForegroundsPath = BR.ReadString();
             }
 
-            Color[] ArrayColor = new Color[16];
+            int NumberOfTeams = BR.ReadInt32();
             //Deathmatch colors
-            for (int D = 0; D < 16; D++)
+            for (int D = 0; D < NumberOfTeams; D++)
             {
-                ArrayColor[D].R = BR.ReadByte();
-                ArrayColor[D].G = BR.ReadByte();
-                ArrayColor[D].B = BR.ReadByte();
-            }
-
-            int ListSingleplayerSpawnsCount = BR.ReadInt32();
-
-            for (int S = 0; S < ListSingleplayerSpawnsCount; S++)
-            {
-                EventPoint NewPoint = new EventPoint(BR);
-            }
-
-            int ListSpawnsCount = BR.ReadInt32();
-            List<EventPoint> ListSpawns = new List<EventPoint>(ListSpawnsCount);
-
-            ListMapTeam.Clear();
-            for (int S = 0; S < ListSpawnsCount; S++)
-            {
-                EventPoint NewPoint = new EventPoint(BR);
-                int ColorIndex = 1;
-
-                if (!string.IsNullOrWhiteSpace(NewPoint.Tag))
-                    ColorIndex = Convert.ToInt32(NewPoint.Tag);
-
-                if (!ListMapTeam.Contains(ColorIndex))
-                {
-                    ListMapTeam.Add(ColorIndex);
-                }
+                ListMapTeam.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
             }
 
             FS.Close();

@@ -145,11 +145,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public byte PlayersMax;
         public string Description;
 
-        public List<EventPoint> ListSingleplayerSpawns;
         public Dictionary<string, List<Squad>> DicSpawnSquadByPlayer;
-        public List<EventPoint> ListMultiplayerSpawns;
-        public Color[] ArrayMultiplayerColor;
-        public List<MapSwitchPoint> ListMapSwitchPoint;
+        public List<Color> ListMultiplayerColor;
         public List<BattleMap> ListSubMap;
 
         public ActionPanelHolder ListActionMenuChoice;
@@ -248,6 +245,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
             ListSubMap = new List<BattleMap>();
             DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
+            ListMultiplayerColor = new List<Color>();
 
             GlobalBattleContext = new BattleContext();
             GlobalQuickLoadContext = new UnitQuickLoadEffectContext();
@@ -290,31 +288,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 BW.Write(ListForegroundsPath[F]);
             }
-        }
 
-        protected void SaveSpawns(BinaryWriter BW)
-        {
+            BW.Write(ListMultiplayerColor.Count);
             //Deathmatch colors
-            for (int D = 0; D < ArrayMultiplayerColor.Length; D++)
+            for (int D = 0; D < ListMultiplayerColor.Count; D++)
             {
-                BW.Write(ArrayMultiplayerColor[D].R);
-                BW.Write(ArrayMultiplayerColor[D].G);
-                BW.Write(ArrayMultiplayerColor[D].B);
-            }
-            BW.Write(ListSingleplayerSpawns.Count);
-            for (int S = 0; S < ListSingleplayerSpawns.Count; S++)
-            {
-                ListSingleplayerSpawns[S].Save(BW);
-            }
-            BW.Write(ListMultiplayerSpawns.Count);
-            for (int S = 0; S < ListMultiplayerSpawns.Count; S++)
-            {
-                ListMultiplayerSpawns[S].Save(BW);
-            }
-            BW.Write(ListMapSwitchPoint.Count);
-            for (int S = 0; S < ListMapSwitchPoint.Count; S++)
-            {
-                ListMapSwitchPoint[S].Save(BW);
+                BW.Write(ListMultiplayerColor[D].R);
+                BW.Write(ListMultiplayerColor[D].G);
+                BW.Write(ListMultiplayerColor[D].B);
             }
         }
 
@@ -457,63 +438,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ListForegroundsPath.Add(BR.ReadString());
             }
-        }
 
-        protected void LoadSpawns(BinaryReader BR)
-        {
-            ArrayMultiplayerColor = new Color[16];
+            int ArrayMultiplayerColorLength = BR.ReadInt32();
+            ListMultiplayerColor = new List<Color>(ArrayMultiplayerColorLength);
 
-            //Deathmatch colors
-            for (int D = 0; D < ArrayMultiplayerColor.Length; D++)
+            for (int D = 0; D < ArrayMultiplayerColorLength; D++)
             {
-                ArrayMultiplayerColor[D].R = BR.ReadByte();
-                ArrayMultiplayerColor[D].G = BR.ReadByte();
-                ArrayMultiplayerColor[D].B = BR.ReadByte();
-            }
-
-            int ListSingleplayerSpawnsCount = BR.ReadInt32();
-            ListSingleplayerSpawns = new List<EventPoint>(ListSingleplayerSpawnsCount);
-
-            for (int S = 0; S < ListSingleplayerSpawnsCount; S++)
-            {
-                EventPoint NewPoint = new EventPoint(BR);
-                NewPoint.ColorRed = Color.Blue.R;
-                NewPoint.ColorGreen = Color.Blue.G;
-                NewPoint.ColorBlue = Color.Blue.B;
-
-                ListSingleplayerSpawns.Add(NewPoint);
-            }
-
-            int ListMultiplayerSpawnsCount = BR.ReadInt32();
-            ListMultiplayerSpawns = new List<EventPoint>(ListMultiplayerSpawnsCount);
-
-            for (int S = 0; S < ListMultiplayerSpawnsCount; S++)
-            {
-                EventPoint NewPoint = new EventPoint(BR);
-                int ColorIndex = Convert.ToInt32(NewPoint.Tag) - 1;
-                NewPoint.ColorRed = ArrayMultiplayerColor[ColorIndex].R;
-                NewPoint.ColorGreen = ArrayMultiplayerColor[ColorIndex].G;
-                NewPoint.ColorBlue = ArrayMultiplayerColor[ColorIndex].B;
-                ListMultiplayerSpawns.Add(NewPoint);
-            }
-
-            ListSubMap.Add(this);
-            int ListMapSwitchPointCount = BR.ReadInt32();
-            ListMapSwitchPoint = new List<MapSwitchPoint>(ListMapSwitchPointCount);
-
-            for (int S = 0; S < ListMapSwitchPointCount; S++)
-            {
-                MapSwitchPoint NewMapSwitchPoint = new MapSwitchPoint(BR);
-                ListMapSwitchPoint.Add(NewMapSwitchPoint);
-                if (DicBattmeMapType.Count > 0 && !string.IsNullOrEmpty(NewMapSwitchPoint.SwitchMapPath)
-                    && ListSubMap.Find(x => x.BattleMapPath == NewMapSwitchPoint.SwitchMapPath) == null)
-                {
-                    BattleMap NewMap = DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(string.Empty);
-                    NewMap.BattleMapPath = NewMapSwitchPoint.SwitchMapPath;
-                    NewMap.ListGameScreen = ListGameScreen;
-                    NewMap.ListSubMap = ListSubMap;
-                    NewMap.Load();
-                }
+                ListMultiplayerColor.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
             }
         }
 

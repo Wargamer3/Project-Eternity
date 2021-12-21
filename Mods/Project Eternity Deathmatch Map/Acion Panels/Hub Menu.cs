@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            foreach (MapSwitchPoint ActiveSwitchPoint in Map.ListMapSwitchPoint)
+            foreach (MapSwitchPoint ActiveSwitchPoint in Map.ListLayer[0].ListMapSwitchPoint)
             {
                 if (CheckPositionOverlap(ActiveSwitchPoint.Position, NextPosition))
                 {

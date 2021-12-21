@@ -20,16 +20,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public ContentManager content;
         private CustomSpriteBatch g;
         private Texture2D sprPixel;
-        private SpriteFont fntSpawnText;
         public int ViewerIndex;
 
         public bool ShowGrid;
-
-        private Color BrushPlayer;
-        private Color BrushEnemy;
-        private Color BrushNeutral;
-        private Color BrushAlly;
-        private Color BrushMapSwitchEventPoint;
 
         private HScrollBar sclMapWidth;
         private VScrollBar sclMapHeight;
@@ -48,18 +41,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Timer = new System.Diagnostics.Stopwatch();
             Mouse.WindowHandle = this.Handle;
 
-            BrushPlayer = Color.FromNonPremultiplied(30, 144, 255, 180);
-            BrushEnemy = Color.FromNonPremultiplied(255, 0, 0, 180);
-            BrushNeutral = Color.FromNonPremultiplied(255, 255, 0, 180);
-            BrushAlly = Color.FromNonPremultiplied(191, 255, 0, 180);
-            BrushMapSwitchEventPoint = Color.FromNonPremultiplied(191, 255, 0, 180);
 
             content = new ContentManager(Services, "Content");
             g = new CustomSpriteBatch(new SpriteBatch(GraphicsDevice));
             Helper = new MapScriptGUIHelper();
             Helper.Load(content, g, GraphicsDevice);
             sprPixel = content.Load<Texture2D>("Pixel");
-            fntSpawnText = content.Load<SpriteFont>("Fonts/Calibri8");
 
             this.sclMapWidth = new HScrollBar();
             this.sclMapHeight = new VScrollBar();
@@ -186,45 +173,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             g.End();
             g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-
-            for (int i = 0; i < ActiveMap.ListSingleplayerSpawns.Count; i++)
-            {
-                g.Draw(sprPixel, new Rectangle((int)(ActiveMap.ListSingleplayerSpawns[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X,
-                                              (int)(ActiveMap.ListSingleplayerSpawns[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y,
-                                               ActiveMap.TileSize.X, ActiveMap.TileSize.Y),
-                                BrushPlayer);
-
-                g.DrawString(fntSpawnText, ActiveMap.ListSingleplayerSpawns[i].Tag,
-                    new Vector2((ActiveMap.ListSingleplayerSpawns[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X + 10,
-                                (ActiveMap.ListSingleplayerSpawns[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y + 10),
-                    Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            }
-
-            for (int i = 0; i < ActiveMap.ListMultiplayerSpawns.Count; i++)
-            {
-                g.Draw(sprPixel, new Rectangle((int)(ActiveMap.ListMultiplayerSpawns[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X,
-                                              (int)(ActiveMap.ListMultiplayerSpawns[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y,
-                                               ActiveMap.TileSize.X, ActiveMap.TileSize.Y),
-                                BrushPlayer);
-
-                g.DrawString(fntSpawnText, ActiveMap.ListMultiplayerSpawns[i].Tag,
-                    new Vector2((ActiveMap.ListMultiplayerSpawns[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X + 10,
-                                (ActiveMap.ListMultiplayerSpawns[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y + 10),
-                    Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            }
-
-            for (int i = 0; i < ActiveMap.ListMapSwitchPoint.Count; i++)
-            {
-                g.Draw(sprPixel, new Rectangle((int)(ActiveMap.ListMapSwitchPoint[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X,
-                                               (int)(ActiveMap.ListMapSwitchPoint[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y,
-                                               ActiveMap.TileSize.X, ActiveMap.TileSize.Y),
-                                BrushMapSwitchEventPoint);
-
-                g.DrawString(fntSpawnText, ActiveMap.ListMapSwitchPoint[i].Tag,
-                    new Vector2((ActiveMap.ListMapSwitchPoint[i].Position.X - ActiveMap.CameraPosition.X) * ActiveMap.TileSize.X + 10,
-                                (ActiveMap.ListMapSwitchPoint[i].Position.Y - ActiveMap.CameraPosition.Y) * ActiveMap.TileSize.Y + 10),
-                    Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            }
 
             //Grid
             if (ShowGrid)

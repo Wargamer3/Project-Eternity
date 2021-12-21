@@ -28,9 +28,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     string PlayerTag = PlayerIndex.ToString();
                     int SpawnSquadIndex = 0;
-                    for (int S = 0; S < Owner.ListMultiplayerSpawns.Count; S++)
+                    for (int S = 0; S < Owner.ListLayer[0].ListMultiplayerSpawns.Count; S++)
                     {
-                        if (Owner.ListMultiplayerSpawns[S].Tag == PlayerTag)
+                        if (Owner.ListLayer[0].ListMultiplayerSpawns[S].Tag == PlayerTag)
                         {
                             if (ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex] == null)
                             {
@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
 
                             ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                            Owner.SpawnSquad(PlayerIndex - 1, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, Owner.ListMultiplayerSpawns[S].Position);
+                            Owner.SpawnSquad(PlayerIndex - 1, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, Owner.ListLayer[0].ListMultiplayerSpawns[S].Position);
                             ++SpawnSquadIndex;
 
                             if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)

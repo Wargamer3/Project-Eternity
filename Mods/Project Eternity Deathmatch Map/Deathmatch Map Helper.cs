@@ -174,9 +174,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ActiveMap.ListLayer.Count;
         }
 
-        public List<object> GetLayersAndSubLayers()
+        public List<BaseMapLayer> GetLayersAndSubLayers()
         {
-            List<object> ListLayers = new List<object>();
+            List<BaseMapLayer> ListLayers = new List<BaseMapLayer>();
 
             foreach (MapLayer ActiveMapLayer in ActiveMap.ListLayer)
             {

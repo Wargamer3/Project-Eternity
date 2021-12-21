@@ -33,9 +33,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListPlayer = new List<Player>();
             GlobalSorcererStreetBattleContext = new SorcererStreetBattleContext();
             ListLayer = new List<MapLayer>();
-            ListSingleplayerSpawns = new List<EventPoint>();
-            ListMultiplayerSpawns = new List<EventPoint>();
-            ListMapSwitchPoint = new List<MapSwitchPoint>();
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
 
             CursorPosition = new Vector3(0, 0, 0);
@@ -88,8 +85,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             SaveProperties(BW);
 
-            SaveSpawns(BW);
-
             MapScript.SaveMapScripts(BW, ListMapScript);
 
             SaveTilesets(BW);
@@ -138,8 +133,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MapName = Path.GetFileNameWithoutExtension(BattleMapPath);
 
             LoadProperties(BR);
-
-            LoadSpawns(BR);
 
             ListMapScript = MapScript.LoadMapScripts(BR, DicMapEvent, DicMapCondition, DicMapTrigger, out ListMapEvent);
 

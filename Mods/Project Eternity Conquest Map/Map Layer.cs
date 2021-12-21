@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
-    public class SubMapLayer : ISubMapLayer
+    public class SubMapLayer : BaseMapLayer, ISubMapLayer
     {
         public override string ToString()
         {
@@ -18,9 +17,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     public class MapLayer : BaseMapLayer
     {
         public List<SubMapLayer> ListSubLayer;
-        public int StartupDelay;
-        public int ToggleDelayOn;
-        public int ToggleDelayOff;
         public float Depth;
 
         public DrawableGrid LayerGrid;

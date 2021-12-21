@@ -8,6 +8,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int ToggleDelayOn;
         public int ToggleDelayOff;
 
+        public List<EventPoint> ListSingleplayerSpawns;
+        public List<EventPoint> ListMultiplayerSpawns;
+        public List<MapSwitchPoint> ListMapSwitchPoint;
         public List<InteractiveProp> ListProp;
     }
 

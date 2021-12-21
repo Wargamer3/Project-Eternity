@@ -7,7 +7,7 @@ using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class SubMapLayer : ISubMapLayer
+    public class SubMapLayer : BaseMapLayer, ISubMapLayer
     {
         public override string ToString()
         {
@@ -18,9 +18,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class MapLayer : BaseMapLayer
     {
         public List<SubMapLayer> ListSubLayer;
-        public int StartupDelay;
-        public int ToggleDelayOn;
-        public int ToggleDelayOff;
         public float Depth;
 
         public DrawableGrid LayerGrid;

@@ -157,9 +157,9 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 return ActiveMap.ListLayer.Count;
             }
 
-            public List<object> GetLayersAndSubLayers()
+            public List<BaseMapLayer> GetLayersAndSubLayers()
             {
-                List<object> ListLayers = new List<object>();
+                List<BaseMapLayer> ListLayers = new List<BaseMapLayer>();
 
                 foreach (MapLayer ActiveMapLayer in ActiveMap.ListLayer)
                 {
@@ -209,7 +209,6 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 WorldMap NewMap = new WorldMap(MapLogicName, string.Empty, null);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap));
-                BattleMapViewer.ActiveMap.ArrayMultiplayerColor = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
 
                 SaveItem(FilePath, FilePath);
             }

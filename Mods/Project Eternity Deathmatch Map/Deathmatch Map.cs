@@ -160,9 +160,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListTileSet = new List<Texture2D>();
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
-            ListSingleplayerSpawns = new List<EventPoint>();
-            ListMultiplayerSpawns = new List<EventPoint>();
-            ListMapSwitchPoint = new List<MapSwitchPoint>();
             CameraPosition = Vector3.Zero;
             ActiveSquadIndex = -1;
 
@@ -204,8 +201,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BinaryWriter BW = new BinaryWriter(FS);
 
             SaveProperties(BW);
-
-            SaveSpawns(BW);
 
             MapScript.SaveMapScripts(BW, ListMapScript);
 
@@ -385,8 +380,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             MapName = Path.GetFileNameWithoutExtension(BattleMapPath);
 
             LoadProperties(BR);
-
-            LoadSpawns(BR);
 
             ListMapScript = MapScript.LoadMapScripts(BR, DicMapEvent, DicMapCondition, DicMapTrigger, out ListMapEvent);
 

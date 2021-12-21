@@ -133,7 +133,6 @@ namespace ProjectEternity.Editors.MapEditor
                 DeathmatchMap NewMap = new DeathmatchMap(FilePath, string.Empty, null);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap));
-                BattleMapViewer.ActiveMap.ArrayMultiplayerColor = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
 
                 SaveItem(FilePath, FilePath);
             }
@@ -182,7 +181,8 @@ namespace ProjectEternity.Editors.MapEditor
             NewMap.CursorPositionVisible = new Vector3(-1, -1, 0);
 
             BattleMapViewer.SetListMapScript(NewMap.ListMapScript);
-            BattleMapViewer.Helper.OnSelect = (SelectedObject, RightClick) => {
+            BattleMapViewer.Helper.OnSelect = (SelectedObject, RightClick) =>
+            {
                 if (RightClick && SelectedObject != null)
                 {
                     BattleMapViewer.cmsScriptMenu.Show(BattleMapViewer, PointToClient(Cursor.Position));
@@ -193,13 +193,20 @@ namespace ProjectEternity.Editors.MapEditor
                 }
             };
 
-
             for (int S = BattleMapViewer.ActiveMap.ListMapScript.Count - 1; S >= 0; --S)
             {
                 BattleMapViewer.Helper.InitScript(BattleMapViewer.ActiveMap.ListMapScript[S]);
             }
 
-            btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(BattleMapViewer.ActiveMap.ArrayMultiplayerColor[0].R, BattleMapViewer.ActiveMap.ArrayMultiplayerColor[0].G, BattleMapViewer.ActiveMap.ArrayMultiplayerColor[0].B);
+            if (NewMap.ListMultiplayerColor.Count > 0)
+            {
+                for (int C = 0; C < NewMap.ListMultiplayerColor.Count; C++)
+                {
+                    cbDeadthmatch.Items.Add(C + 1);
+                }
+
+                btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(BattleMapViewer.ActiveMap.ListMultiplayerColor[0].R, BattleMapViewer.ActiveMap.ListMultiplayerColor[0].G, BattleMapViewer.ActiveMap.ListMultiplayerColor[0].B);
+            }
         }
 
         private void DrawInfo(int MouseX, int MouseY)
@@ -510,22 +517,24 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void NewSpawnSingleplayer(int X, int Y, EventPoint Spawn)
         {
+            int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
             if (Spawn != null)
             {
                 Spawn = new EventPoint(Spawn);
                 Spawn.Position = new Vector3(X, Y, 0);
             }
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Count; S++)
+            for (int S = 0; S < TopLayer.ListSingleplayerSpawns.Count; S++)
             {//If it exist.
-                if (BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.X == X && BattleMapViewer.ActiveMap.ListSingleplayerSpawns[S].Position.Y == Y)
+                if (TopLayer.ListSingleplayerSpawns[S].Position.X == X && TopLayer.ListSingleplayerSpawns[S].Position.Y == Y)
                 {
                     //Delete it.
-                    BattleMapViewer.ActiveMap.ListSingleplayerSpawns.RemoveAt(S);
+                    TopLayer.ListSingleplayerSpawns.RemoveAt(S);
                     if (Spawn != null)
                     {
                         //Add the new one.
-                        BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Add(Spawn);
+                        TopLayer.ListSingleplayerSpawns.Add(Spawn);
                     }
                     return;
                 }
@@ -533,28 +542,30 @@ namespace ProjectEternity.Editors.MapEditor
             if (Spawn != null)
             {
                 //Add the new SpawnPoint.
-                BattleMapViewer.ActiveMap.ListSingleplayerSpawns.Add(Spawn);
+                TopLayer.ListSingleplayerSpawns.Add(Spawn);
             }
         }
 
         private void NewSpawnMultiplayer(int X, int Y, EventPoint Spawn)
         {
+            int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
             if (Spawn != null)
             {
                 Spawn = new EventPoint(Spawn);
                 Spawn.Position = new Vector3(X, Y, 0);
             }
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < BattleMapViewer.ActiveMap.ListMultiplayerSpawns.Count; S++)
+            for (int S = 0; S < TopLayer.ListMultiplayerSpawns.Count; S++)
             {//If it exist.
-                if (BattleMapViewer.ActiveMap.ListMultiplayerSpawns[S].Position.X == X && BattleMapViewer.ActiveMap.ListMultiplayerSpawns[S].Position.Y == Y)
+                if (TopLayer.ListMultiplayerSpawns[S].Position.X == X && TopLayer.ListMultiplayerSpawns[S].Position.Y == Y)
                 {
                     //Delete it.
-                    BattleMapViewer.ActiveMap.ListMultiplayerSpawns.RemoveAt(S);
+                    TopLayer.ListMultiplayerSpawns.RemoveAt(S);
                     if (Spawn != null)
                     {
                         //Add the new one.
-                        BattleMapViewer.ActiveMap.ListMultiplayerSpawns.Add(Spawn);
+                        TopLayer.ListMultiplayerSpawns.Add(Spawn);
                     }
                     return;
                 }
@@ -562,20 +573,22 @@ namespace ProjectEternity.Editors.MapEditor
             if (Spawn != null)
             {
                 //Add the new SpawnPoint.
-                BattleMapViewer.ActiveMap.ListMultiplayerSpawns.Add(Spawn);
+                TopLayer.ListMultiplayerSpawns.Add(Spawn);
             }
         }
 
         private void NewMapSwitchPoint(int X, int Y, EventPoint Spawn)
         {
+            int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
             MapSwitchPoint OldEventPoint = null;
 
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < BattleMapViewer.ActiveMap.ListMapSwitchPoint.Count; S++)
+            for (int S = 0; S < TopLayer.ListMapSwitchPoint.Count; S++)
             {//If it exist.
-                if (BattleMapViewer.ActiveMap.ListMapSwitchPoint[S].Position.X == X && BattleMapViewer.ActiveMap.ListMapSwitchPoint[S].Position.Y == Y)
+                if (TopLayer.ListMapSwitchPoint[S].Position.X == X && TopLayer.ListMapSwitchPoint[S].Position.Y == Y)
                 {
-                    OldEventPoint = BattleMapViewer.ActiveMap.ListMapSwitchPoint[S];
+                    OldEventPoint = TopLayer.ListMapSwitchPoint[S];
                 }
             }
 
@@ -585,7 +598,7 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     MapSwitchPoint NewMapSwitchPoint = new MapSwitchPoint(Spawn);
                     NewMapSwitchPoint.Position = new Vector3(X, Y, 0);
-                    BattleMapViewer.ActiveMap.ListMapSwitchPoint.Add(NewMapSwitchPoint);
+                    TopLayer.ListMapSwitchPoint.Add(NewMapSwitchPoint);
                     pgEventPoints.SelectedObject = NewMapSwitchPoint;
                 }
                 else
@@ -595,7 +608,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
             else if (OldEventPoint != null)
             {
-                BattleMapViewer.ActiveMap.ListMapSwitchPoint.Remove(OldEventPoint);
+                TopLayer.ListMapSwitchPoint.Remove(OldEventPoint);
             }
         }
 
@@ -675,13 +688,13 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnSpawnDM_MouseMove(object sender, MouseEventArgs e)
         {//If left clicked and moving, open the team selector.
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
                 cbDeadthmatch.DroppedDown = true;
         }
 
         private void btnSpawnDM_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {//If left click and over the little black cursor at the bottom right, open the team selector.
                 if (e.X > btnSpawnDM.Width - 10 && e.Y > btnSpawnDM.Height - 10)
                     cbDeadthmatch.DroppedDown = true;
@@ -696,7 +709,7 @@ namespace ProjectEternity.Editors.MapEditor
                 if (CD.ShowDialog() == DialogResult.OK)
                 {//Change the button color and the color in the list at the same time with the returned color.
                     btnSpawnDM.BackColor = CD.Color;
-                    BattleMapViewer.ActiveMap.ArrayMultiplayerColor[cbDeadthmatch.SelectedIndex] = Color.FromNonPremultiplied(CD.Color.R, CD.Color.G, CD.Color.B, 255);
+                    BattleMapViewer.ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex] = Color.FromNonPremultiplied(CD.Color.R, CD.Color.G, CD.Color.B, 255);
                     if (btnSpawnDM.Checked)
                     {
                         ActiveSpawn.ColorRed = btnSpawnDM.BackColor.R;
@@ -704,13 +717,16 @@ namespace ProjectEternity.Editors.MapEditor
                         ActiveSpawn.ColorRed = btnSpawnDM.BackColor.B;
                     }
 
-                    for (int S = 0; S < BattleMapViewer.ActiveMap.ListMultiplayerSpawns.Count; S++)
+                    foreach (BaseMapLayer ActiveLayer in Helper.GetLayersAndSubLayers())
                     {
-                        if (BattleMapViewer.ActiveMap.ListMultiplayerSpawns[S].Tag == btnSpawnDM.Text)
+                        for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
                         {
-                            BattleMapViewer.ActiveMap.ListMultiplayerSpawns[S].ColorRed = CD.Color.R;
-                            BattleMapViewer.ActiveMap.ListMultiplayerSpawns[S].ColorGreen = CD.Color.G;
-                            BattleMapViewer.ActiveMap.ListMultiplayerSpawns[S].ColorBlue = CD.Color.B;
+                            if (ActiveLayer.ListMultiplayerSpawns[S].Tag == btnSpawnDM.Text)
+                            {
+                                ActiveLayer.ListMultiplayerSpawns[S].ColorRed = CD.Color.R;
+                                ActiveLayer.ListMultiplayerSpawns[S].ColorGreen = CD.Color.G;
+                                ActiveLayer.ListMultiplayerSpawns[S].ColorBlue = CD.Color.B;
+                            }
                         }
                     }
                 }
@@ -721,12 +737,28 @@ namespace ProjectEternity.Editors.MapEditor
         private void cbDeadthmatch_SelectedIndexChanged(object sender, EventArgs e)
         {
             btnSpawnDM.Text = cbDeadthmatch.Text;//Give the button the selected text.
-            btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(BattleMapViewer.ActiveMap.ArrayMultiplayerColor[cbDeadthmatch.SelectedIndex].R,
-                                                                 BattleMapViewer.ActiveMap.ArrayMultiplayerColor[cbDeadthmatch.SelectedIndex].G,
-                                                                 BattleMapViewer.ActiveMap.ArrayMultiplayerColor[cbDeadthmatch.SelectedIndex].B);//Give the button the selected color.
+            btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(BattleMapViewer.ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].R,
+                                                                 BattleMapViewer.ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].G,
+                                                                 BattleMapViewer.ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].B);//Give the button the selected color.
             btnSpawnDM.Checked = true;//Press the button.
             //Update the ActiveSpawn.
             ActiveSpawn = new EventPoint(Vector3.Zero, btnSpawnDM.Text, btnSpawnDM.BackColor.R, btnSpawnDM.BackColor.G, btnSpawnDM.BackColor.B);
+        }
+
+        private void btnAddDeathmatchTeam_Click(object sender, EventArgs e)
+        {
+            Color[] ArrayColorChoices = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
+            BattleMapViewer.ActiveMap.ListMultiplayerColor.Add(ArrayColorChoices[Math.Min(ArrayColorChoices.Length - 1, BattleMapViewer.ActiveMap.ListMultiplayerColor.Count)]);
+            cbDeadthmatch.Items.Add(BattleMapViewer.ActiveMap.ListMultiplayerColor.Count);
+        }
+
+        private void btnRemoveDeathmatchTeam_Click(object sender, EventArgs e)
+        {
+            if (cbDeadthmatch.SelectedIndex >= 0)
+            {
+                BattleMapViewer.ActiveMap.ListMultiplayerColor.RemoveAt(cbDeadthmatch.SelectedIndex);
+                cbDeadthmatch.Items.RemoveAt(cbDeadthmatch.SelectedIndex);
+            }
         }
 
         #endregion
@@ -857,7 +889,7 @@ namespace ProjectEternity.Editors.MapEditor
             if (BattleMapViewer.ActiveMap.TileSize.X != 0)
             {
                 int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-                BaseMapLayer TopLayer = (BaseMapLayer)Helper.GetLayersAndSubLayers()[TopLayerIndex];
+                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
 
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.
                 for (int P = 0; P < TopLayer.ListProp.Count; P++)
@@ -894,7 +926,7 @@ namespace ProjectEternity.Editors.MapEditor
             if (BattleMapViewer.ActiveMap.TileSize.X != 0)
             {
                 int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-                BaseMapLayer TopLayer = (BaseMapLayer)Helper.GetLayersAndSubLayers()[TopLayerIndex];
+                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
 
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.
                 for (int P = 0; P < TopLayer.ListProp.Count; P++)

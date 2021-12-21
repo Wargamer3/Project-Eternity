@@ -80,9 +80,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             ListTileSet = new List<Texture2D>();
             ListTileSetPath = new List<string>();
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
-            ListSingleplayerSpawns = new List<EventPoint>();
-            ListMultiplayerSpawns = new List<EventPoint>();
-            ListMapSwitchPoint = new List<MapSwitchPoint>();
             ListZone = new List<MapZoneInfo>();
             ListConsumable = new List<MapConsumable>();
             ListLayer = new List<MapLayer>();
@@ -105,8 +102,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             BinaryWriter BW = new BinaryWriter(FS);
 
             SaveProperties(BW);
-
-            SaveSpawns(BW);
 
             MapScript.SaveMapScripts(BW, ListMapScript);
 
@@ -172,8 +167,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             MapName = Path.GetFileNameWithoutExtension(BattleMapPath);
 
             LoadProperties(BR);
-
-            LoadSpawns(BR);
 
             ListMapScript = MapScript.LoadMapScripts(BR, DicMapEvent, DicMapCondition, DicMapTrigger, out ListMapEvent);
 

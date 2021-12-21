@@ -31,7 +31,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private static List<GameScreen> ListGameScreenCreatedByMap;
 
         private List<Squad> ListPresentSquad;
-        public List<EventPoint> ListSingleplayerSpawns;
 
         public LoadoutScreen(Roster PlayerRoster)
             : base()
@@ -61,15 +60,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (NewMap == null)
             {
                 LoadMap(ListGameScreen, PlayerRoster);
-            }
-
-            ListSingleplayerSpawns = new List<EventPoint>();
-            foreach (EventPoint ActiveSpawn in NewMap.ListSingleplayerSpawns)
-            {
-                if (ActiveSpawn.Tag == "P")
-                {
-                    ListSingleplayerSpawns.Add(ActiveSpawn);
-                }
             }
         }
 
@@ -123,7 +113,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else if (InputHelper.InputConfirmPressed())
                 {
-                    if (ListSpawnSquad.Count == ListSingleplayerSpawns.Count || ListPresentSquad.Count == 0)
+                    if (ListSpawnSquad.Count == NewMap.PlayersMax || ListPresentSquad.Count == 0)
                     {
                         StartMap(this, gameTime);
                     }
@@ -165,7 +155,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             g.Draw(sprBackground, new Vector2(0, 0), Color.White);
             g.DrawString(fntArial14, ListSpawnSquad.Count.ToString(), new Vector2(511, 21), Color.Yellow);
-            g.DrawString(fntArial14, ListSingleplayerSpawns.Count.ToString(), new Vector2(550, 21), Color.Yellow);
+            g.DrawString(fntArial14, NewMap.PlayersMax.ToString(), new Vector2(550, 21), Color.Yellow);
             g.DrawString(fntArial12, PageCurrent.ToString(), new Vector2(604, 380), Color.White);
             g.DrawString(fntArial12, PageMax.ToString(), new Vector2(624, 380), Color.White);
             //Unit drawing.

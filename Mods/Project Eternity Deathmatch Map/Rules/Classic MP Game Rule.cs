@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             for (int P = 0; P < Owner.ListPlayer.Count; P++)
             {
-                Owner.ListPlayer[P].Color = Owner.ArrayMultiplayerColor[P];
+                Owner.ListPlayer[P].Color = Owner.ListMultiplayerColor[P];
 
                 for (int S = 0; S < Owner.ListPlayer[P].ListSpawnPoint.Count; S++)
                 {

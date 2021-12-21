@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void CheckForMapSwitch()
         {
-            foreach (MapSwitchPoint ActivePoint in Map.ListMapSwitchPoint)
+            foreach (MapSwitchPoint ActivePoint in Map.ListLayer[ActiveSquad.LayerIndex].ListMapSwitchPoint)
             {
                 if (ActivePoint.Position == ActiveSquad.Position)
                 {

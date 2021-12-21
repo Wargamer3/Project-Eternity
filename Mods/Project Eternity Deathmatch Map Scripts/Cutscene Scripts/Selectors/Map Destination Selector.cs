@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (Editor.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     ListTerrainChangeLocation.Clear();
-                    foreach (BattleMapScreen.EventPoint NewDestinationPoint in Editor.BattleMapViewer.ActiveMap.ListSingleplayerSpawns)
+                    foreach (BattleMapScreen.EventPoint NewDestinationPoint in Editor.ActiveMap.ListLayer[0].ListSingleplayerSpawns)
                     {
                         ListTerrainChangeLocation.Add(new Vector2(NewDestinationPoint.Position.X, NewDestinationPoint.Position.Y));
                     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -23,6 +25,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public MapLayer(DeathmatchMap Map)
         {
             this.Map = Map;
+
+            ListSingleplayerSpawns = new List<EventPoint>();
+            ListMultiplayerSpawns = new List<EventPoint>();
+            ListMapSwitchPoint = new List<MapSwitchPoint>();
 
             ListSubLayer = new List<SubMapLayer>();
             ListProp = new List<InteractiveProp>();
@@ -45,6 +51,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public MapLayer(DeathmatchMap Map, BinaryReader BR)
         {
             this.Map = Map;
+
+            ListSingleplayerSpawns = new List<EventPoint>();
+            ListMultiplayerSpawns = new List<EventPoint>();
+            ListMapSwitchPoint = new List<MapSwitchPoint>();
 
             ListSubLayer = new List<SubMapLayer>();
             ListProp = new List<InteractiveProp>();
@@ -71,6 +81,50 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
                     ArrayTerrain[X, Y] = new Terrain(BR, X, Y);
+                }
+            }
+
+            int ListSingleplayerSpawnsCount = BR.ReadInt32();
+            ListSingleplayerSpawns = new List<EventPoint>(ListSingleplayerSpawnsCount);
+
+            for (int S = 0; S < ListSingleplayerSpawnsCount; S++)
+            {
+                EventPoint NewPoint = new EventPoint(BR);
+                NewPoint.ColorRed = Color.Blue.R;
+                NewPoint.ColorGreen = Color.Blue.G;
+                NewPoint.ColorBlue = Color.Blue.B;
+
+                ListSingleplayerSpawns.Add(NewPoint);
+            }
+
+            int ListMultiplayerSpawnsCount = BR.ReadInt32();
+            ListMultiplayerSpawns = new List<EventPoint>(ListMultiplayerSpawnsCount);
+
+            for (int S = 0; S < ListMultiplayerSpawnsCount; S++)
+            {
+                EventPoint NewPoint = new EventPoint(BR);
+                int ColorIndex = Convert.ToInt32(NewPoint.Tag) - 1;
+                NewPoint.ColorRed = Map.ListMultiplayerColor[ColorIndex].R;
+                NewPoint.ColorGreen = Map.ListMultiplayerColor[ColorIndex].G;
+                NewPoint.ColorBlue = Map.ListMultiplayerColor[ColorIndex].B;
+                ListMultiplayerSpawns.Add(NewPoint);
+            }
+
+            int ListMapSwitchPointCount = BR.ReadInt32();
+            ListMapSwitchPoint = new List<MapSwitchPoint>(ListMapSwitchPointCount);
+
+            for (int S = 0; S < ListMapSwitchPointCount; S++)
+            {
+                MapSwitchPoint NewMapSwitchPoint = new MapSwitchPoint(BR);
+                ListMapSwitchPoint.Add(NewMapSwitchPoint);
+                if (BattleMap.DicBattmeMapType.Count > 0 && !string.IsNullOrEmpty(NewMapSwitchPoint.SwitchMapPath)
+                    && Map.ListSubMap.Find(x => x.BattleMapPath == NewMapSwitchPoint.SwitchMapPath) == null)
+                {
+                    BattleMap NewMap = BattleMap.DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(string.Empty);
+                    NewMap.BattleMapPath = NewMapSwitchPoint.SwitchMapPath;
+                    NewMap.ListGameScreen = Map.ListGameScreen;
+                    NewMap.ListSubMap = Map.ListSubMap;
+                    NewMap.Load();
                 }
             }
 
@@ -104,6 +158,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     ArrayTerrain[X, Y].Save(BW);
                 }
+            }
+
+            BW.Write(ListSingleplayerSpawns.Count);
+            for (int S = 0; S < ListSingleplayerSpawns.Count; S++)
+            {
+                ListSingleplayerSpawns[S].Save(BW);
+            }
+            BW.Write(ListMultiplayerSpawns.Count);
+            for (int S = 0; S < ListMultiplayerSpawns.Count; S++)
+            {
+                ListMultiplayerSpawns[S].Save(BW);
+            }
+            BW.Write(ListMapSwitchPoint.Count);
+            for (int S = 0; S < ListMapSwitchPoint.Count; S++)
+            {
+                ListMapSwitchPoint[S].Save(BW);
             }
 
             BW.Write(ListProp.Count);
@@ -271,6 +341,55 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int P = 0; P < ListProp.Count; ++P)
                 {
                     ListProp[P].Draw(g);
+                }
+
+                if (!Map.ShowUnits)
+                {
+                    Color BrushPlayer = Color.FromNonPremultiplied(30, 144, 255, 180);
+                    Color BrushEnemy = Color.FromNonPremultiplied(255, 0, 0, 180);
+                    Color BrushNeutral = Color.FromNonPremultiplied(255, 255, 0, 180);
+                    Color BrushAlly = Color.FromNonPremultiplied(191, 255, 0, 180);
+                    Color BrushMapSwitchEventPoint = Color.FromNonPremultiplied(191, 255, 0, 180);
+
+                    for (int i = 0; i < ListSingleplayerSpawns.Count; i++)
+                    {
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListSingleplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
+                                                      (int)(ListSingleplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                                                       Map.TileSize.X, Map.TileSize.Y),
+                                                      null,
+                                        BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
+
+                        g.DrawString(Map.fntArial9, ListSingleplayerSpawns[i].Tag,
+                            new Vector2((ListSingleplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
+                                        (ListSingleplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    }
+
+                    for (int i = 0; i < ListMultiplayerSpawns.Count; i++)
+                    {
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListMultiplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
+                                                      (int)(ListMultiplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                                                       Map.TileSize.X, Map.TileSize.Y), null,
+                                        BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
+
+                        g.DrawString(Map.fntArial9, ListMultiplayerSpawns[i].Tag,
+                            new Vector2((ListMultiplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
+                                        (ListMultiplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    }
+
+                    for (int i = 0; i < ListMapSwitchPoint.Count; i++)
+                    {
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListMapSwitchPoint[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
+                                                       (int)(ListMapSwitchPoint[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                                                       Map.TileSize.X, Map.TileSize.Y), null,
+                                        BrushMapSwitchEventPoint, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
+
+                        g.DrawString(Map.fntArial9, ListMapSwitchPoint[i].Tag,
+                            new Vector2((ListMapSwitchPoint[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
+                                        (ListMapSwitchPoint[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    }
                 }
             }
         }

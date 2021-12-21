@@ -18,6 +18,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void RemoveSubLayer(BaseMapLayer ParentLayer, ISubMapLayer SubLayer);
         void EditLayer(int Index);
         int GetLayerCount();
-        List<object> GetLayersAndSubLayers();
+        List<BaseMapLayer> GetLayersAndSubLayers();
     }
 }

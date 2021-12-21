@@ -54,6 +54,8 @@
             this.btnEventSpawn = new System.Windows.Forms.CheckBox();
             this.lblEventSpawns = new System.Windows.Forms.Label();
             this.gbMultiplayerSpawns = new System.Windows.Forms.GroupBox();
+            this.btnRemoveDeathmatchTeam = new System.Windows.Forms.Button();
+            this.btnAddDeathmatchTeam = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.btnSpawnDM = new System.Windows.Forms.CheckBox();
             this.cbDeadthmatch = new System.Windows.Forms.ComboBox();
@@ -410,6 +412,8 @@
             // 
             // gbMultiplayerSpawns
             // 
+            this.gbMultiplayerSpawns.Controls.Add(this.btnRemoveDeathmatchTeam);
+            this.gbMultiplayerSpawns.Controls.Add(this.btnAddDeathmatchTeam);
             this.gbMultiplayerSpawns.Controls.Add(this.label6);
             this.gbMultiplayerSpawns.Controls.Add(this.btnSpawnDM);
             this.gbMultiplayerSpawns.Controls.Add(this.cbDeadthmatch);
@@ -419,6 +423,26 @@
             this.gbMultiplayerSpawns.TabIndex = 1;
             this.gbMultiplayerSpawns.TabStop = false;
             this.gbMultiplayerSpawns.Text = "Multiplayer Spawns";
+            // 
+            // btnRemoveDeathmatchTeam
+            // 
+            this.btnRemoveDeathmatchTeam.Location = new System.Drawing.Point(145, 56);
+            this.btnRemoveDeathmatchTeam.Name = "btnRemoveDeathmatchTeam";
+            this.btnRemoveDeathmatchTeam.Size = new System.Drawing.Size(75, 23);
+            this.btnRemoveDeathmatchTeam.TabIndex = 13;
+            this.btnRemoveDeathmatchTeam.Text = "Remove";
+            this.btnRemoveDeathmatchTeam.UseVisualStyleBackColor = true;
+            this.btnRemoveDeathmatchTeam.Click += new System.EventHandler(this.btnRemoveDeathmatchTeam_Click);
+            // 
+            // btnAddDeathmatchTeam
+            // 
+            this.btnAddDeathmatchTeam.Location = new System.Drawing.Point(62, 56);
+            this.btnAddDeathmatchTeam.Name = "btnAddDeathmatchTeam";
+            this.btnAddDeathmatchTeam.Size = new System.Drawing.Size(75, 23);
+            this.btnAddDeathmatchTeam.TabIndex = 12;
+            this.btnAddDeathmatchTeam.Text = "Add";
+            this.btnAddDeathmatchTeam.UseVisualStyleBackColor = true;
+            this.btnAddDeathmatchTeam.Click += new System.EventHandler(this.btnAddDeathmatchTeam_Click);
             // 
             // label6
             // 
@@ -448,23 +472,6 @@
             // cbDeadthmatch
             // 
             this.cbDeadthmatch.FormattingEnabled = true;
-            this.cbDeadthmatch.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16"});
             this.cbDeadthmatch.Location = new System.Drawing.Point(9, 58);
             this.cbDeadthmatch.Name = "cbDeadthmatch";
             this.cbDeadthmatch.Size = new System.Drawing.Size(47, 21);
@@ -972,5 +979,7 @@
         private System.Windows.Forms.TabPage tabVisualProps;
         private System.Windows.Forms.ListBox lsVisualProps;
         private System.Windows.Forms.ListBox lsPhysicalProps;
+        private System.Windows.Forms.Button btnRemoveDeathmatchTeam;
+        private System.Windows.Forms.Button btnAddDeathmatchTeam;
     }
 }

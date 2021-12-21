@@ -46,9 +46,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Pathfinder = new MovementAlgorithmConquest(this);
             ListPlayer = new List<Player>();
             ListLayer = new List<MapLayer>();
-            ListSingleplayerSpawns = new List<EventPoint>();
-            ListMultiplayerSpawns = new List<EventPoint>();
-            ListMapSwitchPoint = new List<MapSwitchPoint>();
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
 
             CursorPosition = new Vector3(9, 13, 0);
@@ -100,8 +97,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             BinaryWriter BW = new BinaryWriter(FS);
 
             SaveProperties(BW);
-
-            SaveSpawns(BW);
 
             MapScript.SaveMapScripts(BW, ListMapScript);
 
@@ -157,8 +152,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             MapName = Path.GetFileNameWithoutExtension(BattleMapPath);
 
             LoadProperties(BR);
-
-            LoadSpawns(BR);
 
             ListMapScript = MapScript.LoadMapScripts(BR, DicMapEvent, DicMapCondition, DicMapTrigger, out ListMapEvent);
 
