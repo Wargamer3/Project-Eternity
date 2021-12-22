@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="3D\Cross Ring 3D.cs" />
+    <Compile Include="3D\Orbiting Camera 3D.cs" />
+    <Compile Include="3D\Default Camera 3D.cs" />
     <Compile Include="3D\Ring 3D.cs" />
     <Compile Include="3D\Billboard System\Billboard System.cs" />
     <Compile Include="3D\Billboard System\Billboard Vertex.cs" />

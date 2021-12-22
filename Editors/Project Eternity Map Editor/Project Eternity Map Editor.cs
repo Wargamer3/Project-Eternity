@@ -328,6 +328,18 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
+        private void btn3DTileAttributes_Click(object sender, EventArgs e)
+        {
+            Point TilePos = TilesetViewer.ActiveTile;
+            TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
+                ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y],
+                ActiveMap);
+
+            if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
+            {
+            }
+        }
+
         #endregion
 
         #region Map
@@ -469,8 +481,21 @@ namespace ProjectEternity.Editors.MapEditor
 
             else if (e.Button == MouseButtons.Right)
             {
+                if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+                {//Get the Tile under the mouse base on the map starting pos.
+                    Point TilePos = new Point(MouseX, MouseY);
+                    DrawableTile SelectedTerrain = Helper.GetTile(TilePos.X, TilePos.Y, lsLayers.SelectedIndex);
+
+                    TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
+                        SelectedTerrain,
+                        ActiveMap);
+
+                    if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
+                    {
+                    }
+                }
                 //If there is a map loaded
-                if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+                else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
                 {
                     //Spawn tab
                     if (tabToolBox.SelectedIndex == 1)

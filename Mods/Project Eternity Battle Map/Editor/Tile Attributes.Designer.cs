@@ -320,6 +320,11 @@
             // txtHeight
             // 
             this.txtHeight.DecimalPlaces = 2;
+            this.txtHeight.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
             this.txtHeight.Location = new System.Drawing.Point(15, 105);
             this.txtHeight.Name = "txtHeight";
             this.txtHeight.Size = new System.Drawing.Size(72, 20);

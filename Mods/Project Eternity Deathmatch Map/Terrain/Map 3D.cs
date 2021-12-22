@@ -10,24 +10,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class Map3D : DrawableGrid
     {
-        public Dictionary<Texture2D, List<Tile3D>> DicTile3D;
+        protected Point MapSize { get { return Map.MapSize; } }
+
+        public List<Tile3D> ListTile3D;
         protected BasicEffect PolygonEffect;
         protected float Radius;
         private DeathmatchMap Map;
         protected int LayerIndex;
-        public DeathmatchCamera Camera;
+        protected MapLayer Owner;
+        public DefaultCamera Camera;
         private Texture2D sprCursor;
         private Tile3D Cursor;
         private Dictionary<Color, List<Tile3D>> DicDrawablePointPerColor;
         private Random Random;
 
-        public Map3D(DeathmatchMap Map, int LayerIndex, GraphicsDevice g)
+        public Map3D(DeathmatchMap Map, int LayerIndex, MapLayer Owner, GraphicsDevice g)
         {
             this.Map = Map;
             this.LayerIndex = LayerIndex;
+            this.Owner = Owner;
             Random = new Random();
             sprCursor = Map.sprCursor;
-            Camera = new DeathmatchCamera(g);
+            Camera = new DefaultCamera(g);
             Radius = (Map.MapSize.X * Map.TileSize.X) / 2;
 
             PolygonEffect = new BasicEffect(g);
@@ -46,7 +50,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PolygonEffect.View = Matrix.Identity;
 
             DicDrawablePointPerColor = new Dictionary<Color, List<Tile3D>>();
-            DicTile3D = new Dictionary<Texture2D, List<Tile3D>>();
+            ListTile3D = new List<Tile3D>();
 
             CreateMap(Map);
 
@@ -55,7 +59,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Save(BinaryWriter BW)
         {
-            throw new NotImplementedException();
+            for (int X = MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    Owner.OriginalLayerGrid.GetTile(X, Y).Save(BW);
+                }
+            }
         }
 
         public void Load(BinaryReader BR)
@@ -65,57 +75,39 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected virtual void CreateMap(DeathmatchMap Map)
         {
-            DicTile3D.Clear();
+            ListTile3D.Clear();
+            Map2D GroundLayer = Owner.OriginalLayerGrid;
 
             for (int X = Map.MapSize.X - 1; X >= 0; --X)
             {
                 for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                 {
-                    float Z = (-Map.GetTerrain(X, Y, LayerIndex).Position.Z - (LayerIndex * 3)) *- 32;
-                    Vector3[] ArrayVertexPosition = new Vector3[4];
-                    ArrayVertexPosition[0] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y);
-                    ArrayVertexPosition[1] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y);
-                    ArrayVertexPosition[2] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
-                    ArrayVertexPosition[3] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
-
-                    Map2D GroundLayer = Map.ListLayer[LayerIndex].OriginalLayerGrid;
                     DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
-                    Texture2D ActiveTileset = Map.ListTileSet[ActiveTerrain.Tileset];
-                    if (!DicTile3D.ContainsKey(ActiveTileset))
-                    {
-                        DicTile3D.Add(ActiveTileset, new List<Tile3D>());
-                    }
-                    DicTile3D[ActiveTileset].Add(CreateTile3D(Map, ArrayVertexPosition, ActiveTerrain.Origin.X, ActiveTerrain.Origin.Y, X, Y, ActiveTileset.Width, ActiveTileset.Height, Radius));
-
-                    //Create slope right
-                    if (X + 1 < Map.MapSize.X)
-                    {
-                        float ZRight = Map.GetTerrain(X + 1, Y, LayerIndex).Position.Z;
-                        if (Z != ZRight)
-                        {
-                            Vector3[] ArrayVertexPositionRight = new Vector3[4];
-                            ArrayVertexPositionRight[0] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y);
-                            ArrayVertexPositionRight[2] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
-                            ArrayVertexPositionRight[1] = new Vector3((X + 1) * Map.TileSize.X, ZRight, Y * Map.TileSize.Y);
-                            ArrayVertexPositionRight[3] = new Vector3((X + 1) * Map.TileSize.X, ZRight, Y * Map.TileSize.Y + Map.TileSize.Y);
-                            DicTile3D[ActiveTileset].Add(CreateTile3D(Map, ArrayVertexPositionRight, ActiveTerrain.Origin.X, ActiveTerrain.Origin.Y, X, Y, ActiveTileset.Width, ActiveTileset.Height, Radius));
-                        }
-                    }
-
-                    //Create slope down
+                    Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+                    float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64);
+                    float ZFront = Z;
+                    float ZBack = Z;
+                    float ZRight = Z;
+                    float ZLeft = Z;
                     if (Y + 1 < Map.MapSize.Y)
                     {
-                        float ZDown = Map.GetTerrain(X, Y + 1, LayerIndex).Position.Z;
-                        if (Z != ZDown)
-                        {
-                            Vector3[] ArrayVertexPositionDown = new Vector3[4];
-                            ArrayVertexPositionDown[0] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
-                            ArrayVertexPositionDown[1] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
-                            ArrayVertexPositionDown[2] = new Vector3(X * Map.TileSize.X, ZDown, (Y + 1) * Map.TileSize.Y);
-                            ArrayVertexPositionDown[3] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, ZDown, (Y + 1) * Map.TileSize.Y);
-                            DicTile3D[ActiveTileset].Add(CreateTile3D(Map, ArrayVertexPositionDown, ActiveTerrain.Origin.X, ActiveTerrain.Origin.Y, X, Y, ActiveTileset.Width, ActiveTileset.Height, Radius));
-                        }
+                        ZFront = Owner.ArrayTerrain[X, Y + 1].Position.Z * 32 + (LayerIndex * 64);
                     }
+                    if (Y - 1 >= 0)
+                    {
+                        ZBack = Owner.ArrayTerrain[X, Y - 1].Position.Z * 32 + (LayerIndex * 64);
+                    }
+                    if (X - 1 >= 0)
+                    {
+                        ZLeft = Owner.ArrayTerrain[X - 1, Y].Position.Z * 32 + (LayerIndex * 64);
+                    }
+                    if (X + 1 < Map.MapSize.X)
+                    {
+                        ZRight = Owner.ArrayTerrain[X + 1, Y].Position.Z * 32 + (LayerIndex * 64);
+                    }
+
+                    ListTile3D.AddRange(ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
+                        X * Map.TileSize.X, Y * Map.TileSize.Y, Z, (LayerIndex * 64), Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0));
                 }
             }
         }
@@ -130,10 +122,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ArrayVertexPosition[2] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
             ArrayVertexPosition[3] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
 
-            return CreateTile3D(Map, ArrayVertexPosition, 0, 0, X, Y, TextureWidth, TextureHeight, Radius);
+            return CreateTile3D(Map, ArrayVertexPosition, 0, 0, TextureWidth, TextureHeight, Radius);
         }
 
-        private static Tile3D CreateTile3D(DeathmatchMap Map, Vector3[] ArrayVertexPosition, float OffsetX, float OffsetY, float X, float Y, int TextureWidth, int TextureHeight, float Radius)
+        private static Tile3D CreateTile3D(DeathmatchMap Map, Vector3[] ArrayVertexPosition, float OffsetX, float OffsetY, int TextureWidth, int TextureHeight, float Radius)
         {
             VertexPositionColorTexture[] ArrayVertex = new VertexPositionColorTexture[4];
             float UVXValue = OffsetX + 0.5f;
@@ -182,7 +174,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            return new Tile3D(ArrayVertex, ArrayIndex);
+            return new Tile3D(0, ArrayVertex, ArrayIndex);
         }
 
         public void TogglePreview(bool UsePreview)
@@ -197,8 +189,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void Update(GameTime gameTime)
         {
             Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, LayerIndex, sprCursor.Width, sprCursor.Height, Radius);
-            Camera.TeleportCamera(new Vector3(Map.CursorPosition.X * Map.TileSize.X - Radius, Radius * 1.2f + 200, 200 - Radius * 0.9f + Map.CursorPosition.Y * Map.TileSize.Y));
-            Camera.SetRotation(0, (float)-Math.PI / 4f, 0f);
+            Camera.SetTarget(new Vector3(Map.TileSize.X * Map.MapSize.X / 2, LayerIndex * 32, Map.TileSize.Y * Map.MapSize.Y / 2));
             Camera.Update(gameTime);
 
             DicDrawablePointPerColor.Clear();
@@ -215,15 +206,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
-            foreach (KeyValuePair<Texture2D, List<Tile3D>> ActiveTileSet in DicTile3D)
+            foreach (Tile3D ActiveTile in ListTile3D)
             {
-                PolygonEffect.Texture = ActiveTileSet.Key;
+                PolygonEffect.Texture = Map.ListTileSet[ActiveTile.TilesetIndex];
                 PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-                foreach (Tile3D ActiveTile in ActiveTileSet.Value)
-                {
-                    ActiveTile.Draw(g.GraphicsDevice);
-                }
+                ActiveTile.Draw(g.GraphicsDevice);
             }
 
             PolygonEffect.Texture = sprCursor;

@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Terrain ActiveTerrain = Map.GetTerrain(TileX, TileY, TileZ);
             DrawableTile ActiveTile = Map.GetTile(TileX, TileY, TileZ);
             g.Draw(Map.sprCursorTerrainSelection, new Vector2(DrawX, DrawY), Color.White);
-            g.Draw(Map.ListTileSet[ActiveTile.Tileset], new Vector2(DrawX + 6, DrawY + 22), ActiveTile.Origin, Color.White);
+            g.Draw(Map.ListTileSet[ActiveTile.TilesetIndex], new Vector2(DrawX + 6, DrawY + 22), ActiveTile.Origin, Color.White);
             string BonusValue;
 
             //Draw the bonuses.

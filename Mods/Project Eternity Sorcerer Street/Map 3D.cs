@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ArrayVertexPosition[3] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
                     
                     DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
-                    Texture2D ActiveTileset = Map.ListTileSet[ActiveTerrain.Tileset];
+                    Texture2D ActiveTileset = Map.ListTileSet[ActiveTerrain.TilesetIndex];
                     if (!DicTile3D.ContainsKey(ActiveTileset))
                     {
                         DicTile3D.Add(ActiveTileset, new List<Tile3D>());

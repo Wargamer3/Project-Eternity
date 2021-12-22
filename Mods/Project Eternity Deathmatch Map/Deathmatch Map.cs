@@ -538,6 +538,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     Init();
                 }
+                for (int L = 0; L < ListLayer.Count; ++L)
+                {
+                    ListLayer[L].LayerGrid = ListLayer[L].OriginalLayerGrid;
+                    for (int L2 = 0; L2 < ListLayer[L].ListSubLayer.Count; ++L2)
+                    {
+                        ListLayer[L].ListSubLayer[L2].LayerGrid = ListLayer[L].ListSubLayer[L2].OriginalLayerGrid;
+                    }
+                }
+            }
+            else if (ListTileSet.Count > 0)
+            {
+                for (int L = 0; L < ListLayer.Count; ++L)
+                {
+                    ListLayer[L].LayerGrid = new Map3D(this, L, ListLayer[L], GraphicsDevice);
+                    for (int L2 = 0; L2 < ListLayer[L].ListSubLayer.Count; ++L2)
+                    {
+                        ListLayer[L].ListSubLayer[L2].LayerGrid = new Map3D(this, L, ListLayer[L].ListSubLayer[L2], GraphicsDevice);
+                    }
+                }
             }
         }
 
@@ -620,20 +639,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     for (int L = 0; L < ListLayer.Count; ++L)
                     {
-                        ListLayer[L].LayerGrid = new Map3D(this, L, GraphicsDevice);
+                        ListLayer[L].LayerGrid = new Map3D(this, L, ListLayer[L], GraphicsDevice);
                     }
                 }
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.L))
                 {
-                    ListLayer[0].LayerGrid = new CubeMap3D(this, 0, GraphicsDevice);
+                    ListLayer[0].LayerGrid = new CubeMap3D(this, 0, ListLayer[0], GraphicsDevice);
                 }
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.O))
                 {
-                    ListLayer[0].LayerGrid = new SphericalMap3D(this, 0, GraphicsDevice);
+                    ListLayer[0].LayerGrid = new SphericalMap3D(this, 0, ListLayer[0], GraphicsDevice);
                 }
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.U))
                 {
-                    ListLayer[0].LayerGrid = ListLayer[0].OriginalLayerGrid;
+                    for (int L = 0; L < ListLayer.Count; ++L)
+                    {
+                        ListLayer[L].LayerGrid = ListLayer[L].OriginalLayerGrid;
+                        for (int L2 = 0; L2 < ListLayer[L].ListSubLayer.Count; ++L2)
+                        {
+                            ListLayer[L].ListSubLayer[L2].LayerGrid = ListLayer[L].ListSubLayer[L2].OriginalLayerGrid;
+                        }
+                    }
                 }
 
                 if (!IsInit)

@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace ProjectEternity.GameScreens.DeathmatchMapScreen
+namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class Tile3D
     {
+        public int TilesetIndex;
         public short[] ArrayIndex;
         public VertexPositionColorTexture[] ArrayVertex;
 
@@ -11,8 +12,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public int TriangleCount;
 
-        public Tile3D(VertexPositionColorTexture[] ArrayVertex, short[] ArrayIndex)
+        public Tile3D(int TilesetIndex, VertexPositionColorTexture[] ArrayVertex, short[] ArrayIndex)
         {
+            this.TilesetIndex = TilesetIndex;
             this.ArrayVertex = ArrayVertex;
             this.ArrayIndex = ArrayIndex;
             TriangleCount = ArrayIndex.Length / 3;
@@ -20,6 +22,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public Tile3D(Tile3D Clone)
         {
+            this.TilesetIndex = Clone.TilesetIndex;
             this.ArrayVertex = (VertexPositionColorTexture[])Clone.ArrayVertex.Clone();
             this.ArrayIndex = (short[])Clone.ArrayIndex.Clone();
             TriangleCount = Clone.TriangleCount;

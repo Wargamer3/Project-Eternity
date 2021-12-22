@@ -141,7 +141,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int L = 0; L < ListTerrainChangeLocationCount; ++L)
                         {
-                            int OriginalTilesetIndex = TerrainAttribute.ListTileChangeLocation[L].Tileset;
+                            int OriginalTilesetIndex = TerrainAttribute.ListTileChangeLocation[L].TilesetIndex;
 
                             for (int P = 0; P < Map.ListTilesetPreset.Count; ++P)
                             {
@@ -175,7 +175,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     BW.Write(TerrainAttribute.ListTerrainChangeLocation[L].Position.X);
                     BW.Write(TerrainAttribute.ListTerrainChangeLocation[L].Position.Y);
-                    BW.Write(TerrainAttribute.ListTileChangeLocation[L].Tileset);
+                    BW.Write(TerrainAttribute.ListTileChangeLocation[L].TilesetIndex);
                     BW.Write(TerrainAttribute.ListTileChangeLocation[L].Origin.X);
                     BW.Write(TerrainAttribute.ListTileChangeLocation[L].Origin.Y);
                     TerrainAttribute.ListTerrainChangeLocation[L].Save(BW);

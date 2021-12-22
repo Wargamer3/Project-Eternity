@@ -1248,22 +1248,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquadTerrain.BattleBackgroundAnimationIndex >= 0)
             {
-                ActiveSquadBackgroundPath = ListTilesetPreset[ActiveSquadTile.Tileset].ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleBackgroundAnimationIndex];
+                ActiveSquadBackgroundPath = ListTilesetPreset[ActiveSquadTile.TilesetIndex].ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleBackgroundAnimationIndex];
             }
 
             if (TargetSquadTerrain.BattleBackgroundAnimationIndex >= 0)
             {
-                TargetSquadBackgroundPath = ListTilesetPreset[TargetSquadTile.Tileset].ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleBackgroundAnimationIndex];
+                TargetSquadBackgroundPath = ListTilesetPreset[TargetSquadTile.TilesetIndex].ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleBackgroundAnimationIndex];
             }
 
             if (ActiveSquadTerrain.BattleForegroundAnimationIndex >= 0)
             {
-                ActiveSquadForegroundPath = ListTilesetPreset[ActiveSquadTile.Tileset].ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleForegroundAnimationIndex];
+                ActiveSquadForegroundPath = ListTilesetPreset[ActiveSquadTile.TilesetIndex].ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleForegroundAnimationIndex];
             }
 
             if (TargetSquadTerrain.BattleForegroundAnimationIndex >= 0)
             {
-                TargetSquadForegroundPath = ListTilesetPreset[TargetSquadTile.Tileset].ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleForegroundAnimationIndex];
+                TargetSquadForegroundPath = ListTilesetPreset[TargetSquadTile.TilesetIndex].ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleForegroundAnimationIndex];
             }
 
             if (OldAttackerBackground != null)

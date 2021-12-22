@@ -151,7 +151,6 @@
     <Compile Include="Menus\Non Demo\Non Demo Battle Frame.cs" />
     <Compile Include="Menus\Game Over Menu.cs" />
     <Compile Include="Rules\Lobby Victory Screen.cs" />
-    <Compile Include="Terrain\Camera 3D.cs" />
     <Compile Include="Deathmatch Context.cs" />
     <Compile Include="Deathmatch Map Requirement.cs" />
     <Compile Include="Deathmatch Map Timeline.cs" />
@@ -178,7 +177,6 @@
     <Compile Include="Terrain\Map 3D.cs" />
     <Compile Include="Terrain\Spherical Map 3D.cs" />
     <Compile Include="Terrain\Sub Map Layer.cs" />
-    <Compile Include="Terrain\Tile 3D.cs" />
     <Compile Include="Deathmatch Unit.cs" />
     <Compile Include="Classic Multiplayer\Multiplayer Screen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

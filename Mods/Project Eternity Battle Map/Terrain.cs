@@ -175,8 +175,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListActivation = ListActivation;
             this.ListBonus = ListBonus;
             this.ListBonusValue = ListBonusValue;
-            this.BattleBackgroundAnimationIndex = -1;
-            this.BattleForegroundAnimationIndex = -1;
         }
 
         public Terrain(BinaryReader BR, float XPos, float YPos)

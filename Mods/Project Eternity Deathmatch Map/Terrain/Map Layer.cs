@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

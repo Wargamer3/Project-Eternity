@@ -94,6 +94,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tslInformation = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
+            this.btn3DTileAttributes = new System.Windows.Forms.Button();
             this.tbConditions.SuspendLayout();
             this.tabToolBox.SuspendLayout();
             this.tabTiles.SuspendLayout();
@@ -163,6 +164,7 @@
             // 
             // tabTiles
             // 
+            this.tabTiles.Controls.Add(this.btn3DTileAttributes);
             this.tabTiles.Controls.Add(this.TilesetViewer);
             this.tabTiles.Controls.Add(this.btnTileAttributes);
             this.tabTiles.Controls.Add(this.sclTileHeight);
@@ -193,7 +195,7 @@
             // 
             this.btnTileAttributes.Location = new System.Drawing.Point(10, 140);
             this.btnTileAttributes.Name = "btnTileAttributes";
-            this.btnTileAttributes.Size = new System.Drawing.Size(221, 23);
+            this.btnTileAttributes.Size = new System.Drawing.Size(105, 23);
             this.btnTileAttributes.TabIndex = 6;
             this.btnTileAttributes.Text = "Tile attributes";
             this.btnTileAttributes.UseVisualStyleBackColor = true;
@@ -861,6 +863,16 @@
             this.mnuToolBar.TabIndex = 9;
             this.mnuToolBar.Text = "menuStrip1";
             // 
+            // btn3DTileAttributes
+            // 
+            this.btn3DTileAttributes.Location = new System.Drawing.Point(126, 140);
+            this.btn3DTileAttributes.Name = "btn3DTileAttributes";
+            this.btn3DTileAttributes.Size = new System.Drawing.Size(105, 23);
+            this.btn3DTileAttributes.TabIndex = 8;
+            this.btn3DTileAttributes.Text = "3D Tile attributes";
+            this.btn3DTileAttributes.UseVisualStyleBackColor = true;
+            this.btn3DTileAttributes.Click += new System.EventHandler(this.btn3DTileAttributes_Click);
+            // 
             // ProjectEternityMapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -981,5 +993,6 @@
         private System.Windows.Forms.ListBox lsPhysicalProps;
         private System.Windows.Forms.Button btnRemoveDeathmatchTeam;
         private System.Windows.Forms.Button btnAddDeathmatchTeam;
+        private System.Windows.Forms.Button btn3DTileAttributes;
     }
 }

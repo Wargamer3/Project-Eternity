@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -10,14 +9,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         protected virtual bool Spherical { get { return false; } }
 
-        public CubeMap3D(DeathmatchMap Map, int LayerIndex, GraphicsDevice g)
-            : base(Map, LayerIndex, g)
+        public CubeMap3D(DeathmatchMap Map, int LayerIndex, MapLayer Owner, GraphicsDevice g)
+            : base(Map, LayerIndex, Owner, g)
         {
         }
 
         protected override void CreateMap(DeathmatchMap Map)
         {
-            DicTile3D.Clear();
+            ListTile3D.Clear();
 
             for (int X = Map.MapSize.X - 1; X >= 0; --X)
             {
@@ -40,11 +39,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     Map2D GroundLayer = Map.ListLayer[0].OriginalLayerGrid;
                     DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
-                    Texture2D ActiveTileset = Map.ListTileSet[ActiveTerrain.Tileset];
-                    if (!DicTile3D.ContainsKey(ActiveTileset))
-                    {
-                        DicTile3D.Add(ActiveTileset, new List<Tile3D>());
-                    }
+                    Texture2D ActiveTileset = Map.ListTileSet[ActiveTerrain.TilesetIndex];
                     Tile3D NewTile = CreateTile(Map, ActiveTileset, ArrayVertexPosition, X, Y);
 
                     if (Spherical)
@@ -56,7 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         CreateFlatElevation(Map, ActiveTileset, NewTile, X, Y);
                     }
-                    CreateCubicTile(Map, ActiveTileset, NewTile);
+                    CreateCubicTile(Map, NewTile);
                 }
             }
         }
@@ -105,12 +100,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ArrayIndex[4] = 3;
             ArrayIndex[5] = 2;
 
-            Tile3D NewTile = new Tile3D(ArrayVertex, ArrayIndex);
+            Tile3D NewTile = new Tile3D(0, ArrayVertex, ArrayIndex);
 
             return NewTile;
         }
 
-        private void CreateCubicTile(DeathmatchMap Map, Texture2D ActiveTileset, Tile3D Original)
+        private void CreateCubicTile(DeathmatchMap Map, Tile3D Original)
         {
             const float DegToRag = 0.0174532925f;
             float Radius = (Map.MapSize.X * Map.TileSize.X) / 2f;
@@ -138,7 +133,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            DicTile3D[ActiveTileset].Add(NewTile);
+            ListTile3D.Add(NewTile);
 
             //Front
             RotationMatrix = Matrix.CreateRotationX(90 * DegToRag);
@@ -152,7 +147,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            DicTile3D[ActiveTileset].Add(NewTile);
+            ListTile3D.Add(NewTile);
 
             //Back
             RotationMatrix = Matrix.CreateRotationX(270 * DegToRag);
@@ -166,7 +161,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            DicTile3D[ActiveTileset].Add(NewTile);
+            ListTile3D.Add(NewTile);
 
             //Left
             RotationMatrix = Matrix.CreateRotationX(90 * DegToRag) * Matrix.CreateRotationY(90 * DegToRag);
@@ -180,7 +175,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            DicTile3D[ActiveTileset].Add(NewTile);
+            ListTile3D.Add(NewTile);
 
             //Right
             RotationMatrix = Matrix.CreateRotationX(90 * DegToRag) * Matrix.CreateRotationY(270 * DegToRag);
@@ -194,7 +189,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            DicTile3D[ActiveTileset].Add(NewTile);
+            ListTile3D.Add(NewTile);
 
             //Bottom
             RotationMatrix = Matrix.CreateRotationX(180 * DegToRag);
@@ -208,7 +203,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            DicTile3D[ActiveTileset].Add(NewTile);
+            ListTile3D.Add(NewTile);
         }
 
         private void MoveToSphericalCoordinates(Tile3D ActiveTile, float Radius)
@@ -260,7 +255,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ArrayVertexPositionRight[3] = D + Normal * ZRight;
 
                     Tile3D NewTile = CreateTile(Map, TileSet, ArrayVertexPositionRight, X, Y);
-                    CreateCubicTile(Map, TileSet, NewTile);
+                    CreateCubicTile(Map, NewTile);
                 }
             }
 
@@ -278,7 +273,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ArrayVertexPositionDown[3] = D + Normal * ZDown;
 
                     Tile3D NewTile = CreateTile(Map, TileSet, ArrayVertexPositionDown, X, Y);
-                    CreateCubicTile(Map, TileSet, NewTile);
+                    CreateCubicTile(Map, NewTile);
                 }
             }
         }
@@ -312,7 +307,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ArrayVertexPositionRight[3] = D + Vector3.Normalize(D) * ZRight;
 
                     Tile3D NewTile = CreateTile(Map, TileSet, ArrayVertexPositionRight, X, Y);
-                    CreateCubicTile(Map, TileSet, NewTile);
+                    CreateCubicTile(Map, NewTile);
                 }
             }
 
@@ -330,7 +325,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ArrayVertexPositionDown[3] = D + Vector3.Normalize(D) * ZDown;
 
                     Tile3D NewTile = CreateTile(Map, TileSet, ArrayVertexPositionDown, X, Y);
-                    CreateCubicTile(Map, TileSet, NewTile);
+                    CreateCubicTile(Map, NewTile);
                 }
             }
         }

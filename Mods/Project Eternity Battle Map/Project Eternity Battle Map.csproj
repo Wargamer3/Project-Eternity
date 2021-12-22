@@ -76,6 +76,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Battle Map Cutscene Script Holder.cs" />
+    <Compile Include="Editor\Tile Attributes 3D.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\Tile Attributes 3D.Designer.cs">
+      <DependentUpon>Tile Attributes 3D.cs</DependentUpon>
+    </Compile>
     <Compile Include="Editor\Extra Layer Attributes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,9 @@
     </Compile>
     <Compile Include="Editor\Tile Attributes.Designer.cs">
       <DependentUpon>Tile Attributes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\Tile Viewer 3D.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="IGameRule.cs" />
     <Compile Include="Inputs\Keyboard Input.cs" />
@@ -207,6 +216,8 @@
     <Compile Include="Editor\Tileset Viewer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Terrain3D.cs" />
+    <Compile Include="Tile 3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
@@ -281,6 +292,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Editor\Tile Attributes 3D.resx">
+      <DependentUpon>Tile Attributes 3D.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Editor\Battle Map Viewer.resx">
       <DependentUpon>Battle Map Viewer.cs</DependentUpon>
     </EmbeddedResource>

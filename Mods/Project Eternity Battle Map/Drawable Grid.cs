@@ -12,31 +12,50 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public struct DrawableTile
     {
         public Rectangle Origin;//X, Y origin from at which the tile is located in the TileSet.
-        public int Tileset;
+        public int TilesetIndex;
+
+        public Terrain3D Terrain3DInfo;
 
         public DrawableTile(BinaryReader BR, int TileWidth, int TileHeight)
         {
-            Tileset = BR.ReadInt32();
+            TilesetIndex = BR.ReadInt32();
             Origin = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TileWidth, TileHeight);
+            bool HasTerrain3DInfo = BR.ReadBoolean();
+            Terrain3DInfo = null;
+            if (HasTerrain3DInfo)
+            {
+                Terrain3DInfo = new Terrain3D(BR, TileWidth, TileHeight);
+            }
         }
 
         public DrawableTile(Rectangle Origin, int Tileset)
         {
             this.Origin = Origin;
-            this.Tileset = Tileset;
+            this.TilesetIndex = Tileset;
+            Terrain3DInfo = new Terrain3D();
         }
 
-        public DrawableTile(DrawableTile TilePreset) : this()
+        public DrawableTile(DrawableTile TilePreset)
+            : this()
         {
             this.Origin = TilePreset.Origin;
-            this.Tileset = TilePreset.Tileset;
+            this.TilesetIndex = TilePreset.TilesetIndex;
+            if (TilePreset.Terrain3DInfo != null)
+            {
+                this.Terrain3DInfo = new Terrain3D(TilePreset.Terrain3DInfo);
+            }
         }
 
         public void Save(BinaryWriter BW)
         {
-            BW.Write(Tileset);
+            BW.Write(TilesetIndex);
             BW.Write(Origin.X);
             BW.Write(Origin.Y);
+            BW.Write(Terrain3DInfo != null);
+            if (Terrain3DInfo != null)
+            {
+                Terrain3DInfo.Save(BW);
+            }
         }
     }
 
@@ -130,9 +149,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 for (int Y = ArrayTile.GetLength(1) - 1; Y >= 0; --Y)
                 {
-                    if (ArrayTile[X, Y].Tileset > TilesetIndex)
+                    if (ArrayTile[X, Y].TilesetIndex > TilesetIndex)
                     {
-                        --ArrayTile[X, Y].Tileset;
+                        --ArrayTile[X, Y].TilesetIndex;
                     }
                 }
             }
@@ -160,10 +179,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     if (FinalHeight > CameraPosition.Z)
                     {
-                        FinalColor = Color.FromNonPremultiplied(255, 255, 255, (int)Math.Min(255, 255 - (FinalHeight - CameraPosition.Z) * 255));
+                        FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - CameraPosition.Z) * 255);
                     }
 
-                    g.Draw(Map.ListTileSet[ArrayTile[X, Y].Tileset],
+                    g.Draw(Map.ListTileSet[ArrayTile[X, Y].TilesetIndex],
                         new Vector2((X - CameraPosition.X) * TileSize.X, (Y - CameraPosition.Y) * TileSize.Y), 
                         ArrayTile[X, Y].Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, Depth);
                 }

@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         int Y = (int)ActivePosition.Y;
                         DrawableTile ActiveTile = ActiveLayer.OriginalLayerGrid.GetTile(X, Y);
                         ActiveTile.Origin = TerrainAttribute.Origin;
-                        ActiveTile.Tileset = TilesetIndex;
+                        ActiveTile.TilesetIndex = TilesetIndex;
                         ActiveLayer.OriginalLayerGrid.ReplaceTile(X, Y, ActiveTile);
                     }
 
