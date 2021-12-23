@@ -6,13 +6,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public int TilesetIndex;
         public short[] ArrayIndex;
-        public VertexPositionColorTexture[] ArrayVertex;
+        public VertexPositionNormalTexture[] ArrayVertex;
 
         public int VertexCount { get { return ArrayVertex.Length; } }
 
         public int TriangleCount;
 
-        public Tile3D(int TilesetIndex, VertexPositionColorTexture[] ArrayVertex, short[] ArrayIndex)
+        public Tile3D(int TilesetIndex, VertexPositionNormalTexture[] ArrayVertex, short[] ArrayIndex)
         {
             this.TilesetIndex = TilesetIndex;
             this.ArrayVertex = ArrayVertex;
@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Tile3D(Tile3D Clone)
         {
             this.TilesetIndex = Clone.TilesetIndex;
-            this.ArrayVertex = (VertexPositionColorTexture[])Clone.ArrayVertex.Clone();
+            this.ArrayVertex = (VertexPositionNormalTexture[])Clone.ArrayVertex.Clone();
             this.ArrayIndex = (short[])Clone.ArrayIndex.Clone();
             TriangleCount = Clone.TriangleCount;
         }

@@ -36,8 +36,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             PolygonEffect = new BasicEffect(g);
 
-            PolygonEffect.VertexColorEnabled = true;
             PolygonEffect.TextureEnabled = true;
+            PolygonEffect.EnableDefaultLighting();
 
             float aspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
 
@@ -127,35 +127,37 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private static Tile3D CreateTile3D(DeathmatchMap Map, Vector3[] ArrayVertexPosition, float OffsetX, float OffsetY, int TextureWidth, int TextureHeight, float Radius)
         {
-            VertexPositionColorTexture[] ArrayVertex = new VertexPositionColorTexture[4];
+            VertexPositionNormalTexture[] ArrayVertex = new VertexPositionNormalTexture[4];
             float UVXValue = OffsetX + 0.5f;
             float UVYValue = OffsetY + 0.5f;
 
-            ArrayVertex[0] = new VertexPositionColorTexture();
+            Vector3 NormalTriangle = Vector3.Normalize(Vector3.Cross(ArrayVertexPosition[1] - ArrayVertexPosition[0], ArrayVertexPosition[2] - ArrayVertexPosition[0]));
+
+            ArrayVertex[0] = new VertexPositionNormalTexture();
             ArrayVertex[0].Position = new Vector3(ArrayVertexPosition[0].X - Map.TileSize.X / 2f, ArrayVertexPosition[0].Y, ArrayVertexPosition[0].Z - Map.TileSize.Y / 2f);
             ArrayVertex[0].TextureCoordinate = new Vector2(UVXValue / TextureWidth, UVYValue / TextureHeight);
-            ArrayVertex[0].Color = Color.White;
+            ArrayVertex[0].Normal = NormalTriangle;
 
             UVXValue = OffsetX + Map.TileSize.X - 0.5f;
             UVYValue = OffsetY + 0.5f;
-            ArrayVertex[1] = new VertexPositionColorTexture();
+            ArrayVertex[1] = new VertexPositionNormalTexture();
             ArrayVertex[1].Position = new Vector3(ArrayVertexPosition[1].X - Map.TileSize.X / 2f, ArrayVertexPosition[1].Y, ArrayVertexPosition[1].Z - Map.TileSize.Y / 2f);
             ArrayVertex[1].TextureCoordinate = new Vector2(UVXValue / TextureWidth, UVYValue / TextureHeight);
-            ArrayVertex[1].Color = Color.White;
+            ArrayVertex[1].Normal = NormalTriangle;
 
             UVXValue = OffsetX + 0.5f;
             UVYValue = OffsetY + Map.TileSize.Y - 0.5f;
-            ArrayVertex[2] = new VertexPositionColorTexture();
+            ArrayVertex[2] = new VertexPositionNormalTexture();
             ArrayVertex[2].Position = new Vector3(ArrayVertexPosition[2].X - Map.TileSize.X / 2f, ArrayVertexPosition[2].Y, ArrayVertexPosition[2].Z - Map.TileSize.Y / 2f);
             ArrayVertex[2].TextureCoordinate = new Vector2(UVXValue / TextureWidth, UVYValue / TextureHeight);
-            ArrayVertex[2].Color = Color.White;
+            ArrayVertex[2].Normal = NormalTriangle;
 
             UVXValue = OffsetX + Map.TileSize.X - 0.5f;
             UVYValue = OffsetY + Map.TileSize.Y - 0.5f;
-            ArrayVertex[3] = new VertexPositionColorTexture();
+            ArrayVertex[3] = new VertexPositionNormalTexture();
             ArrayVertex[3].Position = new Vector3(ArrayVertexPosition[3].X - Map.TileSize.X / 2f, ArrayVertexPosition[3].Y, ArrayVertexPosition[3].Z - Map.TileSize.Y / 2f);
             ArrayVertex[3].TextureCoordinate = new Vector2(UVXValue / TextureWidth, UVYValue / TextureHeight);
-            ArrayVertex[3].Color = Color.White;
+            ArrayVertex[3].Normal = NormalTriangle;
 
             short[] ArrayIndex = new short[6];
             ArrayIndex[0] = 0;

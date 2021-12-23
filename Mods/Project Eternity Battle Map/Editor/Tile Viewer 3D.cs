@@ -34,8 +34,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             PolygonEffect = new BasicEffect(GraphicsDevice);
 
-            PolygonEffect.VertexColorEnabled = true;
             PolygonEffect.TextureEnabled = true;
+            PolygonEffect.EnableDefaultLighting();
 
             float aspectRatio = GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height;
 
