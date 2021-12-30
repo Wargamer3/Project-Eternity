@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         NewSquad.IsPlayerControlled = true;
                     }
 
-                    Owner.SpawnSquad(P, NewSquad, 0, Owner.ListPlayer[P].ListSpawnPoint[S].Position);
+                    Owner.SpawnSquad(P, NewSquad, 0, Owner.ListPlayer[P].ListSpawnPoint[S].Position, 0);
                 }
             }
         }

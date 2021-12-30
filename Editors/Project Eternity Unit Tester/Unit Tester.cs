@@ -476,17 +476,17 @@ namespace ProjectEternity.Editors.UnitTester
                                 else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
                                     rbAttackerMovementSpace.Checked = true;
 
-                                if (NewUnit.Size == "LLL")
+                                if (NewUnit.Size == UnitStats.UnitSizeLLL)
                                     rbAttackerSizeLLL.Checked = true;
-                                else if (NewUnit.Size == "LL")
+                                else if (NewUnit.Size == UnitStats.UnitSizeLL)
                                     rbAttackerSizeLL.Checked = true;
-                                else if (NewUnit.Size == "L")
+                                else if (NewUnit.Size == UnitStats.UnitSizeL)
                                     rbAttackerSizeL.Checked = true;
-                                else if (NewUnit.Size == "M")
+                                else if (NewUnit.Size == UnitStats.UnitSizeM)
                                     rbAttackerSizeM.Checked = true;
-                                else if (NewUnit.Size == "S")
+                                else if (NewUnit.Size == UnitStats.UnitSizeS)
                                     rbAttackerSizeS.Checked = true;
-                                else if (NewUnit.Size == "SS")
+                                else if (NewUnit.Size == UnitStats.UnitSizeSS)
                                     rbAttackerSizeSS.Checked = true;
                             }
                             else if (tabControl1.SelectedIndex == 1)//Defender
@@ -512,17 +512,17 @@ namespace ProjectEternity.Editors.UnitTester
                                 else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
                                     rbDefenderMovementSpace.Checked = true;
 
-                                if (NewUnit.Size == "LLL")
+                                if (NewUnit.Size == UnitStats.UnitSizeLLL)
                                     rbDefenderSizeLLL.Checked = true;
-                                else if (NewUnit.Size == "LL")
+                                else if (NewUnit.Size == UnitStats.UnitSizeLL)
                                     rbDefenderSizeLL.Checked = true;
-                                else if (NewUnit.Size == "L")
+                                else if (NewUnit.Size == UnitStats.UnitSizeL)
                                     rbDefenderSizeL.Checked = true;
-                                else if (NewUnit.Size == "M")
+                                else if (NewUnit.Size == UnitStats.UnitSizeM)
                                     rbAttackerSizeM.Checked = true;
-                                else if (NewUnit.Size == "S")
+                                else if (NewUnit.Size == UnitStats.UnitSizeS)
                                     rbDefenderSizeS.Checked = true;
-                                else if (NewUnit.Size == "SS")
+                                else if (NewUnit.Size == UnitStats.UnitSizeSS)
                                     rbDefenderSizeSS.Checked = true;
                             }
                         }

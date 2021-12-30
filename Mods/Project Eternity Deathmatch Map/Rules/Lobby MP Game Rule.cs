@@ -28,34 +28,45 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     string PlayerTag = PlayerIndex.ToString();
                     int SpawnSquadIndex = 0;
-                    for (int S = 0; S < Owner.ListLayer[0].ListMultiplayerSpawns.Count; S++)
+                    for (int L = 0; L < Owner.ListLayer.Count; L++)
                     {
-                        if (Owner.ListLayer[0].ListMultiplayerSpawns[S].Tag == PlayerTag)
+                        MapLayer ActiveLayer = Owner.ListLayer[L];
+                        for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
                         {
-                            if (ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex] == null)
+                            if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                             {
+                                if (ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex] == null)
+                                {
+                                    ++SpawnSquadIndex;
+                                    continue;
+                                }
+
+                                for (int U = 0; U < ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].UnitsInSquad; ++U)
+                                {
+                                    ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).UnitTypeName]);
+                                }
+
+                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                                Owner.SpawnSquad(PlayerIndex - 1, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, ActiveLayer.ListMultiplayerSpawns[S].Position, L);
                                 ++SpawnSquadIndex;
-                                continue;
-                            }
 
-                            for (int U = 0; U < ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].UnitsInSquad; ++U)
-                            {
-                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).UnitTypeName]);
+                                if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
+                                {
+                                    break;
+                                }
                             }
+                        }
 
-                            ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                            Owner.SpawnSquad(PlayerIndex - 1, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, Owner.ListLayer[0].ListMultiplayerSpawns[S].Position);
-                            ++SpawnSquadIndex;
-
-                            if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
-                            {
-                                break;
-                            }
+                        if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
+                        {
+                            break;
                         }
                     }
 
                     ++PlayerIndex;
                 }
+
+                Owner.CursorPosition = Owner.ListPlayer[0].ListSquad[0].Position;
             }
         }
 

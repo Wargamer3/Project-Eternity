@@ -18,6 +18,13 @@ namespace ProjectEternity.Core.Units
         public const string TerrainUnderground = "Underground";
         public const string TerrainUnderwater = "Underwater";
 
+        public const string UnitSizeLLL = "LLL";
+        public const string UnitSizeLL = "LL";
+        public const string UnitSizeL = "L";
+        public const string UnitSizeM = "M";
+        public const string UnitSizeS = "S";
+        public const string UnitSizeSS = "SS";
+
         [Flags]
         public enum UnitLinkTypes : int
         {
@@ -388,6 +395,24 @@ namespace ProjectEternity.Core.Units
         public int TerrainAttributeValue(string Terrain)
         {
             return DicTerrainValue[Terrain] + Boosts.DicTerrainLetterAttributeModifier[Terrain];
+        }
+
+        public float GetClearance()
+        {
+            if (Size == UnitStats.UnitSizeLLL)
+                return 3;
+            else if (Size == UnitStats.UnitSizeLL)
+                return 2;
+            else if (Size == UnitStats.UnitSizeL)
+                return 1;
+            else if (Size == UnitStats.UnitSizeM)
+                return 1;
+            else if (Size == UnitStats.UnitSizeS)
+                return 1;
+            else if (Size == UnitStats.UnitSizeSS)
+                return 0.75f;
+
+            return 1;
         }
     }
 }

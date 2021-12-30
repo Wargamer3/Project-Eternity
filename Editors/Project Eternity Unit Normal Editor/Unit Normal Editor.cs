@@ -405,17 +405,17 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainUnderwater))
                 cboMovementUnderwater.Checked = true;
 
-            if (LoadedUnit.Size == "LLL")
+            if (LoadedUnit.Size == UnitStats.UnitSizeLLL)
                 rbSizeLLL.Checked = true;
-            else if (LoadedUnit.Size == "LL")
+            else if (LoadedUnit.Size == UnitStats.UnitSizeLL)
                 rbSizeLL.Checked = true;
-            else if (LoadedUnit.Size == "L")
+            else if (LoadedUnit.Size == UnitStats.UnitSizeL)
                 rbSizeL.Checked = true;
-            else if (LoadedUnit.Size == "M")
+            else if (LoadedUnit.Size == UnitStats.UnitSizeM)
                 rbSizeM.Checked = true;
-            else if (LoadedUnit.Size == "S")
+            else if (LoadedUnit.Size == UnitStats.UnitSizeS)
                 rbSizeS.Checked = true;
-            else if (LoadedUnit.Size == "SS")
+            else if (LoadedUnit.Size == UnitStats.UnitSizeSS)
                 rbSizeSS.Checked = true;
 
             if (LoadedUnit.UnitStat.ArrayMapSize.GetLength(0) == 1 && LoadedUnit.UnitStat.ArrayMapSize.GetLength(1) == 1)

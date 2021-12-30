@@ -54,6 +54,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public uint WingmanAToSpawnID;
             public uint WingmanBToSpawnID;
             public Point SpawnPosition;
+            public int SpawnLayer;
             public int SpawnPlayer;
             public bool IsEventSquad;
             public bool IsPlayerControlled;
@@ -88,6 +89,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 WingmanAToSpawnID = 0;
                 WingmanBToSpawnID = 0;
                 SpawnPosition = new Point();
+                SpawnLayer = 0;
                 SpawnPlayer = 0;
                 IsEventSquad = false;
                 IsPlayerControlled = true;
@@ -210,6 +212,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 WingmanAToSpawnID = BR.ReadUInt32();
                 WingmanBToSpawnID = BR.ReadUInt32();
                 SpawnPosition = new Point(BR.ReadInt32(), BR.ReadInt32());
+                SpawnLayer = BR.ReadInt32();
 
                 SpawnPlayer = BR.ReadInt32();
                 IsEventSquad = BR.ReadBoolean();
@@ -231,6 +234,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write(WingmanBToSpawnID);
                 BW.Write(SpawnPosition.X);
                 BW.Write(SpawnPosition.Y);
+                BW.Write(SpawnLayer);
 
                 BW.Write(SpawnPlayer);
                 BW.Write(IsEventSquad);
@@ -293,7 +297,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         NewSquad.SquadAI.Load(AIPath);
                     }
 
-                    Map.SpawnSquad(SpawnPlayer, NewSquad, LeaderToSpawnID, FinalPosition);
+                    Map.SpawnSquad(SpawnPlayer, NewSquad, LeaderToSpawnID, FinalPosition, SpawnLayer);
 
                     if (!string.IsNullOrEmpty(PartDropPath))
                     {

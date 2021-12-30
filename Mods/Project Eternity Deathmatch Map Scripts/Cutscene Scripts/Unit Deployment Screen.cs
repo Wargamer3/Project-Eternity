@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                                 Squad NewSquad = new Squad("", CurrentUnit);
 
-                                Map.SpawnSquad(0, NewSquad, 0, FinalPosition);
+                                Map.SpawnSquad(0, NewSquad, 0, FinalPosition, 0);
 
                                 Map.MovementAnimation.Add(Spawn.Position.X, Spawn.Position.Y, NewSquad);
                             }

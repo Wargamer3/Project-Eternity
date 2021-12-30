@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].At(U).UnitTypeName]);
                         }
                         Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                        Owner.SpawnSquad(0, Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex], 0, Owner.ListLayer[0].ListSingleplayerSpawns[S].Position);
+                        Owner.SpawnSquad(0, Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex], 0, Owner.ListLayer[0].ListSingleplayerSpawns[S].Position, 0);
                         ++SpawnSquadIndex;
                     }
                 }

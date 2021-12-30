@@ -104,9 +104,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 EventPoint NewPoint = new EventPoint(BR);
                 int ColorIndex = Convert.ToInt32(NewPoint.Tag) - 1;
-                NewPoint.ColorRed = Map.ListMultiplayerColor[ColorIndex].R;
+                /*NewPoint.ColorRed = Map.ListMultiplayerColor[ColorIndex].R;
                 NewPoint.ColorGreen = Map.ListMultiplayerColor[ColorIndex].G;
-                NewPoint.ColorBlue = Map.ListMultiplayerColor[ColorIndex].B;
+                NewPoint.ColorBlue = Map.ListMultiplayerColor[ColorIndex].B;*/
                 ListMultiplayerSpawns.Add(NewPoint);
             }
 

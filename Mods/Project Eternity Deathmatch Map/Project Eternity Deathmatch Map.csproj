@@ -168,7 +168,6 @@
     <Compile Include="Menus\Consumable Part Menu.cs" />
     <Compile Include="Movement Algorithm Deathmatch .cs" />
     <Compile Include="Classic Multiplayer\Loby Scripts.cs" />
-    <Compile Include="Classic Multiplayer\Online Scripts.cs" />
     <Compile Include="Deathmatch Map.cs" />
     <Compile Include="Battle Map Methods.cs" />
     <Compile Include="Player.cs" />

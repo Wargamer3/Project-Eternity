@@ -17,8 +17,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentLeader.ListAttack[0].Pri = Core.Attacks.WeaponPrimaryProperty.ALL;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -37,8 +37,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentLeader.ListAttack[0].Pri = Core.Attacks.WeaponPrimaryProperty.ALL;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(13, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(13, 5, 0), 0);
             EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
@@ -58,8 +58,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentLeader.ListAttack[0].Pri = Core.Attacks.WeaponPrimaryProperty.ALL;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
@@ -79,8 +79,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentLeader.ListAttack[0].Pri = Core.Attacks.WeaponPrimaryProperty.ALL;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
@@ -114,8 +114,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -151,8 +151,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.AttackIndex = 0;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -188,8 +188,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.AttackIndex = 0;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -225,8 +225,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.AttackIndex = 0;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -262,8 +262,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.AttackIndex = 0;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -299,8 +299,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentLeader.AttackIndex = 0;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -334,8 +334,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentWingmanB.AttackIndex = -1;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Focused;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -369,8 +369,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentWingmanB.AttackIndex = 0;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
@@ -404,8 +404,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.CurrentWingmanB.AttackIndex = 0;
 
             EnemySquad.IsPlayerControlled = false;
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0));
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0));
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);

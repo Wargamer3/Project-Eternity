@@ -114,7 +114,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         private static Tile3D CreateCursor(DeathmatchMap Map, float X, float Y, int LayerIndex, int TextureWidth, int TextureHeight, float Radius)
         {
-            float Z = Map.GetTerrain(Math.Max(0, X), Math.Max(0, Y), LayerIndex).Position.Z;
+            float Z = Map.GetTerrain(Math.Max(0, X), Math.Max(0, Y), LayerIndex).Position.Z + LayerIndex * 32;
 
             Vector3[] ArrayVertexPosition = new Vector3[4];
             ArrayVertexPosition[0] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y);
@@ -179,10 +179,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new Tile3D(0, ArrayVertex, ArrayIndex);
         }
 
-        public void TogglePreview(bool UsePreview)
-        {
-        }
-
         public void RemoveTileset(int TilesetIndex)
         {
             throw new NotImplementedException();
@@ -190,8 +186,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Update(GameTime gameTime)
         {
-            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, LayerIndex, sprCursor.Width, sprCursor.Height, Radius);
-            Camera.SetTarget(new Vector3(Map.TileSize.X * Map.MapSize.X / 2, LayerIndex * 32, Map.TileSize.Y * Map.MapSize.Y / 2));
+            if (Map.CursorPositionVisible.X < 0)
+            {
+                Camera.CameraHeight = 600;
+                Camera.CameraDistance = 500;
+                Camera.SetTarget(new Vector3(Map.TileSize.X * Map.MapSize.X / 2, LayerIndex * 32, Map.TileSize.Y * Map.MapSize.Y / 2));
+                Camera.Update(gameTime);
+                return;
+            }
+
+            Camera.CameraHeight = 400;
+            Camera.CameraDistance = 300;
+            int X = (int)Map.CursorPositionVisible.X;
+            int Y = (int)Map.CursorPositionVisible.Y;
+            float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64);
+            Map2D GroundLayer = Owner.OriginalLayerGrid;
+            DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+            Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+            Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 64, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+
+            Camera.SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, LayerIndex * 32, Map.TileSize.Y * Map.CursorPositionVisible.Y));
             Camera.Update(gameTime);
 
             DicDrawablePointPerColor.Clear();
@@ -216,10 +231,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveTile.Draw(g.GraphicsDevice);
             }
 
-            PolygonEffect.Texture = sprCursor;
-            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+            if ((int)Map.CursorPosition.Z == LayerIndex)
+            {
+                PolygonEffect.Texture = sprCursor;
+                PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-            Cursor.Draw(g.GraphicsDevice);
+                Cursor.Draw(g.GraphicsDevice);
+            }
 
             g.End();
             GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -228,8 +246,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 //If the selected unit have the order to move, draw the possible positions it can go to.
                 for (int U = 0; U < Map.ListPlayer[P].ListSquad.Count; U++)
-                {//If it's dead, don't draw it unless it's an event unit.
-                    if ((Map.ListPlayer[P].ListSquad[U].CurrentLeader == null && !Map.ListPlayer[P].ListSquad[U].IsEventSquad) || Map.ListPlayer[P].ListSquad[U].IsDead)
+                {
+                    //If it's dead, don't draw it unless it's an event unit.
+                    if (Map.ListPlayer[P].ListSquad[U].LayerIndex != LayerIndex
+                        || (Map.ListPlayer[P].ListSquad[U].CurrentLeader == null && !Map.ListPlayer[P].ListSquad[U].IsEventSquad)
+                        || Map.ListPlayer[P].ListSquad[U].IsDead)
                         continue;
 
                     Color UnitColor;
@@ -239,11 +260,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         UnitColor = Color.White;
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.SetViewMatrix(Camera.View);
+                    float Z = Owner.ArrayTerrain[(int)Map.ListPlayer[P].ListSquad[U].Position.X, (int)Map.ListPlayer[P].ListSquad[U].Position.Y].Position.Z * 32 + (LayerIndex * 64);
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.SetPosition(
-                        -Map.MapSize.X / 2 + 0.5f + Map.ListPlayer[P].ListSquad[U].Position.X,
-                        Radius,
-                        -Map.MapSize.Y / 2 + 0.5f + Map.ListPlayer[P].ListSquad[U].Y);
+                        Map.ListPlayer[P].ListSquad[U].Position.X * Map.TileSize.X,
+                        Z,
+                        Map.ListPlayer[P].ListSquad[U].Position.Y * Map.TileSize.Y);
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.Draw(GameScreen.GraphicsDevice);
                 }

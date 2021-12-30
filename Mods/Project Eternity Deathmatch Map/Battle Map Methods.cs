@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         /// <summary>
         /// Used by Cutscene
         /// </summary>
-        public void SpawnSquad(int PlayerIndex, Squad NewSquad, uint ID, Vector3 Position)
+        public void SpawnSquad(int PlayerIndex, Squad NewSquad, uint ID, Vector3 Position, int LayerIndex)
         {
             if (Content != null)
             {

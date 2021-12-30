@@ -42,7 +42,7 @@ namespace ProjectEternity.Core.Units.Builder
 
                 //Initialise the Unit stats.
                 NewLeader.Init();
-                Map.SpawnSquad(0, new Squad("Tower", NewLeader), 0, Map.CursorPosition);
+                Map.SpawnSquad(0, new Squad("Tower", NewLeader), 0, Map.CursorPosition, (int)Map.CursorPosition.Z);
 
                 if (ListOtherSquads.Count > 0)
                 {
@@ -57,6 +57,7 @@ namespace ProjectEternity.Core.Units.Builder
 
                             Position.X += Math.Sign(Diff.X);
                             Position.Y += Math.Sign(Diff.Y);
+                            Position.Z += Math.Sign(Diff.Z);
 
                             if (!Map.CheckForObstacleAtPosition(Position, Vector3.Zero))
                             {
@@ -65,7 +66,7 @@ namespace ProjectEternity.Core.Units.Builder
 
                                 //Initialise the Unit stats.
                                 NewLeader.Init();
-                                Map.SpawnSquad(Map.ActivePlayerIndex, new Squad("Tower", NewLeader), 0, Position);
+                                Map.SpawnSquad(Map.ActivePlayerIndex, new Squad("Tower", NewLeader), 0, Position, (int)Position.Z);
                             }
                         }
                     }

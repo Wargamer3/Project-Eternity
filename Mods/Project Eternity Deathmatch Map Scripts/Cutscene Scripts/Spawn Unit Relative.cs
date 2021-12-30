@@ -47,6 +47,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             private uint _WingmanBToSpawnID;
             private uint _RelativeSpawnUnitID;
             private Point _RelativeSpawnPosition;
+            private int _SpawnLayer;
             private int _SpawnPlayer;
             private bool _IsEventSquad;
             private bool _IsPlayerControlled;
@@ -84,6 +85,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 IsEnded = false;
                 IsTimerEnded = false;
 
+                _SpawnLayer = 0;
                 _LeaderToSpawnID = 0;
                 _WingmanAToSpawnID = 0;
                 _WingmanBToSpawnID = 0;
@@ -177,6 +179,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 WingmanBToSpawnID = BR.ReadUInt32();
                 RelativeSpawnUnitID = BR.ReadUInt32();
                 RelativeSpawnPosition = new Point(BR.ReadInt32(), BR.ReadInt32());
+                SpawnLayer = BR.ReadInt32();
 
                 SpawnPlayer = BR.ReadInt32();
                 IsEventSquad = BR.ReadBoolean();
@@ -194,6 +197,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write(RelativeSpawnUnitID);
                 BW.Write(RelativeSpawnPosition.X);
                 BW.Write(RelativeSpawnPosition.Y);
+                BW.Write(SpawnLayer);
 
                 BW.Write(SpawnPlayer);
                 BW.Write(IsEventSquad);
@@ -252,7 +256,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AnimationPosition = new Microsoft.Xna.Framework.Vector2(NewSquad.X * Map.TileSize.X, NewSquad.Y * Map.TileSize.Y);
                     UnitSpawned = true;
 
-                    Map.SpawnSquad(SpawnPlayer, NewSquad, _LeaderToSpawnID, FinalPosition);
+                    Map.SpawnSquad(SpawnPlayer, NewSquad, _LeaderToSpawnID, FinalPosition, _SpawnLayer);
                 }
             }
 
@@ -325,6 +329,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 set
                 {
                     _RelativeSpawnPosition = value;
+                }
+            }
+
+            [CategoryAttribute("Spawner Attributes"),
+            DescriptionAttribute(".")]
+            public int SpawnLayer
+            {
+                get
+                {
+                    return _SpawnLayer;
+                }
+                set
+                {
+                    _SpawnLayer = value;
                 }
             }
 

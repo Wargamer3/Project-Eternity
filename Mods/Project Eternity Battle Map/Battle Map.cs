@@ -68,6 +68,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected Texture2D sprEllipse;
         public Texture2D sprCursor;
+        public Texture2D sprCursorPath;
 
         public Texture2D sprUnitHover;
 
@@ -118,7 +119,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static Dictionary<string, BattleMap> DicBattmeMapType = new Dictionary<string, BattleMap>();
         public FormulaParser ActiveParser;
 
-        public Vector3 CursorPosition;
+        public Vector3 CursorPosition;//Z is layer index
         public Vector3 CursorPositionVisible;
         protected float CursorHoldTime;
 
@@ -362,7 +363,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 fxGrayscale = Content.Load<Effect>("Shaders/Grayscale");
 
                 sprEllipse = Content.Load<Texture2D>("Ellipse");
-                sprCursor = Content.Load<Texture2D>("Battle/Reticle");
+                sprCursor = Content.Load<Texture2D>("Cursors/Reticle");
+                sprCursorPath = Content.Load<Texture2D>("Cursors/Cursor Path");
                 sprUnitHover = Content.Load<Texture2D>("Units/Unit Hover");
 
                 sprPhaseBackground = Content.Load<Texture2D>("Battle/Phase/Background");
@@ -871,9 +873,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <returns>Returns true if the cursor was moved</returns>
         public bool CursorControl()
         {
+            Vector3 CursorPositionOld = CursorPosition;
+
             bool CursorMoved = false;
 
-            if (MouseHelper.MouseMoved())
+            /*if (MouseHelper.MouseMoved())
             {
                 float NewX = MouseHelper.MouseStateCurrent.X / TileSize.X;
                 float NewY = MouseHelper.MouseStateCurrent.Y / TileSize.Y;
@@ -908,6 +912,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     CursorMoved = true;
                 }
             }
+            */
             bool CanKeyboardMove = false;
             if (InputHelper.InputLeftHold() || InputHelper.InputRightHold() || InputHelper.InputUpHold() || InputHelper.InputDownHold())
             {
@@ -974,8 +979,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 CursorMoved = true;
             }
 
+            if (CursorMoved)
+            {
+                CursorPosition.Z = GetNextLayerIndex(CursorPositionOld, (int)CursorPosition.X, (int)CursorPosition.Y);
+            }
+
             return CursorMoved;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CurrentPosition">X, Y Position, Z value as LayerIndex</param>
+        /// <param name="NextX"></param>
+        /// <param name="NextY"></param>
+        /// <returns></returns>
+        public abstract int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY);
 
         /// <summary>
         /// Anything related with the cursor on the field is here.

@@ -5,6 +5,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -20,10 +21,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private bool IsPostAttack;
 
         private List<Vector3> ListMVChoice;
+        private List<Vector3> ListMVHoverChoice;
 
         public ActionPanelMovePart1(DeathmatchMap Map)
             : base(PanelName, Map, false)
         {
+            ListMVHoverChoice = new List<Vector3>();
         }
 
         public ActionPanelMovePart1(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, Vector3 LastPosition, Vector3 LastCameraPosition, bool IsPostAttack = false)
@@ -35,6 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.LastCameraPosition = LastCameraPosition;
             this.IsPostAttack = IsPostAttack;
 
+            ListMVHoverChoice = new List<Vector3>();
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
@@ -66,6 +70,43 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Map.sndConfirm.Play();
                 }
             }
+        }
+
+        private void AddHoverChoice()
+        {
+            if (ListMVHoverChoice.Count == 0 && LastPosition != Map.CursorPosition)
+            {
+                float DiffX = Math.Abs(LastPosition.X - Map.CursorPosition.X);
+                float DiffY = Math.Abs(LastPosition.Y - Map.CursorPosition.Y);
+                float CurrentZ = LastPosition.Z;
+
+                for (int X = 0; X <= DiffX; ++X)
+                {
+                    for (int Y = 0; Y <= DiffX; ++Y)
+                    {
+                        CurrentZ = Map.GetTerrain(0, 0, 0).Position.Z;
+                        ListMVHoverChoice.Add(GetMVChoice(X, Y));
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
+
+        private Vector3 GetMVChoice(float X, float Y)
+        {
+            string TerrainType = Map.GetTerrainType(X, Y, 0);
+            foreach (Vector3 ActiveMVChoice in ListMVChoice)
+            {
+                if (ActiveMVChoice.X == X && ActiveMVChoice.Y == Y)
+                {
+                    return ActiveMVChoice;
+                }
+            }
+
+            return Vector3.Zero;
         }
 
         private bool CheckIfUnitCanMove()

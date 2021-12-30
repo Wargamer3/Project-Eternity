@@ -16,7 +16,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteBatch g;
         public OrbitingCamera Camera;
         protected BasicEffect PolygonEffect;
-        float Radius = 10;
         public List<Texture2D> ListTileSet;
         public List<Tile3D> ListTile3D;
 

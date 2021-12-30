@@ -306,6 +306,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     float SquadX = BR.ReadFloat();
                     float SquadY = BR.ReadFloat();
+                    float SquadZ = BR.ReadFloat();
                     bool SquadIsPlayerControlled = BR.ReadBoolean();
 
                     int UnitsInSquad = BR.ReadInt32();
@@ -343,7 +344,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     }
                     Squad NewSquad = new Squad("", Leader, WingmanA, WingmanB);
-                    NewSquad.SetPosition(new Vector3(SquadX, SquadY, 0));
+                    NewSquad.SetPosition(new Vector3(SquadX, SquadY, SquadZ));
                     NewSquad.IsPlayerControlled = SquadIsPlayerControlled;
                     NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
                 }
@@ -358,7 +359,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 foreach (Squad ActiveSquad in ActivePlayer.Inventory.ActiveLoadout.ListSquad)
                 {
                     ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                    SpawnSquad(P, ActiveSquad, 0, ActiveSquad.Position);
+                    SpawnSquad(P, ActiveSquad, 0, ActiveSquad.Position, (int)ActiveSquad.Position.Z);
                 }
             }
             Init();
@@ -1030,8 +1031,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             if (RealX + X < 0 || RealX + X >= MapSize.X || RealY + Y < 0 || RealY + Y >= MapSize.Y)
                                 continue;
 
-                            GetTerrain(RealX + X, RealY + Y, CurrentSquad.LayerIndex).Parent = null;
-
                             bool UnitFound = false;
 
                             for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
@@ -1061,6 +1060,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int i = 0; i < ListAllNode.Count; i++)
             {
+                ListAllNode[i].Parent = null;//Unset parents
                 bool UnitFound = false;
                 for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
                 {
@@ -1074,6 +1074,91 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             
             return MovementChoice;
+        }
+
+        public override int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY)
+        {
+            Terrain CurrentTerrain = ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y];
+            string CurrentTerrainType = GetTerrainType(CurrentPosition.X, CurrentPosition.Y, (int)CurrentPosition.Z);
+            float MaxClearance = 1f;
+            float ClimbValue = 10f;
+            float CurrentZ = CurrentTerrain.Position.Z + CurrentPosition.Z;
+
+            int ClosestLayerIndex = -1;
+            float ClosestTerrainDistance = float.MaxValue;
+
+            for (int L = 0; L < ListLayer.Count; L++)
+            {
+                MapLayer ActiveLayer = ListLayer[L];
+                Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
+
+                string NextTerrainType = GetTerrainType(NextX, NextY, L);
+                float NextTerrainZ = NextTerrain.Position.Z + L;
+
+                //Check lower or higher neighbors if on solid ground
+                if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid && NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid)
+                {
+                    float ZDiff = NextTerrainZ - CurrentZ;
+                    //Prioritize going downward
+                    if (NextTerrainZ <= CurrentPosition.Z)
+                    {
+                        if (ZDiff <= ClosestTerrainDistance && HasEnoughClearance(NextTerrainZ, NextX, NextY, L, MaxClearance))
+                        {
+                            ClosestTerrainDistance = ZDiff;
+                            ClosestLayerIndex = L;
+                        }
+                    }
+                    else
+                    {
+                        if (ZDiff <= ClosestTerrainDistance && ZDiff <= ClimbValue)
+                        {
+                            ClosestTerrainDistance = ZDiff;
+                            ClosestLayerIndex = L;
+                        }
+                    }
+                }
+                //Already in void, check for any neighbors
+                else
+                {
+                    if (NextTerrainZ == CurrentPosition.Z && NextTerrainType == CurrentTerrainType)
+                    {
+                        return L;
+                    }
+                    //Prioritize going upward
+                    else if (NextTerrainZ > CurrentPosition.Z)
+                    {
+                        float ZDiff = NextTerrainZ - CurrentZ;
+                        if (ZDiff < ClosestTerrainDistance && ZDiff <= ClimbValue)
+                        {
+                            ClosestTerrainDistance = ZDiff;
+                            ClosestLayerIndex = L;
+                        }
+                    }
+                }
+            }
+
+            return ClosestLayerIndex;
+        }
+
+        private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
+        {
+            for (int L = StartLayer + 1; L < ListLayer.Count; L++)
+            {
+                MapLayer ActiveLayer = ListLayer[L];
+                Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
+
+                string NextTerrainType = GetTerrainType(NextX, NextY, L);
+                float NextTerrainZ = ActiveTerrain.Position.Z + L;
+
+                float ZDiff = NextTerrainZ - CurrentZ;
+
+                if (NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid && ZDiff < MaxClearance)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void FinalizeMovement(Squad CurrentSquad, int UsedMovement)
@@ -1120,6 +1205,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     BW.AppendFloat(ActiveSquad.X);
                     BW.AppendFloat(ActiveSquad.Y);
+                    BW.AppendFloat(ActiveSquad.Z);
                     BW.AppendBoolean(ActiveSquad.IsPlayerControlled);
 
                     BW.AppendInt32(ActiveSquad.UnitsInSquad);
