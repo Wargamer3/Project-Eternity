@@ -56,7 +56,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                         {
                             int y = y1 + dy * (x - x1) / dx;
 
-                            Terrain ActiveTerrain = Info.Map.GetTerrain(x, y, Info.ActiveSquad.LayerIndex);
+                            Terrain ActiveTerrain = Info.Map.GetTerrain(x, y, (int)Info.ActiveSquad.Z);
 
                             if (ActiveTerrain.MVMoveCost == -1)
                             {

@@ -308,7 +308,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public TerrainSorcererStreet GetTerrain(UnitMapComponent ActiveUnit)
         {
-            return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, ActiveUnit.LayerIndex);
+            return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
         public string GetTerrainType(float PosX, float PosY, int LayerIndex)
         {

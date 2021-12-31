@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             BW.AppendFloat(PlayerUnit.X);
             BW.AppendFloat(PlayerUnit.Y);
-            BW.AppendInt32(PlayerUnit.LayerIndex);
+            BW.AppendInt32((int)PlayerUnit.Z);
         }
 
         protected override ActionPanel Copy()

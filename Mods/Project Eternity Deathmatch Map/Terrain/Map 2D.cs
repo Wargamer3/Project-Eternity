@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int S = 0; S < ActiveMap.ListPlayer[P].ListSquad.Count; S++)
                 {
-                    if (ActiveMap.ListPlayer[P].ListSquad[S].LayerIndex == LayerIndex)
+                    if ((int)ActiveMap.ListPlayer[P].ListSquad[S].Z == LayerIndex)
                     {
                         DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListSquad[S], !ActiveMap.ListPlayer[P].ListSquad[S].CanMove && P == ActiveMap.ActivePlayerIndex);
                     }

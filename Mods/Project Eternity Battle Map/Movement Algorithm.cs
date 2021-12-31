@@ -101,7 +101,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListCloseNode.Add(CurrentNode);
 
                 // Get successors to the current node
-                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, MapComponent.LayerIndex);
+                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, (int)MapComponent.Position.Z);
                 foreach (MovementAlgorithmTile Neighbor in ListSuccessors)
                 {
                     //Cost to move to this Neighbor

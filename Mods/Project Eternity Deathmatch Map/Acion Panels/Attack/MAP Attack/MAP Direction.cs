@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             }
 
-            Map.ListLayer[ActiveSquad.LayerIndex].LayerGrid.AddDrawablePoints(AttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
+            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(AttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
         }
 
         private void AimUp()

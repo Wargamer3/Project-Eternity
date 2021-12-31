@@ -18,9 +18,7 @@ namespace ProjectEternity.Core.Units
         public bool IsPlayerControlled;
 
         protected Vector3 _Position;
-        protected int _LayerIndex;
         public Vector3 Position { get { return _Position; } }
-        public int LayerIndex { get { return _LayerIndex; } }
 
         public UnitMap3D Unit3D;
         public List<UnitMapComponent> ListTransportedUnit;
@@ -60,11 +58,6 @@ namespace ProjectEternity.Core.Units
             {
                 --ActionsRemaining;
             }
-        }
-
-        public void SetLayerIndex(int LayerIndex)
-        {
-            _LayerIndex = LayerIndex;
         }
 
         public void SetPosition(Vector3 Position)

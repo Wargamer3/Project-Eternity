@@ -69,7 +69,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             }
             else
             {
-                AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, AttackerSquad.LayerIndex);
+                AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, (int)AttackerSquad.Z);
             }
 
             if (DefenderSquad.IsFlying)
@@ -79,7 +79,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             }
             else
             {
-                DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, DefenderSquad.LayerIndex);
+                DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, (int)DefenderSquad.Z);
                 DefenderTerrain = GetTerrain(DefenderSquad);
             }
 
@@ -314,7 +314,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             }
             else
             {
-                AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, AttackerSquad.LayerIndex);
+                AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, (int)AttackerSquad.Z);
             }
 
             if (DefenderSquad.IsFlying)
@@ -324,7 +324,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             }
             else
             {
-                DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, DefenderSquad.LayerIndex);
+                DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, (int)DefenderSquad.Z);
                 DefenderTerrain = GetTerrain(DefenderSquad);
             }
 

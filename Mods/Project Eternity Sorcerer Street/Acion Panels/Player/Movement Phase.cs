@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, ActivePlayer.GamePiece.LayerIndex, ActivePlayer.CurrentDirection == Directions.None);
+            PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, ActivePlayer.CurrentDirection == Directions.None);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (Movement > 0)
                 {
-                    PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, ActivePlayer.GamePiece.LayerIndex, true);
+                    PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, true);
                 }
                 else
                 {

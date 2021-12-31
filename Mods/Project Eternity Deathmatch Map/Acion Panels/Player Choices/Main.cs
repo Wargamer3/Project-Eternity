@@ -78,14 +78,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainLand)
                     && ActiveSquad.CurrentMovement != UnitStats.TerrainLand
-                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == UnitStats.TerrainLand)
+                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z) == UnitStats.TerrainLand)
                 {
                     AddChoiceToCurrentPanel(new ActionPanelLand(Map, ActiveSquad));
                 }
 
                 if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainUnderwater)
                     && ActiveSquad.CurrentMovement != UnitStats.TerrainUnderwater
-                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == UnitStats.TerrainSea)
+                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z) == UnitStats.TerrainSea)
                 {
                     AddChoiceToCurrentPanel(new ActionPanelDive(Map, ActiveSquad));
                 }
@@ -120,7 +120,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainUnderground)
                     && ActiveSquad.CurrentMovement != UnitStats.TerrainUnderground
-                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.LayerIndex) == UnitStats.TerrainLand)
+                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z) == UnitStats.TerrainLand)
                 {
                     AddChoiceToCurrentPanel(new ActionPanelDig(Map, ActiveSquad));
                 }
@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void CheckForMapSwitch()
         {
-            foreach (MapSwitchPoint ActivePoint in Map.ListLayer[ActiveSquad.LayerIndex].ListMapSwitchPoint)
+            foreach (MapSwitchPoint ActivePoint in Map.ListLayer[(int)ActiveSquad.Position.Z].ListMapSwitchPoint)
             {
                 if (ActivePoint.Position == ActiveSquad.Position)
                 {
@@ -147,7 +147,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<ActionPanel> ListPanel = new List<ActionPanel>();
 
-            foreach (InteractiveProp ActiveProp in Map.ListLayer[ActiveSquad.LayerIndex].ListProp)
+            foreach (InteractiveProp ActiveProp in Map.ListLayer[(int)ActiveSquad.Position.Z].ListProp)
             {
                 ListPanel.AddRange(ActiveProp.OnUnitSelected(SelectedUnit));
             }

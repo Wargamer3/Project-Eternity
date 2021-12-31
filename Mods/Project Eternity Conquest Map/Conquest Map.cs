@@ -1025,7 +1025,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     if (Position.X + X < 0 || Position.X + X >= MapSize.X || Position.Y + Y < 0 || Position.Y + Y >= MapSize.Y)
                         continue;
 
-                    TerrainConquest ActiveTerrain = GetTerrain((int)Position.X + X, (int)Position.Y + Y, CurrentUnit.Components.LayerIndex);
+                    TerrainConquest ActiveTerrain = GetTerrain((int)Position.X + X, (int)Position.Y + Y, (int)Position.Z);
                     ActiveTerrain.Parent = null;
 
                     int MovementCost;
@@ -1059,7 +1059,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath( new List<MovementAlgorithmTile>() { (MovementAlgorithmTile)GetTerrain((int)Position.X, (int)Position.Y, CurrentUnit.Components.LayerIndex) }, CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath( new List<MovementAlgorithmTile>() { (MovementAlgorithmTile)GetTerrain((int)Position.X, (int)Position.Y, (int)Position.Z) }, CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost);
 
             List<Vector3> ListMVChoice = new List<Vector3>();
             for (int i = 0; i < ListAllNode.Count; i++)
@@ -1218,7 +1218,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public TerrainConquest GetTerrain(UnitMapComponent ActiveUnit)
         {
-            return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, ActiveUnit.LayerIndex);
+            return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
         public string GetTerrainType(float PosX, float PosY, int LayerIndex)
         {

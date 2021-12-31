@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else
                     MovementCostToNeighbor += TerrainToGo.MVMoveCost;
 
-                if (TerrainToGo.TerrainTypeIndex != GetTile(CurrentNode.Position.X, CurrentNode.Position.Y, MapComponent.LayerIndex).TerrainTypeIndex)
+                if (TerrainToGo.TerrainTypeIndex != GetTile(CurrentNode.Position.X, CurrentNode.Position.Y, (int)MapComponent.Z).TerrainTypeIndex)
                     MovementCostToNeighbor += TerrainToGo.MVEnterCost;
             }
 

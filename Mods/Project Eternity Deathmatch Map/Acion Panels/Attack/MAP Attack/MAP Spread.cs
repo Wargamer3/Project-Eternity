@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BattlePreview.UpdateUnitDisplay();
             }
 
-            Map.ListLayer[ActiveSquad.LayerIndex].LayerGrid.AddDrawablePoints(AttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
+            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(AttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
         }
 
         public override void DoRead(ByteReader BR)

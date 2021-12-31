@@ -54,7 +54,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             CreateMap(Map);
 
-            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, LayerIndex, sprCursor.Width, sprCursor.Height, Radius);
+            int X = (int)Map.CursorPositionVisible.X;
+            int Y = (int)Map.CursorPositionVisible.Y;
+            float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64);
+            Map2D GroundLayer = Owner.OriginalLayerGrid;
+            DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+            Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+            Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 64, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
         }
 
         public void Save(BinaryWriter BW)
@@ -199,12 +206,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Camera.CameraDistance = 300;
             int X = (int)Map.CursorPositionVisible.X;
             int Y = (int)Map.CursorPositionVisible.Y;
-            float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64);
+            float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64) + 0.2f;
             Map2D GroundLayer = Owner.OriginalLayerGrid;
             DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
             Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
             Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 64, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 64 + 0.2f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
 
             Camera.SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, LayerIndex * 32, Map.TileSize.Y * Map.CursorPositionVisible.Y));
             Camera.Update(gameTime);
@@ -231,6 +238,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveTile.Draw(g.GraphicsDevice);
             }
 
+            if (IsSubLayer)
+            {
+                return;
+            }
+
             if ((int)Map.CursorPosition.Z == LayerIndex)
             {
                 PolygonEffect.Texture = sprCursor;
@@ -248,7 +260,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int U = 0; U < Map.ListPlayer[P].ListSquad.Count; U++)
                 {
                     //If it's dead, don't draw it unless it's an event unit.
-                    if (Map.ListPlayer[P].ListSquad[U].LayerIndex != LayerIndex
+                    if ((int)Map.ListPlayer[P].ListSquad[U].Position.Z != LayerIndex
                         || (Map.ListPlayer[P].ListSquad[U].CurrentLeader == null && !Map.ListPlayer[P].ListSquad[U].IsEventSquad)
                         || Map.ListPlayer[P].ListSquad[U].IsDead)
                         continue;
@@ -260,29 +272,53 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         UnitColor = Color.White;
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.SetViewMatrix(Camera.View);
-                    float Z = Owner.ArrayTerrain[(int)Map.ListPlayer[P].ListSquad[U].Position.X, (int)Map.ListPlayer[P].ListSquad[U].Position.Y].Position.Z * 32 + (LayerIndex * 64);
+                    float TerrainZ = Owner.ArrayTerrain[(int)Map.ListPlayer[P].ListSquad[U].Position.X, (int)Map.ListPlayer[P].ListSquad[U].Position.Y].Position.Z;
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.SetPosition(
-                        Map.ListPlayer[P].ListSquad[U].Position.X * Map.TileSize.X,
-                        Z,
-                        Map.ListPlayer[P].ListSquad[U].Position.Y * Map.TileSize.Y);
+                        Map.ListPlayer[P].ListSquad[U].Position.X + 0.5f,
+                        Map.ListPlayer[P].ListSquad[U].Position.Z * 64 + TerrainZ * 32,
+                        Map.ListPlayer[P].ListSquad[U].Position.Y + 0.5f);
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.Draw(GameScreen.GraphicsDevice);
                 }
             }
+
+            DrawDrawablePoints(g);
             g.Begin();
         }
         
         public void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor)
         {
             List<Tile3D> ListDrawablePoint3D = new List<Tile3D>(ListPoint.Count);
-
+            
             foreach (Vector3 ActivePoint in ListPoint)
             {
-                ListDrawablePoint3D.Add(CreateCursor(Map, ActivePoint.X, ActivePoint.Y, LayerIndex, 32, 32, Radius));
+                int X = (int)ActivePoint.X;
+                int Y = (int)ActivePoint.Y;
+                float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64) + 0.1f;
+                Map2D GroundLayer = Owner.OriginalLayerGrid;
+                DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+
+                ListDrawablePoint3D.Add(ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 64, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
             }
 
             DicDrawablePointPerColor.Add(PointColor, ListDrawablePoint3D);
+        }
+
+        private void DrawDrawablePoints(CustomSpriteBatch g)
+        {
+            PolygonEffect.Texture = GameScreen.sprPixel;
+            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+
+            foreach (KeyValuePair<Color, List<Tile3D>> DrawablePointPerColor in DicDrawablePointPerColor)
+            {
+                foreach (Tile3D DrawablePoint in DrawablePointPerColor.Value)
+                {
+                    DrawablePoint.Draw(g.GraphicsDevice);
+                }
+            }
         }
 
         public void Reset()

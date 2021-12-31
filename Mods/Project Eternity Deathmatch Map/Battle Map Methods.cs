@@ -34,6 +34,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         /// </summary>
         public void SpawnSquad(int PlayerIndex, Squad NewSquad, uint ID, Vector3 Position, int LayerIndex)
         {
+            Position.Z = LayerIndex;
             if (Content != null)
             {
                 NewSquad.Unit3D = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
@@ -156,7 +157,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     BW.Write(ActiveSquad.IsFlying);
                     BW.Write(ActiveSquad.IsUnderTerrain);
                     BW.Write(ActiveSquad.IsPlayerControlled);
-                    BW.Write(ActiveSquad.LayerIndex);
                     if (ActiveSquad.SquadAI == null || ActiveSquad.SquadAI.Path == null)
                     {
                         BW.Write(string.Empty);
@@ -314,7 +314,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     bool ActiveSquadIsFlying = BR.ReadBoolean();
                     bool ActiveSquadIsUnderTerrain = BR.ReadBoolean();
                     bool ActiveSquadIsPlayerControlled = BR.ReadBoolean();
-                    int ActiveSquadLayerIndex = BR.ReadInt32();
                     string ActiveSquadSquadAI = BR.ReadString();
 
                     int ActiveSquadUnitsInSquad = BR.ReadInt32();
@@ -406,7 +405,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     NewSquad.IsFlying = ActiveSquadIsFlying;
                     NewSquad.IsUnderTerrain = ActiveSquadIsUnderTerrain;
                     NewSquad.IsPlayerControlled = ActiveSquadIsPlayerControlled;
-                    NewSquad.SetLayerIndex(ActiveSquadLayerIndex);
                     NewSquad.SetPosition(new Vector3(ActiveSquadPositionX, ActiveSquadPositionY, ActiveSquadPositionZ));
                     NewPlayer.ListSquad.Add(NewSquad);
                 }

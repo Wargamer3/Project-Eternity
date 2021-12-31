@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 //Remove everything that is closer then DistanceMax.
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {
-                    TerrainConquest ActiveTerrain = Map.GetTerrain((int)ListMVChoice[M].X, (int)ListMVChoice[M].Y, ActiveUnit.Components.LayerIndex);
+                    TerrainConquest ActiveTerrain = Map.GetTerrain((int)ListMVChoice[M].X, (int)ListMVChoice[M].Y, (int)ListMVChoice[M].Z);
 
                     //Check if the Terrain is a building.
                     if (ActiveTerrain.CapturedPlayerIndex != Map.ActivePlayerIndex && ActiveTerrain.TerrainTypeIndex >= 13)
