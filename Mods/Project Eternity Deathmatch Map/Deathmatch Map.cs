@@ -1081,11 +1081,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Terrain CurrentTerrain = ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y];
             string CurrentTerrainType = GetTerrainType(CurrentPosition.X, CurrentPosition.Y, (int)CurrentPosition.Z);
             float MaxClearance = 1f;
-            float ClimbValue = 10f;
+            float ClimbValue = 15f;
             float CurrentZ = CurrentTerrain.Position.Z + CurrentPosition.Z;
 
-            int ClosestLayerIndex = -1;
-            float ClosestTerrainDistance = float.MaxValue;
+            int ClosestLayerIndexDown = -1;
+            int ClosestLayerIndexUp = 0;
+            float ClosestTerrainDistanceDown = float.MaxValue;
+            float ClosestTerrainDistanceUp = float.MinValue;
 
             for (int L = 0; L < ListLayer.Count; L++)
             {
@@ -1096,24 +1098,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 float NextTerrainZ = NextTerrain.Position.Z + L;
 
                 //Check lower or higher neighbors if on solid ground
-                if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid && NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid)
+                if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid)
                 {
-                    float ZDiff = NextTerrainZ - CurrentZ;
-                    //Prioritize going downward
-                    if (NextTerrainZ <= CurrentPosition.Z)
+                    if (NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid)
                     {
-                        if (ZDiff <= ClosestTerrainDistance && HasEnoughClearance(NextTerrainZ, NextX, NextY, L, MaxClearance))
+                        //Prioritize going downward
+                        if (NextTerrainZ <= CurrentZ)
                         {
-                            ClosestTerrainDistance = ZDiff;
-                            ClosestLayerIndex = L;
+                            float ZDiff = CurrentZ - NextTerrainZ;
+                            if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(NextTerrainZ, NextX, NextY, L, MaxClearance))
+                            {
+                                ClosestTerrainDistanceDown = ZDiff;
+                                ClosestLayerIndexDown = L;
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (ZDiff <= ClosestTerrainDistance && ZDiff <= ClimbValue)
+                        else
                         {
-                            ClosestTerrainDistance = ZDiff;
-                            ClosestLayerIndex = L;
+                            float ZDiff = NextTerrainZ - CurrentZ;
+                            if (ZDiff >= ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
+                            {
+                                ClosestTerrainDistanceUp = ZDiff;
+                                ClosestLayerIndexUp = L;
+                            }
                         }
                     }
                 }
@@ -1128,16 +1134,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     else if (NextTerrainZ > CurrentPosition.Z)
                     {
                         float ZDiff = NextTerrainZ - CurrentZ;
-                        if (ZDiff < ClosestTerrainDistance && ZDiff <= ClimbValue)
+                        if (ZDiff < ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                         {
-                            ClosestTerrainDistance = ZDiff;
-                            ClosestLayerIndex = L;
+                            ClosestTerrainDistanceUp = ZDiff;
+                            ClosestLayerIndexUp = L;
                         }
                     }
                 }
             }
 
-            return ClosestLayerIndex;
+            if (ClosestLayerIndexDown >= 0)
+            {
+                return ClosestLayerIndexDown;
+            }
+            else
+            {
+                return ClosestLayerIndexUp;
+            }
         }
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)

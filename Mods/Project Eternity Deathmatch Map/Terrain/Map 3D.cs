@@ -91,101 +91,34 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                     Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-                    float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64);
+                    float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 32);
                     float ZFront = Z;
                     float ZBack = Z;
                     float ZRight = Z;
                     float ZLeft = Z;
                     if (Y + 1 < Map.MapSize.Y)
                     {
-                        ZFront = Owner.ArrayTerrain[X, Y + 1].Position.Z * 32 + (LayerIndex * 64);
+                        ZFront = Owner.ArrayTerrain[X, Y + 1].Position.Z * 32 + (LayerIndex * 32);
                     }
                     if (Y - 1 >= 0)
                     {
-                        ZBack = Owner.ArrayTerrain[X, Y - 1].Position.Z * 32 + (LayerIndex * 64);
+                        ZBack = Owner.ArrayTerrain[X, Y - 1].Position.Z * 32 + (LayerIndex * 32);
                     }
                     if (X - 1 >= 0)
                     {
-                        ZLeft = Owner.ArrayTerrain[X - 1, Y].Position.Z * 32 + (LayerIndex * 64);
+                        ZLeft = Owner.ArrayTerrain[X - 1, Y].Position.Z * 32 + (LayerIndex * 32);
                     }
                     if (X + 1 < Map.MapSize.X)
                     {
-                        ZRight = Owner.ArrayTerrain[X + 1, Y].Position.Z * 32 + (LayerIndex * 64);
+                        ZRight = Owner.ArrayTerrain[X + 1, Y].Position.Z * 32 + (LayerIndex * 32);
                     }
 
                     ListTile3D.AddRange(ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
-                        X * Map.TileSize.X, Y * Map.TileSize.Y, Z, (LayerIndex * 64), Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0));
+                        X * Map.TileSize.X, Y * Map.TileSize.Y, Z, (LayerIndex * 32), Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0));
                 }
             }
         }
         
-        private static Tile3D CreateCursor(DeathmatchMap Map, float X, float Y, int LayerIndex, int TextureWidth, int TextureHeight, float Radius)
-        {
-            float Z = Map.GetTerrain(Math.Max(0, X), Math.Max(0, Y), LayerIndex).Position.Z + LayerIndex * 32;
-
-            Vector3[] ArrayVertexPosition = new Vector3[4];
-            ArrayVertexPosition[0] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y);
-            ArrayVertexPosition[1] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y);
-            ArrayVertexPosition[2] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
-            ArrayVertexPosition[3] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y + Map.TileSize.Y);
-
-            return CreateTile3D(Map, ArrayVertexPosition, 0, 0, TextureWidth, TextureHeight, Radius);
-        }
-
-        private static Tile3D CreateTile3D(DeathmatchMap Map, Vector3[] ArrayVertexPosition, float OffsetX, float OffsetY, int TextureWidth, int TextureHeight, float Radius)
-        {
-            VertexPositionNormalTexture[] ArrayVertex = new VertexPositionNormalTexture[4];
-            float UVXValue = OffsetX + 0.5f;
-            float UVYValue = OffsetY + 0.5f;
-
-            Vector3 NormalTriangle = Vector3.Normalize(Vector3.Cross(ArrayVertexPosition[1] - ArrayVertexPosition[0], ArrayVertexPosition[2] - ArrayVertexPosition[0]));
-
-            ArrayVertex[0] = new VertexPositionNormalTexture();
-            ArrayVertex[0].Position = new Vector3(ArrayVertexPosition[0].X - Map.TileSize.X / 2f, ArrayVertexPosition[0].Y, ArrayVertexPosition[0].Z - Map.TileSize.Y / 2f);
-            ArrayVertex[0].TextureCoordinate = new Vector2(UVXValue / TextureWidth, UVYValue / TextureHeight);
-            ArrayVertex[0].Normal = NormalTriangle;
-
-            UVXValue = OffsetX + Map.TileSize.X - 0.5f;
-            UVYValue = OffsetY + 0.5f;
-            ArrayVertex[1] = new VertexPositionNormalTexture();
-            ArrayVertex[1].Position = new Vector3(ArrayVertexPosition[1].X - Map.TileSize.X / 2f, ArrayVertexPosition[1].Y, ArrayVertexPosition[1].Z - Map.TileSize.Y / 2f);
-            ArrayVertex[1].TextureCoordinate = new Vector2(UVXValue / TextureWidth, UVYValue / TextureHeight);
-            ArrayVertex[1].Normal = NormalTriangle;
-
-            UVXValue = OffsetX + 0.5f;
-            UVYValue = OffsetY + Map.TileSize.Y - 0.5f;
-            ArrayVertex[2] = new VertexPositionNormalTexture();
-            ArrayVertex[2].Position = new Vector3(ArrayVertexPosition[2].X - Map.TileSize.X / 2f, ArrayVertexPosition[2].Y, ArrayVertexPosition[2].Z - Map.TileSize.Y / 2f);
-            ArrayVertex[2].TextureCoordinate = new Vector2(UVXValue / TextureWidth, UVYValue / TextureHeight);
-            ArrayVertex[2].Normal = NormalTriangle;
-
-            UVXValue = OffsetX + Map.TileSize.X - 0.5f;
-            UVYValue = OffsetY + Map.TileSize.Y - 0.5f;
-            ArrayVertex[3] = new VertexPositionNormalTexture();
-            ArrayVertex[3].Position = new Vector3(ArrayVertexPosition[3].X - Map.TileSize.X / 2f, ArrayVertexPosition[3].Y, ArrayVertexPosition[3].Z - Map.TileSize.Y / 2f);
-            ArrayVertex[3].TextureCoordinate = new Vector2(UVXValue / TextureWidth, UVYValue / TextureHeight);
-            ArrayVertex[3].Normal = NormalTriangle;
-
-            short[] ArrayIndex = new short[6];
-            ArrayIndex[0] = 0;
-            ArrayIndex[1] = 1;
-            ArrayIndex[2] = 3;
-            ArrayIndex[3] = 0;
-            ArrayIndex[4] = 3;
-            ArrayIndex[5] = 2;
-
-            Vector3[] ArrayTransformedVertexPosition = new Vector3[ArrayVertexPosition.Length];
-
-            Matrix TranslationToOriginMatrix = Matrix.CreateTranslation(-Radius, Radius, -Radius);
-            Vector3.Transform(ArrayVertexPosition, ref TranslationToOriginMatrix, ArrayTransformedVertexPosition);
-            for (int V = ArrayVertexPosition.Length - 1; V >= 0; --V)
-            {
-                ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
-            }
-
-            return new Tile3D(0, ArrayVertex, ArrayIndex);
-        }
-
         public void RemoveTileset(int TilesetIndex)
         {
             throw new NotImplementedException();
@@ -206,14 +139,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Camera.CameraDistance = 300;
             int X = (int)Map.CursorPositionVisible.X;
             int Y = (int)Map.CursorPositionVisible.Y;
-            float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64) + 0.2f;
+            float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 32) + 0.2f;
             Map2D GroundLayer = Owner.OriginalLayerGrid;
             DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
             Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
             Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 64 + 0.2f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 32 + 0.2f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
 
-            Camera.SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, LayerIndex * 32, Map.TileSize.Y * Map.CursorPositionVisible.Y));
+            Camera.SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, Map.CursorPosition.Z * 32, Map.TileSize.Y * Map.CursorPositionVisible.Y));
             Camera.Update(gameTime);
 
             DicDrawablePointPerColor.Clear();
