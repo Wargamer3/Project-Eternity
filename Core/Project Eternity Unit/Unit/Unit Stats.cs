@@ -9,12 +9,14 @@ namespace ProjectEternity.Core.Units
 {
     public class UnitStats
     {
+        public const string TerrainAir = "Air";
         public const string TerrainLand = "Land";
         public const string TerrainSea = "Sea";
-        public const string TerrainAir = "Air";
         public const string TerrainSpace = "Space";
         public const string TerrainWall = "Wall";
+        public const int TerrainWallIndex = 5;
         public const string TerrainVoid = "Void";
+        public const int TerrainVoidIndex = 6;
         public const string TerrainUnderground = "Underground";
         public const string TerrainUnderwater = "Underwater";
 
@@ -386,7 +388,7 @@ namespace ProjectEternity.Core.Units
             int FinalX = (int)(PositionToCheck.X - Position.X);
             int FinalY = (int)(PositionToCheck.Y - Position.Y);
 
-            if (FinalX < 0 || FinalY < 0 || FinalX >= ArrayMapSize.GetLength(0) || FinalY >= ArrayMapSize.GetLength(1))
+            if (FinalX < 0 || FinalY < 0 || FinalX >= ArrayMapSize.GetLength(0) || FinalY >= ArrayMapSize.GetLength(1) || (int)Position.Z != (int)PositionToCheck.Z)
                 return false;
 
             return ArrayMapSize[FinalX, FinalY];

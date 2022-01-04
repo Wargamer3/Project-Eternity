@@ -16,27 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListAllNode = new List<MovementAlgorithmTile>();
         }
 
-        private MovementAlgorithmTile AddSuccessor(MovementAlgorithmTile ActiveNode, int MaxMovement, float AX, float AY, int LayerIndex)
-        {
-            MovementAlgorithmTile ActiveTile = GetTile(AX, AY, LayerIndex);
-
-            //Wall
-            if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1)
-            {
-                return null;
-            }
-
-            //If the NewNode is the parent, skip it.
-            if (ActiveNode.Parent == null || ActiveNode.Position.X != AX || ActiveNode.Position.Y != AY)
-            {
-                //Used for an undefined map or if you don't need to calculate the whole map.
-                //ListSuccessors.Add(new AStarNode(ActiveNode, AX, AY));
-                ActiveTile.Parent = ActiveNode;
-                return ActiveTile;
-            }
-
-            return null;
-        }
+        protected abstract List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile ActiveNode, float OffsetX, float OffsetY, int LayerIndex);
 
         private List<MovementAlgorithmTile> GetSuccessors(MovementAlgorithmTile ActiveNode, int MaxMovement, int LayerIndex)
         {
@@ -47,15 +27,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return ListSuccessors;
             }
 
-            MovementAlgorithmTile Successor = null;
-            if ((Successor = AddSuccessor(ActiveNode, MaxMovement, ActiveNode.Position.X - 1, ActiveNode.Position.Y, LayerIndex)) != null)
-                ListSuccessors.Add(Successor);
-            if ((Successor = AddSuccessor(ActiveNode, MaxMovement, ActiveNode.Position.X + 1, ActiveNode.Position.Y, LayerIndex)) != null)
-                ListSuccessors.Add(Successor);
-            if ((Successor = AddSuccessor(ActiveNode, MaxMovement, ActiveNode.Position.X, ActiveNode.Position.Y - 1, LayerIndex)) != null)
-                ListSuccessors.Add(Successor);
-            if ((Successor = AddSuccessor(ActiveNode, MaxMovement, ActiveNode.Position.X, ActiveNode.Position.Y + 1, LayerIndex)) != null)
-                ListSuccessors.Add(Successor);
+            ListSuccessors.AddRange(AddSuccessor(ActiveNode, -1, 0, LayerIndex));
+            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 1, 0, LayerIndex));
+            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 0, -1, LayerIndex));
+            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 0, 1, LayerIndex));
 
             //Diagonal movement
             //AddSuccessor(ActiveNode, ActiveNode.XPos + 1, ActiveNode.YPos + 1);

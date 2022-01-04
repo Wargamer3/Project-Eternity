@@ -99,6 +99,29 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             this.FogOfWarMap = FogOfWarMap;
         }
 
+        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile ActiveNode, float OffsetX, float OffsetY, int LayerIndex)
+        {
+            List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
+            MovementAlgorithmTile ActiveTile = GetTile(ActiveNode.Position.X + OffsetX, ActiveNode.Position.X + OffsetY, LayerIndex);
+            //Wall
+            if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
+                || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+            {
+                return ListTerrainSuccessor;
+            }
+
+            //If the NewNode is the parent, skip it.
+            if (ActiveNode.Parent == null)
+            {
+                //Used for an undefined map or if you don't need to calculate the whole map.
+                //ListSuccessors.Add(new AStarNode(ActiveNode, AX, AY));
+                ActiveTile.Parent = ActiveNode;
+                ListTerrainSuccessor.Add(ActiveTile);
+            }
+
+            return ListTerrainSuccessor;
+        }
+
         public override float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo)
         {
             return 1;

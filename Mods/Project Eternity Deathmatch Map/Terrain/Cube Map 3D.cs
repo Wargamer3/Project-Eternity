@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -16,7 +17,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override void CreateMap(DeathmatchMap Map)
         {
-            ListTile3D.Clear();
+            DicTile3DByTileset.Clear();
 
             for (int X = Map.MapSize.X - 1; X >= 0; --X)
             {
@@ -136,7 +137,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            ListTile3D.Add(NewTile);
+            if (!DicTile3DByTileset.ContainsKey(NewTile.TilesetIndex))
+            {
+                DicTile3DByTileset.Add(NewTile.TilesetIndex, new List<Tile3D>());
+            }
+
+            DicTile3DByTileset[NewTile.TilesetIndex].Add(NewTile);
 
             //Front
             RotationMatrix = Matrix.CreateRotationX(90 * DegToRag);
@@ -150,7 +156,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            ListTile3D.Add(NewTile);
+            DicTile3DByTileset[NewTile.TilesetIndex].Add(NewTile);
 
             //Back
             RotationMatrix = Matrix.CreateRotationX(270 * DegToRag);
@@ -164,7 +170,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            ListTile3D.Add(NewTile);
+            DicTile3DByTileset[NewTile.TilesetIndex].Add(NewTile);
 
             //Left
             RotationMatrix = Matrix.CreateRotationX(90 * DegToRag) * Matrix.CreateRotationY(90 * DegToRag);
@@ -178,7 +184,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            ListTile3D.Add(NewTile);
+            DicTile3DByTileset[NewTile.TilesetIndex].Add(NewTile);
 
             //Right
             RotationMatrix = Matrix.CreateRotationX(90 * DegToRag) * Matrix.CreateRotationY(270 * DegToRag);
@@ -192,7 +198,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            ListTile3D.Add(NewTile);
+            DicTile3DByTileset[NewTile.TilesetIndex].Add(NewTile);
 
             //Bottom
             RotationMatrix = Matrix.CreateRotationX(180 * DegToRag);
@@ -206,7 +212,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewTile.ArrayVertex[V].Position = ArrayTransformedVertexPosition[V];
             }
 
-            ListTile3D.Add(NewTile);
+            DicTile3DByTileset[NewTile.TilesetIndex].Add(NewTile);
         }
 
         private void MoveToSphericalCoordinates(Tile3D ActiveTile, float Radius)

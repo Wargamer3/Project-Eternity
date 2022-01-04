@@ -981,7 +981,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (CursorMoved)
             {
-                CursorPosition.Z = GetNextLayerIndex(CursorPositionOld, (int)CursorPosition.X, (int)CursorPosition.Y);
+                CursorPosition.Z = GetNextLayerIndex(CursorPositionOld, (int)CursorPosition.X, (int)CursorPosition.Y, 1f, 15f, out _);
             }
 
             return CursorMoved;
@@ -993,8 +993,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="CurrentPosition">X, Y Position, Z value as LayerIndex</param>
         /// <param name="NextX"></param>
         /// <param name="NextY"></param>
+        /// <param name="MaxClearance"></param>
+        /// <param name="ClimbValue"></param>
         /// <returns></returns>
-        public abstract int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY);
+        public abstract int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<int> ListLayerPossibility);
 
         /// <summary>
         /// Anything related with the cursor on the field is here.

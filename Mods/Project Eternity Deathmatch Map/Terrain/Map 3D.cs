@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         protected Point MapSize { get { return Map.MapSize; } }
 
-        public List<Tile3D> ListTile3D;
+        public Dictionary<int, List<Tile3D>> DicTile3DByTileset;
         protected BasicEffect PolygonEffect;
         protected float Radius;
         private DeathmatchMap Map;
@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PolygonEffect.View = Matrix.Identity;
 
             DicDrawablePointPerColor = new Dictionary<Color, List<Tile3D>>();
-            ListTile3D = new List<Tile3D>();
+            DicTile3DByTileset = new Dictionary<int, List<Tile3D>>();
 
             CreateMap(Map);
 
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected virtual void CreateMap(DeathmatchMap Map)
         {
-            ListTile3D.Clear();
+            DicTile3DByTileset.Clear();
             Map2D GroundLayer = Owner.OriginalLayerGrid;
 
             for (int X = Map.MapSize.X - 1; X >= 0; --X)
@@ -113,8 +113,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ZRight = Owner.ArrayTerrain[X + 1, Y].Position.Z * 32 + (LayerIndex * 32);
                     }
 
-                    ListTile3D.AddRange(ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
-                        X * Map.TileSize.X, Y * Map.TileSize.Y, Z, (LayerIndex * 32), Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0));
+                    List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
+                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, (LayerIndex * 32), Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
+
+                    foreach (Tile3D ActiveTile in ListNew3DTile)
+                    {
+                        if (!DicTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                        {
+                            DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new List<Tile3D>());
+                        }
+                        DicTile3DByTileset[ActiveTile.TilesetIndex].Add(ActiveTile);
+                    }
                 }
             }
         }
@@ -163,12 +172,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
-            foreach (Tile3D ActiveTile in ListTile3D)
+            foreach (KeyValuePair<int, List<Tile3D>> ActiveTileSet in DicTile3DByTileset)
             {
-                PolygonEffect.Texture = Map.ListTileSet[ActiveTile.TilesetIndex];
+                PolygonEffect.Texture = Map.ListTileSet[ActiveTileSet.Key];
                 PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-                ActiveTile.Draw(g.GraphicsDevice);
+                foreach (Tile3D ActiveTile in ActiveTileSet.Value)
+                {
+                    ActiveTile.Draw(g.GraphicsDevice);
+                }
             }
 
             if (IsSubLayer)
@@ -209,7 +221,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.SetPosition(
                         Map.ListPlayer[P].ListSquad[U].Position.X + 0.5f,
-                        Map.ListPlayer[P].ListSquad[U].Position.Z * 64 + TerrainZ * 32,
+                        Map.ListPlayer[P].ListSquad[U].Position.Z * 32 + TerrainZ * 32,
                         Map.ListPlayer[P].ListSquad[U].Position.Y + 0.5f);
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.Draw(GameScreen.GraphicsDevice);
@@ -228,13 +240,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 int X = (int)ActivePoint.X;
                 int Y = (int)ActivePoint.Y;
-                float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64) + 0.1f;
+                float Z = Map.ListLayer[(int)ActivePoint.Z].ArrayTerrain[X, Y].Position.Z * 32 + (ActivePoint.Z * 32) + 0.1f;
                 Map2D GroundLayer = Owner.OriginalLayerGrid;
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                 ListDrawablePoint3D.Add(ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 64, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
+                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z + 0.1f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
             }
 
             DicDrawablePointPerColor.Add(PointColor, ListDrawablePoint3D);

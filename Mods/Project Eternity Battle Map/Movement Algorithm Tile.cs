@@ -9,6 +9,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int MVMoveCost;//How much energy is required to move in it.
         public float MovementCost;//How much energy required to move there.
         public int TerrainTypeIndex;//What kind of terrain it is.
+        public int LayerIndex;
 
         public MovementAlgorithmTile Parent;//Used for A*.
     }
