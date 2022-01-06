@@ -321,6 +321,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.cbo3DStyle.FormattingEnabled = true;
             this.cbo3DStyle.Items.AddRange(new object[] {
             "Flat",
+            "Invisible",
             "Cube",
             "Flat Wall Lateral",
             "Flat Wall Medial",

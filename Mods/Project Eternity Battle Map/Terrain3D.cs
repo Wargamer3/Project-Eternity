@@ -8,7 +8,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class Terrain3D
     {
-        public enum TerrainStyles : byte { Flat, Cube, FlatWallLateral, FlatWallMedial, FlatWallFront, FlatWallBack, FlatWallLeft, FlatWallRight,
+        public enum TerrainStyles : byte { Flat, Invisible, Cube, FlatWallLateral, FlatWallMedial, FlatWallFront, FlatWallBack, FlatWallLeft, FlatWallRight,
             SlopeLeftToRight, SlopeRightToLeft, SlopeFrontToBack, SlopeBackToFront,
             WedgeLeftToRight, WedgeRightToLeft, WedgeFrontToBack, WedgeBackToFront,
             FrontLeftCorner, FrontRightCorner, BackLeftCorner, BackRightCorner }
