@@ -871,7 +871,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// Move the cursor on the map.
         /// </summary>
         /// <returns>Returns true if the cursor was moved</returns>
-        public bool CursorControl()
+        public bool CursorControl(PlayerInput ActiveInputManager)
         {
             Vector3 CursorPositionOld = CursorPosition;
 
@@ -914,7 +914,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             */
             bool CanKeyboardMove = false;
-            if (InputHelper.InputLeftHold() || InputHelper.InputRightHold() || InputHelper.InputUpHold() || InputHelper.InputDownHold())
+            if (ActiveInputManager.InputLeftHold() || ActiveInputManager.InputRightHold() || ActiveInputManager.InputUpHold() || ActiveInputManager.InputDownHold())
             {
                 if (CursorHoldTime < 0)
                 {
@@ -941,7 +941,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 CursorHoldTime = -1;
             }
             //X
-            if (InputHelper.InputLeftHold() && CanKeyboardMove)
+            if (ActiveInputManager.InputLeftHold() && CanKeyboardMove)
             {
                 //Update the camera if needed.
                 if (CursorPosition.X - CameraPosition.X - 3 < 0 && CameraPosition.X > -3)
@@ -950,7 +950,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 CursorPosition.X -= (CursorPosition.X > 0) ? 1 : 0;
                 CursorMoved = true;
             }
-            else if (InputHelper.InputRightHold() && CanKeyboardMove)
+            else if (ActiveInputManager.InputRightHold() && CanKeyboardMove)
             {
                 //Update the camera if needed.
                 if (CursorPosition.X - CameraPosition.X + 3 >= ScreenSize.X && CameraPosition.X + ScreenSize.X < MapSize.X + 3)
@@ -960,7 +960,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 CursorMoved = true;
             }
             //Y
-            if (InputHelper.InputUpHold() && CanKeyboardMove)
+            if (ActiveInputManager.InputUpHold() && CanKeyboardMove)
             {
                 //Update the camera if needed.
                 if (CursorPosition.Y - CameraPosition.Y - 3 < 0 && CameraPosition.Y > -3)
@@ -969,7 +969,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 CursorPosition.Y -= (CursorPosition.Y > 0) ? 1 : 0;
                 CursorMoved = true;
             }
-            else if (InputHelper.InputDownHold() && CanKeyboardMove)
+            else if (ActiveInputManager.InputDownHold() && CanKeyboardMove)
             {
                 //Update the camera if needed.
                 if (CursorPosition.Y - CameraPosition.Y + 3 >= ScreenSize.Y && CameraPosition.Y + ScreenSize.Y < MapSize.Y + 3)

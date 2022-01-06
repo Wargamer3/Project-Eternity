@@ -11,6 +11,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int TerrainTypeIndex;//What kind of terrain it is.
         public int LayerIndex;
 
-        public MovementAlgorithmTile Parent;//Used for A*.
+        public MovementAlgorithmTile ParentTemp;//Temporary variable used for A* and set to null after.
+        public MovementAlgorithmTile ParentReal;
     }
 }

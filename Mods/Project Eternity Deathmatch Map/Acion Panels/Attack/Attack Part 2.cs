@@ -4,6 +4,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -14,7 +15,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         private Squad ActiveSquad;
-        public List<Vector3> AttackChoice;
+        public List<Vector3> ListAttackChoice;
+        public List<MovementAlgorithmTile> ListAttackTerrain;
         private BattlePreviewer BattlePreview;
 
         public ActionPanelAttackPart2(DeathmatchMap Map)
@@ -34,21 +36,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            AttackChoice = Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);
+            ListAttackChoice = Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);
+            ListAttackTerrain = new List<MovementAlgorithmTile>();
+            foreach (Vector3 ActiveTerrain in ListAttackChoice)
+            {
+                ListAttackTerrain.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(AttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
+            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
 
             if (ActiveInputManager.InputConfirmPressed())
             {
                 int TargetSelect = 0;
                 //Verify if the cursor is over one of the possible MV position.
-                while ((Map.CursorPosition.X != AttackChoice[TargetSelect].X || Map.CursorPosition.Y != AttackChoice[TargetSelect].Y)
-                    && ++TargetSelect < AttackChoice.Count) ;
+                while ((Map.CursorPosition.X != ListAttackChoice[TargetSelect].X || Map.CursorPosition.Y != ListAttackChoice[TargetSelect].Y)
+                    && ++TargetSelect < ListAttackChoice.Count) ;
                 //If nothing was found.
-                if (TargetSelect >= AttackChoice.Count)
+                if (TargetSelect >= ListAttackChoice.Count)
                     return;
 
                 Map.TargetSquadIndex = -1;
@@ -89,7 +96,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                bool CursorMoved = Map.UpdateMapNavigation();
+                bool CursorMoved = Map.UpdateMapNavigation(ActiveInputManager);
                 if (CursorMoved)
                 {
                     BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
@@ -105,10 +112,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
             int AttackChoiceCount = BR.ReadInt32();
-            AttackChoice = new List<Vector3>(AttackChoiceCount);
+            ListAttackChoice = new List<Vector3>(AttackChoiceCount);
+            ListAttackTerrain = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                AttackChoice.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0f));
+                Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
+                ListAttackChoice.Add(NewTerrain);
+                ListAttackTerrain.Add(Map.GetTerrain(NewTerrain.X, NewTerrain.Y, (int)NewTerrain.Z));
             }
 
             bool IsBattlePreviewOpen = BR.ReadBoolean();
@@ -127,12 +137,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
-            BW.AppendInt32(AttackChoice.Count);
+            BW.AppendInt32(ListAttackChoice.Count);
 
-            for (int A = 0; A < AttackChoice.Count; ++A)
+            for (int A = 0; A < ListAttackChoice.Count; ++A)
             {
-                BW.AppendFloat(AttackChoice[A].X);
-                BW.AppendFloat(AttackChoice[A].Y);
+                BW.AppendFloat(ListAttackChoice[A].X);
+                BW.AppendFloat(ListAttackChoice[A].Y);
+                BW.AppendInt32((int)ListAttackChoice[A].Z);
             }
 
             BW.AppendBoolean(BattlePreview != null);

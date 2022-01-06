@@ -8,6 +8,7 @@ using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -263,7 +264,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ListSelectedSpirit[0].Range > 0)
                 {
                     List<Vector3> ListMVChoice = Map.ComputeRange(ActiveSquad.Position, 0, ListSelectedSpirit[0].Range);
-                    Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
+                    List<MovementAlgorithmTile> ListTerrainChoice = new List<MovementAlgorithmTile>();
+                    foreach (Vector3 ActiveTerrain in ListMVChoice)
+                    {
+                        ListTerrainChoice.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+                    }
+                    Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListTerrainChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
                 }
                 
                 for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)

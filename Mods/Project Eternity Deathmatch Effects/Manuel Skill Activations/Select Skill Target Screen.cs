@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens;
-using ProjectEternity.Core.Characters;
-using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using ProjectEternity.Core.Effects;
+using ProjectEternity.Core.Characters;
+using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.Core.Skill
 {
@@ -36,7 +35,7 @@ namespace ProjectEternity.Core.Skill
 
         public override void Update(GameTime gameTime)
         {
-            Map.CursorControl();
+            Map.CursorControl(Map.ListPlayer[Map.ActivePlayerIndex].InputManager);
             Map.UpdateCursorVisiblePosition(gameTime);
             //Loop through the players to find a Unit to control.
             for (int P = 0; P < Map.ListPlayer.Count; P++)
@@ -54,7 +53,7 @@ namespace ProjectEternity.Core.Skill
                 }
             }
 
-            if (InputHelper.InputConfirmPressed())
+            if (Map.ListPlayer[Map.ActivePlayerIndex].InputManager.InputConfirmPressed())
             {
                 Squad TargetSquad = null;
                 for (int P = Map.ListPlayer.Count - 1; P >= 0 && TargetSquad == null; --P)
@@ -94,7 +93,7 @@ namespace ProjectEternity.Core.Skill
                     Map.RemoveScreen(this);
                 }
             }
-            else if (InputHelper.InputCancelPressed())
+            else if (Map.ListPlayer[Map.ActivePlayerIndex].InputManager.InputCancelPressed())
             {
                 Map.CursorPosition = SkillSquad.Position;
                 Map.CursorPositionVisible = Map.CursorPosition;

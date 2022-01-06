@@ -98,7 +98,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     //New path or Neighbor have a lower movement cost then before.
                     if (!ListOpenNode.Contains(Neighbor) || MovementCostToNeighbor < Neighbor.MovementCost)
                     {
-                        Neighbor.Parent = CurrentNode;
+                        Neighbor.ParentTemp = CurrentNode;
+                        Neighbor.ParentReal = CurrentNode;
                         Neighbor.MovementCost = MovementCostToNeighbor;
 
                         if (!ListOpenNode.Contains(Neighbor))

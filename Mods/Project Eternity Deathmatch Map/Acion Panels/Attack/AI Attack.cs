@@ -26,11 +26,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private const int AITimerBase = 20;
         private const int AITimerBaseHalf = 10;
         private Vector2 AICursorNextPosition;
-        public List<Vector3> AttackChoice;
+        public List<Vector3> ListAttackChoice;
+        public List<MovementAlgorithmTile> ListAttackTerrain;
 
         public ActionPanelAIAttackBehavior(DeathmatchMap Map)
             : base(PanelName, Map)
         {
+            ListAttackTerrain = new List<MovementAlgorithmTile>();
         }
 
         public ActionPanelAIAttackBehavior(DeathmatchMap Map,  int ActivePlayerIndex, int ActiveSquadIndex, Tuple<int, int> Target)
@@ -41,6 +43,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Target = Target;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            ListAttackTerrain = new List<MovementAlgorithmTile>();
         }
 
         public override void OnSelect()
@@ -59,6 +62,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            Map.ListLayer[(int)ActiveSquad.Z].LayerGrid.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
             if (AITimer >= 0)
             {
                 AITimer--;
@@ -94,14 +98,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.MAP)
                 {
-                    AttackChoice.Clear();
+                    ListAttackChoice.Clear();
                     for (int X = 0; X < ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.ListChoice.Count; X++)
                     {
                         for (int Y = 0; Y < ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.ListChoice[X].Count; Y++)
                         {
                             if (ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.ListChoice[X][Y])
                             {
-                                AttackChoice.Add(new Vector3(Map.CursorPosition.X + X - ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.Width,
+                                ListAttackChoice.Add(new Vector3(Map.CursorPosition.X + X - ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.Width,
                                                        Map.CursorPosition.Y + Y - ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.Height, Map.CursorPosition.Z));
                             }
                         }
@@ -109,16 +113,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.Delay > 0)
                     {
-                        Map.ListDelayedAttack.Add(new DelayedAttack(ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquad, ActivePlayerIndex, AttackChoice));
+                        Map.ListDelayedAttack.Add(new DelayedAttack(ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquad, ActivePlayerIndex, ListAttackChoice));
                         RemoveFromPanelList(this);
                     }
                     else
                     {
-                        Stack<Tuple<int, int>> ListMAPAttackTarget = Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack, AttackChoice);
+                        Stack<Tuple<int, int>> ListMAPAttackTarget = Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack, ListAttackChoice);
 
                         if (ListMAPAttackTarget.Count > 0)
                         {
-                            Map.GlobalDeathmatchContext.ArrayAttackPosition = AttackChoice.ToArray();
+                            Map.GlobalDeathmatchContext.ArrayAttackPosition = ListAttackChoice.ToArray();
 
                             Map.AttackWithMAPAttack( ActivePlayerIndex, ActiveSquadIndex, ListMAPAttackTarget);
 
@@ -172,8 +176,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void PrepareToAttack()
         {
-            AttackChoice = Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);
-            Map.ListLayer[0].LayerGrid.AddDrawablePoints(AttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
+            ListAttackChoice = Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);
+            ListAttackTerrain = new List<MovementAlgorithmTile>();
+            foreach (Vector3 ActiveTerrain in ListAttackChoice)
+            {
+                ListAttackTerrain.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+            }
+            Map.ListLayer[(int)ActiveSquad.Z].LayerGrid.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
             Map.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Focused;
 
             if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)

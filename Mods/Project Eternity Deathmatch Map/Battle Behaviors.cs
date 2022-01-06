@@ -145,23 +145,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     //Make sure you can use it.
                     if (ActiveWeapon.CanAttack)
                     {
-                        List<Vector3> ListRealChoice;
+                        List<MovementAlgorithmTile> ListRealChoice;
 
                         if (CanMove)
                         {
                             //Move to be in range.
-                            ListRealChoice = new List<Vector3>(GetMVChoice(ActiveSquad));
+                            ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveSquad));
                         }
                         else
                         {
-                            ListRealChoice = new List<Vector3>();
+                            ListRealChoice = new List<MovementAlgorithmTile>();
                         }
 
-                        ListRealChoice.Add(ActiveSquad.Position);
+                        ListRealChoice.Add(GetTerrain(ActiveSquad));
 
                         for (int M = 0; M < ListRealChoice.Count; M++)
                         {//Remove every MV that would make it impossible to attack.
-                            float Distance = Math.Abs(ListRealChoice[M].X - ListPlayer[P].ListSquad[TargetSelect].X) + Math.Abs(ListRealChoice[M].Y - ListPlayer[P].ListSquad[TargetSelect].Y);
+                            float Distance = Math.Abs(ListRealChoice[M].Position.X - ListPlayer[P].ListSquad[TargetSelect].X) + Math.Abs(ListRealChoice[M].Position.Y - ListPlayer[P].ListSquad[TargetSelect].Y);
                             //Check if you can attack it if you moved.
                             if (Distance < MinRange || Distance > MaxRange)
                                 ListRealChoice.RemoveAt(M--);

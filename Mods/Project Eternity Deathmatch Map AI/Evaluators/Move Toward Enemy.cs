@@ -7,6 +7,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.AI.DeathmatchMapScreen
 {
@@ -63,7 +64,11 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 float DistanceUnit = Math.Abs(ActiveSquadPosition.X - TargetSquad.X) + Math.Abs(ActiveSquadPosition.Y - TargetSquad.Y);
                 //Move to be in range.
 
-                List<Vector3> ListRealChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<Vector3> ListRealChoice = new List<Vector3>();
+                foreach (MovementAlgorithmTile ActiveTerrain in Info.Map.GetMVChoice(Info.ActiveSquad))
+                {
+                    ListRealChoice.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+                }
                 for (int M = 0; M < ListRealChoice.Count; M++)
                 {//Remove every MV that would make it impossible to attack.
                     float Distance = Math.Abs(ListRealChoice[M].X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Y - TargetSquad.Y);

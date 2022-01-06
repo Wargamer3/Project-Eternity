@@ -8,11 +8,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     public class DeathmatchMap2D : Map2D
     {
         private readonly DeathmatchMap ActiveMap;
+        protected MapLayer Owner;
 
-        public DeathmatchMap2D(DeathmatchMap Map)
+        public DeathmatchMap2D(DeathmatchMap Map, MapLayer Owner)
             : base(Map)
         {
             ActiveMap = Map;
+            this.Owner = Owner;
 
             DrawableTile[,] ArrayTile = new DrawableTile[MapSize.X, MapSize.Y];
 
@@ -60,6 +62,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListSquad[S], !ActiveMap.ListPlayer[P].ListSquad[S].CanMove && P == ActiveMap.ActivePlayerIndex);
                     }
                 }
+            }
+
+            for (int P = 0; P < Owner.ListProp.Count; ++P)
+            {
+                Owner.ListProp[P].Draw(g);
             }
         }
 

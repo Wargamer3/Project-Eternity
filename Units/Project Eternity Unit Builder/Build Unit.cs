@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Characters;
-using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.Core.Units.Builder
@@ -14,6 +14,7 @@ namespace ProjectEternity.Core.Units.Builder
         private const string PanelName = "Build2";
 
         List<Vector3> ListBuildSpot;
+        List<MovementAlgorithmTile> ListBuildTerrain;
         UnitBuilder ActiveUnit;
 
         public ActionPanelBuildUnit(DeathmatchMap Map)
@@ -30,11 +31,16 @@ namespace ProjectEternity.Core.Units.Builder
         public override void OnSelect()
         {
             ListBuildSpot = Map.ComputeRange(Map.CursorPosition, 1, 5);
+            ListBuildTerrain = new List<MovementAlgorithmTile>();
+            foreach (Vector3 ActiveTerrain in ListBuildSpot)
+            {
+                ListBuildTerrain.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            if (ActiveInputManager.InputConfirmPressed())
             {
                 List<Squad> ListOtherSquads = FindOtherSquad("Tower");
                 Unit NewLeader = Unit.FromType("Normal", "Electric Wall", Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
@@ -74,15 +80,15 @@ namespace ProjectEternity.Core.Units.Builder
                 Map.sndConfirm.Play();
                 CancelPanel();
             }
-            else if (InputHelper.InputCancelPressed() || MouseHelper.InputRightButtonReleased())
+            else if (ActiveInputManager.InputCancelPressed())
             {
             }
             else
             {
-                Map.CursorControl();
+                Map.CursorControl(ActiveInputManager);
             }
 
-            Map.ListLayer[0].LayerGrid.AddDrawablePoints(ListBuildSpot, Color.Coral);
+            Map.ListLayer[0].LayerGrid.AddDrawablePoints(ListBuildTerrain, Color.Coral);
         }
 
         private List<Squad> FindOtherSquad(string SquadName)

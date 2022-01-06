@@ -5,6 +5,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -78,10 +79,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     UnitConquest TargetSquad = ListPlayer[ListDefendingSquad[RandomNumber].Item1].ListUnit[ListDefendingSquad[RandomNumber].Item2];
                     float DistanceUnit = Math.Abs(PosX - TargetSquad.X) + Math.Abs(PosY - TargetSquad.Y);
                     //Move to be in range.
-                    List<Vector3> ListRealChoice = new List<Vector3>(GetMVChoice(ActiveUnit));
+                    List<MovementAlgorithmTile> ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveUnit));
                     for (int M = 0; M < ListRealChoice.Count; M++)
                     {//Remove every MV that would make it impossible to attack.
-                        Distance = Math.Abs(ListRealChoice[M].X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Y - TargetSquad.Y);
+                        Distance = Math.Abs(ListRealChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Position.Y - TargetSquad.Y);
                         //Remove every MV that would bring the Unit too close to use its weapon.
                         if (DistanceUnit <= MinRange)
                         {
@@ -101,10 +102,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         MovementAnimation.Add(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.Components);
 
                         //Prepare the Cursor to move.
-                        CursorPosition.X = ListRealChoice[Choice].X;
-                        CursorPosition.Y = ListRealChoice[Choice].Y;
+                        CursorPosition.X = ListRealChoice[Choice].Position.X;
+                        CursorPosition.Y = ListRealChoice[Choice].Position.Y;
+                        CursorPosition.Z = ListRealChoice[Choice].Position.Z;
                         ActiveUnit.SetPosition(CursorPosition);
-                        ActiveUnit.SetPosition(ListRealChoice[Choice]);
+                        ActiveUnit.SetPosition(ListRealChoice[Choice].Position);
 
                         FinalizeMovement(ActiveUnit);
                     }
@@ -194,10 +196,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     UnitConquest TargetSquad = ListPlayer[ListDefendingSquad[RandomNumber].Item1].ListUnit[ListDefendingSquad[RandomNumber].Item2];
                     float DistanceUnit = Math.Abs(PosX - TargetSquad.X) + Math.Abs(PosY - TargetSquad.Y);
                     //Move to be in range.
-                    List<Vector3> ListRealChoice = new List<Vector3>(GetMVChoice(ActiveUnit));
+                    List<MovementAlgorithmTile> ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveUnit));
                     for (int M = 0; M < ListRealChoice.Count; M++)
                     {//Remove every MV that would make it impossible to attack.
-                        Distance = Math.Abs(ListRealChoice[M].X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Y - TargetSquad.Y);
+                        Distance = Math.Abs(ListRealChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Position.Y - TargetSquad.Y);
                         //Remove every MV that would bring the Unit too close to use its weapon.
                         if (DistanceUnit <= MinRange)
                         {
@@ -217,9 +219,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         MovementAnimation.Add(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.Components);
 
                         //Prepare the Cursor to move.
-                        CursorPosition.X = ListRealChoice[Choice].X;
-                        CursorPosition.Y = ListRealChoice[Choice].Y;
-                        ActiveUnit.SetPosition(ListRealChoice[Choice]);
+                        CursorPosition.X = ListRealChoice[Choice].Position.X;
+                        CursorPosition.Y = ListRealChoice[Choice].Position.Y;
+                        CursorPosition.Z = ListRealChoice[Choice].Position.Z;
+                        ActiveUnit.SetPosition(ListRealChoice[Choice].Position);
 
                         FinalizeMovement(ActiveUnit);
                     }

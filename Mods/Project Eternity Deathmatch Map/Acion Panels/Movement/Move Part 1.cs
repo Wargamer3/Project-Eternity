@@ -17,16 +17,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActiveSquadIndex;
         private Vector3 LastPosition;
         private Vector3 LastCameraPosition;
+        private Vector3 LastCusorMVPosition;
         private Squad ActiveSquad;
         private bool IsPostAttack;
 
-        private List<Vector3> ListMVChoice;
-        private List<Vector3> ListMVHoverChoice;
+        private List<MovementAlgorithmTile> ListMVChoice;
+        private List<Vector3> ListMVPoints;
+        private List<MovementAlgorithmTile> ListMovedOverTerrain;
+        private List<Vector3> ListMovedOverPoint;
 
         public ActionPanelMovePart1(DeathmatchMap Map)
             : base(PanelName, Map, false)
         {
-            ListMVHoverChoice = new List<Vector3>();
+            ListMovedOverTerrain = new List<MovementAlgorithmTile>();
+            ListMovedOverPoint = new List<Vector3>();
         }
 
         public ActionPanelMovePart1(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, Vector3 LastPosition, Vector3 LastCameraPosition, bool IsPostAttack = false)
@@ -38,7 +42,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.LastCameraPosition = LastCameraPosition;
             this.IsPostAttack = IsPostAttack;
 
-            ListMVHoverChoice = new List<Vector3>();
+            ListMovedOverTerrain = new List<MovementAlgorithmTile>();
+            ListMovedOverPoint = new List<Vector3>();
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
@@ -47,71 +52,149 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad.SetPosition(LastPosition);
             Map.CursorPosition = LastPosition;
             Map.CursorPositionVisible = Map.CursorPosition;
+            LastCusorMVPosition = LastPosition;
 
             Map.CameraPosition = LastCameraPosition;
 
-            //Get the possible moves.
             ListMVChoice = Map.GetMVChoice(ActiveSquad);
+            ListMVPoints = new List<Vector3>();
+            foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
+            {
+                ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+            }
+            ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z));
+            ListMovedOverPoint.Add(ActiveSquad.Position);
             ActiveSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
             Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
-            Map.CursorControl();//Move the cursor
+            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePath(ListMovedOverTerrain);
+
+            Map.CursorControl(ActiveInputManager);//Move the cursor
+
             if (ActiveInputManager.InputConfirmPressed())
             {
                 if (CheckIfUnitCanMove())
                 {
                     ListNextChoice.Clear();
 
-                    AddToPanelListAndSelect(new ActionPanelMovePart2(Map, ActivePlayerIndex, ActiveSquadIndex, IsPostAttack));
+                    AddToPanelListAndSelect(new ActionPanelMovePart2(Map, ActivePlayerIndex, ActiveSquadIndex, IsPostAttack, ListMovedOverPoint));
 
                     Map.sndConfirm.Play();
                 }
+            }
+            else if (Map.CursorPosition == ActiveSquad.Position)
+            {
+                ListMovedOverTerrain.Clear();
+                ListMovedOverPoint.Clear();
+                ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z));
+                ListMovedOverPoint.Add(ActiveSquad.Position);
+                LastCusorMVPosition = Map.CursorPosition;
+            }
+            else if (ListMVPoints.Contains(Map.CursorPosition) && Map.CursorPosition != LastCusorMVPosition)
+            {
+                if (Math.Abs(LastCusorMVPosition.X - Map.CursorPosition.X) + Math.Abs(LastCusorMVPosition.Y - Map.CursorPosition.Y) > 1)
+                {
+                    ComputeNewHoverPath();
+                }
+                else if (ListMovedOverPoint.Contains(Map.CursorPosition))
+                {
+                    RemoveHoverChoice();
+                }
+                else
+                {
+                    AddHoverChoice();
+                }
+
+                LastCusorMVPosition = Map.CursorPosition;
             }
         }
 
         private void AddHoverChoice()
         {
-            if (ListMVHoverChoice.Count == 0 && LastPosition != Map.CursorPosition)
-            {
-                float DiffX = Math.Abs(LastPosition.X - Map.CursorPosition.X);
-                float DiffY = Math.Abs(LastPosition.Y - Map.CursorPosition.Y);
-                float CurrentZ = LastPosition.Z;
+            int MaxMV = Map.GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
-                for (int X = 0; X <= DiffX; ++X)
-                {
-                    for (int Y = 0; Y <= DiffX; ++Y)
-                    {
-                        CurrentZ = Map.GetTerrain(0, 0, 0).Position.Z;
-                        ListMVHoverChoice.Add(GetMVChoice(X, Y));
-                    }
-                }
+            MaxMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
+
+            MovementAlgorithmTile LastTerrin = Map.GetTerrain(ActiveSquad);
+            float CurrentMVCost = 0;
+            for (int T = 1; T < ListMovedOverTerrain.Count; T++)
+            {
+                MovementAlgorithmTile ActiveTerrain = ListMovedOverTerrain[T];
+                CurrentMVCost += Map.Pathfinder.GetMVCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, LastTerrin, ActiveTerrain);
+            }
+
+            MovementAlgorithmTile NextTerrain = Map.GetTerrain(Map.CursorPosition.X, Map.CursorPosition.Y, (int)Map.CursorPosition.Z);
+            CurrentMVCost += Map.Pathfinder.GetMVCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, LastTerrin, NextTerrain);
+
+            if (CurrentMVCost <= MaxMV)
+            {
+                ListMovedOverTerrain.Add(NextTerrain);
+                ListMovedOverPoint.Add(Map.CursorPosition);
             }
             else
             {
-
+                ComputeNewHoverPath();
             }
         }
 
-        private Vector3 GetMVChoice(float X, float Y)
+        private void RemoveHoverChoice()
         {
-            string TerrainType = Map.GetTerrainType(X, Y, 0);
-            foreach (Vector3 ActiveMVChoice in ListMVChoice)
+            bool RemovePoint = false;
+
+            for (int P = 0; P < ListMovedOverPoint.Count; ++P)
             {
-                if (ActiveMVChoice.X == X && ActiveMVChoice.Y == Y)
+                if (RemovePoint)
                 {
-                    return ActiveMVChoice;
+                    ListMovedOverPoint.RemoveAt(P);
+                    ListMovedOverTerrain.RemoveAt(P);
+                    --P;
+                }
+                else if (Map.CursorPosition == ListMovedOverPoint[P])
+                {
+                    RemovePoint = true;
                 }
             }
+        }
 
-            return Vector3.Zero;
+        private void ComputeNewHoverPath()
+        {
+            ListMovedOverTerrain.Clear();
+            ListMovedOverPoint.Clear();
+
+            MovementAlgorithmTile CurrentTerrain = Map.GetTerrain(Map.CursorPosition.X, Map.CursorPosition.Y, (int)Map.CursorPosition.Z);
+
+            do
+            {
+                if (!ListMovedOverTerrain.Contains(CurrentTerrain))
+                {
+                    ListMovedOverTerrain.Add(CurrentTerrain);
+                    ListMovedOverPoint.Add(new Vector3(CurrentTerrain.Position.X, CurrentTerrain.Position.Y, CurrentTerrain.LayerIndex));
+                    if (CurrentTerrain.Position == ActiveSquad.Position)
+                    {
+                        CurrentTerrain = null;
+                    }
+                    else
+                    {
+                        CurrentTerrain = CurrentTerrain.ParentReal;
+                    }
+                }
+                else
+                {
+                    CurrentTerrain = null;
+                }
+            }
+            while (CurrentTerrain != null);
+
+            ListMovedOverTerrain.Reverse();
+            ListMovedOverPoint.Reverse();
         }
 
         private bool CheckIfUnitCanMove()
         {
-            if (ListMVChoice.Contains(Map.CursorPosition))
+            if (ListMVPoints.Contains(Map.CursorPosition))
             {
                 for (int CurrentSquadOffsetX = 0; CurrentSquadOffsetX < ActiveSquad.ArrayMapSize.GetLength(0); ++CurrentSquadOffsetX)
                 {
@@ -120,7 +203,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         float RealX = Map.CursorPosition.X + CurrentSquadOffsetX;
                         float RealY = Map.CursorPosition.Y + CurrentSquadOffsetY;
 
-                        if (!ListMVChoice.Contains(new Vector3((int)RealX, (int)RealY, (int)ActiveSquad.Position.Z)))
+                        if (!ListMVPoints.Contains(new Vector3((int)RealX, (int)RealY, (int)ActiveSquad.Position.Z)))
                         {
                             return false;
                         }
@@ -146,8 +229,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            LastPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0);
-            LastCameraPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0);
+            LastPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadUInt32());
+            LastCameraPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
 
             OnSelect();
@@ -159,8 +242,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendFloat(LastPosition.X);
             BW.AppendFloat(LastPosition.Y);
+            BW.AppendInt32((int)LastPosition.Z);
             BW.AppendFloat(LastCameraPosition.X);
             BW.AppendFloat(LastCameraPosition.Y);
+            BW.AppendFloat(LastCameraPosition.Z);
         }
 
         protected override ActionPanel Copy()

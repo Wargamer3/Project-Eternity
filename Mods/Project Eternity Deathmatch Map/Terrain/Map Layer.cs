@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map);
+            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, this);
             _Depth = OriginalLayerGrid.Depth;
         }
 
@@ -336,11 +336,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
                 {
                     ActiveSubLayer.Draw(g, LayerIndex, true);
-                }
-
-                for (int P = 0; P < ListProp.Count; ++P)
-                {
-                    ListProp[P].Draw(g);
                 }
 
                 if (!Map.ShowUnits)

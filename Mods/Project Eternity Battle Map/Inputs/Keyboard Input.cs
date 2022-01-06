@@ -62,6 +62,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return KeyboardHelper.InputSkipPressed();
         }
 
+        public bool InputLeftHold()
+        {
+            return InputHelper.InputLeftHold();
+        }
+
+        public bool InputRightHold()
+        {
+            return InputHelper.InputRightHold();
+        }
+
+        public bool InputUpHold()
+        {
+            return InputHelper.InputUpHold();
+        }
+
+        public bool InputDownHold()
+        {
+            return InputHelper.InputDownHold();
+        }
+
         public bool IsInZone(float MinX, float MinY, float MaxX, float MaxY)
         {
             return MouseHelper.MouseStateCurrent.X >= MinX && MouseHelper.MouseStateCurrent.X <= MaxX

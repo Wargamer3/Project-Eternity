@@ -17,6 +17,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         bool InputCommand1Pressed();
         bool InputCommand2Pressed();
         bool InputSkipPressed();
+        bool InputLeftHold();
+        bool InputRightHold();
+        bool InputUpHold();
+        bool InputDownHold();
         bool IsInZone(float MinX, float MinY, float MaxX, float MaxY);
     }
 }

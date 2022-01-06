@@ -1010,7 +1010,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return -1;
         }
 
-        public List<Vector3> GetMVChoice(UnitConquest CurrentUnit)
+        public List<MovementAlgorithmTile> GetMVChoice(UnitConquest CurrentUnit)
         {
             Vector3 Position = CurrentUnit.Position;
 
@@ -1018,50 +1018,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             MaxMVCost += CurrentUnit.Boosts.MovementModifier;
 
-            for (int X = -MaxMVCost; X <= MaxMVCost; X++)
-            {
-                for (int Y = -MaxMVCost; Y <= MaxMVCost; Y++)
-                {
-                    if (Position.X + X < 0 || Position.X + X >= MapSize.X || Position.Y + Y < 0 || Position.Y + Y >= MapSize.Y)
-                        continue;
-
-                    TerrainConquest ActiveTerrain = GetTerrain((int)Position.X + X, (int)Position.Y + Y, (int)Position.Z);
-                    ActiveTerrain.Parent = null;
-
-                    int MovementCost;
-
-                    if (ListUnitMovementCost[ActiveTerrain.TerrainTypeIndex].TryGetValue(CurrentUnit.ListTerrainChoices[0], out MovementCost))
-                        ActiveTerrain.MVMoveCost = MovementCost;
-                    else
-                    {
-                        ActiveTerrain.MovementCost = -1;
-                        continue;
-                    }
-
-                    bool UnitFound = false;
-
-                    for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
-                    {//Only check for enemies, can move through allies, can't move through ennemies.
-                        if (ListPlayer[P].Team == ListPlayer[ActivePlayerIndex].Team)
-                            continue;
-
-                        //Check if there's a Unit.
-                        //If a Unit was found.
-                        if (CheckForObstacleAtPosition(P, Position, new Vector3(X, Y, 0)))
-                            UnitFound = true;
-                    }
-                    //If there is an enemy Unit.
-                    if (UnitFound)
-                        ActiveTerrain.MovementCost = -1;//Make it impossible to go there.
-                    else
-                        ActiveTerrain.MovementCost = 0;
-                }
-            }
-
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath( new List<MovementAlgorithmTile>() { (MovementAlgorithmTile)GetTerrain((int)Position.X, (int)Position.Y, (int)Position.Z) }, CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath( new List<MovementAlgorithmTile>() { GetTerrain((int)Position.X, (int)Position.Y, (int)Position.Z) }, CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost);
 
-            List<Vector3> ListMVChoice = new List<Vector3>();
+            List<MovementAlgorithmTile> ListMVChoice = new List<MovementAlgorithmTile>();
             for (int i = 0; i < ListAllNode.Count; i++)
             {
                 bool UnitFound = false;
@@ -1076,7 +1036,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
                 //If there is no Unit.
                 if (!UnitFound)
-                    ListMVChoice.Add(ListAllNode[i].Position);
+                    ListMVChoice.Add(ListAllNode[i]);
             }
 
             return ListMVChoice;

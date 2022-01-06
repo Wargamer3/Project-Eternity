@@ -5,6 +5,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -15,6 +16,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly Squad ActiveSquad;
         private readonly ActionPanel Owner;
         private List<Vector3> ListMVChoice;
+        public List<MovementAlgorithmTile> ListTerrainChoice;
 
         public ActionPanelResupply(DeathmatchMap Map)
             : base(PanelName, Map)
@@ -27,6 +29,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ActiveSquad = ActiveSquad;
             this.Owner = Owner;
             ListMVChoice = new List<Vector3>();
+            ListTerrainChoice = new List<MovementAlgorithmTile>();
         }
 
         public override void OnSelect()
@@ -117,14 +120,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 #endregion
 
                 if (ListMVChoice.Count > 0)
+                {
                     Owner.AddChoiceToCurrentPanel(this);
+                    foreach (Vector3 ActiveTerrain in ListMVChoice)
+                    {
+                        ListTerrainChoice.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+                    }
+                }
             }
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.CursorControl();//Move the cursor
-            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
+            Map.CursorControl(ActiveInputManager);//Move the cursor
+            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListTerrainChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
 
             if (ActiveInputManager.InputConfirmPressed())
             {
@@ -164,9 +173,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int AttackChoiceCount = BR.ReadInt32();
             ListMVChoice = new List<Vector3>(AttackChoiceCount);
+            ListTerrainChoice = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int M = 0; M < AttackChoiceCount; ++M)
             {
-                ListMVChoice.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0f));
+                Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
+                ListMVChoice.Add(NewTerrain);
+                ListTerrainChoice.Add(Map.GetTerrain(NewTerrain.X, NewTerrain.Y, (int)NewTerrain.Z));
             }
         }
 
@@ -178,6 +190,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 BW.AppendFloat(ListMVChoice[M].X);
                 BW.AppendFloat(ListMVChoice[M].Y);
+                BW.AppendInt32((int)ListMVChoice[M].Z);
             }
         }
 

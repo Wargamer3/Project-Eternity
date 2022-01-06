@@ -5,6 +5,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -15,7 +16,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private int ActivePlayerIndex;
         private int ActiveUnitIndex;
         private UnitConquest ActiveUnit;
-        private List<Vector3> ListMVChoice;
+        private List<MovementAlgorithmTile> ListMVChoice;
+        private List<Vector3> ListMVPoints;
 
         public ActionPanelMoveUnit(ConquestMap Map)
             : base(PanelName, Map)
@@ -34,6 +36,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public override void OnSelect()
         {
             ListMVChoice = Map.GetMVChoice(ActiveUnit);
+            ListMVPoints = new List<Vector3>();
+            foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
+            {
+                ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+            }
             Map.LastPosition = Map.CursorPosition;
         }
 
@@ -44,7 +51,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Map.CursorControl();
 
             if ((InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased()) &&
-                ListMVChoice.Contains(Map.CursorPosition))//If the cursor is in the possible move list.
+                ListMVPoints.Contains(Map.CursorPosition))//If the cursor is in the possible move list.
             {
                 //Movement initialisation.
                 Map.MovementAnimation.Add(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.Components);
@@ -64,6 +71,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ActiveUnit = Map.ListPlayer[ActivePlayerIndex].ListUnit[ActiveUnitIndex];
 
             ListMVChoice = Map.GetMVChoice(ActiveUnit);
+            ListMVPoints = new List<Vector3>();
+            foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
+            {
+                ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+            }
             Map.LastPosition = Map.CursorPosition;
         }
 

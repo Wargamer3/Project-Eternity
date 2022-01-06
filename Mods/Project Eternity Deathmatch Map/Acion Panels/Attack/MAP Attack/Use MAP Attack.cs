@@ -5,7 +5,6 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
-using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -17,7 +16,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         private Attack CurrentAttack;
-        public List<Vector3> AttackChoice;
+        public List<Vector3> ListAttackChoice;
         private BattlePreviewer BattlePreview;
 
         public ActionPanelUseMAPAttack(DeathmatchMap Map)
@@ -30,7 +29,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
-            this.AttackChoice = AttackChoice;
+            this.ListAttackChoice = AttackChoice;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
@@ -46,29 +45,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             switch (ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.Property)
             {
                 case WeaponMAPProperties.Spread:
-                    if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+                    if (ActiveInputManager.InputConfirmPressed())
                     {
                     }
                     else
                     {
-                        Map.CursorControl();//Move the cursor
+                        Map.CursorControl(ActiveInputManager);//Move the cursor
                     }
                     break;
 
                 case WeaponMAPProperties.Direction:
-                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, AttackChoice);
+                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListAttackChoice);
                     Map.sndConfirm.Play();
                     break;
 
                 case WeaponMAPProperties.Targeted:
-                    if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+                    if (ActiveInputManager.InputConfirmPressed())
                     {
-                        Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, AttackChoice);
+                        Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListAttackChoice);
                         Map.sndConfirm.Play();
                     }
                     else
                     {
-                        Map.CursorControl();//Move the cursor
+                        Map.CursorControl(ActiveInputManager);//Move the cursor
                         BattlePreview.UpdateUnitDisplay();
                     }
                     break;
@@ -82,10 +81,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
             int AttackChoiceCount = BR.ReadInt32();
-            AttackChoice = new List<Vector3>(AttackChoiceCount);
+            ListAttackChoice = new List<Vector3>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                AttackChoice.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), 0f));
+                Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
+                ListAttackChoice.Add(NewTerrain);
             }
 
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
@@ -96,12 +96,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
-            BW.AppendInt32(AttackChoice.Count);
+            BW.AppendInt32(ListAttackChoice.Count);
 
-            for (int A = 0; A < AttackChoice.Count; ++A)
+            for (int A = 0; A < ListAttackChoice.Count; ++A)
             {
-                BW.AppendFloat(AttackChoice[A].X);
-                BW.AppendFloat(AttackChoice[A].Y);
+                BW.AppendFloat(ListAttackChoice[A].X);
+                BW.AppendFloat(ListAttackChoice[A].Y);
+                BW.AppendInt32((int)ListAttackChoice[A].Z);
             }
         }
 

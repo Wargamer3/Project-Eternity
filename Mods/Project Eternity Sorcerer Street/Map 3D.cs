@@ -286,16 +286,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.Begin();
         }
         
-        public void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor)
+        public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
         {
             List<Tile3D> ListDrawablePoint3D = new List<Tile3D>(ListPoint.Count);
 
-            foreach (Vector3 ActivePoint in ListPoint)
+            foreach (MovementAlgorithmTile ActivePoint in ListPoint)
             {
-                ListDrawablePoint3D.Add(CreateCursor(Map, ActivePoint.X, ActivePoint.Y, ActivePoint.Z, 32, 32, Radius));
+                ListDrawablePoint3D.Add(CreateCursor(Map, ActivePoint.Position.X, ActivePoint.Position.Y, ActivePoint.LayerIndex, 32, 32, Radius));
             }
 
             DicDrawablePointPerColor.Add(PointColor, ListDrawablePoint3D);
+        }
+
+        public void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)
+        {
+            throw new NotImplementedException();
         }
 
         public void Reset()

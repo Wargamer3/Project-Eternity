@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
 
 namespace ProjectEternity.AI.ConquestMapScreen
@@ -32,7 +33,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
 
                     bool CanAttackPostMovement = (ActiveAttack.Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement || Info.ActiveSquad.Boosts.PostMovementModifier.Attack;
 
-                    List<Vector3> ListMVChoice;
+                    List<MovementAlgorithmTile> ListMVChoice;
 
                     if (_AddMovementToRange && CanAttackPostMovement)
                     {
@@ -40,8 +41,8 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     }
                     else
                     {
-                        ListMVChoice = new List<Vector3>();
-                        ListMVChoice.Add(Info.ActiveSquad.Position);
+                        ListMVChoice = new List<MovementAlgorithmTile>();
+                        ListMVChoice.Add(Info.Map.GetTerrain(Info.ActiveSquad.Components));
                     }
 
                     if (i == 0)
@@ -49,7 +50,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                         //Remove everything that is closer then DistanceMax.
                         for (int M = 0; M < ListMVChoice.Count; M++)
                         {
-                            List<Tuple<int, int>> ListTargetUnit = Info.Map.CanSquadAttackWeapon1((int)ListMVChoice[M].X, (int)ListMVChoice[M].Y, Info.Map.ActivePlayerIndex, Info.ActiveSquad.ArmourType.ToString(),
+                            List<Tuple<int, int>> ListTargetUnit = Info.Map.CanSquadAttackWeapon1((int)ListMVChoice[M].Position.X, (int)ListMVChoice[M].Position.Y, Info.Map.ActivePlayerIndex, Info.ActiveSquad.ArmourType.ToString(),
                                 ActiveAttack);
 
                             foreach (Tuple<int, int> Target in ListTargetUnit)
@@ -63,7 +64,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                         //Remove everything that is closer then DistanceMax.
                         for (int M = 0; M < ListMVChoice.Count; M++)
                         {
-                            List<Tuple<int, int>> ListTargetUnit = Info.Map.CanSquadAttackWeapon2((int)ListMVChoice[M].X, (int)ListMVChoice[M].Y, Info.Map.ActivePlayerIndex, Info.ActiveSquad.ArmourType.ToString(),
+                            List<Tuple<int, int>> ListTargetUnit = Info.Map.CanSquadAttackWeapon2((int)ListMVChoice[M].Position.X, (int)ListMVChoice[M].Position.Y, Info.Map.ActivePlayerIndex, Info.ActiveSquad.ArmourType.ToString(),
                                 ActiveAttack);
 
                             foreach (Tuple<int, int> Target in ListTargetUnit)

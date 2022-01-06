@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
 
 namespace ProjectEternity.AI.ConquestMapScreen
@@ -46,7 +47,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 }
 
                 DistanceMax = 99999;
-                List<Vector3> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
                 int FinalMV = 0;
                 //If for some reason, there's no target on to move at, don't move.
                 if (TargetSquad != null)
@@ -54,7 +55,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     //Remove everything that is closer then DistanceMax.
                     for (int M = 0; M < ListMVChoice.Count; M++)
                     {
-                        float Distance = (Math.Abs(ListMVChoice[M].X - TargetSquad.X) + Math.Abs(ListMVChoice[M].Y - TargetSquad.Y));
+                        float Distance = (Math.Abs(ListMVChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListMVChoice[M].Position.Y - TargetSquad.Y));
                         //Remove MV choices if they are not at the furthest distance and if there is at least 1 MV(protection against bugs)
                         if (Distance < DistanceMax && ListMVChoice.Count > 1)
                         {
@@ -65,11 +66,11 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     if (DistanceMax < Math.Abs(Info.ActiveSquad.X - TargetSquad.X) + Math.Abs(Info.ActiveSquad.Y - TargetSquad.Y))
                     {
                         //Prepare the Cursor to move.
-                        Info.Map.CursorPosition.X = ListMVChoice[FinalMV].X;
-                        Info.Map.CursorPosition.Y = ListMVChoice[FinalMV].Y;
+                        Info.Map.CursorPosition.X = ListMVChoice[FinalMV].Position.X;
+                        Info.Map.CursorPosition.Y = ListMVChoice[FinalMV].Position.Y;
                         Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
                         //Move the Unit to the target position;
-                        Info.ActiveSquad.SetPosition(ListMVChoice[FinalMV]);
+                        Info.ActiveSquad.SetPosition(ListMVChoice[FinalMV].Position);
                         Info.Map.FinalizeMovement(Info.ActiveSquad);
                     }
                     else

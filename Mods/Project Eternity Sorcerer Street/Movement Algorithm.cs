@@ -31,11 +31,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
 
                 //If the NewNode is the parent, skip it.
-                if (ActiveNode.Parent == null)
+                if (ActiveNode.ParentTemp == null)
                 {
                     //Used for an undefined map or if you don't need to calculate the whole map.
                     //ListSuccessors.Add(new AStarNode(ActiveNode, AX, AY));
-                    ActiveTile.Parent = ActiveNode;
+                    ActiveTile.ParentTemp = ActiveNode;
                     ListTerrainSuccessor.Add(ActiveTile);
                 }
             }

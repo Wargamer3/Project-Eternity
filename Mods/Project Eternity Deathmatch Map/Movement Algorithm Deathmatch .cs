@@ -22,6 +22,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (int ActiveLayerIndex in ListLayerPossibility)
             {
+                if (Map.CheckForObstacleAtPosition(new Vector3(ActiveNode.Position.X + OffsetX, ActiveNode.Position.Y + OffsetY, ActiveLayerIndex), Vector3.Zero))
+                {
+                    continue;
+                }
+
                 MovementAlgorithmTile ActiveTile = GetTile(ActiveNode.Position.X + OffsetX, ActiveNode.Position.Y + OffsetY, ActiveLayerIndex);
                 //Wall
                 if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
@@ -31,14 +36,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 //If the NewNode is the parent, skip it.
-                if (ActiveTile.Parent == null)
-                {
-                    //Used for an undefined map or if you don't need to calculate the whole map.
-                    //ListSuccessors.Add(new AStarNode(ActiveNode, AX, AY));
-                    ActiveTile.Parent = ActiveNode;
-                    ActiveTile.LayerIndex = ActiveLayerIndex;
-                    ListTerrainSuccessor.Add(ActiveTile);
-                }
+                //Used for an undefined map or if you don't need to calculate the whole map.
+                //ListSuccessors.Add(new AStarNode(ActiveNode, AX, AY));
+                ActiveTile.LayerIndex = ActiveLayerIndex;
+                ListTerrainSuccessor.Add(ActiveTile);
             }
 
             return ListTerrainSuccessor;

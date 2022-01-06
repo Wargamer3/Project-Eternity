@@ -8,6 +8,7 @@ using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.AI.DeathmatchMapScreen
 {
@@ -39,7 +40,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 if (MaxRange > 1)
                     MaxRange += Info.ActiveSquad.CurrentLeader.Boosts.RangeModifier;
 
-                List<Vector3> ListMVChoice;
+                List<MovementAlgorithmTile> ListMVChoice;
 
                 if (_AddMovementToRange && CanAttackPostMovement)
                 {
@@ -47,14 +48,14 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 }
                 else
                 {
-                    ListMVChoice = new List<Vector3>();
-                    ListMVChoice.Add(Info.ActiveSquad.Position);
+                    ListMVChoice = new List<MovementAlgorithmTile>();
+                    ListMVChoice.Add(Info.Map.GetTerrain(Info.ActiveSquad));
                 }
 
                 //Remove everything that is closer then DistanceMax.
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {
-                    List<Tuple<int, int>> ListTargetUnit = Info.Map.CanSquadAttackWeapon(Info.ActiveSquad, ListMVChoice[M],
+                    List<Tuple<int, int>> ListTargetUnit = Info.Map.CanSquadAttackWeapon(Info.ActiveSquad, new Vector3(ListMVChoice[M].Position.X, ListMVChoice[M].Position.Y, ListMVChoice[M].LayerIndex),
                         ActiveAttack, MinRange, MaxRange, Info.ActiveSquad.CanMove, Info.ActiveSquad.CurrentLeader.Boosts);
 
                     //Priority goes to units with higher chances of hitting.

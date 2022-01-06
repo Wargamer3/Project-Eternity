@@ -17,18 +17,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Squad ActiveSquad;
         private bool IsPostAttack;
         private Vector3 CursorPosition;
+        private readonly List<Vector3> ListMVHoverPoints;
 
         public ActionPanelMovePart2(DeathmatchMap Map)
             : base(PanelName, Map, false)
         {
         }
 
-        public ActionPanelMovePart2(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, bool IsPostAttack)
+        public ActionPanelMovePart2(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, bool IsPostAttack, List<Vector3> ListMVHoverPoints)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.IsPostAttack = IsPostAttack;
+            this.ListMVHoverPoints = ListMVHoverPoints;
 
             CursorPosition = Map.CursorPosition;
 
@@ -104,6 +106,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveInputManager.InputConfirmPressed())
             {//Make sure the mouse is inside the menu.
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
+
+                foreach (InteractiveProp ActiveProp in Map.ListLayer[(int)ActiveSquad.Position.Z].ListProp)
+                {
+                    foreach (Vector3 MovedOverPoint in ListMVHoverPoints)
+                    {
+                        ActiveProp.OnMovedOverBeforeStop(ActiveSquad, MovedOverPoint, CursorPosition);
+                    }
+                }
 
                 Map.sndConfirm.Play();
             }

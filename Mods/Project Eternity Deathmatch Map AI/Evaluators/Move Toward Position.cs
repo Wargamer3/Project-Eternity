@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.AI;
-using ProjectEternity.Core.Units;
+using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.AI.DeathmatchMapScreen
@@ -26,7 +26,11 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad);
 
                 float DistanceMax = 99999;
-                List<Vector3> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<Vector3> ListMVChoice = new List<Vector3>();
+                foreach (MovementAlgorithmTile ActiveTerrain in Info.Map.GetMVChoice(Info.ActiveSquad))
+                {
+                    ListMVChoice.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+                }
                 ListMVChoice = FilterMVChoice(ListMVChoice);
                 int FinalMV = 0;
                 //If for some reason, there's no target on to move at, don't move.

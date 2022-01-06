@@ -65,7 +65,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void Load(BinaryReader BR);
         void Update(GameTime gameTime);
         void RemoveTileset(int TilesetIndex);
-        void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor);
+        void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor);
+        void AddDrawablePath(List<MovementAlgorithmTile> ListPoint);
         void BeginDraw(CustomSpriteBatch g);
         void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer, MovementAlgorithmTile[,] ArrayTerrain);
         void Reset();
@@ -74,7 +75,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public abstract class Map2D : DrawableGrid
     {
         private BattleMap Map;
-        private Dictionary<Color, List<Vector3>> DicDrawablePointPerColor;
+        private Dictionary<Color, List<MovementAlgorithmTile>> DicDrawablePointPerColor;
 
         protected Point MapSize { get { return Map.MapSize; } }
 
@@ -89,7 +90,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Map2D(BattleMap Map)
         {
             this.Map = Map;
-            DicDrawablePointPerColor = new Dictionary<Color, List<Vector3>>();
+            DicDrawablePointPerColor = new Dictionary<Color, List<MovementAlgorithmTile>>();
             Depth = 1f;
         }
 
@@ -157,9 +158,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void AddDrawablePoints(List<Vector3> ListPoint, Color PointColor)
+        public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
         {
             DicDrawablePointPerColor.Add(PointColor, ListPoint);
+        }
+
+        public void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)
+        {
         }
 
         public void BeginDraw(CustomSpriteBatch g)
@@ -292,11 +297,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DrawDrawablePoints(CustomSpriteBatch g)
         {
-            foreach (KeyValuePair<Color, List<Vector3>> DrawablePointPerColor in DicDrawablePointPerColor)
+            foreach (KeyValuePair<Color, List<MovementAlgorithmTile>> DrawablePointPerColor in DicDrawablePointPerColor)
             {
-                foreach (Vector3 DrawablePoint in DrawablePointPerColor.Value)
+                foreach (MovementAlgorithmTile DrawablePoint in DrawablePointPerColor.Value)
                 {
-                    g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.X - CameraPosition.X) * TileSize.X, (int)(DrawablePoint.Y - CameraPosition.Y) * TileSize.Y, TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
+                    g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.Position.X - CameraPosition.X) * TileSize.X, (int)(DrawablePoint.Position.Y - CameraPosition.Y) * TileSize.Y, TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
                 }
             }
         }

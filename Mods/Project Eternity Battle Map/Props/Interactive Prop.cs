@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -19,6 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int LayerIndex;
         public bool[,] ArrayMapSize;
         public bool CanBlockPath;
+        public UnitMap3D Unit3D;
 
         protected InteractiveProp(string PropName, PropCategories PropCategory,  bool[,] ArrayMapSize, bool CanBlockPath)
         {
@@ -72,6 +74,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public abstract void OnTurnEnd(int PlayerIndex);
 
         public abstract void Draw(CustomSpriteBatch g);
+
+        public abstract void Draw3D(GraphicsDevice GraphicsDevice);
 
         public InteractiveProp Copy(Vector3 Position, int LayerIndex)
         {

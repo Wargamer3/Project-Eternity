@@ -33,9 +33,9 @@ namespace ProjectEternity.Core
             CameraRotation.Up.Normalize();
             CameraRotation.Right.Normalize();
 
-            CameraPosition3D = Vector3.Transform(new Vector3(CameraDistance, 0, CameraDistance), Matrix.CreateRotationY(0.2f)) + Target;
+            CameraPosition3D = Vector3.Transform(new Vector3(0, 0, CameraDistance), Matrix.CreateRotationY(0.2f)) + Target;
             CameraPosition3D = Vector3.Transform(CameraPosition3D, Matrix.CreateTranslation(0f, CameraHeight, 0f));
-            View = Matrix.CreateLookAt(CameraPosition3D, Target, CameraRotation.Up);
+            View = Matrix.CreateLookAt(CameraPosition3D, Target, Vector3.Up);
         }
     }
 }

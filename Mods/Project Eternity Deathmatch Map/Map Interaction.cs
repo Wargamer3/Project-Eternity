@@ -144,9 +144,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public bool UpdateMapNavigation()
+        public bool UpdateMapNavigation(PlayerInput ActiveInputManager)
         {
-            bool CursorMoved = CursorControl();//Move the cursor
+            bool CursorMoved = CursorControl(ActiveInputManager);//Move the cursor
             if (InputHelper.InputLButtonPressed())
             {
                 if (ListPlayer[ActivePlayerIndex].ListSquad.Count == 0)

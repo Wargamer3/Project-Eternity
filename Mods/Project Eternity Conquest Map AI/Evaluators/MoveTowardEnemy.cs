@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
 
 namespace ProjectEternity.AI.ConquestMapScreen
@@ -50,10 +51,10 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 float DistanceUnit = Math.Abs(ActiveSquadPosition.X - TargetSquad.X) + Math.Abs(ActiveSquadPosition.Y - TargetSquad.Y);
                 //Move to be in range.
 
-                List<Vector3> ListRealChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<MovementAlgorithmTile> ListRealChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
                 for (int M = 0; M < ListRealChoice.Count; M++)
                 {//Remove every MV that would make it impossible to attack.
-                    float Distance = Math.Abs(ListRealChoice[M].X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Y - TargetSquad.Y);
+                    float Distance = Math.Abs(ListRealChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Position.Y - TargetSquad.Y);
                     //Check if you can attack it if you moved.
                     if (Distance < MinRange || Distance > MaxRange)
                         ListRealChoice.RemoveAt(M--);
@@ -68,9 +69,9 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad.Components);
 
                     //Prepare the Cursor to move.
-                    Info.Map.CursorPosition.X = ListRealChoice[Choice].X;
-                    Info.Map.CursorPosition.Y = ListRealChoice[Choice].Y;
-                    Info.ActiveSquad.SetPosition(ListRealChoice[Choice]);
+                    Info.Map.CursorPosition.X = ListRealChoice[Choice].Position.X;
+                    Info.Map.CursorPosition.Y = ListRealChoice[Choice].Position.Y;
+                    Info.ActiveSquad.SetPosition(ListRealChoice[Choice].Position);
 
                     Info.Map.FinalizeMovement(Info.ActiveSquad);
                 }

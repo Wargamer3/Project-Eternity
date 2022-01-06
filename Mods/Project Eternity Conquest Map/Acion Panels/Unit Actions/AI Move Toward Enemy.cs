@@ -6,6 +6,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Units.Conquest;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -52,7 +53,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
             }
             DistanceMax = 99999;
-            List<Vector3> ListMVChoice = Map.GetMVChoice(ActiveUnit);
+            List<MovementAlgorithmTile> ListMVChoice = Map.GetMVChoice(ActiveUnit);
             int FinalMV = 0;
 
             //If for some reason, there's no target on to move at, don't move.
@@ -61,7 +62,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 //Remove everything that is closer then DistanceMax.
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {
-                    float Distance = (Math.Abs(ListMVChoice[M].X - TargetSquad.X) + Math.Abs(ListMVChoice[M].Y - TargetSquad.Y));
+                    float Distance = (Math.Abs(ListMVChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListMVChoice[M].Position.Y - TargetSquad.Y));
                     //Remove MV choices if they are not at the furthest distance and if there is at least 1 MV(protection against bugs)
                     if (Distance < DistanceMax && ListMVChoice.Count > 1)
                     {
@@ -72,10 +73,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 if (DistanceMax < Math.Abs(ActiveUnit.X - TargetSquad.X) + Math.Abs(ActiveUnit.Y - TargetSquad.Y))
                 {
                     //Prepare the Cursor to move.
-                    Map.CursorPosition.X = ListMVChoice[FinalMV].X;
-                    Map.CursorPosition.Y = ListMVChoice[FinalMV].Y;
+                    Map.CursorPosition.X = ListMVChoice[FinalMV].Position.X;
+                    Map.CursorPosition.Y = ListMVChoice[FinalMV].Position.Y;
+                    Map.CursorPosition.Y = ListMVChoice[FinalMV].Position.Z;
                     //Move the Unit to the target position;
-                    ActiveUnit.SetPosition(ListMVChoice[FinalMV]);
+                    ActiveUnit.SetPosition(ListMVChoice[FinalMV].Position);
                 }
             }
 

@@ -1011,21 +1011,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public List<Vector3> GetMVChoice(Squad ActiveSquad)
+        public List<MovementAlgorithmTile> GetMVChoice(Squad ActiveSquad)
         {
             int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
             StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
 
-
             //Init A star.
             List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV);
 
-            List<Vector3> MovementChoice = new List<Vector3>();
+            List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
 
             for (int i = 0; i < ListAllNode.Count; i++)
             {
-                ListAllNode[i].Parent = null;//Unset parents
+                ListAllNode[i].ParentTemp = null;//Unset parents
                 ListAllNode[i].MovementCost = 0;
                 bool UnitFound = false;
                 for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
@@ -1036,7 +1035,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 //If there is no Unit.
                 if (!UnitFound)
-                    MovementChoice.Add(new Vector3(ListAllNode[i].Position.X, ListAllNode[i].Position.Y, ListAllNode[i].LayerIndex));
+                    MovementChoice.Add(ListAllNode[i]);
             }
             
             return MovementChoice;
