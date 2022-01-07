@@ -69,8 +69,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
-            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePath(ListMovedOverTerrain);
+            Map.ListLayer[0].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
+            Map.ListLayer[0].LayerGrid.AddDrawablePath(ListMovedOverTerrain);
 
             Map.CursorControl(ActiveInputManager);//Move the cursor
 
@@ -203,7 +203,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         float RealX = Map.CursorPosition.X + CurrentSquadOffsetX;
                         float RealY = Map.CursorPosition.Y + CurrentSquadOffsetY;
 
-                        if (!ListMVPoints.Contains(new Vector3((int)RealX, (int)RealY, (int)ActiveSquad.Position.Z)))
+                        if (!ListMVPoints.Contains(new Vector3((int)RealX, (int)RealY, (int)Map.CursorPosition.Z)))
                         {
                             return false;
                         }

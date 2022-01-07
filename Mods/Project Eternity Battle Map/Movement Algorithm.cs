@@ -54,6 +54,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (MovementAlgorithmTile AStartNode in ListAStartNode)
             {
+                AStartNode.LayerIndex = (int)MapComponent.Position.Z;
                 ListOpenNode.Add(AStartNode);
                 ListAllNode.Add(AStartNode);
             }
@@ -76,7 +77,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListCloseNode.Add(CurrentNode);
 
                 // Get successors to the current node
-                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, (int)MapComponent.Position.Z);
+                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, CurrentNode.LayerIndex);
                 foreach (MovementAlgorithmTile Neighbor in ListSuccessors)
                 {
                     //Cost to move to this Neighbor
@@ -98,8 +99,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     //New path or Neighbor have a lower movement cost then before.
                     if (!ListOpenNode.Contains(Neighbor) || MovementCostToNeighbor < Neighbor.MovementCost)
                     {
-                        Neighbor.ParentTemp = CurrentNode;
-                        Neighbor.ParentReal = CurrentNode;
+                        if (Neighbor.ParentTemp == null || Neighbor.ParentTemp.Position.Z == CurrentNode.ParentTemp.Position.Z)
+                        {
+                            Neighbor.ParentTemp = CurrentNode;
+                            Neighbor.ParentReal = CurrentNode;
+                        }
                         Neighbor.MovementCost = MovementCostToNeighbor;
 
                         if (!ListOpenNode.Contains(Neighbor))

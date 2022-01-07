@@ -7,7 +7,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class MovementAlgorithmDeathmatch : MovementAlgorithm
     {
-        DeathmatchMap Map;
+        private readonly DeathmatchMap Map;
+        private const bool AllowGoThroughGround = false;
 
         public MovementAlgorithmDeathmatch(DeathmatchMap Map)
         {
@@ -18,7 +19,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<int> ListLayerPossibility;
-            Map.GetNextLayerIndex(new Vector3(ActiveNode.Position.X, ActiveNode.Position.Y, LayerIndex), (int)(ActiveNode.Position.X + OffsetX), (int)(ActiveNode.Position.Y + OffsetY), 1f, 15, out ListLayerPossibility);
+            int NextRegularMovementLayerIndex = Map.GetNextLayerIndex(new Vector3(ActiveNode.Position.X, ActiveNode.Position.Y, LayerIndex), (int)(ActiveNode.Position.X + OffsetX), (int)(ActiveNode.Position.Y + OffsetY), 1f, 15, out ListLayerPossibility);
 
             foreach (int ActiveLayerIndex in ListLayerPossibility)
             {
@@ -35,6 +36,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     continue;
                 }
 
+                if (!AllowGoThroughGround && ActiveLayerIndex < NextRegularMovementLayerIndex && ActiveLayerIndex != NextRegularMovementLayerIndex && ListLayerPossibility.Contains(LayerIndex))
+                {
+                    continue;
+                }
                 //If the NewNode is the parent, skip it.
                 //Used for an undefined map or if you don't need to calculate the whole map.
                 //ListSuccessors.Add(new AStarNode(ActiveNode, AX, AY));
