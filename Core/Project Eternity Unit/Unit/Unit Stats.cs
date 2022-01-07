@@ -10,13 +10,17 @@ namespace ProjectEternity.Core.Units
     public class UnitStats
     {
         public const string TerrainAir = "Air";
+        public const int TerrainAirIndex = 0;
         public const string TerrainLand = "Land";
+        public const int TerrainLandIndex = 1;
         public const string TerrainSea = "Sea";
+        public const int TerrainSeaIndex = 2;
         public const string TerrainSpace = "Space";
+        public const int TerrainSpaceIndex = 3;
         public const string TerrainWall = "Wall";
-        public const int TerrainWallIndex = 5;
+        public const int TerrainWallIndex = 4;
         public const string TerrainVoid = "Void";
-        public const int TerrainVoidIndex = 6;
+        public const int TerrainVoidIndex = 5;
         public const string TerrainUnderground = "Underground";
         public const string TerrainUnderwater = "Underwater";
 

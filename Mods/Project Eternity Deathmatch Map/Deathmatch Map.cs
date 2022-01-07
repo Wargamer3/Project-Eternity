@@ -626,14 +626,36 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     return;
                 }
 
-                if (KeyboardHelper.KeyPressed(Keys.P))
+                if (KeyboardHelper.KeyPressed(Keys.Q))
                 {
-                    CameraPosition.Z += 0.1f;
+                    do
+                    {
+                        CursorPosition.Z += 1f;
+                    }
+                    while (CursorPosition.Z < ListLayer.Count
+                    && ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex
+                    && !KeyboardHelper.KeyHold(Keys.LeftAlt));
+
+                    if (CursorPosition.Z >= ListLayer.Count)
+                    {
+                        CursorPosition.Z = ListLayer.Count - 1;
+                    }
                 }
 
-                if (KeyboardHelper.KeyPressed(Keys.O))
+                if (KeyboardHelper.KeyPressed(Keys.E))
                 {
-                    CameraPosition.Z -= 0.1f;
+                    do
+                    {
+                        CursorPosition.Z -= 1f;
+                    }
+                    while (CursorPosition.Z >= 0
+                    && ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex
+                    && !KeyboardHelper.KeyHold(Keys.LeftAlt));
+
+                    if (CursorPosition.Z < 0)
+                    {
+                        CursorPosition.Z = 0;
+                    }
                 }
 
                 if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
