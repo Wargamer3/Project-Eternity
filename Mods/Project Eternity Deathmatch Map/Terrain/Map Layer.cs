@@ -135,7 +135,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListProp.Add(Map.DicInteractiveProp[BR.ReadString()].LoadCopy(BR));
             }
 
-            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, BR);
+            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, this, BR);
             int ListSubLayerCount = BR.ReadInt32();
             ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
             for (int L = 0; L < ListSubLayerCount; L++)

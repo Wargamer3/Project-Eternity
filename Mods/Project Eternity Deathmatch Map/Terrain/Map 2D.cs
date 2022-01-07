@@ -29,10 +29,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ReplaceGrid(ArrayTile);
         }
 
-        public DeathmatchMap2D(DeathmatchMap Map, BinaryReader BR)
+        public DeathmatchMap2D(DeathmatchMap Map, MapLayer Owner, BinaryReader BR)
             : base(Map)
         {
             ActiveMap = Map;
+            this.Owner = Owner;
 
             DrawableTile[,] ArrayTile = new DrawableTile[MapSize.X, MapSize.Y];
 

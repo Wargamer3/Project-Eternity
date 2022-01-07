@@ -297,6 +297,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z + 0.15f, Map.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
             }
         }
+
         private void DrawDrawablePoints(CustomSpriteBatch g)
         {
             PolygonEffect.Texture = GameScreen.sprPixel;
