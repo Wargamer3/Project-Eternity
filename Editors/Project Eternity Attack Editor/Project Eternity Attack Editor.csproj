@@ -78,6 +78,12 @@
     <Compile Include="MAP Attack Editor.Designer.cs">
       <DependentUpon>MAP Attack Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="PER Attack Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PER Attack Editor.Designer.cs">
+      <DependentUpon>PER Attack Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Project Eternity Attack Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MAP Attack Editor.resx">
       <DependentUpon>MAP Attack Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PER Attack Editor.resx">
+      <DependentUpon>PER Attack Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Project Eternity Attack Editor.resx">
       <DependentUpon>Project Eternity Attack Editor.cs</DependentUpon>

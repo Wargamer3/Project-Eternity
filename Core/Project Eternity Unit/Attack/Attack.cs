@@ -10,15 +10,17 @@ namespace ProjectEternity.Core.Attacks
 {
     public enum WeaponStyle { M, R, Special };
 
-    // The Primary property of an attack. PLA means it is a platoon attack, which can be used to support other units. ALL means that it is an All attack, which hits multiple targets instead of one.
-    public enum WeaponPrimaryProperty : byte { None = 0, PLA = 1, ALL = 2, Break = 3, Multi = 4, Dash = 5, MAP = 6 };
+    /* The Primary property of an attack. PLA means it is a platoon attack, which can be used to support other units. ALL means that it is an All attack, which hits multiple targets instead of one.
+     * PER is for Persistent which doesn't need to target an enemy
+     */
+    public enum WeaponPrimaryProperty : byte { None = 0, PLA = 1, ALL = 2, Break = 3, Multi = 4, Dash = 5, MAP = 6, PER = 7 };
 
     /* The secondary property of an attack. Examples of Secondary Properties are:
     * P: Post Movement. Means that the attack can be used after moving.
     * B: Beam Attack. Enemies that are weak to Beams will take more damage, but certain barriers will reduce their damage to 0.
     * S: Special Attack. Can reduce an enemy's stats for three turns. Which stat is reduced is listed under Special:, on the bottom right corner of the menu.*/
     [Flags]
-    public enum WeaponSecondaryProperty : byte { None = 0, PostMovement = 0x1, SwordCut = 0x2, ShootDown = 0x4 };
+    public enum WeaponSecondaryProperty : byte { None = 0, PostMovement = 0x1, SwordCut = 0x2, ShootDown = 0x4, Partial = 0x8 };
 
     public enum WeaponMAPProperties : byte {  Spread = 0, Direction = 1, Targeted = 2 };
 
@@ -28,10 +30,13 @@ namespace ProjectEternity.Core.Attacks
 
         public WeaponStyle Style;// - Shows either Melee, Ranged or Special; determines which Pilot Stat to call on.
         public string PowerFormula;
+        public string MinDamageFormula;
         public int RangeMinimum;
         public int RangeMaximum;// - How close (or far) an enemy must be for this weapon to be used on them. Normally expressed in Min-Max (e.g. 2-4 means the weapon works on enemies between two and four cells away).
         public WeaponPrimaryProperty Pri;
         public WeaponSecondaryProperty Sec;
+        public byte PostMovementAccuracyMalus;
+        public byte PostMovementEvasionBonus;
         public BaseAutomaticSkill[] ArrayAttackAttributes;
         public int Accuracy;// A flat bonus used in the accuracy formula. Hit can be improved via Pilot Abilities, Unit Abilities, and Parts.
         public int Critical;// A flat bonus used in the critical hit rate formula. Crit can be improved via Pilot Abilities, Unit Abilities, and Parts.
@@ -59,6 +64,8 @@ namespace ProjectEternity.Core.Attacks
         public Dictionary<string, char> DicTerrainAttribute;
 
         public MAPAttackAttributes MAPAttributes;
+        public PERAttackAttributes PERAttributes;
+        public ExplosionOptions ExplosionOption;
         public readonly List<AttackContext> Animations;
         public readonly bool IsExternal;
 
@@ -133,6 +140,8 @@ namespace ProjectEternity.Core.Attacks
             this.Description = BR.ReadString();
 
             this.PowerFormula = BR.ReadString();
+            this.MinDamageFormula = BR.ReadString();
+            this.MinDamageFormula = string.Empty;
             this.ENCost = BR.ReadInt32();
             this.MaxAmmo = BR.ReadInt32();
             this.MoraleRequirement = BR.ReadInt32();
@@ -146,8 +155,16 @@ namespace ProjectEternity.Core.Attacks
             {
                 MAPAttributes = new MAPAttackAttributes(BR);
             }
+            else if (this.Pri == WeaponPrimaryProperty.PER)
+            {
+                PERAttributes = new PERAttackAttributes(BR);
+            }
 
             this.Sec = (WeaponSecondaryProperty)BR.ReadByte();
+            PostMovementAccuracyMalus = BR.ReadByte();
+            PostMovementEvasionBonus = BR.ReadByte();
+
+            ExplosionOption = new ExplosionOptions(BR);
 
             int AttackType = BR.ReadInt32();
 

@@ -17,6 +17,7 @@ namespace ProjectEternity.Editors.AttackEditor
         private QuoteEditor Editor;
 
         private MAPAttackEditor MAPAttackEditor;
+        private PERAttackEditor PERAttackEditor;
 
         private Dictionary<string, BaseSkillRequirement> DicRequirement;
         private Dictionary<string, BaseEffect> DicEffect;
@@ -90,7 +91,6 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             string Description = txtDescription.Text;
 
-            string DamageFormula = txtDamage.Text;
             int ENCost = Convert.ToInt32(txtENCost.Value);
             int MaximumAmmo = Convert.ToInt32(txtMaximumAmmo.Value);
             int MoraleRequirement = Convert.ToInt32(txtMoraleRequirement.Value);
@@ -120,6 +120,8 @@ namespace ProjectEternity.Editors.AttackEditor
                 SecondaryProperty = SecondaryProperty | WeaponSecondaryProperty.SwordCut;
             if (cbShootDown.Checked)
                 SecondaryProperty = SecondaryProperty | WeaponSecondaryProperty.ShootDown;
+            if (cbPartialAttack.Checked)
+                SecondaryProperty = SecondaryProperty | WeaponSecondaryProperty.Partial;
 
             int AttackType = 0;
             if (rbAttackTypeMelee.Checked)
@@ -145,7 +147,8 @@ namespace ProjectEternity.Editors.AttackEditor
             //Create the Part file.
             BW.Write(Description);
 
-            BW.Write(DamageFormula);
+            BW.Write(txtDamage.Text);
+            BW.Write(txtMinDamage.Text);
             BW.Write(ENCost);
             BW.Write(MaximumAmmo);
             BW.Write(MoraleRequirement);
@@ -176,7 +179,47 @@ namespace ProjectEternity.Editors.AttackEditor
                     BW.Write((int)MAPAttackEditor.txtAttackDelay.Value);
                 }
             }
+            else if (PrimaryProperty == WeaponPrimaryProperty.PER)
+            {
+                if (PERAttackEditor != null)
+                {
+                    BW.Write((float)PERAttackEditor.txtProjectileSpeed.Value);
+                    BW.Write(PERAttackEditor.cbAffectedByGravity.Checked);
+                    BW.Write(PERAttackEditor.cbCanBeShotDown.Checked);
+                    BW.Write((byte)PERAttackEditor.txtMaxLifetime.Value);
+
+                    BW.Write((byte)PERAttackEditor.txtNumberOfProjectiles.Value);
+                    BW.Write((float)PERAttackEditor.txtLateralMaxSpread.Value);
+                    BW.Write((float)PERAttackEditor.txtForwardMaxSpread.Value);
+
+                    if (PERAttackEditor.rbDestroySelf.Checked)
+                    {
+                        BW.Write((byte)PERAttackAttributes.GroundCollisions.DestroySelf);
+                    }
+                    else if (PERAttackEditor.rbStop.Checked)
+                    {
+                        BW.Write((byte)PERAttackAttributes.GroundCollisions.Stop);
+                    }
+                    else if (PERAttackEditor.rbBounce.Checked)
+                    {
+                        BW.Write((byte)PERAttackAttributes.GroundCollisions.Bounce);
+                        BW.Write((byte)PERAttackEditor.txtBounceLimit.Value);
+                    }
+                }
+            }
+
             BW.Write((byte)SecondaryProperty);
+            BW.Write((byte)txtPostMovementAccuracyMalus.Value);
+            BW.Write((byte)txtPostMovementEvasionBonus.Value);
+
+            BW.Write((float)txtExplosionRadius.Value);
+            BW.Write((float)txtExplosionWindPowerAtCenter.Value);
+            BW.Write((float)txtExplosionWindPowerAtEdge.Value);
+            BW.Write((float)txtExplosionWindPowerToSelfMultiplier.Value);
+            BW.Write((float)txtExplosionDamageAtCenter.Value);
+            BW.Write((float)txtExplosionDamageAtEdge.Value);
+            BW.Write((float)txtExplosionDamageToSelfMultiplier.Value);
+
             BW.Write(AttackType);
 
             BW.Write(TerrainGradeAir);
@@ -242,6 +285,7 @@ namespace ProjectEternity.Editors.AttackEditor
             this.Text = ActiveWeapon.RelativePath + " - Project Eternity Attack Editor";
             Editor = new QuoteEditor();
             MAPAttackEditor = new MAPAttackEditor();
+            PERAttackEditor = new PERAttackEditor();
 
             //Create the Part file.
             string ItemName = ActiveWeapon.RelativePath;
@@ -293,6 +337,33 @@ namespace ProjectEternity.Editors.AttackEditor
                     MAPAttackEditor.txtAttackDelay.Value = ActiveWeapon.MAPAttributes.Delay;
                     break;
 
+                case WeaponPrimaryProperty.PER:
+                    PERAttackEditor.txtProjectileSpeed.Value = (decimal)ActiveWeapon.PERAttributes.ProjectileSpeed;
+                    PERAttackEditor.cbAffectedByGravity.Checked = ActiveWeapon.PERAttributes.AffectedByGravity;
+                    PERAttackEditor.cbCanBeShotDown.Checked = ActiveWeapon.PERAttributes.CanBeShotDown;
+                    PERAttackEditor.txtMaxLifetime.Value = ActiveWeapon.PERAttributes.MaxLifetime;
+
+                    PERAttackEditor.txtNumberOfProjectiles.Value = ActiveWeapon.PERAttributes.NumberOfProjectiles;
+                    PERAttackEditor.txtLateralMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxLateralSpread;
+                    PERAttackEditor.txtForwardMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxForwardSpread;
+
+                    if (ActiveWeapon.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.DestroySelf)
+                    {
+                        PERAttackEditor.rbDestroySelf.Checked = true;
+                    }
+                    else if (ActiveWeapon.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.Stop)
+                    {
+                        PERAttackEditor.rbStop.Checked = true;
+                    }
+                    else if (ActiveWeapon.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.Bounce)
+                    {
+                        PERAttackEditor.rbBounce.Checked = true;
+                        PERAttackEditor.txtBounceLimit.Value = ActiveWeapon.PERAttributes.BounceLimit;
+                    }
+
+                    rbPER.Checked = true;
+                    break;
+
                 case WeaponPrimaryProperty.ALL:
                     rbALL.Checked = true;
                     break;
@@ -318,6 +389,24 @@ namespace ProjectEternity.Editors.AttackEditor
 
             if ((ActiveWeapon.Sec & WeaponSecondaryProperty.ShootDown) == WeaponSecondaryProperty.ShootDown)
                 cbShootDown.Checked = true;
+
+            if ((ActiveWeapon.Sec & WeaponSecondaryProperty.Partial) == WeaponSecondaryProperty.Partial)
+                cbPartialAttack.Checked = true;
+
+            txtPostMovementAccuracyMalus.Value = ActiveWeapon.PostMovementAccuracyMalus;
+            txtPostMovementEvasionBonus.Value = ActiveWeapon.PostMovementEvasionBonus;
+
+            #endregion
+
+            #region Explosion Attributes
+
+            txtExplosionRadius.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionRadius;
+            txtExplosionWindPowerAtCenter.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerAtCenter;
+            txtExplosionWindPowerAtEdge.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerAtEdge;
+            txtExplosionWindPowerToSelfMultiplier.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerToSelfMultiplier;
+            txtExplosionDamageAtCenter.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageAtCenter;
+            txtExplosionDamageAtEdge.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageAtEdge;
+            txtExplosionDamageToSelfMultiplier.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageToSelfMultiplier;
 
             #endregion
 
@@ -529,7 +618,14 @@ namespace ProjectEternity.Editors.AttackEditor
 
         private void btnConfigure_Click(object sender, EventArgs e)
         {
-            MAPAttackEditor.ShowDialog();
+            if (rbMAP.Checked)
+            {
+                MAPAttackEditor.ShowDialog();
+            }
+            else if (rbPER.Checked)
+            {
+                PERAttackEditor.ShowDialog();
+            }
         }
 
         private void btnSetSkill1_Click(object sender, EventArgs e)
