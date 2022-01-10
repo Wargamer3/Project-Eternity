@@ -56,14 +56,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             CreateMap(Map);
 
-            int X = (int)Map.CursorPositionVisible.X;
-            int Y = (int)Map.CursorPositionVisible.Y;
-            float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 64);
+            float Z = Owner.ArrayTerrain[0, 0].Position.Z * 32 + (LayerIndex * 64);
             Map2D GroundLayer = Owner.OriginalLayerGrid;
-            DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+            DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
             Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
             Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 64, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                0, 0, Z, LayerIndex * 64, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
         }
 
         public void Save(BinaryWriter BW)

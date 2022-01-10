@@ -1266,9 +1266,6 @@
             // 
             // gbProjectileInformation
             // 
-            this.gbProjectileInformation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbProjectileInformation.Controls.Add(this.lblExplosionWindPowerToSelfMultiplier);
             this.gbProjectileInformation.Controls.Add(this.txtExplosionWindPowerToSelfMultiplier);
             this.gbProjectileInformation.Controls.Add(this.lblExplosionDamageToSelfMultiplier);

@@ -141,7 +141,6 @@ namespace ProjectEternity.Core.Attacks
 
             this.PowerFormula = BR.ReadString();
             this.MinDamageFormula = BR.ReadString();
-            this.MinDamageFormula = string.Empty;
             this.ENCost = BR.ReadInt32();
             this.MaxAmmo = BR.ReadInt32();
             this.MoraleRequirement = BR.ReadInt32();
