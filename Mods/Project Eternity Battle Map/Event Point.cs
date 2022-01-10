@@ -113,4 +113,42 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
     }
+
+    public class TeleportPoint : EventPoint
+    {
+        public TeleportPoint(Vector3 Position, string Tag, byte ColorRed, byte ColorGreen, byte ColorBlue)
+            : base(Position, Tag, ColorRed, ColorGreen, ColorBlue)
+        {
+        }
+
+        public TeleportPoint(EventPoint Copy)
+            : base(Copy)
+        {
+        }
+
+        public TeleportPoint(BinaryReader BR)
+            : base(BR)
+        {
+            OtherMapEntryPoint = new Point(BR.ReadInt32(), BR.ReadInt32());
+            OtherMapEntryLayer = BR.ReadInt32();
+        }
+
+        public override void Save(BinaryWriter BW)
+        {
+            base.Save(BW);
+
+            BW.Write(OtherMapEntryPoint.X);
+            BW.Write(OtherMapEntryPoint.Y);
+            BW.Write(OtherMapEntryLayer);
+        }
+
+        #region Properties
+
+        [CategoryAttribute("Map Switch Attributes"),
+        DescriptionAttribute(".")]
+        public Point OtherMapEntryPoint { get; set; }
+        public int OtherMapEntryLayer { get; set; }
+
+        #endregion
+    }
 }

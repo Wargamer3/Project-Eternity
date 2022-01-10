@@ -32,6 +32,7 @@
             this.lstConditions = new System.Windows.Forms.ListBox();
             this.tabToolBox = new System.Windows.Forms.TabControl();
             this.tabTiles = new System.Windows.Forms.TabPage();
+            this.btn3DTileAttributes = new System.Windows.Forms.Button();
             this.TilesetViewer = new ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl();
             this.btnTileAttributes = new System.Windows.Forms.Button();
             this.sclTileHeight = new System.Windows.Forms.VScrollBar();
@@ -94,7 +95,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tslInformation = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
-            this.btn3DTileAttributes = new System.Windows.Forms.Button();
+            this.btnTeleporters = new System.Windows.Forms.CheckBox();
+            this.lblTeleporters = new System.Windows.Forms.Label();
             this.tbConditions.SuspendLayout();
             this.tabToolBox.SuspendLayout();
             this.tabTiles.SuspendLayout();
@@ -181,6 +183,16 @@
             this.tabTiles.TabIndex = 2;
             this.tabTiles.Text = "Tiles";
             this.tabTiles.UseVisualStyleBackColor = true;
+            // 
+            // btn3DTileAttributes
+            // 
+            this.btn3DTileAttributes.Location = new System.Drawing.Point(126, 140);
+            this.btn3DTileAttributes.Name = "btn3DTileAttributes";
+            this.btn3DTileAttributes.Size = new System.Drawing.Size(105, 23);
+            this.btn3DTileAttributes.TabIndex = 8;
+            this.btn3DTileAttributes.Text = "3D Tile attributes";
+            this.btn3DTileAttributes.UseVisualStyleBackColor = true;
+            this.btn3DTileAttributes.Click += new System.EventHandler(this.btn3DTileAttributes_Click);
             // 
             // TilesetViewer
             // 
@@ -357,6 +369,8 @@
             // 
             // gbOtherEvents
             // 
+            this.gbOtherEvents.Controls.Add(this.btnTeleporters);
+            this.gbOtherEvents.Controls.Add(this.lblTeleporters);
             this.gbOtherEvents.Controls.Add(this.btnMapSwitches);
             this.gbOtherEvents.Controls.Add(this.lblMapSwitches);
             this.gbOtherEvents.Controls.Add(this.btnEventSpawn);
@@ -372,7 +386,7 @@
             // 
             this.btnMapSwitches.Appearance = System.Windows.Forms.Appearance.Button;
             this.btnMapSwitches.BackColor = System.Drawing.Color.Moccasin;
-            this.btnMapSwitches.Location = new System.Drawing.Point(94, 32);
+            this.btnMapSwitches.Location = new System.Drawing.Point(89, 32);
             this.btnMapSwitches.Name = "btnMapSwitches";
             this.btnMapSwitches.Size = new System.Drawing.Size(47, 47);
             this.btnMapSwitches.TabIndex = 12;
@@ -384,7 +398,7 @@
             // lblMapSwitches
             // 
             this.lblMapSwitches.AutoSize = true;
-            this.lblMapSwitches.Location = new System.Drawing.Point(91, 16);
+            this.lblMapSwitches.Location = new System.Drawing.Point(86, 16);
             this.lblMapSwitches.Name = "lblMapSwitches";
             this.lblMapSwitches.Size = new System.Drawing.Size(74, 13);
             this.lblMapSwitches.TabIndex = 13;
@@ -863,15 +877,27 @@
             this.mnuToolBar.TabIndex = 9;
             this.mnuToolBar.Text = "menuStrip1";
             // 
-            // btn3DTileAttributes
+            // btnTeleporters
             // 
-            this.btn3DTileAttributes.Location = new System.Drawing.Point(126, 140);
-            this.btn3DTileAttributes.Name = "btn3DTileAttributes";
-            this.btn3DTileAttributes.Size = new System.Drawing.Size(105, 23);
-            this.btn3DTileAttributes.TabIndex = 8;
-            this.btn3DTileAttributes.Text = "3D Tile attributes";
-            this.btn3DTileAttributes.UseVisualStyleBackColor = true;
-            this.btn3DTileAttributes.Click += new System.EventHandler(this.btn3DTileAttributes_Click);
+            this.btnTeleporters.Appearance = System.Windows.Forms.Appearance.Button;
+            this.btnTeleporters.BackColor = System.Drawing.Color.Firebrick;
+            this.btnTeleporters.Location = new System.Drawing.Point(168, 32);
+            this.btnTeleporters.Name = "btnTeleporters";
+            this.btnTeleporters.Size = new System.Drawing.Size(47, 47);
+            this.btnTeleporters.TabIndex = 14;
+            this.btnTeleporters.Text = "T";
+            this.btnTeleporters.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnTeleporters.UseVisualStyleBackColor = false;
+            this.btnTeleporters.CheckedChanged += new System.EventHandler(this.btnTeleporters_CheckedChanged);
+            // 
+            // lblTeleporters
+            // 
+            this.lblTeleporters.AutoSize = true;
+            this.lblTeleporters.Location = new System.Drawing.Point(165, 16);
+            this.lblTeleporters.Name = "lblTeleporters";
+            this.lblTeleporters.Size = new System.Drawing.Size(60, 13);
+            this.lblTeleporters.TabIndex = 15;
+            this.lblTeleporters.Text = "Teleporters";
             // 
             // ProjectEternityMapEditor
             // 
@@ -994,5 +1020,7 @@
         private System.Windows.Forms.Button btnRemoveDeathmatchTeam;
         private System.Windows.Forms.Button btnAddDeathmatchTeam;
         private System.Windows.Forms.Button btn3DTileAttributes;
+        private System.Windows.Forms.CheckBox btnTeleporters;
+        private System.Windows.Forms.Label lblTeleporters;
     }
 }

@@ -525,7 +525,11 @@ namespace ProjectEternity.Editors.MapEditor
         {//If there is an active Spawn and a map loaded.
             if (BattleMapViewer.ActiveMap.TileSize.X != 0)
             {
-                if (btnMapSwitches.Checked)
+                if (btnTeleporters.Checked)
+                {
+                    NewTeleporterPoint(X, Y, Spawn);
+                }
+                else if (btnMapSwitches.Checked)
                 {
                     NewMapSwitchPoint(X, Y, Spawn);
                 }
@@ -637,6 +641,41 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
+        private void NewTeleporterPoint(int X, int Y, EventPoint Spawn)
+        {
+            int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
+            TeleportPoint OldEventPoint = null;
+
+            //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
+            for (int S = 0; S < TopLayer.ListTeleportPoint.Count; S++)
+            {//If it exist.
+                if (TopLayer.ListTeleportPoint[S].Position.X == X && TopLayer.ListTeleportPoint[S].Position.Y == Y)
+                {
+                    OldEventPoint = TopLayer.ListTeleportPoint[S];
+                }
+            }
+
+            if (Spawn != null)
+            {
+                if (OldEventPoint == null)
+                {
+                    TeleportPoint NewMapSwitchPoint = new TeleportPoint(Spawn);
+                    NewMapSwitchPoint.Position = new Vector3(X, Y, 0);
+                    TopLayer.ListTeleportPoint.Add(NewMapSwitchPoint);
+                    pgEventPoints.SelectedObject = NewMapSwitchPoint;
+                }
+                else
+                {
+                    pgEventPoints.SelectedObject = OldEventPoint;
+                }
+            }
+            else if (OldEventPoint != null)
+            {
+                TopLayer.ListTeleportPoint.Remove(OldEventPoint);
+            }
+        }
+
         #region Selection spawn changes
 
         private void ResetSpawn(CheckBox Sender)
@@ -652,6 +691,8 @@ namespace ProjectEternity.Editors.MapEditor
                 btnEventSpawn.Checked = false;
             if (Sender != btnMapSwitches)
                 btnMapSwitches.Checked = false;
+            if (Sender != btnTeleporters)
+                btnTeleporters.Checked = false;
         }
 
         private void btnSpawnPlayer_CheckedChanged(object sender, EventArgs e)
@@ -803,6 +844,14 @@ namespace ProjectEternity.Editors.MapEditor
             ResetSpawn(btnMapSwitches);
             //Set a new ActiveSpawn.
             ActiveSpawn = new EventPoint(Vector3.Zero, btnMapSwitches.Text, btnMapSwitches.BackColor.R, btnMapSwitches.BackColor.G, btnMapSwitches.BackColor.B);
+        }
+
+        private void btnTeleporters_CheckedChanged(object sender, EventArgs e)
+        {
+            //Reset the Spawn buttons
+            ResetSpawn(btnTeleporters);
+            //Set a new ActiveSpawn.
+            ActiveSpawn = new EventPoint(Vector3.Zero, btnTeleporters.Text, btnTeleporters.BackColor.R, btnTeleporters.BackColor.G, btnTeleporters.BackColor.B);
         }
 
         #endregion

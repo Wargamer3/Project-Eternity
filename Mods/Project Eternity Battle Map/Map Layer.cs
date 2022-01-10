@@ -11,6 +11,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<EventPoint> ListSingleplayerSpawns;
         public List<EventPoint> ListMultiplayerSpawns;
         public List<MapSwitchPoint> ListMapSwitchPoint;
+        public List<TeleportPoint> ListTeleportPoint;
         public List<InteractiveProp> ListProp;
     }
 

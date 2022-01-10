@@ -29,6 +29,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListSingleplayerSpawns = new List<EventPoint>();
             ListMultiplayerSpawns = new List<EventPoint>();
             ListMapSwitchPoint = new List<MapSwitchPoint>();
+            ListTeleportPoint = new List<TeleportPoint>();
 
             ListSubLayer = new List<SubMapLayer>();
             ListProp = new List<InteractiveProp>();
@@ -55,6 +56,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListSingleplayerSpawns = new List<EventPoint>();
             ListMultiplayerSpawns = new List<EventPoint>();
             ListMapSwitchPoint = new List<MapSwitchPoint>();
+            ListTeleportPoint = new List<TeleportPoint>();
 
             ListSubLayer = new List<SubMapLayer>();
             ListProp = new List<InteractiveProp>();
@@ -128,6 +130,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
+            int ListTeleportPointCount = BR.ReadInt32();
+            ListTeleportPoint = new List<TeleportPoint>(ListTeleportPointCount);
+
+            for (int S = 0; S < ListTeleportPointCount; S++)
+            {
+                TeleportPoint NewTeleportPoint = new TeleportPoint(BR);
+                ListTeleportPoint.Add(NewTeleportPoint);
+            }
+
             int ListPropCount = BR.ReadInt32();
             ListProp = new List<InteractiveProp>(ListPropCount);
             for (int L = 0; L < ListPropCount; L++)
@@ -174,6 +185,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int S = 0; S < ListMapSwitchPoint.Count; S++)
             {
                 ListMapSwitchPoint[S].Save(BW);
+            }
+            BW.Write(ListTeleportPoint.Count);
+            for (int T = 0; T < ListTeleportPoint.Count; T++)
+            {
+                ListTeleportPoint[T].Save(BW);
             }
 
             BW.Write(ListProp.Count);
@@ -345,6 +361,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Color BrushNeutral = Color.FromNonPremultiplied(255, 255, 0, 180);
                     Color BrushAlly = Color.FromNonPremultiplied(191, 255, 0, 180);
                     Color BrushMapSwitchEventPoint = Color.FromNonPremultiplied(191, 255, 0, 180);
+                    Color BrushTeleportPoint = Color.FromNonPremultiplied(70, 13, 13, 180);
 
                     for (int i = 0; i < ListSingleplayerSpawns.Count; i++)
                     {
@@ -373,16 +390,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
 
-                    for (int i = 0; i < ListMapSwitchPoint.Count; i++)
+                    for (int S = 0; S < ListMapSwitchPoint.Count; S++)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListMapSwitchPoint[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                       (int)(ListMapSwitchPoint[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListMapSwitchPoint[S].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
+                                                       (int)(ListMapSwitchPoint[S].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y), null,
                                         BrushMapSwitchEventPoint, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
 
-                        g.DrawString(Map.fntArial9, ListMapSwitchPoint[i].Tag,
-                            new Vector2((ListMapSwitchPoint[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (ListMapSwitchPoint[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                        g.DrawString(Map.fntArial9, ListMapSwitchPoint[S].Tag,
+                            new Vector2((ListMapSwitchPoint[S].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
+                                        (ListMapSwitchPoint[S].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    }
+
+                    for (int T = 0; T < ListTeleportPoint.Count; T++)
+                    {
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListTeleportPoint[T].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
+                                                       (int)(ListTeleportPoint[T].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                                                       Map.TileSize.X, Map.TileSize.Y), null,
+                                        BrushTeleportPoint, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
+
+                        g.DrawString(Map.fntArial9, ListTeleportPoint[T].Tag,
+                            new Vector2((ListTeleportPoint[T].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
+                                        (ListTeleportPoint[T].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
                 }
