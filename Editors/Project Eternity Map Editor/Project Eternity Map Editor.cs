@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Editors.MusicPlayer;
@@ -132,7 +131,7 @@ namespace ProjectEternity.Editors.MapEditor
                 fs.Close();
                 DeathmatchMap NewMap = new DeathmatchMap(FilePath, string.Empty, null);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
-                NewMap.ListLayer.Add(new MapLayer(NewMap));
+                NewMap.LayerManager.ListLayer.Add(new MapLayer(NewMap));
 
                 SaveItem(FilePath, FilePath);
             }

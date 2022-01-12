@@ -49,45 +49,5 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             Load(BR);
         }
-
-        public override void DrawPlayers(CustomSpriteBatch g, int LayerIndex)
-        {
-            DrawDelayedAttacks(g);
-
-            for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
-            {
-                for (int S = 0; S < ActiveMap.ListPlayer[P].ListSquad.Count; S++)
-                {
-                    if ((int)ActiveMap.ListPlayer[P].ListSquad[S].Z == LayerIndex)
-                    {
-                        DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListSquad[S], !ActiveMap.ListPlayer[P].ListSquad[S].CanMove && P == ActiveMap.ActivePlayerIndex);
-                    }
-                }
-            }
-
-            for (int P = 0; P < Owner.ListProp.Count; ++P)
-            {
-                Owner.ListProp[P].Draw(g);
-            }
-        }
-
-        private void DrawDelayedAttacks(CustomSpriteBatch g)
-        {
-            int BorderX = (int)(TileSize.X * 0.1);
-            int BorderY = (int)(TileSize.Y * 0.1);
-
-            foreach (DelayedAttack ActiveAttack in ActiveMap.ListDelayedAttack)
-            {
-                foreach (Vector3 ActivePosition in ActiveAttack.ListAttackPosition)
-                {
-                    g.Draw(GameScreen.sprPixel,
-                        new Rectangle(
-                            (int)(ActivePosition.X - CameraPosition.X) * TileSize.X + BorderX,
-                            (int)(ActivePosition.Y - CameraPosition.Y) * TileSize.Y + BorderY,
-                            TileSize.X - BorderX * 2,
-                            TileSize.Y - BorderY * 2), Color.FromNonPremultiplied(139, 0, 0, 190));
-                }
-            }
-        }
     }
 }

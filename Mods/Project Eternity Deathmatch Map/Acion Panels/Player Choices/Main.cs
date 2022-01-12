@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void CheckForMapSwitch()
         {
-            foreach (MapSwitchPoint ActivePoint in Map.ListLayer[(int)ActiveSquad.Position.Z].ListMapSwitchPoint)
+            foreach (MapSwitchPoint ActivePoint in Map.LayerManager[(int)ActiveSquad.Position.Z].ListMapSwitchPoint)
             {
                 if (ActivePoint.Position == ActiveSquad.Position)
                 {
@@ -147,7 +147,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<ActionPanel> ListPanel = new List<ActionPanel>();
 
-            foreach (InteractiveProp ActiveProp in Map.ListLayer[(int)ActiveSquad.Position.Z].ListProp)
+            foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
             {
                 ListPanel.AddRange(ActiveProp.OnUnitSelected(SelectedUnit));
             }

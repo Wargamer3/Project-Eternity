@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.ListLayer[(int)ActiveSquad.Z].LayerGrid.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
+            Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
             if (AITimer >= 0)
             {
                 AITimer--;
@@ -182,7 +182,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListAttackTerrain.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
             }
-            Map.ListLayer[(int)ActiveSquad.Z].LayerGrid.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
+            Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
             Map.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Focused;
 
             if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)

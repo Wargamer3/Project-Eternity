@@ -69,8 +69,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.ListLayer[0].LayerGrid.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
-            Map.ListLayer[0].LayerGrid.AddDrawablePath(ListMovedOverTerrain);
+            Map.LayerManager.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
+            Map.LayerManager.AddDrawablePath(ListMovedOverTerrain);
 
             Map.CursorControl(ActiveInputManager);//Move the cursor
 

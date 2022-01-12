@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
-                Map.ListLayer[0].OriginalLayerGrid.ReplaceForegrounds(ListForegrounds);
+                Map.LayerManager.ListLayer[0].LayerGrid.ReplaceForegrounds(ListForegrounds);
             }
 
             public override void Draw(CustomSpriteBatch g)

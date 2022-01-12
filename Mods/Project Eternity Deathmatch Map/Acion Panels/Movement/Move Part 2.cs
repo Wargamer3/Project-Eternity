@@ -92,7 +92,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<ActionPanel> ListPanel = new List<ActionPanel>();
 
-            foreach (InteractiveProp ActiveProp in Map.ListLayer[(int)ActiveSquad.Position.Z].ListProp)
+            foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
             {
                 ListPanel.AddRange(ActiveProp.OnUnitBeforeStop(StoppedUnit, CursorPosition));
             }
@@ -107,7 +107,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {//Make sure the mouse is inside the menu.
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
 
-                foreach (InteractiveProp ActiveProp in Map.ListLayer[(int)ActiveSquad.Position.Z].ListProp)
+                foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
                 {
                     foreach (Vector3 MovedOverPoint in ListMVHoverPoints)
                     {

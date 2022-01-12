@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public List<DelayedAttack> ListDelayedAttack;
         public MovementAlgorithm Pathfinder;
-        public List<MapLayer> ListLayer;
+        public LayerHolderDeathmatch LayerManager;
 
         public NonDemoScreen NonDemoScreen;
         public SpiritMenu SpiritMenu;
@@ -142,7 +142,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             RequireDrawFocus = true;
             Pathfinder = new MovementAlgorithmDeathmatch(this);
             ListDelayedAttack = new List<DelayedAttack>();
-            ListLayer = new List<MapLayer>();
             ListTerrainType = new List<string>();
             ListTerrainType.Add(UnitStats.TerrainAir);
             ListTerrainType.Add(UnitStats.TerrainLand);
@@ -206,11 +205,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             SaveTilesets(BW);
 
-            BW.Write(ListLayer.Count);
-            foreach (MapLayer ActiveLayer in ListLayer)
-            {
-                ActiveLayer.Save(BW);
-            }
+            LayerManager.Save(BW);
 
             FS.Close();
             BW.Close();
@@ -386,20 +381,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             LoadTilesets(BR);
 
-            LoadMapGrid(BR);
+            LayerManager = new LayerHolderDeathmatch(this, BR);
 
             BR.Close();
             FS.Close();
-        }
-        
-        protected void LoadMapGrid(BinaryReader BR)
-        {
-            int LayerCount = BR.ReadInt32();
-
-            for (int i = 0; i < LayerCount; ++i)
-            {
-                ListLayer.Add(new MapLayer(this, BR));
-            }
         }
 
         public override void LoadEffects()
@@ -539,41 +524,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     Init();
                 }
-                for (int L = 0; L < ListLayer.Count; ++L)
-                {
-                    ListLayer[L].LayerGrid = ListLayer[L].OriginalLayerGrid;
-                    for (int L2 = 0; L2 < ListLayer[L].ListSubLayer.Count; ++L2)
-                    {
-                        ListLayer[L].ListSubLayer[L2].LayerGrid = ListLayer[L].ListSubLayer[L2].OriginalLayerGrid;
-                    }
-                }
             }
-            else if (ListTileSet.Count > 0)
-            {
-                for (int L = 0; L < ListLayer.Count; ++L)
-                {
-                    ListLayer[L].LayerGrid = new Map3D(this, L, ListLayer[L], GraphicsDevice);
-                    for (int L2 = 0; L2 < ListLayer[L].ListSubLayer.Count; ++L2)
-                    {
-                        ListLayer[L].ListSubLayer[L2].LayerGrid = new Map3D(this, L, ListLayer[L].ListSubLayer[L2], GraphicsDevice);
-                    }
-                }
-            }
+
+            LayerManager.TogglePreview(UsePreview);
         }
 
         public Terrain GetTerrain(float X, float Y, int LayerIndex)
         {
-            return ListLayer[LayerIndex].ArrayTerrain[(int)X, (int)Y];
-        }
-
-        public DrawableTile GetTile(float X, float Y, int LayerIndex)
-        {
-            return ListLayer[LayerIndex].OriginalLayerGrid.GetTile((int)X, (int)Y);
+            return LayerManager.ListLayer[LayerIndex].ArrayTerrain[(int)X, (int)Y];
         }
 
         public Terrain GetTerrain(UnitMapComponent ActiveUnit)
         {
-            return ListLayer[(int)ActiveUnit.Z].ArrayTerrain[(int)ActiveUnit.X, (int)ActiveUnit.Y];
+            return LayerManager.ListLayer[(int)ActiveUnit.Z].ArrayTerrain[(int)ActiveUnit.X, (int)ActiveUnit.Y];
+        }
+
+        public DrawableTile GetTile(UnitMapComponent ActiveUnit)
+        {
+            return LayerManager.GetTile((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
 
         public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit)
@@ -585,16 +553,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveUnit.ArrayMapSize[X, Y])
                     {
-                        ListTerrainFound.Add(ListLayer[(int)ActiveUnit.Z].ArrayTerrain[(int)ActiveUnit.X + X, (int)ActiveUnit.Y + Y]);
+                        ListTerrainFound.Add(LayerManager.ListLayer[(int)ActiveUnit.Z].ArrayTerrain[(int)ActiveUnit.X + X, (int)ActiveUnit.Y + Y]);
                     }
                 }
             }
             return ListTerrainFound;
-        }
-
-        public DrawableTile GetTile(UnitMapComponent ActiveUnit)
-        {
-            return GetTile(ActiveUnit.X, ActiveUnit.Y, (int)ActiveUnit.Z);
         }
 
         public override void Update(GameTime gameTime)
@@ -616,73 +579,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ListForeground[F].Update(gameTime);
                 }
 
-                foreach (MapLayer ActiveMapLayer in ListLayer)
-                {
-                    ActiveMapLayer.Update(gameTime);
-                }
+                LayerManager.Update(gameTime);
 
                 if (!IsOnTop)
                 {
                     return;
-                }
-
-                if (KeyboardHelper.KeyPressed(Keys.Q))
-                {
-                    do
-                    {
-                        CursorPosition.Z += 1f;
-                    }
-                    while (CursorPosition.Z < ListLayer.Count
-                    && ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex
-                    && !KeyboardHelper.KeyHold(Keys.LeftAlt));
-
-                    if (CursorPosition.Z >= ListLayer.Count)
-                    {
-                        CursorPosition.Z = ListLayer.Count - 1;
-                    }
-                }
-
-                if (KeyboardHelper.KeyPressed(Keys.E))
-                {
-                    do
-                    {
-                        CursorPosition.Z -= 1f;
-                    }
-                    while (CursorPosition.Z >= 0
-                    && ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex
-                    && !KeyboardHelper.KeyHold(Keys.LeftAlt));
-
-                    if (CursorPosition.Z < 0)
-                    {
-                        CursorPosition.Z = 0;
-                    }
-                }
-
-                if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
-                {
-                    for (int L = 0; L < ListLayer.Count; ++L)
-                    {
-                        ListLayer[L].LayerGrid = new Map3D(this, L, ListLayer[L], GraphicsDevice);
-                    }
-                }
-                if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.L))
-                {
-                    ListLayer[0].LayerGrid = new CubeMap3D(this, 0, ListLayer[0], GraphicsDevice);
-                }
-                if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.O))
-                {
-                    ListLayer[0].LayerGrid = new SphericalMap3D(this, 0, ListLayer[0], GraphicsDevice);
-                }
-                if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.U))
-                {
-                    for (int L = 0; L < ListLayer.Count; ++L)
-                    {
-                        ListLayer[L].LayerGrid = ListLayer[L].OriginalLayerGrid;
-                        for (int L2 = 0; L2 < ListLayer[L].ListSubLayer.Count; ++L2)
-                        {
-                            ListLayer[L].ListSubLayer[L2].LayerGrid = ListLayer[L].ListSubLayer[L2].OriginalLayerGrid;
-                        }
-                    }
                 }
 
                 if (!IsInit)
@@ -746,10 +647,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            for (int L = 0; L < ListLayer.Count; L++)
-            {
-                ListLayer[L].Update(UpdateTime);
-            }
+            LayerManager.Update(UpdateTime);
 
             if (!ListPlayer[ActivePlayerIndex].IsPlayerControlled && ListActionMenuChoice.HasMainPanel)
             {
@@ -768,17 +666,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BeginDrawNightOverlay(g);
             }
 
-            if (ShowLayerIndex == -1)
-            {
-                for (int i = 0; i < ListLayer.Count; ++i)
-                {
-                    ListLayer[i].BeginDraw(g);
-                }
-            }
-            else
-            {
-                ListLayer[ShowLayerIndex].BeginDraw(g);
-            }
+            LayerManager.BeginDraw(g);
 
             g.End();
         }
@@ -816,17 +704,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.Begin();
             }
 
-            if (ShowLayerIndex == -1)
-            {
-                for (int L = 0; L < ListLayer.Count; ++L)
-                {
-                    ListLayer[L].Draw(g, L, false);
-                }
-            }
-            else
-            {
-                ListLayer[ShowLayerIndex].Draw(g, ShowLayerIndex, false);
-            }
+            LayerManager.Draw(g);
 
             if (ShowUnits)
             {
@@ -1072,7 +950,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return -1;
             }
 
-            Terrain CurrentTerrain = ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y];
+            Terrain CurrentTerrain = LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y];
             string CurrentTerrainType = GetTerrainType(CurrentPosition.X, CurrentPosition.Y, (int)CurrentPosition.Z);
             float CurrentZ = CurrentTerrain.Position.Z + CurrentPosition.Z;
 
@@ -1081,9 +959,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
 
-            for (int L = 0; L < ListLayer.Count; L++)
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MapLayer ActiveLayer = ListLayer[L];
+                MapLayer ActiveLayer = LayerManager.ListLayer[L];
                 Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
                 string NextTerrainType = GetTerrainType(NextX, NextY, L);
@@ -1150,9 +1028,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
         {
-            for (int L = StartLayer + 1; L < ListLayer.Count; L++)
+            for (int L = StartLayer + 1; L < LayerManager.ListLayer.Count; L++)
             {
-                MapLayer ActiveLayer = ListLayer[L];
+                MapLayer ActiveLayer = LayerManager.ListLayer[L];
                 Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
                 string NextTerrainType = GetTerrainType(NextX, NextY, L);

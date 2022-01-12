@@ -60,18 +60,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             int TilesetIndex = Params.LocalContext.Map.ListTileSet.IndexOf(sprTileset);
 
-            MapLayer ActiveLayer = Params.LocalContext.Map.ListLayer[0];
+            MapLayer ActiveLayer = Params.LocalContext.Map.LayerManager.ListLayer[0];
             foreach (Vector3 ActivePosition in Params.LocalContext.ArrayAttackPosition)
             {
                 int X = (int)ActivePosition.X;
                 int Y = (int)ActivePosition.Y;
-                DrawableTile ActiveTile = ActiveLayer.OriginalLayerGrid.GetTile(X, Y);
+                DrawableTile ActiveTile = ActiveLayer.LayerGrid.GetTile(X, Y);
                 ActiveTile.Origin = TerrainAttribute.Origin;
                 ActiveTile.TilesetIndex = TilesetIndex;
-                ActiveLayer.OriginalLayerGrid.ReplaceTile(X, Y, ActiveTile);
+                ActiveLayer.LayerGrid.ReplaceTile(X, Y, ActiveTile);
             }
 
-            ActiveLayer.ResetGrid();
+            Params.LocalContext.Map.LayerManager.LayerHolderDrawable.Reset();
 
             return TerrainAttribute.Tileset + " (" + TerrainAttribute.Origin.X + ", " + TerrainAttribute.Origin.Y + ")";
         }

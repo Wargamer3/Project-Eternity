@@ -11,14 +11,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     public class MapLayer : BaseMapLayer
     {
         public List<SubMapLayer> ListSubLayer;
-        public float Depth { get { return _Depth; } set { _Depth = value; if (OriginalLayerGrid != null) OriginalLayerGrid.Depth = value; } }
+        public float Depth { get { return _Depth; } set { _Depth = value; if (LayerGrid != null) LayerGrid.Depth = value; } }
         private float _Depth;
 
-        public DrawableGrid LayerGrid;
-        public readonly DeathmatchMap2D OriginalLayerGrid;
+        public readonly DeathmatchMap2D LayerGrid;
         public Terrain[,] ArrayTerrain;//Array of every tile on the map.
 
-        private bool IsVisible;
+        public bool IsVisible;
         private int ToggleTimer;
         private DeathmatchMap Map;
 
@@ -45,8 +44,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, this);
-            _Depth = OriginalLayerGrid.Depth;
+            LayerGrid = new DeathmatchMap2D(Map, this);
+            _Depth = LayerGrid.Depth;
         }
 
         public MapLayer(DeathmatchMap Map, BinaryReader BR)
@@ -146,14 +145,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListProp.Add(Map.DicInteractiveProp[BR.ReadString()].LoadCopy(BR));
             }
 
-            LayerGrid = OriginalLayerGrid = new DeathmatchMap2D(Map, this, BR);
+            LayerGrid = new DeathmatchMap2D(Map, this, BR);
             int ListSubLayerCount = BR.ReadInt32();
             ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
             for (int L = 0; L < ListSubLayerCount; L++)
             {
                 ListSubLayer.Add(new SubMapLayer(Map, BR));
             }
-            OriginalLayerGrid.Depth = Depth;
+
+            LayerGrid.Depth = Depth;
         }
 
         public void Save(BinaryWriter BW)
@@ -226,202 +226,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-
             for (int P = 0; P < ListProp.Count; ++P)
             {
                 ListProp[P].Update(gameTime);
             }
-            LayerGrid.Update(gameTime);
+
             foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
             {
                 ActiveSubLayer.Update(gameTime);
             }
-        }
-
-        public void ResetGrid()
-        {
-            LayerGrid.Reset();
-        }
-
-        public void BeginDraw(CustomSpriteBatch g)
-        {
-            if (IsVisible)
-            {
-                LayerGrid.BeginDraw(g);
-                foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
-                {
-                    ActiveSubLayer.BeginDraw(g);
-                }
-            }
-        }
-
-        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer)
-        {
-            if (IsVisible)
-            {
-                LayerGrid.Draw(g, LayerIndex, IsSubLayer, ArrayTerrain);
-
-                if (Map.ShowTerrainType)
-                {
-                    int IndexOfLayer = LayerIndex;
-                    if (Map.ShowLayerIndex >= 0 && IndexOfLayer != -1)
-                    {
-                        IndexOfLayer = 0;
-                    }
-                    else if (IndexOfLayer == -1)
-                    {
-                        IndexOfLayer = 3;
-                    }
-                    float XOffset = (IndexOfLayer % 3) * Map.TileSize.X / 3;
-                    float YOffset = (IndexOfLayer / 3) * Map.TileSize.Y / 3;
-                    for (int Y = 0; Y < Map.MapSize.Y; Y++)
-                    {
-                        for (int X = 0; X < Map.MapSize.X; X++)
-                        {
-                            Color TextColor = Color.White;
-                            switch (ArrayTerrain[X, Y].TerrainTypeIndex)
-                            {
-                                case 0:
-                                    TextColor = Color.DeepSkyBlue;
-                                    break;
-                                case 1:
-                                    TextColor = Color.White;
-                                    break;
-                                case 2:
-                                    TextColor = Color.Navy;
-                                    break;
-                                case 3:
-                                    TextColor = Color.DarkGray;
-                                    break;
-                                case 4:
-                                    TextColor = Color.Red;
-                                    break;
-                                case 5:
-                                    TextColor = Color.Yellow;
-                                    break;
-                            }
-                            TextHelper.DrawText(g, ArrayTerrain[X, Y].TerrainTypeIndex.ToString(),
-                                new Vector2((X - Map.CameraPosition.X) * Map.TileSize.X + XOffset,
-                                (Y - Map.CameraPosition.Y) * Map.TileSize.Y + YOffset), TextColor);
-                        }
-                    }
-                }
-
-                if (Map.ShowTerrainHeight)
-                {
-                    int IndexOfLayer = Map.ListLayer.IndexOf(this);
-                    if (Map.ShowLayerIndex >= 0)
-                    {
-                        IndexOfLayer = 0;
-                    }
-                    float XOffset = (IndexOfLayer % 3) * Map.TileSize.X / 3;
-                    float YOffset = (IndexOfLayer / 3) * Map.TileSize.Y / 3;
-                    for (int Y = 0; Y < Map.MapSize.Y; Y++)
-                    {
-                        for (int X = 0; X < Map.MapSize.X; X++)
-                        {
-                            Color TextColor = Color.White;
-                            if (ArrayTerrain[X, Y].Position.Z >= 2)
-                            {
-                                TextColor = Color.Red;
-                            }
-                            else if (ArrayTerrain[X, Y].Position.Z >= 1)
-                            {
-                                TextColor = Color.Orange;
-                            }
-                            else if (ArrayTerrain[X, Y].Position.Z >= 0.75)
-                            {
-                                TextColor = Color.Yellow;
-                            }
-                            else if (ArrayTerrain[X, Y].Position.Z >= 0.5)
-                            {
-                                TextColor = Color.Green;
-                            }
-                            else if (ArrayTerrain[X, Y].Position.Z > 0)
-                            {
-                                TextColor = Color.SkyBlue;
-                            }
-
-                            TextHelper.DrawText(g, ArrayTerrain[X, Y].Position.Z.ToString(),
-                                new Vector2((X - Map.CameraPosition.X) * Map.TileSize.X + XOffset,
-                                (Y - Map.CameraPosition.Y) * Map.TileSize.Y + YOffset), TextColor);
-                        }
-                    }
-                }
-
-                foreach (SubMapLayer ActiveSubLayer in ListSubLayer)
-                {
-                    ActiveSubLayer.Draw(g, LayerIndex, true);
-                }
-
-                if (!Map.ShowUnits)
-                {
-                    Color BrushPlayer = Color.FromNonPremultiplied(30, 144, 255, 180);
-                    Color BrushEnemy = Color.FromNonPremultiplied(255, 0, 0, 180);
-                    Color BrushNeutral = Color.FromNonPremultiplied(255, 255, 0, 180);
-                    Color BrushAlly = Color.FromNonPremultiplied(191, 255, 0, 180);
-                    Color BrushMapSwitchEventPoint = Color.FromNonPremultiplied(191, 255, 0, 180);
-                    Color BrushTeleportPoint = Color.FromNonPremultiplied(70, 13, 13, 180);
-
-                    for (int i = 0; i < ListSingleplayerSpawns.Count; i++)
-                    {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListSingleplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                      (int)(ListSingleplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
-                                                       Map.TileSize.X, Map.TileSize.Y),
-                                                      null,
-                                        BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
-
-                        g.DrawString(Map.fntArial9, ListSingleplayerSpawns[i].Tag,
-                            new Vector2((ListSingleplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (ListSingleplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
-                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                    }
-
-                    for (int i = 0; i < ListMultiplayerSpawns.Count; i++)
-                    {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListMultiplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                      (int)(ListMultiplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
-                                                       Map.TileSize.X, Map.TileSize.Y), null,
-                                        BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
-
-                        g.DrawString(Map.fntArial9, ListMultiplayerSpawns[i].Tag,
-                            new Vector2((ListMultiplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (ListMultiplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
-                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                    }
-
-                    for (int S = 0; S < ListMapSwitchPoint.Count; S++)
-                    {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListMapSwitchPoint[S].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                       (int)(ListMapSwitchPoint[S].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
-                                                       Map.TileSize.X, Map.TileSize.Y), null,
-                                        BrushMapSwitchEventPoint, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
-
-                        g.DrawString(Map.fntArial9, ListMapSwitchPoint[S].Tag,
-                            new Vector2((ListMapSwitchPoint[S].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (ListMapSwitchPoint[S].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
-                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                    }
-
-                    for (int T = 0; T < ListTeleportPoint.Count; T++)
-                    {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(ListTeleportPoint[T].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                       (int)(ListTeleportPoint[T].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
-                                                       Map.TileSize.X, Map.TileSize.Y), null,
-                                        BrushTeleportPoint, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
-
-                        g.DrawString(Map.fntArial9, ListTeleportPoint[T].Tag,
-                            new Vector2((ListTeleportPoint[T].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (ListTeleportPoint[T].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
-                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                    }
-                }
-            }
-        }
-
-        public void EndDraw(CustomSpriteBatch g)
-        {
-
         }
 
         public override string ToString()

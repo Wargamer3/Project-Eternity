@@ -47,18 +47,18 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             Load(BR);
         }
 
-        public override void DrawPlayers(CustomSpriteBatch g, int LayerIndex)
+        public void DrawPlayers(CustomSpriteBatch g, int LayerIndex)
         {
             for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
             {
                 for (int S = 0; S < ActiveMap.ListPlayer[P].ListUnit.Count; S++)
                 {
-                    DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListUnit[S], !ActiveMap.ListPlayer[P].ListUnit[S].CanMove && P == ActiveMap.ActivePlayerIndex);
+                    //DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListUnit[S], !ActiveMap.ListPlayer[P].ListUnit[S].CanMove && P == ActiveMap.ActivePlayerIndex);
                 }
 
                 for (int C = 0; C < ActiveMap.ListPlayer[P].ListConstruction.Count; C++)
                 {
-                    DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListConstruction[C], !ActiveMap.ListPlayer[P].ListConstruction[C].CanMove && P == ActiveMap.ActivePlayerIndex);
+                    //DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListConstruction[C], !ActiveMap.ListPlayer[P].ListConstruction[C].CanMove && P == ActiveMap.ActivePlayerIndex);
                 }
             }
         }

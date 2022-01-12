@@ -133,7 +133,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void DoUpdate(GameTime gameTime)
         {
             Map.CursorControl(ActiveInputManager);//Move the cursor
-            Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListTerrainChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
+            Map.LayerManager.AddDrawablePoints(ListTerrainChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
 
             if (ActiveInputManager.InputConfirmPressed())
             {

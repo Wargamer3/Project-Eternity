@@ -28,9 +28,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     string PlayerTag = PlayerIndex.ToString();
                     int SpawnSquadIndex = 0;
-                    for (int L = 0; L < Owner.ListLayer.Count; L++)
+                    for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
                     {
-                        MapLayer ActiveLayer = Owner.ListLayer[L];
+                        BaseMapLayer ActiveLayer = Owner.LayerManager[L];
                         for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
                         {
                             if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)

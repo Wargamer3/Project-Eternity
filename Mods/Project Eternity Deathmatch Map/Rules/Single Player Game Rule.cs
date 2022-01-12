@@ -25,16 +25,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (Owner.DicSpawnSquadByPlayer.Count > 0 && Owner.DicSpawnSquadByPlayer["Player"].Count > 0)
             {
                 int SpawnSquadIndex = 0;
-                for (int S = 0; S < Owner.ListLayer[0].ListSingleplayerSpawns.Count; S++)
+                for (int S = 0; S < Owner.LayerManager[0].ListSingleplayerSpawns.Count; S++)
                 {
-                    if (Owner.ListLayer[0].ListSingleplayerSpawns[S].Tag == "P")
+                    if (Owner.LayerManager[0].ListSingleplayerSpawns[S].Tag == "P")
                     {
                         for (int U = 0; U < Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].UnitsInSquad; ++U)
                         {
                             Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].At(U).UnitTypeName]);
                         }
                         Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                        Owner.SpawnSquad(0, Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex], 0, Owner.ListLayer[0].ListSingleplayerSpawns[S].Position, 0);
+                        Owner.SpawnSquad(0, Owner.DicSpawnSquadByPlayer["Player"][SpawnSquadIndex], 0, Owner.LayerManager[0].ListSingleplayerSpawns[S].Position, 0);
                         ++SpawnSquadIndex;
                     }
                 }

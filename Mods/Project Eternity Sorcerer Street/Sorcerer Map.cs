@@ -263,34 +263,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
-            if (ShowLayerIndex == -1)
-            {
-                for (int i = 0; i < ListLayer.Count; ++i)
-                {
-                    ListLayer[i].BeginDraw(g);
-                }
-            }
-            else
-            {
-                ListLayer[ShowLayerIndex].BeginDraw(g);
-            }
         }
 
         public override void Draw(CustomSpriteBatch g)
         {
             g.End();
             g.Begin(SpriteSortMode.Deferred, null);
-            if (ShowLayerIndex == -1)
-            {
-                for (int L = 0; L < ListLayer.Count; ++L)
-                {
-                    ListLayer[L].Draw(g, L);
-                }
-            }
-            else
-            {
-                ListLayer[ShowLayerIndex].Draw(g, ShowLayerIndex);
-            }
 
             if (IsOnTop)
             {

@@ -269,7 +269,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         ListTerrainChoice.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
                     }
-                    Map.ListLayer[(int)ActiveSquad.Position.Z].LayerGrid.AddDrawablePoints(ListTerrainChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
+                    Map.LayerManager.AddDrawablePoints(ListTerrainChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
                 }
                 
                 for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)

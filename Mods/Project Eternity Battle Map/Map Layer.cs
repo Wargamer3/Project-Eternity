@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -18,5 +21,47 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public interface ISubMapLayer
     {
 
+    }
+
+    public abstract class LayerHolder
+    {
+        public ILayerHolderDrawable LayerHolderDrawable;
+
+        public abstract BaseMapLayer this[int i] { get; }
+
+        public abstract void Save(BinaryWriter BW);
+
+        public abstract void Update(GameTime gameTime);
+
+        public abstract void TogglePreview(bool UsePreview);
+
+        public abstract DrawableTile GetTile(int X, int Y, int LayerIndex);
+
+        public abstract void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor);
+
+        public abstract void AddDrawablePath(List<MovementAlgorithmTile> ListPoint);
+
+        public abstract void BeginDraw(CustomSpriteBatch g);
+
+        public abstract void Draw(CustomSpriteBatch g);
+
+        public abstract void EndDraw(CustomSpriteBatch g);
+    }
+
+    public interface ILayerHolderDrawable
+    {
+        void AddDrawablePath(List<MovementAlgorithmTile> ListPoint);
+
+        void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor);
+
+        void Reset();
+
+        void Update(GameTime gameTime);
+
+        void BeginDraw(CustomSpriteBatch g);
+
+        void Draw(CustomSpriteBatch g);
+
+        void EndDraw(CustomSpriteBatch g);
     }
 }

@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public DrawableTile GetTile(int X, int Y, int LayerIndex)
         {
-            return ActiveMap.ListLayer[LayerIndex].OriginalLayerGrid.GetTile(X, Y);
+            return ActiveMap.LayerManager.GetTile(X, Y, LayerIndex);
         }
 
         public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)
@@ -48,8 +48,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (X < ActiveMap.MapSize.X && Y < ActiveMap.MapSize.Y)
                         {
-                            ArrayTerrain[X, Y] = ActiveMap.ListLayer[L].ArrayTerrain[X, Y];
-                            ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].OriginalLayerGrid.GetTile(X, Y);
+                            ArrayTerrain[X, Y] = ActiveMap.LayerManager.ListLayer[L].ArrayTerrain[X, Y];
+                            ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].LayerGrid.GetTile(X, Y);
                         }
                         else
                         {
@@ -65,14 +65,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             else
                             {
                                 ArrayTerrain[X, Y] = new Terrain(X, Y);
-                                ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].OriginalLayerGrid.GetTile(X, Y);
+                                ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].LayerGrid.GetTile(X, Y);
                             }
                         }
                     }
                 }
 
-                ActiveMap.ListLayer[L].ArrayTerrain = ArrayTerrain;
-                ActiveMap.ListLayer[L].OriginalLayerGrid.ReplaceGrid(ArrayTile2D);
+                ActiveMap.LayerManager.ListLayer[L].ArrayTerrain = ArrayTerrain;
+                ActiveMap.LayerManager.ListLayer[L].LayerGrid.ReplaceGrid(ArrayTile2D);
             }
 
             ActiveMap.MapSize = new Point(NewWidth, NewHeight);
@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             DrawableTile NewTile = new DrawableTile(TilePreset);
 
-            GetRealLayer(LayerIndex).OriginalLayerGrid.ReplaceTile(X, Y, NewTile);
+            GetRealLayer(LayerIndex).LayerGrid.ReplaceTile(X, Y, NewTile);
         }
 
         public void RemoveTileset(int TilesetIndex)
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveMap.ListTileSet.RemoveAt(TilesetIndex);
             ActiveMap.ListTilesetPreset.RemoveAt(TilesetIndex);
 
-            foreach (MapLayer ActiveLayer in ActiveMap.ListLayer)
+            foreach (MapLayer ActiveLayer in ActiveMap.LayerManager.ListLayer)
             {
                 ActiveLayer.LayerGrid.RemoveTileset(TilesetIndex);
             }
@@ -108,20 +108,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int RealIndex = 0;
 
-            for (int L = 0; L < ActiveMap.ListLayer.Count; ++L)
+            for (int L = 0; L < ActiveMap.LayerManager.ListLayer.Count; ++L)
             {
                 if (LayerIndex == RealIndex)
                 {
-                    return ActiveMap.ListLayer[L];
+                    return ActiveMap.LayerManager.ListLayer[L];
                 }
 
                 ++RealIndex;
 
-                for (int L2 = 0; L2 < ActiveMap.ListLayer[L].ListSubLayer.Count; ++L2)
+                for (int L2 = 0; L2 < ActiveMap.LayerManager.ListLayer[L].ListSubLayer.Count; ++L2)
                 {
                     if (LayerIndex == RealIndex)
                     {
-                        return ActiveMap.ListLayer[L].ListSubLayer[L2];
+                        return ActiveMap.LayerManager.ListLayer[L].ListSubLayer[L2];
                     }
 
                     ++RealIndex;
@@ -133,7 +133,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public BaseMapLayer CreateNewLayer()
         {
             MapLayer NewLayer = new MapLayer(ActiveMap);
-            ActiveMap.ListLayer.Add(NewLayer);
+            ActiveMap.LayerManager.ListLayer.Add(NewLayer);
             return NewLayer;
         }
 
@@ -146,7 +146,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void RemoveLayer(int Index)
         {
-            ActiveMap.ListLayer.RemoveAt(Index);
+            ActiveMap.LayerManager.ListLayer.RemoveAt(Index);
         }
 
         public void RemoveSubLayer(BaseMapLayer ParentLayer, ISubMapLayer SubLayer)
@@ -171,14 +171,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public int GetLayerCount()
         {
-            return ActiveMap.ListLayer.Count;
+            return ActiveMap.LayerManager.ListLayer.Count;
         }
 
         public List<BaseMapLayer> GetLayersAndSubLayers()
         {
             List<BaseMapLayer> ListLayers = new List<BaseMapLayer>();
 
-            foreach (MapLayer ActiveMapLayer in ActiveMap.ListLayer)
+            foreach (MapLayer ActiveMapLayer in ActiveMap.LayerManager.ListLayer)
             {
                 ListLayers.Add(ActiveMapLayer);
                 foreach (SubMapLayer ActiveSubMapLayer in ActiveMapLayer.ListSubLayer)

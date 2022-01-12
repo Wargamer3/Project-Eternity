@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     TransformationCounter -= TilesTransformationCounter;
 
-                    MapLayer ActiveLayer = Map.ListLayer[0];
+                    MapLayer ActiveLayer = Map.LayerManager.ListLayer[0];
 
                     for (int T = RealCurrentTransformingIndex; T < TerrainAttribute.ListTerrainChangeLocation.Count && T < RealCurrentTransformingIndex + _MinSimultaneousTiles; T++)
                     {
@@ -60,13 +60,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         int PosY = (int)ActiveTerrain.Position.Y;
                         DrawableTile ActiveTile = TerrainAttribute.ListTileChangeLocation[T];
                         ActiveLayer.ArrayTerrain[PosX, PosY] = ActiveTerrain;
-                        ActiveLayer.OriginalLayerGrid.ReplaceTile(PosX, PosY, ActiveTile);
+                        ActiveLayer.LayerGrid.ReplaceTile(PosX, PosY, ActiveTile);
                     }
 
                     CurrentTransformingIndex += _MinSimultaneousTiles;
                     RealCurrentTransformingIndex = (int)CurrentTransformingIndex;
 
-                    ActiveLayer.ResetGrid();
+                    Map.LayerManager.LayerHolderDrawable.Reset();
                 }
 
                 if (RealCurrentTransformingIndex >= TerrainAttribute.ListTerrainChangeLocation.Count)

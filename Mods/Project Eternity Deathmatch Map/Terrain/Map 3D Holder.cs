@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,34 +7,31 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    public class Map3D : DrawableGrid
+    public class Map3DDrawable : ILayerHolderDrawable
     {
         protected Point MapSize { get { return Map.MapSize; } }
 
-        public Dictionary<int, List<Tile3D>> DicTile3DByTileset;
-        protected BasicEffect PolygonEffect;
-        protected float Radius;
         private DeathmatchMap Map;
-        protected int LayerIndex;
-        protected MapLayer Owner;
-        public DefaultCamera Camera;
+
+        private Effect effect;
+        private BasicEffect PolygonEffect;
+        private DefaultCamera Camera;
         private Texture2D sprCursor;
         private Tile3D Cursor;
+        private Dictionary<int, Tile3DHolder> DicTile3DByTileset;
         private Dictionary<Color, List<Tile3D>> DicDrawablePointPerColor;
         private List<Tile3D> ListDrawableArrowPerColor;
-        private Random Random;
 
-        public Map3D(DeathmatchMap Map, int LayerIndex, MapLayer Owner, GraphicsDevice g)
+        public Map3DDrawable(DeathmatchMap Map, GraphicsDevice g)
         {
             this.Map = Map;
-            this.LayerIndex = LayerIndex;
-            this.Owner = Owner;
-            Random = new Random();
             sprCursor = Map.sprCursor;
             Camera = new DefaultCamera(g);
-            Radius = (Map.MapSize.X * Map.TileSize.X) / 2;
+
+            effect = Map.Content.Load<Effect>("Shaders/Default Shader 3D");
 
             PolygonEffect = new BasicEffect(g);
+
 
             PolygonEffect.TextureEnabled = true;
             PolygonEffect.EnableDefaultLighting();
@@ -50,40 +46,67 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PolygonEffect.World = Matrix.Identity;
             PolygonEffect.View = Matrix.Identity;
 
+            // Key light.
+            effect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
+            effect.Parameters["DirLight0DiffuseColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
+            effect.Parameters["DirLight0SpecularColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
+
+            // Fill light.
+            effect.Parameters["DirLight1Direction"].SetValue(new Vector3(0.7198464f, 0.3420201f, 0.6040227f));
+            effect.Parameters["DirLight1DiffuseColor"].SetValue(new Vector3(0.9647059f, 0.7607844f, 0.4078432f));
+            effect.Parameters["DirLight1SpecularColor"].SetValue(Vector3.Zero);
+
+            // Back light.
+            effect.Parameters["DirLight2Direction"].SetValue(new Vector3(0.4545195f, -0.7660444f, 0.4545195f));
+            effect.Parameters["DirLight2DiffuseColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
+            effect.Parameters["DirLight2SpecularColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
+
+            Vector3 diffuseColor = Vector3.One;
+            Vector3 emissiveColor = Vector3.Zero;
+            Vector3 ambientLightColor = new Vector3(0.05333332f, 0.09882354f, 0.1819608f);
+            Vector4 diffuse = new Vector4();
+            Vector3 emissive = new Vector3();
+            float alpha = 1;
+            diffuse.X = diffuseColor.X * alpha;
+            diffuse.Y = diffuseColor.Y * alpha;
+            diffuse.Z = diffuseColor.Z * alpha;
+            diffuse.W = alpha;
+
+            emissive.X = (emissiveColor.X + ambientLightColor.X * diffuseColor.X) * alpha;
+            emissive.Y = (emissiveColor.Y + ambientLightColor.Y * diffuseColor.Y) * alpha;
+            emissive.Z = (emissiveColor.Z + ambientLightColor.Z * diffuseColor.Z) * alpha;
+
+            effect.Parameters["DiffuseColor"].SetValue(diffuse);
+            effect.Parameters["EmissiveColor"].SetValue(emissive);
+            effect.Parameters["SpecularColor"].SetValue(Vector3.One);
+            effect.Parameters["SpecularPower"].SetValue(64);
+
+
             DicDrawablePointPerColor = new Dictionary<Color, List<Tile3D>>();
-            DicTile3DByTileset = new Dictionary<int, List<Tile3D>>();
+            DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
             ListDrawableArrowPerColor = new List<Tile3D>();
 
-            CreateMap(Map);
+            for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+            {
+                CreateMap(Map, Map.LayerManager.ListLayer[L], L);
+            }
 
-            float Z = Owner.ArrayTerrain[0, 0].Position.Z * 32 + (LayerIndex * 64);
-            Map2D GroundLayer = Owner.OriginalLayerGrid;
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+            {
+                ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+            }
+
+            float Z = Map.LayerManager.ListLayer[0].ArrayTerrain[0, 0].Position.Z * 32;
+            Map2D GroundLayer = Map.LayerManager.ListLayer[0].LayerGrid;
             DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
             Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
             Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                0, 0, Z, LayerIndex * 64, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                0, 0, Z, 0, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
         }
 
-        public void Save(BinaryWriter BW)
+        protected void CreateMap(DeathmatchMap Map, MapLayer Owner, int LayerIndex)
         {
-            for (int X = MapSize.X - 1; X >= 0; --X)
-            {
-                for (int Y = MapSize.Y - 1; Y >= 0; --Y)
-                {
-                    Owner.OriginalLayerGrid.GetTile(X, Y).Save(BW);
-                }
-            }
-        }
-
-        public void Load(BinaryReader BR)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual void CreateMap(DeathmatchMap Map)
-        {
-            DicTile3DByTileset.Clear();
-            Map2D GroundLayer = Owner.OriginalLayerGrid;
+            Map2D GroundLayer = Owner.LayerGrid;
 
             for (int X = Map.MapSize.X - 1; X >= 0; --X)
             {
@@ -119,23 +142,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
 
                     List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
-                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, (LayerIndex * 32), Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
+                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 32, Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
 
                     foreach (Tile3D ActiveTile in ListNew3DTile)
                     {
                         if (!DicTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
                         {
-                            DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new List<Tile3D>());
+                            DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(effect, Map.ListTileSet[ActiveTile.TilesetIndex]));
                         }
-                        DicTile3DByTileset[ActiveTile.TilesetIndex].Add(ActiveTile);
+                        DicTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile);
                     }
                 }
             }
-        }
-        
-        public void RemoveTileset(int TilesetIndex)
-        {
-            throw new NotImplementedException();
+
+            for (int L = 0; L < Owner.ListSubLayer.Count; L++)
+            {
+                CreateMap(Map, Owner.ListSubLayer[L], LayerIndex);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -144,7 +167,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Camera.CameraHeight = 600;
                 Camera.CameraDistance = 500;
-                Camera.SetTarget(new Vector3(Map.TileSize.X * Map.MapSize.X / 2, LayerIndex * 32, Map.TileSize.Y * Map.MapSize.Y / 2));
+                Camera.SetTarget(new Vector3(Map.TileSize.X * Map.MapSize.X / 2, Map.CursorPosition.Z * 32, Map.TileSize.Y * Map.MapSize.Y / 2));
                 Camera.Update(gameTime);
                 return;
             }
@@ -153,103 +176,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Camera.CameraDistance = 300;
             int X = (int)Map.CursorPositionVisible.X;
             int Y = (int)Map.CursorPositionVisible.Y;
-            float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 32) + 0.3f;
-            Map2D GroundLayer = Owner.OriginalLayerGrid;
+            float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].Position.Z * 32 + (Map.CursorPosition.Z * 32) + 0.3f;
+            Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
             DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
             Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
             Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 32 + 0.3f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * 32 + 0.3f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
 
             Camera.SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, Map.CursorPosition.Z * 32, Map.TileSize.Y * Map.CursorPositionVisible.Y));
             Camera.Update(gameTime);
 
             DicDrawablePointPerColor.Clear();
             ListDrawableArrowPerColor.Clear();
-        }
-        
-        public void BeginDraw(CustomSpriteBatch g)
-        {
-        }
-
-        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer, MovementAlgorithmTile[,] ArrayTerrain)
-        {
-            PolygonEffect.View = Camera.View;
-            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-
-            foreach (KeyValuePair<int, List<Tile3D>> ActiveTileSet in DicTile3DByTileset)
-            {
-                PolygonEffect.Texture = Map.ListTileSet[ActiveTileSet.Key];
-                PolygonEffect.CurrentTechnique.Passes[0].Apply();
-
-                foreach (Tile3D ActiveTile in ActiveTileSet.Value)
-                {
-                    ActiveTile.Draw(g.GraphicsDevice);
-                }
-            }
-
-            if (IsSubLayer)
-            {
-                return;
-            }
-
-            g.End();
-            GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-            for (int P = 0; P < Map.ListPlayer.Count; P++)
-            {
-                //If the selected unit have the order to move, draw the possible positions it can go to.
-                for (int U = 0; U < Map.ListPlayer[P].ListSquad.Count; U++)
-                {
-                    //If it's dead, don't draw it unless it's an event unit.
-                    if ((int)Map.ListPlayer[P].ListSquad[U].Position.Z != LayerIndex
-                        || (Map.ListPlayer[P].ListSquad[U].CurrentLeader == null && !Map.ListPlayer[P].ListSquad[U].IsEventSquad)
-                        || Map.ListPlayer[P].ListSquad[U].IsDead)
-                        continue;
-
-                    Color UnitColor;
-                    if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
-                        UnitColor = Map.ListPlayer[P].Color;
-                    else
-                        UnitColor = Color.White;
-
-                    Map.ListPlayer[P].ListSquad[U].Unit3D.SetViewMatrix(Camera.View);
-                    float TerrainZ = Owner.ArrayTerrain[(int)Map.ListPlayer[P].ListSquad[U].Position.X, (int)Map.ListPlayer[P].ListSquad[U].Position.Y].Position.Z;
-
-                    Map.ListPlayer[P].ListSquad[U].Unit3D.SetPosition(
-                        Map.ListPlayer[P].ListSquad[U].Position.X + 0.5f,
-                        Map.ListPlayer[P].ListSquad[U].Position.Z * 32 + TerrainZ * 32,
-                        Map.ListPlayer[P].ListSquad[U].Position.Y + 0.5f);
-
-                    Map.ListPlayer[P].ListSquad[U].Unit3D.Draw(GameScreen.GraphicsDevice);
-                }
-            }
-
-            for (int P = 0; P < Owner.ListProp.Count; ++P)
-            {
-                Owner.ListProp[P].Unit3D.SetViewMatrix(Camera.View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].Position.Z;
-
-                Owner.ListProp[P].Unit3D.SetPosition(
-                    Owner.ListProp[P].Position.X + 0.5f,
-                    Owner.ListProp[P].Position.Z * 32 + TerrainZ * 32,
-                    Owner.ListProp[P].Position.Y + 0.5f);
-
-                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice);
-            }
-
-            DrawDrawablePoints(g);
-
-            if ((int)Map.CursorPosition.Z == LayerIndex)
-            {
-                PolygonEffect.Texture = sprCursor;
-                PolygonEffect.CurrentTechnique.Passes[0].Apply();
-
-                Cursor.Draw(g.GraphicsDevice);
-            }
-
-            g.Begin();
         }
         
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
@@ -260,8 +198,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 int X = (int)ActivePoint.Position.X;
                 int Y = (int)ActivePoint.Position.Y;
-                float Z = Map.ListLayer[(int)ActivePoint.LayerIndex].ArrayTerrain[X, Y].Position.Z * 32 + (ActivePoint.LayerIndex * 32) + 0.1f;
-                Map2D GroundLayer = Owner.OriginalLayerGrid;
+                float Z = Map.LayerManager.ListLayer[ActivePoint.LayerIndex].ArrayTerrain[X, Y].Position.Z * 32 + (ActivePoint.LayerIndex * 32) + 0.1f;
+                Map2D GroundLayer = Map.LayerManager.ListLayer[ActivePoint.LayerIndex].LayerGrid;
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
@@ -286,8 +224,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 int X = (int)ActivePoint.Position.X;
                 int Y = (int)ActivePoint.Position.Y;
-                float Z = Map.ListLayer[(int)ActivePoint.LayerIndex].ArrayTerrain[X, Y].Position.Z * 32 + (ActivePoint.LayerIndex * 32) + 0.1f;
-                Map2D GroundLayer = Owner.OriginalLayerGrid;
+                float Z = Map.LayerManager.ListLayer[ActivePoint.LayerIndex].ArrayTerrain[X, Y].Position.Z * 32 + (ActivePoint.LayerIndex * 32) + 0.1f;
+                Map2D GroundLayer = Map.LayerManager.ListLayer[ActivePoint.LayerIndex].LayerGrid;
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
@@ -406,7 +344,117 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Reset()
         {
-            CreateMap(Map);
+            DicTile3DByTileset.Clear();
+
+            for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+            {
+                CreateMap(Map, Map.LayerManager.ListLayer[L], L);
+            }
+
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+            {
+                ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+            }
+        }
+
+        public void BeginDraw(CustomSpriteBatch g)
+        {
+        }
+
+        public void Draw(CustomSpriteBatch g, MapLayer Owner, bool IsSubLayer)
+        {
+            if (!Owner.IsVisible)
+            {
+                return;
+            }
+
+            if (!IsSubLayer)
+            {
+                return;
+            }
+
+            for (int P = 0; P < Owner.ListProp.Count; ++P)
+            {
+                Owner.ListProp[P].Unit3D.SetViewMatrix(Camera.View);
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].Position.Z;
+
+                Owner.ListProp[P].Unit3D.SetPosition(
+                    Owner.ListProp[P].Position.X + 0.5f,
+                    Owner.ListProp[P].Position.Z * 32 + TerrainZ * 32,
+                    Owner.ListProp[P].Position.Y + 0.5f);
+
+                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice);
+            }
+        }
+
+        public void Draw(CustomSpriteBatch g)
+        {
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            PolygonEffect.View = Camera.View;
+            Matrix ViewProjection = Camera.View * PolygonEffect.Projection;
+
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+            {
+                ActiveTileSet.Value.SetViewMatrix(ViewProjection, Camera.CameraPosition3D);
+
+                ActiveTileSet.Value.Draw(g.GraphicsDevice);
+            }
+
+            if (Map.ShowLayerIndex == -1)
+            {
+                for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+                {
+                    Draw(g, Map.LayerManager.ListLayer[L], false);
+                }
+            }
+            else
+            {
+                Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
+            }
+
+            DrawDrawablePoints(g);
+
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.None;
+            PolygonEffect.Texture = sprCursor;
+            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+
+            Cursor.Draw(g.GraphicsDevice);
+
+            for (int P = 0; P < Map.ListPlayer.Count; P++)
+            {
+                //If the selected unit have the order to move, draw the possible positions it can go to.
+                for (int U = 0; U < Map.ListPlayer[P].ListSquad.Count; U++)
+                {
+                    //If it's dead, don't draw it unless it's an event unit.
+                    if ((Map.ListPlayer[P].ListSquad[U].CurrentLeader == null && !Map.ListPlayer[P].ListSquad[U].IsEventSquad)
+                        || Map.ListPlayer[P].ListSquad[U].IsDead)
+                        continue;
+
+                    Color UnitColor;
+                    if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
+                        UnitColor = Map.ListPlayer[P].Color;
+                    else
+                        UnitColor = Color.White;
+
+                    Map.ListPlayer[P].ListSquad[U].Unit3D.SetViewMatrix(Camera.View);
+                    float TerrainZ = Map.LayerManager.ListLayer[(int)Map.ListPlayer[P].ListSquad[U].Z].ArrayTerrain[(int)Map.ListPlayer[P].ListSquad[U].Position.X, (int)Map.ListPlayer[P].ListSquad[U].Position.Y].Position.Z;
+
+                    Map.ListPlayer[P].ListSquad[U].Unit3D.SetPosition(
+                        Map.ListPlayer[P].ListSquad[U].Position.X + 0.5f,
+                        Map.ListPlayer[P].ListSquad[U].Position.Z * 32 + TerrainZ * 32,
+                        Map.ListPlayer[P].ListSquad[U].Position.Y + 0.5f);
+
+                    Map.ListPlayer[P].ListSquad[U].Unit3D.Draw(GameScreen.GraphicsDevice);
+                }
+            }
+
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+        }
+
+        public void EndDraw(CustomSpriteBatch g)
+        {
         }
     }
 }

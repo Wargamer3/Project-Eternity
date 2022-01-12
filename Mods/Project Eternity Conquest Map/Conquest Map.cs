@@ -27,6 +27,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon1;//Unit Name, <Target Name, Damage>.
         public Dictionary<string, Dictionary<string, int>> DicUnitDamageWeapon2;//Unit Name, <Target Name, Damage>.
         public List<MapLayer> ListLayer;
+        public LayerHolder LayerManager;
         public Dictionary<string, int> DicUnitCost;//Unit name, how much it cost to build.
         public int BuildingMenuCursor;
         public List<string> ListCurrentBuildingChoice;
@@ -1123,34 +1124,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 MapOverlay.BeginDraw(g);
             }
 
-            if (ShowLayerIndex == -1)
-            {
-                for (int i = 0; i < ListLayer.Count; ++i)
-                {
-                    ListLayer[i].BeginDraw(g);
-                }
-            }
-            else
-            {
-                ListLayer[ShowLayerIndex].BeginDraw(g);
-            }
+            LayerManager.BeginDraw(g);
 
             g.End();
         }
 
         public override void Draw(CustomSpriteBatch g)
         {
-            if (ShowLayerIndex == -1)
-            {
-                for (int L = 0; L < ListLayer.Count; ++L)
-                {
-                    ListLayer[L].Draw(g, L);
-                }
-            }
-            else
-            {
-                ListLayer[ShowLayerIndex].Draw(g, ShowLayerIndex);
-            }
+            LayerManager.Draw(g);
 
             if (ShowUnits)
             {

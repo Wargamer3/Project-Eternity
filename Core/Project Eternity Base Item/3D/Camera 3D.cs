@@ -10,7 +10,7 @@ namespace ProjectEternity.Core
     {
         public Matrix View;
         protected Matrix CameraRotation;
-        protected Vector3 CameraPosition3D;
+        public Vector3 CameraPosition3D;
         public Matrix Projection;
 
         public Camera3D(GraphicsDevice g)

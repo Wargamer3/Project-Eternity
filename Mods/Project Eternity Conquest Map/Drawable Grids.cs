@@ -48,13 +48,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Load(BR);
         }
 
-        public override void DrawPlayers(CustomSpriteBatch g, int LayerIndex)
+        public void DrawPlayers(CustomSpriteBatch g, int LayerIndex)
         {
             for (int P = 0; P < ActiveMap.ListPlayer.Count; P++)
             {
                 for (int S = 0; S < ActiveMap.ListPlayer[P].ListUnit.Count; S++)
                 {
-                    DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListUnit[S].Components, !ActiveMap.ListPlayer[P].ListUnit[S].CanMove && P == ActiveMap.ActivePlayerIndex);
+                    //DrawUnitMap(g, ActiveMap.ListPlayer[P].Color, ActiveMap.ListPlayer[P].ListUnit[S].Components, !ActiveMap.ListPlayer[P].ListUnit[S].CanMove && P == ActiveMap.ActivePlayerIndex);
                 }
             }
         }

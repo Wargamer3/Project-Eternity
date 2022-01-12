@@ -88,7 +88,7 @@ namespace ProjectEternity.Core.Units.Builder
                 Map.CursorControl(ActiveInputManager);
             }
 
-            Map.ListLayer[0].LayerGrid.AddDrawablePoints(ListBuildTerrain, Color.Coral);
+            Map.LayerManager.AddDrawablePoints(ListBuildTerrain, Color.Coral);
         }
 
         private List<Squad> FindOtherSquad(string SquadName)

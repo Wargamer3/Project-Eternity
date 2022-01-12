@@ -143,27 +143,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                 }
             }
-
-            LayerGrid.Update(gameTime);
-        }
-
-        public void BeginDraw(CustomSpriteBatch g)
-        {
-            if (IsVisible)
-                LayerGrid.BeginDraw(g);
-        }
-
-        public void Draw(CustomSpriteBatch g, int LayerIndex)
-        {
-            if (IsVisible)
-            {
-                LayerGrid.Draw(g, LayerIndex, false, ArrayTerrain);
-            }
-        }
-
-        public void EndDraw(CustomSpriteBatch g)
-        {
-
         }
 
         public override string ToString()

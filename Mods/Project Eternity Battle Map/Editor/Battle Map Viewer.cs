@@ -174,19 +174,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.End();
             g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
-            //Grid
-            if (ShowGrid)
-            {
-                //Draw the vertical lines for the grid.
-                for (int X = 0; X < ActiveMap.MapSize.X; X++)
-                    g.Draw(sprPixel, new Rectangle(X * ActiveMap.TileSize.X, 0,
-                                                   1, ActiveMap.MapSize.Y * ActiveMap.TileSize.Y), Color.Black);
-                //Draw the horizontal lines for the grid.
-                for (int Y = 0; Y < ActiveMap.MapSize.Y; Y++)
-                    g.Draw(sprPixel, new Rectangle(0, Y * ActiveMap.TileSize.Y,
-                                               ActiveMap.MapSize.X * ActiveMap.TileSize.X, 1), Color.Black);
-            }
-
             ActiveMap.EndDraw(g);
             g.End();
         }

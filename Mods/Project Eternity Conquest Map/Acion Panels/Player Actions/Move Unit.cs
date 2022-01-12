@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.ListLayer[0].LayerGrid.AddDrawablePoints(ListMVChoice, Color.White);
+            Map.LayerManager.AddDrawablePoints(ListMVChoice, Color.White);
 
             Map.CursorControl();
 

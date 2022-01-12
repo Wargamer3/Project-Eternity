@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int PosY = RandomHelper.Random.Next(Map.MapSize.Y);
                 HealthCrate NewCrate = new HealthCrate(new Vector3(5, 10, 0), Map);
                 NewCrate.Load(Map.Content);
-                Map.ListLayer[0].ListProp.Add(NewCrate);
+                Map.LayerManager[0].ListProp.Add(NewCrate);
                 IsEnded = true;
             }
 
@@ -96,7 +96,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 public void HealSquad(Squad SquadToHeal)
                 {
                     SquadToHeal.CurrentLeader.HealUnit(SquadToHeal.CurrentLeader.MaxHP / 2);
-                    Map.ListLayer[0].ListProp.Remove(this);
+                    Map.LayerManager[0].ListProp.Remove(this);
                 }
 
                 public override void Update(GameTime gameTime)

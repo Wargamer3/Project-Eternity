@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Characters;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Units.Normal;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
@@ -13,7 +13,7 @@ namespace ProjectEternity.UnitTests
         public static DeathmatchMap CreateDummyMap(DeathmatchContext GlobalDeathmatchContext)
         {
             DeathmatchMap DummyMap = new DeathmatchMap(GlobalDeathmatchContext);
-            DummyMap.ListLayer.Add(new MapLayer(DummyMap));
+            DummyMap.LayerManager.ListLayer.Add(new MapLayer(DummyMap));
             DummyMap.LoadEffects();
             DummyMap.LoadSkillRequirements();
             DummyMap.LoadAutomaticSkillActivation();
@@ -22,13 +22,13 @@ namespace ProjectEternity.UnitTests
             DummyMap.NonDemoScreen = new NonDemoScreen(DummyMap);
             DummyMap.ListGameScreen = new List<GameScreens.GameScreen>();
 
-            DummyMap.ListLayer.Add(new MapLayer(DummyMap));
-            DummyMap.ListLayer[0].ArrayTerrain = new Terrain[20, 20];
+            DummyMap.LayerManager.ListLayer.Add(new MapLayer(DummyMap));
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain = new Terrain[20, 20];
             for (int X = 0; X < 20; ++X)
             {
                 for (int Y = 0; Y < 20; ++Y)
                 {
-                    DummyMap.ListLayer[0].ArrayTerrain[X, Y] = new Terrain(X, Y, 1, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
+                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new Terrain(X, Y, 1, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
                 }
             }
 

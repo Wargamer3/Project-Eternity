@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override string DoExecuteEffect()
         {
-            MapLayer ActiveLayer = Params.LocalContext.Map.ListLayer[0];
+            MapLayer ActiveLayer = Params.LocalContext.Map.LayerManager.ListLayer[0];
 
             foreach (Vector3 ActivePosition in Params.LocalContext.ArrayAttackPosition)
             {
@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            ActiveLayer.ResetGrid();
+            Params.LocalContext.Map.LayerManager.LayerHolderDrawable.Reset();
             return "Depth: " + _Depth + " - Radius: " + _Radius;
 
         }
