@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Effects;

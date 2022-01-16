@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using FMOD;
@@ -285,12 +286,12 @@ namespace ProjectEternity.Core.Units
         public List<string> ListIgnoreSkill;//List used to ignore other skills.
         public List<string> ListCharacterIDWhitelist { get { return _UnitStat.ListCharacterIDWhitelist; } }
 
-        public List<Attack> ListAttack { get { return _UnitStat.ListAttack; } }
+        public List<Attack> ListAttack { get { return _UnitStat.ListAttack.Concat(_UnitStat.ListAttackTemporary).ToList(); } }
 
         public int PLAAttack { get { return _UnitStat.PLAAttack; } }
 
         public int AttackIndex;
-        public Attack CurrentAttack { get { return AttackIndex >= 0 && AttackIndex < _UnitStat.ListAttack.Count ? _UnitStat.ListAttack[AttackIndex] : null; } }
+        public Attack CurrentAttack { get { return AttackIndex >= 0 && AttackIndex < ListAttack.Count ? ListAttack[AttackIndex] : null; } }
 
         public string AttackAccuracy;
         public string MAPAttackAccuracyA;
@@ -579,35 +580,35 @@ namespace ProjectEternity.Core.Units
 
         public void UpdateAllAttacks(Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
-            for (int A = 0; A < ListAttack.Count; A++)
+            foreach (Attack ActiveAttack in ListAttack)
             {
-                if (!ListAttack[A].CanAttack)
+                if (!ActiveAttack.CanAttack)
                 {
-                    ListAttack[A].UpdateAttack(this, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove);
+                    ActiveAttack.UpdateAttack(this, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove);
                 }
             }
         }
 
         public void UpdateNonMAPAttacks(Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
-            for (int A = 0; A < ListAttack.Count; A++)
+            foreach (Attack ActiveAttack in ListAttack)
             {
-                if (ListAttack[A].Pri != WeaponPrimaryProperty.MAP)
+                if (ActiveAttack.Pri != WeaponPrimaryProperty.MAP)
                 {
-                    ListAttack[A].UpdateAttack(this, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove);
+                    ActiveAttack.UpdateAttack(this, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove);
                 }
                 else
                 {
-                    ListAttack[A].DisableAttack();
+                    ActiveAttack.DisableAttack();
                 }
             }
         }
 
         public void DisableAllAttacks()
         {
-            for (int A = 0; A < ListAttack.Count; A++)
+            foreach (Attack ActiveAttack in ListAttack)
             {
-                ListAttack[A].DisableAttack();
+                ActiveAttack.DisableAttack();
             }
         }
 

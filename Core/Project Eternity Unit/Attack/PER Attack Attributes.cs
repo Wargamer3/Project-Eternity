@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.Core.Attacks
 {
@@ -11,6 +12,8 @@ namespace ProjectEternity.Core.Attacks
         public bool AffectedByGravity;
         public bool CanBeShotDown;
         public byte MaxLifetime;
+
+        public SimpleAnimation ProjectileAnimation;
 
         public byte NumberOfProjectiles;
         public float MaxLateralSpread;
@@ -25,6 +28,8 @@ namespace ProjectEternity.Core.Attacks
             AffectedByGravity = BR.ReadBoolean();
             CanBeShotDown = BR.ReadBoolean();
             MaxLifetime = BR.ReadByte();
+
+            ProjectileAnimation = new SimpleAnimation(BR, false);
 
             NumberOfProjectiles = BR.ReadByte();
             MaxLateralSpread = BR.ReadSingle();

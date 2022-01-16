@@ -272,7 +272,11 @@ namespace ProjectEternity.Core.Attacks
             if (CanMove || (!CanMove && ((Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement ||
                                             (CurrentUnit.Boosts.PostMovementModifier.Attack && CurrentUnit.Boosts.PostMovementModifier.Attack))))
             {
-                if (Pri == WeaponPrimaryProperty.MAP)
+                if (Pri == WeaponPrimaryProperty.PER)
+                {
+                    return true;
+                }
+                else if (Pri == WeaponPrimaryProperty.MAP)
                 {
                     for (int X = 0; X < ArrayTargetMapSize.GetLength(0); X++)
                     {

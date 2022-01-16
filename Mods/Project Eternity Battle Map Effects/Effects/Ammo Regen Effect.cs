@@ -40,9 +40,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override bool CanActivate()
         {
-            for (int W = Params.GlobalContext.EffectTargetUnit.ListAttack.Count - 1; W >= 0; --W)
+            foreach (Core.Attacks.Attack ActiveAttack in Params.GlobalContext.EffectTargetUnit.ListAttack)
             {
-                if (Params.GlobalContext.EffectTargetUnit.ListAttack[W].Ammo < Params.GlobalContext.EffectTargetUnit.ListAttack[W].MaxAmmo)
+                if (ActiveAttack.Ammo < ActiveAttack.MaxAmmo)
                 {
                     return true;
                 }

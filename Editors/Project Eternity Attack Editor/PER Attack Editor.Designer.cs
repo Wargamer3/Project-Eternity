@@ -120,6 +120,7 @@ namespace ProjectEternity.Editors.AttackEditor
             this.btnUseTextureProjectile.TabIndex = 51;
             this.btnUseTextureProjectile.Text = "Use Texture Projectile";
             this.btnUseTextureProjectile.UseVisualStyleBackColor = true;
+            this.btnUseTextureProjectile.Click += new System.EventHandler(this.btnUseTextureProjectile_Click);
             // 
             // btnUseAnimatedProjectile
             // 
@@ -129,6 +130,7 @@ namespace ProjectEternity.Editors.AttackEditor
             this.btnUseAnimatedProjectile.TabIndex = 50;
             this.btnUseAnimatedProjectile.Text = "Use Animated Projectile";
             this.btnUseAnimatedProjectile.UseVisualStyleBackColor = true;
+            this.btnUseAnimatedProjectile.Click += new System.EventHandler(this.btnUseAnimatedProjectile_Click);
             // 
             // txtProjectilePath
             // 
@@ -267,6 +269,7 @@ namespace ProjectEternity.Editors.AttackEditor
             this.btnSelectSkillChain.TabIndex = 39;
             this.btnSelectSkillChain.Text = "Select Skill Chain";
             this.btnSelectSkillChain.UseVisualStyleBackColor = true;
+            this.btnSelectSkillChain.Click += new System.EventHandler(this.btnSelectSkillChain_Click);
             // 
             // gbGroundCollision
             // 
@@ -305,7 +308,6 @@ namespace ProjectEternity.Editors.AttackEditor
             this.rbStop.Name = "rbStop";
             this.rbStop.Size = new System.Drawing.Size(47, 17);
             this.rbStop.TabIndex = 2;
-            this.rbStop.TabStop = true;
             this.rbStop.Text = "Stop";
             this.rbStop.UseVisualStyleBackColor = true;
             // 
@@ -316,13 +318,13 @@ namespace ProjectEternity.Editors.AttackEditor
             this.rbBounce.Name = "rbBounce";
             this.rbBounce.Size = new System.Drawing.Size(62, 17);
             this.rbBounce.TabIndex = 1;
-            this.rbBounce.TabStop = true;
             this.rbBounce.Text = "Bounce";
             this.rbBounce.UseVisualStyleBackColor = true;
             // 
             // rbDestroySelf
             // 
             this.rbDestroySelf.AutoSize = true;
+            this.rbDestroySelf.Checked = true;
             this.rbDestroySelf.Location = new System.Drawing.Point(6, 19);
             this.rbDestroySelf.Name = "rbDestroySelf";
             this.rbDestroySelf.Size = new System.Drawing.Size(82, 17);

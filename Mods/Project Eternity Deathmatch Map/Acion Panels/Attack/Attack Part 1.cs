@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -16,6 +17,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         private Squad ActiveSquad;
+        private List<Attack> ListAttack;
 
         public ActionPanelAttackPart1(DeathmatchMap Map)
             : base(PanelName, Map)
@@ -30,6 +32,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.CanMove = CanMove;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            ListAttack = ActiveSquad.CurrentLeader.ListAttack;
         }
 
         public override void OnSelect()
@@ -53,21 +56,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 --ActiveSquad.CurrentLeader.AttackIndex;
                 if (ActiveSquad.CurrentLeader.AttackIndex < 0)
-                    ActiveSquad.CurrentLeader.AttackIndex = ActiveSquad.CurrentLeader.ListAttack.Count - 1;
+                    ActiveSquad.CurrentLeader.AttackIndex = ListAttack.Count - 1;
 
                 Map.sndSelection.Play();
             }
             else if (ActiveInputManager.InputDownPressed())
             {
                 ++ActiveSquad.CurrentLeader.AttackIndex;
-                if (ActiveSquad.CurrentLeader.AttackIndex >= ActiveSquad.CurrentLeader.ListAttack.Count)
+                if (ActiveSquad.CurrentLeader.AttackIndex >= ListAttack.Count)
                     ActiveSquad.CurrentLeader.AttackIndex = 0;
 
                 Map.sndSelection.Play();
             }
             else if (ActiveInputManager.InputMovePressed())
             {
-                for (int A = 0; A < ActiveSquad.CurrentLeader.ListAttack.Count; A++)
+                for (int A = 0; A < ListAttack.Count; A++)
                 {
                     if (ActiveInputManager.IsInZone(0, YStart + A * YStep, Constants.Width, YStart + (A + 1) * YStep))
                     {
@@ -81,7 +84,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)
                 {
-                    if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == Core.Attacks.WeaponPrimaryProperty.MAP)
+                    if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.PER)
+                    {
+                        AddToPanelListAndSelect(new ActionPanelAttackPER(Map, ActivePlayerIndex, ActiveSquadIndex));
+                    }
+                    else if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.MAP)
                     {
                         AddToPanelListAndSelect(new ActionPanelAttackMAP(Map, ActivePlayerIndex, ActiveSquadIndex));
                     }
@@ -102,6 +109,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            ListAttack = ActiveSquad.CurrentLeader.ListAttack;
             ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
         }
 
@@ -120,7 +128,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             //Draw the weapon selection menu.
-            Map.DrawAttackPanel(g, Map.fntFinlanderFont, ActiveSquad.CurrentLeader, ActiveSquad.CurrentLeader.AttackIndex);
+            Map.DrawAttackPanel(g, Map.fntFinlanderFont, ActiveSquad.CurrentLeader, ListAttack, ActiveSquad.CurrentLeader.AttackIndex);
         }
     }
 }

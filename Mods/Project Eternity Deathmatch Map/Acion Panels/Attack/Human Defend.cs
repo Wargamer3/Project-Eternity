@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
@@ -22,6 +24,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int TargetSquadIndex;
         private Squad TargetSquad;
         private SupportSquadHolder TargetSquadSupport;
+        List<Attack> ListAttackTargetSquad;
 
         public ActionPanelHumanDefend(DeathmatchMap Map)
             : base(PanelName, Map, Map.ListPlayer[Map.TargetPlayerIndex].InputManager, false)
@@ -42,6 +45,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
+            ListAttackTargetSquad = TargetSquad.CurrentLeader.ListAttack;
         }
 
         public override void OnSelect()
@@ -265,14 +269,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 --TargetSquad.CurrentLeader.AttackIndex;
                 if (TargetSquad.CurrentLeader.AttackIndex < 0)
-                    TargetSquad.CurrentLeader.AttackIndex = TargetSquad.CurrentLeader.ListAttack.Count - 1;
+                    TargetSquad.CurrentLeader.AttackIndex = ListAttackTargetSquad.Count - 1;
 
                 Map.sndSelection.Play();
             }
             else if (ActiveInputManager.InputDownPressed())
             {
                 ++TargetSquad.CurrentLeader.AttackIndex;
-                if (TargetSquad.CurrentLeader.AttackIndex >= TargetSquad.CurrentLeader.ListAttack.Count)
+                if (TargetSquad.CurrentLeader.AttackIndex >= ListAttackTargetSquad.Count)
                     TargetSquad.CurrentLeader.AttackIndex = 0;
 
                 Map.sndSelection.Play();
@@ -595,7 +599,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            Map.BattleSumaryDefenceDraw(g, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
+            Map.BattleSumaryDefenceDraw(g, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, ListAttackTargetSquad, TargetSquadSupport);
         }
     }
 }

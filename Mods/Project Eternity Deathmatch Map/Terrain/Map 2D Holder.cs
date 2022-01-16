@@ -73,14 +73,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
+            for (int P = 0; P < Owner.ListProp.Count; ++P)
+            {
+                Owner.ListProp[P].Draw(g);
+            }
+
             if (Map.ShowUnits && !IsSubLayer)
             {
                 DrawDrawablePoints(g);
-
-                for (int P = 0; P < Owner.ListProp.Count; ++P)
-                {
-                    Owner.ListProp[P].Draw(g);
-                }
 
                 DrawCursor(g);
             }

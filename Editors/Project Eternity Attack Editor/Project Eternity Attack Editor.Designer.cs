@@ -1299,6 +1299,7 @@
             // txtExplosionWindPowerToSelfMultiplier
             // 
             this.txtExplosionWindPowerToSelfMultiplier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExplosionWindPowerToSelfMultiplier.DecimalPlaces = 2;
             this.txtExplosionWindPowerToSelfMultiplier.Location = new System.Drawing.Point(215, 97);
             this.txtExplosionWindPowerToSelfMultiplier.Name = "txtExplosionWindPowerToSelfMultiplier";
             this.txtExplosionWindPowerToSelfMultiplier.Size = new System.Drawing.Size(82, 20);
@@ -1316,6 +1317,7 @@
             // txtExplosionDamageToSelfMultiplier
             // 
             this.txtExplosionDamageToSelfMultiplier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExplosionDamageToSelfMultiplier.DecimalPlaces = 2;
             this.txtExplosionDamageToSelfMultiplier.Location = new System.Drawing.Point(215, 175);
             this.txtExplosionDamageToSelfMultiplier.Name = "txtExplosionDamageToSelfMultiplier";
             this.txtExplosionDamageToSelfMultiplier.Size = new System.Drawing.Size(82, 20);
@@ -1367,6 +1369,7 @@
             // txtExplosionWindPowerAtEdge
             // 
             this.txtExplosionWindPowerAtEdge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExplosionWindPowerAtEdge.DecimalPlaces = 2;
             this.txtExplosionWindPowerAtEdge.Location = new System.Drawing.Point(215, 71);
             this.txtExplosionWindPowerAtEdge.Name = "txtExplosionWindPowerAtEdge";
             this.txtExplosionWindPowerAtEdge.Size = new System.Drawing.Size(82, 20);
@@ -1384,6 +1387,7 @@
             // txtExplosionWindPowerAtCenter
             // 
             this.txtExplosionWindPowerAtCenter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExplosionWindPowerAtCenter.DecimalPlaces = 2;
             this.txtExplosionWindPowerAtCenter.Location = new System.Drawing.Point(215, 45);
             this.txtExplosionWindPowerAtCenter.Name = "txtExplosionWindPowerAtCenter";
             this.txtExplosionWindPowerAtCenter.Size = new System.Drawing.Size(82, 20);
@@ -1401,6 +1405,7 @@
             // txtExplosionRadius
             // 
             this.txtExplosionRadius.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExplosionRadius.DecimalPlaces = 2;
             this.txtExplosionRadius.Location = new System.Drawing.Point(215, 19);
             this.txtExplosionRadius.Name = "txtExplosionRadius";
             this.txtExplosionRadius.Size = new System.Drawing.Size(82, 20);

@@ -81,6 +81,7 @@ namespace ProjectEternity.Core.Units
         public bool[,] ArrayMapSize;//Custom mask for actual place a Unit is taking.
 
         public List<Attack> ListAttack;
+        public List<Attack> ListAttackTemporary;//Picked up weapons and others.
         public int PLAAttack;
 
         public List<string> ListTerrainChoices;
@@ -140,6 +141,7 @@ namespace ProjectEternity.Core.Units
             ListCharacterIDWhitelist = new List<string>();
 
             Animations = new UnitAnimations();
+            ListAttackTemporary = new List<Attack>();
         }
 
         public UnitStats(bool[,] ArrayMapSize)

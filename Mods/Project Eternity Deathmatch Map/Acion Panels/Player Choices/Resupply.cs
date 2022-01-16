@@ -151,8 +151,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             //Refill EN.
                             Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].RefillEN(Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].MaxEN);
                             //Refill Weapons.
-                            for (int W = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].ListAttack.Count - 1; W >= 0; --W)
-                                Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].ListAttack[W].Ammo = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].ListAttack[W].MaxAmmo;
+                            foreach (Core.Attacks.Attack ActiveAttack in Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].ListAttack)
+                            {
+                                ActiveAttack.Ammo = ActiveAttack.MaxAmmo;
+                            }
                             //Drop Morale by 10 points.
                             Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].Pilot.Will = Math.Max(50, Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[CursorSelect][U].Pilot.Will - 10);
 

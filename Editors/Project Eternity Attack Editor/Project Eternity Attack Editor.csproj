@@ -133,6 +133,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
+      <Project>{7297B027-A204-417E-89A0-5ED5A7F525D8}</Project>
+      <Name>Project Eternity Animation Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
       <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
       <Name>Project Eternity Base Item</Name>

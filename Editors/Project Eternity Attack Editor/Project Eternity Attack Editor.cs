@@ -112,6 +112,8 @@ namespace ProjectEternity.Editors.AttackEditor
                 PrimaryProperty = WeaponPrimaryProperty.Multi;
             else if (rbDASH.Checked)
                 PrimaryProperty = WeaponPrimaryProperty.Dash;
+            else if (rbPER.Checked)
+                PrimaryProperty = WeaponPrimaryProperty.PER;
 
             WeaponSecondaryProperty SecondaryProperty = WeaponSecondaryProperty.None;
             if (cbPostMovement.Checked)
@@ -188,6 +190,8 @@ namespace ProjectEternity.Editors.AttackEditor
                     BW.Write(PERAttackEditor.cbCanBeShotDown.Checked);
                     BW.Write((byte)PERAttackEditor.txtMaxLifetime.Value);
 
+                    BW.Write(PERAttackEditor.IsProjectileAnimated);
+                    BW.Write(PERAttackEditor.txtProjectilePath.Text);
                     BW.Write((byte)PERAttackEditor.txtNumberOfProjectiles.Value);
                     BW.Write((float)PERAttackEditor.txtLateralMaxSpread.Value);
                     BW.Write((float)PERAttackEditor.txtForwardMaxSpread.Value);
@@ -342,6 +346,9 @@ namespace ProjectEternity.Editors.AttackEditor
                     PERAttackEditor.cbAffectedByGravity.Checked = ActiveWeapon.PERAttributes.AffectedByGravity;
                     PERAttackEditor.cbCanBeShotDown.Checked = ActiveWeapon.PERAttributes.CanBeShotDown;
                     PERAttackEditor.txtMaxLifetime.Value = ActiveWeapon.PERAttributes.MaxLifetime;
+
+                    PERAttackEditor.IsProjectileAnimated = ActiveWeapon.PERAttributes.ProjectileAnimation.IsAnimated;
+                    PERAttackEditor.txtProjectilePath.Text = ActiveWeapon.PERAttributes.ProjectileAnimation.Path;
 
                     PERAttackEditor.txtNumberOfProjectiles.Value = ActiveWeapon.PERAttributes.NumberOfProjectiles;
                     PERAttackEditor.txtLateralMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxLateralSpread;

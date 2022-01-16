@@ -62,38 +62,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             LayerHolderDrawable.Update(gameTime);
 
-            if (KeyboardHelper.KeyPressed(Keys.Q))
-            {
-                do
-                {
-                    Map.CursorPosition.Z += 1f;
-                }
-                while (Map.CursorPosition.Z < ListLayer.Count
-                && ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[(int)Map.CursorPosition.X, (int)Map.CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex
-                && !KeyboardHelper.KeyHold(Keys.LeftAlt));
-
-                if (Map.CursorPosition.Z >= ListLayer.Count)
-                {
-                    Map.CursorPosition.Z = ListLayer.Count - 1;
-                }
-            }
-
-            if (KeyboardHelper.KeyPressed(Keys.E))
-            {
-                do
-                {
-                    Map.CursorPosition.Z -= 1f;
-                }
-                while (Map.CursorPosition.Z >= 0
-                && ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[(int)Map.CursorPosition.X, (int)Map.CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex
-                && !KeyboardHelper.KeyHold(Keys.LeftAlt));
-
-                if (Map.CursorPosition.Z < 0)
-                {
-                    Map.CursorPosition.Z = 0;
-                }
-            }
-
             if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
             {
                 LayerHolderDrawable = new Map3DDrawable(Map, GameScreen.GraphicsDevice);

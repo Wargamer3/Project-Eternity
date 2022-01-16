@@ -5,6 +5,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.ControlHelper;
 using FMOD;
 using System.Collections.Generic;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -32,12 +33,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int UpgradeTotalCost;
 
         private Unit SelectedUnit;
+        private List<Attack> ListAttack;
         private FormulaParser ActiveParser;
 
         public DefaultUnitUpgradesScreen(Unit SelectedUnit, FormulaParser ActiveParser)
             : base()
         {
             this.SelectedUnit = SelectedUnit;
+            ListAttack = SelectedUnit.ListAttack;
             this.ActiveParser = ActiveParser;
 
             ArrayUpgradeCount = new int[5] { 0, 0, 0, 0, 0 };
@@ -199,17 +202,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (UpgradeChoice == UpgradeChoices.Attacks)
             {
-                AttackPicker.DrawTopAttackPanel(g, fntFinlanderFont, SelectedUnit, 0, false);
+                AttackPicker.DrawTopAttackPanel(g, fntFinlanderFont, SelectedUnit, ListAttack, 0, false);
 
                 int YStart = 115;
                 int YStep = 25;
 
                 g.DrawString(fntFinlanderFont, "Power", new Vector2(350, YStart - 25), Color.Yellow);
-                for (int i = 0; i < SelectedUnit.ListAttack.Count && i <= 8; i++)
+                for (int i = 0; i < ListAttack.Count && i <= 8; i++)
                 {
-                    int CurrentPower = SelectedUnit.ListAttack[i].GetPower(SelectedUnit, ActiveParser);
+                    int CurrentPower = ListAttack[i].GetPower(SelectedUnit, ActiveParser);
                     SelectedUnit.UnitStat.AttackUpgrades.Value += AttackUpgradeCount;
-                    int NextPower = SelectedUnit.ListAttack[i].GetPower(SelectedUnit, ActiveParser);
+                    int NextPower = ListAttack[i].GetPower(SelectedUnit, ActiveParser);
                     SelectedUnit.UnitStat.AttackUpgrades.Value -= AttackUpgradeCount;
 
                     g.DrawStringRightAligned(fntFinlanderFont, CurrentPower.ToString(), new Vector2(400, YStart + i * YStep), Color.White);

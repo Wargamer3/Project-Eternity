@@ -66,6 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acion Panels\Attack\PER Attack\Attack PER.cs" />
+    <Compile Include="Acion Panels\Attack\PER Attack\PER Attack Pahtfinding.cs" />
     <Compile Include="Acion Panels\Attack\Start Battle.cs" />
     <Compile Include="Acion Panels\Attack\Human Attack.cs" />
     <Compile Include="Acion Panels\Attack\Human Defend.cs" />

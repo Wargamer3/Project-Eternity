@@ -1,21 +1,20 @@
+using System;
+using System.Collections.Generic;
 using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
-using System;
+using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class StatusMenuScreen : GameScreen
     {
         public enum StatusPannels { Summary, Pilot, Unit, Attacks }
-
-        public Squad ActiveSquad;
-        private BattleMap Map;
 
         #region Ressources
 
@@ -40,6 +39,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntFinlanderFont;
 
         #endregion
+
+        public Squad ActiveSquad;
+        private List<Attack> ListAttack;
+        private BattleMap Map;
 
         private bool IsLoaded;
         public StatusPannels StatusPannel;
@@ -70,6 +73,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void OpenStatusMenuScreen(Squad ActiveSquad)
         {
             this.ActiveSquad = ActiveSquad;
+            ListAttack = ActiveSquad.CurrentLeader.ListAttack;
             StatusPannel = StatusPannels.Summary;
             SecondaryMenuIndex = 0;
             SelectedPilotSkillIndex = -1;
@@ -344,14 +348,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     else if (InputHelper.InputDownPressed())
                     {
                         ++AttackCursorIndex;
-                        if (AttackCursorIndex >= ActiveSquad.CurrentLeader.ListAttack.Count)
+                        if (AttackCursorIndex >= ListAttack.Count)
                             AttackCursorIndex = 0;
 
                         sndSelection.Play();
                     }
                     else if (InputHelper.InputConfirmPressed())
                     {
-                        if (ActiveSquad.CurrentLeader.ListAttack[AttackCursorIndex].ArrayAttackAttributes.Length > 0)
+                        if (ListAttack[AttackCursorIndex].ArrayAttackAttributes.Length > 0)
                         {
                             SecondaryMenuIndex = 1;
                             AttackAttributeIndex = 0;
@@ -364,7 +368,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (InputHelper.InputLeftPressed() || InputHelper.InputRightPressed())
                     {
-                        if (AttackAttributeIndex < 2 && AttackAttributeIndex + 2 < ActiveSquad.CurrentLeader.ListAttack[AttackCursorIndex].ArrayAttackAttributes.Length)
+                        if (AttackAttributeIndex < 2 && AttackAttributeIndex + 2 < ListAttack[AttackCursorIndex].ArrayAttackAttributes.Length)
                         {
                             AttackAttributeIndex += 2;
                             sndSelection.Play();
@@ -379,14 +383,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         --AttackAttributeIndex;
                         if (AttackAttributeIndex < 0)
-                            AttackAttributeIndex = ActiveSquad.CurrentLeader.ListAttack[AttackCursorIndex].ArrayAttackAttributes.Length - 1;
+                            AttackAttributeIndex = ListAttack[AttackCursorIndex].ArrayAttackAttributes.Length - 1;
 
                         sndSelection.Play();
                     }
                     else if (InputHelper.InputDownPressed())
                     {
                         ++AttackAttributeIndex;
-                        if (AttackAttributeIndex >= ActiveSquad.CurrentLeader.ListAttack[AttackCursorIndex].ArrayAttackAttributes.Length)
+                        if (AttackAttributeIndex >= ListAttack[AttackCursorIndex].ArrayAttackAttributes.Length)
                             AttackAttributeIndex = 0;
 
                         sndSelection.Play();
@@ -495,7 +499,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case StatusPannels.Attacks:
-                    Map.DrawAttackPanel(g, fntFinlanderFont, ActiveSquad.CurrentLeader, AttackCursorIndex);
+                    Map.DrawAttackPanel(g, fntFinlanderFont, ActiveSquad.CurrentLeader, ListAttack, AttackCursorIndex);
                     break;
             }
         }

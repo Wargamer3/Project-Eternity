@@ -57,8 +57,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Params.LocalContext.EffectTargetUnit.Boosts.AmmoMaxModifier = FinalMaxAmmoValue;
 
-            for (int W = Params.LocalContext.EffectTargetUnit.ListAttack.Count - 1; W >= 0; --W)
-                Params.LocalContext.EffectTargetUnit.ListAttack[W].Ammo += FinalMaxAmmoValue;
+            foreach (Core.Attacks.Attack ActiveAttack in Params.LocalContext.EffectTargetUnit.ListAttack)
+            {
+                ActiveAttack.Ammo += FinalMaxAmmoValue;
+            }
 
             if (EvaluationResult != _MaxAmmoValue)
             {

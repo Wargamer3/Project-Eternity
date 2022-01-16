@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using ProjectEternity.Core;
+using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -163,6 +166,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Update(GameTime gameTime)
         {
+            UpdateCamera();
+
             if (Map.CursorPositionVisible.X < 0)
             {
                 Camera.CameraHeight = 600;
@@ -189,7 +194,72 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DicDrawablePointPerColor.Clear();
             ListDrawableArrowPerColor.Clear();
         }
-        
+
+        private void UpdateCamera()
+        {
+            if (KeyboardHelper.KeyPressed(Keys.Q))
+            {
+                float NextZ = Map.CursorPosition.Z;
+
+                if (KeyboardHelper.KeyHold(Keys.LeftAlt))
+                {
+                    NextZ += 1f;
+                }
+                else
+                {
+                    do
+                    {
+                        NextZ += 1f;
+                    }
+                    while (NextZ < Map.LayerManager.ListLayer.Count
+                        && Map.LayerManager.ListLayer[(int)NextZ].ArrayTerrain[(int)Map.CursorPosition.X, (int)Map.CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex);
+
+                    if (NextZ >= Map.LayerManager.ListLayer.Count)
+                    {
+                        NextZ = Map.CursorPosition.Z + 1f;
+                    }
+                }
+
+                if (NextZ >= Map.LayerManager.ListLayer.Count)
+                {
+                    NextZ = Map.LayerManager.ListLayer.Count - 1;
+                }
+
+                Map.CursorPosition.Z = NextZ;
+            }
+
+            if (KeyboardHelper.KeyPressed(Keys.E))
+            {
+                float NextZ = Map.CursorPosition.Z;
+
+                if (KeyboardHelper.KeyHold(Keys.LeftAlt))
+                {
+                    NextZ -= 1f;
+                }
+                else
+                {
+                    do
+                    {
+                        NextZ -= 1f;
+                    }
+                    while (NextZ >= 0
+                        && Map.LayerManager.ListLayer[(int)NextZ].ArrayTerrain[(int)Map.CursorPosition.X, (int)Map.CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex);
+
+                    if (NextZ < 0)
+                    {
+                        NextZ = Map.CursorPosition.Z - 1f;
+                    }
+                }
+
+                if (NextZ < 0)
+                {
+                    NextZ = 0;
+                }
+
+                Map.CursorPosition.Z = NextZ;
+            }
+        }
+
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
         {
             List<Tile3D> ListDrawablePoint3D = new List<Tile3D>(ListPoint.Count);
@@ -451,6 +521,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            g.End();
+            g.Begin();
         }
 
         public void EndDraw(CustomSpriteBatch g)
