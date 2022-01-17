@@ -41,6 +41,8 @@ namespace ProjectEternity.Editors.AttackEditor
             this.txtProjectileSpeed = new System.Windows.Forms.NumericUpDown();
             this.cbAffectedByGravity = new System.Windows.Forms.CheckBox();
             this.gbAttackAttributes = new System.Windows.Forms.GroupBox();
+            this.lblUpwardMaxSpread = new System.Windows.Forms.Label();
+            this.txtUpwardMaxSpread = new System.Windows.Forms.NumericUpDown();
             this.lblForwardMaxSpread = new System.Windows.Forms.Label();
             this.txtForwardMaxSpread = new System.Windows.Forms.NumericUpDown();
             this.lblLateralMaxSpread = new System.Windows.Forms.Label();
@@ -60,6 +62,7 @@ namespace ProjectEternity.Editors.AttackEditor
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxLifetime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtProjectileSpeed)).BeginInit();
             this.gbAttackAttributes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtUpwardMaxSpread)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtForwardMaxSpread)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtLateralMaxSpread)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtNumberOfProjectiles)).BeginInit();
@@ -177,6 +180,8 @@ namespace ProjectEternity.Editors.AttackEditor
             // 
             // gbAttackAttributes
             // 
+            this.gbAttackAttributes.Controls.Add(this.lblUpwardMaxSpread);
+            this.gbAttackAttributes.Controls.Add(this.txtUpwardMaxSpread);
             this.gbAttackAttributes.Controls.Add(this.lblForwardMaxSpread);
             this.gbAttackAttributes.Controls.Add(this.txtForwardMaxSpread);
             this.gbAttackAttributes.Controls.Add(this.lblLateralMaxSpread);
@@ -188,10 +193,27 @@ namespace ProjectEternity.Editors.AttackEditor
             this.gbAttackAttributes.Controls.Add(this.btnSelectSkillChain);
             this.gbAttackAttributes.Location = new System.Drawing.Point(12, 164);
             this.gbAttackAttributes.Name = "gbAttackAttributes";
-            this.gbAttackAttributes.Size = new System.Drawing.Size(249, 130);
+            this.gbAttackAttributes.Size = new System.Drawing.Size(249, 165);
             this.gbAttackAttributes.TabIndex = 1;
             this.gbAttackAttributes.TabStop = false;
             this.gbAttackAttributes.Text = "Attack Attributes";
+            // 
+            // lblUpwardMaxSpread
+            // 
+            this.lblUpwardMaxSpread.AutoSize = true;
+            this.lblUpwardMaxSpread.Location = new System.Drawing.Point(6, 99);
+            this.lblUpwardMaxSpread.Name = "lblUpwardMaxSpread";
+            this.lblUpwardMaxSpread.Size = new System.Drawing.Size(104, 13);
+            this.lblUpwardMaxSpread.TabIndex = 48;
+            this.lblUpwardMaxSpread.Text = "Upward Max Spread";
+            // 
+            // txtUpwardMaxSpread
+            // 
+            this.txtUpwardMaxSpread.DecimalPlaces = 2;
+            this.txtUpwardMaxSpread.Location = new System.Drawing.Point(171, 97);
+            this.txtUpwardMaxSpread.Name = "txtUpwardMaxSpread";
+            this.txtUpwardMaxSpread.Size = new System.Drawing.Size(71, 20);
+            this.txtUpwardMaxSpread.TabIndex = 47;
             // 
             // lblForwardMaxSpread
             // 
@@ -204,6 +226,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // 
             // txtForwardMaxSpread
             // 
+            this.txtForwardMaxSpread.DecimalPlaces = 2;
             this.txtForwardMaxSpread.Location = new System.Drawing.Point(171, 71);
             this.txtForwardMaxSpread.Name = "txtForwardMaxSpread";
             this.txtForwardMaxSpread.Size = new System.Drawing.Size(71, 20);
@@ -220,6 +243,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // 
             // txtLateralMaxSpread
             // 
+            this.txtLateralMaxSpread.DecimalPlaces = 2;
             this.txtLateralMaxSpread.Location = new System.Drawing.Point(171, 45);
             this.txtLateralMaxSpread.Name = "txtLateralMaxSpread";
             this.txtLateralMaxSpread.Size = new System.Drawing.Size(71, 20);
@@ -245,7 +269,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // 
             this.lblSkillChain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSkillChain.AutoSize = true;
-            this.lblSkillChain.Location = new System.Drawing.Point(6, 88);
+            this.lblSkillChain.Location = new System.Drawing.Point(6, 123);
             this.lblSkillChain.Name = "lblSkillChain";
             this.lblSkillChain.Size = new System.Drawing.Size(56, 13);
             this.lblSkillChain.TabIndex = 41;
@@ -254,7 +278,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // txtSkillChain
             // 
             this.txtSkillChain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtSkillChain.Location = new System.Drawing.Point(6, 104);
+            this.txtSkillChain.Location = new System.Drawing.Point(6, 139);
             this.txtSkillChain.Name = "txtSkillChain";
             this.txtSkillChain.ReadOnly = true;
             this.txtSkillChain.Size = new System.Drawing.Size(126, 20);
@@ -263,7 +287,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // btnSelectSkillChain
             // 
             this.btnSelectSkillChain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSelectSkillChain.Location = new System.Drawing.Point(138, 101);
+            this.btnSelectSkillChain.Location = new System.Drawing.Point(138, 136);
             this.btnSelectSkillChain.Name = "btnSelectSkillChain";
             this.btnSelectSkillChain.Size = new System.Drawing.Size(105, 23);
             this.btnSelectSkillChain.TabIndex = 39;
@@ -280,7 +304,7 @@ namespace ProjectEternity.Editors.AttackEditor
             this.gbGroundCollision.Controls.Add(this.rbDestroySelf);
             this.gbGroundCollision.Location = new System.Drawing.Point(267, 164);
             this.gbGroundCollision.Name = "gbGroundCollision";
-            this.gbGroundCollision.Size = new System.Drawing.Size(161, 101);
+            this.gbGroundCollision.Size = new System.Drawing.Size(161, 117);
             this.gbGroundCollision.TabIndex = 2;
             this.gbGroundCollision.TabStop = false;
             this.gbGroundCollision.Text = "Ground Collision";
@@ -288,7 +312,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // lblBounceLimit
             // 
             this.lblBounceLimit.AutoSize = true;
-            this.lblBounceLimit.Location = new System.Drawing.Point(6, 77);
+            this.lblBounceLimit.Location = new System.Drawing.Point(6, 90);
             this.lblBounceLimit.Name = "lblBounceLimit";
             this.lblBounceLimit.Size = new System.Drawing.Size(68, 13);
             this.lblBounceLimit.TabIndex = 49;
@@ -296,7 +320,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // 
             // txtBounceLimit
             // 
-            this.txtBounceLimit.Location = new System.Drawing.Point(80, 75);
+            this.txtBounceLimit.Location = new System.Drawing.Point(84, 88);
             this.txtBounceLimit.Name = "txtBounceLimit";
             this.txtBounceLimit.Size = new System.Drawing.Size(71, 20);
             this.txtBounceLimit.TabIndex = 48;
@@ -304,7 +328,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // rbStop
             // 
             this.rbStop.AutoSize = true;
-            this.rbStop.Location = new System.Drawing.Point(108, 19);
+            this.rbStop.Location = new System.Drawing.Point(6, 42);
             this.rbStop.Name = "rbStop";
             this.rbStop.Size = new System.Drawing.Size(47, 17);
             this.rbStop.TabIndex = 2;
@@ -314,7 +338,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // rbBounce
             // 
             this.rbBounce.AutoSize = true;
-            this.rbBounce.Location = new System.Drawing.Point(6, 42);
+            this.rbBounce.Location = new System.Drawing.Point(6, 65);
             this.rbBounce.Name = "rbBounce";
             this.rbBounce.Size = new System.Drawing.Size(62, 17);
             this.rbBounce.TabIndex = 1;
@@ -337,7 +361,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(439, 296);
+            this.ClientSize = new System.Drawing.Size(439, 341);
             this.Controls.Add(this.gbGroundCollision);
             this.Controls.Add(this.gbAttackAttributes);
             this.Controls.Add(this.gbProjectileAttributes);
@@ -349,6 +373,7 @@ namespace ProjectEternity.Editors.AttackEditor
             ((System.ComponentModel.ISupportInitialize)(this.txtProjectileSpeed)).EndInit();
             this.gbAttackAttributes.ResumeLayout(false);
             this.gbAttackAttributes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtUpwardMaxSpread)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtForwardMaxSpread)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtLateralMaxSpread)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtNumberOfProjectiles)).EndInit();
@@ -388,5 +413,7 @@ namespace ProjectEternity.Editors.AttackEditor
         public System.Windows.Forms.RadioButton rbStop;
         public System.Windows.Forms.RadioButton rbBounce;
         public System.Windows.Forms.RadioButton rbDestroySelf;
+        private System.Windows.Forms.Label lblUpwardMaxSpread;
+        public System.Windows.Forms.NumericUpDown txtUpwardMaxSpread;
     }
 }

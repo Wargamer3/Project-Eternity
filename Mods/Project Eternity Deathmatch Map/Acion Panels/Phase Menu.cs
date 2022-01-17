@@ -111,11 +111,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Map.ActivePlayerIndex++;
                 UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
+                UpdatePERAttacks(Map, Map.ActivePlayerIndex);
 
                 if (Map.ActivePlayerIndex >= Map.ListPlayer.Count)
                 {
                     Map.OnNewTurn();
                     UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
+                    UpdatePERAttacks(Map, Map.ActivePlayerIndex);
                 }
 
                 foreach (Player ActivePlayer in Map.ListPlayer)
@@ -179,6 +181,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         Map.ListDelayedAttack.RemoveAt(A);
                     }
+                }
+            }
+        }
+
+        public static void UpdatePERAttacks(DeathmatchMap Map, int ActivePlayerIndex)
+        {
+            for (int A = Map.ListPERAttack.Count - 1; A >= 0; --A)
+            {
+                PERAttack ActivePERAttack = Map.ListPERAttack[A];
+
+                if (ActivePERAttack.PlayerIndex == ActivePlayerIndex)
+                {
+                    ActivePERAttack.Position += ActivePERAttack.Speed;
+
+                    ActivePERAttack.Map3DComponent.SetPosition(
+                        ActivePERAttack.Position.X + 16 + 0.5f,
+                        ActivePERAttack.Position.Z * 32,
+                        ActivePERAttack.Position.Y + 16 + 0.5f);
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelInitAttackPER(Map, ActivePlayerIndex, ActivePERAttack));
                 }
             }
         }

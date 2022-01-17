@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -88,7 +87,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int Y = 0; Y < Map.MapSize.Y; ++Y)
                 {
-                    ProcessLine(ActiveTerrain, TestedFinalPos, Map.LayerManager.ListLayer.Count - 1);
+                    ProcessLine(ActiveTerrain, new Vector2(X, Y), Map.LayerManager.ListLayer.Count - 1);
                 }
             }
         }
@@ -103,7 +102,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int NextY = (int)StartNode.Position.Y;
             int NextZ = StartNode.LayerIndex;
             float Progress = 0;
-            bool IsBlocked = false;
 
             while (NextTerrain != null)
             {

@@ -5,6 +5,7 @@ using System.IO;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.Core.Attacks
 {
@@ -105,7 +106,7 @@ namespace ProjectEternity.Core.Attacks
         {
         }
 
-        public Attack(string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public Attack(string AttackPath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(AttackPath)
         {
@@ -116,23 +117,23 @@ namespace ProjectEternity.Core.Attacks
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 
-            Init(BR, AttackPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            Init(BR, Content, AttackPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
             FS.Close();
             BR.Close();
         }
 
-        public Attack(BinaryReader BR, string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public Attack(BinaryReader BR, ContentManager Content, string AttackPath, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(AttackPath)
         {
             Animations = new List<AttackContext>();
             IsExternal = false;
 
-            Init(BR, AttackPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            Init(BR, Content, AttackPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
-        public void Init(BinaryReader BR, string AttackName, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public void Init(BinaryReader BR, ContentManager Content, string AttackName, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             //Create the Part file.
@@ -156,7 +157,7 @@ namespace ProjectEternity.Core.Attacks
             }
             else if (this.Pri == WeaponPrimaryProperty.PER)
             {
-                PERAttributes = new PERAttackAttributes(BR);
+                PERAttributes = new PERAttackAttributes(BR, Content);
             }
 
             this.Sec = (WeaponSecondaryProperty)BR.ReadByte();

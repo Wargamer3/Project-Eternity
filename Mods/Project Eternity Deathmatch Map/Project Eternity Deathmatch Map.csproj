@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acion Panels\Attack\Init PER Attack.cs" />
     <Compile Include="Acion Panels\Attack\PER Attack\Attack PER.cs" />
     <Compile Include="Acion Panels\Attack\PER Attack\PER Attack Pahtfinding.cs" />
     <Compile Include="Acion Panels\Attack\Start Battle.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Battle Formulas.cs" />
     <Compile Include="Battle Previewer.cs" />
     <Compile Include="Deathmatch Map Helper.cs" />
+    <Compile Include="PER Attack.cs" />
     <Compile Include="Rules\Classic MP Game Rule.cs" />
     <Compile Include="Rules\Campaign Game Rule.cs" />
     <Compile Include="Rules\Lobby MP Game Rule.cs" />

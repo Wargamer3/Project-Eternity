@@ -19,6 +19,7 @@ namespace ProjectEternity.Core.Item
 
         public bool IsOnLastFrame { get { return AnimationSpriteRealPosition == ArraySpriteSource.Length - 1; } }
         public bool AnimationEnded { get { return AnimationSpriteRealPosition >= ArraySpriteSource.Length; } }
+        public int FrameCount { get { return ArraySpriteSource.Length; } }
 
         protected AnimatedSprite()
         {

@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                     else
                     {
-                        Stack<Tuple<int, int>> ListMAPAttackTarget = Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack, ListAttackChoice);
+                        Stack<Tuple<int, int>> ListMAPAttackTarget = Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.FriendlyFire, ListAttackChoice);
 
                         if (ListMAPAttackTarget.Count > 0)
                         {

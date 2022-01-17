@@ -195,6 +195,7 @@ namespace ProjectEternity.Editors.AttackEditor
                     BW.Write((byte)PERAttackEditor.txtNumberOfProjectiles.Value);
                     BW.Write((float)PERAttackEditor.txtLateralMaxSpread.Value);
                     BW.Write((float)PERAttackEditor.txtForwardMaxSpread.Value);
+                    BW.Write((float)PERAttackEditor.txtUpwardMaxSpread.Value);
 
                     if (PERAttackEditor.rbDestroySelf.Checked)
                     {
@@ -280,7 +281,7 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             string Name = AttackPath.Substring(0, AttackPath.Length - 4).Substring(16);
 
-            Attack ActiveWeapon = new Attack(Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            Attack ActiveWeapon = new Attack(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             LoadAttack(ActiveWeapon);
         }
 
@@ -353,6 +354,7 @@ namespace ProjectEternity.Editors.AttackEditor
                     PERAttackEditor.txtNumberOfProjectiles.Value = ActiveWeapon.PERAttributes.NumberOfProjectiles;
                     PERAttackEditor.txtLateralMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxLateralSpread;
                     PERAttackEditor.txtForwardMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxForwardSpread;
+                    PERAttackEditor.txtUpwardMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxUpwardSpread;
 
                     if (ActiveWeapon.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.DestroySelf)
                     {

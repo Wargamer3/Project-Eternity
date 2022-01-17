@@ -44,7 +44,7 @@ namespace ProjectEternity.Core.Units.Normal
                 Description = BR.ReadString();
                 Price = BR.ReadInt32();
                 
-                _UnitStat = new UnitStats(ItemName, BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                _UnitStat = new UnitStats(ItemName, BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 int ListPartSlotCount = BR.ReadInt32();
                 ArrayParts = new UnitPart[ListPartSlotCount];
@@ -58,7 +58,7 @@ namespace ProjectEternity.Core.Units.Normal
                 Description = UnitFile.ReadField("Unit Stats", "Description");
                 Price = Convert.ToInt32(UnitFile.ReadField("Unit Stats", "Price"));
                 
-                _UnitStat = new UnitStats(RelativePath, UnitFile, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                _UnitStat = new UnitStats(RelativePath, Content, UnitFile, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                 ArrayParts = new UnitPart[Convert.ToInt32(UnitFile.ReadField("Unit Stats", "Parts Slots"))];
             }

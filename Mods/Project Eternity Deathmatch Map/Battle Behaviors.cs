@@ -99,7 +99,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                Stack<Tuple<int, int>> ListMAPAttackTarget = GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack, AttackChoice);
+                Stack<Tuple<int, int>> ListMAPAttackTarget = GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.FriendlyFire, AttackChoice);
 
                 if (ListMAPAttackTarget.Count > 0)
                 {
@@ -178,7 +178,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListTargetUnit;
         }
 
-        public Stack<Tuple<int, int>> GetEnemies(Attack ActiveAttack, List<Vector3> ListAttackPosition)
+        public Stack<Tuple<int, int>> GetEnemies(bool FriendlyFire, List<Vector3> ListAttackPosition)
         {
             Stack<Tuple<int, int>> ListMAPAttackTarget = new Stack<Tuple<int, int>>();//Player index, Squad index.
 
@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     //Find if a Unit is under the cursor.
                     int TargetIndex = CheckForSquadAtPosition(P, ListAttackPosition[i], Vector3.Zero);
                     //If one was found.
-                    if (TargetIndex >= 0 && (ActiveAttack.MAPAttributes.FriendlyFire ||
+                    if (TargetIndex >= 0 && (FriendlyFire ||
                                                 ListPlayer[ActivePlayerIndex].Team != ListPlayer[P].Team))
                     {
                         ListMAPAttackTarget.Push(new Tuple<int, int>(P, TargetIndex));

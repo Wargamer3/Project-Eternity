@@ -57,6 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public List<Player> ListAllPlayer { get { return ListPlayer; } }
 
         public List<DelayedAttack> ListDelayedAttack;
+        public List<PERAttack> ListPERAttack;
         public MovementAlgorithm Pathfinder;
         public LayerHolderDeathmatch LayerManager;
 
@@ -142,6 +143,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             RequireDrawFocus = true;
             Pathfinder = new MovementAlgorithmDeathmatch(this);
             ListDelayedAttack = new List<DelayedAttack>();
+            ListPERAttack = new List<PERAttack>();
             ListTerrainType = new List<string>();
             ListTerrainType.Add(UnitStats.TerrainAir);
             ListTerrainType.Add(UnitStats.TerrainLand);

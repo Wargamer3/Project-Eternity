@@ -2,8 +2,9 @@
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Attacks;
+using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.Core.Units
 {
@@ -150,7 +151,7 @@ namespace ProjectEternity.Core.Units
             this.ArrayMapSize = ArrayMapSize;
         }
 
-        public UnitStats(string Name, BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public UnitStats(string Name, BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : this()
         {
@@ -207,11 +208,11 @@ namespace ProjectEternity.Core.Units
 
                 if (IsExternal)
                 {
-                    NewAttack = new Attack(AttackName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                    NewAttack = new Attack(AttackName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 }
                 else
                 {
-                    NewAttack = new Attack(BR, AttackName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                    NewAttack = new Attack(BR, Content, AttackName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 }
 
                 NewAttack.Ammo = NewAttack.MaxAmmo;
@@ -238,7 +239,7 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public UnitStats(string Name, IniFile UnitFile, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public UnitStats(string Name, ContentManager Content, IniFile UnitFile, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : this()
         {
@@ -295,7 +296,7 @@ namespace ProjectEternity.Core.Units
             foreach (KeyValuePair<string, string> ActiveField in UnitFile.ReadHeader("Attacks"))
             {
                 int A = Convert.ToInt32(ActiveField.Key.Substring(7));
-                Attack NewAttack = new Attack(ActiveField.Value, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                Attack NewAttack = new Attack(ActiveField.Value, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 NewAttack.Ammo = NewAttack.MaxAmmo;
                 if (NewAttack.Pri == WeaponPrimaryProperty.PLA)
                     PLAAttack = A;

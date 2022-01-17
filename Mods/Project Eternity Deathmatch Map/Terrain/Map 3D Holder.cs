@@ -513,17 +513,49 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.SetPosition(
                         Map.ListPlayer[P].ListSquad[U].Position.X + 0.5f,
-                        Map.ListPlayer[P].ListSquad[U].Position.Z * 32 + TerrainZ * 32,
+                        (Map.ListPlayer[P].ListSquad[U].Position.Z + TerrainZ * 32),
                         Map.ListPlayer[P].ListSquad[U].Position.Y + 0.5f);
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.Draw(GameScreen.GraphicsDevice);
                 }
             }
 
+            DrawDelayedAttacks(g);
+
+            DrawPERAttacks(g);
+
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             g.End();
             g.Begin();
+        }
+
+        private void DrawDelayedAttacks(CustomSpriteBatch g)
+        {
+            /*int BorderX = (int)(TileSize.X * 0.1);
+            int BorderY = (int)(TileSize.Y * 0.1);
+
+            foreach (DelayedAttack ActiveAttack in Map.ListDelayedAttack)
+            {
+                foreach (Vector3 ActivePosition in ActiveAttack.ListAttackPosition)
+                {
+                    g.Draw(GameScreen.sprPixel,
+                        new Rectangle(
+                            (int)(ActivePosition.X - CameraPosition.X) * TileSize.X + BorderX,
+                            (int)(ActivePosition.Y - CameraPosition.Y) * TileSize.Y + BorderY,
+                            TileSize.X - BorderX * 2,
+                            TileSize.Y - BorderY * 2), Color.FromNonPremultiplied(139, 0, 0, 190));
+                }
+            }*/
+        }
+
+        private void DrawPERAttacks(CustomSpriteBatch g)
+        {
+            foreach (PERAttack ActiveAttack in Map.ListPERAttack)
+            {
+                ActiveAttack.Map3DComponent.SetViewMatrix(Camera.View);
+                ActiveAttack.Map3DComponent.Draw(g.GraphicsDevice);
+            }
         }
 
         public void EndDraw(CustomSpriteBatch g)

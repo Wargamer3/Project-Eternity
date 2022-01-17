@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Microsoft.Xna.Framework.Content;
 using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.Core.Attacks
@@ -18,11 +19,12 @@ namespace ProjectEternity.Core.Attacks
         public byte NumberOfProjectiles;
         public float MaxLateralSpread;
         public float MaxForwardSpread;
+        public float MaxUpwardSpread;
 
         public GroundCollisions GroundCollision;
         public byte BounceLimit;
 
-        public PERAttackAttributes(BinaryReader BR)
+        public PERAttackAttributes(BinaryReader BR, ContentManager Content)
         {
             ProjectileSpeed = BR.ReadSingle();
             AffectedByGravity = BR.ReadBoolean();
@@ -30,10 +32,15 @@ namespace ProjectEternity.Core.Attacks
             MaxLifetime = BR.ReadByte();
 
             ProjectileAnimation = new SimpleAnimation(BR, false);
+            if (Content != null)
+            {
+                ProjectileAnimation.Load(Content, "Animations/Sprites/");
+            }
 
             NumberOfProjectiles = BR.ReadByte();
             MaxLateralSpread = BR.ReadSingle();
             MaxForwardSpread = BR.ReadSingle();
+            MaxUpwardSpread = BR.ReadSingle();
 
             GroundCollision = (GroundCollisions)BR.ReadByte();
             BounceLimit = BR.ReadByte();

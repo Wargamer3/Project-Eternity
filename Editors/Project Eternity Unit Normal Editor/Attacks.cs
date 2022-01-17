@@ -379,7 +379,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                                 return;
                             }
 
-                            Attack NewAttack = new Attack(Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                            Attack NewAttack = new Attack(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                             NewAttack.Animations.Add(new AttackContext());
 
                             NewAttack.Animations[0].Animations.Start = new Core.Units.AnimationInfo(UnitName + "/Attacks/" + AttackName + "/Start");

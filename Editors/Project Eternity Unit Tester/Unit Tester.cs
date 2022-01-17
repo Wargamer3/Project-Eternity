@@ -576,7 +576,7 @@ namespace ProjectEternity.Editors.UnitTester
 
                     case ItemSelectionChoices.Weapon:
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(16);
-                        Attack NewWeapon = new Attack(Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                        Attack NewWeapon = new Attack(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
                         txtWeaponDamage.Value = NewWeapon.GetPower(null, null);
                         txtWeaponAccuracy.Value = NewWeapon.Accuracy;

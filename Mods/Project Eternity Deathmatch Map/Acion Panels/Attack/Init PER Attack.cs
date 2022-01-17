@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
@@ -8,25 +9,25 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    public class ActionPanelInitDelayedAttackMAP : ActionPanelDeathmatch
+    public class ActionPanelInitAttackPER : ActionPanelDeathmatch
     {
-        private const string PanelName = "InitAttackMAP";
+        private const string PanelName = "InitAttackPER";
 
         private readonly Squad ActiveSquad;
         private int ActivePlayerIndex;
-        private readonly DelayedAttack ActiveDelayedAttack;
+        private readonly PERAttack ActivePERAttack;
 
-        public ActionPanelInitDelayedAttackMAP(DeathmatchMap Map)
+        public ActionPanelInitAttackPER(DeathmatchMap Map)
             : base(PanelName, Map)
         {
         }
 
-        public ActionPanelInitDelayedAttackMAP(DeathmatchMap Map, int ActivePlayerIndex, DelayedAttack ActiveDelayedAttack)
+        public ActionPanelInitAttackPER(DeathmatchMap Map, int ActivePlayerIndex, PERAttack ActivePERAttack)
             : base(PanelName, Map)
         {
-            ActiveSquad = ActiveDelayedAttack.Owner;
+            ActiveSquad = ActivePERAttack.Owner;
             this.ActivePlayerIndex = ActivePlayerIndex;
-            this.ActiveDelayedAttack = ActiveDelayedAttack;
+            this.ActivePERAttack = ActivePERAttack;
         }
 
         public override void OnSelect()
@@ -35,8 +36,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.AttackWithMAPAttack(ActivePlayerIndex, Map.ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad), Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.FriendlyFire, ActiveDelayedAttack.ListAttackPosition));
+            Stack<Tuple<int, int>> ListMAPAttackTarget = Map.GetEnemies(true, new List<Vector3>() { ActivePERAttack.Position });
+
+            Map.AttackWithMAPAttack(ActivePlayerIndex, Map.ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad), ListMAPAttackTarget);
             RemoveFromPanelList(this);
+
+            if (ActivePERAttack.Lifetime <= 0 || ListMAPAttackTarget.Count > 0)
+            {
+                Map.ListPERAttack.Remove(ActivePERAttack);
+            }
         }
 
         public override void DoRead(ByteReader BR)

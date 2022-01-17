@@ -208,13 +208,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DrawEditorOverlay(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], 0, false);
             }
 
+            DrawDelayedAttacks(g);
+
+            DrawPERAttacks(g);
+
             DrawPlayers(g);
         }
 
         public void DrawPlayers(CustomSpriteBatch g)
         {
-            DrawDelayedAttacks(g);
-
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 for (int S = 0; S < Map.ListPlayer[P].ListSquad.Count; S++)
@@ -240,6 +242,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             TileSize.X - BorderX * 2,
                             TileSize.Y - BorderY * 2), Color.FromNonPremultiplied(139, 0, 0, 190));
                 }
+            }
+        }
+
+        private void DrawPERAttacks(CustomSpriteBatch g)
+        {
+            foreach (PERAttack ActiveAttack in Map.ListPERAttack)
+            {
+                ActiveAttack.ActiveAttack.PERAttributes.ProjectileAnimation.Draw(g, new Vector2(ActiveAttack.Position.X, ActiveAttack.Position.Y));
             }
         }
 
