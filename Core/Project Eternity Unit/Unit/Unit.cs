@@ -269,7 +269,6 @@ namespace ProjectEternity.Core.Units
 
         #endregion
 
-        public bool CanAttack { get { foreach (Attack ActiveAttack in ListAttack) { if (ActiveAttack.CanAttack) return true; }; return false; } }//If the character is in range to attack.
         public BattleDefenseChoices BattleDefenseChoice;
 
         public int MaxCharacter = 5;
@@ -286,12 +285,16 @@ namespace ProjectEternity.Core.Units
         public List<string> ListIgnoreSkill;//List used to ignore other skills.
         public List<string> ListCharacterIDWhitelist { get { return _UnitStat.ListCharacterIDWhitelist; } }
 
-        public List<Attack> ListAttack { get { return _UnitStat.ListAttack.Concat(_UnitStat.ListAttackTemporary).ToList(); } }
+        private Attack ChargedAttack;
+        public bool CanAttack { get { foreach (Attack ActiveAttack in ListAttack) { if (ActiveAttack.CanAttack) return true; }; return false; } }//If the character is in range to attack.
 
-        public int PLAAttack { get { return _UnitStat.PLAAttack; } }
+        private List<Attack> _ListAttack;
+        private List<Attack> ListAttackTemporary;//Picked up weapons and others.
+        public List<Attack> ListAttack { get { return _ListAttack; } }
 
-        public int AttackIndex;
-        public Attack CurrentAttack { get { return AttackIndex >= 0 && AttackIndex < ListAttack.Count ? ListAttack[AttackIndex] : null; } }
+        public Attack PLAAttack { get { return _UnitStat.PLAAttack; } }
+
+        public Attack CurrentAttack { get { return _UnitStat.CurrentAttack; } set { _UnitStat.CurrentAttack = value; } }
 
         public string AttackAccuracy;
         public string MAPAttackAccuracyA;
@@ -309,8 +312,9 @@ namespace ProjectEternity.Core.Units
         protected Unit(string Name)
             : base(Name)
         {
+            _ListAttack = new List<Attack>();
+            ListAttackTemporary = new List<Attack>();
             ListIgnoreSkill = new List<string>();
-            AttackIndex = -1;
             AttackAccuracy = "";
             _UnitStat = new UnitStats(new bool[1, 1] { { true } });
             ArrayCharacterActive = new Character[0];
@@ -574,6 +578,7 @@ namespace ProjectEternity.Core.Units
 
             _UnitStat.Init();
             DoInit();
+            UpdateAttacks();
         }
 
         public abstract void DoInit();
@@ -610,6 +615,76 @@ namespace ProjectEternity.Core.Units
             {
                 ActiveAttack.DisableAttack();
             }
+        }
+
+        public void AddTemporaryAttack(Attack NewAttack)
+        {
+            ListAttackTemporary.Add(NewAttack);
+        }
+
+        public void ChargeAttack()
+        {
+            ChargedAttack = CurrentAttack;
+            ChargedAttack.IsChargeable = false;
+            UpdateAttacks();
+        }
+
+        public void UseChargeAttack()
+        {
+            ChargedAttack.IsChargeable = true;
+            ChargedAttack = null;
+            UpdateAttacks();
+        }
+
+        public void UpdateAttacks()
+        {
+            _ListAttack.Clear();
+
+            if (ChargedAttack != null)
+            {
+                _ListAttack.Add(ChargedAttack);
+                foreach (Attack ActiveChargedAttack in ChargedAttack.ListChargedAttack)
+                {
+                    ActiveChargedAttack.IsChargeable = true;
+                    _ListAttack.Add(ActiveChargedAttack);
+                }
+                return;
+            }
+
+            foreach (Attack ActiveAttack in _UnitStat.ListAttack)
+            {
+                _ListAttack.Add(ActiveAttack);
+
+                foreach (Attack ActiveSecondaryAttack in ActiveAttack.ListSecondaryAttack)
+                {
+                    _ListAttack.Add(ActiveSecondaryAttack);
+                }
+                foreach (Attack ActiveChargedAttack in ActiveAttack.ListChargedAttack)
+                {
+                    ActiveChargedAttack.IsChargeable = true;
+                    _ListAttack.Add(ActiveChargedAttack);
+                }
+            }
+
+            foreach (Attack ActiveAttack in ListAttackTemporary)
+            {
+                _ListAttack.Add(ActiveAttack);
+
+                foreach (Attack ActiveSecondaryAttack in ActiveAttack.ListSecondaryAttack)
+                {
+                    _ListAttack.Add(ActiveSecondaryAttack);
+                }
+                foreach (Attack ActiveChargedAttack in ActiveAttack.ListChargedAttack)
+                {
+                    ActiveChargedAttack.IsChargeable = true;
+                    _ListAttack.Add(ActiveChargedAttack);
+                }
+            }
+        }
+
+        public byte GetPostMovementLevel()
+        {
+            return (byte)((_UnitStat.PostMVLevel + Pilot.PostMVLevel) / 2);
         }
 
         public virtual void ReloadSkills(Unit Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,

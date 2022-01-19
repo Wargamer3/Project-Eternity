@@ -107,12 +107,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        #region Variables
-
-        public int WeaponIndexOld;//Index of the weapon used for reset.
-
-        #endregion
-
         public bool CanNullifyAttack(Attack ActiveWeapon, string AttackerMovementType, string DefenderMovementType, Squad DefenderSquad, StatsBoosts DefenderBoosts)
         {
             //Check if the Unit can counter the attack.
@@ -479,9 +473,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return AttackChoice;
         }
         
-        public void DrawAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, int CursorIndex)
+        public void DrawAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, Attack CurrentAttack)
         {
-            AttackPicker.DrawAttackPanel(g, ActiveFont, ActiveUnit, ListAttack, CursorIndex);
+            AttackPicker.DrawAttackPanel(g, ActiveFont, ActiveUnit, ListAttack, CurrentAttack);
         }
     }
 }

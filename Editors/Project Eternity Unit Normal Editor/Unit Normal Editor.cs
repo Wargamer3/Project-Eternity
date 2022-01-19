@@ -120,11 +120,16 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Write(Convert.ToInt32(txtPrice.Text));
 
             BW.Write((int)txtEXP.Value);
-            BW.Write(Convert.ToInt32(txtBaseHP.Text));
-            BW.Write(Convert.ToInt32(txtBaseEN.Text));
-            BW.Write(Convert.ToInt32(txtBaseArmor.Text));
-            BW.Write(Convert.ToInt32(txtBaseMobility.Text));
-            BW.Write(Convert.ToSingle(txtBaseMovement.Text));
+            BW.Write((int)txtBaseHP.Value);
+            BW.Write((int)txtBaseEN.Value);
+            BW.Write((int)txtBaseArmor.Value);
+            BW.Write((int)txtBaseMobility.Value);
+            BW.Write((float)txtBaseMovement.Value);
+            BW.Write((byte)txtMaxClimb.Value);
+            BW.Write((byte)txtPostMVLevel.Value);
+            BW.Write((byte)txtReMoveLevel.Value);
+            BW.Write((byte)txtChargeCancelLevel.Value);
+
             BW.Write(frmAttacks.AttackUpgradesValueIndex);
             BW.Write(frmAttacks.AttackUpgradesCostIndex);
 
@@ -352,7 +357,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 lstPilots.Items.Add(LoadedUnit.ListCharacterIDWhitelist[P]);
             }
 
-            frmAttacks.SetAttacks(LoadedUnit.ListAttack);
+            frmAttacks.SetAttacks(LoadedUnit.UnitStat.ListAttack);
             frmAttacks.cbUpgradeCost.SelectedIndex = (int)LoadedUnit.UnitStat.AttackUpgradesCost;
             frmAttacks.cbUpgradeValues.SelectedIndex = (int)LoadedUnit.UnitStat.AttackUpgradesSpeed;
 
@@ -380,11 +385,15 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             txtEXP.Value = LoadedUnit.UnitStat.EXPValue;
             txtDescription.Text = LoadedUnit.Description;
 
-            txtBaseHP.Text = LoadedUnit.MaxHP.ToString();
-            txtBaseEN.Text = LoadedUnit.MaxEN.ToString();
-            txtBaseArmor.Text = LoadedUnit.Armor.ToString();
-            txtBaseMobility.Text = LoadedUnit.Mobility.ToString();
-            txtBaseMovement.Text = LoadedUnit.MaxMovement.ToString();
+            txtBaseHP.Value = LoadedUnit.MaxHP;
+            txtBaseEN.Value = LoadedUnit.MaxEN;
+            txtBaseArmor.Value = LoadedUnit.Armor;
+            txtBaseMobility.Value = LoadedUnit.Mobility;
+            txtBaseMovement.Value = LoadedUnit.MaxMovement;
+            txtMaxClimb.Value = LoadedUnit.UnitStat.MaxClimb;
+            txtPostMVLevel.Value = LoadedUnit.UnitStat.PostMVLevel;
+            txtReMoveLevel.Value = LoadedUnit.UnitStat.ReMoveLevel;
+            txtChargeCancelLevel.Value = LoadedUnit.UnitStat.ChargedAttackCancelLevel;
 
             List<char> Grades = new List<char> { '-', 'S', 'A', 'B', 'C', 'D' };
             cbTerrainAir.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainAir];

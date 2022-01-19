@@ -499,7 +499,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case StatusPannels.Attacks:
-                    Map.DrawAttackPanel(g, fntFinlanderFont, ActiveSquad.CurrentLeader, ListAttack, AttackCursorIndex);
+                    Map.DrawAttackPanel(g, fntFinlanderFont, ActiveSquad.CurrentLeader, ListAttack, ListAttack[AttackCursorIndex]);
                     break;
             }
         }

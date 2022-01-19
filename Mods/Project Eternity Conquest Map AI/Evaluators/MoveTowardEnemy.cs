@@ -38,12 +38,12 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 Tuple<int, int> Target = (Tuple<int, int>)ArrayReferences[0].ReferencedScript.GetContent();
                 UnitConquest TargetSquad = Info.Map.ListPlayer[Target.Item1].ListUnit[Target.Item2];
 
-                UnitConquest CurrentActiveUnit = Info.ActiveSquad;
-                Vector3 ActiveSquadPosition = Info.ActiveSquad.Position;
+                UnitConquest CurrentActiveUnit = Info.ActiveUnit;
+                Vector3 ActiveSquadPosition = Info.ActiveUnit.Position;
 
                 //Define the minimum and maximum value of the attack range.
-                int MinRange = Info.ActiveSquad.CurrentAttack.RangeMinimum;
-                int MaxRange = Info.ActiveSquad.CurrentAttack.RangeMaximum;
+                int MinRange = Info.ActiveUnit.CurrentAttack.RangeMinimum;
+                int MaxRange = Info.ActiveUnit.CurrentAttack.RangeMaximum;
                 if (MaxRange > 1)
                     MaxRange += CurrentActiveUnit.Boosts.RangeModifier;
 
@@ -51,7 +51,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 float DistanceUnit = Math.Abs(ActiveSquadPosition.X - TargetSquad.X) + Math.Abs(ActiveSquadPosition.Y - TargetSquad.Y);
                 //Move to be in range.
 
-                List<MovementAlgorithmTile> ListRealChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<MovementAlgorithmTile> ListRealChoice = Info.Map.GetMVChoice(Info.ActiveUnit);
                 for (int M = 0; M < ListRealChoice.Count; M++)
                 {//Remove every MV that would make it impossible to attack.
                     float Distance = Math.Abs(ListRealChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Position.Y - TargetSquad.Y);
@@ -66,19 +66,19 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     int Choice = RandomHelper.Next(ListRealChoice.Count);
 
                     //Movement initialisation.
-                    Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad.Components);
+                    Info.Map.MovementAnimation.Add(Info.ActiveUnit.X, Info.ActiveUnit.Y, Info.ActiveUnit.Components);
 
                     //Prepare the Cursor to move.
                     Info.Map.CursorPosition.X = ListRealChoice[Choice].Position.X;
                     Info.Map.CursorPosition.Y = ListRealChoice[Choice].Position.Y;
-                    Info.ActiveSquad.SetPosition(ListRealChoice[Choice].Position);
+                    Info.ActiveUnit.SetPosition(ListRealChoice[Choice].Position);
 
-                    Info.Map.FinalizeMovement(Info.ActiveSquad);
+                    Info.Map.FinalizeMovement(Info.ActiveUnit);
                 }
                 else
                 {
                     //Something is blocking the path.
-                    Info.Map.FinalizeMovement(Info.ActiveSquad);
+                    Info.Map.FinalizeMovement(Info.ActiveUnit);
                 }
             }
 

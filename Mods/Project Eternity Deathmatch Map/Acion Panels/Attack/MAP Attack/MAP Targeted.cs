@@ -87,7 +87,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
-            ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
+            string ActiveSquadAttackName = BR.ReadString();
+            if (!string.IsNullOrEmpty(ActiveSquadAttackName))
+            {
+                foreach (Attack ActiveAttack in ActiveSquad.CurrentLeader.ListAttack)
+                {
+                    if (ActiveAttack.ItemName == ActiveSquadAttackName)
+                    {
+                        ActiveSquad.CurrentLeader.CurrentAttack = ActiveAttack;
+                        break;
+                    }
+                }
+            }
             int AttackChoiceCount = BR.ReadInt32();
             ListAttackChoice = new List<Vector3>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
@@ -104,7 +115,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
-            BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
+            BW.AppendString(ActiveSquad.CurrentLeader.ItemName);
             BW.AppendInt32(ListAttackChoice.Count);
 
             for (int A = 0; A < ListAttackChoice.Count; ++A)

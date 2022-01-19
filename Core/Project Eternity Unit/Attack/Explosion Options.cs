@@ -26,12 +26,24 @@ namespace ProjectEternity.Core.Attacks
         public ExplosionOptions(BinaryReader BR)
         {
             ExplosionRadius = BR.ReadSingle();
-            ExplosionWindPowerAtCenter = BR.ReadSingle();
-            ExplosionWindPowerAtEdge = BR.ReadSingle();
-            ExplosionWindPowerToSelfMultiplier = BR.ReadSingle();
-            ExplosionDamageAtCenter = BR.ReadSingle();
-            ExplosionDamageAtEdge = BR.ReadSingle();
-            ExplosionDamageToSelfMultiplier = BR.ReadSingle();
+            if (ExplosionRadius > 0)
+            {
+                ExplosionWindPowerAtCenter = BR.ReadSingle();
+                ExplosionWindPowerAtEdge = BR.ReadSingle();
+                ExplosionWindPowerToSelfMultiplier = BR.ReadSingle();
+                ExplosionDamageAtCenter = BR.ReadSingle();
+                ExplosionDamageAtEdge = BR.ReadSingle();
+                ExplosionDamageToSelfMultiplier = BR.ReadSingle();
+            }
+            else
+            {
+                ExplosionWindPowerAtCenter = 0;
+                ExplosionWindPowerAtEdge = 0;
+                ExplosionWindPowerToSelfMultiplier = 0;
+                ExplosionDamageAtCenter = 0;
+                ExplosionDamageAtEdge = 0;
+                ExplosionDamageToSelfMultiplier = 0;
+            }
         }
 
         public void Save(BinaryWriter BW)

@@ -128,7 +128,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             //Remove Ammo if needed.
                             if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)
-                                --ActiveSquad.CurrentLeader.CurrentAttack.Ammo;
+                                ActiveSquad.CurrentLeader.CurrentAttack.ConsumeAmmo();
                         }
                         else
                         {
@@ -209,12 +209,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveSquad.CurrentWingmanA != null)
             {
                 ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                if (ActiveSquad.CurrentWingmanA.PLAAttack >= 0)
+                if (ActiveSquad.CurrentWingmanA.PLAAttack != null)
                 {
-                    Attack PLAAttack = ActiveSquad.CurrentWingmanA.ListAttack[ActiveSquad.CurrentWingmanA.PLAAttack];
-                    PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, true);
+                    ActiveSquad.CurrentWingmanA.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, true);
 
-                    if (PLAAttack.CanAttack)
+                    if (ActiveSquad.CurrentWingmanA.PLAAttack.CanAttack)
                     {
                         ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
                     }
@@ -224,12 +223,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveSquad.CurrentWingmanB != null)
             {
                 ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                if (ActiveSquad.CurrentWingmanB.PLAAttack >= 0)
+                if (ActiveSquad.CurrentWingmanB.PLAAttack != null)
                 {
-                    Attack PLAAttack = ActiveSquad.CurrentWingmanB.ListAttack[ActiveSquad.CurrentWingmanB.PLAAttack];
-                    PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, true);
+                    ActiveSquad.CurrentWingmanB.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, true);
 
-                    if (PLAAttack.CanAttack)
+                    if (ActiveSquad.CurrentWingmanB.PLAAttack.CanAttack)
                     {
                         ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
                     }

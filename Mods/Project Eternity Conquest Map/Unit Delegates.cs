@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             Attack ActiveWeapon = ActiveUnit.ListAttack[0];
             List<Tuple<int, int>> ListDefendingSquad = CanSquadAttackWeapon1(PosX, PosY, ActivePlayerIndex, ActiveUnit.RelativePath, ActiveUnit.ListAttack[1]);
 
-            if (!ActiveUnit.CanMove && !((ActiveWeapon.Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement || ActiveUnit.Boosts.PostMovementModifier.Attack))
+            if (!ActiveUnit.CanMove && !ActiveWeapon.IsPostMovement(ActiveUnit))
                 return false;
 
             //Define the minimum and maximum value of the attack range.
@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             #region Can't attack directly
 
             //If it's a post-movement weapon or you can still move.
-            else if (ActiveUnit.CanMove&& ((ActiveWeapon.Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement || ActiveUnit.Boosts.PostMovementModifier.Attack))
+            else if (ActiveUnit.CanMove && ActiveWeapon.IsPostMovement(ActiveUnit))
             {//check if there is an enemy too close to be attacked but that could be attacked after moving.
                 for (int P = 0; P < ListPlayer.Count; P++)
                 {
@@ -138,7 +138,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             if (ListDefendingSquad == null)
                 return false;
 
-            if (!ActiveUnit.CanMove && !((ActiveWeapon.Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement || ActiveUnit.Boosts.PostMovementModifier.Attack))
+            if (!ActiveUnit.CanMove && !ActiveWeapon.IsPostMovement(ActiveUnit))
                 return false;
 
             //Define the minimum and maximum value of the attack range.
@@ -171,7 +171,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             #region Can't attack directly
 
             //If it's a post-movement weapon or you can still move.
-            else if (ActiveUnit.CanMove && ((ActiveWeapon.Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement || ActiveUnit.Boosts.PostMovementModifier.Attack))
+            else if (ActiveUnit.CanMove && ActiveWeapon.IsPostMovement(ActiveUnit))
             {//check if there is an enemy too close to be attacked but that could be attacked after moving.
                 for (int P = 0; P < ListPlayer.Count; P++)
                 {

@@ -257,10 +257,13 @@ namespace ProjectEternity.Editors.CharacterEditor
                     }
                 }
 
-                BW.Write(cbAirRank.SelectedIndex);
-                BW.Write(cbLandRank.SelectedIndex);
-                BW.Write(cbSeaRank.SelectedIndex);
-                BW.Write(cbSpaceRank.SelectedIndex);
+                BW.Write((byte)cbAirRank.SelectedIndex);
+                BW.Write((byte)cbLandRank.SelectedIndex);
+                BW.Write((byte)cbSeaRank.SelectedIndex);
+                BW.Write((byte)cbSpaceRank.SelectedIndex);
+                BW.Write((byte)txtPostMVLevel.Value);
+                BW.Write((byte)txtReMoveLevel.Value);
+                BW.Write((byte)txtChargeCancelLevel.Value);
             }
 
             if (QuoteEditor == null)
@@ -380,6 +383,10 @@ namespace ProjectEternity.Editors.CharacterEditor
             cbLandRank.SelectedIndex = ListGrade.IndexOf(NewCharacter.TerrainGrade.TerrainGradeLand);
             cbSeaRank.SelectedIndex = ListGrade.IndexOf(NewCharacter.TerrainGrade.TerrainGradeSea);
             cbSpaceRank.SelectedIndex = ListGrade.IndexOf(NewCharacter.TerrainGrade.TerrainGradeSpace);
+
+            txtPostMVLevel.Value = 1;
+            txtReMoveLevel.Value = 0;
+            txtChargeCancelLevel.Value = NewCharacter.ChargedAttackCancelLevel;
 
             for (int S = 0; S < NewCharacter.ArrayPilotSpirit.Length; ++S)
             {

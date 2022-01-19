@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z));
             ListMovedOverPoint.Add(ActiveSquad.Position);
-            ActiveSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
+            ActiveSquad.CurrentLeader.CurrentAttack = null;
         }
 
         public override void DoUpdate(GameTime gameTime)

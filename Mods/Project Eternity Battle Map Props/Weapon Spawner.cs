@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void PickupWeapon(Squad SquadToUse)
         {
-            SquadToUse.CurrentLeader.UnitStat.ListAttackTemporary.Add(null);
+            SquadToUse.CurrentLeader.AddTemporaryAttack(null);
         }
 
         public override void Update(GameTime gameTime)

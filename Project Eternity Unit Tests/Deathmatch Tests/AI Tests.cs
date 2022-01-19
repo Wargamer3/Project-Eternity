@@ -17,8 +17,9 @@ namespace ProjectEternity.UnitTests
             Squad DummySquad = CreateDummySquad();
 
             Attack DummyAttack = new Attack("Dummy Attack", string.Empty, 0, "8000", 0, 5, WeaponPrimaryProperty.None,
-                WeaponSecondaryProperty.PostMovement, 10, 0, 6, 1, 100, "Laser",
+                WeaponSecondaryProperty.None, 10, 0, 6, 1, 100, "Laser",
                 new Dictionary<string, char>() { { "Air", 'S' }, { "Land", 'S' }, { "Sea", 'S' }, { "Space", 'S' } });
+            DummyAttack.PostMovementLevel = 1;
             DummySquad.CurrentLeader.ListAttack.Add(DummyAttack);
 
             Test.Info = new GameScreens.DeathmatchMapScreen.DeathmatchAIInfo(DummyMap, DummySquad);

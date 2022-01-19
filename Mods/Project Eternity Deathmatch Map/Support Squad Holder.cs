@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -75,10 +76,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             AttackerSupportUnit.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
                             int BestDamage = 0;
-                            int BestAttackIndex = -1;
+                            Attack BestAttack = null;
 
-                            for (AttackerSupportUnit.AttackIndex = 0; AttackerSupportUnit.AttackIndex < AttackerSupportUnit.ListAttack.Count; ++AttackerSupportUnit.AttackIndex)
+                            foreach (Attack ActiveAttack in AttackerSupportUnit.ListAttack)
                             {
+                                AttackerSupportUnit.CurrentAttack = ActiveAttack;
                                 if (!AttackerSupportUnit.CurrentAttack.CanAttack)
                                     continue;
 
@@ -92,13 +94,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     if (Result.AttackDamage > BestDamage)
                                     {
                                         BestDamage = Result.AttackDamage;
-                                        BestAttackIndex = AttackerSupportUnit.AttackIndex;
+                                        BestAttack = ActiveAttack;
                                     }
                                 }
                             }
-                            if (BestAttackIndex >= 0)
+                            if (BestAttack != null)
                             {
-                                AttackerSupportUnit.AttackIndex = BestAttackIndex;
+                                AttackerSupportUnit.CurrentAttack = BestAttack;
                                 AddSupportSquad(AttackerSupportSquad);
                                 ActiveSquadSupportIndex = Count - 1;
                             }
@@ -130,7 +132,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             && (!DefendingSquad.IsFlying
                                 || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir)))
                         {
-                            ActivePlayer.ListSquad[SquadIndex].CurrentLeader.AttackIndex = -1;
+                            ActivePlayer.ListSquad[SquadIndex].CurrentLeader.CurrentAttack = null;
                             AddSupportSquad(ActivePlayer.ListSquad[SquadIndex]);
 
                             if (ActiveSquadSupport == null || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.HP > ActiveSquadSupport.CurrentLeader.HP)

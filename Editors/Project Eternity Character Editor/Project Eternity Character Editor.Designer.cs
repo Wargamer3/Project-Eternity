@@ -34,6 +34,8 @@
             this.tsmRelationships = new System.Windows.Forms.ToolStripMenuItem();
             this.cbCanPilot = new System.Windows.Forms.CheckBox();
             this.gbOtherStats = new System.Windows.Forms.GroupBox();
+            this.lblChargeCancelLevel = new System.Windows.Forms.Label();
+            this.txtChargeCancelLevel = new System.Windows.Forms.NumericUpDown();
             this.cbSpaceRank = new System.Windows.Forms.ComboBox();
             this.cbLandRank = new System.Windows.Forms.ComboBox();
             this.cbSeaRank = new System.Windows.Forms.ComboBox();
@@ -136,8 +138,14 @@
             this.gbSlave = new System.Windows.Forms.GroupBox();
             this.txtSlave = new System.Windows.Forms.TextBox();
             this.btnSelectSlave = new System.Windows.Forms.Button();
+            this.gbAdvanced = new System.Windows.Forms.GroupBox();
+            this.txtPostMVLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblPostMVLevel = new System.Windows.Forms.Label();
+            this.txtReMoveLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblReMoveLevel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.gbOtherStats.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtChargeCancelLevel)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtEXP)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -152,6 +160,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtPilotSpirit1LevelRequired)).BeginInit();
             this.gbPersonality.SuspendLayout();
             this.gbSlave.SuspendLayout();
+            this.gbAdvanced.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -212,10 +223,32 @@
             this.gbOtherStats.Controls.Add(this.label5);
             this.gbOtherStats.Location = new System.Drawing.Point(474, 78);
             this.gbOtherStats.Name = "gbOtherStats";
-            this.gbOtherStats.Size = new System.Drawing.Size(155, 125);
+            this.gbOtherStats.Size = new System.Drawing.Size(125, 119);
             this.gbOtherStats.TabIndex = 2;
             this.gbOtherStats.TabStop = false;
             this.gbOtherStats.Text = "Other stats";
+            // 
+            // lblChargeCancelLevel
+            // 
+            this.lblChargeCancelLevel.AutoSize = true;
+            this.lblChargeCancelLevel.Location = new System.Drawing.Point(6, 73);
+            this.lblChargeCancelLevel.Name = "lblChargeCancelLevel";
+            this.lblChargeCancelLevel.Size = new System.Drawing.Size(109, 13);
+            this.lblChargeCancelLevel.TabIndex = 62;
+            this.lblChargeCancelLevel.Text = "Charge Cancel Level:";
+            // 
+            // txtChargeCancelLevel
+            // 
+            this.txtChargeCancelLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtChargeCancelLevel.Location = new System.Drawing.Point(127, 71);
+            this.txtChargeCancelLevel.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtChargeCancelLevel.Name = "txtChargeCancelLevel";
+            this.txtChargeCancelLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtChargeCancelLevel.TabIndex = 61;
             // 
             // cbSpaceRank
             // 
@@ -227,9 +260,9 @@
             "B",
             "C",
             "D"});
-            this.cbSpaceRank.Location = new System.Drawing.Point(77, 100);
+            this.cbSpaceRank.Location = new System.Drawing.Point(80, 97);
             this.cbSpaceRank.Name = "cbSpaceRank";
-            this.cbSpaceRank.Size = new System.Drawing.Size(72, 21);
+            this.cbSpaceRank.Size = new System.Drawing.Size(37, 21);
             this.cbSpaceRank.TabIndex = 10;
             this.cbSpaceRank.TabStop = false;
             // 
@@ -243,9 +276,9 @@
             "B",
             "C",
             "D"});
-            this.cbLandRank.Location = new System.Drawing.Point(77, 46);
+            this.cbLandRank.Location = new System.Drawing.Point(80, 44);
             this.cbLandRank.Name = "cbLandRank";
-            this.cbLandRank.Size = new System.Drawing.Size(72, 21);
+            this.cbLandRank.Size = new System.Drawing.Size(37, 21);
             this.cbLandRank.TabIndex = 8;
             this.cbLandRank.TabStop = false;
             // 
@@ -259,9 +292,9 @@
             "B",
             "C",
             "D"});
-            this.cbSeaRank.Location = new System.Drawing.Point(77, 73);
+            this.cbSeaRank.Location = new System.Drawing.Point(80, 71);
             this.cbSeaRank.Name = "cbSeaRank";
-            this.cbSeaRank.Size = new System.Drawing.Size(72, 21);
+            this.cbSeaRank.Size = new System.Drawing.Size(37, 21);
             this.cbSeaRank.TabIndex = 9;
             this.cbSeaRank.TabStop = false;
             // 
@@ -275,9 +308,9 @@
             "B",
             "C",
             "D"});
-            this.cbAirRank.Location = new System.Drawing.Point(77, 19);
+            this.cbAirRank.Location = new System.Drawing.Point(80, 17);
             this.cbAirRank.Name = "cbAirRank";
-            this.cbAirRank.Size = new System.Drawing.Size(72, 21);
+            this.cbAirRank.Size = new System.Drawing.Size(37, 21);
             this.cbAirRank.TabIndex = 7;
             this.cbAirRank.TabStop = false;
             // 
@@ -1286,11 +1319,69 @@
             this.btnSelectSlave.UseVisualStyleBackColor = true;
             this.btnSelectSlave.Click += new System.EventHandler(this.btnSelectSlave_Click);
             // 
+            // gbAdvanced
+            // 
+            this.gbAdvanced.Controls.Add(this.txtReMoveLevel);
+            this.gbAdvanced.Controls.Add(this.lblReMoveLevel);
+            this.gbAdvanced.Controls.Add(this.txtPostMVLevel);
+            this.gbAdvanced.Controls.Add(this.lblPostMVLevel);
+            this.gbAdvanced.Controls.Add(this.lblChargeCancelLevel);
+            this.gbAdvanced.Controls.Add(this.txtChargeCancelLevel);
+            this.gbAdvanced.Location = new System.Drawing.Point(605, 78);
+            this.gbAdvanced.Name = "gbAdvanced";
+            this.gbAdvanced.Size = new System.Drawing.Size(172, 99);
+            this.gbAdvanced.TabIndex = 69;
+            this.gbAdvanced.TabStop = false;
+            this.gbAdvanced.Text = "Advanced";
+            // 
+            // txtPostMVLevel
+            // 
+            this.txtPostMVLevel.Location = new System.Drawing.Point(127, 19);
+            this.txtPostMVLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtPostMVLevel.Name = "txtPostMVLevel";
+            this.txtPostMVLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtPostMVLevel.TabIndex = 66;
+            // 
+            // lblPostMVLevel
+            // 
+            this.lblPostMVLevel.AutoSize = true;
+            this.lblPostMVLevel.Location = new System.Drawing.Point(6, 21);
+            this.lblPostMVLevel.Name = "lblPostMVLevel";
+            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
+            this.lblPostMVLevel.TabIndex = 65;
+            this.lblPostMVLevel.Text = "Post MV Level:";
+            // 
+            // txtReMoveLevel
+            // 
+            this.txtReMoveLevel.Location = new System.Drawing.Point(127, 45);
+            this.txtReMoveLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtReMoveLevel.Name = "txtReMoveLevel";
+            this.txtReMoveLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtReMoveLevel.TabIndex = 68;
+            // 
+            // lblReMoveLevel
+            // 
+            this.lblReMoveLevel.AutoSize = true;
+            this.lblReMoveLevel.Location = new System.Drawing.Point(6, 47);
+            this.lblReMoveLevel.Name = "lblReMoveLevel";
+            this.lblReMoveLevel.Size = new System.Drawing.Size(83, 13);
+            this.lblReMoveLevel.TabIndex = 67;
+            this.lblReMoveLevel.Text = "Re-Move Level:";
+            // 
             // ProjectEternityCharacterEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(787, 499);
+            this.Controls.Add(this.gbAdvanced);
             this.Controls.Add(this.gbSlave);
             this.Controls.Add(this.gbPersonality);
             this.Controls.Add(this.groupBox5);
@@ -1307,6 +1398,7 @@
             this.menuStrip1.PerformLayout();
             this.gbOtherStats.ResumeLayout(false);
             this.gbOtherStats.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtChargeCancelLevel)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtEXP)).EndInit();
@@ -1328,6 +1420,10 @@
             this.gbPersonality.PerformLayout();
             this.gbSlave.ResumeLayout(false);
             this.gbSlave.PerformLayout();
+            this.gbAdvanced.ResumeLayout(false);
+            this.gbAdvanced.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1443,6 +1539,13 @@
         private System.Windows.Forms.GroupBox gbSlave;
         private System.Windows.Forms.TextBox txtSlave;
         private System.Windows.Forms.Button btnSelectSlave;
+        private System.Windows.Forms.Label lblChargeCancelLevel;
+        public System.Windows.Forms.NumericUpDown txtChargeCancelLevel;
+        private System.Windows.Forms.GroupBox gbAdvanced;
+        private System.Windows.Forms.NumericUpDown txtPostMVLevel;
+        private System.Windows.Forms.Label lblPostMVLevel;
+        private System.Windows.Forms.NumericUpDown txtReMoveLevel;
+        private System.Windows.Forms.Label lblReMoveLevel;
     }
 }
 

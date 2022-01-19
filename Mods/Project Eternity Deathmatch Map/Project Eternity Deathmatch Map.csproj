@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acion Panels\Attack\Init Delayed MAP Attack.cs" />
     <Compile Include="Acion Panels\Attack\Init PER Attack.cs" />
     <Compile Include="Acion Panels\Attack\PER Attack\Attack PER.cs" />
     <Compile Include="Acion Panels\Attack\PER Attack\PER Attack Pahtfinding.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Acion Panels\Map Menu\Unit List.cs" />
     <Compile Include="Acion Panels\Map Menu\End Turn.cs" />
     <Compile Include="Acion Panels\Map Switch Menu.cs" />
-    <Compile Include="Acion Panels\Attack\Init Delayed MAP Attack.cs" />
+    <Compile Include="Acion Panels\Attack\Charge Attack.cs" />
     <Compile Include="Acion Panels\Hub Menu.cs" />
     <Compile Include="Acion Panels\Movement\Board.cs" />
     <Compile Include="Acion Panels\Movement\Deploy.cs" />

@@ -16,8 +16,8 @@ namespace ProjectEternity.AI.ConquestMapScreen
 
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
-                Info.Map.FinalizeMovement(Info.ActiveSquad);
-                Info.ActiveSquad.EndTurn();
+                Info.Map.FinalizeMovement(Info.ActiveUnit);
+                Info.ActiveUnit.EndTurn();
 
                 Result = new List<object>();
                 IsCompleted = true;

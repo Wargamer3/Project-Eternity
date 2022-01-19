@@ -43,12 +43,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
     public class ConquestAIInfo
     {
         public ConquestMap Map;
-        public UnitConquest ActiveSquad;
+        public UnitConquest ActiveUnit;
 
         public ConquestAIInfo(ConquestMap Map, UnitConquest Owner)
         {
             this.Map = Map;
-            this.ActiveSquad = Owner;
+            this.ActiveUnit = Owner;
         }
     }
 

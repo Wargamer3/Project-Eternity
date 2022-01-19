@@ -8,6 +8,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -114,28 +115,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
 
-                    RightSquad.CurrentLeader.AttackIndex = 0;
+                    List<Attack> ListAttack = RightSquad.CurrentLeader.ListAttack;
+                    RightSquad.CurrentLeader.CurrentAttack = ListAttack[0];
 
                     if (!string.IsNullOrWhiteSpace(AttackingUnitWeaponName))
                     {
-                        for (int A = 0; A < RightSquad.CurrentLeader.ListAttack.Count; ++A)
+                        foreach (Attack ActiveAttack in ListAttack)
                         {
-                            if (RightSquad.CurrentLeader.ListAttack[A].ItemName == AttackingUnitWeaponName)
+                            if (ActiveAttack.ItemName == AttackingUnitWeaponName)
                             {
-                                RightSquad.CurrentLeader.AttackIndex = A;
+                                RightSquad.CurrentLeader.CurrentAttack = ActiveAttack;
                             }
                         }
                     }
 
-                    LeftSquad.CurrentLeader.AttackIndex = 0;
+                    ListAttack = LeftSquad.CurrentLeader.ListAttack;
+                    LeftSquad.CurrentLeader.CurrentAttack = ListAttack[0];
 
                     if (!string.IsNullOrWhiteSpace(AttackingUnitWeaponName))
                     {
-                        for (int A = 0; A < LeftSquad.CurrentLeader.ListAttack.Count; ++A)
+                        foreach (Attack ActiveAttack in ListAttack)
                         {
-                            if (LeftSquad.CurrentLeader.ListAttack[A].ItemName == DefendingUnitWeaponName)
+                            if (ActiveAttack.ItemName == DefendingUnitWeaponName)
                             {
-                                LeftSquad.CurrentLeader.AttackIndex = A;
+                                LeftSquad.CurrentLeader.CurrentAttack = ActiveAttack;
                             }
                         }
                     }

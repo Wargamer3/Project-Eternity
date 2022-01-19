@@ -14,7 +14,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
 
             public object GetContent()
             {
-                return !Info.ActiveSquad.CanMove;
+                return !Info.ActiveUnit.CanMove;
             }
 
             public override AIScript CopyScript()

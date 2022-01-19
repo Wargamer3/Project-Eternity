@@ -21,7 +21,7 @@ namespace ProjectEternity.Core.Attacks
     * B: Beam Attack. Enemies that are weak to Beams will take more damage, but certain barriers will reduce their damage to 0.
     * S: Special Attack. Can reduce an enemy's stats for three turns. Which stat is reduced is listed under Special:, on the bottom right corner of the menu.*/
     [Flags]
-    public enum WeaponSecondaryProperty : byte { None = 0, PostMovement = 0x1, SwordCut = 0x2, ShootDown = 0x4, Partial = 0x8 };
+    public enum WeaponSecondaryProperty : byte { None = 0, SwordCut = 0x1, ShootDown = 0x2, Partial = 0x4 };
 
     public enum WeaponMAPProperties : byte {  Spread = 0, Direction = 1, Targeted = 2 };
 
@@ -32,21 +32,25 @@ namespace ProjectEternity.Core.Attacks
         public WeaponStyle Style;// - Shows either Melee, Ranged or Special; determines which Pilot Stat to call on.
         public string PowerFormula;
         public string MinDamageFormula;
-        public int RangeMinimum;
-        public int RangeMaximum;// - How close (or far) an enemy must be for this weapon to be used on them. Normally expressed in Min-Max (e.g. 2-4 means the weapon works on enemies between two and four cells away).
+        public byte RangeMinimum;
+        public byte RangeMaximum;// - How close (or far) an enemy must be for this weapon to be used on them. Normally expressed in Min-Max (e.g. 2-4 means the weapon works on enemies between two and four cells away).
         public WeaponPrimaryProperty Pri;
         public WeaponSecondaryProperty Sec;
+        public byte PostMovementLevel;
+        public byte ReMoveLevel;
         public byte PostMovementAccuracyMalus;
         public byte PostMovementEvasionBonus;
         public BaseAutomaticSkill[] ArrayAttackAttributes;
-        public int Accuracy;// A flat bonus used in the accuracy formula. Hit can be improved via Pilot Abilities, Unit Abilities, and Parts.
-        public int Critical;// A flat bonus used in the critical hit rate formula. Crit can be improved via Pilot Abilities, Unit Abilities, and Parts.
+        public sbyte Accuracy;// A flat bonus used in the accuracy formula. Hit can be improved via Pilot Abilities, Unit Abilities, and Parts.
+        public sbyte Critical;// A flat bonus used in the critical hit rate formula. Crit can be improved via Pilot Abilities, Unit Abilities, and Parts.
 
-        public int Ammo;// Certain attacks use ammo. If they hit 0, they will be unable to use that gun until resupplied. Ammo can can be improved via Pilot Abilities, Unit Abilities, and Parts.
-        private int _MaxAmmo;
-        public int MaxAmmo { get { return _MaxAmmo; } set { _MaxAmmo = value; Ammo = Math.Min(Ammo, value); } }
-        public int ENCost;// Certain attacks use EN. If EN is reduced to 0, the unit will be unable to use that attack. EN costs can be can be lowered via Pilot Abilities, Unit Abilities, and Parts.
-        public int MoraleRequirement;// Most attacks require morale to use. Morale is gained by defeating the enemy, but is not lowered by using an attack.
+        public byte _Ammo;// Certain attacks use ammo. If they hit 0, they will be unable to use that gun until resupplied. Ammo can can be improved via Pilot Abilities, Unit Abilities, and Parts.
+        public byte Ammo { get { return Parent != null ? Parent.Ammo : _Ammo; } }
+        public byte AmmoConsumption;//Number of ammo to use per attack. Used mostly for secondary and charged Attacks.
+        private byte _MaxAmmo;
+        public byte MaxAmmo { get { return Parent != null ? Parent.MaxAmmo : _MaxAmmo; } }
+        public byte ENCost;// Certain attacks use EN. If EN is reduced to 0, the unit will be unable to use that attack. EN costs can be can be lowered via Pilot Abilities, Unit Abilities, and Parts.
+        public byte MoraleRequirement;// Most attacks require morale to use. Morale is gained by defeating the enemy, but is not lowered by using an attack.
 
         public string AttackType;/* - Shows which category along the "Ways to knock down your foes" spectrum the weapon lies.
                                 * Solid Shot - Machine guns, bazookas and solid-shell cannons.
@@ -66,6 +70,11 @@ namespace ProjectEternity.Core.Attacks
 
         public MAPAttackAttributes MAPAttributes;
         public PERAttackAttributes PERAttributes;
+        private Attack Parent;
+        public bool IsChargeable;
+        public List<Attack> ListSecondaryAttack;
+        public byte ChargedAttackCancelLevel;
+        public List<Attack> ListChargedAttack;
         public ExplosionOptions ExplosionOption;
         public readonly List<AttackContext> Animations;
         public readonly bool IsExternal;
@@ -82,8 +91,8 @@ namespace ProjectEternity.Core.Attacks
             DicTerrainAttribute.Add(UnitStats.TerrainSpace, 'A');
         }
 
-        public Attack(string Name, string Description, int Price, string PowerFormula, int RangeMin, int RangeMax, WeaponPrimaryProperty Pri, WeaponSecondaryProperty Sec,
-            int Hit, int Crit, int AmmoMax, int ENCost, int MoraleRequirement, string Type, Dictionary<string, char> DicTerrainAttribute)
+        public Attack(string Name, string Description, int Price, string PowerFormula, byte RangeMin, byte RangeMax, WeaponPrimaryProperty Pri, WeaponSecondaryProperty Sec,
+            sbyte Hit, sbyte Crit, byte AmmoMax, byte ENCost, byte MoraleRequirement, string Type, Dictionary<string, char> DicTerrainAttribute)
             : base(Name, Description, Price)
         {
             ArrayAttackAttributes = new BaseAutomaticSkill[0];
@@ -94,7 +103,7 @@ namespace ProjectEternity.Core.Attacks
             this.Sec = Sec;
             this.Accuracy = Hit;
             this.Critical = Crit;
-            this.MaxAmmo = AmmoMax;
+            this._MaxAmmo = AmmoMax;
             this.ENCost = ENCost;
             this.MoraleRequirement = MoraleRequirement;
             this.AttackType = Type;
@@ -142,13 +151,14 @@ namespace ProjectEternity.Core.Attacks
 
             this.PowerFormula = BR.ReadString();
             this.MinDamageFormula = BR.ReadString();
-            this.ENCost = BR.ReadInt32();
-            this.MaxAmmo = BR.ReadInt32();
-            this.MoraleRequirement = BR.ReadInt32();
-            this.RangeMinimum = BR.ReadInt32();
-            this.RangeMaximum = BR.ReadInt32();
-            this.Accuracy = BR.ReadInt32();
-            this.Critical = BR.ReadInt32();
+            this.ENCost = BR.ReadByte();
+            this._MaxAmmo = BR.ReadByte();
+            this.AmmoConsumption = BR.ReadByte();
+            this.MoraleRequirement = BR.ReadByte();
+            this.RangeMinimum = BR.ReadByte();
+            this.RangeMaximum = BR.ReadByte();
+            this.Accuracy = BR.ReadSByte();
+            this.Critical = BR.ReadSByte();
 
             this.Pri = (WeaponPrimaryProperty)BR.ReadByte();
             if (this.Pri == WeaponPrimaryProperty.MAP)
@@ -161,12 +171,12 @@ namespace ProjectEternity.Core.Attacks
             }
 
             this.Sec = (WeaponSecondaryProperty)BR.ReadByte();
+            ReMoveLevel = BR.ReadByte();
+            PostMovementLevel = BR.ReadByte();
             PostMovementAccuracyMalus = BR.ReadByte();
             PostMovementEvasionBonus = BR.ReadByte();
 
-            ExplosionOption = new ExplosionOptions(BR);
-
-            int AttackType = BR.ReadInt32();
+            int AttackType = BR.ReadByte();
 
             if (AttackType == 0)
             {
@@ -209,10 +219,10 @@ namespace ProjectEternity.Core.Attacks
                 Style = WeaponStyle.R;
             }
 
-            int TerrainGradeAir = BR.ReadInt32();
-            int TerrainGradeLand = BR.ReadInt32();
-            int TerrainGradeSea = BR.ReadInt32();
-            int TerrainGradeSpace = BR.ReadInt32();
+            byte TerrainGradeAir = BR.ReadByte();
+            byte TerrainGradeLand = BR.ReadByte();
+            byte TerrainGradeSea = BR.ReadByte();
+            byte TerrainGradeSpace = BR.ReadByte();
 
             char[] Grades = new char[6] { '-', 'S', 'A', 'B', 'C', 'D' };
             DicTerrainAttribute = new Dictionary<string, char>(4);
@@ -220,6 +230,30 @@ namespace ProjectEternity.Core.Attacks
             DicTerrainAttribute.Add(UnitStats.TerrainLand, Grades[TerrainGradeLand]);
             DicTerrainAttribute.Add(UnitStats.TerrainSea, Grades[TerrainGradeSea]);
             DicTerrainAttribute.Add(UnitStats.TerrainSpace, Grades[TerrainGradeSpace]);
+
+            int ListSecondaryAttackCount = BR.ReadInt32();
+            ListSecondaryAttack = new List<Attack>(ListSecondaryAttackCount);
+            for (int S = 0; S < ListSecondaryAttackCount; ++S)
+            {
+                Attack LoadedSecondaryAttack = new Attack(BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                LoadedSecondaryAttack.Parent = this;
+                ListSecondaryAttack.Add(LoadedSecondaryAttack);
+            }
+
+            int ListChargedAttackCount = BR.ReadInt32();
+            ListChargedAttack = new List<Attack>(ListChargedAttackCount);
+            for (int S = 0; S < ListChargedAttackCount; ++S)
+            {
+                Attack LoadedChargedAttack = new Attack(BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                LoadedChargedAttack.Parent = this;
+                ListChargedAttack.Add(LoadedChargedAttack);
+            }
+            if (ListChargedAttackCount > 0)
+            {
+                ChargedAttackCancelLevel = BR.ReadByte();
+            }
+
+            ExplosionOption = new ExplosionOptions(BR);
 
             Int32 AttackAttributesCount = BR.ReadInt32();
             this.ArrayAttackAttributes = new BaseAutomaticSkill[AttackAttributesCount];
@@ -250,7 +284,7 @@ namespace ProjectEternity.Core.Attacks
 
         public void DisableAttack()
         {
-            _CanAttack = false;
+            _CanAttack = true;
         }
 
         private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
@@ -270,8 +304,7 @@ namespace ProjectEternity.Core.Attacks
                 MaxDistance += CurrentUnit.Boosts.RangeModifier;
 
             //If it's a post-movement weapon or the mech can still move.
-            if (CanMove || (!CanMove && ((Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement ||
-                                            (CurrentUnit.Boosts.PostMovementModifier.Attack && CurrentUnit.Boosts.PostMovementModifier.Attack))))
+            if (CanMove || (!CanMove && IsPostMovement(CurrentUnit)))
             {
                 if (Pri == WeaponPrimaryProperty.PER)
                 {
@@ -316,6 +349,11 @@ namespace ProjectEternity.Core.Attacks
             return false;
         }
 
+        public bool IsPostMovement(Unit CurrentUnit)
+        {
+            return CurrentUnit.GetPostMovementLevel() >= PostMovementLevel || CurrentUnit.Boosts.PostMovementModifier.Attack;
+        }
+
         public int GetPower(Unit Owner, FormulaParser ActiveParser)
         {
             if (Owner != null)
@@ -328,6 +366,66 @@ namespace ProjectEternity.Core.Attacks
             }
         }
 
+        public void SetMaxAmmo(byte MaxAmmoToSet)
+        {
+            if (Parent != null)
+            {
+                Parent.SetMaxAmmo(MaxAmmoToSet);
+            }
+            else
+            {
+                _MaxAmmo = MaxAmmoToSet;
+            }
+        }
+
+        public void RefillAmmo()
+        {
+            if (Parent != null)
+            {
+                Parent.RefillAmmo();
+            }
+            else
+            {
+                _Ammo = MaxAmmo;
+            }
+        }
+
+        public void ConsumeAmmo()
+        {
+            if (Parent != null)
+            {
+                Parent.ConsumeAmmo();
+            }
+            else
+            {
+                _Ammo -= AmmoConsumption;
+            }
+        }
+
+        public void IncreaseAmmo(byte AmmoToAdd)
+        {
+            if (Parent != null)
+            {
+                Parent.IncreaseAmmo(AmmoToAdd);
+            }
+            else
+            {
+                _Ammo = (byte)Math.Min(MaxAmmo, _Ammo + AmmoToAdd);
+            }
+        }
+
+        public void EmptyAmmo()
+        {
+            if (Parent != null)
+            {
+                Parent.EmptyAmmo();
+            }
+            else
+            {
+                _Ammo = 0;
+            }
+        }
+
         public AttackAnimations GetAttackAnimations(FormulaParser ActiveParser)
         {
             return Animations[0].Animations;
@@ -337,8 +435,6 @@ namespace ProjectEternity.Core.Attacks
         {
             return ItemName;
         }
-
-        #region Terrain attributes
 
         public int TerrainAttribute(string Terrain)
         {
@@ -361,7 +457,5 @@ namespace ProjectEternity.Core.Attacks
             }
             return 0;
         }
-
-        #endregion
     }
 }

@@ -202,7 +202,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (UpgradeChoice == UpgradeChoices.Attacks)
             {
-                AttackPicker.DrawTopAttackPanel(g, fntFinlanderFont, SelectedUnit, ListAttack, 0, false);
+                AttackPicker.DrawTopAttackPanel(g, fntFinlanderFont, SelectedUnit, ListAttack, ListAttack[0], false);
 
                 int YStart = 115;
                 int YStep = 25;

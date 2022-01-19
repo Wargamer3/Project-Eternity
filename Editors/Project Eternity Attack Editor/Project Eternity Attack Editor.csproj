@@ -69,6 +69,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Advanced Settings Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Advanced Settings Editor.Designer.cs">
+      <DependentUpon>Advanced Settings Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Attack Formula Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     <Compile Include="Quote Editor.Designer.cs">
       <DependentUpon>Quote Editor.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Advanced Settings Editor.resx">
+      <DependentUpon>Advanced Settings Editor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Attack Formula Editor.resx">
       <DependentUpon>Attack Formula Editor.cs</DependentUpon>
     </EmbeddedResource>

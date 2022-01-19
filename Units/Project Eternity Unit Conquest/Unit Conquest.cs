@@ -75,13 +75,13 @@ namespace ProjectEternity.Core.Units.Conquest
 
         public string Weapon1Name;
         public bool Weapon1PostMovement;
-        public int Weapon1MinimumRange;
-        public int Weapon1MaximumRange;
+        public byte Weapon1MinimumRange;
+        public byte Weapon1MaximumRange;
 
         public string Weapon2Name;
         public bool Weapon2PostMovement;
-        public int Weapon2MinimumRange;
-        public int Weapon2MaximumRange;
+        public byte Weapon2MinimumRange;
+        public byte Weapon2MaximumRange;
 
         private UnitMapComponent MapComponents;
         public AIContainer SquadAI;
@@ -125,13 +125,13 @@ namespace ProjectEternity.Core.Units.Conquest
 
             Weapon1Name = BR.ReadString();
             Weapon1PostMovement = BR.ReadBoolean();
-            Weapon1MinimumRange = BR.ReadInt32();
-            Weapon1MaximumRange = BR.ReadInt32();
+            Weapon1MinimumRange = BR.ReadByte();
+            Weapon1MaximumRange = BR.ReadByte();
 
             Weapon2Name = BR.ReadString();
             Weapon2PostMovement = BR.ReadBoolean();
-            Weapon2MinimumRange = BR.ReadInt32();
-            Weapon2MaximumRange = BR.ReadInt32();
+            Weapon2MinimumRange = BR.ReadByte();
+            Weapon2MaximumRange = BR.ReadByte();
 
             if (Content != null)
             {
@@ -172,13 +172,13 @@ namespace ProjectEternity.Core.Units.Conquest
             Gaz = MaxGaz;
             Material = MaxMaterial;
 
-            _UnitStat.PLAAttack = -1;
+            _UnitStat.PLAAttack = null;
 
             Attack Weapon1 = new Attack(Weapon1Name);
             Weapon1.RangeMinimum = Weapon1MinimumRange;
             Weapon1.RangeMaximum = Weapon1MaximumRange;
             if (Weapon1PostMovement)
-                Weapon1.Sec = WeaponSecondaryProperty.PostMovement;
+                Weapon1.PostMovementLevel = 1;
             else
                 Weapon1.Sec = WeaponSecondaryProperty.None;
 
@@ -188,7 +188,7 @@ namespace ProjectEternity.Core.Units.Conquest
             Weapon2.RangeMinimum = Weapon2MinimumRange;
             Weapon2.RangeMaximum = Weapon2MaximumRange;
             if (Weapon2PostMovement)
-                Weapon2.Sec = WeaponSecondaryProperty.PostMovement;
+                Weapon2.PostMovementLevel = 1;
             else
                 Weapon2.Sec = WeaponSecondaryProperty.None;
 

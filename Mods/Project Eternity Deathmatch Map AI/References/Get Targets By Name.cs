@@ -30,14 +30,14 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                 List<object> ListEnemy = new List<object>();
 
-                bool CanAttackPostMovement = (ActiveAttack.Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement || Info.ActiveSquad.CurrentLeader.Boosts.PostMovementModifier.Attack;
+                bool CanAttackPostMovement = ActiveAttack.IsPostMovement(Info.ActiveSquad.CurrentLeader);
 
                 if (!Info.ActiveSquad.CanMove && !CanAttackPostMovement)
                 {
                     return ListEnemy;
                 }
 
-                Info.ActiveSquad.CurrentLeader.AttackIndex = Info.ActiveSquad.CurrentLeader.ListAttack.IndexOf(ActiveAttack);
+                Info.ActiveSquad.CurrentLeader.CurrentAttack = ActiveAttack;
 
                 //Define the minimum and maximum value of the attack range.
                 int MinRange = ActiveAttack.RangeMinimum;
@@ -56,7 +56,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team, Info.ActiveSquad.CanMove & _AddMovementToRange);
 
                 var ListTargetUnit = Info.Map.CanSquadAttackWeapon(Info.ActiveSquad, Info.ActiveSquad.Position,
-                    ActiveAttack, MinRange, MaxRange, _AddMovementToRange, Info.ActiveSquad.CurrentLeader.Boosts);
+                    ActiveAttack, MinRange, MaxRange, _AddMovementToRange, Info.ActiveSquad.CurrentLeader);
 
                 //Priority goes to units with higher chances of hitting.
                 IOrderedEnumerable<Tuple<int, int>> ListHitRate = ListTargetUnit.OrderByDescending(Target =>

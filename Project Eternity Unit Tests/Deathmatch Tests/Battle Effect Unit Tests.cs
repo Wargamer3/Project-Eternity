@@ -824,7 +824,7 @@ namespace ProjectEternity.UnitTests
             Squad DummySquad = CreateDummySquad();
             GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummyMap.ActiveParser);
 
-            GlobalDeathmatchContext.EffectOwnerUnit.ListAttack[0].Ammo = 0;
+            GlobalDeathmatchContext.EffectOwnerUnit.ListAttack[0].EmptyAmmo();
 
             DummySkill.AddSkillEffectsToTarget(string.Empty);
             List<BaseEffect> ListActiveEffect = GlobalDeathmatchContext.EffectOwnerUnit.Pilot.Effects.GetActiveEffects("Dummy");
@@ -845,7 +845,7 @@ namespace ProjectEternity.UnitTests
             Squad DummySquad = CreateDummySquad();
             GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummyMap.ActiveParser);
 
-            GlobalDeathmatchContext.EffectOwnerUnit.ListAttack[0].Ammo = 0;
+            GlobalDeathmatchContext.EffectOwnerUnit.ListAttack[0].EmptyAmmo();
 
             DummySkill.AddSkillEffectsToTarget(string.Empty);
             List<BaseEffect> ListActiveEffect = GlobalDeathmatchContext.EffectOwnerUnit.Pilot.Effects.GetActiveEffects("Dummy");

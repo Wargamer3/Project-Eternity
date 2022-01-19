@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveAttack != null)
             {
-                ActiveSquad.CurrentLeader.AttackIndex = ActiveSquad.CurrentLeader.ListAttack.IndexOf(ActiveAttack);
+                ActiveSquad.CurrentLeader.CurrentAttack = ActiveAttack;
             }
         }
 

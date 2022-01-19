@@ -15,6 +15,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         private const string PanelName = "HumanAttack";
 
+        private int AttackIndex;
+        private Attack WeaponOld;
+
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         private Squad ActiveSquad;
@@ -47,7 +50,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.TargetSquadSupport = TargetSquadSupport;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+
             ListAttackActiveSquad = ActiveSquad.CurrentLeader.ListAttack;
+
             if (ActiveSquadSupport.ActiveSquadSupport != null)
             {
                 ListAttackActiveSquadSupport = ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.ListAttack;
@@ -189,7 +194,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             ActiveSquad.CurrentLeader.UpdateNonMAPAttacks(ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, ActiveSquad.CanMove);
 
-                            ActiveSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
+                            AttackIndex = 0;//Make sure you select the first weapon.
                             Map.BattleMenuStage = BattleMenuStages.ChooseAttack;
                         }
                         else
@@ -227,17 +232,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (ActiveInputManager.InputUpPressed())
             {
-                --ActiveSquad.CurrentLeader.AttackIndex;
-                if (ActiveSquad.CurrentLeader.AttackIndex < 0)
-                    ActiveSquad.CurrentLeader.AttackIndex = ListAttackActiveSquadSupport.Count - 1;
+                --AttackIndex;
+                if (AttackIndex < 0)
+                    AttackIndex = ListAttackActiveSquad.Count - 1;
+
+                ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquad[AttackIndex];
 
                 Map.sndSelection.Play();
             }
             else if (ActiveInputManager.InputDownPressed())
             {
-                ++ActiveSquad.CurrentLeader.AttackIndex;
-                if (ActiveSquad.CurrentLeader.AttackIndex >= ListAttackActiveSquadSupport.Count)
-                    ActiveSquad.CurrentLeader.AttackIndex = 0;
+                ++AttackIndex;
+                if (AttackIndex >= ListAttackActiveSquad.Count)
+                    AttackIndex = 0;
+
+                ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquad[AttackIndex];
 
                 Map.sndSelection.Play();
             }
@@ -245,12 +254,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 int YStep = 25;
 
-                for (int A = 0; A < ListAttackActiveSquadSupport.Count; ++A)
+                for (int A = 0; A < ListAttackActiveSquad.Count; ++A)
                 {
                     int YStart = 122 + A * YStep;
                     if (ActiveInputManager.IsInZone(0, YStart, Constants.Width, YStart + YStep))
                     {
-                        ActiveSquad.CurrentLeader.AttackIndex = A;
+                        AttackIndex = A;
+                        ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquad[A];
                         break;
                     }
                 }
@@ -271,6 +281,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         PrepareDefenseSquadForBattle(Map, ActivePlayerIndex, ActiveSquadIndex, TargetPlayerIndex, TargetSquadIndex);
                     }
 
+                    Map.BattleMenuStage = BattleMenuStages.Default;
                     Map.sndConfirm.Play();
                 }
                 else
@@ -405,13 +416,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.BattleMenuCursorIndexSecond == 1)
                         {
-                            ActiveSquad.CurrentWingmanA.AttackIndex = ActiveSquad.CurrentWingmanA.PLAAttack;
+                            ActiveSquad.CurrentWingmanA.CurrentAttack = ActiveSquad.CurrentWingmanA.PLAAttack;
                             ActiveSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentWingmanA, ActiveSquad,
                                 TargetSquad.CurrentWingmanA, TargetSquad, TargetSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
                         }
                         else if (Map.BattleMenuCursorIndexSecond == 2)
                         {
-                            ActiveSquad.CurrentWingmanB.AttackIndex = ActiveSquad.CurrentWingmanB.PLAAttack;
+                            ActiveSquad.CurrentWingmanB.CurrentAttack = ActiveSquad.CurrentWingmanB.PLAAttack;
                             ActiveSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentWingmanB, ActiveSquad,
                                 TargetSquad.CurrentWingmanB, TargetSquad, TargetSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
                         }
@@ -420,13 +431,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.BattleMenuCursorIndexSecond == 1)
                         {
-                            ActiveSquad.CurrentWingmanA.AttackIndex = ActiveSquad.CurrentWingmanA.PLAAttack;
+                            ActiveSquad.CurrentWingmanA.CurrentAttack = ActiveSquad.CurrentWingmanA.PLAAttack;
                             ActiveSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentWingmanA, ActiveSquad,
                                 TargetSquad.CurrentLeader, TargetSquad, TargetSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
                         }
                         else if (Map.BattleMenuCursorIndexSecond == 2)
                         {
-                            ActiveSquad.CurrentWingmanB.AttackIndex = ActiveSquad.CurrentWingmanB.PLAAttack;
+                            ActiveSquad.CurrentWingmanB.CurrentAttack = ActiveSquad.CurrentWingmanB.PLAAttack;
                             ActiveSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentWingmanB, ActiveSquad,
                                 TargetSquad.CurrentLeader, TargetSquad, TargetSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
                         }
@@ -474,8 +485,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement,
                         ActiveSquadSupport.ActiveSquadSupport.CanMove);
 
-                    Map.WeaponIndexOld = ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex;
-                    ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
+                    WeaponOld = ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack;
+                    AttackIndex = 0;//Make sure you select the first weapon.
                 }
                 else
                 {
@@ -494,29 +505,50 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (ActiveInputManager.InputUpPressed())
             {
-                --ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex;
-                if (ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex < 0)
-                    ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex = ListAttackActiveSquadSupport.Count - 1;
+                --AttackIndex;
+                if (AttackIndex < 0)
+                    AttackIndex = ListAttackActiveSquadSupport.Count - 1;
+
+                ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquadSupport[AttackIndex];
 
                 Map.sndSelection.Play();
             }
             else if (ActiveInputManager.InputDownPressed())
             {
-                ++ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex;
-                if (ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex >= ListAttackActiveSquadSupport.Count)
-                    ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.AttackIndex = 0;
+                ++AttackIndex;
+                if (AttackIndex >= ListAttackActiveSquadSupport.Count)
+                    AttackIndex = 0;
+
+                ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquadSupport[AttackIndex];
 
                 Map.sndSelection.Play();
             }
+            else if (ActiveInputManager.InputMovePressed())
+            {
+                int YStep = 25;
+
+                for (int A = 0; A < ListAttackActiveSquad.Count; ++A)
+                {
+                    int YStart = 122 + A * YStep;
+                    if (ActiveInputManager.IsInZone(0, YStart, Constants.Width, YStart + YStep))
+                    {
+                        AttackIndex = A;
+                        ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquad[A];
+                        break;
+                    }
+                }
+            }
             else if (ActiveInputManager.InputConfirmPressed())
             {
-                if (ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack.CanAttack)
+                if (ListAttackActiveSquad[AttackIndex].CanAttack)
                 {
                     Map.BattleMenuStage = BattleMenuStages.Default;
                     Map.sndConfirm.Play();
                 }
                 else
+                {
                     Map.sndDeny.Play();
+                }
             }
             else if (ActiveInputManager.InputCancelPressed())
             {
@@ -538,8 +570,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             ActiveSquadSupport = new SupportSquadHolder();
             ActiveSquad.CurrentLeader.BattleDefenseChoice = (Unit.BattleDefenseChoices)BR.ReadByte();
-            ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
+            string ActiveSquadAttackName = BR.ReadString();
+
             ListAttackActiveSquad = ActiveSquad.CurrentLeader.ListAttack;
+            if (!string.IsNullOrEmpty(ActiveSquadAttackName))
+            {
+                foreach (Attack ActiveAttack in ListAttackActiveSquad)
+                {
+                    if (ActiveAttack.ItemName == ActiveSquadAttackName)
+                    {
+                        ActiveSquad.CurrentLeader.CurrentAttack = ActiveAttack;
+                        break;
+                    }
+                }
+            }
+
             if (ActiveSquadSupport.ActiveSquadSupport != null)
             {
                 ListAttackActiveSquadSupport = ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.ListAttack;
@@ -554,7 +599,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             TargetSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
             TargetSquadSupport = new SupportSquadHolder();
             TargetSquad.CurrentLeader.BattleDefenseChoice = (Unit.BattleDefenseChoices)BR.ReadByte();
-            TargetSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
+            string TargetSquadAttackName = BR.ReadString();
+            if (!string.IsNullOrEmpty(TargetSquadAttackName))
+            {
+                foreach (Attack ActiveAttack in TargetSquad.CurrentLeader.ListAttack)
+                {
+                    if (ActiveAttack.ItemName == TargetSquadAttackName)
+                    {
+                        TargetSquad.CurrentLeader.CurrentAttack = ActiveAttack;
+                        break;
+                    }
+                }
+            }
 
             Map.BattleMenuStage = (BattleMenuStages)BR.ReadByte();
         }
@@ -564,12 +620,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendByte((byte)ActiveSquad.CurrentLeader.BattleDefenseChoice);
-            BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
+            BW.AppendString(ActiveSquad.CurrentLeader.CurrentAttack.ItemName);
 
             BW.AppendInt32(TargetPlayerIndex);
             BW.AppendInt32(TargetSquadIndex);
             BW.AppendByte((byte)TargetSquad.CurrentLeader.BattleDefenseChoice);
-            BW.AppendInt32(TargetSquad.CurrentLeader.AttackIndex);
+            BW.AppendString(TargetSquad.CurrentLeader.CurrentAttack.ItemName);
 
             BW.AppendByte((byte)Map.BattleMenuStage);
         }

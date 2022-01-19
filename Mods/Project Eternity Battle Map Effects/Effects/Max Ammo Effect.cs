@@ -52,14 +52,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected override string DoExecuteEffect()
         {
             string EvaluationResult = Params.GlobalContext.ActiveParser.Evaluate(_MaxAmmoValue);
-            int FinalMaxAmmoValue = (int)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            byte FinalMaxAmmoValue = (byte)double.Parse(EvaluationResult, CultureInfo.InvariantCulture);
             LastEvaluationResult = FinalMaxAmmoValue;
 
             Params.LocalContext.EffectTargetUnit.Boosts.AmmoMaxModifier = FinalMaxAmmoValue;
 
             foreach (Core.Attacks.Attack ActiveAttack in Params.LocalContext.EffectTargetUnit.ListAttack)
             {
-                ActiveAttack.Ammo += FinalMaxAmmoValue;
+                ActiveAttack.IncreaseAmmo(FinalMaxAmmoValue);
             }
 
             if (EvaluationResult != _MaxAmmoValue)

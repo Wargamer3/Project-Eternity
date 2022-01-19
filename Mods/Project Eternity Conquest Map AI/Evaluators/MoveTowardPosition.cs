@@ -24,11 +24,11 @@ namespace ProjectEternity.AI.ConquestMapScreen
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
                 //Movement initialisation.
-                Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad.Components);
+                Info.Map.MovementAnimation.Add(Info.ActiveUnit.X, Info.ActiveUnit.Y, Info.ActiveUnit.Components);
                 List<Unit> ListChoice = new List<Unit>();
 
                 float DistanceMax = 99999;
-                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveUnit);
                 int FinalMV = 0;
                 //If for some reason, there's no target on to move at, don't move.
                 //Remove everything that is closer then DistanceMax.
@@ -42,19 +42,19 @@ namespace ProjectEternity.AI.ConquestMapScreen
                         FinalMV = M;
                     }
                 }
-                if (DistanceMax < Math.Abs(Info.ActiveSquad.X - TargetPosition.X) + Math.Abs(Info.ActiveSquad.Y - TargetPosition.Y))
+                if (DistanceMax < Math.Abs(Info.ActiveUnit.X - TargetPosition.X) + Math.Abs(Info.ActiveUnit.Y - TargetPosition.Y))
                 {
                     //Prepare the Cursor to move.
                     Info.Map.CursorPosition.X = ListMVChoice[FinalMV].Position.X;
                     Info.Map.CursorPosition.Y = ListMVChoice[FinalMV].Position.Y;
                     Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
                     //Move the Unit to the target position;
-                    Info.ActiveSquad.SetPosition(ListMVChoice[FinalMV].Position);
-                    Info.Map.FinalizeMovement(Info.ActiveSquad);
+                    Info.ActiveUnit.SetPosition(ListMVChoice[FinalMV].Position);
+                    Info.Map.FinalizeMovement(Info.ActiveUnit);
                 }
                 else
                 {
-                    Info.Map.FinalizeMovement(Info.ActiveSquad);
+                    Info.Map.FinalizeMovement(Info.ActiveUnit);
                 }
 
                 Result = new List<object>();

@@ -45,10 +45,11 @@ namespace ProjectEternity.UnitTests
             DummyCharacter.Init();
 
             Unit DummyUnit = new UnitNormal();
-            Attack DummyAttack = new Attack("Dummy Attack", string.Empty, 0, "10000", 0, 5, WeaponPrimaryProperty.None, WeaponSecondaryProperty.PostMovement, 10, 5, 0, 1, 100, "Laser", new System.Collections.Generic.Dictionary<string, char>());
+            Attack DummyAttack = new Attack("Dummy Attack", string.Empty, 0, "10000", 0, 5, WeaponPrimaryProperty.None, WeaponSecondaryProperty.None, 10, 5, 0, 1, 100, "Laser", new System.Collections.Generic.Dictionary<string, char>());
+            DummyAttack.PostMovementLevel = 1;
             DummyUnit.ArrayCharacterActive = new Character[1] { DummyCharacter };
             DummyUnit.ListAttack.Add(DummyAttack);
-            DummyUnit.AttackIndex = 0;
+            DummyUnit.CurrentAttack = DummyAttack;
             Squad DummySquad = new Squad("Dummy", DummyUnit);
 
             Assert.AreEqual(190, DeathmatchMap.Accuracy(DummyUnit, 0));

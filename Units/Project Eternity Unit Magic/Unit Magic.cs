@@ -190,8 +190,8 @@ namespace ProjectEternity.Units.Magic
                 SpellAttack.PowerFormula = "30";
                 SpellAttack.RangeMinimum = 1;
                 SpellAttack.RangeMaximum = 10;
-                SpellAttack.Ammo = 10;
-                SpellAttack.MaxAmmo = 10;
+                SpellAttack.SetMaxAmmo(10);
+                SpellAttack.RefillAmmo();
                 SpellAttack.ArrayAttackAttributes = new BaseAutomaticSkill[0];
                 SpellAttack.Animations[0].Animations[0] = new MagicAttackAnimationStartInfo("Default Animations/Idle", ActiveMagicSpell, GlobalProjectileContext, MagicProjectileParams.SharedParams);
                 for (int A = 1; A < SpellAttack.Animations.Count; ++A)

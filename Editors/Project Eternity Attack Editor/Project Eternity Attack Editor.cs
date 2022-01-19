@@ -5,17 +5,15 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Attacks;
+using System.Windows.Forms;
 
 namespace ProjectEternity.Editors.AttackEditor
 {
     public partial class ProjectEternityAttackEditor : BaseEditor
     {
-        private enum ItemSelectionChoices {  Skill1, Skill2, Skill3, Skill4 };
-
-        private ItemSelectionChoices ItemSelectionChoice;
-
         private QuoteEditor Editor;
 
+        private AdvancedSettingsEditor AdvancedSettings;
         private MAPAttackEditor MAPAttackEditor;
         private PERAttackEditor PERAttackEditor;
 
@@ -57,6 +55,7 @@ namespace ProjectEternity.Editors.AttackEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
+                AdvancedSettings = new AdvancedSettingsEditor();
                 SaveItem(FilePath, FilePath);
             }
 
@@ -91,14 +90,6 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             string Description = txtDescription.Text;
 
-            int ENCost = Convert.ToInt32(txtENCost.Value);
-            int MaximumAmmo = Convert.ToInt32(txtMaximumAmmo.Value);
-            int MoraleRequirement = Convert.ToInt32(txtMoraleRequirement.Value);
-            int MinimumRange = Convert.ToInt32(txtMinimumRange.Value);
-            int MaximumRange = Convert.ToInt32(txtMaximumRange.Value);
-            int Accuracy = Convert.ToInt32(txtAccuracy.Value);
-            int Critical = Convert.ToInt32(txtCritical.Value);
-
             WeaponPrimaryProperty PrimaryProperty = WeaponPrimaryProperty.None;
             if (rbMAP.Checked)
                 PrimaryProperty = WeaponPrimaryProperty.MAP;
@@ -116,8 +107,6 @@ namespace ProjectEternity.Editors.AttackEditor
                 PrimaryProperty = WeaponPrimaryProperty.PER;
 
             WeaponSecondaryProperty SecondaryProperty = WeaponSecondaryProperty.None;
-            if (cbPostMovement.Checked)
-                SecondaryProperty = SecondaryProperty | WeaponSecondaryProperty.PostMovement;
             if (cbSwordCut.Checked)
                 SecondaryProperty = SecondaryProperty | WeaponSecondaryProperty.SwordCut;
             if (cbShootDown.Checked)
@@ -141,23 +130,19 @@ namespace ProjectEternity.Editors.AttackEditor
             else if (rbAttackTypeSpecial.Checked)
                 AttackType = 7;
 
-            int TerrainGradeAir = cbAirRank.SelectedIndex;
-            int TerrainGradeLand = cbLandRank.SelectedIndex;
-            int TerrainGradeSea = cbSeaRank.SelectedIndex;
-            int TerrainGradeSpace = cbSpaceRank.SelectedIndex;
-
             //Create the Part file.
             BW.Write(Description);
 
             BW.Write(txtDamage.Text);
             BW.Write(txtMinDamage.Text);
-            BW.Write(ENCost);
-            BW.Write(MaximumAmmo);
-            BW.Write(MoraleRequirement);
-            BW.Write(MinimumRange);
-            BW.Write(MaximumRange);
-            BW.Write(Accuracy);
-            BW.Write(Critical);
+            BW.Write((byte)txtENCost.Value);
+            BW.Write((byte)txtMaximumAmmo.Value);
+            BW.Write((byte)txtAmmoConsumption.Value);
+            BW.Write((byte)txtMoraleRequirement.Value);
+            BW.Write((byte)txtMinimumRange.Value);
+            BW.Write((byte)txtMaximumRange.Value);
+            BW.Write((sbyte)txtAccuracy.Value);
+            BW.Write((sbyte)txtCritical.Value);
 
             BW.Write((byte)PrimaryProperty);
             if (PrimaryProperty == WeaponPrimaryProperty.MAP)
@@ -214,46 +199,67 @@ namespace ProjectEternity.Editors.AttackEditor
             }
 
             BW.Write((byte)SecondaryProperty);
+            BW.Write((byte)txtReMoveLevel.Value);
+            BW.Write((byte)txtPostMovementLevel.Value);
             BW.Write((byte)txtPostMovementAccuracyMalus.Value);
             BW.Write((byte)txtPostMovementEvasionBonus.Value);
 
-            BW.Write((float)txtExplosionRadius.Value);
-            BW.Write((float)txtExplosionWindPowerAtCenter.Value);
-            BW.Write((float)txtExplosionWindPowerAtEdge.Value);
-            BW.Write((float)txtExplosionWindPowerToSelfMultiplier.Value);
-            BW.Write((float)txtExplosionDamageAtCenter.Value);
-            BW.Write((float)txtExplosionDamageAtEdge.Value);
-            BW.Write((float)txtExplosionDamageToSelfMultiplier.Value);
+            BW.Write((byte)AttackType);
 
-            BW.Write(AttackType);
+            BW.Write((byte)cbAirRank.SelectedIndex);
+            BW.Write((byte)cbLandRank.SelectedIndex);
+            BW.Write((byte)cbSeaRank.SelectedIndex);
+            BW.Write((byte)cbSpaceRank.SelectedIndex);
 
-            BW.Write(TerrainGradeAir);
-            BW.Write(TerrainGradeLand);
-            BW.Write(TerrainGradeSea);
-            BW.Write(TerrainGradeSpace);
+            BW.Write(AdvancedSettings.lvSecondaryAttack.Items.Count);
+            for (int S = 0; S < AdvancedSettings.lvSecondaryAttack.Items.Count; S++)
+            {
+                BW.Write(AdvancedSettings.lvSecondaryAttack.Items[S].Tag.ToString());
+            }
+
+            BW.Write(AdvancedSettings.lvChargedAttacks.Items.Count);
+            for (int S = 0; S < AdvancedSettings.lvChargedAttacks.Items.Count; S++)
+            {
+                BW.Write(AdvancedSettings.lvChargedAttacks.Items[S].Tag.ToString());
+            }
+            if (AdvancedSettings.lvChargedAttacks.Items.Count > 0)
+            {
+                BW.Write((byte)AdvancedSettings.txtChargeCancelLevel.Value);
+            }
+
+            BW.Write((float)AdvancedSettings.txtExplosionRadius.Value);
+            if (AdvancedSettings.txtExplosionRadius.Value > 0)
+            {
+                BW.Write((float)AdvancedSettings.txtExplosionWindPowerAtCenter.Value);
+                BW.Write((float)AdvancedSettings.txtExplosionWindPowerAtEdge.Value);
+                BW.Write((float)AdvancedSettings.txtExplosionWindPowerToSelfMultiplier.Value);
+                BW.Write((float)AdvancedSettings.txtExplosionDamageAtCenter.Value);
+                BW.Write((float)AdvancedSettings.txtExplosionDamageAtEdge.Value);
+                BW.Write((float)AdvancedSettings.txtExplosionDamageToSelfMultiplier.Value);
+            }
 
             #region Skills
 
             int PilotSkillCount = 0;
-            if (txtPilotSkill1.Text != "None")
+            if (AdvancedSettings.txtPilotSkill1.Text != "None")
                 ++PilotSkillCount;
-            if (txtPilotSkill2.Text != "None")
+            if (AdvancedSettings.txtPilotSkill2.Text != "None")
                 ++PilotSkillCount;
-            if (txtPilotSkill3.Text != "None")
+            if (AdvancedSettings.txtPilotSkill3.Text != "None")
                 ++PilotSkillCount;
-            if (txtPilotSkill4.Text != "None")
+            if (AdvancedSettings.txtPilotSkill4.Text != "None")
                 ++PilotSkillCount;
 
             BW.Write(PilotSkillCount);
 
-            if (txtPilotSkill1.Text != "None")
-                BW.Write(txtPilotSkill1.Text);
-            if (txtPilotSkill2.Text != "None")
-                BW.Write(txtPilotSkill2.Text);
-            if (txtPilotSkill3.Text != "None")
-                BW.Write(txtPilotSkill3.Text);
-            if (txtPilotSkill4.Text != "None")
-                BW.Write(txtPilotSkill4.Text);
+            if (AdvancedSettings.txtPilotSkill1.Text != "None")
+                BW.Write(AdvancedSettings.txtPilotSkill1.Text);
+            if (AdvancedSettings.txtPilotSkill2.Text != "None")
+                BW.Write(AdvancedSettings.txtPilotSkill2.Text);
+            if (AdvancedSettings.txtPilotSkill3.Text != "None")
+                BW.Write(AdvancedSettings.txtPilotSkill3.Text);
+            if (AdvancedSettings.txtPilotSkill4.Text != "None")
+                BW.Write(AdvancedSettings.txtPilotSkill4.Text);
 
             #endregion
 
@@ -289,6 +295,7 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             this.Text = ActiveWeapon.RelativePath + " - Project Eternity Attack Editor";
             Editor = new QuoteEditor();
+            AdvancedSettings = new AdvancedSettingsEditor();
             MAPAttackEditor = new MAPAttackEditor();
             PERAttackEditor = new PERAttackEditor();
 
@@ -298,7 +305,6 @@ namespace ProjectEternity.Editors.AttackEditor
 
             string PowerFormula = ActiveWeapon.PowerFormula;
             int ENCost = ActiveWeapon.ENCost;
-            int MaximumAmmo = ActiveWeapon.MaxAmmo;
             int MoraleRequirement = ActiveWeapon.MoraleRequirement;
             int MinimumRange = ActiveWeapon.RangeMinimum;
             int MaximumRange = ActiveWeapon.RangeMaximum;
@@ -313,8 +319,10 @@ namespace ProjectEternity.Editors.AttackEditor
             txtDescription.Text = Description;
 
             txtDamage.Text = PowerFormula;
-            txtENCost.Text = ENCost.ToString();
-            txtMaximumAmmo.Text = MaximumAmmo.ToString();
+            txtMinDamage.Text = ActiveWeapon.MinDamageFormula;
+            txtENCost.Value = ActiveWeapon.ENCost;
+            txtMaximumAmmo.Value = ActiveWeapon.MaxAmmo;
+            txtAmmoConsumption.Value = ActiveWeapon.AmmoConsumption;
             txtMoraleRequirement.Text = MoraleRequirement.ToString();
             txtMinimumRange.Text = MinimumRange.ToString();
             txtMaximumRange.Text = MaximumRange.ToString();
@@ -390,9 +398,6 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Secondary
 
-            if ((ActiveWeapon.Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement)
-                cbPostMovement.Checked = true;
-
             if ((ActiveWeapon.Sec & WeaponSecondaryProperty.SwordCut) == WeaponSecondaryProperty.SwordCut)
                 cbSwordCut.Checked = true;
 
@@ -402,20 +407,10 @@ namespace ProjectEternity.Editors.AttackEditor
             if ((ActiveWeapon.Sec & WeaponSecondaryProperty.Partial) == WeaponSecondaryProperty.Partial)
                 cbPartialAttack.Checked = true;
 
+            txtReMoveLevel.Value = ActiveWeapon.ReMoveLevel;
+            txtPostMovementLevel.Value = ActiveWeapon.PostMovementLevel;
             txtPostMovementAccuracyMalus.Value = ActiveWeapon.PostMovementAccuracyMalus;
             txtPostMovementEvasionBonus.Value = ActiveWeapon.PostMovementEvasionBonus;
-
-            #endregion
-
-            #region Explosion Attributes
-
-            txtExplosionRadius.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionRadius;
-            txtExplosionWindPowerAtCenter.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerAtCenter;
-            txtExplosionWindPowerAtEdge.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerAtEdge;
-            txtExplosionWindPowerToSelfMultiplier.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerToSelfMultiplier;
-            txtExplosionDamageAtCenter.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageAtCenter;
-            txtExplosionDamageAtEdge.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageAtEdge;
-            txtExplosionDamageToSelfMultiplier.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageToSelfMultiplier;
 
             #endregion
 
@@ -586,23 +581,61 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #endregion
 
+            #region Special Attacks
+
+            foreach (Attack ActiveAttack in ActiveWeapon.ListSecondaryAttack)
+            {
+                string AttackName = ActiveAttack.RelativePath;
+                string[] ArrayName = AttackName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                ListViewItem NewItem = new ListViewItem(ArrayName[ArrayName.Length - 1]);
+                NewItem.Tag = AttackName;
+                AdvancedSettings.lvSecondaryAttack.Items.Add(NewItem);
+            }
+
+            #endregion
+
+            #region Charged Attacks
+
+            foreach (Attack ActiveAttack in ActiveWeapon.ListChargedAttack)
+            {
+                string AttackName = ActiveAttack.RelativePath;
+                string[] ArrayName = AttackName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                ListViewItem NewItem = new ListViewItem(ArrayName[ArrayName.Length - 1]);
+                NewItem.Tag = AttackName;
+                AdvancedSettings.lvChargedAttacks.Items.Add(NewItem);
+            }
+
+            #endregion
+
+            #region Explosion Attributes
+
+            AdvancedSettings.txtExplosionRadius.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionRadius;
+            AdvancedSettings.txtExplosionWindPowerAtCenter.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerAtCenter;
+            AdvancedSettings.txtExplosionWindPowerAtEdge.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerAtEdge;
+            AdvancedSettings.txtExplosionWindPowerToSelfMultiplier.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerToSelfMultiplier;
+            AdvancedSettings.txtExplosionDamageAtCenter.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageAtCenter;
+            AdvancedSettings.txtExplosionDamageAtEdge.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageAtEdge;
+            AdvancedSettings.txtExplosionDamageToSelfMultiplier.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageToSelfMultiplier;
+
+            #endregion
+
             #region Attack Attributes
 
             if (ActiveWeapon.ArrayAttackAttributes.Length >= 1)
             {
-                txtPilotSkill1.Text = ActiveWeapon.ArrayAttackAttributes[0].Name;
+                AdvancedSettings.txtPilotSkill1.Text = ActiveWeapon.ArrayAttackAttributes[0].Name;
             }
             if (ActiveWeapon.ArrayAttackAttributes.Length >= 2)
             {
-                txtPilotSkill2.Text = ActiveWeapon.ArrayAttackAttributes[1].Name;
+                AdvancedSettings.txtPilotSkill2.Text = ActiveWeapon.ArrayAttackAttributes[1].Name;
             }
             if (ActiveWeapon.ArrayAttackAttributes.Length >= 3)
             {
-                txtPilotSkill3.Text = ActiveWeapon.ArrayAttackAttributes[2].Name;
+                AdvancedSettings.txtPilotSkill3.Text = ActiveWeapon.ArrayAttackAttributes[2].Name;
             }
             if (ActiveWeapon.ArrayAttackAttributes.Length >= 4)
             {
-                txtPilotSkill4.Text = ActiveWeapon.ArrayAttackAttributes[3].Name;
+                AdvancedSettings.txtPilotSkill4.Text = ActiveWeapon.ArrayAttackAttributes[3].Name;
             }
 
             #endregion
@@ -625,6 +658,15 @@ namespace ProjectEternity.Editors.AttackEditor
             Editor.ShowDialog();
         }
 
+        private void btnEditDamage_Click(object sender, EventArgs e)
+        {
+            AttackFormulaEditor DamageDialog = new AttackFormulaEditor();
+            if (DamageDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                txtDamage.Text = DamageDialog.Code;
+            }
+        }
+
         private void btnConfigure_Click(object sender, EventArgs e)
         {
             if (rbMAP.Checked)
@@ -637,94 +679,9 @@ namespace ProjectEternity.Editors.AttackEditor
             }
         }
 
-        private void btnSetSkill1_Click(object sender, EventArgs e)
+        private void tsmAdvanced_Click(object sender, EventArgs e)
         {
-            ItemSelectionChoice = ItemSelectionChoices.Skill1;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAttackAttributes));
-        }
-
-        private void btnSetSkill2_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.Skill2;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAttackAttributes));
-        }
-
-        private void btnSetSkill3_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.Skill3;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAttackAttributes));
-        }
-
-        private void btnSetSkill4_Click(object sender, EventArgs e)
-        {
-            ItemSelectionChoice = ItemSelectionChoices.Skill4;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAttackAttributes));
-        }
-
-        protected void ListMenuItemsSelected(List<string> Items)
-        {
-            if (Items == null)
-                return;
-
-            string Name;
-            for (int I = 0; I < Items.Count; I++)
-            {
-                switch (ItemSelectionChoice)
-                {
-                    case ItemSelectionChoices.Skill1:
-                        if (Items[I] == null)
-                            txtPilotSkill1.Text = "None";
-                        else
-                        {
-                            Name = Items[I].Substring(0, Items[0].Length - 5).Substring(27);
-                            if (Name != null)
-                                txtPilotSkill1.Text = Name;
-                        }
-                        break;
-
-                    case ItemSelectionChoices.Skill2:
-                        if (Items[I] == null)
-                            txtPilotSkill2.Text = "None";
-                        else
-                        {
-                            Name = Items[I].Substring(0, Items[0].Length - 5).Substring(27);
-                            if (Name != null)
-                                txtPilotSkill2.Text = Name;
-                        }
-                        break;
-
-                    case ItemSelectionChoices.Skill3:
-                        if (Items[I] == null)
-                            txtPilotSkill3.Text = "None";
-                        else
-                        {
-                            Name = Items[I].Substring(0, Items[0].Length - 5).Substring(27);
-                            if (Name != null)
-                                txtPilotSkill3.Text = Name;
-                        }
-                        break;
-
-                    case ItemSelectionChoices.Skill4:
-                        if (Items[I] == null)
-                            txtPilotSkill4.Text = "None";
-                        else
-                        {
-                            Name = Items[I].Substring(0, Items[0].Length - 5).Substring(27);
-                            if (Name != null)
-                                txtPilotSkill4.Text = Name;
-                        }
-                        break;
-                }
-            }
-        }
-
-        private void btnEditDamage_Click(object sender, EventArgs e)
-        {
-            AttackFormulaEditor DamageDialog = new AttackFormulaEditor();
-            if (DamageDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                txtDamage.Text = DamageDialog.Code;
-            }
+            AdvancedSettings.ShowDialog();
         }
     }
 }

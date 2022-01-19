@@ -22,7 +22,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
             {
                 UnitConquest TargetSquad = null;
                 //Movement initialisation.
-                Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad.Components);
+                Info.Map.MovementAnimation.Add(Info.ActiveUnit.X, Info.ActiveUnit.Y, Info.ActiveUnit.Components);
                 List<Unit> ListChoice = new List<Unit>();
                 float DistanceMax = 99999;
                 //Select the nearest enemy as a target.
@@ -37,7 +37,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                         if (Info.Map.ListPlayer[P].ListUnit[U].HP <= 0)
                             continue;
 
-                        float Distance = (Math.Abs(Info.Map.ListPlayer[P].ListUnit[U].X - Info.ActiveSquad.X) + Math.Abs(Info.Map.ListPlayer[P].ListUnit[U].Y - Info.ActiveSquad.Y));
+                        float Distance = (Math.Abs(Info.Map.ListPlayer[P].ListUnit[U].X - Info.ActiveUnit.X) + Math.Abs(Info.Map.ListPlayer[P].ListUnit[U].Y - Info.ActiveUnit.Y));
                         if (Distance < DistanceMax)
                         {
                             DistanceMax = Distance;
@@ -47,7 +47,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 }
 
                 DistanceMax = 99999;
-                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveUnit);
                 int FinalMV = 0;
                 //If for some reason, there's no target on to move at, don't move.
                 if (TargetSquad != null)
@@ -63,24 +63,24 @@ namespace ProjectEternity.AI.ConquestMapScreen
                             FinalMV = M;
                         }
                     }
-                    if (DistanceMax < Math.Abs(Info.ActiveSquad.X - TargetSquad.X) + Math.Abs(Info.ActiveSquad.Y - TargetSquad.Y))
+                    if (DistanceMax < Math.Abs(Info.ActiveUnit.X - TargetSquad.X) + Math.Abs(Info.ActiveUnit.Y - TargetSquad.Y))
                     {
                         //Prepare the Cursor to move.
                         Info.Map.CursorPosition.X = ListMVChoice[FinalMV].Position.X;
                         Info.Map.CursorPosition.Y = ListMVChoice[FinalMV].Position.Y;
                         Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
                         //Move the Unit to the target position;
-                        Info.ActiveSquad.SetPosition(ListMVChoice[FinalMV].Position);
-                        Info.Map.FinalizeMovement(Info.ActiveSquad);
+                        Info.ActiveUnit.SetPosition(ListMVChoice[FinalMV].Position);
+                        Info.Map.FinalizeMovement(Info.ActiveUnit);
                     }
                     else
                     {
-                        Info.Map.FinalizeMovement(Info.ActiveSquad);
+                        Info.Map.FinalizeMovement(Info.ActiveUnit);
                     }
                 }
                 else
                 {
-                    Info.Map.FinalizeMovement(Info.ActiveSquad);
+                    Info.Map.FinalizeMovement(Info.ActiveUnit);
                 }
                 
                 Result = new List<object>();

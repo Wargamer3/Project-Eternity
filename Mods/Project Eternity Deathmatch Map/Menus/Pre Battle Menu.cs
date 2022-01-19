@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             switch (BattleMenuStage)
             {
                 case BattleMenuStages.ChooseAttack:
-                    DrawAttackPanel(g, fntFinlanderFont, RightSquad.CurrentLeader, ListAttackRightSquad, RightSquad.CurrentLeader.AttackIndex);
+                    DrawAttackPanel(g, fntFinlanderFont, RightSquad.CurrentLeader, ListAttackRightSquad, RightSquad.CurrentLeader.CurrentAttack);
                     break;
 
                 case BattleMenuStages.ChooseDefense:
@@ -243,7 +243,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     break;
 
                 case BattleMenuStages.ChooseSupportAttack:
-                    DrawAttackPanel(g, fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader, ListAttackAttackingSupport, AttackingSupport.ActiveSquadSupport.CurrentLeader.AttackIndex);
+                    DrawAttackPanel(g, fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader, ListAttackAttackingSupport, AttackingSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack);
                     break;
             }
         }

@@ -30,7 +30,7 @@ namespace ProjectEternity.Core.Characters
                 this.TerrainGradeSpace = TerrainGradeSpace;
             }
 
-            public TerrainGrades(int TerrainGradeAir, int TerrainGradeLand, int TerrainGradeSea, int TerrainGradeSpace)
+            public TerrainGrades(byte TerrainGradeAir, byte TerrainGradeLand, byte TerrainGradeSea, byte TerrainGradeSpace)
             {
                 char[] Grades = new char[5] { 'S', 'A', 'B', 'C', 'D' };
                 this.TerrainGradeAir = Grades[TerrainGradeAir];
@@ -154,6 +154,9 @@ namespace ProjectEternity.Core.Characters
         public string[] ArrayPortraitBoxPath;
         public int EXPValue;
         public bool CanPilot;
+        public byte PostMVLevel;
+        public byte ReMoveLevel;
+        public byte ChargedAttackCancelLevel;
         public TerrainGrades TerrainGrade;
         private SharableInt32 _EXP;
         public int EXP { private set { _EXP.Value = value; } get { return _EXP.Value; } }
@@ -380,10 +383,14 @@ namespace ProjectEternity.Core.Characters
                     ArrayLevelMaxSP[L] = BR.ReadInt32();
                 }
 
-                int TerrainGradeAir = BR.ReadInt32();
-                int TerrainGradeLand = BR.ReadInt32();
-                int TerrainGradeSea = BR.ReadInt32();
-                int TerrainGradeSpace = BR.ReadInt32();
+                byte TerrainGradeAir = BR.ReadByte();
+                byte TerrainGradeLand = BR.ReadByte();
+                byte TerrainGradeSea = BR.ReadByte();
+                byte TerrainGradeSpace = BR.ReadByte();
+
+                PostMVLevel = BR.ReadByte();
+                ReMoveLevel = BR.ReadByte();
+                ChargedAttackCancelLevel = BR.ReadByte();
 
                 TerrainGrade = new TerrainGrades(TerrainGradeAir, TerrainGradeLand, TerrainGradeSea, TerrainGradeSpace);
             }

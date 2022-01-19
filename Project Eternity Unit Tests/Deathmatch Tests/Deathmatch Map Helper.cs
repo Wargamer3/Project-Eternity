@@ -79,13 +79,16 @@ namespace ProjectEternity.UnitTests
             DummyUnit.Armor = 100;
             DummyUnit.Mobility = 50;
             DummyUnit.MaxMovement = 5;
+
             Attack DummyAttack = new Attack("Dummy Attack", string.Empty, 0, "10000", 0, 5, WeaponPrimaryProperty.None,
-                WeaponSecondaryProperty.PostMovement, 10, 0, 6, 1, 100, "Laser",
+                WeaponSecondaryProperty.None, 10, 0, 6, 1, 100, "Laser",
                 new Dictionary<string, char>() { { "Air", 'S' }, { "Land", 'S' }, { "Sea", 'S' }, { "Space", 'S' } });
+
+            DummyAttack.PostMovementLevel = 1;
 
             DummyUnit.ArrayCharacterActive = new Character[1] { DummyCharacter };
             DummyUnit.ListAttack.Add(DummyAttack);
-            DummyUnit.AttackIndex = 0;
+            DummyUnit.CurrentAttack = DummyAttack;
             DummyUnit.UnitStat.DicTerrainValue.Add("Air", 1);
             DummyUnit.UnitStat.DicTerrainValue.Add("Land", 1);
             DummyUnit.UnitStat.DicTerrainValue.Add("Sea", 1);

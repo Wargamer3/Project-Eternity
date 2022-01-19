@@ -658,7 +658,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
             //Remove Leader Ammo if needed.
             if (UnitAttacker.CurrentAttack.MaxAmmo > 0)
-                --UnitAttacker.CurrentAttack.Ammo;
+                UnitAttacker.CurrentAttack.ConsumeAmmo();
 
             UnitAttacker.ConsumeEN(UnitAttacker.EN - Result.AttackAttackerFinalEN);
 

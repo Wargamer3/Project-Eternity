@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.gbStats = new System.Windows.Forms.GroupBox();
+            this.txtAmmoConsumption = new System.Windows.Forms.NumericUpDown();
+            this.lblAmmoConsumption = new System.Windows.Forms.Label();
             this.txtMinDamage = new System.Windows.Forms.TextBox();
             this.btnEditMinDamage = new System.Windows.Forms.Button();
             this.lblMinDamage = new System.Windows.Forms.Label();
@@ -85,60 +87,21 @@
             this.txtPostMovementAccuracyMalus = new System.Windows.Forms.NumericUpDown();
             this.cbShootDown = new System.Windows.Forms.CheckBox();
             this.cbSwordCut = new System.Windows.Forms.CheckBox();
-            this.cbPostMovement = new System.Windows.Forms.CheckBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmAdvanced = new System.Windows.Forms.ToolStripMenuItem();
             this.gbItemInformtion = new System.Windows.Forms.GroupBox();
             this.btnEditQuotes = new System.Windows.Forms.Button();
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
-            this.gbPilotSkills = new System.Windows.Forms.GroupBox();
-            this.txtPilotSkill4Level = new System.Windows.Forms.NumericUpDown();
-            this.txtPilotSkill3Level = new System.Windows.Forms.NumericUpDown();
-            this.txtPilotSkill2Level = new System.Windows.Forms.NumericUpDown();
-            this.txtPilotSkill1Level = new System.Windows.Forms.NumericUpDown();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.lblSkillLevel4 = new System.Windows.Forms.Label();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.lblSkillLevel3 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.lblSkillLevel2 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.lblSkillName4 = new System.Windows.Forms.Label();
-            this.txtPilotSkill4 = new System.Windows.Forms.TextBox();
-            this.lblSkillLevelRequired = new System.Windows.Forms.Label();
-            this.btnSetSkill4 = new System.Windows.Forms.Button();
-            this.lblSkillName3 = new System.Windows.Forms.Label();
-            this.txtPilotSkill3 = new System.Windows.Forms.TextBox();
-            this.lblSkillLevelRequired3 = new System.Windows.Forms.Label();
-            this.btnSetSkill3 = new System.Windows.Forms.Button();
-            this.lblSkillName2 = new System.Windows.Forms.Label();
-            this.txtPilotSkill2 = new System.Windows.Forms.TextBox();
-            this.lblSkillLevelRequired2 = new System.Windows.Forms.Label();
-            this.btnSetSkill2 = new System.Windows.Forms.Button();
-            this.lblSkillName1 = new System.Windows.Forms.Label();
-            this.txtPilotSkill1 = new System.Windows.Forms.TextBox();
-            this.lblSkillLevelRequired1 = new System.Windows.Forms.Label();
-            this.lblSkillLevel1 = new System.Windows.Forms.Label();
-            this.btnSetSkill1 = new System.Windows.Forms.Button();
-            this.gbProjectileInformation = new System.Windows.Forms.GroupBox();
-            this.lblExplosionWindPowerToSelfMultiplier = new System.Windows.Forms.Label();
-            this.txtExplosionWindPowerToSelfMultiplier = new System.Windows.Forms.NumericUpDown();
-            this.lblExplosionDamageToSelfMultiplier = new System.Windows.Forms.Label();
-            this.txtExplosionDamageToSelfMultiplier = new System.Windows.Forms.NumericUpDown();
-            this.lblExplosionDamageAtEdge = new System.Windows.Forms.Label();
-            this.txtExplosionDamageAtEdge = new System.Windows.Forms.NumericUpDown();
-            this.lblExplosionDamageAtCenter = new System.Windows.Forms.Label();
-            this.txtExplosionDamageAtCenter = new System.Windows.Forms.NumericUpDown();
-            this.lblExplosionWindPowerAtEdge = new System.Windows.Forms.Label();
-            this.txtExplosionWindPowerAtEdge = new System.Windows.Forms.NumericUpDown();
-            this.lblExplosionWindPowerAtCenter = new System.Windows.Forms.Label();
-            this.txtExplosionWindPowerAtCenter = new System.Windows.Forms.NumericUpDown();
-            this.lblExplosionRadius = new System.Windows.Forms.Label();
-            this.txtExplosionRadius = new System.Windows.Forms.NumericUpDown();
+            this.txtReMoveLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblReMoveLevel = new System.Windows.Forms.Label();
+            this.txtPostMovementLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblPostMVLevel = new System.Windows.Forms.Label();
             this.gbStats.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAmmoConsumption)).BeginInit();
             this.txtMinDamage.SuspendLayout();
             this.txtDamage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCritical)).BeginInit();
@@ -156,23 +119,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementAccuracyMalus)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbItemInformtion.SuspendLayout();
-            this.gbPilotSkills.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPilotSkill4Level)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPilotSkill3Level)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPilotSkill2Level)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPilotSkill1Level)).BeginInit();
-            this.gbProjectileInformation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionWindPowerToSelfMultiplier)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionDamageToSelfMultiplier)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionDamageAtEdge)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionDamageAtCenter)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionWindPowerAtEdge)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionWindPowerAtCenter)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionRadius)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // gbStats
             // 
+            this.gbStats.Controls.Add(this.txtAmmoConsumption);
+            this.gbStats.Controls.Add(this.lblAmmoConsumption);
             this.gbStats.Controls.Add(this.txtMinDamage);
             this.gbStats.Controls.Add(this.lblMinDamage);
             this.gbStats.Controls.Add(this.txtDamage);
@@ -191,12 +145,39 @@
             this.gbStats.Controls.Add(this.lblMaximumRange);
             this.gbStats.Controls.Add(this.lblMinimumRange);
             this.gbStats.Controls.Add(this.lblDamage);
-            this.gbStats.Location = new System.Drawing.Point(12, 183);
+            this.gbStats.Location = new System.Drawing.Point(331, 27);
             this.gbStats.Name = "gbStats";
-            this.gbStats.Size = new System.Drawing.Size(178, 254);
+            this.gbStats.Size = new System.Drawing.Size(178, 279);
             this.gbStats.TabIndex = 1;
             this.gbStats.TabStop = false;
             this.gbStats.Text = "Stats";
+            // 
+            // txtAmmoConsumption
+            // 
+            this.txtAmmoConsumption.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAmmoConsumption.Location = new System.Drawing.Point(114, 122);
+            this.txtAmmoConsumption.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.txtAmmoConsumption.Name = "txtAmmoConsumption";
+            this.txtAmmoConsumption.Size = new System.Drawing.Size(58, 20);
+            this.txtAmmoConsumption.TabIndex = 43;
+            this.txtAmmoConsumption.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblAmmoConsumption
+            // 
+            this.lblAmmoConsumption.AutoSize = true;
+            this.lblAmmoConsumption.Location = new System.Drawing.Point(6, 124);
+            this.lblAmmoConsumption.Name = "lblAmmoConsumption";
+            this.lblAmmoConsumption.Size = new System.Drawing.Size(102, 13);
+            this.lblAmmoConsumption.TabIndex = 42;
+            this.lblAmmoConsumption.Text = "Ammo consumption:";
             // 
             // txtMinDamage
             // 
@@ -257,7 +238,7 @@
             // txtCritical
             // 
             this.txtCritical.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCritical.Location = new System.Drawing.Point(114, 226);
+            this.txtCritical.Location = new System.Drawing.Point(114, 252);
             this.txtCritical.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -275,7 +256,7 @@
             // txtAccuracy
             // 
             this.txtAccuracy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAccuracy.Location = new System.Drawing.Point(114, 200);
+            this.txtAccuracy.Location = new System.Drawing.Point(114, 226);
             this.txtAccuracy.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -293,7 +274,7 @@
             // txtMaximumRange
             // 
             this.txtMaximumRange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMaximumRange.Location = new System.Drawing.Point(114, 174);
+            this.txtMaximumRange.Location = new System.Drawing.Point(114, 200);
             this.txtMaximumRange.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -311,7 +292,7 @@
             // txtMinimumRange
             // 
             this.txtMinimumRange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMinimumRange.Location = new System.Drawing.Point(114, 148);
+            this.txtMinimumRange.Location = new System.Drawing.Point(114, 174);
             this.txtMinimumRange.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -329,7 +310,7 @@
             // txtMoraleRequirement
             // 
             this.txtMoraleRequirement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMoraleRequirement.Location = new System.Drawing.Point(114, 122);
+            this.txtMoraleRequirement.Location = new System.Drawing.Point(114, 148);
             this.txtMoraleRequirement.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -368,7 +349,7 @@
             // lblMoraleRequirement
             // 
             this.lblMoraleRequirement.AutoSize = true;
-            this.lblMoraleRequirement.Location = new System.Drawing.Point(7, 124);
+            this.lblMoraleRequirement.Location = new System.Drawing.Point(7, 150);
             this.lblMoraleRequirement.Name = "lblMoraleRequirement";
             this.lblMoraleRequirement.Size = new System.Drawing.Size(100, 13);
             this.lblMoraleRequirement.TabIndex = 14;
@@ -395,7 +376,7 @@
             // lblCritical
             // 
             this.lblCritical.AutoSize = true;
-            this.lblCritical.Location = new System.Drawing.Point(6, 228);
+            this.lblCritical.Location = new System.Drawing.Point(6, 254);
             this.lblCritical.Name = "lblCritical";
             this.lblCritical.Size = new System.Drawing.Size(41, 13);
             this.lblCritical.TabIndex = 8;
@@ -404,7 +385,7 @@
             // lblAccuracy
             // 
             this.lblAccuracy.AutoSize = true;
-            this.lblAccuracy.Location = new System.Drawing.Point(6, 202);
+            this.lblAccuracy.Location = new System.Drawing.Point(6, 228);
             this.lblAccuracy.Name = "lblAccuracy";
             this.lblAccuracy.Size = new System.Drawing.Size(55, 13);
             this.lblAccuracy.TabIndex = 6;
@@ -413,7 +394,7 @@
             // lblMaximumRange
             // 
             this.lblMaximumRange.AutoSize = true;
-            this.lblMaximumRange.Location = new System.Drawing.Point(6, 176);
+            this.lblMaximumRange.Location = new System.Drawing.Point(6, 202);
             this.lblMaximumRange.Name = "lblMaximumRange";
             this.lblMaximumRange.Size = new System.Drawing.Size(84, 13);
             this.lblMaximumRange.TabIndex = 4;
@@ -422,7 +403,7 @@
             // lblMinimumRange
             // 
             this.lblMinimumRange.AutoSize = true;
-            this.lblMinimumRange.Location = new System.Drawing.Point(6, 150);
+            this.lblMinimumRange.Location = new System.Drawing.Point(6, 176);
             this.lblMinimumRange.Name = "lblMinimumRange";
             this.lblMinimumRange.Size = new System.Drawing.Size(81, 13);
             this.lblMinimumRange.TabIndex = 2;
@@ -447,9 +428,9 @@
             this.gbOtherStats.Controls.Add(this.lblSeaRank);
             this.gbOtherStats.Controls.Add(this.lblLandRank);
             this.gbOtherStats.Controls.Add(this.lblAirRank);
-            this.gbOtherStats.Location = new System.Drawing.Point(196, 350);
+            this.gbOtherStats.Location = new System.Drawing.Point(515, 238);
             this.gbOtherStats.Name = "gbOtherStats";
-            this.gbOtherStats.Size = new System.Drawing.Size(179, 127);
+            this.gbOtherStats.Size = new System.Drawing.Size(128, 127);
             this.gbOtherStats.TabIndex = 3;
             this.gbOtherStats.TabStop = false;
             this.gbOtherStats.Text = "Other stats";
@@ -467,7 +448,7 @@
             "D"});
             this.cbSpaceRank.Location = new System.Drawing.Point(79, 100);
             this.cbSpaceRank.Name = "cbSpaceRank";
-            this.cbSpaceRank.Size = new System.Drawing.Size(72, 21);
+            this.cbSpaceRank.Size = new System.Drawing.Size(43, 21);
             this.cbSpaceRank.TabIndex = 3;
             // 
             // cbLandRank
@@ -483,7 +464,7 @@
             "D"});
             this.cbLandRank.Location = new System.Drawing.Point(79, 46);
             this.cbLandRank.Name = "cbLandRank";
-            this.cbLandRank.Size = new System.Drawing.Size(72, 21);
+            this.cbLandRank.Size = new System.Drawing.Size(43, 21);
             this.cbLandRank.TabIndex = 1;
             // 
             // cbSeaRank
@@ -499,7 +480,7 @@
             "D"});
             this.cbSeaRank.Location = new System.Drawing.Point(79, 73);
             this.cbSeaRank.Name = "cbSeaRank";
-            this.cbSeaRank.Size = new System.Drawing.Size(72, 21);
+            this.cbSeaRank.Size = new System.Drawing.Size(43, 21);
             this.cbSeaRank.TabIndex = 2;
             // 
             // cbAirRank
@@ -515,7 +496,7 @@
             "D"});
             this.cbAirRank.Location = new System.Drawing.Point(79, 19);
             this.cbAirRank.Name = "cbAirRank";
-            this.cbAirRank.Size = new System.Drawing.Size(72, 21);
+            this.cbAirRank.Size = new System.Drawing.Size(43, 21);
             this.cbAirRank.TabIndex = 0;
             // 
             // lblSpaceRank
@@ -565,7 +546,7 @@
             this.gbPrimaryProperty.Controls.Add(this.rbNone);
             this.gbPrimaryProperty.Controls.Add(this.rbPLA);
             this.gbPrimaryProperty.Controls.Add(this.rbMAP);
-            this.gbPrimaryProperty.Location = new System.Drawing.Point(381, 238);
+            this.gbPrimaryProperty.Location = new System.Drawing.Point(12, 183);
             this.gbPrimaryProperty.Name = "gbPrimaryProperty";
             this.gbPrimaryProperty.Size = new System.Drawing.Size(128, 140);
             this.gbPrimaryProperty.TabIndex = 2;
@@ -681,7 +662,7 @@
             this.gbAttackType.Controls.Add(this.rbAttackTypeEnergyShot);
             this.gbAttackType.Controls.Add(this.rbAttackTypeSolidShot);
             this.gbAttackType.Controls.Add(this.rbAttackTypeBlank);
-            this.gbAttackType.Location = new System.Drawing.Point(381, 27);
+            this.gbAttackType.Location = new System.Drawing.Point(515, 27);
             this.gbAttackType.Name = "gbAttackType";
             this.gbAttackType.Size = new System.Drawing.Size(128, 205);
             this.gbAttackType.TabIndex = 5;
@@ -779,6 +760,10 @@
             // 
             // gbSecondaryProperties
             // 
+            this.gbSecondaryProperties.Controls.Add(this.txtReMoveLevel);
+            this.gbSecondaryProperties.Controls.Add(this.lblReMoveLevel);
+            this.gbSecondaryProperties.Controls.Add(this.txtPostMovementLevel);
+            this.gbSecondaryProperties.Controls.Add(this.lblPostMVLevel);
             this.gbSecondaryProperties.Controls.Add(this.lblEvasionBonus);
             this.gbSecondaryProperties.Controls.Add(this.txtPostMovementEvasionBonus);
             this.gbSecondaryProperties.Controls.Add(this.cbPartialAttack);
@@ -786,10 +771,9 @@
             this.gbSecondaryProperties.Controls.Add(this.txtPostMovementAccuracyMalus);
             this.gbSecondaryProperties.Controls.Add(this.cbShootDown);
             this.gbSecondaryProperties.Controls.Add(this.cbSwordCut);
-            this.gbSecondaryProperties.Controls.Add(this.cbPostMovement);
-            this.gbSecondaryProperties.Location = new System.Drawing.Point(196, 183);
+            this.gbSecondaryProperties.Location = new System.Drawing.Point(146, 183);
             this.gbSecondaryProperties.Name = "gbSecondaryProperties";
-            this.gbSecondaryProperties.Size = new System.Drawing.Size(179, 161);
+            this.gbSecondaryProperties.Size = new System.Drawing.Size(179, 192);
             this.gbSecondaryProperties.TabIndex = 4;
             this.gbSecondaryProperties.TabStop = false;
             this.gbSecondaryProperties.Text = "Secondary properties";
@@ -797,7 +781,7 @@
             // lblEvasionBonus
             // 
             this.lblEvasionBonus.AutoSize = true;
-            this.lblEvasionBonus.Location = new System.Drawing.Point(6, 138);
+            this.lblEvasionBonus.Location = new System.Drawing.Point(6, 167);
             this.lblEvasionBonus.Name = "lblEvasionBonus";
             this.lblEvasionBonus.Size = new System.Drawing.Size(81, 13);
             this.lblEvasionBonus.TabIndex = 39;
@@ -806,7 +790,7 @@
             // txtPostMovementEvasionBonus
             // 
             this.txtPostMovementEvasionBonus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPostMovementEvasionBonus.Location = new System.Drawing.Point(115, 136);
+            this.txtPostMovementEvasionBonus.Location = new System.Drawing.Point(115, 165);
             this.txtPostMovementEvasionBonus.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -829,7 +813,7 @@
             // lblPostMovementAccuracyMalus
             // 
             this.lblPostMovementAccuracyMalus.AutoSize = true;
-            this.lblPostMovementAccuracyMalus.Location = new System.Drawing.Point(6, 112);
+            this.lblPostMovementAccuracyMalus.Location = new System.Drawing.Point(6, 141);
             this.lblPostMovementAccuracyMalus.Name = "lblPostMovementAccuracyMalus";
             this.lblPostMovementAccuracyMalus.Size = new System.Drawing.Size(85, 13);
             this.lblPostMovementAccuracyMalus.TabIndex = 36;
@@ -838,7 +822,7 @@
             // txtPostMovementAccuracyMalus
             // 
             this.txtPostMovementAccuracyMalus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPostMovementAccuracyMalus.Location = new System.Drawing.Point(115, 110);
+            this.txtPostMovementAccuracyMalus.Location = new System.Drawing.Point(115, 139);
             this.txtPostMovementAccuracyMalus.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -868,23 +852,14 @@
             this.cbSwordCut.Text = "Sword Cut:";
             this.cbSwordCut.UseVisualStyleBackColor = true;
             // 
-            // cbPostMovement
-            // 
-            this.cbPostMovement.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbPostMovement.Location = new System.Drawing.Point(6, 87);
-            this.cbPostMovement.Name = "cbPostMovement";
-            this.cbPostMovement.Size = new System.Drawing.Size(107, 17);
-            this.cbPostMovement.TabIndex = 30;
-            this.cbPostMovement.Text = "Post Movement:";
-            this.cbPostMovement.UseVisualStyleBackColor = true;
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmSave});
+            this.tsmSave,
+            this.tsmAdvanced});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(913, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(649, 24);
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -895,6 +870,13 @@
             this.tsmSave.Text = "Save";
             this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
+            // tsmAdvanced
+            // 
+            this.tsmAdvanced.Name = "tsmAdvanced";
+            this.tsmAdvanced.Size = new System.Drawing.Size(72, 20);
+            this.tsmAdvanced.Text = "Advanced";
+            this.tsmAdvanced.Click += new System.EventHandler(this.tsmAdvanced_Click);
+            // 
             // gbItemInformtion
             // 
             this.gbItemInformtion.Controls.Add(this.btnEditQuotes);
@@ -904,14 +886,14 @@
             this.gbItemInformtion.Controls.Add(this.lblDescription);
             this.gbItemInformtion.Location = new System.Drawing.Point(12, 27);
             this.gbItemInformtion.Name = "gbItemInformtion";
-            this.gbItemInformtion.Size = new System.Drawing.Size(363, 150);
+            this.gbItemInformtion.Size = new System.Drawing.Size(313, 150);
             this.gbItemInformtion.TabIndex = 31;
             this.gbItemInformtion.TabStop = false;
             this.gbItemInformtion.Text = "Item Information";
             // 
             // btnEditQuotes
             // 
-            this.btnEditQuotes.Location = new System.Drawing.Point(282, 17);
+            this.btnEditQuotes.Location = new System.Drawing.Point(232, 17);
             this.btnEditQuotes.Name = "btnEditQuotes";
             this.btnEditQuotes.Size = new System.Drawing.Size(75, 23);
             this.btnEditQuotes.TabIndex = 41;
@@ -924,7 +906,7 @@
             this.txtName.Location = new System.Drawing.Point(50, 19);
             this.txtName.Name = "txtName";
             this.txtName.ReadOnly = true;
-            this.txtName.Size = new System.Drawing.Size(226, 20);
+            this.txtName.Size = new System.Drawing.Size(176, 20);
             this.txtName.TabIndex = 40;
             // 
             // lblName
@@ -941,7 +923,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 58);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(351, 86);
+            this.txtDescription.Size = new System.Drawing.Size(301, 86);
             this.txtDescription.TabIndex = 38;
             // 
             // lblDescription
@@ -953,471 +935,58 @@
             this.lblDescription.TabIndex = 37;
             this.lblDescription.Text = "Description:";
             // 
-            // gbPilotSkills
-            // 
-            this.gbPilotSkills.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbPilotSkills.Controls.Add(this.txtPilotSkill4Level);
-            this.gbPilotSkills.Controls.Add(this.txtPilotSkill3Level);
-            this.gbPilotSkills.Controls.Add(this.txtPilotSkill2Level);
-            this.gbPilotSkills.Controls.Add(this.txtPilotSkill1Level);
-            this.gbPilotSkills.Controls.Add(this.comboBox4);
-            this.gbPilotSkills.Controls.Add(this.lblSkillLevel4);
-            this.gbPilotSkills.Controls.Add(this.comboBox3);
-            this.gbPilotSkills.Controls.Add(this.lblSkillLevel3);
-            this.gbPilotSkills.Controls.Add(this.comboBox2);
-            this.gbPilotSkills.Controls.Add(this.lblSkillLevel2);
-            this.gbPilotSkills.Controls.Add(this.comboBox1);
-            this.gbPilotSkills.Controls.Add(this.lblSkillName4);
-            this.gbPilotSkills.Controls.Add(this.txtPilotSkill4);
-            this.gbPilotSkills.Controls.Add(this.lblSkillLevelRequired);
-            this.gbPilotSkills.Controls.Add(this.btnSetSkill4);
-            this.gbPilotSkills.Controls.Add(this.lblSkillName3);
-            this.gbPilotSkills.Controls.Add(this.txtPilotSkill3);
-            this.gbPilotSkills.Controls.Add(this.lblSkillLevelRequired3);
-            this.gbPilotSkills.Controls.Add(this.btnSetSkill3);
-            this.gbPilotSkills.Controls.Add(this.lblSkillName2);
-            this.gbPilotSkills.Controls.Add(this.txtPilotSkill2);
-            this.gbPilotSkills.Controls.Add(this.lblSkillLevelRequired2);
-            this.gbPilotSkills.Controls.Add(this.btnSetSkill2);
-            this.gbPilotSkills.Controls.Add(this.lblSkillName1);
-            this.gbPilotSkills.Controls.Add(this.txtPilotSkill1);
-            this.gbPilotSkills.Controls.Add(this.lblSkillLevelRequired1);
-            this.gbPilotSkills.Controls.Add(this.lblSkillLevel1);
-            this.gbPilotSkills.Controls.Add(this.btnSetSkill1);
-            this.gbPilotSkills.Location = new System.Drawing.Point(515, 27);
-            this.gbPilotSkills.Name = "gbPilotSkills";
-            this.gbPilotSkills.Size = new System.Drawing.Size(386, 174);
-            this.gbPilotSkills.TabIndex = 32;
-            this.gbPilotSkills.TabStop = false;
-            this.gbPilotSkills.Text = "Pilot skills";
-            // 
-            // txtPilotSkill4Level
-            // 
-            this.txtPilotSkill4Level.Location = new System.Drawing.Point(309, 149);
-            this.txtPilotSkill4Level.Name = "txtPilotSkill4Level";
-            this.txtPilotSkill4Level.Size = new System.Drawing.Size(71, 20);
-            this.txtPilotSkill4Level.TabIndex = 73;
-            // 
-            // txtPilotSkill3Level
-            // 
-            this.txtPilotSkill3Level.Location = new System.Drawing.Point(309, 110);
-            this.txtPilotSkill3Level.Name = "txtPilotSkill3Level";
-            this.txtPilotSkill3Level.Size = new System.Drawing.Size(71, 20);
-            this.txtPilotSkill3Level.TabIndex = 72;
-            // 
-            // txtPilotSkill2Level
-            // 
-            this.txtPilotSkill2Level.Location = new System.Drawing.Point(309, 71);
-            this.txtPilotSkill2Level.Name = "txtPilotSkill2Level";
-            this.txtPilotSkill2Level.Size = new System.Drawing.Size(71, 20);
-            this.txtPilotSkill2Level.TabIndex = 71;
-            // 
-            // txtPilotSkill1Level
-            // 
-            this.txtPilotSkill1Level.Location = new System.Drawing.Point(309, 32);
-            this.txtPilotSkill1Level.Name = "txtPilotSkill1Level";
-            this.txtPilotSkill1Level.Size = new System.Drawing.Size(71, 20);
-            this.txtPilotSkill1Level.TabIndex = 70;
-            // 
-            // comboBox4
-            // 
-            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Items.AddRange(new object[] {
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.comboBox4.Location = new System.Drawing.Point(252, 149);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(51, 21);
-            this.comboBox4.TabIndex = 68;
-            this.comboBox4.TabStop = false;
-            // 
-            // lblSkillLevel4
-            // 
-            this.lblSkillLevel4.AutoSize = true;
-            this.lblSkillLevel4.Location = new System.Drawing.Point(252, 133);
-            this.lblSkillLevel4.Name = "lblSkillLevel4";
-            this.lblSkillLevel4.Size = new System.Drawing.Size(51, 13);
-            this.lblSkillLevel4.TabIndex = 69;
-            this.lblSkillLevel4.Text = "Skill level";
-            // 
-            // comboBox3
-            // 
-            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Items.AddRange(new object[] {
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.comboBox3.Location = new System.Drawing.Point(252, 110);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(51, 21);
-            this.comboBox3.TabIndex = 66;
-            this.comboBox3.TabStop = false;
-            // 
-            // lblSkillLevel3
-            // 
-            this.lblSkillLevel3.AutoSize = true;
-            this.lblSkillLevel3.Location = new System.Drawing.Point(252, 94);
-            this.lblSkillLevel3.Name = "lblSkillLevel3";
-            this.lblSkillLevel3.Size = new System.Drawing.Size(51, 13);
-            this.lblSkillLevel3.TabIndex = 67;
-            this.lblSkillLevel3.Text = "Skill level";
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.comboBox2.Location = new System.Drawing.Point(252, 71);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(51, 21);
-            this.comboBox2.TabIndex = 65;
-            this.comboBox2.TabStop = false;
-            // 
-            // lblSkillLevel2
-            // 
-            this.lblSkillLevel2.AutoSize = true;
-            this.lblSkillLevel2.Location = new System.Drawing.Point(252, 55);
-            this.lblSkillLevel2.Name = "lblSkillLevel2";
-            this.lblSkillLevel2.Size = new System.Drawing.Size(51, 13);
-            this.lblSkillLevel2.TabIndex = 66;
-            this.lblSkillLevel2.Text = "Skill level";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.comboBox1.Location = new System.Drawing.Point(252, 32);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(51, 21);
-            this.comboBox1.TabIndex = 16;
-            this.comboBox1.TabStop = false;
-            // 
-            // lblSkillName4
-            // 
-            this.lblSkillName4.AutoSize = true;
-            this.lblSkillName4.Location = new System.Drawing.Point(80, 133);
-            this.lblSkillName4.Name = "lblSkillName4";
-            this.lblSkillName4.Size = new System.Drawing.Size(55, 13);
-            this.lblSkillName4.TabIndex = 47;
-            this.lblSkillName4.Text = "Skill name";
-            // 
-            // txtPilotSkill4
-            // 
-            this.txtPilotSkill4.Location = new System.Drawing.Point(83, 149);
-            this.txtPilotSkill4.Name = "txtPilotSkill4";
-            this.txtPilotSkill4.ReadOnly = true;
-            this.txtPilotSkill4.Size = new System.Drawing.Size(163, 20);
-            this.txtPilotSkill4.TabIndex = 48;
-            this.txtPilotSkill4.Text = "None";
-            // 
-            // lblSkillLevelRequired
-            // 
-            this.lblSkillLevelRequired.AutoSize = true;
-            this.lblSkillLevelRequired.Location = new System.Drawing.Point(306, 133);
-            this.lblSkillLevelRequired.Name = "lblSkillLevelRequired";
-            this.lblSkillLevelRequired.Size = new System.Drawing.Size(74, 13);
-            this.lblSkillLevelRequired.TabIndex = 49;
-            this.lblSkillLevelRequired.Text = "Level required";
-            // 
-            // btnSetSkill4
-            // 
-            this.btnSetSkill4.Location = new System.Drawing.Point(9, 147);
-            this.btnSetSkill4.Name = "btnSetSkill4";
-            this.btnSetSkill4.Size = new System.Drawing.Size(71, 23);
-            this.btnSetSkill4.TabIndex = 44;
-            this.btnSetSkill4.Text = "Set skill 4";
-            this.btnSetSkill4.UseVisualStyleBackColor = true;
-            // 
-            // lblSkillName3
-            // 
-            this.lblSkillName3.AutoSize = true;
-            this.lblSkillName3.Location = new System.Drawing.Point(80, 94);
-            this.lblSkillName3.Name = "lblSkillName3";
-            this.lblSkillName3.Size = new System.Drawing.Size(55, 13);
-            this.lblSkillName3.TabIndex = 40;
-            this.lblSkillName3.Text = "Skill name";
-            // 
-            // txtPilotSkill3
-            // 
-            this.txtPilotSkill3.Location = new System.Drawing.Point(83, 110);
-            this.txtPilotSkill3.Name = "txtPilotSkill3";
-            this.txtPilotSkill3.ReadOnly = true;
-            this.txtPilotSkill3.Size = new System.Drawing.Size(163, 20);
-            this.txtPilotSkill3.TabIndex = 41;
-            this.txtPilotSkill3.Text = "None";
-            // 
-            // lblSkillLevelRequired3
-            // 
-            this.lblSkillLevelRequired3.AutoSize = true;
-            this.lblSkillLevelRequired3.Location = new System.Drawing.Point(306, 94);
-            this.lblSkillLevelRequired3.Name = "lblSkillLevelRequired3";
-            this.lblSkillLevelRequired3.Size = new System.Drawing.Size(74, 13);
-            this.lblSkillLevelRequired3.TabIndex = 42;
-            this.lblSkillLevelRequired3.Text = "Level required";
-            // 
-            // btnSetSkill3
-            // 
-            this.btnSetSkill3.Location = new System.Drawing.Point(9, 108);
-            this.btnSetSkill3.Name = "btnSetSkill3";
-            this.btnSetSkill3.Size = new System.Drawing.Size(71, 23);
-            this.btnSetSkill3.TabIndex = 37;
-            this.btnSetSkill3.Text = "Set skill 3";
-            this.btnSetSkill3.UseVisualStyleBackColor = true;
-            // 
-            // lblSkillName2
-            // 
-            this.lblSkillName2.AutoSize = true;
-            this.lblSkillName2.Location = new System.Drawing.Point(80, 55);
-            this.lblSkillName2.Name = "lblSkillName2";
-            this.lblSkillName2.Size = new System.Drawing.Size(55, 13);
-            this.lblSkillName2.TabIndex = 33;
-            this.lblSkillName2.Text = "Skill name";
-            // 
-            // txtPilotSkill2
-            // 
-            this.txtPilotSkill2.Location = new System.Drawing.Point(83, 71);
-            this.txtPilotSkill2.Name = "txtPilotSkill2";
-            this.txtPilotSkill2.ReadOnly = true;
-            this.txtPilotSkill2.Size = new System.Drawing.Size(163, 20);
-            this.txtPilotSkill2.TabIndex = 34;
-            this.txtPilotSkill2.Text = "None";
-            // 
-            // lblSkillLevelRequired2
-            // 
-            this.lblSkillLevelRequired2.AutoSize = true;
-            this.lblSkillLevelRequired2.Location = new System.Drawing.Point(306, 55);
-            this.lblSkillLevelRequired2.Name = "lblSkillLevelRequired2";
-            this.lblSkillLevelRequired2.Size = new System.Drawing.Size(74, 13);
-            this.lblSkillLevelRequired2.TabIndex = 35;
-            this.lblSkillLevelRequired2.Text = "Level required";
-            // 
-            // btnSetSkill2
-            // 
-            this.btnSetSkill2.Location = new System.Drawing.Point(9, 69);
-            this.btnSetSkill2.Name = "btnSetSkill2";
-            this.btnSetSkill2.Size = new System.Drawing.Size(71, 23);
-            this.btnSetSkill2.TabIndex = 30;
-            this.btnSetSkill2.Text = "Set skill 2";
-            this.btnSetSkill2.UseVisualStyleBackColor = true;
-            // 
-            // lblSkillName1
-            // 
-            this.lblSkillName1.AutoSize = true;
-            this.lblSkillName1.Location = new System.Drawing.Point(80, 16);
-            this.lblSkillName1.Name = "lblSkillName1";
-            this.lblSkillName1.Size = new System.Drawing.Size(55, 13);
-            this.lblSkillName1.TabIndex = 28;
-            this.lblSkillName1.Text = "Skill name";
-            // 
-            // txtPilotSkill1
-            // 
-            this.txtPilotSkill1.Location = new System.Drawing.Point(83, 32);
-            this.txtPilotSkill1.Name = "txtPilotSkill1";
-            this.txtPilotSkill1.ReadOnly = true;
-            this.txtPilotSkill1.Size = new System.Drawing.Size(163, 20);
-            this.txtPilotSkill1.TabIndex = 28;
-            this.txtPilotSkill1.Text = "None";
-            // 
-            // lblSkillLevelRequired1
-            // 
-            this.lblSkillLevelRequired1.AutoSize = true;
-            this.lblSkillLevelRequired1.Location = new System.Drawing.Point(306, 16);
-            this.lblSkillLevelRequired1.Name = "lblSkillLevelRequired1";
-            this.lblSkillLevelRequired1.Size = new System.Drawing.Size(74, 13);
-            this.lblSkillLevelRequired1.TabIndex = 28;
-            this.lblSkillLevelRequired1.Text = "Level required";
-            // 
-            // lblSkillLevel1
-            // 
-            this.lblSkillLevel1.AutoSize = true;
-            this.lblSkillLevel1.Location = new System.Drawing.Point(252, 16);
-            this.lblSkillLevel1.Name = "lblSkillLevel1";
-            this.lblSkillLevel1.Size = new System.Drawing.Size(51, 13);
-            this.lblSkillLevel1.TabIndex = 27;
-            this.lblSkillLevel1.Text = "Skill level";
-            // 
-            // btnSetSkill1
-            // 
-            this.btnSetSkill1.Location = new System.Drawing.Point(9, 30);
-            this.btnSetSkill1.Name = "btnSetSkill1";
-            this.btnSetSkill1.Size = new System.Drawing.Size(71, 23);
-            this.btnSetSkill1.TabIndex = 25;
-            this.btnSetSkill1.Text = "Set skill 1";
-            this.btnSetSkill1.UseVisualStyleBackColor = true;
-            this.btnSetSkill1.Click += new System.EventHandler(this.btnSetSkill1_Click);
-            // 
-            // gbProjectileInformation
-            // 
-            this.gbProjectileInformation.Controls.Add(this.lblExplosionWindPowerToSelfMultiplier);
-            this.gbProjectileInformation.Controls.Add(this.txtExplosionWindPowerToSelfMultiplier);
-            this.gbProjectileInformation.Controls.Add(this.lblExplosionDamageToSelfMultiplier);
-            this.gbProjectileInformation.Controls.Add(this.txtExplosionDamageToSelfMultiplier);
-            this.gbProjectileInformation.Controls.Add(this.lblExplosionDamageAtEdge);
-            this.gbProjectileInformation.Controls.Add(this.txtExplosionDamageAtEdge);
-            this.gbProjectileInformation.Controls.Add(this.lblExplosionDamageAtCenter);
-            this.gbProjectileInformation.Controls.Add(this.txtExplosionDamageAtCenter);
-            this.gbProjectileInformation.Controls.Add(this.lblExplosionWindPowerAtEdge);
-            this.gbProjectileInformation.Controls.Add(this.txtExplosionWindPowerAtEdge);
-            this.gbProjectileInformation.Controls.Add(this.lblExplosionWindPowerAtCenter);
-            this.gbProjectileInformation.Controls.Add(this.txtExplosionWindPowerAtCenter);
-            this.gbProjectileInformation.Controls.Add(this.lblExplosionRadius);
-            this.gbProjectileInformation.Controls.Add(this.txtExplosionRadius);
-            this.gbProjectileInformation.Location = new System.Drawing.Point(515, 207);
-            this.gbProjectileInformation.Name = "gbProjectileInformation";
-            this.gbProjectileInformation.Size = new System.Drawing.Size(303, 200);
-            this.gbProjectileInformation.TabIndex = 33;
-            this.gbProjectileInformation.TabStop = false;
-            this.gbProjectileInformation.Text = "Explosion attributes";
-            // 
-            // lblExplosionWindPowerToSelfMultiplier
-            // 
-            this.lblExplosionWindPowerToSelfMultiplier.AutoSize = true;
-            this.lblExplosionWindPowerToSelfMultiplier.Location = new System.Drawing.Point(6, 99);
-            this.lblExplosionWindPowerToSelfMultiplier.Name = "lblExplosionWindPowerToSelfMultiplier";
-            this.lblExplosionWindPowerToSelfMultiplier.Size = new System.Drawing.Size(194, 13);
-            this.lblExplosionWindPowerToSelfMultiplier.TabIndex = 59;
-            this.lblExplosionWindPowerToSelfMultiplier.Text = "Explosion Wind Power To Self Multiplier";
-            // 
-            // txtExplosionWindPowerToSelfMultiplier
-            // 
-            this.txtExplosionWindPowerToSelfMultiplier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExplosionWindPowerToSelfMultiplier.DecimalPlaces = 2;
-            this.txtExplosionWindPowerToSelfMultiplier.Location = new System.Drawing.Point(215, 97);
-            this.txtExplosionWindPowerToSelfMultiplier.Name = "txtExplosionWindPowerToSelfMultiplier";
-            this.txtExplosionWindPowerToSelfMultiplier.Size = new System.Drawing.Size(82, 20);
-            this.txtExplosionWindPowerToSelfMultiplier.TabIndex = 58;
-            // 
-            // lblExplosionDamageToSelfMultiplier
-            // 
-            this.lblExplosionDamageToSelfMultiplier.AutoSize = true;
-            this.lblExplosionDamageToSelfMultiplier.Location = new System.Drawing.Point(6, 177);
-            this.lblExplosionDamageToSelfMultiplier.Name = "lblExplosionDamageToSelfMultiplier";
-            this.lblExplosionDamageToSelfMultiplier.Size = new System.Drawing.Size(176, 13);
-            this.lblExplosionDamageToSelfMultiplier.TabIndex = 57;
-            this.lblExplosionDamageToSelfMultiplier.Text = "Explosion Damage To Self Multiplier";
-            // 
-            // txtExplosionDamageToSelfMultiplier
-            // 
-            this.txtExplosionDamageToSelfMultiplier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExplosionDamageToSelfMultiplier.DecimalPlaces = 2;
-            this.txtExplosionDamageToSelfMultiplier.Location = new System.Drawing.Point(215, 175);
-            this.txtExplosionDamageToSelfMultiplier.Name = "txtExplosionDamageToSelfMultiplier";
-            this.txtExplosionDamageToSelfMultiplier.Size = new System.Drawing.Size(82, 20);
-            this.txtExplosionDamageToSelfMultiplier.TabIndex = 56;
-            // 
-            // lblExplosionDamageAtEdge
-            // 
-            this.lblExplosionDamageAtEdge.AutoSize = true;
-            this.lblExplosionDamageAtEdge.Location = new System.Drawing.Point(6, 151);
-            this.lblExplosionDamageAtEdge.Name = "lblExplosionDamageAtEdge";
-            this.lblExplosionDamageAtEdge.Size = new System.Drawing.Size(136, 13);
-            this.lblExplosionDamageAtEdge.TabIndex = 55;
-            this.lblExplosionDamageAtEdge.Text = "Explosion Damage At Edge";
-            // 
-            // txtExplosionDamageAtEdge
-            // 
-            this.txtExplosionDamageAtEdge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExplosionDamageAtEdge.Location = new System.Drawing.Point(215, 149);
-            this.txtExplosionDamageAtEdge.Name = "txtExplosionDamageAtEdge";
-            this.txtExplosionDamageAtEdge.Size = new System.Drawing.Size(82, 20);
-            this.txtExplosionDamageAtEdge.TabIndex = 54;
-            // 
-            // lblExplosionDamageAtCenter
-            // 
-            this.lblExplosionDamageAtCenter.AutoSize = true;
-            this.lblExplosionDamageAtCenter.Location = new System.Drawing.Point(6, 125);
-            this.lblExplosionDamageAtCenter.Name = "lblExplosionDamageAtCenter";
-            this.lblExplosionDamageAtCenter.Size = new System.Drawing.Size(142, 13);
-            this.lblExplosionDamageAtCenter.TabIndex = 53;
-            this.lblExplosionDamageAtCenter.Text = "Explosion Damage At Center";
-            // 
-            // txtExplosionDamageAtCenter
-            // 
-            this.txtExplosionDamageAtCenter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExplosionDamageAtCenter.Location = new System.Drawing.Point(215, 123);
-            this.txtExplosionDamageAtCenter.Name = "txtExplosionDamageAtCenter";
-            this.txtExplosionDamageAtCenter.Size = new System.Drawing.Size(82, 20);
-            this.txtExplosionDamageAtCenter.TabIndex = 52;
-            // 
-            // lblExplosionWindPowerAtEdge
-            // 
-            this.lblExplosionWindPowerAtEdge.AutoSize = true;
-            this.lblExplosionWindPowerAtEdge.Location = new System.Drawing.Point(6, 73);
-            this.lblExplosionWindPowerAtEdge.Name = "lblExplosionWindPowerAtEdge";
-            this.lblExplosionWindPowerAtEdge.Size = new System.Drawing.Size(154, 13);
-            this.lblExplosionWindPowerAtEdge.TabIndex = 51;
-            this.lblExplosionWindPowerAtEdge.Text = "Explosion Wind Power At Edge";
-            // 
-            // txtExplosionWindPowerAtEdge
-            // 
-            this.txtExplosionWindPowerAtEdge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExplosionWindPowerAtEdge.DecimalPlaces = 2;
-            this.txtExplosionWindPowerAtEdge.Location = new System.Drawing.Point(215, 71);
-            this.txtExplosionWindPowerAtEdge.Name = "txtExplosionWindPowerAtEdge";
-            this.txtExplosionWindPowerAtEdge.Size = new System.Drawing.Size(82, 20);
-            this.txtExplosionWindPowerAtEdge.TabIndex = 50;
-            // 
-            // lblExplosionWindPowerAtCenter
-            // 
-            this.lblExplosionWindPowerAtCenter.AutoSize = true;
-            this.lblExplosionWindPowerAtCenter.Location = new System.Drawing.Point(6, 47);
-            this.lblExplosionWindPowerAtCenter.Name = "lblExplosionWindPowerAtCenter";
-            this.lblExplosionWindPowerAtCenter.Size = new System.Drawing.Size(160, 13);
-            this.lblExplosionWindPowerAtCenter.TabIndex = 49;
-            this.lblExplosionWindPowerAtCenter.Text = "Explosion Wind Power At Center";
-            // 
-            // txtExplosionWindPowerAtCenter
-            // 
-            this.txtExplosionWindPowerAtCenter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExplosionWindPowerAtCenter.DecimalPlaces = 2;
-            this.txtExplosionWindPowerAtCenter.Location = new System.Drawing.Point(215, 45);
-            this.txtExplosionWindPowerAtCenter.Name = "txtExplosionWindPowerAtCenter";
-            this.txtExplosionWindPowerAtCenter.Size = new System.Drawing.Size(82, 20);
-            this.txtExplosionWindPowerAtCenter.TabIndex = 48;
-            // 
-            // lblExplosionRadius
-            // 
-            this.lblExplosionRadius.AutoSize = true;
-            this.lblExplosionRadius.Location = new System.Drawing.Point(6, 21);
-            this.lblExplosionRadius.Name = "lblExplosionRadius";
-            this.lblExplosionRadius.Size = new System.Drawing.Size(88, 13);
-            this.lblExplosionRadius.TabIndex = 47;
-            this.lblExplosionRadius.Text = "Explosion Radius";
-            // 
-            // txtExplosionRadius
-            // 
-            this.txtExplosionRadius.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExplosionRadius.DecimalPlaces = 2;
-            this.txtExplosionRadius.Location = new System.Drawing.Point(215, 19);
-            this.txtExplosionRadius.Name = "txtExplosionRadius";
-            this.txtExplosionRadius.Size = new System.Drawing.Size(82, 20);
-            this.txtExplosionRadius.TabIndex = 46;
+            // txtReMoveLevel
+            // 
+            this.txtReMoveLevel.Location = new System.Drawing.Point(134, 87);
+            this.txtReMoveLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtReMoveLevel.Name = "txtReMoveLevel";
+            this.txtReMoveLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtReMoveLevel.TabIndex = 72;
+            // 
+            // lblReMoveLevel
+            // 
+            this.lblReMoveLevel.AutoSize = true;
+            this.lblReMoveLevel.Location = new System.Drawing.Point(6, 89);
+            this.lblReMoveLevel.Name = "lblReMoveLevel";
+            this.lblReMoveLevel.Size = new System.Drawing.Size(83, 13);
+            this.lblReMoveLevel.TabIndex = 71;
+            this.lblReMoveLevel.Text = "Re-Move Level:";
+            // 
+            // txtPostMVLevel
+            // 
+            this.txtPostMovementLevel.Location = new System.Drawing.Point(134, 113);
+            this.txtPostMovementLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtPostMovementLevel.Name = "txtPostMVLevel";
+            this.txtPostMovementLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtPostMovementLevel.TabIndex = 70;
+            this.txtPostMovementLevel.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblPostMVLevel
+            // 
+            this.lblPostMVLevel.AutoSize = true;
+            this.lblPostMVLevel.Location = new System.Drawing.Point(6, 115);
+            this.lblPostMVLevel.Name = "lblPostMVLevel";
+            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
+            this.lblPostMVLevel.TabIndex = 69;
+            this.lblPostMVLevel.Text = "Post MV Level:";
             // 
             // ProjectEternityAttackEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(913, 489);
-            this.Controls.Add(this.gbProjectileInformation);
-            this.Controls.Add(this.gbPilotSkills);
+            this.ClientSize = new System.Drawing.Size(649, 382);
             this.Controls.Add(this.gbItemInformtion);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.gbSecondaryProperties);
@@ -1430,6 +999,7 @@
             this.Text = "Project Eternity Attack Editor";
             this.gbStats.ResumeLayout(false);
             this.gbStats.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAmmoConsumption)).EndInit();
             this.txtMinDamage.ResumeLayout(false);
             this.txtDamage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.txtCritical)).EndInit();
@@ -1453,21 +1023,8 @@
             this.menuStrip1.PerformLayout();
             this.gbItemInformtion.ResumeLayout(false);
             this.gbItemInformtion.PerformLayout();
-            this.gbPilotSkills.ResumeLayout(false);
-            this.gbPilotSkills.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPilotSkill4Level)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPilotSkill3Level)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPilotSkill2Level)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPilotSkill1Level)).EndInit();
-            this.gbProjectileInformation.ResumeLayout(false);
-            this.gbProjectileInformation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionWindPowerToSelfMultiplier)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionDamageToSelfMultiplier)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionDamageAtEdge)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionDamageAtCenter)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionWindPowerAtEdge)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionWindPowerAtCenter)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtExplosionRadius)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementLevel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1508,7 +1065,6 @@
         private System.Windows.Forms.GroupBox gbSecondaryProperties;
         private System.Windows.Forms.RadioButton rbNone;
         protected System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.CheckBox cbPostMovement;
         private System.Windows.Forms.GroupBox gbItemInformtion;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblDescription;
@@ -1529,62 +1085,25 @@
         private System.Windows.Forms.RadioButton rbBREAK;
         private System.Windows.Forms.RadioButton rbDASH;
         private System.Windows.Forms.RadioButton rbALL;
-        private System.Windows.Forms.GroupBox gbPilotSkills;
-        private System.Windows.Forms.ComboBox comboBox4;
-        private System.Windows.Forms.Label lblSkillLevel4;
-        private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.Label lblSkillLevel3;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.Label lblSkillLevel2;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label lblSkillName4;
-        private System.Windows.Forms.TextBox txtPilotSkill4;
-        private System.Windows.Forms.Label lblSkillLevelRequired;
-        private System.Windows.Forms.Button btnSetSkill4;
-        private System.Windows.Forms.Label lblSkillName3;
-        private System.Windows.Forms.TextBox txtPilotSkill3;
-        private System.Windows.Forms.Label lblSkillLevelRequired3;
-        private System.Windows.Forms.Button btnSetSkill3;
-        private System.Windows.Forms.Label lblSkillName2;
-        private System.Windows.Forms.TextBox txtPilotSkill2;
-        private System.Windows.Forms.Label lblSkillLevelRequired2;
-        private System.Windows.Forms.Button btnSetSkill2;
-        private System.Windows.Forms.Label lblSkillName1;
-        private System.Windows.Forms.TextBox txtPilotSkill1;
-        private System.Windows.Forms.Label lblSkillLevelRequired1;
-        private System.Windows.Forms.Label lblSkillLevel1;
-        private System.Windows.Forms.Button btnSetSkill1;
-        private System.Windows.Forms.NumericUpDown txtPilotSkill4Level;
-        private System.Windows.Forms.NumericUpDown txtPilotSkill3Level;
-        private System.Windows.Forms.NumericUpDown txtPilotSkill2Level;
-        private System.Windows.Forms.NumericUpDown txtPilotSkill1Level;
         private System.Windows.Forms.TextBox txtDamage;
         private System.Windows.Forms.Button btnEditDamage;
         public System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label lblPostMovementAccuracyMalus;
         private System.Windows.Forms.NumericUpDown txtPostMovementAccuracyMalus;
         private System.Windows.Forms.RadioButton rbPER;
-        private System.Windows.Forms.GroupBox gbProjectileInformation;
-        private System.Windows.Forms.Label lblExplosionWindPowerToSelfMultiplier;
-        private System.Windows.Forms.NumericUpDown txtExplosionWindPowerToSelfMultiplier;
-        private System.Windows.Forms.Label lblExplosionDamageToSelfMultiplier;
-        private System.Windows.Forms.NumericUpDown txtExplosionDamageToSelfMultiplier;
-        private System.Windows.Forms.Label lblExplosionDamageAtEdge;
-        private System.Windows.Forms.NumericUpDown txtExplosionDamageAtEdge;
-        private System.Windows.Forms.Label lblExplosionDamageAtCenter;
-        private System.Windows.Forms.NumericUpDown txtExplosionDamageAtCenter;
-        private System.Windows.Forms.Label lblExplosionWindPowerAtEdge;
-        private System.Windows.Forms.NumericUpDown txtExplosionWindPowerAtEdge;
-        private System.Windows.Forms.Label lblExplosionWindPowerAtCenter;
-        private System.Windows.Forms.NumericUpDown txtExplosionWindPowerAtCenter;
-        private System.Windows.Forms.Label lblExplosionRadius;
-        private System.Windows.Forms.NumericUpDown txtExplosionRadius;
         private System.Windows.Forms.TextBox txtMinDamage;
         private System.Windows.Forms.Button btnEditMinDamage;
         private System.Windows.Forms.Label lblMinDamage;
         private System.Windows.Forms.CheckBox cbPartialAttack;
         private System.Windows.Forms.Label lblEvasionBonus;
         private System.Windows.Forms.NumericUpDown txtPostMovementEvasionBonus;
+        private System.Windows.Forms.NumericUpDown txtAmmoConsumption;
+        private System.Windows.Forms.Label lblAmmoConsumption;
+        private System.Windows.Forms.ToolStripMenuItem tsmAdvanced;
+        private System.Windows.Forms.NumericUpDown txtReMoveLevel;
+        private System.Windows.Forms.Label lblReMoveLevel;
+        private System.Windows.Forms.NumericUpDown txtPostMovementLevel;
+        private System.Windows.Forms.Label lblPostMVLevel;
     }
 }
 

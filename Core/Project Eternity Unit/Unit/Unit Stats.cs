@@ -82,8 +82,13 @@ namespace ProjectEternity.Core.Units
         public bool[,] ArrayMapSize;//Custom mask for actual place a Unit is taking.
 
         public List<Attack> ListAttack;
-        public List<Attack> ListAttackTemporary;//Picked up weapons and others.
-        public int PLAAttack;
+        public Attack PLAAttack;
+        public Attack CurrentAttack;
+
+        public byte MaxClimb;
+        public byte PostMVLevel;
+        public byte ReMoveLevel;
+        public byte ChargedAttackCancelLevel;
 
         public List<string> ListTerrainChoices;
         public Dictionary<string, int> DicTerrainValue;
@@ -142,7 +147,6 @@ namespace ProjectEternity.Core.Units
             ListCharacterIDWhitelist = new List<string>();
 
             Animations = new UnitAnimations();
-            ListAttackTemporary = new List<Attack>();
         }
 
         public UnitStats(bool[,] ArrayMapSize)
@@ -162,6 +166,11 @@ namespace ProjectEternity.Core.Units
             _Armor.Value = BR.ReadInt32();
             _Mobility.Value = BR.ReadInt32();
             _MaxMovement.Value = (int)BR.ReadSingle();
+            MaxClimb = BR.ReadByte();
+            PostMVLevel = BR.ReadByte();
+            ReMoveLevel = BR.ReadByte();
+            ChargedAttackCancelLevel = BR.ReadByte();
+
             AttackUpgradesSpeed = (AttackUpgradesSpeeds)BR.ReadByte();
             AttackUpgradesCost = (AttackUpgradesCosts)BR.ReadByte();
 
@@ -215,9 +224,11 @@ namespace ProjectEternity.Core.Units
                     NewAttack = new Attack(BR, Content, AttackName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 }
 
-                NewAttack.Ammo = NewAttack.MaxAmmo;
+                NewAttack.RefillAmmo();
                 if (NewAttack.Pri == WeaponPrimaryProperty.PLA)
-                    PLAAttack = A;
+                {
+                    PLAAttack = NewAttack;
+                }
 
                 Int32 ListAttackContextCount = BR.ReadInt32();
                 for (int AC = 0; AC < ListAttackContextCount; ++AC)
@@ -295,11 +306,10 @@ namespace ProjectEternity.Core.Units
             ListAttack = new List<Attack>();
             foreach (KeyValuePair<string, string> ActiveField in UnitFile.ReadHeader("Attacks"))
             {
-                int A = Convert.ToInt32(ActiveField.Key.Substring(7));
                 Attack NewAttack = new Attack(ActiveField.Value, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-                NewAttack.Ammo = NewAttack.MaxAmmo;
+                NewAttack.RefillAmmo();
                 if (NewAttack.Pri == WeaponPrimaryProperty.PLA)
-                    PLAAttack = A;
+                    PLAAttack = NewAttack;
                 
                 //Load Animation paths.
                 foreach (KeyValuePair<string, string> ActiveAnimationField in DicAttackAnimations)
@@ -330,14 +340,14 @@ namespace ProjectEternity.Core.Units
 
         public void Init()
         {
-            PLAAttack = -1;
+            PLAAttack = null;
 
             //Add the weapon stocked in the Unit's parts to a generic weapon list.
             for (int i = 0; i < ListAttack.Count; i++)
             {
-                ListAttack[i].Ammo = ListAttack[i].MaxAmmo;
+                ListAttack[i].RefillAmmo();
                 if (ListAttack[i].Pri == WeaponPrimaryProperty.PLA)
-                    PLAAttack = i;
+                    PLAAttack = ListAttack[i];
             }
         }
 

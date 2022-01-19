@@ -24,7 +24,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentLeader.BattleDefenseChoice);
-            Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -39,13 +39,12 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(13, 5, 0), 0);
-            EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Evade, EnemySquad.CurrentLeader.BattleDefenseChoice);
-            Assert.AreEqual(-1, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.AreEqual(null, EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -60,13 +59,12 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
-            EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Evade, EnemySquad.CurrentLeader.BattleDefenseChoice);
-            Assert.AreEqual(-1, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.AreEqual(null, EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -81,13 +79,12 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
-            EnemySquad.CurrentLeader.AttackIndex = 0;
             DummyMap.BattleMenuOffenseFormationChoice = BattleMap.FormationChoices.ALL;
             DummyMap.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.Spread;
             DummyMap.PrepareSquadsForBattle(0, 0, 1, 0);
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Evade, EnemySquad.CurrentLeader.BattleDefenseChoice);
-            Assert.AreEqual(-1, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.AreEqual(null, EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -101,11 +98,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentWingmanA.ListAttack[0].PowerFormula = "20000";
             DummySquad.CurrentWingmanB.ListAttack[0].PowerFormula = "0";
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-            DummySquad.CurrentWingmanA.AttackIndex = -1;
-            DummySquad.CurrentWingmanB.AttackIndex = -1;
-
-            EnemySquad.CurrentLeader.AttackIndex = 0;
+            DummySquad.CurrentWingmanA.CurrentAttack = null;
+            DummySquad.CurrentWingmanB.CurrentAttack = null;
 
             DummySquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
             DummySquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
@@ -126,11 +120,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentLeader.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanB.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanA.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanB.CurrentAttack);
 
-            Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -144,11 +138,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentWingmanA.ListAttack[0].PowerFormula = "0";
             DummySquad.CurrentWingmanB.ListAttack[0].PowerFormula = "20000";
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-            DummySquad.CurrentWingmanA.AttackIndex = -1;
-            DummySquad.CurrentWingmanB.AttackIndex = -1;
-
-            EnemySquad.CurrentLeader.AttackIndex = 0;
+            DummySquad.CurrentWingmanA.CurrentAttack = null;
+            DummySquad.CurrentWingmanB.CurrentAttack = null;
 
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
@@ -163,11 +154,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentLeader.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanB.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanA.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanB.CurrentAttack);
 
-            Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -181,11 +172,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentWingmanA.ListAttack[0].PowerFormula = "10000";
             DummySquad.CurrentWingmanB.ListAttack[0].PowerFormula = "10000";
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-            DummySquad.CurrentWingmanA.AttackIndex = -1;
-            DummySquad.CurrentWingmanB.AttackIndex = -1;
-
-            EnemySquad.CurrentLeader.AttackIndex = 0;
+            DummySquad.CurrentWingmanA.CurrentAttack = null;
+            DummySquad.CurrentWingmanB.CurrentAttack = null;
 
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
@@ -200,11 +188,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentLeader.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanB.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanA.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanB.CurrentAttack);
 
-            Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -218,11 +206,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentWingmanA.ListAttack[0].PowerFormula = "30000";
             DummySquad.CurrentWingmanB.ListAttack[0].PowerFormula = "0";
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-            DummySquad.CurrentWingmanA.AttackIndex = -1;
-            DummySquad.CurrentWingmanB.AttackIndex = -1;
-
-            EnemySquad.CurrentLeader.AttackIndex = 0;
+            DummySquad.CurrentWingmanA.CurrentAttack = null;
+            DummySquad.CurrentWingmanB.CurrentAttack = null;
 
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
@@ -237,11 +222,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentLeader.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanB.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanA.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanB.CurrentAttack);
 
-            Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -255,11 +240,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentWingmanA.ListAttack[0].PowerFormula = "0";
             DummySquad.CurrentWingmanB.ListAttack[0].PowerFormula = "30000";
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-            DummySquad.CurrentWingmanA.AttackIndex = -1;
-            DummySquad.CurrentWingmanB.AttackIndex = -1;
-
-            EnemySquad.CurrentLeader.AttackIndex = 0;
+            DummySquad.CurrentWingmanA.CurrentAttack = null;
+            DummySquad.CurrentWingmanB.CurrentAttack = null;
 
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
@@ -274,11 +256,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentLeader.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanB.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanA.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanB.CurrentAttack);
 
-            Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -292,11 +274,8 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentWingmanA.ListAttack[0].PowerFormula = "20000";
             DummySquad.CurrentWingmanB.ListAttack[0].PowerFormula = "20000";
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-            DummySquad.CurrentWingmanA.AttackIndex = -1;
-            DummySquad.CurrentWingmanB.AttackIndex = -1;
-
-            EnemySquad.CurrentLeader.AttackIndex = 0;
+            DummySquad.CurrentWingmanA.CurrentAttack = null;
+            DummySquad.CurrentWingmanB.CurrentAttack = null;
 
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
@@ -311,11 +290,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
 
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentLeader.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(-1, DummySquad.CurrentWingmanB.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanA.CurrentAttack);
+            Assert.AreEqual(null, DummySquad.CurrentWingmanB.CurrentAttack);
 
-            Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(EnemySquad.CurrentLeader.CurrentAttack);
         }
 
         [TestMethod]
@@ -327,11 +306,9 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentLeader.ListAttack[0].PowerFormula = "4000";
             DummySquad.CurrentLeader.ListAttack[0].Pri = Core.Attacks.WeaponPrimaryProperty.ALL;
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-
-            EnemySquad.CurrentLeader.AttackIndex = -1;
-            EnemySquad.CurrentWingmanA.AttackIndex = -1;
-            EnemySquad.CurrentWingmanB.AttackIndex = -1;
+            EnemySquad.CurrentLeader.CurrentAttack = null;
+            EnemySquad.CurrentWingmanA.CurrentAttack = null;
+            EnemySquad.CurrentWingmanB.CurrentAttack = null;
 
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
@@ -346,11 +323,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentWingmanA.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Attack, EnemySquad.CurrentWingmanB.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
 
-            Assert.AreEqual(0, EnemySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(0, EnemySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(0, EnemySquad.CurrentWingmanB.AttackIndex);
+            Assert.IsNotNull(EnemySquad.CurrentLeader.CurrentAttack);
+            Assert.IsNotNull(EnemySquad.CurrentWingmanA.CurrentAttack);
+            Assert.IsNotNull(EnemySquad.CurrentWingmanB.CurrentAttack);
         }
 
         [TestMethod]
@@ -362,12 +339,6 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentLeader.ListAttack[0].PowerFormula = "10000";
             DummySquad.CurrentLeader.ListAttack[0].Pri = Core.Attacks.WeaponPrimaryProperty.ALL;
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-
-            EnemySquad.CurrentLeader.AttackIndex = 0;
-            EnemySquad.CurrentWingmanA.AttackIndex = 0;
-            EnemySquad.CurrentWingmanB.AttackIndex = 0;
-
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
@@ -381,11 +352,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             Assert.AreEqual(Unit.BattleDefenseChoices.Evade, EnemySquad.CurrentWingmanA.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Evade, EnemySquad.CurrentWingmanB.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
 
-            Assert.AreEqual(-1, EnemySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(-1, EnemySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(-1, EnemySquad.CurrentWingmanB.AttackIndex);
+            Assert.AreEqual(null, EnemySquad.CurrentLeader.CurrentAttack);
+            Assert.IsNull(EnemySquad.CurrentWingmanA.CurrentAttack);
+            Assert.IsNull(EnemySquad.CurrentWingmanB.CurrentAttack);
         }
 
         [TestMethod]
@@ -397,12 +368,6 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             DummySquad.CurrentLeader.ListAttack[0].PowerFormula = "20000";
             DummySquad.CurrentLeader.ListAttack[0].Pri = Core.Attacks.WeaponPrimaryProperty.ALL;
 
-            DummySquad.CurrentLeader.AttackIndex = 0;
-
-            EnemySquad.CurrentLeader.AttackIndex = 0;
-            EnemySquad.CurrentWingmanA.AttackIndex = 0;
-            EnemySquad.CurrentWingmanB.AttackIndex = 0;
-
             EnemySquad.IsPlayerControlled = false;
             DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
             DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(5, 5, 0), 0);
@@ -416,11 +381,11 @@ namespace ProjectEternity.UnitTests.BattleBehavior
             Assert.AreEqual(Unit.BattleDefenseChoices.Evade, EnemySquad.CurrentWingmanA.BattleDefenseChoice);
             Assert.AreEqual(Unit.BattleDefenseChoices.Evade, EnemySquad.CurrentWingmanB.BattleDefenseChoice);
 
-            Assert.AreEqual(0, DummySquad.CurrentLeader.AttackIndex);
+            Assert.IsNotNull(DummySquad.CurrentLeader.CurrentAttack);
 
-            Assert.AreEqual(-1, EnemySquad.CurrentLeader.AttackIndex);
-            Assert.AreEqual(-1, EnemySquad.CurrentWingmanA.AttackIndex);
-            Assert.AreEqual(-1, EnemySquad.CurrentWingmanB.AttackIndex);
+            Assert.AreEqual(null, EnemySquad.CurrentLeader.CurrentAttack);
+            Assert.IsNull(EnemySquad.CurrentWingmanA.CurrentAttack);
+            Assert.IsNull(EnemySquad.CurrentWingmanB.CurrentAttack);
         }
     }
 }

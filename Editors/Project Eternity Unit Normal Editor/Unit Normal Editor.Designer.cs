@@ -37,6 +37,15 @@
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblChargeCancelLevel = new System.Windows.Forms.Label();
+            this.txtChargeCancelLevel = new System.Windows.Forms.NumericUpDown();
+            this.txtMaxClimb = new System.Windows.Forms.NumericUpDown();
+            this.lblMaxClimb = new System.Windows.Forms.Label();
+            this.txtBaseMovement = new System.Windows.Forms.NumericUpDown();
+            this.txtBaseMobility = new System.Windows.Forms.NumericUpDown();
+            this.txtBaseArmor = new System.Windows.Forms.NumericUpDown();
+            this.txtBaseEN = new System.Windows.Forms.NumericUpDown();
+            this.txtBaseHP = new System.Windows.Forms.NumericUpDown();
             this.lblPartsSlots = new System.Windows.Forms.Label();
             this.txtPartsSlots = new System.Windows.Forms.NumericUpDown();
             this.lvlMovement = new System.Windows.Forms.Label();
@@ -91,15 +100,19 @@
             this.rbSizeLLL = new System.Windows.Forms.RadioButton();
             this.gbAttacks = new System.Windows.Forms.GroupBox();
             this.btnEditAttack = new System.Windows.Forms.Button();
-            this.txtBaseHP = new System.Windows.Forms.NumericUpDown();
-            this.txtBaseEN = new System.Windows.Forms.NumericUpDown();
-            this.txtBaseArmor = new System.Windows.Forms.NumericUpDown();
-            this.txtBaseMobility = new System.Windows.Forms.NumericUpDown();
-            this.txtBaseMovement = new System.Windows.Forms.NumericUpDown();
-            this.txtMaxClimb = new System.Windows.Forms.NumericUpDown();
-            this.lblMaxClimb = new System.Windows.Forms.Label();
+            this.txtReMoveLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblReMoveLevel = new System.Windows.Forms.Label();
+            this.txtPostMVLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblPostMVLevel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtChargeCancelLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxClimb)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMovement)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMobility)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseArmor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseEN)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseHP)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPartsSlots)).BeginInit();
             this.tabList.SuspendLayout();
             this.tabAnimations.SuspendLayout();
@@ -111,12 +124,8 @@
             this.cboUnderwater.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.gbAttacks.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseHP)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseEN)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseArmor)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMobility)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMovement)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMaxClimb)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -187,6 +196,12 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtReMoveLevel);
+            this.groupBox1.Controls.Add(this.lblReMoveLevel);
+            this.groupBox1.Controls.Add(this.txtPostMVLevel);
+            this.groupBox1.Controls.Add(this.lblPostMVLevel);
+            this.groupBox1.Controls.Add(this.lblChargeCancelLevel);
+            this.groupBox1.Controls.Add(this.txtChargeCancelLevel);
             this.groupBox1.Controls.Add(this.txtMaxClimb);
             this.groupBox1.Controls.Add(this.lblMaxClimb);
             this.groupBox1.Controls.Add(this.txtBaseMovement);
@@ -203,15 +218,118 @@
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Location = new System.Drawing.Point(12, 181);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(270, 172);
+            this.groupBox1.Size = new System.Drawing.Size(270, 175);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Unit boosts";
             // 
+            // lblChargeCancelLevel
+            // 
+            this.lblChargeCancelLevel.AutoSize = true;
+            this.lblChargeCancelLevel.Location = new System.Drawing.Point(5, 125);
+            this.lblChargeCancelLevel.Name = "lblChargeCancelLevel";
+            this.lblChargeCancelLevel.Size = new System.Drawing.Size(109, 13);
+            this.lblChargeCancelLevel.TabIndex = 62;
+            this.lblChargeCancelLevel.Text = "Charge Cancel Level:";
+            // 
+            // txtChargeCancelLevel
+            // 
+            this.txtChargeCancelLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtChargeCancelLevel.Location = new System.Drawing.Point(207, 123);
+            this.txtChargeCancelLevel.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtChargeCancelLevel.Name = "txtChargeCancelLevel";
+            this.txtChargeCancelLevel.Size = new System.Drawing.Size(56, 20);
+            this.txtChargeCancelLevel.TabIndex = 61;
+            // 
+            // txtMaxClimb
+            // 
+            this.txtMaxClimb.Location = new System.Drawing.Point(214, 71);
+            this.txtMaxClimb.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtMaxClimb.Name = "txtMaxClimb";
+            this.txtMaxClimb.Size = new System.Drawing.Size(50, 20);
+            this.txtMaxClimb.TabIndex = 18;
+            // 
+            // lblMaxClimb
+            // 
+            this.lblMaxClimb.AutoSize = true;
+            this.lblMaxClimb.Location = new System.Drawing.Point(150, 73);
+            this.lblMaxClimb.Name = "lblMaxClimb";
+            this.lblMaxClimb.Size = new System.Drawing.Size(58, 13);
+            this.lblMaxClimb.TabIndex = 17;
+            this.lblMaxClimb.Text = "Max Climb:";
+            // 
+            // txtBaseMovement
+            // 
+            this.txtBaseMovement.Location = new System.Drawing.Point(98, 71);
+            this.txtBaseMovement.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseMovement.Name = "txtBaseMovement";
+            this.txtBaseMovement.Size = new System.Drawing.Size(46, 20);
+            this.txtBaseMovement.TabIndex = 16;
+            // 
+            // txtBaseMobility
+            // 
+            this.txtBaseMobility.Location = new System.Drawing.Point(214, 45);
+            this.txtBaseMobility.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseMobility.Name = "txtBaseMobility";
+            this.txtBaseMobility.Size = new System.Drawing.Size(50, 20);
+            this.txtBaseMobility.TabIndex = 15;
+            // 
+            // txtBaseArmor
+            // 
+            this.txtBaseArmor.Location = new System.Drawing.Point(88, 45);
+            this.txtBaseArmor.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseArmor.Name = "txtBaseArmor";
+            this.txtBaseArmor.Size = new System.Drawing.Size(56, 20);
+            this.txtBaseArmor.TabIndex = 14;
+            // 
+            // txtBaseEN
+            // 
+            this.txtBaseEN.Location = new System.Drawing.Point(208, 19);
+            this.txtBaseEN.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseEN.Name = "txtBaseEN";
+            this.txtBaseEN.Size = new System.Drawing.Size(56, 20);
+            this.txtBaseEN.TabIndex = 13;
+            // 
+            // txtBaseHP
+            // 
+            this.txtBaseHP.Location = new System.Drawing.Point(88, 19);
+            this.txtBaseHP.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtBaseHP.Name = "txtBaseHP";
+            this.txtBaseHP.Size = new System.Drawing.Size(56, 20);
+            this.txtBaseHP.TabIndex = 12;
+            // 
             // lblPartsSlots
             // 
             this.lblPartsSlots.AutoSize = true;
-            this.lblPartsSlots.Location = new System.Drawing.Point(6, 99);
+            this.lblPartsSlots.Location = new System.Drawing.Point(6, 151);
             this.lblPartsSlots.Name = "lblPartsSlots";
             this.lblPartsSlots.Size = new System.Drawing.Size(60, 13);
             this.lblPartsSlots.TabIndex = 11;
@@ -219,7 +337,7 @@
             // 
             // txtPartsSlots
             // 
-            this.txtPartsSlots.Location = new System.Drawing.Point(174, 97);
+            this.txtPartsSlots.Location = new System.Drawing.Point(206, 149);
             this.txtPartsSlots.Maximum = new decimal(new int[] {
             4,
             0,
@@ -231,7 +349,7 @@
             0,
             0});
             this.txtPartsSlots.Name = "txtPartsSlots";
-            this.txtPartsSlots.Size = new System.Drawing.Size(90, 20);
+            this.txtPartsSlots.Size = new System.Drawing.Size(57, 20);
             this.txtPartsSlots.TabIndex = 10;
             this.txtPartsSlots.Value = new decimal(new int[] {
             1,
@@ -291,7 +409,7 @@
             this.tabList.Location = new System.Drawing.Point(288, 181);
             this.tabList.Name = "tabList";
             this.tabList.SelectedIndex = 0;
-            this.tabList.Size = new System.Drawing.Size(272, 298);
+            this.tabList.Size = new System.Drawing.Size(272, 301);
             this.tabList.TabIndex = 18;
             // 
             // tabAnimations
@@ -303,7 +421,7 @@
             this.tabAnimations.Location = new System.Drawing.Point(4, 22);
             this.tabAnimations.Name = "tabAnimations";
             this.tabAnimations.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAnimations.Size = new System.Drawing.Size(264, 272);
+            this.tabAnimations.Size = new System.Drawing.Size(264, 275);
             this.tabAnimations.TabIndex = 0;
             this.tabAnimations.Text = "Animations";
             this.tabAnimations.UseVisualStyleBackColor = true;
@@ -414,7 +532,7 @@
             this.groupBox2.Controls.Add(this.btnRemovePilot);
             this.groupBox2.Controls.Add(this.btnAddPilot);
             this.groupBox2.Controls.Add(this.lstPilots);
-            this.groupBox2.Location = new System.Drawing.Point(12, 359);
+            this.groupBox2.Location = new System.Drawing.Point(12, 362);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(271, 120);
             this.groupBox2.TabIndex = 19;
@@ -630,7 +748,7 @@
             this.cboUnderwater.Controls.Add(this.cboMovementAir);
             this.cboUnderwater.Location = new System.Drawing.Point(566, 158);
             this.cboUnderwater.Name = "cboUnderwater";
-            this.cboUnderwater.Size = new System.Drawing.Size(156, 167);
+            this.cboUnderwater.Size = new System.Drawing.Size(156, 170);
             this.cboUnderwater.TabIndex = 30;
             this.cboUnderwater.TabStop = false;
             this.cboUnderwater.Text = "Movement types";
@@ -704,7 +822,7 @@
             this.groupBox6.Controls.Add(this.rbSizeL);
             this.groupBox6.Controls.Add(this.rbSizeLL);
             this.groupBox6.Controls.Add(this.rbSizeLLL);
-            this.groupBox6.Location = new System.Drawing.Point(566, 331);
+            this.groupBox6.Location = new System.Drawing.Point(566, 334);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(156, 94);
             this.groupBox6.TabIndex = 31;
@@ -790,7 +908,7 @@
             // gbAttacks
             // 
             this.gbAttacks.Controls.Add(this.btnEditAttack);
-            this.gbAttacks.Location = new System.Drawing.Point(566, 431);
+            this.gbAttacks.Location = new System.Drawing.Point(566, 434);
             this.gbAttacks.Name = "gbAttacks";
             this.gbAttacks.Size = new System.Drawing.Size(156, 48);
             this.gbAttacks.TabIndex = 32;
@@ -807,92 +925,53 @@
             this.btnEditAttack.UseVisualStyleBackColor = true;
             this.btnEditAttack.Click += new System.EventHandler(this.btnEditAttacks_Click);
             // 
-            // txtBaseHP
+            // txtReMoveLevel
             // 
-            this.txtBaseHP.Location = new System.Drawing.Point(88, 19);
-            this.txtBaseHP.Maximum = new decimal(new int[] {
+            this.txtReMoveLevel.Location = new System.Drawing.Point(225, 97);
+            this.txtReMoveLevel.Maximum = new decimal(new int[] {
             100000,
             0,
             0,
             0});
-            this.txtBaseHP.Name = "txtBaseHP";
-            this.txtBaseHP.Size = new System.Drawing.Size(56, 20);
-            this.txtBaseHP.TabIndex = 12;
+            this.txtReMoveLevel.Name = "txtReMoveLevel";
+            this.txtReMoveLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtReMoveLevel.TabIndex = 66;
             // 
-            // txtBaseEN
+            // lblReMoveLevel
             // 
-            this.txtBaseEN.Location = new System.Drawing.Point(208, 19);
-            this.txtBaseEN.Maximum = new decimal(new int[] {
+            this.lblReMoveLevel.AutoSize = true;
+            this.lblReMoveLevel.Location = new System.Drawing.Point(136, 99);
+            this.lblReMoveLevel.Name = "lblReMoveLevel";
+            this.lblReMoveLevel.Size = new System.Drawing.Size(83, 13);
+            this.lblReMoveLevel.TabIndex = 65;
+            this.lblReMoveLevel.Text = "Re-Move Level:";
+            // 
+            // txtPostMVLevel
+            // 
+            this.txtPostMVLevel.Location = new System.Drawing.Point(90, 97);
+            this.txtPostMVLevel.Maximum = new decimal(new int[] {
             100000,
             0,
             0,
             0});
-            this.txtBaseEN.Name = "txtBaseEN";
-            this.txtBaseEN.Size = new System.Drawing.Size(56, 20);
-            this.txtBaseEN.TabIndex = 13;
+            this.txtPostMVLevel.Name = "txtPostMVLevel";
+            this.txtPostMVLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtPostMVLevel.TabIndex = 64;
             // 
-            // txtBaseArmor
+            // lblPostMVLevel
             // 
-            this.txtBaseArmor.Location = new System.Drawing.Point(88, 45);
-            this.txtBaseArmor.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtBaseArmor.Name = "txtBaseArmor";
-            this.txtBaseArmor.Size = new System.Drawing.Size(56, 20);
-            this.txtBaseArmor.TabIndex = 14;
-            // 
-            // txtBaseMobility
-            // 
-            this.txtBaseMobility.Location = new System.Drawing.Point(208, 45);
-            this.txtBaseMobility.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtBaseMobility.Name = "txtBaseMobility";
-            this.txtBaseMobility.Size = new System.Drawing.Size(56, 20);
-            this.txtBaseMobility.TabIndex = 15;
-            // 
-            // txtBaseMovement
-            // 
-            this.txtBaseMovement.Location = new System.Drawing.Point(88, 71);
-            this.txtBaseMovement.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtBaseMovement.Name = "txtBaseMovement";
-            this.txtBaseMovement.Size = new System.Drawing.Size(56, 20);
-            this.txtBaseMovement.TabIndex = 16;
-            // 
-            // txtMaxClimb
-            // 
-            this.txtMaxClimb.Location = new System.Drawing.Point(208, 71);
-            this.txtMaxClimb.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtMaxClimb.Name = "txtMaxClimb";
-            this.txtMaxClimb.Size = new System.Drawing.Size(56, 20);
-            this.txtMaxClimb.TabIndex = 18;
-            // 
-            // lblMaxClimb
-            // 
-            this.lblMaxClimb.AutoSize = true;
-            this.lblMaxClimb.Location = new System.Drawing.Point(144, 73);
-            this.lblMaxClimb.Name = "lblMaxClimb";
-            this.lblMaxClimb.Size = new System.Drawing.Size(58, 13);
-            this.lblMaxClimb.TabIndex = 17;
-            this.lblMaxClimb.Text = "Max Climb:";
+            this.lblPostMVLevel.AutoSize = true;
+            this.lblPostMVLevel.Location = new System.Drawing.Point(5, 99);
+            this.lblPostMVLevel.Name = "lblPostMVLevel";
+            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
+            this.lblPostMVLevel.TabIndex = 63;
+            this.lblPostMVLevel.Text = "Post MV Level:";
             // 
             // UnitNormalEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(734, 491);
+            this.ClientSize = new System.Drawing.Size(734, 485);
             this.Controls.Add(this.gbAttacks);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.cboUnderwater);
@@ -909,6 +988,13 @@
             this.menuStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtChargeCancelLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxClimb)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMovement)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMobility)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseArmor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseEN)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtBaseHP)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPartsSlots)).EndInit();
             this.tabList.ResumeLayout(false);
             this.tabAnimations.ResumeLayout(false);
@@ -925,12 +1011,8 @@
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.gbAttacks.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseHP)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseEN)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseArmor)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMobility)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtBaseMovement)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMaxClimb)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1008,5 +1090,11 @@
         private System.Windows.Forms.NumericUpDown txtBaseMovement;
         private System.Windows.Forms.NumericUpDown txtMaxClimb;
         private System.Windows.Forms.Label lblMaxClimb;
+        private System.Windows.Forms.Label lblChargeCancelLevel;
+        public System.Windows.Forms.NumericUpDown txtChargeCancelLevel;
+        private System.Windows.Forms.NumericUpDown txtReMoveLevel;
+        private System.Windows.Forms.Label lblReMoveLevel;
+        private System.Windows.Forms.NumericUpDown txtPostMVLevel;
+        private System.Windows.Forms.Label lblPostMVLevel;
     }
 }

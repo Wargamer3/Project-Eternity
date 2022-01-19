@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
-        public void DrawTopAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, int CursorIndex, bool DrawAll = true)
+        public void DrawTopAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, Attack CurrentAttack, bool DrawAll = true)
         {
             Color ColorBrush;
             string Hit;
@@ -105,7 +105,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawString(ActiveFont, "Crit", new Vector2(XStart + 565, YStart - 25), Color.Yellow);
             }
 
-            for (int i = Math.Max(0, CursorIndex - 8), CurPos = 0; i < ListAttack.Count && CurPos <= 8; i++, CurPos++)
+            for (int i = 0, CurPos = 0; i < ListAttack.Count && CurPos <= 8; i++, CurPos++)
             {
                 if (ListAttack[i].CanAttack)
                     ColorBrush = Color.White;
@@ -129,32 +129,46 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     g.Draw(sprRanged, new Vector2(XStart + 7, YStart + CurPos * YStep + 5), Color.White);
 
                 int CurrentX = XStart + 35;
-                g.DrawString(ActiveFont, ListAttack[i].ItemName, new Vector2(XStart + 35, YStart + CurPos * YStep), ColorBrush);
-                CurrentX += 5 + (int)ActiveFont.MeasureString(ListAttack[i].ItemName).X;
+                if (ListAttack[i].IsChargeable)
+                {
+                    g.DrawString(ActiveFont, "Charge " + ListAttack[i].ItemName, new Vector2(XStart + 35, YStart + CurPos * YStep), ColorBrush);
+                }
+                else
+                {
+                    g.DrawString(ActiveFont, ListAttack[i].ItemName, new Vector2(XStart + 35, YStart + CurPos * YStep), ColorBrush);
 
-                if ((ListAttack[i].Sec & WeaponSecondaryProperty.PostMovement) == WeaponSecondaryProperty.PostMovement)
-                {
-                    g.Draw(sprAttackPropertiesP, new Vector2(CurrentX, YStart + 11 + CurPos * YStep), Color.White);
-                    CurrentX += 12;
+                    CurrentX += 5 + (int)ActiveFont.MeasureString(ListAttack[i].ItemName).X;
+
+                    if (ListAttack[i].IsPostMovement(ActiveUnit))
+                    {
+                        g.Draw(sprAttackPropertiesP, new Vector2(CurrentX, YStart + 11 + CurPos * YStep), Color.White);
+                        CurrentX += 12;
+                    }
+
+                    if (ListAttack[i].Pri == WeaponPrimaryProperty.MAP)
+                    {
+                        g.Draw(sprAttackTypeMAP, new Vector2(CurrentX, YStart + 11 + CurPos * YStep), Color.White);
+                        CurrentX += 42;
+                    }
+                    if (ListAttack[i].Pri == WeaponPrimaryProperty.PLA)
+                    {
+                        g.Draw(sprAttackTypePLA, new Vector2(CurrentX, YStart + 11 + CurPos * YStep), Color.White);
+                        CurrentX += 42;
+                    }
+                    if (ListAttack[i].Pri == WeaponPrimaryProperty.ALL)
+                    {
+                        g.Draw(sprAttackTypeALL, new Vector2(CurrentX, YStart + 11 + CurPos * YStep), Color.White);
+                        CurrentX += 42;
+                    }
                 }
 
-                if (ListAttack[i].Pri == WeaponPrimaryProperty.MAP)
+                if (ListAttack[i] == CurrentAttack)
                 {
-                    g.Draw(sprAttackTypeMAP, new Vector2(CurrentX, YStart + 11 + CurPos * YStep), Color.White);
-                    CurrentX += 42;
-                }
-                if (ListAttack[i].Pri == WeaponPrimaryProperty.PLA)
-                {
-                    g.Draw(sprAttackTypePLA, new Vector2(CurrentX, YStart + 11 + CurPos * YStep), Color.White);
-                    CurrentX += 42;
-                }
-                if (ListAttack[i].Pri == WeaponPrimaryProperty.ALL)
-                {
-                    g.Draw(sprAttackTypeALL, new Vector2(CurrentX, YStart + 11 + CurPos * YStep), Color.White);
-                    CurrentX += 42;
+                    //Draw the cursor.
+                    g.Draw(sprPixel, new Rectangle(XStart + 6, 120 + i * YStep, 618, YStep), Color.FromNonPremultiplied(255, 255, 255, 127));
                 }
 
-                if (DrawAll)
+                if (DrawAll && !ListAttack[i].IsChargeable)
                 {
                     g.DrawString(ActiveFont, ListAttack[i].GetPower(ActiveUnit, ActiveParser).ToString(),
                         new Vector2(XStart + 315, YStart + CurPos * YStep), ColorBrush);
@@ -171,51 +185,48 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void DrawAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, int CursorIndex)
+        public void DrawAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, Attack CurrentAttack)
         {
             int XStart = (Constants.Width - 630) / 2;
-            int YStep = 25;
             int YStart = 115;
 
-            DrawTopAttackPanel(g, ActiveFont, ActiveUnit, ListAttack, CursorIndex);
+            DrawTopAttackPanel(g, ActiveFont, ActiveUnit, ListAttack, CurrentAttack);
             //Draw the information of the selected weapon.
             DrawBox(g, new Vector2(XStart, YStart + 170), 630, 50, Color.White);
             g.DrawString(ActiveFont, "Ammo", new Vector2(XStart + 13, YStart + 178), Color.Yellow);
-            g.DrawStringRightAligned(ActiveFont, ListAttack[CursorIndex].Ammo + "/" + (ListAttack[CursorIndex].MaxAmmo + ActiveUnit.Boosts.AmmoMaxModifier),
+            g.DrawStringRightAligned(ActiveFont, CurrentAttack.Ammo + "/" + (CurrentAttack.MaxAmmo + ActiveUnit.Boosts.AmmoMaxModifier),
                 new Vector2(XStart + 150, YStart + 178), Color.White);
 
             g.DrawString(ActiveFont, "Will", new Vector2(XStart + 156, YStart + 178), Color.Yellow);
-            g.DrawStringRightAligned(ActiveFont, ListAttack[CursorIndex].MoraleRequirement + "(" + ActiveUnit.PilotMorale + ")",
+            g.DrawStringRightAligned(ActiveFont, CurrentAttack.MoraleRequirement + "(" + ActiveUnit.PilotMorale + ")",
                 new Vector2(XStart + 305, YStart + 178), Color.White);
 
             g.DrawString(ActiveFont, "Energy", new Vector2(XStart + 305, YStart + 178), Color.Yellow);
-            g.DrawStringRightAligned(ActiveFont, ListAttack[CursorIndex].ENCost.ToString(),
+            g.DrawStringRightAligned(ActiveFont, CurrentAttack.ENCost.ToString(),
                 new Vector2(XStart + 430, YStart + 178), Color.White);
             g.Draw(sprSky, new Vector2(XStart + 442, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, ListAttack[CursorIndex].DicTerrainAttribute[UnitStats.TerrainAir].ToString(),
+            g.DrawString(ActiveFont, CurrentAttack.DicTerrainAttribute[UnitStats.TerrainAir].ToString(),
                 new Vector2(XStart + 467, YStart + 178), Color.White);
             g.Draw(sprLand, new Vector2(XStart + 488, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, ListAttack[CursorIndex].DicTerrainAttribute[UnitStats.TerrainLand].ToString(),
+            g.DrawString(ActiveFont, CurrentAttack.DicTerrainAttribute[UnitStats.TerrainLand].ToString(),
                 new Vector2(XStart + 513, YStart + 178), Color.White);
             g.Draw(sprSea, new Vector2(XStart + 534, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, ListAttack[CursorIndex].DicTerrainAttribute[UnitStats.TerrainSea].ToString(),
+            g.DrawString(ActiveFont, CurrentAttack.DicTerrainAttribute[UnitStats.TerrainSea].ToString(),
                 new Vector2(XStart + 559, YStart + 178), Color.White);
             g.Draw(sprSpace, new Vector2(XStart + 580, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, ListAttack[CursorIndex].DicTerrainAttribute[UnitStats.TerrainSpace].ToString(),
+            g.DrawString(ActiveFont, CurrentAttack.DicTerrainAttribute[UnitStats.TerrainSpace].ToString(),
                 new Vector2(XStart + 605, YStart + 178), Color.White);
 
             DrawBox(g, new Vector2(XStart, YStart + 220), 630, 140, Color.White);
-            //Draw the cursor.
-            g.Draw(sprPixel, new Rectangle(XStart + 6, 120 + CursorIndex * YStep, 618, YStep), Color.FromNonPremultiplied(255, 255, 255, 127));
 
             Vector2 BoxPosition = new Vector2(XStart + 10, YStart + 223);
             for (int A = 0; A < 4; A++)
             {
                 string TextToDraw = "------";
-                if (A < ListAttack[CursorIndex].ArrayAttackAttributes.Length)
+                if (A < CurrentAttack.ArrayAttackAttributes.Length)
                 {
-                    TextToDraw = ListAttack[CursorIndex].ArrayAttackAttributes[A].Name;
-                    TextHelper.DrawText(g, ListAttack[CursorIndex].ArrayAttackAttributes[A].Description,
+                    TextToDraw = CurrentAttack.ArrayAttackAttributes[A].Name;
+                    TextHelper.DrawText(g, CurrentAttack.ArrayAttackAttributes[A].Description,
                         new Vector2(BoxPosition.X + 20, BoxPosition.Y + 22 + A * 31), Color.White);
                 }
                 g.DrawString(ActiveFont, TextToDraw,

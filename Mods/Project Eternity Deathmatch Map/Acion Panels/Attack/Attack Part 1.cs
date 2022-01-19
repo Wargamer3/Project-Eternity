@@ -13,6 +13,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         private const string PanelName = "Attack";
 
+        private int AttackIndex;
+
         private bool CanMove;
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
@@ -43,7 +45,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Update weapons so you know which one is in attack range.
             Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, CanMove);
 
-            ActiveSquad.CurrentLeader.AttackIndex = 0;//Make sure you select the first weapon.
+            ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[0];//Make sure you select the first weapon.
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -54,17 +56,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Move the cursor.
             if (ActiveInputManager.InputUpPressed())
             {
-                --ActiveSquad.CurrentLeader.AttackIndex;
-                if (ActiveSquad.CurrentLeader.AttackIndex < 0)
-                    ActiveSquad.CurrentLeader.AttackIndex = ListAttack.Count - 1;
+                --AttackIndex;
+                if (AttackIndex < 0)
+                    AttackIndex = ListAttack.Count - 1;
+
+                ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[AttackIndex];
 
                 Map.sndSelection.Play();
             }
             else if (ActiveInputManager.InputDownPressed())
             {
-                ++ActiveSquad.CurrentLeader.AttackIndex;
-                if (ActiveSquad.CurrentLeader.AttackIndex >= ListAttack.Count)
-                    ActiveSquad.CurrentLeader.AttackIndex = 0;
+                ++AttackIndex;
+                if (AttackIndex >= ListAttack.Count)
+                    AttackIndex = 0;
+
+                ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[AttackIndex];
 
                 Map.sndSelection.Play();
             }
@@ -74,13 +80,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveInputManager.IsInZone(0, YStart + A * YStep, Constants.Width, YStart + (A + 1) * YStep))
                     {
-                        ActiveSquad.CurrentLeader.AttackIndex = A;
+                        AttackIndex = A;
+                        ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[A];
                         break;
                     }
                 }
             }
             //Exit the weapon panel.
-            if (ActiveInputManager.InputConfirmPressed(0, YStart + ActiveSquad.CurrentLeader.AttackIndex * YStep, Constants.Width, YStart + (ActiveSquad.CurrentLeader.AttackIndex + 1) * YStep))
+            if (ActiveInputManager.InputConfirmPressed(0, YStart + AttackIndex * YStep, Constants.Width, YStart + (AttackIndex + 1) * YStep))
             {
                 if (ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)
                 {
@@ -91,6 +98,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     else if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.MAP)
                     {
                         AddToPanelListAndSelect(new ActionPanelAttackMAP(Map, ActivePlayerIndex, ActiveSquadIndex));
+                    }
+                    else if (ActiveSquad.CurrentLeader.CurrentAttack.IsChargeable)
+                    {
+                        AddToPanelListAndSelect(new ActionPanelChargeAttack(Map, ActivePlayerIndex, ActiveSquadIndex));
                     }
                     else
                     {
@@ -110,14 +121,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquadIndex = BR.ReadInt32();
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             ListAttack = ActiveSquad.CurrentLeader.ListAttack;
-            ActiveSquad.CurrentLeader.AttackIndex = BR.ReadInt32();
+            AttackIndex = BR.ReadInt32();
         }
 
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
-            BW.AppendInt32(ActiveSquad.CurrentLeader.AttackIndex);
+            BW.AppendInt32(AttackIndex);
         }
 
         protected override ActionPanel Copy()
@@ -128,7 +139,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             //Draw the weapon selection menu.
-            Map.DrawAttackPanel(g, Map.fntFinlanderFont, ActiveSquad.CurrentLeader, ListAttack, ActiveSquad.CurrentLeader.AttackIndex);
+            Map.DrawAttackPanel(g, Map.fntFinlanderFont, ActiveSquad.CurrentLeader, ListAttack, ListAttack[AttackIndex]);
         }
     }
 }
