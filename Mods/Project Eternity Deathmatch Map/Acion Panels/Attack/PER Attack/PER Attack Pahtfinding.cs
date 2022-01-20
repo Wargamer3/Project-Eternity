@@ -29,7 +29,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             MovementAlgorithmTile ActiveTerrain = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z);
             ListAllAttackTerrain.Add(Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z));
-            ActiveTerrain.LayerIndex = (int)ActiveTerrain.Position.Z;
 
             //Start Right, go downward
             Vector2 TestedFinalPos = new Vector2(Map.MapSize.X, ActiveSquad.Position.Y);
@@ -124,7 +123,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (!ListAllAttackTerrain.Contains(NextTerrain))
                 {
-                    NextTerrain.LayerIndex = NextZ;
                     ListAllAttackTerrain.Add(NextTerrain);
 
                     if (IsTerrainBlocking(NextTerrain))

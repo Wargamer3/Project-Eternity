@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public DrawableTile[,] ArrayTiles;
             public List<string> ListBattleBackgroundAnimationPath;
 
-            public TilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int Index)
+            public TilesetPreset(string TilesetName, int TilesetWidth, int TilesetHeight, int TileSizeX, int TileSizeY, int TilesetIndex)
             {
                 this.TilesetName = TilesetName;
 
@@ -31,8 +31,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
                     {
-                        Terrain NewTerrain = new Terrain(X, Y);
-                        DrawableTile NewTile = new DrawableTile(new Rectangle(X * TileSizeX, Y * TileSizeY, TileSizeX, TileSizeY), Index);
+                        Terrain NewTerrain = new Terrain(X, Y, 0);
+                        DrawableTile NewTile = new DrawableTile(new Rectangle(X * TileSizeX, Y * TileSizeY, TileSizeX, TileSizeY), TilesetIndex);
                         
                         NewTerrain.TerrainTypeIndex = 0;
                         NewTerrain.MVEnterCost = 1;
@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
                     {
-                        Terrain NewTerrain = new Terrain(BR, X, Y);
+                        Terrain NewTerrain = new Terrain(BR, X, Y, 0);
                         DrawableTile NewTile = new DrawableTile(new Rectangle(X * TileSizeX, Y * TileSizeY, TileSizeX, TileSizeY), Index);
                         ArrayTerrain[X, Y] = NewTerrain;
                         ArrayTiles[X, Y] = NewTile;
@@ -131,6 +131,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.TerrainTypeIndex = Other.TerrainTypeIndex;
             this.MVEnterCost = Other.MVEnterCost;
             this.MVMoveCost = Other.MVMoveCost;
+            this.LayerIndex = Other.LayerIndex;
             this.ListActivation = (TerrainActivation[])Other.ListActivation.Clone();
             this.ListBonus = (TerrainBonus[])Other.ListBonus.Clone();
             this.ListBonusValue = (int[])Other.ListBonusValue.Clone();
@@ -141,9 +142,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public Terrain(float XPos, float YPos)
+        public Terrain(float XPos, float YPos, int LayerIndex)
         {
             this.Position = new Vector3(XPos, YPos, 0);
+            this.LayerIndex = LayerIndex;
             this.TerrainTypeIndex = 0;
             this.MVEnterCost = 0;
             this.MVMoveCost = 1;
@@ -165,9 +167,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="ListActivation">Activation type of the bonuses.</param>
         /// <param name="ListBonus">Bonuses the terrain can give.</param>
         /// <param name="ListBonusValue">//Value of the bonuses.</param>
-        public Terrain(int XPos, int YPos, int TerrainTypeIndex, int MVEnterCost, int MVMoveCost,
+        public Terrain(int XPos, int YPos, int LayerIndex, int TerrainTypeIndex, int MVEnterCost, int MVMoveCost,
             TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue)
-            : this(XPos, YPos)
+            : this(XPos, YPos, LayerIndex)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
             this.MVEnterCost = MVEnterCost;
@@ -177,8 +179,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListBonusValue = ListBonusValue;
         }
 
-        public Terrain(BinaryReader BR, float XPos, float YPos)
-            : this(XPos, YPos)
+        public Terrain(BinaryReader BR, float XPos, float YPos, int LayerIndex)
+            : this(XPos, YPos, LayerIndex)
         {
             Position.Z = BR.ReadSingle();
             TerrainTypeIndex = BR.ReadInt32();

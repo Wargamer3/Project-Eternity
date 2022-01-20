@@ -483,7 +483,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             {
                                 for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                 {
-                                    Helper.ReplaceTerrain(X, Y, new Terrain(X, Y,
+                                    Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, 0,
                                        0, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
                                        0);
 

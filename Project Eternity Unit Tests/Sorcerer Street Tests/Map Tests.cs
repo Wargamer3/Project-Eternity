@@ -211,7 +211,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             SorcererStreetMap DummyMap = new SorcererStreetMap();
             DummyMap.GameTurn = 1;
-            DummyMap.ListLayer.Add(new MapLayer(DummyMap));
+            DummyMap.ListLayer.Add(new MapLayer(DummyMap, 0));
             DummyMap.ListGameScreen = new List<GameScreens.GameScreen>();
             DummyMap.ListLayer[0].ArrayTerrain = new TerrainSorcererStreet[20, 20];
             for (int X = 0; X < 20; ++X)

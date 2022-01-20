@@ -70,7 +70,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                                 }
                                 else
                                 {
-                                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y);
+                                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, L);
                                     ArrayTile2D[X, Y] = ((Map2D)ActiveMap.ListLayer[L].LayerGrid).GetTile(X, Y);
                                 }
                             }
@@ -112,7 +112,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
             public BaseMapLayer CreateNewLayer()
             {
-                MapLayer NewLayer = new MapLayer(ActiveMap);
+                MapLayer NewLayer = new MapLayer(ActiveMap, ActiveMap.ListLayer.Count);
                 ActiveMap.ListLayer.Add(NewLayer);
                 return NewLayer;
             }
@@ -187,7 +187,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 fs.Close();
                 SorcererStreetMap NewMap = new SorcererStreetMap(FilePath, string.Empty);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
-                NewMap.ListLayer.Add(new MapLayer(NewMap));
+                NewMap.ListLayer.Add(new MapLayer(NewMap, 0));
 
                 SaveItem(FilePath, FilePath);
             }

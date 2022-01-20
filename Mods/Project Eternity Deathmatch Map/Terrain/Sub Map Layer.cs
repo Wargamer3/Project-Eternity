@@ -6,13 +6,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class SubMapLayer : MapLayer, ISubMapLayer
     {
-        public SubMapLayer(DeathmatchMap Map)
-            : base(Map)
+        public SubMapLayer(DeathmatchMap Map, int LayerIndex)
+            : base(Map, LayerIndex)
         {
         }
 
-        public SubMapLayer(DeathmatchMap Map, BinaryReader BR)
-            : base(Map, BR)
+        public SubMapLayer(DeathmatchMap Map, BinaryReader BR, int LayerIndex)
+            : base(Map, BR, LayerIndex)
         {
         }
 

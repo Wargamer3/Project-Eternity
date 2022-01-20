@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private SorcererStreetMap Map;
         public Map2D OriginalLayerGrid;
 
-        public MapLayer(SorcererStreetMap Map)
+        public MapLayer(SorcererStreetMap Map, int LayerIndex)
         {
             this.Map = Map;
 
@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y);
+                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex);
                 }
             }
 
@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LayerGrid = new Map3D(Map, this, OriginalLayerGrid, GameScreen.GraphicsDevice);
         }
 
-        public MapLayer(SorcererStreetMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BinaryReader BR)
+        public MapLayer(SorcererStreetMap Map, List<AnimationBackground> ListBackgrounds, List<AnimationBackground> ListForegrounds, BinaryReader BR, int LayerIndex)
         {
             this.Map = Map;
 
@@ -96,7 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             break;
 
                         default:
-                            ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex, TerrainTypeIndex);
                             break;
                     }
                 }

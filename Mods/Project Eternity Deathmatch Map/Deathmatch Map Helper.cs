@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
                             else
                             {
-                                ArrayTerrain[X, Y] = new Terrain(X, Y);
+                                ArrayTerrain[X, Y] = new Terrain(X, Y, L);
                                 ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].LayerGrid.GetTile(X, Y);
                             }
                         }
@@ -81,6 +81,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex)
         {
             Terrain NewTerrain = new Terrain(TerrainPreset);
+            NewTerrain.LayerIndex = LayerIndex;
             NewTerrain.Position = new Vector3(X, Y, TerrainPreset.Position.Z);
 
             GetRealLayer(LayerIndex).ArrayTerrain[X, Y] = NewTerrain;
@@ -132,15 +133,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public BaseMapLayer CreateNewLayer()
         {
-            MapLayer NewLayer = new MapLayer(ActiveMap);
+            MapLayer NewLayer = new MapLayer(ActiveMap, ActiveMap.LayerManager.ListLayer.Count);
             ActiveMap.LayerManager.ListLayer.Add(NewLayer);
             return NewLayer;
         }
 
         public ISubMapLayer CreateNewSubLayer(BaseMapLayer ParentLayer)
         {
-            SubMapLayer NewLayer = new SubMapLayer(ActiveMap);
-            ((MapLayer)ParentLayer).ListSubLayer.Add(NewLayer);
+            MapLayer RealParent = (MapLayer)ParentLayer;
+            SubMapLayer NewLayer = new SubMapLayer(ActiveMap, ActiveMap.LayerManager.ListLayer.IndexOf(RealParent));
+            RealParent.ListSubLayer.Add(NewLayer);
             return NewLayer;
         }
 

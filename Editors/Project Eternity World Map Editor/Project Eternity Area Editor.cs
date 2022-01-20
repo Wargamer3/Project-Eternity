@@ -70,7 +70,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                                 }
                                 else
                                 {
-                                    ArrayTerrain[X, Y] = new Terrain(X, Y);
+                                    ArrayTerrain[X, Y] = new Terrain(X, Y, L);
                                     ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].OriginalLayerGrid.GetTile(X, Y);
                                 }
                             }
@@ -112,7 +112,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
 
             public BaseMapLayer CreateNewLayer()
             {
-                MapLayer NewLayer = new MapLayer(ActiveMap);
+                MapLayer NewLayer = new MapLayer(ActiveMap, ActiveMap.ListLayer.Count);
                 ActiveMap.ListLayer.Add(NewLayer);
                 return NewLayer;
             }
@@ -208,7 +208,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 fs.Close();
                 WorldMap NewMap = new WorldMap(MapLogicName, string.Empty, null);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
-                NewMap.ListLayer.Add(new MapLayer(NewMap));
+                NewMap.ListLayer.Add(new MapLayer(NewMap, 0));
 
                 SaveItem(FilePath, FilePath);
             }

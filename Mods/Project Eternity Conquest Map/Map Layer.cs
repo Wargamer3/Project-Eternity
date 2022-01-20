@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         private int ToggleTimer;
         private ConquestMap Map;
 
-        public MapLayer(ConquestMap Map)
+        public MapLayer(ConquestMap Map, int LayerIndex)
         {
             this.Map = Map;
 
@@ -40,14 +40,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y);
+                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, LayerIndex);
                 }
             }
 
             LayerGrid = new ConquestMap2D(Map);
         }
 
-        public MapLayer(ConquestMap Map, BinaryReader BR)
+        public MapLayer(ConquestMap Map, BinaryReader BR, int LayerIndex)
         {
             this.Map = Map;
 
@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainConquest(BR, X, Y);
+                    ArrayTerrain[X, Y] = new TerrainConquest(BR, X, Y, LayerIndex);
                 }
             }
 

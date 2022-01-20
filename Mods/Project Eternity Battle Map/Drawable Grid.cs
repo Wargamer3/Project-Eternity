@@ -28,10 +28,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public DrawableTile(Rectangle Origin, int Tileset)
+        public DrawableTile(Rectangle Origin, int TilesetIndex)
         {
             this.Origin = Origin;
-            this.TilesetIndex = Tileset;
+            this.TilesetIndex = TilesetIndex;
             Terrain3DInfo = new Terrain3D();
         }
 

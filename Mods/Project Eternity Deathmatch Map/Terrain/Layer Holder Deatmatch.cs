@@ -28,9 +28,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int LayerCount = BR.ReadInt32();
             ListLayer = new List<MapLayer>(LayerCount);
 
-            for (int i = 0; i < LayerCount; ++i)
+            for (int L = 0; L < LayerCount; ++L)
             {
-                ListLayer.Add(new MapLayer(Map, BR));
+                ListLayer.Add(new MapLayer(Map, BR, L));
             }
 
             LayerHolderDrawable = new DeathmatchMap2DHolder(Map);

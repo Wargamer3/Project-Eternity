@@ -284,7 +284,7 @@ namespace ProjectEternity.Core.Attacks
 
         public void DisableAttack()
         {
-            _CanAttack = true;
+            _CanAttack = false;
         }
 
         private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)

@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ToggleTimer;
         private DeathmatchMap Map;
 
-        public MapLayer(DeathmatchMap Map)
+        public MapLayer(DeathmatchMap Map, int LayerIndex)
         {
             this.Map = Map;
 
@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(X, Y);
+                    ArrayTerrain[X, Y] = new Terrain(X, Y, LayerIndex);
                 }
             }
 
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             _Depth = LayerGrid.Depth;
         }
 
-        public MapLayer(DeathmatchMap Map, BinaryReader BR)
+        public MapLayer(DeathmatchMap Map, BinaryReader BR, int LayerIndex)
         {
             this.Map = Map;
 
@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(BR, X, Y);
+                    ArrayTerrain[X, Y] = new Terrain(BR, X, Y, LayerIndex);
                 }
             }
 
@@ -150,7 +150,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
             for (int L = 0; L < ListSubLayerCount; L++)
             {
-                ListSubLayer.Add(new SubMapLayer(Map, BR));
+                ListSubLayer.Add(new SubMapLayer(Map, BR, LayerIndex));
             }
 
             LayerGrid.Depth = Depth;

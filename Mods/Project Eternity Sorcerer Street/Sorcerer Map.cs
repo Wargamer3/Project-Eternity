@@ -150,15 +150,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int LayerCount = BR.ReadInt32();
 
-            for (int i = 0; i < LayerCount; ++i)
+            for (int L = 0; L < LayerCount; ++L)
             {
-                if (i == 0)
+                if (L == 0)
                 {
-                    ListLayer.Add(new MapLayer(this, ListBackground, ListForeground, BR));
+                    ListLayer.Add(new MapLayer(this, ListBackground, ListForeground, BR, L));
                 }
                 else
                 {
-                    ListLayer.Add(new MapLayer(this, null, null, BR));
+                    ListLayer.Add(new MapLayer(this, null, null, BR, L));
                 }
             }
         }

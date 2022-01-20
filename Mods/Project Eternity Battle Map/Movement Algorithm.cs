@@ -54,7 +54,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (MovementAlgorithmTile AStartNode in ListAStartNode)
             {
-                AStartNode.LayerIndex = (int)MapComponent.Position.Z;
                 ListOpenNode.Add(AStartNode);
                 ListAllNode.Add(AStartNode);
             }

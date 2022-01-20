@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         private int ToggleTimer;
         private WorldMap Map;
 
-        public MapLayer(WorldMap Map)
+        public MapLayer(WorldMap Map, int LayerIndex)
         {
             this.Map = Map;
 
@@ -41,14 +41,14 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(X, Y);
+                    ArrayTerrain[X, Y] = new Terrain(X, Y, LayerIndex);
                 }
             }
 
             LayerGrid = new WorldMap2D(Map);
         }
 
-        public MapLayer(WorldMap Map, BinaryReader BR)
+        public MapLayer(WorldMap Map, BinaryReader BR, int LayerIndex)
         {
             this.Map = Map;
 
@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(BR, X, Y);
+                    ArrayTerrain[X, Y] = new Terrain(BR, X, Y, LayerIndex);
                 }
             }
             

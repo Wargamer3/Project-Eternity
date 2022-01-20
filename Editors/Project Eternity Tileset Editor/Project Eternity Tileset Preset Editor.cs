@@ -481,7 +481,7 @@ namespace ProjectEternity.Editors.MapEditor
                             {
                                 for (int Y = TilesetHeight - 1; Y >= 0; --Y)
                                 {
-                                    ArrayTerrain[X, Y] = new Terrain(X, Y);
+                                    ArrayTerrain[X, Y] = new Terrain(X, Y, 0);
                                     ArrayTerrain[X, Y].TerrainTypeIndex = 1;
                                 }
                             }

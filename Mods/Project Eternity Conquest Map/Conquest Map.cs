@@ -170,9 +170,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             int LayerCount = BR.ReadInt32();
 
-            for (int i = 0; i < LayerCount; ++i)
+            for (int L = 0; L < LayerCount; ++L)
             {
-                ListLayer.Add(new MapLayer(this, BR));
+                ListLayer.Add(new MapLayer(this, BR, L));
             }
         }
 

@@ -106,7 +106,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     float TileY = BR.ReadSingle();
                     int Tileset = BR.ReadInt32();
                     Rectangle Origin = new Rectangle(BR.ReadInt32(), BR.ReadInt32(), TerrainAttribute.TileSize.X, TerrainAttribute.TileSize.Y);
-                    TerrainAttribute.ListTerrainChangeLocation.Add(new Terrain(BR, TileX, TileY));
+                    TerrainAttribute.ListTerrainChangeLocation.Add(new Terrain(BR, TileX, TileY, 0));
                     TerrainAttribute.ListTileChangeLocation.Add(new DrawableTile(Origin, Tileset));
                 }
 
