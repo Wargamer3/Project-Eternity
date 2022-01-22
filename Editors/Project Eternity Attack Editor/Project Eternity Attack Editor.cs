@@ -114,7 +114,7 @@ namespace ProjectEternity.Editors.AttackEditor
             if (cbPartialAttack.Checked)
                 SecondaryProperty = SecondaryProperty | WeaponSecondaryProperty.Partial;
 
-            int AttackType = 0;
+            byte AttackType = 0;
             if (rbAttackTypeMelee.Checked)
                 AttackType = 1;
             else if (rbAttackTypeSolidBlade.Checked)

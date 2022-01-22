@@ -653,7 +653,10 @@ namespace ProjectEternity.Core.Units
 
             foreach (Attack ActiveAttack in _UnitStat.ListAttack)
             {
-                _ListAttack.Add(ActiveAttack);
+                if (ActiveAttack.ListChargedAttack.Count == 0 || ActiveAttack.PowerFormula != "0")
+                {
+                    _ListAttack.Add(ActiveAttack);
+                }
 
                 foreach (Attack ActiveSecondaryAttack in ActiveAttack.ListSecondaryAttack)
                 {
@@ -668,7 +671,10 @@ namespace ProjectEternity.Core.Units
 
             foreach (Attack ActiveAttack in ListAttackTemporary)
             {
-                _ListAttack.Add(ActiveAttack);
+                if (ActiveAttack.ListChargedAttack.Count == 0 || ActiveAttack.PowerFormula != "0")
+                {
+                    _ListAttack.Add(ActiveAttack);
+                }
 
                 foreach (Attack ActiveSecondaryAttack in ActiveAttack.ListSecondaryAttack)
                 {

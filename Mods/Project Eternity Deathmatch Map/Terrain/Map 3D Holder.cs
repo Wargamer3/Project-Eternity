@@ -513,7 +513,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.SetPosition(
                         Map.ListPlayer[P].ListSquad[U].Position.X + 0.5f,
-                        (Map.ListPlayer[P].ListSquad[U].Position.Z + TerrainZ * 32),
+                        (Map.ListPlayer[P].ListSquad[U].Position.Z * 32 + TerrainZ * 32),
                         Map.ListPlayer[P].ListSquad[U].Position.Y + 0.5f);
 
                     Map.ListPlayer[P].ListSquad[U].Unit3D.Draw(GameScreen.GraphicsDevice);

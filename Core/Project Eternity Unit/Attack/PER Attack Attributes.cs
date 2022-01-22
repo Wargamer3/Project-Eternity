@@ -43,7 +43,14 @@ namespace ProjectEternity.Core.Attacks
             MaxUpwardSpread = BR.ReadSingle();
 
             GroundCollision = (GroundCollisions)BR.ReadByte();
-            BounceLimit = BR.ReadByte();
+            if (GroundCollision == GroundCollisions.Bounce)
+            {
+                BounceLimit = BR.ReadByte();
+            }
+            else
+            {
+                BounceLimit = 0;
+            }
         }
     }
 }

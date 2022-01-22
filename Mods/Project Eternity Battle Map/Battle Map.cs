@@ -131,6 +131,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Point MapSize;
         public int ShowLayerIndex;
         public BattleMapOverlay MapOverlay;
+        public bool ShowGrid;
         public bool ShowUnits;
         public bool ShowTerrainType;
         public bool ShowTerrainHeight;

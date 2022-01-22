@@ -41,14 +41,13 @@ namespace ProjectEternity.Editors.MapEditor
             #region cbShowGrid
 
             //Init the ShowGrid button (as it can't be done with the tool box)
-            BattleMapViewer.ShowGrid = false;
             cbShowGrid = new CheckBox
             {
                 Text = "Show grid"
             };
             //Link a CheckedChanged event to a method.
             cbShowGrid.CheckedChanged += new EventHandler(cbShowGrid_CheckedChanged);
-            cbShowGrid.Checked = true;
+            cbShowGrid.Checked = false;
             //Make it 10 pixel after the last mnuToolBar item.
             cbShowGrid.Padding = new Padding(10, 0, 0, 0);
             mnuToolBar.Items.Add(new ToolStripControlHost(cbShowGrid));
@@ -57,7 +56,6 @@ namespace ProjectEternity.Editors.MapEditor
 
             #region cbPreviewMap
 
-            //Init the Preview Map button (as it can't be done with the tool box)
             cbPreviewMap = new CheckBox
             {
                 Text = "Preview Map"
@@ -73,7 +71,6 @@ namespace ProjectEternity.Editors.MapEditor
 
             #region cbShowAllLayers
 
-            //Init the Preview Map button (as it can't be done with the tool box)
             cbShowAllLayers = new CheckBox
             {
                 Text = "Show All Layers"
@@ -1017,7 +1014,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void cbShowGrid_CheckedChanged(object sender, EventArgs e)
         {
-            BattleMapViewer.ShowGrid = cbShowGrid.Checked;
+            BattleMapViewer.ActiveMap.ShowGrid = cbShowGrid.Checked;
         }
 
         private void cbShowTerrainType_CheckedChanged(object sender, EventArgs e)

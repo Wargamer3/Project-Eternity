@@ -176,7 +176,7 @@ namespace ProjectEternity.Core.Attacks
             PostMovementAccuracyMalus = BR.ReadByte();
             PostMovementEvasionBonus = BR.ReadByte();
 
-            int AttackType = BR.ReadByte();
+            byte AttackType = BR.ReadByte();
 
             if (AttackType == 0)
             {

@@ -134,6 +134,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             GlobalDeathmatchContext.Map = this;
 
             GameRule = new SinglePlayerGameRule(this);
+            LayerManager = new LayerHolderDeathmatch(this);
             ListActionMenuChoice = new ActionPanelHolderDeathmatch(this);
             ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
@@ -957,7 +958,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             float CurrentZ = CurrentTerrain.Position.Z + CurrentPosition.Z;
 
             int ClosestLayerIndexDown = -1;
-            int ClosestLayerIndexUp = 0;
+            int ClosestLayerIndexUp = (int)CurrentPosition.Z;
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
 
@@ -1002,7 +1003,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (NextTerrainZ == CurrentPosition.Z && NextTerrainType == CurrentTerrainType)
                     {
-                        return L;
+                        return (int)CurrentPosition.Z;
                     }
                     //Prioritize going upward
                     else if (NextTerrainZ > CurrentPosition.Z)

@@ -22,8 +22,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Texture2D sprPixel;
         public int ViewerIndex;
 
-        public bool ShowGrid;
-
         private HScrollBar sclMapWidth;
         private VScrollBar sclMapHeight;
         public ContextMenuStrip cmsScriptMenu;

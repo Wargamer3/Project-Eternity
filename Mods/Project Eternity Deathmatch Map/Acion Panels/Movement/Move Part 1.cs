@@ -74,6 +74,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             Map.CursorControl(ActiveInputManager);//Move the cursor
 
+            foreach (TeleportPoint ActiveTeleport in Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ListTeleportPoint)
+            {
+                if (ActiveTeleport.Position.X == Map.CursorPosition.X && ActiveTeleport.Position.Y == Map.CursorPosition.Y)
+                {
+                    Map.CursorPosition.X = ActiveTeleport.OtherMapEntryPoint.X;
+                    Map.CursorPosition.Y = ActiveTeleport.OtherMapEntryPoint.Y;
+                    Map.CursorPosition.Z = ActiveTeleport.OtherMapEntryLayer;
+                    break;
+                }
+            }
+
             if (ActiveInputManager.InputConfirmPressed())
             {
                 if (CheckIfUnitCanMove())

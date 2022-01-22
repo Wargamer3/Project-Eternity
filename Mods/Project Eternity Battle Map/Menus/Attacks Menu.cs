@@ -92,7 +92,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int YStart = 115;
 
             g.Draw(ActiveUnit.SpriteMap, new Vector2(XStart + 15, 50), Color.White);
-            g.DrawString(ActiveFont, ActiveUnit.RelativePath, new Vector2(XStart + 55, 50), Color.White);
+            g.DrawString(ActiveFont, ActiveUnit.UnitStat.Name, new Vector2(XStart + 55, 50), Color.White);
             g.Draw(sprPixel, new Rectangle(XStart + 55, 75, (int)ActiveFont.MeasureString(ActiveUnit.RelativePath).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
 
             DrawBox(g, new Vector2(XStart, YStart - 30), 630, 200, Color.White);
@@ -105,6 +105,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawString(ActiveFont, "Crit", new Vector2(XStart + 565, YStart - 25), Color.Yellow);
             }
 
+            float YPos = 115;
             for (int i = 0, CurPos = 0; i < ListAttack.Count && CurPos <= 8; i++, CurPos++)
             {
                 if (ListAttack[i].CanAttack)
@@ -124,18 +125,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 //Draw the weapon list.
                 if (ListAttack[i].AttackType == "Melee")
-                    g.Draw(sprMelee, new Vector2(XStart + 7, YStart + CurPos * YStep + 5), Color.White);
+                    g.Draw(sprMelee, new Vector2(XStart + 7, YPos + 5), Color.White);
                 else
-                    g.Draw(sprRanged, new Vector2(XStart + 7, YStart + CurPos * YStep + 5), Color.White);
+                    g.Draw(sprRanged, new Vector2(XStart + 7, YPos + 5), Color.White);
 
                 int CurrentX = XStart + 35;
                 if (ListAttack[i].IsChargeable)
                 {
-                    g.DrawString(ActiveFont, "Charge " + ListAttack[i].ItemName, new Vector2(XStart + 35, YStart + CurPos * YStep), ColorBrush);
+                    g.DrawString(ActiveFont, "Charge " + ListAttack[i].ItemName, new Vector2(XStart + 35, YPos), ColorBrush);
                 }
                 else
                 {
-                    g.DrawString(ActiveFont, ListAttack[i].ItemName, new Vector2(XStart + 35, YStart + CurPos * YStep), ColorBrush);
+                    g.DrawString(ActiveFont, ListAttack[i].ItemName, new Vector2(XStart + 35, YPos), ColorBrush);
 
                     CurrentX += 5 + (int)ActiveFont.MeasureString(ListAttack[i].ItemName).X;
 
@@ -171,17 +172,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (DrawAll && !ListAttack[i].IsChargeable)
                 {
                     g.DrawString(ActiveFont, ListAttack[i].GetPower(ActiveUnit, ActiveParser).ToString(),
-                        new Vector2(XStart + 315, YStart + CurPos * YStep), ColorBrush);
+                        new Vector2(XStart + 315, YPos), ColorBrush);
 
                     int RangeMaximum = ListAttack[i].RangeMaximum;
                     if (RangeMaximum > 1)
                         RangeMaximum += ActiveUnit.Boosts.RangeModifier;
 
                     g.DrawString(ActiveFont, ListAttack[i].RangeMinimum + "- " + RangeMaximum,
-                        new Vector2(XStart + 425, YStart + CurPos * YStep), ColorBrush);
-                    g.DrawStringRightAligned(ActiveFont, Hit, new Vector2(XStart + 555, YStart + CurPos * YStep), ColorBrush);
-                    g.DrawString(ActiveFont, Crit, new Vector2(XStart + 570, YStart + CurPos * YStep), ColorBrush);
+                        new Vector2(XStart + 425, YPos), ColorBrush);
+                    g.DrawStringRightAligned(ActiveFont, Hit, new Vector2(XStart + 555, YPos), ColorBrush);
+                    g.DrawString(ActiveFont, Crit, new Vector2(XStart + 570, YPos), ColorBrush);
                 }
+
+                YPos += YStep;
             }
         }
 
