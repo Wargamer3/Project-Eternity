@@ -4,6 +4,7 @@ using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
@@ -75,6 +76,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public NonDemoScreen(DeathmatchMap Map)
         {
+            RequireFocus = true;
+            RequireDrawFocus = true;
+
             this.Map = Map;
             ListNonDemoBattleFrame = new List<NonDemoBattleFrame>();
             if (Map != null)
@@ -92,7 +96,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             sprNonDemoExplosion.EndAnimation();
         }
 
-        public void InitNonDemo(Squad AttackingSquad, SupportSquadHolder AttackingSupport, int AttackerPlayerIndex, SquadBattleResult AttackerSquadResult, FormationChoices AttackerFormation,
+        public void InitNonDemo(Squad AttackingSquad, Attack CurrentAttack, SupportSquadHolder AttackingSupport, int AttackerPlayerIndex, SquadBattleResult AttackerSquadResult, FormationChoices AttackerFormation,
             Squad DefendingSquad, SupportSquadHolder DefendingSupport, int DefenderPlayerIndex, SquadBattleResult DefenderSquadResult, FormationChoices DefenderFormation, bool IsRightAttacking)
         {
             this.AttackingSquad = AttackingSquad;
@@ -107,7 +111,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             NonDemoAnimationTimer = -1;
             CurrentNonDemoBattleFrame = 0;
 
-            bool CanDefenderCounter = AttackingSquad.CurrentLeader.CurrentAttack.Pri != Core.Attacks.WeaponPrimaryProperty.MAP;
+            bool CanDefenderCounter = CurrentAttack.Pri != WeaponPrimaryProperty.MAP && CurrentAttack.Pri != WeaponPrimaryProperty.PER;
 
             NonDemoAnimationTimer = 50;
 
@@ -1301,9 +1305,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             RemoveWithoutUnloading(this);
             
-            Map.FinalizeBattle(AttackingSquad, AttackingSupport, AttackerPlayerIndex, DefendingSquad, DefendingSupport, DefenderPlayerIndex, AttackerSquadResult, DefenderSquadResult);
+            Map.FinalizeBattle(AttackingSquad, AttackingSquad.CurrentLeader.CurrentAttack, AttackingSupport, AttackerPlayerIndex, DefendingSquad, DefendingSupport, DefenderPlayerIndex, AttackerSquadResult, DefenderSquadResult);
 
-            NonDemoAnimationTimer = -1;
+            NonDemoAnimationTimer = 9999;
 
             if (Map.ListMAPAttackTarget.Count > 0)
             {
@@ -1313,7 +1317,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
                 TargetSquadSupport.PrepareDefenceSupport(Map, NextTarget.Item1, Map.ListPlayer[NextTarget.Item1].ListSquad[NextTarget.Item2]);
-                Map.ReadyNextMAPAttack(AttackerPlayerIndex, Map.ListPlayer[AttackerPlayerIndex].ListSquad.IndexOf(AttackingSquad), AttackingSupport, NextTarget.Item1, NextTarget.Item2, TargetSquadSupport);
+                Map.ReadyNextMAPAttack(AttackerPlayerIndex, Map.ListPlayer[AttackerPlayerIndex].ListSquad.IndexOf(AttackingSquad), AttackingSquad.CurrentLeader.CurrentAttack, AttackingSupport,
+                    NextTarget.Item1, NextTarget.Item2, TargetSquadSupport);
             }
         }
         

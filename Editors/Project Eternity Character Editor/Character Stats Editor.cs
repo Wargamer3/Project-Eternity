@@ -54,9 +54,9 @@ namespace ProjectEternity.Editors.CharacterEditor
         {
             if (UseEvent)
             {
-                while (dgvStats.Rows.Count > txtMaxLevel.Value)
+                while (dgvStats.Rows.Count - 1 > txtMaxLevel.Value)
                 {
-                    dgvStats.Rows.RemoveAt(dgvStats.Rows.Count - 1);
+                    dgvStats.Rows.RemoveAt(dgvStats.Rows.Count - 2);
                 }
 
                 DataGridViewRow LastRow = dgvStats.Rows[dgvStats.Rows.GetLastRow(DataGridViewElementStates.None)];

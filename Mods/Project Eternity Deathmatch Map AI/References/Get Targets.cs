@@ -60,7 +60,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                     //Priority goes to units with higher chances of hitting.
                     IOrderedEnumerable<Tuple<int, int>> ListHitRate = ListTargetUnit.OrderByDescending(Target =>
-                        Info.Map.CalculateHitRate(Info.ActiveSquad.CurrentLeader, Info.ActiveSquad,
+                        Info.Map.CalculateHitRate(Info.ActiveSquad.CurrentLeader, ActiveAttack, Info.ActiveSquad,
                         Info.Map.ListPlayer[Target.Item1].ListSquad[Target.Item2].CurrentLeader, Info.Map.ListPlayer[Target.Item1].ListSquad[Target.Item2],
                         Unit.BattleDefenseChoices.Attack));
 

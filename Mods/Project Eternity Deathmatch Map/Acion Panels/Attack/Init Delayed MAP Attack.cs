@@ -35,7 +35,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Map.AttackWithMAPAttack(ActivePlayerIndex, Map.ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad), Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.FriendlyFire, ActiveDelayedAttack.ListAttackPosition));
+            Map.AttackWithMAPAttack(ActivePlayerIndex, Map.ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad), ActiveDelayedAttack.ActiveAttack,
+                Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.FriendlyFire, ActiveDelayedAttack.ListAttackPosition));
             RemoveFromPanelList(this);
         }
 

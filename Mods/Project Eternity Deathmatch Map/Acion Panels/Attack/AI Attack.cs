@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             Map.GlobalDeathmatchContext.ArrayAttackPosition = ListAttackChoice.ToArray();
 
-                            Map.AttackWithMAPAttack( ActivePlayerIndex, ActiveSquadIndex, ListMAPAttackTarget);
+                            Map.AttackWithMAPAttack(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ListMAPAttackTarget);
 
                             //Remove Ammo if needed.
                             if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)
@@ -132,13 +132,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                         else
                         {
-                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, Target.Item1, Target.Item2, TargetSquadSupport);
+                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, Target.Item1, Target.Item2, TargetSquadSupport);
                         }
                     }
                 }
                 else
                 {
-                    Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, Target.Item1, Target.Item2, TargetSquadSupport);
+                    Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, Target.Item1, Target.Item2, TargetSquadSupport);
                 }
                 AITimer = AITimerBase;
             }
@@ -235,9 +235,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             //Simulate defense reaction.
-            DeathmatchMap.PrepareDefenseSquadForBattle(Map, ActivePlayerIndex, ActiveSquadIndex, Target.Item1, Target.Item2);
+            DeathmatchMap.PrepareDefenseSquadForBattle(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, Target.Item1, Target.Item2);
             //Compute the Attacker's accuracy and Wingmans reaction.
-            DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+            DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack, TargetSquad);
         }
 
         public override void Draw(CustomSpriteBatch g)

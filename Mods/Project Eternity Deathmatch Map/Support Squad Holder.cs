@@ -84,12 +84,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 if (!AttackerSupportUnit.CurrentAttack.CanAttack)
                                     continue;
 
-                                int Accuracy = Map.CalculateHitRate(AttackerSupportUnit, AttackerSupportSquad, DefendingSquad.CurrentLeader, DefendingSquad, DefendingSquad.CurrentLeader.BattleDefenseChoice);
+                                int Accuracy = Map.CalculateHitRate(AttackerSupportUnit, AttackerSupportUnit.CurrentAttack, AttackerSupportSquad, DefendingSquad.CurrentLeader, DefendingSquad, DefendingSquad.CurrentLeader.BattleDefenseChoice);
                                 AttackerSupportUnit.AttackAccuracy = Accuracy + "%";
 
                                 if (Accuracy > 0)
                                 {
-                                    BattleMap.BattleResult Result = Map.DamageFormula(AttackerSupportUnit, ActivePlayer.ListSquad[SquadIndex], 1, DefendingPlayerIndex, DefendingSquadIndex, 0, Defender.BattleDefenseChoice, true);
+                                    BattleMap.BattleResult Result = Map.DamageFormula(AttackerSupportUnit, AttackerSupportUnit.CurrentAttack, ActivePlayer.ListSquad[SquadIndex], 1, DefendingPlayerIndex, DefendingSquadIndex, 0, Defender.BattleDefenseChoice, true);
 
                                     if (Result.AttackDamage > BestDamage)
                                     {

@@ -22,14 +22,14 @@ namespace ProjectEternity.Core.Editor
         public static GetItemInfo GetItemByKey;
         public const string GUIRootPathAnimations = "Animations";
         public const string GUIRootPathAnimationsSprites = "Animations/Sprites";
+        public const string GUIRootPathAnimationsSpriteSheets = "Animations/Sprite Sheets";
+        public const string GUIRootPathAnimationsBitmapAnimations = "Animations/Bitmap Animations";
         public const string GUIRootPathAnimationsBackgroundsAll = "Animations/Backgrounds";
         public const string GUIRootPathAnimationsBackgrounds3D = "Animations/Backgrounds 3D";
         public const string GUIRootPathAnimationsBackgrounds2D = "Animations/Backgrounds 2D";
         public const string GUIRootPathAnimationsBackground2DObject = "Animations/Background 2D Objects";
         public const string GUIRootPathAnimationsBackgroundSprites = "Animations/Backgrounds/Sprites";
         public const string GUIRootPathAnimationsBackground2DUsableItems = "Animations/Backgrounds Usable Items";
-        public const string GUIRootPathAnimationsSpriteSheets = "Animations/Sprite Sheets";
-        public const string GUIRootPathAnimationsBitmapAnimations = "Animations/Bitmap Animations";
         public const string GUIRootPathSFX = "SFX";
         public const string GUIRootPathUnits = "Units";
         public const string GUIRootPathUnitsNormal = "Units\\Normal";

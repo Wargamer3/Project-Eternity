@@ -736,7 +736,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            Map.FinalizeBattle(Attacker, ActiveSquadSupport, AttackerPlayerIndex, TargetSquad, TargetSquadSupport, DefenderPlayerIndex, ResultAttack, ResultDefend);
+            Map.FinalizeBattle(Attacker, Attacker.CurrentLeader.CurrentAttack, ActiveSquadSupport, AttackerPlayerIndex, TargetSquad, TargetSquadSupport, DefenderPlayerIndex, ResultAttack, ResultDefend);
             RemoveScreen(this);
         }
 

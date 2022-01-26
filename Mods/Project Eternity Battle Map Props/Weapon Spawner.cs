@@ -30,7 +30,30 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttacks);
                 if (Items != null)
                 {
-                    value = Path.GetFileNameWithoutExtension(Items[0]);
+                    value = Items[0].Substring(0, Items[0].Length - 4).Substring(16);
+                }
+            }
+            return value;
+        }
+    }
+
+    public class AnimationSpritesSelector : UITypeEditor
+    {
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.Modal;
+        }
+
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            IWindowsFormsEditorService svc = (IWindowsFormsEditorService)
+                provider.GetService(typeof(IWindowsFormsEditorService));
+            if (svc != null)
+            {
+                List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites);
+                if (Items != null)
+                {
+                    value = Items[0].Substring(0, Items[0].Length - 4).Substring(27);
                 }
             }
             return value;
@@ -39,13 +62,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
     public class WeaponSpawner : InteractiveProp
     {
-        private Texture2D sprCrate;
+        private Texture2D sprWeapon;
 
         private readonly BattleMap Map;
 
         private string _WeaponName;
+        private string _SpritePath;
         private int _RespawnTime;
-        private int _Ammo;
+        private byte _Ammo;
         private bool IsUsed;
 
         public WeaponSpawner(BattleMap Map)
@@ -54,6 +78,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Map = Map;
 
             _WeaponName = string.Empty;
+            _SpritePath = string.Empty;
             _RespawnTime = 1;
             _Ammo = 1;
 
@@ -62,27 +87,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load(ContentManager Content)
         {
-            sprCrate = Content.Load<Texture2D>("Maps/Props/HP Crate");
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), sprCrate, 1);
         }
 
         public override void DoLoad(BinaryReader BR)
         {
             _WeaponName = BR.ReadString();
+            _SpritePath = BR.ReadString();
             _RespawnTime = BR.ReadInt32();
-            _Ammo = BR.ReadInt32();
+            _Ammo = BR.ReadByte();
+
+            if (!string.IsNullOrEmpty(_SpritePath))
+            {
+                sprWeapon = Map.Content.Load<Texture2D>("Animations/Sprites/" + _SpritePath);
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprWeapon, 1);
+            }
         }
 
         public override void DoSave(BinaryWriter BW)
         {
             BW.Write(_WeaponName);
+            BW.Write(_SpritePath);
             BW.Write(_RespawnTime);
             BW.Write(_Ammo);
         }
 
         public void PickupWeapon(Squad SquadToUse)
         {
-            SquadToUse.CurrentLeader.AddTemporaryAttack(null);
+            SquadToUse.CurrentLeader.AddTemporaryAttack(_WeaponName, _Ammo, Map.Content, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
         }
 
         public override void Update(GameTime gameTime)
@@ -105,16 +136,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void OnMovedOverBeforeStop(Squad SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn)
         {
-            if (PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
+            if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
+                PickupWeapon(SelectedUnit);
                 IsUsed = true;
             }
         }
 
         public override void OnUnitStop(Squad StoppedUnit)
         {
-            if (StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
+            if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
             {
+                PickupWeapon(StoppedUnit);
                 IsUsed = true;
             }
         }
@@ -129,18 +162,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            if (!IsUsed)
-            {
-                float PosX = (Position.X - Map.CameraPosition.X) * Map.TileSize.X;
-                float PosY = (Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+            float PosX = (Position.X - Map.CameraPosition.X) * Map.TileSize.X;
+            float PosY = (Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
 
-                g.Draw(sprCrate, new Vector2(PosX, PosY), Color.White);
+            if (sprWeapon == null)
+            {
+                g.Draw(GameScreen.sprPixel, new Rectangle((int)PosX, (int)PosY, 32, 32), Color.Red);
+            }
+            else
+            {
+                if (!IsUsed)
+                {
+                    g.Draw(sprWeapon, new Vector2(PosX, PosY), Color.White);
+                }
             }
         }
 
         public override void Draw3D(GraphicsDevice GraphicsDevice)
         {
-            if (!IsUsed)
+            if (!IsUsed && Unit3D != null)
             {
                 Unit3D.Draw(GraphicsDevice);
             }
@@ -150,8 +190,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             WeaponSpawner NewProp = new WeaponSpawner(Map);
 
-            NewProp.sprCrate = sprCrate;
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprCrate, 1);
+            if (sprWeapon != null)
+            {
+                NewProp.sprWeapon = sprWeapon;
+                NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprWeapon, 1);
+            }
 
             return NewProp;
         }
@@ -174,6 +217,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        [Editor(typeof(AnimationSpritesSelector), typeof(UITypeEditor)),
+        CategoryAttribute("Spawner"),
+        DescriptionAttribute("The sprite path."),
+        DefaultValueAttribute(0)]
+        public string SpritePath
+        {
+            get
+            {
+                return _SpritePath;
+            }
+            set
+            {
+                _SpritePath = value;
+                sprWeapon = GameScreen.ContentFallback.Load<Texture2D>("Animations/Sprites/" + _SpritePath);
+            }
+        }
+
         [CategoryAttribute("Spawner"),
         DescriptionAttribute("How many turns before it respawn."),
         DefaultValueAttribute(0)]
@@ -192,7 +252,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         [CategoryAttribute("Spawner"),
         DescriptionAttribute("How much ammo to give."),
         DefaultValueAttribute(0)]
-        public int Ammo
+        public byte Ammo
         {
             get
             {

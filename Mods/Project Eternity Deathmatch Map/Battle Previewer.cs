@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 ActiveSquadSupport.PrepareAttackSupport(Map, PlayerIndex, ActiveSquad, P, SquadIndex);
                                 TargetSquadSupport.PrepareDefenceSupport(Map, P, DefendingSquad);
 
-                                BattleResult = Map.CalculateFinalHP(ActiveSquad, ActiveSquadSupport.ActiveSquadSupport, Map.ActivePlayerIndex,
+                                BattleResult = Map.CalculateFinalHP(ActiveSquad, ActiveAttack, ActiveSquadSupport.ActiveSquadSupport, Map.ActivePlayerIndex,
                                                                         FormationChoices.Focused,
                                                                         DefendingSquad, TargetSquadSupport.ActiveSquadSupport,
                                                                         P, SquadIndex, true, false);

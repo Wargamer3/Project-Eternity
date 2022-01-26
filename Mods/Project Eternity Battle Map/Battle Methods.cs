@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return NullifyAttack;
         }
 
-        public BattleResult DamageFormula(Unit Attacker, float DamageModifier, int Attack,
+        public BattleResult DamageFormula(Unit Attacker, Attack CurrentAttack, float DamageModifier, int Attack,
             int TargetPlayerIndex, int TargetSquadIndex, int TargetUnitIndex, Unit Defender, Unit.BattleDefenseChoices DefenseChoice,
             bool NullifyAttack, int Defense, bool CalculateCritical = false)
         {
@@ -159,7 +159,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CalculateCritical && !Attacker.Boosts.CriticalAlwaysFail)
                 {
                     //(((Attacker Skill Stat - Defender Skill Stat) + Weapon Critical Hit Rate) + Additive effect) * Multiplying effec
-                    int Critical = (Attacker.PilotSKL - Defender.PilotSKL) + Attacker.CurrentAttack.Critical + Attacker.Boosts.CriticalHitRateModifier;
+                    int Critical = (Attacker.PilotSKL - Defender.PilotSKL) + CurrentAttack.Critical + Attacker.Boosts.CriticalHitRateModifier;
                     //Don't calculate critical if there is a damage multiplier.
                     if (Attacker.Boosts.BaseDamageMultiplier == 1)
                     {
@@ -191,7 +191,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             #region Sword Cut
 
-            if (Result.AttackDamage > 0 && (Attacker.CurrentAttack.Sec & WeaponSecondaryProperty.SwordCut) == WeaponSecondaryProperty.SwordCut)
+            if (Result.AttackDamage > 0 && (CurrentAttack.Sec & WeaponSecondaryProperty.SwordCut) == WeaponSecondaryProperty.SwordCut)
             {
                 bool PilotSwordCut = false;
                 bool UnitSwordCut = Defender.Boosts.SwordCutModifier;
@@ -230,7 +230,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             #region Shoot Down
 
-            if (Result.AttackDamage > 0 && (Attacker.CurrentAttack.Sec & WeaponSecondaryProperty.ShootDown) == WeaponSecondaryProperty.ShootDown)
+            if (Result.AttackDamage > 0 && (CurrentAttack.Sec & WeaponSecondaryProperty.ShootDown) == WeaponSecondaryProperty.ShootDown)
             {
                 bool PilotShootDown = false;
                 bool UnitShootDown = Defender.Boosts.ShootDownModifier;
@@ -343,8 +343,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                     Result.AttackAttackerFinalEN -= ENCost;
                                     int BreakingDamage = int.Parse(ActiveParser.Evaluate(ActiveBarrierEffect.BreakingDamage), CultureInfo.InvariantCulture);
                                     //Look for weapon breaker or damage breaker or if the Barrier can protect against that Attack.
-                                    if ((ActiveBarrierEffect.EffectiveAttacks.Count > 0 && !ActiveBarrierEffect.EffectiveAttacks.Contains(Attacker.CurrentAttack.RelativePath)) ||
-                                        ActiveBarrierEffect.BreakingAttacks.Contains(Attacker.CurrentAttack.RelativePath) ||
+                                    if ((ActiveBarrierEffect.EffectiveAttacks.Count > 0 && !ActiveBarrierEffect.EffectiveAttacks.Contains(CurrentAttack.RelativePath)) ||
+                                        ActiveBarrierEffect.BreakingAttacks.Contains(CurrentAttack.RelativePath) ||
                                         Result.AttackDamage >= BreakingDamage)
                                     {
                                         IsBarrierBreak = true;

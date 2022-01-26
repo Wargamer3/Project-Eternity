@@ -68,9 +68,9 @@ namespace ProjectEternity.UnitTests
             Unit DummyUnit = DummySquad.CurrentLeader;
             Unit DummyDefenderUnit = DummyDefenderSquad.CurrentLeader;
             
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
 
-            Assert.AreEqual(100, DummyMap.CalculateHitRate(DummyUnit, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
+            Assert.AreEqual(100, DummyMap.CalculateHitRate(DummyUnit, DummyUnit.CurrentAttack, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
 
             Assert.AreEqual(11880, Result.ArrayResult[0].AttackDamage);
         }
@@ -85,7 +85,7 @@ namespace ProjectEternity.UnitTests
             BaseAutomaticSkill TestSkill = CreateDummySkill(new PassiveRequirement());
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
             
             Assert.AreEqual(11980, Result.ArrayResult[0].AttackDamage);
         }
@@ -100,7 +100,7 @@ namespace ProjectEternity.UnitTests
             BaseAutomaticSkill TestSkill = CreateDummySkill(new BattleStartRequirement(GlobalDeathmatchContext));
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
             
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
             
             Assert.AreEqual(11980, Result.ArrayResult[0].AttackDamage);
         }
@@ -115,7 +115,7 @@ namespace ProjectEternity.UnitTests
             BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeAttackRequirement(GlobalDeathmatchContext));
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
 
             Assert.AreEqual(11980, Result.ArrayResult[0].AttackDamage);
         }
@@ -130,8 +130,8 @@ namespace ProjectEternity.UnitTests
             BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeAttackRequirement(GlobalDeathmatchContext));
             DummyDefenderSquad.CurrentLeader.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
-            var ResultCounter = DummyMap.CalculateFinalHP(DummyDefenderSquad, null, 0, BattleMap.FormationChoices.Focused, DummySquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var ResultCounter = DummyMap.CalculateFinalHP(DummyDefenderSquad, DummyDefenderSquad.CurrentLeader.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummySquad, null, 1, 0, true, false);
 
             Assert.AreEqual(11880, Result.ArrayResult[0].AttackDamage);
             Assert.AreEqual(11980, ResultCounter.ArrayResult[0].AttackDamage);
@@ -147,7 +147,7 @@ namespace ProjectEternity.UnitTests
             BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeHitRequirement(GlobalDeathmatchContext));
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
 
             Assert.AreEqual(11980, Result.ArrayResult[0].AttackDamage);
         }
@@ -163,8 +163,8 @@ namespace ProjectEternity.UnitTests
             BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeGettingHitRequirement(GlobalDeathmatchContext));
             DummyDefenderSquad.CurrentLeader.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
-            var ResultCounter = DummyMap.CalculateFinalHP(DummyDefenderSquad, null, 0, BattleMap.FormationChoices.Focused, DummySquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummySquad.CurrentLeader.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var ResultCounter = DummyMap.CalculateFinalHP(DummyDefenderSquad, DummyDefenderSquad.CurrentLeader.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummySquad, null, 1, 0, true, false);
 
             Assert.AreEqual(11880, Result.ArrayResult[0].AttackDamage);
             Assert.AreEqual(11980, ResultCounter.ArrayResult[0].AttackDamage);
@@ -182,13 +182,13 @@ namespace ProjectEternity.UnitTests
             DummyDefenderUnit.Pilot.ArrayLevelEVA[0] = 200;
             DummyDefenderUnit.Pilot.Init();
 
-            Assert.AreEqual(0, DummyMap.CalculateHitRate(DummyUnit, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
+            Assert.AreEqual(0, DummyMap.CalculateHitRate(DummyUnit, DummyUnit.CurrentAttack, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
 
             BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeMissRequirement(GlobalDeathmatchContext));
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
             DummyUnit.Pilot.ArrayPilotSkillLevels = new Core.Characters.Character.SkillLevels[1] { new Core.Characters.Character.SkillLevels() };
 
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
 
             Assert.AreEqual(0, Result.ArrayResult[0].AttackDamage);
             Assert.AreEqual(true, Result.ArrayResult[0].AttackMissed);
@@ -196,9 +196,9 @@ namespace ProjectEternity.UnitTests
             DummyUnit.Pilot.ArrayLevelHIT[0] = 200;
             DummyUnit.Pilot.Init();
 
-            Assert.AreEqual(100, DummyMap.CalculateHitRate(DummyUnit, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
+            Assert.AreEqual(100, DummyMap.CalculateHitRate(DummyUnit, DummyUnit.CurrentAttack, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
 
-            Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
 
             Assert.AreEqual(11980, Result.ArrayResult[0].AttackDamage);
         }
@@ -215,13 +215,13 @@ namespace ProjectEternity.UnitTests
             DummyDefenderUnit.Pilot.ArrayLevelEVA[0] = 200;
             DummyDefenderUnit.Pilot.Init();
 
-            Assert.AreEqual(0, DummyMap.CalculateHitRate(DummyUnit, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
+            Assert.AreEqual(0, DummyMap.CalculateHitRate(DummyUnit, DummyUnit.CurrentAttack, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
 
             BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeGettingMissedRequirement(GlobalDeathmatchContext));
             DummyDefenderSquad.CurrentLeader.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
-            var Result = DummyMap.CalculateFinalHP(DummySquad, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
-            var ResultCounter = DummyMap.CalculateFinalHP(DummyDefenderSquad, null, 0, BattleMap.FormationChoices.Focused, DummySquad, null, 1, 0, true, false);
+            var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
+            var ResultCounter = DummyMap.CalculateFinalHP(DummyDefenderSquad, DummyDefenderSquad.CurrentLeader.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummySquad, null, 1, 0, true, false);
             
             Assert.AreEqual(0, Result.ArrayResult[0].AttackDamage);
             Assert.AreEqual(true, Result.ArrayResult[0].AttackMissed);

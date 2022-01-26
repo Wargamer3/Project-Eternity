@@ -52,7 +52,7 @@ namespace ProjectEternity.UnitTests
             DummyUnit.CurrentAttack = DummyAttack;
             Squad DummySquad = new Squad("Dummy", DummyUnit);
 
-            Assert.AreEqual(190, DeathmatchMap.Accuracy(DummyUnit, 0));
+            Assert.AreEqual(190, DeathmatchMap.Accuracy(DummyUnit, DummyAttack, 0));
         }
     }
 }

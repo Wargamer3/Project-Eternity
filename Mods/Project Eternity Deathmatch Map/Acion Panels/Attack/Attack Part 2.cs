@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 return;
                             }
 
-                            Map.PrepareSquadsForBattle(ActivePlayerIndex, ActiveSquadIndex,P, TargetSelect);
+                            Map.PrepareSquadsForBattle(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, P, TargetSelect);
 
                             SupportSquadHolder ActiveSquadSupport = new SupportSquadHolder();
                             ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, P, TargetSelect);
@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
                             TargetSquadSupport.PrepareDefenceSupport(Map, P, Map.ListPlayer[P].ListSquad[TargetSelect]);
 
-                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, P, TargetSelect, TargetSquadSupport);
+                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, P, TargetSelect, TargetSquadSupport);
 
                             break;
                         }

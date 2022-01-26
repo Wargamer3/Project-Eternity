@@ -168,7 +168,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (AttackingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
-                int AttackDamage = DamageFormula(AttackingSquad.CurrentLeader, AttackingSquad, 1f,
+                int AttackDamage = DamageFormula(AttackingSquad.CurrentLeader, AttackingSquad.CurrentLeader.CurrentAttack, AttackingSquad, 1f,
                     DefendingPlayerIndex, DefendingSquadIndex, 0,
                     DefendingSquad.CurrentLeader.BattleDefenseChoice, false)
                     .AttackDamage;
@@ -179,7 +179,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
-                int AttackDamage = DamageFormula(DefendingSquad.CurrentLeader, DefendingSquad, 1f,
+                int AttackDamage = DamageFormula(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad, 1f,
                     AttackingPlayerIndex, AttackingSquadIndex, 0,
                     AttackingSquad.CurrentLeader.BattleDefenseChoice, false)
                     .AttackDamage;
@@ -262,7 +262,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             
             if (DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
-                int AttackDamage = DamageFormula(DefendingSquad.CurrentLeader, DefendingSquad, 1f,
+                int AttackDamage = DamageFormula(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad, 1f,
                     AttackingPlayerIndex, AttackingSquadIndex, 0,
                     AttackingSquad.CurrentLeader.BattleDefenseChoice, false)
                     .AttackDamage;
@@ -273,7 +273,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (AttackingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
-                int AttackDamage = DamageFormula(AttackingSquad.CurrentLeader, AttackingSquad, 1f,
+                int AttackDamage = DamageFormula(AttackingSquad.CurrentLeader, AttackingSquad.CurrentLeader.CurrentAttack, AttackingSquad, 1f,
                     DefendingPlayerIndex, DefendingSquadIndex, 0,
                     DefendingSquad.CurrentLeader.BattleDefenseChoice, false)
                     .AttackDamage;

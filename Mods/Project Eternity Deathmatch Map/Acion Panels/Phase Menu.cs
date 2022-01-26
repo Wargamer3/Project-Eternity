@@ -193,13 +193,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActivePERAttack.PlayerIndex == ActivePlayerIndex)
                 {
-                    ActivePERAttack.Position += ActivePERAttack.Speed;
-
-                    ActivePERAttack.Map3DComponent.SetPosition(
-                        ActivePERAttack.Position.X + 16 + 0.5f,
-                        ActivePERAttack.Position.Z * 32,
-                        ActivePERAttack.Position.Y + 16 + 0.5f);
-                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelInitAttackPER(Map, ActivePlayerIndex, ActivePERAttack));
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelUpdatePERAttacks(Map));
+                    return;
                 }
             }
         }

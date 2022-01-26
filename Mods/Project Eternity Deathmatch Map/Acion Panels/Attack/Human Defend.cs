@@ -160,7 +160,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 switch (Map.BattleMenuCursorIndex)
                 {
                     case BattleMenuChoices.Start:
-                        Map.ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
+                        Map.ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
                         break;
 
                     case BattleMenuChoices.Action:
@@ -227,13 +227,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
                     Map.BattleMenuStage = BattleMenuStages.Default;
-                    ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad, TargetSquad.CurrentLeader, TargetSquad, Unit.BattleDefenseChoices.Defend).ToString() + "%";
+                    ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquad, TargetSquad.CurrentLeader, TargetSquad, Unit.BattleDefenseChoices.Defend).ToString() + "%";
                 }
                 else if (Map.BattleMenuCursorIndexSecond == 2)
                 {
                     TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
                     Map.BattleMenuStage = BattleMenuStages.Default;
-                    ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad, TargetSquad.CurrentLeader, TargetSquad, Unit.BattleDefenseChoices.Evade).ToString() + "%";
+                    ActiveSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquad, TargetSquad.CurrentLeader, TargetSquad, Unit.BattleDefenseChoices.Evade).ToString() + "%";
                 }
 
                 Map.sndConfirm.Play();
@@ -305,7 +305,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             if (ActiveSquad.CurrentWingmanA != null)
                             {
-                                TargetSquad.CurrentLeader.MAPAttackAccuracyA = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
+                                TargetSquad.CurrentLeader.MAPAttackAccuracyA = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.CurrentAttack, TargetSquad,
                                     ActiveSquad.CurrentWingmanA, ActiveSquad, ActiveSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
                             }
                             else
@@ -316,7 +316,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             if (ActiveSquad.CurrentWingmanB != null)
                             {
-                                TargetSquad.CurrentLeader.MAPAttackAccuracyB = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
+                                TargetSquad.CurrentLeader.MAPAttackAccuracyB = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.CurrentAttack, TargetSquad,
                                     ActiveSquad.CurrentWingmanB, ActiveSquad, ActiveSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
                             }
                             else
@@ -330,14 +330,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         Map.UpdateWingmansSelection(TargetSquad, ActiveSquad, Map.BattleMenuOffenseFormationChoice);
                     }
+
                     Map.BattleMenuStage = BattleMenuStages.Default;
 
                     TargetSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
 
                     //Simulate offense reaction.
-                    PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+                    PrepareAttackSquadForBattle(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack, TargetSquad);
                     //The Defense Leader now attack.
-                    TargetSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad,
+                    TargetSquad.CurrentLeader.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.CurrentAttack, TargetSquad,
                         ActiveSquad.CurrentLeader, ActiveSquad, Unit.BattleDefenseChoices.Attack).ToString() + "%";
 
                     Map.sndConfirm.Play();
@@ -421,20 +422,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         TargetSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
 
                         //Simulate offense reaction.
-                        DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+                        DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack, TargetSquad);
 
                         if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread)
                         {
                             if (Map.BattleMenuCursorIndexSecond == 1)
                             {
                                 TargetSquad.CurrentWingmanA.CurrentAttack = TargetSquad.CurrentWingmanA.PLAAttack;
-                                TargetSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanA, TargetSquad,
+                                TargetSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanA, TargetSquad.CurrentWingmanA.CurrentAttack, TargetSquad,
                                    ActiveSquad.CurrentWingmanA, ActiveSquad, ActiveSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
                             }
                             else if (Map.BattleMenuCursorIndexSecond == 2)
                             {
                                 TargetSquad.CurrentWingmanB.CurrentAttack = TargetSquad.CurrentWingmanB.PLAAttack;
-                                TargetSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanB, TargetSquad,
+                                TargetSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanB, TargetSquad.CurrentWingmanB.CurrentAttack, TargetSquad,
                                     ActiveSquad.CurrentWingmanB, ActiveSquad, ActiveSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
                             }
                         }
@@ -443,13 +444,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             if (Map.BattleMenuCursorIndexSecond == 1)
                             {
                                 TargetSquad.CurrentWingmanA.CurrentAttack = TargetSquad.CurrentWingmanA.PLAAttack;
-                                TargetSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanA, TargetSquad,
+                                TargetSquad.CurrentWingmanA.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanA, TargetSquad.CurrentWingmanA.CurrentAttack, TargetSquad,
                                     ActiveSquad.CurrentLeader, ActiveSquad, ActiveSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
                             }
                             else if (Map.BattleMenuCursorIndexSecond == 2)
                             {
                                 TargetSquad.CurrentWingmanB.CurrentAttack = TargetSquad.CurrentWingmanB.PLAAttack;
-                                TargetSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanB, TargetSquad,
+                                TargetSquad.CurrentWingmanB.AttackAccuracy = Map.CalculateHitRate(TargetSquad.CurrentWingmanB, TargetSquad.CurrentWingmanB.CurrentAttack, TargetSquad,
                                     ActiveSquad.CurrentLeader, ActiveSquad, ActiveSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
                             }
                         }
@@ -462,7 +463,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Map.BattleMenuDefenseFormationChoice = FormationChoices.Focused;
 
                     //Simulate offense reaction.
-                    DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+                    DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack, TargetSquad);
 
                     if (TargetSquad.CurrentWingmanA != null && TargetSquad.CurrentWingmanA.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
                         TargetSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
@@ -475,7 +476,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     TargetSquad[Map.BattleMenuCursorIndexSecond].BattleDefenseChoice = (Unit.BattleDefenseChoices)Map.BattleMenuCursorIndexThird;
                     //Simulate offense reaction.
-                    DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, TargetSquad);
+                    DeathmatchMap.PrepareAttackSquadForBattle(Map, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack, TargetSquad);
                     Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.Default;
                 }
 

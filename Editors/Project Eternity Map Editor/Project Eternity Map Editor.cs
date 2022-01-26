@@ -967,7 +967,7 @@ namespace ProjectEternity.Editors.MapEditor
                     if (TopLayer.ListProp[P].Position.X == X && TopLayer.ListProp[P].Position.Y == Y)
                     {
                         pgPropProperties.SelectedObject = TopLayer.ListProp[P];
-                        break;
+                        return;
                     }
                 }
 
@@ -986,6 +986,7 @@ namespace ProjectEternity.Editors.MapEditor
                 }
 
                 ActiveProp = ActiveProp.Copy(new Vector3(X, Y, 0), TopLayerIndex);
+                pgPropProperties.SelectedObject = ActiveProp;
 
                 TopLayer.ListProp.Add(ActiveProp);
             }

@@ -10,16 +10,16 @@ using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class HealthCrateSpawner : InteractiveProp
+    public class HealthVialMediumSpawner : InteractiveProp
     {
-        private Texture2D sprCrate;
+        private Texture2D sprVial;
 
         private readonly BattleMap Map;
 
         private bool IsUsed;
 
-        public HealthCrateSpawner(BattleMap Map)
-            : base("HP Crate", PropCategories.Interactive, new bool[,] { { true } }, false)
+        public HealthVialMediumSpawner(BattleMap Map)
+            : base("HP Vial Medium", PropCategories.Interactive, new bool[,] { { true } }, false)
         {
             this.Map = Map;
             IsUsed = false;
@@ -28,8 +28,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load(ContentManager Content)
         {
-            sprCrate = Content.Load<Texture2D>("Maps/Props/HP Crate");
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), sprCrate, 1);
+            sprVial = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Health Vial Medium");
+            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), sprVial, 1);
         }
 
         public override void DoLoad(BinaryReader BR)
@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 float PosX = (Position.X - Map.CameraPosition.X) * Map.TileSize.X;
                 float PosY = (Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
 
-                g.Draw(sprCrate, new Vector2(PosX, PosY), Color.White);
+                g.Draw(sprVial, new Vector2(PosX, PosY), Color.White);
             }
         }
 
@@ -108,10 +108,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override InteractiveProp Copy()
         {
-            HealthCrateSpawner NewProp = new HealthCrateSpawner(Map);
+            HealthVialMediumSpawner NewProp = new HealthVialMediumSpawner(Map);
 
-            NewProp.sprCrate = sprCrate;
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprCrate, 1);
+            NewProp.sprVial = sprVial;
+            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprVial, 1);
 
             return NewProp;
         }

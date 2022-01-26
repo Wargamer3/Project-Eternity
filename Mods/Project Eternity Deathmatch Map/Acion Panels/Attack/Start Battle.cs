@@ -19,6 +19,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         private Squad ActiveSquad;
+        private Attack CurrentAttack;
         private SupportSquadHolder ActiveSquadSupport;
 
         private int TargetPlayerIndex;
@@ -40,12 +41,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             SendBackToSender = true;
         }
 
-        public ActionPanelStartBattle(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport,
+        public ActionPanelStartBattle(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport,
              int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport, bool IsDefending)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
+            this.CurrentAttack = CurrentAttack;
             this.ActiveSquadSupport = ActiveSquadSupport;
 
             this.TargetPlayerIndex = TargetPlayerIndex;
@@ -276,6 +278,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int FinalActivePlayerIndex = ActivePlayerIndex;
             int FinalActiveSquadIndex = ActiveSquadIndex;
             Squad FinalActiveSquad = ActiveSquad;
+            Attack FinalAttack = CurrentAttack;
             SupportSquadHolder FinalActiveSquadSupport = ActiveSquadSupport;
 
             int FinalTargetPlayerIndex = TargetPlayerIndex;
@@ -288,6 +291,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 FinalActivePlayerIndex = TargetPlayerIndex;
                 FinalActiveSquadIndex = TargetSquadIndex;
                 FinalActiveSquad = TargetSquad;
+                FinalAttack = FinalActiveSquad.CurrentLeader.CurrentAttack;
                 FinalActiveSquadSupport = TargetSquadSupport;
 
                 FinalTargetPlayerIndex = ActivePlayerIndex;
@@ -296,13 +300,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 FinalTargetSquadSupport = ActiveSquadSupport;
             }
 
-            bool ShowAnimation = Constants.ShowAnimation && FinalActiveSquad.CurrentLeader.CurrentAttack.GetAttackAnimations(Map.ActiveParser).Start.AnimationName != null;
+            bool ShowAnimation = Constants.ShowAnimation && FinalAttack.GetAttackAnimations(Map.ActiveParser).Start.AnimationName != null
+                && FinalAttack.Pri != WeaponPrimaryProperty.MAP && FinalAttack.Pri != WeaponPrimaryProperty.PER;
             ListNextAnimationScreen.Clear();
             Map.NonDemoScreen.ListNonDemoBattleFrame.Clear();
 
             if (Map.IsOfflineOrServer)
             {
-                AttackingResult = Map.CalculateFinalHP(FinalActiveSquad, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
+                AttackingResult = Map.CalculateFinalHP(FinalActiveSquad, FinalAttack, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
                                                                     Map.BattleMenuOffenseFormationChoice, FinalTargetSquad, FinalTargetSquadSupport.ActiveSquadSupport,
                                                                     FinalTargetPlayerIndex, FinalTargetSquadIndex, true, true);
 
@@ -310,7 +315,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                Map.CalculateFinalHP(FinalActiveSquad, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
+                Map.CalculateFinalHP(FinalActiveSquad, FinalAttack, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
                                                                        Map.BattleMenuOffenseFormationChoice, FinalTargetSquad, FinalTargetSquadSupport.ActiveSquadSupport,
                                                                        FinalTargetPlayerIndex, FinalTargetSquadIndex, true, true);
             }
@@ -338,13 +343,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (Map.IsOfflineOrServer)
                     {
-                        DefendingResult = Map.CalculateFinalHP(FinalTargetSquad, null, FinalTargetPlayerIndex,
+                        DefendingResult = Map.CalculateFinalHP(FinalTargetSquad, FinalTargetSquad.CurrentLeader.CurrentAttack, null, FinalTargetPlayerIndex,
                                                         Map.BattleMenuDefenseFormationChoice, FinalActiveSquad, null,
                                                         FinalActivePlayerIndex, FinalActiveSquadIndex, true, true);
                     }
                     else
                     {
-                        Map.CalculateFinalHP(FinalTargetSquad, null, FinalTargetPlayerIndex,
+                        Map.CalculateFinalHP(FinalTargetSquad, FinalTargetSquad.CurrentLeader.CurrentAttack, null, FinalTargetPlayerIndex,
                                                         Map.BattleMenuDefenseFormationChoice, FinalActiveSquad, null,
                                                         FinalActivePlayerIndex, FinalActiveSquadIndex, true, true);
                     }
@@ -374,12 +379,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, AttackingResult, DefendingResult));
                 }
                 else
-                {
-                    Map.NonDemoScreen.InitNonDemo(FinalActiveSquad, FinalActiveSquadSupport, FinalActivePlayerIndex, AttackingResult, Map.BattleMenuOffenseFormationChoice,
+                { 
+                    NonDemoScreen NonDemoScreen = new NonDemoScreen(Map);
+                    Map.PushScreen(NonDemoScreen);
+                    NonDemoScreen.InitNonDemo(FinalActiveSquad, FinalAttack, FinalActiveSquadSupport, FinalActivePlayerIndex, AttackingResult, Map.BattleMenuOffenseFormationChoice,
+                         FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, DefendingResult, Map.BattleMenuDefenseFormationChoice, IsActiveSquadOnRight);
+                    /*Map.NonDemoScreen.InitNonDemo(FinalActiveSquad, FinalAttack, FinalActiveSquadSupport, FinalActivePlayerIndex, AttackingResult, Map.BattleMenuOffenseFormationChoice,
                         FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, DefendingResult, Map.BattleMenuDefenseFormationChoice, IsActiveSquadOnRight);
 
                     Map.NonDemoScreen.Alive = true;
-                    Map.ListGameScreen.Insert(0, Map.NonDemoScreen);
+                    Map.ListGameScreen.Insert(0, Map.NonDemoScreen);*/
                 }
             }
 

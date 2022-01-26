@@ -617,9 +617,28 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public void AddTemporaryAttack(Attack NewAttack)
+        public void AddTemporaryAttack(string NewAttackName, byte Ammo, Microsoft.Xna.Framework.Content.ContentManager Content,
+            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            ListAttackTemporary.Add(NewAttack);
+            Attack ExistingAttack = null;
+            foreach (Attack ActiveAttack in ListAttackTemporary)
+            {
+                if (ActiveAttack.RelativePath == NewAttackName)
+                {
+                    ExistingAttack = ActiveAttack;
+                    break;
+                }
+            }
+
+            if (ExistingAttack == null)
+            {
+                ListAttackTemporary.Add(new Attack(NewAttackName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+            }
+            else
+            {
+                ExistingAttack.IncreaseAmmo(Ammo);
+            }
         }
 
         public void ChargeAttack()
