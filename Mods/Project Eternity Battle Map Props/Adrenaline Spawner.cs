@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load(ContentManager Content)
         {
             sprAdrenaline = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Adrenaline");
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), sprAdrenaline, 1);
+            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprAdrenaline, 1);
         }
 
         public override void DoLoad(BinaryReader BR)
@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             AdrenalineSpawner NewProp = new AdrenalineSpawner(Map);
 
             NewProp.sprAdrenaline = sprAdrenaline;
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprAdrenaline, 1);
+            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprAdrenaline, 1);
 
             return NewProp;
         }

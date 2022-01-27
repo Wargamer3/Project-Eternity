@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load(ContentManager Content)
         {
             sprVial = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Health Vial Medium");
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), sprVial, 1);
+            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprVial, 1);
         }
 
         public override void DoLoad(BinaryReader BR)
@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             HealthVialMediumSpawner NewProp = new HealthVialMediumSpawner(Map);
 
             NewProp.sprVial = sprVial;
-            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprVial, 1);
+            NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprVial, 1);
 
             return NewProp;
         }

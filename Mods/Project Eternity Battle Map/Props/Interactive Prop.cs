@@ -17,7 +17,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public readonly string PropName;//HP, EN, Ammo, weapon, pillar.
         public readonly PropCategories PropCategory;//Used only for the map editor.
         public Vector3 Position;
-        public int LayerIndex;
         public bool[,] ArrayMapSize;
         public bool CanBlockPath;
         public UnitMap3D Unit3D;
@@ -32,12 +31,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void Load(ContentManager Content);
 
-        public InteractiveProp LoadCopy(BinaryReader BR)
+        public InteractiveProp LoadCopy(BinaryReader BR, int LayerIndex)
         {
             InteractiveProp NewProp = Copy();
 
-            NewProp.Position = new Vector3(BR.ReadSingle(), BR.ReadSingle(), 0);
-            NewProp.LayerIndex = BR.ReadInt32();
+            NewProp.Position = new Vector3(BR.ReadSingle(), BR.ReadSingle(), LayerIndex);
 
             NewProp.DoLoad(BR);
 
@@ -52,7 +50,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Write(Position.X);
             BW.Write(Position.Y);
-            BW.Write(LayerIndex);
 
             DoSave(BW);
         }
@@ -82,7 +79,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             InteractiveProp NewProp = Copy();
 
             NewProp.Position = Position;
-            NewProp.LayerIndex = LayerIndex;
+            NewProp.Position.Z = LayerIndex;
 
             return NewProp;
         }

@@ -382,7 +382,7 @@ namespace ProjectEternity.Core.Units
         public UnitMap3DVertex[] particles;
         private DynamicVertexBuffer vertexBuffer;
         private IndexBuffer indexBuffer;
-        private Effect UnitEffect3D;
+        public readonly Effect UnitEffect3D;
         private EffectParameterCollection parameters;
         // Shortcuts for accessing frequently changed effect parameters.
         private EffectParameter effectViewParameter;

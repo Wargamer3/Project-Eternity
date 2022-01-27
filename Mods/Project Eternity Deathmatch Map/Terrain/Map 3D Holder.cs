@@ -438,7 +438,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return;
             }
 
-            if (!IsSubLayer)
+            if (IsSubLayer)
             {
                 return;
             }

@@ -99,7 +99,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (!string.IsNullOrEmpty(_SpritePath))
             {
                 sprWeapon = Map.Content.Load<Texture2D>("Animations/Sprites/" + _SpritePath);
-                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprWeapon, 1);
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprWeapon, 1);
             }
         }
 
@@ -193,7 +193,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (sprWeapon != null)
             {
                 NewProp.sprWeapon = sprWeapon;
-                NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Squad shader 3D"), sprWeapon, 1);
+                NewProp.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Unit3D.UnitEffect3D, sprWeapon, 1);
             }
 
             return NewProp;
