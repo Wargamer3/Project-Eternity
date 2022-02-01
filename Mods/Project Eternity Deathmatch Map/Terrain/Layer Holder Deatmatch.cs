@@ -107,6 +107,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LayerHolderDrawable.AddDrawablePoints(ListPoint, PointColor);
         }
 
+        public override void AddDamageNumber(string Damage, Vector3 Position)
+        {
+            LayerHolderDrawable.AddDamageNumber(Damage, Position);
+        }
+
         public override void BeginDraw(CustomSpriteBatch g)
         {
             LayerHolderDrawable.BeginDraw(g);

@@ -58,23 +58,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            for (int A = Map.ListPERAttack.Count - 1; A >= 0; --A)
+            if (ListPERAttackToUpdate.Count == 0)
             {
-                PERAttack ActivePERAttack = Map.ListPERAttack[A];
-
-                if (ActivePERAttack.PlayerIndex == Map.ActivePlayerIndex)
+                for (int A = Map.ListPERAttack.Count - 1; A >= 0; --A)
                 {
-                    --ActivePERAttack.Lifetime;
+                    PERAttack ActivePERAttack = Map.ListPERAttack[A];
 
-                    if (ActivePERAttack.Lifetime <= 0)
+                    if (ActivePERAttack.PlayerIndex == Map.ActivePlayerIndex)
                     {
-                        Map.ListPERAttack.RemoveAt(A);
-                    }
-                    else
-                    {
-                        Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position.X, ActivePERAttack.Position.Y, (int)ActivePERAttack.Position.Z);
-                        Vector3 NextPosition = ActivePERAttack.Position + ActivePERAttack.Speed;
-                        ListPERAttackToUpdate.Add(new PERAttackMovement(ActivePERAttack, ActivePERAttack.Position, NextPosition, CurrentTerrain));
+                        --ActivePERAttack.Lifetime;
+
+                        if (ActivePERAttack.Lifetime <= 0)
+                        {
+                            Map.ListPERAttack.RemoveAt(A);
+                        }
+                        else
+                        {
+                            Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position.X, ActivePERAttack.Position.Y, (int)ActivePERAttack.Position.Z);
+                            Vector3 NextPosition = ActivePERAttack.Position + ActivePERAttack.Speed;
+                            ListPERAttackToUpdate.Add(new PERAttackMovement(ActivePERAttack, ActivePERAttack.Position, NextPosition, CurrentTerrain));
+                        }
                     }
                 }
             }
@@ -133,9 +136,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            foreach (PERAttackMovement ActiveAttack in ListPERAttackToUpdate)
-            {
-            }
         }
     }
 }

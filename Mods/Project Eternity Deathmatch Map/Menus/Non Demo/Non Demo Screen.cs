@@ -170,6 +170,50 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+
+        public void InitNonDemo(int DefenderPlayerIndex, int DefenderSquadIndex, int Damage)
+        {
+            this.DefenderPlayerIndex = DefenderPlayerIndex;
+            this.DefendingSquad = Map.ListPlayer[DefenderPlayerIndex].ListSquad[DefenderSquadIndex];
+
+            BattleResult AttackerSquadResultSingle = new BattleResult();
+            AttackerSquadResultSingle.AttackAttackerFinalEN = DefendingSquad.CurrentLeader.EN;
+
+            BattleResult[] ArrayAttackerResult = new BattleResult[1];
+            ArrayAttackerResult[0].SetTarget(DefenderPlayerIndex, DefenderSquadIndex, 0, DefendingSquad.CurrentLeader);
+            ArrayAttackerResult[0].AttackDamage = Damage;
+            AttackerSquadResult = new SquadBattleResult(ArrayAttackerResult);
+
+            NonDemoAnimationTimer = -1;
+            CurrentNonDemoBattleFrame = 0;
+
+            NonDemoAnimationTimer = 50;
+
+            float AttackerPositionX = NonDemoRightUnitPosition.X;
+            float AttackerPositionY = NonDemoRightUnitPosition.Y;
+
+            NonDemoBattleFrameSquad AttackingSquadFrame = new NonDemoBattleFrameSquad();
+
+            AttackingSquadFrame.LeaderStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentLeader, AttackerSquadResultSingle),
+                AttackerPositionX, AttackerPositionY, false);
+
+            NonDemoBattleFrame DefaultNonDemoBattleFrame = new NonDemoBattleFrame(NonDemoIdleFrame.FrameLength, new NonDemoBattleFrameSquad(), AttackingSquadFrame);
+
+            ListNonDemoBattleFrame.Add(DefaultNonDemoBattleFrame);
+
+            AttackingSquadFrame = new NonDemoBattleFrameSquad();
+            AttackingSquadFrame.LeaderStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentLeader, AttackerSquadResultSingle),
+                AttackerPositionX, AttackerPositionY, false);
+
+            AttackingSquadFrame.LeaderStance = new NonDemoGetHitFrame(AttackingSquadFrame.LeaderStance, false, Map.fntNonDemoDamage,
+                Damage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
+
+            DefaultNonDemoBattleFrame = new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, new NonDemoBattleFrameSquad(), AttackingSquadFrame);
+
+            ListNonDemoBattleFrame.Add(DefaultNonDemoBattleFrame);
+
+        }
+
         private void FillCombatAnimations(NonDemoBattleFrame DefaultNonDemoBattleFrame, Squad Attacker, Squad AttackerSupport, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
             Squad Defender, Squad DefenderSupport, bool IsRightAttacking, ref int[] ArrayDefenderHP, int[] ArrayAttackerHP)
         {
@@ -1304,8 +1348,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void NonDemoBattleFinished()
         {
             RemoveWithoutUnloading(this);
-            
-            Map.FinalizeBattle(AttackingSquad, AttackingSquad.CurrentLeader.CurrentAttack, AttackingSupport, AttackerPlayerIndex, DefendingSquad, DefendingSupport, DefenderPlayerIndex, AttackerSquadResult, DefenderSquadResult);
+
+            if (AttackingSquad == null)
+            {
+                Map.FinalizeBattle(null, null, null, Map.ActivePlayerIndex, DefendingSquad, DefendingSupport, DefenderPlayerIndex, AttackerSquadResult, DefenderSquadResult);
+            }
+            else
+            {
+                Map.FinalizeBattle(AttackingSquad, AttackingSquad.CurrentLeader.CurrentAttack, AttackingSupport, AttackerPlayerIndex, DefendingSquad, DefendingSupport, DefenderPlayerIndex, AttackerSquadResult, DefenderSquadResult);
+            }
 
             NonDemoAnimationTimer = 9999;
 
@@ -1324,27 +1375,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         public override void Draw(CustomSpriteBatch g)
         {
-            //Draw fighting Units over the original as they are no grayed.
-            if (AttackingSquad.IsFlying)
-            {
-                g.Draw(Map.sprUnitHover, new Vector2((AttackingSquad.X - Map.CameraPosition.X) * Map.TileSize.X, (AttackingSquad.Y - Map.CameraPosition.Y) * Map.TileSize.Y), Color.White);
-                g.Draw(AttackingSquad.CurrentLeader.SpriteMap, new Vector2((AttackingSquad.X - Map.CameraPosition.X) * Map.TileSize.X, (AttackingSquad.Y - Map.CameraPosition.Y) * Map.TileSize.Y - 7), Color.White);
-            }
-            else
-            {
-                g.Draw(AttackingSquad.CurrentLeader.SpriteMap, new Vector2((AttackingSquad.X - Map.CameraPosition.X) * Map.TileSize.X, (AttackingSquad.Y - Map.CameraPosition.Y) * Map.TileSize.Y), Color.White);
-            }
-
-            if (DefendingSquad.IsFlying)
-            {
-                g.Draw(Map.sprUnitHover, new Vector2((DefendingSquad.X - Map.CameraPosition.X) * Map.TileSize.X, (DefendingSquad.Y - Map.CameraPosition.Y) * Map.TileSize.Y), Color.White);
-                g.Draw(DefendingSquad.CurrentLeader.SpriteMap, new Vector2((DefendingSquad.X - Map.CameraPosition.X) * Map.TileSize.X, (DefendingSquad.Y - Map.CameraPosition.Y) * Map.TileSize.Y - 7), Color.White);
-            }
-            else
-            {
-                g.Draw(DefendingSquad.CurrentLeader.SpriteMap, new Vector2((DefendingSquad.X - Map.CameraPosition.X) * Map.TileSize.X, (DefendingSquad.Y - Map.CameraPosition.Y) * Map.TileSize.Y), Color.White);
-            }
-
             if (CurrentNonDemoBattleFrame < 0)
                 return;
 

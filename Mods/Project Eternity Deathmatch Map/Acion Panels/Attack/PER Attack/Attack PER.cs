@@ -17,6 +17,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActiveSquadIndex;
         private Squad ActiveSquad;
         public List<Vector3> ListAttackChoice;
+        public List<MovementAlgorithmTile> ListAttackDirectionHelper;
         public List<MovementAlgorithmTile> ListAttackTerrain;
         private BattlePreviewer BattlePreview;
 
@@ -46,11 +47,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListAttackChoice.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
             }
+
+            ListAttackDirectionHelper = PERAttack.PredictAttackMovement(Map, ActiveSquad.Position, Map.CursorPosition);
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
             Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
+            Map.LayerManager.AddDrawablePath(ListAttackDirectionHelper);
 
             if (ActiveInputManager.InputConfirmPressed())
             {
@@ -88,7 +92,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AttackSpeed += AttackForwardVector * RandForward * AttackUsed.PERAttributes.ProjectileSpeed;
                 AttackSpeed += AttackForwardVector * AttackUsed.PERAttributes.ProjectileSpeed;
 
-                Vector3 AttackPosition = new Vector3(ActiveSquad.Position.X + 0.5f, ActiveSquad.Position.Y + 0.5f, ActiveSquad.Position.Z + ActiveTerrain.Position.Z);
+                Vector3 AttackPosition = new Vector3(ActiveSquad.Position.X + 0.5f, ActiveSquad.Position.Y + 0.5f, ActiveSquad.Position.Z + ActiveTerrain.Position.Z + 0.5f);
                 Vector3 NextPosition = AttackPosition + AttackSpeed;
 
                 PERAttack NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, AttackSpeed, AttackUsed.PERAttributes.MaxLifetime);

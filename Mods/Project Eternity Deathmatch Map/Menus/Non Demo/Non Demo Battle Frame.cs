@@ -18,7 +18,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 public void Update(GameTime gameTime)
                 {
-                    LeaderStance.Update(gameTime);
+                    if (LeaderStance != null)
+                    {
+                        LeaderStance.Update(gameTime);
+                    }
+
                     if (WingmanAStance != null)
                     {
                         WingmanAStance.Update(gameTime);
@@ -37,7 +41,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 public void OnEnd()
                 {
-                    LeaderStance.OnEnd();
+                    if (LeaderStance != null)
+                    {
+                        LeaderStance.OnEnd();
+                    }
+
                     if (WingmanAStance != null)
                     {
                         WingmanAStance.OnEnd();
@@ -56,7 +64,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 public void Draw(CustomSpriteBatch g, int NonDemoAnimationTimer)
                 {
-                    LeaderStance.Draw(g, NonDemoAnimationTimer);
+                    if (LeaderStance != null)
+                    {
+                        LeaderStance.Draw(g, NonDemoAnimationTimer);
+                    }
+
                     if (WingmanAStance != null)
                     {
                         WingmanAStance.Draw(g, NonDemoAnimationTimer);

@@ -18,7 +18,9 @@ namespace ProjectEternity.Core.Units
         public bool IsPlayerControlled;
 
         protected Vector3 _Position;
+        protected Vector3 _Speed;
         public Vector3 Position { get { return _Position; } }
+        public Vector3 Speed { get { return _Speed; } set { _Speed = value; } }
 
         public UnitMap3D Unit3D;
         public List<UnitMapComponent> ListTransportedUnit;
@@ -66,7 +68,7 @@ namespace ProjectEternity.Core.Units
 
             if (Unit3D != null)
             {
-                Unit3D.SetPosition(Position.X, Height, Position.Y);
+                Unit3D.SetPosition(Position.X, Position.Z * Height, Position.Y);
             }
         }
 

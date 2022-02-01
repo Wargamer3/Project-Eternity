@@ -41,6 +41,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void AddDrawablePath(List<MovementAlgorithmTile> ListPoint);
 
+        public abstract void AddDamageNumber(string Damage, Vector3 Position);
+
         public abstract void BeginDraw(CustomSpriteBatch g);
 
         public abstract void Draw(CustomSpriteBatch g);
@@ -53,6 +55,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void AddDrawablePath(List<MovementAlgorithmTile> ListPoint);
 
         void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor);
+
+        void AddDamageNumber(string Damage, Vector3 Position);
 
         void Reset();
 

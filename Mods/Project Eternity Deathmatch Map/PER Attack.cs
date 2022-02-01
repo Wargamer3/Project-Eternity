@@ -69,13 +69,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     return;
                 }
 
-                ListAttackTarget.Push(ActiveTarget);
-                Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, ListAttackTarget);
                 DestroySelf();
+
+                if (ActiveAttack.ExplosionOption.ExplosionRadius > 0)
+                {
+                    HandleExplosion();
+                }
+                else
+                {
+                    ListAttackTarget.Push(ActiveTarget);
+                    Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, ListAttackTarget);
+                }
             }
             else if (ActiveTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
             {
                 DestroySelf();
+
+                if (ActiveAttack.ExplosionOption.ExplosionRadius > 0)
+                {
+                    HandleExplosion();
+                }
             }
 
             SetPosition(NextPosition);
@@ -84,6 +97,45 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 DestroySelf();
             }
+        }
+
+        public static List<MovementAlgorithmTile> PredictAttackMovement(DeathmatchMap Map, Vector3 StartPosition, Vector3 CursorPosition)
+        {
+            List<MovementAlgorithmTile> ListCrossedTerrain = new List<MovementAlgorithmTile>();
+
+            Vector3 Diff = CursorPosition - StartPosition;
+            Diff.Normalize();
+
+            Terrain NextTerrain = Map.GetTerrain(StartPosition.X, StartPosition.Y, (int)StartPosition.Z);
+            float Progress = 0;
+
+            int NextX;
+            int NextY;
+            int NextZ;
+
+            while (NextTerrain != null)
+            {
+                Progress += 1;
+                NextX = (int)(StartPosition.X + Progress * Diff.X);
+                NextY = (int)(StartPosition.Y + Progress * Diff.Y);
+                NextZ = (int)(StartPosition.Z + Progress * Diff.Z);
+
+                if (NextX < 0 || NextX >= Map.MapSize.X || NextY < 0 || NextY >= Map.MapSize.Y || NextZ < 0 || NextZ >= Map.LayerManager.ListLayer.Count)
+                {
+                    break;
+                }
+
+                NextTerrain = Map.GetTerrain(NextX, NextY, NextZ);
+
+                ListCrossedTerrain.Add(NextTerrain);
+
+                if (NextTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
+                {
+                    break;
+                }
+            }
+
+            return ListCrossedTerrain;
         }
 
         public List<Terrain> GetCrossedTerrain(Vector3 NextPosition)
@@ -145,6 +197,71 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void DestroySelf()
         {
             Map.ListPERAttack.Remove(this);
+        }
+
+        public void HandleExplosion()
+        {
+            int StartX = (int)(Position.X - ActiveAttack.ExplosionOption.ExplosionRadius);
+            int EndX = (int)(Position.X + ActiveAttack.ExplosionOption.ExplosionRadius);
+            int StartY = (int)(Position.Y - ActiveAttack.ExplosionOption.ExplosionRadius);
+            int EndY = (int)(Position.Y + ActiveAttack.ExplosionOption.ExplosionRadius);
+            int StartZ = (int)(Position.Z - ActiveAttack.ExplosionOption.ExplosionRadius);
+            int EndZ = (int)(Position.Z + ActiveAttack.ExplosionOption.ExplosionRadius);
+
+            Stack<Tuple<int, int>> ListAttackTarget = new Stack<Tuple<int, int>>();
+
+            for (int X = StartX; X < EndX; ++X)
+            {
+                for (int Y = StartY; Y < EndY; ++Y)
+                {
+                    for (int Z = StartZ; Z < EndZ; ++Z)
+                    {
+                        Tuple<int, int> ActiveTarget = CheckForEnemies(new Vector3(StartX, StartY, Z), true);
+
+                        if (ActiveTarget != null)
+                        {
+                            ListAttackTarget.Push(ActiveTarget);
+                        }
+                    }
+                }
+            }
+
+            if (ListAttackTarget.Count > 0)
+            {
+                Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, ListAttackTarget);
+                foreach (Tuple<int, int> ActiveTarget in ListAttackTarget)
+                {
+                    Squad SquadToKill = Map.ListPlayer[ActiveTarget.Item1].ListSquad[ActiveTarget.Item2];
+
+                    Terrain SquadTerrain = Map.GetTerrain(SquadToKill.X, SquadToKill.Y, (int)SquadToKill.Z);
+
+                    float DiffX = Math.Abs(Position.X - SquadToKill.Position.X);
+                    float DiffY = Math.Abs(Position.Y - SquadToKill.Position.Y);
+                    float DiffZ = Math.Abs(Position.Z - (SquadToKill.Position.Z + SquadTerrain.Position.Z));
+
+                    float DiffTotal = (DiffX + DiffY + DiffZ) / 3;
+
+                    if (DiffTotal < ActiveAttack.ExplosionOption.ExplosionRadius)
+                    {
+                        float WindForce = DiffTotal / ActiveAttack.ExplosionOption.ExplosionRadius;
+                        float WindValue = ActiveAttack.ExplosionOption.ExplosionWindPowerAtEdge + WindForce * (ActiveAttack.ExplosionOption.ExplosionWindPowerAtCenter - ActiveAttack.ExplosionOption.ExplosionWindPowerAtEdge);
+
+                        Vector3 FinalSpeed = SquadToKill.Position - Position;
+                        FinalSpeed.Normalize();
+
+                        FinalSpeed *= WindValue;
+                        SquadToKill.Speed = FinalSpeed;
+
+                        SquadToKill.SetPosition(SquadToKill.Position + new Vector3(0, 0, Map.LayerManager.ListLayer[(int)SquadToKill.Position.Z].ArrayTerrain[(int)SquadToKill.Position.X, (int)SquadToKill.Position.Y].Position.Z));
+
+                        if (FinalSpeed.Z > 0)
+                        {
+                            SquadToKill.CurrentMovement = UnitStats.TerrainAir;
+                            SquadToKill.IsFlying = false;
+                        }
+                    }
+                }
+            }
         }
     }
 }

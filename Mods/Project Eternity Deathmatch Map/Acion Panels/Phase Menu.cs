@@ -110,15 +110,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             do
             {
                 Map.ActivePlayerIndex++;
-                UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
-                UpdatePERAttacks(Map, Map.ActivePlayerIndex);
 
                 if (Map.ActivePlayerIndex >= Map.ListPlayer.Count)
                 {
                     Map.OnNewTurn();
-                    UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
-                    UpdatePERAttacks(Map, Map.ActivePlayerIndex);
                 }
+
+                UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
+                UpdatePERAttacks(Map, Map.ActivePlayerIndex);
+                UpdateSquadMovement(Map, Map.ActivePlayerIndex);
 
                 foreach (Player ActivePlayer in Map.ListPlayer)
                 {
@@ -194,6 +194,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActivePERAttack.PlayerIndex == ActivePlayerIndex)
                 {
                     Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelUpdatePERAttacks(Map));
+                    return;
+                }
+            }
+        }
+
+        public static void UpdateSquadMovement(DeathmatchMap Map, int ActivePlayerIndex)
+        {
+            for (int S = Map.ListPlayer[ActivePlayerIndex].ListSquad.Count - 1; S >= 0; --S)
+            {
+                if (Map.ListPlayer[ActivePlayerIndex].ListSquad[S].Speed != Vector3.Zero
+                    || (Map.ListPlayer[ActivePlayerIndex].ListSquad[S].CurrentMovement == Core.Units.UnitStats.TerrainAir
+                            && !Map.ListPlayer[ActivePlayerIndex].ListSquad[S].IsFlying))
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAutoMove(Map));
                     return;
                 }
             }

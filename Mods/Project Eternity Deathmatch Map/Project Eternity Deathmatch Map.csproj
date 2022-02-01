@@ -91,9 +91,11 @@
     <Compile Include="Acion Panels\Map Switch Menu.cs" />
     <Compile Include="Acion Panels\Attack\Charge Attack.cs" />
     <Compile Include="Acion Panels\Hub Menu.cs" />
+    <Compile Include="Acion Panels\Movement\Fall To Death.cs" />
     <Compile Include="Acion Panels\Movement\Board.cs" />
     <Compile Include="Acion Panels\Movement\Deploy.cs" />
     <Compile Include="Acion Panels\Movement\Deploy At Position.cs" />
+    <Compile Include="Acion Panels\Movement\Auto Move.cs" />
     <Compile Include="Acion Panels\Movement\Move Part 1.cs" />
     <Compile Include="Acion Panels\Player Behavior\AI Step.cs" />
     <Compile Include="Acion Panels\Player Behavior\Human Step.cs" />

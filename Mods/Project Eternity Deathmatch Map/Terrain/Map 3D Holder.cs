@@ -24,6 +24,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Dictionary<int, Tile3DHolder> DicTile3DByTileset;
         private Dictionary<Color, List<Tile3D>> DicDrawablePointPerColor;
         private List<Tile3D> ListDrawableArrowPerColor;
+        private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
         public Map3DDrawable(DeathmatchMap Map, GraphicsDevice g)
         {
@@ -88,6 +89,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DicDrawablePointPerColor = new Dictionary<Color, List<Tile3D>>();
             DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
             ListDrawableArrowPerColor = new List<Tile3D>();
+            DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
             for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
             {
@@ -193,6 +195,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             DicDrawablePointPerColor.Clear();
             ListDrawableArrowPerColor.Clear();
+            DicDamageNumberByPosition.Clear();
         }
 
         private void UpdateCamera()
@@ -304,26 +307,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private void DrawDrawablePoints(CustomSpriteBatch g)
+        public void AddDamageNumber(string Damage, Vector3 Position)
         {
-            PolygonEffect.Texture = GameScreen.sprPixel;
-            PolygonEffect.CurrentTechnique.Passes[0].Apply();
-
-            foreach (KeyValuePair<Color, List<Tile3D>> DrawablePointPerColor in DicDrawablePointPerColor)
-            {
-                foreach (Tile3D DrawablePoint in DrawablePointPerColor.Value)
-                {
-                    DrawablePoint.Draw(g.GraphicsDevice);
-                }
-            }
-
-            PolygonEffect.Texture = Map.sprCursorPath;
-            PolygonEffect.CurrentTechnique.Passes[0].Apply();
-
-            foreach (Tile3D DrawablePoint in ListDrawableArrowPerColor)
-            {
-                DrawablePoint.Draw(g.GraphicsDevice);
-            }
+            DicDamageNumberByPosition.Add(Damage, Position);
         }
 
         private Point GetCursorTextureOffset(MovementAlgorithmTile Previous, MovementAlgorithmTile Current, MovementAlgorithmTile Next)
@@ -495,11 +481,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 //If the selected unit have the order to move, draw the possible positions it can go to.
-                for (int U = 0; U < Map.ListPlayer[P].ListSquad.Count; U++)
+                foreach (Squad ActiveSquad in Map.ListPlayer[P].ListSquad)
                 {
                     //If it's dead, don't draw it unless it's an event unit.
-                    if ((Map.ListPlayer[P].ListSquad[U].CurrentLeader == null && !Map.ListPlayer[P].ListSquad[U].IsEventSquad)
-                        || Map.ListPlayer[P].ListSquad[U].IsDead)
+                    if ((ActiveSquad.CurrentLeader == null && !ActiveSquad.IsEventSquad)
+                        || ActiveSquad.IsDead)
                         continue;
 
                     Color UnitColor;
@@ -508,15 +494,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     else
                         UnitColor = Color.White;
 
-                    Map.ListPlayer[P].ListSquad[U].Unit3D.SetViewMatrix(Camera.View);
-                    float TerrainZ = Map.LayerManager.ListLayer[(int)Map.ListPlayer[P].ListSquad[U].Z].ArrayTerrain[(int)Map.ListPlayer[P].ListSquad[U].Position.X, (int)Map.ListPlayer[P].ListSquad[U].Position.Y].Position.Z;
+                    ActiveSquad.Unit3D.SetViewMatrix(Camera.View);
+                    float TerrainZ = 0;
+                    if (ActiveSquad.Speed == Vector3.Zero)
+                    {
+                        TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y].Position.Z;
+                    }
 
-                    Map.ListPlayer[P].ListSquad[U].Unit3D.SetPosition(
-                        Map.ListPlayer[P].ListSquad[U].Position.X + 0.5f,
-                        (Map.ListPlayer[P].ListSquad[U].Position.Z * 32 + TerrainZ * 32),
-                        Map.ListPlayer[P].ListSquad[U].Position.Y + 0.5f);
+                    ActiveSquad.Unit3D.SetPosition(
+                        ActiveSquad.Position.X + 0.5f,
+                        (ActiveSquad.Position.Z + TerrainZ) * 32,
+                        ActiveSquad.Position.Y + 0.5f);
 
-                    Map.ListPlayer[P].ListSquad[U].Unit3D.Draw(GameScreen.GraphicsDevice);
+                    ActiveSquad.Unit3D.Draw(GameScreen.GraphicsDevice);
                 }
             }
 
@@ -528,6 +518,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             g.End();
             g.Begin();
+
+            DrawDamageNumbers(g);
+        }
+
+        private void DrawDrawablePoints(CustomSpriteBatch g)
+        {
+            PolygonEffect.Texture = GameScreen.sprPixel;
+            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+
+            foreach (KeyValuePair<Color, List<Tile3D>> DrawablePointPerColor in DicDrawablePointPerColor)
+            {
+                foreach (Tile3D DrawablePoint in DrawablePointPerColor.Value)
+                {
+                    DrawablePoint.Draw(g.GraphicsDevice);
+                }
+            }
+
+            PolygonEffect.Texture = Map.sprCursorPath;
+            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+
+            foreach (Tile3D DrawablePoint in ListDrawableArrowPerColor)
+            {
+                DrawablePoint.Draw(g.GraphicsDevice);
+            }
         }
 
         private void DrawDelayedAttacks(CustomSpriteBatch g)
@@ -555,6 +569,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ActiveAttack.Map3DComponent.SetViewMatrix(Camera.View);
                 ActiveAttack.Map3DComponent.Draw(g.GraphicsDevice);
+            }
+        }
+
+        private void DrawDamageNumbers(CustomSpriteBatch g)
+        {
+            foreach (KeyValuePair<string, Vector3> ActiveAttack in DicDamageNumberByPosition)
+            {
+                Vector3 Visible3DPosition = new Vector3(ActiveAttack.Value.X, ActiveAttack.Value.Z * 32, ActiveAttack.Value.Y);
+                Vector3 Position = new Vector3(Visible3DPosition.X * 32, Visible3DPosition.Y + 16, Visible3DPosition.Z * 32);
+
+                Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, PolygonEffect.View, Matrix.Identity);
+                g.DrawString(Map.fntNonDemoDamage, ActiveAttack.Key, new Vector2(Position2D.X, Position2D.Y), Color.White);
             }
         }
 

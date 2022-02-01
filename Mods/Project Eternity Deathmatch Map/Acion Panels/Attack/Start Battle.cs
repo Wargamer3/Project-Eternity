@@ -384,11 +384,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Map.PushScreen(NonDemoScreen);
                     NonDemoScreen.InitNonDemo(FinalActiveSquad, FinalAttack, FinalActiveSquadSupport, FinalActivePlayerIndex, AttackingResult, Map.BattleMenuOffenseFormationChoice,
                          FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, DefendingResult, Map.BattleMenuDefenseFormationChoice, IsActiveSquadOnRight);
-                    /*Map.NonDemoScreen.InitNonDemo(FinalActiveSquad, FinalAttack, FinalActiveSquadSupport, FinalActivePlayerIndex, AttackingResult, Map.BattleMenuOffenseFormationChoice,
-                        FinalTargetSquad, FinalTargetSquadSupport, FinalTargetPlayerIndex, DefendingResult, Map.BattleMenuDefenseFormationChoice, IsActiveSquadOnRight);
-
-                    Map.NonDemoScreen.Alive = true;
-                    Map.ListGameScreen.Insert(0, Map.NonDemoScreen);*/
                 }
             }
 

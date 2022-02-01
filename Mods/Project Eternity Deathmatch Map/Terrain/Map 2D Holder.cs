@@ -11,6 +11,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     public class DeathmatchMap2DHolder : ILayerHolderDrawable
     {
         private Dictionary<Color, List<MovementAlgorithmTile>> DicDrawablePointPerColor;
+        private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
         protected Point MapSize { get { return Map.MapSize; } }
 
@@ -25,11 +26,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.Map = Map;
             DicDrawablePointPerColor = new Dictionary<Color, List<MovementAlgorithmTile>>();
+            DicDamageNumberByPosition = new Dictionary<string, Vector3>();
         }
 
         public void Update(GameTime gameTime)
         {
             DicDrawablePointPerColor.Clear();
+            DicDamageNumberByPosition.Clear();
         }
 
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
@@ -39,6 +42,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)
         {
+        }
+
+        public void AddDamageNumber(string Damage, Vector3 Position)
+        {
+            DicDamageNumberByPosition.Add(Damage, Position);
         }
 
         public void BeginDraw(CustomSpriteBatch g)
@@ -213,6 +221,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawPERAttacks(g);
 
             DrawPlayers(g);
+
+            DrawDamageNumbers(g);
         }
 
         public void DrawPlayers(CustomSpriteBatch g)
@@ -250,6 +260,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             foreach (PERAttack ActiveAttack in Map.ListPERAttack)
             {
                 ActiveAttack.ActiveAttack.PERAttributes.ProjectileAnimation.Draw(g, new Vector2(ActiveAttack.Position.X, ActiveAttack.Position.Y));
+            }
+        }
+
+        private void DrawDamageNumbers(CustomSpriteBatch g)
+        {
+            foreach (KeyValuePair<string, Vector3> ActiveAttack in DicDamageNumberByPosition)
+            {
+                g.DrawString(Map.fntNonDemoDamage, ActiveAttack.Key, new Vector2(ActiveAttack.Value.X, ActiveAttack.Value.Y), Color.White);
             }
         }
 

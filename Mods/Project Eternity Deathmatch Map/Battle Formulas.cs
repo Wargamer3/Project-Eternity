@@ -430,93 +430,114 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return Result;
         }
 
-        public void FinalizeBattle(Squad Attacker, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport, int AttackerPlayerIndex, Squad TargetSquad, SupportSquadHolder TargetSquadSupport, int DefenderPlayerIndex, SquadBattleResult ResultAttack, SquadBattleResult ResultDefend)
+        public void FinalizeBattle(Squad Attacker, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport, int AttackerPlayerIndex,
+            Squad TargetSquad, SupportSquadHolder TargetSquadSupport, int DefenderPlayerIndex, SquadBattleResult ResultAttack, SquadBattleResult ResultDefend)
         {
-            Squad Target = TargetSquad;
-            if (TargetSquadSupport.ActiveSquadSupport != null)
-            {
-                Target = TargetSquadSupport.ActiveSquadSupport;
-                //Remove 1 Support Defend.
-                --TargetSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportDefendModifier;
-            }
-
             List<Unit> ListDeadDefender = new List<Unit>();
             List<LevelUpMenu> ListBattleRecap = new List<LevelUpMenu>();
+            bool HasRecap = false;
 
-            ListBattleRecap.AddRange(FinalizeBattle(Attacker, CurrentAttack, AttackerPlayerIndex, Target, DefenderPlayerIndex, ResultAttack, ListDeadDefender));
-
-            //Counter attack
-            if (TargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack && TargetSquad.CurrentLeader.HP > 0)
+            if (Attacker != null)
             {
-                ListBattleRecap.AddRange(FinalizeBattle(TargetSquad, TargetSquad.CurrentLeader.CurrentAttack, DefenderPlayerIndex, Attacker, AttackerPlayerIndex, ResultDefend, new List<Unit>()));
+                Squad Target = TargetSquad;
+
+                if (TargetSquadSupport.ActiveSquadSupport != null)
+                {
+                    Target = TargetSquadSupport.ActiveSquadSupport;
+                    //Remove 1 Support Defend.
+                    --TargetSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportDefendModifier;
+                }
+
+                ListBattleRecap.AddRange(FinalizeBattle(Attacker, CurrentAttack, AttackerPlayerIndex, Target, DefenderPlayerIndex, ResultAttack, ListDeadDefender));
+
+                //Counter attack
+                if (TargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack && TargetSquad.CurrentLeader.HP > 0)
+                {
+                    ListBattleRecap.AddRange(FinalizeBattle(TargetSquad, TargetSquad.CurrentLeader.CurrentAttack, DefenderPlayerIndex, Attacker, AttackerPlayerIndex, ResultDefend, new List<Unit>()));
+                }
+
+                //Support Attack
+                if (ActiveSquadSupport.ActiveSquadSupport != null && Attacker.CurrentLeader.HP > 0 && TargetSquad.CurrentLeader.HP > 0)
+                {
+                    //Remove 1 Support Defend.
+                    --ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifier;
+
+                    LevelUpMenu BattleRecap = FinalizeBattle(ActiveSquadSupport.ActiveSquadSupport.CurrentLeader, ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack, ActiveSquadSupport.ActiveSquadSupport, AttackerPlayerIndex,
+                        TargetSquad.CurrentLeader, TargetSquad, DefenderPlayerIndex, ResultAttack.ResultSupportAttack, ListDeadDefender);
+
+                    if (BattleRecap != null)
+                    {
+                        ListBattleRecap.Add(BattleRecap);
+                    }
+                }
+                //Explosion of death cutscene
+                if (Attacker.CurrentLeader == null)
+                    PushScreen(new ExplosionCutscene(CenterCamera, this, Attacker));
+
+                for (int R = ListBattleRecap.Count - 1; R >= 0; --R)
+                {
+                    if (Constants.ShowBattleRecap && ListBattleRecap[R].IsHuman)
+                    {
+                        PushScreen(ListBattleRecap[R]);
+
+                        if (!HasRecap)
+                        {
+                            ListBattleRecap[R].SetBattleContent(true, Attacker, ActiveSquadSupport, DefenderPlayerIndex, TargetSquad, TargetSquadSupport);
+                        }
+                        else
+                        {
+                            ListBattleRecap[R].SetBattleContent(false, Attacker, ActiveSquadSupport, DefenderPlayerIndex, TargetSquad, TargetSquadSupport);
+                        }
+
+                        HasRecap = true;
+                    }
+                    else
+                    {
+                        ListBattleRecap[R].LevelUp();
+                    }
+                }
             }
-
-            //Support Attack
-            if (ActiveSquadSupport.ActiveSquadSupport != null && Attacker.CurrentLeader.HP > 0 && TargetSquad.CurrentLeader.HP > 0)
+            else
             {
-                //Remove 1 Support Defend.
-                --ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifier;
-
-                LevelUpMenu BattleRecap = FinalizeBattle(ActiveSquadSupport.ActiveSquadSupport.CurrentLeader, ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack, ActiveSquadSupport.ActiveSquadSupport, AttackerPlayerIndex,
-                    TargetSquad.CurrentLeader, TargetSquad, DefenderPlayerIndex, ResultAttack.ResultSupportAttack, ListDeadDefender);
-
+                LevelUpMenu BattleRecap = FinalizeBattle(null, null, null, AttackerPlayerIndex, ResultAttack.ArrayResult[0].Target, TargetSquad, DefenderPlayerIndex, ResultAttack.ArrayResult[0], ListDeadDefender);
                 if (BattleRecap != null)
                 {
                     ListBattleRecap.Add(BattleRecap);
                 }
             }
 
-            #region Explosions
-
             //Explosion of death cutscene
-            if (Attacker.CurrentLeader == null)
-                PushScreen(new BattleMapScreen.ExplosionCutscene(CenterCamera, this, Attacker));
             if (TargetSquad.CurrentLeader == null)
-                PushScreen(new BattleMapScreen.ExplosionCutscene(CenterCamera, this, TargetSquad));
-
-            #endregion
-
-            bool HasRecap = false;
-            for (int R = ListBattleRecap.Count - 1; R >= 0; --R)
-            {
-                if (Constants.ShowBattleRecap && ListBattleRecap[R].IsHuman)
-                {
-                    PushScreen(ListBattleRecap[R]);
-
-                    if (!HasRecap)
-                    {
-                        ListBattleRecap[R].SetBattleContent(true, Attacker, ActiveSquadSupport, DefenderPlayerIndex, TargetSquad, TargetSquadSupport);
-                    }
-                    else
-                    {
-                        ListBattleRecap[R].SetBattleContent(false, Attacker, ActiveSquadSupport, DefenderPlayerIndex, TargetSquad, TargetSquadSupport);
-                    }
-
-                    HasRecap = true;
-                }
-                else
-                {
-                    ListBattleRecap[R].LevelUp();
-                }
-            }
+                PushScreen(new ExplosionCutscene(CenterCamera, this, TargetSquad));
 
             if (!HasRecap)
             {
-                GlobalBattleContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, ActiveParser);
+                if (Attacker != null)
+                {
+                    GlobalBattleContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, ActiveParser);
+                }
 
                 UpdateMapEvent(EventTypeOnBattle, 1);
 
                 GlobalBattleContext.SetContext(null, null, null, null, null, null, ActiveParser);
 
                 //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)
-                Attacker.UpdateSquad();
-                if (ActiveSquadSupport != null && ActiveSquadSupport.ActiveSquadSupport != null)
-                    ActiveSquadSupport.ActiveSquadSupport.UpdateSquad();
+
+                if (Attacker != null)
+                {
+                    Attacker.UpdateSquad();
+                    if (ActiveSquadSupport != null && ActiveSquadSupport.ActiveSquadSupport != null)
+                        ActiveSquadSupport.ActiveSquadSupport.UpdateSquad();
+                }
+
                 TargetSquad.UpdateSquad();
                 if (TargetSquadSupport != null && TargetSquadSupport.ActiveSquadSupport != null)
                     TargetSquadSupport.ActiveSquadSupport.UpdateSquad();
 
-                GameRule.OnSquadDefeated(DefenderPlayerIndex, TargetSquad);
+                if (TargetSquad.CurrentLeader == null)
+                {
+                    GameRule.OnSquadDefeated(DefenderPlayerIndex, TargetSquad);
+                }
             }
         }
 
@@ -549,48 +570,72 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                                    BattleResult Result, List<Unit> ListDeadDefender)
         {
             LevelUpMenu BattleRecap = null;
-            if (CurrentAttack != null && !ListDeadDefender.Contains(Result.Target))
+            if (!ListDeadDefender.Contains(Result.Target))
             {
-                FinalizeAttack(AttackerSquad, Attacker, CurrentAttack, Result);
+                Result.Target.DamageUnit(Result.AttackDamage);
+
+                //Remove Leader Ammo if needed.
+                if (CurrentAttack != null && CurrentAttack.MaxAmmo > 0)
+                {
+                    CurrentAttack.ConsumeAmmo();
+                }
+
+                if (AttackerSquad != null)//Can get hurt by the environment
+                {
+                    Attacker.ConsumeEN(Attacker.EN - Result.AttackAttackerFinalEN);
+
+                    int PilotPoint = 0;
+                    Attacker.PilotPilotPoints += (int)(PilotPoint * Attacker.Boosts.PPMultiplier);
+
+                    ActivateAutomaticSkills(AttackerSquad, Attacker, string.Empty, AttackerSquad, Attacker);
+                }
+
+                ActivateAutomaticSkills(ListPlayer[Result.TargetPlayerIndex].ListSquad[Result.TargetSquadIndex], Result.Target, string.Empty, null, Result.Target);
 
                 //Will Gains
                 if (Result.Target.HP <= 0)
                 {
+                    ListDeadDefender.Add(Result.Target);
+
                     if (AttackerPlayerIndex == 0)
                     {
                         int Money = 500;
                         Constants.Money += (int)(Money * Attacker.Boosts.MoneyMultiplier);
                     }
 
-                    BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, AttackerSquad, ListPlayer[AttackerPlayerIndex].IsPlayerControlled);
-                    BattleRecap.TotalExpGained += (int)((Result.Target.Pilot.EXPValue + Result.Target.UnitStat.EXPValue) * Attacker.Boosts.EXPMultiplier);
-
-                    ListDeadDefender.Add(Result.Target);
-
-                    FinalizeDeath(AttackerSquad, AttackerPlayerIndex, DefenderSquad, DefenderPlayerIndex, Result.Target);
-                    Attacker.PilotKills += 1;
-
-                    for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
+                    if (AttackerSquad != null)//Can get hurt by the environment
                     {
-                        Attacker.ArrayCharacterActive[C].Will += Attacker.ArrayCharacterActive[C].Personality.WillGainDestroyedEnemy;
-                    }
+                        BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, AttackerSquad, ListPlayer[AttackerPlayerIndex].IsPlayerControlled);
+                        BattleRecap.TotalExpGained += (int)((Result.Target.Pilot.EXPValue + Result.Target.UnitStat.EXPValue) * Attacker.Boosts.EXPMultiplier);
 
-                    for (int U = 0; U < AttackerSquad.UnitsAliveInSquad; U++)
-                    {
-                        if (Attacker == AttackerSquad[U])
-                            continue;
+                        FinalizeDeath(AttackerSquad, AttackerPlayerIndex, DefenderSquad, DefenderPlayerIndex, Result.Target);
+                        Attacker.PilotKills += 1;
 
-                        for (int C = 1; C < AttackerSquad[U].ArrayCharacterActive.Length; C++)
+                        for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
                         {
-                            AttackerSquad[U].ArrayCharacterActive[C].Will += 2;
+                            Attacker.ArrayCharacterActive[C].Will += Attacker.ArrayCharacterActive[C].Personality.WillGainDestroyedEnemy;
+                        }
+
+                        for (int U = 0; U < AttackerSquad.UnitsAliveInSquad; U++)
+                        {
+                            if (Attacker == AttackerSquad[U])
+                                continue;
+
+                            for (int C = 1; C < AttackerSquad[U].ArrayCharacterActive.Length; C++)
+                            {
+                                AttackerSquad[U].ArrayCharacterActive[C].Will += 2;
+                            }
                         }
                     }
                 }
                 else if (Result.AttackMissed)
                 {
-                    for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
+                    if (AttackerSquad != null)//Can get hurt by the environment
                     {
-                        Attacker.ArrayCharacterActive[C].Will += Attacker.ArrayCharacterActive[C].Personality.WillGainMissedEnemy;
+                        for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
+                        {
+                            Attacker.ArrayCharacterActive[C].Will += Attacker.ArrayCharacterActive[C].Personality.WillGainMissedEnemy;
+                        }
                     }
 
                     for (int C = 0; C < Result.Target.ArrayCharacterActive.Length; C++)
@@ -600,9 +645,12 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 }
                 else if (!Result.AttackMissed)
                 {
-                    for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
+                    if (AttackerSquad != null)//Can get hurt by the environment
                     {
-                        Attacker.ArrayCharacterActive[C].Will += Attacker.ArrayCharacterActive[C].Personality.WillGainHitEnemy;
+                        for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
+                        {
+                            Attacker.ArrayCharacterActive[C].Will += Attacker.ArrayCharacterActive[C].Personality.WillGainHitEnemy;
+                        }
                     }
 
                     for (int C = 0; C < Result.Target.ArrayCharacterActive.Length; C++)
@@ -650,23 +698,6 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     }
                 }
             }
-        }
-
-        private void FinalizeAttack(Squad SquadAttacker, Unit UnitAttacker, Attack CurrentAttack, BattleResult Result)
-        {
-            Result.Target.DamageUnit(Result.AttackDamage);
-
-            //Remove Leader Ammo if needed.
-            if (CurrentAttack.MaxAmmo > 0)
-                CurrentAttack.ConsumeAmmo();
-
-            UnitAttacker.ConsumeEN(UnitAttacker.EN - Result.AttackAttackerFinalEN);
-
-            int PilotPoint = 0;
-            UnitAttacker.PilotPilotPoints += (int)(PilotPoint * UnitAttacker.Boosts.PPMultiplier);
-            
-            ActivateAutomaticSkills(SquadAttacker, UnitAttacker, string.Empty, SquadAttacker, UnitAttacker);
-            ActivateAutomaticSkills(ListPlayer[Result.TargetPlayerIndex].ListSquad[Result.TargetSquadIndex], Result.Target, string.Empty, null, Result.Target);
         }
 
         public SquadBattleResult CalculateFinalHP(Squad Attacker, Attack CurrentAttack, Squad SupportAttacker, int AttackerPlayerIndex, FormationChoices AttackerFormationChoice,

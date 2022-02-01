@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Jump Pad.cs" />
     <Compile Include="Flag Spawner.cs" />
     <Compile Include="Adrenaline Spawner.cs" />
     <Compile Include="Health Vial Medium Spawner .cs" />
