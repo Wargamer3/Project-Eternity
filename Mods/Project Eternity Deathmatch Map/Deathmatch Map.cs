@@ -507,15 +507,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Player NewDeahtmatchPlayer = new Player(NewPlayer);
 
-            Color PlayerColor = Color.Red;
-
-            if (ListPlayer.Count < ListMultiplayerColor.Count)
-            {
-                PlayerColor = ListMultiplayerColor[ListPlayer.Count];
-            }
-
-            NewDeahtmatchPlayer.Color = PlayerColor;
-
             ListPlayer.Add(NewDeahtmatchPlayer);
             ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);
         }
