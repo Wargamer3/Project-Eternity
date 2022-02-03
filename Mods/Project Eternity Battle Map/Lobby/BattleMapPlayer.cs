@@ -142,7 +142,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return;
             }
 
-            Name = File.ReadAllText("User data/Profiles/Battle Map/Last Selected Profile.txt", Encoding.UTF8);
+            if (Name == null)
+            {
+                Name = File.ReadAllText("User data/Profiles/Battle Map/Last Selected Profile.txt", Encoding.UTF8);
+            }
             FileStream FS = new FileStream("User data/Profiles/Battle Map/" + Name + ".bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
@@ -155,7 +158,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FS.Close();
         }
 
-        private void InitFirstTimeInventory()
+        public void InitFirstTimeInventory()
         {
             IniFile IniDefaultUnits = IniFile.ReadFromFile("Content/Battle Lobby Default Units.ini");
 

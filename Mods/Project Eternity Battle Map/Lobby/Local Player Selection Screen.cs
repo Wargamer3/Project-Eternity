@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -140,17 +141,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick.Play();
 
             BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
-            Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-            Character NewCharacter = new Character("Original/Greg", GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-            NewCharacter.Level = 1;
-            NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
 
-            Squad NewSquad = new Squad("Squad", NewUnit);
-            NewSquad.IsPlayerControlled = true;
-
-            NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
+            if (!File.Exists("User data/Profiles/Battle Map/" + NewPlayer.Name + ".bin"))
+            {
+                NewPlayer.InitFirstTimeInventory();
+                NewPlayer.SaveLocally();
+            }
 
             PlayerManager.ListLocalPlayer.Add(NewPlayer);
+            NewPlayer.LoadLocally(GameScreen.ContentFallback);
             UpdateUIElements();
         }
 

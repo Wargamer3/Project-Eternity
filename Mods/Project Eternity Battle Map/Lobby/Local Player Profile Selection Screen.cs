@@ -92,6 +92,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick.Play();
 
             ActivePlayer.Name = ListPlayerProfile[SelectedProfileIndex];
+            ActivePlayer.LoadLocally(GameScreen.ContentFallback);
 
             RemoveScreen(this);
         }

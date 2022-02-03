@@ -157,7 +157,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
 
                 PlayerManager.ListLocalPlayer.Add(NewPlayer);
                 PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);
@@ -200,7 +200,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (ListServerIP.Count == 0)
                     {
                         TryConnecting = false;
-                        PlayerManager.ListLocalPlayer.Add(new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, BattleMapPlayer.PlayerTypes.Offline, false, 0, true, Color.Blue));
+                        PlayerManager.ListLocalPlayer.Add(new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, BattleMapPlayer.PlayerTypes.Offline, false, 0, true, Color.Blue));
                         PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);
                     }
                 }
