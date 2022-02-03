@@ -101,6 +101,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.ListPERAttack.Add(NewAttack);
 
+
+                if (AttackUsed.MaxAmmo > 0)
+                {
+                    AttackUsed.ConsumeAmmo();
+                }
+                RemoveAllSubActionPanels();
                 Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, NewAttack));
             }
         }
