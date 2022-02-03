@@ -568,6 +568,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         (ActiveSquad.Position.Z + TerrainZ) * 32,
                         ActiveSquad.Position.Y + 0.5f);
 
+                    ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActiveSquad.CanMove && P == Map.ActivePlayerIndex);
+
                     ActiveSquad.Unit3D.Draw(GameScreen.GraphicsDevice);
                 }
             }
