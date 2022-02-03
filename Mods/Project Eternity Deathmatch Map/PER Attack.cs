@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Stack<Tuple<int, int>> ListAttackTarget = new Stack<Tuple<int, int>>();
 
-            Tuple<int, int> ActiveTarget = CheckForEnemies(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex), true);
+            Tuple<int, int> ActiveTarget = CheckForEnemies(Map, PlayerIndex, new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex), true);
 
             if (ActiveTarget != null)
             {
@@ -107,8 +107,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Diff.Normalize();
 
             Terrain NextTerrain = Map.GetTerrain(StartPosition.X, StartPosition.Y, (int)StartPosition.Z);
+            ListCrossedTerrain.Add(NextTerrain);
+
             float Progress = 0;
 
+            int LastX = (int)StartPosition.X;
+            int LastY = (int)StartPosition.Y;
+            int LastZ = (int)StartPosition.Z;
+            int CurrentX = (int)StartPosition.X;
+            int CurrentY = (int)StartPosition.Y;
+            int CurrentZ = (int)StartPosition.Z;
             int NextX;
             int NextY;
             int NextZ;
@@ -116,6 +124,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             while (NextTerrain != null)
             {
                 Progress += 1;
+
                 NextX = (int)(StartPosition.X + Progress * Diff.X);
                 NextY = (int)(StartPosition.Y + Progress * Diff.Y);
                 NextZ = (int)(StartPosition.Z + Progress * Diff.Z);
@@ -125,14 +134,86 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
                 }
 
+                #region Corners
+
+                if (CurrentX != NextX && (CurrentY != NextY || CurrentZ != NextZ)
+                    || CurrentY != NextY && (CurrentX != NextX || CurrentZ != NextZ)
+                    || CurrentZ != NextZ && (CurrentX != NextX || CurrentY != NextY))
+                {
+                    int CornerNextX = NextX;
+                    int CornerNextY = NextY;
+                    int CornerNextZ = NextZ;
+
+                    if (LastX == CurrentX)
+                    {
+                        CornerNextX = CurrentX;
+                    }
+                    else if (LastY == CurrentY)
+                    {
+                        CornerNextY = CurrentY;
+                    }
+                    else
+                    {
+                        CornerNextZ = CurrentZ;
+                    }
+
+                    if (CornerNextX < 0 || CornerNextX >= Map.MapSize.X || CornerNextY < 0 || CornerNextY >= Map.MapSize.Y || CornerNextZ < 0 || CornerNextZ >= Map.LayerManager.ListLayer.Count)
+                    {
+                        break;
+                    }
+
+                    NextTerrain = Map.GetTerrain(CornerNextX, CornerNextY, CornerNextZ);
+
+                    CurrentX = CornerNextX;
+                    CurrentY = CornerNextY;
+                    CurrentZ = CornerNextZ;
+
+                    if (!ListCrossedTerrain.Contains(NextTerrain))
+                    {
+                        ListCrossedTerrain.Add(NextTerrain);
+                    }
+
+                    if (NextTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
+                    {
+                        break;
+                    }
+
+                    Tuple<int, int> ActiveCornerTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, new Vector3(CornerNextX, CornerNextY, CornerNextZ), true);
+
+                    if (ActiveCornerTarget != null)
+                    {
+                        break;
+                    }
+                }
+
+                #endregion
+
                 NextTerrain = Map.GetTerrain(NextX, NextY, NextZ);
 
-                ListCrossedTerrain.Add(NextTerrain);
+                if (!ListCrossedTerrain.Contains(NextTerrain))
+                {
+                    ListCrossedTerrain.Add(NextTerrain);
+                }
 
                 if (NextTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
                 {
                     break;
                 }
+
+                Tuple<int, int> ActiveTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, new Vector3(NextX, NextY, NextZ), true);
+
+                if (ActiveTarget != null)
+                {
+                    break;
+                }
+
+                LastX = CurrentX;
+                LastY = CurrentY;
+                LastZ = CurrentZ;
+
+                CurrentX = NextX;
+                CurrentY = NextY;
+                CurrentZ = NextZ;
             }
 
             return ListCrossedTerrain;
@@ -149,9 +230,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Terrain NextTerrain = Map.GetTerrain(Position.X, Position.Y, (int)Position.Z);
             float Progress = 0;
 
+            int LastX = (int)Position.X;
+            int LastY = (int)Position.Y;
+            int LastZ = (int)Position.Z;
+            int CurrentX = (int)Position.X;
+            int CurrentY = (int)Position.Y;
+            int CurrentZ = (int)Position.Z;
             int NextX;
             int NextY;
             int NextZ;
+
 
             while (NextTerrain != null)
             {
@@ -165,27 +253,92 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
                 }
 
+                #region Corners
+
+                if (CurrentX != NextX && (CurrentY != NextY || CurrentZ != NextZ)
+                    || CurrentY != NextY && (CurrentX != NextX || CurrentZ != NextZ)
+                    || CurrentZ != NextZ && (CurrentX != NextX || CurrentY != NextY))
+                {
+                    int CornerNextX = NextX;
+                    int CornerNextY = NextY;
+                    int CornerNextZ = NextZ;
+
+                    if (LastX == CurrentX)
+                    {
+                        CornerNextX = CurrentX;
+                    }
+                    else if (LastY == CurrentY)
+                    {
+                        CornerNextY = CurrentY;
+                    }
+                    else
+                    {
+                        CornerNextZ = CurrentZ;
+                    }
+
+                    if (CornerNextX < 0 || CornerNextX >= Map.MapSize.X || CornerNextY < 0 || CornerNextY >= Map.MapSize.Y || CornerNextZ < 0 || CornerNextZ >= Map.LayerManager.ListLayer.Count)
+                    {
+                        break;
+                    }
+
+                    NextTerrain = Map.GetTerrain(CornerNextX, CornerNextY, CornerNextZ);
+
+                    CurrentX = CornerNextX;
+                    CurrentY = CornerNextY;
+                    CurrentZ = CornerNextZ;
+
+                    if (!ListCrossedTerrain.Contains(NextTerrain))
+                    {
+                        ListCrossedTerrain.Add(NextTerrain);
+                    }
+
+                    if (NextTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
+                    {
+                        break;
+                    }
+
+                    Tuple<int, int> ActiveCornerTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, new Vector3(CornerNextX, CornerNextY, CornerNextZ), true);
+
+                    if (ActiveCornerTarget != null)
+                    {
+                        break;
+                    }
+                }
+
+                #endregion
+
                 NextTerrain = Map.GetTerrain(NextX, NextY, NextZ);
 
-                ListCrossedTerrain.Add(NextTerrain);
+                if (!ListCrossedTerrain.Contains(NextTerrain))
+                {
+                    ListCrossedTerrain.Add(NextTerrain);
+                }
 
                 if (Progress >= DistanceToTravel || NextTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
                 {
                     break;
                 }
+
+                LastX = CurrentX;
+                LastY = CurrentY;
+                LastZ = CurrentZ;
+
+                CurrentX = NextX;
+                CurrentY = NextY;
+                CurrentZ = NextZ;
             }
 
             return ListCrossedTerrain;
         }
 
-        public Tuple<int, int> CheckForEnemies(Vector3 PositionToCheck, bool FriendlyFire)
+        public static Tuple<int, int> CheckForEnemies(DeathmatchMap Map, int ActivePlayerIndex, Vector3 PositionToCheck, bool FriendlyFire)
         {
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 //Find if a Unit is under the cursor.
                 int TargetIndex = Map.CheckForSquadAtPosition(P, PositionToCheck, Vector3.Zero);
                 //If one was found.
-                if (TargetIndex >= 0 && (FriendlyFire || Map.ListPlayer[PlayerIndex].Team != Map.ListPlayer[P].Team))
+                if (TargetIndex >= 0 && (FriendlyFire || Map.ListPlayer[ActivePlayerIndex].Team != Map.ListPlayer[P].Team))
                 {
                     return new Tuple<int, int>(P, TargetIndex);
                 }
@@ -216,7 +369,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int Z = StartZ; Z < EndZ; ++Z)
                     {
-                        Tuple<int, int> ActiveTarget = CheckForEnemies(new Vector3(StartX, StartY, Z), true);
+                        Tuple<int, int> ActiveTarget = CheckForEnemies(Map, PlayerIndex, new Vector3(StartX, StartY, Z), true);
 
                         if (ActiveTarget != null)
                         {

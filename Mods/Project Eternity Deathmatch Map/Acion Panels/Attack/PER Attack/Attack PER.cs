@@ -24,6 +24,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public ActionPanelAttackPER(DeathmatchMap Map)
             : base(PanelName, Map)
         {
+            ListAttackDirectionHelper = new List<MovementAlgorithmTile>();
         }
 
         public ActionPanelAttackPER(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
@@ -31,6 +32,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
+
+            ListAttackDirectionHelper = new List<MovementAlgorithmTile>();
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
@@ -47,8 +50,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListAttackChoice.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
             }
-
-            ListAttackDirectionHelper = PERAttack.PredictAttackMovement(Map, ActiveSquad.Position, Map.CursorPosition);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -67,6 +68,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (CursorMoved)
                 {
                     BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
+                    ListAttackDirectionHelper = PERAttack.PredictAttackMovement(Map, ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0.5f), Map.CursorPosition + new Vector3(0.5f, 0.5f, 0.5f));
                 }
                 BattlePreview.UpdateUnitDisplay();
             }
