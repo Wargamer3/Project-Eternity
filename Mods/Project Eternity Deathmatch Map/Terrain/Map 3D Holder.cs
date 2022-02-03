@@ -16,13 +16,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private DeathmatchMap Map;
 
-        private Effect effect;
+        private Effect MapEffect;
+        private Effect ColorEffect;
         private BasicEffect PolygonEffect;
         private DefaultCamera Camera;
         private Texture2D sprCursor;
         private Tile3D Cursor;
         private Dictionary<int, Tile3DHolder> DicTile3DByTileset;
-        private Dictionary<Color, List<Tile3D>> DicDrawablePointPerColor;
+        private Dictionary<int, Dictionary<int, Tile3DHolder>> DicTile3DByLayerByTileset;
+        private Dictionary<Vector4, List<Tile3D>> DicDrawablePointPerColor;
         private List<Tile3D> ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
@@ -32,10 +34,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             sprCursor = Map.sprCursor;
             Camera = new DefaultCamera(g);
 
-            effect = Map.Content.Load<Effect>("Shaders/Default Shader 3D");
+            MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D");
+            ColorEffect = Map.Content.Load<Effect>("Shaders/Color Only");
+            ColorEffect.Parameters["t0"].SetValue(GameScreen.sprPixel);
 
             PolygonEffect = new BasicEffect(g);
-
 
             PolygonEffect.TextureEnabled = true;
             PolygonEffect.EnableDefaultLighting();
@@ -51,19 +54,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PolygonEffect.View = Matrix.Identity;
 
             // Key light.
-            effect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
-            effect.Parameters["DirLight0DiffuseColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
-            effect.Parameters["DirLight0SpecularColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
+            MapEffect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
+            MapEffect.Parameters["DirLight0DiffuseColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
+            MapEffect.Parameters["DirLight0SpecularColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
 
             // Fill light.
-            effect.Parameters["DirLight1Direction"].SetValue(new Vector3(0.7198464f, 0.3420201f, 0.6040227f));
-            effect.Parameters["DirLight1DiffuseColor"].SetValue(new Vector3(0.9647059f, 0.7607844f, 0.4078432f));
-            effect.Parameters["DirLight1SpecularColor"].SetValue(Vector3.Zero);
+            MapEffect.Parameters["DirLight1Direction"].SetValue(new Vector3(0.7198464f, 0.3420201f, 0.6040227f));
+            MapEffect.Parameters["DirLight1DiffuseColor"].SetValue(new Vector3(0.9647059f, 0.7607844f, 0.4078432f));
+            MapEffect.Parameters["DirLight1SpecularColor"].SetValue(Vector3.Zero);
 
             // Back light.
-            effect.Parameters["DirLight2Direction"].SetValue(new Vector3(0.4545195f, -0.7660444f, 0.4545195f));
-            effect.Parameters["DirLight2DiffuseColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
-            effect.Parameters["DirLight2SpecularColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
+            MapEffect.Parameters["DirLight2Direction"].SetValue(new Vector3(0.4545195f, -0.7660444f, 0.4545195f));
+            MapEffect.Parameters["DirLight2DiffuseColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
+            MapEffect.Parameters["DirLight2SpecularColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
 
             Vector3 diffuseColor = Vector3.One;
             Vector3 emissiveColor = Vector3.Zero;
@@ -80,14 +83,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             emissive.Y = (emissiveColor.Y + ambientLightColor.Y * diffuseColor.Y) * alpha;
             emissive.Z = (emissiveColor.Z + ambientLightColor.Z * diffuseColor.Z) * alpha;
 
-            effect.Parameters["DiffuseColor"].SetValue(diffuse);
-            effect.Parameters["EmissiveColor"].SetValue(emissive);
-            effect.Parameters["SpecularColor"].SetValue(Vector3.One);
-            effect.Parameters["SpecularPower"].SetValue(64);
+            MapEffect.Parameters["DiffuseColor"].SetValue(diffuse);
+            MapEffect.Parameters["EmissiveColor"].SetValue(emissive);
+            MapEffect.Parameters["SpecularColor"].SetValue(Vector3.One);
+            MapEffect.Parameters["SpecularPower"].SetValue(64);
 
 
-            DicDrawablePointPerColor = new Dictionary<Color, List<Tile3D>>();
+            DicDrawablePointPerColor = new Dictionary<Vector4, List<Tile3D>>();
             DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
+            DicTile3DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile3DHolder>>();
             ListDrawableArrowPerColor = new List<Tile3D>();
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
@@ -99,6 +103,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
             {
                 ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+            }
+
+            foreach (KeyValuePair<int, Dictionary<int, Tile3DHolder>> ActiveLayer in DicTile3DByLayerByTileset)
+            {
+                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in ActiveLayer.Value)
+                {
+                    ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+                }
             }
 
             float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].Position.Z * 32;
@@ -119,6 +131,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         protected void CreateMap(DeathmatchMap Map, MapLayer Owner, int LayerIndex)
         {
             Map2D GroundLayer = Owner.LayerGrid;
+
+            if (!DicTile3DByLayerByTileset.ContainsKey(LayerIndex))
+            {
+                DicTile3DByLayerByTileset.Add(LayerIndex, new Dictionary<int, Tile3DHolder>());
+            }
 
             for (int X = Map.MapSize.X - 1; X >= 0; --X)
             {
@@ -160,9 +177,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (!DicTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
                         {
-                            DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(effect, Map.ListTileSet[ActiveTile.TilesetIndex]));
+                            DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
                         }
+
+                        if (!DicTile3DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+                        {
+                            DicTile3DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
+                        }
+
                         DicTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile);
+                        DicTile3DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile);
                     }
                 }
             }
@@ -270,6 +294,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        private bool IsCursorHiddenByWall()
+        {
+            int CursorX = (int)Map.CursorPosition.X;
+            int CursorLayer = (int)Map.CursorPosition.Z;
+            for (int Y = (int)Map.CursorPosition.Y; Y < Map.MapSize.Y; ++Y)
+            {
+                if (Map.LayerManager.ListLayer[CursorLayer].ArrayTerrain[CursorX, Y].TerrainTypeIndex == UnitStats.TerrainWallIndex)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
         {
             List<Tile3D> ListDrawablePoint3D = new List<Tile3D>(ListPoint.Count);
@@ -287,7 +326,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z + 0.1f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
             }
 
-            DicDrawablePointPerColor.Add(PointColor, ListDrawablePoint3D);
+            DicDrawablePointPerColor.Add(new Vector4(PointColor.R / 255f, PointColor.G / 255f, PointColor.B / 255f, PointColor.A / 255f), ListDrawablePoint3D);
         }
 
         public void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)
@@ -408,10 +447,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void Reset()
         {
             DicTile3DByTileset.Clear();
+            DicTile3DByLayerByTileset.Clear();
 
             for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
             {
                 CreateMap(Map, Map.LayerManager.ListLayer[L], L);
+            }
+
+            foreach (KeyValuePair<int, Dictionary<int, Tile3DHolder>> ActiveLayer in DicTile3DByLayerByTileset)
+            {
+                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in ActiveLayer.Value)
+                {
+                    ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+                }
             }
 
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
@@ -431,23 +479,56 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             PolygonEffect.View = Camera.View;
             Matrix ViewProjection = Camera.View * PolygonEffect.Projection;
-
-            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
-            {
-                ActiveTileSet.Value.SetViewMatrix(ViewProjection, Camera.CameraPosition3D);
-
-                ActiveTileSet.Value.Draw(g.GraphicsDevice);
-            }
+            ColorEffect.Parameters["ViewProjection"].SetValue(ViewProjection);
 
             if (Map.ShowLayerIndex == -1)
             {
-                for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+                bool DrawUpperLayers = !IsCursorHiddenByWall();
+
+                if (DrawUpperLayers)
                 {
-                    Draw(g, Map.LayerManager.ListLayer[L], false);
+                    foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+                    {
+                        ActiveTileSet.Value.SetViewMatrix(ViewProjection, Camera.CameraPosition3D);
+
+                        ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                    }
+
+                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+                    {
+                        Draw(g, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+                else
+                {
+                    int MaxLayerIndex = Map.LayerManager.ListLayer.Count;
+                    if (!DrawUpperLayers)
+                    {
+                        MaxLayerIndex = (int)Map.CursorPosition.Z + 1;
+                    }
+
+                    for (int L = 0; L < MaxLayerIndex; L++)
+                    {
+                        foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[L])
+                        {
+                            ActiveTileSet.Value.SetViewMatrix(ViewProjection, Camera.CameraPosition3D);
+
+                            ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                        }
+
+                        Draw(g, Map.LayerManager.ListLayer[L], false);
+                    }
                 }
             }
             else
             {
+                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[Map.ShowLayerIndex])
+                {
+                    ActiveTileSet.Value.SetViewMatrix(ViewProjection, Camera.CameraPosition3D);
+
+                    ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                }
+
                 Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
             }
 
@@ -531,11 +612,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void DrawDrawablePoints(CustomSpriteBatch g)
         {
-            PolygonEffect.Texture = GameScreen.sprPixel;
-            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+            ColorEffect.CurrentTechnique.Passes[0].Apply();
 
-            foreach (KeyValuePair<Color, List<Tile3D>> DrawablePointPerColor in DicDrawablePointPerColor)
+            foreach (KeyValuePair<Vector4, List<Tile3D>> DrawablePointPerColor in DicDrawablePointPerColor)
             {
+                ColorEffect.Parameters["Color"].SetValue(DrawablePointPerColor.Key);
+
                 foreach (Tile3D DrawablePoint in DrawablePointPerColor.Value)
                 {
                     DrawablePoint.Draw(g.GraphicsDevice);
