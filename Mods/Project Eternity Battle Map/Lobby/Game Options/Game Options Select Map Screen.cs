@@ -144,6 +144,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         NewMapSize.Y = BR.ReadInt32();
                         int TileSizeX = BR.ReadInt32();
                         int TileSizeY = BR.ReadInt32();
+                        string CameraType = BR.ReadString();
 
                         int CameraPositionX = BR.ReadInt32();
                         int CameraPositionY = BR.ReadInt32();

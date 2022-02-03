@@ -8,7 +8,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         void Init();
         void Update(GameTime gameTime);
-        void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad);
+        void OnNewTurn(int ActivePlayerIndex);
+        void OnSquadDefeated(int AttackerSquadPlayerIndex, Squad AttackerSquad, int DefeatedSquadPlayerIndex, Squad DefeatedSquad);
         void OnManualVictory();
         void OnManualDefeat();
         void BeginDraw(CustomSpriteBatch g);

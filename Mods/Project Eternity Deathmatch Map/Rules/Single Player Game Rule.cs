@@ -41,12 +41,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void OnNewTurn(int ActivePlayerIndex)
         {
-            Owner.ListActionMenuChoice.Last().Update(gameTime);
         }
 
-        public void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad)
+        public void OnSquadDefeated(int AttackerSquadPlayerIndex, Squad AttackerSquad, int DefeatedSquadPlayerIndex, Squad DefeatedSquad)
         {
             bool HumanPlayersLost = true;
 
@@ -108,6 +107,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void OnManualDefeat()
         {
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            Owner.ListActionMenuChoice.Last().Update(gameTime);
         }
 
         public void BeginDraw(CustomSpriteBatch g)

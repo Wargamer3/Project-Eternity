@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private List<Tile3D> ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
-        public Map3DDrawable(DeathmatchMap Map, GraphicsDevice g)
+        public Map3DDrawable(DeathmatchMap Map, LayerHolderDeathmatch LayerManager, GraphicsDevice g)
         {
             this.Map = Map;
             sprCursor = Map.sprCursor;
@@ -91,9 +91,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListDrawableArrowPerColor = new List<Tile3D>();
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
-            for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                CreateMap(Map, Map.LayerManager.ListLayer[L], L);
+                CreateMap(Map, LayerManager.ListLayer[L], L);
             }
 
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
@@ -101,12 +101,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
             }
 
-            float Z = Map.LayerManager.ListLayer[0].ArrayTerrain[0, 0].Position.Z * 32;
-            Map2D GroundLayer = Map.LayerManager.ListLayer[0].LayerGrid;
+            float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].Position.Z * 32;
+            Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
             DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
             Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
             Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
                 0, 0, Z, 0, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+
+            if (Map.IsEditor)
+            {
+                Map.CursorPosition.X = Map.MapSize.X / 2;
+                Map.CursorPosition.Y = Map.MapSize.Y / 2;
+                Map.CursorPosition.Z = (LayerManager.ListLayer.Count - 1) / 2;
+            }
         }
 
         protected void CreateMap(DeathmatchMap Map, MapLayer Owner, int LayerIndex)
@@ -170,15 +177,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             UpdateCamera();
 
-            if (Map.CursorPositionVisible.X < 0)
-            {
-                Camera.CameraHeight = 600;
-                Camera.CameraDistance = 500;
-                Camera.SetTarget(new Vector3(Map.TileSize.X * Map.MapSize.X / 2, Map.CursorPosition.Z * 32, Map.TileSize.Y * Map.MapSize.Y / 2));
-                Camera.Update(gameTime);
-                return;
-            }
-
             Camera.CameraHeight = 400;
             Camera.CameraDistance = 300;
             int X = (int)Map.CursorPositionVisible.X;
@@ -200,6 +198,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void UpdateCamera()
         {
+            if (Map.IsEditor)
+            {
+                KeyboardHelper.UpdateKeyboardStatus();
+                Map.CursorControl(new KeyboardInput());
+            }
             if (KeyboardHelper.KeyPressed(Keys.Q))
             {
                 float NextZ = Map.CursorPosition.Z;
@@ -230,8 +233,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.CursorPosition.Z = NextZ;
             }
-
-            if (KeyboardHelper.KeyPressed(Keys.E))
+            else if (KeyboardHelper.KeyPressed(Keys.E))
             {
                 float NextZ = Map.CursorPosition.Z;
 
@@ -260,6 +262,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 Map.CursorPosition.Z = NextZ;
+            }
+
+            if (Map.IsEditor)
+            {
+                KeyboardHelper.PlayerStateLast = Keyboard.GetState();
             }
         }
 
@@ -417,32 +424,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public void Draw(CustomSpriteBatch g, MapLayer Owner, bool IsSubLayer)
-        {
-            if (!Owner.IsVisible)
-            {
-                return;
-            }
-
-            if (IsSubLayer)
-            {
-                return;
-            }
-
-            for (int P = 0; P < Owner.ListProp.Count; ++P)
-            {
-                Owner.ListProp[P].Unit3D.SetViewMatrix(Camera.View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].Position.Z;
-
-                Owner.ListProp[P].Unit3D.SetPosition(
-                    Owner.ListProp[P].Position.X + 0.5f,
-                    Owner.ListProp[P].Position.Z * 32 + TerrainZ * 32,
-                    Owner.ListProp[P].Position.Y + 0.5f);
-
-                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice);
-            }
-        }
-
         public void Draw(CustomSpriteBatch g)
         {
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -520,6 +501,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.Begin();
 
             DrawDamageNumbers(g);
+        }
+
+        public void Draw(CustomSpriteBatch g, MapLayer Owner, bool IsSubLayer)
+        {
+            if (!Owner.IsVisible)
+            {
+                return;
+            }
+
+            if (IsSubLayer)
+            {
+                return;
+            }
+
+            for (int P = 0; P < Owner.ListProp.Count; ++P)
+            {
+                Owner.ListProp[P].Unit3D.SetViewMatrix(Camera.View);
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].Position.Z;
+
+                Owner.ListProp[P].Unit3D.SetPosition(
+                    Owner.ListProp[P].Position.X + 0.5f,
+                    Owner.ListProp[P].Position.Z * 32 + TerrainZ * 32,
+                    Owner.ListProp[P].Position.Y + 0.5f);
+
+                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice);
+            }
         }
 
         private void DrawDrawablePoints(CustomSpriteBatch g)

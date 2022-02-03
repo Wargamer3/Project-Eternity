@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddChoiceToCurrentPanel(OptionalPanel);
                 }
 
-                new ActionPanelRepair(Map, this, ActiveSquad).OnSelect();
+                ActionPanelRepair.AddIfUsable(Map, this, ActiveSquad);
             }
 
             //Movement initialisation.

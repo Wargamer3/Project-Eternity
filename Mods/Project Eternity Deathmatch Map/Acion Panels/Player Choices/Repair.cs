@@ -24,16 +24,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMVChoice = new List<MovementAlgorithmTile>();
         }
 
-        public ActionPanelRepair(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
+        public ActionPanelRepair(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad, List<MovementAlgorithmTile> ListMVChoice, List<Vector3> ListMVPoints)
             : base(PanelName, Map)
         {
             this.ActiveSquad = ActiveSquad;
             this.Owner = Owner;
-            ListMVChoice = new List<MovementAlgorithmTile>();
+            this.ListMVChoice = ListMVChoice;
+            this.ListMVPoints = ListMVPoints;
         }
 
         public override void OnSelect()
         {
+        }
+
+        public static void AddIfUsable(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
+        {
+            List<MovementAlgorithmTile> ListMVChoice = new List<MovementAlgorithmTile>();
+
             if (ActiveSquad.CurrentLeader.Boosts.RepairModifier)
             {
                 int SquadIndex;
@@ -121,12 +128,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ListMVChoice.Count > 0)
                 {
-                    Owner.AddChoiceToCurrentPanel(this);
-                    ListMVPoints = new List<Vector3>();
+                    List<Vector3> ListMVPoints = new List<Vector3>();
                     foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
                     {
                         ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
                     }
+
+                    Owner.AddChoiceToCurrentPanel(new ActionPanelRepair(Map, Owner, ActiveSquad, ListMVChoice, ListMVPoints));
                 }
             }
         }

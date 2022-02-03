@@ -54,6 +54,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public SpriteFont fntArial12;
         protected SpriteFont fntArial10;
         public SpriteFont fntArial9;
+        public SpriteFont fntArial8;
         protected SpriteFont fntNumbers;
         protected SpriteFont fntAccuracyNormal;//1 pt outline
         protected SpriteFont fntAccuracySmall;//2pt outline Color is #00c6ff for Blue. #ff0000 for Red
@@ -131,6 +132,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Point MapSize;
         public int ShowLayerIndex;
         public BattleMapOverlay MapOverlay;
+        public bool IsEditor;
         public bool ShowGrid;
         public bool ShowUnits;
         public bool ShowTerrainType;
@@ -142,6 +144,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<AnimationBackground> ListForeground;
 
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
+        public string CameraType;
         public Vector3 CameraPosition;
         public byte PlayersMin;
         public byte PlayersMax;
@@ -215,7 +218,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MapSize = new Point(10, 10);
             TileSize = new Point(32, 32);
             ShowLayerIndex = -1;
-            
+
+            IsEditor = false;
             IsFrozen = false;
             OnlinePlayers = new OnlineConfiguration();
 
@@ -228,6 +232,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListForegroundsPath = new List<string>();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
 
+            CameraType = "2D";
             Description = "";
             VictoryCondition = "";
             LossCondition = "";
@@ -272,8 +277,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(TileSize.X);
             BW.Write(TileSize.Y);
 
-            BW.Write((int)CameraPosition.X);
-            BW.Write((int)CameraPosition.Y);
+            BW.Write(CameraType);
+
+            BW.Write((int)Math.Max(0, CameraPosition.X));
+            BW.Write((int)Math.Max(0, CameraPosition.Y));
 
             BW.Write(PlayersMin);
             BW.Write(PlayersMax);
@@ -346,6 +353,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
                 fntArial10 = Content.Load<SpriteFont>("Fonts/Arial10");
                 fntArial9 = Content.Load<SpriteFont>("Fonts/Arial9");
+                fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
                 fntNumbers = Content.Load<SpriteFont>("Fonts/VFfont");
                 fntBattleMenuText = Content.Load<SpriteFont>("Fonts/Battle Menu Text");
                 fntAccuracyNormal = Content.Load<SpriteFont>("Fonts/Accuracy Normal");
@@ -420,6 +428,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             TileSize.X = BR.ReadInt32();
             TileSize.Y = BR.ReadInt32();
+
+            CameraType = BR.ReadString();
 
             CameraPosition.X = BR.ReadInt32();
             CameraPosition.Y = BR.ReadInt32();

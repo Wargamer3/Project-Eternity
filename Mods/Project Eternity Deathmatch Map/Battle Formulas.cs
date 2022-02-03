@@ -482,11 +482,11 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
                         if (!HasRecap)
                         {
-                            ListBattleRecap[R].SetBattleContent(true, Attacker, ActiveSquadSupport, DefenderPlayerIndex, TargetSquad, TargetSquadSupport);
+                            ListBattleRecap[R].SetBattleContent(true, AttackerPlayerIndex, Attacker, ActiveSquadSupport, DefenderPlayerIndex, TargetSquad, TargetSquadSupport);
                         }
                         else
                         {
-                            ListBattleRecap[R].SetBattleContent(false, Attacker, ActiveSquadSupport, DefenderPlayerIndex, TargetSquad, TargetSquadSupport);
+                            ListBattleRecap[R].SetBattleContent(false, AttackerPlayerIndex, Attacker, ActiveSquadSupport, DefenderPlayerIndex, TargetSquad, TargetSquadSupport);
                         }
 
                         HasRecap = true;
@@ -536,7 +536,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
                 if (TargetSquad.CurrentLeader == null)
                 {
-                    GameRule.OnSquadDefeated(DefenderPlayerIndex, TargetSquad);
+                    GameRule.OnSquadDefeated(AttackerPlayerIndex, Attacker, DefenderPlayerIndex, TargetSquad);
                 }
             }
         }

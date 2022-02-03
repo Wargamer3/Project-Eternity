@@ -23,17 +23,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public ActionPanelResupply(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
+        public ActionPanelResupply(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad, List<Vector3> ListMVChoice, List<MovementAlgorithmTile> ListTerrainChoice)
             : base(PanelName, Map)
         {
             this.ActiveSquad = ActiveSquad;
             this.Owner = Owner;
-            ListMVChoice = new List<Vector3>();
-            ListTerrainChoice = new List<MovementAlgorithmTile>();
+            this.ListMVChoice = ListMVChoice;
+            this.ListTerrainChoice = ListTerrainChoice;
         }
 
         public override void OnSelect()
         {
+        }
+
+        public static void AddIfUsable(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
+        {
+            List<Vector3> ListMVChoice = new List<Vector3>();
+
             if (ActiveSquad.CurrentLeader.Boosts.ResupplyModifier)
             {
                 int SquadIndex;
@@ -121,11 +127,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ListMVChoice.Count > 0)
                 {
-                    Owner.AddChoiceToCurrentPanel(this);
+                    List<MovementAlgorithmTile> ListTerrainChoice = new List<MovementAlgorithmTile>();
                     foreach (Vector3 ActiveTerrain in ListMVChoice)
                     {
                         ListTerrainChoice.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
                     }
+                    Owner.AddChoiceToCurrentPanel(new ActionPanelResupply(Map, Owner, ActiveSquad, ListMVChoice, ListTerrainChoice));
                 }
             }
         }

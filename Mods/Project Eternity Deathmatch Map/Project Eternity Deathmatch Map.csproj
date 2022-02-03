@@ -106,6 +106,7 @@
     <Compile Include="Acion Panels\Player Choices\Change Movement Type\Fly.cs" />
     <Compile Include="Acion Panels\Player Choices\Change Movement Type\Land.cs" />
     <Compile Include="Acion Panels\Player Choices\Formation.cs" />
+    <Compile Include="Acion Panels\Player Choices\Jump.cs" />
     <Compile Include="Acion Panels\Player Choices\Resupply.cs" />
     <Compile Include="Acion Panels\Player Choices\Repair.cs" />
     <Compile Include="Acion Panels\Player Choices\Status.cs" />

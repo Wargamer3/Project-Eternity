@@ -39,6 +39,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly Unit Owner;
         private readonly Squad OwnerSquad;
         public readonly bool IsHuman;
+        private int AttackerSquadPlayerIndex;
         private Squad Attacker;
         private SupportSquadHolder ActiveSquadSupport;
         private int TargetSquadPlayerIndex;
@@ -106,9 +107,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PilotOriginalHIT = Pilot.HIT;
         }
 
-        public void SetBattleContent(bool UpdateBattleEventsOnClose, Squad Attacker, SupportSquadHolder ActiveSquadSupport, int TargetSquadPlayerIndex, Squad TargetSquad, SupportSquadHolder TargetSquadSupport)
+        public void SetBattleContent(bool UpdateBattleEventsOnClose, int AttackerSquadPlayerIndex, Squad Attacker, SupportSquadHolder ActiveSquadSupport, int TargetSquadPlayerIndex, Squad TargetSquad, SupportSquadHolder TargetSquadSupport)
         {
             this.UpdateBattleEventsOnClose = UpdateBattleEventsOnClose;
+            this.AttackerSquadPlayerIndex = AttackerSquadPlayerIndex;
             this.Attacker = Attacker;
             this.ActiveSquadSupport = ActiveSquadSupport;
             this.TargetSquadPlayerIndex = TargetSquadPlayerIndex;
@@ -240,7 +242,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (TargetSquadSupport != null && TargetSquadSupport.ActiveSquadSupport != null)
                             TargetSquadSupport.ActiveSquadSupport.UpdateSquad();
 
-                        Map.GameRule.OnSquadDefeated(TargetSquadPlayerIndex, TargetSquad);
+                        Map.GameRule.OnSquadDefeated(AttackerSquadPlayerIndex, Attacker, TargetSquadPlayerIndex, TargetSquad);
                     }
                 }
             }

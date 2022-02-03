@@ -169,12 +169,12 @@ namespace ProjectEternity.Editors.MapEditor
         protected void InitMap(BattleMap NewMap)
         {
             ActiveMap = NewMap;
+            ActiveMap.IsEditor = true;
             BattleMapViewer.ActiveMap = NewMap;
             NewMap.ListGameScreen = new List<GameScreens.GameScreen>();
             NewMap.Content = BattleMapViewer.content;
             Helper.InitMap();
             ActiveMap.TogglePreview(true);
-            NewMap.CursorPositionVisible = new Vector3(-1, -1, 0);
 
             BattleMapViewer.SetListMapScript(NewMap.ListMapScript);
             BattleMapViewer.Helper.OnSelect = (SelectedObject, RightClick) =>
@@ -450,8 +450,8 @@ namespace ProjectEternity.Editors.MapEditor
                         else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
                         {
                             Point TilePos = TilesetViewer.ActiveTile;
-                            if (TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0)
-                                || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1))
+                            if (TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
+                                || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
                             {
                                 return;
                             }
@@ -1196,7 +1196,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void mapPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MapStatistics MS = new MapStatistics(ActiveMap.MapName, ActiveMap.MapSize, ActiveMap.TileSize, ActiveMap.CameraPosition, ActiveMap.PlayersMin, ActiveMap.PlayersMax, ActiveMap.Description);
+            MapStatistics MS = new MapStatistics(ActiveMap.MapName, ActiveMap.MapSize, ActiveMap.TileSize, ActiveMap.CameraType, ActiveMap.CameraPosition, ActiveMap.PlayersMin, ActiveMap.PlayersMax, ActiveMap.Description);
             if (MS.ShowDialog() == DialogResult.OK)
             {
                 Point MapSize = new Point((int)MS.txtMapWidth.Value, (int)MS.txtMapHeight.Value);
@@ -1216,6 +1216,7 @@ namespace ProjectEternity.Editors.MapEditor
                     ActiveMap.TileSize = new Point(TileSize.X, TileSize.Y);
                 }
 
+                ActiveMap.CameraType = MS.cbCameraType.Text;
                 ActiveMap.CameraPosition = CameraPosition;
                 ActiveMap.PlayersMin = (byte)MS.txtPlayersMin.Value;
                 ActiveMap.PlayersMax = (byte)MS.txtPlayersMax.Value;

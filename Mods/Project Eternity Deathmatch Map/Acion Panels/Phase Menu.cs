@@ -110,6 +110,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             do
             {
                 Map.ActivePlayerIndex++;
+                Map.GameRule.OnNewTurn(Map.ActivePlayerIndex);
 
                 if (Map.ActivePlayerIndex >= Map.ListPlayer.Count)
                 {

@@ -506,6 +506,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void AddLocalPlayer(BattleMapPlayer NewPlayer)
         {
             Player NewDeahtmatchPlayer = new Player(NewPlayer);
+
+            Color PlayerColor = Color.Red;
+
+            if (ListPlayer.Count < ListMultiplayerColor.Count)
+            {
+                PlayerColor = ListMultiplayerColor[ListPlayer.Count];
+            }
+
+            NewDeahtmatchPlayer.Color = PlayerColor;
+
             ListPlayer.Add(NewDeahtmatchPlayer);
             ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);
         }

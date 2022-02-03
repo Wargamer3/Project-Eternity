@@ -35,15 +35,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void SpawnSquad(int PlayerIndex, Squad NewSquad, uint ID, Vector3 Position, int LayerIndex)
         {
             Position.Z = LayerIndex;
-            if (Content != null)
-            {
-                NewSquad.Unit3D = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
-            }
 
             while (ListPlayer.Count <= PlayerIndex)
             {
                 Player NewPlayer = new Player("Enemy", "CPU", false, false, PlayerIndex, Color.Red);
                 ListPlayer.Add(NewPlayer);
+            }
+            if (Content != null)
+            {
+                NewSquad.Unit3D = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
+                Color OutlineColor = ListPlayer[PlayerIndex].Color;
+                NewSquad.Unit3D.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
             }
             ListPlayer[PlayerIndex].IsAlive = true;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Characters;
@@ -67,13 +68,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
         }
-
-        public void Update(GameTime gameTime)
+        public void OnNewTurn(int ActivePlayerIndex)
         {
-            Owner.OnlinePlayers.Update();
         }
 
-        public void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad)
+
+        public void OnSquadDefeated(int AttackerSquadPlayerIndex, Squad AttackerSquad, int DefeatedSquadPlayerIndex, Squad DefeatedSquad)
         {
         }
 
@@ -83,6 +83,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void OnManualDefeat()
         {
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            Owner.OnlinePlayers.Update();
         }
 
         public void BeginDraw(CustomSpriteBatch g)

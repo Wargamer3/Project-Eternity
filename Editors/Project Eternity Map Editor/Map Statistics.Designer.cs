@@ -55,6 +55,8 @@
             this.txtTileHeight = new System.Windows.Forms.NumericUpDown();
             this.txtMapWidth = new System.Windows.Forms.NumericUpDown();
             this.txtMapHeight = new System.Windows.Forms.NumericUpDown();
+            this.cbCameraType = new System.Windows.Forms.ComboBox();
+            this.lblCameraType = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).BeginInit();
@@ -80,7 +82,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 108);
+            this.label2.Location = new System.Drawing.Point(115, 67);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 13);
             this.label2.TabIndex = 5;
@@ -89,7 +91,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(135, 109);
+            this.label3.Location = new System.Drawing.Point(80, 106);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(58, 13);
             this.label3.TabIndex = 6;
@@ -98,7 +100,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(135, 67);
+            this.label4.Location = new System.Drawing.Point(12, 106);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(55, 13);
             this.label4.TabIndex = 7;
@@ -311,14 +313,14 @@
             // 
             // txtTileWidth
             // 
-            this.txtTileWidth.Location = new System.Drawing.Point(135, 83);
+            this.txtTileWidth.Location = new System.Drawing.Point(12, 122);
             this.txtTileWidth.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.txtTileWidth.Name = "txtTileWidth";
-            this.txtTileWidth.Size = new System.Drawing.Size(83, 20);
+            this.txtTileWidth.Size = new System.Drawing.Size(58, 20);
             this.txtTileWidth.TabIndex = 6;
             this.txtTileWidth.Value = new decimal(new int[] {
             32,
@@ -328,14 +330,14 @@
             // 
             // txtTileHeight
             // 
-            this.txtTileHeight.Location = new System.Drawing.Point(135, 125);
+            this.txtTileHeight.Location = new System.Drawing.Point(80, 122);
             this.txtTileHeight.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.txtTileHeight.Name = "txtTileHeight";
-            this.txtTileHeight.Size = new System.Drawing.Size(83, 20);
+            this.txtTileHeight.Size = new System.Drawing.Size(58, 20);
             this.txtTileHeight.TabIndex = 17;
             this.txtTileHeight.Value = new decimal(new int[] {
             32,
@@ -362,7 +364,7 @@
             // 
             // txtMapHeight
             // 
-            this.txtMapHeight.Location = new System.Drawing.Point(12, 125);
+            this.txtMapHeight.Location = new System.Drawing.Point(115, 84);
             this.txtMapHeight.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -377,11 +379,34 @@
             0,
             0});
             // 
+            // cbCameraType
+            // 
+            this.cbCameraType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCameraType.FormattingEnabled = true;
+            this.cbCameraType.Items.AddRange(new object[] {
+            "2D",
+            "3D"});
+            this.cbCameraType.Location = new System.Drawing.Point(144, 121);
+            this.cbCameraType.Name = "cbCameraType";
+            this.cbCameraType.Size = new System.Drawing.Size(71, 21);
+            this.cbCameraType.TabIndex = 12;
+            // 
+            // lblCameraType
+            // 
+            this.lblCameraType.AutoSize = true;
+            this.lblCameraType.Location = new System.Drawing.Point(144, 107);
+            this.lblCameraType.Name = "lblCameraType";
+            this.lblCameraType.Size = new System.Drawing.Size(70, 13);
+            this.lblCameraType.TabIndex = 20;
+            this.lblCameraType.Text = "Camera Type";
+            // 
             // MapStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(582, 317);
+            this.Controls.Add(this.lblCameraType);
+            this.Controls.Add(this.cbCameraType);
             this.Controls.Add(this.txtMapHeight);
             this.Controls.Add(this.txtMapWidth);
             this.Controls.Add(this.txtTileHeight);
@@ -448,5 +473,7 @@
         public System.Windows.Forms.NumericUpDown txtMapHeight;
         public System.Windows.Forms.NumericUpDown txtCameraStartPositionY;
         public System.Windows.Forms.NumericUpDown txtCameraStartPositionX;
+        private System.Windows.Forms.Label lblCameraType;
+        public System.Windows.Forms.ComboBox cbCameraType;
     }
 }

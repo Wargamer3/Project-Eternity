@@ -33,7 +33,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListLayer.Add(new MapLayer(Map, BR, L));
             }
 
-            LayerHolderDrawable = new DeathmatchMap2DHolder(Map);
+            if (Map.CameraType == "2D")
+            {
+                LayerHolderDrawable = new DeathmatchMap2DHolder(Map);
+            }
+            else
+            {
+                LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
+            }
         }
 
         public override BaseMapLayer this[int i]
@@ -64,7 +71,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
             {
-                LayerHolderDrawable = new Map3DDrawable(Map, GameScreen.GraphicsDevice);
+                LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
             }
             if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.L))
             {
@@ -82,13 +89,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void TogglePreview(bool UsePreview)
         {
-            if (!UsePreview)
+
+            if (!UsePreview || Map.CameraType == "2D")
             {
                 LayerHolderDrawable = new DeathmatchMap2DHolder(Map);
             }
-            else if (Map.ListTileSet.Count > 0)
+            else
             {
-                LayerHolderDrawable = new Map3DDrawable(Map, GameScreen.GraphicsDevice);
+                LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
             }
         }
 

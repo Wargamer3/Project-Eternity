@@ -1,5 +1,4 @@
 ﻿using System;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -14,7 +13,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Owner = Owner;
         }
 
-        public override void OnSquadDefeated(int DefeatedSquadPlayerIndex, Squad DefeatedSquad)
+        public override void OnSquadDefeated(int AttackerSquadPlayerIndex, Squad AttackerSquad, int DefeatedSquadPlayerIndex, Squad DefeatedSquad)
         {
             bool HordePlayerAILost = true;
 

@@ -13,8 +13,8 @@ namespace ProjectEternity.Editors.MapEditor
         private enum ItemSelectionChoices { Backgrounds, Foregrounds };
         ItemSelectionChoices ItemSelectionChoice;
 
-        public MapStatistics(string MapName, Microsoft.Xna.Framework.Point MapSize, Microsoft.Xna.Framework.Point TileSize, Microsoft.Xna.Framework.Vector3 CameraStartPosition,
-            byte PlayersMin, byte PlayersMax, string Description)
+        public MapStatistics(string MapName, Microsoft.Xna.Framework.Point MapSize, Microsoft.Xna.Framework.Point TileSize, string CameraType,
+            Microsoft.Xna.Framework.Vector3 CameraStartPosition, byte PlayersMin, byte PlayersMax, string Description)
         {
             InitializeComponent();
             txtMapName.Text = MapName;
@@ -22,8 +22,9 @@ namespace ProjectEternity.Editors.MapEditor
             txtMapHeight.Text = MapSize.Y.ToString();
             txtTileWidth.Text = TileSize.X.ToString();
             txtTileHeight.Text = TileSize.Y.ToString();
-            txtCameraStartPositionX.Value = (int)CameraStartPosition.X;
-            txtCameraStartPositionY.Value = (int)CameraStartPosition.Y;
+            cbCameraType.SelectedText = CameraType;
+            txtCameraStartPositionX.Value = (int)Math.Max(0,CameraStartPosition.X);
+            txtCameraStartPositionY.Value = (int)Math.Max(0, CameraStartPosition.Y);
             txtPlayersMin.Value = PlayersMin;
             txtPlayersMax.Value = PlayersMax;
             txtDescription.Text = Description;

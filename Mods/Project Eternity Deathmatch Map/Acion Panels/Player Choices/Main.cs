@@ -56,6 +56,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 AddToPanelListAndSelect(new ActionPanelDeploy(Map, ActiveSquad));
             }
+
             AddChoiceToCurrentPanel(new ActionPanelStatus(Map, ActiveSquad));
             AddChoiceToCurrentPanel(new ActionPanelDebug(ActiveSquad, Map));
 
@@ -127,8 +128,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 CheckForMapSwitch();
 
-                new ActionPanelRepair(Map, this, ActiveSquad).OnSelect();
-                new ActionPanelResupply(Map, this, ActiveSquad).OnSelect();
+                ActionPanelJump.AddIfUsable(Map, this, ActiveSquad);
+                ActionPanelRepair.AddIfUsable(Map, this, ActiveSquad);
+                ActionPanelResupply.AddIfUsable(Map, this, ActiveSquad);
             }
         }
 

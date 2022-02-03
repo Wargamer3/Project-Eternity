@@ -11,6 +11,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public List<Squad> ListSquad;
         public List<EventPoint> ListSpawnPoint;
         public bool IsAlive;//If the player can play (always true if it still have any active units).
+        public int Kills;
+        public int Death;
 
         public Player(string Name, string PlayerType, bool IsPlayerControlled, bool IsOnline, int Team, Color Color)
             : base("", Name, PlayerType, IsOnline, Team, IsPlayerControlled, Color)
