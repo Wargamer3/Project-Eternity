@@ -53,9 +53,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer)
+        public void Draw(CustomSpriteBatch g, MapLayer Owner, int LayerIndex, bool IsSubLayer)
         {
-            MapLayer Owner = Map.LayerManager.ListLayer[LayerIndex];
             if (!Owner.IsVisible)
             {
                 return;
@@ -91,6 +90,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DrawDrawablePoints(g);
 
                 DrawCursor(g);
+            }
+
+            for (int L = 0; L < Owner.ListSubLayer.Count; L++)
+            {
+                Draw(g, Owner.ListSubLayer[L], LayerIndex, true);
             }
         }
 
@@ -206,14 +210,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
                 {
-                    Draw(g, L, false);
+                    Draw(g, Map.LayerManager.ListLayer[L], L, false);
                     DrawEditorOverlay(g, Map.LayerManager.ListLayer[L], L, false);
                 }
             }
             else
             {
-                Draw(g, Map.ShowLayerIndex, false);
-                DrawEditorOverlay(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], 0, false);
+                Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], Map.ShowLayerIndex, false);
+                DrawEditorOverlay(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], Map.ShowLayerIndex, false);
             }
 
             DrawDelayedAttacks(g);
@@ -281,6 +285,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (Map.ShowLayerIndex >= 0 && IndexOfLayer != -1)
                     {
                         IndexOfLayer = 0;
+                        if (IsSubLayer)
+                        {
+                            IndexOfLayer = 1;
+                        }
                     }
                     else if (IsSubLayer)
                     {

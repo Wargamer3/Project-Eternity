@@ -68,6 +68,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
         }
+
         public void OnNewTurn(int ActivePlayerIndex)
         {
         }

@@ -549,11 +549,11 @@ namespace ProjectEternity.Editors.MapEditor
         private void NewSpawnSingleplayer(int X, int Y, EventPoint Spawn)
         {
             int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
             if (Spawn != null)
             {
                 Spawn = new EventPoint(Spawn);
-                Spawn.Position = new Vector3(X, Y, 0);
+                Spawn.Position = new Vector3(X, Y, TopLayerIndex);
             }
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
             for (int S = 0; S < TopLayer.ListSingleplayerSpawns.Count; S++)
@@ -580,11 +580,11 @@ namespace ProjectEternity.Editors.MapEditor
         private void NewSpawnMultiplayer(int X, int Y, EventPoint Spawn)
         {
             int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
             if (Spawn != null)
             {
                 Spawn = new EventPoint(Spawn);
-                Spawn.Position = new Vector3(X, Y, 0);
+                Spawn.Position = new Vector3(X, Y, TopLayerIndex);
             }
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
             for (int S = 0; S < TopLayer.ListMultiplayerSpawns.Count; S++)
@@ -611,7 +611,7 @@ namespace ProjectEternity.Editors.MapEditor
         private void NewMapSwitchPoint(int X, int Y, EventPoint Spawn)
         {
             int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
             MapSwitchPoint OldEventPoint = null;
 
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
@@ -628,7 +628,7 @@ namespace ProjectEternity.Editors.MapEditor
                 if (OldEventPoint == null)
                 {
                     MapSwitchPoint NewMapSwitchPoint = new MapSwitchPoint(Spawn);
-                    NewMapSwitchPoint.Position = new Vector3(X, Y, 0);
+                    NewMapSwitchPoint.Position = new Vector3(X, Y, TopLayerIndex);
                     TopLayer.ListMapSwitchPoint.Add(NewMapSwitchPoint);
                     pgEventPoints.SelectedObject = NewMapSwitchPoint;
                 }
@@ -646,7 +646,7 @@ namespace ProjectEternity.Editors.MapEditor
         private void NewTeleporterPoint(int X, int Y, EventPoint Spawn)
         {
             int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
+            BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
             TeleportPoint OldEventPoint = null;
 
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
@@ -663,7 +663,7 @@ namespace ProjectEternity.Editors.MapEditor
                 if (OldEventPoint == null)
                 {
                     TeleportPoint NewMapSwitchPoint = new TeleportPoint(Spawn);
-                    NewMapSwitchPoint.Position = new Vector3(X, Y, 0);
+                    NewMapSwitchPoint.Position = new Vector3(X, Y, TopLayerIndex);
                     TopLayer.ListTeleportPoint.Add(NewMapSwitchPoint);
                     pgEventPoints.SelectedObject = NewMapSwitchPoint;
                 }
@@ -777,7 +777,8 @@ namespace ProjectEternity.Editors.MapEditor
                 if (CD.ShowDialog() == DialogResult.OK)
                 {//Change the button color and the color in the list at the same time with the returned color.
                     btnSpawnDM.BackColor = CD.Color;
-                    BattleMapViewer.ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex] = Color.FromNonPremultiplied(CD.Color.R, CD.Color.G, CD.Color.B, 255);
+                    int MPColorIndex = Math.Max(0, cbDeadthmatch.SelectedIndex);
+                    BattleMapViewer.ActiveMap.ListMultiplayerColor[MPColorIndex] = Color.FromNonPremultiplied(CD.Color.R, CD.Color.G, CD.Color.B, 255);
                     if (btnSpawnDM.Checked)
                     {
                         ActiveSpawn.ColorRed = btnSpawnDM.BackColor.R;

@@ -259,6 +259,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int TileSizeX = BR.ReadInt32();
             int TileSizeY = BR.ReadInt32();
 
+            string CameraType = BR.ReadString();
+
             int CameraPositionX = BR.ReadInt32();
             int CameraPositionY = BR.ReadInt32();
 
@@ -578,6 +580,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 g.DrawString(fntText, "Ready", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }
+
             if (SelectingTeam == -1)
             {
                 Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX, DrawY, 320, 25);
