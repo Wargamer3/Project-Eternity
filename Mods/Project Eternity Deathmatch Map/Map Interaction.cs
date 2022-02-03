@@ -147,6 +147,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public bool UpdateMapNavigation(PlayerInput ActiveInputManager)
         {
             bool CursorMoved = CursorControl(ActiveInputManager);//Move the cursor
+            if (CursorMoved)
+            {
+                foreach (TeleportPoint ActiveTeleport in LayerManager.ListLayer[(int)CursorPosition.Z].ListTeleportPoint)
+                {
+                    if (ActiveTeleport.Position.X == CursorPosition.X && ActiveTeleport.Position.Y == CursorPosition.Y)
+                    {
+                        CursorPosition.X = ActiveTeleport.OtherMapEntryPoint.X;
+                        CursorPosition.Y = ActiveTeleport.OtherMapEntryPoint.Y;
+                        CursorPosition.Z = ActiveTeleport.OtherMapEntryLayer;
+                        break;
+                    }
+                }
+            }
+
             if (InputHelper.InputLButtonPressed())
             {
                 if (ListPlayer[ActivePlayerIndex].ListSquad.Count == 0)
