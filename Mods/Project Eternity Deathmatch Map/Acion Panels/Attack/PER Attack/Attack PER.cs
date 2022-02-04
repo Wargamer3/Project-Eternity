@@ -107,6 +107,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AttackUsed.ConsumeAmmo();
                 }
                 RemoveAllSubActionPanels();
+
+                Map.CursorPosition = ActiveSquad.Position;
+                Map.CursorPositionVisible = Map.CursorPosition;
+
                 Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, NewAttack));
             }
         }

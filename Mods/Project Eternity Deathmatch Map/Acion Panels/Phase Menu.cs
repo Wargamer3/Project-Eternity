@@ -298,6 +298,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.UpdateMapEvent(BattleMap.EventTypePhase, 0);
             Map.ListActionMenuChoice.RemoveAllActionPanels();//Will also remove this panel
 
+            Map.CursorPosition = ActivePlayer.ListSquad[0].Position;
+            Map.CursorPositionVisible = Map.CursorPosition;
+
             bool AIControlledSquadFound = false;
             for (int U = 0; U < ActivePlayer.ListSquad.Count; U++)
             {
