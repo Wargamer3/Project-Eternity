@@ -170,10 +170,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActiveSquad != null)
                     UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
 
-                ++UnitIndex;
+                int StartIndex = UnitIndex;
+                bool UnmovedSquadFound = false;
 
-                if (UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
-                    UnitIndex = 0;
+                do
+                {
+                    ++UnitIndex;
+
+                    if (UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
+                        UnitIndex = 0;
+
+                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
+                    {
+                        UnmovedSquadFound = true;
+                    }
+                }
+                while (StartIndex != UnitIndex && !UnmovedSquadFound);
+
+                if (!UnmovedSquadFound)
+                {
+                    if (++UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
+                        UnitIndex = 0;
+                }
 
                 ActiveSquadIndex = UnitIndex;
                 CursorPosition = ActiveSquad.Position;
@@ -193,9 +211,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int UnitIndex = 0;
                 if (ActiveSquad != null)
                     UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
-                --UnitIndex;
-                if (UnitIndex < 0)
-                    UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
+                int StartIndex = UnitIndex;
+                bool UnmovedSquadFound = false;
+
+                do
+                {
+                    --UnitIndex;
+
+                    if (UnitIndex < 0)
+                        UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
+
+                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
+                    {
+                        UnmovedSquadFound = true;
+                    }
+                }
+                while (StartIndex != UnitIndex && !UnmovedSquadFound);
+
+                if (!UnmovedSquadFound)
+                {
+                    if (--UnitIndex < 0)
+                        UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
+                }
 
                 ActiveSquadIndex = UnitIndex;
                 CursorPosition = ActiveSquad.Position;
