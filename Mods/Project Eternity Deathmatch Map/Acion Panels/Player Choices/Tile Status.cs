@@ -53,19 +53,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             float TileY = Map.CursorPosition.Y;
             int TileZ = (int)Math.Floor(Map.CursorPosition.Z);
 
-            float DrawX = (TileX - Map.CameraPosition.X + 1) * Map.TileSize.X;
-            float DrawY = (TileY - Map.CameraPosition.Y) * Map.TileSize.Y;
-
-            if (DrawX + Map.sprCursorTerrainSelection.Width >= Constants.Width)
-                DrawX = Constants.Width - Map.sprCursorTerrainSelection.Width;
-
-            if (DrawY + Map.sprCursorTerrainSelection.Height >= Constants.Height)
-                DrawY = Constants.Height - Map.sprCursorTerrainSelection.Height;
-
             Terrain ActiveTerrain = Map.GetTerrain(TileX, TileY, TileZ);
             DrawableTile ActiveTile = Map.LayerManager.GetTile((int)TileX, (int)TileY, TileZ);
-            g.Draw(Map.sprCursorTerrainSelection, new Vector2(DrawX, DrawY), Color.White);
-            g.Draw(Map.ListTileSet[ActiveTile.TilesetIndex], new Vector2(DrawX + 6, DrawY + 22), ActiveTile.Origin, Color.White);
+            g.Draw(Map.sprCursorTerrainSelection, new Vector2(FinalMenuX, FinalMenuY), Color.White);
+            g.Draw(Map.ListTileSet[ActiveTile.TilesetIndex], new Vector2(FinalMenuX + 6, FinalMenuY + 22), ActiveTile.Origin, Color.White);
             string BonusValue;
 
             //Draw the bonuses.
@@ -82,27 +73,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         break;
 
                     case TerrainBonus.Evasion:
-                        g.DrawString(Map.fntArial9, BonusValue, new Vector2(DrawX + 108, DrawY + 36), Color.White);
+                        g.DrawString(Map.fntArial9, BonusValue, new Vector2(FinalMenuX + 108, FinalMenuY + 36), Color.White);
                         break;
 
                     case TerrainBonus.Armor:
-                        g.DrawStringRightAligned(Map.fntArial9, BonusValue, new Vector2(DrawX + 85, DrawY + 36), Color.White);
+                        g.DrawStringRightAligned(Map.fntArial9, BonusValue, new Vector2(FinalMenuX + 85, FinalMenuY + 36), Color.White);
                         break;
 
                     case TerrainBonus.HPRegen:
-                        g.DrawStringRightAligned(Map.fntArial9, BonusValue + "%", new Vector2(DrawX + 90, DrawY + 17), Color.White);
+                        g.DrawStringRightAligned(Map.fntArial9, BonusValue + "%", new Vector2(FinalMenuX + 90, FinalMenuY + 17), Color.White);
                         break;
 
                     case TerrainBonus.HPRestore:
-                        g.DrawStringRightAligned(Map.fntArial9, BonusValue, new Vector2(DrawX + 85, DrawY + 17), Color.White);
+                        g.DrawStringRightAligned(Map.fntArial9, BonusValue, new Vector2(FinalMenuX + 85, FinalMenuY + 17), Color.White);
                         break;
 
                     case TerrainBonus.ENRegen:
-                        g.DrawString(Map.fntArial9, BonusValue + "%", new Vector2(DrawX + 103, DrawY + 17), Color.White);
+                        g.DrawString(Map.fntArial9, BonusValue + "%", new Vector2(FinalMenuX + 103, FinalMenuY + 17), Color.White);
                         break;
 
                     case TerrainBonus.ENRestore:
-                        g.DrawString(Map.fntArial9, BonusValue, new Vector2(DrawX + 105, DrawY + 17), Color.White);
+                        g.DrawString(Map.fntArial9, BonusValue, new Vector2(FinalMenuX + 105, FinalMenuY + 17), Color.White);
                         break;
                 }
             }

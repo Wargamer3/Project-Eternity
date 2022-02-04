@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -21,15 +22,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.Map = Map;
 
-            BaseMenuX = (int)((Map.CursorPosition.X - Map.CameraPosition.X + 1) * Map.TileSize.X);
-            BaseMenuY = (int)((Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y);
+            Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetMenuPosition();
 
-            if (BaseMenuX + MinActionMenuWidth >= Constants.Width)
-                BaseMenuX = Constants.Width - MinActionMenuWidth;
-
-            int MenuHeight = ListNextChoice.Count * PannelHeight + 6 * 2;
-            if (BaseMenuY + MenuHeight >= Constants.Height)
-                BaseMenuY = Constants.Height - MenuHeight;
+            BaseMenuX = MenuPosition.X;
+            BaseMenuY = MenuPosition.Y;
 
             UpdateFinalMenuPosition();
         }

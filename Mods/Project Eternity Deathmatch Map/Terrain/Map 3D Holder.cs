@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -307,6 +308,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             return false;
+        }
+
+        public Point GetMenuPosition()
+        {
+            Point BaseMenuPosition;
+
+            Vector3 Visible3DPosition = new Vector3(Map.CursorPosition.X * Map.TileSize.X, Map.CursorPosition.Z * 32, Map.CursorPosition.Y * Map.TileSize.Y);
+
+            Vector3 Position2D = GameScreen.GraphicsDevice.Viewport.Project(Visible3DPosition, PolygonEffect.Projection, PolygonEffect.View, Matrix.Identity);
+
+            BaseMenuPosition.X = (int)Position2D.X + Map.TileSize.X;
+            BaseMenuPosition.Y = (int)Position2D.Y;
+
+            return BaseMenuPosition;
         }
 
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)

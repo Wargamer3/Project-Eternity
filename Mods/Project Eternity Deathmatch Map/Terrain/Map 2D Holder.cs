@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -33,6 +34,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             DicDrawablePointPerColor.Clear();
             DicDamageNumberByPosition.Clear();
+        }
+
+        public Point GetMenuPosition()
+        {
+            Point BaseMenuPosition;
+
+            BaseMenuPosition.X = (int)((Map.CursorPosition.X - Map.CameraPosition.X + 1) * Map.TileSize.X);
+            BaseMenuPosition.Y = (int)((Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y);
+
+            return BaseMenuPosition;
         }
 
         public void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor)
