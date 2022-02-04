@@ -398,8 +398,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 FinalTargetSquad[U].UpdateSkillsLifetime(SkillEffect.LifetimeTypeBattle);
             }
 
-            Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost);
-            FinalActiveSquad.EndTurn();
+            if (FinalAttack.Pri != WeaponPrimaryProperty.PER)
+            {
+                Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost);
+                FinalActiveSquad.EndTurn();
+            }
 
             if (Map.IsClient)
             {

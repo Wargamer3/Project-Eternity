@@ -369,7 +369,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int Z = StartZ; Z < EndZ; ++Z)
                     {
-                        Tuple<int, int> ActiveTarget = CheckForEnemies(Map, PlayerIndex, new Vector3(StartX, StartY, Z), true);
+                        Tuple<int, int> ActiveTarget = CheckForEnemies(Map, PlayerIndex, new Vector3(X, Y, Z), true);
 
                         if (ActiveTarget != null)
                         {

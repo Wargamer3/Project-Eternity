@@ -104,6 +104,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     PERAttackMovement ActiveAttack = ListPERAttackToUpdate[P];
                     Vector3 NextPostion = ActiveAttack.StartPosition + ActiveAttack.Movement * (float)Progress;
+
+                    if (NextPostion.X < 0 || NextPostion.X >= Map.MapSize.X || NextPostion.Y < 0 || NextPostion.Y >= Map.MapSize.Y || NextPostion.Z < 0 || NextPostion.Z >= Map.LayerManager.ListLayer.Count)
+                    {
+                        ListPERAttackToUpdate.RemoveAt(P);
+                        ActiveAttack.Owner.DestroySelf();
+                        return;
+                    }
                     Terrain NextTerrain = Map.GetTerrain(NextPostion.X, NextPostion.Y, (int)NextPostion.Z);
 
                     if (NextTerrain != ActiveAttack.LastTerrain && ActiveAttack.ListCrossedTerrain.Contains(NextTerrain))

@@ -84,6 +84,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 float RandForward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxForwardSpread;
                 float RandUpward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxUpwardSpread;
 
+                Vector3 AttackPosition = new Vector3(ActiveSquad.Position.X + 0.5f, ActiveSquad.Position.Y + 0.5f, ActiveSquad.Position.Z + ActiveTerrain.Position.Z + 0.5f);
                 Vector3 AttackForwardVector = Map.CursorPosition - ActiveSquad.Position;
                 AttackForwardVector.Normalize();
                 Vector3 AttackLateralVector = new Vector3(AttackForwardVector.Y, -AttackForwardVector.X, AttackForwardVector.Z);
@@ -94,18 +95,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AttackSpeed += AttackForwardVector * RandForward * AttackUsed.PERAttributes.ProjectileSpeed;
                 AttackSpeed += AttackForwardVector * AttackUsed.PERAttributes.ProjectileSpeed;
 
-                Vector3 AttackPosition = new Vector3(ActiveSquad.Position.X + 0.5f, ActiveSquad.Position.Y + 0.5f, ActiveSquad.Position.Z + ActiveTerrain.Position.Z + 0.5f);
-                Vector3 NextPosition = AttackPosition + AttackSpeed;
-
                 PERAttack NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, AttackSpeed, AttackUsed.PERAttributes.MaxLifetime);
 
                 Map.ListPERAttack.Add(NewAttack);
-
 
                 if (AttackUsed.MaxAmmo > 0)
                 {
                     AttackUsed.ConsumeAmmo();
                 }
+
+                ActiveSquad.EndTurn();
+
                 RemoveAllSubActionPanels();
 
                 Map.CursorPosition = ActiveSquad.Position;
