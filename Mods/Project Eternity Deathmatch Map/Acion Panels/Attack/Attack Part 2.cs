@@ -4,8 +4,8 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
+        private List<Vector3> ListMVHoverPoints;
         private Squad ActiveSquad;
         public List<Vector3> ListAttackChoice;
         public List<MovementAlgorithmTile> ListAttackTerrain;
@@ -25,11 +26,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public ActionPanelAttackPart2(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+        public ActionPanelAttackPart2(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
+            this.ListMVHoverPoints = ListMVHoverPoints;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
@@ -87,7 +89,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
                             TargetSquadSupport.PrepareDefenceSupport(Map, P, Map.ListPlayer[P].ListSquad[TargetSelect]);
 
-                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, P, TargetSelect, TargetSquadSupport);
+                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, P, TargetSelect, TargetSquadSupport);
 
                             break;
                         }

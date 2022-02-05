@@ -17,6 +17,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Squad ActiveSquad;
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
+        private List<Vector3> ListMVHoverPoints;
         private Attack CurrentAttack;
         public List<Vector3> ListAttackChoice;
         public List<MovementAlgorithmTile> ListAttackTerrain;
@@ -27,11 +28,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public ActionPanelAttackMAPSpread(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+        public ActionPanelAttackMAPSpread(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
+            this.ListMVHoverPoints = ListMVHoverPoints;
+
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
             BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
@@ -64,7 +67,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (ListAttackChoice.Contains(Map.CursorPosition))
                 {
-                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListAttackChoice);
+                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints, ListAttackChoice);
                     Map.sndConfirm.Play();
                 }
                 else

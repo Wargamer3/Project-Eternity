@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 else
                 {
                     ListAttackTarget.Push(ActiveTarget);
-                    Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, ListAttackTarget);
+                    Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
                 }
             }
             else if (ActiveTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
@@ -381,7 +381,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (ListAttackTarget.Count > 0)
             {
-                Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, ListAttackTarget);
+                Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
                 foreach (Tuple<int, int> ActiveTarget in ListAttackTarget)
                 {
                     Squad SquadToKill = Map.ListPlayer[ActiveTarget.Item1].ListSquad[ActiveTarget.Item2];

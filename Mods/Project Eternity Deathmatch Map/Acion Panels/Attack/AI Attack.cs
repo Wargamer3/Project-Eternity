@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             Map.GlobalDeathmatchContext.ArrayAttackPosition = ListAttackChoice.ToArray();
 
-                            Map.AttackWithMAPAttack(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ListMAPAttackTarget);
+                            Map.AttackWithMAPAttack(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, new List<Vector3>(), ListMAPAttackTarget);
 
                             //Remove Ammo if needed.
                             if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)
@@ -132,13 +132,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                         else
                         {
-                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, Target.Item1, Target.Item2, TargetSquadSupport);
+                            Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, new List<Vector3>(),
+                                Target.Item1, Target.Item2, TargetSquadSupport);
                         }
                     }
                 }
                 else
                 {
-                    Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, Target.Item1, Target.Item2, TargetSquadSupport);
+                    Map.ComputeTargetPlayerDefence(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, new List<Vector3>(),
+                        Target.Item1, Target.Item2, TargetSquadSupport);
                 }
                 AITimer = AITimerBase;
             }

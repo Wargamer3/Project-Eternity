@@ -91,12 +91,12 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     Info.Map.CursorPosition.Y = ListRealChoice[Choice].Y;
                     Info.ActiveSquad.SetPosition(ListRealChoice[Choice]);
 
-                    Info.Map.FinalizeMovement(Info.ActiveSquad, (int)Info.Map.GetTerrain(Info.ActiveSquad).MovementCost);
+                    Info.Map.FinalizeMovement(Info.ActiveSquad, (int)Info.Map.GetTerrain(Info.ActiveSquad).MovementCost, new List<Vector3>());
                 }
                 else
                 {
                     //Something is blocking the path.
-                    Info.Map.FinalizeMovement(Info.ActiveSquad, 1);
+                    Info.Map.FinalizeMovement(Info.ActiveSquad, 1, new List<Vector3>());
                 }
             }
 

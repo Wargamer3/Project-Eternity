@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
@@ -15,24 +16,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly Squad ActiveSquad;
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
-        private readonly DelayedAttack ActiveDelayedAttack;
+        private List<Vector3> ListMVHoverPoints;
 
         public ActionPanelChargeAttack(DeathmatchMap Map)
             : base(PanelName, Map)
         {
         }
 
-        public ActionPanelChargeAttack(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+        public ActionPanelChargeAttack(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
+            this.ListMVHoverPoints = ListMVHoverPoints;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
         }
 
         public override void OnSelect()
         {
+            foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
+            {
+                ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
+            }
+
             ActiveSquad.CurrentLeader.ChargeAttack();
             RemoveAllSubActionPanels();
         }

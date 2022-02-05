@@ -1052,25 +1052,34 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return true;
         }
 
-        public void FinalizeMovement(Squad CurrentSquad, int UsedMovement)
+        public void FinalizeMovement(Squad ActiveSquad, int UsedMovement, List<Vector3> ListMVHoverPoints)
         {
-            if (CurrentSquad.CurrentMovement != UnitStats.TerrainAir && GetTerrainType(CurrentSquad.X, CurrentSquad.Y, (int)CurrentSquad.Position.Z) != UnitStats.TerrainAir)
+            if (ActiveSquad.CurrentMovement != UnitStats.TerrainAir && GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z) != UnitStats.TerrainAir)
             {
-                CurrentSquad.CurrentMovement = GetTerrainType(CurrentSquad.X, CurrentSquad.Y, (int)CurrentSquad.Position.Z);
+                ActiveSquad.CurrentMovement = GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z);
             }
             
             if (UsedMovement > 0)
             {
-                if (CurrentSquad.CurrentMovement == UnitStats.TerrainAir)
+                if (ActiveSquad.CurrentMovement == UnitStats.TerrainAir)
                 {
-                    CurrentSquad.CurrentLeader.ConsumeEN(1);
-                    if (CurrentSquad.CurrentWingmanA != null)
-                        CurrentSquad.CurrentWingmanA.ConsumeEN(1);
-                    if (CurrentSquad.CurrentWingmanB != null)
-                        CurrentSquad.CurrentWingmanB.ConsumeEN(1);
+                    ActiveSquad.CurrentLeader.ConsumeEN(1);
+                    if (ActiveSquad.CurrentWingmanA != null)
+                        ActiveSquad.CurrentWingmanA.ConsumeEN(1);
+                    if (ActiveSquad.CurrentWingmanB != null)
+                        ActiveSquad.CurrentWingmanB.ConsumeEN(1);
                 }
             }
-            ActivateAutomaticSkills(CurrentSquad, CurrentSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName, CurrentSquad, CurrentSquad.CurrentLeader);
+
+            if (ListMVHoverPoints.Count > 0)
+            {
+                foreach (InteractiveProp ActiveProp in LayerManager[(int)this.ActiveSquad.Position.Z].ListProp)
+                {
+                    ActiveProp.FinishMoving(this.ActiveSquad, ListMVHoverPoints);
+                }
+            }
+
+            ActivateAutomaticSkills(ActiveSquad, ActiveSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName, ActiveSquad, ActiveSquad.CurrentLeader);
             UpdateMapEvent(EventTypeUnitMoved, 0);
         }
 

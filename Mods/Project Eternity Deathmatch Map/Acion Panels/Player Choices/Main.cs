@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, ActivePlayerIndex, ActiveSquadIndex, Map.CursorPosition, Map.CameraPosition));
                 if (ActiveSquad.CurrentLeader.CanAttack)
                 {
-                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CanMove));
+                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CanMove, new List<Vector3>()));
                 }
                 AddChoiceToCurrentPanel(new ActionPanelSpirit(Map, ActiveSquad));
                 new ActionPanelConsumableParts(Map, this, ActiveSquad).OnSelect();

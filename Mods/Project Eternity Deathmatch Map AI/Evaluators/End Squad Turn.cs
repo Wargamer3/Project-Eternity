@@ -16,7 +16,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
-                Info.Map.FinalizeMovement(Info.ActiveSquad, 1);
+                Info.Map.FinalizeMovement(Info.ActiveSquad, 1, new List<Vector3>());
                 Info.ActiveSquad.EndTurn();
 
                 Result = new List<object>();

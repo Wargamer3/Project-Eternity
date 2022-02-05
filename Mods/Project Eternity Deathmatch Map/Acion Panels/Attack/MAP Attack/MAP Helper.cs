@@ -4,6 +4,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -13,6 +14,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private readonly int ActivePlayerIndex;
         private readonly int ActiveSquadIndex;
+        private readonly List<Vector3> ListMVHoverPoints;
         private readonly Attack CurrentAttack;
 
         public ActionPanelAttackMAP(DeathmatchMap Map)
@@ -20,11 +22,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public ActionPanelAttackMAP(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+        public ActionPanelAttackMAP(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
+            this.ListMVHoverPoints = ListMVHoverPoints;
             CurrentAttack = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex].CurrentLeader.CurrentAttack;
         }
 
@@ -34,16 +37,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (CurrentAttack.MAPAttributes.Property == WeaponMAPProperties.Spread)
                 {
-                    AddToPanelListAndSelect(new ActionPanelAttackMAPSpread(Map, ActivePlayerIndex, ActiveSquadIndex));
+                    AddToPanelListAndSelect(new ActionPanelAttackMAPSpread(Map, ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints));
                 }
                 else if (CurrentAttack.MAPAttributes.Property == WeaponMAPProperties.Direction)
                 {
-                    AddToPanelListAndSelect(new ActionPanelAttackMAPDirection(Map, ActivePlayerIndex, ActiveSquadIndex));
+                    AddToPanelListAndSelect(new ActionPanelAttackMAPDirection(Map, ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints));
                 }
                 else if (CurrentAttack.MAPAttributes.Property == WeaponMAPProperties.Targeted)
                 {
-                    AddToPanelListAndSelect(new ActionPanelAttackMAPTargeted(Map, ActivePlayerIndex, ActiveSquadIndex));
+                    AddToPanelListAndSelect(new ActionPanelAttackMAPTargeted(Map, ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints));
                 }
+
                 RemoveFromPanelList(this);
             }
         }

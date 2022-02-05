@@ -22,6 +22,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActiveSquadIndex;
         private Squad ActiveSquad;
         private SupportSquadHolder ActiveSquadSupport;
+        private List<Vector3> ListMVHoverPoints;
         private List<Attack> ListAttackActiveSquad;
         private List<Attack> ListAttackActiveSquadSupport;
 
@@ -38,12 +39,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         public ActionPanelHumanAttack(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport,
+            List<Vector3> ListMVHoverPoints,
              int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.ActiveSquadSupport = ActiveSquadSupport;
+            this.ListMVHoverPoints = ListMVHoverPoints;
 
             this.TargetPlayerIndex = TargetPlayerIndex;
             this.TargetSquadIndex = TargetSquadIndex;
@@ -560,7 +563,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void StartBattle()
         {
-            AddToPanelListAndSelect(new ActionPanelStartBattle(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false));
+            AddToPanelListAndSelect(new ActionPanelStartBattle(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false));
         }
 
         public override void DoRead(ByteReader BR)

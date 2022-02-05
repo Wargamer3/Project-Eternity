@@ -21,6 +21,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Squad ActiveSquad;
         private Attack CurrentAttack;
         private SupportSquadHolder ActiveSquadSupport;
+        private List<Vector3> ListMVHoverPoints;
 
         private int TargetPlayerIndex;
         private int TargetSquadIndex;
@@ -42,6 +43,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         public ActionPanelStartBattle(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport,
+            List<Vector3> ListMVHoverPoints,
              int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport, bool IsDefending)
             : base(PanelName, Map, false)
         {
@@ -49,6 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.CurrentAttack = CurrentAttack;
             this.ActiveSquadSupport = ActiveSquadSupport;
+            this.ListMVHoverPoints = ListMVHoverPoints;
 
             this.TargetPlayerIndex = TargetPlayerIndex;
             this.TargetSquadIndex = TargetSquadIndex;
@@ -400,7 +403,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (FinalAttack.Pri != WeaponPrimaryProperty.PER)
             {
-                Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost);
+                Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost, ListMVHoverPoints);
                 FinalActiveSquad.EndTurn();
             }
 
@@ -412,7 +415,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (FinalActiveSquad.CurrentLeader.Boosts.PostAttackModifier.Attack)
                 {
                     HasAfterAttack = true;
-                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad.CanMove));
+                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad.CanMove, new List<Vector3>()));
                 }
 
                 if (FinalActiveSquad.CurrentLeader.Boosts.PostAttackModifier.Move)
@@ -424,7 +427,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (HasAfterAttack)
                 {
-                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelWait(Map, FinalActiveSquad));
+                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelWait(Map, FinalActiveSquad, new List<Vector3>()));
                     ListActionMenuChoice.Add(AfterAttack);
                 }
             }

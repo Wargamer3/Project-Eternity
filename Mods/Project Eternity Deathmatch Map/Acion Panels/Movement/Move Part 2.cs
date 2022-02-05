@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListNextChoice.Clear();
             if (IsPostAttack)
             {
-                AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad));
+                AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad, ListMVHoverPoints));
             }
             else
             {
@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActiveSquad.CurrentLeader.CanAttack)
                 {
-                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, false));
+                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, false, ListMVHoverPoints));
                 }
 
                 if (ActiveSquad.CurrentLeader.Boosts.PostMovementModifier.Spirit)
@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 else
                 {
-                    AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad));
+                    AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad, ListMVHoverPoints));
                 }
 
                 foreach (ActionPanel OptionalPanel in GetPropPanelsOnUnitStop(ActiveSquad))
@@ -106,14 +106,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveInputManager.InputConfirmPressed())
             {//Make sure the mouse is inside the menu.
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
-
-                foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
-                {
-                    foreach (Vector3 MovedOverPoint in ListMVHoverPoints)
-                    {
-                        ActiveProp.OnMovedOverBeforeStop(ActiveSquad, MovedOverPoint, CursorPosition);
-                    }
-                }
 
                 Map.sndConfirm.Play();
             }

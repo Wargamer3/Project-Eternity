@@ -11,36 +11,38 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public partial class DeathmatchMap
     {
-        public void ComputeTargetPlayerOffense(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport, int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
+        public void ComputeTargetPlayerOffense(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport, List<Vector3> ListMVHoverPoints,
+            int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
         {
             if (ListPlayer[ActivePlayerIndex].IsPlayerControlled)
             {
-                ActionPanelHumanAttack PlayerDefence = new ActionPanelHumanAttack(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
+                ActionPanelHumanAttack PlayerDefence = new ActionPanelHumanAttack(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, ListMVHoverPoints, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
                 ListActionMenuChoice.Add(PlayerDefence);
                 PlayerDefence.OnSelect();
             }
             else
             {
-                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, true));
+                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, true));
             }
         }
 
-        public void ComputeTargetPlayerDefence(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport, int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
+        public void ComputeTargetPlayerDefence(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport, List<Vector3> ListMVHoverPoints,
+            int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
         {
             if (ListPlayer[TargetPlayerIndex].IsPlayerControlled)
             {
-                ActionPanelHumanDefend PlayerDefence = new ActionPanelHumanDefend(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
+                ActionPanelHumanDefend PlayerDefence = new ActionPanelHumanDefend(this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, ListMVHoverPoints, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
                 ListActionMenuChoice.Add(PlayerDefence);
                 PlayerDefence.OnSelect();
             }
             else
             {
                 //Skip defense
-                ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
+                ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
             }
         }
 
-        public void ReadyNextMAPAttack(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport,
+        public void ReadyNextMAPAttack(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport, List<Vector3> ListMVHoverPoints,
             int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
         {
             Squad ActiveSquad = ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
@@ -68,10 +70,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PrepareDefenseSquadForBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, TargetPlayerIndex, TargetSquadIndex);
             PrepareAttackSquadForBattle(this, ActiveSquad, CurrentAttack, TargetSquad);
 
-            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false ));
+            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false ));
         }
 
-        public void AttackWithMAPAttack(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, Stack<Tuple<int, int>> ListMAPAttackTarget)
+        public void AttackWithMAPAttack(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, List<Vector3> ListMVHoverPoints, Stack<Tuple<int, int>> ListMAPAttackTarget)
         {
             Squad ActiveSquad = ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             this.ListMAPAttackTarget = ListMAPAttackTarget;
@@ -84,13 +86,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
             TargetSquadSupport.PrepareDefenceSupport(this, FirstEnemy.Item1, ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2]);
 
-            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, FirstEnemy.Item1, FirstEnemy.Item2, TargetSquadSupport, false));
+            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, FirstEnemy.Item1, FirstEnemy.Item2, TargetSquadSupport, false));
 
             PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2].Position));
             ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
         }
 
-        public void SelectMAPEnemies(int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> AttackChoice)
+        public void SelectMAPEnemies(int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints, List<Vector3> AttackChoice)
         {
             if (ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.Delay > 0)
             {
@@ -106,7 +108,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     GlobalDeathmatchContext.ArrayAttackPosition = AttackChoice.ToArray();
 
-                    AttackWithMAPAttack(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ListMAPAttackTarget);
+                    AttackWithMAPAttack(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ListMVHoverPoints, ListMAPAttackTarget);
 
                     //Remove Ammo if needed.
                     if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)

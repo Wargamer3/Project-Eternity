@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
+        private List<Vector3> ListMVHoverPoints;
         private Squad ActiveSquad;
         public List<Vector3> ListAttackChoice;
         public List<MovementAlgorithmTile> ListAttackDirectionHelper;
@@ -27,11 +28,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAttackDirectionHelper = new List<MovementAlgorithmTile>();
         }
 
-        public ActionPanelAttackPER(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+        public ActionPanelAttackPER(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
+            this.ListMVHoverPoints = ListMVHoverPoints;
 
             ListAttackDirectionHelper = new List<MovementAlgorithmTile>();
 
@@ -105,6 +107,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 ActiveSquad.EndTurn();
+
+                foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
+                {
+                    ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
+                }
 
                 RemoveAllSubActionPanels();
 

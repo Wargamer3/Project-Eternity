@@ -1368,7 +1368,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
                 TargetSquadSupport.PrepareDefenceSupport(Map, NextTarget.Item1, Map.ListPlayer[NextTarget.Item1].ListSquad[NextTarget.Item2]);
-                Map.ReadyNextMAPAttack(AttackerPlayerIndex, Map.ListPlayer[AttackerPlayerIndex].ListSquad.IndexOf(AttackingSquad), AttackingSquad.CurrentLeader.CurrentAttack, AttackingSupport,
+                Map.ReadyNextMAPAttack(AttackerPlayerIndex, Map.ListPlayer[AttackerPlayerIndex].ListSquad.IndexOf(AttackingSquad),
+                    AttackingSquad.CurrentLeader.CurrentAttack, AttackingSupport, new List<Vector3>(),
                     NextTarget.Item1, NextTarget.Item2, TargetSquadSupport);
             }
         }

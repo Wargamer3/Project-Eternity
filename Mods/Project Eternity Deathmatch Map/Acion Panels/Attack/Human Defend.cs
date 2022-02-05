@@ -22,12 +22,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActiveSquadIndex;
         private Squad ActiveSquad;
         private SupportSquadHolder ActiveSquadSupport;
+        private List<Vector3> ListMVHoverPoints;
 
         private int TargetPlayerIndex;
         private int TargetSquadIndex;
         private Squad TargetSquad;
         private SupportSquadHolder TargetSquadSupport;
-        List<Attack> ListAttackTargetSquad;
+        private List<Attack> ListAttackTargetSquad;
 
         public ActionPanelHumanDefend(DeathmatchMap Map)
             : base(PanelName, Map, Map.ListPlayer[Map.TargetPlayerIndex].InputManager, false)
@@ -35,12 +36,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         public ActionPanelHumanDefend(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, SupportSquadHolder ActiveSquadSupport,
+            List<Vector3> ListMVHoverPoints,
              int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
             : base(PanelName, Map, Map.ListPlayer[Map.TargetPlayerIndex].InputManager, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.ActiveSquadSupport = ActiveSquadSupport;
+            this.ListMVHoverPoints = ListMVHoverPoints;
 
             this.TargetPlayerIndex = TargetPlayerIndex;
             this.TargetSquadIndex = TargetSquadIndex;
@@ -160,7 +163,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 switch (Map.BattleMenuCursorIndex)
                 {
                     case BattleMenuChoices.Start:
-                        Map.ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
+                        Map.ComputeTargetPlayerOffense(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
                         break;
 
                     case BattleMenuChoices.Action:
