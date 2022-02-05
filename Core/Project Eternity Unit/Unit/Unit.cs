@@ -777,6 +777,11 @@ namespace ProjectEternity.Core.Units
             _EN = Math.Min(_EN + Amount, MaxEN);
         }
 
+        public void RefillSP(int Amount)
+        {
+            Pilot.SP = Math.Min(Pilot.SP + Amount, Pilot.MaxSP);
+        }
+
         public void ResetBoosts()
         {
             Boosts.Reset();

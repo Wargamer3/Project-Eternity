@@ -17,6 +17,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly BattleMap Map;
 
         private bool IsUsed;
+        private int TurnUsed;
+        private int TurnRemaining;
 
         public AdrenalineSpawner(BattleMap Map)
             : base("Adrenaline", PropCategories.Interactive, new bool[,] { { true } }, false)
@@ -40,9 +42,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
-        public void HealSquad(Squad SquadToHeal)
+        public void RefillAdrenaline(Squad SquadToHeal)
         {
-            SquadToHeal.CurrentLeader.HealUnit(SquadToHeal.CurrentLeader.MaxHP / 2);
+            if (SquadToHeal.CurrentLeader.Pilot.SP < SquadToHeal.CurrentLeader.Pilot.MaxSP)
+            {
+                SquadToHeal.CurrentLeader.RefillSP(5);
+                IsUsed = true;
+                TurnUsed = Map.ActivePlayerIndex;
+                TurnRemaining = 2;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -67,7 +75,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
-                IsUsed = true;
+                RefillAdrenaline(SelectedUnit);
             }
         }
 
@@ -75,7 +83,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
             {
-                IsUsed = true;
+                RefillAdrenaline(StoppedUnit);
             }
         }
 
@@ -85,6 +93,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void OnTurnEnd(int PlayerIndex)
         {
+            if (IsUsed && TurnUsed == PlayerIndex && --TurnRemaining <= 0)
+            {
+                IsUsed = false;
+            }
         }
 
         public override void Draw(CustomSpriteBatch g)

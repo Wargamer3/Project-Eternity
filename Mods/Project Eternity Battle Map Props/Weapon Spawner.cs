@@ -71,6 +71,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int _RespawnTime;
         private byte _Ammo;
         private bool IsUsed;
+        private int TurnUsed;
+        private int TurnRemaining;
 
         public WeaponSpawner(BattleMap Map)
             : base("Weapon Spawner", PropCategories.Interactive, new bool[,] { { true } }, false)
@@ -114,6 +116,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void PickupWeapon(Squad SquadToUse)
         {
             SquadToUse.CurrentLeader.AddTemporaryAttack(_WeaponName, _Ammo, Map.Content, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
+            IsUsed = true;
+            TurnUsed = Map.ActivePlayerIndex;
+            TurnRemaining = _RespawnTime;
         }
 
         public override void Update(GameTime gameTime)
@@ -139,7 +144,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
                 PickupWeapon(SelectedUnit);
-                IsUsed = true;
             }
         }
 
@@ -148,7 +152,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
             {
                 PickupWeapon(StoppedUnit);
-                IsUsed = true;
             }
         }
 
@@ -158,6 +161,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void OnTurnEnd(int PlayerIndex)
         {
+            if (IsUsed && TurnUsed == PlayerIndex && --TurnRemaining <= 0)
+            {
+                IsUsed = false;
+            }
         }
 
         public override void Draw(CustomSpriteBatch g)
