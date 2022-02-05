@@ -966,7 +966,7 @@ namespace ProjectEternity.Editors.MapEditor
             if (BattleMapViewer.ActiveMap.TileSize.X != 0)
             {
                 int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
+                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
 
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.
                 for (int P = 0; P < TopLayer.ListProp.Count; P++)
@@ -1004,7 +1004,7 @@ namespace ProjectEternity.Editors.MapEditor
             if (BattleMapViewer.ActiveMap.TileSize.X != 0)
             {
                 int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
-                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[TopLayerIndex];
+                BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
 
                 //Loop in the Prop list to find if a Prop already exist at the X, Y position.
                 for (int P = 0; P < TopLayer.ListProp.Count; P++)

@@ -75,6 +75,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).UnitTypeName]);
                                 }
 
+                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.PilotSP = 0;
                                 ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
                                 Owner.SpawnSquad(PlayerIndex, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, ActiveLayer.ListMultiplayerSpawns[S].Position, L);
                                 ++SpawnSquadIndex;
@@ -170,6 +171,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             int RandomSapwnPointIndex = RandomHelper.Next(ListPossibleSpawnPoint.Count);
             Tuple<EventPoint, int> RandomSpawnPoint = ListPossibleSpawnPoint[RandomSapwnPointIndex];
+
+            Owner.CursorPosition = RandomSpawnPoint.Item1.Position;
+            Owner.CursorPositionVisible = Owner.CursorPosition;
 
             Owner.SpawnSquad(ActivePlayerIndex, ActiveSquad, ActiveSquad.ID, RandomSpawnPoint.Item1.Position, RandomSpawnPoint.Item2);
         }
