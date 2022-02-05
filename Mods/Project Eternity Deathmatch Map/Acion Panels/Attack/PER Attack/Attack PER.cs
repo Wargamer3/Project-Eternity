@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
             Map.LayerManager.AddDrawablePath(ListAttackDirectionHelper);
 
-            if (ActiveInputManager.InputConfirmPressed())
+            if (ActiveInputManager.InputConfirmPressed() && Map.CursorPosition != ActiveSquad.Position)
             {
                 CreateAttack(ActiveSquad.CurrentLeader.CurrentAttack);
                 Map.sndConfirm.Play();
@@ -79,6 +79,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void CreateAttack(Attack AttackUsed)
         {
             Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad);
+            List<PERAttack> ListNewList = new List<PERAttack>();
 
             for (int A = 0; A < AttackUsed.PERAttributes.NumberOfProjectiles; ++A)
             {
@@ -93,33 +94,34 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Vector3 AttackSpeed = new Vector3();
                 AttackSpeed -= AttackLateralVector * AttackUsed.PERAttributes.MaxLateralSpread / 2;
-                AttackSpeed += AttackLateralVector * RandLateral * AttackUsed.PERAttributes.ProjectileSpeed;
+                AttackSpeed += AttackLateralVector * RandLateral * AttackUsed.PERAttributes.MaxLateralSpread;
                 AttackSpeed += AttackForwardVector * RandForward * AttackUsed.PERAttributes.ProjectileSpeed;
                 AttackSpeed += AttackForwardVector * AttackUsed.PERAttributes.ProjectileSpeed;
 
                 PERAttack NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, AttackSpeed, AttackUsed.PERAttributes.MaxLifetime);
 
+                ListNewList.Add(NewAttack);
                 Map.ListPERAttack.Add(NewAttack);
-
-                if (AttackUsed.MaxAmmo > 0)
-                {
-                    AttackUsed.ConsumeAmmo();
-                }
-
-                ActiveSquad.EndTurn();
-
-                foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
-                {
-                    ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
-                }
-
-                RemoveAllSubActionPanels();
-
-                Map.CursorPosition = ActiveSquad.Position;
-                Map.CursorPositionVisible = Map.CursorPosition;
-
-                Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, NewAttack));
             }
+
+            if (AttackUsed.MaxAmmo > 0)
+            {
+                AttackUsed.ConsumeAmmo();
+            }
+
+            ActiveSquad.EndTurn();
+
+            foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
+            {
+                ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
+            }
+
+            RemoveAllSubActionPanels();
+
+            Map.CursorPosition = ActiveSquad.Position;
+            Map.CursorPositionVisible = Map.CursorPosition;
+
+            Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, ListNewList));
         }
 
         public override void DoRead(ByteReader BR)

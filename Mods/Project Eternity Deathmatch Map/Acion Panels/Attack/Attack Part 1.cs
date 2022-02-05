@@ -93,17 +93,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)
                 {
-                    if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.PER)
+                    if (ActiveSquad.CurrentLeader.CurrentAttack.IsChargeable)
+                    {
+                        AddToPanelListAndSelect(new ActionPanelChargeAttack(Map, ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints));
+                    }
+                    else if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.PER)
                     {
                         AddToPanelListAndSelect(new ActionPanelAttackPER(Map, ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints));
                     }
                     else if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.MAP)
                     {
                         AddToPanelListAndSelect(new ActionPanelAttackMAP(Map, ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints));
-                    }
-                    else if (ActiveSquad.CurrentLeader.CurrentAttack.IsChargeable)
-                    {
-                        AddToPanelListAndSelect(new ActionPanelChargeAttack(Map, ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints));
                     }
                     else
                     {

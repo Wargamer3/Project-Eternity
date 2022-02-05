@@ -633,12 +633,11 @@ namespace ProjectEternity.Core.Units
 
             if (ExistingAttack == null)
             {
-                ListAttackTemporary.Add(new Attack(NewAttackName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+                ExistingAttack = new Attack(NewAttackName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                ListAttackTemporary.Add(ExistingAttack);
             }
-            else
-            {
-                ExistingAttack.IncreaseAmmo(Ammo);
-            }
+
+            ExistingAttack.IncreaseAmmo(Ammo);
 
             UpdateAttacks();
         }

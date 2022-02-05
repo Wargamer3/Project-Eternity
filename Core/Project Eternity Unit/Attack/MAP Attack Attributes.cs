@@ -31,7 +31,7 @@ namespace ProjectEternity.Core.Attacks
             Delay = BR.ReadInt32();
         }
 
-        public bool CanAttackTarget(Vector3 StartPosition, Vector3 TargetPosition, int StartingMV, int FinishingMV)
+        public bool CanAttackTarget(Vector3 StartPosition, Vector3 TargetPosition, int MinDistance, int MaxDistance)
         {
             int StartX = (int)StartPosition.X;
             int StartY = (int)StartPosition.Y;
@@ -84,9 +84,10 @@ namespace ProjectEternity.Core.Attacks
             {
                 int DistanceX = Math.Abs(StartX - TargetX);
                 int DistanceY = Math.Abs(StartY - TargetY);
+                int FinalDistance = DistanceX + DistanceY;
                 //If a Unit is in range.
-                if (DistanceX + Width >= StartingMV && DistanceX <= FinishingMV + Width &&
-                    DistanceY + Height >= StartingMV && DistanceY <= FinishingMV + Height)
+                if (FinalDistance + Width >= MinDistance && FinalDistance <= MaxDistance + Width &&
+                    FinalDistance + Height >= MinDistance && FinalDistance <= MaxDistance + Height)
                 {
                     for (int X = ListChoice.Count - 1; X >= 0; --X)
                     {
@@ -95,11 +96,12 @@ namespace ProjectEternity.Core.Attacks
                             //Not an active tile.
                             if (!ListChoice[X][Y])
                                 continue;
+
                             int DistanceCenterX = X - Width;
                             int DistanceCenterY = Y - Height;
 
-                            if (DistanceX >= StartingMV + DistanceCenterX && DistanceX <= FinishingMV + DistanceCenterX &&
-                                DistanceY >= StartingMV + DistanceCenterY && DistanceY <= FinishingMV + DistanceCenterY)
+                            if (FinalDistance >= MinDistance + DistanceCenterX && FinalDistance <= MaxDistance + DistanceCenterX &&
+                                FinalDistance >= MinDistance + DistanceCenterY && FinalDistance <= MaxDistance + DistanceCenterY)
                             {
                                 return true;
                             }

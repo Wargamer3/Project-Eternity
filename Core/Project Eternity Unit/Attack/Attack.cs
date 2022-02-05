@@ -306,6 +306,10 @@ namespace ProjectEternity.Core.Attacks
             //If it's a post-movement weapon or the mech can still move.
             if (CanMove || (!CanMove && IsPostMovement(CurrentUnit)))
             {
+                if (IsChargeable)
+                {
+                    return true;
+                }
                 if (Pri == WeaponPrimaryProperty.PER)
                 {
                     return true;

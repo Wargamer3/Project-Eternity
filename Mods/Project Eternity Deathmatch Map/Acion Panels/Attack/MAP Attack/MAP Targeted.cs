@@ -73,6 +73,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (ListAttackChoice.Contains(Map.CursorPosition))
                 {
+                    ListAttackChoice.Clear();
                     for (int X = 0; X < CurrentAttack.MAPAttributes.ListChoice.Count; X++)
                     {
                         for (int Y = 0; Y < CurrentAttack.MAPAttributes.ListChoice[X].Count; Y++)
@@ -85,6 +86,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
 
+                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints, ListAttackChoice);
                     Map.sndConfirm.Play();
                 }
                 else

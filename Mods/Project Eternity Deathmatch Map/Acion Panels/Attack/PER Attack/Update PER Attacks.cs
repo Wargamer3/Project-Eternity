@@ -46,14 +46,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListPERAttackToUpdate = new List<PERAttackMovement>();
         }
 
-        public ActionPanelUpdatePERAttacks(DeathmatchMap Map, PERAttack ActivePERAttack)
+        public ActionPanelUpdatePERAttacks(DeathmatchMap Map, List<PERAttack> ListNewPERAttack)
             : base(PanelName, Map)
         {
             TimeElapsed = 0;
             ListPERAttackToUpdate = new List<PERAttackMovement>();
-            Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position.X, ActivePERAttack.Position.Y, (int)ActivePERAttack.Position.Z);
-            Vector3 NextPosition = ActivePERAttack.Position + ActivePERAttack.Speed;
-            ListPERAttackToUpdate.Add(new PERAttackMovement(ActivePERAttack, ActivePERAttack.Position, NextPosition, CurrentTerrain));
+            foreach (PERAttack ActivePERAttack in ListNewPERAttack)
+            {
+                Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position.X, ActivePERAttack.Position.Y, (int)ActivePERAttack.Position.Z);
+                Vector3 NextPosition = ActivePERAttack.Position + ActivePERAttack.Speed;
+                ListPERAttackToUpdate.Add(new PERAttackMovement(ActivePERAttack, ActivePERAttack.Position, NextPosition, CurrentTerrain));
+            }
         }
 
         public override void OnSelect()

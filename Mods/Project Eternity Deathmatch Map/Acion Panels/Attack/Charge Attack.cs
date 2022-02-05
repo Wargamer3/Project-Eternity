@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Effects;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -41,6 +42,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             ActiveSquad.CurrentLeader.ChargeAttack();
+            Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad).MovementCost, ListMVHoverPoints);
+            ActiveSquad.EndTurn();
+            ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
             RemoveAllSubActionPanels();
         }
 
