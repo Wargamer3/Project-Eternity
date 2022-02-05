@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 
@@ -55,6 +54,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool InputCommand2Pressed()
         {
             return KeyboardHelper.InputCommand2Pressed();
+        }
+
+        public bool InputLButtonPressed()
+        {
+            return InputHelper.InputLButtonPressed();
+        }
+
+        public bool InputRButtonPressed()
+        {
+            return InputHelper.InputRButtonPressed();
         }
 
         public bool InputSkipPressed()

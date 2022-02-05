@@ -16,6 +16,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         bool InputCancelPressed();
         bool InputCommand1Pressed();
         bool InputCommand2Pressed();
+        bool InputLButtonPressed();
+        bool InputRButtonPressed();
         bool InputSkipPressed();
         bool InputLeftHold();
         bool InputRightHold();
