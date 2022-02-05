@@ -534,7 +534,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 if (TargetSquadSupport != null && TargetSquadSupport.ActiveSquadSupport != null)
                     TargetSquadSupport.ActiveSquadSupport.UpdateSquad();
 
-                if (TargetSquad.CurrentLeader == null)
+                if (TargetSquad.IsDead)
                 {
                     GameRule.OnSquadDefeated(AttackerPlayerIndex, Attacker, DefenderPlayerIndex, TargetSquad);
                 }

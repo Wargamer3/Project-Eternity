@@ -1349,7 +1349,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             RemoveWithoutUnloading(this);
 
-            if (AttackingSquad == null)
+            if (AttackingSquad == null || AttackingSquad.IsDead)
             {
                 Map.FinalizeBattle(null, null, null, Map.ActivePlayerIndex, DefendingSquad, DefendingSupport, DefenderPlayerIndex, AttackerSquadResult, DefenderSquadResult);
             }
