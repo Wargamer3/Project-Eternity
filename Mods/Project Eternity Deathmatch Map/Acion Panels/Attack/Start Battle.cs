@@ -303,8 +303,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 FinalTargetSquadSupport = ActiveSquadSupport;
             }
 
-            bool ShowAnimation = Constants.ShowAnimation && FinalAttack.GetAttackAnimations(Map.ActiveParser).Start.AnimationName != null
-                && FinalAttack.Pri != WeaponPrimaryProperty.MAP && FinalAttack.Pri != WeaponPrimaryProperty.PER;
+            bool ShowAnimation = Constants.ShowAnimation && FinalAttack.Pri != WeaponPrimaryProperty.MAP && FinalAttack.Pri != WeaponPrimaryProperty.PER
+                && FinalAttack.GetAttackAnimations(Map.ActiveParser).Start.AnimationName != null;
             ListNextAnimationScreen.Clear();
             Map.NonDemoScreen.ListNonDemoBattleFrame.Clear();
 
@@ -403,6 +403,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (FinalAttack.Pri != WeaponPrimaryProperty.PER)
             {
+                if (FinalAttack.Parent != null && !FinalAttack.IsChargeable)
+                {
+                    FinalActiveSquad.CurrentLeader.UseChargeAttack();
+                }
                 Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost, ListMVHoverPoints);
                 FinalActiveSquad.EndTurn();
             }

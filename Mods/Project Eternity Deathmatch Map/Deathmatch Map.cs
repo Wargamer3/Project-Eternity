@@ -1073,9 +1073,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ListMVHoverPoints.Count > 0)
             {
-                foreach (InteractiveProp ActiveProp in LayerManager[(int)this.ActiveSquad.Position.Z].ListProp)
+                foreach (InteractiveProp ActiveProp in LayerManager[(int)ActiveSquad.Position.Z].ListProp)
                 {
-                    ActiveProp.FinishMoving(this.ActiveSquad, ListMVHoverPoints);
+                    ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
                 }
             }
 

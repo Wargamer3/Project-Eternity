@@ -576,7 +576,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 CurrentX += 50;
             }
 
-
             int CurrentY = Constants.Height - 174;
 
             DrawBox(g, new Vector2(MiddlePosX, BottomPositionY), MiddleWidth, BottomHeight, Color.White);
@@ -786,7 +785,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (S < ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit.Length && ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].IsUnlocked)
                     {
-                        if (fntFinlanderFont.MeasureString(ActiveSquad.CurrentLeader.Pilot.ArrayPilotSkill[S].Name).X > SpiritTextMaxSize)
+                        if (fntFinlanderFont.MeasureString(ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name).X > SpiritTextMaxSize)
                         {
                             g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name,
                                 new Vector2(X - Math.Max(0, ScrollTextOffsetSpirits), Y + S * 30), Color.White);
