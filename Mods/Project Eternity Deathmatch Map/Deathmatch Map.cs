@@ -184,7 +184,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     break;
 
                 case "Deathmatch":
-                    GameRule = new HordeGameRule(this);
+                    GameRule = new DeathmatchGameRule(this);
                     break;
             }
         }
