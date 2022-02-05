@@ -130,9 +130,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     g.Draw(sprRanged, new Vector2(XStart + 7, YPos + 5), Color.White);
 
                 int CurrentX = XStart + 35;
-                if (ListAttack[i].IsChargeable)
+                if (ListAttack[i].IsChargeable && ListAttack[i].Parent != null)
                 {
-                    g.DrawString(ActiveFont, "Charge " + ListAttack[i].ItemName, new Vector2(XStart + 35, YPos), ColorBrush);
+                    if (ListAttack[i].Parent.PowerFormula != "0")
+                    {
+                        g.DrawString(ActiveFont, "Charge " + ListAttack[i].Parent.ItemName, new Vector2(XStart + 35, YPos), ColorBrush);
+                    }
+                    else
+                    {
+                        g.DrawString(ActiveFont, "Charge " + ListAttack[i].ItemName, new Vector2(XStart + 35, YPos), ColorBrush);
+                    }
                 }
                 else
                 {

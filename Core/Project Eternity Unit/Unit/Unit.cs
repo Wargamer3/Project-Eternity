@@ -639,6 +639,8 @@ namespace ProjectEternity.Core.Units
             {
                 ExistingAttack.IncreaseAmmo(Ammo);
             }
+
+            UpdateAttacks();
         }
 
         public void ChargeAttack()

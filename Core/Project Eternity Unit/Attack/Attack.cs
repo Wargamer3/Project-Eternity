@@ -70,7 +70,7 @@ namespace ProjectEternity.Core.Attacks
 
         public MAPAttackAttributes MAPAttributes;
         public PERAttackAttributes PERAttributes;
-        private Attack Parent;
+        public Attack Parent;
         public bool IsChargeable;
         public List<Attack> ListSecondaryAttack;
         public byte ChargedAttackCancelLevel;
