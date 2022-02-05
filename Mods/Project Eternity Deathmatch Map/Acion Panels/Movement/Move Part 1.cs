@@ -72,16 +72,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.LayerManager.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
             Map.LayerManager.AddDrawablePath(ListMovedOverTerrain);
 
-            Map.CursorControl(ActiveInputManager);//Move the cursor
-
-            foreach (TeleportPoint ActiveTeleport in Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ListTeleportPoint)
+            if (Map.CursorControl(ActiveInputManager))
             {
-                if (ActiveTeleport.Position.X == Map.CursorPosition.X && ActiveTeleport.Position.Y == Map.CursorPosition.Y)
+                foreach (TeleportPoint ActiveTeleport in Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ListTeleportPoint)
                 {
-                    Map.CursorPosition.X = ActiveTeleport.OtherMapEntryPoint.X;
-                    Map.CursorPosition.Y = ActiveTeleport.OtherMapEntryPoint.Y;
-                    Map.CursorPosition.Z = ActiveTeleport.OtherMapEntryLayer;
-                    break;
+                    if (ActiveTeleport.Position.X == Map.CursorPosition.X && ActiveTeleport.Position.Y == Map.CursorPosition.Y)
+                    {
+                        Map.CursorPosition.X = ActiveTeleport.OtherMapEntryPoint.X;
+                        Map.CursorPosition.Y = ActiveTeleport.OtherMapEntryPoint.Y;
+                        Map.CursorPosition.Z = ActiveTeleport.OtherMapEntryLayer;
+                        break;
+                    }
                 }
             }
 
@@ -94,6 +95,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddToPanelListAndSelect(new ActionPanelMovePart2(Map, ActivePlayerIndex, ActiveSquadIndex, IsPostAttack, ListMovedOverPoint));
 
                     Map.sndConfirm.Play();
+                }
+                else
+                {
+                    Map.sndDeny.Play();
                 }
             }
             else if (Map.CursorPosition == ActiveSquad.Position)

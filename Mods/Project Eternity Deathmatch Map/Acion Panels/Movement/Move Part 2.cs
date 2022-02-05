@@ -103,15 +103,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             NavigateThroughNextChoices(Map.sndSelection, Map.sndConfirm);
 
-            if (ActiveInputManager.InputConfirmPressed())
-            {//Make sure the mouse is inside the menu.
-                AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
-
-                Map.sndConfirm.Play();
-            }
-            else if (ActiveInputManager.InputCancelPressed())
-            {
-            }
             if (ActiveInputManager.InputUpPressed())
             {
                 ActionMenuCursor -= (ActionMenuCursor > 0) ? 1 : 0;

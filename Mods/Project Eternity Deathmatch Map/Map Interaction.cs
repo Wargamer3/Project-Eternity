@@ -180,7 +180,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
                         UnitIndex = 0;
 
-                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
+                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader != null && ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
                     {
                         UnmovedSquadFound = true;
                     }
@@ -189,8 +189,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (!UnmovedSquadFound)
                 {
-                    if (++UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
-                        UnitIndex = 0;
+                    do
+                    {
+                        if (++UnitIndex >= ListPlayer[ActivePlayerIndex].ListSquad.Count)
+                            UnitIndex = 0;
+                    }
+                    while (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader == null);
                 }
 
                 ActiveSquadIndex = UnitIndex;
@@ -221,7 +225,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (UnitIndex < 0)
                         UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
 
-                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
+                    if (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader != null && ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CanMove)
                     {
                         UnmovedSquadFound = true;
                     }
@@ -230,8 +234,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (!UnmovedSquadFound)
                 {
-                    if (--UnitIndex < 0)
-                        UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
+                    do
+                    {
+                        if (--UnitIndex < 0)
+                            UnitIndex = ListPlayer[ActivePlayerIndex].ListSquad.Count - 1;
+                    }
+                    while (ListPlayer[ActivePlayerIndex].ListSquad[UnitIndex].CurrentLeader == null);
                 }
 
                 ActiveSquadIndex = UnitIndex;
