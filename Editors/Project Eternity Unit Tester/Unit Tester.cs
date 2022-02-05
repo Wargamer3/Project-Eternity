@@ -392,7 +392,7 @@ namespace ProjectEternity.Editors.UnitTester
 
             #region Accuracy
             //(((Pilot Hit Stat/2 + 130) * Final Terrain Multiplier) + Weapon Hit Rate) + Base Hit Rate Effect
-            int Accuracy = (int)(((((int)txtAttackerPilotHIT.Value/2 + 130) * ((100 + FinalAttackerTerrainMultiplier) / 100.0)) + (int)txtWeaponAccuracy.Value + AttackerBoosts.AccuracyModifier) * AttackerBoosts.AccuracyMultiplier);
+            int Accuracy = (int)(((((int)txtAttackerPilotHIT.Value / 2 + 130) * ((100 + FinalAttackerTerrainMultiplier) / 100.0)) + (int)txtWeaponAccuracy.Value + AttackerBoosts.AccuracyModifier) * AttackerBoosts.AccuracyMultiplier);
             txtAccuracyFormula.Text = Accuracy.ToString();
 
             #endregion
@@ -400,7 +400,7 @@ namespace ProjectEternity.Editors.UnitTester
             #region Evasion
 
             //((Pilot Evasion/2)+Robot Mobility) * Final Terrain Multiplier) + Base Evasion Effect
-            int Evasion = (int)((int)(txtDefenderPilotEVA.Value/2 + txtDefenderMobility.Value) * ((100 + FinalDefenderTerrainMultiplier) / 100.0)) + DefenderBoosts.EvasionModifier;
+            int Evasion = (int)((int)(txtDefenderPilotEVA.Value / 2 + txtDefenderMobility.Value) * ((100 + FinalDefenderTerrainMultiplier) / 100.0)) + DefenderBoosts.EvasionModifier;
             txtEvasionFormula.Text = Evasion.ToString();
 
             #endregion
@@ -578,7 +578,7 @@ namespace ProjectEternity.Editors.UnitTester
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(16);
                         Attack NewWeapon = new Attack(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
 
-                        txtWeaponDamage.Value = NewWeapon.GetPower(null, null);
+                        txtWeaponDamage.Text = NewWeapon.PowerFormula;
                         txtWeaponAccuracy.Value = NewWeapon.Accuracy;
 
                         if (NewWeapon.Style == WeaponStyle.M)
