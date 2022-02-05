@@ -565,27 +565,52 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         || ActiveSquad.IsDead)
                         continue;
 
-                    Color UnitColor;
-                    if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
-                        UnitColor = Map.ListPlayer[P].Color;
-                    else
-                        UnitColor = Color.White;
-
                     ActiveSquad.Unit3D.SetViewMatrix(Camera.View);
-                    float TerrainZ = 0;
-                    if (ActiveSquad.Speed == Vector3.Zero)
+
+                    if (Map.MovementAnimation.Contains(ActiveSquad))
                     {
-                        TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y].Position.Z;
+                        int IndexOfUnit = Map.MovementAnimation.IndexOf(ActiveSquad);
+                        float PosX = Map.MovementAnimation.ListPosX[IndexOfUnit];
+                        float PosY = Map.MovementAnimation.ListPosY[IndexOfUnit];
+
+                        float TerrainZ = 0;
+                        if (ActiveSquad.Speed == Vector3.Zero)
+                        {
+                            TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)PosX, (int)PosY].Position.Z;
+                        }
+
+                        ActiveSquad.Unit3D.SetPosition(
+                            PosX + 0.5f,
+                            (ActiveSquad.Position.Z + TerrainZ) * 32,
+                            PosY + 0.5f);
+
+                        ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
+
+                        ActiveSquad.Unit3D.Draw(GameScreen.GraphicsDevice);
                     }
+                    else
+                    {
+                        Color UnitColor;
+                        if (Constants.UnitRepresentationState == Constants.UnitRepresentationStates.Colored)
+                            UnitColor = Map.ListPlayer[P].Color;
+                        else
+                            UnitColor = Color.White;
 
-                    ActiveSquad.Unit3D.SetPosition(
-                        ActiveSquad.Position.X + 0.5f,
-                        (ActiveSquad.Position.Z + TerrainZ) * 32,
-                        ActiveSquad.Position.Y + 0.5f);
+                        float TerrainZ = 0;
+                        if (ActiveSquad.Speed == Vector3.Zero)
+                        {
+                            TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y].Position.Z;
+                        }
 
-                    ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActiveSquad.CanMove && P == Map.ActivePlayerIndex);
+                        ActiveSquad.Unit3D.SetPosition(
+                            ActiveSquad.Position.X + 0.5f,
+                            (ActiveSquad.Position.Z + TerrainZ) * 32,
+                            ActiveSquad.Position.Y + 0.5f);
 
-                    ActiveSquad.Unit3D.Draw(GameScreen.GraphicsDevice);
+                        ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActiveSquad.CanMove && P == Map.ActivePlayerIndex);
+
+                        ActiveSquad.Unit3D.Draw(GameScreen.GraphicsDevice);
+                    }
                 }
             }
 
@@ -634,6 +659,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             foreach (KeyValuePair<Vector4, List<Tile3D>> DrawablePointPerColor in DicDrawablePointPerColor)
             {
                 ColorEffect.Parameters["Color"].SetValue(DrawablePointPerColor.Key);
+
+                ColorEffect.CurrentTechnique.Passes[0].Apply();
 
                 foreach (Tile3D DrawablePoint in DrawablePointPerColor.Value)
                 {
