@@ -23,7 +23,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
                 //Movement initialisation.
-                Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad);
+                Vector3 StartPosition = Info.ActiveSquad.Position;
 
                 float DistanceMax = 99999;
                 List<Vector3> ListMVChoice = new List<Vector3>();
@@ -59,6 +59,8 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 {
                     Info.Map.FinalizeMovement(Info.ActiveSquad, 1, new List<Vector3>());
                 }
+
+                Info.Map.MovementAnimation.Add(Info.ActiveSquad, StartPosition, Info.ActiveSquad.Position);
 
                 Result = new List<object>();
                 IsCompleted = true;

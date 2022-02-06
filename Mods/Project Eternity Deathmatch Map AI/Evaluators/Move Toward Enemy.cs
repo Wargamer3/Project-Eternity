@@ -84,7 +84,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     int Choice = RandomHelper.Next(ListRealChoice.Count);
 
                     //Movement initialisation.
-                    Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad);
+                    Info.Map.MovementAnimation.Add(Info.ActiveSquad, Info.ActiveSquad.Position, ListRealChoice[Choice]);
 
                     //Prepare the Cursor to move.
                     Info.Map.CursorPosition.X = ListRealChoice[Choice].X;

@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 ListMVPoints.Contains(Map.CursorPosition))//If the cursor is in the possible move list.
             {
                 //Movement initialisation.
-                Map.MovementAnimation.Add(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.Components);
+                Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, Map.CursorPosition);
                 //Move the Unit to the cursor position
                 ActiveUnit.SetPosition(Map.CursorPosition);
                 ListMVChoice.Clear();

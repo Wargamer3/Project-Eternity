@@ -1008,56 +1008,5 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="ClimbValue"></param>
         /// <returns></returns>
         public abstract int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<int> ListLayerPossibility);
-
-        /// <summary>
-        /// Anything related with the cursor on the field is here.
-        /// </summary>
-        public void MoveSquad()
-        {
-            const float MovementSpeed = 0.2f;
-
-            for (int P = MovementAnimation.Count - 1; P >= 0; --P)
-            {
-                UnitMapComponent ActiveUnitMap = MovementAnimation.ListMovingMapUnit[P];
-
-                if (MovementAnimation.ListPosX[P] < ActiveUnitMap.X - MovementSpeed)
-                {
-                    MovementAnimation.ListPosX[P] += MovementSpeed;
-                    if (MovementAnimation.ListPosX[P] > ActiveUnitMap.X + MovementSpeed)
-                        MovementAnimation.ListPosX[P] = ActiveUnitMap.X;
-                }
-                else if (MovementAnimation.ListPosX[P] > ActiveUnitMap.X + MovementSpeed)
-                {
-                    MovementAnimation.ListPosX[P] -= MovementSpeed;
-                    if (MovementAnimation.ListPosX[P] < ActiveUnitMap.X - MovementSpeed)
-                        MovementAnimation.ListPosX[P] = ActiveUnitMap.X;
-                }
-                else
-                    MovementAnimation.ListPosX[P] = ActiveUnitMap.X;
-
-                if (MovementAnimation.ListPosY[P] < ActiveUnitMap.Y - MovementSpeed)
-                {
-                    MovementAnimation.ListPosY[P] += MovementSpeed;
-                    if (MovementAnimation.ListPosY[P] > ActiveUnitMap.Y + MovementSpeed)
-                        MovementAnimation.ListPosY[P] = ActiveUnitMap.Y;
-                }
-                else if (MovementAnimation.ListPosY[P] > ActiveUnitMap.Y + MovementSpeed)
-                {
-                    MovementAnimation.ListPosY[P] -= MovementSpeed;
-                    if (MovementAnimation.ListPosY[P] < ActiveUnitMap.Y - MovementSpeed)
-                        MovementAnimation.ListPosY[P] = ActiveUnitMap.Y;
-                }
-                else
-                {
-                    MovementAnimation.ListPosY[P] = ActiveUnitMap.Y;
-                    if (MovementAnimation.ListPosX[P] == ActiveUnitMap.X)
-                        MovementAnimation.RemoveAt(P--);
-                }
-            }
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
-            {
-                OnlinePlayers.ExecuteAndSend(new Online.BattleMapLobyScriptHolder.SkipSquadMovementScript(this));
-            }
-        }
     }
 }

@@ -1092,7 +1092,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
             else if (MovementAnimation.Count > 0)
             {
-                MoveSquad();
+                MovementAnimation.MoveSquad(this);
             }
             else
             {

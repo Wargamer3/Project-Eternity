@@ -49,7 +49,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 continue;
 
                             MovingSquad = Map.ListPlayer[P].ListSquad[U];
-                            Map.MovementAnimation.Add(MovingSquad.X, MovingSquad.Y, MovingSquad);
                         }
                     }
 
@@ -66,6 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         else
                             HasMovementFocus = false;
 
+                        Map.MovementAnimation.Add(MovingSquad, MovingSquad.Position, FinalPosition);
                         MovingSquad.SetPosition(FinalPosition);
                     }
 
@@ -76,7 +76,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
                 if (HasMovementFocus)
-                    Map.MoveSquad();
+                    Map.MovementAnimation.MoveSquad(Map);
 
                 if (Map.MovementAnimation.Count == 0)
                 {

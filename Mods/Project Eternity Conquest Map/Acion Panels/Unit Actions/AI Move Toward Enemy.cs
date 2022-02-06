@@ -31,7 +31,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             UnitConquest TargetSquad = null;
             //Movement initialisation.
-            Map.MovementAnimation.Add(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.Components);
             List<Unit> ListChoice = new List<Unit>();
             float DistanceMax = 99999;
             //Select the nearest enemy as a target.
@@ -79,6 +78,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     //Move the Unit to the target position;
                     ActiveUnit.SetPosition(ListMVChoice[FinalMV].Position);
                 }
+
+                Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListMVChoice[FinalMV].Position);
             }
 
             Map.FinalizeMovement(ActiveUnit);

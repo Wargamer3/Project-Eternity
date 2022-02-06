@@ -240,7 +240,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (MovementAnimation.Count > 0)
             {
-                MoveSquad();
+                MovementAnimation.MoveSquad(this);
             }
             else if (ListPlayer.Count > 0)
             {

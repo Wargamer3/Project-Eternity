@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     if (ActiveTerrain.CapturedPlayerIndex != Map.ActivePlayerIndex && ActiveTerrain.TerrainTypeIndex >= 13)
                     {
                         //Movement initialisation.
-                        Map.MovementAnimation.Add(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.Components);
+                        Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListMVChoice[M].Position);
                         //Prepare the Cursor to move.
                         Map.CursorPosition.X = ListMVChoice[M].Position.X;
                         Map.CursorPosition.Y = ListMVChoice[M].Position.Y;

@@ -43,13 +43,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             protected override void Execute(IOnlineConnection Host)
             {
-                for (int P = Map.MovementAnimation.Count - 1; P >= 0; --P)
-                {
-                    UnitMapComponent ActiveUnitMap = Map.MovementAnimation.ListMovingMapUnit[P];
-
-                    Map.MovementAnimation.ListPosX[P] = ActiveUnitMap.X;
-                    Map.MovementAnimation.ListPosY[P] = ActiveUnitMap.Y;
-                }
+                Map.MovementAnimation.Skip();
             }
 
             protected override void Read(OnlineReader Sender)

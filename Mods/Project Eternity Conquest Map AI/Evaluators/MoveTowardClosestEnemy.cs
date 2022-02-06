@@ -22,7 +22,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
             {
                 UnitConquest TargetSquad = null;
                 //Movement initialisation.
-                Info.Map.MovementAnimation.Add(Info.ActiveUnit.X, Info.ActiveUnit.Y, Info.ActiveUnit.Components);
+                Vector3 StartPosition = Info.ActiveUnit.Components.Position;
                 List<Unit> ListChoice = new List<Unit>();
                 float DistanceMax = 99999;
                 //Select the nearest enemy as a target.
@@ -82,7 +82,9 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 {
                     Info.Map.FinalizeMovement(Info.ActiveUnit);
                 }
-                
+
+                Info.Map.MovementAnimation.Add(Info.ActiveUnit.Components, StartPosition, Info.ActiveUnit.Components.Position);
+
                 Result = new List<object>();
                 IsCompleted = true;
             }

@@ -99,7 +99,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         int Choice = RandomHelper.Next(ListRealChoice.Count);
 
                         //Movement initialisation.
-                        MovementAnimation.Add(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.Components);
+                        MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListRealChoice[Choice].Position);
 
                         //Prepare the Cursor to move.
                         CursorPosition.X = ListRealChoice[Choice].Position.X;
@@ -216,7 +216,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                         int Choice = RandomHelper.Next(ListRealChoice.Count);
 
                         //Movement initialisation.
-                        MovementAnimation.Add(ActiveUnit.X, ActiveUnit.Y, ActiveUnit.Components);
+                        MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListRealChoice[Choice].Position);
 
                         //Prepare the Cursor to move.
                         CursorPosition.X = ListRealChoice[Choice].Position.X;

@@ -66,7 +66,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     int Choice = RandomHelper.Next(ListRealChoice.Count);
 
                     //Movement initialisation.
-                    Info.Map.MovementAnimation.Add(Info.ActiveUnit.X, Info.ActiveUnit.Y, Info.ActiveUnit.Components);
+                    Info.Map.MovementAnimation.Add(Info.ActiveUnit.Components, Info.ActiveUnit.Components.Position, ListRealChoice[Choice].Position);
 
                     //Prepare the Cursor to move.
                     Info.Map.CursorPosition.X = ListRealChoice[Choice].Position.X;

@@ -142,7 +142,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                                 Map.SpawnSquad(0, NewSquad, 0, FinalPosition, 0);
 
-                                Map.MovementAnimation.Add(Spawn.Position.X, Spawn.Position.Y, NewSquad);
+                                Map.MovementAnimation.Add(NewSquad, Spawn.Position, FinalPosition);
                             }
                         }
                     }
@@ -170,7 +170,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     //If a Unit is moving, wait until it finished moving before spawning the next unit
                     if (Map.MovementAnimation.Count > 0)
                     {
-                        Map.MoveSquad();
+                        Map.MovementAnimation.MoveSquad(Map);
 
                         if (Map.MovementAnimation.Count == 0)
                         {

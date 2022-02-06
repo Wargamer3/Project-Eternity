@@ -119,9 +119,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (Map.MovementAnimation.Contains(ActiveSquad))
             {
-                int IndexOfUnit = Map.MovementAnimation.IndexOf(ActiveSquad);
-                float PosX = (Map.MovementAnimation.ListPosX[IndexOfUnit] - CameraPosition.X) * TileSize.X;
-                float PosY = (Map.MovementAnimation.ListPosY[IndexOfUnit] - CameraPosition.Y) * TileSize.Y;
+                Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveSquad);
+                float PosX = (CurrentPosition.X - CameraPosition.X) * TileSize.X;
+                float PosY = (CurrentPosition.Y - CameraPosition.Y) * TileSize.Y;
 
                 if (ActiveSquad.IsFlying)
                 {

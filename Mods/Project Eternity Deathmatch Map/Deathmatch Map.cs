@@ -597,7 +597,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 else if (MovementAnimation.Count > 0)
                 {
-                    MoveSquad();
+                    MovementAnimation.MoveSquad(this);
                 }
                 else
                 {

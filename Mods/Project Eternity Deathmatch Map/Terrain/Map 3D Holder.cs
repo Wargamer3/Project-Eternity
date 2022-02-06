@@ -569,20 +569,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (Map.MovementAnimation.Contains(ActiveSquad))
                     {
-                        int IndexOfUnit = Map.MovementAnimation.IndexOf(ActiveSquad);
-                        float PosX = Map.MovementAnimation.ListPosX[IndexOfUnit];
-                        float PosY = Map.MovementAnimation.ListPosY[IndexOfUnit];
+                        Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveSquad);
 
                         float TerrainZ = 0;
                         if (ActiveSquad.Speed == Vector3.Zero)
                         {
-                            TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)PosX, (int)PosY].Position.Z;
+                            TerrainZ = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y].Position.Z;
                         }
 
                         ActiveSquad.Unit3D.SetPosition(
-                            PosX + 0.5f,
-                            (ActiveSquad.Position.Z + TerrainZ) * 32,
-                            PosY + 0.5f);
+                            CurrentPosition.X + 0.5f,
+                            (CurrentPosition.Z + TerrainZ) * 32,
+                            CurrentPosition.Y + 0.5f);
 
                         ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
 

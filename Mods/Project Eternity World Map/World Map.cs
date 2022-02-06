@@ -240,7 +240,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }
             else if (MovementAnimation.Count > 0)
             {
-                MoveSquad();
+                MovementAnimation.MoveSquad(this);
             }
             else
             {
@@ -377,7 +377,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             Vector3 FinalPosition;
             GetEmptyPosition(SpawnDestination, out FinalPosition);
 
-            MovementAnimation.Add(NewUnit.X, NewUnit.Y, NewUnit);
+            MovementAnimation.Add(NewUnit, NewUnit.Position, FinalPosition);
 
             NewUnit.SetPosition(FinalPosition);
         }

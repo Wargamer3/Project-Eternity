@@ -24,7 +24,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
                 //Movement initialisation.
-                Info.Map.MovementAnimation.Add(Info.ActiveUnit.X, Info.ActiveUnit.Y, Info.ActiveUnit.Components);
+                Vector3 StartPosition = Info.ActiveUnit.Components.Position;
                 List<Unit> ListChoice = new List<Unit>();
 
                 float DistanceMax = 99999;
@@ -56,6 +56,8 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 {
                     Info.Map.FinalizeMovement(Info.ActiveUnit);
                 }
+
+                Info.Map.MovementAnimation.Add(Info.ActiveUnit.Components, StartPosition, Info.ActiveUnit.Components.Position);
 
                 Result = new List<object>();
                 IsCompleted = true;

@@ -21,7 +21,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             {
                 Squad TargetSquad = null;
                 //Movement initialisation.
-                Info.Map.MovementAnimation.Add(Info.ActiveSquad.X, Info.ActiveSquad.Y, Info.ActiveSquad);
+                Vector3 StartPosition = Info.ActiveSquad.Position;
                 float DistanceMax = 99999;
                 //Select the nearest enemy as a target.
                 for (int P = 0; P < Info.Map.ListPlayer.Count; P++)
@@ -85,7 +85,9 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 {
                     Info.Map.FinalizeMovement(Info.ActiveSquad, 1, new List<Vector3>());
                 }
-                
+
+                Info.Map.MovementAnimation.Add(Info.ActiveSquad, StartPosition, Info.ActiveSquad.Position);
+
                 Result = new List<object>();
                 IsCompleted = true;
             }

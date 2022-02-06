@@ -1,57 +1,144 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class MovementAnimations
     {
-        public List<float> ListPosX;
-        public List<float> ListPosY;
-        public List<UnitMapComponent> ListMovingMapUnit;
+        public Dictionary<UnitMapComponent, Vector3> DicMovingMapUnitByPosition;
+        public Dictionary<UnitMapComponent, List<Vector3>> DicMovingMapUnitByNextPosition;
 
         public MovementAnimations()
         {
-            ListPosX = new List<float>();
-            ListPosY = new List<float>();
-            ListMovingMapUnit = new List<UnitMapComponent>();
+            DicMovingMapUnitByPosition = new Dictionary<UnitMapComponent, Vector3>();
+            DicMovingMapUnitByNextPosition = new Dictionary<UnitMapComponent, List<Vector3>>();
         }
 
-        public void Add(float PosX, float PosY, UnitMapComponent MovingMapUnit)
+        public void Add(UnitMapComponent MovingMapUnit, Vector3 StartPosition, Vector3 FinalPosition)
         {
-            ListPosX.Add(PosX);
-            ListPosY.Add(PosY);
-            ListMovingMapUnit.Add(MovingMapUnit);
+            DicMovingMapUnitByPosition.Add(MovingMapUnit, StartPosition);
+            DicMovingMapUnitByNextPosition.Add(MovingMapUnit, new List<Vector3>() { FinalPosition });
+        }
+
+        public void Add(UnitMapComponent MovingMapUnit, Vector3 StartPosition, List<Vector3> ListNextPosition)
+        {
+            DicMovingMapUnitByPosition.Add(MovingMapUnit, StartPosition);
+            DicMovingMapUnitByNextPosition.Add(MovingMapUnit, ListNextPosition);
         }
 
         public bool Contains(UnitMapComponent MovingMapUnit)
         {
-            return ListMovingMapUnit.Contains(MovingMapUnit);
+            return DicMovingMapUnitByPosition.ContainsKey(MovingMapUnit);
         }
 
-        public int IndexOf(UnitMapComponent MovingMapUnit)
+        public Vector3 GetPosition(UnitMapComponent MovingMapUnit)
         {
-            for (int i = ListMovingMapUnit.Count - 1; i >= 0; --i)
+            return DicMovingMapUnitByPosition[MovingMapUnit];
+        }
+
+        public void MoveSquad(BattleMap Map)
+        {
+            const float MovementSpeed = 0.2f;
+            List<UnitMapComponent> ListRemovedSquad = new List<UnitMapComponent>();
+
+            foreach(KeyValuePair<UnitMapComponent, List<Vector3>> ActiveUnitMap in DicMovingMapUnitByNextPosition)
             {
-                if (ListMovingMapUnit.IndexOf(MovingMapUnit) >= 0)
-                    return ListMovingMapUnit.IndexOf(MovingMapUnit);
+                Vector3 NextPosition = ActiveUnitMap.Value[0];
+                Vector3 UpdatedPosition = DicMovingMapUnitByPosition[ActiveUnitMap.Key];
+
+                if (UpdatedPosition.X < NextPosition.X - MovementSpeed)
+                {
+                    UpdatedPosition.X += MovementSpeed;
+                    if (UpdatedPosition.X > NextPosition.X + MovementSpeed)
+                        UpdatedPosition.X = NextPosition.X;
+                }
+                else if (UpdatedPosition.X > NextPosition.X + MovementSpeed)
+                {
+                    UpdatedPosition.X -= MovementSpeed;
+                    if (UpdatedPosition.X < NextPosition.X - MovementSpeed)
+                        UpdatedPosition.X = NextPosition.X;
+                }
+                else
+                {
+                    UpdatedPosition.X = NextPosition.X;
+                }
+
+                if (UpdatedPosition.Y < NextPosition.Y - MovementSpeed)
+                {
+                    UpdatedPosition.Y += MovementSpeed;
+                    if (UpdatedPosition.Y > NextPosition.Y + MovementSpeed)
+                        UpdatedPosition.Y = NextPosition.Y;
+                }
+                else if (UpdatedPosition.Y > NextPosition.Y + MovementSpeed)
+                {
+                    UpdatedPosition.Y -= MovementSpeed;
+                    if (UpdatedPosition.Y < NextPosition.Y - MovementSpeed)
+                        UpdatedPosition.Y = NextPosition.Y;
+                }
+                else
+                {
+                    UpdatedPosition.Y = NextPosition.Y;
+                }
+
+                if (UpdatedPosition.Z < NextPosition.Z - MovementSpeed)
+                {
+                    UpdatedPosition.Z += MovementSpeed;
+                    if (UpdatedPosition.Z > NextPosition.Z + MovementSpeed)
+                        UpdatedPosition.Z = NextPosition.Z;
+                }
+                else if (UpdatedPosition.Z > NextPosition.Z + MovementSpeed)
+                {
+                    UpdatedPosition.Z -= MovementSpeed;
+                    if (UpdatedPosition.Z < NextPosition.Z - MovementSpeed)
+                        UpdatedPosition.Z = NextPosition.Z;
+                }
+                else
+                {
+                    UpdatedPosition.Z = NextPosition.Z;
+                }
+
+                DicMovingMapUnitByPosition[ActiveUnitMap.Key] = UpdatedPosition;
+
+                if (UpdatedPosition.X == NextPosition.X && UpdatedPosition.Y == NextPosition.Y && UpdatedPosition.Z == NextPosition.Z)
+                {
+                    ListRemovedSquad.Add(ActiveUnitMap.Key);
+                }
             }
-            return -1;
+
+            foreach (UnitMapComponent RemovedSquad in ListRemovedSquad)
+            {
+                DicMovingMapUnitByNextPosition[RemovedSquad].RemoveAt(0);
+
+                if (DicMovingMapUnitByNextPosition[RemovedSquad].Count == 0)
+                {
+                    DicMovingMapUnitByPosition.Remove(RemovedSquad);
+                    DicMovingMapUnitByNextPosition.Remove(RemovedSquad);
+                }
+            }
+
+            ListRemovedSquad.Clear();
+
+            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            {
+                Map.OnlinePlayers.ExecuteAndSend(new Online.BattleMapLobyScriptHolder.SkipSquadMovementScript(Map));
+            }
+        }
+
+        public void Skip()
+        {
+            DicMovingMapUnitByPosition.Clear();
+            DicMovingMapUnitByNextPosition.Clear();
         }
 
         public int Count
         {
             get
             {
-                return ListPosX.Count;
+                return DicMovingMapUnitByPosition.Count;
             }
-        }
-
-        public void RemoveAt(int Index)
-        {
-            ListPosX.RemoveAt(Index);
-            ListPosY.RemoveAt(Index);
-            ListMovingMapUnit.RemoveAt(Index);
         }
     }
 }
