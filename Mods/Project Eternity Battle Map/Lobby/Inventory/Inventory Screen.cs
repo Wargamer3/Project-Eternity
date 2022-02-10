@@ -20,6 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BoxButton CharacterFilterButton;
         private BoxButton EquipmentFilterButton;
         private BoxButton ConsumableFilterButton;
+        private DropDownButton CurrentLocalPlayerButton;
 
         private IUIElement[] ArrayMenuButton;
 
@@ -71,6 +72,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             EquipmentFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 154, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Equipment", OnButtonOver, SelectEquipmentFilterButton);
             ConsumableFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 244, HeaderSectionY + 4, 100, HeaderSectionHeight - 8), fntArial12, "Consumable", OnButtonOver, SelectConsumableFilterButton);
 
+            CurrentLocalPlayerButton = new DropDownButton(new Rectangle(400, 8, 120, 45), fntArial12, "M&K",
+                new string[] { "M&K", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4" }, OnButtonOver, null);
+
             UnitFilterButton.CanBeChecked = true;
             CharacterFilterButton.CanBeChecked = true;
             EquipmentFilterButton.CanBeChecked = true;
@@ -80,7 +84,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayMenuButton = new IUIElement[]
             {
-                ReturnToLobbyButton,
+                CurrentLocalPlayerButton, ReturnToLobbyButton,
                 UnitFilterButton, CharacterFilterButton, EquipmentFilterButton, ConsumableFilterButton,
             };
 

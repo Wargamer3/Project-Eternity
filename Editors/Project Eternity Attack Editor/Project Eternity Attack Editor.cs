@@ -173,6 +173,7 @@ namespace ProjectEternity.Editors.AttackEditor
                     BW.Write((float)PERAttackEditor.txtProjectileSpeed.Value);
                     BW.Write(PERAttackEditor.cbAffectedByGravity.Checked);
                     BW.Write(PERAttackEditor.cbCanBeShotDown.Checked);
+                    BW.Write(PERAttackEditor.cbHoming.Checked);
                     BW.Write((byte)PERAttackEditor.txtMaxLifetime.Value);
 
                     BW.Write(PERAttackEditor.IsProjectileAnimated);
@@ -354,6 +355,7 @@ namespace ProjectEternity.Editors.AttackEditor
                     PERAttackEditor.txtProjectileSpeed.Value = (decimal)ActiveWeapon.PERAttributes.ProjectileSpeed;
                     PERAttackEditor.cbAffectedByGravity.Checked = ActiveWeapon.PERAttributes.AffectedByGravity;
                     PERAttackEditor.cbCanBeShotDown.Checked = ActiveWeapon.PERAttributes.CanBeShotDown;
+                    PERAttackEditor.cbHoming.Checked = ActiveWeapon.PERAttributes.Homing;
                     PERAttackEditor.txtMaxLifetime.Value = ActiveWeapon.PERAttributes.MaxLifetime;
 
                     PERAttackEditor.IsProjectileAnimated = ActiveWeapon.PERAttributes.ProjectileAnimation.IsAnimated;

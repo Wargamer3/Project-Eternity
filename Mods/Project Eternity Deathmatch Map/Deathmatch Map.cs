@@ -186,6 +186,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case "Deathmatch":
                     GameRule = new DeathmatchGameRule(this);
                     break;
+
+                case "Capture The Flag":
+                    GameRule = new CaptureTheFlagGameRule(this);
+                    break;
             }
         }
 
@@ -500,6 +504,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int S = ActiveListScript.Value.Count - 1; S >= 0; --S)
                     AIScriptHolder.DicAIScripts.Add(ActiveListScript.Value[S].Name, ActiveListScript.Value[S]);
+            }
+        }
+
+        protected override void LoadInteractiveProps()
+        {
+            base.LoadInteractiveProps();
+
+            foreach (KeyValuePair<string, InteractiveProp> ActiveProp in InteractiveProp.LoadFromAssemblyFiles(Directory.GetFiles("Props/Deathmatch Map", "*.dll"), this))
+            {
+                ActiveProp.Value.Load(Content);
+                DicInteractiveProp.Add(ActiveProp.Value.PropName, ActiveProp.Value);
             }
         }
 

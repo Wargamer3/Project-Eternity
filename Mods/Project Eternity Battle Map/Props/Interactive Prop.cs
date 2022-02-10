@@ -7,6 +7,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using Microsoft.Xna.Framework.Graphics;
+using System.Reflection;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -118,5 +119,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             return DicMapCondition;
         }
+
+        public static Dictionary<string, InteractiveProp> LoadFromAssemblyFiles(string[] ArrayFilePath, params object[] Args)
+        {
+            Dictionary<string, InteractiveProp> DicUnitType = new Dictionary<string, InteractiveProp>();
+
+            for (int F = 0; F < ArrayFilePath.Length; F++)
+            {
+                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                foreach (KeyValuePair<string, InteractiveProp> ActiveUnit in LoadFromAssembly(ActiveAssembly, Args))
+                {
+                    DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);
+                }
+            }
+
+            return DicUnitType;
+        }
+
+        public static Dictionary<string, InteractiveProp> LoadFromAssembly(Assembly ActiveAssembly, params object[] Args)
+        {
+            Dictionary<string, InteractiveProp> DicUnitType = new Dictionary<string, InteractiveProp>();
+            List<InteractiveProp> ListSkillEffect = ReflectionHelper.GetObjectsFromBaseTypes<InteractiveProp>(typeof(InteractiveProp), ActiveAssembly.GetTypes(), Args);
+
+            foreach (InteractiveProp Instance in ListSkillEffect)
+            {
+                DicUnitType.Add(Instance.PropName, Instance);
+            }
+
+            return DicUnitType;
+        }
+
     }
 }

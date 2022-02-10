@@ -668,7 +668,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void LoadInteractiveProps()
+        protected virtual void LoadInteractiveProps()
         {
             Dictionary<string, InteractiveProp> BattleMapInteractiveProp = InteractiveProp.LoadProps(this);
             foreach (InteractiveProp ActiveProp in BattleMapInteractiveProp.Values)

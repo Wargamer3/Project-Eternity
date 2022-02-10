@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Animation Info.cs" />
     <Compile Include="Attack\Attack Context.cs" />
+    <Compile Include="Attack\Attack Pickup.cs" />
     <Compile Include="Attack\Attack.cs" />
     <Compile Include="Attack\Attack Animations.cs" />
     <Compile Include="Attack\Explosion Options.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Effects\Unit Effect Context.cs" />
     <Compile Include="Effects\Unit Effect Params.cs" />
     <Compile Include="Effects\Unit Stats Converter.cs" />
+    <Compile Include="Holdable Item.cs" />
     <Compile Include="Manual Skill Target.cs" />
     <Compile Include="Parts.cs" />
     <Compile Include="Effects\Skill Effect.cs" />

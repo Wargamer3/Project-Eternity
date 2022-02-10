@@ -68,6 +68,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public GamePreparationScreen(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
         {
+            RequireDrawFocus = true;
             this.OnlineGameClient = OnlineGameClient;
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.Room = Room;

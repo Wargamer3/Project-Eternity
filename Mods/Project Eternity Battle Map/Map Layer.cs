@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -16,6 +18,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<MapSwitchPoint> ListMapSwitchPoint;
         public List<TeleportPoint> ListTeleportPoint;
         public List<InteractiveProp> ListProp;
+        public List<HoldableItem> ListHoldableItem;
+        public List<AttackPickup> ListAttackPickup;
     }
 
     public interface ISubMapLayer

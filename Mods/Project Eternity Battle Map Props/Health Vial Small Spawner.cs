@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void OnMovedOverBeforeStop(Squad SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn)
         {
-            if (PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
+            if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
                 HealSquad(SelectedUnit);
             }
@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void OnUnitStop(Squad StoppedUnit)
         {
-            if (StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
+            if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
             {
                 HealSquad(StoppedUnit);
             }

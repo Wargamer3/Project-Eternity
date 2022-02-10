@@ -58,6 +58,7 @@ namespace ProjectEternity.Editors.AttackEditor
             this.rbStop = new System.Windows.Forms.RadioButton();
             this.rbBounce = new System.Windows.Forms.RadioButton();
             this.rbDestroySelf = new System.Windows.Forms.RadioButton();
+            this.cbHoming = new System.Windows.Forms.CheckBox();
             this.gbProjectileAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxLifetime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtProjectileSpeed)).BeginInit();
@@ -72,6 +73,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // 
             // gbProjectileAttributes
             // 
+            this.gbProjectileAttributes.Controls.Add(this.cbHoming);
             this.gbProjectileAttributes.Controls.Add(this.lblMaxLifetime);
             this.gbProjectileAttributes.Controls.Add(this.txtMaxLifetime);
             this.gbProjectileAttributes.Controls.Add(this.cbCanBeShotDown);
@@ -92,7 +94,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // lblMaxLifetime
             // 
             this.lblMaxLifetime.AutoSize = true;
-            this.lblMaxLifetime.Location = new System.Drawing.Point(168, 68);
+            this.lblMaxLifetime.Location = new System.Drawing.Point(174, 93);
             this.lblMaxLifetime.Name = "lblMaxLifetime";
             this.lblMaxLifetime.Size = new System.Drawing.Size(66, 13);
             this.lblMaxLifetime.TabIndex = 54;
@@ -100,7 +102,7 @@ namespace ProjectEternity.Editors.AttackEditor
             // 
             // txtMaxLifetime
             // 
-            this.txtMaxLifetime.Location = new System.Drawing.Point(240, 64);
+            this.txtMaxLifetime.Location = new System.Drawing.Point(246, 89);
             this.txtMaxLifetime.Name = "txtMaxLifetime";
             this.txtMaxLifetime.Size = new System.Drawing.Size(71, 20);
             this.txtMaxLifetime.TabIndex = 53;
@@ -357,6 +359,16 @@ namespace ProjectEternity.Editors.AttackEditor
             this.rbDestroySelf.Text = "Destroy Self";
             this.rbDestroySelf.UseVisualStyleBackColor = true;
             // 
+            // cbHoming
+            // 
+            this.cbHoming.AutoSize = true;
+            this.cbHoming.Location = new System.Drawing.Point(170, 66);
+            this.cbHoming.Name = "cbHoming";
+            this.cbHoming.Size = new System.Drawing.Size(62, 17);
+            this.cbHoming.TabIndex = 55;
+            this.cbHoming.Text = "Homing";
+            this.cbHoming.UseVisualStyleBackColor = true;
+            // 
             // PERAttackEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -415,5 +427,6 @@ namespace ProjectEternity.Editors.AttackEditor
         public System.Windows.Forms.RadioButton rbDestroySelf;
         private System.Windows.Forms.Label lblUpwardMaxSpread;
         public System.Windows.Forms.NumericUpDown txtUpwardMaxSpread;
+        public System.Windows.Forms.CheckBox cbHoming;
     }
 }

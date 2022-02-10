@@ -12,6 +12,7 @@ namespace ProjectEternity.Core.Attacks
         public float ProjectileSpeed;
         public bool AffectedByGravity;
         public bool CanBeShotDown;
+        public bool Homing;
         public byte MaxLifetime;
 
         public SimpleAnimation ProjectileAnimation;
@@ -29,6 +30,7 @@ namespace ProjectEternity.Core.Attacks
             ProjectileSpeed = BR.ReadSingle();
             AffectedByGravity = BR.ReadBoolean();
             CanBeShotDown = BR.ReadBoolean();
+            Homing = BR.ReadBoolean();
             MaxLifetime = BR.ReadByte();
 
             ProjectileAnimation = new SimpleAnimation(BR, false);

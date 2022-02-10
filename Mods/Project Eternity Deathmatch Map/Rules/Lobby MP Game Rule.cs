@@ -9,7 +9,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    abstract class LobbyMPGameRule : IGameRule
+    public abstract class LobbyMPGameRule : IGameRule
     {
         private struct DeathInfo
         {

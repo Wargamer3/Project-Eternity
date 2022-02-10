@@ -64,6 +64,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Gametype GametypeBaseDefense = new Gametype("Base Defense", "Wave survival mode, respawn at the start of each wave. Must defend a base by building turrets.", null);
 
             Gametype GametypeDeathmatch = new Gametype("Deathmatch", "Gain points for kills and assists, respawn on death.", null);
+            Gametype GametypeCaptureTheFlag = new Gametype("Capture The Flag", "Capture a flag in the enemy base and bring it back to your own flag to score a point.", null);
             Gametype GametypeObjective = new Gametype("Objective", "One team must complete objectives while another prevent them.", null);
             Gametype GametypeAssault = new Gametype("Assault", "Team deathmatch with limited respawns.", null);
             Gametype GametypeConquest = new Gametype("Conquest", "Teams must fight to capture respawn bases that give them points. The starting base may or may not be capturable.", null);
@@ -77,10 +78,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             SelectedGametype = GametypeCampaign;
             ArrayGametypeCategory = new GametypeCategory[2];
-            ArrayGametypeCategory[0] = new GametypeCategory("PVE", new Gametype[] { GametypeCampaign, GametypeHorde });
+            ArrayGametypeCategory[0] = new GametypeCategory("PVE", new Gametype[] { GametypeCampaign, GametypeHorde, GametypeBaseDefense });
             ArrayGametypeCategory[1] = new GametypeCategory("PVP", new Gametype[]
             {
-                GametypeDeathmatch, GametypeObjective, GametypeAssault, GametypeConquest,
+                GametypeDeathmatch, GametypeCaptureTheFlag, GametypeObjective, GametypeAssault, GametypeConquest,
                 GametypeOnslaught, GametypeKingOfTheHill, GametypeBunny, GametypeFreezeTag,
                 GametypeJailbreak, GametypeMutant, GametypeKaiju,
             });

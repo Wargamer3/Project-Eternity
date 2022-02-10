@@ -128,6 +128,7 @@
     <Compile Include="PER Attack.cs" />
     <Compile Include="Rules\Classic MP Game Rule.cs" />
     <Compile Include="Rules\Campaign Game Rule.cs" />
+    <Compile Include="Rules\Capture The Flag Game Rule.cs" />
     <Compile Include="Rules\Deathmatch Game Rule.cs" />
     <Compile Include="Rules\Lobby MP Game Rule.cs" />
     <Compile Include="Rules\Horde Game Rule.cs" />

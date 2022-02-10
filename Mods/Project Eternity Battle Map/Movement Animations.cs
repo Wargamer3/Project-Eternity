@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Add(UnitMapComponent MovingMapUnit, Vector3 StartPosition, List<Vector3> ListNextPosition)
         {
             DicMovingMapUnitByPosition.Add(MovingMapUnit, StartPosition);
-            DicMovingMapUnitByNextPosition.Add(MovingMapUnit, ListNextPosition);
+            DicMovingMapUnitByNextPosition.Add(MovingMapUnit, new List<Vector3>(ListNextPosition));
         }
 
         public bool Contains(UnitMapComponent MovingMapUnit)

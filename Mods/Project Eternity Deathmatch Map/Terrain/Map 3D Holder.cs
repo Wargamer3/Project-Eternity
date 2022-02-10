@@ -577,6 +577,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             TerrainZ = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y].Position.Z;
                         }
 
+                        if (ActiveSquad.ItemHeld != null)
+                        {
+                            ActiveSquad.ItemHeld.Item3D.SetViewMatrix(Camera.View);
+
+                            ActiveSquad.ItemHeld.Item3D.SetPosition(
+                                CurrentPosition.X + 0.5f,
+                                (CurrentPosition.Z + TerrainZ) * 32 + 0.5f,
+                                CurrentPosition.Y);
+
+                            ActiveSquad.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
+                        }
+
                         ActiveSquad.Unit3D.SetPosition(
                             CurrentPosition.X + 0.5f,
                             (CurrentPosition.Z + TerrainZ) * 32,
@@ -598,6 +610,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (ActiveSquad.Speed == Vector3.Zero)
                         {
                             TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y].Position.Z;
+                        }
+
+                        if (ActiveSquad.ItemHeld != null)
+                        {
+                            ActiveSquad.ItemHeld.Item3D.SetViewMatrix(Camera.View);
+
+                            ActiveSquad.ItemHeld.Item3D.SetPosition(
+                                ActiveSquad.Position.X + 0.5f,
+                                (ActiveSquad.Position.Z + TerrainZ) * 32 + 0.5f,
+                                ActiveSquad.Position.Y);
+
+                            ActiveSquad.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
                         }
 
                         ActiveSquad.Unit3D.SetPosition(

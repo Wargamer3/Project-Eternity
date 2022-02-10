@@ -2,7 +2,6 @@
 using System.IO;
 using System.ComponentModel;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.GameScreens.BattleMapScreen;

@@ -4,18 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FDC08C07-6562-4922-AFEC-7F2D4336FB0D}</ProjectGuid>
+    <ProjectGuid>{B5B74445-13BD-4DEE-927A-B8006BC51769}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ProjectEternity.GameScreens.BattleMapScreen</RootNamespace>
-    <AssemblyName>Project Eternity Battle Map Props</AssemblyName>
+    <RootNamespace>ProjectEternity.GameScreens.DeathmatchMapScreen</RootNamespace>
+    <AssemblyName>Project Eternity Deahtmatch Map Props</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Props\Battle Map\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Props\Deathmatch Map\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -23,7 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Props\Battle Map\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Props\Deathmatch Map\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
@@ -53,16 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Jump Pad.cs" />
-    <Compile Include="Adrenaline Spawner.cs" />
-    <Compile Include="Health Vial Medium Spawner .cs" />
-    <Compile Include="Weapon Spawner.cs" />
-    <Compile Include="Health Vial Small Spawner.cs" />
+    <Compile Include="Flag Spawner.cs" />
+    <Compile Include="Flag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
-      <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
+      <Project>{EA7A4390-EEBB-43F1-BE86-33177B215695}</Project>
       <Name>Project Eternity Base Item</Name>
       <Private>False</Private>
     </ProjectReference>
@@ -84,6 +81,11 @@
     <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
       <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
       <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Deathmatch Map\Project Eternity Deathmatch Map.csproj">
+      <Project>{24157076-0f9f-4fab-8e32-76b4320c28b9}</Project>
+      <Name>Project Eternity Deathmatch Map</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

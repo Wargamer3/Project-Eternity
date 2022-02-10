@@ -304,6 +304,11 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
         public int CalculateHitRate(Unit Attacker, Attack CurrentAttack, Squad AttackerSquad, Unit Defender, Squad DefenderSquad, Unit.BattleDefenseChoices DefenseChoice)
         {
+            if (CurrentAttack.Pri == WeaponPrimaryProperty.PER)
+            {
+                return 100;
+            }
+
             string AttackerTerrainType;
             string DefenderTerrainType;
             Terrain DefenderTerrain;

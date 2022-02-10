@@ -23,6 +23,8 @@ namespace ProjectEternity.Core.Units
         public Vector3 Speed { get { return _Speed; } set { _Speed = value; } }
 
         public UnitMap3D Unit3D;
+        private HoldableItem _ItemHeld;
+        public HoldableItem ItemHeld => _ItemHeld;
         public List<UnitMapComponent> ListTransportedUnit;
         public bool CanTransportUnit;
         public List<string> ListAllowedTransportUnitName;
@@ -44,6 +46,7 @@ namespace ProjectEternity.Core.Units
         public abstract void DrawExtraOnMap(CustomSpriteBatch g, Vector3 PositionY, Color UnitColor);
 
         public abstract void DrawOverlayOnMap(CustomSpriteBatch g, Vector3 Position);
+
         public abstract void DrawTimeOfDayOverlayOnMap(CustomSpriteBatch g, Vector3 Position, int TimeOfDay);
         
         public virtual List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, ActionPanelHolder ListActionMenuChoice)
@@ -59,6 +62,26 @@ namespace ProjectEternity.Core.Units
             if (ActionsRemaining > 0)
             {
                 --ActionsRemaining;
+            }
+        }
+
+        public void PickupItem(HoldableItem ItemHeld)
+        {
+            if (_ItemHeld != null)
+            {
+                _ItemHeld.OnDroped(this);
+            }
+
+            _ItemHeld = ItemHeld;
+            _ItemHeld.OnPickedUp(this);
+        }
+
+        public void DropItem()
+        {
+            if (_ItemHeld != null)
+            {
+                _ItemHeld.OnDroped(this);
+                _ItemHeld = null;
             }
         }
 
