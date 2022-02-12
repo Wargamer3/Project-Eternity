@@ -289,7 +289,7 @@ namespace ProjectEternity.Core.Units
         public bool CanAttack { get { foreach (Attack ActiveAttack in ListAttack) { if (ActiveAttack.CanAttack) return true; }; return false; } }//If the character is in range to attack.
 
         private List<Attack> _ListAttack;
-        private List<Attack> ListAttackTemporary;//Picked up weapons and others.
+        private List<TemporaryAttackPickup> ListAttackTemporary;//Picked up weapons and others.
         public List<Attack> ListAttack { get { return _ListAttack; } }
 
         public Attack PLAAttack { get { return _UnitStat.PLAAttack; } }
@@ -313,7 +313,7 @@ namespace ProjectEternity.Core.Units
             : base(Name)
         {
             _ListAttack = new List<Attack>();
-            ListAttackTemporary = new List<Attack>();
+            ListAttackTemporary = new List<TemporaryAttackPickup>();
             ListIgnoreSkill = new List<string>();
             AttackAccuracy = "";
             _UnitStat = new UnitStats(new bool[1, 1] { { true } });
@@ -578,10 +578,32 @@ namespace ProjectEternity.Core.Units
 
             _UnitStat.Init();
             DoInit();
-            UpdateAttacks();
+            UpdateUsableAttacks();
         }
 
         public abstract void DoInit();
+
+        public TemporaryAttackPickup OnDeath()
+        {
+            TemporaryAttackPickup AttackToDrop = null;
+
+            foreach (TemporaryAttackPickup ActiveAttack in ListAttackTemporary)
+            {
+                if (ActiveAttack.Owner.MaxAmmo > 0 && ActiveAttack.Owner.Ammo > 0)
+                {
+                    AttackToDrop = ActiveAttack;
+                    AttackToDrop.Owner = null;
+                    AttackToDrop.Ammo = ActiveAttack.Owner.Ammo;
+                    break;
+                }
+            }
+
+            ListAttackTemporary.Clear();
+
+            UpdateUsableAttacks();
+
+            return AttackToDrop;
+        }
 
         public void UpdateAllAttacks(Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
@@ -617,14 +639,14 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public void AddTemporaryAttack(string NewAttackName, byte Ammo, Microsoft.Xna.Framework.Content.ContentManager Content,
+        public void AddTemporaryAttack(string NewAttackName, string SpritePath, Texture2D sprWeapon, Effect Effect3D, byte Ammo, Microsoft.Xna.Framework.Content.ContentManager Content,
             Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            Attack ExistingAttack = null;
-            foreach (Attack ActiveAttack in ListAttackTemporary)
+            TemporaryAttackPickup ExistingAttack = null;
+            foreach (TemporaryAttackPickup ActiveAttack in ListAttackTemporary)
             {
-                if (ActiveAttack.RelativePath == NewAttackName)
+                if (ActiveAttack.Owner.RelativePath == NewAttackName)
                 {
                     ExistingAttack = ActiveAttack;
                     break;
@@ -633,30 +655,56 @@ namespace ProjectEternity.Core.Units
 
             if (ExistingAttack == null)
             {
-                ExistingAttack = new Attack(NewAttackName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                ExistingAttack = new TemporaryAttackPickup(new Attack(NewAttackName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget), SpritePath, sprWeapon, Effect3D);
                 ListAttackTemporary.Add(ExistingAttack);
             }
 
-            ExistingAttack.IncreaseAmmo(Ammo);
+            ExistingAttack.Owner.IncreaseAmmo(Ammo);
 
-            UpdateAttacks();
+            UpdateUsableAttacks();
+        }
+
+        public void AddTemporaryAttack(TemporaryAttackPickup AttackPickup, Microsoft.Xna.Framework.Content.ContentManager Content,
+            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            TemporaryAttackPickup ExistingAttack = null;
+            foreach (TemporaryAttackPickup ActiveAttack in ListAttackTemporary)
+            {
+                if (ActiveAttack.Owner.RelativePath == AttackPickup.Owner.RelativePath)
+                {
+                    ExistingAttack = ActiveAttack;
+                    break;
+                }
+            }
+
+            if (ExistingAttack == null)
+            {
+                ExistingAttack = AttackPickup;
+                ExistingAttack.Owner = new Attack(AttackPickup.AttackName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                ListAttackTemporary.Add(ExistingAttack);
+            }
+
+            ExistingAttack.Owner.IncreaseAmmo(ExistingAttack.Ammo);
+
+            UpdateUsableAttacks();
         }
 
         public void ChargeAttack()
         {
             ChargedAttack = CurrentAttack;
             ChargedAttack.IsChargeable = false;
-            UpdateAttacks();
+            UpdateUsableAttacks();
         }
 
         public void UseChargeAttack()
         {
             ChargedAttack.IsChargeable = true;
             ChargedAttack = null;
-            UpdateAttacks();
+            UpdateUsableAttacks();
         }
 
-        public void UpdateAttacks()
+        public void UpdateUsableAttacks()
         {
             _ListAttack.Clear();
 
@@ -689,18 +737,18 @@ namespace ProjectEternity.Core.Units
                 }
             }
 
-            foreach (Attack ActiveAttack in ListAttackTemporary)
+            foreach (TemporaryAttackPickup ActiveAttack in ListAttackTemporary)
             {
-                if (ActiveAttack.ListChargedAttack.Count == 0 || ActiveAttack.PowerFormula != "0")
+                if (ActiveAttack.Owner.ListChargedAttack.Count == 0 || ActiveAttack.Owner.PowerFormula != "0")
                 {
-                    _ListAttack.Add(ActiveAttack);
+                    _ListAttack.Add(ActiveAttack.Owner);
                 }
 
-                foreach (Attack ActiveSecondaryAttack in ActiveAttack.ListSecondaryAttack)
+                foreach (Attack ActiveSecondaryAttack in ActiveAttack.Owner.ListSecondaryAttack)
                 {
                     _ListAttack.Add(ActiveSecondaryAttack);
                 }
-                foreach (Attack ActiveChargedAttack in ActiveAttack.ListChargedAttack)
+                foreach (Attack ActiveChargedAttack in ActiveAttack.Owner.ListChargedAttack)
                 {
                     ActiveChargedAttack.IsChargeable = true;
                     _ListAttack.Add(ActiveChargedAttack);

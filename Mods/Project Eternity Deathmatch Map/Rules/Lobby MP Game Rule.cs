@@ -6,6 +6,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -123,6 +124,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ++Owner.ListAllPlayer[DefeatedSquadPlayerIndex].Death;
 
             ListDeadSquadInfo.Add(new DeathInfo(DefeatedSquad, DefeatedSquadPlayerIndex, TurnsToRespawn));
+
+            TemporaryAttackPickup DroppedWeapon = DefeatedSquad.CurrentLeader.OnDeath();
+            if (DroppedWeapon != null)
+            {
+                DroppedWeapon.Position = AttackerSquad.Position;
+                Owner.LayerManager.ListLayer[(int)DefeatedSquad.Z].ListAttackPickup.Add(DroppedWeapon);
+            }
         }
 
         public void OnManualVictory()

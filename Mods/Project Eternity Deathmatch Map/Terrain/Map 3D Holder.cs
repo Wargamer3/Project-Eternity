@@ -672,6 +672,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice);
             }
+
+            for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
+            {
+                Owner.ListAttackPickup[P].Attack3D.SetViewMatrix(Camera.View);
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListAttackPickup[P].Position.X, (int)Owner.ListAttackPickup[P].Position.Y].Position.Z;
+
+                Owner.ListAttackPickup[P].Attack3D.SetPosition(
+                    Owner.ListAttackPickup[P].Position.X + 0.5f,
+                    Owner.ListAttackPickup[P].Position.Z * 32 + TerrainZ * 32,
+                    Owner.ListAttackPickup[P].Position.Y + 0.5f);
+
+                Owner.ListAttackPickup[P].Attack3D.Draw(GameScreen.GraphicsDevice);
+            }
         }
 
         private void DrawDrawablePoints(CustomSpriteBatch g)

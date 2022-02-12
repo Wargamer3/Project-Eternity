@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<TeleportPoint> ListTeleportPoint;
         public List<InteractiveProp> ListProp;
         public List<HoldableItem> ListHoldableItem;
-        public List<AttackPickup> ListAttackPickup;
+        public List<TemporaryAttackPickup> ListAttackPickup;
     }
 
     public interface ISubMapLayer

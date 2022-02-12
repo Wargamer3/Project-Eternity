@@ -35,11 +35,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             public override void Update(GameTime gameTime)
             {
-                foreach (Player ActivePlayer in Map.ListPlayer)
+                for (int P = 0; P < Map.ListPlayer.Count; P++)
                 {
+                    Player ActivePlayer = Map.ListPlayer[P];
                     foreach (Core.Units.Squad ActiveSquad in ActivePlayer.ListSquad)
                     {
-                        if (ListTerrainDamageLocation.Contains(new Vector2(ActiveSquad.Position.X, ActiveSquad.Position.Y)))
+                        if (!ActiveSquad.IsDead && ListTerrainDamageLocation.Contains(new Vector2(ActiveSquad.Position.X, ActiveSquad.Position.Y)))
                         {
                             for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; ++U)
                             {
@@ -47,6 +48,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
 
                             ActiveSquad.UpdateSquad();
+                            if (ActiveSquad.IsDead)
+                            {
+                                Map.GameRule.OnSquadDefeated(Map.ActivePlayerIndex, null, P, ActiveSquad);
+                            }
                         }
                     }
                 }

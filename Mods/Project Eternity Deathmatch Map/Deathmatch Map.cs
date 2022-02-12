@@ -1088,9 +1088,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ListMVHoverPoints.Count > 0)
             {
-                foreach (InteractiveProp ActiveProp in LayerManager[(int)ActiveSquad.Position.Z].ListProp)
+                BaseMapLayer ActiveLayer = LayerManager[(int)ActiveSquad.Position.Z];
+
+                foreach (InteractiveProp ActiveProp in ActiveLayer.ListProp)
                 {
                     ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
+                }
+
+                foreach (Core.Attacks.TemporaryAttackPickup ActiveAttack in ActiveLayer.ListAttackPickup)
+                {
+                    if (ListMVHoverPoints.Contains(ActiveAttack.Position))
+                    {
+                        ActiveSquad.CurrentLeader.AddTemporaryAttack(ActiveAttack, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                    }
                 }
             }
 

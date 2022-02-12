@@ -66,6 +66,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             Map.ListPlayer[P].ListSquad[U].CurrentLeader.KillUnit();
                             Map.ListPlayer[P].ListSquad[U].UpdateSquad();
+                            if (Map.ListPlayer[P].ListSquad[U].IsDead)
+                            {
+                                Map.GameRule.OnSquadDefeated(Map.ActivePlayerIndex, null, P, Map.ListPlayer[P].ListSquad[U]);
+                            }
                             AnimationPosition = new Microsoft.Xna.Framework.Vector2(Map.ListPlayer[P].ListSquad[U].X * Map.TileSize.X, Map.ListPlayer[P].ListSquad[U].Y * Map.TileSize.Y);
                             break;
                         }
