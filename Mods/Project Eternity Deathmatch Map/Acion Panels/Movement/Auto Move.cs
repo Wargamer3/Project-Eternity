@@ -42,7 +42,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private double TimeElapsed;
         private int LastSquadIndex;
-        private double Progress;
 
         private List<SquadAutoMovement> ListSquadAutoMovement;
 
@@ -52,10 +51,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListSquadAutoMovement = new List<SquadAutoMovement>();
         }
 
-        public ActionPanelAutoMove(DeathmatchMap Map, Squad SquadToMove, Vector3 NextPosition)
+        public ActionPanelAutoMove(DeathmatchMap Map, int PlayerIndex, int SquadIndex, Squad SquadToMove)
             : base(PanelName, Map, false)
         {
             ListSquadAutoMovement = new List<SquadAutoMovement>();
+            ListSquadAutoMovement.Add(new SquadAutoMovement(PlayerIndex, SquadIndex, SquadToMove, Map.GetTerrain(SquadToMove)));
         }
 
         public override void OnSelect()
@@ -80,7 +80,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (TimeElapsed < AnimationLengthInSeconds)
             {
-                Progress = TimeElapsed / AnimationLengthInSeconds;
                 float FrameProgress = (float)(gameTime.ElapsedGameTime.TotalSeconds / AnimationLengthInSeconds);
 
                 for (int S = LastSquadIndex - 1; S >= 0; --S)
@@ -89,6 +88,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (ListSquadAutoMovement[S].Owner.CurrentLeader == null)
                     {
+                        ListSquadAutoMovement[S].Owner.SetPosition(new Vector3((int)ListSquadAutoMovement[S].LastPosition.X,
+                            (int)ListSquadAutoMovement[S].LastPosition.Y, (int)ListSquadAutoMovement[S].LastPosition.Z));
                         ListSquadAutoMovement.RemoveAt(S);
                         return;
                     }
@@ -99,26 +100,34 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         float NewSpeedY = ListSquadAutoMovement[S].Owner.Speed.Y;
                         float NewSpeedZ = ListSquadAutoMovement[S].Owner.Speed.Z;
 
-                        if (NewSpeedX > Friction)
+                        if (NewSpeedX > FrameProgress * Friction)
                             NewSpeedX -= FrameProgress * Friction;
-                        else if (NewSpeedX < -Friction)
+                        else if (NewSpeedX < FrameProgress * -Friction)
                             NewSpeedX += FrameProgress * Friction;
                         else
                             NewSpeedX = 0;
 
-                        if (NewSpeedY > Friction)
+                        if (NewSpeedY > FrameProgress * Friction)
                             NewSpeedY -= FrameProgress * Friction;
-                        else if (NewSpeedY < -Friction)
+                        else if (NewSpeedY < FrameProgress * -Friction)
                             NewSpeedY += FrameProgress * Friction;
                         else
                             NewSpeedY = 0;
 
-                        NewSpeedZ -= FrameProgress * Gravity;
-
                         ListSquadAutoMovement[S].Owner.Speed = new Vector3(NewSpeedX, NewSpeedY, NewSpeedZ);
+
+                        if (NewSpeedX == 0 && NewSpeedY == 0 && NewSpeedZ == 0)
+                        {
+                            ListSquadAutoMovement[S].Owner.SetPosition(new Vector3((int)ListSquadAutoMovement[S].LastPosition.X,
+                                (int)ListSquadAutoMovement[S].LastPosition.Y, (int)ListSquadAutoMovement[S].LastPosition.Z));
+                            ListSquadAutoMovement.RemoveAt(S);
+                            return;
+                        }
                     }
                     else
                     {
+                        ListSquadAutoMovement[S].Owner.Speed = new Vector3(ListSquadAutoMovement[S].Owner.Speed.X, ListSquadAutoMovement[S].Owner.Speed.Y, ListSquadAutoMovement[S].Owner.Speed.Z - FrameProgress * Gravity);
+
                         int LandedLayer = CheckLanding(ListSquadAutoMovement[S]);
 
                         if (LandedLayer >= 0)
@@ -130,13 +139,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
 
-                    if (CheckForCollisions(ListSquadAutoMovement[S]))
+                    if (CheckForCollisions(ListSquadAutoMovement[S], FrameProgress))
                     {
+                        ListSquadAutoMovement[S].Owner.SetPosition(new Vector3((int)ListSquadAutoMovement[S].LastPosition.X,
+                            (int)ListSquadAutoMovement[S].LastPosition.Y, (int)ListSquadAutoMovement[S].LastPosition.Z));
                         ListSquadAutoMovement.RemoveAt(S);
                         return;
                     }
 
-                    ListSquadAutoMovement[S].Owner.SetPosition(ListSquadAutoMovement[S].LastPosition);
+                    if (ListSquadAutoMovement[S].LastPosition != ListSquadAutoMovement[S].Owner.Position)
+                    {
+                        ListSquadAutoMovement[S].Owner.SetPosition(ListSquadAutoMovement[S].LastPosition);
+                    }
                 }
 
                 LastSquadIndex = ListSquadAutoMovement.Count;
@@ -148,22 +162,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private bool CheckForCollisions(SquadAutoMovement ActiveSquad)
+        private bool CheckForCollisions(SquadAutoMovement ActiveSquad, float FrameProgress)
         {
-            Vector3 NextPostion = ActiveSquad.StartPosition + ActiveSquad.Owner.Speed * (float)Progress;
+            Vector3 NextPosition = ActiveSquad.LastPosition + ActiveSquad.Owner.Speed * FrameProgress;
 
-            if (NextPostion.X < 0 || NextPostion.X >= Map.MapSize.X
-                || NextPostion.Y < 0 || NextPostion.Y >= Map.MapSize.Y
-                || NextPostion.Z < 0 || NextPostion.Z >= Map.LayerManager.ListLayer.Count)
+            if (NextPosition.X < 0 || NextPosition.X >= Map.MapSize.X
+                || NextPosition.Y < 0 || NextPosition.Y >= Map.MapSize.Y
+                || NextPosition.Z < 0 || NextPosition.Z >= Map.LayerManager.ListLayer.Count)
             {
                 Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelFallToDeath(Map, ActiveSquad.PlayerIndex, ActiveSquad.SquadIndex));
                 return true;
             }
 
-            Terrain NextTerrain = Map.GetTerrain(NextPostion.X, NextPostion.Y, (int)NextPostion.Z);
+            Terrain NextTerrain = Map.GetTerrain(NextPosition.X, NextPosition.Y, (int)NextPosition.Z);
 
             if (NextTerrain == ActiveSquad.LastTerrain)
             {
+                ActiveSquad.LastPosition = NextPosition;
+                ActiveSquad.LastTerrain = NextTerrain;
                 return false;
             }
 
@@ -178,8 +194,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
-                int SquadIndex = Map.CheckForSquadAtPosition(P, NextPostion, Vector3.Zero);
-                if (SquadIndex >= 0)
+                int SquadIndex = Map.CheckForSquadAtPosition(P, NextPosition, Vector3.Zero);
+                if (SquadIndex >= 0 && P != ActiveSquad.PlayerIndex && SquadIndex != ActiveSquad.SquadIndex)
                 {
                     NonDemoScreen NonDemoScreen = new NonDemoScreen(Map);
                     Map.PushScreen(NonDemoScreen);
@@ -189,7 +205,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            ActiveSquad.LastPosition = NextPostion;
+            ActiveSquad.LastPosition = NextPosition;
             ActiveSquad.LastTerrain = NextTerrain;
 
             return false;
@@ -221,7 +237,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private bool IsOnGround(SquadAutoMovement ActiveSquad)
         {
-            return ActiveSquad.Owner.CurrentMovement == UnitStats.TerrainLand;
+            return ActiveSquad.Owner.CurrentMovement == UnitStats.TerrainLand
+                && Map.LayerManager.ListLayer[(int)ActiveSquad.Owner.Z].ArrayTerrain[(int)ActiveSquad.Owner.X, (int)ActiveSquad.Owner.Y].TerrainTypeIndex != UnitStats.TerrainVoidIndex;
         }
 
         protected override void OnCancelPanel()

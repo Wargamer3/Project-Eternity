@@ -30,6 +30,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListSubLayer = new List<SubMapLayer>();
             ListProp = new List<InteractiveProp>();
+            ListHoldableItem = new List<Core.Units.HoldableItem>();
+            ListAttackPickup = new List<Core.Attacks.TemporaryAttackPickup>();
             IsVisible = true;
 
             //Tiles
@@ -57,6 +59,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListSubLayer = new List<SubMapLayer>();
             ListProp = new List<InteractiveProp>();
+            ListHoldableItem = new List<Core.Units.HoldableItem>();
+            ListAttackPickup = new List<Core.Attacks.TemporaryAttackPickup>();
 
             StartupDelay = BR.ReadInt32();
             ToggleDelayOn = BR.ReadInt32();

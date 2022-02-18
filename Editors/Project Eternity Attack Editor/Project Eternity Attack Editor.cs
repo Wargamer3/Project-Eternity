@@ -14,6 +14,8 @@ namespace ProjectEternity.Editors.AttackEditor
         private QuoteEditor Editor;
 
         private AdvancedSettingsEditor AdvancedSettings;
+        private DashAttackEditor DashAttackEditor;
+        private KnockbackAttackEditor KnockbackAttackEditor;
         private MAPAttackEditor MAPAttackEditor;
         private PERAttackEditor PERAttackEditor;
 
@@ -145,7 +147,13 @@ namespace ProjectEternity.Editors.AttackEditor
             BW.Write((sbyte)txtCritical.Value);
 
             BW.Write((byte)PrimaryProperty);
-            if (PrimaryProperty == WeaponPrimaryProperty.MAP)
+            if (PrimaryProperty == WeaponPrimaryProperty.Dash)
+            {
+                BW.Write((byte)DashAttackEditor.txtMaxDashReach.Value);
+                BW.Write((byte)DashAttackEditor.txtEnemyKnockback.Value);
+                BW.Write((byte)DashAttackEditor.txtSelfKnockback.Value);
+            }
+            else if (PrimaryProperty == WeaponPrimaryProperty.MAP)
             {
                 if (MAPAttackEditor != null)
                 {
@@ -197,6 +205,16 @@ namespace ProjectEternity.Editors.AttackEditor
                         BW.Write((byte)PERAttackEditor.txtBounceLimit.Value);
                     }
                 }
+            }
+            else if (KnockbackAttackEditor != null)
+            {
+                BW.Write((byte)KnockbackAttackEditor.txtEnemyKnockback.Value);
+                BW.Write((byte)KnockbackAttackEditor.txtSelfKnockback.Value);
+            }
+            else
+            {
+                BW.Write((byte)0);
+                BW.Write((byte)0);
             }
 
             BW.Write((byte)SecondaryProperty);
@@ -297,6 +315,8 @@ namespace ProjectEternity.Editors.AttackEditor
             this.Text = ActiveWeapon.RelativePath + " - Project Eternity Attack Editor";
             Editor = new QuoteEditor();
             AdvancedSettings = new AdvancedSettingsEditor();
+            DashAttackEditor = new DashAttackEditor();
+            KnockbackAttackEditor = new KnockbackAttackEditor();
             MAPAttackEditor = new MAPAttackEditor();
             PERAttackEditor = new PERAttackEditor();
 
@@ -304,8 +324,6 @@ namespace ProjectEternity.Editors.AttackEditor
             string ItemName = ActiveWeapon.RelativePath;
             string Description = ActiveWeapon.Description;
 
-            string PowerFormula = ActiveWeapon.PowerFormula;
-            int ENCost = ActiveWeapon.ENCost;
             int MoraleRequirement = ActiveWeapon.MoraleRequirement;
             int MinimumRange = ActiveWeapon.RangeMinimum;
             int MaximumRange = ActiveWeapon.RangeMaximum;
@@ -319,7 +337,7 @@ namespace ProjectEternity.Editors.AttackEditor
             txtName.Text = ItemName;
             txtDescription.Text = Description;
 
-            txtDamage.Text = PowerFormula;
+            txtDamage.Text = ActiveWeapon.PowerFormula;
             txtMinDamage.Text = ActiveWeapon.MinDamageFormula;
             txtENCost.Value = ActiveWeapon.ENCost;
             txtMaximumAmmo.Value = ActiveWeapon.MaxAmmo;
@@ -330,10 +348,23 @@ namespace ProjectEternity.Editors.AttackEditor
             txtAccuracy.Text = Accuracy.ToString();
             txtCritical.Text = Critical.ToString();
 
+            KnockbackAttackEditor.txtEnemyKnockback.Value = (decimal)ActiveWeapon.KnockbackAttributes.EnemyKnockback;
+            KnockbackAttackEditor.txtSelfKnockback.Value = (decimal)ActiveWeapon.KnockbackAttributes.SelfKnockback;
+
             #region Primary
+
+            MAPAttackEditor.ckFriendlyFire.Checked = ActiveWeapon.MAPAttributes.FriendlyFire;
+            MAPAttackEditor.txtAttackDelay.Value = ActiveWeapon.MAPAttributes.Delay;
 
             switch (ActiveWeapon.Pri)
             {
+                case WeaponPrimaryProperty.Dash:
+                    rbDASH.Checked = true;
+                    DashAttackEditor.txtMaxDashReach.Value = ActiveWeapon.DashMaxReach;
+                    DashAttackEditor.txtEnemyKnockback.Value = ActiveWeapon.KnockbackAttributes.EnemyKnockback;
+                    DashAttackEditor.txtSelfKnockback.Value = ActiveWeapon.KnockbackAttributes.SelfKnockback;
+                    break;
+
                 case WeaponPrimaryProperty.MAP:
                     rbMAP.Checked = true;
                     MAPAttackEditor.ListAttackchoice = ActiveWeapon.MAPAttributes.ListChoice;
@@ -671,13 +702,21 @@ namespace ProjectEternity.Editors.AttackEditor
 
         private void btnConfigure_Click(object sender, EventArgs e)
         {
-            if (rbMAP.Checked)
+            if (rbDASH.Checked)
+            {
+                DashAttackEditor.ShowDialog();
+            }
+            else if (rbMAP.Checked)
             {
                 MAPAttackEditor.ShowDialog();
             }
             else if (rbPER.Checked)
             {
                 PERAttackEditor.ShowDialog();
+            }
+            else
+            {
+                KnockbackAttackEditor.ShowDialog();
             }
         }
 

@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
+using ProjectEternity.Core.Attacks;
+using ProjectEternity.GameScreens.AnimationScreen;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.DeathmatchMap;
-using ProjectEternity.GameScreens.AnimationScreen;
-using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -407,6 +408,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     FinalActiveSquad.CurrentLeader.UseChargeAttack();
                 }
+                else if (FinalAttack.Pri == WeaponPrimaryProperty.Dash)
+                {
+                    Map.MovementAnimation.Add(FinalActiveSquad, FinalActiveSquad.Position, GetDashPosition(FinalActiveSquad, FinalAttack, FinalTargetSquad));
+                }
+
+                HandleKnockback(FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad, FinalAttack, FinalTargetPlayerIndex, FinalTargetSquadIndex, FinalTargetSquad);
+
                 Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost, ListMVHoverPoints);
                 FinalActiveSquad.EndTurn();
             }
@@ -479,6 +487,38 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             InitPlayerBattle(false);
+        }
+
+        private Vector3 GetDashPosition(Squad ActiveSquad, Attack FinalAttack, Squad TargetSquad)
+        {
+            Vector3 FinalPosition = ActiveSquad.Position;
+
+            float DiffX = TargetSquad.X - ActiveSquad.X;
+            float DiffY = TargetSquad.Y - ActiveSquad.Y;
+            int MovementX = Math.Min(FinalAttack.DashMaxReach, (int)Math.Abs(DiffX) - 1);
+            int MovementY = Math.Min(FinalAttack.DashMaxReach, (int)Math.Abs(DiffY) - 1);
+
+            FinalPosition = new Vector3(ActiveSquad.X + MovementX * Math.Sign(DiffX), ActiveSquad.Y + MovementY * Math.Sign(DiffY), ActiveSquad.Z);
+            ActiveSquad.SetPosition(FinalPosition);
+
+            return FinalPosition;
+        }
+
+        private void HandleKnockback(int ActivePlayerIndex, int ActiveSquadIndex, Squad ActiveSquad, Attack FinalAttack, int TargetPlayerIndex, int TargetSquadIndex, Squad TargetSquad)
+        {
+            Vector3 Diff = TargetSquad.Position - ActiveSquad.Position;
+            Diff.Normalize();
+
+            if (FinalAttack.KnockbackAttributes.EnemyKnockback > 0)
+            {
+                TargetSquad.Speed += Diff * FinalAttack.KnockbackAttributes.EnemyKnockback;
+                Map.ListActionMenuChoice.Add(new ActionPanelAutoMove(Map, TargetPlayerIndex, TargetSquadIndex, TargetSquad));
+            }
+            if (FinalAttack.KnockbackAttributes.SelfKnockback > 0)
+            {
+                ActiveSquad.Speed -= Diff * FinalAttack.KnockbackAttributes.SelfKnockback;
+                Map.ListActionMenuChoice.Add(new ActionPanelAutoMove(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad));
+            }
         }
     }
 }

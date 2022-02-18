@@ -81,11 +81,23 @@
     <Compile Include="Attack Formula Editor.Designer.cs">
       <DependentUpon>Attack Formula Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dash Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dash Editor.Designer.cs">
+      <DependentUpon>Dash Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="MAP Attack Editor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MAP Attack Editor.Designer.cs">
       <DependentUpon>MAP Attack Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Knockback Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Knockback Editor.Designer.cs">
+      <DependentUpon>Knockback Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="PER Attack Editor.cs">
       <SubType>Form</SubType>
@@ -112,8 +124,14 @@
     <EmbeddedResource Include="Attack Formula Editor.resx">
       <DependentUpon>Attack Formula Editor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dash Editor.resx">
+      <DependentUpon>Dash Editor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MAP Attack Editor.resx">
       <DependentUpon>MAP Attack Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Knockback Editor.resx">
+      <DependentUpon>Knockback Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PER Attack Editor.resx">
       <DependentUpon>PER Attack Editor.cs</DependentUpon>

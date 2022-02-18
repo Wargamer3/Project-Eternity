@@ -70,6 +70,8 @@ namespace ProjectEternity.Core.Attacks
 
         public MAPAttackAttributes MAPAttributes;
         public PERAttackAttributes PERAttributes;
+        public KnockbackAttackAttributes KnockbackAttributes;
+        public byte DashMaxReach;
         public Attack Parent;
         public bool IsChargeable;
         public List<Attack> ListSecondaryAttack;
@@ -161,13 +163,24 @@ namespace ProjectEternity.Core.Attacks
             this.Critical = BR.ReadSByte();
 
             this.Pri = (WeaponPrimaryProperty)BR.ReadByte();
-            if (this.Pri == WeaponPrimaryProperty.MAP)
+            if (this.Pri == WeaponPrimaryProperty.Dash)
+            {
+                DashMaxReach = BR.ReadByte();
+                KnockbackAttributes = new KnockbackAttackAttributes(BR);
+            }
+            else if (this.Pri == WeaponPrimaryProperty.MAP)
             {
                 MAPAttributes = new MAPAttackAttributes(BR);
+                KnockbackAttributes = new KnockbackAttackAttributes();
             }
             else if (this.Pri == WeaponPrimaryProperty.PER)
             {
                 PERAttributes = new PERAttackAttributes(BR, Content);
+                KnockbackAttributes = new KnockbackAttackAttributes();
+            }
+            else
+            {
+                KnockbackAttributes = new KnockbackAttackAttributes(BR);
             }
 
             this.Sec = (WeaponSecondaryProperty)BR.ReadByte();
@@ -294,7 +307,7 @@ namespace ProjectEternity.Core.Attacks
                 || MoraleRequirement > CurrentUnit.PilotMorale)
                 return false;
 
-            if (DicTerrainAttribute[TargetMovementType] == '-')
+            if (!DicTerrainAttribute.ContainsKey(TargetMovementType) ||  DicTerrainAttribute[TargetMovementType] == '-')
                 return false;
 
             //Define the minimum and maximum value of the attack range.
@@ -355,7 +368,7 @@ namespace ProjectEternity.Core.Attacks
 
         public bool IsPostMovement(Unit CurrentUnit)
         {
-            return CurrentUnit.GetPostMovementLevel() >= PostMovementLevel || CurrentUnit.Boosts.PostMovementModifier.Attack;
+            return PostMovementLevel > 0 && (CurrentUnit.GetPostMovementLevel() >= PostMovementLevel || CurrentUnit.Boosts.PostMovementModifier.Attack);
         }
 
         public int GetPower(Unit Owner, FormulaParser ActiveParser)

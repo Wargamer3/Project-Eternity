@@ -1,5 +1,4 @@
-﻿
-namespace ProjectEternity.Editors.AttackEditor
+﻿namespace ProjectEternity.Editors.AttackEditor
 {
     partial class PERAttackEditor
     {
