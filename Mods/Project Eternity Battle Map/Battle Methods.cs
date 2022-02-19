@@ -473,9 +473,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return AttackChoice;
         }
         
-        public void DrawAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, Attack CurrentAttack)
+        public void DrawAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont)
         {
-            AttackPicker.DrawAttackPanel(g, ActiveFont, ActiveUnit, ListAttack, CurrentAttack);
+            AttackPicker.DrawAttackPanel(g, ActiveFont);
         }
     }
 }

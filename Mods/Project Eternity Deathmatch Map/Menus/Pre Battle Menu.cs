@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             sprBattleMenuBackground = Content.Load<Texture2D>("Status Screen/Background Black");
         }
 
-        private void BattleSumaryDraw(CustomSpriteBatch g, Squad RightSquad, List<Attack> ListAttackRightSquad)
+        private void BattleSumaryDraw(CustomSpriteBatch g, Squad RightSquad)
         {
             int MenuWith = 130;
             int MenuHeight = 30;
@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             switch (BattleMenuStage)
             {
                 case BattleMenuStages.ChooseAttack:
-                    DrawAttackPanel(g, fntFinlanderFont, RightSquad.CurrentLeader, ListAttackRightSquad, RightSquad.CurrentLeader.CurrentAttack);
+                    DrawAttackPanel(g, fntFinlanderFont);
                     break;
 
                 case BattleMenuStages.ChooseDefense:
@@ -156,7 +156,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void BattleSumaryAttackDraw(CustomSpriteBatch g,
             int DefendingPlayerIndex, int DefendingSquadIndex, SupportSquadHolder TargetSquadSupport,
-            int AttackingPlayerIndex, int AttackingSquadIndex, List<Attack> ListAttackAttackingSquad, SupportSquadHolder AttackingSupport, List<Attack> ListAttackAttackingSupport)
+            int AttackingPlayerIndex, int AttackingSquadIndex, SupportSquadHolder AttackingSupport)
         {
             Squad AttackingSquad = ListPlayer[AttackingPlayerIndex].ListSquad[AttackingSquadIndex];
             Squad DefendingSquad = ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
@@ -207,7 +207,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             //Player side is always on the right.
-            BattleSumaryDraw(g, AttackingSquad, ListAttackAttackingSquad);
+            BattleSumaryDraw(g, AttackingSquad);
 
             switch (BattleMenuStage)
             {
@@ -243,14 +243,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     break;
 
                 case BattleMenuStages.ChooseSupportAttack:
-                    DrawAttackPanel(g, fntFinlanderFont, AttackingSupport.ActiveSquadSupport.CurrentLeader, ListAttackAttackingSupport, AttackingSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack);
+                    DrawAttackPanel(g, fntFinlanderFont);
                     break;
             }
         }
 
         public void BattleSumaryDefenceDraw(CustomSpriteBatch g,
             int AttackingPlayerIndex, int AttackingSquadIndex, SupportSquadHolder ActiveSquadSupport,
-            int DefendingPlayerIndex, int DefendingSquadIndex, List<Attack> ListAttackDefendngSquad, SupportSquadHolder TargetSquadSupport)
+            int DefendingPlayerIndex, int DefendingSquadIndex, SupportSquadHolder TargetSquadSupport)
         {
             Squad AttackingSquad = ListPlayer[AttackingPlayerIndex].ListSquad[AttackingSquadIndex];
             Squad DefendingSquad = ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
@@ -294,7 +294,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             //Player side is always on the right.
-            BattleSumaryDraw(g, DefendingSquad, ListAttackDefendngSquad);
+            BattleSumaryDraw(g, DefendingSquad);
 
             switch (BattleMenuStage)
             {

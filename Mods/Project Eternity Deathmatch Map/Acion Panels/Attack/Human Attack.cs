@@ -195,6 +195,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     case BattleMenuChoices.Action:
                         if (ActiveSquad.UnitsAliveInSquad == 1)
                         {
+                            Map.AttackPicker.Reset(ActiveSquad.CurrentLeader, ListAttackActiveSquad);
                             ActiveSquad.CurrentLeader.UpdateNonMAPAttacks(ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, ActiveSquad.CanMove);
 
                             AttackIndex = 0;//Make sure you select the first weapon.
@@ -241,6 +242,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquad[AttackIndex];
 
+                Map.AttackPicker.SetCursorIndex(AttackIndex);
+
                 Map.sndSelection.Play();
             }
             else if (ActiveInputManager.InputDownPressed())
@@ -250,6 +253,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AttackIndex = 0;
 
                 ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquad[AttackIndex];
+
+                Map.AttackPicker.SetCursorIndex(AttackIndex);
 
                 Map.sndSelection.Play();
             }
@@ -480,6 +485,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActiveSquadSupport.ActiveSquadSupportIndex >= 0)
                 {
                     Map.BattleMenuStage = BattleMenuStages.ChooseSupportAttack;
+                    Map.AttackPicker.Reset(ActiveSquadSupport.ActiveSquadSupport.CurrentLeader, ListAttackActiveSquadSupport);
                     //Update weapons so you know which one is in attack range.
 
                     ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.DisableAllAttacks();
@@ -512,7 +518,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (AttackIndex < 0)
                     AttackIndex = ListAttackActiveSquadSupport.Count - 1;
 
-                ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquadSupport[AttackIndex];
+                ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack = ListAttackActiveSquadSupport[AttackIndex];
+
+                Map.AttackPicker.SetCursorIndex(AttackIndex);
 
                 Map.sndSelection.Play();
             }
@@ -522,7 +530,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (AttackIndex >= ListAttackActiveSquadSupport.Count)
                     AttackIndex = 0;
 
-                ActiveSquad.CurrentLeader.CurrentAttack = ListAttackActiveSquadSupport[AttackIndex];
+                ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack = ListAttackActiveSquadSupport[AttackIndex];
+
+                Map.AttackPicker.SetCursorIndex(AttackIndex);
 
                 Map.sndSelection.Play();
             }
@@ -640,7 +650,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            Map.BattleSumaryAttackDraw(g, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, ActivePlayerIndex, ActiveSquadIndex, ListAttackActiveSquad, ActiveSquadSupport, ListAttackActiveSquadSupport);
+            Map.BattleSumaryAttackDraw(g, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport);
         }
     }
 }

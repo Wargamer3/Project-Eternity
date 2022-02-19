@@ -41,6 +41,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
+            Map.AttackPicker.Reset(ActiveSquad.CurrentLeader, ListAttack);
             Map.CursorPosition = ActiveSquad.Position;
             Map.CursorPositionVisible = Map.CursorPosition;
 
@@ -64,6 +65,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[AttackIndex];
 
+                Map.AttackPicker.SetCursorIndex(AttackIndex);
+
                 Map.sndSelection.Play();
             }
             else if (ActiveInputManager.InputDownPressed())
@@ -73,6 +76,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AttackIndex = 0;
 
                 ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[AttackIndex];
+
+                Map.AttackPicker.SetCursorIndex(AttackIndex);
 
                 Map.sndSelection.Play();
             }
@@ -141,7 +146,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             //Draw the weapon selection menu.
-            Map.DrawAttackPanel(g, Map.fntFinlanderFont, ActiveSquad.CurrentLeader, ListAttack, ListAttack[AttackIndex]);
+            Map.DrawAttackPanel(g, Map.fntFinlanderFont);
         }
     }
 }

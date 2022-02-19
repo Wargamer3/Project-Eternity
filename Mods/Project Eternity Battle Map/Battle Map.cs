@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public StatusMenuScreen StatusMenu;
 
-        private AttacksMenu AttackPicker;
+        public AttacksMenu AttackPicker;
 
         #region Bars
 

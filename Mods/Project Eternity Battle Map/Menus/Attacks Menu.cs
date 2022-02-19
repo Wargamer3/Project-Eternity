@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class AttacksMenu : GameScreen
+    public class AttacksMenu : GameScreen
     {
         private Texture2D sprLand;
         private Texture2D sprSea;
@@ -26,6 +26,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Texture2D sprAttackTypeALL;
         private Texture2D sprAttackTypeMAP;
         private Texture2D sprAttackTypePLA;
+
+        private Unit ActiveUnit;
+        private List<Attack> ListAttack;
+        private int ScrollbarOffset;
+        private int CursorIndex;
 
         private FormulaParser ActiveParser;
 
@@ -78,12 +83,36 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
+        public void SetCursorIndex(int CursorIndex)
+        {
+            this.CursorIndex = CursorIndex;
+
+            if (CursorIndex > ScrollbarOffset + 5)
+            {
+                ScrollbarOffset = CursorIndex - 5;
+            }
+            else if(CursorIndex < ScrollbarOffset)
+            {
+                ScrollbarOffset = CursorIndex;
+            }
+        }
+
+        public void Reset(Unit ActiveUnit, List<Attack> ListAttack)
+        {
+            this.ActiveUnit = ActiveUnit;
+            this.ListAttack = ListAttack;
+            CursorIndex = 0;
+            ScrollbarOffset = 0;
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
         }
 
-        public void DrawTopAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, Attack CurrentAttack, bool DrawAll = true)
+        public void DrawTopAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, bool DrawAll = true)
         {
+            Attack CurrentAttack = ListAttack[CursorIndex];
+
             Color ColorBrush;
             string Hit;
             string Crit;
@@ -106,7 +135,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             float YPos = 115;
-            for (int i = 0, CurPos = 0; i < ListAttack.Count && CurPos <= 8; i++, CurPos++)
+            for (int i = ScrollbarOffset, CurPos = 0; i < ListAttack.Count && CurPos < 6; i++, CurPos++)
             {
                 if (ListAttack[i].CanAttack)
                     ColorBrush = Color.White;
@@ -170,10 +199,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                if (ListAttack[i] == CurrentAttack)
+                if (CurPos == CursorIndex - ScrollbarOffset)
                 {
                     //Draw the cursor.
-                    g.Draw(sprPixel, new Rectangle(XStart + 6, 120 + i * YStep, 618, YStep), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    g.Draw(sprPixel, new Rectangle(XStart + 6, 120 + CurPos * YStep, 618, YStep), Color.FromNonPremultiplied(255, 255, 255, 127));
                 }
 
                 if (DrawAll && !ListAttack[i].IsChargeable)
@@ -195,12 +224,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void DrawAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont, Unit ActiveUnit, List<Attack> ListAttack, Attack CurrentAttack)
+        public void DrawAttackPanel(CustomSpriteBatch g, SpriteFont ActiveFont)
         {
+            Attack CurrentAttack = ListAttack[CursorIndex];
+
             int XStart = (Constants.Width - 630) / 2;
             int YStart = 115;
 
-            DrawTopAttackPanel(g, ActiveFont, ActiveUnit, ListAttack, CurrentAttack);
+            DrawTopAttackPanel(g, ActiveFont);
             //Draw the information of the selected weapon.
             DrawBox(g, new Vector2(XStart, YStart + 170), 630, 50, Color.White);
             g.DrawString(ActiveFont, "Ammo", new Vector2(XStart + 13, YStart + 178), Color.Yellow);

@@ -173,14 +173,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     --StatusPannel;
                     if (StatusPannel < StatusPannels.Summary)
+                    {
                         StatusPannel = StatusPannels.Attacks;
+                        Map.AttackPicker.Reset(ActiveSquad.CurrentLeader, ListAttack);
+                    }
                     sndSelection.Play();
                 }
                 else if (InputHelper.InputRightPressed())
                 {
                     ++StatusPannel;
                     if (StatusPannel > StatusPannels.Attacks)
+                    {
                         StatusPannel = StatusPannels.Summary;
+                    }
+
+                    if (StatusPannel == StatusPannels.Attacks)
+                    {
+                        Map.AttackPicker.Reset(ActiveSquad.CurrentLeader, ListAttack);
+                    }
                     sndSelection.Play();
                 }
                 else if (InputHelper.InputCancelPressed())
@@ -343,6 +353,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         if (AttackCursorIndex < 0)
                             AttackCursorIndex = 0;
 
+                        ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[AttackCursorIndex];
+
+                        Map.AttackPicker.SetCursorIndex(AttackCursorIndex);
+
                         sndSelection.Play();
                     }
                     else if (InputHelper.InputDownPressed())
@@ -350,6 +364,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         ++AttackCursorIndex;
                         if (AttackCursorIndex >= ListAttack.Count)
                             AttackCursorIndex = 0;
+
+                        ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[AttackCursorIndex];
+
+                        Map.AttackPicker.SetCursorIndex(AttackCursorIndex);
 
                         sndSelection.Play();
                     }
@@ -499,7 +517,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case StatusPannels.Attacks:
-                    Map.DrawAttackPanel(g, fntFinlanderFont, ActiveSquad.CurrentLeader, ListAttack, ListAttack[AttackCursorIndex]);
+                    Map.DrawAttackPanel(g, fntFinlanderFont);
                     break;
             }
         }

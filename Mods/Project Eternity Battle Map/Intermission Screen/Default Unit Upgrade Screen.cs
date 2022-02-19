@@ -60,6 +60,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             AttackPicker = new AttacksMenu(ActiveParser);
             AttackPicker.Load();
+            AttackPicker.Reset(SelectedUnit, ListAttack);
 
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
         }
@@ -202,7 +203,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (UpgradeChoice == UpgradeChoices.Attacks)
             {
-                AttackPicker.DrawTopAttackPanel(g, fntFinlanderFont, SelectedUnit, ListAttack, ListAttack[0], false);
+                AttackPicker.DrawTopAttackPanel(g, fntFinlanderFont, false);
 
                 int YStart = 115;
                 int YStep = 25;

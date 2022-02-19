@@ -630,7 +630,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            Map.BattleSumaryDefenceDraw(g, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, ListAttackTargetSquad, TargetSquadSupport);
+            Map.BattleSumaryDefenceDraw(g, ActivePlayerIndex, ActiveSquadIndex, ActiveSquadSupport, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport);
         }
     }
 }
