@@ -62,6 +62,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
             }
+            ListMovedOverTerrain = new List<MovementAlgorithmTile>();
+            ListMovedOverPoint = new List<Vector3>();
             ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z));
             ListMovedOverPoint.Add(ActiveSquad.Position);
             ActiveSquad.CurrentLeader.CurrentAttack = null;

@@ -78,14 +78,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActionPanelRepair.AddIfUsable(Map, this, ActiveSquad);
             }
 
-            //Movement initialisation.
-            Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoints);
+            if (ActiveSquad.Position != Map.CursorPosition)
+            {
+                //Movement initialisation.
+                Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoints);
 
-            //Move the Unit to the cursor position
-            ActiveSquad.SetPosition(Map.CursorPosition);
+                //Move the Unit to the cursor position
+                ActiveSquad.SetPosition(Map.CursorPosition);
 
-            Map.CursorPosition = ActiveSquad.Position;
-            Map.CursorPositionVisible = Map.CursorPosition;
+                Map.CursorPosition = ActiveSquad.Position;
+                Map.CursorPositionVisible = Map.CursorPosition;
+            }
         }
 
         private List<ActionPanel> GetPropPanelsOnUnitStop(Squad StoppedUnit)
