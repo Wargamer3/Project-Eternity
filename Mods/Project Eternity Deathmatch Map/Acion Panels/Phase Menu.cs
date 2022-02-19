@@ -110,12 +110,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             do
             {
                 Map.ActivePlayerIndex++;
-                Map.GameRule.OnNewTurn(Map.ActivePlayerIndex);
 
                 if (Map.ActivePlayerIndex >= Map.ListPlayer.Count)
                 {
                     Map.OnNewTurn();
                 }
+
+                Map.GameRule.OnNewTurn(Map.ActivePlayerIndex);
 
                 UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
                 UpdatePERAttacks(Map, Map.ActivePlayerIndex);
@@ -297,12 +298,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Map.UpdateMapEvent(BattleMap.EventTypePhase, 0);
             Map.ListActionMenuChoice.RemoveAllActionPanels();//Will also remove this panel
-
-            if (ActivePlayer.ListSquad.Count > 0)
-            {
-                Map.CursorPosition = ActivePlayer.ListSquad[0].Position;
-                Map.CursorPositionVisible = Map.CursorPosition;
-            }
 
             bool AIControlledSquadFound = false;
             for (int U = 0; U < ActivePlayer.ListSquad.Count; U++)

@@ -103,6 +103,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void OnNewTurn(int ActivePlayerIndex)
         {
+            if (Owner.ListPlayer[ActivePlayerIndex].ListSquad.Count > 0)
+            {
+                Owner.CursorPosition = Owner.ListPlayer[ActivePlayerIndex].ListSquad[0].Position;
+                Owner.CursorPositionVisible = Owner.CursorPosition;
+            }
+
             for (int S = ListDeadSquadInfo.Count - 1; S >= 0; S--)
             {
                 DeathInfo RespawningSquad = ListDeadSquadInfo[S];
