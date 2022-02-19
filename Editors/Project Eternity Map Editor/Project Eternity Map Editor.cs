@@ -1253,6 +1253,7 @@ namespace ProjectEternity.Editors.MapEditor
             if (BattleMapViewer.ActiveMap == null)
                 return;
 
+            lstEvents.Items.AddRange(BattleMapViewer.ActiveMap.DicMapEvent.Values.ToArray());
             lstConditions.Items.AddRange(BattleMapViewer.ActiveMap.DicMapCondition.Values.ToArray());
             lstTriggers.Items.AddRange(BattleMapViewer.ActiveMap.DicMapTrigger.Values.ToArray());
             BattleMapViewer.RefreshScrollbars();

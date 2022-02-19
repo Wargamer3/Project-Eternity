@@ -413,7 +413,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Map.MovementAnimation.Add(FinalActiveSquad, FinalActiveSquad.Position, GetDashPosition(FinalActiveSquad, FinalAttack, FinalTargetSquad));
                 }
 
-                HandleKnockback(FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad, FinalAttack, FinalTargetPlayerIndex, FinalTargetSquadIndex, FinalTargetSquad);
+                if (!AttackingResult.ArrayResult[0].AttackMissed)
+                {
+                    HandleKnockback(FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad, FinalAttack, FinalTargetPlayerIndex, FinalTargetSquadIndex, FinalTargetSquad);
+                }
 
                 Map.FinalizeMovement(FinalActiveSquad, (int)Map.GetTerrain(FinalActiveSquad).MovementCost, ListMVHoverPoints);
                 FinalActiveSquad.EndTurn();

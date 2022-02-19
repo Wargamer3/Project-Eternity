@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListDeadSquadInfo.Add(new DeathInfo(DefeatedSquad, DefeatedSquadPlayerIndex, TurnsToRespawn));
 
-            TemporaryAttackPickup DroppedWeapon = DefeatedSquad.CurrentLeader.OnDeath();
+            TemporaryAttackPickup DroppedWeapon = DefeatedSquad.At(0).OnDeath();
             if (DroppedWeapon != null)
             {
                 DroppedWeapon.Position = AttackerSquad.Position;

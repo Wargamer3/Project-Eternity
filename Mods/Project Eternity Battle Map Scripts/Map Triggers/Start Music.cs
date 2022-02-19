@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Preload()
         {
             if (PreLoad)
-                Sound = new FMODSound(GameScreen.FMODSystem, MusicPath);
+                Sound = new FMODSound(GameScreen.FMODSystem, "Content/Maps/BGM/" + MusicPath + ".mp3");
         }
 
         public override void Update(int Index)
@@ -49,11 +49,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Sound = new FMODSound(GameScreen.FMODSystem, MusicPath);
 
             if (Loop)
+            {
+                Sound.SetLoop(true);
                 Sound.PlayAsBGM();
+                GameScreen.FMODSystem.sndActiveBGMName = MusicPath;
+            }
             else
                 Sound.Play();
-
-            Map.ExecuteFollowingScripts(this, 0);
         }
 
         public override MapScript CopyScript()
