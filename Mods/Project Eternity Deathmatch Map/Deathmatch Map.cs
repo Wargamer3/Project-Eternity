@@ -610,11 +610,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     Init();
                 }
-                else if (MovementAnimation.Count > 0)
+                if (MovementAnimation.Count > 0)
                 {
                     MovementAnimation.MoveSquad(this);
                 }
-                else
+                if (!MovementAnimation.IsBlocking || MovementAnimation.Count == 0)
                 {
                     GameRule.Update(gameTime);
                 }
@@ -983,6 +983,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 MapLayer ActiveLayer = LayerManager.ListLayer[L];
                 Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
+                Terrain PreviousTerrain = ActiveLayer.ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y];
+                if (L > (int)CurrentPosition.Z && PreviousTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
+                {
+                    break;
+                }
 
                 string NextTerrainType = GetTerrainType(NextX, NextY, L);
                 float NextTerrainZ = NextTerrain.Position.Z + L;
@@ -1008,9 +1013,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             float ZDiff = NextTerrainZ - CurrentZ;
                             if (ZDiff >= ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                             {
-                                ClosestTerrainDistanceUp = ZDiff;
-                                ClosestLayerIndexUp = L;
-                                ListLayerPossibility.Add(L);
+                                if (PreviousTerrain.TerrainTypeIndex != UnitStats.TerrainLandIndex)
+                                {
+                                    ClosestTerrainDistanceUp = ZDiff;
+                                    ClosestLayerIndexUp = L;
+                                    ListLayerPossibility.Add(L);
+                                }
                             }
                         }
                     }

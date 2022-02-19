@@ -19,7 +19,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<int> ListLayerPossibility;
-            int NextRegularMovementLayerIndex = Map.GetNextLayerIndex(new Vector3(ActiveNode.Position.X, ActiveNode.Position.Y, StartingLayerIndex), (int)(ActiveNode.Position.X + OffsetX), (int)(ActiveNode.Position.Y + OffsetY), 1f, 15, out ListLayerPossibility);
+            int NextRegularMovementLayerIndex = Map.GetNextLayerIndex(new Vector3(ActiveNode.Position.X, ActiveNode.Position.Y, StartingLayerIndex), (int)(ActiveNode.Position.X + OffsetX), (int)(ActiveNode.Position.Y + OffsetY),
+                1f, 15, out ListLayerPossibility);
 
             foreach (int ActiveLayerIndex in ListLayerPossibility)
             {
@@ -41,22 +42,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     continue;
                 }
 
-                bool TeleportFound = false;
-
                 foreach (TeleportPoint ActiveTeleport in Map.LayerManager.ListLayer[ActiveLayerIndex].ListTeleportPoint)
                 {
                     if (ActiveTeleport.Position.X == ActiveTile.Position.X && ActiveTeleport.Position.Y == ActiveTile.Position.Y)
                     {
                         ListTerrainSuccessor.Add(GetTile(ActiveTeleport.OtherMapEntryPoint.X, ActiveTeleport.OtherMapEntryPoint.Y, ActiveTeleport.OtherMapEntryLayer));
-                        TeleportFound = true;
                         break;
                     }
                 }
 
-                if (!TeleportFound)
-                {
-                    ListTerrainSuccessor.Add(ActiveTile);
-                }
+                ListTerrainSuccessor.Add(ActiveTile);
             }
 
             return ListTerrainSuccessor;

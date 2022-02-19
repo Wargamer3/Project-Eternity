@@ -10,21 +10,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public Dictionary<UnitMapComponent, Vector3> DicMovingMapUnitByPosition;
         public Dictionary<UnitMapComponent, List<Vector3>> DicMovingMapUnitByNextPosition;
+        public bool IsBlocking;
 
         public MovementAnimations()
         {
+            IsBlocking = true;
             DicMovingMapUnitByPosition = new Dictionary<UnitMapComponent, Vector3>();
             DicMovingMapUnitByNextPosition = new Dictionary<UnitMapComponent, List<Vector3>>();
         }
 
         public void Add(UnitMapComponent MovingMapUnit, Vector3 StartPosition, Vector3 FinalPosition)
         {
+            IsBlocking = true;
             DicMovingMapUnitByPosition.Add(MovingMapUnit, StartPosition);
             DicMovingMapUnitByNextPosition.Add(MovingMapUnit, new List<Vector3>() { FinalPosition });
         }
 
         public void Add(UnitMapComponent MovingMapUnit, Vector3 StartPosition, List<Vector3> ListNextPosition)
         {
+            IsBlocking = false;
             DicMovingMapUnitByPosition.Add(MovingMapUnit, StartPosition);
             DicMovingMapUnitByNextPosition.Add(MovingMapUnit, new List<Vector3>(ListNextPosition));
         }
@@ -121,7 +125,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListRemovedSquad.Clear();
 
-            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
+            if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased() || InputHelper.InputCancelPressed())
             {
                 Map.OnlinePlayers.ExecuteAndSend(new Online.BattleMapLobyScriptHolder.SkipSquadMovementScript(Map));
             }
