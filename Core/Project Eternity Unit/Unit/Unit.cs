@@ -592,8 +592,8 @@ namespace ProjectEternity.Core.Units
                 if (ActiveAttack.Owner.MaxAmmo > 0 && ActiveAttack.Owner.Ammo > 0)
                 {
                     AttackToDrop = ActiveAttack;
-                    AttackToDrop.Owner = null;
                     AttackToDrop.Ammo = ActiveAttack.Owner.Ammo;
+                    AttackToDrop.Owner = null;
                     break;
                 }
             }
@@ -671,7 +671,7 @@ namespace ProjectEternity.Core.Units
             TemporaryAttackPickup ExistingAttack = null;
             foreach (TemporaryAttackPickup ActiveAttack in ListAttackTemporary)
             {
-                if (ActiveAttack.Owner.RelativePath == AttackPickup.Owner.RelativePath)
+                if (ActiveAttack.Owner.RelativePath == AttackPickup.AttackName)
                 {
                     ExistingAttack = ActiveAttack;
                     break;
