@@ -78,6 +78,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Squad ActiveSquad = ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             this.ListMAPAttackTarget = ListMAPAttackTarget;
             Tuple<int, int> FirstEnemy = ListMAPAttackTarget.Pop();
+            ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2].CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
             PrepareSquadsForBattle(ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, FirstEnemy.Item1, FirstEnemy.Item2);
 
             SupportSquadHolder ActiveSquadSupport = new SupportSquadHolder();
@@ -360,6 +361,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack,
             int DefendingPlayerIndex, int DefendingSquadIndex)
         {
+            if (CurrentAttack.Pri == WeaponPrimaryProperty.MAP || CurrentAttack.Pri == WeaponPrimaryProperty.PER)
+                return;
+
             Squad AttackingSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             Squad DefendingSquad = Map.ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
 
