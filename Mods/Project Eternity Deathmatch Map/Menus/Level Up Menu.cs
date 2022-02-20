@@ -242,7 +242,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (TargetSquadSupport != null && TargetSquadSupport.ActiveSquadSupport != null)
                             TargetSquadSupport.ActiveSquadSupport.UpdateSquad();
 
-                        Map.GameRule.OnSquadDefeated(AttackerSquadPlayerIndex, Attacker, TargetSquadPlayerIndex, TargetSquad);
+                        if (Attacker.IsDead && !TargetSquad.IsDead)
+                        {
+                            Map.GameRule.OnSquadDefeated(TargetSquadPlayerIndex, TargetSquad, AttackerSquadPlayerIndex, Attacker);
+                        }
+                        if (TargetSquad.IsDead && !Attacker.IsDead)
+                        {
+                            Map.GameRule.OnSquadDefeated(AttackerSquadPlayerIndex, Attacker, TargetSquadPlayerIndex, TargetSquad);
+                        }
                     }
                 }
             }
