@@ -79,6 +79,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
                                 Owner.SpawnSquad(PlayerIndex, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, ActiveLayer.ListMultiplayerSpawns[S].Position, L);
                                 ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.PilotSP = 0;
+                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.ConsumeEN(ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.MaxEN);
                                 ++SpawnSquadIndex;
 
                                 if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
@@ -107,6 +108,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Owner.CursorPosition = Owner.ListPlayer[ActivePlayerIndex].ListSquad[0].Position;
                 Owner.CursorPositionVisible = Owner.CursorPosition;
+                foreach (Squad ActiveSquad in Owner.ListPlayer[ActivePlayerIndex].ListSquad)
+                {
+                    if (!ActiveSquad.IsDead)
+                    {
+                        ActiveSquad.CurrentLeader.RefillSP(10);
+                        ActiveSquad.CurrentLeader.RefillEN(5);
+                    }
+                }
             }
 
             for (int S = ListDeadSquadInfo.Count - 1; S >= 0; S--)
@@ -117,7 +126,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (--RespawningSquad.TurnRemaining <= 0)
                     {
-                        SpawnSquad(ActivePlayerIndex, RespawningSquad.DeadSquad);
+                        RespawnSquad(ActivePlayerIndex, RespawningSquad.DeadSquad);
                         ListDeadSquadInfo.RemoveAt(S);
                     }
                 }
@@ -128,6 +137,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ++Owner.ListAllPlayer[AttackerSquadPlayerIndex].Kills;
             ++Owner.ListAllPlayer[DefeatedSquadPlayerIndex].Death;
+            AttackerSquad.CurrentLeader.RefillSP(5);
+            AttackerSquad.CurrentLeader.RefillEN(5);
+
+            if (DefeatedSquad.ItemHeld != null)
+            {
+                Owner.LayerManager.ListLayer[(int)DefeatedSquad.Position.Z].ListHoldableItem.Add(DefeatedSquad.ItemHeld);
+                DefeatedSquad.ItemHeld.Position = DefeatedSquad.Position;
+                DefeatedSquad.DropItem();
+            }
 
             ListDeadSquadInfo.Add(new DeathInfo(DefeatedSquad, DefeatedSquadPlayerIndex, TurnsToRespawn));
 
@@ -159,9 +177,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        private void SpawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
+        private void RespawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
         {
-            List<Tuple<EventPoint, int>> ListPossibleSpawnPoint = new List<Tuple<EventPoint, int>>();
+            List<Vector3> ListPossibleSpawnPoint = new List<Vector3>();
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
             {
                 ActiveSquad.At(U).ReinitializeMembers(Owner.DicUnitType[ActiveSquad.At(U).UnitTypeName]);
@@ -177,19 +195,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                     {
-                        ListPossibleSpawnPoint.Add(new Tuple<EventPoint, int>(ActiveLayer.ListMultiplayerSpawns[S], L));
-                        return;
+                        ListPossibleSpawnPoint.Add(new Vector3(ActiveLayer.ListMultiplayerSpawns[S].Position.X, ActiveLayer.ListMultiplayerSpawns[S].Position.Y, L));
                     }
                 }
             }
 
             int RandomSapwnPointIndex = RandomHelper.Next(ListPossibleSpawnPoint.Count);
-            Tuple<EventPoint, int> RandomSpawnPoint = ListPossibleSpawnPoint[RandomSapwnPointIndex];
+            Vector3 RandomSpawnPoint = ListPossibleSpawnPoint[RandomSapwnPointIndex];
 
-            Owner.CursorPosition = RandomSpawnPoint.Item1.Position;
+            Owner.CursorPosition = RandomSpawnPoint;
             Owner.CursorPositionVisible = Owner.CursorPosition;
 
-            Owner.SpawnSquad(ActivePlayerIndex, ActiveSquad, ActiveSquad.ID, RandomSpawnPoint.Item1.Position, RandomSpawnPoint.Item2);
+            ActiveSquad.At(0).HealUnit(ActiveSquad.At(0).MaxHP);
+
+            ActiveSquad.UpdateSquad();
+
+            Owner.ActivateAutomaticSkills(ActiveSquad, string.Empty);
+            ActiveSquad.SetPosition(RandomSpawnPoint);
+
+            if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
+            {
+                ActiveSquad.IsFlying = true;
+                ActiveSquad.CurrentMovement = UnitStats.TerrainAir;
+            }
+            else
+            {
+                ActiveSquad.CurrentMovement = UnitStats.TerrainLand;
+            }
         }
 
         public virtual void Update(GameTime gameTime)

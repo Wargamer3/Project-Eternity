@@ -105,6 +105,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 {
                                     EnemyFlagSpawner.ReturnFlag();
                                     ActiveSquad.DropItem();
+                                    ActiveSquad.CurrentLeader.RefillSP(10);
+                                    ActiveSquad.CurrentLeader.RefillEN(5);
                                     //Get point
                                     ((CaptureTheFlagGameRule)Map.GameRule).GetPoint(Map.ListPlayer[Map.ActivePlayerIndex].Team);
                                     return;

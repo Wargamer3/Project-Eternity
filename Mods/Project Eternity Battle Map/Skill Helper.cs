@@ -6,7 +6,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public partial class BattleMap
     {
-        protected void ActivateAutomaticSkills(Squad ActiveSquad, string SkillToUpdate)
+        public void ActivateAutomaticSkills(Squad ActiveSquad, string SkillToUpdate)
         {
             for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; ++U)
             {

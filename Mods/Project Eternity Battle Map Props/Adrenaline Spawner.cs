@@ -46,10 +46,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (SquadToHeal.CurrentLeader.Pilot.SP < SquadToHeal.CurrentLeader.Pilot.MaxSP)
             {
-                SquadToHeal.CurrentLeader.RefillSP(5);
+                SquadToHeal.CurrentLeader.RefillSP(10);
                 IsUsed = true;
                 TurnUsed = Map.ActivePlayerIndex;
-                TurnRemaining = 2;
+                TurnRemaining = 3;
             }
         }
 
