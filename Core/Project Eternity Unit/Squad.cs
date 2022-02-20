@@ -219,6 +219,8 @@ namespace ProjectEternity.Core.Units
 
         public void UpdateSquad()
         {
+            IsDead = false;
+
             CurrentLeaderIndex = -1;
             CurrentWingmanAIndex = -1;
             CurrentWingmanBIndex = -1;
