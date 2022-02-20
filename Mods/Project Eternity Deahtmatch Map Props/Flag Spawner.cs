@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 sprFlag = Map.Content.Load<Texture2D>("Animations/Sprites/" + _SpritePath);
                 Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
                 Flag3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
-                TeamFlag = new Flag(Map, this, sprFlag, Flag3D, _Team);
+                TeamFlag = new Flag(Map, this, sprFlag, Flag3D);
             }
         }
 
@@ -91,7 +91,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Flag ActiveFlag = (Flag)ActiveSquad.ItemHeld;
 
-                if (ActiveFlag.Team != _Team)
+                if (ActiveFlag.Owner.Team != _Team)
                 {
                     foreach (MapLayer ActiveLayer in Map.LayerManager.ListLayer)
                     {

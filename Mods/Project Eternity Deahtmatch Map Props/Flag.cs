@@ -55,9 +55,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         private readonly DeathmatchMap Map;
-        private readonly FlagSpawner Owner;
+        public readonly FlagSpawner Owner;
         public readonly Texture2D sprFlag;
-        public readonly byte Team;
 
         private bool IsDropped = false;
         private int TurnUsed;
@@ -68,25 +67,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override int Height => sprFlag.Height;
 
-        public Flag(DeathmatchMap Map, FlagSpawner Owner, Texture2D sprFlag, UnitMap3D Item3D, byte Team)
+        public Flag(DeathmatchMap Map, FlagSpawner Owner, Texture2D sprFlag, UnitMap3D Item3D)
             : base("Flag")
         {
             this.Map = Map;
             this.Owner = Owner;
             this.sprFlag = sprFlag;
             this.Item3D = Item3D;
-            this.Team = Team;
         }
 
         public override void OnPickedUp(UnitMapComponent ActiveUnit)
         {
             IsDropped = false;
+            Owner.ReturnFlag();
         }
 
         public override void OnDroped(UnitMapComponent ActiveUnit)
         {
             TurnUsed = Map.ActivePlayerIndex;
             TurnRemaining = TurnsBeforeReturn;
+            IsDropped = true;
         }
 
         public override List<ActionPanel> OnUnitBeforeStop(Squad ActiveSquad)
@@ -107,20 +107,34 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListPanel;
         }
 
-        public override void OnMovedOverBeforeStop(Squad SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn)
+        public override void OnMovedOverBeforeStop(Squad SelectedSquad, Vector3 PositionMovedOn, Vector3 PositionStoppedOn)
         {
             if (IsDropped && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
             {
-                SelectedUnit.PickupItem(this);
+                if (Map.ListPlayer[Map.ActivePlayerIndex].Team == Owner.Team)
+                {
+                    Owner.ReturnFlag();
+                }
+                else
+                {
+                    SelectedSquad.PickupItem(this);
+                }
                 Map.LayerManager.ListLayer[(int)Position.Z].ListHoldableItem.Remove(this);
             }
         }
 
-        public override void OnUnitStop(Squad StoppedUnit)
+        public override void OnUnitStop(Squad StoppedSquad)
         {
-            if (IsDropped && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
+            if (IsDropped && StoppedSquad.X == Position.X && StoppedSquad.Y == Position.Y)
             {
-                StoppedUnit.PickupItem(this);
+                if (Map.ListPlayer[Map.ActivePlayerIndex].Team == Owner.Team)
+                {
+                    Owner.ReturnFlag();
+                }
+                else
+                {
+                    StoppedSquad.PickupItem(this);
+                }
                 Map.LayerManager.ListLayer[(int)Position.Z].ListHoldableItem.Remove(this);
             }
         }
