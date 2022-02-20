@@ -118,6 +118,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.GameRule.OnNewTurn(Map.ActivePlayerIndex);
 
+                UpdateProps(Map, Map.ActivePlayerIndex);
                 UpdateDelayedAttacks(Map, Map.ActivePlayerIndex);
                 UpdatePERAttacks(Map, Map.ActivePlayerIndex);
                 UpdateSquadMovement(Map, Map.ActivePlayerIndex);
@@ -141,6 +142,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int S = 0; S < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; S++)
             {
                 Squad ActiveSquad = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[S];
+
+                if (ActiveSquad.ItemHeld != null)
+                {
+                    ActiveSquad.ItemHeld.OnTurnEnd(ActiveSquad, Map.ActivePlayerIndex);
+                }
 
                 for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
                 {
@@ -211,6 +217,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAutoMove(Map));
                     return;
+                }
+            }
+        }
+
+        public static void UpdateProps(DeathmatchMap Map, int ActivePlayerIndex)
+        {
+            foreach (MapLayer ActiveLayer in Map.LayerManager.ListLayer)
+            {
+                foreach (InteractiveProp ActiveProp in ActiveLayer.ListProp)
+                {
+                    ActiveProp.OnTurnEnd(ActivePlayerIndex);
+                }
+            }
+        }
+
+        public static void UpdateHoldableItems(DeathmatchMap Map, int ActivePlayerIndex)
+        {
+            foreach (MapLayer ActiveLayer in Map.LayerManager.ListLayer)
+            {
+                foreach (HoldableItem ActiveProp in ActiveLayer.ListHoldableItem)
+                {
+                    ActiveProp.OnTurnEnd(null, ActivePlayerIndex);
                 }
             }
         }

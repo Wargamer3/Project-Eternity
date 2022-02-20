@@ -669,7 +669,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Owner.ListProp[P].Position.X + 0.5f,
                     Owner.ListProp[P].Position.Z * 32 + TerrainZ * 32,
                     Owner.ListProp[P].Position.Y + 0.5f);
+            }
 
+            for (int P = 0; P < Owner.ListProp.Count; ++P)
+            {
                 Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice);
             }
 
@@ -682,8 +685,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Owner.ListAttackPickup[P].Position.X + 0.5f,
                     Owner.ListAttackPickup[P].Position.Z * 32 + TerrainZ * 32,
                     Owner.ListAttackPickup[P].Position.Y + 0.5f);
+            }
 
+            for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
+            {
                 Owner.ListAttackPickup[P].Attack3D.Draw(GameScreen.GraphicsDevice);
+            }
+
+            for (int I = 0; I < Owner.ListHoldableItem.Count; ++I)
+            {
+                Owner.ListHoldableItem[I].Item3D.SetViewMatrix(Camera.View);
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListHoldableItem[I].Position.X, (int)Owner.ListHoldableItem[I].Position.Y].Position.Z;
+
+                Owner.ListHoldableItem[I].Item3D.SetPosition(
+                    Owner.ListHoldableItem[I].Position.X + 0.5f,
+                    Owner.ListHoldableItem[I].Position.Z * 32 + TerrainZ * 32,
+                    Owner.ListHoldableItem[I].Position.Y + 0.5f);
+            }
+
+            for (int I = 0; I < Owner.ListHoldableItem.Count; ++I)
+            {
+                Owner.ListHoldableItem[I].Item3D.Draw(GameScreen.GraphicsDevice);
             }
         }
 

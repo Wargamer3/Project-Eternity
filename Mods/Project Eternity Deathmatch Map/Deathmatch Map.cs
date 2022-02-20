@@ -1110,6 +1110,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ActiveSquad.CurrentLeader.AddTemporaryAttack(ActiveAttack, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                     }
                 }
+
+                for (int I = ActiveLayer.ListHoldableItem.Count - 1; I >= 0; I--)
+                {
+                    HoldableItem ActiveItem = ActiveLayer.ListHoldableItem[I];
+                    foreach (Vector3 MovedOverPoint in ListMVHoverPoints)
+                    {
+                        ActiveItem.OnMovedOverBeforeStop(ActiveSquad, MovedOverPoint, ActiveSquad.Position);
+                    }
+
+                    ActiveItem.OnUnitStop(ActiveSquad);
+                }
             }
 
             ActivateAutomaticSkills(ActiveSquad, ActiveSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName, ActiveSquad, ActiveSquad.CurrentLeader);
