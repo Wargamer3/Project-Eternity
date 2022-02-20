@@ -80,6 +80,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (TimeElapsed < AnimationLengthInSeconds)
             {
+                if (ListSquadAutoMovement.Count > 0)
+                {
+                    Map.CursorPosition = ListSquadAutoMovement[0].StartPosition;
+                    Map.CursorPositionVisible = Map.CursorPosition;
+                }
+
                 float FrameProgress = (float)(gameTime.ElapsedGameTime.TotalSeconds / AnimationLengthInSeconds);
 
                 for (int S = LastSquadIndex - 1; S >= 0; --S)
