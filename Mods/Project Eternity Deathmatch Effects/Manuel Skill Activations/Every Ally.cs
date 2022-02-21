@@ -1,4 +1,5 @@
-﻿using ProjectEternity.GameScreens.DeathmatchMapScreen;
+﻿using ProjectEternity.Core.Effects;
+using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.Core.Skill
 {
@@ -58,7 +59,7 @@ namespace ProjectEternity.Core.Skill
                         Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
                             Context.Map.ListPlayer[P].ListSquad[S], Context.Map.ListPlayer[P].ListSquad[S][U], Context.Map.ListPlayer[P].ListSquad[S][U].Pilot, Context.Map.ActiveParser);
 
-                        AddAndExecuteEffect(ActiveSkill, Context.Map.ListPlayer[P].ListSquad[S][U].Pilot.Effects);
+                        AddAndExecuteEffect(ActiveSkill, Context.Map.ListPlayer[P].ListSquad[S][U].Pilot.Effects, SkillEffect.LifetimeTypeTurns + Context.Map.ActivePlayerIndex);
                     }
                 }
             }

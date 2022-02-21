@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                                 ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
                                 Owner.SpawnSquad(PlayerIndex, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, ActiveLayer.ListMultiplayerSpawns[S].Position, L);
-                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.PilotSP = 0;
+                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.PilotSP = 100;
                                 ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.ConsumeEN(ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.MaxEN);
                                 ++SpawnSquadIndex;
 
@@ -135,10 +135,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public virtual void OnSquadDefeated(int AttackerSquadPlayerIndex, Squad AttackerSquad, int DefeatedSquadPlayerIndex, Squad DefeatedSquad)
         {
-            ++Owner.ListAllPlayer[AttackerSquadPlayerIndex].Kills;
+            if (AttackerSquadPlayerIndex != DefeatedSquadPlayerIndex)//Don't count suicides as kills
+            {
+                ++Owner.ListAllPlayer[AttackerSquadPlayerIndex].Kills;
+            }
+
             ++Owner.ListAllPlayer[DefeatedSquadPlayerIndex].Death;
-            AttackerSquad.CurrentLeader.RefillSP(5);
-            AttackerSquad.CurrentLeader.RefillEN(5);
+
+            AttackerSquad.At(0).RefillSP(5);
+            AttackerSquad.At(0).RefillEN(5);
+            AttackerSquad.At(0).RemoveEffects();
+
+            if (AttackerSquad == null)
+            {
+                return;
+            }
 
             if (DefeatedSquad.ItemHeld != null)
             {

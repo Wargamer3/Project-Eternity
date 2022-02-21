@@ -904,6 +904,15 @@ namespace ProjectEternity.Core.Units
             }
         }
 
+        public void RemoveEffects()
+        {
+            ResetBoosts();
+            for (int C = ArrayCharacterActive.Length - 1; C >= 0; --C)
+            {
+                ArrayCharacterActive[C].Effects.RemoveEffects();
+            }
+        }
+
         public void UpdateSkillsLifetime(string LifetimeType)
         {
             for (int C = ArrayCharacterActive.Length - 1; C >= 0; --C)

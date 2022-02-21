@@ -121,6 +121,11 @@ namespace ProjectEternity.Core.Item
             }
         }
 
+        public void RemoveEffects()
+        {
+            DicActiveEffect.Clear();
+        }
+
         public void UpdateAllEffectsLifetime(string LifetimeType)
         {
             foreach (KeyValuePair<string, List<BaseEffect>> ActiveListEffect in DicActiveEffect)

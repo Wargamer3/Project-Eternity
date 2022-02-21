@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.Core.Skill
 {
@@ -22,12 +23,18 @@ namespace ProjectEternity.Core.Skill
 
         public abstract bool CanActivateOnTarget(ManualSkill ActiveSkill);
 
-        public void AddAndExecuteEffect(ManualSkill ActiveSkill, EffectHolder Effects)
+        public void AddAndExecuteEffect(ManualSkill ActiveSkill, EffectHolder Effects, string LifetimeTurnValue)
         {
             for (int E = ActiveSkill.ListEffect.Count - 1; E >= 0; --E)
             {
-                //Init Skill.
-                Effects.AddAndExecuteEffect(ActiveSkill.ListEffect[E], ActiveSkill.Name);
+                string LifeType = "";
+
+                if (ActiveSkill.ListEffect[E].LifetimeType == SkillEffect.LifetimeTypeTurns)
+                {
+                    LifeType = LifetimeTurnValue;
+                }
+
+                Effects.AddAndExecuteEffect(ActiveSkill.ListEffect[E], ActiveSkill.Name, LifeType);
             }
         }
 

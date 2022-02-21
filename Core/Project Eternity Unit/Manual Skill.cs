@@ -53,7 +53,7 @@ namespace ProjectEternity.Core.Skill
             BR.Close();
         }
         
-        public void ActiveSkillFromMenu(Character ActiveCharacter, Squad ActiveSquad)
+        public void ActiveSkillFromMenu()
         {
             Target.ActivateSkillFromMenu(this);
         }

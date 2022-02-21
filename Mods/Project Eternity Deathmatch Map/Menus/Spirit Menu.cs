@@ -283,7 +283,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ManualSkill SpiritToActivate = PilotSpiritActivation[U][C][S];
 
                             //Consume SP and activate skills.
-                            SpiritToActivate.ActiveSkillFromMenu(ActiveSquad[U].ArrayCharacterActive[C], ActiveSquad);
+                            SpiritToActivate.ActiveSkillFromMenu();
                             //Update skills activation to disable those who can't be used anymore.
                             SpiritToActivate.UpdateSkillActivation();
 

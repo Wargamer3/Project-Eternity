@@ -78,7 +78,7 @@ namespace ProjectEternity.Core.Skill
                 Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
                     TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Context.Map.ActiveParser);
 
-                Owner.AddAndExecuteEffect(ActiveSkill, Context.EffectTargetCharacter.Effects);
+                Owner.AddAndExecuteEffect(ActiveSkill, Context.EffectTargetCharacter.Effects, SkillEffect.LifetimeTypeTurns + Context.Map.ActivePlayerIndex);
                 Context.EffectTargetUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
                 SkillPilot.SP -= ActiveSkill.SPCost;
 
