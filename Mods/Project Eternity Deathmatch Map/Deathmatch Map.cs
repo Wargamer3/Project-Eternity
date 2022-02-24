@@ -961,6 +961,36 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return MovementChoice;
         }
 
+        public List<MovementAlgorithmTile> GetMVChoicesTowardPoint(Squad ActiveSquad, Vector3 Destination)
+        {
+            int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
+
+            StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
+
+            //Init A star.
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV, Destination);
+
+            List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
+
+            for (int i = 0; i < ListAllNode.Count; i++)
+            {
+                ListAllNode[i].ParentTemp = null;//Unset parents
+                ListAllNode[i].MovementCost = 0;
+                bool UnitFound = false;
+                for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
+                {
+                    int SquadIndex = CheckForSquadAtPosition(P, new Vector3(ListAllNode[i].Position.X, ListAllNode[i].Position.Y, ListAllNode[i].LayerIndex), Vector3.Zero);
+                    if (SquadIndex >= 0)
+                        UnitFound = true;
+                }
+                //If there is no Unit.
+                if (!UnitFound)
+                    MovementChoice.Add(ListAllNode[i]);
+            }
+
+            return MovementChoice;
+        }
+
         public override int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<int> ListLayerPossibility)
         {
             ListLayerPossibility = new List<int>();

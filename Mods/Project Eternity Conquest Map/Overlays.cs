@@ -136,5 +136,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             return FogOfWarMap[(int)PosX, (int)PosY];
         }
+
+        public override bool IsBlocked(MovementAlgorithmTile CurrentNode)
+        {
+            return false;
+        }
     }
 }

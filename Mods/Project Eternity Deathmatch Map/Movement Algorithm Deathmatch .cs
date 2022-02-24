@@ -107,5 +107,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             return Map.GetTerrain(PosX, PosY, LayerIndex);
         }
+
+        public override bool IsBlocked(MovementAlgorithmTile CurrentNode)
+        {
+            for (int P = 0; P < Map.ListPlayer.Count; P++)
+            {
+                int SquadIndex = Map.CheckForSquadAtPosition(P, new Vector3(CurrentNode.Position.X, CurrentNode.Position.Y, CurrentNode.LayerIndex), Vector3.Zero);
+                if (SquadIndex >= 0)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

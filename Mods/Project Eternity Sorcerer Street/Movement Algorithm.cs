@@ -57,5 +57,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             return Map.ListLayer[LayerIndex].ArrayTerrain[(int)PosX, (int)PosY];
         }
+
+        public override bool IsBlocked(MovementAlgorithmTile CurrentNode)
+        {
+            return false;
+        }
     }
 }

@@ -47,5 +47,10 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         {
             return Map.ListLayer[LayerIndex].ArrayTerrain[(int)PosX, (int)PosY];
         }
+
+        public override bool IsBlocked(MovementAlgorithmTile CurrentNode)
+        {
+            return false;
+        }
     }
 }
