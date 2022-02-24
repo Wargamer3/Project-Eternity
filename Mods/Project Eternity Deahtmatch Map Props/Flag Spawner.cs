@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private string _SpritePath;
         private byte _Team;
 
-        private bool IsUsed;
+        public bool IsUsed;
 
         public FlagSpawner(DeathmatchMap Map)
             : base("Flag", PropCategories.Interactive, new bool[,] { { true } }, false)

@@ -70,6 +70,7 @@
     <Compile Include="References\Get Map Variable.cs" />
     <Compile Include="References\Get Nearby Allies.cs" />
     <Compile Include="References\Get Nearby Enemies.cs" />
+    <Compile Include="References\CTF Check Flag Status.cs" />
     <Compile Include="References\Get Self.cs" />
     <Compile Include="References\Get Targets.cs" />
     <Compile Include="References\Get Targets By Name.cs" />
@@ -130,6 +131,11 @@
     <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
       <Project>{d6fc98bd-a6ee-4223-b995-65299d714a4c}</Project>
       <Name>Project Eternity Battle Map</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Deahtmatch Map Props\Project Eternity Deahtmatch Map Props.csproj">
+      <Project>{b5b74445-13bd-4dee-927a-b8006bc51769}</Project>
+      <Name>Project Eternity Deahtmatch Map Props</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Deathmatch Map\Project Eternity Deathmatch Map.csproj">

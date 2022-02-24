@@ -9,7 +9,7 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    class Flag : HoldableItem
+    public class Flag : HoldableItem
     {
         public class DropFlagActionPanel : ActionPanelDeathmatch
         {
