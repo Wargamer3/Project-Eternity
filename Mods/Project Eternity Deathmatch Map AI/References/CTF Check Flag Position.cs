@@ -8,18 +8,16 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 {
     public sealed partial class DeathmatchScriptHolder
     {
-        public class CTFGetFlagStatus : DeathmatchScript, ScriptReference
+        public class CTFGetFlagPosition : DeathmatchScript, ScriptReference
         {
             public enum FlagTeams { Self, Enemy }
-            public enum FlagStatuses { AtBase, Captured, CapturedBySelf, Dropped }
 
             private FlagTeams _FlagTeam;
-            private FlagStatuses _FlagStatus;
 
             private FlagSpawner FlagSpawnerCache;
 
-            public CTFGetFlagStatus()
-                : base(100, 50, "CTF - Get Flag Status", new string[0], new string[0])
+            public CTFGetFlagPosition()
+                : base(100, 50, "CTF - Get Flag Position", new string[0], new string[0])
             {
             }
 
@@ -30,24 +28,21 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     FlagSpawnerCache = GetFlagSpawner();
                 }
 
-                if (FlagStatus == FlagStatuses.AtBase)
+                if (FlagSpawnerCache.IsUsed)
                 {
-                    return !FlagSpawnerCache.IsUsed;
-                }
-                else if (FlagStatus == FlagStatuses.Captured)
-                {
-                    return FlagSpawnerCache.IsUsed;
-                }
-                else if (FlagStatus == FlagStatuses.Dropped)
-                {
+
                     Flag DroppedFlag = GetFlag();
                     if (DroppedFlag != null)
                     {
-                        return true;
+                        return DroppedFlag.Position;
                     }
                 }
+                else
+                {
+                    return FlagSpawnerCache.Position;
+                }
 
-                return false;
+                return Info.ActiveSquad.Position;
             }
 
             public override void Load(BinaryReader BR)
@@ -55,7 +50,6 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 base.Load(BR);
 
                 _FlagTeam = (FlagTeams)BR.ReadByte();
-                _FlagStatus = (FlagStatuses)BR.ReadByte();
             }
 
             public override void Save(BinaryWriter BW)
@@ -63,7 +57,6 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 base.Save(BW);
 
                 BW.Write((byte)_FlagTeam);
-                BW.Write((byte)_FlagStatus);
             }
 
             private FlagSpawner GetFlagSpawner()
@@ -120,7 +113,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             public override AIScript CopyScript()
             {
-                return new CTFGetFlagStatus();
+                return new CTFGetFlagPosition();
             }
 
             [CategoryAttribute("Script Attributes"),
@@ -135,21 +128,6 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 set
                 {
                     _FlagTeam = value;
-                }
-            }
-
-            [CategoryAttribute("Script Attributes"),
-            DescriptionAttribute(""),
-            DefaultValueAttribute("")]
-            public FlagStatuses FlagStatus
-            {
-                get
-                {
-                    return _FlagStatus;
-                }
-                set
-                {
-                    _FlagStatus = value;
                 }
             }
         }

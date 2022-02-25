@@ -91,6 +91,7 @@
     <Compile Include="Acion Panels\Map Switch Menu.cs" />
     <Compile Include="Acion Panels\Attack\Charge Attack.cs" />
     <Compile Include="Acion Panels\Hub Menu.cs" />
+    <Compile Include="Acion Panels\Movement\AI Move.cs" />
     <Compile Include="Acion Panels\Movement\Fall To Death.cs" />
     <Compile Include="Acion Panels\Movement\Board.cs" />
     <Compile Include="Acion Panels\Movement\Deploy.cs" />

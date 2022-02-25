@@ -880,6 +880,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveSquad.CurrentMovement == UnitStats.TerrainAir)
             {
                 int StartingMV = Math.Min(ActiveSquad.CurrentLeader.MaxMovement, ActiveSquad.CurrentLeader.EN);//Maximum distance you can reach.
+                StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
 
                 if (ActiveSquad.CurrentWingmanA != null)
                 {
@@ -896,6 +897,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else
             {
                 int StartingMV = ActiveSquad.CurrentLeader.MaxMovement;//Maximum distance you can reach.
+                StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
+
                 if (ActiveSquad.CurrentWingmanA != null)
                 {
                     StartingMV += ActiveSquad.CurrentWingmanA.MaxMovement;
@@ -935,8 +938,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
-            StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
-
             //Init A star.
             List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV);
 
@@ -964,8 +965,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public List<MovementAlgorithmTile> GetMVChoicesTowardPoint(Squad ActiveSquad, Vector3 Destination)
         {
             int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
-
-            StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
 
             //Init A star.
             List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV, Destination);

@@ -134,8 +134,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int MaxMV = Map.GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
-            MaxMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
-
             MovementAlgorithmTile LastTerrin = Map.GetTerrain(ActiveSquad);
             float CurrentMVCost = 0;
             for (int T = 1; T < ListMovedOverTerrain.Count; T++)

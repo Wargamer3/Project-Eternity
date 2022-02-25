@@ -64,6 +64,9 @@
     <Compile Include="Deathmatch AI Script Holder.cs" />
     <Compile Include="Evaluators\Change AI.cs" />
     <Compile Include="Evaluators\End Squad Turn.cs" />
+    <Compile Include="Evaluators\Move Toward Point.cs" />
+    <Compile Include="References\Check Nearest Weapon Position.cs" />
+    <Compile Include="References\CTF Check Flag Position.cs" />
     <Compile Include="References\Get Attacks Ordered By Power.cs" />
     <Compile Include="References\Get Enemies.cs" />
     <Compile Include="References\Get Enemies By Name.cs" />
@@ -126,6 +129,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
       <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
       <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Battle Map Props\Project Eternity Battle Map Props.csproj">
+      <Project>{fdc08c07-6562-4922-afec-7f2d4336fb0d}</Project>
+      <Name>Project Eternity Battle Map Props</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
