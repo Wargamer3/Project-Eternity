@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Attacks;
@@ -35,6 +36,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAttackTerrain = new List<MovementAlgorithmTile>();
         }
 
+        public ActionPanelAIAttackBehavior(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex)
+            : base(PanelName, Map)
+        {
+            this.ActivePlayerIndex = ActivePlayerIndex;
+            this.ActiveSquadIndex = ActiveSquadIndex;
+
+            ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            ListAttackTerrain = new List<MovementAlgorithmTile>();
+        }
+
         public ActionPanelAIAttackBehavior(DeathmatchMap Map,  int ActivePlayerIndex, int ActiveSquadIndex, Tuple<int, int> Target)
             : base(PanelName, Map)
         {
@@ -48,6 +59,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
+            if (Target == null)
+            {
+                SelectTargetAndAttack();
+            }
+
             TargetSquad = Map.ListPlayer[Target.Item1].ListSquad[Target.Item2];
             Map.TargetPlayerIndex = Target.Item1;
 
@@ -143,6 +159,45 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         Target.Item1, Target.Item2, TargetSquadSupport);
                 }
                 AITimer = AITimerBase;
+            }
+        }
+
+        private void SelectTargetAndAttack()
+        {
+            Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, false);
+            IEnumerable<Attack> ListAttackOrderedByPower = ActiveSquad.CurrentLeader.ListAttack.OrderByDescending(Attack => Attack.GetPower(ActiveSquad.CurrentLeader, Map.ActiveParser));
+            foreach (Attack ActiveAttack in ListAttackOrderedByPower)
+            {
+                ActiveSquad.CurrentLeader.CurrentAttack = ActiveAttack;
+                List<Tuple<int, int>> ListTargetUnit = new List<Tuple<int, int>>();
+
+                for (int P = 0; P < Map.ListPlayer.Count; P++)
+                {
+                    if (Map.ListPlayer[P].Team == Map.ListPlayer[ActivePlayerIndex].Team)//Don't check your team.
+                        continue;
+
+                    for (int U = 0; U < Map.ListPlayer[P].ListSquad.Count; U++)
+                    {
+                        if (Map.ListPlayer[P].ListSquad[U].CurrentLeader == null)
+                            continue;
+
+                        ActiveSquad.CurrentLeader.UpdateAllAttacks(ActiveSquad.Position, Map.ListPlayer[P].ListSquad[U].Position,
+                                Map.ListPlayer[P].ListSquad[U].ArrayMapSize, Map.ListPlayer[P].ListSquad[U].CurrentMovement, false);
+
+                        if (ActiveAttack.CanAttack)
+                        {
+                            ListTargetUnit.Add(new Tuple<int, int>(P, U)); ;
+                        }
+                    }
+                }
+
+                //Priority goes to units with higher chances of hitting.
+                IOrderedEnumerable<Tuple<int, int>> ListHitRate = ListTargetUnit.OrderByDescending(Target =>
+                    Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveAttack, ActiveSquad,
+                    Map.ListPlayer[Target.Item1].ListSquad[Target.Item2].CurrentLeader, Map.ListPlayer[Target.Item1].ListSquad[Target.Item2],
+                    Unit.BattleDefenseChoices.Attack));
+
+                this.Target = ListHitRate.First();
             }
         }
 

@@ -11,12 +11,12 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 {
     public sealed partial class DeathmatchScriptHolder
     {
-        public class MoveTowardPoint : DeathmatchScript, ScriptEvaluator
+        public class IsCloseToPoint : DeathmatchScript, ScriptEvaluator
         {
-            private bool _AttackAfterMove;
+            private float _MaxDistance;
 
-            public MoveTowardPoint()
-                : base(150, 50, "Move Toward Point", new string[0], new string[1] { "Point" })
+            public IsCloseToPoint()
+                : base(150, 50, "Is Close To Point", new string[2] { "Condition is true", "Condition is false" }, new string[1] { "Point" })
             {
             }
 
@@ -26,24 +26,6 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 List<MovementAlgorithmTile> ListMovement = Info.Map.GetMVChoicesTowardPoint(Info.ActiveSquad, Target);
                 List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
 
-                if (_AttackAfterMove)
-                {
-                    Info.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAIMoveBehavior(
-                        Info.Map,
-                        Info.Map.ActivePlayerIndex,
-                        Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].ListSquad.IndexOf(Info.ActiveSquad),
-                        ListMovement, ListMVChoice,
-                        new ActionPanelAIAttackBehavior(Info.Map, Info.Map.ActivePlayerIndex, Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].ListSquad.IndexOf(Info.ActiveSquad))));
-                }
-                else
-                {
-                    Info.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAIMoveBehavior(
-                        Info.Map,
-                        Info.Map.ActivePlayerIndex,
-                        Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].ListSquad.IndexOf(Info.ActiveSquad),
-                        ListMovement, ListMVChoice));
-                }
-
                 IsCompleted = false;
                 Result = new List<object>() { "break" };
             }
@@ -52,33 +34,33 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             {
                 base.Load(BR);
 
-                _AttackAfterMove = BR.ReadBoolean();
+                _MaxDistance = BR.ReadSingle();
             }
 
             public override void Save(BinaryWriter BW)
             {
                 base.Save(BW);
 
-                BW.Write(_AttackAfterMove);
+                BW.Write(_MaxDistance);
             }
 
             public override AIScript CopyScript()
             {
-                return new MoveTowardPoint();
+                return new IsCloseToPoint();
             }
 
             [CategoryAttribute("Script Attributes"),
             DescriptionAttribute(""),
             DefaultValueAttribute("")]
-            public bool AttackAfterMove
+            public float MaxDistance
             {
                 get
                 {
-                    return _AttackAfterMove;
+                    return _MaxDistance;
                 }
                 set
                 {
-                    _AttackAfterMove = value;
+                    _MaxDistance = value;
                 }
             }
         }

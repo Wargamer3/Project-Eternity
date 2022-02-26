@@ -64,6 +64,7 @@
     <Compile Include="Deathmatch AI Script Holder.cs" />
     <Compile Include="Evaluators\Change AI.cs" />
     <Compile Include="Evaluators\End Squad Turn.cs" />
+    <Compile Include="Evaluators\Is Close To Point.cs" />
     <Compile Include="Evaluators\Move Toward Point.cs" />
     <Compile Include="References\Check Nearest Weapon Position.cs" />
     <Compile Include="References\CTF Check Flag Position.cs" />

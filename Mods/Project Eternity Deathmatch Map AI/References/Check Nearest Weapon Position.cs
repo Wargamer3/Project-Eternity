@@ -3,8 +3,8 @@ using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Attacks;
-using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.AI.DeathmatchMapScreen
 {
@@ -17,7 +17,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             private FlagTeams _FlagTeam;
 
             public GetNearestWeaponPosition()
-                : base(100, 50, "CTF - Get Flag Position", new string[0], new string[0])
+                : base(100, 50, "Check Nearest Weapon Position", new string[0], new string[0])
             {
             }
 

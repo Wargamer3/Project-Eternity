@@ -293,7 +293,7 @@ namespace ProjectEternity.Core.AI
         {
             private Operators.LogicOperators _LogicOperator;
 
-            public bool CompareValue(Operators.LogicOperators Operator, double Value1, double Value2)
+            public static bool CompareValue(Operators.LogicOperators Operator, double Value1, double Value2)
             {
                 switch (Operator)
                 {
@@ -456,6 +456,56 @@ namespace ProjectEternity.Core.AI
             public override AIScript CopyScript()
             {
                 return new If();
+            }
+        }
+
+        public class IfEqual : AIScript, ScriptEvaluator
+        {
+            public IfEqual()
+                : base(120, 50, "If Equals", new string[2] { "Condition is true", "Condition is false" }, new string[2] { "Value 1", "Value 2" })
+            {
+            }
+
+            public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
+            {
+                bool IsEverythingCompleted = true;
+
+                object Value1 = ArrayReferences[0].ReferencedScript.GetContent();
+                object Value2 = ArrayReferences[1].ReferencedScript.GetContent();
+
+                if (Value1 is string && Value2 is string)
+                {
+                    if (Value1.ToString() == Value2.ToString())
+                    {
+                        ExecuteFollowingScripts(0, gameTime, null, out IsCompleted, out Result);
+                        IsEverythingCompleted &= IsCompleted;
+                    }
+                    else
+                    {
+                        ExecuteFollowingScripts(1, gameTime, null, out IsCompleted, out Result);
+                        IsEverythingCompleted &= IsCompleted;
+                    }
+                }
+                else
+                {
+                    if (Operator.CompareValue(Operators.LogicOperators.Equal, (double)Value1, (double)Value2))
+                    {
+                        ExecuteFollowingScripts(0, gameTime, null, out IsCompleted, out Result);
+                        IsEverythingCompleted &= IsCompleted;
+                    }
+                    else
+                    {
+                        ExecuteFollowingScripts(1, gameTime, null, out IsCompleted, out Result);
+                        IsEverythingCompleted &= IsCompleted;
+                    }
+                }
+
+                IsCompleted = IsEverythingCompleted;
+            }
+
+            public override AIScript CopyScript()
+            {
+                return new IfEqual();
             }
         }
 
@@ -717,6 +767,184 @@ namespace ProjectEternity.Core.AI
                 set
                 {
                     _MaxValue = value;
+                }
+            }
+        }
+
+        public class SetRandomValueToContent : AIScript, ScriptEvaluator
+        {
+            private double _MinValue;
+            private double _MaxValue;
+            private bool _UseDecimals;
+
+            public SetRandomValueToContent()
+                : base(150, 50, "Set Random Value To Content", new string[1] { "Received Object" }, new string[0])
+            {
+            }
+
+            public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
+            {
+                if (_UseDecimals)
+                {
+                    double Difference = _MaxValue - _MinValue;
+
+                    double NewValue = _MinValue + RandomHelper.Random.NextDouble() * Difference;
+                    ExecuteFollowingScripts(0, gameTime, NewValue, out IsCompleted, out Result);
+                }
+                else
+                {
+                    int Difference = (int)_MaxValue - (int)_MinValue;
+
+                    int DiceRollValue = (int)_MinValue + RandomHelper.Next(Difference);
+                    ExecuteFollowingScripts(0, gameTime, DiceRollValue, out IsCompleted, out Result);
+
+                }
+
+                IsCompleted = true;
+            }
+
+            public override void Load(BinaryReader BR)
+            {
+                base.Load(BR);
+
+                _UseDecimals = BR.ReadBoolean();
+                _MinValue = BR.ReadDouble();
+                _MaxValue = BR.ReadDouble();
+            }
+
+            public override void Save(BinaryWriter BW)
+            {
+                base.Save(BW);
+
+                BW.Write(_UseDecimals);
+                BW.Write(_MinValue);
+                BW.Write(_MaxValue);
+            }
+
+            public override AIScript CopyScript()
+            {
+                return new SetRandomValueToContent();
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute("")]
+            public bool UseDecimals
+            {
+                get
+                {
+                    return _UseDecimals;
+                }
+                set
+                {
+                    _UseDecimals = value;
+                }
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute("")]
+            public double MinValue
+            {
+                get
+                {
+                    return _MinValue;
+                }
+                set
+                {
+                    _MinValue = value;
+                }
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute("")]
+            public double MaxValue
+            {
+                get
+                {
+                    return _MaxValue;
+                }
+                set
+                {
+                    _MaxValue = value;
+                }
+            }
+        }
+
+        public class DiceRoll : AIScript, ScriptEvaluator
+        {
+            private int _ExpectedMinValue;
+            private int _DiceMaxValue;
+
+            public DiceRoll()
+                : base(150, 50, "Dice Roll", new string[2] { "Condition is true", "Condition is false" }, new string[0])
+            {
+            }
+
+            public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
+            {
+                int DiceRollValue = RandomHelper.Next(_DiceMaxValue);
+
+                bool IsEverythingCompleted = true;
+
+                if (DiceRollValue >= _ExpectedMinValue)
+                {
+                    ExecuteFollowingScripts(0, gameTime, null, out IsCompleted, out Result);
+                    IsEverythingCompleted &= IsCompleted;
+                }
+                else
+                {
+                    ExecuteFollowingScripts(1, gameTime, null, out IsCompleted, out Result);
+                    IsEverythingCompleted &= IsCompleted;
+                }
+
+                IsCompleted = IsEverythingCompleted;
+                IsCompleted = true;
+            }
+
+            public override void Load(BinaryReader BR)
+            {
+                base.Load(BR);
+
+                _ExpectedMinValue = BR.ReadInt32();
+                _DiceMaxValue = BR.ReadInt32();
+            }
+
+            public override void Save(BinaryWriter BW)
+            {
+                base.Save(BW);
+                BW.Write(_ExpectedMinValue);
+                BW.Write(_DiceMaxValue);
+            }
+
+            public override AIScript CopyScript()
+            {
+                return new DiceRoll();
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute("")]
+            public int ExpectedMinValue
+            {
+                get
+                {
+                    return _ExpectedMinValue;
+                }
+                set
+                {
+                    _ExpectedMinValue = value;
+                }
+            }
+
+            [CategoryAttribute("Script Attributes"),
+            DescriptionAttribute("")]
+            public int DiceMaxValue
+            {
+                get
+                {
+                    return _DiceMaxValue;
+                }
+                set
+                {
+                    _DiceMaxValue = value;
                 }
             }
         }
