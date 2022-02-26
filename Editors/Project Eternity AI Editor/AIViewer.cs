@@ -620,7 +620,8 @@ namespace ProjectEternity.Editors.AIEditor
         private void panDrawingSurface_MouseDown(object sender, MouseEventArgs e)
         {
             Rectangle MouseRec = new Rectangle(e.X + ScriptStartingPos.X, e.Y + ScriptStartingPos.Y, 1, 1);
-            MousePosOld = e.Location;
+            MousePosOld.X = MouseRec.X;
+            MousePosOld.Y = MouseRec.Y;
 
             for (int S = AI.ListScript.Count - 1; S >= 0; --S)
             {

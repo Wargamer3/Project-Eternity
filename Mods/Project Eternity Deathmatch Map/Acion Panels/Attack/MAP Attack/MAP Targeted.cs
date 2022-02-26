@@ -47,13 +47,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
-            BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
+            BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack);
         }
 
         public override void OnSelect()
         {
             ListAttackChoice = Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);
-            ListMAPAttackTarget = Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.FriendlyFire, ListAttackChoice);
+            ListMAPAttackTarget = Map.GetEnemies(CurrentAttack.MAPAttributes.FriendlyFire, ListAttackChoice);
 
             ListAttackTerrain = new List<MovementAlgorithmTile>();
             foreach (Vector3 ActiveTerrain in ListAttackChoice)

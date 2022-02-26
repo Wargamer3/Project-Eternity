@@ -69,6 +69,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Gametype GametypeAssault = new Gametype("Assault", "Team deathmatch with limited respawns.", null);
             Gametype GametypeConquest = new Gametype("Conquest", "Teams must fight to capture respawn bases that give them points. The starting base may or may not be capturable.", null);
             Gametype GametypeOnslaught = new Gametype("Onslaught", "Teams must fight to capture respawn bases that give them access to the enemy base's core. Last team with a core win.", null);
+            Gametype GametypeTitan = new Gametype("Titan", "Both teams have a flying base protected by a shield. Capture missile silos to bring the shield down. Destroy the core to win.", null);
+            Gametype GametypeBaseAssault = new Gametype("Base Assault", "Each team has 3 bases to attack and defend. After destroying the walls with artillery you can plant a bomb to completely destroy it.", null);
             Gametype GametypeKingOfTheHill = new Gametype("King Of The Hill", "Hold a position without enemies to win points.", null);
             Gametype GametypeBunny = new Gametype("Bunny", "Unit that holds the flag become the bunny and gets points for kills, everyone else try to kill the bunny.", null);
             Gametype GametypeFreezeTag = new Gametype("Freeze Tag", "Killing an enemy freeze him, when every enemies are frozen you win. Teamates can unfreeze allie by staying next to them for 2 turns.", null);
