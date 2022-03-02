@@ -23,8 +23,20 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
                 Vector3 Target = (Vector3)ArrayReferences[0].ReferencedScript.GetContent();
-                List<MovementAlgorithmTile> ListMovement = Info.Map.GetMVChoicesTowardPoint(Info.ActiveSquad, Target);
+                List<MovementAlgorithmTile> ListMovement = Info.Map.GetMVChoicesTowardPoint(Info.ActiveSquad, Target, true);
                 List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+
+                bool IsEverythingCompleted = true;
+                if (ListMovement.Count > 0 && ListMovement.Count < _MaxDistance)
+                {
+                    ExecuteFollowingScripts(0, gameTime, null, out IsCompleted, out Result);
+                    IsEverythingCompleted &= IsCompleted;
+                }
+                else
+                {
+                    ExecuteFollowingScripts(1, gameTime, null, out IsCompleted, out Result);
+                    IsEverythingCompleted &= IsCompleted;
+                }
 
                 IsCompleted = false;
                 Result = new List<object>() { "break" };

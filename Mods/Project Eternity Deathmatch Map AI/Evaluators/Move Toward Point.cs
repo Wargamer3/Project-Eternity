@@ -23,7 +23,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
                 Vector3 Target = (Vector3)ArrayReferences[0].ReferencedScript.GetContent();
-                List<MovementAlgorithmTile> ListMovement = Info.Map.GetMVChoicesTowardPoint(Info.ActiveSquad, Target);
+                List<MovementAlgorithmTile> ListMovement = Info.Map.GetMVChoicesTowardPoint(Info.ActiveSquad, Target, false);
                 List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
 
                 if (_AttackAfterMove)

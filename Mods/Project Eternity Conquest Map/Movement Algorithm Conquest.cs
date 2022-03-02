@@ -14,7 +14,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             this.Map = Map;
         }
 
-        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile ActiveNode, float OffsetX, float OffsetY, int LayerIndex)
+        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile ActiveNode, float OffsetX, float OffsetY, int LayerIndex,
+            UnitMapComponent MapComponent, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<int> ListLayerPossibility;

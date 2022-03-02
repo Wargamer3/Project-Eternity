@@ -99,7 +99,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             this.FogOfWarMap = FogOfWarMap;
         }
 
-        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile ActiveNode, float OffsetX, float OffsetY, int LayerIndex)
+        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile ActiveNode, float OffsetX, float OffsetY, int LayerIndex,
+            UnitMapComponent MapComponent, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             MovementAlgorithmTile ActiveTile = GetTile(ActiveNode.Position.X + OffsetX, ActiveNode.Position.X + OffsetY, LayerIndex);

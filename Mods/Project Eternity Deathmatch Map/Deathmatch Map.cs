@@ -947,6 +947,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListAllNode[i].ParentTemp = null;//Unset parents
                 ListAllNode[i].MovementCost = 0;
+
+                if (ListAllNode[i].TerrainTypeIndex == UnitStats.TerrainWallIndex || ListAllNode[i].TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                {
+                    continue;
+                }
                 bool UnitFound = false;
                 for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
                 {
@@ -962,32 +967,82 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return MovementChoice;
         }
 
-        public List<MovementAlgorithmTile> GetMVChoicesTowardPoint(Squad ActiveSquad, Vector3 Destination)
+        public List<MovementAlgorithmTile> GetMVChoicesTowardPoint(Squad ActiveSquad, Vector3 Destination, bool IgnoreObstacles)
         {
-            int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
+            int MaxMovement = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV, Destination);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, MaxMovement, Destination, IgnoreObstacles);
 
-            List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
+            MovementAlgorithmTile ActiveNode = ListAllNode[ListAllNode.Count - 1];
 
-            for (int i = 0; i < ListAllNode.Count; i++)
+            if (Destination.X != ActiveNode.Position.X || Destination.Y != ActiveNode.Position.Y || Destination.Z != ActiveNode.LayerIndex)
+            {
+                bool EmptyNodeFound = false;
+                int Offset = 1;
+
+                while (!EmptyNodeFound && Offset < 5)
+                {
+                    for (int i = ListAllNode.Count - 1; i >= 0 && !EmptyNodeFound; i--)
+                    {
+                        for (int X = -Offset; X <= Offset && !EmptyNodeFound; ++X)
+                        {
+                            for (int Y = -Offset; Y <= Offset && !EmptyNodeFound; ++Y)
+                            {
+                                if (ListAllNode[i].Position.X == Destination.X + X && ListAllNode[i].Position.Y == Destination.Y + Y && ListAllNode[i].LayerIndex == Destination.Z)
+                                {
+                                    ActiveNode = ListAllNode[i];
+                                    EmptyNodeFound = true;
+                                }
+                            }
+                        }
+                    }
+
+                    ++Offset;
+                }
+
+                if (!EmptyNodeFound)
+                {
+                    for (int i = ListAllNode.Count - 1; i >= 0; i--)
+                    {
+                        ListAllNode[i].ParentTemp = null;//Unset parents
+                        ListAllNode[i].MovementCost = 0;
+                    }
+
+                    return ListAllNode;
+                }
+            }
+
+            List<MovementAlgorithmTile> ListPathNode = new List<MovementAlgorithmTile>();
+
+            while (ActiveNode != null)
+            {
+                if (ListPathNode.Contains(ActiveNode.ParentReal))
+                {
+                    break;
+                }
+                if (ActiveSquad.Position.X == ActiveNode.Position.X && ActiveSquad.Position.Y == ActiveNode.Position.Y && ActiveSquad.Position.Z == ActiveNode.LayerIndex)
+                {
+                    ListPathNode.Add(ActiveNode);
+                    break;
+                }
+                if (ActiveNode.MovementCost <= MaxMovement)
+                {
+                    ListPathNode.Add(ActiveNode);
+                }
+
+                ActiveNode = ActiveNode.ParentReal;
+            }
+
+            for (int i = ListAllNode.Count - 1; i >= 0; i--)
             {
                 ListAllNode[i].ParentTemp = null;//Unset parents
                 ListAllNode[i].MovementCost = 0;
-                bool UnitFound = false;
-                for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
-                {
-                    int SquadIndex = CheckForSquadAtPosition(P, new Vector3(ListAllNode[i].Position.X, ListAllNode[i].Position.Y, ListAllNode[i].LayerIndex), Vector3.Zero);
-                    if (SquadIndex >= 0)
-                        UnitFound = true;
-                }
-                //If there is no Unit.
-                if (!UnitFound)
-                    MovementChoice.Add(ListAllNode[i]);
             }
 
-            return MovementChoice;
+            ListPathNode.Reverse();
+
+            return ListPathNode;
         }
 
         public override int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<int> ListLayerPossibility)
