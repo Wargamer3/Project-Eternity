@@ -59,9 +59,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
+            Map.CursorPosition = ActiveSquad.Position;
+            Map.CursorPositionVisible = Map.CursorPosition;
+
             if (Target == null)
             {
                 SelectTargetAndAttack();
+                return;
             }
 
             TargetSquad = Map.ListPlayer[Target.Item1].ListSquad[Target.Item2];
@@ -190,15 +194,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
                 }
+                if (ListTargetUnit.Count > 0)
+                {
+                    //Priority goes to units with higher chances of hitting.
+                    IOrderedEnumerable<Tuple<int, int>> ListHitRate = ListTargetUnit.OrderByDescending(Target =>
+                        Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveAttack, ActiveSquad,
+                        Map.ListPlayer[Target.Item1].ListSquad[Target.Item2].CurrentLeader, Map.ListPlayer[Target.Item1].ListSquad[Target.Item2],
+                        Unit.BattleDefenseChoices.Attack));
 
-                //Priority goes to units with higher chances of hitting.
-                IOrderedEnumerable<Tuple<int, int>> ListHitRate = ListTargetUnit.OrderByDescending(Target =>
-                    Map.CalculateHitRate(ActiveSquad.CurrentLeader, ActiveAttack, ActiveSquad,
-                    Map.ListPlayer[Target.Item1].ListSquad[Target.Item2].CurrentLeader, Map.ListPlayer[Target.Item1].ListSquad[Target.Item2],
-                    Unit.BattleDefenseChoices.Attack));
-
-                this.Target = ListHitRate.First();
+                    this.Target = ListHitRate.First();
+                }
+                else
+                {
+                    RemoveFromPanelList(this);
+                    return;
+                }
             }
+
+            TargetSquad = Map.ListPlayer[Target.Item1].ListSquad[Target.Item2];
+            Map.TargetPlayerIndex = Target.Item1;
+
+            AITimer = AITimerBase;
+            PrepareToAttack();
+
+            ActiveSquadSupport = new SupportSquadHolder();
+            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, Target.Item1, Target.Item2);
+            TargetSquadSupport = new SupportSquadHolder();
+            TargetSquadSupport.PrepareDefenceSupport(Map, Target.Item1, TargetSquad);
         }
 
         public override void DoRead(ByteReader BR)
@@ -254,9 +276,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.BattleMenuStage = DeathmatchMap.BattleMenuStages.Default;
 
             //Prepare the Cursor to move.
-            Map.CursorPosition.X = ActiveSquad.X;
-            Map.CursorPosition.Y = ActiveSquad.Y;
-            Map.CursorPositionVisible = Map.CursorPosition;
             AICursorNextPosition.X = TargetSquad.X;
             AICursorNextPosition.Y = TargetSquad.Y;
             Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);

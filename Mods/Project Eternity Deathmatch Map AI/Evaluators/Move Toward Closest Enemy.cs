@@ -19,6 +19,9 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
+                Info.Map.CursorPosition = Info.ActiveSquad.Position;
+                Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
+
                 Squad TargetSquad = null;
                 //Movement initialisation.
                 Vector3 StartPosition = Info.ActiveSquad.Position;

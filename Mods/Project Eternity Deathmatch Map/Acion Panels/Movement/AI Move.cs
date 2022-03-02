@@ -44,14 +44,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ListMVChoice = ListMVChoice;
             this.NextPanel = NextPanel;
 
-            AICursorNextPosition = ListMVChoice[ListMVChoice.Count - 1].Position;
+            AICursorNextPosition = ListMovement[ListMovement.Count - 1].Position;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             Map.CursorPosition = ActiveSquad.Position;
+            Map.CursorPositionVisible = Map.CursorPosition;
 
+            ListMVHoverPoints = new List<Vector3>();
             foreach (MovementAlgorithmTile ActiveTile in ListMovement)
             {
-                ListMVHoverPoints.Add(ActiveTile.Position);
+                ListMVHoverPoints.Add(new Vector3(ActiveTile.Position.X, ActiveTile.Position.Y, ActiveTile.LayerIndex));
             }
         }
 
@@ -105,18 +107,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Move the Unit to the cursor position
                 ActiveSquad.SetPosition(Map.CursorPosition);
 
-                Map.CursorPosition = ActiveSquad.Position;
                 Map.CursorPositionVisible = Map.CursorPosition;
+
+                Map.FinalizeMovement(ActiveSquad, (int)Map.GetTerrain(ActiveSquad).MovementCost, ListMVHoverPoints);
+
+                ActiveSquad.EndTurn();
 
                 RemoveFromPanelList(this);
                 if (NextPanel != null)
                 {
                     AddToPanelListAndSelect(NextPanel);
-                }
-                else
-                {
-                    //End the unit turn.
-                    ActiveSquad.EndTurn();
                 }
 
                 AITimer = AITimerBase;

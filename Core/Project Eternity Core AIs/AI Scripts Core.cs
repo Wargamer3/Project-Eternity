@@ -69,7 +69,7 @@ namespace ProjectEternity.Core.AI
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
                 IsCompleted = false;
-                Result = null;
+                Result = new List<object>();
                 if (Input != null)
                 {
                     string InputEvent = (string)Input;
@@ -795,7 +795,7 @@ namespace ProjectEternity.Core.AI
                 {
                     int Difference = (int)_MaxValue - (int)_MinValue;
 
-                    int DiceRollValue = (int)_MinValue + RandomHelper.Next(Difference);
+                    double DiceRollValue = (int)_MinValue + RandomHelper.Next(Difference + 1);
                     ExecuteFollowingScripts(0, gameTime, DiceRollValue, out IsCompleted, out Result);
 
                 }
@@ -881,7 +881,7 @@ namespace ProjectEternity.Core.AI
 
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
-                int DiceRollValue = RandomHelper.Next(_DiceMaxValue);
+                int DiceRollValue = RandomHelper.Next(_DiceMaxValue + 1);
 
                 bool IsEverythingCompleted = true;
 

@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (UnitsNotUpdatedCount == 0)
             {
-                ActionPanelPhaseChange.EndPlayerPhase(Map);
+                ActionPanelPhaseChange.FinishAIPlayerTurn(Map);
             }
         }
 

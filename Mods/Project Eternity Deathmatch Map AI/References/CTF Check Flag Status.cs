@@ -38,6 +38,14 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 {
                     return FlagSpawnerCache.IsUsed;
                 }
+                else if (FlagStatus == FlagStatuses.CapturedBySelf)
+                {
+                    Flag DroppedFlag = Info.ActiveSquad.ItemHeld as Flag;
+                    if (DroppedFlag != null)
+                    {
+                        return DroppedFlag.Owner.Team != Info.Map.ListPlayer[Info.Map.ActivePlayerIndex].Team;
+                    }
+                }
                 else if (FlagStatus == FlagStatuses.Dropped)
                 {
                     Flag DroppedFlag = GetFlag();
