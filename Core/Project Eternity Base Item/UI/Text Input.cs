@@ -18,7 +18,7 @@ namespace ProjectEternity.Core.Item
         protected Vector2 TextInputPosition;
         protected Vector2 TextInputSize;
 
-        private OnConfirmDelegate OnConfirm;
+        protected OnConfirmDelegate OnConfirm;
 
         protected bool IsActive;
         private bool DigitsOnly;

@@ -172,6 +172,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
             }
 
+            HandleTeamSelection();
+        }
+
+        private void HandleTeamSelection()
+        {
             if (SelectingTeam == -1 && Room.UseTeams && ListMapTeam.Count > 0 && MouseHelper.InputLeftButtonPressed())
             {
                 int DrawX = 10;
@@ -185,13 +190,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         SelectingTeam = PlayerIndex;
                     }
                 }
+
+                DrawY = 45 + Room.ListRoomPlayer.Count * 45;
+                PlayerIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 45;
+                if (PlayerIndex >= 0 && PlayerIndex < Room.ListRoomBot.Count)
+                {
+                    Rectangle TeamCollisionBox = new Rectangle(DrawX + 280, DrawY + PlayerIndex * 45, 80, 25);
+                    if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    {
+                        SelectingTeam = Room.ListRoomPlayer.Count + PlayerIndex;
+                    }
+                }
             }
             else if (SelectingTeam != -1 && MouseHelper.InputLeftButtonPressed())
             {
                 int DrawX = 10;
                 int DrawY = 45 + 30 + SelectingTeam * 45;
                 int TeamIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 25;
-                if (TeamIndex >= 0 && TeamIndex < ListMapTeam.Count)
+                if (TeamIndex >= 0 && TeamIndex < ListMapTeam.Count && SelectingTeam < Room.ListRoomPlayer.Count)
                 {
                     Rectangle TeamCollisionBox = new Rectangle(DrawX + 285, DrawY + TeamIndex * 25, 85, 25);
                     if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
@@ -199,6 +215,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         Room.ListRoomPlayer[SelectingTeam].Team = TeamIndex;
                     }
                 }
+
+                DrawY = 45 + 30 + SelectingTeam * 45;
+                TeamIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 25;
+                if (TeamIndex >= 0 && TeamIndex < ListMapTeam.Count)
+                {
+                    Rectangle TeamCollisionBox = new Rectangle(DrawX + 285, DrawY + TeamIndex * 25, 85, 25);
+                    if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    {
+                        Room.ListRoomBot[SelectingTeam - Room.ListRoomPlayer.Count].Team = TeamIndex;
+                    }
+                }
+
                 SelectingTeam = -1;
             }
         }
@@ -282,6 +310,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             int NumberOfTeams = BR.ReadInt32();
+            ListMapTeam = new List<Color>(NumberOfTeams);
             //Deathmatch colors
             for (int D = 0; D < NumberOfTeams; D++)
             {
@@ -420,6 +449,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         BattleMapPlayer ActivePlayer = PlayerManager.ListLocalPlayer[P];
                         NewMap.AddLocalPlayer(ActivePlayer);
                     }
+                    else if (P < Room.MaxNumberOfBots)
+                    {
+                        BattleMapPlayer ActivePlayer = Room.ListRoomBot[P - PlayerManager.ListLocalPlayer.Count];
+                        NewMap.AddLocalPlayer(ActivePlayer);
+                    }
                     else//Fill with empty players to ensure the enemy player is always player 10+
                     {
                         NewMap.AddLocalPlayer(null);
@@ -530,7 +564,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int DrawY = 45 + P * 45;
 
                 DrawBox(g, new Vector2(DrawX - 5, DrawY - 10), LeftSideWidth - 10, 45, Color.White);
-                DrawPlayerBox(g, DrawX, DrawY, P);
+                DrawPlayerBox(g, DrawX, DrawY, Room.ListRoomPlayer[P]);
+            }
+
+            for (int P = 0; P < Room.ListRoomBot.Count && P < Room.MaxNumberOfBots - Room.ListRoomPlayer.Count; ++P)
+            {
+                int DrawX = 10;
+                int DrawY = 45 + Room.ListRoomPlayer.Count * 45 + P * 45;
+
+                DrawBox(g, new Vector2(DrawX - 5, DrawY - 10), LeftSideWidth - 10, 45, Color.White);
+                DrawPlayerBox(g, DrawX, DrawY, Room.ListRoomBot[P]);
             }
             if (SelectingTeam >= 0)
             {
@@ -549,10 +592,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, int PlayerToDrawIndex)
+        private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, BattleMapPlayer PlayerToDraw)
         {
-            BattleMapPlayer PlayerToDraw = Room.ListRoomPlayer[PlayerToDrawIndex];
-
             DrawBox(g, new Vector2(DrawX, DrawY), 50, 25, Color.White);
             DrawBox(g, new Vector2(DrawX + 50, DrawY), 50, 25, Color.White);
             DrawBox(g, new Vector2(DrawX + 100, DrawY), 180, 25, Color.White);
@@ -586,7 +627,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX, DrawY, 320, 25);
                 Rectangle TeamCollisionBox = new Rectangle(DrawX + 280, DrawY, 85, 25);
-                if (Room.UseTeams && ListMapTeam.Count > 0 && PlayerManager.ListLocalPlayer.Contains(PlayerToDraw) && TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                if (Room.UseTeams && ListMapTeam.Count > 0 && TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y)
+                    && (PlayerManager.ListLocalPlayer.Contains(PlayerToDraw) || Room.ListRoomBot.Contains(PlayerToDraw)))
                 {
                     g.Draw(sprPixel, new Rectangle(DrawX + 280, DrawY, 85, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
                 }

@@ -31,12 +31,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     int InternalValue = int.Parse(Text);
                     SetText(MathHelper.Min(255, InternalValue + 1).ToString());
+                    OnConfirm(Text);
                 }
                 else if (MouseHelper.MouseStateCurrent.X >= ButtonX && MouseHelper.MouseStateCurrent.Y >= BottomButtonY
                     && MouseHelper.MouseStateCurrent.X <= ButtonX + ButtonWidth && MouseHelper.MouseStateCurrent.Y <= BottomButtonY + ButtonHeight)
                 {
                     int InternalValue = int.Parse(Text);
                     SetText(MathHelper.Max(0, InternalValue - 1).ToString());
+                    OnConfirm(Text);
                 }
             }
         }

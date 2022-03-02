@@ -65,23 +65,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                             {
-                                if (ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex] == null)
+                                Squad NewSquad = ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex];
+                                if (NewSquad == null)
                                 {
                                     ++SpawnSquadIndex;
                                     continue;
                                 }
 
-                                for (int U = 0; U < ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].UnitsInSquad; ++U)
+                                for (int U = 0; U < NewSquad.UnitsInSquad; ++U)
                                 {
-                                    ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).ReinitializeMembers(Owner.DicUnitType[ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].At(U).UnitTypeName]);
+                                    NewSquad.At(U).ReinitializeMembers(Owner.DicUnitType[NewSquad.At(U).UnitTypeName]);
                                 }
 
-                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                                Owner.SpawnSquad(PlayerIndex, ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex], 0, ActiveLayer.ListMultiplayerSpawns[S].Position, L);
-                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.PilotSP = 100;
-                                ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.ConsumeEN(ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex].CurrentLeader.MaxEN);
+                                NewSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                                Owner.SpawnSquad(PlayerIndex, NewSquad, 0, ActiveLayer.ListMultiplayerSpawns[S].Position, L);
+                                NewSquad.CurrentLeader.PilotSP = 0;
+                                NewSquad.CurrentLeader.ConsumeEN(NewSquad.CurrentLeader.MaxEN);
                                 ++SpawnSquadIndex;
 
+                                if (!ActivePlayer.IsPlayerControlled || !NewSquad.IsPlayerControlled)
+                                {
+                                    NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(Owner, NewSquad));
+                                    NewSquad.SquadAI.Load("Multiplayer/Capture The Flag/Easy");
+                                }
                                 if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
                                 {
                                     break;

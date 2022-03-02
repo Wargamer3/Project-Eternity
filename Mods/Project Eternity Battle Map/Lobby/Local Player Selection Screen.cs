@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             sndButtonClick.Play();
 
-            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
+            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
 
             if (!File.Exists("User data/Profiles/Battle Map/" + NewPlayer.Name + ".bin"))
             {

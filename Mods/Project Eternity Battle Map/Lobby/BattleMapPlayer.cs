@@ -182,6 +182,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Inventory.ActiveLoadout.ListSquad.Add(Inventory.ListOwnedSquad[0]);
         }
 
+        public void FillLoadout(int UnitsInLoadout)
+        {
+            IniFile IniDefaultUnits = IniFile.ReadFromFile("Content/Battle Lobby Default Units.ini");
+            string ActiveKey = IniDefaultUnits.ReadAllKeys()[0];
+
+            string UnitPath = IniDefaultUnits.ReadField(ActiveKey, "Path");
+            string Pilot = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
+
+            while (Inventory.ActiveLoadout.ListSquad.Count < UnitsInLoadout)
+            {
+                Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                Character NewCharacter = new Character(Pilot, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                NewCharacter.Level = 1;
+                NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
+
+                Squad NewSquad = new Squad("Squad", NewUnit);
+                NewSquad.IsPlayerControlled = true;
+
+                Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
+            }
+
+            while (Inventory.ActiveLoadout.ListSquad.Count > UnitsInLoadout)
+            {
+                Inventory.ActiveLoadout.ListSquad.RemoveAt(Inventory.ActiveLoadout.ListSquad.Count - 1);
+            }
+        }
+
         public void SaveLocally()
         {
             FileStream FS = new FileStream("User data/Profiles/Battle Map/" + Name + ".bin", FileMode.OpenOrCreate, FileAccess.Write);

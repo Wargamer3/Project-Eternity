@@ -157,7 +157,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
 
                 PlayerManager.ListLocalPlayer.Add(NewPlayer);
                 PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);

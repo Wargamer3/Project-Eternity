@@ -76,6 +76,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Gametype GametypeFreezeTag = new Gametype("Freeze Tag", "Killing an enemy freeze him, when every enemies are frozen you win. Teamates can unfreeze allie by staying next to them for 2 turns.", null);
             Gametype GametypeJailbreak = new Gametype("Jailbreak", "Killing an enemy send him to your prison, capture everyone to win. Teamates can be freed by standing on a switch.", null);
             Gametype GametypeMutant = new Gametype("Mutant", "First kill transform you into the mutant, a unit with overpowered stats and attacks. Only the Mutant can kill or be killed.", null);
+            Gametype GametypeProtectThaPimp = new Gametype("Protect Tha Pimp", "Try to kill the enemy Pimp before it can escape. The pimp move slower and only has a 1 HKO melee attack.", null);
             Gametype GametypeKaiju = new Gametype("Kaiju", "One player controls giant monsters while the other players use their units.", null);
 
             SelectedGametype = GametypeCampaign;
@@ -84,7 +85,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayGametypeCategory[1] = new GametypeCategory("PVP", new Gametype[]
             {
                 GametypeDeathmatch, GametypeCaptureTheFlag, GametypeObjective, GametypeAssault, GametypeConquest,
-                GametypeOnslaught, GametypeKingOfTheHill, GametypeBunny, GametypeFreezeTag,
+                GametypeOnslaught, GametypeKingOfTheHill, GametypeBunny, GametypeFreezeTag, GametypeProtectThaPimp,
                 GametypeJailbreak, GametypeMutant, GametypeKaiju,
             });
 

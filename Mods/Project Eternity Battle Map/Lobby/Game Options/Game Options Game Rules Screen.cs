@@ -10,7 +10,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private SpriteFont fntText;
 
-        private BoxNumericUpDown BotNumberTextbox;
+        private BoxNumericUpDown MaxBotNumberTextbox;
+        private BoxNumericUpDown MaxSquadPerBotNumberTextbox;
         private BoxNumericUpDown GoalScoreTextbox;
         private BoxNumericUpDown TimeLimitTextbox;
         private BoxNumericUpDown TurnLimitTextbox;
@@ -46,7 +47,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int DrawY = PanelY;
             DrawY += 40;
 
-            BotNumberTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
+            MaxBotNumberTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20), OnMaxBotsChanged);
+            MaxSquadPerBotNumberTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20), OnMaxSquadPerBotChanged);
+            MaxBotNumberTextbox.SetText(Room.MaxNumberOfBots.ToString());
+            MaxSquadPerBotNumberTextbox.SetText(Room.MaxSquadsPerBot.ToString());
 
             DrawY += 105;
             DrawY += 40;
@@ -63,7 +67,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ArrayMenuButton = new IUIElement[]
             {
-                BotNumberTextbox, GoalScoreTextbox, TimeLimitTextbox, TurnLimitTextbox, MinPlayerTextbox, MaxPlayerTextbox, MaxSquadPerPlayerTextbox,
+                MaxBotNumberTextbox, MaxSquadPerBotNumberTextbox, GoalScoreTextbox, TimeLimitTextbox, TurnLimitTextbox, MinPlayerTextbox, MaxPlayerTextbox, MaxSquadPerPlayerTextbox,
             };
         }
 
@@ -72,6 +76,34 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             foreach (IUIElement ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Update(gameTime);
+            }
+        }
+
+        private void OnMaxBotsChanged(string InputMessage)
+        {
+            Room.MaxNumberOfBots = int.Parse(InputMessage);
+
+            while (Room.ListRoomBot.Count < Room.MaxNumberOfBots)
+            {
+                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Bot", BattleMapPlayer.PlayerTypes.Online, false, 0, false, Color.Blue);
+                NewPlayer.InitFirstTimeInventory();
+                NewPlayer.FillLoadout(Room.MaxSquadsPerBot);
+                Room.ListRoomBot.Add(NewPlayer);
+            }
+
+            while (Room.ListRoomBot.Count > Room.MaxNumberOfBots)
+            {
+                Room.ListRoomBot.RemoveAt(Room.ListRoomBot.Count - 1);
+            }
+        }
+
+        private void OnMaxSquadPerBotChanged(string InputMessage)
+        {
+            Room.MaxSquadsPerBot = int.Parse(InputMessage);
+
+            foreach (BattleMapPlayer ActivePlayer in Room.ListRoomBot)
+            {
+                ActivePlayer.FillLoadout(Room.MaxSquadsPerBot);
             }
         }
 
@@ -86,6 +118,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawY += 40;
             g.DrawString(fntText, "Number of Bots", new Vector2(DrawX + 10, DrawY), Color.White);
+            g.DrawString(fntText, "Max Squads Per Bots", new Vector2(RightColumnX + 10, DrawY), Color.White);
 
             DrawY += 105;
             DrawBox(g, new Vector2(DrawX, DrawY), PanelWidth, PanelHeight + 30, Color.White);

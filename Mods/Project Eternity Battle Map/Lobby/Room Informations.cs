@@ -20,7 +20,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string MapPath { get; set; }
         public bool IsPlaying { get; set; }
         public string Password { get; set; }
-        public bool UseTeams { get; set; }
         public List<IOnlineConnection> ListOnlinePlayer { get; }
         public byte CurrentPlayerCount { get; set; }
         public byte MinNumberOfPlayer { get; set; }
@@ -29,9 +28,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int OwnerServerPort { get; }
         public bool IsDead { get; set; }//Used when the DataManager need to tell that a Room is deleted.
 
+        public bool UseTeams;
+        public int MaxNumberOfBots;
+        public int MaxSquadsPerBot;
+
         public string CurrentDifficulty;
 
         public readonly List<BattleMapPlayer> ListRoomPlayer;
+
+        public readonly List<BattleMapPlayer> ListRoomBot;
 
         private readonly List<string> ListLocalPlayerID;
 
@@ -42,6 +47,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListOnlinePlayer = new List<IOnlineConnection>();
             ListRoomPlayer = new List<BattleMapPlayer>();
+            ListRoomBot = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
             RoomName = string.Empty;
             RoomType = string.Empty;
@@ -52,6 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OwnerServerPort = 0;
             CurrentPlayerCount = 0;
             MaxNumberOfPlayer = 0;
+            MaxSquadsPerBot = 1;
         }
 
         public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, byte MinPlayer, byte MaxPlayer, byte CurrentClientCount)
@@ -66,12 +73,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListOnlinePlayer = new List<IOnlineConnection>();
             ListRoomPlayer = new List<BattleMapPlayer>();
+            ListRoomBot = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
             CurrentDifficulty = "Easy";
             UseTeams = true;
             IsDead = false;
             OwnerServerIP = null;
             OwnerServerPort = 0;
+            MaxSquadsPerBot = 1;
         }
 
         public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID)
@@ -86,6 +95,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListRoomPlayer = new List<BattleMapPlayer>();
             this.ListLocalPlayerID = ListLocalPlayerID;
             UseTeams = true;
+            MaxSquadsPerBot = 1;
         }
 
         public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort,
@@ -106,9 +116,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListOnlinePlayer = new List<IOnlineConnection>();
             ListRoomPlayer = new List<BattleMapPlayer>();
+            ListRoomBot = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
             CurrentDifficulty = "Easy";
             UseTeams = true;
+            MaxSquadsPerBot = 1;
         }
 
         public void AddLocalPlayer(BattleMapPlayer NewPlayer)
