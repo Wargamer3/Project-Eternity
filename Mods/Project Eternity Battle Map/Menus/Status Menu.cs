@@ -108,10 +108,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 IsLoaded = true;
 
-                sprLand = Content.Load<Texture2D>("Status Screen/Ground");
-                sprSea = Content.Load<Texture2D>("Status Screen/Sea");
-                sprSky = Content.Load<Texture2D>("Status Screen/Sky");
-                sprSpace = Content.Load<Texture2D>("Status Screen/Space");
+                sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
+                sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");
+                sprSky = Content.Load<Texture2D>("Menus/Status Screen/Sky");
+                sprSpace = Content.Load<Texture2D>("Menus/Status Screen/Space");
 
                 sprBarExtraLargeBackground = Content.Load<Texture2D>("Battle/Bars/Extra Long Bar");
                 sprBarExtraLargeEN = Content.Load<Texture2D>("Battle/Bars/Extra Long Energy");
@@ -122,7 +122,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 sndSelection = new FMODSound(FMODSystem, "Content/SFX/Selection.mp3");
                 sndCancel = new FMODSound(FMODSystem, "Content/SFX/Cancel.mp3");
 
-                sprBackground = Content.Load<Texture2D>("Status Screen/Background Black");
+                sprBackground = Content.Load<Texture2D>("Menus/Status Screen/Background Black");
 
                 fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
 

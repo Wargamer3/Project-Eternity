@@ -56,16 +56,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             UnitSelectionMenu = new DrawableMenu(DrawMenuItem, ListPresentUnit.Count, 5);
 
-            sprMapMenuBackground = Content.Load<Texture2D>("Status Screen/Background Black");
+            sprMapMenuBackground = Content.Load<Texture2D>("Menus/Status Screen/Background Black");
 
             sprBarLargeBackground = Content.Load<Texture2D>("Battle/Bars/Large Bar");
             sprBarLargeEN = Content.Load<Texture2D>("Battle/Bars/Large Energy");
             sprBarLargeHP = Content.Load<Texture2D>("Battle/Bars/Large Health");
 
-            sprLand = Content.Load<Texture2D>("Status Screen/Ground");
-            sprSea = Content.Load<Texture2D>("Status Screen/Sea");
-            sprSky = Content.Load<Texture2D>("Status Screen/Sky");
-            sprSpace = Content.Load<Texture2D>("Status Screen/Space");
+            sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
+            sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");
+            sprSky = Content.Load<Texture2D>("Menus/Status Screen/Sky");
+            sprSpace = Content.Load<Texture2D>("Menus/Status Screen/Space");
 
             sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
             sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");

@@ -26,12 +26,12 @@ namespace ProjectEternity.GameScreens
             ContentFallback = Content;
             _sprPixel = Content.Load<Texture2D>("Pixel");
 
-            sprBox = Content.Load<Texture2D>("Main Menu New/Box");
-            sprBoxBackground = Content.Load<Texture2D>("Main Menu New/Background");
-            sprBoxBackgroundRed = Content.Load<Texture2D>("Main Menu New/Background Red");
-            sprBoxBackgroundBlue = Content.Load<Texture2D>("Main Menu New/Background Blue");
-            sprBoxBackgroundGray = Content.Load<Texture2D>("Main Menu New/Background Gray");
-            sprBoxBackgroundBlack = Content.Load<Texture2D>("Main Menu New/Background Black");
+            sprBox = Content.Load<Texture2D>("Menus/Main Menu/Box");
+            sprBoxBackground = Content.Load<Texture2D>("Menus/Main Menu/Background");
+            sprBoxBackgroundRed = Content.Load<Texture2D>("Menus/Main Menu/Background Red");
+            sprBoxBackgroundBlue = Content.Load<Texture2D>("Menus/Main Menu/Background Blue");
+            sprBoxBackgroundGray = Content.Load<Texture2D>("Menus/Main Menu/Background Gray");
+            sprBoxBackgroundBlack = Content.Load<Texture2D>("Menus/Main Menu/Background Black");
 
             Debug = new DebugScreen();
         }
