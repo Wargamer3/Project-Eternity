@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         };
 
-        private enum MenuChoice { PilotStatus, PilotTraining, PilotSwap, UnitStatus, UnitUpgrade, UnitParts, UnitEquipment, Shop, ChangeBGM, Options, Data, NextStage };
+        private enum MenuChoice { PilotStatus, PilotTraining, PilotSwap, UnitStatus, UnitUpgrade, UnitParts, UnitEquipment, Shop, Commander, ChangeBGM, Options, Data, NextStage };
 
         private readonly Roster PlayerRoster;
 
@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Menu = new PartMenu[] { new PartMenu("Pilot", new string[] { "Pilot Status", "Pilot Training", "Pilot Swap" }),
                                     new PartMenu("Unit", new string[] { "Unit Status", "Unit Upgrade", "Unit Parts", "Unit Equipment" }),
-                                    new PartMenu("Misc", new string[] { "Shop", "Change BGM", "Options", "Data", "MOVE OUT!" }) };
+                                    new PartMenu("Misc", new string[] { "Shop", "Commander", "Change BGM", "Options", "Data", "MOVE OUT!" }) };
             Menu[0].Open = true;
             Menu[1].Open = true;
             Menu[2].Open = true;
@@ -71,10 +71,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Menu[1].IsAvailable[3] = true;
 
             Menu[2].IsAvailable[0] = false;
-            Menu[2].IsAvailable[1] = false;
+            Menu[2].IsAvailable[1] = true;
             Menu[2].IsAvailable[2] = false;
             Menu[2].IsAvailable[3] = true;
             Menu[2].IsAvailable[4] = true;
+            Menu[2].IsAvailable[5] = true;
 
             MenuElements = Menu[0].Categories.Length + Menu[1].Categories.Length + Menu[2].Categories.Length;
 
@@ -155,6 +156,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         if (Menu[2].IsAvailable[0])
                         {
                             PushScreen(new Shop());
+                        }
+                        break;
+
+                    case MenuChoice.Commander:
+                        if (Menu[2].IsAvailable[1])
+                        {
+                            PushScreen(new CommanderScreen(PlayerRoster));
                         }
                         break;
 

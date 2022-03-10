@@ -101,7 +101,10 @@
     <Compile Include="IGameRule.cs" />
     <Compile Include="Inputs\Keyboard Input.cs" />
     <Compile Include="Inputs\Player Input.cs" />
+    <Compile Include="Intermission Screen\Commander\Commander Tech Node.cs" />
+    <Compile Include="Intermission Screen\Commander\CommanderTechTree.cs" />
     <Compile Include="Intermission Screen\Data Load Screen.cs" />
+    <Compile Include="Intermission Screen\Commander\Commander Screen.cs" />
     <Compile Include="Intermission Screen\Data Screen.cs" />
     <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
     <Compile Include="Editor\ITileAttributes.cs" />
