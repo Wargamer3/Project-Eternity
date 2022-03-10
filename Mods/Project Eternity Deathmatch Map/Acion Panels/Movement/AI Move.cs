@@ -102,7 +102,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else
             {
                 //Movement initialisation.
-                Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoints);
+                Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoints, true);
 
                 //Move the Unit to the cursor position
                 ActiveSquad.SetPosition(Map.CursorPosition);

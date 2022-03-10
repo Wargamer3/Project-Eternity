@@ -45,7 +45,7 @@ namespace ProjectEternity.Core.AI
                 if (svc != null)
                 {
                     List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAIs);
-                    if (Items != null)
+                    if (Items != null && Items.Count > 0)
                     {
                         value = Items[0].Substring(0, Items[0].Length - 5).Substring(12);
                     }

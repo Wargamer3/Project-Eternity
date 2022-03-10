@@ -26,9 +26,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicMovingMapUnitByNextPosition.Add(MovingMapUnit, new List<Vector3>() { FinalPosition });
         }
 
-        public void Add(UnitMapComponent MovingMapUnit, Vector3 StartPosition, List<Vector3> ListNextPosition)
+        public void Add(UnitMapComponent MovingMapUnit, Vector3 StartPosition, List<Vector3> ListNextPosition, bool IsBlocking = false)
         {
-            IsBlocking = false;
+            this.IsBlocking = IsBlocking;
             DicMovingMapUnitByPosition.Add(MovingMapUnit, StartPosition);
             DicMovingMapUnitByNextPosition.Add(MovingMapUnit, new List<Vector3>(ListNextPosition));
         }

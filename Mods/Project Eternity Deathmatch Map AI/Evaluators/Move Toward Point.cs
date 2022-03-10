@@ -3,10 +3,10 @@ using System.IO;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 using ProjectEternity.Core.AI;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using ProjectEternity.Core;
 
 namespace ProjectEternity.AI.DeathmatchMapScreen
 {
@@ -50,7 +50,12 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                         }
                     }
 
-                    FinalTile = ListFinalChoice[RandomHelper.Next(ListMovement.Count)];
+                    foreach (MovementAlgorithmTile ActiveSquadTile in Info.Map.GetAllTerrain(Info.ActiveSquad))
+                    {
+                        ListFinalChoice.Remove(ActiveSquadTile);
+                    }
+
+                    FinalTile = ListFinalChoice[RandomHelper.Next(ListFinalChoice.Count)];
                     while (FinalTile != null)
                     {
                         if (ListMovement.Contains(FinalTile.ParentReal))
@@ -67,6 +72,8 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                         FinalTile = FinalTile.ParentReal;
                     }
+
+                    ListMovement.Reverse();
                 }
 
                 if (_AttackAfterMove)

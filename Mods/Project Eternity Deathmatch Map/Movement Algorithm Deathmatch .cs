@@ -23,12 +23,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int NextRegularMovementLayerIndex = Map.GetNextLayerIndex(new Vector3(ActiveNode.Position.X, ActiveNode.Position.Y, StartingLayerIndex), (int)(ActiveNode.Position.X + OffsetX), (int)(ActiveNode.Position.Y + OffsetY),
                 1f, 15, out ListLayerPossibility);
 
-            if (!IgnoreObstacles && ActiveNode.Position.X != MapComponent.X && ActiveNode.Position.Y != MapComponent.Y && ActiveNode.LayerIndex != MapComponent.Z
-                && Map.CheckForObstacleAtPosition(new Vector3(ActiveNode.Position.X, ActiveNode.Position.Y, StartingLayerIndex), Vector3.Zero))
-            {
-                return ListTerrainSuccessor;
-            }
-
             foreach (int ActiveLayerIndex in ListLayerPossibility)
             {
                 MovementAlgorithmTile ActiveTile = GetTile(ActiveNode.Position.X + OffsetX, ActiveNode.Position.Y + OffsetY, ActiveLayerIndex);
@@ -53,7 +47,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
 
-                ListTerrainSuccessor.Add(ActiveTile);
+                if (IgnoreObstacles
+                    || (ActiveNode.Position.X == MapComponent.X && ActiveNode.Position.Y == MapComponent.Y && ActiveNode.LayerIndex == MapComponent.Z)
+                    || !Map.CheckForObstacleAtPosition(new Vector3(ActiveTile.Position.X, ActiveTile.Position.Y, ActiveLayerIndex), Vector3.Zero))
+                {
+                    ListTerrainSuccessor.Add(ActiveTile);
+                }
             }
 
             return ListTerrainSuccessor;
