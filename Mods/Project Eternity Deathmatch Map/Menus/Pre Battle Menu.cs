@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected void LoadPreBattleMenu()
         {
-            sprBattleMenuBackground = Content.Load<Texture2D>("Status Screen/Background Black");
+            sprBattleMenuBackground = Content.Load<Texture2D>("Menus/Status Screen/Background Black");
         }
 
         private void BattleSumaryDraw(CustomSpriteBatch g, Squad RightSquad)

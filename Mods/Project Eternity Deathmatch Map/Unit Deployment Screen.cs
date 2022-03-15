@@ -70,10 +70,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Load(ContentManager Content)
         {
-            sprLand = Content.Load<Texture2D>("Status Screen/Ground");
-            sprSea = Content.Load<Texture2D>("Status Screen/Sea");
-            sprSky = Content.Load<Texture2D>("Status Screen/Sky");
-            sprSpace = Content.Load<Texture2D>("Status Screen/Space");
+            sprLand = Content.Load<Texture2D>("Menus/Status Screen/Ground");
+            sprSea = Content.Load<Texture2D>("Menus/Status Screen/Sea");
+            sprSky = Content.Load<Texture2D>("Menus/Status Screen/Sky");
+            sprSpace = Content.Load<Texture2D>("Menus/Status Screen/Space");
 
             sndConfirm = new FMODSound(GameScreen.FMODSystem, "Content/SFX/Confirm.mp3");
             sndDeny = new FMODSound(GameScreen.FMODSystem, "Content/SFX/Deny.mp3");

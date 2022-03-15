@@ -149,12 +149,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ListSelectedSpirit = new List<ManualSkill>();
 
-            sprSpiritMenuMain = Content.Load<Texture2D>("Spirit Screen/Main");
-            sprSpiritMenuPilotBox = Content.Load<Texture2D>("Spirit Screen/Pilot Box");
-            sprSpiritMenuSelectBox = Content.Load<Texture2D>("Spirit Screen/Select Box");
-            sprSpiritMenuSelectChosen = Content.Load<Texture2D>("Spirit Screen/Select Chosen");
-            sprSpiritMenuDescription = Content.Load<Texture2D>("Spirit Screen/Description");
-            sprSpiritMenuHighlight = Content.Load<Texture2D>("Spirit Screen/Highlight");
+            sprSpiritMenuMain = Content.Load<Texture2D>("Menus/Spirit Screen/Main");
+            sprSpiritMenuPilotBox = Content.Load<Texture2D>("Menus/Spirit Screen/Pilot Box");
+            sprSpiritMenuSelectBox = Content.Load<Texture2D>("Menus/Spirit Screen/Select Box");
+            sprSpiritMenuSelectChosen = Content.Load<Texture2D>("Menus/Spirit Screen/Select Chosen");
+            sprSpiritMenuDescription = Content.Load<Texture2D>("Menus/Spirit Screen/Description");
+            sprSpiritMenuHighlight = Content.Load<Texture2D>("Menus/Spirit Screen/Highlight");
 
             sprBarSmallBackground = Content.Load<Texture2D>("Battle/Bars/Small Bar");
             sprBarSmallEN = Content.Load<Texture2D>("Battle/Bars/Small Energy");
