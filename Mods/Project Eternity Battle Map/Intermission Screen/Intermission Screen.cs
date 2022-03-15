@@ -170,7 +170,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     switch ((MenuChoice)SelectedChoice)
                     {
                         case MenuChoice.StartBattle:
-                            PushScreen(new LoadoutScreen(PlayerRoster));
+                            PushScreen(new LoadoutScreen(PlayerRoster, new List<Commander>()));
                             break;
 
                         case MenuChoice.View:
@@ -293,7 +293,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BW.Write(RouteChoice.Value);
             }
 
-            PlayerRoster.SaveTeam(BW);
+            PlayerRoster.SaveProgression(BW);
 
             BW.Write(SystemList.ListPart.Count);
             foreach (string ActivePart in SystemList.ListPart.Keys)
@@ -303,57 +303,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             FS.Close();
             BW.Close();
-        }
-
-        public void LoadProgression()
-        {
-            FileStream FS = new FileStream("SRWE Save.bin", FileMode.Open, FileAccess.Read);
-            BinaryReader BR = new BinaryReader(FS);
-
-            BattleMap.DicRouteChoices.Clear();
-
-            PlayerRoster.TeamCharacters.Clear();
-            PlayerRoster.TeamUnits.Clear();
-            PlayerRoster.TeamSquads.Clear();
-
-            BattleMap.NextMapType = BR.ReadString();
-            BattleMap.NextMapPath = BR.ReadString();
-
-            int DicGlobalVariablesCount = BR.ReadInt32();
-            for (int R = 0; R < DicGlobalVariablesCount; R++)
-            {
-                string RouteKey = BR.ReadString();
-                string RouteValue = BR.ReadString();
-                BattleMap.DicGlobalVariables.Add(RouteKey, RouteValue);
-            }
-
-            int DicRouteChoicesCount = BR.ReadInt32();
-            for (int R = 0; R < DicRouteChoicesCount; R++)
-            {
-                string RouteKey = BR.ReadString();
-                int RouteValue = BR.ReadInt32();
-                BattleMap.DicRouteChoices.Add(RouteKey, RouteValue);
-            }
-
-            PlayerRoster.LoadTeam(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-
-            int ListPartCount = BR.ReadInt32();
-            for (int P = 0; P < ListPartCount; P++)
-            {
-                string LoadedPartPath = BR.ReadString();
-                string[] PartByType = LoadedPartPath.Split('/');
-                if (PartByType[0] == "Standard Parts")
-                {
-                    SystemList.ListPart.Add(LoadedPartPath, new UnitStandardPart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget));
-                }
-                else if (PartByType[0] == "Consumable Parts")
-                {
-                    SystemList.ListPart.Add(LoadedPartPath, new UnitConsumablePart("Content/Units/" + LoadedPartPath + ".pep", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
-                }
-            }
-
-            FS.Close();
-            BR.Close();
         }
     }
 }

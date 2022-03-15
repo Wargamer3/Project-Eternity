@@ -109,6 +109,7 @@
     <Compile Include="Intermission Screen\Default Unit Upgrade Screen.cs" />
     <Compile Include="Editor\ITileAttributes.cs" />
     <Compile Include="Intermission Screen\Data Save Screen.cs" />
+    <Compile Include="Intermission Screen\Commander\Commander Loadout Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Gametype Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Mutators Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Game Rules Screen.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Team Lists\Roster Unit.cs" />
     <Compile Include="Team Lists\Roster Character.cs" />
     <Compile Include="Team Lists\Roster.cs" />
+    <Compile Include="Team Lists\Team List Commander.cs" />
     <Compile Include="Team Lists\Team List Character.cs" />
     <Compile Include="Team Lists\Team List Squad.cs" />
     <Compile Include="Team Lists\Team List Unit.cs" />

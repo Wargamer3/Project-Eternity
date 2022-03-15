@@ -13,6 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public TeamListSquad TeamSquads;
         public TeamListUnit TeamUnits;
         public TeamListCharacter TeamCharacters;
+        public TeamListCommander TeamCommander;
         public Dictionary<string, RosterCharacter> DicRosterCharacter;
         public Dictionary<string, RosterUnit> DicRosterUnit;
 
@@ -21,6 +22,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             TeamSquads = new TeamListSquad();
             TeamUnits = new TeamListUnit();
             TeamCharacters = new TeamListCharacter();
+            TeamCommander = new TeamListCommander();
             DicRosterCharacter = new Dictionary<string, RosterCharacter>();
             DicRosterUnit = new Dictionary<string, RosterUnit>();
         }
@@ -81,11 +83,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void SaveTeam(BinaryWriter BW)
+        public void SaveProgression(BinaryWriter BW)
         {
             TeamCharacters.Save(BW);
             TeamUnits.Save(BW);
             TeamSquads.Save(BW);
+            TeamCommander.Save(BW);
         }
 
         public void LoadRoster()
@@ -142,12 +145,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CreateUnitRosterDependencies();
         }
 
-        public void LoadTeam(BinaryReader BR, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public void LoadProgression(BinaryReader BR, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             TeamCharacters.Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             TeamUnits.Load(BR, TeamCharacters.ListAll, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             TeamSquads.Load(BR, TeamCharacters.ListAll, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            TeamCommander.Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             CreateCharacterRosterDependencies();
             CreateUnitRosterDependencies();

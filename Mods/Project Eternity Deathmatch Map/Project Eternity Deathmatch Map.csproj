@@ -83,6 +83,7 @@
     <Compile Include="Acion Panels\Debug Menu.cs" />
     <Compile Include="Acion Panels\Map Menu\Log Screen.cs" />
     <Compile Include="Acion Panels\Map Menu\Map Change.cs" />
+    <Compile Include="Acion Panels\Map Menu\Commander Menu.cs" />
     <Compile Include="Acion Panels\Map Menu\Objectives.cs" />
     <Compile Include="Acion Panels\Map Menu\Options.cs" />
     <Compile Include="Acion Panels\Map Menu\Quick Save.cs" />

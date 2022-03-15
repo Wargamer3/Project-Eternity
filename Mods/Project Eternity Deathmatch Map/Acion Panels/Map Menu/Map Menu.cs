@@ -79,6 +79,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 sprSpace, fntFinlanderFont));
             AddChoiceToCurrentPanel(new ActionPanelQuickSave(Map));
             AddChoiceToCurrentPanel(new ActionPanelOptions(Map));
+            AddChoiceToCurrentPanel(new ActionPanelCommanderMenu(Map, Map.ListPlayer[Map.ActivePlayerIndex]));
 
             if (GameScreen.UseDebugMode)
             {

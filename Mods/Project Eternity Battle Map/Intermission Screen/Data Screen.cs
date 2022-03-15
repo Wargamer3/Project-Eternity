@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BW.Write(RouteChoice.Value);
             }
 
-            PlayerRoster.SaveTeam(BW);
+            PlayerRoster.SaveProgression(BW);
 
             BW.Write(SystemList.ListPart.Count);
             foreach (string ActivePart in SystemList.ListPart.Keys)
@@ -187,7 +187,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BattleMap.DicRouteChoices.Add(RouteKey, RouteValue);
             }
 
-            PlayerRoster.LoadTeam(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            PlayerRoster.LoadProgression(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             SystemList.ListPart.Clear();
             int ListPartCount = BR.ReadInt32();

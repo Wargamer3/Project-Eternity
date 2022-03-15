@@ -27,15 +27,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int PageMax;
         const int ItemPerPage = 8;
         private static BattleMap NewMap;
-        private static List<Squad> ListSpawnSquad;
+        private static List<Squad> ListSelectedSquad;
         private static List<GameScreen> ListGameScreenCreatedByMap;
 
         private List<Squad> ListPresentSquad;
+        private List<Commander> ListSelectedCommander;
 
-        public LoadoutScreen(Roster PlayerRoster)
+        public LoadoutScreen(Roster PlayerRoster, List<Commander> ListSelectedCommander)
             : base()
         {
             this.PlayerRoster = PlayerRoster;
+            this.ListSelectedCommander = ListSelectedCommander;
             Stage = -1;
             CursorIndex = 0;
             PageCurrent = 1;
@@ -44,10 +46,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             sprRectangle = Content.Load<Texture2D>("Pixel");
-            sprBackground = Content.Load<Texture2D>("Intermission Screens/Unit Selection");
-            sprCursor = Content.Load<Texture2D>("Intermission Screens/Unit Selection Cursor");
-            sprConfirmation = Content.Load<Texture2D>("Intermission Screens/Unit Selection Confirmation");
-            sprWarning = Content.Load<Texture2D>("Intermission Screens/Unit Selection Warning");
+            sprBackground = Content.Load<Texture2D>("Menus/Intermission Screens/Unit Selection");
+            sprCursor = Content.Load<Texture2D>("Menus/Intermission Screens/Unit Selection Cursor");
+            sprConfirmation = Content.Load<Texture2D>("Menus/Intermission Screens/Unit Selection Confirmation");
+            sprWarning = Content.Load<Texture2D>("Menus/Intermission Screens/Unit Selection Warning");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntArial14 = Content.Load<SpriteFont>("Fonts/Arial");
@@ -66,17 +68,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static void LoadMap(List<GameScreen> ListGameScreen, Roster PlayerRoster)
         {
             int OldNumberOfGameScreen = ListGameScreen.Count;
-            ListSpawnSquad = new List<Squad>();
-            Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
-            DicSpawnSquadByPlayer.Add("Player", ListSpawnSquad);
+            ListSelectedSquad = new List<Squad>();
             NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(string.Empty);
             NewMap.BattleMapPath = BattleMap.NextMapPath;
-            NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
             NewMap.ListGameScreen = ListGameScreen;
             NewMap.PlayerRoster = PlayerRoster;
             NewMap.Load();
-            NewMap.Init();
-            NewMap.TogglePreview(true);
 
             //Remove any GameScreen created by the map so they don't show up immediately.
             ListGameScreenCreatedByMap = new List<GameScreen>(ListGameScreen.Count - OldNumberOfGameScreen);
@@ -113,13 +110,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else if (InputHelper.InputConfirmPressed())
                 {
-                    if (ListSpawnSquad.Count == NewMap.PlayersMax || ListPresentSquad.Count == 0)
+                    if (ListSelectedSquad.Count == NewMap.PlayersMax || ListPresentSquad.Count == 0)
                     {
-                        StartMap(this, gameTime);
+                        BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
+                        Player1.Inventory.ActiveLoadout.ListSpawnSquad.AddRange(ListSelectedSquad);
+                        Player1.Inventory.ActiveLoadout.ListSpawnCommander.AddRange(ListSelectedCommander);
+                        StartMap(this, gameTime, Player1);
                     }
                     else
                     {
-                        ListSpawnSquad.Add(ListPresentSquad[CursorIndex + (PageCurrent - 1) * 8]);
+                        ListSelectedSquad.Add(ListPresentSquad[CursorIndex + (PageCurrent - 1) * 8]);
                     }
                 }
                 else if (InputHelper.InputCancelPressed())
@@ -134,8 +134,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public static void StartMap(GameScreen Owner, GameTime gameTime)
+        public static void StartMap(GameScreen Owner, GameTime gameTime, BattleMapPlayer Player1)
         {
+            int OldNumberOfGameScreen = Owner.ListGameScreen.Count;
+            NewMap.AddLocalPlayer(Player1);
+            NewMap.Init();
+            NewMap.TogglePreview(true);
+
+            ListGameScreenCreatedByMap = new List<GameScreen>(Owner.ListGameScreen.Count - OldNumberOfGameScreen);
+            for (int S = Owner.ListGameScreen.Count - 1 - OldNumberOfGameScreen; S >= 0; --S)
+            {
+                ListGameScreenCreatedByMap.Add(Owner.ListGameScreen[S]);
+                Owner.ListGameScreen.RemoveAt(S);
+            }
+
             Owner.RemoveAllScreens();
 
             Owner.ListGameScreen.Insert(0, NewMap);
@@ -154,7 +166,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             g.Draw(sprBackground, new Vector2(0, 0), Color.White);
-            g.DrawString(fntArial14, ListSpawnSquad.Count.ToString(), new Vector2(511, 21), Color.Yellow);
+            g.DrawString(fntArial14, ListSelectedSquad.Count.ToString(), new Vector2(511, 21), Color.Yellow);
             g.DrawString(fntArial14, NewMap.PlayersMax.ToString(), new Vector2(550, 21), Color.Yellow);
             g.DrawString(fntArial12, PageCurrent.ToString(), new Vector2(604, 380), Color.White);
             g.DrawString(fntArial12, PageMax.ToString(), new Vector2(624, 380), Color.White);
@@ -168,7 +180,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     g.Draw(sprRectangle, new Rectangle(47, 62 + Pos * 38, 316, 1), Color.FromNonPremultiplied(127, 107, 0, 255));
                     g.Draw(sprRectangle, new Rectangle(47, 84 + Pos * 38, 316, 1), Color.FromNonPremultiplied(127, 107, 0, 255));
 				}
-                if (ListSpawnSquad.Contains(ListPresentSquad[S]))
+                if (ListSelectedSquad.Contains(ListPresentSquad[S]))
                     g.Draw(sprCursor, new Vector2(40, 52 + Pos * 38), Color.White);
             }
             if (Stage == 0)
