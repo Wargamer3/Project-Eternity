@@ -193,11 +193,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public DeathmatchMap(string BattleMapPath, string GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public DeathmatchMap(string BattleMapPath, string GameMode)
             : this(GameMode)
         {
             this.BattleMapPath = BattleMapPath;
-            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
         }
 
         public override void Save(string FilePath)
@@ -302,7 +301,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 NewPlayer.IsPlayerControlled = IsPlayerControlled;
-                NewPlayer.Inventory.ActiveLoadout.ListSquad.Clear();
+                NewPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Clear();
                 int ArraySquadLength = BR.ReadInt32();
                 for (int S = 0; S < ArraySquadLength; ++S)
                 {
@@ -348,7 +347,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Squad NewSquad = new Squad("", Leader, WingmanA, WingmanB);
                     NewSquad.SetPosition(new Vector3(SquadX, SquadY, SquadZ));
                     NewSquad.IsPlayerControlled = SquadIsPlayerControlled;
-                    NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
+                    NewPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
                 }
             }
 
@@ -358,7 +357,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int P = 0; P < ListPlayer.Count; P++)
             {
                 Player ActivePlayer = ListPlayer[P];
-                foreach (Squad ActiveSquad in ActivePlayer.Inventory.ActiveLoadout.ListSquad)
+                foreach (Squad ActiveSquad in ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad)
                 {
                     ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                     SpawnSquad(P, ActiveSquad, 0, ActiveSquad.Position, (int)ActiveSquad.Position.Z);

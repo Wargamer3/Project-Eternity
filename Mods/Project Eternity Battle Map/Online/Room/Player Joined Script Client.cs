@@ -43,7 +43,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
                 Squad NewSquad = new Squad("Squad", NewUnit);
 
-                JoiningPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
+                JoiningPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
 
                 NewMissionSelectScreen.AddPlayer(JoiningPlayer);
             }

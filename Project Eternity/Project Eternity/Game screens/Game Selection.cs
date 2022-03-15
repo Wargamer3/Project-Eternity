@@ -65,11 +65,13 @@ namespace ProjectEternity
                     case MenuChoices.Normal:
                         int OldNumberOfGameScreen = ListGameScreen.Count;
                         StreamReader BR = new StreamReader("Content/Map path.ini");
-                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), string.Empty, new Dictionary<string, List<Core.Units.Squad>>());
+                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), string.Empty);
                         BR.Close();
                         NewMap.ListGameScreen = ListGameScreen;
                         NewMap.PlayerRoster = new Roster();
                         NewMap.PlayerRoster.LoadRoster();
+                        BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
+                        NewMap.AddLocalPlayer(Player1);
                         NewMap.Load();
                         NewMap.Init();
                         NewMap.TogglePreview(true);
@@ -97,7 +99,7 @@ namespace ProjectEternity
 
                     case MenuChoices.SuperTreeWar:
                         int OldNumberOfGameScreenSTW = ListGameScreen.Count;
-                        DeathmatchMap NewMapSTW = new DeathmatchMap("Super Tree Wars/Holy Temple", string.Empty, new Dictionary<string, List<Core.Units.Squad>>());
+                        DeathmatchMap NewMapSTW = new DeathmatchMap("Super Tree Wars/Holy Temple", string.Empty);
                         NewMapSTW.ListGameScreen = ListGameScreen;
                         NewMapSTW.PlayerRoster = new Roster();
                         NewMapSTW.PlayerRoster.LoadRoster();
@@ -158,11 +160,11 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.WorldMap:
-                        PushScreen(new WorldMap("Test Map", string.Empty, new Dictionary<string, List<Core.Units.Squad>>()));
+                        PushScreen(new WorldMap("Test Map", string.Empty));
                         break;
 
                     case MenuChoices.Conquest:
-                        PushScreen(new GameScreens.ConquestMapScreen.ConquestMap("Conquest Test", string.Empty, null));
+                        PushScreen(new GameScreens.ConquestMapScreen.ConquestMap("Conquest Test", string.Empty));
                         break;
 
                     case MenuChoices.SorcererStreet:

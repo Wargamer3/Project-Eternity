@@ -150,7 +150,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public byte PlayersMax;
         public string Description;
 
-        public Dictionary<string, List<Squad>> DicSpawnSquadByPlayer;
         public List<Color> ListMultiplayerColor;
         public List<BattleMap> ListSubMap;
 
@@ -251,7 +250,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
             ListSubMap = new List<BattleMap>();
-            DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
             ListMultiplayerColor = new List<Color>();
 
             GlobalBattleContext = new BattleContext();

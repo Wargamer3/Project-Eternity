@@ -179,7 +179,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Inventory.ListOwnedCharacter.Add(NewCharacter);
             }
 
-            Inventory.ActiveLoadout.ListSquad.Add(Inventory.ListOwnedSquad[0]);
+            Inventory.ActiveLoadout.ListSpawnSquad.Add(Inventory.ListOwnedSquad[0]);
         }
 
         public void FillLoadout(int UnitsInLoadout)
@@ -190,7 +190,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             string UnitPath = IniDefaultUnits.ReadField(ActiveKey, "Path");
             string Pilot = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
 
-            while (Inventory.ActiveLoadout.ListSquad.Count < UnitsInLoadout)
+            while (Inventory.ActiveLoadout.ListSpawnSquad.Count < UnitsInLoadout)
             {
                 Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
                 Character NewCharacter = new Character(Pilot, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
@@ -200,12 +200,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Squad NewSquad = new Squad("Squad", NewUnit);
                 NewSquad.IsPlayerControlled = true;
 
-                Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
+                Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
             }
 
-            while (Inventory.ActiveLoadout.ListSquad.Count > UnitsInLoadout)
+            while (Inventory.ActiveLoadout.ListSpawnSquad.Count > UnitsInLoadout)
             {
-                Inventory.ActiveLoadout.ListSquad.RemoveAt(Inventory.ActiveLoadout.ListSquad.Count - 1);
+                Inventory.ActiveLoadout.ListSpawnSquad.RemoveAt(Inventory.ActiveLoadout.ListSpawnSquad.Count - 1);
             }
         }
 

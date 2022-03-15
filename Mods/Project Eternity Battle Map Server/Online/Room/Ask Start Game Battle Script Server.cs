@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
             for (int P = 0; P < Owner.ListRoomPlayer.Count; ++P)
             {
-                DicSpawnSquadByPlayer.Add(Owner.ListRoomPlayer[P].Name, Owner.ListRoomPlayer[P].Inventory.ActiveLoadout.ListSquad);
+                DicSpawnSquadByPlayer.Add(Owner.ListRoomPlayer[P].Name, Owner.ListRoomPlayer[P].Inventory.ActiveLoadout.ListSpawnSquad);
             }
 
             BattleMap NewMap;
@@ -53,7 +53,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
             NewMap.ListGameScreen = new List<GameScreen>();
             NewMap.BattleMapPath = Owner.MapPath;
-            NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
             NewMap.InitOnlineServer(OnlineServer, CreatedGroup);
             CreatedGroup.SetGame(NewMap);
 

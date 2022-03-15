@@ -1,28 +1,28 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Characters;
-using System.IO;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class PlayerInventory
     {
-        public List<SquadLoadout> ListSquadLoadout;
+        public List<PlayerLoadout> ListSquadLoadout;
         public List<Squad> ListOwnedSquad;
         public List<Character> ListOwnedCharacter;
 
-        public SquadLoadout ActiveLoadout;
+        public PlayerLoadout ActiveLoadout;
 
         public PlayerInventory()
         {
-            ListSquadLoadout = new List<SquadLoadout>();
+            ListSquadLoadout = new List<PlayerLoadout>();
             ListOwnedSquad = new List<Squad>();
             ListOwnedCharacter = new List<Character>();
 
-            ActiveLoadout = new SquadLoadout();
+            ActiveLoadout = new PlayerLoadout();
             ListSquadLoadout.Add(ActiveLoadout);
         }
 
@@ -63,21 +63,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             int ListSquadLoadoutCount = BR.ReadInt32();
-            ListSquadLoadout = new List<SquadLoadout>(ListSquadLoadoutCount);
+            ListSquadLoadout = new List<PlayerLoadout>(ListSquadLoadoutCount);
             for (int L = 0; L < ListSquadLoadoutCount; ++L)
             {
-                SquadLoadout NewSquadLoadout = new SquadLoadout();
+                PlayerLoadout NewSquadLoadout = new PlayerLoadout();
                 ListSquadLoadout.Add(NewSquadLoadout);
 
                 int NewSquadLoadoutSquadCount = BR.ReadInt32();
-                NewSquadLoadout.ListSquad = new List<Squad>(NewSquadLoadoutSquadCount);
+                NewSquadLoadout.ListSpawnSquad = new List<Squad>(NewSquadLoadoutSquadCount);
                 for (int S = 0; S < NewSquadLoadoutSquadCount; ++S)
                 {
                     string RelativePath = BR.ReadString();
 
                     if (string.IsNullOrEmpty(RelativePath))
                     {
-                        NewSquadLoadout.ListSquad.Add(null);
+                        NewSquadLoadout.ListSpawnSquad.Add(null);
                         continue;
                     }
 
@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     Squad NewSquad = new Squad("Squad", LoadedUnit);
                     NewSquad.IsPlayerControlled = true;
 
-                    NewSquadLoadout.ListSquad.Add(NewSquad);
+                    NewSquadLoadout.ListSpawnSquad.Add(NewSquad);
                 }
             }
 
@@ -120,31 +120,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(ListSquadLoadout.Count);
             for (int L = 0; L < ListSquadLoadout.Count; ++L)
             {
-                BW.Write(ListSquadLoadout[L].ListSquad.Count);
-                for (int S = 0; S < ListSquadLoadout[L].ListSquad.Count; ++S)
+                BW.Write(ListSquadLoadout[L].ListSpawnSquad.Count);
+                for (int S = 0; S < ListSquadLoadout[L].ListSpawnSquad.Count; ++S)
                 {
-                    if (ListSquadLoadout[L].ListSquad[S] == null)
+                    if (ListSquadLoadout[L].ListSpawnSquad[S] == null)
                     {
                         BW.Write(string.Empty);
                     }
                     else
                     {
-                        BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.RelativePath);
-                        BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.UnitTypeName);
-                        BW.Write(ListSquadLoadout[L].ListSquad[S].CurrentLeader.Pilot.FullName);
+                        BW.Write(ListSquadLoadout[L].ListSpawnSquad[S].CurrentLeader.RelativePath);
+                        BW.Write(ListSquadLoadout[L].ListSpawnSquad[S].CurrentLeader.UnitTypeName);
+                        BW.Write(ListSquadLoadout[L].ListSpawnSquad[S].CurrentLeader.Pilot.FullName);
                     }
                 }
             }
         }
     }
 
-    public class SquadLoadout
+    public class PlayerLoadout
     {
-        public List<Squad> ListSquad;
+        public List<Squad> ListSpawnSquad;
+        public List<Commander> ListSpawnCommander;
 
-        public SquadLoadout()
+        public PlayerLoadout()
         {
-            ListSquad = new List<Squad>();
+            ListSpawnSquad = new List<Squad>();
+            ListSpawnCommander = new List<Commander>();
         }
     }
 }

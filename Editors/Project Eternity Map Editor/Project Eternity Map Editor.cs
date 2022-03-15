@@ -126,7 +126,7 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                DeathmatchMap NewMap = new DeathmatchMap(FilePath, string.Empty, null);
+                DeathmatchMap NewMap = new DeathmatchMap(FilePath, string.Empty);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.LayerManager.ListLayer.Add(new MapLayer(NewMap, 0));
 
@@ -159,7 +159,7 @@ namespace ProjectEternity.Editors.MapEditor
             string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(24);
 
             BattleMapViewer.Preload();
-            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty, new Dictionary<string, List<Core.Units.Squad>>());
+            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty);
             Helper = new DeathmatchMapHelper(NewMap);
             InitMap(NewMap);
 

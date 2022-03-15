@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                             {
-                                Squad NewSquad = ActivePlayer.Inventory.ActiveLoadout.ListSquad[SpawnSquadIndex];
+                                Squad NewSquad = ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex];
                                 if (NewSquad == null)
                                 {
                                     ++SpawnSquadIndex;
@@ -88,14 +88,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(Owner, NewSquad));
                                     NewSquad.SquadAI.Load("Multiplayer/Capture The Flag/Easy");
                                 }
-                                if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
+                                if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
                                 {
                                     break;
                                 }
                             }
                         }
 
-                        if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSquad.Count)
+                        if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
                         {
                             break;
                         }

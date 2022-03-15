@@ -424,7 +424,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
                 for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
                 {
-                    DicSpawnSquadByPlayer.Add(Room.ListRoomPlayer[P].Name, Room.ListRoomPlayer[P].Inventory.ActiveLoadout.ListSquad);
+                    DicSpawnSquadByPlayer.Add(Room.ListRoomPlayer[P].Name, Room.ListRoomPlayer[P].Inventory.ActiveLoadout.ListSpawnSquad);
                 }
 
                 BattleMap NewMap;
@@ -439,7 +439,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 NewMap.BattleMapPath = Room.MapPath;
-                NewMap.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
                 NewMap.ListGameScreen = ListGameScreen;
 
                 for (int P = 0; P < 10; P++)
@@ -606,11 +605,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 57, DrawY + 5), Color.White);
             g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 110, DrawY + 5), Color.White);
 
-            for (int S = 0; S < PlayerToDraw.Inventory.ActiveLoadout.ListSquad.Count; S++)
+            for (int S = 0; S < PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad.Count; S++)
             {
-                if (PlayerToDraw.Inventory.ActiveLoadout.ListSquad[S] != null)
+                if (PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S] != null)
                 {
-                    g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSquad[S][0].SpriteMap, new Rectangle(DrawX + 370 + S * 35, DrawY - 3, 32, 32), Color.White);
+                    g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S][0].SpriteMap, new Rectangle(DrawX + 370 + S * 35, DrawY - 3, 32, 32), Color.White);
                 }
             }
 

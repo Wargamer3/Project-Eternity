@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, BattleMapPlayer.PlayerTypes.Online, false, 0, true, Color.Blue);
 
-            NewPlayer.Inventory.ActiveLoadout.ListSquad.Add(NewSquad);
+            NewPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
 
             return NewPlayer;
         }

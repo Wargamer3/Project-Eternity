@@ -206,7 +206,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                WorldMap NewMap = new WorldMap(MapLogicName, string.Empty, null);
+                WorldMap NewMap = new WorldMap(MapLogicName, string.Empty);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap, 0));
 
@@ -230,7 +230,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
         {
             string Name = MapPath.Substring(0, MapPath.Length - 4).Substring(MapPath.LastIndexOf("Maps") + 5);
             BattleMapViewer.Preload();
-            WorldMap ActiveWorldMap = new WorldMap(Name, string.Empty, null);
+            WorldMap ActiveWorldMap = new WorldMap(Name, string.Empty);
             Helper = new WorldMapHelper(ActiveWorldMap);
 
             InitMap(ActiveWorldMap);

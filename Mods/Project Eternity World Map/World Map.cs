@@ -88,11 +88,10 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             this.ListPlayer = new List<Player>();
         }
 
-        public WorldMap(string BattleMapPath, string GameMode, Dictionary<string, List<Squad>> DicSpawnSquadByPlayer)
+        public WorldMap(string BattleMapPath, string GameMode)
             : this(GameMode)
         {
             this.BattleMapPath = BattleMapPath;
-            this.DicSpawnSquadByPlayer = DicSpawnSquadByPlayer;
         }
 
         public override void Save(string FilePath)

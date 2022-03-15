@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
         public override BattleMap GetNewMap(string GameMode)
         {
-            return new WorldMap(BattleMapPath, GameMode, DicSpawnSquadByPlayer);
+            return new WorldMap(BattleMapPath, GameMode);
         }
 
         public override GameScreen GetMultiplayerScreen()
