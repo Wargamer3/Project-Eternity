@@ -21,6 +21,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly Roster PlayerRoster;
 
         private int CursorIndex;
+        private static List<Commander> ListPresentCommander;
         private static List<Commander> ListSelectedCommander;
 
         public CommanderLoadoutScreen(Roster PlayerRoster)
@@ -31,8 +32,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListSelectedCommander = new List<Commander>();
 
             CursorIndex = 0;
-            PlayerRoster.ListCommander.Clear();
-            PlayerRoster.ListCommander.Add(new Commander("Saotome Institute"));
+            PlayerRoster.TeamCommander.Clear();
+            PlayerRoster.TeamCommander.Add(new Commander("Saotome Institute"));
+            ListPresentCommander = PlayerRoster.TeamCommander.GetAll();
         }
 
         public override void Load()
@@ -54,12 +56,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (InputHelper.InputDownPressed())
             {
-                if (CursorIndex < 8 && CursorIndex + 1 < PlayerRoster.ListCommander.Count)
+                if (CursorIndex < 8 && CursorIndex + 1 < ListPresentCommander.Count)
                     CursorIndex++;
             }
             else if (InputHelper.InputConfirmPressed())
             {
-                if (ListSelectedCommander.Count == MaxCommander || ListSelectedCommander.Count == PlayerRoster.ListCommander.Count || PlayerRoster.ListCommander.Count == 0)
+                if (ListSelectedCommander.Count == MaxCommander || ListSelectedCommander.Count == ListPresentCommander.Count || ListPresentCommander.Count == 0)
                 {
                     LoadoutScreen.LoadMap(ListGameScreen, PlayerRoster);
                     BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
@@ -68,7 +70,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else
                 {
-                    ListSelectedCommander.Add(PlayerRoster.ListCommander[CursorIndex]);
+                    ListSelectedCommander.Add(ListPresentCommander[CursorIndex]);
                 }
             }
             else if (InputHelper.InputCancelPressed())
@@ -90,16 +92,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntArial14, ListSelectedCommander.Count.ToString() + " / " + MaxCommander, new Vector2(511, 21), Color.Yellow);
             g.DrawStringMiddleAligned(fntArial12, "Left", new Vector2(570, 23), Color.White);
 
-            for (int S = 0, Pos = 0; S < PlayerRoster.ListCommander.Count; S++, Pos++)
+            for (int C = 0, Pos = 0; C < ListPresentCommander.Count; C++, Pos++)
 			{
-                g.DrawString(fntArial12, PlayerRoster.ListCommander[S].Name, new Vector2(50, 63 + Pos * 38), Color.White);
-				if (S == CursorIndex)
+                g.DrawString(fntArial12, ListPresentCommander[C].Name, new Vector2(50, 63 + Pos * 38), Color.White);
+				if (C == CursorIndex)
 				{
                     g.Draw(sprRectangle, new Rectangle(47, 62 + Pos * 38, 316, 1), Color.FromNonPremultiplied(127, 107, 0, 255));
                     g.Draw(sprRectangle, new Rectangle(47, 84 + Pos * 38, 316, 1), Color.FromNonPremultiplied(127, 107, 0, 255));
 				}
 
-                if (ListSelectedCommander.Contains(PlayerRoster.ListCommander[S]))
+                if (ListSelectedCommander.Contains(ListPresentCommander[C]))
                 {
                     g.Draw(sprCursor, new Vector2(40, 52 + Pos * 38), Color.White);
                 }
