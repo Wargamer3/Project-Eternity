@@ -23,6 +23,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private DefaultCamera Camera;
         private Texture2D sprCursor;
         private Tile3D Cursor;
+        private List<Tile3D> ListEditorCursorFace;
         private Dictionary<int, Tile3DHolder> DicTile3DByTileset;
         private Dictionary<int, Dictionary<int, Tile3DHolder>> DicTile3DByLayerByTileset;
         private Dictionary<Vector4, List<Tile3D>> DicDrawablePointPerColor;
@@ -34,6 +35,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Map = Map;
             sprCursor = Map.sprCursor;
             Camera = new DefaultCamera(g);
+            ListEditorCursorFace = new List<Tile3D>();
 
             MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D");
             ColorEffect = Map.Content.Load<Effect>("Shaders/Color Only");
@@ -198,6 +200,35 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        private void Create3DCursor()
+        {
+            ListEditorCursorFace.Clear();
+
+            int X = (int)Map.CursorPositionVisible.X;
+            int Y = (int)Map.CursorPositionVisible.Y;
+            float ZTop = (Map.CursorPosition.Z + 1) * 32 + 0.3f;
+            float ZBottom = Map.CursorPosition.Z * 32 + 0.3f;
+            Terrain3D Cursor = new Terrain3D();
+            Cursor.TerrainStyle = Terrain3D.TerrainStyles.Cube;
+            Cursor.FrontFace = new DrawableTile();
+            Cursor.FrontFace.TilesetIndex = 0;
+            Cursor.FrontFace.Origin = new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y);
+            Cursor.BackFace = new DrawableTile();
+            Cursor.BackFace.TilesetIndex = 0;
+            Cursor.BackFace.Origin = new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y);
+            Cursor.LeftFace = new DrawableTile();
+            Cursor.LeftFace.TilesetIndex = 0;
+            Cursor.LeftFace.Origin = new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y);
+            Cursor.RightFace = new DrawableTile();
+            Cursor.RightFace.TilesetIndex = 0;
+            Cursor.RightFace.Origin = new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y);
+
+            ListEditorCursorFace = Cursor.CreateTile3D(0, Point.Zero,
+                X * Map.TileSize.X, Y * Map.TileSize.Y, ZTop, ZBottom, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0);
+            ListEditorCursorFace.Add(Cursor.CreateTile3D(0, Point.Zero,
+                X * Map.TileSize.X, Y * Map.TileSize.Y, ZBottom, ZBottom, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0)[0]);
+        }
+
         public void Update(GameTime gameTime)
         {
             UpdateCamera();
@@ -219,6 +250,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DicDrawablePointPerColor.Clear();
             ListDrawableArrowPerColor.Clear();
             DicDamageNumberByPosition.Clear();
+            if (Map.IsEditor)
+            {
+                Create3DCursor();
+            }
         }
 
         private void UpdateCamera()
@@ -553,8 +588,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PolygonEffect.Texture = sprCursor;
             PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-            Cursor.Draw(g.GraphicsDevice);
-
+            if (Map.IsEditor)
+            {
+                g.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+                foreach (Tile3D CursorFace in ListEditorCursorFace)
+                {
+                    CursorFace.Draw(g.GraphicsDevice);
+                }
+                g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            }
+            else
+            {
+                Cursor.Draw(g.GraphicsDevice);
+            }
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 //If the selected unit have the order to move, draw the possible positions it can go to.

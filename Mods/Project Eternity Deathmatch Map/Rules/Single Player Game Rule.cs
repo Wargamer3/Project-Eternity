@@ -142,7 +142,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Update(GameTime gameTime)
         {
-            Owner.ListActionMenuChoice.Last().Update(gameTime);
+            if (!Owner.IsEditor)
+            {
+                Owner.ListActionMenuChoice.Last().Update(gameTime);
+            }
         }
 
         public void BeginDraw(CustomSpriteBatch g)

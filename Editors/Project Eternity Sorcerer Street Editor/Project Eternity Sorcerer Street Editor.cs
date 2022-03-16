@@ -84,7 +84,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 ActiveMap.MapSize = new Point(NewWidth, NewHeight);
             }
 
-            public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex)
+            public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
             {
                 TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset);
                 NewTerrain.Position = new Vector3(X, Y, 0);
@@ -92,7 +92,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
             }
 
-            public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex)
+            public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers)
             {
                 DrawableTile NewTile = new DrawableTile(TilePreset);
 

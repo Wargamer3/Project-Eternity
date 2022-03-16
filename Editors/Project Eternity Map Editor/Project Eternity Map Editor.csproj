@@ -115,6 +115,11 @@
       <Name>Project Eternity Base Item</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
+      <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
+      <Name>Project Eternity Control Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Cutscene\Project Eternity Cutscene.csproj">
       <Project>{7EE3C972-F915-4491-99A2-E654E634405F}</Project>
       <Name>Project Eternity Cutscene</Name>

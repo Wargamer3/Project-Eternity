@@ -78,20 +78,35 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveMap.MapSize = new Point(NewWidth, NewHeight);
         }
 
-        public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex)
+        public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
         {
             Terrain NewTerrain = new Terrain(TerrainPreset);
             NewTerrain.LayerIndex = LayerIndex;
             NewTerrain.Position = new Vector3(X, Y, TerrainPreset.Position.Z);
 
-            GetRealLayer(LayerIndex).ArrayTerrain[X, Y] = NewTerrain;
+            if (ConsiderSubLayers)
+            {
+                GetRealLayer(LayerIndex).ArrayTerrain[X, Y] = NewTerrain;
+            }
+            else
+            {
+                ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
+            }
         }
 
-        public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex)
+        public void ReplaceTile(int X, int Y, DrawableTile TilePreset, int LayerIndex, bool ConsiderSubLayers)
         {
             DrawableTile NewTile = new DrawableTile(TilePreset);
 
-            GetRealLayer(LayerIndex).LayerGrid.ReplaceTile(X, Y, NewTile);
+            if (ConsiderSubLayers)
+            {
+                GetRealLayer(LayerIndex).LayerGrid.ReplaceTile(X, Y, NewTile);
+            }
+            else
+            {
+                ActiveMap.LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
+                ActiveMap.LayerManager.LayerHolderDrawable.Reset();
+            }
         }
 
         public void RemoveTileset(int TilesetIndex)

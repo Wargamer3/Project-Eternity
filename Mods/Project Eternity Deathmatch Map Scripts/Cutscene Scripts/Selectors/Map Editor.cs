@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                             {
-                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, 0);
+                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, 0, true);
                             }
                         }
                         //Just create a new Tile.
@@ -99,10 +99,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             if (MouseX >= 0 && MouseY >= 0 && MouseX < BattleMapViewer.ActiveMap.MapSize.X && MouseY < BattleMapViewer.ActiveMap.MapSize.Y)
                             {
-                                Helper.ReplaceTerrain(MouseX, MouseY, PresetTerrain, 0);
+                                Helper.ReplaceTerrain(MouseX, MouseY, PresetTerrain, 0, true);
 
                                 Helper.ReplaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                    PresetTile, 0);
+                                    PresetTile, 0, true);
                             }
                         }
                     }
@@ -383,8 +383,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             int PosX = (int)ActiveTerrain.Position.X;
                             int PosY = (int)ActiveTerrain.Position.Y;
                             DrawableTile ActiveTile = TerrainAttribute.ListTileChangeLocation[T];
-                            Helper.ReplaceTerrain(PosX, PosY, ActiveTerrain, 0);
-                            Helper.ReplaceTile(PosX, PosY, ActiveTile, 0);
+                            Helper.ReplaceTerrain(PosX, PosY, ActiveTerrain, 0, true);
+                            Helper.ReplaceTile(PosX, PosY, ActiveTile, 0, true);
                         }
 
                         BattleMapViewer.ActiveMap = NewMap;
@@ -453,8 +453,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 {
                                     for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                     {
-                                        Helper.ReplaceTerrain(X, Y, new Terrain(PresetTerrain), 0);
-                                        Helper.ReplaceTile(X, Y, new DrawableTile(PresetTile), 0);
+                                        Helper.ReplaceTerrain(X, Y, new Terrain(PresetTerrain), 0, true);
+                                        Helper.ReplaceTile(X, Y, new DrawableTile(PresetTile), 0, true);
                                     }
                                 }
                             }
@@ -485,7 +485,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 {
                                     Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, 0,
                                        0, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
-                                       0);
+                                       0, true);
 
                                     Helper.ReplaceTile(X, Y,
                                        new DrawableTile(
@@ -493,7 +493,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                                         (Y % (ActiveMap.ListTilesetPreset.Last().ArrayTerrain.GetLength(1))) * ActiveMap.TileSize.Y,
                                                         ActiveMap.TileSize.X, ActiveMap.TileSize.Y),
                                            cboTiles.Items.Count - 1),
-                                       0);
+                                       0, true);
                                 }
                             }
                         }

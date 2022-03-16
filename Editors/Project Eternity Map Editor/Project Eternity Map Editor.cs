@@ -9,6 +9,7 @@ using ProjectEternity.Core.Scripts;
 using ProjectEternity.Editors.MusicPlayer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.Editors.MapEditor
 {
@@ -340,6 +341,15 @@ namespace ProjectEternity.Editors.MapEditor
 
         #region Map
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.X || KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.X))
+            {
+                PlaceTile((int)BattleMapViewer.ActiveMap.CursorPosition.X, (int)BattleMapViewer.ActiveMap.CursorPosition.Y, (int)BattleMapViewer.ActiveMap.CursorPosition.Z, false);
+            }
+            return true;
+        }
+
         protected virtual void pnMapPreview_MouseMove(object sender, MouseEventArgs e)
         {
             Vector3 MapPreviewStartingPos = new Vector3(
@@ -443,27 +453,13 @@ namespace ProjectEternity.Editors.MapEditor
 
                             if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                             {
-                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, lsLayers.SelectedIndex);
+                                Helper.ReplaceTerrain(TilePos.X, TilePos.Y, TileAttributesEditor.ActiveTerrain, lsLayers.SelectedIndex, true);
                             }
                         }
                         //Just create a new Tile.
                         else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
                         {
-                            Point TilePos = TilesetViewer.ActiveTile;
-                            if (TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
-                                || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
-                            {
-                                return;
-                            }
-
-                            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-                            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-
-                            Helper.ReplaceTerrain((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                PresetTerrain, lsLayers.SelectedIndex);
-
-                            Helper.ReplaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y,
-                                PresetTile, lsLayers.SelectedIndex);
+                            PlaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y, lsLayers.SelectedIndex, true);
                         }
                     }
                 }
@@ -517,6 +513,25 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             #endregion
+        }
+
+        private void PlaceTile(int X, int Y, int LayerIndex, bool ConsiderSubLayers)
+        {
+            Point TilePos = TilesetViewer.ActiveTile;
+            if (TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
+                || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
+            {
+                return;
+            }
+
+            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+
+            Helper.ReplaceTerrain(X, Y,
+                PresetTerrain, LayerIndex, ConsiderSubLayers);
+
+            Helper.ReplaceTile(X, Y,
+                PresetTile, LayerIndex, ConsiderSubLayers);
         }
 
         #endregion
@@ -1131,8 +1146,8 @@ namespace ProjectEternity.Editors.MapEditor
                                 {
                                     for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                     {
-                                        Helper.ReplaceTerrain(X, Y, new Terrain(PresetTerrain), 0);
-                                        Helper.ReplaceTile(X, Y, new DrawableTile(PresetTile), 0);
+                                        Helper.ReplaceTerrain(X, Y, new Terrain(PresetTerrain), 0, true);
+                                        Helper.ReplaceTile(X, Y, new DrawableTile(PresetTile), 0, true);
                                     }
                                 }
                             }
@@ -1178,7 +1193,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 {
                                     Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, lsLayers.SelectedIndex,
                                        0, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
-                                       0);
+                                       0, true);
 
                                     Helper.ReplaceTile(X, Y, 
                                        new DrawableTile(
@@ -1186,7 +1201,7 @@ namespace ProjectEternity.Editors.MapEditor
                                                         (Y % (ActiveMap.ListTilesetPreset.Last().ArrayTerrain.GetLength(1))) * ActiveMap.TileSize.Y,
                                                         ActiveMap.TileSize.X, ActiveMap.TileSize.Y),
                                            cboTiles.Items.Count - 1),
-                                       0);
+                                       0, true);
                                 }
                             }
                         }

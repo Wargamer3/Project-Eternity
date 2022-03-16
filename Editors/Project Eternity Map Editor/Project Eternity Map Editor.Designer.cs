@@ -50,6 +50,8 @@
             this.btnSpawnEnemy = new System.Windows.Forms.CheckBox();
             this.btnSpawnPlayer = new System.Windows.Forms.CheckBox();
             this.gbOtherEvents = new System.Windows.Forms.GroupBox();
+            this.btnTeleporters = new System.Windows.Forms.CheckBox();
+            this.lblTeleporters = new System.Windows.Forms.Label();
             this.btnMapSwitches = new System.Windows.Forms.CheckBox();
             this.lblMapSwitches = new System.Windows.Forms.Label();
             this.btnEventSpawn = new System.Windows.Forms.CheckBox();
@@ -95,8 +97,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tslInformation = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
-            this.btnTeleporters = new System.Windows.Forms.CheckBox();
-            this.lblTeleporters = new System.Windows.Forms.Label();
             this.tbConditions.SuspendLayout();
             this.tabToolBox.SuspendLayout();
             this.tabTiles.SuspendLayout();
@@ -381,6 +381,28 @@
             this.gbOtherEvents.TabIndex = 12;
             this.gbOtherEvents.TabStop = false;
             this.gbOtherEvents.Text = "Other";
+            // 
+            // btnTeleporters
+            // 
+            this.btnTeleporters.Appearance = System.Windows.Forms.Appearance.Button;
+            this.btnTeleporters.BackColor = System.Drawing.Color.Firebrick;
+            this.btnTeleporters.Location = new System.Drawing.Point(168, 32);
+            this.btnTeleporters.Name = "btnTeleporters";
+            this.btnTeleporters.Size = new System.Drawing.Size(47, 47);
+            this.btnTeleporters.TabIndex = 14;
+            this.btnTeleporters.Text = "T";
+            this.btnTeleporters.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnTeleporters.UseVisualStyleBackColor = false;
+            this.btnTeleporters.CheckedChanged += new System.EventHandler(this.btnTeleporters_CheckedChanged);
+            // 
+            // lblTeleporters
+            // 
+            this.lblTeleporters.AutoSize = true;
+            this.lblTeleporters.Location = new System.Drawing.Point(165, 16);
+            this.lblTeleporters.Name = "lblTeleporters";
+            this.lblTeleporters.Size = new System.Drawing.Size(60, 13);
+            this.lblTeleporters.TabIndex = 15;
+            this.lblTeleporters.Text = "Teleporters";
             // 
             // btnMapSwitches
             // 
@@ -876,28 +898,6 @@
             this.mnuToolBar.Size = new System.Drawing.Size(928, 24);
             this.mnuToolBar.TabIndex = 9;
             this.mnuToolBar.Text = "menuStrip1";
-            // 
-            // btnTeleporters
-            // 
-            this.btnTeleporters.Appearance = System.Windows.Forms.Appearance.Button;
-            this.btnTeleporters.BackColor = System.Drawing.Color.Firebrick;
-            this.btnTeleporters.Location = new System.Drawing.Point(168, 32);
-            this.btnTeleporters.Name = "btnTeleporters";
-            this.btnTeleporters.Size = new System.Drawing.Size(47, 47);
-            this.btnTeleporters.TabIndex = 14;
-            this.btnTeleporters.Text = "T";
-            this.btnTeleporters.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btnTeleporters.UseVisualStyleBackColor = false;
-            this.btnTeleporters.CheckedChanged += new System.EventHandler(this.btnTeleporters_CheckedChanged);
-            // 
-            // lblTeleporters
-            // 
-            this.lblTeleporters.AutoSize = true;
-            this.lblTeleporters.Location = new System.Drawing.Point(165, 16);
-            this.lblTeleporters.Name = "lblTeleporters";
-            this.lblTeleporters.Size = new System.Drawing.Size(60, 13);
-            this.lblTeleporters.TabIndex = 15;
-            this.lblTeleporters.Text = "Teleporters";
             // 
             // ProjectEternityMapEditor
             // 

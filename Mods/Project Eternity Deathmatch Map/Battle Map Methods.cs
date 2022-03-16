@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             GameRule.Init();
 
-            if (IsClient)
+            if (IsClient && ListPlayer.Count > 0)
             {
                 ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
             }
