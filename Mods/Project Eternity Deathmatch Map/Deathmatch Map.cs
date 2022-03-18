@@ -600,7 +600,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 LayerManager.Update(gameTime);
 
-                if (!IsOnTop)
+                if (!IsOnTop || IsAPlatform)//Everything should be handled by the main map.
                 {
                     return;
                 }
@@ -619,6 +619,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 UpdateCursorVisiblePosition(gameTime);
+
+                foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+                {
+                    ActivePlatform.PlatformMap.Update(gameTime);
+                }
             }
         }
 
@@ -688,6 +693,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LayerManager.BeginDraw(g);
 
             g.End();
+
+            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                ActivePlatform.PlatformMap.BeginDraw(g);
+            }
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -696,8 +706,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 return;
             }
-
-            g.GraphicsDevice.Clear(Color.Black);
 
             //Handle screen shaking.
             if (IsShaking)
@@ -711,6 +719,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 GraphicsDevice.SetRenderTarget(ShakingRenderTraget);
 
                 g.Begin();
+            }
+
+            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                ActivePlatform.PlatformMap.Draw(g);
             }
 
             if (ListBackground.Count > 0)
@@ -814,7 +827,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             #endregion
         }
 
-        public void BeginDrawNightOverlay(CustomSpriteBatch g)
+        private void BeginDrawNightOverlay(CustomSpriteBatch g)
         {
             for (int P = 0; P < ListPlayer.Count; P++)
             {
@@ -828,7 +841,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void DrawNightOverlay(CustomSpriteBatch g)
+        private void DrawNightOverlay(CustomSpriteBatch g)
         {
             for (int P = 0; P < ListPlayer.Count; P++)
             {

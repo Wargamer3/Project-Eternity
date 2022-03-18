@@ -64,6 +64,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         void AddDamageNumber(string Damage, Vector3 Position);
 
+        void SetWorld(Matrix NewWorld);
+
         void Reset();
 
         void Update(GameTime gameTime);

@@ -266,43 +266,7 @@ namespace ProjectEternity
 
             SystemList.LoadSystemLists();
 
-            #region Ressources loading
-
-            string[] Files;
-            bool InstanceIsBaseObject;
-            Type ObjectType;
-
-            #region Battle Maps
-
-            Files = Directory.GetFiles("Mods", "*.dll");
-            for (int F = 0; F < Files.Length; F++)
-            {
-                Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
-                //Get every classes in it.
-                Type[] types = ass.GetTypes();
-                for (int t = 0; t < types.Count(); t++)
-                {
-                    //Look if the class inherit from Unit somewhere.
-                    ObjectType = types[t].BaseType;
-                    InstanceIsBaseObject = ObjectType == typeof(BattleMap);
-                    while (ObjectType != null && ObjectType != typeof(BattleMap))
-                    {
-                        ObjectType = ObjectType.BaseType;
-                        if (ObjectType == null)
-                            InstanceIsBaseObject = false;
-                    }
-                    //If this class is from BaseEditor, load it.
-                    if (InstanceIsBaseObject)
-                    {
-                        BattleMap instance = Activator.CreateInstance(types[t]) as BattleMap;
-                        BattleMap.DicBattmeMapType.Add(instance.GetMapType(), instance);
-                    }
-                }
-            }
-
-            #endregion
-
-            #endregion
+            BattleMap.LoadMapTypes();
 
             SplashScreen.CloseForm();
         }

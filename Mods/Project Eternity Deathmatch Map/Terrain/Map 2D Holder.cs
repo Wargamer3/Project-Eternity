@@ -60,6 +60,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DicDamageNumberByPosition.Add(Damage, Position);
         }
 
+        public void SetWorld(Matrix NewWorld)
+        {
+        }
+
         public void BeginDraw(CustomSpriteBatch g)
         {
         }

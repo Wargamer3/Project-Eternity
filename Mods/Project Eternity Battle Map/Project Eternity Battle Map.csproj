@@ -172,6 +172,7 @@
     <Compile Include="Online\Battle Map Online Client.cs" />
     <Compile Include="Online\Battle Map Client Group.cs" />
     <Compile Include="Props\Interactive Prop.cs" />
+    <Compile Include="Props\Platform.cs" />
     <Compile Include="Team Lists\Commander.cs" />
     <Compile Include="Team Lists\Roster Unit.cs" />
     <Compile Include="Team Lists\Roster Character.cs" />
@@ -226,6 +227,10 @@
     <Compile Include="Tile 3D.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">
+      <Project>{f5cd64c0-abde-44c7-8af8-0a47164d5f69}</Project>
+      <Name>Project Eternity AI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
       <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
       <Name>Project Eternity Animation Screen</Name>

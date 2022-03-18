@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void SetViewMatrix(Matrix ViewProjection, Vector3 CameraPosition3D)
         {
-            Effect3D.Parameters["ViewProjection"].SetValue(ViewProjection);
+            Effect3D.Parameters["WorldViewProj"].SetValue(ViewProjection);
             Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition3D);
 
             float fogStart = 1, fogEnd = 1;
@@ -76,6 +76,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fogVector.W = (ViewProjection.M43 + fogStart) * scale;
 
             Effect3D.Parameters["FogVector"].SetValue(fogVector);
+        }
+
+        public void SetWorld(Matrix NewWorld)
+        {
+            Matrix worldInverse = Matrix.Invert(NewWorld);
+
+            Effect3D.Parameters["World"].SetValue(Matrix.Transpose(NewWorld));
+
+            Effect3D.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
         }
 
         public void Finish(GraphicsDevice g)

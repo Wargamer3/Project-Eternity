@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public override void Draw3D(GraphicsDevice GraphicsDevice)
+        public override void Draw3D(GraphicsDevice GraphicsDevice, CustomSpriteBatch g)
         {
             if (!IsUsed)
             {

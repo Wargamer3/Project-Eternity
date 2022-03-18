@@ -146,12 +146,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
         public string CameraType;
         public Vector3 CameraPosition;
+        public Camera3D Camera;
         public byte PlayersMin;
         public byte PlayersMax;
         public string Description;
 
         public List<Color> ListMultiplayerColor;
         public List<BattleMap> ListSubMap;
+        protected List<BattleMapPlatform> ListPlatform;
+        public bool IsAPlatform;//Everything should be handled by the main map.
+        public bool IsPlatformActive;//Tell if the platform has focus.
+        public BattleMapPlatform ActivePlatform;//The platform in which the cursor is.
 
         public ActionPanelHolder ListActionMenuChoice;
         public Stack<Tuple<int, int>> ListMAPAttackTarget;//Player index, Squad index.
@@ -250,6 +255,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
             ListSubMap = new List<BattleMap>();
+            ListPlatform = new List<BattleMapPlatform>();
             ListMultiplayerColor = new List<Color>();
 
             GlobalBattleContext = new BattleContext();
@@ -320,6 +326,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!IsServer)
             {
+                Camera = new DefaultCamera(GraphicsDevice);
                 AttackPicker = new AttacksMenu(ActiveParser);
 
                 sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
@@ -706,6 +713,39 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
         
+        public static void LoadMapTypes()
+        {
+            string[] Files;
+            bool InstanceIsBaseObject;
+            Type ObjectType;
+
+            Files = Directory.GetFiles("Mods", "*.dll");
+            for (int F = 0; F < Files.Length; F++)
+            {
+                Assembly ass = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                //Get every classes in it.
+                Type[] types = ass.GetTypes();
+                for (int t = 0; t < types.Length; t++)
+                {
+                    //Look if the class inherit from Unit somewhere.
+                    ObjectType = types[t].BaseType;
+                    InstanceIsBaseObject = ObjectType == typeof(BattleMap);
+                    while (ObjectType != null && ObjectType != typeof(BattleMap))
+                    {
+                        ObjectType = ObjectType.BaseType;
+                        if (ObjectType == null)
+                            InstanceIsBaseObject = false;
+                    }
+                    //If this class is from BaseEditor, load it.
+                    if (InstanceIsBaseObject)
+                    {
+                        BattleMap instance = Activator.CreateInstance(types[t]) as BattleMap;
+                        BattleMap.DicBattmeMapType.Add(instance.GetMapType(), instance);
+                    }
+                }
+            }
+        }
+
         public static BattleMap LoadTemporaryMap(List<GameScreen> ListGameScreen)
         {
             FileStream FS = new FileStream("User Data/Saves/TempSave.sav", FileMode.Open, FileAccess.Read);
@@ -994,6 +1034,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return CursorMoved;
+        }
+
+        public void AddPlatform(BattleMapPlatform NewPlatform)
+        {
+            NewPlatform.PlatformMap.IsAPlatform = true;
+            NewPlatform.PlatformMap.Camera = Camera;
+            ListPlatform.Add(NewPlatform);
         }
 
         /// <summary>

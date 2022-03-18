@@ -15,12 +15,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         protected Point MapSize { get { return Map.MapSize; } }
 
+        const float CameraHeight = 700;
+        const float CameraDistance = 500;
+
         private DeathmatchMap Map;
 
         private Effect MapEffect;
         private Effect ColorEffect;
         private BasicEffect PolygonEffect;
-        private DefaultCamera Camera;
+        private Camera3D Camera => Map.Camera;
         private Texture2D sprCursor;
         private Tile3D Cursor;
         private List<Tile3D> ListEditorCursorFace;
@@ -30,14 +33,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private List<Tile3D> ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
+        UnitMap3D TestUnit;
         public Map3DDrawable(DeathmatchMap Map, LayerHolderDeathmatch LayerManager, GraphicsDevice g)
         {
             this.Map = Map;
             sprCursor = Map.sprCursor;
-            Camera = new DefaultCamera(g);
             ListEditorCursorFace = new List<Tile3D>();
 
-            MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D");
+            TestUnit = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D 2"), Map.Content.Load<Texture2D>("Units/Normal/Map Sprite/Mazinger"), 1);
+            MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D 2");
             ColorEffect = Map.Content.Load<Effect>("Shaders/Color Only");
             ColorEffect.Parameters["t0"].SetValue(GameScreen.sprPixel);
 
@@ -55,6 +59,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             PolygonEffect.World = Matrix.Identity;
             PolygonEffect.View = Matrix.Identity;
+
+            MapEffect.Parameters["World"].SetValue(Matrix.Transpose(PolygonEffect.World));
+            TestUnit.UnitEffect3D.Parameters["World"].SetValue(Matrix.Transpose(PolygonEffect.World));
+
+            Matrix worldInverse = Matrix.Invert(PolygonEffect.World);
+
+            MapEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
 
             // Key light.
             MapEffect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
@@ -231,21 +242,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Update(GameTime gameTime)
         {
-            UpdateCamera();
+            if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive))
+            {
+                UpdateCamera();
 
-            Camera.CameraHeight = 400;
-            Camera.CameraDistance = 300;
-            int X = (int)Map.CursorPositionVisible.X;
-            int Y = (int)Map.CursorPositionVisible.Y;
-            float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].Position.Z * 32 + (Map.CursorPosition.Z * 32) + 0.3f;
-            Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
-            DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
-            Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-            Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * 32 + 0.3f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                int X = (int)Map.CursorPositionVisible.X;
+                int Y = (int)Map.CursorPositionVisible.Y;
+                float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].Position.Z * 32 + (Map.CursorPosition.Z * 32) + 0.3f;
+                Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
+                DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+                Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                    X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * 32 + 0.3f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+            }
 
-            Camera.SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, Map.CursorPosition.Z * 32, Map.TileSize.Y * Map.CursorPositionVisible.Y));
-            Camera.Update(gameTime);
+            if (!Map.IsAPlatform)
+            {
+                SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, Map.CursorPosition.Z * 32, Map.TileSize.Y * Map.CursorPositionVisible.Y));
+                Camera.Update(gameTime);
+            }
 
             DicDrawablePointPerColor.Clear();
             ListDrawableArrowPerColor.Clear();
@@ -254,6 +269,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Create3DCursor();
             }
+        }
+
+        public void SetTarget(Vector3 Target)
+        {
+            Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, CameraDistance), Matrix.CreateRotationY(0.2f)) + Target;
+            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, CameraHeight, 0f));
+            Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);
         }
 
         private void UpdateCamera()
@@ -327,6 +349,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (Map.IsEditor)
             {
                 KeyboardHelper.PlayerStateLast = Keyboard.GetState();
+            }
+        }
+
+        public void SetWorld(Matrix NewWorld)
+        {
+            PolygonEffect.World = NewWorld;
+
+            Matrix worldInverse = Matrix.Invert(NewWorld);
+
+            MapEffect.Parameters["World"].SetValue(Matrix.Transpose(NewWorld));
+
+            MapEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
+
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+            {
+                ActiveTileSet.Value.SetWorld(NewWorld);
             }
         }
 
@@ -529,17 +567,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             PolygonEffect.View = Camera.View;
             Matrix ViewProjection = Camera.View * PolygonEffect.Projection;
+            Matrix WorldViewProjection = PolygonEffect.World * ViewProjection;
             ColorEffect.Parameters["ViewProjection"].SetValue(ViewProjection);
+            TestUnit.UnitEffect3D.Parameters["World"].SetValue(PolygonEffect.World);
 
             if (Map.ShowLayerIndex == -1)
             {
                 bool DrawUpperLayers = !IsCursorHiddenByWall();
 
-                if (DrawUpperLayers)
+                if (DrawUpperLayers || Map.IsEditor)
                 {
                     foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
                     {
-                        ActiveTileSet.Value.SetViewMatrix(ViewProjection, Camera.CameraPosition3D);
+                        ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
 
                         ActiveTileSet.Value.Draw(g.GraphicsDevice);
                     }
@@ -584,23 +624,46 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             DrawDrawablePoints(g);
 
-            g.GraphicsDevice.DepthStencilState = DepthStencilState.None;
-            PolygonEffect.Texture = sprCursor;
-            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+            if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive))
+            {
+                g.GraphicsDevice.DepthStencilState = DepthStencilState.None;
+                PolygonEffect.Texture = sprCursor;
+                PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-            if (Map.IsEditor)
-            {
-                g.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-                foreach (Tile3D CursorFace in ListEditorCursorFace)
+                if (Map.IsEditor)
                 {
-                    CursorFace.Draw(g.GraphicsDevice);
+                    g.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+                    foreach (Tile3D CursorFace in ListEditorCursorFace)
+                    {
+                        CursorFace.Draw(g.GraphicsDevice);
+                    }
+                    g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
                 }
-                g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                else
+                {
+                    Cursor.Draw(g.GraphicsDevice);
+                }
             }
-            else
+
+
+            /*for (int X = 0; X < 5; X++)
             {
-                Cursor.Draw(g.GraphicsDevice);
+                for (int Y = 0; Y < 5; Y++)
+                {
+                    TestUnit.SetViewMatrix(WorldViewProjection);
+                    TestUnit.SetPosition((X + 5) * 32, 8 * 32, (Y + 5) * 32);
+                    TestUnit.Draw(GameScreen.GraphicsDevice);
+                }
+            }*/
+
+            if (Map.IsAPlatform)
+            {
+                TestUnit.SetViewMatrix(Camera.View);
+                TestUnit.SetPosition(15 , 32 * 7, 6);
+                TestUnit.Draw(GameScreen.GraphicsDevice);
+
             }
+
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 //If the selected unit have the order to move, draw the possible positions it can go to.
@@ -719,7 +782,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int P = 0; P < Owner.ListProp.Count; ++P)
             {
-                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice);
+                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice, g);
             }
 
             for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)

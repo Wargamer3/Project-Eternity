@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Cutscene Scripts\Evaluate Variable.cs" />
     <Compile Include="Cutscene Scripts\Flash Cursor.cs" />
+    <Compile Include="Cutscene Scripts\Spawn Platform.cs" />
     <Compile Include="Cutscene Scripts\Trigger Defeat.cs" />
     <Compile Include="Map Conditions\Active Player.cs" />
     <Compile Include="Map Conditions\Gate.cs" />

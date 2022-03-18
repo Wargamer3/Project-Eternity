@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void Draw(CustomSpriteBatch g);
 
-        public abstract void Draw3D(GraphicsDevice GraphicsDevice);
+        public abstract void Draw3D(GraphicsDevice GraphicsDevice, CustomSpriteBatch g);
 
         public InteractiveProp Copy(Vector3 Position, int LayerIndex)
         {

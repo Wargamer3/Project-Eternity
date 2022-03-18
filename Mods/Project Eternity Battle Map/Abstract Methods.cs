@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 
@@ -26,6 +27,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public abstract BattleMap GetNewMap(string GameMode);
 
         public abstract string GetMapType();
+
+        public virtual void SetWorld(Matrix World)
+        { }
 
         public abstract bool CheckForObstacleAtPosition(Vector3 Position, Vector3 Displacement);
 

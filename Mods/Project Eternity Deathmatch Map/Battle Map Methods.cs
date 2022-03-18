@@ -478,6 +478,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return "Deathmatch";
         }
 
+        public override void SetWorld(Matrix World)
+        {
+            LayerManager.LayerHolderDrawable.SetWorld(World);
+        }
+
         public override Dictionary<string, ActionPanel> GetOnlineActionPanel()
         {
             Dictionary<string, ActionPanel> DicActionPanel = new Dictionary<string, ActionPanel>();
