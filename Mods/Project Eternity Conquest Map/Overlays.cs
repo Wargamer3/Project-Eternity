@@ -99,11 +99,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             this.FogOfWarMap = FogOfWarMap;
         }
 
-        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile ActiveNode, float OffsetX, float OffsetY, int LayerIndex,
+        protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float OffsetX, float OffsetY,
             UnitMapComponent MapComponent, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
-            MovementAlgorithmTile ActiveTile = GetTile(ActiveNode.Position.X + OffsetX, ActiveNode.Position.X + OffsetY, LayerIndex);
+            MovementAlgorithmTile ActiveTile = GetTile(StartingNode.Position.X + OffsetX, StartingNode.Position.X + OffsetY, StartingNode.LayerIndex);
             //Wall
             if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
                 || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
@@ -112,11 +112,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
 
             //If the NewNode is the parent, skip it.
-            if (ActiveNode.ParentTemp == null)
+            if (StartingNode.ParentTemp == null)
             {
                 //Used for an undefined map or if you don't need to calculate the whole map.
                 //ListSuccessors.Add(new AStarNode(ActiveNode, AX, AY));
-                ActiveTile.ParentTemp = ActiveNode;
+                ActiveTile.ParentTemp = StartingNode;
                 ListTerrainSuccessor.Add(ActiveTile);
             }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Units;
+using static ProjectEternity.GameScreens.BattleMapScreen.MovementAlgorithmTile;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -17,31 +18,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListAllNode = new List<MovementAlgorithmTile>();
         }
 
-        private List<MovementAlgorithmTile> GetSuccessors(MovementAlgorithmTile ActiveNode, int MaxMovement, int LayerIndex, UnitMapComponent MapComponent, bool IgnoreObstacles)
+        private List<MovementAlgorithmTile> GetSuccessors(MovementAlgorithmTile StartingNode, int MaxMovement, UnitMapComponent MapComponent, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListSuccessors = new List<MovementAlgorithmTile>();
 
-            if (ActiveNode.MovementCost >= MaxMovement)
+            if (StartingNode.MovementCost >= MaxMovement)
             {
                 return ListSuccessors;
             }
 
-            ListSuccessors.AddRange(AddSuccessor(ActiveNode, -1, 0, LayerIndex, MapComponent, IgnoreObstacles));
-            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 1, 0, LayerIndex, MapComponent, IgnoreObstacles));
-            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 0, -1, LayerIndex, MapComponent, IgnoreObstacles));
-            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 0, 1, LayerIndex, MapComponent, IgnoreObstacles));
+            ListSuccessors.AddRange(AddSuccessor(StartingNode, -1, 0, MapComponent, IgnoreObstacles));
+            ListSuccessors.AddRange(AddSuccessor(StartingNode, 1, 0, MapComponent, IgnoreObstacles));
+            ListSuccessors.AddRange(AddSuccessor(StartingNode, 0, -1, MapComponent, IgnoreObstacles));
+            ListSuccessors.AddRange(AddSuccessor(StartingNode, 0, 1, MapComponent, IgnoreObstacles));
 
             return ListSuccessors;
         }
 
-        private List<MovementAlgorithmTile> GetSuccessors(MovementAlgorithmTile ActiveNode, int LayerIndex, UnitMapComponent MapComponent, bool IgnoreObstacles)
+        private List<MovementAlgorithmTile> GetSuccessors(MovementAlgorithmTile StartingNode, UnitMapComponent MapComponent, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListSuccessors = new List<MovementAlgorithmTile>();
 
-            ListSuccessors.AddRange(AddSuccessor(ActiveNode, -1, 0, LayerIndex, MapComponent, IgnoreObstacles));
-            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 1, 0, LayerIndex, MapComponent, IgnoreObstacles));
-            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 0, -1, LayerIndex, MapComponent, IgnoreObstacles));
-            ListSuccessors.AddRange(AddSuccessor(ActiveNode, 0, 1, LayerIndex, MapComponent, IgnoreObstacles));
+            ListSuccessors.AddRange(AddSuccessor(StartingNode, -1, 0, MapComponent, IgnoreObstacles));
+            ListSuccessors.AddRange(AddSuccessor(StartingNode, 1, 0, MapComponent, IgnoreObstacles));
+            ListSuccessors.AddRange(AddSuccessor(StartingNode, 0, -1, MapComponent, IgnoreObstacles));
+            ListSuccessors.AddRange(AddSuccessor(StartingNode, 0, 1, MapComponent, IgnoreObstacles));
 
             return ListSuccessors;
         }
@@ -88,7 +89,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListCloseNode.Add(CurrentNode);
 
                 // Get successors to the current node
-                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, CurrentNode.LayerIndex, MapComponent, false);
+                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, MapComponent, false);
                 foreach (MovementAlgorithmTile Neighbor in ListSuccessors)
                 {
                     //Cost to move to this Neighbor
@@ -154,7 +155,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListCloseNode.Add(CurrentNode);
 
                 // Get successors to the current node
-                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, CurrentNode.LayerIndex, MapComponent, IgnoreObstacles);
+                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MapComponent, IgnoreObstacles);
                 foreach (MovementAlgorithmTile Neighbor in ListSuccessors)
                 {
                     //Cost to move to this Neighbor
@@ -204,7 +205,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListAllNode.Clear();
         }
 
-        protected abstract List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile ActiveNode, float OffsetX, float OffsetY, int LayerIndex, UnitMapComponent MapComponent, bool IgnoreObstacles);
+        protected abstract List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float OffsetX, float OffsetY, UnitMapComponent MapComponent, bool IgnoreObstacles);
 
         public abstract float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo);
 

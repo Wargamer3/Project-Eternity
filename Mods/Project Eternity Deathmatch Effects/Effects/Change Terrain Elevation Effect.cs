@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (Math.Abs(X) + Math.Abs(Y) > Radius || FinalX < 0 || FinalX >= Params.LocalContext.Map.MapSize.X || FinalY < 0 || FinalY >= Params.LocalContext.Map.MapSize.Y)
                             continue;
 
-                        ActiveLayer.ArrayTerrain[FinalX, FinalY].Position.Z -= Depth;
+                        ActiveLayer.ArrayTerrain[FinalX, FinalY].Height -= Depth;
                     }
                 }
             }

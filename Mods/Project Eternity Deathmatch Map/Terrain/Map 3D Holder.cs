@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].Position.Z * 32;
+            float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].Position.Z;
             Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
             DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
             Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
@@ -162,30 +162,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         continue;
                     }
 
-                    float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32 + (LayerIndex * 32);
+                    float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32;
                     float ZFront = Z;
                     float ZBack = Z;
                     float ZRight = Z;
                     float ZLeft = Z;
                     if (Y + 1 < Map.MapSize.Y)
                     {
-                        ZFront = Owner.ArrayTerrain[X, Y + 1].Position.Z * 32 + (LayerIndex * 32);
+                        ZFront = Owner.ArrayTerrain[X, Y + 1].Position.Z * 32;
                     }
                     if (Y - 1 >= 0)
                     {
-                        ZBack = Owner.ArrayTerrain[X, Y - 1].Position.Z * 32 + (LayerIndex * 32);
+                        ZBack = Owner.ArrayTerrain[X, Y - 1].Position.Z * 32;
                     }
                     if (X - 1 >= 0)
                     {
-                        ZLeft = Owner.ArrayTerrain[X - 1, Y].Position.Z * 32 + (LayerIndex * 32);
+                        ZLeft = Owner.ArrayTerrain[X - 1, Y].Position.Z * 32;
                     }
                     if (X + 1 < Map.MapSize.X)
                     {
-                        ZRight = Owner.ArrayTerrain[X + 1, Y].Position.Z * 32 + (LayerIndex * 32);
+                        ZRight = Owner.ArrayTerrain[X + 1, Y].Position.Z * 32;
                     }
 
                     List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
-                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, LayerIndex * 32, Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
+                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z - Owner.ArrayTerrain[X, Y].Height * 32,
+                                            Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
 
                     foreach (Tile3D ActiveTile in ListNew3DTile)
                     {
@@ -248,7 +249,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 int X = (int)Map.CursorPositionVisible.X;
                 int Y = (int)Map.CursorPositionVisible.Y;
-                float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].Position.Z * 32 + (Map.CursorPosition.Z * 32) + 0.3f;
+                float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].Position.Z * 32 + 0.3f;
                 Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
@@ -405,13 +406,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 int X = (int)ActivePoint.Position.X;
                 int Y = (int)ActivePoint.Position.Y;
-                float Z = Map.LayerManager.ListLayer[ActivePoint.LayerIndex].ArrayTerrain[X, Y].Position.Z * 32 + (ActivePoint.LayerIndex * 32) + 0.1f;
-                Map2D GroundLayer = Map.LayerManager.ListLayer[ActivePoint.LayerIndex].LayerGrid;
-                DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+                float Z = ActivePoint.Position.Z * 32 + 0.1f;
+                DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                 ListDrawablePoint3D.Add(ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z + 0.1f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
+                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, Z + 0.1f, ActivePoint.Owner.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
             }
 
             DicDrawablePointPerColor.Add(new Vector4(PointColor.R / 255f, PointColor.G / 255f, PointColor.B / 255f, PointColor.A / 255f), ListDrawablePoint3D);
@@ -431,13 +431,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 int X = (int)ActivePoint.Position.X;
                 int Y = (int)ActivePoint.Position.Y;
-                float Z = Map.LayerManager.ListLayer[ActivePoint.LayerIndex].ArrayTerrain[X, Y].Position.Z * 32 + (ActivePoint.LayerIndex * 32) + 0.1f;
-                Map2D GroundLayer = Map.LayerManager.ListLayer[ActivePoint.LayerIndex].LayerGrid;
-                DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+                float Z = ActivePoint.Position.Z * 32 + 0.1f;
+                DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                 ListDrawableArrowPerColor.Add(ActiveTerrain3D.CreateTile3D(0, GetCursorTextureOffset(Previous, ActivePoint, Next),
-                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z + 0.15f, Map.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
+                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, Z + 0.15f, ActivePoint.Owner.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
             }
         }
 
@@ -645,23 +644,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-
-            /*for (int X = 0; X < 5; X++)
-            {
-                for (int Y = 0; Y < 5; Y++)
-                {
-                    TestUnit.SetViewMatrix(WorldViewProjection);
-                    TestUnit.SetPosition((X + 5) * 32, 8 * 32, (Y + 5) * 32);
-                    TestUnit.Draw(GameScreen.GraphicsDevice);
-                }
-            }*/
-
             if (Map.IsAPlatform)
             {
                 TestUnit.SetViewMatrix(Camera.View);
                 TestUnit.SetPosition(15 , 32 * 7, 6);
                 TestUnit.Draw(GameScreen.GraphicsDevice);
-
             }
 
             for (int P = 0; P < Map.ListPlayer.Count; P++)
@@ -692,7 +679,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             ActiveSquad.ItemHeld.Item3D.SetPosition(
                                 CurrentPosition.X + 0.5f,
-                                (CurrentPosition.Z + TerrainZ) * 32 + 0.5f,
+                                TerrainZ + 0.5f,
                                 CurrentPosition.Y);
 
                             ActiveSquad.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
@@ -700,7 +687,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         ActiveSquad.Unit3D.SetPosition(
                             CurrentPosition.X + 0.5f,
-                            (CurrentPosition.Z + TerrainZ) * 32,
+                            TerrainZ,
                             CurrentPosition.Y + 0.5f);
 
                         ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
@@ -727,7 +714,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             ActiveSquad.ItemHeld.Item3D.SetPosition(
                                 ActiveSquad.Position.X + 0.5f,
-                                (ActiveSquad.Position.Z + TerrainZ) * 32 + 0.5f,
+                                TerrainZ * 32 + 0.5f,
                                 ActiveSquad.Position.Y);
 
                             ActiveSquad.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
@@ -735,7 +722,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         ActiveSquad.Unit3D.SetPosition(
                             ActiveSquad.Position.X + 0.5f,
-                            (ActiveSquad.Position.Z + TerrainZ) * 32,
+                            TerrainZ,
                             ActiveSquad.Position.Y + 0.5f);
 
                         ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActiveSquad.CanMove && P == Map.ActivePlayerIndex);
@@ -776,7 +763,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Owner.ListProp[P].Unit3D.SetPosition(
                     Owner.ListProp[P].Position.X + 0.5f,
-                    Owner.ListProp[P].Position.Z * 32 + TerrainZ * 32,
+                    TerrainZ,
                     Owner.ListProp[P].Position.Y + 0.5f);
             }
 
@@ -792,7 +779,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Owner.ListAttackPickup[P].Attack3D.SetPosition(
                     Owner.ListAttackPickup[P].Position.X + 0.5f,
-                    Owner.ListAttackPickup[P].Position.Z * 32 + TerrainZ * 32,
+                    TerrainZ,
                     Owner.ListAttackPickup[P].Position.Y + 0.5f);
             }
 
@@ -808,7 +795,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Owner.ListHoldableItem[I].Item3D.SetPosition(
                     Owner.ListHoldableItem[I].Position.X + 0.5f,
-                    Owner.ListHoldableItem[I].Position.Z * 32 + TerrainZ * 32,
+                    TerrainZ,
                     Owner.ListHoldableItem[I].Position.Y + 0.5f);
             }
 

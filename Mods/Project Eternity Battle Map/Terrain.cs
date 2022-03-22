@@ -182,7 +182,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Terrain(BinaryReader BR, float XPos, float YPos, int LayerIndex)
             : this(XPos, YPos, LayerIndex)
         {
-            Position.Z = BR.ReadSingle();
+            Height = BR.ReadSingle();
             TerrainTypeIndex = BR.ReadInt32();
             MVEnterCost = BR.ReadInt32();
             MVMoveCost = BR.ReadInt32();
@@ -205,7 +205,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public virtual void Save(BinaryWriter BW)
         {
-            BW.Write(Position.Z);
+            BW.Write(Height);
             BW.Write(TerrainTypeIndex);
             BW.Write(MVEnterCost);
             BW.Write(MVMoveCost);

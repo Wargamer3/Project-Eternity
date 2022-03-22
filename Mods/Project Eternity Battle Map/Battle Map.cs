@@ -17,6 +17,7 @@ using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using static ProjectEternity.GameScreens.BattleMapScreen.MovementAlgorithmTile;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -122,6 +123,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public Vector3 CursorPosition;//Z is layer index
         public Vector3 CursorPositionVisible;
+        public abstract MovementAlgorithmTile CursorTerrain { get; }
         protected float CursorHoldTime;
 
         public List<Terrain.TilesetPreset> ListTilesetPreset;
@@ -922,7 +924,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <returns>Returns true if the cursor was moved</returns>
         public bool CursorControl(PlayerInput ActiveInputManager)
         {
-            Vector3 CursorPositionOld = CursorPosition;
+            Vector3 CursorPositionNext = CursorPosition;
 
             bool CursorMoved = false;
 
@@ -996,7 +998,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorPosition.X - CameraPosition.X - 3 < 0 && CameraPosition.X > -3)
                     --CameraPosition.X;
 
-                CursorPosition.X -= (CursorPosition.X > 0) ? 1 : 0;
+                CursorPositionNext.X -= (CursorPosition.X > 0) ? 1 : 0;
                 CursorMoved = true;
             }
             else if (ActiveInputManager.InputRightHold() && CanKeyboardMove)
@@ -1005,7 +1007,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorPosition.X - CameraPosition.X + 3 >= ScreenSize.X && CameraPosition.X + ScreenSize.X < MapSize.X + 3)
                     ++CameraPosition.X;
 
-                CursorPosition.X += (CursorPosition.X < MapSize.X - 1) ? 1 : 0;
+                CursorPositionNext.X += (CursorPosition.X < MapSize.X - 1) ? 1 : 0;
                 CursorMoved = true;
             }
             //Y
@@ -1015,7 +1017,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorPosition.Y - CameraPosition.Y - 3 < 0 && CameraPosition.Y > -3)
                     --CameraPosition.Y;
 
-                CursorPosition.Y -= (CursorPosition.Y > 0) ? 1 : 0;
+                CursorPositionNext.Y -= (CursorPosition.Y > 0) ? 1 : 0;
                 CursorMoved = true;
             }
             else if (ActiveInputManager.InputDownHold() && CanKeyboardMove)
@@ -1024,13 +1026,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (CursorPosition.Y - CameraPosition.Y + 3 >= ScreenSize.Y && CameraPosition.Y + ScreenSize.Y < MapSize.Y + 3)
                     ++CameraPosition.Y;
 
-                CursorPosition.Y += (CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
+                CursorPositionNext.Y += (CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
                 CursorMoved = true;
             }
 
             if (CursorMoved)
             {
-                CursorPosition.Z = GetNextLayerIndex(CursorPositionOld, (int)CursorPosition.X, (int)CursorPosition.Y, 1f, 15f, out _);
+                CursorPosition.Z = GetNextLayerIndex(CursorTerrain, (int)CursorPositionNext.X, (int)CursorPositionNext.Y, 1f, 15f, out _).LayerIndex;
+                CursorPosition.X = CursorPositionNext.X;
+                CursorPosition.Y = CursorPositionNext.Y;
             }
 
             return CursorMoved;
@@ -1038,8 +1042,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void AddPlatform(BattleMapPlatform NewPlatform)
         {
-            NewPlatform.PlatformMap.IsAPlatform = true;
-            NewPlatform.PlatformMap.Camera = Camera;
             ListPlatform.Add(NewPlatform);
         }
 
@@ -1052,6 +1054,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="MaxClearance"></param>
         /// <param name="ClimbValue"></param>
         /// <returns></returns>
-        public abstract int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<int> ListLayerPossibility);
+        public abstract MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility);
+
+        public abstract MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex);
     }
 }

@@ -42,6 +42,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly BattleMap Map;
 
         private BattleMapPlatform Platform;
+        private BattleMap PlatformMap;
 
         private string _MapPath;
         private float Rotation;
@@ -50,9 +51,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             : base("Platform", PropCategories.Interactive, new bool[,] { { true } }, false)
         {
             this.Map = Map;
-            Platform = new BattleMapPlatform();
 
             _MapPath = string.Empty;
+            Platform = new BattleMapPlatform();
         }
 
         public override void Load(ContentManager Content)
@@ -62,9 +63,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void DoLoad(BinaryReader BR)
         {
             _MapPath = BR.ReadString();
-            Yaw = BR.ReadSingle();
-            Pitch = BR.ReadSingle();
-            Roll = BR.ReadSingle();
+            float Yaw = BR.ReadSingle();
+            float Pitch = BR.ReadSingle();
+            float Roll = BR.ReadSingle();
+
+            LoadMap();
+
+            Map.AddPlatform(Platform);
+        }
+
+        private void LoadMap()
+        {
             if (BattleMap.DicBattmeMapType.Count == 0)
             {
                 BattleMap.LoadMapTypes();
@@ -80,8 +89,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             NewMap.Init();
             NewMap.TogglePreview(true);
             NewMap.IsEditor = Map.IsEditor;
-            Platform.PlatformMap = NewMap;
-            Map.AddPlatform(Platform);
+            Platform.SetMap(NewMap, Map);
+            Platform.Yaw = Yaw;
+            Platform.Pitch = Pitch;
+            Platform.Roll = Roll;
+            Platform.Position = Position;
+            PlatformMap = NewMap;
         }
 
         public override void DoSave(BinaryWriter BW)
@@ -94,19 +107,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * 10;
-            float Rad = MathHelper.ToRadians(Rotation);
-            Matrix ToOrigin = Matrix.CreateTranslation(-new Vector3(Platform.PlatformMap.MapSize.X * Platform.PlatformMap.TileSize.X, 0, Platform.PlatformMap.MapSize.Y * Platform.PlatformMap.TileSize.Y));
-            Matrix Rot = Matrix.CreateRotationY(Rad);
+            if (PlatformMap == null)
+            {
+                return;
+            }
+
+            /*Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * 10;
+            Platform.Yaw = MathHelper.ToRadians(Rotation);
 
             float CenterX = Map.MapSize.X * Map.TileSize.X / 2;
             float CenterY = Map.MapSize.Y * Map.TileSize.Y / 2;
-            float LengthX = CenterX * (float)Math.Sin(Rad);
-            float LengthY = CenterY * (float)Math.Cos(Rad);
-            Platform.PlatformMap.SetWorld(ToOrigin * Rot
-                * Matrix.CreateTranslation(new Vector3(CenterX + LengthX,
-                32,
-                CenterY + LengthY)));
+            float LengthX = CenterX * (float)Math.Sin(Platform.Yaw);
+            float LengthY = CenterY * (float)Math.Cos(Platform.Yaw);
+
+            Platform.Position = new Vector3(CenterX + LengthX, 32, CenterY + LengthY);*/
+            Platform.Position = new Vector3(Position.X * Map.TileSize.X + Map.TileSize.X / 2, Position.Z, Position.Y * Map.TileSize.Y  + Map.TileSize.Y / 2);
+            Platform.UpdateWorld();
         }
 
         public override List<ActionPanel> OnUnitSelected(Squad SelectedUnit)
@@ -160,7 +176,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         [Editor(typeof(MapSelector), typeof(UITypeEditor)),
-        CategoryAttribute("Spawner"),
+        CategoryAttribute("Platform"),
         DescriptionAttribute("The Weapon path."),
         DefaultValueAttribute(0)]
         public string MapPath
@@ -172,10 +188,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             set
             {
                 _MapPath = value;
+                LoadMap();
             }
         }
 
-        [CategoryAttribute("Spawner"),
+        [CategoryAttribute("Platform"),
         DescriptionAttribute("The Weapon path."),
         DefaultValueAttribute(0)]
         public float Yaw
@@ -190,7 +207,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        [CategoryAttribute("Spawner"),
+        [CategoryAttribute("Platform"),
         DescriptionAttribute("The Weapon path."),
         DefaultValueAttribute(0)]
         public float Pitch
@@ -205,7 +222,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        [CategoryAttribute("Spawner"),
+        [CategoryAttribute("Platform"),
         DescriptionAttribute("The Weapon path."),
         DefaultValueAttribute(0)]
         public float Roll

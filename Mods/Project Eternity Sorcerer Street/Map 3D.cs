@@ -107,7 +107,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
                 {
-                    float Z = Grid.ArrayTerrain[X, Y].Position.Z;
+                    float Z = Grid.ArrayTerrain[X, Y].Height;
                     Vector3[] ArrayVertexPosition = new Vector3[4];
                     ArrayVertexPosition[0] = new Vector3(X * Map.TileSize.X, Z, Y * Map.TileSize.Y);
                     ArrayVertexPosition[1] = new Vector3(X * Map.TileSize.X + Map.TileSize.X, Z, Y * Map.TileSize.Y);
@@ -125,7 +125,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     //Create slope right
                     if (X + 1 < Map.MapSize.X)
                     {
-                        float ZRight = Grid.ArrayTerrain[X + 1, Y].Position.Z;
+                        float ZRight = Grid.ArrayTerrain[X + 1, Y].Height;
                         if (Z != ZRight)
                         {
                             Vector3[] ArrayVertexPositionRight = new Vector3[4];
@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     //Create slope down
                     if (Y + 1 < Map.MapSize.Y)
                     {
-                        float ZDown = Grid.ArrayTerrain[X, Y + 1].Position.Z;
+                        float ZDown = Grid.ArrayTerrain[X, Y + 1].Height;
                         if (Z != ZDown)
                         {
                             Vector3[] ArrayVertexPositionDown = new Vector3[4];
@@ -234,7 +234,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 return;
             }
 
-            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, Grid.ArrayTerrain[(int)Map.CursorPositionVisible.X, (int)Map.CursorPositionVisible.Y].Position.Z, sprCursor.Width, sprCursor.Height, Radius);
+            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, Grid.ArrayTerrain[(int)Map.CursorPositionVisible.X, (int)Map.CursorPositionVisible.Y].Height, sprCursor.Width, sprCursor.Height, Radius);
             Camera.TeleportCamera(new Vector3( Map.CursorPosition.X * 30, 400, 100 + Map.CursorPosition.Y * 30));
             Camera.SetRotation(0, (float)-Math.PI / 4f, 0f);
             Camera.Update(gameTime);

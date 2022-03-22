@@ -228,7 +228,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     float CurrentZ = ActiveSquad.Owner.Position.Z;
                     float NextZ = ActiveSquad.LastPosition.Z;
 
-                    float ZValue = L + NextTerrain.Position.Z;
+                    float ZValue = NextTerrain.Position.Z;
 
                     //Not touching yet but will touch next frame
                     if (ZValue <= CurrentZ && ZValue >= NextZ)

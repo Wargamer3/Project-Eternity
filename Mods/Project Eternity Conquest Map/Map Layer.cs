@@ -19,7 +19,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public List<SubMapLayer> ListSubLayer;
         public float Depth;
 
-        public DrawableGrid LayerGrid;
+        public Map2D LayerGrid;
         public TerrainConquest[,] ArrayTerrain;//Array of every tile on the map.
 
         private bool IsVisible;

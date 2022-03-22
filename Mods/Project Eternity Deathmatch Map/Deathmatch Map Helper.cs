@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Terrain NewTerrain = new Terrain(TerrainPreset);
             NewTerrain.LayerIndex = LayerIndex;
-            NewTerrain.Position = new Vector3(X, Y, TerrainPreset.Position.Z);
+            NewTerrain.Position = new Vector3(X, Y, TerrainPreset.Height);
 
             if (ConsiderSubLayers)
             {

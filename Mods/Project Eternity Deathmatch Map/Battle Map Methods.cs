@@ -478,9 +478,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return "Deathmatch";
         }
 
-        public override void SetWorld(Matrix World)
+        public override void SetWorld(Matrix World, Vector3 Position)
         {
             LayerManager.LayerHolderDrawable.SetWorld(World);
+
+            for (int Z = 0; Z < LayerManager.ListLayer.Count; ++Z)
+            {
+                for (int X = 0; X < MapSize.X; ++X)
+                {
+                    for (int Y = 0; Y < MapSize.Y; ++Y)
+                    {
+                        LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Position
+                            = new Vector3(
+                                (Position.X - TileSize.X / 2) / TileSize.X + X,
+                                (Position.Z - TileSize.Y / 2) / TileSize.Y + Y,
+                                LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z + Position.Y);
+                    }
+                }
+            }
         }
 
         public override Dictionary<string, ActionPanel> GetOnlineActionPanel()

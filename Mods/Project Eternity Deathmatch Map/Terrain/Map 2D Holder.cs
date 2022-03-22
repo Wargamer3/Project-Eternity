@@ -75,14 +75,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return;
             }
 
-            float BaseHeight = LayerIndex;
-
             for (int X = Owner.LayerGrid.ArrayTile.GetLength(0) - 1; X >= 0; --X)
             {
                 for (int Y = Owner.LayerGrid.ArrayTile.GetLength(1) - 1; Y >= 0; --Y)
                 {
                     Color FinalColor = Color.White;
-                    float FinalHeight = BaseHeight + Owner.ArrayTerrain[X, Y].Position.Z;
+                    float FinalHeight = Owner.ArrayTerrain[X, Y].Position.Z;
 
                     if (FinalHeight > CameraPosition.Z)
                     {
@@ -358,28 +356,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         for (int X = 0; X < Map.MapSize.X; X++)
                         {
                             Color TextColor = Color.White;
-                            if (Owner.ArrayTerrain[X, Y].Position.Z >= 2)
+                            if (Owner.ArrayTerrain[X, Y].Height >= 2)
                             {
                                 TextColor = Color.Red;
                             }
-                            else if (Owner.ArrayTerrain[X, Y].Position.Z >= 1)
+                            else if (Owner.ArrayTerrain[X, Y].Height >= 1)
                             {
                                 TextColor = Color.Orange;
                             }
-                            else if (Owner.ArrayTerrain[X, Y].Position.Z >= 0.75)
+                            else if (Owner.ArrayTerrain[X, Y].Height >= 0.75)
                             {
                                 TextColor = Color.Yellow;
                             }
-                            else if (Owner.ArrayTerrain[X, Y].Position.Z >= 0.5)
+                            else if (Owner.ArrayTerrain[X, Y].Height >= 0.5)
                             {
                                 TextColor = Color.Green;
                             }
-                            else if (Owner.ArrayTerrain[X, Y].Position.Z > 0)
+                            else if (Owner.ArrayTerrain[X, Y].Height > 0)
                             {
                                 TextColor = Color.SkyBlue;
                             }
 
-                            TextHelper.DrawText(g, Owner.ArrayTerrain[X, Y].Position.Z.ToString(),
+                            TextHelper.DrawText(g, Owner.ArrayTerrain[X, Y].Height.ToString(),
                                 new Vector2((X - Map.CameraPosition.X) * Map.TileSize.X + XOffset,
                                 (Y - Map.CameraPosition.Y) * Map.TileSize.Y + YOffset), TextColor);
                         }

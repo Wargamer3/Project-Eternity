@@ -84,6 +84,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
                     ArrayTerrain[X, Y] = new Terrain(BR, X, Y, LayerIndex);
+                    ArrayTerrain[X, Y].Owner = Map;
+                    ArrayTerrain[X, Y].Position.Z = ArrayTerrain[X, Y].Height + LayerIndex;
                 }
             }
 
@@ -153,6 +155,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int L = 0; L < ListSubLayerCount; L++)
             {
                 ListSubLayer.Add(new SubMapLayer(Map, BR, LayerIndex));
+            }
+
+            for (int Y = 0; Y < Map.MapSize.Y; Y++)
+            {
+                for (int X = 0; X < Map.MapSize.X; X++)
+                {
+                    ArrayTerrain[X, Y].DrawableTile = LayerGrid.ArrayTile[X, Y];
+                }
             }
 
             LayerGrid.Depth = Depth;

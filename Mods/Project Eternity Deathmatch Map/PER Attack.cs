@@ -390,7 +390,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     float DiffX = Math.Abs(Position.X - SquadToKill.Position.X);
                     float DiffY = Math.Abs(Position.Y - SquadToKill.Position.Y);
-                    float DiffZ = Math.Abs(Position.Z - (SquadToKill.Position.Z + SquadTerrain.Position.Z));
+                    float DiffZ = Math.Abs(Position.Z - SquadTerrain.Position.Z);
 
                     float DiffTotal = (DiffX + DiffY + DiffZ) / 3;
 
@@ -405,7 +405,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         FinalSpeed *= WindValue;
                         SquadToKill.Speed = FinalSpeed;
 
-                        SquadToKill.SetPosition(SquadToKill.Position + new Vector3(0, 0, Map.LayerManager.ListLayer[(int)SquadToKill.Position.Z].ArrayTerrain[(int)SquadToKill.Position.X, (int)SquadToKill.Position.Y].Position.Z));
+                        SquadToKill.SetPosition(SquadTerrain.Position);
 
                         if (FinalSpeed.Z > 0)
                         {

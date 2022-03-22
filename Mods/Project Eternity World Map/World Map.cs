@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.WorldMapScreen
 {
@@ -48,7 +48,9 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         #region Variables
         
         public Texture2D sprWaypoint;
-        
+
+        public override MovementAlgorithmTile CursorTerrain { get { return ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+
         public List<string> ListTileSetPath;
 
         public List<Player> ListPlayer;

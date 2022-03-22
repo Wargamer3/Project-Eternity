@@ -19,6 +19,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprArrowUp;
         public Texture2D sprEndTurn;
 
+        public override MovementAlgorithmTile CursorTerrain { get { return ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+
         public readonly List<MapLayer> ListLayer;
         public readonly Vector3 LastPosition;
         public readonly List<Player> ListPlayer;
@@ -298,13 +300,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return ListTerrainType[ActiveTerrain.TerrainTypeIndex];
         }
 
-        public override int GetNextLayerIndex(Vector3 CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<int> ListLayerPossibility)
+        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
-            ListLayerPossibility = new List<int>();
+            ListLayerPossibility = new List<MovementAlgorithmTile>();
 
-            Terrain CurrentTerrain = ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y];
-            string CurrentTerrainType = GetTerrainType(CurrentPosition.X, CurrentPosition.Y, (int)CurrentPosition.Z);
-            float CurrentZ = CurrentTerrain.Position.Z + CurrentPosition.Z;
+            string CurrentTerrainType = GetTerrainType(StartingPosition.Position.X, StartingPosition.Position.Y, (int)StartingPosition.LayerIndex);
+            float CurrentZ = StartingPosition.Position.Z;
 
             int ClosestLayerIndexDown = -1;
             int ClosestLayerIndexUp = 0;
@@ -317,7 +318,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
                 string NextTerrainType = GetTerrainType(NextX, NextY, L);
-                float NextTerrainZ = NextTerrain.Position.Z + L;
+                float NextTerrainZ = NextTerrain.Position.Z;
 
                 //Check lower or higher neighbors if on solid ground
                 if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid)
@@ -332,7 +333,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             {
                                 ClosestTerrainDistanceDown = ZDiff;
                                 ClosestLayerIndexDown = L;
-                                ListLayerPossibility.Add(L);
+                                ListLayerPossibility.Add(NextTerrain);
                             }
                         }
                         else
@@ -342,7 +343,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             {
                                 ClosestTerrainDistanceUp = ZDiff;
                                 ClosestLayerIndexUp = L;
-                                ListLayerPossibility.Add(L);
+                                ListLayerPossibility.Add(NextTerrain);
                             }
                         }
                     }
@@ -350,19 +351,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 //Already in void, check for any neighbors
                 else
                 {
-                    if (NextTerrainZ == CurrentPosition.Z && NextTerrainType == CurrentTerrainType)
+                    if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainType == CurrentTerrainType)
                     {
-                        return L;
+                        return NextTerrain;
                     }
                     //Prioritize going upward
-                    else if (NextTerrainZ > CurrentPosition.Z)
+                    else if (NextTerrainZ > StartingPosition.LayerIndex)
                     {
                         float ZDiff = NextTerrainZ - CurrentZ;
                         if (ZDiff < ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                         {
                             ClosestTerrainDistanceUp = ZDiff;
                             ClosestLayerIndexUp = L;
-                            ListLayerPossibility.Add(L);
+                            ListLayerPossibility.Add(NextTerrain);
                         }
                     }
                 }
@@ -370,12 +371,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ClosestLayerIndexDown >= 0)
             {
-                return ClosestLayerIndexDown;
+                return ListLayer[ClosestLayerIndexDown].ArrayTerrain[NextX, NextY];
             }
             else
             {
-                return ClosestLayerIndexUp;
+                return ListLayer[ClosestLayerIndexUp].ArrayTerrain[NextX, NextY];
             }
+        }
+
+        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
+        {
+            if (X < 0 || Y >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= ListLayer.Count)
+            {
+                return null;
+            }
+
+            return ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
@@ -386,7 +397,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
                 string NextTerrainType = GetTerrainType(NextX, NextX, L);
-                float NextTerrainZ = ActiveTerrain.Position.Z + L;
+                float NextTerrainZ = ActiveTerrain.Position.Z;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 

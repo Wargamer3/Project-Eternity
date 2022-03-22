@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             txtMVEnterCost.Value = ActiveTerrain.MVEnterCost;
             txtMVMoveCost.Value = ActiveTerrain.MVMoveCost;
-            txtHeight.Value = (decimal)ActiveTerrain.Position.Z;
+            txtHeight.Value = (decimal)ActiveTerrain.Height;
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
             cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex + 1;
             cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex + 1;
@@ -113,9 +113,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void txtHeight_ValueChanged(object sender, EventArgs e)
         {
             if (txtHeight.Text.Length == 0)
-                ActiveTerrain.Position.Z = 0;
+                ActiveTerrain.Height = 0;
             else
-                ActiveTerrain.Position.Z = (float)txtHeight.Value;
+                ActiveTerrain.Height = (float)txtHeight.Value;
         }
 
         private void btnAddNewBonus_Click(object sender, EventArgs e)
