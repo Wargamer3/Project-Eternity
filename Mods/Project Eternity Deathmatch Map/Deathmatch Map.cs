@@ -193,6 +193,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case "Capture The Flag":
                     GameRule = new CaptureTheFlagGameRule(this);
                     break;
+
+                case "Titan":
+                    GameRule = new TitanGameRule(this);
+                    break;
             }
         }
 
