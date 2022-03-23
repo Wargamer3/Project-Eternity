@@ -56,8 +56,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     for (int T = RealCurrentTransformingIndex; T < TerrainAttribute.ListTerrainChangeLocation.Count && T < RealCurrentTransformingIndex + _MinSimultaneousTiles; T++)
                     {
                         Terrain ActiveTerrain = TerrainAttribute.ListTerrainChangeLocation[T];
-                        int PosX = (int)ActiveTerrain.Position.X;
-                        int PosY = (int)ActiveTerrain.Position.Y;
+                        int PosX = (int)ActiveTerrain.WorldPosition.X;
+                        int PosY = (int)ActiveTerrain.WorldPosition.Y;
                         DrawableTile ActiveTile = TerrainAttribute.ListTileChangeLocation[T];
                         ActiveLayer.ArrayTerrain[PosX, PosY] = ActiveTerrain;
                         ActiveLayer.LayerGrid.ReplaceTile(PosX, PosY, ActiveTile);
@@ -173,8 +173,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write(TerrainAttribute.ListTerrainChangeLocation.Count);
                 for (int L = 0; L < TerrainAttribute.ListTerrainChangeLocation.Count; ++L)
                 {
-                    BW.Write(TerrainAttribute.ListTerrainChangeLocation[L].Position.X);
-                    BW.Write(TerrainAttribute.ListTerrainChangeLocation[L].Position.Y);
+                    BW.Write(TerrainAttribute.ListTerrainChangeLocation[L].WorldPosition.X);
+                    BW.Write(TerrainAttribute.ListTerrainChangeLocation[L].WorldPosition.Y);
                     BW.Write(TerrainAttribute.ListTileChangeLocation[L].TilesetIndex);
                     BW.Write(TerrainAttribute.ListTileChangeLocation[L].Origin.X);
                     BW.Write(TerrainAttribute.ListTileChangeLocation[L].Origin.Y);

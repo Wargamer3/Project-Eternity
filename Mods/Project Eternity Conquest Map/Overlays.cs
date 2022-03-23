@@ -83,8 +83,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         /// </summary>
         public FogOfWarTile(int PosX, int PosY)
         {
-            Position.X = PosX;
-            Position.Y = PosY;
+            WorldPosition.X = PosX;
+            WorldPosition.Y = PosY;
             TerrainTypeIndex = 0;
             MVEnterCost = 0;
             MVMoveCost = 1;
@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             UnitMapComponent MapComponent, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
-            MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.Position.X + OffsetX), (int)(StartingNode.Position.X + OffsetY), StartingNode.LayerIndex);
+            MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.X + OffsetY), StartingNode.LayerIndex);
             //Wall
             if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
                 || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)

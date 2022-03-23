@@ -269,11 +269,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (SpawnPositionX >= Map.MapSize.X || SpawnPositionX < 0 || SpawnPositionY >= Map.MapSize.Y || SpawnPositionY >= Map.MapSize.Y)
                     {
-                        FinalPosition = new Microsoft.Xna.Framework.Vector3(SpawnPositionX, SpawnPositionY, 0);
+                        FinalPosition = new Microsoft.Xna.Framework.Vector3(SpawnPositionX, SpawnPositionY, SpawnLayer);
                     }
                     else
                     {
-                        Map.GetEmptyPosition(new Microsoft.Xna.Framework.Vector3(SpawnPositionX, SpawnPositionY, 0), out FinalPosition);
+                        Map.GetEmptyPosition(new Microsoft.Xna.Framework.Vector3(SpawnPositionX, SpawnPositionY, SpawnLayer), out FinalPosition);
                     }
 
                     LeaderToSpawn.Init();
@@ -297,7 +297,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         NewSquad.SquadAI.Load(AIPath);
                     }
 
-                    Map.SpawnSquad(SpawnPlayer, NewSquad, LeaderToSpawnID, FinalPosition, SpawnLayer);
+                    Map.SpawnSquad(SpawnPlayer, NewSquad, LeaderToSpawnID, new Microsoft.Xna.Framework.Vector2(FinalPosition.X, FinalPosition.Y), (int)FinalPosition.Z);
 
                     if (!string.IsNullOrEmpty(PartDropPath))
                     {

@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// </summary>
         public Terrain(Terrain Other)
         {
-            this.Position = Other.Position;
+            this.WorldPosition = Other.WorldPosition;
             this.TerrainTypeIndex = Other.TerrainTypeIndex;
             this.MVEnterCost = Other.MVEnterCost;
             this.MVMoveCost = Other.MVMoveCost;
@@ -144,7 +144,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// </summary>
         public Terrain(float XPos, float YPos, int LayerIndex)
         {
-            this.Position = new Vector3(XPos, YPos, 0);
+            this.WorldPosition = new Vector3(XPos, YPos, 0);
+            this.InternalPosition = new Vector2(XPos, YPos);
             this.LayerIndex = LayerIndex;
             this.TerrainTypeIndex = 0;
             this.MVEnterCost = 0;

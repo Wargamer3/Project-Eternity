@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].Position.Z;
+            float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].WorldPosition.Z;
             Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
             DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
             Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
@@ -162,26 +162,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         continue;
                     }
 
-                    float Z = Owner.ArrayTerrain[X, Y].Position.Z * 32;
+                    float Z = Owner.ArrayTerrain[X, Y].WorldPosition.Z * 32;
                     float ZFront = Z;
                     float ZBack = Z;
                     float ZRight = Z;
                     float ZLeft = Z;
                     if (Y + 1 < Map.MapSize.Y)
                     {
-                        ZFront = Owner.ArrayTerrain[X, Y + 1].Position.Z * 32;
+                        ZFront = Owner.ArrayTerrain[X, Y + 1].WorldPosition.Z * 32;
                     }
                     if (Y - 1 >= 0)
                     {
-                        ZBack = Owner.ArrayTerrain[X, Y - 1].Position.Z * 32;
+                        ZBack = Owner.ArrayTerrain[X, Y - 1].WorldPosition.Z * 32;
                     }
                     if (X - 1 >= 0)
                     {
-                        ZLeft = Owner.ArrayTerrain[X - 1, Y].Position.Z * 32;
+                        ZLeft = Owner.ArrayTerrain[X - 1, Y].WorldPosition.Z * 32;
                     }
                     if (X + 1 < Map.MapSize.X)
                     {
-                        ZRight = Owner.ArrayTerrain[X + 1, Y].Position.Z * 32;
+                        ZRight = Owner.ArrayTerrain[X + 1, Y].WorldPosition.Z * 32;
                     }
 
                     List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
@@ -249,7 +249,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 int X = (int)Map.CursorPositionVisible.X;
                 int Y = (int)Map.CursorPositionVisible.Y;
-                float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].Position.Z * 32 + 0.3f;
+                float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].WorldPosition.Z * 32 + 0.3f;
                 Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
@@ -404,9 +404,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (MovementAlgorithmTile ActivePoint in ListPoint)
             {
-                int X = (int)ActivePoint.Position.X;
-                int Y = (int)ActivePoint.Position.Y;
-                float Z = ActivePoint.Position.Z * 32 + 0.1f;
+                int X = (int)ActivePoint.WorldPosition.X;
+                int Y = (int)ActivePoint.WorldPosition.Y;
+                float Z = ActivePoint.WorldPosition.Z * 32 + 0.1f;
                 DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
@@ -429,9 +429,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Next = ListPoint[P + 1];
                 }
 
-                int X = (int)ActivePoint.Position.X;
-                int Y = (int)ActivePoint.Position.Y;
-                float Z = ActivePoint.Position.Z * 32 + 0.1f;
+                int X = (int)ActivePoint.WorldPosition.X;
+                int Y = (int)ActivePoint.WorldPosition.Y;
+                float Z = ActivePoint.WorldPosition.Z * 32 + 0.1f;
                 DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
@@ -450,30 +450,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Point TextureOffset = Point.Zero;
             if (Next == null)
             {
-                if (Previous != null && Previous.Position.X < Current.Position.X)//Right
+                if (Previous != null && Previous.WorldPosition.X < Current.WorldPosition.X)//Right
                 {
                     TextureOffset.X = 32 * 3;
                 }
-                else if (Previous != null && Previous.Position.X > Current.Position.X)//Left
+                else if (Previous != null && Previous.WorldPosition.X > Current.WorldPosition.X)//Left
                 {
                     TextureOffset.X = 32 * 4;
                 }
-                else if (Previous != null && Previous.Position.Y < Current.Position.Y)//Down
+                else if (Previous != null && Previous.WorldPosition.Y < Current.WorldPosition.Y)//Down
                 {
                     TextureOffset.X = 32 * 5;
                 }
-                else if (Previous != null && Previous.Position.Y > Current.Position.Y)//Up
+                else if (Previous != null && Previous.WorldPosition.Y > Current.WorldPosition.Y)//Up
                 {
                     TextureOffset.X = 32 * 2;
                 }
             }
-            else if (Current.Position.X < Next.Position.X)//Going Right
+            else if (Current.WorldPosition.X < Next.WorldPosition.X)//Going Right
             {
-                if (Previous != null && Previous.Position.Y < Current.Position.Y)//Down Right
+                if (Previous != null && Previous.WorldPosition.Y < Current.WorldPosition.Y)//Down Right
                 {
                     TextureOffset.X = 32 * 9;
                 }
-                else if (Previous != null && Previous.Position.Y > Current.Position.Y)//Up Right
+                else if (Previous != null && Previous.WorldPosition.Y > Current.WorldPosition.Y)//Up Right
                 {
                     TextureOffset.X = 32 * 8;
                 }
@@ -482,13 +482,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     TextureOffset.X = 32 * 1;
                 }
             }
-            else if (Current.Position.X > Next.Position.X)//Going Left
+            else if (Current.WorldPosition.X > Next.WorldPosition.X)//Going Left
             {
-                if (Previous != null && Previous.Position.Y < Current.Position.Y)//Down Left
+                if (Previous != null && Previous.WorldPosition.Y < Current.WorldPosition.Y)//Down Left
                 {
                     TextureOffset.X = 32 * 7;
                 }
-                else if (Previous != null && Previous.Position.Y > Current.Position.Y)//Up Left
+                else if (Previous != null && Previous.WorldPosition.Y > Current.WorldPosition.Y)//Up Left
                 {
                     TextureOffset.X = 32 * 6;
                 }
@@ -497,13 +497,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     TextureOffset.X = 32 * 1;
                 }
             }
-            else if (Current.Position.Y < Next.Position.Y)//Going Down
+            else if (Current.WorldPosition.Y < Next.WorldPosition.Y)//Going Down
             {
-                if (Previous != null && Previous.Position.X < Current.Position.X)//Right Down
+                if (Previous != null && Previous.WorldPosition.X < Current.WorldPosition.X)//Right Down
                 {
                     TextureOffset.X = 32 * 6;
                 }
-                else if (Previous != null && Previous.Position.X > Current.Position.X)//Left Down
+                else if (Previous != null && Previous.WorldPosition.X > Current.WorldPosition.X)//Left Down
                 {
                     TextureOffset.X = 32 * 8;
                 }
@@ -512,13 +512,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     TextureOffset.X = 32 * 0;
                 }
             }
-            else if (Current.Position.Y > Next.Position.Y)//Going Up
+            else if (Current.WorldPosition.Y > Next.WorldPosition.Y)//Going Up
             {
-                if (Previous != null && Previous.Position.X < Current.Position.X)//Right Up
+                if (Previous != null && Previous.WorldPosition.X < Current.WorldPosition.X)//Right Up
                 {
                     TextureOffset.X = 32 * 7;
                 }
-                else if (Previous != null && Previous.Position.X > Current.Position.X)//Left Up
+                else if (Previous != null && Previous.WorldPosition.X > Current.WorldPosition.X)//Left Up
                 {
                     TextureOffset.X = 32 * 9;
                 }
@@ -670,7 +670,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         float TerrainZ = 0;
                         if (ActiveSquad.Speed == Vector3.Zero)
                         {
-                            TerrainZ = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y].Position.Z;
+                            TerrainZ = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y].WorldPosition.Z;
                         }
 
                         if (ActiveSquad.ItemHeld != null)
@@ -705,7 +705,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         float TerrainZ = 0;
                         if (ActiveSquad.Speed == Vector3.Zero)
                         {
-                            TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y].Position.Z;
+                            TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y].WorldPosition.Z;
                         }
 
                         if (ActiveSquad.ItemHeld != null)
@@ -759,7 +759,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int P = 0; P < Owner.ListProp.Count; ++P)
             {
                 Owner.ListProp[P].Unit3D.SetViewMatrix(Camera.View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].Position.Z;
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].WorldPosition.Z;
 
                 Owner.ListProp[P].Unit3D.SetPosition(
                     Owner.ListProp[P].Position.X + 0.5f,
@@ -775,7 +775,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
             {
                 Owner.ListAttackPickup[P].Attack3D.SetViewMatrix(Camera.View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListAttackPickup[P].Position.X, (int)Owner.ListAttackPickup[P].Position.Y].Position.Z;
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListAttackPickup[P].Position.X, (int)Owner.ListAttackPickup[P].Position.Y].WorldPosition.Z;
 
                 Owner.ListAttackPickup[P].Attack3D.SetPosition(
                     Owner.ListAttackPickup[P].Position.X + 0.5f,
@@ -791,7 +791,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int I = 0; I < Owner.ListHoldableItem.Count; ++I)
             {
                 Owner.ListHoldableItem[I].Item3D.SetViewMatrix(Camera.View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListHoldableItem[I].Position.X, (int)Owner.ListHoldableItem[I].Position.Y].Position.Z;
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListHoldableItem[I].Position.X, (int)Owner.ListHoldableItem[I].Position.Y].WorldPosition.Z;
 
                 Owner.ListHoldableItem[I].Item3D.SetPosition(
                     Owner.ListHoldableItem[I].Position.X + 0.5f,

@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListMVPoints = new List<Vector3>();
             foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
             {
-                ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+                ListMVPoints.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
             }
             Map.LastPosition = Map.CursorPosition;
         }
@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListMVPoints = new List<Vector3>();
             foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
             {
-                ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+                ListMVPoints.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
             }
             Map.LastPosition = Map.CursorPosition;
         }

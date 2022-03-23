@@ -958,11 +958,65 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DicBuildingChoice["Vehicle"].Add("Rig");
         }
 
-        public override void AddLocalPlayer(BattleMapPlayer NewPlayer)
+
+        public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
+        {
+            //ListPlayer[ActivePlayerIndex].ListUnit.Remove((UnitConquest)UnitToRemove);
+        }
+
+        public override void AddUnit(int PlayerIndex, UnitMapComponent UnitToAdd, MovementAlgorithmTile NewPosition)
+        {
+           /* UnitConquest ActiveSquad = (UnitConquest)UnitToAdd;
+
+            ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            ListPlayer[PlayerIndex].ListSquad.Add(ActiveSquad);
+            ListPlayer[PlayerIndex].UpdateAliveStatus();
+            ActiveSquad.SetPosition(new Vector3(NewPosition.WorldPosition.X, NewPosition.WorldPosition.Y, NewPosition.LayerIndex));*/
+        }
+
+        protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
         {
             /*Player NewDeahtmatchPlayer = new Player(NewPlayer);
             ListPlayer.Add(NewDeahtmatchPlayer);
             ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
+        }
+
+        public override void AddPlatform(BattleMapPlatform NewPlatform)
+        {
+            /*foreach (Player ActivePlayer in ListPlayer)
+            {
+                NewPlatform.AddLocalPlayer(ActivePlayer);
+            }*/
+
+            ListPlatform.Add(NewPlatform);
+        }
+
+        public override void SetWorld(Matrix World)
+        {
+            /*LayerManager.LayerHolderDrawable.SetWorld(World);
+
+            for (int Z = 0; Z < LayerManager.ListLayer.Count; ++Z)
+            {
+                Vector3[] ArrayNewPosition = new Vector3[MapSize.X * MapSize.Y];
+                for (int X = 0; X < MapSize.X; ++X)
+                {
+                    for (int Y = 0; Y < MapSize.Y; ++Y)
+                    {
+                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X * 32, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * 32, Y * 32);
+                    }
+                }
+
+                Vector3.Transform(ArrayNewPosition, ref World, ArrayNewPosition);
+
+                for (int X = 0; X < MapSize.X; ++X)
+                {
+                    for (int Y = 0; Y < MapSize.Y; ++Y)
+                    {
+                        LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Position
+                            = new Vector3((float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].X / 32), (float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].Z / 32), ArrayNewPosition[X + Y * MapSize.X].Y / 32);
+                    }
+                }
+            }*/
         }
 
         public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
@@ -1030,10 +1084,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
                 {
                     //Don't check for yourself.
-                    if (ListAllNode[i].Position.X == Position.X && ListAllNode[i].Position.Y == Position.Y)
+                    if (ListAllNode[i].WorldPosition.X == Position.X && ListAllNode[i].WorldPosition.Y == Position.Y)
                         continue;
                     //Check if there's a Unit.
-                    if (CheckForObstacleAtPosition(P, ListAllNode[i].Position, Vector3.Zero))
+                    if (CheckForObstacleAtPosition(P, ListAllNode[i].WorldPosition, Vector3.Zero))
                         UnitFound = true;
                 }
                 //If there is no Unit.
@@ -1162,6 +1216,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
+
         public string GetTerrainType(float PosX, float PosY, int LayerIndex)
         {
             return GetTerrainType(GetTerrain((int)PosX, (int)PosY, LayerIndex));
@@ -1176,8 +1231,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
 
-            string CurrentTerrainType = GetTerrainType(StartingPosition.Position.X, StartingPosition.Position.Y, (int)StartingPosition.LayerIndex);
-            float CurrentZ = StartingPosition.Position.Z + StartingPosition.LayerIndex;
+            string CurrentTerrainType = GetTerrainType(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, (int)StartingPosition.LayerIndex);
+            float CurrentZ = StartingPosition.WorldPosition.Z + StartingPosition.LayerIndex;
 
             int ClosestLayerIndexDown = -1;
             int ClosestLayerIndexUp = 0;
@@ -1190,7 +1245,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
                 string NextTerrainType = GetTerrainType(NextX, NextY, L);
-                float NextTerrainZ = NextTerrain.Position.Z + L;
+                float NextTerrainZ = NextTerrain.WorldPosition.Z + L;
 
                 //Check lower or higher neighbors if on solid ground
                 if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid)
@@ -1269,7 +1324,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
                 string NextTerrainType = GetTerrainType(NextX, NextX, L);
-                float NextTerrainZ = ActiveTerrain.Position.Z + L;
+                float NextTerrainZ = ActiveTerrain.WorldPosition.Z + L;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
@@ -1281,7 +1336,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             return true;
         }
-
 
         public override BattleMap LoadTemporaryMap(BinaryReader BR)
         {

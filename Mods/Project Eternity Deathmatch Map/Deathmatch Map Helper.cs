@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             {
                                 Terrain NewTerrain = new Terrain(TerrainPreset);
                                 DrawableTile NewTile = new DrawableTile(TilePreset);
-                                NewTerrain.Position = new Vector3(X, Y, 0);
+                                NewTerrain.WorldPosition = new Vector3(X, Y, 0);
 
                                 ArrayTerrain[X, Y] = NewTerrain;
                                 ArrayTile2D[X, Y] = NewTile;
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Terrain NewTerrain = new Terrain(TerrainPreset);
             NewTerrain.LayerIndex = LayerIndex;
-            NewTerrain.Position = new Vector3(X, Y, TerrainPreset.Height);
+            NewTerrain.WorldPosition = new Vector3(X, Y, TerrainPreset.Height);
 
             if (ConsiderSubLayers)
             {

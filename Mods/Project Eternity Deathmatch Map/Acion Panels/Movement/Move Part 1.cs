@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMVPoints = new List<Vector3>();
             foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
             {
-                ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+                ListMVPoints.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
             }
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
             ListMovedOverPoint = new List<Vector3>();
@@ -187,8 +187,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (!ListMovedOverTerrain.Contains(CurrentTerrain))
                 {
                     ListMovedOverTerrain.Add(CurrentTerrain);
-                    ListMovedOverPoint.Add(new Vector3(CurrentTerrain.Position.X, CurrentTerrain.Position.Y, CurrentTerrain.LayerIndex));
-                    if (CurrentTerrain.Position == ActiveSquad.Position)
+                    ListMovedOverPoint.Add(new Vector3(CurrentTerrain.WorldPosition.X, CurrentTerrain.WorldPosition.Y, CurrentTerrain.LayerIndex));
+                    if (CurrentTerrain.WorldPosition == ActiveSquad.Position)
                     {
                         CurrentTerrain = null;
                     }

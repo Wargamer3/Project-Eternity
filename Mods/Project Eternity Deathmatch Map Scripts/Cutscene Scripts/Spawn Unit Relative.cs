@@ -247,7 +247,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     float SpawnPositionY = RelativeSpawnSquad.Y + _RelativeSpawnPosition.Y;
                     Microsoft.Xna.Framework.Vector3 FinalPosition;
 
-                    Map.GetEmptyPosition(new Microsoft.Xna.Framework.Vector3(SpawnPositionX, SpawnPositionY, 0), out FinalPosition);
+                    Map.GetEmptyPosition(new Microsoft.Xna.Framework.Vector3(SpawnPositionX, SpawnPositionY, _SpawnLayer), out FinalPosition);
                     
                     Squad NewSquad = new Squad("", LeaderToSpawn.SpawnUnit, WingmanAToSpawn.SpawnUnit, WingmanBToSpawn.SpawnUnit);
 
@@ -256,7 +256,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AnimationPosition = new Microsoft.Xna.Framework.Vector2(NewSquad.X * Map.TileSize.X, NewSquad.Y * Map.TileSize.Y);
                     UnitSpawned = true;
 
-                    Map.SpawnSquad(SpawnPlayer, NewSquad, _LeaderToSpawnID, FinalPosition, _SpawnLayer);
+                    Map.SpawnSquad(SpawnPlayer, NewSquad, _LeaderToSpawnID, new Microsoft.Xna.Framework.Vector2(FinalPosition.X, FinalPosition.Y), (int)FinalPosition.Z);
                 }
             }
 

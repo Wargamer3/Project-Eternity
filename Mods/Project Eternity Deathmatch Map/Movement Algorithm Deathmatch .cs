@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
-            MovementAlgorithmTile NextRegularMovementDestination = Map.GetNextLayerIndex(StartingNode, (int)(StartingNode.Position.X + OffsetX), (int)(StartingNode.Position.Y + OffsetY),
+            MovementAlgorithmTile NextRegularMovementDestination = Map.GetNextLayerIndex(StartingNode, (int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.Y + OffsetY),
                 1f, 1, out ListLayerPossibility);
 
             if (NextRegularMovementDestination == null)
@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 foreach (TeleportPoint ActiveTeleport in Map.LayerManager.ListLayer[ActiveTile.LayerIndex].ListTeleportPoint)
                 {
-                    if (ActiveTeleport.Position.X == ActiveTile.Position.X && ActiveTeleport.Position.Y == ActiveTile.Position.Y)
+                    if (ActiveTeleport.Position.X == ActiveTile.WorldPosition.X && ActiveTeleport.Position.Y == ActiveTile.WorldPosition.Y)
                     {
                         ListTerrainSuccessor.Add(GetTile(ActiveTeleport.OtherMapEntryPoint.X, ActiveTeleport.OtherMapEntryPoint.Y, ActiveTeleport.OtherMapEntryLayer));
                         break;
@@ -54,8 +54,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 if (IgnoreObstacles
-                    || (StartingNode.Position.X == MapComponent.X && StartingNode.Position.Y == MapComponent.Y && StartingNode.LayerIndex == MapComponent.Z)
-                    || !ActiveTile.Owner.CheckForObstacleAtPosition(new Vector3(ActiveTile.Position.X, ActiveTile.Position.Y, ActiveTile.LayerIndex), Vector3.Zero))
+                    || (StartingNode.WorldPosition.X == MapComponent.X && StartingNode.WorldPosition.Y == MapComponent.Y && StartingNode.LayerIndex == MapComponent.Z)
+                    || !ActiveTile.Owner.CheckForObstacleAtPosition(new Vector3(ActiveTile.WorldPosition.X, ActiveTile.WorldPosition.Y, ActiveTile.LayerIndex), Vector3.Zero))
                 {
                     ListTerrainSuccessor.Add(ActiveTile);
                 }
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else
                     MovementCostToNeighbor += TerrainToGo.MVMoveCost;
 
-                if (TerrainToGo.TerrainTypeIndex != GetTile((int)CurrentNode.Position.X, (int)CurrentNode.Position.Y, (int)MapComponent.Z).TerrainTypeIndex)
+                if (TerrainToGo.TerrainTypeIndex != GetTile((int)CurrentNode.WorldPosition.X, (int)CurrentNode.WorldPosition.Y, (int)MapComponent.Z).TerrainTypeIndex)
                     MovementCostToNeighbor += TerrainToGo.MVEnterCost;
             }
 
@@ -119,7 +119,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
-                int SquadIndex = Map.CheckForSquadAtPosition(P, new Vector3(CurrentNode.Position.X, CurrentNode.Position.Y, CurrentNode.LayerIndex), Vector3.Zero);
+                int SquadIndex = Map.CheckForSquadAtPosition(P, new Vector3(CurrentNode.WorldPosition.X, CurrentNode.WorldPosition.Y, CurrentNode.LayerIndex), Vector3.Zero);
                 if (SquadIndex >= 0)
                     return true;
             }

@@ -51,48 +51,49 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (Owner.IsOfflineOrServer)
             {
                 int PlayerIndex = 0;
-                foreach (Player ActivePlayer in Owner.ListPlayer)
+                for (int P = 0; P < Owner.ListPlayer.Count; P++)
                 {
+                    Player ActivePlayer = Owner.ListPlayer[P];
                     if (ActivePlayer.Inventory == null)
                         continue;
 
-                    string PlayerTag = (ActivePlayer.Team + 1).ToString();
+                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(ActivePlayer.Team);
                     int SpawnSquadIndex = 0;
-                    for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
+                    foreach (MovementAlgorithmTile ActiveSpawn in ListPossibleSpawnPoint)
                     {
-                        BaseMapLayer ActiveLayer = Owner.LayerManager[L];
-                        for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
+                        Squad NewSquad = ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex];
+                        if (NewSquad == null)
                         {
-                            if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
-                            {
-                                Squad NewSquad = ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex];
-                                if (NewSquad == null)
-                                {
-                                    ++SpawnSquadIndex;
-                                    continue;
-                                }
+                            ++SpawnSquadIndex;
+                            continue;
+                        }
 
-                                for (int U = 0; U < NewSquad.UnitsInSquad; ++U)
-                                {
-                                    NewSquad.At(U).ReinitializeMembers(Owner.DicUnitType[NewSquad.At(U).UnitTypeName]);
-                                }
+                        for (int U = 0; U < NewSquad.UnitsInSquad; ++U)
+                        {
+                            NewSquad.At(U).ReinitializeMembers(Owner.DicUnitType[NewSquad.At(U).UnitTypeName]);
+                        }
 
-                                NewSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                                Owner.SpawnSquad(PlayerIndex, NewSquad, 0, ActiveLayer.ListMultiplayerSpawns[S].Position, L);
-                                NewSquad.CurrentLeader.PilotSP = 0;
-                                NewSquad.CurrentLeader.ConsumeEN(NewSquad.CurrentLeader.MaxEN);
-                                ++SpawnSquadIndex;
+                        NewSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                        Owner.SpawnSquad(PlayerIndex, NewSquad, 0, ActiveSpawn.InternalPosition, ActiveSpawn.LayerIndex);
+                        NewSquad.CurrentLeader.PilotSP = 0;
+                        NewSquad.CurrentLeader.ConsumeEN(NewSquad.CurrentLeader.MaxEN);
+                        ++SpawnSquadIndex;
 
-                                if (!ActivePlayer.IsPlayerControlled || !NewSquad.IsPlayerControlled)
-                                {
-                                    NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(Owner, NewSquad));
-                                    NewSquad.SquadAI.Load("Multiplayer/Capture The Flag/Easy");
-                                }
-                                if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
-                                {
-                                    break;
-                                }
-                            }
+                        if (!ActivePlayer.IsPlayerControlled || !NewSquad.IsPlayerControlled)
+                        {
+                            NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(Owner, NewSquad));
+                            NewSquad.SquadAI.Load("Multiplayer/Capture The Flag/Easy");
+                        }
+
+                        if (Owner != ActiveSpawn.Owner)
+                        {
+                            ActiveSpawn.Owner.AddUnit(P, NewSquad, ActiveSpawn);
+                            Owner.RemoveUnit(P, NewSquad);
+                        }
+
+                        if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
+                        {
+                            break;
                         }
 
                         if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
@@ -196,7 +197,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void RespawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
         {
-            List<Vector3> ListPossibleSpawnPoint = new List<Vector3>();
+            List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
             {
                 ActiveSquad.At(U).ReinitializeMembers(Owner.DicUnitType[ActiveSquad.At(U).UnitTypeName]);
@@ -204,23 +205,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActiveSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
 
-            string PlayerTag = (ActivePlayerIndex + 1).ToString();
-            for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
-            {
-                BaseMapLayer ActiveLayer = Owner.LayerManager[L];
-                for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
-                {
-                    if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
-                    {
-                        ListPossibleSpawnPoint.Add(new Vector3(ActiveLayer.ListMultiplayerSpawns[S].Position.X, ActiveLayer.ListMultiplayerSpawns[S].Position.Y, L));
-                    }
-                }
-            }
-
             int RandomSapwnPointIndex = RandomHelper.Next(ListPossibleSpawnPoint.Count);
-            Vector3 RandomSpawnPoint = ListPossibleSpawnPoint[RandomSapwnPointIndex];
+            MovementAlgorithmTile RandomSpawnPoint = ListPossibleSpawnPoint[RandomSapwnPointIndex];
 
-            Owner.CursorPosition = RandomSpawnPoint;
+            Owner.CursorPosition = new Vector3(RandomSpawnPoint.InternalPosition.X, RandomSpawnPoint.InternalPosition.Y, RandomSpawnPoint.LayerIndex);
             Owner.CursorPositionVisible = Owner.CursorPosition;
 
             ActiveSquad.At(0).HealUnit(ActiveSquad.At(0).MaxHP);
@@ -228,7 +216,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad.UpdateSquad();
 
             Owner.ActivateAutomaticSkills(ActiveSquad, string.Empty);
-            ActiveSquad.SetPosition(RandomSpawnPoint);
+            ActiveSquad.SetPosition(Owner.CursorPosition);
 
             if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
             {
@@ -239,6 +227,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ActiveSquad.CurrentMovement = UnitStats.TerrainLand;
             }
+        }
+
+        private List<MovementAlgorithmTile> GetSpawnLocations(int Team)
+        {
+            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+
+            string PlayerTag = (Team + 1).ToString();
+            for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
+            {
+                MapLayer ActiveLayer = Owner.LayerManager.ListLayer[L];
+                for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
+                {
+                    if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
+                    {
+                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                    }
+                }
+            }
+
+            return ListPossibleSpawnPoint;
         }
 
         public virtual void Update(GameTime gameTime)

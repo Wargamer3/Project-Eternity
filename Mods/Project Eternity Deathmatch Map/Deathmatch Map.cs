@@ -367,7 +367,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 foreach (Squad ActiveSquad in ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad)
                 {
                     ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                    SpawnSquad(P, ActiveSquad, 0, ActiveSquad.Position, (int)ActiveSquad.Position.Z);
+                    SpawnSquad(P, ActiveSquad, 0, new Vector2(ActiveSquad.Position.X, ActiveSquad.Position.Y), (int)ActiveSquad.Position.Z);
                 }
             }
             Init();
@@ -524,7 +524,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public override void AddLocalPlayer(BattleMapPlayer NewPlayer)
+        protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
         {
             Player NewDeahtmatchPlayer = new Player(NewPlayer);
 
@@ -979,7 +979,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 bool UnitFound = false;
                 for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
                 {
-                    int SquadIndex = CheckForSquadAtPosition(P, ListAllNode[i].Position, Vector3.Zero);
+                    int SquadIndex = CheckForSquadAtPosition(P, ListAllNode[i].WorldPosition, Vector3.Zero);
                     if (SquadIndex >= 0)
                         UnitFound = true;
                 }
@@ -1000,7 +1000,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             MovementAlgorithmTile ActiveNode = ListAllNode[ListAllNode.Count - 1];
 
-            if (Destination.X != ActiveNode.Position.X || Destination.Y != ActiveNode.Position.Y || Destination.Z != ActiveNode.LayerIndex)
+            if (Destination.X != ActiveNode.WorldPosition.X || Destination.Y != ActiveNode.WorldPosition.Y || Destination.Z != ActiveNode.LayerIndex)
             {
                 bool EmptyNodeFound = false;
                 int Offset = 1;
@@ -1013,7 +1013,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             for (int Y = -Offset; Y <= Offset && !EmptyNodeFound; ++Y)
                             {
-                                if (ListAllNode[i].Position.X == Destination.X + X && ListAllNode[i].Position.Y == Destination.Y + Y && ListAllNode[i].LayerIndex == Destination.Z)
+                                if (ListAllNode[i].WorldPosition.X == Destination.X + X && ListAllNode[i].WorldPosition.Y == Destination.Y + Y && ListAllNode[i].LayerIndex == Destination.Z)
                                 {
                                     ActiveNode = ListAllNode[i];
                                     EmptyNodeFound = true;
@@ -1045,7 +1045,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     break;
                 }
-                if (ActiveSquad.Position.X == ActiveNode.Position.X && ActiveSquad.Position.Y == ActiveNode.Position.Y && ActiveSquad.Position.Z == ActiveNode.LayerIndex)
+                if (ActiveSquad.Position.X == ActiveNode.WorldPosition.X && ActiveSquad.Position.Y == ActiveNode.WorldPosition.Y && ActiveSquad.Position.Z == ActiveNode.LayerIndex)
                 {
                     ListPathNode.Add(ActiveNode);
                     break;
@@ -1078,8 +1078,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return null;
             }
             
-            string CurrentTerrainType = GetTerrainType(StartingPosition.Position.X, StartingPosition.Position.Y, StartingPosition.LayerIndex);
-            float CurrentZ = StartingPosition.Position.Z;
+            string CurrentTerrainType = GetTerrainType(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, StartingPosition.LayerIndex);
+            float CurrentZ = StartingPosition.WorldPosition.Z;
 
             MovementAlgorithmTile ClosestLayerIndexDown = null;
             MovementAlgorithmTile ClosestLayerIndexUp = StartingPosition;
@@ -1089,7 +1089,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
                 MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(NextX, NextY, L);
-                Terrain PreviousTerrain = LayerManager.ListLayer[L].ArrayTerrain[(int)StartingPosition.Position.X, (int)StartingPosition.Position.Y];
+                Terrain PreviousTerrain = LayerManager.ListLayer[L].ArrayTerrain[(int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y];
 
                 if (L > StartingPosition.LayerIndex && PreviousTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
                 {
@@ -1097,7 +1097,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 string NextTerrainType = GetTerrainType(NextTerrain);
-                float NextTerrainZ = NextTerrain.Position.Z;
+                float NextTerrainZ = NextTerrain.WorldPosition.Z;
 
                 //Check lower or higher neighbors if on solid ground
                 if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid && CurrentTerrainType != UnitStats.TerrainWall)
@@ -1197,7 +1197,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
                 string NextTerrainType = GetTerrainType(NextX, NextY, L);
-                float NextTerrainZ = ActiveTerrain.Position.Z;
+                float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 

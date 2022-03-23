@@ -40,6 +40,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlatformMap.SetWorld(ToOrigin * YawMatrix * PitchMatrix * RollMatrix * ToFinalPosition);
         }
 
+        public void AddLocalPlayer(BattleMapPlayer ActivePlayer)
+        {
+            PlatformMap.AddLocalPlayer(ActivePlayer);
+        }
+
         public MovementAlgorithmTile FindTileFromGlobalPosition(int X, int Y, int Z)
         {
             int FinalX = X - (int)Position.X / PlatformMap.TileSize.X;

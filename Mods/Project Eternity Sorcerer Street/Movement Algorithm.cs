@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (MovementAlgorithmTile ActiveDestination in ListLayerPossibility)
             {
-                MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.Position.X + OffsetX), (int)(StartingNode.Position.X + OffsetY), ActiveDestination.LayerIndex);
+                MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.X + OffsetY), ActiveDestination.LayerIndex);
                 //Wall
                 if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
                     || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)

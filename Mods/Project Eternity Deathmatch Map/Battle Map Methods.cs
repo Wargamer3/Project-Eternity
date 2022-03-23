@@ -40,10 +40,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         /// <summary>
         /// Used by Cutscene
         /// </summary>
-        public void SpawnSquad(int PlayerIndex, Squad NewSquad, uint ID, Vector3 Position, int LayerIndex)
+        public void SpawnSquad(int PlayerIndex, Squad NewSquad, uint ID, Vector2 Position, int LayerIndex)
         {
-            Position.Z = LayerIndex;
-
             while (ListPlayer.Count <= PlayerIndex)
             {
                 Player NewPlayer = new Player("Enemy", "CPU", false, false, PlayerIndex, Color.Red);
@@ -60,7 +58,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             NewSquad.Init(GlobalBattleContext);
             ActivateAutomaticSkills(NewSquad, string.Empty);
             NewSquad.ID = ID;
-            NewSquad.SetPosition(Position);
+            NewSquad.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));
 
             ListPlayer[PlayerIndex].ListSquad.Add(NewSquad);
 
@@ -96,7 +94,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewSquad.CurrentMovement = UnitStats.TerrainLand;
             }
         }
-        
+
+        public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
+        {
+            ListPlayer[ActivePlayerIndex].ListSquad.Remove((Squad)UnitToRemove);
+            ListPlayer[ActivePlayerIndex].UpdateAliveStatus();
+        }
+
+        public override void AddUnit(int PlayerIndex, UnitMapComponent UnitToAdd, MovementAlgorithmTile NewPosition)
+        {
+            Squad ActiveSquad = (Squad)UnitToAdd;
+            for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
+            {
+                ActiveSquad.At(U).ReinitializeMembers(DicUnitType[ActiveSquad.At(U).UnitTypeName]);
+            }
+
+            ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            ListPlayer[PlayerIndex].ListSquad.Add(ActiveSquad);
+            ListPlayer[PlayerIndex].UpdateAliveStatus();
+            ActiveSquad.SetPosition(new Vector3(NewPosition.InternalPosition.X, NewPosition.InternalPosition.Y, NewPosition.LayerIndex));
+        }
+
         public override void SaveTemporaryMap()
         {
             FileStream FS = new FileStream("User Data/Saves/TempSave.sav", FileMode.Create, FileAccess.Write);
@@ -478,6 +496,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return "Deathmatch";
         }
 
+        public override void AddPlatform(BattleMapPlatform NewPlatform)
+        {
+            foreach (Player ActivePlayer in ListPlayer)
+            {
+                NewPlatform.AddLocalPlayer(ActivePlayer);
+            }
+
+            ListPlatform.Add(NewPlatform);
+        }
+
         public override void SetWorld(Matrix World)
         {
             LayerManager.LayerHolderDrawable.SetWorld(World);
@@ -499,7 +527,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     for (int Y = 0; Y < MapSize.Y; ++Y)
                     {
-                        LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Position
+                        LayerManager.ListLayer[Z].ArrayTerrain[X, Y].WorldPosition
                             = new Vector3((float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].X / 32), (float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].Z / 32), ArrayNewPosition[X + Y * MapSize.X].Y / 32);
                     }
                 }

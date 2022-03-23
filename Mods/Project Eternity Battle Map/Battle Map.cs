@@ -1040,11 +1040,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return CursorMoved;
         }
 
-        public void AddPlatform(BattleMapPlatform NewPlatform)
-        {
-            ListPlatform.Add(NewPlatform);
-        }
-
         /// <summary>
         /// 
         /// </summary>

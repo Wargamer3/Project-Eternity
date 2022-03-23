@@ -29,7 +29,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 List<Vector3> ListMVChoice = new List<Vector3>();
                 foreach (MovementAlgorithmTile ActiveTerrain in Info.Map.GetMVChoice(Info.ActiveSquad))
                 {
-                    ListMVChoice.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+                    ListMVChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
                 }
                 ListMVChoice = FilterMVChoice(ListMVChoice);
                 int FinalMV = 0;

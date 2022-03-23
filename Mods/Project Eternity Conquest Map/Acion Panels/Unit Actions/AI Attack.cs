@@ -45,19 +45,19 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 //Remove everything that is closer then DistanceMax.
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {
-                    TerrainConquest ActiveTerrain = Map.GetTerrain((int)ListMVChoice[M].Position.X, (int)ListMVChoice[M].Position.Y, (int)ListMVChoice[M].Position.Z);
+                    TerrainConquest ActiveTerrain = Map.GetTerrain((int)ListMVChoice[M].WorldPosition.X, (int)ListMVChoice[M].WorldPosition.Y, (int)ListMVChoice[M].WorldPosition.Z);
 
                     //Check if the Terrain is a building.
                     if (ActiveTerrain.CapturedPlayerIndex != Map.ActivePlayerIndex && ActiveTerrain.TerrainTypeIndex >= 13)
                     {
                         //Movement initialisation.
-                        Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListMVChoice[M].Position);
+                        Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListMVChoice[M].WorldPosition);
                         //Prepare the Cursor to move.
-                        Map.CursorPosition.X = ListMVChoice[M].Position.X;
-                        Map.CursorPosition.Y = ListMVChoice[M].Position.Y;
-                        Map.CursorPosition.Z = ListMVChoice[M].Position.Z;
+                        Map.CursorPosition.X = ListMVChoice[M].WorldPosition.X;
+                        Map.CursorPosition.Y = ListMVChoice[M].WorldPosition.Y;
+                        Map.CursorPosition.Z = ListMVChoice[M].WorldPosition.Z;
                         //Move the Unit to the target position;
-                        ActiveUnit.SetPosition(ListMVChoice[M].Position);
+                        ActiveUnit.SetPosition(ListMVChoice[M].WorldPosition);
 
                         Map.FinalizeMovement(ActiveUnit);
                     }

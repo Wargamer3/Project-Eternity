@@ -164,7 +164,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         for (int M = 0; M < ListRealChoice.Count; M++)
                         {//Remove every MV that would make it impossible to attack.
-                            float Distance = Math.Abs(ListRealChoice[M].Position.X - ListPlayer[P].ListSquad[TargetSelect].X) + Math.Abs(ListRealChoice[M].Position.Y - ListPlayer[P].ListSquad[TargetSelect].Y);
+                            float Distance = Math.Abs(ListRealChoice[M].WorldPosition.X - ListPlayer[P].ListSquad[TargetSelect].X) + Math.Abs(ListRealChoice[M].WorldPosition.Y - ListPlayer[P].ListSquad[TargetSelect].Y);
                             //Check if you can attack it if you moved.
                             if (Distance < MinRange || Distance > MaxRange)
                                 ListRealChoice.RemoveAt(M--);

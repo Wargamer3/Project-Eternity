@@ -212,7 +212,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }
         }
 
-        public override void AddLocalPlayer(BattleMapPlayer NewPlayer)
+        protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
         {
             /*Player NewDeahtmatchPlayer = new Player(NewPlayer);
             ListPlayer.Add(NewDeahtmatchPlayer);

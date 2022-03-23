@@ -63,7 +63,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                                 {
                                     TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset);
                                     DrawableTile NewTile = new DrawableTile(TilePreset);
-                                    NewTerrain.Position = new Vector3(X, Y, 0);
+                                    NewTerrain.WorldPosition = new Vector3(X, Y, 0);
 
                                     ArrayTerrain[X, Y] = NewTerrain;
                                     ArrayTile2D[X, Y] = NewTile;
@@ -87,7 +87,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
             {
                 TerrainConquest NewTerrain = new TerrainConquest(TerrainPreset);
-                NewTerrain.Position = new Vector3(X, Y, 0);
+                NewTerrain.WorldPosition = new Vector3(X, Y, 0);
 
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;
             }

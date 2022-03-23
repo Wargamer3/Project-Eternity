@@ -311,7 +311,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         for (int T = 0; T < TerrainAttribute.ListTerrainChangeLocation.Count; T++)
                         {
-                            Vector3 NewDestinationPoint = TerrainAttribute.ListTerrainChangeLocation[T].Position;
+                            Vector3 NewDestinationPoint = TerrainAttribute.ListTerrainChangeLocation[T].WorldPosition;
                             NewMap.LayerManager[0].ListSingleplayerSpawns.Add(new EventPoint(NewDestinationPoint, T.ToString(), 255, 255, 255));
                         }
 
@@ -380,8 +380,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         for (int T = 0; T < TerrainAttribute.ListTerrainChangeLocation.Count; T++)
                         {
                             Terrain ActiveTerrain = TerrainAttribute.ListTerrainChangeLocation[T];
-                            int PosX = (int)ActiveTerrain.Position.X;
-                            int PosY = (int)ActiveTerrain.Position.Y;
+                            int PosX = (int)ActiveTerrain.WorldPosition.X;
+                            int PosY = (int)ActiveTerrain.WorldPosition.Y;
                             DrawableTile ActiveTile = TerrainAttribute.ListTileChangeLocation[T];
                             Helper.ReplaceTerrain(PosX, PosY, ActiveTerrain, 0, true);
                             Helper.ReplaceTile(PosX, PosY, ActiveTile, 0, true);

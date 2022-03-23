@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void MoveToNextTerrain(TerrainSorcererStreet NextTerrain)
         {
-            Vector3 FinalPosition = NextTerrain.Position;
+            Vector3 FinalPosition = NextTerrain.WorldPosition;
             Map.MovementAnimation.Add(ActivePlayer.GamePiece, ActivePlayer.GamePiece.Position, FinalPosition);
             ActivePlayer.GamePiece.SetPosition(FinalPosition);
 

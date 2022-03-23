@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     //New path or Neighbor have a lower movement cost then before.
                     if (!ListOpenNode.Contains(Neighbor) || MovementCostToNeighbor < Neighbor.MovementCost)
                     {
-                        if (Neighbor.ParentTemp == null || CurrentNode.ParentTemp == null || Neighbor.ParentTemp.Position.Z == CurrentNode.ParentTemp.Position.Z)
+                        if (Neighbor.ParentTemp == null || CurrentNode.ParentTemp == null || Neighbor.ParentTemp.WorldPosition.Z == CurrentNode.ParentTemp.WorldPosition.Z)
                         {
                             Neighbor.ParentTemp = CurrentNode;
                             Neighbor.ParentReal = CurrentNode;
@@ -177,7 +177,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     //New path or Neighbor have a lower movement cost then before.
                     if (!ListOpenNode.Contains(Neighbor) || MovementCostToNeighbor < Neighbor.MovementCost)
                     {
-                        if (Neighbor.ParentTemp == null || CurrentNode.ParentTemp == null || Neighbor.ParentTemp.Position.Z == CurrentNode.ParentTemp.Position.Z)
+                        if (Neighbor.ParentTemp == null || CurrentNode.ParentTemp == null || Neighbor.ParentTemp.WorldPosition.Z == CurrentNode.ParentTemp.WorldPosition.Z)
                         {
                             Neighbor.ParentTemp = CurrentNode;
                             Neighbor.ParentReal = CurrentNode;
@@ -188,7 +188,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             ListOpenNode.Add(Neighbor);
                     }
 
-                    if (Neighbor.Position.X == EndPosition.X && Neighbor.Position.Y == EndPosition.Y && Neighbor.LayerIndex == EndPosition.Z)
+                    if (Neighbor.WorldPosition.X == EndPosition.X && Neighbor.WorldPosition.Y == EndPosition.Y && Neighbor.LayerIndex == EndPosition.Z)
                     {
                         return ListAllNode;
                     }

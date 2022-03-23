@@ -4,7 +4,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public abstract class MovementAlgorithmTile
     {
-        public Vector3 Position;//Z = Height + Layer index + Platform height
+        public Vector3 WorldPosition;//Z = Height + Layer index + Platform height, affected by World Matrix.
+        public Vector2 InternalPosition;//Position not affected by World Matrix, will be the same as WorldPosition if not a platform.
         public float Height;
         public int MVEnterCost;//How much energy is required to enter in it.
         public int MVMoveCost;//How much energy is required to move in it.

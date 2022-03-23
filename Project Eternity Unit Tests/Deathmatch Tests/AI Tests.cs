@@ -40,8 +40,8 @@ namespace ProjectEternity.UnitTests
             DeathmatchScriptHolder.GetEnemies Test = new DeathmatchScriptHolder.GetEnemies();
             Squad DummySquad = CreateDummySquad();
             Squad EnemySquad = CreateDummySquad();
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(7, 8, 0), 0);
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector2(3, 5), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector2(7, 8), 0);
             
             Test.Info = new GameScreens.DeathmatchMapScreen.DeathmatchAIInfo(DummyMap, DummySquad);
             List<object> ListEnemies = (List<object>)Test.GetContent();
@@ -55,8 +55,8 @@ namespace ProjectEternity.UnitTests
             CoreScriptHolder.SetVariable Attack = new CoreScriptHolder.SetVariable();
             Squad DummySquad = CreateDummySquad();
             Squad EnemySquad = CreateDummySquad();
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(7, 8, 0), 0);
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector2(3, 5), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector2(7, 8), 0);
             bool IsCompleted;
             List<object> ListResult;
             Attack.Evaluate(null, DummySquad.CurrentLeader.ListAttack[0], out IsCompleted, out ListResult);
@@ -74,8 +74,8 @@ namespace ProjectEternity.UnitTests
             CoreScriptHolder.SetVariable Attack = new CoreScriptHolder.SetVariable();
             Squad DummySquad = CreateDummySquad();
             Squad EnemySquad = CreateDummySquad();
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(3, 8, 0), 0);
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector2(3, 5), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector2(3, 8), 0);
             bool IsCompleted;
             List<object> ListResult;
             Attack.Evaluate(null, DummySquad.CurrentLeader.ListAttack[0], out IsCompleted, out ListResult);
@@ -94,8 +94,8 @@ namespace ProjectEternity.UnitTests
             CoreScriptHolder.SetVariable Attack = new CoreScriptHolder.SetVariable();
             Squad DummySquad = CreateDummySquad();
             Squad EnemySquad = CreateDummySquad();
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(18, 8, 0), 0);
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector2(3, 5), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector2(18, 8), 0);
             bool IsCompleted;
             List<object> ListResult;
             Attack.Evaluate(null, DummySquad.CurrentLeader.ListAttack[0], out IsCompleted, out ListResult);
@@ -114,8 +114,8 @@ namespace ProjectEternity.UnitTests
             CoreScriptHolder.SetVariable Attack = new CoreScriptHolder.SetVariable();
             Squad DummySquad = CreateDummySquad();
             Squad EnemySquad = CreateDummySquad();
-            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector3(3, 5, 0), 0);
-            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector3(8, 8, 0), 0);
+            DummyMap.SpawnSquad(0, DummySquad, 1, new Vector2(3, 5), 0);
+            DummyMap.SpawnSquad(1, EnemySquad, 2, new Vector2(8, 8), 0);
             bool IsCompleted;
             List<object> ListResult;
             Attack.Evaluate(null, DummySquad.CurrentLeader.ListAttack[0], out IsCompleted, out ListResult);

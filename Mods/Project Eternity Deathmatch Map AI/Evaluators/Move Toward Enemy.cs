@@ -70,7 +70,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 List<Vector3> ListRealChoice = new List<Vector3>();
                 foreach (MovementAlgorithmTile ActiveTerrain in Info.Map.GetMVChoice(Info.ActiveSquad))
                 {
-                    ListRealChoice.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+                    ListRealChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
                 }
                 for (int M = 0; M < ListRealChoice.Count; M++)
                 {//Remove every MV that would make it impossible to attack.

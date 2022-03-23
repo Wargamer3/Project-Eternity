@@ -55,7 +55,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 //Remove everything that is closer then DistanceMax.
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {
-                    List<Tuple<int, int>> ListTargetUnit = Info.Map.CanSquadAttackWeapon(Info.ActiveSquad, new Vector3(ListMVChoice[M].Position.X, ListMVChoice[M].Position.Y, ListMVChoice[M].LayerIndex),
+                    List<Tuple<int, int>> ListTargetUnit = Info.Map.CanSquadAttackWeapon(Info.ActiveSquad, new Vector3(ListMVChoice[M].WorldPosition.X, ListMVChoice[M].WorldPosition.Y, ListMVChoice[M].LayerIndex),
                         ActiveAttack, MinRange, MaxRange, Info.ActiveSquad.CanMove, Info.ActiveSquad.CurrentLeader);
 
                     //Priority goes to units with higher chances of hitting.

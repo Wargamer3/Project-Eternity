@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
 
                             NewSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                            Owner.SpawnSquad(PlayerIndex, NewSquad, 0, ActiveLayer.ListSingleplayerSpawns[S].Position, L);
+                            Owner.SpawnSquad(PlayerIndex, NewSquad, 0, new Vector2(ActiveLayer.ListSingleplayerSpawns[S].Position.X, ActiveLayer.ListSingleplayerSpawns[S].Position.Y), L);
                             ++SpawnSquadIndex;
 
                             if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)

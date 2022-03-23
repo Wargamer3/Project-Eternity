@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ListMVChoice = ListMVChoice;
             this.NextPanel = NextPanel;
 
-            AICursorNextPosition = ListMovement[ListMovement.Count - 1].Position;
+            AICursorNextPosition = ListMovement[ListMovement.Count - 1].WorldPosition;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             Map.CursorPosition = ActiveSquad.Position;
@@ -53,7 +53,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMVHoverPoints = new List<Vector3>();
             foreach (MovementAlgorithmTile ActiveTile in ListMovement)
             {
-                ListMVHoverPoints.Add(new Vector3(ActiveTile.Position.X, ActiveTile.Position.Y, ActiveTile.LayerIndex));
+                ListMVHoverPoints.Add(new Vector3(ActiveTile.WorldPosition.X, ActiveTile.WorldPosition.Y, ActiveTile.LayerIndex));
             }
         }
 

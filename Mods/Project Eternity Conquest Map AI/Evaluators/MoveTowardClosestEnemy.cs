@@ -55,7 +55,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     //Remove everything that is closer then DistanceMax.
                     for (int M = 0; M < ListMVChoice.Count; M++)
                     {
-                        float Distance = (Math.Abs(ListMVChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListMVChoice[M].Position.Y - TargetSquad.Y));
+                        float Distance = (Math.Abs(ListMVChoice[M].WorldPosition.X - TargetSquad.X) + Math.Abs(ListMVChoice[M].WorldPosition.Y - TargetSquad.Y));
                         //Remove MV choices if they are not at the furthest distance and if there is at least 1 MV(protection against bugs)
                         if (Distance < DistanceMax && ListMVChoice.Count > 1)
                         {
@@ -66,11 +66,11 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     if (DistanceMax < Math.Abs(Info.ActiveUnit.X - TargetSquad.X) + Math.Abs(Info.ActiveUnit.Y - TargetSquad.Y))
                     {
                         //Prepare the Cursor to move.
-                        Info.Map.CursorPosition.X = ListMVChoice[FinalMV].Position.X;
-                        Info.Map.CursorPosition.Y = ListMVChoice[FinalMV].Position.Y;
+                        Info.Map.CursorPosition.X = ListMVChoice[FinalMV].WorldPosition.X;
+                        Info.Map.CursorPosition.Y = ListMVChoice[FinalMV].WorldPosition.Y;
                         Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
                         //Move the Unit to the target position;
-                        Info.ActiveUnit.SetPosition(ListMVChoice[FinalMV].Position);
+                        Info.ActiveUnit.SetPosition(ListMVChoice[FinalMV].WorldPosition);
                         Info.Map.FinalizeMovement(Info.ActiveUnit);
                     }
                     else

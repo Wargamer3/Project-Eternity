@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 //Remove everything that is closer then DistanceMax.
                 for (int M = 0; M < ListMVChoice.Count; M++)
                 {
-                    float Distance = (Math.Abs(ListMVChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListMVChoice[M].Position.Y - TargetSquad.Y));
+                    float Distance = (Math.Abs(ListMVChoice[M].WorldPosition.X - TargetSquad.X) + Math.Abs(ListMVChoice[M].WorldPosition.Y - TargetSquad.Y));
                     //Remove MV choices if they are not at the furthest distance and if there is at least 1 MV(protection against bugs)
                     if (Distance < DistanceMax && ListMVChoice.Count > 1)
                     {
@@ -72,14 +72,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 if (DistanceMax < Math.Abs(ActiveUnit.X - TargetSquad.X) + Math.Abs(ActiveUnit.Y - TargetSquad.Y))
                 {
                     //Prepare the Cursor to move.
-                    Map.CursorPosition.X = ListMVChoice[FinalMV].Position.X;
-                    Map.CursorPosition.Y = ListMVChoice[FinalMV].Position.Y;
-                    Map.CursorPosition.Y = ListMVChoice[FinalMV].Position.Z;
+                    Map.CursorPosition.X = ListMVChoice[FinalMV].WorldPosition.X;
+                    Map.CursorPosition.Y = ListMVChoice[FinalMV].WorldPosition.Y;
+                    Map.CursorPosition.Y = ListMVChoice[FinalMV].WorldPosition.Z;
                     //Move the Unit to the target position;
-                    ActiveUnit.SetPosition(ListMVChoice[FinalMV].Position);
+                    ActiveUnit.SetPosition(ListMVChoice[FinalMV].WorldPosition);
                 }
 
-                Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListMVChoice[FinalMV].Position);
+                Map.MovementAnimation.Add(ActiveUnit.Components, ActiveUnit.Components.Position, ListMVChoice[FinalMV].WorldPosition);
             }
 
             Map.FinalizeMovement(ActiveUnit);

@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     List<Vector3> ListMVPoints = new List<Vector3>();
                     foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
                     {
-                        ListMVPoints.Add(new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex));
+                        ListMVPoints.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
                     }
 
                     Owner.AddChoiceToCurrentPanel(new ActionPanelRepair(Map, Owner, ActiveSquad, ListMVChoice, ListMVPoints));
@@ -199,9 +199,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int M = 0; M < ListMVChoice.Count; ++M)
             {
-                BW.AppendFloat(ListMVChoice[M].Position.X);
-                BW.AppendFloat(ListMVChoice[M].Position.Y);
-                BW.AppendInt32((int)ListMVChoice[M].Position.Z);
+                BW.AppendFloat(ListMVChoice[M].WorldPosition.X);
+                BW.AppendFloat(ListMVChoice[M].WorldPosition.Y);
+                BW.AppendInt32((int)ListMVChoice[M].WorldPosition.Z);
             }
         }
 

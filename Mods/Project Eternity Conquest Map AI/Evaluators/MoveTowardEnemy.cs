@@ -54,7 +54,7 @@ namespace ProjectEternity.AI.ConquestMapScreen
                 List<MovementAlgorithmTile> ListRealChoice = Info.Map.GetMVChoice(Info.ActiveUnit);
                 for (int M = 0; M < ListRealChoice.Count; M++)
                 {//Remove every MV that would make it impossible to attack.
-                    float Distance = Math.Abs(ListRealChoice[M].Position.X - TargetSquad.X) + Math.Abs(ListRealChoice[M].Position.Y - TargetSquad.Y);
+                    float Distance = Math.Abs(ListRealChoice[M].WorldPosition.X - TargetSquad.X) + Math.Abs(ListRealChoice[M].WorldPosition.Y - TargetSquad.Y);
                     //Check if you can attack it if you moved.
                     if (Distance < MinRange || Distance > MaxRange)
                         ListRealChoice.RemoveAt(M--);
@@ -66,12 +66,12 @@ namespace ProjectEternity.AI.ConquestMapScreen
                     int Choice = RandomHelper.Next(ListRealChoice.Count);
 
                     //Movement initialisation.
-                    Info.Map.MovementAnimation.Add(Info.ActiveUnit.Components, Info.ActiveUnit.Components.Position, ListRealChoice[Choice].Position);
+                    Info.Map.MovementAnimation.Add(Info.ActiveUnit.Components, Info.ActiveUnit.Components.Position, ListRealChoice[Choice].WorldPosition);
 
                     //Prepare the Cursor to move.
-                    Info.Map.CursorPosition.X = ListRealChoice[Choice].Position.X;
-                    Info.Map.CursorPosition.Y = ListRealChoice[Choice].Position.Y;
-                    Info.ActiveUnit.SetPosition(ListRealChoice[Choice].Position);
+                    Info.Map.CursorPosition.X = ListRealChoice[Choice].WorldPosition.X;
+                    Info.Map.CursorPosition.Y = ListRealChoice[Choice].WorldPosition.Y;
+                    Info.ActiveUnit.SetPosition(ListRealChoice[Choice].WorldPosition);
 
                     Info.Map.FinalizeMovement(Info.ActiveUnit);
                 }

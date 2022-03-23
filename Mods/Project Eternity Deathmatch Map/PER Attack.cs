@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Stack<Tuple<int, int>> ListAttackTarget = new Stack<Tuple<int, int>>();
 
-            Tuple<int, int> ActiveTarget = CheckForEnemies(Map, PlayerIndex, new Vector3(ActiveTerrain.Position.X, ActiveTerrain.Position.Y, ActiveTerrain.LayerIndex), true);
+            Tuple<int, int> ActiveTarget = CheckForEnemies(Map, PlayerIndex, new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex), true);
 
             if (ActiveTarget != null)
             {
@@ -390,7 +390,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     float DiffX = Math.Abs(Position.X - SquadToKill.Position.X);
                     float DiffY = Math.Abs(Position.Y - SquadToKill.Position.Y);
-                    float DiffZ = Math.Abs(Position.Z - SquadTerrain.Position.Z);
+                    float DiffZ = Math.Abs(Position.Z - SquadTerrain.WorldPosition.Z);
 
                     float DiffTotal = (DiffX + DiffY + DiffZ) / 3;
 
@@ -405,7 +405,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         FinalSpeed *= WindValue;
                         SquadToKill.Speed = FinalSpeed;
 
-                        SquadToKill.SetPosition(SquadTerrain.Position);
+                        SquadToKill.SetPosition(SquadTerrain.WorldPosition);
 
                         if (FinalSpeed.Z > 0)
                         {

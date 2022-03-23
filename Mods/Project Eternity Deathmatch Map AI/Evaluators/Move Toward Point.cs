@@ -34,7 +34,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 }
 
                 MovementAlgorithmTile FinalTile = ListMovement[ListMovement.Count - 1];
-                Vector3 FinalTilePosition = new Vector3(FinalTile.Position.X, FinalTile.Position.Y, FinalTile.LayerIndex);
+                Vector3 FinalTilePosition = new Vector3(FinalTile.WorldPosition.X, FinalTile.WorldPosition.Y, FinalTile.LayerIndex);
 
                 if (FinalTilePosition == Target && _MinDistanceFromPoint > 0)
                 {
@@ -43,7 +43,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                     for (int M = ListFinalChoice.Count - 1; M >= 0; M--)
                     {
-                        float Distance = (Math.Abs(ListFinalChoice[M].Position.X - Target.X) + Math.Abs(ListFinalChoice[M].Position.Y - Target.Y));
+                        float Distance = (Math.Abs(ListFinalChoice[M].WorldPosition.X - Target.X) + Math.Abs(ListFinalChoice[M].WorldPosition.Y - Target.Y));
                         if (Distance != _MinDistanceFromPoint)
                         {
                             ListFinalChoice.RemoveAt(M);
@@ -62,7 +62,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                         {
                             break;
                         }
-                        if (Info.ActiveSquad.Position.X == FinalTile.Position.X && Info.ActiveSquad.Position.Y == FinalTile.Position.Y && Info.ActiveSquad.Position.Z == FinalTile.LayerIndex)
+                        if (Info.ActiveSquad.Position.X == FinalTile.WorldPosition.X && Info.ActiveSquad.Position.Y == FinalTile.WorldPosition.Y && Info.ActiveSquad.Position.Z == FinalTile.LayerIndex)
                         {
                             ListMovement.Add(FinalTile);
                             break;

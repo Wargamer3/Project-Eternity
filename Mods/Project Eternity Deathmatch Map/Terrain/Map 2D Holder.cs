@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int Y = Owner.LayerGrid.ArrayTile.GetLength(1) - 1; Y >= 0; --Y)
                 {
                     Color FinalColor = Color.White;
-                    float FinalHeight = Owner.ArrayTerrain[X, Y].Position.Z;
+                    float FinalHeight = Owner.ArrayTerrain[X, Y].WorldPosition.Z;
 
                     if (FinalHeight > CameraPosition.Z)
                     {
@@ -207,7 +207,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 foreach (MovementAlgorithmTile DrawablePoint in DrawablePointPerColor.Value)
                 {
-                    g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.Position.X - CameraPosition.X) * TileSize.X, (int)(DrawablePoint.Position.Y - CameraPosition.Y) * TileSize.Y, TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
+                    g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.WorldPosition.X - CameraPosition.X) * TileSize.X, (int)(DrawablePoint.WorldPosition.Y - CameraPosition.Y) * TileSize.Y, TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
                 }
             }
         }

@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             int CursorWidth = sprCursor == null ? 32 : sprCursor.Width;
             int CursorHeight = sprCursor == null ? 32 : sprCursor.Height;
-            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, Grid.ArrayTerrain[(int)Map.CursorPositionVisible.X, (int)Map.CursorPositionVisible.Y].Position.Z,
+            Cursor = CreateCursor(Map, Map.CursorPositionVisible.X, Map.CursorPositionVisible.Y, Grid.ArrayTerrain[(int)Map.CursorPositionVisible.X, (int)Map.CursorPositionVisible.Y].WorldPosition.Z,
                 CursorWidth, CursorHeight, Radius);
         }
 
@@ -292,7 +292,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (MovementAlgorithmTile ActivePoint in ListPoint)
             {
-                ListDrawablePoint3D.Add(CreateCursor(Map, ActivePoint.Position.X, ActivePoint.Position.Y, ActivePoint.LayerIndex, 32, 32, Radius));
+                ListDrawablePoint3D.Add(CreateCursor(Map, ActivePoint.WorldPosition.X, ActivePoint.WorldPosition.Y, ActivePoint.LayerIndex, 32, 32, Radius));
             }
 
             DicDrawablePointPerColor.Add(PointColor, ListDrawablePoint3D);
