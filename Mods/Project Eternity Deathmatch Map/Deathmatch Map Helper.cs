@@ -146,9 +146,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return null;
         }
 
-        public BaseMapLayer CreateNewLayer()
+        public BaseMapLayer CreateNewLayer(Terrain TerrainPreset, DrawableTile TilePreset)
         {
             MapLayer NewLayer = new MapLayer(ActiveMap, ActiveMap.LayerManager.ListLayer.Count);
+
+            Terrain[,] ArrayTerrain = new Terrain[ActiveMap.MapSize.X, ActiveMap.MapSize.Y];
+            DrawableTile[,] ArrayTile2D = new DrawableTile[ActiveMap.MapSize.X, ActiveMap.MapSize.Y];
+
+            for (int X = 0; X < ActiveMap.MapSize.X; X++)
+            {
+                for (int Y = 0; Y < ActiveMap.MapSize.Y; Y++)
+                {
+                    Terrain NewTerrain = new Terrain(TerrainPreset);
+                    DrawableTile NewTile = new DrawableTile(TilePreset);
+                    NewTerrain.WorldPosition = new Vector3(X, Y, ActiveMap.LayerManager.ListLayer.Count - 1);
+
+                    ArrayTerrain[X, Y] = NewTerrain;
+                    ArrayTile2D[X, Y] = NewTile;
+                }
+            }
+
+            NewLayer.ArrayTerrain = ArrayTerrain;
+            NewLayer.LayerGrid.ReplaceGrid(ArrayTile2D);
+
             ActiveMap.LayerManager.ListLayer.Add(NewLayer);
             return NewLayer;
         }

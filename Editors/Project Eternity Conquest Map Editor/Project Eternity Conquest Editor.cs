@@ -110,7 +110,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 }
             }
 
-            public BaseMapLayer CreateNewLayer()
+            public BaseMapLayer CreateNewLayer(Terrain TerrainPreset, DrawableTile TilePreset)
             {
                 MapLayer NewLayer = new MapLayer(ActiveMap, ActiveMap.ListLayer.Count);
                 ActiveMap.ListLayer.Add(NewLayer);

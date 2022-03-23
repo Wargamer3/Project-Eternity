@@ -906,7 +906,11 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnAddExtraLayer_Click(object sender, EventArgs e)
         {
-            lsLayers.Items.Add(Helper.CreateNewLayer());
+            Point TilePos = TilesetViewer.ActiveTile;
+            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+
+            lsLayers.Items.Add(Helper.CreateNewLayer(PresetTerrain, PresetTile));
         }
 
         private void btnRemoveExtraLayer_Click(object sender, EventArgs e)
