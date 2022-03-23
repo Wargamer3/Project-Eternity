@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract string GetMapType();
 
-        public virtual void SetWorld(Matrix World, Vector3 Position)
+        public virtual void SetWorld(Matrix World)
         { }
 
         public abstract bool CheckForObstacleAtPosition(Vector3 Position, Vector3 Displacement);

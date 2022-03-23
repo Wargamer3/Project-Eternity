@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Matrix ToFinalPosition = Matrix.CreateTranslation(new Vector3(Position.X + OffsetX - PlatformMap.TileSize.X / 2, Position.Y, Position.Z + OffsetY - PlatformMap.TileSize.Y / 2));
 
-            PlatformMap.SetWorld(ToOrigin * YawMatrix * PitchMatrix * RollMatrix * ToFinalPosition, Position);
+            PlatformMap.SetWorld(ToOrigin * YawMatrix * PitchMatrix * RollMatrix * ToFinalPosition);
         }
 
         public MovementAlgorithmTile FindTileFromGlobalPosition(int X, int Y, int Z)

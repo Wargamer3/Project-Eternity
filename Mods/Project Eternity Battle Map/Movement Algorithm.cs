@@ -209,7 +209,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo);
 
-        public abstract MovementAlgorithmTile GetTile(float PosX, float PosY, int LayerIndex);
+        public abstract MovementAlgorithmTile GetTile(int PosX, int PosY, int LayerIndex);
 
         public abstract bool IsBlocked(MovementAlgorithmTile CurrentNode);
     }

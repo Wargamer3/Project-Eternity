@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 float RandForward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxForwardSpread;
                 float RandUpward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxUpwardSpread;
 
-                Vector3 AttackPosition = new Vector3(ActiveSquad.Position.X + 0.5f, ActiveSquad.Position.Y + 0.5f, ActiveSquad.Position.Z + ActiveTerrain.Position.Z + 0.5f);
+                Vector3 AttackPosition = new Vector3(ActiveTerrain.Position.X + 0.5f, ActiveTerrain.Position.Y + 0.5f, ActiveTerrain.Position.Z + 0.5f);
                 Vector3 AttackForwardVector = Map.CursorPosition - ActiveSquad.Position;
                 AttackForwardVector.Normalize();
                 Vector3 AttackLateralVector = new Vector3(AttackForwardVector.Y, -AttackForwardVector.X, AttackForwardVector.Z);

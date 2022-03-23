@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -23,7 +22,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             foreach (MovementAlgorithmTile ActiveDestination in ListLayerPossibility)
             {
-                MovementAlgorithmTile ActiveTile = GetTile(StartingNode.Position.X + OffsetX, StartingNode.Position.X + OffsetY, ActiveDestination.LayerIndex);
+                MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.Position.X + OffsetX), (int)(StartingNode.Position.X + OffsetY), ActiveDestination.LayerIndex);
                 //Wall
                 if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
                     || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
@@ -49,14 +48,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return TerrainToGo.MVMoveCost;
         }
 
-        public override MovementAlgorithmTile GetTile(float PosX, float PosY, int LayerIndex)
+        public override MovementAlgorithmTile GetTile(int PosX, int PosY, int LayerIndex)
         {
             if (PosX < 0 || PosY < 0 || PosX >= Map.MapSize.X || PosY >= Map.MapSize.Y)
             {
                 return null;
             }
 
-            return Map.ListLayer[LayerIndex].ArrayTerrain[(int)PosX, (int)PosY];
+            return Map.ListLayer[LayerIndex].ArrayTerrain[PosX, PosY];
         }
 
         public override bool IsBlocked(MovementAlgorithmTile CurrentNode)

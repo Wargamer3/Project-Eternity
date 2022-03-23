@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
 {
@@ -103,7 +104,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             UnitMapComponent MapComponent, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
-            MovementAlgorithmTile ActiveTile = GetTile(StartingNode.Position.X + OffsetX, StartingNode.Position.X + OffsetY, StartingNode.LayerIndex);
+            MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.Position.X + OffsetX), (int)(StartingNode.Position.X + OffsetY), StartingNode.LayerIndex);
             //Wall
             if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
                 || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
@@ -128,14 +129,14 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return 1;
         }
 
-        public override MovementAlgorithmTile GetTile(float PosX, float PosY, int Layerindex)
+        public override MovementAlgorithmTile GetTile(int PosX, int PosY, int Layerindex)
         {
             if (PosX < 0 || PosY < 0 || PosX >= FogOfWarMap.GetLength(0) || PosY >= FogOfWarMap.GetLength(1))
             {
                 return null;
             }
 
-            return FogOfWarMap[(int)PosX, (int)PosY];
+            return FogOfWarMap[PosX, PosY];
         }
 
         public override bool IsBlocked(MovementAlgorithmTile CurrentNode)

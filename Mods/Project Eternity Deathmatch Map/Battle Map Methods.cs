@@ -478,21 +478,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return "Deathmatch";
         }
 
-        public override void SetWorld(Matrix World, Vector3 Position)
+        public override void SetWorld(Matrix World)
         {
             LayerManager.LayerHolderDrawable.SetWorld(World);
 
             for (int Z = 0; Z < LayerManager.ListLayer.Count; ++Z)
             {
+                Vector3[] ArrayNewPosition = new Vector3[MapSize.X * MapSize.Y];
+                for (int X = 0; X < MapSize.X; ++X)
+                {
+                    for (int Y = 0; Y < MapSize.Y; ++Y)
+                    {
+                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X  * 32, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * 32, Y * 32);
+                    }
+                }
+
+                Vector3.Transform(ArrayNewPosition, ref World, ArrayNewPosition);
+
                 for (int X = 0; X < MapSize.X; ++X)
                 {
                     for (int Y = 0; Y < MapSize.Y; ++Y)
                     {
                         LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Position
-                            = new Vector3(
-                                (Position.X - TileSize.X / 2) / TileSize.X + X,
-                                (Position.Z - TileSize.Y / 2) / TileSize.Y + Y,
-                                LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z + Position.Y);
+                            = new Vector3((float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].X / 32), (float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].Z / 32), ArrayNewPosition[X + Y * MapSize.X].Y / 32);
                     }
                 }
             }

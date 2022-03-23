@@ -67,12 +67,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             float Pitch = BR.ReadSingle();
             float Roll = BR.ReadSingle();
 
-            LoadMap();
+            LoadPlatformMap();
+
+            Platform.Yaw = Yaw;
+            Platform.Pitch = Pitch;
+            Platform.Roll = Roll;
 
             Map.AddPlatform(Platform);
         }
 
-        private void LoadMap()
+        private void LoadPlatformMap()
         {
             if (BattleMap.DicBattmeMapType.Count == 0)
             {
@@ -90,9 +94,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             NewMap.TogglePreview(true);
             NewMap.IsEditor = Map.IsEditor;
             Platform.SetMap(NewMap, Map);
-            Platform.Yaw = Yaw;
-            Platform.Pitch = Pitch;
-            Platform.Roll = Roll;
             Platform.Position = Position;
             PlatformMap = NewMap;
         }
@@ -188,7 +189,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             set
             {
                 _MapPath = value;
-                LoadMap();
+                LoadPlatformMap();
             }
         }
 

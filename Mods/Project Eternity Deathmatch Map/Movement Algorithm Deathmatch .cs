@@ -98,21 +98,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else
                     MovementCostToNeighbor += TerrainToGo.MVMoveCost;
 
-                if (TerrainToGo.TerrainTypeIndex != GetTile(CurrentNode.Position.X, CurrentNode.Position.Y, (int)MapComponent.Z).TerrainTypeIndex)
+                if (TerrainToGo.TerrainTypeIndex != GetTile((int)CurrentNode.Position.X, (int)CurrentNode.Position.Y, (int)MapComponent.Z).TerrainTypeIndex)
                     MovementCostToNeighbor += TerrainToGo.MVEnterCost;
             }
 
             return MovementCostToNeighbor;
         }
 
-        public override MovementAlgorithmTile GetTile(float PosX, float PosY, int LayerIndex)
+        public override MovementAlgorithmTile GetTile(int PosX, int PosY, int LayerIndex)
         {
             if (PosX < 0 || PosY < 0 || PosX >= Map.MapSize.X || PosY >= Map.MapSize.Y)
             {
                 return null;
             }
 
-            return Map.GetTerrain(PosX, PosY, LayerIndex);
+            return Map.LayerManager.ListLayer[LayerIndex].ArrayTerrain[PosX, PosY];
         }
 
         public override bool IsBlocked(MovementAlgorithmTile CurrentNode)
