@@ -24,7 +24,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             {
                 Vector3 Target = (Vector3)ArrayReferences[0].ReferencedScript.GetContent();
                 List<MovementAlgorithmTile> ListMovement = Info.Map.GetMVChoicesTowardPoint(Info.ActiveSquad, Target, true);
-                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad, Info.Map);
 
                 bool IsEverythingCompleted = true;
                 if (ListMovement.Count > 0 && ListMovement.Count < _MaxDistance)

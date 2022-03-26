@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
-            MovementAlgorithmTile NextRegularMovementDestination = Map.GetNextLayerIndex(StartingNode, (int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.Y + OffsetY),
+            MovementAlgorithmTile NextRegularMovementDestination = Map.GetNextLayerIndex(StartingNode, (int)OffsetX, (int)OffsetY,
                 1f, 1, out ListLayerPossibility);
 
             if (NextRegularMovementDestination == null)

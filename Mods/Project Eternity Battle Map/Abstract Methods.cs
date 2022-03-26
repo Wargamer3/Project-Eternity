@@ -34,6 +34,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void AddUnit(int PlayerIndex, UnitMapComponent UnitToAdd, MovementAlgorithmTile NewPosition);
 
+        public abstract void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile);
+
+        public abstract MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility);
+
+        public abstract MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex);
+
+        public abstract List<MovementAlgorithmTile> GetSpawnLocations(int Team);
+
         public abstract void Save(string FilePath);
 
         public abstract void SaveTemporaryMap();

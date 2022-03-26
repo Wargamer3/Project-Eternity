@@ -260,12 +260,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (DelayedAttack ActiveAttack in Map.ListDelayedAttack)
             {
-                foreach (Vector3 ActivePosition in ActiveAttack.ListAttackPosition)
+                foreach (MovementAlgorithmTile ActivePosition in ActiveAttack.ListAttackPosition)
                 {
                     g.Draw(GameScreen.sprPixel,
                         new Rectangle(
-                            (int)(ActivePosition.X - CameraPosition.X) * TileSize.X + BorderX,
-                            (int)(ActivePosition.Y - CameraPosition.Y) * TileSize.Y + BorderY,
+                            (int)(ActivePosition.WorldPosition.X - CameraPosition.X) * TileSize.X + BorderX,
+                            (int)(ActivePosition.WorldPosition.Y - CameraPosition.Y) * TileSize.Y + BorderY,
                             TileSize.X - BorderX * 2,
                             TileSize.Y - BorderY * 2), Color.FromNonPremultiplied(139, 0, 0, 190));
                 }

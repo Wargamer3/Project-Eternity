@@ -26,7 +26,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             {
                 Vector3 Target = (Vector3)ArrayReferences[0].ReferencedScript.GetContent();
                 List<MovementAlgorithmTile> ListMovement = Info.Map.GetMVChoicesTowardPoint(Info.ActiveSquad, Target, false);
-                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                List<MovementAlgorithmTile> ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad, Info.Map);
 
                 if (ListMovement.Count == 0)
                 {
@@ -50,7 +50,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                         }
                     }
 
-                    foreach (MovementAlgorithmTile ActiveSquadTile in Info.Map.GetAllTerrain(Info.ActiveSquad))
+                    foreach (MovementAlgorithmTile ActiveSquadTile in Info.Map.GetAllTerrain(Info.ActiveSquad, Info.Map))
                     {
                         ListFinalChoice.Remove(ActiveSquadTile);
                     }

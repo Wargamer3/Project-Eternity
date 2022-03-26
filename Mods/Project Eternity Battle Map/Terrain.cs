@@ -126,12 +126,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// Used to create the empty array of the map.
         /// </summary>
         public Terrain(Terrain Other)
+            : base(Other.InternalPosition.X, Other.InternalPosition.Y, Other.LayerIndex)
         {
             this.WorldPosition = Other.WorldPosition;
             this.TerrainTypeIndex = Other.TerrainTypeIndex;
             this.MVEnterCost = Other.MVEnterCost;
             this.MVMoveCost = Other.MVMoveCost;
-            this.LayerIndex = Other.LayerIndex;
             this.ListActivation = (TerrainActivation[])Other.ListActivation.Clone();
             this.ListBonus = (TerrainBonus[])Other.ListBonus.Clone();
             this.ListBonusValue = (int[])Other.ListBonusValue.Clone();
@@ -142,11 +142,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public Terrain(float XPos, float YPos, int LayerIndex)
+        public Terrain(int XPos, int YPos, int LayerIndex)
+            : base(XPos, YPos, LayerIndex)
         {
             this.WorldPosition = new Vector3(XPos, YPos, 0);
-            this.InternalPosition = new Vector2(XPos, YPos);
-            this.LayerIndex = LayerIndex;
             this.TerrainTypeIndex = 0;
             this.MVEnterCost = 0;
             this.MVMoveCost = 1;
@@ -180,7 +179,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListBonusValue = ListBonusValue;
         }
 
-        public Terrain(BinaryReader BR, float XPos, float YPos, int LayerIndex)
+        public Terrain(BinaryReader BR, int XPos, int YPos, int LayerIndex)
             : this(XPos, YPos, LayerIndex)
         {
             Height = BR.ReadSingle();

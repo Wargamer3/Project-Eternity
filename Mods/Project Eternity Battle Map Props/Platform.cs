@@ -1,15 +1,15 @@
 ﻿using System;
 using System.IO;
+using System.ComponentModel;
+using System.Drawing.Design;
 using System.Collections.Generic;
+using System.Windows.Forms.Design;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
-using System.ComponentModel;
-using System.Drawing.Design;
-using System.Windows.Forms.Design;
 using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -45,7 +45,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BattleMap PlatformMap;
 
         private string _MapPath;
-        private float Rotation;
 
         public PlatformSpawner(BattleMap Map)
             : base("Platform", PropCategories.Interactive, new bool[,] { { true } }, false)
@@ -194,47 +193,47 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         [CategoryAttribute("Platform"),
-        DescriptionAttribute("The Weapon path."),
+        DescriptionAttribute("The platform yaw."),
         DefaultValueAttribute(0)]
         public float Yaw
         {
             get
             {
-                return Platform.Yaw;
+                return MathHelper.ToDegrees(Platform.Yaw);
             }
             set
             {
-                Platform.Yaw = value;
+                Platform.Yaw = MathHelper.ToRadians(value);
             }
         }
 
         [CategoryAttribute("Platform"),
-        DescriptionAttribute("The Weapon path."),
+        DescriptionAttribute("The platform pitch."),
         DefaultValueAttribute(0)]
         public float Pitch
         {
             get
             {
-                return Platform.Pitch;
+                return MathHelper.ToDegrees(Platform.Pitch);
             }
             set
             {
-                Platform.Pitch = value;
+                Platform.Pitch = MathHelper.ToRadians(value);
             }
         }
 
         [CategoryAttribute("Platform"),
-        DescriptionAttribute("The Weapon path."),
+        DescriptionAttribute("The platform roll."),
         DefaultValueAttribute(0)]
         public float Roll
         {
             get
             {
-                return Platform.Roll;
+                return MathHelper.ToDegrees(Platform.Roll);
             }
             set
             {
-                Platform.Roll = value;
+                Platform.Roll = MathHelper.ToRadians(value);
             }
         }
     }

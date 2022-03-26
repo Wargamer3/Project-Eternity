@@ -82,6 +82,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         /// Used to create the empty array of the map.
         /// </summary>
         public FogOfWarTile(int PosX, int PosY)
+            : base(PosX, PosY, 0)
         {
             WorldPosition.X = PosX;
             WorldPosition.Y = PosY;

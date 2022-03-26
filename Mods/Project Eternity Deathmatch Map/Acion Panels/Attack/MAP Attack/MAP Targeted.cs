@@ -52,13 +52,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            ListAttackChoice = Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);
-            ListMAPAttackTarget = Map.GetEnemies(CurrentAttack.MAPAttributes.FriendlyFire, ListAttackChoice);
+            ListAttackTerrain = Map.GetAttackChoice(ActiveSquad);
+            ListMAPAttackTarget = Map.GetEnemies(CurrentAttack.MAPAttributes.FriendlyFire, ListAttackTerrain);
 
-            ListAttackTerrain = new List<MovementAlgorithmTile>();
-            foreach (Vector3 ActiveTerrain in ListAttackChoice)
+            ListAttackChoice = new List<Vector3>();
+            foreach (MovementAlgorithmTile ActiveTerrain in ListAttackTerrain)
             {
-                ListAttackTerrain.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+                ListAttackChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.WorldPosition.Z));
             }
         }
 
@@ -86,7 +86,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
 
-                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints, ListAttackChoice);
+                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints, ListAttackTerrain);
                     Map.sndConfirm.Play();
                 }
                 else

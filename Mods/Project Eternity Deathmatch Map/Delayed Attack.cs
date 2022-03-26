@@ -11,17 +11,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Squad Owner;
         public int PlayerIndex;//Only decrement TurnsRemaining if the current player index correspond
         public int TurnsRemaining;
-        public List<Vector3> ListAttackPosition;
+        public List<MovementAlgorithmTile> ListAttackPosition;
 
-        public DelayedAttack(Attack ActiveAttack, Squad Owner, int PlayerIndex, List<Vector3> ListAttackPosition)
+        public DelayedAttack(Attack ActiveAttack, Squad Owner, int PlayerIndex, List<MovementAlgorithmTile> ListAttackPosition)
         {
             this.ActiveAttack = ActiveAttack;
             this.Owner = Owner;
             this.PlayerIndex = PlayerIndex;
             TurnsRemaining = ActiveAttack.MAPAttributes.Delay;
 
-            this.ListAttackPosition = new List<Vector3>(ListAttackPosition.Count);
-            foreach (Vector3 ActivePosition in ListAttackPosition)
+            this.ListAttackPosition = new List<MovementAlgorithmTile>(ListAttackPosition.Count);
+            foreach (MovementAlgorithmTile ActivePosition in ListAttackPosition)
             {
                 this.ListAttackPosition.Add(ActivePosition);
             }

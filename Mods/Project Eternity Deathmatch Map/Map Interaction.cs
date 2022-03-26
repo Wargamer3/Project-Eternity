@@ -89,7 +89,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)
                     {
-                        foreach (Terrain ActiveTerrain in GetAllTerrain(ActiveSquad))
+                        foreach (Terrain ActiveTerrain in GetAllTerrain(ActiveSquad, this))
                         {
                             //Terrain passive bonus.
                             for (int i = 0; i < ActiveTerrain.ListActivation.Length; i++)

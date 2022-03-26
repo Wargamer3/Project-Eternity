@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.AI;
@@ -8,6 +9,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public class BattleMapPlatform
     {
         private BattleMap PlatformMap;
+        public BattleMap Map => PlatformMap;
 
         public AIContainer PlatformAI;
         public Vector3 Position;
@@ -45,13 +47,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlatformMap.AddLocalPlayer(ActivePlayer);
         }
 
-        public MovementAlgorithmTile FindTileFromGlobalPosition(int X, int Y, int Z)
+        public MovementAlgorithmTile FindTileFromLocalPosition(int X, int Y, int Z)
         {
-            int FinalX = X - (int)Position.X / PlatformMap.TileSize.X;
-            int FinalY = Y - (int)Position.Z / PlatformMap.TileSize.Y;
-            int FinalZ = Z - (int)Position.Y / 32;
-
-            return PlatformMap.GetMovementTile(FinalX, FinalY, FinalZ);
+            return PlatformMap.GetMovementTile(X, Y, Z);
+        }
+        
+        public List<MovementAlgorithmTile> GetSpawnLocations(int Team)
+        {
+            return PlatformMap.GetSpawnLocations(Team);
         }
 
         public void Update(GameTime gameTime)

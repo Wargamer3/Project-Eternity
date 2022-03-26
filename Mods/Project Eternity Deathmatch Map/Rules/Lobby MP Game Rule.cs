@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (ActivePlayer.Inventory == null)
                         continue;
 
-                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(ActivePlayer.Team);
+                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(ActivePlayer.Team);
                     int SpawnSquadIndex = 0;
                     foreach (MovementAlgorithmTile ActiveSpawn in ListPossibleSpawnPoint)
                     {
@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
 
                         NewSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
-                        Owner.SpawnSquad(PlayerIndex, NewSquad, 0, ActiveSpawn.InternalPosition, ActiveSpawn.LayerIndex);
+                        Owner.SpawnSquad(PlayerIndex, NewSquad, 0, new Vector2(ActiveSpawn.InternalPosition.X, ActiveSpawn.InternalPosition.Y), ActiveSpawn.LayerIndex);
                         NewSquad.CurrentLeader.PilotSP = 0;
                         NewSquad.CurrentLeader.ConsumeEN(NewSquad.CurrentLeader.MaxEN);
                         ++SpawnSquadIndex;
@@ -89,7 +89,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             ActiveSpawn.Owner.AddUnit(P, NewSquad, ActiveSpawn);
                             Owner.RemoveUnit(P, NewSquad);
+                            Owner.SelectPlatform(Owner.GetPlatform(ActiveSpawn.Owner));
+                            ActiveSpawn.Owner.CursorPosition = NewSquad.Position;
+                            ActiveSpawn.Owner.CursorPositionVisible = NewSquad.Position;
                         }
+
+                        Owner.CursorPosition = NewSquad.Position;
+                        Owner.CursorPositionVisible = NewSquad.Position;
 
                         if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
                         {
@@ -104,8 +110,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     ++PlayerIndex;
                 }
-
-                Owner.CursorPosition = Owner.ListPlayer[0].ListSquad[0].Position;
             }
         }
 
@@ -197,7 +201,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void RespawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
+            List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
             {
                 ActiveSquad.At(U).ReinitializeMembers(Owner.DicUnitType[ActiveSquad.At(U).UnitTypeName]);
@@ -227,26 +231,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ActiveSquad.CurrentMovement = UnitStats.TerrainLand;
             }
-        }
-
-        private List<MovementAlgorithmTile> GetSpawnLocations(int Team)
-        {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
-
-            string PlayerTag = (Team + 1).ToString();
-            for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
-            {
-                MapLayer ActiveLayer = Owner.LayerManager.ListLayer[L];
-                for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
-                {
-                    if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
-                    {
-                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
-                    }
-                }
-            }
-
-            return ListPossibleSpawnPoint;
         }
 
         public virtual void Update(GameTime gameTime)

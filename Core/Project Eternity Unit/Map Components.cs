@@ -91,7 +91,7 @@ namespace ProjectEternity.Core.Units
 
             if (Unit3D != null)
             {
-                Unit3D.SetPosition(Position.X, Position.Z * Height, Position.Y);
+                Unit3D.SetPosition(Position.X, Position.Z, Position.Y);
             }
         }
 

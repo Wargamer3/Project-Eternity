@@ -20,13 +20,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleMap.BattleResult EnemyResult;
         public Unit SupportAttack;
         public Unit SupportDefend;
-        public Vector3[] ArrayAttackPosition;
+        public MovementAlgorithmTile[] ArrayAttackPosition;
 
         public BattleContext()
         {
             SupportAttack = null;
             SupportDefend = null;
-            ArrayAttackPosition = new Vector3[0];
+            ArrayAttackPosition = new MovementAlgorithmTile[0];
         }
     }
 

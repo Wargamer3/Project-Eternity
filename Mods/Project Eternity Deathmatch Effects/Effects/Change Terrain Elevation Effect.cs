@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
-using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -39,14 +39,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             MapLayer ActiveLayer = Params.LocalContext.Map.LayerManager.ListLayer[0];
 
-            foreach (Vector3 ActivePosition in Params.LocalContext.ArrayAttackPosition)
+            foreach (MovementAlgorithmTile ActivePosition in Params.LocalContext.ArrayAttackPosition)
             {
                 for (int X = -_Radius; X <= _Radius; ++X)
                 {
                     for (int Y = -_Radius; Y <= _Radius; ++Y)
                     {
-                        int FinalX = (int)ActivePosition.X + X;
-                        int FinalY = (int)ActivePosition.Y + Y;
+                        int FinalX = (int)ActivePosition.InternalPosition.X + X;
+                        int FinalY = (int)ActivePosition.InternalPosition.Y + Y;
 
                         if (Math.Abs(X) + Math.Abs(Y) > Radius || FinalX < 0 || FinalX >= Params.LocalContext.Map.MapSize.X || FinalY < 0 || FinalY >= Params.LocalContext.Map.MapSize.Y)
                             continue;

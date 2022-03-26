@@ -89,11 +89,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, FirstEnemy.Item1, FirstEnemy.Item2, TargetSquadSupport, false));
 
-            PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2].Position));
             ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
         }
 
-        public void SelectMAPEnemies(int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints, List<Vector3> AttackChoice)
+        public void SelectMAPEnemies(int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints, List<MovementAlgorithmTile> AttackChoice)
         {
             if (ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.Delay > 0)
             {
@@ -120,6 +119,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public List<Tuple<int, int>> CanSquadAttackWeapon(Squad ActiveSquad, Vector3 Position, Attack ActiveWeapon, int MinRange, int MaxRange, bool CanMove, Unit ActiveUnit)
         {
+            BattleMap ActiveMap = this;
+            if (ActivePlatform != null)
+            {
+                ActiveMap = ActivePlatform.Map;
+            }
+
             bool CanAttackPostMovement = ActiveWeapon.IsPostMovement(ActiveUnit);
 
             if (!ActiveSquad.CanMove && !CanAttackPostMovement)
@@ -153,7 +158,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (CanMove)
                         {
                             //Move to be in range.
-                            ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveSquad));
+                            ListRealChoice = new List<MovementAlgorithmTile>(GetMVChoice(ActiveSquad, ActiveMap));
                         }
                         else
                         {
@@ -182,7 +187,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListTargetUnit;
         }
 
-        public Stack<Tuple<int, int>> GetEnemies(bool FriendlyFire, List<Vector3> ListAttackPosition)
+        public Stack<Tuple<int, int>> GetEnemies(bool FriendlyFire, List<MovementAlgorithmTile> ListAttackPosition)
         {
             Stack<Tuple<int, int>> ListMAPAttackTarget = new Stack<Tuple<int, int>>();//Player index, Squad index.
 
@@ -191,7 +196,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int i = 0; i < ListAttackPosition.Count; i++)
                 {
                     //Find if a Unit is under the cursor.
-                    int TargetIndex = CheckForSquadAtPosition(P, ListAttackPosition[i], Vector3.Zero);
+                    int TargetIndex = CheckForSquadAtPosition(P, ListAttackPosition[i].WorldPosition, Vector3.Zero);
                     //If one was found.
                     if (TargetIndex >= 0 && (FriendlyFire ||
                                                 ListPlayer[ActivePlayerIndex].Team != ListPlayer[P].Team))

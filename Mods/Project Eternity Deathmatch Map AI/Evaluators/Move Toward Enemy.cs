@@ -6,8 +6,8 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Units;
-using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.AI.DeathmatchMapScreen
 {
@@ -68,7 +68,8 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 //Move to be in range.
 
                 List<Vector3> ListRealChoice = new List<Vector3>();
-                foreach (MovementAlgorithmTile ActiveTerrain in Info.Map.GetMVChoice(Info.ActiveSquad))
+                List<MovementAlgorithmTile> ListMVTile = Info.Map.GetMVChoice(Info.ActiveSquad, Info.Map);
+                foreach (MovementAlgorithmTile ActiveTerrain in ListMVTile)
                 {
                     ListRealChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
                 }

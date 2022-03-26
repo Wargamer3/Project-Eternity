@@ -8,6 +8,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -131,16 +132,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             {
                                 Spawn.LeaderName = CurrentUnit.RelativePath;
                                 AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + SpawnTexturePath,
-                                    new Microsoft.Xna.Framework.Vector2((Spawn.Position.X - Map.CameraPosition.X) * Map.TileSize.X, (Spawn.Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y),
+                                    new Vector2((Spawn.Position.X - Map.CameraPosition.X) * Map.TileSize.X, (Spawn.Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y),
                                     0.5f);
 
-                                Microsoft.Xna.Framework.Vector3 FinalPosition;
+                                Vector3 FinalPosition;
 
                                 Map.GetEmptyPosition(Spawn.Position, out FinalPosition);
 
                                 Squad NewSquad = new Squad("", CurrentUnit);
 
-                                Map.SpawnSquad(0, NewSquad, 0, new Microsoft.Xna.Framework.Vector2(FinalPosition.X, FinalPosition.Y), (int)FinalPosition.Z);
+                                Map.SpawnSquad(0, NewSquad, 0, new Vector2(FinalPosition.X, FinalPosition.Y), (int)FinalPosition.Z);
 
                                 Map.MovementAnimation.Add(NewSquad, Spawn.Position, FinalPosition);
                             }

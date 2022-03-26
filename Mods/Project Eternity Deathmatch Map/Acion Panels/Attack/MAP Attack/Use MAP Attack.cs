@@ -5,6 +5,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -17,7 +18,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActiveSquadIndex;
         private List<Vector3> ListMVHoverPoints;
         private Attack CurrentAttack;
-        public List<Vector3> ListAttackChoice;
+        public List<MovementAlgorithmTile> ListAttackChoice;
         private BattlePreviewer BattlePreview;
 
         public ActionPanelUseMAPAttack(DeathmatchMap Map)
@@ -25,7 +26,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public ActionPanelUseMAPAttack(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints, List<Vector3> AttackChoice)
+        public ActionPanelUseMAPAttack(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints, List<MovementAlgorithmTile> AttackChoice)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
@@ -94,11 +95,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
             int AttackChoiceCount = BR.ReadInt32();
-            ListAttackChoice = new List<Vector3>(AttackChoiceCount);
+            ListAttackChoice = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
-                ListAttackChoice.Add(NewTerrain);
+                ListAttackChoice.Add(Map.GetTerrain(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32()));
             }
 
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
@@ -113,9 +113,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int A = 0; A < ListAttackChoice.Count; ++A)
             {
-                BW.AppendFloat(ListAttackChoice[A].X);
-                BW.AppendFloat(ListAttackChoice[A].Y);
-                BW.AppendInt32((int)ListAttackChoice[A].Z);
+                BW.AppendFloat(ListAttackChoice[A].InternalPosition.X);
+                BW.AppendFloat(ListAttackChoice[A].InternalPosition.Y);
+                BW.AppendInt32(ListAttackChoice[A].LayerIndex);
             }
         }
 

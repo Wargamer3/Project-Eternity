@@ -17,7 +17,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActiveSquadIndex;
         private List<Vector3> ListMVHoverPoints;
         private Squad ActiveSquad;
-        public List<Vector3> ListAttackChoice;
         public List<MovementAlgorithmTile> ListAttackDirectionHelper;
         public List<MovementAlgorithmTile> ListAttackTerrain;
         private BattlePreviewer BattlePreview;
@@ -46,12 +45,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PERAttackPahtfinding Pathfinder = new PERAttackPahtfinding(Map, ActiveSquad);
             Pathfinder.ComputeAttackTargets();
             ListAttackTerrain = Pathfinder.ListUsableAttackTerrain;
-
-            ListAttackChoice = new List<Vector3>();
-            foreach (MovementAlgorithmTile ActiveTerrain in ListAttackTerrain)
-            {
-                ListAttackChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
-            }
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -59,7 +52,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
             Map.LayerManager.AddDrawablePath(ListAttackDirectionHelper);
 
-            if (ActiveInputManager.InputConfirmPressed() && Map.CursorPosition != ActiveSquad.Position)
+            if (ActiveInputManager.InputConfirmPressed() && Map.CursorPosition.X != ActiveSquad.Position.X
+                && Map.CursorPosition.Y != ActiveSquad.Position.Y && Map.CursorPosition.Z != ActiveSquad.Position.Z)
             {
                 CreateAttack(ActiveSquad.CurrentLeader.CurrentAttack);
                 Map.sndConfirm.Play();
@@ -119,7 +113,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             RemoveAllSubActionPanels();
 
             Map.CursorPosition = ActiveSquad.Position;
-            Map.CursorPositionVisible = Map.CursorPosition;
+            Map.CursorPositionVisible = ActiveSquad.Position;
 
             Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, ListNewList));
         }
@@ -142,13 +136,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
             int AttackChoiceCount = BR.ReadInt32();
-            ListAttackChoice = new List<Vector3>(AttackChoiceCount);
             ListAttackTerrain = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
-                ListAttackChoice.Add(NewTerrain);
-                ListAttackTerrain.Add(Map.GetTerrain(NewTerrain.X, NewTerrain.Y, (int)NewTerrain.Z));
+                ListAttackTerrain.Add(Map.GetTerrain(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32()));
             }
 
             bool IsBattlePreviewOpen = BR.ReadBoolean();
@@ -159,7 +150,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BattlePreview = new BattlePreviewer(Map, PlayerIndex, SquadIndex, null);
             }
 
-            Map.CursorPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
+            Map.CursorPosition =  new Vector3(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32());
         }
 
         public override void DoWrite(ByteWriter BW)
@@ -167,13 +158,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendString(ActiveSquad.CurrentLeader.ItemName);
-            BW.AppendInt32(ListAttackChoice.Count);
+            BW.AppendInt32(ListAttackTerrain.Count);
 
-            for (int A = 0; A < ListAttackChoice.Count; ++A)
+            for (int A = 0; A < ListAttackTerrain.Count; ++A)
             {
-                BW.AppendFloat(ListAttackChoice[A].X);
-                BW.AppendFloat(ListAttackChoice[A].Y);
-                BW.AppendInt32((int)ListAttackChoice[A].Z);
+                BW.AppendInt32(ListAttackTerrain[A].InternalPosition.X);
+                BW.AppendInt32(ListAttackTerrain[A].InternalPosition.Y);
+                BW.AppendInt32(ListAttackTerrain[A].LayerIndex);
             }
 
             BW.AppendBoolean(BattlePreview != null);
@@ -183,9 +174,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.AppendInt32(BattlePreview.SquadIndex);
             }
 
-            BW.AppendFloat(Map.CursorPosition.X);
-            BW.AppendFloat(Map.CursorPosition.Y);
-            BW.AppendFloat(Map.CursorPosition.Z);
+            BW.AppendInt32((int)Map.CursorPosition.X);
+            BW.AppendInt32((int)Map.CursorPosition.Y);
+            BW.AppendInt32((int)Map.CursorPosition.Z);
         }
 
         protected override ActionPanel Copy()

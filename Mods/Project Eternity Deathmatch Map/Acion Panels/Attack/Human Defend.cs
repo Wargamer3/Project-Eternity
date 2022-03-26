@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.BattleMenuDefenseFormationChoice = FormationChoices.Focused;
             if (ActiveSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)
             {
-                Map.GetAttackChoice(ActiveSquad.CurrentLeader, ActiveSquad.Position);
+                Map.GetAttackChoice(ActiveSquad);
                 Map.BattleMenuOffenseFormationChoice = FormationChoices.ALL;
             }
         }

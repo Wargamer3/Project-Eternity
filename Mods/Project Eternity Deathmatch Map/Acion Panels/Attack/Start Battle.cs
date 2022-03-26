@@ -437,7 +437,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     HasAfterAttack = true;
                     Map.CursorPosition = FinalActiveSquad.Position;
-                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, FinalActiveSquad.Position, Map.CameraPosition, true));
+                    AfterAttack.AddChoiceToCurrentPanel(new ActionPanelMovePart1(Map, FinalActivePlayerIndex, FinalActiveSquadIndex, Map.GetTerrain(FinalActiveSquad), Map.CameraPosition, true));
                 }
 
                 if (HasAfterAttack)

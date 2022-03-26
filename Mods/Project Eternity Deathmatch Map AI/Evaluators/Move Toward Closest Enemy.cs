@@ -20,7 +20,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
             public void Evaluate(GameTime gameTime, object Input, out bool IsCompleted, out List<object> Result)
             {
                 Info.Map.CursorPosition = Info.ActiveSquad.Position;
-                Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
+                Info.Map.CursorPositionVisible = Info.ActiveSquad.Position;
 
                 Squad TargetSquad = null;
                 //Movement initialisation.
@@ -49,7 +49,8 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                 DistanceMax = 99999;
                 List<Vector3> ListMVChoice = new List<Vector3>();
-                foreach (MovementAlgorithmTile ActiveTerrain in Info.Map.GetMVChoice(Info.ActiveSquad))
+                List<MovementAlgorithmTile> ListMVTile = Info.Map.GetMVChoice(Info.ActiveSquad, Info.Map);
+                foreach (MovementAlgorithmTile ActiveTerrain in ListMVTile)
                 {
                     ListMVChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
                 }
@@ -72,9 +73,9 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                     if (DistanceMax < Math.Abs(Info.ActiveSquad.X - TargetSquad.X) + Math.Abs(Info.ActiveSquad.Y - TargetSquad.Y))
                     {
                         //Prepare the Cursor to move.
-                        Info.Map.CursorPosition.X = ListMVPoints[FinalMV].X;
-                        Info.Map.CursorPosition.Y = ListMVPoints[FinalMV].Y;
-                        Info.Map.CursorPositionVisible = Info.Map.CursorPosition;
+                        Info.Map.CursorPosition.X = ListMVTile[FinalMV].InternalPosition.X;
+                        Info.Map.CursorPosition.Y = ListMVTile[FinalMV].InternalPosition.Y;
+                        Info.Map.CursorPositionVisible = ListMVPoints[FinalMV];
                         //Move the Unit to the target position;
                         Info.ActiveSquad.SetPosition(ListMVPoints[FinalMV]);
                         Info.Map.FinalizeMovement(Info.ActiveSquad, (int)Info.Map.GetTerrain(Info.ActiveSquad).MovementCost, new List<Vector3>());

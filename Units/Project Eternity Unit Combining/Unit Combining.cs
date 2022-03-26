@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.Core.Units.Combining
 {
@@ -130,8 +131,9 @@ namespace ProjectEternity.Core.Units.Combining
 
                 if (ActiveSquad.CurrentLeader.RelativePath != RelativePath)
                 {
-                    Microsoft.Xna.Framework.Vector3 FinalPosition;
+                    Vector3 FinalPosition;
                     Map.GetEmptyPosition(ActiveSquad.Position, out FinalPosition);
+
                     ActiveSquad.SetPosition(FinalPosition);
                     Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Add(ActiveSquad);
                 }

@@ -21,7 +21,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActiveSquadIndex;
         private List<Vector3> ListMVHoverPoints;
         private Attack CurrentAttack;
-        public List<Vector3> ListAttackChoice;
         public List<MovementAlgorithmTile> ListAttackTerrain;
 
         public ActionPanelAttackMAPDirection(DeathmatchMap Map)
@@ -35,7 +34,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.ListMVHoverPoints = ListMVHoverPoints;
-            ListAttackChoice = new List<Vector3>();
             ListAttackTerrain = new List<MovementAlgorithmTile>();
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
@@ -73,7 +71,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             else if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
             {
-                Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints, ListAttackChoice);
+                Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints, ListAttackTerrain);
                 Map.sndConfirm.Play();
 
             }
@@ -86,13 +84,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPosition.X = ActiveSquad.X;
             Map.CursorPosition.Y = ActiveSquad.Y - 1;
 
-            ListAttackChoice.Clear();
             ListAttackTerrain.Clear();
             foreach (Vector3 TargetPosition in CurrentAttack.MAPAttributes.GetTargetsDirectionalUp(ActiveSquad.Position))
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
-                    ListAttackChoice.Add(TargetPosition);
                     ListAttackTerrain.Add(Map.GetTerrain(TargetPosition.X, TargetPosition.Y, (int)TargetPosition.Z));
                 }
             }
@@ -103,13 +99,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPosition.X = ActiveSquad.X;
             Map.CursorPosition.Y = ActiveSquad.Y + 1;
 
-            ListAttackChoice.Clear();
             ListAttackTerrain.Clear();
             foreach (Vector3 TargetPosition in CurrentAttack.MAPAttributes.GetTargetsDirectionalDown(ActiveSquad.Position))
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
-                    ListAttackChoice.Add(TargetPosition);
                     ListAttackTerrain.Add(Map.GetTerrain(TargetPosition.X, TargetPosition.Y, (int)TargetPosition.Z));
                 }
             }
@@ -120,13 +114,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPosition.X = ActiveSquad.X - 1;
             Map.CursorPosition.Y = ActiveSquad.Y;
 
-            ListAttackChoice.Clear();
             ListAttackTerrain.Clear();
             foreach (Vector3 TargetPosition in CurrentAttack.MAPAttributes.GetTargetsDirectionalLeft(ActiveSquad.Position))
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
-                    ListAttackChoice.Add(TargetPosition);
                     ListAttackTerrain.Add(Map.GetTerrain(TargetPosition.X, TargetPosition.Y, (int)TargetPosition.Z));
                 }
             }
@@ -137,13 +129,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPosition.X = ActiveSquad.X + 1;
             Map.CursorPosition.Y = ActiveSquad.Y;
 
-            ListAttackChoice.Clear();
             ListAttackTerrain.Clear();
             foreach (Vector3 TargetPosition in CurrentAttack.MAPAttributes.GetTargetsDirectionalRight(ActiveSquad.Position))
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
-                    ListAttackChoice.Add(TargetPosition);
                     ListAttackTerrain.Add(Map.GetTerrain(TargetPosition.X, TargetPosition.Y, (int)TargetPosition.Z));
                 }
             }
@@ -167,13 +157,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
             int AttackChoiceCount = BR.ReadInt32();
-            ListAttackChoice = new List<Vector3>(AttackChoiceCount);
             ListAttackTerrain = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
-                ListAttackChoice.Add(NewTerrain);
-                ListAttackTerrain.Add(Map.GetTerrain(NewTerrain.X, NewTerrain.Y, (int)NewTerrain.Z));
+                ListAttackTerrain.Add(Map.GetTerrain(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32()));
             }
 
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
@@ -185,13 +172,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendString(ActiveSquad.CurrentLeader.ItemName);
-            BW.AppendInt32(ListAttackChoice.Count);
+            BW.AppendInt32(ListAttackTerrain.Count);
 
-            for (int A = 0; A < ListAttackChoice.Count; ++A)
+            for (int A = 0; A < ListAttackTerrain.Count; ++A)
             {
-                BW.AppendFloat(ListAttackChoice[A].X);
-                BW.AppendFloat(ListAttackChoice[A].Y);
-                BW.AppendInt32((int)ListAttackChoice[A].Z);
+                BW.AppendInt32((int)ListAttackTerrain[A].InternalPosition.X);
+                BW.AppendInt32((int)ListAttackTerrain[A].InternalPosition.Y);
+                BW.AppendInt32(ListAttackTerrain[A].LayerIndex);
             }
         }
 

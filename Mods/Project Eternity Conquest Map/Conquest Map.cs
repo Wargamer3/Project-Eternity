@@ -958,7 +958,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             DicBuildingChoice["Vehicle"].Add("Rig");
         }
 
-
         public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
         {
             //ListPlayer[ActivePlayerIndex].ListUnit.Remove((UnitConquest)UnitToRemove);
@@ -1314,6 +1313,39 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
 
             return ListLayer[LayerIndex].ArrayTerrain[X, Y];
+        }
+
+        public override void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile)
+        {
+            DrawableTile NewTile = new DrawableTile(ActiveTile);
+
+            ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
+            LayerManager.LayerHolderDrawable.Reset();
+        }
+
+        public override List<MovementAlgorithmTile> GetSpawnLocations(int Team)
+        {
+            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+
+            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetSpawnLocations(Team));
+            }
+
+            string PlayerTag = (Team + 1).ToString();
+            for (int L = 0; L < ListLayer.Count; L++)
+            {
+                MapLayer ActiveLayer = ListLayer[L];
+                for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
+                {
+                    if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
+                    {
+                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                    }
+                }
+            }
+
+            return ListPossibleSpawnPoint;
         }
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)

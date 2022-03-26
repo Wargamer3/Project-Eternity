@@ -59,6 +59,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActivateAutomaticSkills(NewSquad, string.Empty);
             NewSquad.ID = ID;
             NewSquad.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));
+            NewSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(World);
 
             ListPlayer[PlayerIndex].ListSquad.Add(NewSquad);
 
@@ -113,6 +114,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListPlayer[PlayerIndex].ListSquad.Add(ActiveSquad);
             ListPlayer[PlayerIndex].UpdateAliveStatus();
             ActiveSquad.SetPosition(new Vector3(NewPosition.InternalPosition.X, NewPosition.InternalPosition.Y, NewPosition.LayerIndex));
+
+            ActiveSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(World);
+        }
+
+        public override List<MovementAlgorithmTile> GetSpawnLocations(int Team)
+        {
+            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+
+            foreach(BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetSpawnLocations(Team));
+            }
+
+            string PlayerTag = (Team + 1).ToString();
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
+            {
+                MapLayer ActiveLayer = LayerManager.ListLayer[L];
+                for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
+                {
+                    if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
+                    {
+                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                    }
+                }
+            }
+
+            return ListPossibleSpawnPoint;
         }
 
         public override void SaveTemporaryMap()
@@ -508,6 +536,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void SetWorld(Matrix World)
         {
+            this.World = World;
             LayerManager.LayerHolderDrawable.SetWorld(World);
 
             for (int Z = 0; Z < LayerManager.ListLayer.Count; ++Z)
@@ -517,7 +546,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     for (int Y = 0; Y < MapSize.Y; ++Y)
                     {
-                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X  * 32, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * 32, Y * 32);
+                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X * 32, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * 32, Y * 32);
                     }
                 }
 
@@ -532,6 +561,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
             }
+
+            for (int P = 0; P < ListPlayer.Count; P++)
+            {
+                //If the selected unit have the order to move, draw the possible positions it can go to.
+                foreach (Squad ActiveSquad in ListPlayer[P].ListSquad)
+                {
+                    ActiveSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(World);
+                }
+            }
+        }
+
+        public override void ReplaceTile(int X, int Y, int LayerIndex, DrawableTile ActiveTile)
+        {
+            DrawableTile NewTile = new DrawableTile(ActiveTile);
+
+            LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
+            LayerManager.LayerHolderDrawable.Reset();
         }
 
         public override Dictionary<string, ActionPanel> GetOnlineActionPanel()

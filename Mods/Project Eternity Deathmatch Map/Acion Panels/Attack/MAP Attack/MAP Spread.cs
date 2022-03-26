@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (ListAttackChoice.Contains(Map.CursorPosition))
                 {
-                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints, ListAttackChoice);
+                    Map.SelectMAPEnemies(ActivePlayerIndex, ActiveSquadIndex, ListMVHoverPoints, ListAttackTerrain);
                     Map.sndConfirm.Play();
                 }
                 else

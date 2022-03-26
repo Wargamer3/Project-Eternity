@@ -393,9 +393,6 @@ namespace ProjectEternity.Core.Units
         private EffectParameter effectViewportScaleParameter;
         private EffectParameter effectTimeParameter;
 
-        public float HorizontalMultiplier = 32f;
-        public float VerticalOffset = 16f;
-
         public UnitMap3D(GraphicsDevice g, Effect UnitEffect3D, Texture2D Sprite, int NumberOfImages, float currentTime = 0f)
         {
             this.UnitEffect3D = UnitEffect3D.Clone();
@@ -460,7 +457,7 @@ namespace ProjectEternity.Core.Units
 
         public void SetPosition(float X, float Y, float Z)
         {
-            Vector3 Position = new Vector3(X * HorizontalMultiplier, Y + VerticalOffset, Z * HorizontalMultiplier);
+            Vector3 Position = new Vector3(X, Y, Z);
 
             for (int i = 0; i < 4; ++i)
             {

@@ -569,7 +569,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return LayerManager.GetTile((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
 
-        public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit)
+        public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit, BattleMap ActiveMap)
         {
             List<MovementAlgorithmTile> ListTerrainFound = new List<MovementAlgorithmTile>();
             for (int X = 0; X < ActiveUnit.ArrayMapSize.GetLength(0); ++X)
@@ -578,7 +578,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveUnit.ArrayMapSize[X, Y])
                     {
-                        ListTerrainFound.Add(LayerManager.ListLayer[(int)ActiveUnit.Z].ArrayTerrain[(int)ActiveUnit.X + X, (int)ActiveUnit.Y + Y]);
+                        ListTerrainFound.Add(ActiveMap.GetMovementTile((int)ActiveUnit.X + X, (int)ActiveUnit.Y + Y, (int)ActiveUnit.Z));
                     }
                 }
             }
@@ -607,6 +607,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 LayerManager.Update(gameTime);
 
+                UpdateCursorVisiblePosition(gameTime);
+
                 if (!IsOnTop || IsAPlatform)//Everything should be handled by the main map.
                 {
                     return;
@@ -624,8 +626,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     GameRule.Update(gameTime);
                 }
-
-                UpdateCursorVisiblePosition(gameTime);
 
                 foreach (BattleMapPlatform ActivePlatform in ListPlatform)
                 {
@@ -958,12 +958,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public List<MovementAlgorithmTile> GetMVChoice(Squad ActiveSquad)
+        public List<MovementAlgorithmTile> GetMVChoice(Squad ActiveSquad, BattleMap ActiveMap)
         {
             int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV);
 
             List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
 
@@ -991,12 +991,57 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return MovementChoice;
         }
 
+        public List<MovementAlgorithmTile> GetAttackChoice(Squad ActiveSquad)
+        {
+            int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
+
+            BattleMap ActiveMap = this;
+            if (ActivePlatform != null)
+            {
+                ActiveMap = ActivePlatform.Map;
+            }
+
+            //Init A star.
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV);
+
+            List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
+
+            for (int i = 0; i < ListAllNode.Count; i++)
+            {
+                ListAllNode[i].ParentTemp = null;//Unset parents
+                ListAllNode[i].MovementCost = 0;
+
+                if (ListAllNode[i].TerrainTypeIndex == UnitStats.TerrainWallIndex || ListAllNode[i].TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                {
+                    continue;
+                }
+                bool UnitFound = false;
+                for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
+                {
+                    int SquadIndex = CheckForSquadAtPosition(P, ListAllNode[i].WorldPosition, Vector3.Zero);
+                    if (SquadIndex >= 0)
+                        UnitFound = true;
+                }
+                //If there is no Unit.
+                if (!UnitFound)
+                    MovementChoice.Add(ListAllNode[i]);
+            }
+
+            return MovementChoice;
+        }
+
         public List<MovementAlgorithmTile> GetMVChoicesTowardPoint(Squad ActiveSquad, Vector3 Destination, bool IgnoreObstacles)
         {
             int MaxMovement = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
+            BattleMap ActiveMap = this;
+            if (ActivePlatform != null)
+            {
+                ActiveMap = ActivePlatform.Map;
+            }
+
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, MaxMovement, Destination, IgnoreObstacles);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, MaxMovement, Destination, IgnoreObstacles);
 
             MovementAlgorithmTile ActiveNode = ListAllNode[ListAllNode.Count - 1];
 
@@ -1069,16 +1114,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return ListPathNode;
         }
 
-        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
+            int NextX = StartingPosition.InternalPosition.X + OffsetX;
+            int NextY = StartingPosition.InternalPosition.Y + OffsetY;
 
             if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
             {
                 return null;
             }
             
-            string CurrentTerrainType = GetTerrainType(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, StartingPosition.LayerIndex);
+            int CurrentTerrainType = StartingPosition.TerrainTypeIndex;
             float CurrentZ = StartingPosition.WorldPosition.Z;
 
             MovementAlgorithmTile ClosestLayerIndexDown = null;
@@ -1088,7 +1135,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(NextX, NextY, L);
+                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, L);
                 Terrain PreviousTerrain = LayerManager.ListLayer[L].ArrayTerrain[(int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y];
 
                 if (L > StartingPosition.LayerIndex && PreviousTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
@@ -1096,13 +1143,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     break;
                 }
 
-                string NextTerrainType = GetTerrainType(NextTerrain);
+                int NextTerrainType = NextTerrain.TerrainTypeIndex;
                 float NextTerrainZ = NextTerrain.WorldPosition.Z;
 
                 //Check lower or higher neighbors if on solid ground
-                if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid && CurrentTerrainType != UnitStats.TerrainWall)
+                if (CurrentTerrainType != UnitStats.TerrainAirIndex && CurrentTerrainType != UnitStats.TerrainVoidIndex && CurrentTerrainType != UnitStats.TerrainWallIndex)
                 {
-                    if (NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid && NextTerrainType != UnitStats.TerrainWall)
+                    if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex && NextTerrainType != UnitStats.TerrainWallIndex)
                     {
                         //Prioritize going downward
                         if (NextTerrainZ <= CurrentZ)
@@ -1171,13 +1218,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
-        private MovementAlgorithmTile GetTerrainIncludingPlatforms(int NextX, int NextY, int NextLayerIndex)
+        public MovementAlgorithmTile GetTerrainIncludingPlatforms(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, int NextLayerIndex)
         {
             if (!IsAPlatform)
             {
                 foreach (BattleMapPlatform ActivePlatform in ListPlatform)
                 {
-                    MovementAlgorithmTile FoundTile = ActivePlatform.FindTileFromGlobalPosition(NextX, NextY, NextLayerIndex);
+                    MovementAlgorithmTile FoundTile = ActivePlatform.FindTileFromLocalPosition(StartingPosition.InternalPosition.X + OffsetX, StartingPosition.InternalPosition.Y + OffsetY, NextLayerIndex);
 
                     if (FoundTile != null)
                     {
@@ -1186,7 +1233,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            return LayerManager.ListLayer[NextLayerIndex].ArrayTerrain[NextX, NextY];
+            return LayerManager.ListLayer[NextLayerIndex].ArrayTerrain[(int)StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY];
         }
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)

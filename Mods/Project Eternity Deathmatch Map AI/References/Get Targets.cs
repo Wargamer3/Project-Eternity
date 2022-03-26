@@ -44,7 +44,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                 if (_AddMovementToRange && CanAttackPostMovement)
                 {
-                    ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad);
+                    ListMVChoice = Info.Map.GetMVChoice(Info.ActiveSquad, Info.Map);
                 }
                 else
                 {

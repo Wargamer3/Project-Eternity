@@ -27,7 +27,8 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                 float DistanceMax = 99999;
                 List<Vector3> ListMVChoice = new List<Vector3>();
-                foreach (MovementAlgorithmTile ActiveTerrain in Info.Map.GetMVChoice(Info.ActiveSquad))
+                List<MovementAlgorithmTile> ListMVTile = Info.Map.GetMVChoice(Info.ActiveSquad, Info.Map);
+                foreach (MovementAlgorithmTile ActiveTerrain in ListMVTile)
                 {
                     ListMVChoice.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
                 }

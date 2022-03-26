@@ -15,14 +15,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
-        private Vector3 LastPosition;
+        private MovementAlgorithmTile LastPosition;
         private Vector3 LastCameraPosition;
-        private Vector3 LastCusorMVPosition;
+        private MovementAlgorithmTile LastCusorMVPosition;
         private Squad ActiveSquad;
         private bool IsPostAttack;
 
         private List<MovementAlgorithmTile> ListMVChoice;
-        private List<Vector3> ListMVPoints;
         private List<MovementAlgorithmTile> ListMovedOverTerrain;
         private List<Vector3> ListMovedOverPoint;
 
@@ -33,7 +32,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMovedOverPoint = new List<Vector3>();
         }
 
-        public ActionPanelMovePart1(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, Vector3 LastPosition, Vector3 LastCameraPosition, bool IsPostAttack = false)
+        public ActionPanelMovePart1(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, MovementAlgorithmTile LastPosition, Vector3 LastCameraPosition, bool IsPostAttack = false)
             : base(PanelName, Map, !IsPostAttack)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
@@ -49,19 +48,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            ActiveSquad.SetPosition(LastPosition);
-            Map.CursorPosition = LastPosition;
+            ActiveSquad.SetPosition(new Vector3(LastPosition.InternalPosition.X, LastPosition.InternalPosition.Y, LastPosition.LayerIndex));
+            Map.CursorPosition = ActiveSquad.Position;
             Map.CursorPositionVisible = Map.CursorPosition;
             LastCusorMVPosition = LastPosition;
 
             Map.CameraPosition = LastCameraPosition;
 
-            ListMVChoice = Map.GetMVChoice(ActiveSquad);
-            ListMVPoints = new List<Vector3>();
-            foreach (MovementAlgorithmTile ActiveTerrain in ListMVChoice)
-            {
-                ListMVPoints.Add(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
-            }
+            ListMVChoice = Map.GetMVChoice(ActiveSquad, LastPosition.Owner);
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
             ListMovedOverPoint = new List<Vector3>();
             ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z));
@@ -109,11 +103,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListMovedOverPoint.Clear();
                 ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z));
                 ListMovedOverPoint.Add(ActiveSquad.Position);
-                LastCusorMVPosition = Map.CursorPosition;
+                LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
             }
-            else if (ListMVPoints.Contains(Map.CursorPosition) && Map.CursorPosition != LastCusorMVPosition)
+            else if (ListMVChoice.Contains(LastPosition.Owner.CursorTerrain) && LastPosition.Owner.CursorTerrain != LastCusorMVPosition)
             {
-                if (Math.Abs(LastCusorMVPosition.X - Map.CursorPosition.X) + Math.Abs(LastCusorMVPosition.Y - Map.CursorPosition.Y) > 1)
+                if (Math.Abs(LastCusorMVPosition.InternalPosition.X - LastPosition.Owner.CursorPosition.X) + Math.Abs(LastCusorMVPosition.InternalPosition.Y - LastPosition.Owner.CursorPosition.Y) > 1)
                 {
                     ComputeNewHoverPath();
                 }
@@ -126,7 +120,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddHoverChoice();
                 }
 
-                LastCusorMVPosition = Map.CursorPosition;
+                LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
             }
         }
 
@@ -210,16 +204,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private bool CheckIfUnitCanMove()
         {
-            if (ListMVPoints.Contains(Map.CursorPosition))
+            if (ListMVChoice.Contains(Map.CursorTerrain))
             {
                 for (int CurrentSquadOffsetX = 0; CurrentSquadOffsetX < ActiveSquad.ArrayMapSize.GetLength(0); ++CurrentSquadOffsetX)
                 {
                     for (int CurrentSquadOffsetY = 0; CurrentSquadOffsetY < ActiveSquad.ArrayMapSize.GetLength(1); ++CurrentSquadOffsetY)
                     {
-                        float RealX = Map.CursorPosition.X + CurrentSquadOffsetX;
-                        float RealY = Map.CursorPosition.Y + CurrentSquadOffsetY;
-
-                        if (!ListMVPoints.Contains(new Vector3((int)RealX, (int)RealY, (int)Map.CursorPosition.Z)))
+                        if (!ListMVChoice.Contains(Map.GetTerrainUnderCursor()))
                         {
                             return false;
                         }
@@ -234,7 +225,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override void OnCancelPanel()
         {
-            Map.CursorPosition = LastPosition;
+            Map.CursorPosition = new Vector3(LastPosition.InternalPosition.X, LastPosition.InternalPosition.Y, LastPosition.LayerIndex);
             Map.CursorPositionVisible = Map.CursorPosition;
 
             Map.CameraPosition = LastCameraPosition;
@@ -245,7 +236,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
-            LastPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadUInt32());
+            LastPosition = Map.GetMovementTile(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32());
             LastCameraPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
 
@@ -256,9 +247,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
-            BW.AppendFloat(LastPosition.X);
-            BW.AppendFloat(LastPosition.Y);
-            BW.AppendInt32((int)LastPosition.Z);
+            BW.AppendInt32(LastPosition.InternalPosition.X);
+            BW.AppendInt32(LastPosition.InternalPosition.Y);
+            BW.AppendInt32(LastPosition.LayerIndex);
             BW.AppendFloat(LastCameraPosition.X);
             BW.AppendFloat(LastCameraPosition.Y);
             BW.AppendFloat(LastCameraPosition.Z);

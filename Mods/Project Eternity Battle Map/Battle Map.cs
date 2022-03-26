@@ -156,9 +156,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<Color> ListMultiplayerColor;
         public List<BattleMap> ListSubMap;
         protected List<BattleMapPlatform> ListPlatform;
+        protected Matrix World;
         public bool IsAPlatform;//Everything should be handled by the main map.
-        public bool IsPlatformActive;//Tell if the platform has focus.
-        public BattleMapPlatform ActivePlatform;//The platform in which the cursor is.
+        public bool IsPlatformActive => _IsPlatformActive;//Tell if the platform has focus.
+        protected bool _IsPlatformActive;
+        public BattleMapPlatform ActivePlatform => _ActivePlatform;//The platform in which the cursor is.
+        public BattleMapPlatform _ActivePlatform;
 
         public ActionPanelHolder ListActionMenuChoice;
         public Stack<Tuple<int, int>> ListMAPAttackTarget;//Player index, Squad index.
@@ -244,6 +247,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             LossCondition = "";
             SkillPoint = "";
             sndBattleThemeName = "";
+            World = Matrix.Identity;
 
             DicMapVariables = new Dictionary<string, double>();
             MovementAnimation = new MovementAnimations();
@@ -924,8 +928,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <returns>Returns true if the cursor was moved</returns>
         public bool CursorControl(PlayerInput ActiveInputManager)
         {
-            Vector3 CursorPositionNext = CursorPosition;
-
+            Point Offset = Point.Zero;
             bool CursorMoved = false;
 
             /*if (MouseHelper.MouseMoved())
@@ -991,66 +994,124 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 CursorHoldTime = -1;
             }
+
+            BattleMap ActiveMap = this;
+            bool IsMovingLeft = ActiveInputManager.InputLeftHold();
+            bool IsMovingRight = ActiveInputManager.InputRightHold();
+            bool IsMovingUp = ActiveInputManager.InputUpHold();
+            bool IsMovingDown = ActiveInputManager.InputDownHold();
+
+            if (ActivePlatform != null)
+            {
+                ActiveMap = ActivePlatform.Map;
+
+                float PlatformAngle = MathHelper.ToDegrees(ActivePlatform.Yaw);
+
+                if (PlatformAngle >= 315 || PlatformAngle < 45)
+                {
+                    //do nothing
+                }
+                else if (PlatformAngle >= 45 && PlatformAngle < 135)
+                {
+                    IsMovingLeft = ActiveInputManager.InputDownHold();
+                    IsMovingRight = ActiveInputManager.InputUpHold();
+                    IsMovingUp = ActiveInputManager.InputLeftHold();
+                    IsMovingDown = ActiveInputManager.InputRightHold();
+                }
+                else if (PlatformAngle >= 135 && PlatformAngle < 225)
+                {
+                }
+                else if (PlatformAngle >= 225 && PlatformAngle < 315)
+                {
+                }
+            }
+
             //X
-            if (ActiveInputManager.InputLeftHold() && CanKeyboardMove)
+            if (IsMovingLeft && CanKeyboardMove)
             {
                 //Update the camera if needed.
                 if (CursorPosition.X - CameraPosition.X - 3 < 0 && CameraPosition.X > -3)
                     --CameraPosition.X;
 
-                CursorPositionNext.X -= (CursorPosition.X > 0) ? 1 : 0;
+                Offset.X -= (CursorPosition.X > 0) ? 1 : 0;
                 CursorMoved = true;
             }
-            else if (ActiveInputManager.InputRightHold() && CanKeyboardMove)
+            else if (IsMovingRight && CanKeyboardMove)
             {
                 //Update the camera if needed.
                 if (CursorPosition.X - CameraPosition.X + 3 >= ScreenSize.X && CameraPosition.X + ScreenSize.X < MapSize.X + 3)
                     ++CameraPosition.X;
 
-                CursorPositionNext.X += (CursorPosition.X < MapSize.X - 1) ? 1 : 0;
+                Offset.X += (CursorPosition.X < MapSize.X - 1) ? 1 : 0;
                 CursorMoved = true;
             }
             //Y
-            if (ActiveInputManager.InputUpHold() && CanKeyboardMove)
+            if (IsMovingUp && CanKeyboardMove)
             {
                 //Update the camera if needed.
                 if (CursorPosition.Y - CameraPosition.Y - 3 < 0 && CameraPosition.Y > -3)
                     --CameraPosition.Y;
 
-                CursorPositionNext.Y -= (CursorPosition.Y > 0) ? 1 : 0;
+                Offset.Y -= (CursorPosition.Y > 0) ? 1 : 0;
                 CursorMoved = true;
             }
-            else if (ActiveInputManager.InputDownHold() && CanKeyboardMove)
+            else if (IsMovingDown && CanKeyboardMove)
             {
                 //Update the camera if needed.
                 if (CursorPosition.Y - CameraPosition.Y + 3 >= ScreenSize.Y && CameraPosition.Y + ScreenSize.Y < MapSize.Y + 3)
                     ++CameraPosition.Y;
 
-                CursorPositionNext.Y += (CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
+                Offset.Y += (CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
                 CursorMoved = true;
             }
 
             if (CursorMoved)
             {
-                CursorPosition.Z = GetNextLayerIndex(CursorTerrain, (int)CursorPositionNext.X, (int)CursorPositionNext.Y, 1f, 15f, out _).LayerIndex;
-                CursorPosition.X = CursorPositionNext.X;
-                CursorPosition.Y = CursorPositionNext.Y;
+                MovementAlgorithmTile NextTerrain = GetNextLayerIndex(ActiveMap.CursorTerrain, Offset.X, Offset.Y, 1f, 15f, out _);
+                ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
+                ActiveMap.CursorPosition.X = NextTerrain.InternalPosition.X;
+                ActiveMap.CursorPosition.Y = NextTerrain.InternalPosition.Y;
             }
 
             return CursorMoved;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="CurrentPosition">X, Y Position, Z value as LayerIndex</param>
-        /// <param name="NextX"></param>
-        /// <param name="NextY"></param>
-        /// <param name="MaxClearance"></param>
-        /// <param name="ClimbValue"></param>
-        /// <returns></returns>
-        public abstract MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile CurrentPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility);
+        public MovementAlgorithmTile GetTerrainUnderCursor()
+        {
+            if (ActivePlatform != null)
+            {
+                return ActivePlatform.Map.CursorTerrain;
+            }
 
-        public abstract MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex);
+            return CursorTerrain;
+        }
+
+        public BattleMapPlatform GetPlatform(BattleMap PlatformMapToSelect)
+        {
+            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                if (ActivePlatform.Map == PlatformMapToSelect)
+                {
+                    return ActivePlatform;
+                }
+            }
+
+            return null;
+        }
+
+        public void SelectPlatform(BattleMapPlatform PlatformToSelect)
+        {
+            if (_ActivePlatform != null)
+            {
+                _ActivePlatform.Map._IsPlatformActive = false;
+            }
+
+            _ActivePlatform = PlatformToSelect;
+
+            if (PlatformToSelect != null)
+            {
+                PlatformToSelect.Map._IsPlatformActive = true;
+            }
+        }
     }
 }

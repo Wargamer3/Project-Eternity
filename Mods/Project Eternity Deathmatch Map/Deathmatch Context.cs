@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LocalContext.EnemyResult = GlobalContext.EnemyResult;
             LocalContext.SupportAttack = GlobalContext.SupportAttack;
             LocalContext.SupportDefend = GlobalContext.SupportDefend;
-            LocalContext.ArrayAttackPosition = new Microsoft.Xna.Framework.Vector3[GlobalContext.ArrayAttackPosition.Length];
+            LocalContext.ArrayAttackPosition = new MovementAlgorithmTile[GlobalContext.ArrayAttackPosition.Length];
             GlobalContext.ArrayAttackPosition.CopyTo(LocalContext.ArrayAttackPosition, 0);
         }
     }
