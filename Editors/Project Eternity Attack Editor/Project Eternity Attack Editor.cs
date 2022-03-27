@@ -78,7 +78,6 @@ namespace ProjectEternity.Editors.AttackEditor
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
-            //Create the Part file.
             FileStream FS = new FileStream(ItemPath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);
 

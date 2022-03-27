@@ -85,8 +85,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayGametypeCategory[1] = new GametypeCategory("PVP", new Gametype[]
             {
                 GametypeDeathmatch, GametypeCaptureTheFlag, GametypeObjective, GametypeAssault, GametypeConquest,
-                GametypeOnslaught, GametypeKingOfTheHill, GametypeBunny, GametypeFreezeTag, GametypeProtectThaPimp,
-                GametypeJailbreak, GametypeMutant, GametypeKaiju,
+                GametypeOnslaught, GametypeTitan, GametypeBaseAssault, GametypeKingOfTheHill, GametypeBunny, GametypeFreezeTag,
+                GametypeJailbreak, GametypeMutant, GametypeProtectThaPimp, GametypeKaiju,
             });
 
             int PanelY = (int)(Constants.Height * 0.15);
