@@ -51,6 +51,8 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathAttacks = "Attacks";
         public const string GUIRootPathAttackAttributes = "Attacks\\Attributes";
         public const string GUIRootPathAIs = "AIs";
+        public const string GUIRootPathVehicles = "Vehicles";
+        public const string GUIRootPathVehicleSprites = "Vehicles/Sprites";
         public const string GUIRootPathSpells = "Spells";
         public const string GUIRootPathTripleThunderCombos = "Triple Thunder/Combos";
         public const string GUIRootPathTripleThunderWeapons = "Triple Thunder/Weapons";

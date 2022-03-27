@@ -85,6 +85,9 @@
     <Compile Include="Unit\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Unit Animations.cs" />
+    <Compile Include="Vehicle\Vehicle Seat Weapon.cs" />
+    <Compile Include="Vehicle\Vehicle Seat.cs" />
+    <Compile Include="Vehicle\Vehicle.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">
