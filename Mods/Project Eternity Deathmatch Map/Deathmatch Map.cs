@@ -1182,7 +1182,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainType == CurrentTerrainType)
                     {
-                        return StartingPosition;
+                        return NextTerrain;
                     }
                     //Prioritize going upward
                     else if (NextTerrainZ > StartingPosition.LayerIndex)

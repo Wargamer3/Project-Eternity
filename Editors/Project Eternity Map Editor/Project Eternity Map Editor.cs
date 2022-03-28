@@ -1002,13 +1002,17 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     ActiveProp = (InteractiveProp)lsInteractiveProps.SelectedItem;
                 }
-                if (tabPropsChoices.SelectedIndex == 1 && lsPhysicalProps.SelectedItem != null)
+                else if (tabPropsChoices.SelectedIndex == 1 && lsPhysicalProps.SelectedItem != null)
                 {
                     ActiveProp = (InteractiveProp)lsPhysicalProps.SelectedItem;
                 }
-                if (tabPropsChoices.SelectedIndex == 2 && lsVisualProps.SelectedItem != null)
+                else if (tabPropsChoices.SelectedIndex == 2 && lsVisualProps.SelectedItem != null)
                 {
                     ActiveProp = (InteractiveProp)lsVisualProps.SelectedItem;
+                }
+                else
+                {
+                    return;
                 }
 
                 ActiveProp = ActiveProp.Copy(new Vector3(X, Y, 0), TopLayerIndex);
