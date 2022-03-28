@@ -7,6 +7,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Vehicle;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -587,56 +588,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ColorEffect.Parameters["ViewProjection"].SetValue(ViewProjection);
             MapEffect.Parameters["World"].SetValue(PolygonEffect.World);
 
-            if (Map.ShowLayerIndex == -1)
-            {
-                bool DrawUpperLayers = !IsCursorHiddenByWall();
-
-                if (DrawUpperLayers || Map.IsEditor)
-                {
-                    foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
-                    {
-                        ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
-
-                        ActiveTileSet.Value.Draw(g.GraphicsDevice);
-                    }
-
-                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
-                    {
-                        Draw(g, Map.LayerManager.ListLayer[L], false);
-                    }
-                }
-                else
-                {
-                    int MaxLayerIndex = Map.LayerManager.ListLayer.Count;
-                    if (!DrawUpperLayers)
-                    {
-                        MaxLayerIndex = (int)Map.CursorPosition.Z + 1;
-                    }
-
-                    for (int L = 0; L < MaxLayerIndex; L++)
-                    {
-                        foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[L])
-                        {
-                            ActiveTileSet.Value.SetViewMatrix(ViewProjection, Camera.CameraPosition3D);
-
-                            ActiveTileSet.Value.Draw(g.GraphicsDevice);
-                        }
-
-                        Draw(g, Map.LayerManager.ListLayer[L], false);
-                    }
-                }
-            }
-            else
-            {
-                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[Map.ShowLayerIndex])
-                {
-                    ActiveTileSet.Value.SetViewMatrix(ViewProjection, Camera.CameraPosition3D);
-
-                    ActiveTileSet.Value.Draw(g.GraphicsDevice);
-                }
-
-                Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
-            }
+            DrawMap(g, WorldViewProjection);
 
             DrawDrawablePoints(g);
 
@@ -746,12 +698,68 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             DrawPERAttacks(g);
 
+            DrawVehicles(g);
+
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             g.End();
             g.Begin();
 
             DrawDamageNumbers(g);
+        }
+
+        private void DrawMap(CustomSpriteBatch g, Matrix WorldViewProjection)
+        {
+            if (Map.ShowLayerIndex == -1)
+            {
+                bool DrawUpperLayers = !IsCursorHiddenByWall();
+
+                if (DrawUpperLayers || Map.IsEditor)
+                {
+                    foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+                    {
+                        ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
+
+                        ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                    }
+
+                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+                    {
+                        Draw(g, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+                else
+                {
+                    int MaxLayerIndex = Map.LayerManager.ListLayer.Count;
+                    if (!DrawUpperLayers)
+                    {
+                        MaxLayerIndex = (int)Map.CursorPosition.Z + 1;
+                    }
+
+                    for (int L = 0; L < MaxLayerIndex; L++)
+                    {
+                        foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[L])
+                        {
+                            ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
+
+                            ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                        }
+
+                        Draw(g, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[Map.ShowLayerIndex])
+                {
+                    ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
+
+                    ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                }
+
+                Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
+            }
         }
 
         public void Draw(CustomSpriteBatch g, MapLayer Owner, bool IsSubLayer)
@@ -877,6 +885,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, PolygonEffect.View, Matrix.Identity);
                 g.DrawString(Map.fntNonDemoDamage, ActiveAttack.Key, new Vector2(Position2D.X, Position2D.Y), Color.White);
+            }
+        }
+
+        private void DrawVehicles(CustomSpriteBatch g)
+        {
+            foreach (Vehicle ActiveVehicle in Map.ListVehicle)
+            {
+                PolygonEffect.World = Matrix.CreateTranslation(ActiveVehicle.Position);
+
+                PolygonEffect.Texture = ActiveVehicle.sprVehicle;
+                PolygonEffect.CurrentTechnique.Passes[0].Apply();
+
+                ActiveVehicle.Draw3D(g.GraphicsDevice);
             }
         }
 

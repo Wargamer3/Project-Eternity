@@ -52,5 +52,20 @@ namespace ProjectEternity.Core.Vehicle
 
             Weapon.Save(BW);
         }
+
+        internal VehicleSeat Copy()
+        {
+            VehicleSeat CopySeat = new VehicleSeat();
+
+            CopySeat.Name = Name;
+            CopySeat.CanDrive = CanDrive;
+            CopySeat.IsVisible = IsVisible;
+            CopySeat.IsProtected = IsProtected;
+            CopySeat.SeatOffset = SeatOffset;
+            CopySeat.Height = Height;
+            CopySeat.Weapon = Weapon.Copy();
+
+            return CopySeat;
+        }
     }
 }

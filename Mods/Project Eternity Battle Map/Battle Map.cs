@@ -18,6 +18,7 @@ using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
 using static ProjectEternity.GameScreens.BattleMapScreen.MovementAlgorithmTile;
+using ProjectEternity.Core.Vehicle;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -149,6 +150,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string CameraType;
         public Vector3 CameraPosition;
         public Camera3D Camera;
+        public Camera3D CameraOverride;//Used by vehicles.
         public byte PlayersMin;
         public byte PlayersMax;
         public string Description;
@@ -156,6 +158,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<Color> ListMultiplayerColor;
         public List<BattleMap> ListSubMap;
         protected List<BattleMapPlatform> ListPlatform;
+        public List<Vehicle> ListVehicle;
         protected Matrix World;
         public bool IsAPlatform;//Everything should be handled by the main map.
         public bool IsPlatformActive => _IsPlatformActive;//Tell if the platform has focus.
@@ -262,6 +265,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
             ListSubMap = new List<BattleMap>();
             ListPlatform = new List<BattleMapPlatform>();
+            ListVehicle = new List<Vehicle>();
             ListMultiplayerColor = new List<Color>();
 
             GlobalBattleContext = new BattleContext();

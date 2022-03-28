@@ -4,12 +4,18 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.Core.Vehicle
 {
     public class Vehicle
     {
         public Texture2D sprVehicle;
+
+        public short[] ArrayIndex;
+        public VertexPositionNormalTexture[] ArrayVertex;
+
+        public int TriangleCount;
 
         public string SpritePath;
         public string Name;
@@ -21,6 +27,8 @@ namespace ProjectEternity.Core.Vehicle
         public float MaxClimbAngle;
         public string ControlType;
         public int MaxHP;
+
+        public Vector3 Position;
 
         public List<VehicleSeat> ListSeat;
 
@@ -60,5 +68,40 @@ namespace ProjectEternity.Core.Vehicle
             BR.Close();
         }
 
+        public void SetVertex(VertexPositionNormalTexture[] ArrayVertex, short[] ArrayIndex)
+        {
+            this.ArrayVertex = ArrayVertex;
+            this.ArrayIndex = ArrayIndex;
+            TriangleCount = ArrayIndex.Length / 3;
+        }
+
+        public Vehicle Copy()
+        {
+            Vehicle CopyVehicle = new Vehicle();
+            CopyVehicle.sprVehicle = sprVehicle;
+            CopyVehicle.SpritePath = SpritePath;
+            CopyVehicle.Name = Name;
+            CopyVehicle.VehiclePath = VehiclePath;
+            CopyVehicle.MaxMV = MaxMV;
+            CopyVehicle.Acceleration = Acceleration;
+            CopyVehicle.MaxSpeed = MaxSpeed;
+            CopyVehicle.TurnSpeed = TurnSpeed;
+            CopyVehicle.MaxClimbAngle = MaxClimbAngle;
+            CopyVehicle.ControlType = ControlType;
+            CopyVehicle.MaxHP = MaxHP;
+
+            CopyVehicle.ListSeat = new List<VehicleSeat>(ListSeat.Count);
+            foreach (VehicleSeat ActiveSeat in ListSeat)
+            {
+                CopyVehicle.ListSeat.Add(ActiveSeat.Copy());
+            }
+
+            return CopyVehicle;
+        }
+
+        public void Draw3D(GraphicsDevice g)
+        {
+            g.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, ArrayVertex, 0, ArrayVertex.Length, ArrayIndex, 0, TriangleCount);
+        }
     }
 }

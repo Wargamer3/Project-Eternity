@@ -37,5 +37,18 @@ namespace ProjectEternity.Core.Vehicle
             BW.Write(MinAngleUpward);
             BW.Write(MaxAngleUpward);
         }
+
+        internal VehicleWeapon Copy()
+        {
+            VehicleWeapon CopyWeapon = new VehicleWeapon();
+
+            CopyWeapon.Name = Name;
+            CopyWeapon.MinAngleLateral = MinAngleLateral;
+            CopyWeapon.MaxAngleLateral = MaxAngleLateral;
+            CopyWeapon.MinAngleUpward = MinAngleUpward;
+            CopyWeapon.MaxAngleUpward = MaxAngleUpward;
+
+            return CopyWeapon;
+        }
     }
 }
