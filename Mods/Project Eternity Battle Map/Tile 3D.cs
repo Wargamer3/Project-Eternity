@@ -64,18 +64,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Effect3D.Parameters["WorldViewProj"].SetValue(ViewProjection);
             Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition3D);
-
-            float fogStart = 1, fogEnd = 1;
-            float scale = 1f / (fogStart - fogEnd);
-
-            Vector4 fogVector = new Vector4();
-
-            fogVector.X = ViewProjection.M13 * scale;
-            fogVector.Y = ViewProjection.M23 * scale;
-            fogVector.Z = ViewProjection.M33 * scale;
-            fogVector.W = (ViewProjection.M43 + fogStart) * scale;
-
-            Effect3D.Parameters["FogVector"].SetValue(fogVector);
         }
 
         public void SetWorld(Matrix NewWorld)

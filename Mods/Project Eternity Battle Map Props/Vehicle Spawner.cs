@@ -123,16 +123,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int Y = SpawnTerrain.InternalPosition.Y;
             float Z = SpawnTerrain.WorldPosition.Z * 32 + 0.1f;
             Tile3D TerrainToSpawnOn = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X,
-                Y * Map.TileSize.Y,
-                Z,
+                0 * Map.TileSize.X,
+                0 * Map.TileSize.Y,
+                0,
                 SpawnTerrain.LayerIndex * 32 + 0.1f,
                 new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
                 new List<Texture2D>() { VehicleToSpawn.sprVehicle }, Z, Z, Z, Z, 0)[0];
 
             LastVehicleSpawned = VehicleToSpawn.Copy();
 
+            LastVehicleSpawned.Position = new Vector3(SpawnTerrain.WorldPosition.X * Map.TileSize.X, SpawnTerrain.WorldPosition.Z * 32, SpawnTerrain.WorldPosition.Y * Map.TileSize.Y);
+
             LastVehicleSpawned.SetVertex(TerrainToSpawnOn.ArrayVertex, TerrainToSpawnOn.ArrayIndex);
+
+            LastVehicleSpawned.World = Matrix.CreateTranslation(new Vector3(-LastVehicleSpawned.sprVehicle.Width / 2, 0, -LastVehicleSpawned.sprVehicle.Height / 2)) * Matrix.CreateFromYawPitchRoll(LastVehicleSpawned.Yaw, LastVehicleSpawned.Pitch, LastVehicleSpawned.Roll) * Matrix.CreateTranslation(LastVehicleSpawned.Position);
 
             Map.ListVehicle.Add(LastVehicleSpawned);
         }
@@ -149,7 +153,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (LastVehicleSpawned == null)
+            if (VehicleToSpawn != null && LastVehicleSpawned == null)
             {
                 CreatePreview();
                 SpawnVehicle();

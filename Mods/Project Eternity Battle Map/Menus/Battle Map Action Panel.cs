@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void AddChoiceToCurrentPanel(ActionPanel Panel)
         {
             base.AddChoiceToCurrentPanel(Panel);
-            ActionMenuWidth = Math.Max(ActionMenuWidth, (int)TextHelper.fntShadowFont.MeasureString(Panel.Name).X + 35);
+            ActionMenuWidth = Math.Max(ActionMenuWidth, (int)TextHelper.fntShadowFont.MeasureString(Panel.ToString()).X + 35);
             UpdateFinalMenuPosition();
         }
 

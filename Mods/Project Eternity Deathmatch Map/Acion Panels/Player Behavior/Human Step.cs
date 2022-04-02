@@ -54,40 +54,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Map.ActiveSquadIndex = -1;
                 Map.TargetSquadIndex = -1;
-                bool UnitFound = false;
-                //Loop through the players to find a Unit to control.
-                for (int P = 0; P < Map.ListPlayer.Count && (Map.ActiveSquadIndex < 0 && Map.TargetSquadIndex < 0); P++)
-                {
-                    //Find if a current player Unit is under the cursor.
-                    int CursorSelect = Map.CheckForSquadAtPosition(P, Map.CursorPosition, Vector3.Zero);
 
-                    #region Unit found
-
-                    if (CursorSelect >= 0)
-                    {
-                        UnitFound = true;
-                        ActionPanelMainMenu NewActionMenu = new ActionPanelMainMenu(Map, P, CursorSelect);
-
-                        if (P == Map.ActivePlayerIndex && Map.ListPlayer[P].ListSquad[CursorSelect].IsPlayerControlled)//Player controlled Squad.
-                        {
-                            NewActionMenu.OnSelect();
-                        }
-                        else//Enemy.
-                        {
-                            NewActionMenu.AddChoiceToCurrentPanel(new ActionPanelStatus(Map, Map.ListPlayer[P].ListSquad[CursorSelect]));
-                        }
-
-                        AddToPanelList(NewActionMenu);
-                    }
-
-                    #endregion
-                }
-
-                //You select the tile under the cursor.
-                if (!UnitFound)
-                {
-                    AddToPanelListAndSelect(new ActionPanelTileStatus(Map));
-                }
+                ActionPanelMainMenu.AddIfUsable(Map, this);
+                ActionPanelMoveVehicle.AddIfUsable(Map, this);
 
                 Map.sndConfirm.Play();
             }

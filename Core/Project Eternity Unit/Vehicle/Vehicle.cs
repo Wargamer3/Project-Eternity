@@ -29,6 +29,10 @@ namespace ProjectEternity.Core.Vehicle
         public int MaxHP;
 
         public Vector3 Position;
+        public float Yaw;
+        public float Pitch;
+        public float Roll;
+        public Matrix World;
 
         public List<VehicleSeat> ListSeat;
 

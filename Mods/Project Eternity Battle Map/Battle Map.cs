@@ -159,7 +159,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<BattleMap> ListSubMap;
         protected List<BattleMapPlatform> ListPlatform;
         public List<Vehicle> ListVehicle;
-        protected Matrix World;
+        protected Matrix _World;
+        public Matrix World => _World;
         public bool IsAPlatform;//Everything should be handled by the main map.
         public bool IsPlatformActive => _IsPlatformActive;//Tell if the platform has focus.
         protected bool _IsPlatformActive;
@@ -250,7 +251,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             LossCondition = "";
             SkillPoint = "";
             sndBattleThemeName = "";
-            World = Matrix.Identity;
+            _World = Matrix.Identity;
 
             DicMapVariables = new Dictionary<string, double>();
             MovementAnimation = new MovementAnimations();

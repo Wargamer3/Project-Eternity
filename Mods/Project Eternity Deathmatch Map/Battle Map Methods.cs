@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActivateAutomaticSkills(NewSquad, string.Empty);
             NewSquad.ID = ID;
             NewSquad.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));
-            NewSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(World);
+            NewSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(_World);
 
             ListPlayer[PlayerIndex].ListSquad.Add(NewSquad);
 
@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListPlayer[PlayerIndex].UpdateAliveStatus();
             ActiveSquad.SetPosition(new Vector3(NewPosition.InternalPosition.X, NewPosition.InternalPosition.Y, NewPosition.LayerIndex));
 
-            ActiveSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(World);
+            ActiveSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(_World);
         }
 
         public override List<MovementAlgorithmTile> GetSpawnLocations(int Team)
@@ -536,7 +536,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void SetWorld(Matrix World)
         {
-            this.World = World;
+            this._World = World;
             LayerManager.LayerHolderDrawable.SetWorld(World);
 
             for (int Z = 0; Z < LayerManager.ListLayer.Count; ++Z)

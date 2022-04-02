@@ -101,6 +101,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             MapEffect.Parameters["SpecularColor"].SetValue(Vector3.One);
             MapEffect.Parameters["SpecularPower"].SetValue(64);
 
+            MapEffect.Parameters["FogLimits"].SetValue(new Vector2(1200, 2000));
+            MapEffect.Parameters["FogColor"].SetValue(new Vector3(0.0f, 0.0f, 0.0f));
 
             DicDrawablePointPerColor = new Dictionary<Vector4, List<Tile3D>>();
             DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
@@ -374,7 +376,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
             {
-                ActiveTileSet.Value.SetWorld(NewWorld);
+                if (Map.CameraOverride != null)
+                {
+                    ActiveTileSet.Value.SetWorld(NewWorld * Map.CameraOverride.View);
+                }
+                else
+                {
+                    ActiveTileSet.Value.SetWorld(NewWorld * Map.Camera.View);
+                }
             }
         }
 
@@ -582,13 +591,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            PolygonEffect.View = Camera.View;
-            Matrix ViewProjection = Camera.View * PolygonEffect.Projection;
-            Matrix WorldViewProjection = PolygonEffect.World * ViewProjection;
+            Matrix View = Map.Camera.View;
+            Matrix World = PolygonEffect.World;
+            if (Map.CameraOverride != null)
+            {
+                View = Map.CameraOverride.View;
+            }
+            PolygonEffect.View = View;
+            Matrix ViewProjection = View * PolygonEffect.Projection;
+            Matrix WorldViewProjection = World * ViewProjection;
             ColorEffect.Parameters["ViewProjection"].SetValue(ViewProjection);
-            MapEffect.Parameters["World"].SetValue(PolygonEffect.World);
 
-            DrawMap(g, WorldViewProjection);
+            DrawMap(g, View, WorldViewProjection);
+
+            DrawVehicles(g, View);
 
             DrawDrawablePoints(g);
 
@@ -613,6 +629,144 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
+
+            DrawSquads(g, View);
+
+            DrawDelayedAttacks(g);
+
+            DrawPERAttacks(g, View);
+
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            g.End();
+            g.Begin();
+
+            DrawDamageNumbers(g, View);
+        }
+
+        private void DrawMap(CustomSpriteBatch g, Matrix View, Matrix WorldViewProjection)
+        {
+            Vector3 CameraPosition = Map.Camera.CameraPosition3D;
+            if (Map.CameraOverride != null)
+            {
+                CameraPosition = Map.CameraOverride.CameraPosition3D;
+            }
+
+            if (Map.ShowLayerIndex == -1)
+            {
+                bool DrawUpperLayers = !IsCursorHiddenByWall();
+
+                if (DrawUpperLayers || Map.IsEditor)
+                {
+                    foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+                    {
+                        ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, CameraPosition);
+
+                        ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                    }
+
+                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+                    {
+                        Draw(g, View, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+                else
+                {
+                    int MaxLayerIndex = Map.LayerManager.ListLayer.Count;
+                    if (!DrawUpperLayers)
+                    {
+                        MaxLayerIndex = (int)Map.CursorPosition.Z + 1;
+                    }
+
+                    for (int L = 0; L < MaxLayerIndex; L++)
+                    {
+                        foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[L])
+                        {
+                            ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
+
+                            ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                        }
+
+                        Draw(g, View, Map.LayerManager.ListLayer[L], false);
+                    }
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[Map.ShowLayerIndex])
+                {
+                    ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
+
+                    ActiveTileSet.Value.Draw(g.GraphicsDevice);
+                }
+
+                Draw(g, View, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
+            }
+        }
+
+        public void Draw(CustomSpriteBatch g, Matrix View, MapLayer Owner, bool IsSubLayer)
+        {
+            if (!Owner.IsVisible)
+            {
+                return;
+            }
+
+            if (IsSubLayer)
+            {
+                return;
+            }
+
+            for (int P = 0; P < Owner.ListProp.Count; ++P)
+            {
+                Owner.ListProp[P].Unit3D.SetViewMatrix(View);
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].WorldPosition.Z;
+
+                Owner.ListProp[P].Unit3D.SetPosition(
+                    (Owner.ListProp[P].Position.X + 0.5f) * Map.TileSize.X,
+                    TerrainZ * LayerHeight,
+                    (Owner.ListProp[P].Position.Y + 0.5f) * Map.TileSize.Y);
+            }
+
+            for (int P = 0; P < Owner.ListProp.Count; ++P)
+            {
+                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice, g);
+            }
+
+            for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
+            {
+                Owner.ListAttackPickup[P].Attack3D.SetViewMatrix(View);
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListAttackPickup[P].Position.X, (int)Owner.ListAttackPickup[P].Position.Y].WorldPosition.Z;
+
+                Owner.ListAttackPickup[P].Attack3D.SetPosition(
+                    (Owner.ListAttackPickup[P].Position.X + 0.5f) * Map.TileSize.X,
+                    TerrainZ * LayerHeight,
+                    (Owner.ListAttackPickup[P].Position.Y + 0.5f) * Map.TileSize.Y);
+            }
+
+            for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
+            {
+                Owner.ListAttackPickup[P].Attack3D.Draw(GameScreen.GraphicsDevice);
+            }
+
+            for (int I = 0; I < Owner.ListHoldableItem.Count; ++I)
+            {
+                Owner.ListHoldableItem[I].Item3D.SetViewMatrix(View);
+                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListHoldableItem[I].Position.X, (int)Owner.ListHoldableItem[I].Position.Y].WorldPosition.Z;
+
+                Owner.ListHoldableItem[I].Item3D.SetPosition(
+                    (Owner.ListHoldableItem[I].Position.X + 0.5f) * Map.TileSize.X,
+                    TerrainZ * LayerHeight,
+                    (Owner.ListHoldableItem[I].Position.Y + 0.5f) * Map.TileSize.Y);
+            }
+
+            for (int I = 0; I < Owner.ListHoldableItem.Count; ++I)
+            {
+                Owner.ListHoldableItem[I].Item3D.Draw(GameScreen.GraphicsDevice);
+            }
+        }
+
+        private void DrawSquads(CustomSpriteBatch g, Matrix View)
+        {
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
                 //If the selected unit have the order to move, draw the possible positions it can go to.
@@ -623,7 +777,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         || ActiveSquad.IsDead)
                         continue;
 
-                    ActiveSquad.Unit3D.SetViewMatrix(Camera.View);
+                    ActiveSquad.Unit3D.SetViewMatrix(View);
 
                     if (Map.MovementAnimation.Contains(ActiveSquad))
                     {
@@ -637,7 +791,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (ActiveSquad.ItemHeld != null)
                         {
-                            ActiveSquad.ItemHeld.Item3D.SetViewMatrix(Camera.View);
+                            ActiveSquad.ItemHeld.Item3D.SetViewMatrix(View);
 
                             ActiveSquad.ItemHeld.Item3D.SetPosition(
                                 (CurrentPosition.X + 0.5f) * Map.TileSize.X,
@@ -672,7 +826,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (ActiveSquad.ItemHeld != null)
                         {
-                            ActiveSquad.ItemHeld.Item3D.SetViewMatrix(Camera.View);
+                            ActiveSquad.ItemHeld.Item3D.SetViewMatrix(View);
 
                             ActiveSquad.ItemHeld.Item3D.SetPosition(
                                 (ActiveSquad.Position.X + 0.5f) * Map.TileSize.X,
@@ -694,133 +848,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            DrawDelayedAttacks(g);
-
-            DrawPERAttacks(g);
-
-            DrawVehicles(g);
-
-            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-            g.End();
-            g.Begin();
-
-            DrawDamageNumbers(g);
-        }
-
-        private void DrawMap(CustomSpriteBatch g, Matrix WorldViewProjection)
-        {
-            if (Map.ShowLayerIndex == -1)
-            {
-                bool DrawUpperLayers = !IsCursorHiddenByWall();
-
-                if (DrawUpperLayers || Map.IsEditor)
-                {
-                    foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
-                    {
-                        ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
-
-                        ActiveTileSet.Value.Draw(g.GraphicsDevice);
-                    }
-
-                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
-                    {
-                        Draw(g, Map.LayerManager.ListLayer[L], false);
-                    }
-                }
-                else
-                {
-                    int MaxLayerIndex = Map.LayerManager.ListLayer.Count;
-                    if (!DrawUpperLayers)
-                    {
-                        MaxLayerIndex = (int)Map.CursorPosition.Z + 1;
-                    }
-
-                    for (int L = 0; L < MaxLayerIndex; L++)
-                    {
-                        foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[L])
-                        {
-                            ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
-
-                            ActiveTileSet.Value.Draw(g.GraphicsDevice);
-                        }
-
-                        Draw(g, Map.LayerManager.ListLayer[L], false);
-                    }
-                }
-            }
-            else
-            {
-                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[Map.ShowLayerIndex])
-                {
-                    ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
-
-                    ActiveTileSet.Value.Draw(g.GraphicsDevice);
-                }
-
-                Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
-            }
-        }
-
-        public void Draw(CustomSpriteBatch g, MapLayer Owner, bool IsSubLayer)
-        {
-            if (!Owner.IsVisible)
-            {
-                return;
-            }
-
-            if (IsSubLayer)
-            {
-                return;
-            }
-
-            for (int P = 0; P < Owner.ListProp.Count; ++P)
-            {
-                Owner.ListProp[P].Unit3D.SetViewMatrix(Camera.View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].WorldPosition.Z;
-
-                Owner.ListProp[P].Unit3D.SetPosition(
-                    (Owner.ListProp[P].Position.X + 0.5f) * Map.TileSize.X,
-                    TerrainZ * LayerHeight,
-                    (Owner.ListProp[P].Position.Y + 0.5f) * Map.TileSize.Y);
-            }
-
-            for (int P = 0; P < Owner.ListProp.Count; ++P)
-            {
-                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice, g);
-            }
-
-            for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
-            {
-                Owner.ListAttackPickup[P].Attack3D.SetViewMatrix(Camera.View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListAttackPickup[P].Position.X, (int)Owner.ListAttackPickup[P].Position.Y].WorldPosition.Z;
-
-                Owner.ListAttackPickup[P].Attack3D.SetPosition(
-                    (Owner.ListAttackPickup[P].Position.X + 0.5f) * Map.TileSize.X,
-                    TerrainZ * LayerHeight,
-                    (Owner.ListAttackPickup[P].Position.Y + 0.5f) * Map.TileSize.Y);
-            }
-
-            for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
-            {
-                Owner.ListAttackPickup[P].Attack3D.Draw(GameScreen.GraphicsDevice);
-            }
-
-            for (int I = 0; I < Owner.ListHoldableItem.Count; ++I)
-            {
-                Owner.ListHoldableItem[I].Item3D.SetViewMatrix(Camera.View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListHoldableItem[I].Position.X, (int)Owner.ListHoldableItem[I].Position.Y].WorldPosition.Z;
-
-                Owner.ListHoldableItem[I].Item3D.SetPosition(
-                    (Owner.ListHoldableItem[I].Position.X + 0.5f) * Map.TileSize.X,
-                    TerrainZ * LayerHeight,
-                    (Owner.ListHoldableItem[I].Position.Y + 0.5f) * Map.TileSize.Y);
-            }
-
-            for (int I = 0; I < Owner.ListHoldableItem.Count; ++I)
-            {
-                Owner.ListHoldableItem[I].Item3D.Draw(GameScreen.GraphicsDevice);
-            }
         }
 
         private void DrawDrawablePoints(CustomSpriteBatch g)
@@ -867,38 +894,63 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }*/
         }
 
-        private void DrawPERAttacks(CustomSpriteBatch g)
+        private void DrawPERAttacks(CustomSpriteBatch g, Matrix View)
         {
             foreach (PERAttack ActiveAttack in Map.ListPERAttack)
             {
-                ActiveAttack.Map3DComponent.SetViewMatrix(Camera.View);
+                ActiveAttack.Map3DComponent.SetViewMatrix(View);
                 ActiveAttack.Map3DComponent.Draw(g.GraphicsDevice);
             }
         }
 
-        private void DrawDamageNumbers(CustomSpriteBatch g)
+        private void DrawDamageNumbers(CustomSpriteBatch g, Matrix View)
         {
             foreach (KeyValuePair<string, Vector3> ActiveAttack in DicDamageNumberByPosition)
             {
                 Vector3 Visible3DPosition = new Vector3(ActiveAttack.Value.X, ActiveAttack.Value.Z * LayerHeight, ActiveAttack.Value.Y);
                 Vector3 Position = new Vector3(Visible3DPosition.X * Map.TileSize.X, Visible3DPosition.Y + 16, Visible3DPosition.Z * Map.TileSize.Y);
 
-                Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, PolygonEffect.View, Matrix.Identity);
+                Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, View, Matrix.Identity);
                 g.DrawString(Map.fntNonDemoDamage, ActiveAttack.Key, new Vector2(Position2D.X, Position2D.Y), Color.White);
             }
         }
 
-        private void DrawVehicles(CustomSpriteBatch g)
+        private void DrawVehicles(CustomSpriteBatch g, Matrix View)
         {
             foreach (Vehicle ActiveVehicle in Map.ListVehicle)
             {
-                PolygonEffect.World = Matrix.CreateTranslation(ActiveVehicle.Position);
-
+                PolygonEffect.World = ActiveVehicle.World;
                 PolygonEffect.Texture = ActiveVehicle.sprVehicle;
                 PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
                 ActiveVehicle.Draw3D(g.GraphicsDevice);
+
+                foreach (VehicleSeat ActiveSeat in ActiveVehicle.ListSeat)
+                {
+                    if (ActiveSeat.User != null)
+                    {
+                        ActiveSeat.User.Unit3D.SetViewMatrix(View);
+
+                        Vector3 UserPositon = new Vector3(ActiveVehicle.Position.X - ActiveVehicle.sprVehicle.Width / 2 + ActiveSeat.SeatOffset.X,
+                            ActiveVehicle.Position.Y, ActiveVehicle.Position.Z - ActiveVehicle.sprVehicle.Height / 2 + ActiveSeat.SeatOffset.Y);
+                        var a = Matrix.CreateTranslation(
+                            new Vector3(
+                                -ActiveVehicle.Position.X,
+                                -ActiveVehicle.Position.Y,
+                                -ActiveVehicle.Position.Z))
+                            * Matrix.CreateRotationY(ActiveVehicle.Yaw) * Matrix.CreateTranslation(ActiveVehicle.Position);
+                        Vector3 UserPos2 = Vector3.Transform(UserPositon, a);
+                        ActiveSeat.User.Unit3D.SetPosition(
+                            UserPos2.X,
+                            UserPos2.Y + 8,
+                            UserPos2.Z);
+
+                        ActiveSeat.User.Unit3D.Draw(GameScreen.GraphicsDevice);
+                    }
+                }
             }
+
+            PolygonEffect.World = Map.World;
         }
 
         public void EndDraw(CustomSpriteBatch g)

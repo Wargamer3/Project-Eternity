@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.Core.Vehicle
 {
@@ -13,6 +14,8 @@ namespace ProjectEternity.Core.Vehicle
         public Vector2 SeatOffset;
         public float Height;
         public VehicleWeapon Weapon;
+
+        public UnitMapComponent User;
 
         public VehicleSeat()
         {

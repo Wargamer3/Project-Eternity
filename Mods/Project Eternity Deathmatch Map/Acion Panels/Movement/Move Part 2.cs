@@ -17,20 +17,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Squad ActiveSquad;
         private bool IsPostAttack;
         private Vector3 CursorPosition;
-        private readonly List<Vector3> ListMVHoverPoints;
+        private readonly List<Vector3> ListMVHoverPoint;
 
         public ActionPanelMovePart2(DeathmatchMap Map)
             : base(PanelName, Map, false)
         {
         }
 
-        public ActionPanelMovePart2(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, bool IsPostAttack, List<Vector3> ListMVHoverPoints)
+        public ActionPanelMovePart2(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, bool IsPostAttack, List<Vector3> ListMVHoverPoint)
             : base(PanelName, Map)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.IsPostAttack = IsPostAttack;
-            this.ListMVHoverPoints = ListMVHoverPoints;
+            this.ListMVHoverPoint = ListMVHoverPoint;
 
             CursorPosition = Map.CursorPosition;
 
@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListNextChoice.Clear();
             if (IsPostAttack)
             {
-                AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad, ListMVHoverPoints));
+                AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad, ListMVHoverPoint));
             }
             else
             {
@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ActiveSquad.CurrentLeader.CanAttack)
                 {
-                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, false, ListMVHoverPoints));
+                    AddChoiceToCurrentPanel(new ActionPanelAttackPart1(Map, ActivePlayerIndex, ActiveSquadIndex, false, ListMVHoverPoint));
                 }
 
                 if (ActiveSquad.CurrentLeader.Boosts.PostMovementModifier.Spirit)
@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 else
                 {
-                    AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad, ListMVHoverPoints));
+                    AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad, ListMVHoverPoint));
                 }
 
                 foreach (ActionPanel OptionalPanel in GetPropPanelsOnUnitStop(ActiveSquad))
@@ -76,12 +76,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 ActionPanelRepair.AddIfUsable(Map, this, ActiveSquad);
+                ActionPanelGetInVehicle.AddIfUsable(Map, this, ActiveSquad, ListMVHoverPoint);
             }
 
             if (ActiveSquad.Position != Map.CursorPosition)
             {
                 //Movement initialisation.
-                Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoints);
+                Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoint);
 
                 //Move the Unit to the cursor position
                 ActiveSquad.SetPosition(Map.CursorPosition);
@@ -130,7 +131,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
 
             //Movement initialisation.
-            Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoints);
+            Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoint);
 
             //Move the Unit to the cursor position
             ActiveSquad.SetPosition(Map.CursorPosition);
