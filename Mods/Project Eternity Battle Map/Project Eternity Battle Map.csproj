@@ -98,6 +98,9 @@
     <Compile Include="Editor\Tile Viewer 3D.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Environment\BattleMapOverlay.cs" />
+    <Compile Include="Environment\EnvironmentManager.cs" />
+    <Compile Include="Environment\VolatileSubstance.cs" />
     <Compile Include="IGameRule.cs" />
     <Compile Include="Inputs\Keyboard Input.cs" />
     <Compile Include="Inputs\Player Input.cs" />
@@ -184,7 +187,7 @@
     <Compile Include="Editor\Battle Map Viewer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DayNightCycle.cs" />
+    <Compile Include="Environment\DayNightCycle.cs" />
     <Compile Include="Drawable Grid.cs" />
     <Compile Include="Abstract Methods.cs" />
     <Compile Include="Battle Map.cs" />
@@ -225,6 +228,7 @@
     </Compile>
     <Compile Include="Terrain3D.cs" />
     <Compile Include="Tile 3D.cs" />
+    <Compile Include="Environment\Time Period.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">

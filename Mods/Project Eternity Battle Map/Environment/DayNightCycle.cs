@@ -1,18 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using System;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public interface BattleMapOverlay
-    {
-        void Update(GameTime gameTime);
-        void BeginDraw(CustomSpriteBatch g);
-        void Draw(CustomSpriteBatch g);
-        void EndDraw(CustomSpriteBatch g);
-    }
-
     public class DayNightCycleColorOnly : BattleMapOverlay
     {
         private double CurrentHour;
