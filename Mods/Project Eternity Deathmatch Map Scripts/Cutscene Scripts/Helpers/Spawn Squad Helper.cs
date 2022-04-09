@@ -5,8 +5,7 @@ using FMOD;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
-using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core.Parts;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -73,6 +72,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public string AIPath;
             public string DefenseBattleBehavior;
             public string PartDropPath;
+            public List<string> ListTag;
 
             public ScriptSpawnSquadHelper(DeathmatchMap Map, DeathmatchMapScript Owner)
             {
@@ -101,6 +101,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AIPath = string.Empty;
                 DefenseBattleBehavior = string.Empty;
                 PartDropPath = string.Empty;
+                ListTag = new List<string>();
             }
             
             public void Update(Microsoft.Xna.Framework.GameTime gameTime)

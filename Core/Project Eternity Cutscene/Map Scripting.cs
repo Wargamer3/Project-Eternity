@@ -263,7 +263,7 @@ namespace ProjectEternity.Core.Scripts
             this.GraphicsDevice = GraphicsDevice;
 
             sprPixel = content.Load<Texture2D>("Pixel");
-            fntScriptName = content.Load<SpriteFont>("Fonts/Calibri8");
+            fntScriptName = content.Load<SpriteFont>("Fonts/Arial8");
 
             imgScriptTopLeft = content.Load<Texture2D>("ScriptTopLeft2");
             imgScriptTopMiddle = content.Load<Texture2D>("ScriptTopMiddle2");
@@ -309,17 +309,17 @@ namespace ProjectEternity.Core.Scripts
             g.Draw(imgScriptMiddleRight, new Rectangle(NewScript.ScriptSize.Width - imgScriptMiddleRight.Width, imgScriptTopRight.Height, 1, NewScript.ScriptSize.Height - imgScriptTopMiddle.Height - imgScriptBottomMiddle.Height), Color.White);
             g.Draw(imgScriptBottomRight, new Vector2(NewScript.ScriptSize.Width - imgScriptBottomRight.Width, NewScript.ScriptSize.Height - imgScriptBottomRight.Height), Color.White);
 
-            g.DrawString(fntScriptName, NewScript.ToString(), Vector2.Zero, Color.Black);
+            g.DrawString(fntScriptName, NewScript.ToString(), new Vector2(3, 0), Color.White);
 
             for (int T = NewScript.ArrayNameTrigger.Length - 1; T >= 0; --T)
             {
-                g.DrawString(fntScriptName, NewScript.ArrayNameTrigger[T], new Vector2(0, 15 + T * 12), Color.Black);
+                g.DrawString(fntScriptName, NewScript.ArrayNameTrigger[T], new Vector2(3, 15 + T * 12), Color.White);
             }
             for (int E = NewScript.ArrayNameCondition.Length - 1; E >= 0; --E)
             {
                 g.DrawString(fntScriptName, NewScript.ArrayNameCondition[E], new Vector2(
                                                                                          NewScript.ScriptSize.Width - 5 - fntScriptName.MeasureString(NewScript.ArrayNameCondition[E]).X,
-                                                                                         NewScript.ScriptSize.Height - NewScript.ArrayNameCondition.Length * 12 - 4 + E * 12), Color.Black);
+                                                                                         NewScript.ScriptSize.Height - NewScript.ArrayNameCondition.Length * 12 - 4 + E * 12), Color.White);
             }
             g.End();
 

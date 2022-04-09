@@ -4,6 +4,7 @@ using System.Drawing.Design;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Scripts;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -66,6 +67,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefenseBattleBehavior = BR.ReadString();
                 PartDropPath = BR.ReadString();
 
+                int TagsCount = BR.ReadInt32();
+                for (int T = 0; T < TagsCount; ++T)
+                    Tags.Add(BR.ReadString());
+
                 LeaderUnitId = BR.ReadUInt32();
                 Leader.Load(BR);
             }
@@ -87,6 +92,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write(AIPath);
                 BW.Write(DefenseBattleBehavior);
                 BW.Write(PartDropPath);
+                BW.Write(Tags.Count);
+                for (int T = 0; T < Tags.Count; ++T)
+                    BW.Write(Tags[T]);
 
                 BW.Write(LeaderUnitId);
                 Leader.Save(BW);
@@ -154,6 +162,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 set
                 {
                     UnitSpawner.IsEventSquad = value;
+                }
+            }
+
+            [Editor("System.Windows.Forms.Design.StringCollectionEditor, " +
+            "System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+            typeof(UITypeEditor)),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
+            CategoryAttribute("Spawner Attributes"),
+            DescriptionAttribute("Tags to put in the unit.")]
+            public List<string> Tags
+            {
+                get
+                {
+                    return UnitSpawner.ListTag;
+                }
+                set
+                {
+                    UnitSpawner.ListTag = value;
                 }
             }
 
