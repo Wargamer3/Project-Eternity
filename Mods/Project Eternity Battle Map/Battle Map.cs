@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Point TileSize;
         public Point MapSize;
         public int ShowLayerIndex;
-        public BattleMapOverlay MapOverlay;
+        public EnvironmentManager MapEnvironment;
         public bool IsEditor;
         public bool ShowGrid;
         public bool ShowUnits;
@@ -237,7 +237,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnlinePlayers = new OnlineConfiguration();
 
             GameTurn = 0;
-            MapOverlay = new DayNightCycleColorOnly();
             ListTileSet = new List<Texture2D>();
             ListBackground = new List<AnimationBackground>();
             ListBackgroundsPath = new List<string>();

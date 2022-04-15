@@ -120,7 +120,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             LoadMap();
             LoadMapAssets();
             LoadConquestAIScripts();
-            MapOverlay = new FogOfWarGridOverlay(this);
 
             var ConquestScripts = CutsceneScriptHolder.LoadAllScripts(typeof(ConquestMapCutsceneScriptHolder), this);
             foreach (CutsceneScript ActiveListScript in ConquestScripts.Values)
@@ -1133,7 +1132,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
             if (ShowUnits)
             {
-                MapOverlay.Update(gameTime);
+                MapEnvironment.Update(gameTime);
             }
             for (int i = 0; i < ListLayer.Count; ++i)
             {
@@ -1173,9 +1172,9 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             GraphicsDevice.Clear(Color.Black);
 
-            if (ShowUnits && MapOverlay != null)
+            if (ShowUnits)
             {
-                MapOverlay.BeginDraw(g);
+                MapEnvironment.BeginDraw(g);
             }
 
             LayerManager.BeginDraw(g);
@@ -1189,11 +1188,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
             if (ShowUnits)
             {
-                if (ShowUnits && MapOverlay != null)
+                if (ShowUnits)
                 {
-                    MapOverlay.Draw(g);
+                    MapEnvironment.Draw(g);
 
-                    MapOverlay.EndDraw(g);
+                    MapEnvironment.EndDraw(g);
                 }
             }
 

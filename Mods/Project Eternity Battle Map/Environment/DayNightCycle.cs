@@ -7,17 +7,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class DayNightCycleColorOnly : BattleMapOverlay
     {
-        private double CurrentHour;
+        EnvironmentManager Owner;
 
-        public DayNightCycleColorOnly()
+        public DayNightCycleColorOnly(EnvironmentManager Owner, ZoneShape Shape)
         {
-            CurrentHour = 12;
+            this.Owner = Owner;
         }
 
         public void Update(GameTime gameTime)
         {
-            double EllapsedMinute = gameTime.ElapsedGameTime.TotalHours * 5d;
-            CurrentHour += EllapsedMinute;
         }
 
         public void BeginDraw(CustomSpriteBatch g)
@@ -29,12 +27,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Color Color1;
             Color Color2;
             Color FinalColor = Color.White;
-            double CurrentTime = CurrentHour;
+            double CurrentTime = Owner.CurrentHour;
 
-            if (CurrentHour >= 10 && CurrentHour < 18)
+            if (CurrentTime >= 10 && CurrentTime < 18)
             {
             }
-            else if (CurrentHour >= 18 && CurrentHour < 20)
+            else if (CurrentTime >= 18 && CurrentTime < 20)
             {
                 double Factor = (CurrentTime - 18) / 2;
                 Color1 = Color.White;
@@ -45,7 +43,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 FinalColor = Color.FromNonPremultiplied(newColorR, newColorG, newColorB, (int)(Factor * 100));
                 g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
-            else if (CurrentHour >= 20 && CurrentHour < 22)
+            else if (CurrentTime >= 20 && CurrentTime < 22)
             {
                 double Factor = (CurrentTime - 20) / 2;
                 Color1 = Color.Orange;
@@ -57,12 +55,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 FinalColor = Color.FromNonPremultiplied(newColorR, newColorG, newColorB, 100 + (int)(Factor * 27f));
                 g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
-            else if (CurrentHour >= 22 || CurrentHour < 6)
+            else if (CurrentTime >= 22 || CurrentTime < 6)
             {
                 FinalColor = Color.FromNonPremultiplied(Color.Navy.R, Color.Navy.G, Color.Navy.B, 127);
                 g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
-            else if (CurrentHour >= 6 && CurrentHour < 8)
+            else if (CurrentTime >= 6 && CurrentTime < 8)
             {
                 double Factor = (CurrentTime - 6) / 2;
                 Color1 = Color.Navy;
@@ -74,7 +72,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 FinalColor = Color.FromNonPremultiplied(newColorR, newColorG, newColorB, 127 - (int)(Factor * 27f));
                 g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
-            else if (CurrentHour >= 8 && CurrentHour < 10)
+            else if (CurrentTime >= 8 && CurrentTime < 10)
             {
                 double Factor = (CurrentTime - 8) / 2;
                 Color1 = Color.Orange;
@@ -90,6 +88,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void EndDraw(CustomSpriteBatch g)
         {
+        }
+
+        public void SetCrossfadeValue(double Value)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -222,6 +225,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.End();
             g.Begin();
         }
+
+        public void SetCrossfadeValue(double Value)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class PerlinNoiseFogOverlay : BattleMapOverlay
@@ -281,6 +289,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void EndDraw(CustomSpriteBatch g)
         {
+        }
+
+        public void SetCrossfadeValue(double Value)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

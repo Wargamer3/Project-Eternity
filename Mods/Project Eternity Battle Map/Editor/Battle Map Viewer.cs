@@ -217,6 +217,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
 
+        #region Zones
+
+        public void Zones_MouseDown(MouseEventArgs e)
+        {
+        }
+
+        public void Zones_MouseUp(MouseEventArgs e)
+        {
+        }
+
+        public void Zones_MouseMove(MouseEventArgs e)
+        {
+        }
+
+        #endregion
+
         private void sclMapWidth_Scroll(object sender, ScrollEventArgs e)
         {
             switch (ViewerIndex)

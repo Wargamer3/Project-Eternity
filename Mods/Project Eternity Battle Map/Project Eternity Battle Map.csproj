@@ -99,8 +99,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Environment\BattleMapOverlay.cs" />
-    <Compile Include="Environment\EnvironmentManager.cs" />
-    <Compile Include="Environment\VolatileSubstance.cs" />
+    <Compile Include="Environment\Environment Manager.cs" />
+    <Compile Include="Environment\Map Zone.cs" />
+    <Compile Include="Environment\Volatile Substance.cs" />
+    <Compile Include="Environment\Zone Shape.cs" />
     <Compile Include="IGameRule.cs" />
     <Compile Include="Inputs\Keyboard Input.cs" />
     <Compile Include="Inputs\Player Input.cs" />

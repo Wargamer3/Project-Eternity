@@ -79,7 +79,6 @@
             this.btnLayerAttributes = new System.Windows.Forms.Button();
             this.btnRemoveExtraLayer = new System.Windows.Forms.Button();
             this.btnAddExtraLayer = new System.Windows.Forms.Button();
-            this.lblLayers = new System.Windows.Forms.Label();
             this.tabProps = new System.Windows.Forms.TabPage();
             this.PropsContainer = new System.Windows.Forms.SplitContainer();
             this.tabPropsChoices = new System.Windows.Forms.TabControl();
@@ -90,6 +89,13 @@
             this.tabVisualProps = new System.Windows.Forms.TabPage();
             this.lsVisualProps = new System.Windows.Forms.ListBox();
             this.pgPropProperties = new System.Windows.Forms.PropertyGrid();
+            this.tabZones = new System.Windows.Forms.TabPage();
+            this.pgZoneProperties = new System.Windows.Forms.PropertyGrid();
+            this.btnEditZone = new System.Windows.Forms.Button();
+            this.btnAddZoneOval = new System.Windows.Forms.Button();
+            this.lsZones = new System.Windows.Forms.ListBox();
+            this.btnRemoveZone = new System.Windows.Forms.Button();
+            this.btnAddZoneRectangle = new System.Windows.Forms.Button();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.mapPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -97,6 +103,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tslInformation = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
+            this.btnAddZoneFullMap = new System.Windows.Forms.Button();
             this.tbConditions.SuspendLayout();
             this.tabToolBox.SuspendLayout();
             this.tabTiles.SuspendLayout();
@@ -122,6 +129,7 @@
             this.tabInteractiveProps.SuspendLayout();
             this.tabPhysicalProps.SuspendLayout();
             this.tabVisualProps.SuspendLayout();
+            this.tabZones.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -156,6 +164,7 @@
             this.tabToolBox.Controls.Add(this.tabScripting);
             this.tabToolBox.Controls.Add(this.tabLayers);
             this.tabToolBox.Controls.Add(this.tabProps);
+            this.tabToolBox.Controls.Add(this.tabZones);
             this.tabToolBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabToolBox.Location = new System.Drawing.Point(0, 0);
             this.tabToolBox.Name = "tabToolBox";
@@ -621,7 +630,6 @@
             this.tabLayers.Controls.Add(this.btnLayerAttributes);
             this.tabLayers.Controls.Add(this.btnRemoveExtraLayer);
             this.tabLayers.Controls.Add(this.btnAddExtraLayer);
-            this.tabLayers.Controls.Add(this.lblLayers);
             this.tabLayers.Location = new System.Drawing.Point(4, 22);
             this.tabLayers.Name = "tabLayers";
             this.tabLayers.Padding = new System.Windows.Forms.Padding(3);
@@ -632,7 +640,7 @@
             // 
             // btnRemoveSublayer
             // 
-            this.btnRemoveSublayer.Location = new System.Drawing.Point(121, 188);
+            this.btnRemoveSublayer.Location = new System.Drawing.Point(121, 175);
             this.btnRemoveSublayer.Name = "btnRemoveSublayer";
             this.btnRemoveSublayer.Size = new System.Drawing.Size(109, 23);
             this.btnRemoveSublayer.TabIndex = 30;
@@ -642,7 +650,7 @@
             // 
             // btnAddSublayer
             // 
-            this.btnAddSublayer.Location = new System.Drawing.Point(6, 188);
+            this.btnAddSublayer.Location = new System.Drawing.Point(6, 175);
             this.btnAddSublayer.Name = "btnAddSublayer";
             this.btnAddSublayer.Size = new System.Drawing.Size(109, 23);
             this.btnAddSublayer.TabIndex = 29;
@@ -652,7 +660,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(121, 217);
+            this.button2.Location = new System.Drawing.Point(121, 204);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(109, 23);
             this.button2.TabIndex = 28;
@@ -661,7 +669,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(6, 217);
+            this.button1.Location = new System.Drawing.Point(6, 204);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(109, 23);
             this.button1.TabIndex = 27;
@@ -671,7 +679,7 @@
             // lsLayers
             // 
             this.lsLayers.FormattingEnabled = true;
-            this.lsLayers.Location = new System.Drawing.Point(6, 19);
+            this.lsLayers.Location = new System.Drawing.Point(6, 6);
             this.lsLayers.Name = "lsLayers";
             this.lsLayers.Size = new System.Drawing.Size(228, 134);
             this.lsLayers.TabIndex = 26;
@@ -679,7 +687,7 @@
             // 
             // btnLayerAttributes
             // 
-            this.btnLayerAttributes.Location = new System.Drawing.Point(6, 246);
+            this.btnLayerAttributes.Location = new System.Drawing.Point(6, 233);
             this.btnLayerAttributes.Name = "btnLayerAttributes";
             this.btnLayerAttributes.Size = new System.Drawing.Size(224, 23);
             this.btnLayerAttributes.TabIndex = 25;
@@ -689,7 +697,7 @@
             // 
             // btnRemoveExtraLayer
             // 
-            this.btnRemoveExtraLayer.Location = new System.Drawing.Point(121, 159);
+            this.btnRemoveExtraLayer.Location = new System.Drawing.Point(121, 146);
             this.btnRemoveExtraLayer.Name = "btnRemoveExtraLayer";
             this.btnRemoveExtraLayer.Size = new System.Drawing.Size(109, 23);
             this.btnRemoveExtraLayer.TabIndex = 22;
@@ -699,22 +707,13 @@
             // 
             // btnAddExtraLayer
             // 
-            this.btnAddExtraLayer.Location = new System.Drawing.Point(6, 159);
+            this.btnAddExtraLayer.Location = new System.Drawing.Point(6, 146);
             this.btnAddExtraLayer.Name = "btnAddExtraLayer";
             this.btnAddExtraLayer.Size = new System.Drawing.Size(109, 23);
             this.btnAddExtraLayer.TabIndex = 21;
             this.btnAddExtraLayer.Text = "Add";
             this.btnAddExtraLayer.UseVisualStyleBackColor = true;
             this.btnAddExtraLayer.Click += new System.EventHandler(this.btnAddExtraLayer_Click);
-            // 
-            // lblLayers
-            // 
-            this.lblLayers.AutoSize = true;
-            this.lblLayers.Location = new System.Drawing.Point(6, 3);
-            this.lblLayers.Name = "lblLayers";
-            this.lblLayers.Size = new System.Drawing.Size(38, 13);
-            this.lblLayers.TabIndex = 19;
-            this.lblLayers.Text = "Layers";
             // 
             // tabProps
             // 
@@ -827,6 +826,81 @@
             this.pgPropProperties.TabIndex = 0;
             this.pgPropProperties.ToolbarVisible = false;
             // 
+            // tabZones
+            // 
+            this.tabZones.Controls.Add(this.btnAddZoneFullMap);
+            this.tabZones.Controls.Add(this.pgZoneProperties);
+            this.tabZones.Controls.Add(this.btnEditZone);
+            this.tabZones.Controls.Add(this.btnAddZoneOval);
+            this.tabZones.Controls.Add(this.lsZones);
+            this.tabZones.Controls.Add(this.btnRemoveZone);
+            this.tabZones.Controls.Add(this.btnAddZoneRectangle);
+            this.tabZones.Location = new System.Drawing.Point(4, 22);
+            this.tabZones.Name = "tabZones";
+            this.tabZones.Padding = new System.Windows.Forms.Padding(3);
+            this.tabZones.Size = new System.Drawing.Size(240, 497);
+            this.tabZones.TabIndex = 6;
+            this.tabZones.Text = "Zones";
+            this.tabZones.UseVisualStyleBackColor = true;
+            // 
+            // pgZoneProperties
+            // 
+            this.pgZoneProperties.Location = new System.Drawing.Point(6, 249);
+            this.pgZoneProperties.Name = "pgZoneProperties";
+            this.pgZoneProperties.PropertySort = System.Windows.Forms.PropertySort.Categorized;
+            this.pgZoneProperties.Size = new System.Drawing.Size(228, 242);
+            this.pgZoneProperties.TabIndex = 32;
+            this.pgZoneProperties.ToolbarVisible = false;
+            // 
+            // btnEditZone
+            // 
+            this.btnEditZone.Location = new System.Drawing.Point(121, 175);
+            this.btnEditZone.Name = "btnEditZone";
+            this.btnEditZone.Size = new System.Drawing.Size(109, 23);
+            this.btnEditZone.TabIndex = 31;
+            this.btnEditZone.Text = "Edit";
+            this.btnEditZone.UseVisualStyleBackColor = true;
+            this.btnEditZone.Click += new System.EventHandler(this.btnEditZone_Click);
+            // 
+            // btnAddZoneOval
+            // 
+            this.btnAddZoneOval.Location = new System.Drawing.Point(6, 175);
+            this.btnAddZoneOval.Name = "btnAddZoneOval";
+            this.btnAddZoneOval.Size = new System.Drawing.Size(109, 23);
+            this.btnAddZoneOval.TabIndex = 30;
+            this.btnAddZoneOval.Text = "Add Oval";
+            this.btnAddZoneOval.UseVisualStyleBackColor = true;
+            this.btnAddZoneOval.Click += new System.EventHandler(this.btnAddZoneOval_Click);
+            // 
+            // lsZones
+            // 
+            this.lsZones.FormattingEnabled = true;
+            this.lsZones.Location = new System.Drawing.Point(6, 6);
+            this.lsZones.Name = "lsZones";
+            this.lsZones.Size = new System.Drawing.Size(228, 134);
+            this.lsZones.TabIndex = 29;
+            this.lsZones.SelectedIndexChanged += new System.EventHandler(this.lsZones_SelectedIndexChanged);
+            // 
+            // btnRemoveZone
+            // 
+            this.btnRemoveZone.Location = new System.Drawing.Point(121, 146);
+            this.btnRemoveZone.Name = "btnRemoveZone";
+            this.btnRemoveZone.Size = new System.Drawing.Size(109, 23);
+            this.btnRemoveZone.TabIndex = 28;
+            this.btnRemoveZone.Text = "Remove";
+            this.btnRemoveZone.UseVisualStyleBackColor = true;
+            this.btnRemoveZone.Click += new System.EventHandler(this.btnRemoveZone_Click);
+            // 
+            // btnAddZoneRectangle
+            // 
+            this.btnAddZoneRectangle.Location = new System.Drawing.Point(6, 146);
+            this.btnAddZoneRectangle.Name = "btnAddZoneRectangle";
+            this.btnAddZoneRectangle.Size = new System.Drawing.Size(109, 23);
+            this.btnAddZoneRectangle.TabIndex = 27;
+            this.btnAddZoneRectangle.Text = "Add Rectangle";
+            this.btnAddZoneRectangle.UseVisualStyleBackColor = true;
+            this.btnAddZoneRectangle.Click += new System.EventHandler(this.btnAddZoneRectangle_Click);
+            // 
             // tsmSave
             // 
             this.tsmSave.Name = "tsmSave";
@@ -899,6 +973,16 @@
             this.mnuToolBar.TabIndex = 9;
             this.mnuToolBar.Text = "menuStrip1";
             // 
+            // btnAddZoneFullMap
+            // 
+            this.btnAddZoneFullMap.Location = new System.Drawing.Point(6, 204);
+            this.btnAddZoneFullMap.Name = "btnAddZoneFullMap";
+            this.btnAddZoneFullMap.Size = new System.Drawing.Size(109, 23);
+            this.btnAddZoneFullMap.TabIndex = 33;
+            this.btnAddZoneFullMap.Text = "Add Full Map";
+            this.btnAddZoneFullMap.UseVisualStyleBackColor = true;
+            this.btnAddZoneFullMap.Click += new System.EventHandler(this.btnAddZoneFullMap_Click);
+            // 
             // ProjectEternityMapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -928,7 +1012,6 @@
             this.tbEvents.ResumeLayout(false);
             this.tbTriggers.ResumeLayout(false);
             this.tabLayers.ResumeLayout(false);
-            this.tabLayers.PerformLayout();
             this.tabProps.ResumeLayout(false);
             this.PropsContainer.Panel1.ResumeLayout(false);
             this.PropsContainer.Panel2.ResumeLayout(false);
@@ -938,6 +1021,7 @@
             this.tabInteractiveProps.ResumeLayout(false);
             this.tabPhysicalProps.ResumeLayout(false);
             this.tabVisualProps.ResumeLayout(false);
+            this.tabZones.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -996,7 +1080,6 @@
         protected GameScreens.BattleMapScreen.BattleMapViewerControl BattleMapViewer;
         protected ProjectEternity.GameScreens.BattleMapScreen.TilesetViewerControl TilesetViewer;
         private System.Windows.Forms.TabPage tabLayers;
-        private System.Windows.Forms.Label lblLayers;
         private System.Windows.Forms.Button btnRemoveExtraLayer;
         private System.Windows.Forms.Button btnAddExtraLayer;
         private System.Windows.Forms.Button btnLayerAttributes;
@@ -1022,5 +1105,13 @@
         private System.Windows.Forms.Button btn3DTileAttributes;
         private System.Windows.Forms.CheckBox btnTeleporters;
         private System.Windows.Forms.Label lblTeleporters;
+        private System.Windows.Forms.TabPage tabZones;
+        private System.Windows.Forms.Button btnAddZoneOval;
+        private System.Windows.Forms.ListBox lsZones;
+        private System.Windows.Forms.Button btnRemoveZone;
+        private System.Windows.Forms.Button btnAddZoneRectangle;
+        private System.Windows.Forms.Button btnEditZone;
+        private System.Windows.Forms.PropertyGrid pgZoneProperties;
+        private System.Windows.Forms.Button btnAddZoneFullMap;
     }
 }

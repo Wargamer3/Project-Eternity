@@ -1,7 +1,7 @@
 ﻿
 namespace ProjectEternity.Editors.MapEditor
 {
-    partial class MapOverlays
+    partial class ZoneEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -34,16 +34,14 @@ namespace ProjectEternity.Editors.MapEditor
             this.cbVisibility = new System.Windows.Forms.ComboBox();
             this.lblWeather = new System.Windows.Forms.Label();
             this.cbWeather = new System.Windows.Forms.ComboBox();
-            this.lblTimeMultiplier = new System.Windows.Forms.Label();
-            this.txtlblTimeMultiplier = new System.Windows.Forms.NumericUpDown();
             this.lblTypeOfSky = new System.Windows.Forms.Label();
             this.cbTypeOfSky = new System.Windows.Forms.ComboBox();
-            this.gbTimeLimits = new System.Windows.Forms.GroupBox();
-            this.lblHoursInDay = new System.Windows.Forms.Label();
-            this.txtHoursInDay = new System.Windows.Forms.NumericUpDown();
-            this.lblTimeStart = new System.Windows.Forms.Label();
-            this.txtTimeStart = new System.Windows.Forms.NumericUpDown();
             this.gbTimePeriods = new System.Windows.Forms.GroupBox();
+            this.txtTimePeriodPassiveSkill = new System.Windows.Forms.TextBox();
+            this.btnTimePeriodPassiveSkill = new System.Windows.Forms.Button();
+            this.lblTimePeriodPassiveSkill = new System.Windows.Forms.Label();
+            this.lblTimePeriodName = new System.Windows.Forms.Label();
+            this.txtTimePeriodName = new System.Windows.Forms.TextBox();
             this.txtTimePeriodDayStart = new System.Windows.Forms.NumericUpDown();
             this.lblTimePeriodDayStart = new System.Windows.Forms.Label();
             this.btnRemoveTimePeriod = new System.Windows.Forms.Button();
@@ -56,39 +54,38 @@ namespace ProjectEternity.Editors.MapEditor
             this.txtWindDirection = new System.Windows.Forms.NumericUpDown();
             this.lblWindSpeed = new System.Windows.Forms.Label();
             this.txtWindSpeed = new System.Windows.Forms.NumericUpDown();
-            this.rbLoopFirstDay = new System.Windows.Forms.RadioButton();
-            this.rbLoopLastDay = new System.Windows.Forms.RadioButton();
-            this.rbStopTime = new System.Windows.Forms.RadioButton();
-            this.rbUseRealTime = new System.Windows.Forms.RadioButton();
-            this.rbUseTurns = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblTransitionCrossfadeLength = new System.Windows.Forms.Label();
+            this.txtTransitionCrossfadeLength = new System.Windows.Forms.NumericUpDown();
+            this.lblTransitionEndLength = new System.Windows.Forms.Label();
+            this.txtTransitionEndLength = new System.Windows.Forms.NumericUpDown();
+            this.lblTransitionStartLength = new System.Windows.Forms.Label();
+            this.txtTransitionStartLength = new System.Windows.Forms.NumericUpDown();
             this.gbTimeOfDay.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).BeginInit();
-            this.gbTimeLimits.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtHoursInDay)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTimeStart)).BeginInit();
             this.gbTimePeriods.SuspendLayout();
+            this.txtTimePeriodPassiveSkill.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtTimePeriodDayStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTimePeriodTimeStart)).BeginInit();
             this.gbWind.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtWindDirection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtWindSpeed)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTransitionCrossfadeLength)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTransitionEndLength)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTransitionStartLength)).BeginInit();
             this.SuspendLayout();
             // 
             // gbTimeOfDay
             // 
-            this.gbTimeOfDay.Controls.Add(this.rbUseTurns);
-            this.gbTimeOfDay.Controls.Add(this.rbUseRealTime);
             this.gbTimeOfDay.Controls.Add(this.lblVisibility);
             this.gbTimeOfDay.Controls.Add(this.cbVisibility);
             this.gbTimeOfDay.Controls.Add(this.lblWeather);
             this.gbTimeOfDay.Controls.Add(this.cbWeather);
-            this.gbTimeOfDay.Controls.Add(this.lblTimeMultiplier);
-            this.gbTimeOfDay.Controls.Add(this.txtlblTimeMultiplier);
             this.gbTimeOfDay.Controls.Add(this.lblTypeOfSky);
             this.gbTimeOfDay.Controls.Add(this.cbTypeOfSky);
-            this.gbTimeOfDay.Location = new System.Drawing.Point(213, 12);
+            this.gbTimeOfDay.Location = new System.Drawing.Point(12, 12);
             this.gbTimeOfDay.Name = "gbTimeOfDay";
-            this.gbTimeOfDay.Size = new System.Drawing.Size(215, 151);
+            this.gbTimeOfDay.Size = new System.Drawing.Size(215, 107);
             this.gbTimeOfDay.TabIndex = 0;
             this.gbTimeOfDay.TabStop = false;
             this.gbTimeOfDay.Text = "Time of day";
@@ -130,6 +127,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.cbWeather.FormattingEnabled = true;
             this.cbWeather.Items.AddRange(new object[] {
             "Regular",
+            "Windy",
             "Some clouds",
             "Cloudy",
             "Small rain",
@@ -151,23 +149,6 @@ namespace ProjectEternity.Editors.MapEditor
             this.cbWeather.TabIndex = 5;
             this.cbWeather.SelectedIndexChanged += new System.EventHandler(this.cbWeather_SelectedIndexChanged);
             // 
-            // lblTimeMultiplier
-            // 
-            this.lblTimeMultiplier.AutoSize = true;
-            this.lblTimeMultiplier.Location = new System.Drawing.Point(6, 102);
-            this.lblTimeMultiplier.Name = "lblTimeMultiplier";
-            this.lblTimeMultiplier.Size = new System.Drawing.Size(73, 13);
-            this.lblTimeMultiplier.TabIndex = 4;
-            this.lblTimeMultiplier.Text = "Time multiplier";
-            // 
-            // txtlblTimeMultiplier
-            // 
-            this.txtlblTimeMultiplier.Location = new System.Drawing.Point(89, 100);
-            this.txtlblTimeMultiplier.Name = "txtlblTimeMultiplier";
-            this.txtlblTimeMultiplier.Size = new System.Drawing.Size(56, 20);
-            this.txtlblTimeMultiplier.TabIndex = 3;
-            this.txtlblTimeMultiplier.ValueChanged += new System.EventHandler(this.txtlblTimeMultiplier_ValueChanged);
-            // 
             // lblTypeOfSky
             // 
             this.lblTypeOfSky.AutoSize = true;
@@ -184,70 +165,21 @@ namespace ProjectEternity.Editors.MapEditor
             this.cbTypeOfSky.Items.AddRange(new object[] {
             "Disabled",
             "Regular",
-            "Arctic"});
+            "Arctic",
+            "Warm/orange"});
             this.cbTypeOfSky.Location = new System.Drawing.Point(88, 46);
             this.cbTypeOfSky.Name = "cbTypeOfSky";
             this.cbTypeOfSky.Size = new System.Drawing.Size(121, 21);
             this.cbTypeOfSky.TabIndex = 1;
             this.cbTypeOfSky.SelectedIndexChanged += new System.EventHandler(this.cbTypeOfSky_SelectedIndexChanged);
             // 
-            // gbTimeLimits
-            // 
-            this.gbTimeLimits.Controls.Add(this.rbStopTime);
-            this.gbTimeLimits.Controls.Add(this.rbLoopLastDay);
-            this.gbTimeLimits.Controls.Add(this.rbLoopFirstDay);
-            this.gbTimeLimits.Controls.Add(this.lblHoursInDay);
-            this.gbTimeLimits.Controls.Add(this.txtHoursInDay);
-            this.gbTimeLimits.Controls.Add(this.lblTimeStart);
-            this.gbTimeLimits.Controls.Add(this.txtTimeStart);
-            this.gbTimeLimits.Location = new System.Drawing.Point(12, 12);
-            this.gbTimeLimits.Name = "gbTimeLimits";
-            this.gbTimeLimits.Size = new System.Drawing.Size(195, 151);
-            this.gbTimeLimits.TabIndex = 1;
-            this.gbTimeLimits.TabStop = false;
-            this.gbTimeLimits.Text = "Time limits";
-            // 
-            // lblHoursInDay
-            // 
-            this.lblHoursInDay.AutoSize = true;
-            this.lblHoursInDay.Location = new System.Drawing.Point(6, 43);
-            this.lblHoursInDay.Name = "lblHoursInDay";
-            this.lblHoursInDay.Size = new System.Drawing.Size(66, 13);
-            this.lblHoursInDay.TabIndex = 8;
-            this.lblHoursInDay.Text = "Hours in day";
-            // 
-            // txtHoursInDay
-            // 
-            this.txtHoursInDay.Location = new System.Drawing.Point(133, 41);
-            this.txtHoursInDay.Name = "txtHoursInDay";
-            this.txtHoursInDay.Size = new System.Drawing.Size(56, 20);
-            this.txtHoursInDay.TabIndex = 7;
-            this.txtHoursInDay.Value = new decimal(new int[] {
-            24,
-            0,
-            0,
-            0});
-            // 
-            // lblTimeStart
-            // 
-            this.lblTimeStart.AutoSize = true;
-            this.lblTimeStart.Location = new System.Drawing.Point(6, 17);
-            this.lblTimeStart.Name = "lblTimeStart";
-            this.lblTimeStart.Size = new System.Drawing.Size(53, 13);
-            this.lblTimeStart.TabIndex = 6;
-            this.lblTimeStart.Text = "Time start";
-            // 
-            // txtTimeStart
-            // 
-            this.txtTimeStart.Location = new System.Drawing.Point(133, 15);
-            this.txtTimeStart.Name = "txtTimeStart";
-            this.txtTimeStart.Size = new System.Drawing.Size(56, 20);
-            this.txtTimeStart.TabIndex = 5;
-            // 
             // gbTimePeriods
             // 
-            this.gbTimePeriods.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbTimePeriods.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.gbTimePeriods.Controls.Add(this.txtTimePeriodPassiveSkill);
+            this.gbTimePeriods.Controls.Add(this.lblTimePeriodPassiveSkill);
+            this.gbTimePeriods.Controls.Add(this.lblTimePeriodName);
+            this.gbTimePeriods.Controls.Add(this.txtTimePeriodName);
             this.gbTimePeriods.Controls.Add(this.txtTimePeriodDayStart);
             this.gbTimePeriods.Controls.Add(this.lblTimePeriodDayStart);
             this.gbTimePeriods.Controls.Add(this.btnRemoveTimePeriod);
@@ -255,16 +187,65 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbTimePeriods.Controls.Add(this.lsTimePeriod);
             this.gbTimePeriods.Controls.Add(this.txtTimePeriodTimeStart);
             this.gbTimePeriods.Controls.Add(this.lblTimePeriodTimeStart);
-            this.gbTimePeriods.Location = new System.Drawing.Point(434, 12);
+            this.gbTimePeriods.Location = new System.Drawing.Point(233, 12);
             this.gbTimePeriods.Name = "gbTimePeriods";
-            this.gbTimePeriods.Size = new System.Drawing.Size(177, 257);
+            this.gbTimePeriods.Size = new System.Drawing.Size(212, 305);
             this.gbTimePeriods.TabIndex = 2;
             this.gbTimePeriods.TabStop = false;
             this.gbTimePeriods.Text = "Time periods";
             // 
+            // txtTimePeriodPassiveSkill
+            // 
+            this.txtTimePeriodPassiveSkill.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTimePeriodPassiveSkill.Controls.Add(this.btnTimePeriodPassiveSkill);
+            this.txtTimePeriodPassiveSkill.Location = new System.Drawing.Point(76, 250);
+            this.txtTimePeriodPassiveSkill.Name = "txtTimePeriodPassiveSkill";
+            this.txtTimePeriodPassiveSkill.Size = new System.Drawing.Size(130, 20);
+            this.txtTimePeriodPassiveSkill.TabIndex = 34;
+            // 
+            // btnTimePeriodPassiveSkill
+            // 
+            this.btnTimePeriodPassiveSkill.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnTimePeriodPassiveSkill.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnTimePeriodPassiveSkill.Location = new System.Drawing.Point(105, 0);
+            this.btnTimePeriodPassiveSkill.Margin = new System.Windows.Forms.Padding(0);
+            this.btnTimePeriodPassiveSkill.Name = "btnTimePeriodPassiveSkill";
+            this.btnTimePeriodPassiveSkill.Size = new System.Drawing.Size(21, 16);
+            this.btnTimePeriodPassiveSkill.TabIndex = 33;
+            this.btnTimePeriodPassiveSkill.TabStop = false;
+            this.btnTimePeriodPassiveSkill.Text = "...";
+            this.btnTimePeriodPassiveSkill.UseVisualStyleBackColor = true;
+            this.btnTimePeriodPassiveSkill.Click += new System.EventHandler(this.btnTimePeriodPassiveSkill_Click);
+            // 
+            // lblTimePeriodPassiveSkill
+            // 
+            this.lblTimePeriodPassiveSkill.AutoSize = true;
+            this.lblTimePeriodPassiveSkill.Location = new System.Drawing.Point(6, 253);
+            this.lblTimePeriodPassiveSkill.Name = "lblTimePeriodPassiveSkill";
+            this.lblTimePeriodPassiveSkill.Size = new System.Drawing.Size(64, 13);
+            this.lblTimePeriodPassiveSkill.TabIndex = 10;
+            this.lblTimePeriodPassiveSkill.Text = "Passive skill";
+            // 
+            // lblTimePeriodName
+            // 
+            this.lblTimePeriodName.AutoSize = true;
+            this.lblTimePeriodName.Location = new System.Drawing.Point(6, 175);
+            this.lblTimePeriodName.Name = "lblTimePeriodName";
+            this.lblTimePeriodName.Size = new System.Drawing.Size(35, 13);
+            this.lblTimePeriodName.TabIndex = 8;
+            this.lblTimePeriodName.Text = "Name";
+            // 
+            // txtTimePeriodName
+            // 
+            this.txtTimePeriodName.Location = new System.Drawing.Point(47, 172);
+            this.txtTimePeriodName.Name = "txtTimePeriodName";
+            this.txtTimePeriodName.Size = new System.Drawing.Size(159, 20);
+            this.txtTimePeriodName.TabIndex = 7;
+            this.txtTimePeriodName.TextChanged += new System.EventHandler(this.txtTimePeriodName_TextChanged);
+            // 
             // txtTimePeriodDayStart
             // 
-            this.txtTimePeriodDayStart.Location = new System.Drawing.Point(111, 198);
+            this.txtTimePeriodDayStart.Location = new System.Drawing.Point(149, 224);
             this.txtTimePeriodDayStart.Name = "txtTimePeriodDayStart";
             this.txtTimePeriodDayStart.Size = new System.Drawing.Size(57, 20);
             this.txtTimePeriodDayStart.TabIndex = 6;
@@ -273,7 +254,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodDayStart
             // 
             this.lblTimePeriodDayStart.AutoSize = true;
-            this.lblTimePeriodDayStart.Location = new System.Drawing.Point(6, 200);
+            this.lblTimePeriodDayStart.Location = new System.Drawing.Point(6, 226);
             this.lblTimePeriodDayStart.Name = "lblTimePeriodDayStart";
             this.lblTimePeriodDayStart.Size = new System.Drawing.Size(49, 13);
             this.lblTimePeriodDayStart.TabIndex = 5;
@@ -282,7 +263,7 @@ namespace ProjectEternity.Editors.MapEditor
             // btnRemoveTimePeriod
             // 
             this.btnRemoveTimePeriod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveTimePeriod.Location = new System.Drawing.Point(96, 228);
+            this.btnRemoveTimePeriod.Location = new System.Drawing.Point(131, 276);
             this.btnRemoveTimePeriod.Name = "btnRemoveTimePeriod";
             this.btnRemoveTimePeriod.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveTimePeriod.TabIndex = 4;
@@ -293,7 +274,7 @@ namespace ProjectEternity.Editors.MapEditor
             // btnAddTimePeriod
             // 
             this.btnAddTimePeriod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddTimePeriod.Location = new System.Drawing.Point(9, 228);
+            this.btnAddTimePeriod.Location = new System.Drawing.Point(44, 276);
             this.btnAddTimePeriod.Name = "btnAddTimePeriod";
             this.btnAddTimePeriod.Size = new System.Drawing.Size(75, 23);
             this.btnAddTimePeriod.TabIndex = 3;
@@ -306,12 +287,13 @@ namespace ProjectEternity.Editors.MapEditor
             this.lsTimePeriod.FormattingEnabled = true;
             this.lsTimePeriod.Location = new System.Drawing.Point(6, 19);
             this.lsTimePeriod.Name = "lsTimePeriod";
-            this.lsTimePeriod.Size = new System.Drawing.Size(162, 147);
+            this.lsTimePeriod.Size = new System.Drawing.Size(200, 147);
             this.lsTimePeriod.TabIndex = 2;
+            this.lsTimePeriod.SelectedIndexChanged += new System.EventHandler(this.lsTimePeriod_SelectedIndexChanged);
             // 
             // txtTimePeriodTimeStart
             // 
-            this.txtTimePeriodTimeStart.Location = new System.Drawing.Point(111, 172);
+            this.txtTimePeriodTimeStart.Location = new System.Drawing.Point(149, 198);
             this.txtTimePeriodTimeStart.Name = "txtTimePeriodTimeStart";
             this.txtTimePeriodTimeStart.Size = new System.Drawing.Size(57, 20);
             this.txtTimePeriodTimeStart.TabIndex = 1;
@@ -320,7 +302,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodTimeStart
             // 
             this.lblTimePeriodTimeStart.AutoSize = true;
-            this.lblTimePeriodTimeStart.Location = new System.Drawing.Point(6, 174);
+            this.lblTimePeriodTimeStart.Location = new System.Drawing.Point(6, 200);
             this.lblTimePeriodTimeStart.Name = "lblTimePeriodTimeStart";
             this.lblTimePeriodTimeStart.Size = new System.Drawing.Size(53, 13);
             this.lblTimePeriodTimeStart.TabIndex = 0;
@@ -332,9 +314,9 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbWind.Controls.Add(this.txtWindDirection);
             this.gbWind.Controls.Add(this.lblWindSpeed);
             this.gbWind.Controls.Add(this.txtWindSpeed);
-            this.gbWind.Location = new System.Drawing.Point(213, 169);
+            this.gbWind.Location = new System.Drawing.Point(12, 125);
             this.gbWind.Name = "gbWind";
-            this.gbWind.Size = new System.Drawing.Size(215, 74);
+            this.gbWind.Size = new System.Drawing.Size(215, 70);
             this.gbWind.TabIndex = 9;
             this.gbWind.TabStop = false;
             this.gbWind.Text = "Wind";
@@ -378,89 +360,111 @@ namespace ProjectEternity.Editors.MapEditor
             this.txtWindSpeed.TabIndex = 5;
             this.txtWindSpeed.ValueChanged += new System.EventHandler(this.txtWindSpeed_ValueChanged);
             // 
-            // rbLoopFirstDay
+            // groupBox1
             // 
-            this.rbLoopFirstDay.AutoSize = true;
-            this.rbLoopFirstDay.Location = new System.Drawing.Point(6, 67);
-            this.rbLoopFirstDay.Name = "rbLoopFirstDay";
-            this.rbLoopFirstDay.Size = new System.Drawing.Size(127, 17);
-            this.rbLoopFirstDay.TabIndex = 10;
-            this.rbLoopFirstDay.TabStop = true;
-            this.rbLoopFirstDay.Text = "Loop back to first day";
-            this.rbLoopFirstDay.UseVisualStyleBackColor = true;
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.lblTransitionCrossfadeLength);
+            this.groupBox1.Controls.Add(this.txtTransitionCrossfadeLength);
+            this.groupBox1.Controls.Add(this.lblTransitionEndLength);
+            this.groupBox1.Controls.Add(this.txtTransitionEndLength);
+            this.groupBox1.Controls.Add(this.lblTransitionStartLength);
+            this.groupBox1.Controls.Add(this.txtTransitionStartLength);
+            this.groupBox1.Location = new System.Drawing.Point(12, 201);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(215, 116);
+            this.groupBox1.TabIndex = 10;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Transition";
             // 
-            // rbLoopLastDay
+            // lblTransitionCrossfadeLength
             // 
-            this.rbLoopLastDay.AutoSize = true;
-            this.rbLoopLastDay.Location = new System.Drawing.Point(6, 90);
-            this.rbLoopLastDay.Name = "rbLoopLastDay";
-            this.rbLoopLastDay.Size = new System.Drawing.Size(127, 17);
-            this.rbLoopLastDay.TabIndex = 11;
-            this.rbLoopLastDay.TabStop = true;
-            this.rbLoopLastDay.Text = "Loop back to last day";
-            this.rbLoopLastDay.UseVisualStyleBackColor = true;
+            this.lblTransitionCrossfadeLength.AutoSize = true;
+            this.lblTransitionCrossfadeLength.Location = new System.Drawing.Point(6, 69);
+            this.lblTransitionCrossfadeLength.Name = "lblTransitionCrossfadeLength";
+            this.lblTransitionCrossfadeLength.Size = new System.Drawing.Size(86, 13);
+            this.lblTransitionCrossfadeLength.TabIndex = 12;
+            this.lblTransitionCrossfadeLength.Text = "Crossfade length";
             // 
-            // rbStopTime
+            // txtTransitionCrossfadeLength
             // 
-            this.rbStopTime.AutoSize = true;
-            this.rbStopTime.Location = new System.Drawing.Point(6, 113);
-            this.rbStopTime.Name = "rbStopTime";
-            this.rbStopTime.Size = new System.Drawing.Size(105, 17);
-            this.rbStopTime.TabIndex = 12;
-            this.rbStopTime.TabStop = true;
-            this.rbStopTime.Text = "Stop time on end";
-            this.rbStopTime.UseVisualStyleBackColor = true;
+            this.txtTransitionCrossfadeLength.Location = new System.Drawing.Point(133, 67);
+            this.txtTransitionCrossfadeLength.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.txtTransitionCrossfadeLength.Name = "txtTransitionCrossfadeLength";
+            this.txtTransitionCrossfadeLength.Size = new System.Drawing.Size(56, 20);
+            this.txtTransitionCrossfadeLength.TabIndex = 11;
+            this.txtTransitionCrossfadeLength.ValueChanged += new System.EventHandler(this.txtTransitionCrossfadeLength_ValueChanged);
             // 
-            // rbUseRealTime
+            // lblTransitionEndLength
             // 
-            this.rbUseRealTime.AutoSize = true;
-            this.rbUseRealTime.Location = new System.Drawing.Point(123, 126);
-            this.rbUseRealTime.Name = "rbUseRealTime";
-            this.rbUseRealTime.Size = new System.Drawing.Size(86, 17);
-            this.rbUseRealTime.TabIndex = 13;
-            this.rbUseRealTime.TabStop = true;
-            this.rbUseRealTime.Text = "Use real time";
-            this.rbUseRealTime.UseVisualStyleBackColor = true;
-            this.rbUseRealTime.CheckedChanged += new System.EventHandler(this.rbUseRealTime_CheckedChanged);
+            this.lblTransitionEndLength.AutoSize = true;
+            this.lblTransitionEndLength.Location = new System.Drawing.Point(6, 43);
+            this.lblTransitionEndLength.Name = "lblTransitionEndLength";
+            this.lblTransitionEndLength.Size = new System.Drawing.Size(58, 13);
+            this.lblTransitionEndLength.TabIndex = 8;
+            this.lblTransitionEndLength.Text = "End length";
             // 
-            // rbUseTurns
+            // txtTransitionEndLength
             // 
-            this.rbUseTurns.AutoSize = true;
-            this.rbUseTurns.Location = new System.Drawing.Point(6, 126);
-            this.rbUseTurns.Name = "rbUseTurns";
-            this.rbUseTurns.Size = new System.Drawing.Size(70, 17);
-            this.rbUseTurns.TabIndex = 14;
-            this.rbUseTurns.TabStop = true;
-            this.rbUseTurns.Text = "Use turns";
-            this.rbUseTurns.UseVisualStyleBackColor = true;
-            this.rbUseTurns.CheckedChanged += new System.EventHandler(this.rbUseTurns_CheckedChanged);
+            this.txtTransitionEndLength.Location = new System.Drawing.Point(133, 41);
+            this.txtTransitionEndLength.Maximum = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.txtTransitionEndLength.Name = "txtTransitionEndLength";
+            this.txtTransitionEndLength.Size = new System.Drawing.Size(56, 20);
+            this.txtTransitionEndLength.TabIndex = 7;
+            this.txtTransitionEndLength.ValueChanged += new System.EventHandler(this.txtTransitionEndLength_ValueChanged);
             // 
-            // MapOverlays
+            // lblTransitionStartLength
+            // 
+            this.lblTransitionStartLength.AutoSize = true;
+            this.lblTransitionStartLength.Location = new System.Drawing.Point(6, 17);
+            this.lblTransitionStartLength.Name = "lblTransitionStartLength";
+            this.lblTransitionStartLength.Size = new System.Drawing.Size(61, 13);
+            this.lblTransitionStartLength.TabIndex = 6;
+            this.lblTransitionStartLength.Text = "Start length";
+            // 
+            // txtTransitionStartLength
+            // 
+            this.txtTransitionStartLength.Location = new System.Drawing.Point(133, 15);
+            this.txtTransitionStartLength.Name = "txtTransitionStartLength";
+            this.txtTransitionStartLength.Size = new System.Drawing.Size(56, 20);
+            this.txtTransitionStartLength.TabIndex = 5;
+            this.txtTransitionStartLength.ValueChanged += new System.EventHandler(this.txtTransitionStartLength_ValueChanged);
+            // 
+            // ZoneEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(619, 281);
+            this.ClientSize = new System.Drawing.Size(457, 329);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbWind);
             this.Controls.Add(this.gbTimePeriods);
-            this.Controls.Add(this.gbTimeLimits);
             this.Controls.Add(this.gbTimeOfDay);
-            this.Name = "MapOverlays";
-            this.Text = "Overlays";
+            this.Name = "ZoneEditor";
+            this.Text = "Zone properties";
             this.gbTimeOfDay.ResumeLayout(false);
             this.gbTimeOfDay.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).EndInit();
-            this.gbTimeLimits.ResumeLayout(false);
-            this.gbTimeLimits.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtHoursInDay)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtTimeStart)).EndInit();
             this.gbTimePeriods.ResumeLayout(false);
             this.gbTimePeriods.PerformLayout();
+            this.txtTimePeriodPassiveSkill.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.txtTimePeriodDayStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTimePeriodTimeStart)).EndInit();
             this.gbWind.ResumeLayout(false);
             this.gbWind.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtWindDirection)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtWindSpeed)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTransitionCrossfadeLength)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTransitionEndLength)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTransitionStartLength)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -470,15 +474,8 @@ namespace ProjectEternity.Editors.MapEditor
         private System.Windows.Forms.GroupBox gbTimeOfDay;
         private System.Windows.Forms.Label lblWeather;
         private System.Windows.Forms.ComboBox cbWeather;
-        private System.Windows.Forms.Label lblTimeMultiplier;
-        private System.Windows.Forms.NumericUpDown txtlblTimeMultiplier;
         private System.Windows.Forms.Label lblTypeOfSky;
         private System.Windows.Forms.ComboBox cbTypeOfSky;
-        private System.Windows.Forms.GroupBox gbTimeLimits;
-        private System.Windows.Forms.Label lblHoursInDay;
-        private System.Windows.Forms.NumericUpDown txtHoursInDay;
-        private System.Windows.Forms.Label lblTimeStart;
-        private System.Windows.Forms.NumericUpDown txtTimeStart;
         private System.Windows.Forms.Label lblVisibility;
         private System.Windows.Forms.ComboBox cbVisibility;
         private System.Windows.Forms.GroupBox gbTimePeriods;
@@ -494,10 +491,17 @@ namespace ProjectEternity.Editors.MapEditor
         private System.Windows.Forms.Label lblTimePeriodTimeStart;
         private System.Windows.Forms.NumericUpDown txtTimePeriodDayStart;
         private System.Windows.Forms.Label lblTimePeriodDayStart;
-        private System.Windows.Forms.RadioButton rbUseTurns;
-        private System.Windows.Forms.RadioButton rbUseRealTime;
-        private System.Windows.Forms.RadioButton rbStopTime;
-        private System.Windows.Forms.RadioButton rbLoopLastDay;
-        private System.Windows.Forms.RadioButton rbLoopFirstDay;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.NumericUpDown txtTransitionEndLength;
+        private System.Windows.Forms.Label lblTransitionStartLength;
+        private System.Windows.Forms.NumericUpDown txtTransitionStartLength;
+        private System.Windows.Forms.Label lblTransitionCrossfadeLength;
+        private System.Windows.Forms.NumericUpDown txtTransitionCrossfadeLength;
+        private System.Windows.Forms.Label lblTransitionEndLength;
+        private System.Windows.Forms.Label lblTimePeriodName;
+        private System.Windows.Forms.TextBox txtTimePeriodName;
+        private System.Windows.Forms.Label lblTimePeriodPassiveSkill;
+        private System.Windows.Forms.TextBox txtTimePeriodPassiveSkill;
+        private System.Windows.Forms.Button btnTimePeriodPassiveSkill;
     }
 }

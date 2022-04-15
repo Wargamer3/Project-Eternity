@@ -15,9 +15,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Characters;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using static ProjectEternity.GameScreens.BattleMapScreen.MovementAlgorithmTile;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -138,6 +136,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             GameRule = new SinglePlayerGameRule(this);
             LayerManager = new LayerHolderDeathmatch(this);
+            MapEnvironment = new EnvironmentManager(this);
             ListActionMenuChoice = new ActionPanelHolderDeathmatch(this);
             ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
@@ -219,6 +218,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             SaveTilesets(BW);
 
             LayerManager.Save(BW);
+
+            MapEnvironment.Save(BW);
 
             FS.Close();
             BW.Close();
@@ -395,6 +396,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LoadTilesets(BR);
 
             LayerManager = new LayerHolderDeathmatch(this, BR);
+
+            MapEnvironment = new EnvironmentManager(BR, this);
 
             BR.Close();
             FS.Close();
@@ -592,7 +595,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (ShowUnits)
                 {
-                    MapOverlay.Update(gameTime);
+                    MapEnvironment.Update(gameTime);
                 }
 
                 for (int B = 0; B < ListBackground.Count; ++B)
@@ -691,9 +694,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             GraphicsDevice.Clear(Color.Black);
 
-            if (ShowUnits && MapOverlay != null)
+            if (ShowUnits)
             {
-                MapOverlay.BeginDraw(g);
+                MapEnvironment.BeginDraw(g);
                 BeginDrawNightOverlay(g);
             }
 
@@ -752,13 +755,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ShowUnits)
             {
-                if (ShowUnits && MapOverlay != null)
+                if (ShowUnits)
                 {
-                    MapOverlay.Draw(g);
+                    MapEnvironment.Draw(g);
 
                     DrawNightOverlay(g);
 
-                    MapOverlay.EndDraw(g);
+                    MapEnvironment.EndDraw(g);
                 }
             }
 

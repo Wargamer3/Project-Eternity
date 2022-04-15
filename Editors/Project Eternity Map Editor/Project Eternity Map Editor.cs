@@ -371,6 +371,10 @@ namespace ProjectEternity.Editors.MapEditor
                     case 2:
                         BattleMapViewer.Scripting_MouseMove(e);
                         break;
+
+                    case 5:
+                        BattleMapViewer.Zones_MouseMove(e);
+                        break;
                 }
             }
             else
@@ -384,6 +388,10 @@ namespace ProjectEternity.Editors.MapEditor
 
                     case 2:
                         BattleMapViewer.Scripting_MouseMove(e);
+                        break;
+
+                    case 5:
+                        BattleMapViewer.Zones_MouseMove(e);
                         break;
                 }
             }
@@ -404,6 +412,10 @@ namespace ProjectEternity.Editors.MapEditor
                     case 2:
                         BattleMapViewer.Scripting_MouseUp(e);
                         break;
+
+                    case 5:
+                        BattleMapViewer.Zones_MouseUp(e);
+                        break;
                 }
             }
         }
@@ -419,6 +431,10 @@ namespace ProjectEternity.Editors.MapEditor
 
                 case 2:
                     BattleMapViewer.Scripting_MouseDown(e);
+                    break;
+
+                case 5:
+                    BattleMapViewer.Zones_MouseDown(e);
                     break;
             }
         }
@@ -1038,6 +1054,62 @@ namespace ProjectEternity.Editors.MapEditor
                         break;
                     }
                 }
+            }
+        }
+
+        #endregion
+
+        #region Zones
+
+        private void btnAddZoneRectangle_Click(object sender, EventArgs e)
+        {
+            MapZone NewZone = new MapZone(BattleMapViewer.ActiveMap, ZoneShape.ZoneShapeTypes.Rectangle);
+            BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            lsZones.Items.Add("Zone");
+            pgZoneProperties.SelectedObject = NewZone;
+            lsZones.SelectedIndex = lsZones.Items.Count - 1;
+        }
+
+        private void btnAddZoneOval_Click(object sender, EventArgs e)
+        {
+            MapZone NewZone = new MapZone(BattleMapViewer.ActiveMap, ZoneShape.ZoneShapeTypes.Oval);
+            BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            lsZones.Items.Add("Zone");
+            pgZoneProperties.SelectedObject = NewZone;
+            lsZones.SelectedIndex = lsZones.Items.Count - 1;
+        }
+
+        private void btnAddZoneFullMap_Click(object sender, EventArgs e)
+        {
+            MapZone NewZone = new MapZone(BattleMapViewer.ActiveMap, ZoneShape.ZoneShapeTypes.Full);
+            BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            lsZones.Items.Add("Zone");
+            pgZoneProperties.SelectedObject = NewZone;
+            lsZones.SelectedIndex = lsZones.Items.Count - 1;
+        }
+
+        private void btnRemoveZone_Click(object sender, EventArgs e)
+        {
+            if (lsZones.SelectedIndex >= 0)
+            {
+                BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.RemoveAt(lsZones.SelectedIndex);
+                lsZones.Items.RemoveAt(lsZones.SelectedIndex);
+            }
+        }
+
+        private void btnEditZone_Click(object sender, EventArgs e)
+        {
+            if (lsZones.SelectedIndex >= 0)
+            {
+                new ZoneEditor(BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex]).ShowDialog();
+            }
+        }
+
+        private void lsZones_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lsZones.SelectedIndex >= 0)
+            {
+                pgZoneProperties.SelectedObject = BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex];
             }
         }
 

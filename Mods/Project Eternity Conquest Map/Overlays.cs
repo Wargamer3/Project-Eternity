@@ -74,6 +74,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public void EndDraw(CustomSpriteBatch g)
         {
         }
+
+        public void SetCrossfadeValue(double Value)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class FogOfWarTile : MovementAlgorithmTile

@@ -57,6 +57,18 @@
             this.txtMapHeight = new System.Windows.Forms.NumericUpDown();
             this.cbCameraType = new System.Windows.Forms.ComboBox();
             this.lblCameraType = new System.Windows.Forms.Label();
+            this.gbTimeLimits = new System.Windows.Forms.GroupBox();
+            this.rbUseTurns = new System.Windows.Forms.RadioButton();
+            this.rbStopTime = new System.Windows.Forms.RadioButton();
+            this.rbUseRealTime = new System.Windows.Forms.RadioButton();
+            this.rbLoopLastDay = new System.Windows.Forms.RadioButton();
+            this.rbLoopFirstDay = new System.Windows.Forms.RadioButton();
+            this.lblHoursInDay = new System.Windows.Forms.Label();
+            this.txtHoursInDay = new System.Windows.Forms.NumericUpDown();
+            this.lblTimeStart = new System.Windows.Forms.Label();
+            this.lblTimeMultiplier = new System.Windows.Forms.Label();
+            this.txtlblTimeMultiplier = new System.Windows.Forms.NumericUpDown();
+            this.txtTimeStart = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).BeginInit();
@@ -68,6 +80,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtTileHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapHeight)).BeginInit();
+            this.gbTimeLimits.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtHoursInDay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTimeStart)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -127,7 +143,7 @@
             // btnAccept
             // 
             this.btnAccept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAccept.Location = new System.Drawing.Point(115, 282);
+            this.btnAccept.Location = new System.Drawing.Point(545, 246);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(75, 23);
             this.btnAccept.TabIndex = 10;
@@ -138,7 +154,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClose.Location = new System.Drawing.Point(196, 282);
+            this.btnClose.Location = new System.Drawing.Point(626, 246);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 11;
@@ -228,9 +244,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbDescription.Controls.Add(this.btnOpenTranslationFile);
             this.gbDescription.Controls.Add(this.txtDescription);
-            this.gbDescription.Location = new System.Drawing.Point(277, 12);
+            this.gbDescription.Location = new System.Drawing.Point(478, 12);
             this.gbDescription.Name = "gbDescription";
-            this.gbDescription.Size = new System.Drawing.Size(293, 293);
+            this.gbDescription.Size = new System.Drawing.Size(223, 228);
             this.gbDescription.TabIndex = 15;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
@@ -238,7 +254,7 @@
             // btnOpenTranslationFile
             // 
             this.btnOpenTranslationFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenTranslationFile.Location = new System.Drawing.Point(142, 264);
+            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 199);
             this.btnOpenTranslationFile.Name = "btnOpenTranslationFile";
             this.btnOpenTranslationFile.Size = new System.Drawing.Size(145, 23);
             this.btnOpenTranslationFile.TabIndex = 11;
@@ -253,7 +269,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(281, 242);
+            this.txtDescription.Size = new System.Drawing.Size(211, 177);
             this.txtDescription.TabIndex = 0;
             // 
             // gbPlayers
@@ -400,11 +416,140 @@
             this.lblCameraType.TabIndex = 20;
             this.lblCameraType.Text = "Camera Type";
             // 
+            // gbTimeLimits
+            // 
+            this.gbTimeLimits.Controls.Add(this.rbUseTurns);
+            this.gbTimeLimits.Controls.Add(this.rbStopTime);
+            this.gbTimeLimits.Controls.Add(this.rbUseRealTime);
+            this.gbTimeLimits.Controls.Add(this.rbLoopLastDay);
+            this.gbTimeLimits.Controls.Add(this.rbLoopFirstDay);
+            this.gbTimeLimits.Controls.Add(this.lblHoursInDay);
+            this.gbTimeLimits.Controls.Add(this.txtHoursInDay);
+            this.gbTimeLimits.Controls.Add(this.lblTimeStart);
+            this.gbTimeLimits.Controls.Add(this.lblTimeMultiplier);
+            this.gbTimeLimits.Controls.Add(this.txtlblTimeMultiplier);
+            this.gbTimeLimits.Controls.Add(this.txtTimeStart);
+            this.gbTimeLimits.Location = new System.Drawing.Point(277, 12);
+            this.gbTimeLimits.Name = "gbTimeLimits";
+            this.gbTimeLimits.Size = new System.Drawing.Size(195, 187);
+            this.gbTimeLimits.TabIndex = 21;
+            this.gbTimeLimits.TabStop = false;
+            this.gbTimeLimits.Text = "Time limits";
+            // 
+            // rbUseTurns
+            // 
+            this.rbUseTurns.AutoSize = true;
+            this.rbUseTurns.Location = new System.Drawing.Point(6, 162);
+            this.rbUseTurns.Name = "rbUseTurns";
+            this.rbUseTurns.Size = new System.Drawing.Size(70, 17);
+            this.rbUseTurns.TabIndex = 14;
+            this.rbUseTurns.TabStop = true;
+            this.rbUseTurns.Text = "Use turns";
+            this.rbUseTurns.UseVisualStyleBackColor = true;
+            // 
+            // rbStopTime
+            // 
+            this.rbStopTime.AutoSize = true;
+            this.rbStopTime.Location = new System.Drawing.Point(6, 113);
+            this.rbStopTime.Name = "rbStopTime";
+            this.rbStopTime.Size = new System.Drawing.Size(105, 17);
+            this.rbStopTime.TabIndex = 12;
+            this.rbStopTime.TabStop = true;
+            this.rbStopTime.Text = "Stop time on end";
+            this.rbStopTime.UseVisualStyleBackColor = true;
+            // 
+            // rbUseRealTime
+            // 
+            this.rbUseRealTime.AutoSize = true;
+            this.rbUseRealTime.Location = new System.Drawing.Point(103, 164);
+            this.rbUseRealTime.Name = "rbUseRealTime";
+            this.rbUseRealTime.Size = new System.Drawing.Size(86, 17);
+            this.rbUseRealTime.TabIndex = 13;
+            this.rbUseRealTime.TabStop = true;
+            this.rbUseRealTime.Text = "Use real time";
+            this.rbUseRealTime.UseVisualStyleBackColor = true;
+            // 
+            // rbLoopLastDay
+            // 
+            this.rbLoopLastDay.AutoSize = true;
+            this.rbLoopLastDay.Location = new System.Drawing.Point(6, 90);
+            this.rbLoopLastDay.Name = "rbLoopLastDay";
+            this.rbLoopLastDay.Size = new System.Drawing.Size(127, 17);
+            this.rbLoopLastDay.TabIndex = 11;
+            this.rbLoopLastDay.TabStop = true;
+            this.rbLoopLastDay.Text = "Loop back to last day";
+            this.rbLoopLastDay.UseVisualStyleBackColor = true;
+            // 
+            // rbLoopFirstDay
+            // 
+            this.rbLoopFirstDay.AutoSize = true;
+            this.rbLoopFirstDay.Location = new System.Drawing.Point(6, 67);
+            this.rbLoopFirstDay.Name = "rbLoopFirstDay";
+            this.rbLoopFirstDay.Size = new System.Drawing.Size(127, 17);
+            this.rbLoopFirstDay.TabIndex = 10;
+            this.rbLoopFirstDay.TabStop = true;
+            this.rbLoopFirstDay.Text = "Loop back to first day";
+            this.rbLoopFirstDay.UseVisualStyleBackColor = true;
+            // 
+            // lblHoursInDay
+            // 
+            this.lblHoursInDay.AutoSize = true;
+            this.lblHoursInDay.Location = new System.Drawing.Point(6, 43);
+            this.lblHoursInDay.Name = "lblHoursInDay";
+            this.lblHoursInDay.Size = new System.Drawing.Size(66, 13);
+            this.lblHoursInDay.TabIndex = 8;
+            this.lblHoursInDay.Text = "Hours in day";
+            // 
+            // txtHoursInDay
+            // 
+            this.txtHoursInDay.Location = new System.Drawing.Point(133, 41);
+            this.txtHoursInDay.Name = "txtHoursInDay";
+            this.txtHoursInDay.Size = new System.Drawing.Size(56, 20);
+            this.txtHoursInDay.TabIndex = 7;
+            this.txtHoursInDay.Value = new decimal(new int[] {
+            24,
+            0,
+            0,
+            0});
+            // 
+            // lblTimeStart
+            // 
+            this.lblTimeStart.AutoSize = true;
+            this.lblTimeStart.Location = new System.Drawing.Point(6, 17);
+            this.lblTimeStart.Name = "lblTimeStart";
+            this.lblTimeStart.Size = new System.Drawing.Size(53, 13);
+            this.lblTimeStart.TabIndex = 6;
+            this.lblTimeStart.Text = "Time start";
+            // 
+            // lblTimeMultiplier
+            // 
+            this.lblTimeMultiplier.AutoSize = true;
+            this.lblTimeMultiplier.Location = new System.Drawing.Point(6, 138);
+            this.lblTimeMultiplier.Name = "lblTimeMultiplier";
+            this.lblTimeMultiplier.Size = new System.Drawing.Size(73, 13);
+            this.lblTimeMultiplier.TabIndex = 4;
+            this.lblTimeMultiplier.Text = "Time multiplier";
+            // 
+            // txtlblTimeMultiplier
+            // 
+            this.txtlblTimeMultiplier.Location = new System.Drawing.Point(89, 136);
+            this.txtlblTimeMultiplier.Name = "txtlblTimeMultiplier";
+            this.txtlblTimeMultiplier.Size = new System.Drawing.Size(56, 20);
+            this.txtlblTimeMultiplier.TabIndex = 3;
+            // 
+            // txtTimeStart
+            // 
+            this.txtTimeStart.Location = new System.Drawing.Point(133, 15);
+            this.txtTimeStart.Name = "txtTimeStart";
+            this.txtTimeStart.Size = new System.Drawing.Size(56, 20);
+            this.txtTimeStart.TabIndex = 5;
+            // 
             // MapStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(582, 317);
+            this.ClientSize = new System.Drawing.Size(713, 281);
+            this.Controls.Add(this.gbTimeLimits);
             this.Controls.Add(this.lblCameraType);
             this.Controls.Add(this.cbCameraType);
             this.Controls.Add(this.txtMapHeight);
@@ -425,7 +570,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "MapStatistics";
-            this.Text = "Map statistics";
+            this.Text = "Map properties";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).EndInit();
@@ -440,6 +585,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtTileHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapHeight)).EndInit();
+            this.gbTimeLimits.ResumeLayout(false);
+            this.gbTimeLimits.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtHoursInDay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTimeStart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -475,5 +625,17 @@
         public System.Windows.Forms.NumericUpDown txtCameraStartPositionX;
         private System.Windows.Forms.Label lblCameraType;
         public System.Windows.Forms.ComboBox cbCameraType;
+        private System.Windows.Forms.GroupBox gbTimeLimits;
+        private System.Windows.Forms.RadioButton rbUseTurns;
+        private System.Windows.Forms.RadioButton rbStopTime;
+        private System.Windows.Forms.RadioButton rbUseRealTime;
+        private System.Windows.Forms.RadioButton rbLoopLastDay;
+        private System.Windows.Forms.RadioButton rbLoopFirstDay;
+        private System.Windows.Forms.Label lblHoursInDay;
+        private System.Windows.Forms.NumericUpDown txtHoursInDay;
+        private System.Windows.Forms.Label lblTimeStart;
+        private System.Windows.Forms.Label lblTimeMultiplier;
+        private System.Windows.Forms.NumericUpDown txtlblTimeMultiplier;
+        private System.Windows.Forms.NumericUpDown txtTimeStart;
     }
 }
