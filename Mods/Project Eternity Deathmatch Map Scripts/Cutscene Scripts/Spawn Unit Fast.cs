@@ -68,8 +68,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 PartDropPath = BR.ReadString();
 
                 int TagsCount = BR.ReadInt32();
+                Tags = new string[TagsCount];
                 for (int T = 0; T < TagsCount; ++T)
-                    Tags.Add(BR.ReadString());
+                    Tags[T] = BR.ReadString();
 
                 LeaderUnitId = BR.ReadUInt32();
                 Leader.Load(BR);
@@ -92,8 +93,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write(AIPath);
                 BW.Write(DefenseBattleBehavior);
                 BW.Write(PartDropPath);
-                BW.Write(Tags.Count);
-                for (int T = 0; T < Tags.Count; ++T)
+                BW.Write(Tags.Length);
+                for (int T = 0; T < Tags.Length; ++T)
                     BW.Write(Tags[T]);
 
                 BW.Write(LeaderUnitId);
@@ -171,7 +172,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
             CategoryAttribute("Spawner Attributes"),
             DescriptionAttribute("Tags to put in the unit.")]
-            public List<string> Tags
+            public string[] Tags
             {
                 get
                 {

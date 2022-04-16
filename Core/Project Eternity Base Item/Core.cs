@@ -67,6 +67,11 @@ namespace ProjectEternity.Core
             return Random.Next(MaxValue);
         }
 
+        public static double NextDouble()
+        {
+            return Random.NextDouble();
+        }
+
         /// <summary>
         /// Check if you pass a random check.
         /// </summary>

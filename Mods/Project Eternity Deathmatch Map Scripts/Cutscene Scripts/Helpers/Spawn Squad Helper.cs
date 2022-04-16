@@ -72,7 +72,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public string AIPath;
             public string DefenseBattleBehavior;
             public string PartDropPath;
-            public List<string> ListTag;
+            public string[] ListTag;
 
             public ScriptSpawnSquadHelper(DeathmatchMap Map, DeathmatchMapScript Owner)
             {
@@ -101,7 +101,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AIPath = string.Empty;
                 DefenseBattleBehavior = string.Empty;
                 PartDropPath = string.Empty;
-                ListTag = new List<string>();
+                ListTag = new string[0];
             }
             
             public void Update(Microsoft.Xna.Framework.GameTime gameTime)

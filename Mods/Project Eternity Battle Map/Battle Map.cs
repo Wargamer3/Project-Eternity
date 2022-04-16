@@ -36,6 +36,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         #region Ressources
 
         protected RenderTarget2D ShakingRenderTraget;
+        public RenderTarget2D MapRenderTarget;
 
         public FMODSound sndBattleTheme;
         public string sndBattleThemeName;
@@ -336,6 +337,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!IsServer)
             {
+                MapRenderTarget = new RenderTarget2D(GraphicsDevice, Constants.Width, Constants.Height, false,
+                    GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
                 Camera = new DefaultCamera(GraphicsDevice);
                 AttackPicker = new AttacksMenu(ActiveParser);
 

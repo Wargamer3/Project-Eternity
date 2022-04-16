@@ -141,6 +141,11 @@ namespace Particle3DSample
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, Matrix Projection)
         {
+            LoadContent(Content, GraphicsDevice, Projection, "Shaders/Particle shader");
+        }
+
+        public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, Matrix Projection, string ShaderPath)
+        {
             // Allocate the particle array, and fill in the corner fields (which never change).
             particles = new ParticleVertex[settings.MaxParticles * 4];
 
@@ -152,7 +157,7 @@ namespace Particle3DSample
                 particles[i * 4 + 3].UV = new Vector2(0, 1);
             }
 
-            Effect effect = Content.Load<Effect>("Shaders/Particle shader");
+            Effect effect = Content.Load<Effect>(ShaderPath);
 
             // If we have several particle systems, the content manager will return
             // a single shared effect instance to them all. But we want to preconfigure
@@ -205,7 +210,7 @@ namespace Particle3DSample
 
             indexBuffer.SetData(indices);
         }
-        
+
         public void Update(double ElapsedTotalSeconds)
         {
             currentTime += (float)ElapsedTotalSeconds;

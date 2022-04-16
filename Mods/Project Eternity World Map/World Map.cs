@@ -544,6 +544,26 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }
         }
 
+        public override void DrawMap(CustomSpriteBatch g)
+        {
+            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                ActivePlatform.Draw(g);
+            }
+
+            if (ListBackground.Count > 0)
+            {
+                g.End();
+                for (int B = 0; B < ListBackground.Count; B++)
+                {
+                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
+                }
+                g.Begin();
+            }
+
+            //LayerManager.Draw(g);
+        }
+
         public void DrawConstructionMenuInfo(CustomSpriteBatch g)
         {
             g.Draw(sprPixel, new Rectangle(Constants.Width - 100, 0, Constants.Width, Constants.Height), Color.Black);

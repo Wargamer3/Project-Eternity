@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using Roslyn;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.AI;
@@ -691,6 +690,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
+            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            g.GraphicsDevice.SetRenderTarget(MapRenderTarget);
+            g.GraphicsDevice.Clear(Color.Black);
+            DrawMap(g);
+            g.End();
+            g.GraphicsDevice.SetRenderTarget(null);
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             GraphicsDevice.Clear(Color.Black);
 
@@ -736,33 +741,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.Begin();
             }
 
-            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
-            {
-                ActivePlatform.Draw(g);
-            }
-
-            if (ListBackground.Count > 0)
-            {
-                g.End();
-                for (int B = 0; B < ListBackground.Count; B++)
-                {
-                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
-                }
-                g.Begin();
-            }
-
-            LayerManager.Draw(g);
+            g.Draw(MapRenderTarget, Vector2.Zero, Color.White);
 
             if (ShowUnits)
             {
-                if (ShowUnits)
-                {
-                    MapEnvironment.Draw(g);
+                MapEnvironment.Draw(g);
 
-                    DrawNightOverlay(g);
+                DrawNightOverlay(g);
 
-                    MapEnvironment.EndDraw(g);
-                }
+                MapEnvironment.EndDraw(g);
             }
 
             if (ListForeground.Count > 0)
@@ -840,6 +827,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             #endregion
+        }
+
+        public override void DrawMap(CustomSpriteBatch g)
+        {
+            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                ActivePlatform.Draw(g);
+            }
+
+            if (ListBackground.Count > 0)
+            {
+                g.End();
+                for (int B = 0; B < ListBackground.Count; B++)
+                {
+                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
+                }
+                g.Begin();
+            }
+
+            LayerManager.Draw(g);
         }
 
         private void BeginDrawNightOverlay(CustomSpriteBatch g)

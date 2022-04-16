@@ -139,6 +139,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 case TimePeriod.WeatherTypes.Regular:
                     OverlayWeather = null;
                     break;
+
+                case TimePeriod.WeatherTypes.SmallRain:
+                    RainWeather SmallRainWeather = new RainWeather(Map, Shape);
+                    SmallRainWeather.Init();
+                    OverlayWeather = SmallRainWeather;
+                    break;
             }
         }
 

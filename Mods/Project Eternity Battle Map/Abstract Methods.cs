@@ -2,9 +2,10 @@
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -57,5 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public abstract bool CheckForObstacleAtPosition(Vector3 Position, Vector3 Displacement);
 
         public abstract Dictionary<string, ActionPanel> GetOnlineActionPanel();
+
+        public abstract void DrawMap(CustomSpriteBatch g);
     }
 }
