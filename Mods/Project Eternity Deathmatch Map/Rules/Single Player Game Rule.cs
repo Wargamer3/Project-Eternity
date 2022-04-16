@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -9,6 +10,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     class SinglePlayerGameRule : IGameRule
     {
         private readonly DeathmatchMap Owner;
+        int HPRegenPerTurnFixed;
+        int ENRegenPerTurnFixed;
+        int SPRegenPerTurnFixed;
+        int AmmoRegenPerTurnFixed;
+        float HPRegenPerTurnPercent;
+        float ENRegenPerTurnPercent;
+        float SPRegenPerTurnPercent;
+        float AmmoRegenPerTurnPercent;
 
         public SinglePlayerGameRule(DeathmatchMap Owner)
         {
@@ -17,6 +26,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Init()
         {
+            IniFile SinglePlayerParams = IniFile.ReadFromFile("Content/Single Player Params.ini");
+            HPRegenPerTurnFixed = int.Parse(SinglePlayerParams.ReadField("GameRule", "HPRegenPerTurnFixed"));
+            ENRegenPerTurnFixed = int.Parse(SinglePlayerParams.ReadField("GameRule", "ENRegenPerTurnFixed"));
+            SPRegenPerTurnFixed = int.Parse(SinglePlayerParams.ReadField("GameRule", "SPRegenPerTurnFixed"));
+            AmmoRegenPerTurnFixed = int.Parse(SinglePlayerParams.ReadField("GameRule", "AmmoRegenPerTurnFixed"));
+
+            HPRegenPerTurnPercent = int.Parse(SinglePlayerParams.ReadField("GameRule", "HPRegenPerTurnPercent"));
+            ENRegenPerTurnPercent = int.Parse(SinglePlayerParams.ReadField("GameRule", "ENRegenPerTurnPercent"));
+            SPRegenPerTurnPercent = int.Parse(SinglePlayerParams.ReadField("GameRule", "SPRegenPerTurnPercent"));
+            AmmoRegenPerTurnPercent = int.Parse(SinglePlayerParams.ReadField("GameRule", "AmmoRegenPerTurnPercent"));
+
             int PlayerIndex = 0;
             foreach (Player ActivePlayer in Owner.ListPlayer)
             {
@@ -74,6 +94,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void OnNewTurn(int ActivePlayerIndex)
         {
+            for (int S = 0; S < Owner.ListPlayer[Owner.ActivePlayerIndex].ListSquad.Count; S++)
+            {
+                Squad ActiveSquad = Owner.ListPlayer[Owner.ActivePlayerIndex].ListSquad[S];
+
+                for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+                {
+                    ActiveSquad[U].HealUnit((int)(HPRegenPerTurnFixed + ActiveSquad[U].MaxHP * HPRegenPerTurnPercent * 0.01f));
+                    ActiveSquad[U].RefillEN((int)(ENRegenPerTurnFixed + ActiveSquad[U].MaxEN * ENRegenPerTurnPercent * 0.01f));
+                    ActiveSquad[U].RefillSP((int)(SPRegenPerTurnFixed + ActiveSquad[U].Pilot.MaxSP * SPRegenPerTurnPercent * 0.01f));
+                    ActiveSquad[U].RefillAmmo((byte)AmmoRegenPerTurnFixed, AmmoRegenPerTurnPercent);
+                }
+            }
         }
 
         public void OnSquadDefeated(int AttackerSquadPlayerIndex, Squad AttackerSquad, int DefeatedSquadPlayerIndex, Squad DefeatedSquad)

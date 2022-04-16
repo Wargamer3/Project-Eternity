@@ -831,6 +831,14 @@ namespace ProjectEternity.Core.Units
             Pilot.SP = Math.Min(Pilot.SP + Amount, Pilot.MaxSP);
         }
 
+        public void RefillAmmo(byte Amount, float PercentAmount)
+        {
+            foreach (Attack ActiveAttack in ListAttack)
+            {
+                ActiveAttack.IncreaseAmmo((byte)(Amount + ActiveAttack.MaxAmmo * PercentAmount * 0.01f));
+            }
+        }
+
         public void ResetBoosts()
         {
             Boosts.Reset();
