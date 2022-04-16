@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             private BulletTrailTypes BulletTrailType;
             private Texture2D TrailImage;
-            private Particle3DSample.ParticleSystem TrailParticuleSystem;
+            private Core.ParticleSystem.ParticleSystem2D TrailParticuleSystem;
             private int ParticleLifetime;
             private float ParticleScaleAtEnd;
 

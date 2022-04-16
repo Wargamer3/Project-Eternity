@@ -21,9 +21,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         BattleMap Map;
         RenderTarget2D RainRenderTarget;
         Effect DisplacementEffect;
-        Effect DisplacementPaintEffect;
         Texture2D sprRain;
-        public Particle3DSample.ParticleSystem ParticleSystem;
+        public Core.ParticleSystem.ParticleSystem2D ParticleSystem;
         List<Rain> ListRain;
 
         private struct Rain
@@ -59,7 +58,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             sprRain = Map.Content.Load<Texture2D>("Line");
             DisplacementEffect = Map.Content.Load<Effect>("Shaders/Displacement");
-            DisplacementPaintEffect = Map.Content.Load<Effect>("Shaders/Displacement painter");
             // Look up the resolution and format of our main backbuffer.
             PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;
 
@@ -83,7 +81,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DisplacementEffect.Parameters["World"].SetValue(Matrix.Identity);
             DisplacementEffect.Parameters["TextureSize"].SetValue(new Vector2(1f / width, 1f / height));
 
-            Particle3DSample.ParticleSettings ParticleSettings = new Particle3DSample.ParticleSettings();
+            Core.ParticleSystem.ParticleSettings ParticleSettings = new Core.ParticleSystem.ParticleSettings();
             ParticleSettings.TextureName = "Line";
             ParticleSettings.MaxParticles = 20000;
             ParticleSettings.MinScale = new Vector2(1, 1);
@@ -102,7 +100,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ParticlesPerSeconds = 300;
 
             TimeBetweenEachParticle = 1 / ParticlesPerSeconds;
-            ParticleSystem = new Particle3DSample.ParticleSystem(ParticleSettings);
+            ParticleSystem = new Core.ParticleSystem.ParticleSystem2D(ParticleSettings);
             ParticleSystem.LoadContent(Map.Content, GameScreen.GraphicsDevice, Projection, "Shaders/Displacement Particle shader");
         }
 

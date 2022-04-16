@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Particle3DSample
+namespace ProjectEternity.Core.ParticleSystem
 {
     struct ParticleVertex
     {

@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
     public class Propulsor
     {
-        public static Particle3DSample.ParticleSystem ParticleSystem;
+        public static Core.ParticleSystem.ParticleSystem2D ParticleSystem;
 
         public static void Load(ContentManager Content, GraphicsDevice GraphicsDevice, int Width, int Height)
         {
@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
             Projection = view * (HalfPixelOffset * Projection);
 
-            Particle3DSample.ParticleSettings PropulsorParticleSettings = new Particle3DSample.ParticleSettings();
+            Core.ParticleSystem.ParticleSettings PropulsorParticleSettings = new Core.ParticleSystem.ParticleSettings();
             PropulsorParticleSettings.TextureName = "Triple Thunder/Jetpack Flare_strip16";
             PropulsorParticleSettings.MaxParticles = 20000;
             PropulsorParticleSettings.MinScale = new Vector2(1, 1);
@@ -28,7 +28,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             PropulsorParticleSettings.BlendState = BlendState.AlphaBlend;
             PropulsorParticleSettings.StartingAlpha = 0.7f;
             PropulsorParticleSettings.EndAlpha = 0.1f;
-            ParticleSystem = new Particle3DSample.ParticleSystem(PropulsorParticleSettings);
+            ParticleSystem = new Core.ParticleSystem.ParticleSystem2D(PropulsorParticleSettings);
             ParticleSystem.LoadContent(Content, GraphicsDevice, Projection);
         }
     }

@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.Core.ParticleSystem
 {
-    public class ParticleSystem2D
+    public class ParticleSystem3D
     {
         #region Fields
 
@@ -134,7 +134,7 @@ namespace ProjectEternity.Core.ParticleSystem
 
         #endregion
 
-        public ParticleSystem2D(ParticleSettings settings)
+        public ParticleSystem3D(ParticleSettings settings)
         {
             this.settings = settings;
         }

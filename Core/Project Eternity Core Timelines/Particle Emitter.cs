@@ -15,7 +15,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         private const string TimelineType = "Particle Emitter";
         public enum ParticleBlendStates { AlphaBlend, Additive };
 
-        public Particle3DSample.ParticleSystem ParticleSystem;
+        public Core.ParticleSystem.ParticleSystem2D ParticleSystem;
 
         private readonly Random Random = new Random();
 
@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             _ParticleBlendState = ParticleBlendStates.Additive;
         }
 
-        public ParticleEmitterTimeline(Particle3DSample.ParticleSystem ParticleSystem)
+        public ParticleEmitterTimeline(Core.ParticleSystem.ParticleSystem2D ParticleSystem)
             : this()
         {
             this.ParticleSystem = ParticleSystem;
@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             Projection = view * (HalfPixelOffset * Projection);
 
-            Particle3DSample.ParticleSettings ParticleSettings = new Particle3DSample.ParticleSettings();
+            Core.ParticleSystem.ParticleSettings ParticleSettings = new Core.ParticleSystem.ParticleSettings();
             ParticleSettings.TextureName = BR.ReadString();
             ParticleSettings.MaxParticles = 20000;
             ParticleSettings.MinScale = new Vector2(1, 1);
@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             _ParticleBlendState = (ParticleBlendStates)BR.ReadByte();
 
             TimeBetweenEachParticle = 1 / ParticlesPerSeconds;
-            ParticleSystem = new Particle3DSample.ParticleSystem(ParticleSettings);
+            ParticleSystem = new Core.ParticleSystem.ParticleSystem2D(ParticleSettings);
             ParticleSystem.LoadContent(Content, GameScreen.GraphicsDevice, Projection);
 
             this.SpeedMultiplier = SpeedMultiplier;
@@ -175,7 +175,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 Projection = view * (HalfPixelOffset * Projection);
 
-                Particle3DSample.ParticleSettings ParticleSettings = new Particle3DSample.ParticleSettings();
+                Core.ParticleSystem.ParticleSettings ParticleSettings = new Core.ParticleSystem.ParticleSettings();
                 ParticleSettings.TextureName = SpriteName;
                 ParticleSettings.MaxParticles = 20000;
                 ParticleSettings.MinScale = new Vector2(1, 1);
@@ -192,7 +192,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     string ImageInformation = SpriteName.Substring(StripIndex);
                     ParticleSettings.NumberOfImages = Convert.ToInt32(ImageInformation);
                 }
-                ParticleSystem = new Particle3DSample.ParticleSystem(ParticleSettings);
+                ParticleSystem = new Core.ParticleSystem.ParticleSystem2D(ParticleSettings);
                 ParticleSystem.LoadContent(NewSpawner.SpawnViewer.content, GameScreen.GraphicsDevice, Projection);
 
                 ParticleEmitterTimeline NewParticleEmitorTimeline = new ParticleEmitterTimeline(ParticleSystem);
