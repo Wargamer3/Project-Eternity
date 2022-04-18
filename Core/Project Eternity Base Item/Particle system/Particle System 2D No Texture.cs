@@ -5,20 +5,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.Core.ParticleSystem
 {
-    public class ParticleSystem3D
+    public class ParticleSystem2DNoTexture
     {
         #region Fields
 
-        public ParticleSettings3D settings;
-
+        public ParticleSettingsNoTexture settings;
         private Effect particleEffect;
         private EffectParameter effectViewProjectionParameter;
         private EffectParameter effectTimeParameter;
-
-        private ParticleVertex3D[] particles;
-
+        private ParticleVertex[] particles;
         private DynamicVertexBuffer vertexBuffer;
         private IndexBuffer indexBuffer;
+
 
         // The particles array and vertex buffer are treated as a circular queue.
         // Initially, the entire contents of the array are free, because no particles
@@ -98,45 +96,42 @@ namespace ProjectEternity.Core.ParticleSystem
 
         float currentTime;
 
+
+        // Count how many times Draw has been called. This is used to know
+        // when it is safe to retire old particles back into the free list.
         int drawCounter;
+
+        public EffectParameterCollection parameters;
 
         private const int VertexPerModel = 3;
         private const int PrimitivesPerModel = 1;
         private const int IndexPerModel = VertexPerModel * PrimitivesPerModel;
 
-        public EffectParameterCollection parameters;
-
         #endregion
 
-        public ParticleSystem3D(ParticleSettings3D settings)
+        public ParticleSystem2DNoTexture(ParticleSettingsNoTexture settings)
         {
             this.settings = settings;
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, Matrix Projection)
         {
-            LoadContent(Content, GraphicsDevice, Projection, "Shaders/Particle shader 3D");
+            LoadContent(Content, GraphicsDevice, Projection, "Shaders/Particle shader");
         }
 
         public void LoadContent(ContentManager Content, GraphicsDevice GraphicsDevice, Matrix Projection, string ShaderPath)
         {
             // Allocate the particle array, and fill in the corner fields (which never change).
-            particles = new ParticleVertex3D[settings.MaxParticles * VertexPerModel];
+            particles = new ParticleVertex[settings.MaxParticles * VertexPerModel];
 
             for (int i = 0; i < settings.MaxParticles; i++)
             {
-                particles[i * VertexPerModel + 0].VectorOffset = new Vector3(0, 0, 0);
-                particles[i * VertexPerModel + 1].VectorOffset = new Vector3(1, 0, 0);
-                particles[i * VertexPerModel + 2].VectorOffset = new Vector3(0.5f, 0.5f, 0);
+                particles[i * VertexPerModel + 0].UV = new Vector2(0, 0);
+                particles[i * VertexPerModel + 1].UV = new Vector2(1, 0);
+                particles[i * VertexPerModel + 2].UV = new Vector2(1, 1);
             }
 
             Effect effect = Content.Load<Effect>(ShaderPath);
-
-            // If we have several particle systems, the content manager will return
-            // a single shared effect instance to them all. But we want to preconfigure
-            // the effect with parameters that are specific to this particular
-            // particle system. By cloning the effect, we prevent one particle system
-            // from stomping over the parameter settings of another.
 
             particleEffect = effect.Clone();
 
@@ -153,16 +148,12 @@ namespace ProjectEternity.Core.ParticleSystem
             parameters["SpeedMultiplier"].SetValue(60f);
             parameters["StartingAlpha"].SetValue(settings.StartingAlpha);
             parameters["EndAlpha"].SetValue(settings.EndAlpha);
-            parameters["Size"].SetValue(settings.Size);
-            parameters["RotationSpeed"].SetValue(settings.RotationSpeed);
-            parameters["World"].SetValue(Matrix.Identity);
-            parameters["InverseWorld"].SetValue(Matrix.Invert(Matrix.Identity));
 
-            // Create a dynamic vertex buffer.
-            vertexBuffer = new DynamicVertexBuffer(GraphicsDevice, ParticleVertex3D.VertexDeclaration,
+            parameters["Size"].SetValue(settings.Size);
+
+            vertexBuffer = new DynamicVertexBuffer(GraphicsDevice, ParticleVertex.VertexDeclaration,
                                                    settings.MaxParticles * VertexPerModel, BufferUsage.WriteOnly);
 
-            // Create and populate the index buffer.
             ushort[] indices = new ushort[settings.MaxParticles * IndexPerModel];
 
             for (int i = 0; i < settings.MaxParticles; i++)
@@ -256,7 +247,7 @@ namespace ProjectEternity.Core.ParticleSystem
             }
         }
 
-        public void Draw(GraphicsDevice GraphicsDevice, Vector3 Camera)
+        public void Draw(GraphicsDevice GraphicsDevice, Vector2 Camera)
         {
             parameters["Camera"].SetValue(Camera);
 
@@ -280,7 +271,7 @@ namespace ProjectEternity.Core.ParticleSystem
             {
                 device.BlendState = settings.BlendState;
                 device.DepthStencilState = DepthStencilState.DepthRead;
-
+                
                 // Set an effect parameter describing the current time. All the vertex
                 // shader particle animation is keyed off this value.
                 effectTimeParameter.SetValue(currentTime);
@@ -333,7 +324,7 @@ namespace ProjectEternity.Core.ParticleSystem
         /// </summary>
         void AddNewParticlesToVertexBuffer()
         {
-            int stride = ParticleVertex3D.SizeInBytes;
+            int stride = ParticleVertex.SizeInBytes;
 
             if (firstNewParticle < firstFreeParticle)
             {
@@ -365,7 +356,7 @@ namespace ProjectEternity.Core.ParticleSystem
             firstNewParticle = firstFreeParticle;
         }
 
-        public void AddParticle(Vector3 position, Vector3 velocity)
+        public void AddParticle(Vector2 position, Vector2 velocity)
         {
             // Figure out where in the circular queue to allocate the new particle.
             int nextFreeParticle = firstFreeParticle + 1;
@@ -381,8 +372,8 @@ namespace ProjectEternity.Core.ParticleSystem
             for (int i = 0; i < VertexPerModel; i++)
             {
                 particles[firstFreeParticle * VertexPerModel + i].Time = currentTime;
-                particles[firstFreeParticle * VertexPerModel + i].Speed = velocity;
-                particles[firstFreeParticle * VertexPerModel + i].MinScale = settings.MinScale;
+				particles[firstFreeParticle * VertexPerModel + i].Speed = velocity;
+				particles[firstFreeParticle * VertexPerModel + i].MinScale = settings.MinScale;
                 particles[firstFreeParticle * VertexPerModel + i].Position = position;
             }
 

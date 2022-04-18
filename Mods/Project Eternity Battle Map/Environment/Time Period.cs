@@ -19,6 +19,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             LightSnow,
             HeavySnow,
             Sandstorm,
+            HeatWave,
             Starfall,
             Distortion,
             CherryBlosom,

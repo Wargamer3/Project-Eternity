@@ -97,11 +97,15 @@
     <Compile Include="Ini File.cs" />
     <Compile Include="Byte Writer.cs" />
     <Compile Include="Byte Reader.cs" />
+    <Compile Include="Particle system\Particle Settings No Texture.cs" />
+    <Compile Include="Particle system\Particle Settings 3D.cs" />
+    <Compile Include="Particle system\Particle System 2D No Texture.cs" />
     <Compile Include="Particle system\Particle System 3D.cs" />
+    <Compile Include="Particle system\Particle Vertex 3D.cs" />
     <Compile Include="UI\IUIElement.cs" />
     <Compile Include="UI\Interactive Button.cs" />
     <Compile Include="Particle system\Particle Settings.cs" />
-    <Compile Include="Particle system\Particle System.cs" />
+    <Compile Include="Particle system\Particle System 2D.cs" />
     <Compile Include="Particle system\Particle Vertex.cs" />
     <Compile Include="Polygon Mesh.cs" />
     <Compile Include="Polygon.cs" />

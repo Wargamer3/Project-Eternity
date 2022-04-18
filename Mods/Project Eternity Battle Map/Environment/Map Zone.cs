@@ -141,7 +141,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
 
                 case TimePeriod.WeatherTypes.SmallRain:
-                    RainWeather SmallRainWeather = new RainWeather(Map, Shape);
+                    /*RainWeather SmallRainWeather = new RainWeather(Map, Shape);
+                    SmallRainWeather.Init();*/
+
+                    HeatWaveWeather SmallRainWeather = new HeatWaveWeather(Map, Shape);
                     SmallRainWeather.Init();
                     OverlayWeather = SmallRainWeather;
                     break;
