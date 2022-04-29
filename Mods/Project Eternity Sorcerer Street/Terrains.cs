@@ -4,8 +4,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     class ElementalTerrain : TerrainSorcererStreet
     {
-        public ElementalTerrain(int XPos, int YPos, int TerrainTypeIndex)
-            : base(XPos, YPos, TerrainTypeIndex)
+        public ElementalTerrain(int XPos, int YPos, int LayerIndex, float LayerDepth, int TerrainTypeIndex)
+            : base(XPos, YPos, LayerIndex, LayerDepth, TerrainTypeIndex)
         {
 
         }
@@ -29,8 +29,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
     class GateTerrain : TerrainSorcererStreet
     {
-        public GateTerrain(int XPos, int YPos, int TerrainTypeIndex)
-            : base(XPos, YPos, TerrainTypeIndex)
+        public GateTerrain(int XPos, int YPos, int LayerIndex, float LayerDepth, int TerrainTypeIndex)
+            : base(XPos, YPos, LayerIndex, LayerDepth, TerrainTypeIndex)
         {
 
         }

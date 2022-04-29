@@ -122,7 +122,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             {
                 for (int Y = 0; Y < 20; ++Y)
                 {
-                    DummyMap.ListLayer[0].ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, 1);
+                    DummyMap.ListLayer[0].ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, 0, 0, 1);
                 }
             }
 

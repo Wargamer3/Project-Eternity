@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, LayerIndex);
+                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, LayerIndex, Depth);
                 }
             }
 
@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainConquest(BR, X, Y, LayerIndex);
+                    ArrayTerrain[X, Y] = new TerrainConquest(BR, X, Y, LayerIndex, Depth);
                 }
             }
 

@@ -690,11 +690,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
-            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            g.GraphicsDevice.SetRenderTarget(MapRenderTarget);
-            g.GraphicsDevice.Clear(Color.Black);
-            DrawMap(g);
-            g.End();
             g.GraphicsDevice.SetRenderTarget(null);
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             GraphicsDevice.Clear(Color.Black);
@@ -706,6 +701,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             LayerManager.BeginDraw(g);
+
+            g.End();
+
+            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            g.GraphicsDevice.SetRenderTarget(MapRenderTarget);
+            g.GraphicsDevice.Clear(Color.Black);
+
+            DrawMap(g);
 
             g.End();
 

@@ -70,7 +70,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                                 }
                                 else
                                 {
-                                    ArrayTerrain[X, Y] = new Terrain(X, Y, L);
+                                    ArrayTerrain[X, Y] = new Terrain(X, Y, L, ActiveMap.ListLayer[L].Depth);
                                     ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].OriginalLayerGrid.GetTile(X, Y);
                                 }
                             }

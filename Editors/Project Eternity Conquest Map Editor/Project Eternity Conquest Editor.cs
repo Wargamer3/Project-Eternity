@@ -70,8 +70,8 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                                 }
                                 else
                                 {
-                                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, L);
-                                    ArrayTile2D[X, Y] = ((Map2D)ActiveMap.ListLayer[L].LayerGrid).GetTile(X, Y);
+                                    ArrayTerrain[X, Y] = new TerrainConquest(X, Y, L, ActiveMap.ListLayer[L].Depth);
+                                    ArrayTile2D[X, Y] = ActiveMap.ListLayer[L].LayerGrid.GetTile(X, Y);
                                 }
                             }
                         }

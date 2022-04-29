@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(X, Y, LayerIndex);
+                    ArrayTerrain[X, Y] = new Terrain(X, Y, LayerIndex, Depth);
                 }
             }
 
@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(BR, X, Y, LayerIndex);
+                    ArrayTerrain[X, Y] = new Terrain(BR, X, Y, LayerIndex, Depth);
                 }
             }
             

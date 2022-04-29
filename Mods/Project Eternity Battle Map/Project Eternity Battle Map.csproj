@@ -101,6 +101,7 @@
     <Compile Include="Environment\BattleMapOverlay.cs" />
     <Compile Include="Environment\Heat Wave Weather.cs" />
     <Compile Include="Environment\Prism Distortion Weather.cs" />
+    <Compile Include="Environment\Wet Weather.cs" />
     <Compile Include="Environment\Rain Weather.cs" />
     <Compile Include="Environment\Environment Manager.cs" />
     <Compile Include="Environment\Map Zone.cs" />
@@ -234,6 +235,8 @@
     <Compile Include="Terrain3D.cs" />
     <Compile Include="Tile 3D.cs" />
     <Compile Include="Environment\Time Period.cs" />
+    <Compile Include="Tile2DHolder.cs" />
+    <Compile Include="Tile3DHolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">

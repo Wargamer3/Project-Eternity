@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex);
+                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex, Depth);
                 }
             }
 
@@ -85,18 +85,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         case TerrainSorcererStreet.WaterElement:
                         case TerrainSorcererStreet.EarthElement:
                         case TerrainSorcererStreet.AirElement:
-                            ArrayTerrain[X, Y] = new ElementalTerrain(X, Y, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new ElementalTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
                             break;
 
                         case TerrainSorcererStreet.EastGate:
                         case TerrainSorcererStreet.WestGate:
                         case TerrainSorcererStreet.SouthGate:
                         case TerrainSorcererStreet.NorthGate:
-                            ArrayTerrain[X, Y] = new GateTerrain(X, Y, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new GateTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
                             break;
 
                         default:
-                            ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex, TerrainTypeIndex);
+                            ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex, Depth, TerrainTypeIndex);
                             break;
                     }
                 }

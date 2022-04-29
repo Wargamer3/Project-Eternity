@@ -28,7 +28,7 @@ namespace ProjectEternity.UnitTests
             {
                 for (int Y = 0; Y < 20; ++Y)
                 {
-                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new Terrain(X, Y, 0, 1, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
+                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new Terrain(X, Y, 0, 0, 1, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
                 }
             }
 

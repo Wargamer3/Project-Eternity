@@ -128,6 +128,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public abstract MovementAlgorithmTile CursorTerrain { get; }
         protected float CursorHoldTime;
 
+        public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
         public List<Terrain.TilesetPreset> ListTilesetPreset;
         public List<string> ListTerrainType;//Used to store the types of the terrain used.
 
@@ -141,7 +142,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool ShowUnits;
         public bool ShowTerrainType;
         public bool ShowTerrainHeight;
-        public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
         public List<string> ListBackgroundsPath;
         public List<AnimationBackground> ListBackground;
         public List<string> ListForegroundsPath;

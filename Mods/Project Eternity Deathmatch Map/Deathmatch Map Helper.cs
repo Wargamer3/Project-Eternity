@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
                             else
                             {
-                                ArrayTerrain[X, Y] = new Terrain(X, Y, L);
+                                ArrayTerrain[X, Y] = new Terrain(X, Y, L, ActiveMap.LayerManager.ListLayer[L].Depth);
                                 ArrayTile2D[X, Y] = ActiveMap.LayerManager.ListLayer[L].LayerGrid.GetTile(X, Y);
                             }
                         }

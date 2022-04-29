@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
                     {
-                        Terrain NewTerrain = new Terrain(X, Y, 0);
+                        Terrain NewTerrain = new Terrain(X, Y, 0, 0);
                         DrawableTile NewTile = new DrawableTile(new Rectangle(X * TileSizeX, Y * TileSizeY, TileSizeX, TileSizeY), TilesetIndex);
                         
                         NewTerrain.TerrainTypeIndex = 0;
@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     for (int X = 0; X < ArrayTerrain.GetLength(0); X++)
                     {
-                        Terrain NewTerrain = new Terrain(BR, X, Y, 0);
+                        Terrain NewTerrain = new Terrain(BR, X, Y, 0, 0);
                         DrawableTile NewTile = new DrawableTile(new Rectangle(X * TileSizeX, Y * TileSizeY, TileSizeX, TileSizeY), Index);
                         ArrayTerrain[X, Y] = NewTerrain;
                         ArrayTiles[X, Y] = NewTile;
@@ -126,7 +126,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// Used to create the empty array of the map.
         /// </summary>
         public Terrain(Terrain Other)
-            : base(Other.InternalPosition.X, Other.InternalPosition.Y, Other.LayerIndex)
+            : base(Other.InternalPosition.X, Other.InternalPosition.Y, Other.LayerIndex, Other.LayerDepth)
         {
             this.WorldPosition = Other.WorldPosition;
             this.TerrainTypeIndex = Other.TerrainTypeIndex;
@@ -142,8 +142,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public Terrain(int XPos, int YPos, int LayerIndex)
-            : base(XPos, YPos, LayerIndex)
+        public Terrain(int XPos, int YPos, int LayerIndex, float LayerDepth)
+            : base(XPos, YPos, LayerIndex, LayerDepth)
         {
             this.WorldPosition = new Vector3(XPos, YPos, 0);
             this.TerrainTypeIndex = 0;
@@ -167,9 +167,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <param name="ListActivation">Activation type of the bonuses.</param>
         /// <param name="ListBonus">Bonuses the terrain can give.</param>
         /// <param name="ListBonusValue">//Value of the bonuses.</param>
-        public Terrain(int XPos, int YPos, int LayerIndex, int TerrainTypeIndex, int MVEnterCost, int MVMoveCost,
+        public Terrain(int XPos, int YPos, int LayerIndex, float LayerDepth, int TerrainTypeIndex, int MVEnterCost, int MVMoveCost,
             TerrainActivation[] ListActivation, TerrainBonus[] ListBonus, int[] ListBonusValue)
-            : this(XPos, YPos, LayerIndex)
+            : this(XPos, YPos, LayerIndex, LayerDepth)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
             this.MVEnterCost = MVEnterCost;
@@ -179,8 +179,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListBonusValue = ListBonusValue;
         }
 
-        public Terrain(BinaryReader BR, int XPos, int YPos, int LayerIndex)
-            : this(XPos, YPos, LayerIndex)
+        public Terrain(BinaryReader BR, int XPos, int YPos, int LayerIndex, float LayerDepth)
+            : this(XPos, YPos, LayerIndex, LayerDepth)
         {
             Height = BR.ReadSingle();
             TerrainTypeIndex = BR.ReadInt32();

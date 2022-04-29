@@ -70,7 +70,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                                 }
                                 else
                                 {
-                                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, L);
+                                    ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, L, ActiveMap.ListLayer[L].Depth);
                                     ArrayTile2D[X, Y] = ((Map2D)ActiveMap.ListLayer[L].LayerGrid).GetTile(X, Y);
                                 }
                             }

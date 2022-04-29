@@ -196,6 +196,7 @@
     <Compile Include="Deathmatch Unit.cs" />
     <Compile Include="Classic Multiplayer\Multiplayer Screen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Terrain\Tile2DHolder.cs" />
     <Compile Include="Unit Deployment Screen.cs" />
   </ItemGroup>
   <ItemGroup>
