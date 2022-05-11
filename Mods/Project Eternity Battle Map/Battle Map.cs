@@ -158,7 +158,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public List<Color> ListMultiplayerColor;
         public List<BattleMap> ListSubMap;
-        protected List<BattleMapPlatform> ListPlatform;
+        public List<BattleMapPlatform> ListPlatform;
         public List<Vehicle> ListVehicle;
         protected Matrix _World;
         public Matrix World => _World;

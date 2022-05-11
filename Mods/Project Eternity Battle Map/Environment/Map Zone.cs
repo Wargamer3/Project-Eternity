@@ -9,7 +9,7 @@ using ProjectEternity.Core.AI;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class MapZone
+    public abstract class MapZone
     {
         private BattleMap Map;
 
@@ -17,13 +17,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public ZoneShape Shape;
 
         public List<TimePeriod> ListTimePeriod;
-        private TimePeriod CurrentTimePeriod;
+        protected TimePeriod CurrentTimePeriod;
         private TimePeriod NextTimePeriod;
         private int NextTimePeriodIndex;
 
-        private BattleMapOverlay OverlayWeather;
-        private BattleMapOverlay OverlayTypeOfSky;
-        private BattleMapOverlay OverlayVisibility;
+        protected BattleMapOverlay OverlayWeather;
+        protected BattleMapOverlay OverlayTypeOfSky;
+        protected BattleMapOverlay OverlayVisibility;
 
         private BattleMapOverlay CrossfadeOverlayWeather;
         private BattleMapOverlay CrossfadeOverlayTypeOfSky;
@@ -68,10 +68,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 NextTimePeriod = ListTimePeriod[1];
                 NextTimePeriodIndex = 1;
             }
-
-            UpdateOverlayTypeOfSky();
-            UpdateOverlayWeater();
-            UpdateOverlayVisibility();
         }
 
         public void Save(BinaryWriter BW)
@@ -118,48 +114,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateNextTimePeriod();
         }
 
-        private void UpdateOverlayTypeOfSky()
-        {
-            switch (CurrentTimePeriod.TypeOfSky)
-            {
-                case TimePeriod.SkyTypes.Disabled:
-                    OverlayTypeOfSky = null;
-                    break;
+        protected abstract void UpdateOverlayTypeOfSky();
 
-                case TimePeriod.SkyTypes.Regular:
-                    OverlayTypeOfSky = new DayNightCycleColorOnly(Map.MapEnvironment, Shape);
-                    break;
-            }
-        }
+        protected abstract void UpdateOverlayWeater();
 
-        private void UpdateOverlayWeater()
-        {
-            switch (CurrentTimePeriod.Weather)
-            {
-                case TimePeriod.WeatherTypes.Regular:
-                    OverlayWeather = null;
-                    break;
-
-                case TimePeriod.WeatherTypes.SmallRain:
-                    /*RainWeather SmallRainWeather = new RainWeather(Map, Shape);
-                    SmallRainWeather.Init();*/
-
-                    HeatWaveWeather SmallRainWeather = new HeatWaveWeather(Map, Shape);
-                    SmallRainWeather.Init();
-                    OverlayWeather = SmallRainWeather;
-                    break;
-            }
-        }
-
-        private void UpdateOverlayVisibility()
-        {
-            switch (CurrentTimePeriod.Visibility)
-            {
-                case TimePeriod.VisibilityTypes.Regular:
-                    OverlayVisibility = null;
-                    break;
-            }
-        }
+        protected abstract void UpdateOverlayVisibility();
 
         private void UpdateNextTimePeriod()
         {
@@ -221,7 +180,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void Draw(CustomSpriteBatch g)
+        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer)
         {
             if (OverlayWeather != null)
             {

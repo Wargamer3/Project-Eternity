@@ -5,7 +5,7 @@ using System.IO;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class EnvironmentManager
+    public abstract class EnvironmentManager
     {
         public enum TimePeriods { Turns, RealTime }
         public enum TimeLoopTypes { FirstDay, LastDay, Stop }
@@ -42,7 +42,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.Map = Map;
 
-            ListMapZone = new List<MapZone>();
             ListVolatileSubstance = new List<VolatileSubstance>();
 
             TimeStart = BR.ReadSingle();
@@ -50,12 +49,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             TimeLoopType = (TimeLoopTypes)BR.ReadByte();
             TimeMultiplier = BR.ReadSingle();
             TimePeriodType = (TimePeriods)BR.ReadByte();
-
-            int ListMapZoneCount = BR.ReadInt32();
-            for (int Z = 0; Z < ListMapZoneCount; ++Z)
-            {
-                ListMapZone.Add(new MapZone(BR, Map));
-            }
         }
 
         public void Save(BinaryWriter BW)
@@ -92,11 +85,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void Draw(CustomSpriteBatch g)
+        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer)
         {
             foreach (MapZone ActiveZone in ListMapZone)
             {
-                ActiveZone.Draw(g);
+                ActiveZone.Draw(g, LayerIndex, IsSubLayer);
             }
         }
 

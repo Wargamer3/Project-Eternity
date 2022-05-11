@@ -20,18 +20,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public Tile2DHolder(string TilesetName, ContentManager Content, Effect WetEffect)
         {
-            this.WetEffect = WetEffect.Clone();
             ListTile3D = new List<Terrain>();
-            CanUseEffect = true;
+
+            if (WetEffect != null)
+            {
+                this.WetEffect = WetEffect.Clone();
+                CanUseEffect = true;
+            }
+            else
+            {
+                CanUseEffect = false;
+            }
 
             if (Content != null)
             {
-                if (File.Exists("Content/Maps/Tilesets/" + TilesetName + ".xnb"))
-                {
-                    sprTileset = Content.Load<Texture2D>("Maps/Tilesets/" + TilesetName);
-                }
+                sprTileset = Content.Load<Texture2D>("Maps/Tilesets/" + TilesetName);
 
-                if (File.Exists("Content/Maps/Tilesets/" + TilesetName + " NormalMap.xnb"))
+                if (CanUseEffect && File.Exists("Content/Maps/Tilesets/" + TilesetName + " NormalMap.xnb"))
                 {
                     sprTilesetBumpMap = Content.Load<Texture2D>("Maps/Tilesets/" + TilesetName + " NormalMap");
                     this.WetEffect.Parameters["NormalMap"].SetValue(sprTilesetBumpMap);
@@ -41,7 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     CanUseEffect = false;
                 }
 
-                if (File.Exists("Content/Maps/Tilesets/" + TilesetName + " HeightMap.xnb"))
+                if (CanUseEffect && File.Exists("Content/Maps/Tilesets/" + TilesetName + " HeightMap.xnb"))
                 {
                     sprTilesetHeightMap = Content.Load<Texture2D>("Maps/Tilesets/" + TilesetName + " HeightMap");
                     this.WetEffect.Parameters["HeightMap"].SetValue(sprTilesetHeightMap);

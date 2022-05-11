@@ -1063,7 +1063,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnAddZoneRectangle_Click(object sender, EventArgs e)
         {
-            MapZone NewZone = new MapZone(BattleMapViewer.ActiveMap, ZoneShape.ZoneShapeTypes.Rectangle);
+            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Rectangle);
             BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
             lsZones.Items.Add("Zone");
             pgZoneProperties.SelectedObject = NewZone;
@@ -1072,7 +1072,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnAddZoneOval_Click(object sender, EventArgs e)
         {
-            MapZone NewZone = new MapZone(BattleMapViewer.ActiveMap, ZoneShape.ZoneShapeTypes.Oval);
+            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Oval);
             BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
             lsZones.Items.Add("Zone");
             pgZoneProperties.SelectedObject = NewZone;
@@ -1081,7 +1081,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnAddZoneFullMap_Click(object sender, EventArgs e)
         {
-            MapZone NewZone = new MapZone(BattleMapViewer.ActiveMap, ZoneShape.ZoneShapeTypes.Full);
+            MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Full);
             BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
             lsZones.Items.Add("Zone");
             pgZoneProperties.SelectedObject = NewZone;

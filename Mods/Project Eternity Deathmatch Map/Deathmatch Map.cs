@@ -135,7 +135,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             GameRule = new SinglePlayerGameRule(this);
             LayerManager = new LayerHolderDeathmatch(this);
-            MapEnvironment = new EnvironmentManager(this);
+            MapEnvironment = new EnvironmentManagerDeathmatch(this);
             ListActionMenuChoice = new ActionPanelHolderDeathmatch(this);
             ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
@@ -396,7 +396,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             LayerManager = new LayerHolderDeathmatch(this, BR);
 
-            MapEnvironment = new EnvironmentManager(BR, this);
+            MapEnvironment = new EnvironmentManagerDeathmatch(BR, this);
 
             BR.Close();
             FS.Close();
@@ -696,19 +696,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ShowUnits)
             {
-                MapEnvironment.BeginDraw(g);
                 BeginDrawNightOverlay(g);
             }
 
             LayerManager.BeginDraw(g);
-
-            g.End();
-
-            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            g.GraphicsDevice.SetRenderTarget(MapRenderTarget);
-            g.GraphicsDevice.Clear(Color.Black);
-
-            DrawMap(g);
 
             g.End();
 
@@ -744,15 +735,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.Begin();
             }
 
-            g.Draw(MapRenderTarget, Vector2.Zero, Color.White);
+            if (ListBackground.Count > 0)
+            {
+                g.End();
+                for (int B = 0; B < ListBackground.Count; B++)
+                {
+                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
+                }
+                g.Begin();
+            }
+
+            LayerManager.Draw(g);
 
             if (ShowUnits)
             {
-                MapEnvironment.Draw(g);
-
                 DrawNightOverlay(g);
-
-                MapEnvironment.EndDraw(g);
             }
 
             if (ListForeground.Count > 0)
@@ -830,26 +827,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             #endregion
-        }
-
-        public override void DrawMap(CustomSpriteBatch g)
-        {
-            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
-            {
-                ActivePlatform.Draw(g);
-            }
-
-            if (ListBackground.Count > 0)
-            {
-                g.End();
-                for (int B = 0; B < ListBackground.Count; B++)
-                {
-                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
-                }
-                g.Begin();
-            }
-
-            LayerManager.Draw(g);
         }
 
         private void BeginDrawNightOverlay(CustomSpriteBatch g)

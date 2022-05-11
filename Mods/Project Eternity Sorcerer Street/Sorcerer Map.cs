@@ -349,26 +349,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-
-        public override void DrawMap(CustomSpriteBatch g)
-        {
-            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
-            {
-                ActivePlatform.Draw(g);
-            }
-
-            if (ListBackground.Count > 0)
-            {
-                g.End();
-                for (int B = 0; B < ListBackground.Count; B++)
-                {
-                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
-                }
-                g.Begin();
-            }
-
-        }
-
         public TerrainSorcererStreet GetTerrain(int X, int Y, int LayerIndex)
         {
             return ListLayer[LayerIndex].ArrayTerrain[X, Y];

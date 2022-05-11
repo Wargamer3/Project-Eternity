@@ -7,9 +7,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class DayNightCycleColorOnly : BattleMapOverlay
     {
-        EnvironmentManager Owner;
+        BattleMap Owner;
 
-        public DayNightCycleColorOnly(EnvironmentManager Owner, ZoneShape Shape)
+        public DayNightCycleColorOnly(BattleMap Owner, ZoneShape Shape)
         {
             this.Owner = Owner;
         }
@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Color Color1;
             Color Color2;
             Color FinalColor = Color.White;
-            double CurrentTime = Owner.CurrentHour;
+            double CurrentTime = Owner.MapEnvironment.CurrentHour;
 
             if (CurrentTime >= 10 && CurrentTime < 18)
             {

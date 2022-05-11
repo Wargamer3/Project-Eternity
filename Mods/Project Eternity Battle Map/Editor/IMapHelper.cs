@@ -19,5 +19,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void EditLayer(int Index);
         int GetLayerCount();
         List<BaseMapLayer> GetLayersAndSubLayers();
+        MapZone CreateNewZone(ZoneShape.ZoneShapeTypes ZoneType);
     }
 }

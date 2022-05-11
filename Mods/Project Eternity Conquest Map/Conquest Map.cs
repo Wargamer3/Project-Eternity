@@ -1172,11 +1172,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             GraphicsDevice.Clear(Color.Black);
 
-            if (ShowUnits)
-            {
-                MapEnvironment.BeginDraw(g);
-            }
-
             LayerManager.BeginDraw(g);
 
             g.End();
@@ -1184,17 +1179,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawMap(g);
-
-            if (ShowUnits)
-            {
-                if (ShowUnits)
-                {
-                    MapEnvironment.Draw(g);
-
-                    MapEnvironment.EndDraw(g);
-                }
-            }
+            LayerManager.Draw(g);
 
             if (IsOnTop)
             {
@@ -1203,26 +1188,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     ListActionMenuChoice.Last().Draw(g);
                 }
             }
-        }
-
-        public override void DrawMap(CustomSpriteBatch g)
-        {
-            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
-            {
-                ActivePlatform.Draw(g);
-            }
-
-            if (ListBackground.Count > 0)
-            {
-                g.End();
-                for (int B = 0; B < ListBackground.Count; B++)
-                {
-                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
-                }
-                g.Begin();
-            }
-
-            LayerManager.Draw(g);
         }
 
         public TerrainConquest GetTerrain(int X, int Y, int LayerIndex)

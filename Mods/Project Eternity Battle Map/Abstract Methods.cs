@@ -58,7 +58,5 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public abstract bool CheckForObstacleAtPosition(Vector3 Position, Vector3 Displacement);
 
         public abstract Dictionary<string, ActionPanel> GetOnlineActionPanel();
-
-        public abstract void DrawMap(CustomSpriteBatch g);
     }
 }

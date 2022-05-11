@@ -173,6 +173,9 @@
     <Compile Include="Deathmatch Map Timeline.cs" />
     <Compile Include="Delayed Attack.cs" />
     <Compile Include="Formula Parser.cs" />
+    <Compile Include="Terrain\Default Weather.cs" />
+    <Compile Include="Terrain\Map Zone Deathmatch.cs" />
+    <Compile Include="Terrain\Environment Manager Deathmatch.cs" />
     <Compile Include="Terrain\Map 2D Holder.cs" />
     <Compile Include="Terrain\Map 2D.cs" />
     <Compile Include="Map Interaction.cs" />
@@ -192,6 +195,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Menus\Spirit Menu.cs" />
     <Compile Include="Support Squad Holder.cs" />
+    <Compile Include="Terrain\Rain Weather.cs" />
     <Compile Include="Terrain\Sub Map Layer.cs" />
     <Compile Include="Deathmatch Unit.cs" />
     <Compile Include="Classic Multiplayer\Multiplayer Screen.cs" />

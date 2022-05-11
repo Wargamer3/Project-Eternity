@@ -169,6 +169,11 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
                 return ListLayers;
             }
+
+            public MapZone CreateNewZone(ZoneShape.ZoneShapeTypes ZoneType)
+            {
+                throw new NotImplementedException();
+            }
         }
         
         public ProjectEternitySorcererStreetEditor()

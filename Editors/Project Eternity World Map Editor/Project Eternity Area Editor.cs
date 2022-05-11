@@ -172,6 +172,11 @@ namespace ProjectEternity.Editors.WorldMapEditor
 
                 return ListLayers;
             }
+
+            public MapZone CreateNewZone(ZoneShape.ZoneShapeTypes ZoneType)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public class Zone

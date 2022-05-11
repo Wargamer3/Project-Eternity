@@ -225,5 +225,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             return ListLayers;
         }
+
+        public MapZone CreateNewZone(ZoneShape.ZoneShapeTypes ZoneType)
+        {
+            return new MapZoneDeathmatch(ActiveMap, ZoneType);
+        }
     }
 }
