@@ -11,8 +11,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         private Vector2 SpawnOffset;
         private Vector2 SpawnOffsetRandom;
-        Vector2 SpawnSpeed;
-        Vector2 SpawnSpeedRandom;
         private double ParticlesPerSeconds;
         private double TimeElapsedSinceLastParticle;
         private double TimeBetweenEachParticle;
@@ -32,26 +30,54 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         Model SkyModel;
         Matrix[] SkyBones;
         double Time;
+        float FogValue = 0;
+
+        WeatherIntensityManager IntensityManager;
+        WeatherRainSizeManager RainSizeManager;
+        WeatherWindSpeedManager WindSpeedManager;
 
         private struct Rain
         {
+            private const float GravitySpeed = 2;
+            private const float GravitySpeedMax = 25;
             public Vector2 Position;
             public Vector2 Speed;
+            public float Size;
             public float Angle;
-            public double Lifetime;
+            public float Lifetime;
 
-            public Rain(Vector2 Position, Vector2 Speed, float Angle)
+            public Rain(Vector2 Position, float Size)
             {
                 this.Position = Position;
-                this.Speed = Speed;
-                this.Angle = Angle;
+                this.Speed = Vector2.Zero;
+                this.Size = Size;
+                this.Angle = 0;
                 Lifetime = 5;
             }
 
-            public Rain Update(double TimeElapsedInSeconds)
+            //Smaller = more affected by wind, Bigger = fall faster
+            public Rain Update(float TimeElapsedInSeconds, float WindSpeed)
             {
+                float WindMultiplier = (WeatherRainSizeManager.MaxRainSize / Size) * 0.5f;
+                float GravityMultiplier = Size / WeatherRainSizeManager.MaxRainSize;
+                if (Size < 1.5)
+                {
+
+                }
+                if (Size > 1.5)
+                    GravityMultiplier *= 2f;
+                if (Size > 2)
+                    GravityMultiplier *= 3f;
+
                 Lifetime -= TimeElapsedInSeconds;
+                Speed.X += WindSpeed * TimeElapsedInSeconds * WindMultiplier;
+                if (Speed.Y < GravitySpeedMax * GravityMultiplier * 5)
+                {
+                    Speed.Y += GravitySpeed * TimeElapsedInSeconds * GravityMultiplier * 6;
+                }
+
                 Position += Speed;
+                Angle = (float)Math.Atan2(Speed.Y, Speed.X);
                 return this;
             }
         }
@@ -60,6 +86,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(Map, Shape)
         {
             ListRain = new List<Rain>();
+            IntensityManager = new WeatherIntensityManager(300);
+            RainSizeManager = new WeatherRainSizeManager();
+            WindSpeedManager = new WeatherWindSpeedManager();
         }
 
         public void Init()
@@ -89,10 +118,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DisplacementEffect.Parameters["World"].SetValue(Matrix.Identity);
             DisplacementEffect.Parameters["TextureSize"].SetValue(new Vector2(1f / width, 1f / height));
 
-            SpawnOffset = new Vector2( -100, -100);
-            SpawnOffsetRandom = new Vector2(Constants.Width, Constants.Height);
-            SpawnSpeed = new Vector2(5, 5);
-            SpawnSpeedRandom = new Vector2(3, 3);
+            SpawnOffset = new Vector2(-100, -100);
+            SpawnOffsetRandom = new Vector2(Constants.Width + 100, 50);
 
             ParticlesPerSeconds = 300;
 
@@ -147,25 +174,45 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            if (gameTime.IsRunningSlowly)
+            {
+                return;
+            }
+
             double TimeElapsedInSeconds = gameTime.ElapsedGameTime.TotalSeconds;
+            float TimeElapsedInSecondsFloat = (float)TimeElapsedInSeconds;
             TimeElapsedSinceLastParticle += TimeElapsedInSeconds;
-            Time += TimeElapsedInSeconds;
+
+            FogValue = Math.Max(0, (IntensityManager.Intensity - 200) / (WeatherIntensityManager.MaxIntensity));
+
+            Time += TimeElapsedInSeconds * (ParticlesPerSeconds / 300);
+
+            IntensityManager.Update(gameTime);
+            RainSizeManager.Update(gameTime);
+            WindSpeedManager.Update(gameTime);
+
+            SpawnOffset = new Vector2(-WindSpeedManager.WindSpeed * Constants.Width / 3 / WeatherWindSpeedManager.MaxWindSpeed + Constants.Width / 2,
+                -150 + 100 * (Math.Abs(WindSpeedManager.WindSpeed) / WeatherWindSpeedManager.MaxWindSpeed));
+            SpawnOffsetRandom = new Vector2(Constants.Width / 2 + 100, 50);
+
+
+            ParticlesPerSeconds = IntensityManager.Intensity;
+
+            TimeBetweenEachParticle = 1 / ParticlesPerSeconds;
 
             for (int R = 0; R < ListRain.Count; R++)
             {
                 if (ListRain[R].Lifetime > 0)
                 {
-                    ListRain[R] = ListRain[R].Update(TimeElapsedInSeconds);
+                    ListRain[R] = ListRain[R].Update(TimeElapsedInSecondsFloat, WindSpeedManager.WindSpeed);
                 }
             }
 
             while (TimeElapsedSinceLastParticle >= TimeBetweenEachParticle)
             {
                 TimeElapsedSinceLastParticle -= TimeBetweenEachParticle;
-                Vector2 SpawnPosition = new Vector2(SpawnOffset.X + (float)RandomHelper.NextDouble() * SpawnOffsetRandom.X,
+                Vector2 SpawnPosition = new Vector2(SpawnOffset.X - SpawnOffsetRandom.X + (float)RandomHelper.NextDouble() * SpawnOffsetRandom.X * 2,
                     SpawnOffset.Y + (float)RandomHelper.NextDouble() * SpawnOffsetRandom.Y);
-
-                Vector2 ParticleSpeed = new Vector2(SpawnSpeed.X + (float)RandomHelper.NextDouble() * SpawnSpeedRandom.X, SpawnSpeed.Y + (float)RandomHelper.NextDouble() * SpawnSpeedRandom.Y);
 
                 bool RainFound = false;
                 for (int R = 0; R < ListRain.Count; R++)
@@ -173,14 +220,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Rain ActiveRainDrop = ListRain[R];
                     if (ActiveRainDrop.Lifetime <= 0)
                     {
-                        ListRain[R] = new Rain(SpawnPosition, ParticleSpeed, (float)Math.Atan2(-ParticleSpeed.Y, -ParticleSpeed.X));
+                        ListRain[R] = new Rain(SpawnPosition, RainSizeManager.RainSizeFinal);
                         RainFound = true;
                         break;
                     }
                 }
                 if (!RainFound)
                 {
-                    ListRain.Add(new Rain(SpawnPosition, ParticleSpeed, (float)Math.Atan2(-ParticleSpeed.Y, -ParticleSpeed.X)));
+                    ListRain.Add(new Rain(SpawnPosition, RainSizeManager.RainSizeFinal));
                 }
             }
         }
@@ -292,7 +339,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (Rain ActiveRainDrop in ListRain)
             {
-                g.Draw(sprRain, ActiveRainDrop.Position, null, Color.White, ActiveRainDrop.Angle, new Vector2(sprRain.Width / 2, sprRain.Height / 2), 1f, SpriteEffects.None, 0);
+                g.Draw(sprRain, ActiveRainDrop.Position, null, Color.White, ActiveRainDrop.Angle, new Vector2(sprRain.Width / 2, sprRain.Height / 2), 1.45f / ActiveRainDrop.Size, SpriteEffects.None, 0);
             }
 
             g.End();
@@ -304,6 +351,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveTileset.WetEffect.Parameters["Time"].SetValue((float)Time);
                 ActiveTileset.WetEffect.Parameters["RippleTexture"].SetValue(RippleRenderTarget);
                 ActiveTileset.WetEffect.Parameters["ReflectionCubeMap"].SetValue(RefCubeMap);
+                ActiveTileset.WetEffect.Parameters["MinimumFog"].SetValue(FogValue);
+                ActiveTileset.WetEffect.Parameters["MinimumMultiplier"].SetValue(2.1f);
+                ActiveTileset.WetEffect.Parameters["FogColor"].SetValue(new Vector3(0.2f, 0.2f, 0.2f));
+                ActiveTileset.WetEffect.Parameters["DesaturationValue"].SetValue(0.1f);
+
                 ActiveTileset.Draw(g);
             }
 
@@ -331,8 +383,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Rain ActiveRainDrop = ListRain[R];
                 if (ActiveRainDrop.Lifetime > 0)
-                g.Draw(sprRain, ActiveRainDrop.Position, null, Color.FromNonPremultiplied(255, 255, 255, 70), ActiveRainDrop.Angle, new Vector2(sprRain.Width / 2, sprRain.Height / 2), 1f, SpriteEffects.None, 0);
+                {
+                    g.Draw(sprRain, ActiveRainDrop.Position, null, Color.FromNonPremultiplied(255, 255, 255, 70), ActiveRainDrop.Angle, new Vector2(sprRain.Width / 2, sprRain.Height / 2), 1.4f / ActiveRainDrop.Size, SpriteEffects.None, 0);
+                }
             }
+            TextHelper.DrawText(g, IntensityManager.Intensity.ToString(), Vector2.Zero, Color.Red);
+            TextHelper.DrawText(g, WindSpeedManager.WindSpeed.ToString(), new Vector2(0, 80), Color.Green);
             g.End();
             g.Begin();
         }
