@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.LightningSystem;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -35,6 +36,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         WeatherIntensityManager IntensityManager;
         WeatherRainSizeManager RainSizeManager;
         WeatherWindSpeedManager WindSpeedManager;
+        WeatherLightningManager LightningManager;
 
         private struct Rain
         {
@@ -113,6 +115,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             Projection = HalfPixelOffset * Projection;
 
+            LightningManager = new WeatherLightningManager(Map.Content, Projection);
+
             DisplacementEffect.Parameters["View"].SetValue(View);
             DisplacementEffect.Parameters["Projection"].SetValue(Projection);
             DisplacementEffect.Parameters["World"].SetValue(Matrix.Identity);
@@ -174,11 +178,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (gameTime.IsRunningSlowly)
-            {
-                return;
-            }
-
             double TimeElapsedInSeconds = gameTime.ElapsedGameTime.TotalSeconds;
             float TimeElapsedInSecondsFloat = (float)TimeElapsedInSeconds;
             TimeElapsedSinceLastParticle += TimeElapsedInSeconds;
@@ -190,10 +189,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             IntensityManager.Update(gameTime);
             RainSizeManager.Update(gameTime);
             WindSpeedManager.Update(gameTime);
+            LightningManager.Intensity = IntensityManager.Intensity;
+            LightningManager.Update(gameTime);
 
             SpawnOffset = new Vector2(-WindSpeedManager.WindSpeed * Constants.Width / 3 / WeatherWindSpeedManager.MaxWindSpeed + Constants.Width / 2,
-                -150 + 100 * (Math.Abs(WindSpeedManager.WindSpeed) / WeatherWindSpeedManager.MaxWindSpeed));
-            SpawnOffsetRandom = new Vector2(Constants.Width / 2 + 100, 50);
+                -150 + 130 * (Math.Abs(WindSpeedManager.WindSpeed) / WeatherWindSpeedManager.MaxWindSpeed));
+            SpawnOffsetRandom = new Vector2(Constants.Width / 2 + 100 + 50 * (Math.Abs(WindSpeedManager.WindSpeed) / WeatherWindSpeedManager.MaxWindSpeed), 50);
 
 
             ParticlesPerSeconds = IntensityManager.Intensity;
@@ -332,6 +333,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawSkyCube();
 
             g.End();
+
+            LightningManager.BeginDraw(g);
+
             g.Begin();
 
             g.GraphicsDevice.SetRenderTarget(RainRenderTarget);
@@ -355,10 +359,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveTileset.WetEffect.Parameters["MinimumMultiplier"].SetValue(2.1f);
                 ActiveTileset.WetEffect.Parameters["FogColor"].SetValue(new Vector3(0.2f, 0.2f, 0.2f));
                 ActiveTileset.WetEffect.Parameters["DesaturationValue"].SetValue(0.1f);
+                ActiveTileset.WetEffect.Parameters["LightIntensity"].SetValue(LightningManager.AmbiantLightMultiplier);
 
                 ActiveTileset.Draw(g);
             }
 
+            g.Begin();
+            LightningManager.Draw(g);
+            g.End();
             g.GraphicsDevice.SetRenderTarget(null);
             g.Begin();
         }
@@ -387,8 +395,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     g.Draw(sprRain, ActiveRainDrop.Position, null, Color.FromNonPremultiplied(255, 255, 255, 70), ActiveRainDrop.Angle, new Vector2(sprRain.Width / 2, sprRain.Height / 2), 1.4f / ActiveRainDrop.Size, SpriteEffects.None, 0);
                 }
             }
-            TextHelper.DrawText(g, IntensityManager.Intensity.ToString(), Vector2.Zero, Color.Red);
-            TextHelper.DrawText(g, WindSpeedManager.WindSpeed.ToString(), new Vector2(0, 80), Color.Green);
+            TextHelper.DrawText(g, "Intensity: " + IntensityManager.Intensity.ToString(), Vector2.Zero, Color.SandyBrown);
+            TextHelper.DrawText(g, "Wind: " + WindSpeedManager.WindSpeed.ToString(), new Vector2(0, 20), Color.Chartreuse);
+            TextHelper.DrawText(g, "Rain Size: " + RainSizeManager.RainSizeMin.ToString(), new Vector2(0, 40), Color.Aquamarine);
             g.End();
             g.Begin();
         }

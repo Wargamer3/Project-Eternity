@@ -97,6 +97,13 @@
     <Compile Include="Ini File.cs" />
     <Compile Include="Byte Writer.cs" />
     <Compile Include="Byte Reader.cs" />
+    <Compile Include="Lightning\Lightning Sections\LightingSection.cs" />
+    <Compile Include="Lightning\Lightning Sections\LightingSectionFork.cs" />
+    <Compile Include="Lightning\Lightning Sections\LightingSectionJitter.cs" />
+    <Compile Include="Lightning\LightningBehaviour.cs" />
+    <Compile Include="Lightning\LightningBolt.cs" />
+    <Compile Include="Lightning\LightningVertex.cs" />
+    <Compile Include="Lightning\PostProcessGlow.cs" />
     <Compile Include="Particle system\Particle Settings No Texture.cs" />
     <Compile Include="Particle system\Particle Settings 3D.cs" />
     <Compile Include="Particle system\Particle System 2D No Texture.cs" />

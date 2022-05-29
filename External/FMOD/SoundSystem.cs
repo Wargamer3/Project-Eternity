@@ -140,6 +140,11 @@ namespace FMOD
                 throw new Exception("Play Sound Failed\r\n" + result.ToString());
         }
 
+        public void SetVolume(float Volume)
+        {
+            ActiveChannel.setVolume(Volume);
+        }
+
         public void SetLoop(bool Loop)
         {
             if (!SoundSystem.AudioFound)

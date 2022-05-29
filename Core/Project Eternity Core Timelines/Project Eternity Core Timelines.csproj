@@ -53,6 +53,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lightning Spawner Helper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lightning Spawner Helper.Designer.cs">
+      <DependentUpon>Lightning Spawner Helper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lightning Spawner Viewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Lightning Timeline.cs" />
     <Compile Include="Particle Emitter.cs" />
     <Compile Include="Animated Chain Spawner Helper.cs">
       <SubType>Form</SubType>
@@ -91,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Animated Bitmap Spawner Helper.resx">
       <DependentUpon>Animated Bitmap Spawner Helper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lightning Spawner Helper.resx">
+      <DependentUpon>Lightning Spawner Helper.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sprite Sheet Helper.resx">
       <DependentUpon>Sprite Sheet Helper.cs</DependentUpon>

@@ -201,9 +201,10 @@
     <Compile Include="Classic Multiplayer\Multiplayer Screen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terrain\Tile2DHolder.cs" />
+    <Compile Include="Terrain\Weather Lightning Manager.cs" />
     <Compile Include="Terrain\Weather Intensity Manager.cs" />
-    <Compile Include="Terrain\Rain Size Manager.cs" />
-    <Compile Include="Terrain\Wind Manager.cs" />
+    <Compile Include="Terrain\Weather Rain Size Manager.cs" />
+    <Compile Include="Terrain\Weather Wind Manager.cs" />
     <Compile Include="Unit Deployment Screen.cs" />
   </ItemGroup>
   <ItemGroup>

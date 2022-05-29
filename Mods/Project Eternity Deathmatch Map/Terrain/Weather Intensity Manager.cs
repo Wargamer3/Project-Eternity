@@ -1,4 +1,5 @@
 ﻿using System;
+using FMOD;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 
@@ -33,6 +34,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private const double TransitionTimeInSeconds = 4;
         private const double TransitionTimeInSecondsSmallChange = 1;
 
+        private FMODSound RainLight;
+        private FMODSound RainRegular;
+        private FMODSound RaintMediumHeavy;
+        private FMODSound RainHeavy;
+
         public WeatherIntensityManager(float StartIntensity)
         {
             AllowDynamicChangesIntensity = true;
@@ -41,6 +47,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Intensity = StartIntensity;
             OldIntensity = StartIntensity;
             NextIntensity = StartIntensity;
+
+            RainLight = new FMODSound(GameScreen.FMODSystem, "Content/SFX/Weather/Rain/Rain Light.wav");
+            RainRegular = new FMODSound(GameScreen.FMODSystem, "Content/SFX/Weather/Rain/Rain Regular.wav");
+            RaintMediumHeavy = new FMODSound(GameScreen.FMODSystem, "Content/SFX/Weather/Rain/Rain Medium Heavy.wav");
+            RainHeavy = new FMODSound(GameScreen.FMODSystem, "Content/SFX/Weather/Rain/Rain Heavy.wav");
+
+            RainLight.SetLoop(true);
+            RainRegular.SetLoop(true);
+            RaintMediumHeavy.SetLoop(true);
+            RainHeavy.SetLoop(true);
+
+            RainLight.Play();
+            RainRegular.Play();
+            RaintMediumHeavy.Play();
+            RainHeavy.Play();
+
+            RainLight.SetVolume(0f);
+            RainRegular.SetVolume(1f);
+            RaintMediumHeavy.SetVolume(0f);
+            RainHeavy.SetVolume(0f);
         }
 
         public void Update(GameTime gameTime)
@@ -56,6 +82,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 UpdateDynamicSmallChangesIntensity(TimeElapsedInSeconds);
             }
+
+            UpdateBGM();
         }
 
         private void UpdateDynamicChangesIntensity(double TimeElapsedInSeconds)
@@ -113,6 +141,71 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             Intensity = Math.Max(Intensity + SmallChangeIntensity, MinIntensity);
+        }
+
+        private void UpdateBGM()
+        {
+            if (Intensity < 200)
+            {
+                RainLight.SetVolume(1f);
+                RainRegular.SetVolume(0f);
+                RaintMediumHeavy.SetVolume(0f);
+                RainHeavy.SetVolume(0f);
+            }
+            else if (Intensity < 400)
+            {
+                if (Intensity < 250)//Transition
+                {
+                    float Progression = (Intensity - 200) / 50f;
+                    RainLight.SetVolume(1f - Progression);
+                    RainRegular.SetVolume(Progression);
+                    RaintMediumHeavy.SetVolume(0f);
+                    RainHeavy.SetVolume(0f);
+                }
+                else
+                {
+                    RainLight.SetVolume(0f);
+                    RainRegular.SetVolume(1f);
+                    RaintMediumHeavy.SetVolume(0f);
+                    RainHeavy.SetVolume(0f);
+                }
+            }
+            else if (Intensity < 500)
+            {
+                if (Intensity < 425)//Transition
+                {
+                    float Progression = (Intensity - 200) / 25;
+                    RainLight.SetVolume(0f);
+                    RainRegular.SetVolume(1f - Progression);
+                    RaintMediumHeavy.SetVolume(Progression);
+                    RainHeavy.SetVolume(0f);
+                }
+                else
+                {
+                    RainLight.SetVolume(0f);
+                    RainRegular.SetVolume(0f);
+                    RaintMediumHeavy.SetVolume(1f);
+                    RainHeavy.SetVolume(0f);
+                }
+            }
+            else
+            {
+                if (Intensity < 550)//Transition
+                {
+                    float Progression = (Intensity - 200) / 50;
+                    RainLight.SetVolume(0f);
+                    RainRegular.SetVolume(0f);
+                    RaintMediumHeavy.SetVolume(1f - Progression);
+                    RainHeavy.SetVolume(Progression);
+                }
+                else
+                {
+                    RainLight.SetVolume(0f);
+                    RainRegular.SetVolume(0f);
+                    RaintMediumHeavy.SetVolume(0f);
+                    RainHeavy.SetVolume(1f);
+                }
+            }
         }
     }
 }
