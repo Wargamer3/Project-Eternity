@@ -7,30 +7,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class DayNightCycleColorOnly : BattleMapOverlay
     {
-        BattleMap Owner;
+        private readonly BattleMap Map;
+        private readonly MapZone Owner;
 
-        public DayNightCycleColorOnly(BattleMap Owner, ZoneShape Shape)
+        public DayNightCycleColorOnly(BattleMap Map, MapZone Owner)
         {
+            this.Map = Map;
             this.Owner = Owner;
         }
 
         public void Update(GameTime gameTime)
         {
-        }
-
-        public void BeginDraw(CustomSpriteBatch g)
-        {
-        }
-
-        public void Draw(CustomSpriteBatch g)
-        {
             Color Color1;
             Color Color2;
             Color FinalColor = Color.White;
-            double CurrentTime = Owner.MapEnvironment.CurrentHour;
+            double CurrentTime = Map.MapEnvironment.CurrentHour;
 
             if (CurrentTime >= 10 && CurrentTime < 18)
             {
+                FinalColor = Color.FromNonPremultiplied(255, 255, 255, 0);
             }
             else if (CurrentTime >= 18 && CurrentTime < 20)
             {
@@ -41,7 +36,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int newColorG = (int)(Color1.G * (1f - Factor) + Color2.G * Factor);
                 int newColorB = (int)(Color1.B * (1f - Factor) + Color2.B * Factor);
                 FinalColor = Color.FromNonPremultiplied(newColorR, newColorG, newColorB, (int)(Factor * 100));
-                g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
             else if (CurrentTime >= 20 && CurrentTime < 22)
             {
@@ -53,12 +47,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int newColorG = (int)(Color1.G * (1f - Factor) + Color2.G * Factor);
                 int newColorB = (int)(Color1.B * (1f - Factor) + Color2.B * Factor);
                 FinalColor = Color.FromNonPremultiplied(newColorR, newColorG, newColorB, 100 + (int)(Factor * 27f));
-                g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
             else if (CurrentTime >= 22 || CurrentTime < 6)
             {
                 FinalColor = Color.FromNonPremultiplied(Color.Navy.R, Color.Navy.G, Color.Navy.B, 127);
-                g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
             else if (CurrentTime >= 6 && CurrentTime < 8)
             {
@@ -70,7 +62,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int newColorG = (int)(Color1.G * (1f - Factor) + Color2.G * Factor);
                 int newColorB = (int)(Color1.B * (1f - Factor) + Color2.B * Factor);
                 FinalColor = Color.FromNonPremultiplied(newColorR, newColorG, newColorB, 127 - (int)(Factor * 27f));
-                g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
             else if (CurrentTime >= 8 && CurrentTime < 10)
             {
@@ -82,8 +73,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int newColorG = (int)(Color1.G * (1f - Factor) + Color2.G * Factor);
                 int newColorB = (int)(Color1.B * (1f - Factor) + Color2.B * Factor);
                 FinalColor = Color.FromNonPremultiplied(newColorR, newColorG, newColorB, (int)((1d - Factor) * 100d));
-                g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), FinalColor);
             }
+
+            Owner.TimeOfDayColor = FinalColor;
+        }
+
+        public void BeginDraw(CustomSpriteBatch g)
+        {
+        }
+
+        public void Draw(CustomSpriteBatch g)
+        {
+            g.Draw(GameScreen.sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), Owner.TimeOfDayColor);
         }
 
         public void EndDraw(CustomSpriteBatch g)

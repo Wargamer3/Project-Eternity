@@ -173,6 +173,7 @@
     <Compile Include="Deathmatch Map Timeline.cs" />
     <Compile Include="Delayed Attack.cs" />
     <Compile Include="Formula Parser.cs" />
+    <Compile Include="Terrain\Shadow overlay.cs" />
     <Compile Include="Terrain\Default Weather.cs" />
     <Compile Include="Terrain\Map Zone Deathmatch.cs" />
     <Compile Include="Terrain\Environment Manager Deathmatch.cs" />
@@ -204,7 +205,6 @@
     <Compile Include="Terrain\Weather Lightning Manager.cs" />
     <Compile Include="Terrain\Weather Intensity Manager.cs" />
     <Compile Include="Terrain\Weather Rain Size Manager.cs" />
-    <Compile Include="Terrain\Weather Wind Manager.cs" />
     <Compile Include="Unit Deployment Screen.cs" />
   </ItemGroup>
   <ItemGroup>

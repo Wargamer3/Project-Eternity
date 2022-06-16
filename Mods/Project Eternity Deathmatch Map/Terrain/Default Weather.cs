@@ -7,24 +7,24 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-	public abstract class DefaultWeather : BattleMapOverlay
+	public class DefaultWeather : BattleMapOverlay
 	{
 		protected readonly DeathmatchMap Map;
 
-		protected readonly Dictionary<int, Tile2DHolder> DicTile3DByTileset;
+		protected readonly Dictionary<int, Tile2DHolder> DicTile2DByTileset;
 
 		public DefaultWeather(DeathmatchMap Map, ZoneShape Shape)
 		{
 			this.Map = Map;
-			DicTile3DByTileset = new Dictionary<int, Tile2DHolder>();
+			DicTile2DByTileset = new Dictionary<int, Tile2DHolder>();
 
-			for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+			for (int L = 0; L < 1; L++)
 			{
 				CreateMap(Map, Map.LayerManager.ListLayer[L], null);
 			}
 		}
 
-		protected void CreateMap(DeathmatchMap Map, MapLayer Owner, Effect WetEffect)
+		public void CreateMap(DeathmatchMap Map, MapLayer Owner, Effect WetEffect)
 		{
 			for (int X = Map.MapSize.X - 1; X >= 0; --X)
 			{
@@ -33,39 +33,48 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 					Terrain ActiveTerrain = Owner.ArrayTerrain[X, Y];
 					DrawableTile ActiveTile = Owner.ArrayTerrain[X, Y].DrawableTile;
 
-					if (!DicTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
+					if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
 					{
-						DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName, Map.Content, WetEffect));
+						DicTile2DByTileset.Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName, Map.Content, WetEffect));
 					}
 
-					DicTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTerrain);
+					DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTerrain);
 				}
 			}
 		}
 
-		public void DrawMap(CustomSpriteBatch g)
+        public virtual void Update(GameTime gameTime)
+        {
+
+        }
+
+        public virtual void BeginDraw(CustomSpriteBatch g)
+        {
+            g.End();
+
+            g.GraphicsDevice.SetRenderTarget(Map.MapRenderTarget);
+            g.GraphicsDevice.Clear(Color.White);
+            foreach (Tile2DHolder ActiveTileset in DicTile2DByTileset.Values)
+            {
+                ActiveTileset.Draw(g);
+            }
+
+            g.Begin();
+        }
+
+        public virtual void Draw(CustomSpriteBatch g)
 		{
-			g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-			g.GraphicsDevice.SetRenderTarget(Map.MapRenderTarget);
-			g.GraphicsDevice.Clear(Color.Black);
-
-			foreach (BattleMapPlatform ActivePlatform in Map.ListPlatform)
-			{
-				ActivePlatform.Draw(g);
-			}
-
-			foreach (Tile2DHolder ActiveTileset in DicTile3DByTileset.Values)
-			{
-				ActiveTileset.Draw(g);
-			}
-
-			g.End();
+			g.Draw(Map.MapRenderTarget, Vector2.Zero, Color.White);
 		}
 
-        public abstract void Update(GameTime gameTime);
-        public abstract void BeginDraw(CustomSpriteBatch g);
-        public abstract void Draw(CustomSpriteBatch g);
-        public abstract void EndDraw(CustomSpriteBatch g);
-		public abstract void SetCrossfadeValue(double Value);
+        public virtual void EndDraw(CustomSpriteBatch g)
+        {
+
+        }
+
+		public virtual void SetCrossfadeValue(double Value)
+        {
+
+        }
     }
 }

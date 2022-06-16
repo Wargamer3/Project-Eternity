@@ -146,6 +146,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<AnimationBackground> ListBackground;
         public List<string> ListForegroundsPath;
         public List<AnimationBackground> ListForeground;
+        public List<BattleMapLight> ListLight;
 
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
         public string CameraType;
@@ -243,6 +244,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListBackgroundsPath = new List<string>();
             ListForeground = new List<AnimationBackground>();
             ListForegroundsPath = new List<string>();
+            ListLight = new List<BattleMapLight>();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
 
             CameraType = "2D";

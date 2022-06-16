@@ -518,9 +518,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             DrawPlayers(g);
 
-            foreach (IUIElement ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveElement in ArrayMenuButton)
             {
-                ActiveButton.Draw(g);
+                ActiveElement.Draw(g);
             }
         }
 

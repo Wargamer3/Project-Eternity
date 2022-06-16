@@ -22,6 +22,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public List<VolatileSubstance> ListVolatileSubstance;
 
+        public MapZone GlobalZone;
         public List<MapZone> ListMapZone;
 
         public EnvironmentManager(BattleMap Map)
@@ -59,6 +60,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(TimeMultiplier);
             BW.Write((byte)TimePeriodType);
 
+            GlobalZone.Save(BW);
+
             BW.Write(ListMapZone.Count);
             for (int Z = 0; Z < ListMapZone.Count; ++Z)
             {
@@ -71,6 +74,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             double EllapsedMinute = gameTime.ElapsedGameTime.TotalHours * 5d;
             CurrentHour += EllapsedMinute;
 
+            GlobalZone.Update(gameTime);
+
             foreach (MapZone ActiveZone in ListMapZone)
             {
                 ActiveZone.Update(gameTime);
@@ -79,6 +84,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void BeginDraw(CustomSpriteBatch g)
         {
+            GlobalZone.BeginDraw(g);
+
             foreach (MapZone ActiveZone in ListMapZone)
             {
                 ActiveZone.BeginDraw(g);
@@ -87,6 +94,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer)
         {
+            GlobalZone.Draw(g, LayerIndex, IsSubLayer);
+
             foreach (MapZone ActiveZone in ListMapZone)
             {
                 ActiveZone.Draw(g, LayerIndex, IsSubLayer);
@@ -95,6 +104,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void EndDraw(CustomSpriteBatch g)
         {
+            GlobalZone.EndDraw(g);
+
             foreach (MapZone ActiveZone in ListMapZone)
             {
                 ActiveZone.EndDraw(g);

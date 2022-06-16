@@ -40,9 +40,9 @@ namespace ProjectEternity.Editors.MapEditor
                 txtTimePeriodDayStart.Value = (decimal)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].DayStart;
                 txtTimePeriodPassiveSkill.Text = ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].PassiveSkillPath;
 
-                cbWeather.SelectedIndex = (int)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].Weather;
-                cbTypeOfSky.SelectedIndex = (int)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].TypeOfSky;
-                cbVisibility.SelectedIndex = (int)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].Visibility;
+                cbWeatherType.SelectedIndex = (int)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].WeatherType;
+                cbSkyType.SelectedIndex = (int)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].SkyType;
+                cbVisibilityType.SelectedIndex = (int)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].VisibilityType;
 
                 txtWindSpeed.Value = (decimal)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].WindSpeed;
                 txtWindDirection.Value = (decimal)ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].WindDirection;
@@ -104,27 +104,27 @@ namespace ProjectEternity.Editors.MapEditor
 
         #region Time of day
 
-        private void cbWeather_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbWeatherType_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lsTimePeriod.SelectedIndex >= 0)
             {
-                ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].Weather = (TimePeriod.WeatherTypes)cbWeather.SelectedIndex;
+                ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].WeatherType = (TimePeriod.WeatherTypes)cbWeatherType.SelectedIndex;
             }
         }
 
-        private void cbTypeOfSky_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbSkyType_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lsTimePeriod.SelectedIndex >= 0)
             {
-                ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].TypeOfSky = (TimePeriod.SkyTypes)cbTypeOfSky.SelectedIndex;
+                ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].SkyType = (TimePeriod.SkyTypes)cbSkyType.SelectedIndex;
             }
         }
 
-        private void cbVisibility_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbVisibilityType_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lsTimePeriod.SelectedIndex >= 0)
             {
-                ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].Visibility = (TimePeriod.VisibilityTypes)cbVisibility.SelectedIndex;
+                ZoneToEdit.ListTimePeriod[lsTimePeriod.SelectedIndex].VisibilityType = (TimePeriod.VisibilityTypes)cbVisibilityType.SelectedIndex;
             }
         }
 

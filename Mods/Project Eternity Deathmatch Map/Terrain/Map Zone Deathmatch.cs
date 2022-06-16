@@ -26,24 +26,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override void UpdateOverlayTypeOfSky()
         {
-            switch (CurrentTimePeriod.TypeOfSky)
+            switch (CurrentTimePeriod.SkyType)
             {
                 case TimePeriod.SkyTypes.Disabled:
                     OverlayTypeOfSky = null;
                     break;
 
                 case TimePeriod.SkyTypes.Regular:
-                    OverlayTypeOfSky = new DayNightCycleColorOnly(Map, Shape);
+                    OverlayTypeOfSky = new DayNightCycleColorOnly(Map, this);
                     break;
             }
         }
 
         protected override void UpdateOverlayWeater()
         {
-            switch (CurrentTimePeriod.Weather)
+            switch (CurrentTimePeriod.WeatherType)
             {
                 case TimePeriod.WeatherTypes.Regular:
-                    OverlayWeather = null;
+                    OverlayWeather = new DefaultWeather(Map, Shape);
                     break;
 
                 case TimePeriod.WeatherTypes.SmallRain:
@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override void UpdateOverlayVisibility()
         {
-            switch (CurrentTimePeriod.Visibility)
+            switch (CurrentTimePeriod.VisibilityType)
             {
                 case TimePeriod.VisibilityTypes.Regular:
                     OverlayVisibility = null;

@@ -29,13 +29,17 @@ namespace ProjectEternity.Editors.MapEditor
         /// </summary>
         private void InitializeComponent()
         {
-            this.gbTimeOfDay = new System.Windows.Forms.GroupBox();
-            this.lblVisibility = new System.Windows.Forms.Label();
-            this.cbVisibility = new System.Windows.Forms.ComboBox();
-            this.lblWeather = new System.Windows.Forms.Label();
-            this.cbWeather = new System.Windows.Forms.ComboBox();
-            this.lblTypeOfSky = new System.Windows.Forms.Label();
-            this.cbTypeOfSky = new System.Windows.Forms.ComboBox();
+            this.gbWeatherControl = new System.Windows.Forms.GroupBox();
+            this.lblWeatherUsage = new System.Windows.Forms.Label();
+            this.btnWeatherAdvanced = new System.Windows.Forms.Button();
+            this.cbWeatherUsage = new System.Windows.Forms.ComboBox();
+            this.lblWeatherType = new System.Windows.Forms.Label();
+            this.cbWeatherType = new System.Windows.Forms.ComboBox();
+            this.btnSkyAdvanced = new System.Windows.Forms.Button();
+            this.lblVisibilityType = new System.Windows.Forms.Label();
+            this.cbVisibilityType = new System.Windows.Forms.ComboBox();
+            this.lblSkyType = new System.Windows.Forms.Label();
+            this.cbSkyType = new System.Windows.Forms.ComboBox();
             this.gbTimePeriods = new System.Windows.Forms.GroupBox();
             this.txtTimePeriodPassiveSkill = new System.Windows.Forms.TextBox();
             this.btnTimePeriodPassiveSkill = new System.Windows.Forms.Button();
@@ -50,6 +54,9 @@ namespace ProjectEternity.Editors.MapEditor
             this.txtTimePeriodTimeStart = new System.Windows.Forms.NumericUpDown();
             this.lblTimePeriodTimeStart = new System.Windows.Forms.Label();
             this.gbWind = new System.Windows.Forms.GroupBox();
+            this.btnWindAdvanced = new System.Windows.Forms.Button();
+            this.lblWindUsage = new System.Windows.Forms.Label();
+            this.cbWindUsage = new System.Windows.Forms.ComboBox();
             this.lblWindDirection = new System.Windows.Forms.Label();
             this.txtWindDirection = new System.Windows.Forms.NumericUpDown();
             this.lblWindSpeed = new System.Windows.Forms.Label();
@@ -61,7 +68,14 @@ namespace ProjectEternity.Editors.MapEditor
             this.txtTransitionEndLength = new System.Windows.Forms.NumericUpDown();
             this.lblTransitionStartLength = new System.Windows.Forms.Label();
             this.txtTransitionStartLength = new System.Windows.Forms.NumericUpDown();
-            this.gbTimeOfDay.SuspendLayout();
+            this.gbVisibilityControl = new System.Windows.Forms.GroupBox();
+            this.lblVisibilityUsage = new System.Windows.Forms.Label();
+            this.btnVisibilityAdvanced = new System.Windows.Forms.Button();
+            this.cbVisibilityUsage = new System.Windows.Forms.ComboBox();
+            this.gbSkyControl = new System.Windows.Forms.GroupBox();
+            this.lblSkyUsage = new System.Windows.Forms.Label();
+            this.cbSkyUsage = new System.Windows.Forms.ComboBox();
+            this.gbWeatherControl.SuspendLayout();
             this.gbTimePeriods.SuspendLayout();
             this.txtTimePeriodPassiveSkill.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtTimePeriodDayStart)).BeginInit();
@@ -73,59 +87,69 @@ namespace ProjectEternity.Editors.MapEditor
             ((System.ComponentModel.ISupportInitialize)(this.txtTransitionCrossfadeLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTransitionEndLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTransitionStartLength)).BeginInit();
+            this.gbVisibilityControl.SuspendLayout();
+            this.gbSkyControl.SuspendLayout();
             this.SuspendLayout();
             // 
-            // gbTimeOfDay
+            // gbWeatherControl
             // 
-            this.gbTimeOfDay.Controls.Add(this.lblVisibility);
-            this.gbTimeOfDay.Controls.Add(this.cbVisibility);
-            this.gbTimeOfDay.Controls.Add(this.lblWeather);
-            this.gbTimeOfDay.Controls.Add(this.cbWeather);
-            this.gbTimeOfDay.Controls.Add(this.lblTypeOfSky);
-            this.gbTimeOfDay.Controls.Add(this.cbTypeOfSky);
-            this.gbTimeOfDay.Location = new System.Drawing.Point(12, 12);
-            this.gbTimeOfDay.Name = "gbTimeOfDay";
-            this.gbTimeOfDay.Size = new System.Drawing.Size(215, 107);
-            this.gbTimeOfDay.TabIndex = 0;
-            this.gbTimeOfDay.TabStop = false;
-            this.gbTimeOfDay.Text = "Time of day";
+            this.gbWeatherControl.Controls.Add(this.lblWeatherUsage);
+            this.gbWeatherControl.Controls.Add(this.btnWeatherAdvanced);
+            this.gbWeatherControl.Controls.Add(this.cbWeatherUsage);
+            this.gbWeatherControl.Controls.Add(this.lblWeatherType);
+            this.gbWeatherControl.Controls.Add(this.cbWeatherType);
+            this.gbWeatherControl.Location = new System.Drawing.Point(12, 12);
+            this.gbWeatherControl.Name = "gbWeatherControl";
+            this.gbWeatherControl.Size = new System.Drawing.Size(299, 73);
+            this.gbWeatherControl.TabIndex = 0;
+            this.gbWeatherControl.TabStop = false;
+            this.gbWeatherControl.Text = "Weather Control";
             // 
-            // lblVisibility
+            // lblWeatherUsage
             // 
-            this.lblVisibility.AutoSize = true;
-            this.lblVisibility.Location = new System.Drawing.Point(6, 76);
-            this.lblVisibility.Name = "lblVisibility";
-            this.lblVisibility.Size = new System.Drawing.Size(43, 13);
-            this.lblVisibility.TabIndex = 8;
-            this.lblVisibility.Text = "Visibility";
+            this.lblWeatherUsage.AutoSize = true;
+            this.lblWeatherUsage.Location = new System.Drawing.Point(6, 49);
+            this.lblWeatherUsage.Name = "lblWeatherUsage";
+            this.lblWeatherUsage.Size = new System.Drawing.Size(38, 13);
+            this.lblWeatherUsage.TabIndex = 41;
+            this.lblWeatherUsage.Text = "Usage";
             // 
-            // cbVisibility
+            // btnWeatherAdvanced
             // 
-            this.cbVisibility.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbVisibility.FormattingEnabled = true;
-            this.cbVisibility.Items.AddRange(new object[] {
-            "Regular",
-            "Fog of war"});
-            this.cbVisibility.Location = new System.Drawing.Point(88, 73);
-            this.cbVisibility.Name = "cbVisibility";
-            this.cbVisibility.Size = new System.Drawing.Size(121, 21);
-            this.cbVisibility.TabIndex = 7;
-            this.cbVisibility.SelectedIndexChanged += new System.EventHandler(this.cbVisibility_SelectedIndexChanged);
+            this.btnWeatherAdvanced.Location = new System.Drawing.Point(215, 19);
+            this.btnWeatherAdvanced.Name = "btnWeatherAdvanced";
+            this.btnWeatherAdvanced.Size = new System.Drawing.Size(78, 23);
+            this.btnWeatherAdvanced.TabIndex = 11;
+            this.btnWeatherAdvanced.Text = "Advanced";
+            this.btnWeatherAdvanced.UseVisualStyleBackColor = true;
             // 
-            // lblWeather
+            // cbWeatherUsage
             // 
-            this.lblWeather.AutoSize = true;
-            this.lblWeather.Location = new System.Drawing.Point(6, 22);
-            this.lblWeather.Name = "lblWeather";
-            this.lblWeather.Size = new System.Drawing.Size(48, 13);
-            this.lblWeather.TabIndex = 6;
-            this.lblWeather.Text = "Weather";
+            this.cbWeatherUsage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbWeatherUsage.FormattingEnabled = true;
+            this.cbWeatherUsage.Items.AddRange(new object[] {
+            "Global",
+            "Relative",
+            "Absolute"});
+            this.cbWeatherUsage.Location = new System.Drawing.Point(88, 46);
+            this.cbWeatherUsage.Name = "cbWeatherUsage";
+            this.cbWeatherUsage.Size = new System.Drawing.Size(121, 21);
+            this.cbWeatherUsage.TabIndex = 40;
             // 
-            // cbWeather
+            // lblWeatherType
             // 
-            this.cbWeather.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbWeather.FormattingEnabled = true;
-            this.cbWeather.Items.AddRange(new object[] {
+            this.lblWeatherType.AutoSize = true;
+            this.lblWeatherType.Location = new System.Drawing.Point(6, 22);
+            this.lblWeatherType.Name = "lblWeatherType";
+            this.lblWeatherType.Size = new System.Drawing.Size(31, 13);
+            this.lblWeatherType.TabIndex = 6;
+            this.lblWeatherType.Text = "Type";
+            // 
+            // cbWeatherType
+            // 
+            this.cbWeatherType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbWeatherType.FormattingEnabled = true;
+            this.cbWeatherType.Items.AddRange(new object[] {
             "Regular",
             "Windy",
             "Some clouds",
@@ -143,39 +167,71 @@ namespace ProjectEternity.Editors.MapEditor
             "Fireflies",
             "Minovsky",
             "Getter"});
-            this.cbWeather.Location = new System.Drawing.Point(88, 19);
-            this.cbWeather.Name = "cbWeather";
-            this.cbWeather.Size = new System.Drawing.Size(121, 21);
-            this.cbWeather.TabIndex = 5;
-            this.cbWeather.SelectedIndexChanged += new System.EventHandler(this.cbWeather_SelectedIndexChanged);
+            this.cbWeatherType.Location = new System.Drawing.Point(88, 19);
+            this.cbWeatherType.Name = "cbWeatherType";
+            this.cbWeatherType.Size = new System.Drawing.Size(121, 21);
+            this.cbWeatherType.TabIndex = 5;
+            this.cbWeatherType.SelectedIndexChanged += new System.EventHandler(this.cbWeatherType_SelectedIndexChanged);
             // 
-            // lblTypeOfSky
+            // btnSkyAdvanced
             // 
-            this.lblTypeOfSky.AutoSize = true;
-            this.lblTypeOfSky.Location = new System.Drawing.Point(6, 49);
-            this.lblTypeOfSky.Name = "lblTypeOfSky";
-            this.lblTypeOfSky.Size = new System.Drawing.Size(62, 13);
-            this.lblTypeOfSky.TabIndex = 2;
-            this.lblTypeOfSky.Text = "Type of sky";
+            this.btnSkyAdvanced.Location = new System.Drawing.Point(215, 19);
+            this.btnSkyAdvanced.Name = "btnSkyAdvanced";
+            this.btnSkyAdvanced.Size = new System.Drawing.Size(78, 23);
+            this.btnSkyAdvanced.TabIndex = 12;
+            this.btnSkyAdvanced.Text = "Advanced";
+            this.btnSkyAdvanced.UseVisualStyleBackColor = true;
             // 
-            // cbTypeOfSky
+            // lblVisibilityType
             // 
-            this.cbTypeOfSky.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbTypeOfSky.FormattingEnabled = true;
-            this.cbTypeOfSky.Items.AddRange(new object[] {
+            this.lblVisibilityType.AutoSize = true;
+            this.lblVisibilityType.Location = new System.Drawing.Point(6, 22);
+            this.lblVisibilityType.Name = "lblVisibilityType";
+            this.lblVisibilityType.Size = new System.Drawing.Size(31, 13);
+            this.lblVisibilityType.TabIndex = 8;
+            this.lblVisibilityType.Text = "Type";
+            // 
+            // cbVisibilityType
+            // 
+            this.cbVisibilityType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbVisibilityType.FormattingEnabled = true;
+            this.cbVisibilityType.Items.AddRange(new object[] {
+            "Regular",
+            "Fog of war"});
+            this.cbVisibilityType.Location = new System.Drawing.Point(88, 19);
+            this.cbVisibilityType.Name = "cbVisibilityType";
+            this.cbVisibilityType.Size = new System.Drawing.Size(121, 21);
+            this.cbVisibilityType.TabIndex = 7;
+            this.cbVisibilityType.SelectedIndexChanged += new System.EventHandler(this.cbVisibilityType_SelectedIndexChanged);
+            // 
+            // lblSkyType
+            // 
+            this.lblSkyType.AutoSize = true;
+            this.lblSkyType.Location = new System.Drawing.Point(6, 22);
+            this.lblSkyType.Name = "lblSkyType";
+            this.lblSkyType.Size = new System.Drawing.Size(31, 13);
+            this.lblSkyType.TabIndex = 2;
+            this.lblSkyType.Text = "Type";
+            // 
+            // cbSkyType
+            // 
+            this.cbSkyType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSkyType.FormattingEnabled = true;
+            this.cbSkyType.Items.AddRange(new object[] {
             "Disabled",
             "Regular",
             "Arctic",
             "Warm/orange"});
-            this.cbTypeOfSky.Location = new System.Drawing.Point(88, 46);
-            this.cbTypeOfSky.Name = "cbTypeOfSky";
-            this.cbTypeOfSky.Size = new System.Drawing.Size(121, 21);
-            this.cbTypeOfSky.TabIndex = 1;
-            this.cbTypeOfSky.SelectedIndexChanged += new System.EventHandler(this.cbTypeOfSky_SelectedIndexChanged);
+            this.cbSkyType.Location = new System.Drawing.Point(88, 19);
+            this.cbSkyType.Name = "cbSkyType";
+            this.cbSkyType.Size = new System.Drawing.Size(121, 21);
+            this.cbSkyType.TabIndex = 1;
+            this.cbSkyType.SelectedIndexChanged += new System.EventHandler(this.cbSkyType_SelectedIndexChanged);
             // 
             // gbTimePeriods
             // 
-            this.gbTimePeriods.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.gbTimePeriods.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gbTimePeriods.Controls.Add(this.txtTimePeriodPassiveSkill);
             this.gbTimePeriods.Controls.Add(this.lblTimePeriodPassiveSkill);
             this.gbTimePeriods.Controls.Add(this.lblTimePeriodName);
@@ -187,9 +243,9 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbTimePeriods.Controls.Add(this.lsTimePeriod);
             this.gbTimePeriods.Controls.Add(this.txtTimePeriodTimeStart);
             this.gbTimePeriods.Controls.Add(this.lblTimePeriodTimeStart);
-            this.gbTimePeriods.Location = new System.Drawing.Point(233, 12);
+            this.gbTimePeriods.Location = new System.Drawing.Point(317, 12);
             this.gbTimePeriods.Name = "gbTimePeriods";
-            this.gbTimePeriods.Size = new System.Drawing.Size(212, 305);
+            this.gbTimePeriods.Size = new System.Drawing.Size(212, 441);
             this.gbTimePeriods.TabIndex = 2;
             this.gbTimePeriods.TabStop = false;
             this.gbTimePeriods.Text = "Time periods";
@@ -198,7 +254,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             this.txtTimePeriodPassiveSkill.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTimePeriodPassiveSkill.Controls.Add(this.btnTimePeriodPassiveSkill);
-            this.txtTimePeriodPassiveSkill.Location = new System.Drawing.Point(76, 250);
+            this.txtTimePeriodPassiveSkill.Location = new System.Drawing.Point(76, 386);
             this.txtTimePeriodPassiveSkill.Name = "txtTimePeriodPassiveSkill";
             this.txtTimePeriodPassiveSkill.Size = new System.Drawing.Size(130, 20);
             this.txtTimePeriodPassiveSkill.TabIndex = 34;
@@ -220,7 +276,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodPassiveSkill
             // 
             this.lblTimePeriodPassiveSkill.AutoSize = true;
-            this.lblTimePeriodPassiveSkill.Location = new System.Drawing.Point(6, 253);
+            this.lblTimePeriodPassiveSkill.Location = new System.Drawing.Point(6, 389);
             this.lblTimePeriodPassiveSkill.Name = "lblTimePeriodPassiveSkill";
             this.lblTimePeriodPassiveSkill.Size = new System.Drawing.Size(64, 13);
             this.lblTimePeriodPassiveSkill.TabIndex = 10;
@@ -229,7 +285,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodName
             // 
             this.lblTimePeriodName.AutoSize = true;
-            this.lblTimePeriodName.Location = new System.Drawing.Point(6, 175);
+            this.lblTimePeriodName.Location = new System.Drawing.Point(6, 311);
             this.lblTimePeriodName.Name = "lblTimePeriodName";
             this.lblTimePeriodName.Size = new System.Drawing.Size(35, 13);
             this.lblTimePeriodName.TabIndex = 8;
@@ -237,7 +293,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtTimePeriodName
             // 
-            this.txtTimePeriodName.Location = new System.Drawing.Point(47, 172);
+            this.txtTimePeriodName.Location = new System.Drawing.Point(47, 308);
             this.txtTimePeriodName.Name = "txtTimePeriodName";
             this.txtTimePeriodName.Size = new System.Drawing.Size(159, 20);
             this.txtTimePeriodName.TabIndex = 7;
@@ -245,7 +301,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtTimePeriodDayStart
             // 
-            this.txtTimePeriodDayStart.Location = new System.Drawing.Point(149, 224);
+            this.txtTimePeriodDayStart.Location = new System.Drawing.Point(149, 360);
             this.txtTimePeriodDayStart.Name = "txtTimePeriodDayStart";
             this.txtTimePeriodDayStart.Size = new System.Drawing.Size(57, 20);
             this.txtTimePeriodDayStart.TabIndex = 6;
@@ -254,7 +310,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodDayStart
             // 
             this.lblTimePeriodDayStart.AutoSize = true;
-            this.lblTimePeriodDayStart.Location = new System.Drawing.Point(6, 226);
+            this.lblTimePeriodDayStart.Location = new System.Drawing.Point(6, 362);
             this.lblTimePeriodDayStart.Name = "lblTimePeriodDayStart";
             this.lblTimePeriodDayStart.Size = new System.Drawing.Size(49, 13);
             this.lblTimePeriodDayStart.TabIndex = 5;
@@ -263,7 +319,7 @@ namespace ProjectEternity.Editors.MapEditor
             // btnRemoveTimePeriod
             // 
             this.btnRemoveTimePeriod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveTimePeriod.Location = new System.Drawing.Point(131, 276);
+            this.btnRemoveTimePeriod.Location = new System.Drawing.Point(131, 412);
             this.btnRemoveTimePeriod.Name = "btnRemoveTimePeriod";
             this.btnRemoveTimePeriod.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveTimePeriod.TabIndex = 4;
@@ -274,7 +330,7 @@ namespace ProjectEternity.Editors.MapEditor
             // btnAddTimePeriod
             // 
             this.btnAddTimePeriod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddTimePeriod.Location = new System.Drawing.Point(44, 276);
+            this.btnAddTimePeriod.Location = new System.Drawing.Point(44, 412);
             this.btnAddTimePeriod.Name = "btnAddTimePeriod";
             this.btnAddTimePeriod.Size = new System.Drawing.Size(75, 23);
             this.btnAddTimePeriod.TabIndex = 3;
@@ -287,13 +343,13 @@ namespace ProjectEternity.Editors.MapEditor
             this.lsTimePeriod.FormattingEnabled = true;
             this.lsTimePeriod.Location = new System.Drawing.Point(6, 19);
             this.lsTimePeriod.Name = "lsTimePeriod";
-            this.lsTimePeriod.Size = new System.Drawing.Size(200, 147);
+            this.lsTimePeriod.Size = new System.Drawing.Size(200, 277);
             this.lsTimePeriod.TabIndex = 2;
             this.lsTimePeriod.SelectedIndexChanged += new System.EventHandler(this.lsTimePeriod_SelectedIndexChanged);
             // 
             // txtTimePeriodTimeStart
             // 
-            this.txtTimePeriodTimeStart.Location = new System.Drawing.Point(149, 198);
+            this.txtTimePeriodTimeStart.Location = new System.Drawing.Point(149, 334);
             this.txtTimePeriodTimeStart.Name = "txtTimePeriodTimeStart";
             this.txtTimePeriodTimeStart.Size = new System.Drawing.Size(57, 20);
             this.txtTimePeriodTimeStart.TabIndex = 1;
@@ -302,7 +358,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodTimeStart
             // 
             this.lblTimePeriodTimeStart.AutoSize = true;
-            this.lblTimePeriodTimeStart.Location = new System.Drawing.Point(6, 200);
+            this.lblTimePeriodTimeStart.Location = new System.Drawing.Point(6, 336);
             this.lblTimePeriodTimeStart.Name = "lblTimePeriodTimeStart";
             this.lblTimePeriodTimeStart.Size = new System.Drawing.Size(53, 13);
             this.lblTimePeriodTimeStart.TabIndex = 0;
@@ -310,21 +366,55 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // gbWind
             // 
+            this.gbWind.Controls.Add(this.btnWindAdvanced);
+            this.gbWind.Controls.Add(this.lblWindUsage);
+            this.gbWind.Controls.Add(this.cbWindUsage);
             this.gbWind.Controls.Add(this.lblWindDirection);
             this.gbWind.Controls.Add(this.txtWindDirection);
             this.gbWind.Controls.Add(this.lblWindSpeed);
             this.gbWind.Controls.Add(this.txtWindSpeed);
-            this.gbWind.Location = new System.Drawing.Point(12, 125);
+            this.gbWind.Location = new System.Drawing.Point(12, 249);
             this.gbWind.Name = "gbWind";
-            this.gbWind.Size = new System.Drawing.Size(215, 70);
+            this.gbWind.Size = new System.Drawing.Size(299, 100);
             this.gbWind.TabIndex = 9;
             this.gbWind.TabStop = false;
             this.gbWind.Text = "Wind";
             // 
+            // btnWindAdvanced
+            // 
+            this.btnWindAdvanced.Location = new System.Drawing.Point(215, 17);
+            this.btnWindAdvanced.Name = "btnWindAdvanced";
+            this.btnWindAdvanced.Size = new System.Drawing.Size(78, 23);
+            this.btnWindAdvanced.TabIndex = 37;
+            this.btnWindAdvanced.Text = "Advanced";
+            this.btnWindAdvanced.UseVisualStyleBackColor = true;
+            // 
+            // lblWindUsage
+            // 
+            this.lblWindUsage.AutoSize = true;
+            this.lblWindUsage.Location = new System.Drawing.Point(6, 22);
+            this.lblWindUsage.Name = "lblWindUsage";
+            this.lblWindUsage.Size = new System.Drawing.Size(38, 13);
+            this.lblWindUsage.TabIndex = 36;
+            this.lblWindUsage.Text = "Usage";
+            // 
+            // cbWindUsage
+            // 
+            this.cbWindUsage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbWindUsage.FormattingEnabled = true;
+            this.cbWindUsage.Items.AddRange(new object[] {
+            "Global",
+            "Relative",
+            "Absolute"});
+            this.cbWindUsage.Location = new System.Drawing.Point(88, 19);
+            this.cbWindUsage.Name = "cbWindUsage";
+            this.cbWindUsage.Size = new System.Drawing.Size(121, 21);
+            this.cbWindUsage.TabIndex = 35;
+            // 
             // lblWindDirection
             // 
             this.lblWindDirection.AutoSize = true;
-            this.lblWindDirection.Location = new System.Drawing.Point(6, 43);
+            this.lblWindDirection.Location = new System.Drawing.Point(6, 74);
             this.lblWindDirection.Name = "lblWindDirection";
             this.lblWindDirection.Size = new System.Drawing.Size(93, 13);
             this.lblWindDirection.TabIndex = 8;
@@ -332,7 +422,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtWindDirection
             // 
-            this.txtWindDirection.Location = new System.Drawing.Point(133, 41);
+            this.txtWindDirection.Location = new System.Drawing.Point(153, 72);
             this.txtWindDirection.Maximum = new decimal(new int[] {
             360,
             0,
@@ -346,7 +436,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblWindSpeed
             // 
             this.lblWindSpeed.AutoSize = true;
-            this.lblWindSpeed.Location = new System.Drawing.Point(6, 17);
+            this.lblWindSpeed.Location = new System.Drawing.Point(6, 48);
             this.lblWindSpeed.Name = "lblWindSpeed";
             this.lblWindSpeed.Size = new System.Drawing.Size(38, 13);
             this.lblWindSpeed.TabIndex = 6;
@@ -354,7 +444,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtWindSpeed
             // 
-            this.txtWindSpeed.Location = new System.Drawing.Point(133, 15);
+            this.txtWindSpeed.Location = new System.Drawing.Point(153, 46);
             this.txtWindSpeed.Name = "txtWindSpeed";
             this.txtWindSpeed.Size = new System.Drawing.Size(56, 20);
             this.txtWindSpeed.TabIndex = 5;
@@ -362,17 +452,16 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.lblTransitionCrossfadeLength);
             this.groupBox1.Controls.Add(this.txtTransitionCrossfadeLength);
             this.groupBox1.Controls.Add(this.lblTransitionEndLength);
             this.groupBox1.Controls.Add(this.txtTransitionEndLength);
             this.groupBox1.Controls.Add(this.lblTransitionStartLength);
             this.groupBox1.Controls.Add(this.txtTransitionStartLength);
-            this.groupBox1.Location = new System.Drawing.Point(12, 201);
+            this.groupBox1.Location = new System.Drawing.Point(12, 355);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(215, 116);
+            this.groupBox1.Size = new System.Drawing.Size(299, 98);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Transition";
@@ -388,7 +477,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtTransitionCrossfadeLength
             // 
-            this.txtTransitionCrossfadeLength.Location = new System.Drawing.Point(133, 67);
+            this.txtTransitionCrossfadeLength.Location = new System.Drawing.Point(153, 67);
             this.txtTransitionCrossfadeLength.Maximum = new decimal(new int[] {
             360,
             0,
@@ -410,7 +499,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtTransitionEndLength
             // 
-            this.txtTransitionEndLength.Location = new System.Drawing.Point(133, 41);
+            this.txtTransitionEndLength.Location = new System.Drawing.Point(153, 41);
             this.txtTransitionEndLength.Maximum = new decimal(new int[] {
             360,
             0,
@@ -432,25 +521,108 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtTransitionStartLength
             // 
-            this.txtTransitionStartLength.Location = new System.Drawing.Point(133, 15);
+            this.txtTransitionStartLength.Location = new System.Drawing.Point(153, 15);
             this.txtTransitionStartLength.Name = "txtTransitionStartLength";
             this.txtTransitionStartLength.Size = new System.Drawing.Size(56, 20);
             this.txtTransitionStartLength.TabIndex = 5;
             this.txtTransitionStartLength.ValueChanged += new System.EventHandler(this.txtTransitionStartLength_ValueChanged);
             // 
+            // gbVisibilityControl
+            // 
+            this.gbVisibilityControl.Controls.Add(this.lblVisibilityUsage);
+            this.gbVisibilityControl.Controls.Add(this.btnVisibilityAdvanced);
+            this.gbVisibilityControl.Controls.Add(this.cbVisibilityUsage);
+            this.gbVisibilityControl.Controls.Add(this.cbVisibilityType);
+            this.gbVisibilityControl.Controls.Add(this.lblVisibilityType);
+            this.gbVisibilityControl.Location = new System.Drawing.Point(12, 170);
+            this.gbVisibilityControl.Name = "gbVisibilityControl";
+            this.gbVisibilityControl.Size = new System.Drawing.Size(299, 73);
+            this.gbVisibilityControl.TabIndex = 11;
+            this.gbVisibilityControl.TabStop = false;
+            this.gbVisibilityControl.Text = "Visibility Control";
+            // 
+            // lblVisibilityUsage
+            // 
+            this.lblVisibilityUsage.AutoSize = true;
+            this.lblVisibilityUsage.Location = new System.Drawing.Point(6, 49);
+            this.lblVisibilityUsage.Name = "lblVisibilityUsage";
+            this.lblVisibilityUsage.Size = new System.Drawing.Size(38, 13);
+            this.lblVisibilityUsage.TabIndex = 39;
+            this.lblVisibilityUsage.Text = "Usage";
+            // 
+            // btnVisibilityAdvanced
+            // 
+            this.btnVisibilityAdvanced.Location = new System.Drawing.Point(215, 17);
+            this.btnVisibilityAdvanced.Name = "btnVisibilityAdvanced";
+            this.btnVisibilityAdvanced.Size = new System.Drawing.Size(78, 23);
+            this.btnVisibilityAdvanced.TabIndex = 38;
+            this.btnVisibilityAdvanced.Text = "Advanced";
+            this.btnVisibilityAdvanced.UseVisualStyleBackColor = true;
+            // 
+            // cbVisibilityUsage
+            // 
+            this.cbVisibilityUsage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbVisibilityUsage.FormattingEnabled = true;
+            this.cbVisibilityUsage.Items.AddRange(new object[] {
+            "Global",
+            "Relative",
+            "Absolute"});
+            this.cbVisibilityUsage.Location = new System.Drawing.Point(88, 46);
+            this.cbVisibilityUsage.Name = "cbVisibilityUsage";
+            this.cbVisibilityUsage.Size = new System.Drawing.Size(121, 21);
+            this.cbVisibilityUsage.TabIndex = 38;
+            // 
+            // gbSkyControl
+            // 
+            this.gbSkyControl.Controls.Add(this.btnSkyAdvanced);
+            this.gbSkyControl.Controls.Add(this.lblSkyUsage);
+            this.gbSkyControl.Controls.Add(this.cbSkyUsage);
+            this.gbSkyControl.Controls.Add(this.cbSkyType);
+            this.gbSkyControl.Controls.Add(this.lblSkyType);
+            this.gbSkyControl.Location = new System.Drawing.Point(12, 91);
+            this.gbSkyControl.Name = "gbSkyControl";
+            this.gbSkyControl.Size = new System.Drawing.Size(299, 73);
+            this.gbSkyControl.TabIndex = 40;
+            this.gbSkyControl.TabStop = false;
+            this.gbSkyControl.Text = "Sky control";
+            // 
+            // lblSkyUsage
+            // 
+            this.lblSkyUsage.AutoSize = true;
+            this.lblSkyUsage.Location = new System.Drawing.Point(6, 49);
+            this.lblSkyUsage.Name = "lblSkyUsage";
+            this.lblSkyUsage.Size = new System.Drawing.Size(38, 13);
+            this.lblSkyUsage.TabIndex = 39;
+            this.lblSkyUsage.Text = "Usage";
+            // 
+            // cbSkyUsage
+            // 
+            this.cbSkyUsage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSkyUsage.FormattingEnabled = true;
+            this.cbSkyUsage.Items.AddRange(new object[] {
+            "Global",
+            "Relative",
+            "Absolute"});
+            this.cbSkyUsage.Location = new System.Drawing.Point(88, 46);
+            this.cbSkyUsage.Name = "cbSkyUsage";
+            this.cbSkyUsage.Size = new System.Drawing.Size(121, 21);
+            this.cbSkyUsage.TabIndex = 38;
+            // 
             // ZoneEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(457, 329);
+            this.ClientSize = new System.Drawing.Size(537, 465);
+            this.Controls.Add(this.gbSkyControl);
+            this.Controls.Add(this.gbVisibilityControl);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbWind);
             this.Controls.Add(this.gbTimePeriods);
-            this.Controls.Add(this.gbTimeOfDay);
+            this.Controls.Add(this.gbWeatherControl);
             this.Name = "ZoneEditor";
             this.Text = "Zone properties";
-            this.gbTimeOfDay.ResumeLayout(false);
-            this.gbTimeOfDay.PerformLayout();
+            this.gbWeatherControl.ResumeLayout(false);
+            this.gbWeatherControl.PerformLayout();
             this.gbTimePeriods.ResumeLayout(false);
             this.gbTimePeriods.PerformLayout();
             this.txtTimePeriodPassiveSkill.ResumeLayout(false);
@@ -465,19 +637,23 @@ namespace ProjectEternity.Editors.MapEditor
             ((System.ComponentModel.ISupportInitialize)(this.txtTransitionCrossfadeLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTransitionEndLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTransitionStartLength)).EndInit();
+            this.gbVisibilityControl.ResumeLayout(false);
+            this.gbVisibilityControl.PerformLayout();
+            this.gbSkyControl.ResumeLayout(false);
+            this.gbSkyControl.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox gbTimeOfDay;
-        private System.Windows.Forms.Label lblWeather;
-        private System.Windows.Forms.ComboBox cbWeather;
-        private System.Windows.Forms.Label lblTypeOfSky;
-        private System.Windows.Forms.ComboBox cbTypeOfSky;
-        private System.Windows.Forms.Label lblVisibility;
-        private System.Windows.Forms.ComboBox cbVisibility;
+        private System.Windows.Forms.GroupBox gbWeatherControl;
+        private System.Windows.Forms.Label lblWeatherType;
+        private System.Windows.Forms.ComboBox cbWeatherType;
+        private System.Windows.Forms.Label lblSkyType;
+        private System.Windows.Forms.ComboBox cbSkyType;
+        private System.Windows.Forms.Label lblVisibilityType;
+        private System.Windows.Forms.ComboBox cbVisibilityType;
         private System.Windows.Forms.GroupBox gbTimePeriods;
         private System.Windows.Forms.GroupBox gbWind;
         private System.Windows.Forms.Label lblWindDirection;
@@ -503,5 +679,19 @@ namespace ProjectEternity.Editors.MapEditor
         private System.Windows.Forms.Label lblTimePeriodPassiveSkill;
         private System.Windows.Forms.TextBox txtTimePeriodPassiveSkill;
         private System.Windows.Forms.Button btnTimePeriodPassiveSkill;
+        private System.Windows.Forms.Button btnSkyAdvanced;
+        private System.Windows.Forms.Button btnWeatherAdvanced;
+        private System.Windows.Forms.Button btnWindAdvanced;
+        private System.Windows.Forms.Label lblWindUsage;
+        private System.Windows.Forms.ComboBox cbWindUsage;
+        private System.Windows.Forms.Label lblWeatherUsage;
+        private System.Windows.Forms.ComboBox cbWeatherUsage;
+        private System.Windows.Forms.GroupBox gbVisibilityControl;
+        private System.Windows.Forms.Label lblVisibilityUsage;
+        private System.Windows.Forms.Button btnVisibilityAdvanced;
+        private System.Windows.Forms.ComboBox cbVisibilityUsage;
+        private System.Windows.Forms.GroupBox gbSkyControl;
+        private System.Windows.Forms.Label lblSkyUsage;
+        private System.Windows.Forms.ComboBox cbSkyUsage;
     }
 }

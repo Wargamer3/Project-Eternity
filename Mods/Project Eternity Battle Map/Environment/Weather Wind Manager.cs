@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 
-namespace ProjectEternity.GameScreens.DeathmatchMapScreen
+namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class WeatherWindSpeedManager
+    public class WeatherWindSpeedManager
     {
         private bool AllowDynamicChanges;
         private bool AllowDynamicSmallChanges;

@@ -21,6 +21,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private TimePeriod NextTimePeriod;
         private int NextTimePeriodIndex;
 
+        public Color TimeOfDayColor;
+        public Vector3 SunPosition;
+        public Vector2 WindSpeed;
+
         protected BattleMapOverlay OverlayWeather;
         protected BattleMapOverlay OverlayTypeOfSky;
         protected BattleMapOverlay OverlayVisibility;

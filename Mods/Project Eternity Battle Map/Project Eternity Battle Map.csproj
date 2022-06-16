@@ -99,8 +99,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Environment\BattleMapOverlay.cs" />
+    <Compile Include="Environment\Battle Map Light.cs" />
     <Compile Include="Environment\Heat Wave Weather.cs" />
     <Compile Include="Environment\Prism Distortion Weather.cs" />
+    <Compile Include="Environment\Weather Wind Manager.cs" />
     <Compile Include="Environment\Wet Weather.cs" />
     <Compile Include="Environment\Environment Manager.cs" />
     <Compile Include="Environment\Map Zone.cs" />

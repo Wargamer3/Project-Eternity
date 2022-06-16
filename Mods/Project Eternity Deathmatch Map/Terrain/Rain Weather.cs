@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.LightningSystem;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -16,27 +15,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private double TimeElapsedSinceLastParticle;
         private double TimeBetweenEachParticle;
 
-        RenderTarget2D RainRenderTarget;
-        Effect DisplacementEffect;
-        Texture2D sprRain;
-        List<Rain> ListRain;
+        private RenderTarget2D RainRenderTarget;
+        private Effect DisplacementEffect;
+        private Texture2D sprRain;
+        private List<Rain> ListRain;
 
-        Texture2D RippleTexture;
-        Texture2D Droplet;
-        Texture2D sprSkyTexture;
-        Effect RippleEffect;
-        Effect WetEffect;
-        RenderTarget2D RippleRenderTarget;
-        RenderTargetCube RefCubeMap;
-        Model SkyModel;
-        Matrix[] SkyBones;
-        double Time;
-        float FogValue = 0;
+        private Texture2D RippleTexture;
+        private Texture2D Droplet;
+        private Texture2D sprSkyTexture;
+        private Effect RippleEffect;
+        private Effect WetEffect;
+        private RenderTarget2D RippleRenderTarget;
+        private RenderTargetCube RefCubeMap;
+        private Model SkyModel;
+        private Matrix[] SkyBones;
+        private double Time;
+        private float FogValue = 0;
 
-        WeatherIntensityManager IntensityManager;
-        WeatherRainSizeManager RainSizeManager;
-        WeatherWindSpeedManager WindSpeedManager;
-        WeatherLightningManager LightningManager;
+        private ShadowOverlay shadowOverlay;
+
+        private WeatherIntensityManager IntensityManager;
+        private WeatherRainSizeManager RainSizeManager;
+        private WeatherWindSpeedManager WindSpeedManager;
+        private WeatherLightningManager LightningManager;
 
         private struct Rain
         {
@@ -95,6 +96,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Init()
         {
+            shadowOverlay = new ShadowOverlay(Map);
             sprRain = Map.Content.Load<Texture2D>("Line");
             DisplacementEffect = Map.Content.Load<Effect>("Shaders/Displacement");
             // Look up the resolution and format of our main backbuffer.
@@ -108,6 +110,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             RainRenderTarget = new RenderTarget2D(GameScreen.GraphicsDevice, width, height, false,
                                                    format, pp.DepthStencilFormat, pp.MultiSampleCount,
                                                    RenderTargetUsage.DiscardContents);
+
             Matrix View = Matrix.Identity;
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, -1);
@@ -169,7 +172,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             WetEffect.Parameters["LightIntensity"].SetValue(1f);
             WetEffect.Parameters["LightDirection"].SetValue(Vector3.Normalize(new Vector3(80, 15, 8)));
 
-            DicTile3DByTileset.Clear();
+            DicTile2DByTileset.Clear();
             for (int L = 0; L < 1; L++)
             {
                 CreateMap(Map, Map.LayerManager.ListLayer[L], WetEffect);
@@ -317,22 +320,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void DrawRipples(CustomSpriteBatch g)
         {
             RippleEffect.Parameters["Time"].SetValue((float)Time);
-            g.End();
             g.GraphicsDevice.SetRenderTarget(RippleRenderTarget);
             g.GraphicsDevice.Clear(Color.Transparent);
             g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, RippleEffect);
             g.Draw(RippleTexture, new Rectangle(0, 0, Constants.Width, Constants.Height), Color.White);
             g.End();
             g.GraphicsDevice.SetRenderTarget(null);
-            g.Begin();
         }
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
+            g.End();
+
+            shadowOverlay.BeginDraw(g);
+
             DrawRipples(g);
             DrawSkyCube();
-
-            g.End();
 
             LightningManager.BeginDraw(g);
 
@@ -350,7 +353,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             g.GraphicsDevice.SetRenderTarget(Map.MapRenderTarget);
             g.GraphicsDevice.Clear(Color.White);
-            foreach (var ActiveTileset in DicTile3DByTileset.Values)
+            foreach (Tile2DHolder ActiveTileset in DicTile2DByTileset.Values)
             {
                 ActiveTileset.WetEffect.Parameters["Time"].SetValue((float)Time);
                 ActiveTileset.WetEffect.Parameters["RippleTexture"].SetValue(RippleRenderTarget);
@@ -379,7 +382,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.GraphicsDevice.Textures[1] = RainRenderTarget;
             g.GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
             g.Draw(Map.MapRenderTarget, Vector2.Zero, Color.White);
+
             g.End();
+            shadowOverlay.Draw(g);
             g.Begin();
         }
 

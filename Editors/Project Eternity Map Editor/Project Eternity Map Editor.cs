@@ -190,9 +190,9 @@ namespace ProjectEternity.Editors.MapEditor
                 }
             };
 
-            for (int S = BattleMapViewer.ActiveMap.ListMapScript.Count - 1; S >= 0; --S)
+            for (int S = NewMap.ListMapScript.Count - 1; S >= 0; --S)
             {
-                BattleMapViewer.Helper.InitScript(BattleMapViewer.ActiveMap.ListMapScript[S]);
+                BattleMapViewer.Helper.InitScript(NewMap.ListMapScript[S]);
             }
 
             if (NewMap.ListMultiplayerColor.Count > 0)
@@ -202,7 +202,7 @@ namespace ProjectEternity.Editors.MapEditor
                     cbDeadthmatch.Items.Add(C + 1);
                 }
 
-                btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(BattleMapViewer.ActiveMap.ListMultiplayerColor[0].R, BattleMapViewer.ActiveMap.ListMultiplayerColor[0].G, BattleMapViewer.ActiveMap.ListMultiplayerColor[0].B);
+                btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(NewMap.ListMultiplayerColor[0].R, NewMap.ListMultiplayerColor[0].G, NewMap.ListMultiplayerColor[0].B);
             }
         }
 

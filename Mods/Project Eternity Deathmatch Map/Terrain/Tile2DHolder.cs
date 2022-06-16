@@ -11,7 +11,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class Tile2DHolder
     {
-        private List<Terrain> ListTile3D;
+        private List<Terrain> ListTile2D;
         Texture2D sprTileset;
         Texture2D sprTilesetBumpMap;
         Texture2D sprTilesetHeightMap;//R = Depth, G = Wall Left to right angle, B = Wall Up to down angle where 255 = upward wall
@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public Tile2DHolder(string TilesetName, ContentManager Content, Effect WetEffect)
         {
-            ListTile3D = new List<Terrain>();
+            ListTile2D = new List<Terrain>();
 
             if (WetEffect != null)
             {
@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void AddTile(Terrain NewTile)
         {
-            ListTile3D.Add(NewTile);
+            ListTile2D.Add(NewTile);
         }
 
         public void Draw(CustomSpriteBatch g)
@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             }
 
-            foreach (var ActiveTile in ListTile3D)
+            foreach (Terrain ActiveTile in ListTile2D)
             {
                 Color FinalColor = Color.White;
                 float FinalHeight = ActiveTile.WorldPosition.Z;
@@ -86,6 +86,35 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 g.Draw(sprTileset,
                         new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.CameraPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.CameraPosition.Y) * ActiveTile.Owner.TileSize.Y),
+                        ActiveTile.DrawableTile.Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ActiveTile.LayerDepth);
+            }
+
+            g.End();
+        }
+
+        public void Draw(CustomSpriteBatch g, Vector2 Offset)
+        {
+            if (CanUseEffect)
+            {
+                g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, WetEffect);
+            }
+            else
+            {
+                g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            }
+
+            foreach (Terrain ActiveTile in ListTile2D)
+            {
+                Color FinalColor = Color.White;
+                float FinalHeight = ActiveTile.WorldPosition.Z;
+
+                if (FinalHeight > ActiveTile.Owner.CameraPosition.Z)
+                {
+                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.CameraPosition.Z) * 255);
+                }
+
+                g.Draw(sprTileset,
+                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.CameraPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.CameraPosition.Y) * ActiveTile.Owner.TileSize.Y) + Offset,
                         ActiveTile.DrawableTile.Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ActiveTile.LayerDepth);
             }
 

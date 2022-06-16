@@ -31,16 +31,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public enum SkyTypes { Disabled, Regular, Arctic, Warm, }
         public enum VisibilityTypes { Regular, FogOfWar }
+        public enum ZoneUsages { Global, Relative, Absolute }
+
 
         public string Name;
 
         public float TimeStart;
         public float DayStart;
 
-        public WeatherTypes Weather;
-        public SkyTypes TypeOfSky;
-        public VisibilityTypes Visibility;
+        public WeatherTypes WeatherType;
+        public ZoneUsages WeatherUsage;
+        public SkyTypes SkyType;
+        public ZoneUsages SkyUsage;
+        public VisibilityTypes VisibilityType;
+        public ZoneUsages VisibilityUsage;
 
+        public ZoneUsages WindUsage;
         public float WindSpeed;
         public float WindDirection;
 
@@ -59,9 +65,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             PassiveSkillPath = "None";
 
-            Weather = WeatherTypes.Regular;
-            TypeOfSky = SkyTypes.Regular;
-            Visibility = VisibilityTypes.Regular;
+            WeatherType = WeatherTypes.Regular;
+            SkyType = SkyTypes.Regular;
+            VisibilityType = VisibilityTypes.Regular;
 
             WindSpeed = 0;
             WindDirection = 0;
@@ -75,6 +81,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public TimePeriod(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
+            PassiveSkill = null;
+
+            Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+        }
+
+        protected virtual void Load(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
             Name = BR.ReadString();
 
             TimeStart = BR.ReadSingle();
@@ -86,20 +100,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 PassiveSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + PassiveSkillPath + ".pecs", PassiveSkillPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
 
-            Weather = (WeatherTypes)BR.ReadByte();
-            TypeOfSky = (SkyTypes)BR.ReadByte();
-            Visibility = (VisibilityTypes)BR.ReadByte();
+            WeatherType = (WeatherTypes)BR.ReadByte();
+            WeatherUsage = (ZoneUsages)BR.ReadByte();
 
+            SkyType = (SkyTypes)BR.ReadByte();
+            SkyUsage = (ZoneUsages)BR.ReadByte();
+
+            VisibilityType = (VisibilityTypes)BR.ReadByte();
+            VisibilityUsage = (ZoneUsages)BR.ReadByte();
+
+            WindUsage = (ZoneUsages)BR.ReadByte();
             WindSpeed = BR.ReadSingle();
             WindDirection = BR.ReadSingle();
 
             TransitionStartLength = BR.ReadSingle();
             TransitionEndLength = BR.ReadSingle();
             CrossfadeLength = BR.ReadSingle();
-            PassiveSkill = null;
         }
 
-        public void Save(BinaryWriter BW)
+        public virtual void Save(BinaryWriter BW)
         {
             BW.Write(Name);
 
@@ -108,10 +127,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Write(PassiveSkillPath);
 
-            BW.Write((byte)Weather);
-            BW.Write((byte)TypeOfSky);
-            BW.Write((byte)Visibility);
+            BW.Write((byte)WeatherType);
+            BW.Write((byte)WeatherUsage);
 
+            BW.Write((byte)SkyType);
+            BW.Write((byte)SkyUsage);
+
+            BW.Write((byte)VisibilityType);
+            BW.Write((byte)VisibilityUsage);
+
+            BW.Write((byte)WindUsage);
             BW.Write(WindSpeed);
             BW.Write(WindDirection);
 
