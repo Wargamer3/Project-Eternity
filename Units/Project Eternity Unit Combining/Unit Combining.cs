@@ -213,7 +213,7 @@ namespace ProjectEternity.Core.Units.Combining
         {
         }
 
-        public override GameScreen GetCustomizeScreen()
+        public override GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {
             return null;
         }

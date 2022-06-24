@@ -110,7 +110,7 @@ namespace ProjectEternity.Core.Units.Normal
         {
         }
 
-        public override GameScreens.GameScreen GetCustomizeScreen()
+        public override GameScreens.GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {
             return null;
         }

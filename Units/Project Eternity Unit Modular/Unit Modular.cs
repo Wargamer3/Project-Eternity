@@ -525,7 +525,7 @@ namespace ProjectEternity.Core.Units.Modular
             this.MaxMovement = (int)Parts.Movement;
         }
 
-        public override GameScreens.GameScreen GetCustomizeScreen()
+        public override GameScreens.GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {
             return new PartsEquipScreen(this);
         }

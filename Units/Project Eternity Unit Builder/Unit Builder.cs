@@ -135,7 +135,7 @@ namespace ProjectEternity.Core.Units.Builder
         {
         }
 
-        public override GameScreen GetCustomizeScreen()
+        public override GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {
             return null;
         }

@@ -171,8 +171,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case MenuChoice.NextStage:
-                        PushScreen(new CommanderLoadoutScreen(PlayerRoster));
-                        //PushScreen(new LoadoutScreen(PlayerRoster));
+                        //PushScreen(new CommanderLoadoutScreen(PlayerRoster));
+                        PushScreen(new LoadoutScreen(PlayerRoster, new List<Commander>()));
                         //LoadoutScreen.LoadMap(ListGameScreen, PlayerRoster);
                         //LoadoutScreen.StartMap(this, gameTime);
                         break;

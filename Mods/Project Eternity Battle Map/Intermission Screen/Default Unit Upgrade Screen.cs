@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.ControlHelper;
-using FMOD;
-using System.Collections.Generic;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -15,6 +15,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private enum UpgradeChoices { HP, EN, Armor, Mobility, Attacks }
 
         private Texture2D sprMapMenuBackground;
+        private Texture2D sprBackWall;
+        private Texture2D sprFacingWall;
+        private Texture2D sprFloor;
+        private Texture2D sprInnerWall;
+        private Texture2D sprOverhang;
 
         private SpriteFont fntFinlanderFont;
 
@@ -32,14 +37,44 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int[] ArrayUpgradeCost;
         private int UpgradeTotalCost;
 
-        private Unit SelectedUnit;
-        private List<Attack> ListAttack;
-        private FormulaParser ActiveParser;
+        private readonly Unit SelectedUnit;
+        private readonly List<Attack> ListAttack;
+        private readonly List<Unit> ListPresentUnit;
 
-        public DefaultUnitUpgradesScreen(Unit SelectedUnit, FormulaParser ActiveParser)
+        private  int SelectedUnitIndex;
+        private  int PreviousUnitIndex;
+        private  int NextUnitIndex;
+        private bool RotateRight;
+        private int SelectedNextUnitIndex = -1;
+        private GameScreen NextUpgradeScreen;
+
+        private readonly FormulaParser ActiveParser;
+        private float HangarPosition = 320;
+        private BasicEffect basicEffect;
+        private VertexPositionTexture[] quad = new VertexPositionTexture[6];
+
+        public DefaultUnitUpgradesScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
             : base()
         {
-            this.SelectedUnit = SelectedUnit;
+            this.ListPresentUnit = ListPresentUnit;
+            this.SelectedUnitIndex = SelectedUnitIndex;
+
+            if (ListPresentUnit.Count > 1)
+            {
+                PreviousUnitIndex = SelectedUnitIndex  - 1;
+                if (PreviousUnitIndex < 0)
+                {
+                    PreviousUnitIndex = ListPresentUnit.Count - 1;
+                }
+
+                NextUnitIndex = SelectedUnitIndex + 1;
+                if (NextUnitIndex >= ListPresentUnit.Count)
+                {
+                    NextUnitIndex = 0;
+                }
+            }
+
+            SelectedUnit = ListPresentUnit[SelectedUnitIndex];
             ListAttack = SelectedUnit.ListAttack;
             this.ActiveParser = ActiveParser;
 
@@ -57,17 +92,122 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             sprMapMenuBackground = Content.Load<Texture2D>("Menus/Status Screen/Background Black");
+            sprBackWall = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Back Wall");
+            sprFacingWall = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Facing Wall");
+            sprFloor = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Floor");
+            sprInnerWall = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Inner Wall");
+            sprOverhang = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Overhang");
 
             AttackPicker = new AttacksMenu(ActiveParser);
             AttackPicker.Load();
             AttackPicker.Reset(SelectedUnit, ListAttack);
 
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
+
+            float CenterX = 320;
+            float Top = 0;
+            Vector2 TopLeft = new Vector2(CenterX - sprFloor.Width, Top);
+            Vector2 TopRight = new Vector2(CenterX + sprFloor.Width, Top);
+            Vector2 BottomLeft = new Vector2(CenterX - sprFloor.Width, Top + sprFloor.Height * 2);
+            Vector2 BottomRight = new Vector2(CenterX + sprFloor.Width, Top + sprFloor.Height * 2);
+
+            quad[0] = new VertexPositionTexture(new Vector3(TopLeft, 0f), new Vector2(0f, 0f));
+            quad[1] = new VertexPositionTexture(new Vector3(BottomRight, 0f), new Vector2(1f, 1f));
+            quad[2] = new VertexPositionTexture(new Vector3(BottomLeft, 0f), new Vector2(0f, 1f));
+
+            quad[3] = new VertexPositionTexture(new Vector3(BottomRight, 0f), new Vector2(1f, 1f));
+            quad[4] = new VertexPositionTexture(new Vector3(TopLeft, 0f), new Vector2(0f, 0f));
+            quad[5] = new VertexPositionTexture(new Vector3(TopRight, 0f), new Vector2(1f, 0f));
+
+            SetUpBasicEffect();
+        }
+
+        public void SetUpBasicEffect()
+        {
+            basicEffect = new BasicEffect(GameScreen.GraphicsDevice);
+            basicEffect.VertexColorEnabled = false;
+            basicEffect.TextureEnabled = true;
+            basicEffect.Texture = sprFloor;
+
+            Matrix View = Matrix.Identity;
+
+            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 0, -1);
+            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+
+            Projection = HalfPixelOffset * Projection;
+
+            basicEffect.World = Matrix.Identity;
+            basicEffect.View = View;
+            basicEffect.Projection = Projection;
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (InputHelper.InputCancelPressed())
+            if (NextUpgradeScreen != null)
+            {
+                if (RotateRight)
+                {
+                    HangarPosition -= 5;
+
+                    if (SelectedNextUnitIndex == SelectedUnitIndex && HangarPosition <= 320)
+                    {
+                        RemoveScreen(this);
+                        PushScreen(NextUpgradeScreen);
+                    }
+                    else if (HangarPosition < 0)
+                    {
+                        HangarPosition += 480;
+
+                        PreviousUnitIndex = SelectedUnitIndex;
+                        SelectedUnitIndex = NextUnitIndex;
+                        NextUnitIndex = SelectedUnitIndex + 1;
+
+                        if (NextUnitIndex >= ListPresentUnit.Count)
+                        {
+                            NextUnitIndex = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    HangarPosition += 5;
+                    if (HangarPosition > 480)
+                    {
+                        HangarPosition -= 480;
+                        RemoveScreen(this);
+                        PushScreen(NextUpgradeScreen);
+                    }
+                }
+            }
+            else if (InputHelper.InputLButtonPressed())
+            {
+                SelectedNextUnitIndex = PreviousUnitIndex;
+                RotateRight = false;
+
+                GameScreen CustomizeScreen = ListPresentUnit[SelectedNextUnitIndex].GetCustomizeScreen(ListPresentUnit, SelectedNextUnitIndex, ActiveParser);
+
+                if (CustomizeScreen == null)
+                {
+                    CustomizeScreen = new DefaultUnitUpgradesScreen(ListPresentUnit, SelectedNextUnitIndex, ActiveParser);
+                }
+
+                NextUpgradeScreen = CustomizeScreen;
+            }
+            else if (InputHelper.InputRButtonPressed())
+            {
+                SelectedNextUnitIndex = NextUnitIndex;
+                RotateRight = true;
+
+                GameScreen CustomizeScreen = ListPresentUnit[SelectedNextUnitIndex].GetCustomizeScreen(ListPresentUnit, SelectedNextUnitIndex, ActiveParser);
+
+                if (CustomizeScreen == null)
+                {
+                    CustomizeScreen = new DefaultUnitUpgradesScreen(ListPresentUnit, SelectedNextUnitIndex, ActiveParser);
+                }
+
+                NextUpgradeScreen = CustomizeScreen;
+            }
+            else if (InputHelper.InputCancelPressed())
             {
                 RemoveScreen(this);
             }
@@ -152,18 +292,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             g.End();
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            g.Draw(sprMapMenuBackground, new Vector2(0, 0), Color.White);
+            DrawCarousel(g);
             DrawUpgradeMenu(g);
         }
         
         private void DrawUpgradeMenu(CustomSpriteBatch g)
         {
-            g.Draw(sprMapMenuBackground, new Vector2(0, 0), Color.White);
             g.DrawString(fntFinlanderFont, "UNIT UPGRADE", new Vector2(10, 10), Color.White);
 
             g.Draw(SelectedUnit.SpriteMap, new Vector2(20, 50), Color.White);
             g.DrawString(fntFinlanderFont, SelectedUnit.RelativePath, new Vector2(60, 50), Color.White);
             g.Draw(sprPixel, new Rectangle(60, 75, (int)fntFinlanderFont.MeasureString(SelectedUnit.RelativePath).X, 1), Color.FromNonPremultiplied(173, 216, 230, 190));
-            g.Draw(SelectedUnit.SpriteUnit, new Vector2(250 - SelectedUnit.SpriteUnit.Width, 280 - SelectedUnit.SpriteUnit.Height), Color.White);
 
             int Y = 350;
             DrawBox(g, new Vector2(5, Y), 450, 120, Color.Black);
@@ -254,6 +394,113 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 g.DrawLine(sprPixel, new Vector2(BoxX + i * UpgradeWidth, BoxY), new Vector2(BoxX + i * UpgradeWidth, BoxY + BoxHeight), Color.White);
             }
+        }
+
+        private void DrawQuad(CustomSpriteBatch g, Texture2D Sprite, bool FlipX, float CenterX, float Top, float BottomSkewValue, float ScaleX)
+        {
+            basicEffect.Texture = Sprite;
+
+            Vector2 TopLeft = new Vector2(CenterX - Sprite.Width * ScaleX, Top);
+            Vector2 TopRight = new Vector2(CenterX + Sprite.Width * ScaleX, Top);
+            Vector2 BottomLeft = new Vector2(CenterX + BottomSkewValue - Sprite.Width * ScaleX, Top + Sprite.Height * 2);
+            Vector2 BottomRight = new Vector2(CenterX + BottomSkewValue + Sprite.Width * ScaleX, Top + Sprite.Height * 2);
+
+            if (FlipX)
+            {
+                quad[0].TextureCoordinate = new Vector2(1f, 0f);
+                quad[1].TextureCoordinate = new Vector2(0f, 1f);
+                quad[2].TextureCoordinate = new Vector2(1f, 1f);
+
+                quad[3].TextureCoordinate = new Vector2(0f, 1f);
+                quad[4].TextureCoordinate = new Vector2(1f, 0f);
+                quad[5].TextureCoordinate = new Vector2(0f, 0f);
+            }
+            else
+            {
+                quad[0].TextureCoordinate = new Vector2(0f, 0f);
+                quad[1].TextureCoordinate = new Vector2(1f, 1f);
+                quad[2].TextureCoordinate = new Vector2(0f, 1f);
+
+                quad[3].TextureCoordinate = new Vector2(1f, 1f);
+                quad[4].TextureCoordinate = new Vector2(0f, 0f);
+                quad[5].TextureCoordinate = new Vector2(1f, 0f);
+            }
+
+            quad[0].Position = new Vector3(TopLeft, 0f);
+            quad[1].Position = new Vector3(BottomRight, 0f);
+            quad[2].Position = new Vector3(BottomLeft, 0f);
+
+            quad[3].Position = new Vector3(BottomRight, 0f);
+            quad[4].Position = new Vector3(TopLeft, 0f);
+            quad[5].Position = new Vector3(TopRight, 0f);
+
+            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                g.GraphicsDevice.DrawUserPrimitives(
+                    PrimitiveType.TriangleList, quad, 0, 2);
+            }
+        }
+
+        private void DrawCarousel(CustomSpriteBatch g)
+        {
+            if (HangarPosition > 480)
+            {
+                HangarPosition -= 480;
+            }
+
+            g.End();
+
+            Vector2 CenterUnitPosition = new Vector2(Constants.Width / 2, 270);
+
+            if (PreviousUnitIndex >= 0)
+            {
+                DrawHangar(g, HangarPosition - 480, PreviousUnitIndex);
+            }
+
+            if (NextUnitIndex >= 0)
+            {
+                DrawHangar(g, HangarPosition + 480, NextUnitIndex);
+            }
+
+            DrawHangar(g, HangarPosition, SelectedUnitIndex);
+
+            DrawQuad(g, sprFacingWall, false, HangarPosition - 240, CenterUnitPosition.Y - 190, 0, 1f);
+            DrawQuad(g, sprFacingWall, false, HangarPosition + 240, CenterUnitPosition.Y - 190, 0, 1f);
+
+            DrawQuad(g, sprOverhang, false, HangarPosition, 0, 0, 1f);
+            DrawQuad(g, sprOverhang, false, HangarPosition + sprOverhang.Width * 2 - 74, 0, 0, 1f);
+            DrawQuad(g, sprOverhang, false, HangarPosition - sprOverhang.Width * 2 + 74, 0, 0, 1f);
+
+            g.Begin();
+        }
+
+        private void DrawHangar(CustomSpriteBatch g, float RealHangarPosition, int UnitIndex)
+        {
+            Vector2 CenterUnitPosition = new Vector2(Constants.Width / 2, 270);
+            float FloorSkewMax = 100;
+
+            float Hangar1Scale = 1 - (CenterUnitPosition.X - RealHangarPosition) / 320;
+            float HangarPositionDrawn = RealHangarPosition + (1 - Hangar1Scale) * 120;
+
+            float Hangar1RightWallCenter = RealHangarPosition + 152;
+            float Hangar1RightWallScale = 1 - (472 - Hangar1RightWallCenter) / 320;
+            float Hangar1RightWallWidth = (sprInnerWall.Width - 3) * Hangar1RightWallScale;
+            float Hangar1RightWallX = HangarPositionDrawn + 90;
+            Hangar1RightWallCenter = Hangar1RightWallX + Hangar1RightWallWidth + (1 - Hangar1RightWallScale) * 4;
+
+            float Hangar1LeftWallCenter = RealHangarPosition - 152;
+            float Hangar1LeftWallScale = 1 - (Hangar1LeftWallCenter - 168) / 320;
+            float Hangar1LeftWallWidth = (sprInnerWall.Width - 3) * Hangar1LeftWallScale;
+            float Hangar1LeftWallX = HangarPositionDrawn - 90;
+            Hangar1LeftWallCenter = Hangar1LeftWallX - Hangar1LeftWallWidth - (1 - Hangar1LeftWallScale) * 4;
+
+            DrawQuad(g, sprBackWall, false, HangarPositionDrawn, CenterUnitPosition.Y - 188, 0f, 1f);
+            DrawQuad(g, sprFloor, false, HangarPositionDrawn, CenterUnitPosition.Y, -(1 - Hangar1Scale) * FloorSkewMax, 1f);
+            DrawQuad(g, sprInnerWall, true, Hangar1LeftWallCenter, CenterUnitPosition.Y - 186, 0, Hangar1LeftWallScale);
+            DrawQuad(g, sprInnerWall, false, Hangar1RightWallCenter, CenterUnitPosition.Y - 186, 0, Hangar1RightWallScale);
+
+            DrawQuad(g, ListPresentUnit[UnitIndex].SpriteUnit, true, RealHangarPosition + 50 * (1 - Hangar1Scale), CenterUnitPosition.Y - ListPresentUnit[UnitIndex].SpriteUnit.Height * 2 + 50, 0, 1f);
         }
     }
 }

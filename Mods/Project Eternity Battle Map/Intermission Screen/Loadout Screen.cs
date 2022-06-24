@@ -10,6 +10,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public sealed class LoadoutScreen : GameScreen
     {
+        private enum Stages { SquadSelection, SquadInfo, Warning, Confirmation }
+
         Texture2D sprRectangle;
         Texture2D sprBackground;
         Texture2D sprCursor;
@@ -20,17 +22,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         SpriteFont fntArial14;
 
         private readonly Roster PlayerRoster;
+        protected StatusMenuScreen StatusMenu;
 
-        int Stage;
-        int CursorIndex;
-        int PageCurrent;
-        int PageMax;
-        const int ItemPerPage = 8;
+        private Stages Stage;
+        private int CursorIndex;
+        private int PageCurrent;
+        private int PageMax;
+        private const int ItemPerPage = 8;
         private static BattleMap NewMap;
         private static List<Squad> ListSelectedSquad;
         private static List<GameScreen> ListGameScreenCreatedByMap;
 
         private List<Squad> ListPresentSquad;
+        private List<Unit> ListPresentUnit;
         private List<Commander> ListSelectedCommander;
 
         public LoadoutScreen(Roster PlayerRoster, List<Commander> ListSelectedCommander)
@@ -38,7 +42,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.PlayerRoster = PlayerRoster;
             this.ListSelectedCommander = ListSelectedCommander;
-            Stage = -1;
+            Stage = Stages.SquadSelection;
             CursorIndex = 0;
             PageCurrent = 1;
         }
@@ -54,7 +58,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntArial14 = Content.Load<SpriteFont>("Fonts/Arial");
 
+            StatusMenu = new StatusMenuScreen(null);
+            StatusMenu.Load();
+
             ListPresentSquad = PlayerRoster.TeamSquads.GetPresent();
+            ListPresentUnit = PlayerRoster.TeamUnits.GetPresent();
 
             PageMax = (int)Math.Ceiling(ListPresentSquad.Count / (float)ItemPerPage);
 
@@ -86,7 +94,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (Stage == -1)
+            if (Stage == Stages.SquadSelection)
             {
                 if (InputHelper.InputUpPressed())
                 {
@@ -126,11 +134,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     RemoveScreen(this);
                 }
+                else if (InputHelper.InputCommand1Pressed())
+                {
+                    Stage = Stages.SquadInfo;
+                    StatusMenu.ActiveSquad = new Squad("", ListPresentUnit[0]);
+                    StatusMenu.StatusPannel = StatusMenuScreen.StatusPannels.Unit;
+                }
             }
             else
             {
                 if (InputHelper.InputCancelPressed() || InputHelper.InputConfirmPressed())
-                    Stage--;
+                {
+                    Stage = Stages.SquadSelection;
+                }
             }
         }
 
@@ -183,12 +199,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (ListSelectedSquad.Contains(ListPresentSquad[S]))
                     g.Draw(sprCursor, new Vector2(40, 52 + Pos * 38), Color.White);
             }
-            if (Stage == 0)
+            if (Stage == Stages.Warning)
             {
                 g.Draw(sprWarning, new Vector2(100, 120), Color.White);
             }
-            if (Stage == -2)
+            else if(Stage == Stages.Confirmation)
+            {
                 g.Draw(sprConfirmation, new Vector2(100, 120), Color.White);
+            }
+            else if (Stage == Stages.SquadInfo)
+            {
+                StatusMenu.Draw(g);
+            }
         }
     }
 }

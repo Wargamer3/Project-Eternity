@@ -125,7 +125,7 @@ namespace ProjectEternity.Core.Units.Hub
         {
         }
 
-        public override GameScreen GetCustomizeScreen()
+        public override GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {
             throw new NotImplementedException();
         }

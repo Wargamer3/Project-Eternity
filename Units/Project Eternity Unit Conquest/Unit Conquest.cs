@@ -241,7 +241,7 @@ namespace ProjectEternity.Core.Units.Conquest
             get { return MapComponents; }
         }
 
-        public override GameScreens.GameScreen GetCustomizeScreen()
+        public override GameScreens.GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {
             throw new NotImplementedException();
         }

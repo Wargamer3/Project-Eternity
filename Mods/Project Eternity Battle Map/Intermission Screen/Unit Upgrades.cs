@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public sealed class UnitUpgradesScreen : UnitListScreen
     {
-        private List<Unit> ListPresentUnit;
-
         public UnitUpgradesScreen(Roster PlayerRoster, FormulaParser ActiveParser)
             : base(PlayerRoster, ActiveParser)
         {
@@ -19,8 +16,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             base.Load();
-
-            ListPresentUnit = PlayerRoster.TeamUnits.GetPresent();
         }
 
         public override void Update(GameTime gameTime)
@@ -31,10 +26,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (InputHelper.InputConfirmPressed() && ListPresentUnit.Count > 0)
             {
-                GameScreen CustomizeScreen = SelectedUnit.GetCustomizeScreen();
+                GameScreen CustomizeScreen = SelectedUnit.GetCustomizeScreen(ListPresentUnit, UnitSelectionMenu.SelectedIndex, ActiveParser);
 
                 if (CustomizeScreen == null)
-                    CustomizeScreen = new DefaultUnitUpgradesScreen(SelectedUnit, ActiveParser);
+                {
+                    CustomizeScreen = new DefaultUnitUpgradesScreen(ListPresentUnit, UnitSelectionMenu.SelectedIndex, ActiveParser);
+                }
 
                 PushScreen(CustomizeScreen);
             }

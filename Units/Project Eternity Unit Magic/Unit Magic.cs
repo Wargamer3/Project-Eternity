@@ -202,7 +202,7 @@ namespace ProjectEternity.Units.Magic
             }
         }
 
-        public override GameScreen GetCustomizeScreen()
+        public override GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {
             return new MagicEditor(ListMagicSpell[0], GlobalProjectileContext, MagicProjectileParams.SharedParams);
         }

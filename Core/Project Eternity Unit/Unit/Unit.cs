@@ -959,7 +959,7 @@ namespace ProjectEternity.Core.Units
         public virtual List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         { return new List<ActionPanel>(); }
 
-        public abstract GameScreens.GameScreen GetCustomizeScreen();
+        public abstract GameScreens.GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser);
 
         #region TerrainAttributes
 

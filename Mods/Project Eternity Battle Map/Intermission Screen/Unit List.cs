@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public DrawableMenu UnitSelectionMenu;
 
-        private List<Unit> ListPresentUnit;
+        protected List<Unit> ListPresentUnit;
         protected FormulaParser ActiveParser;
 
         public Unit SelectedUnit { get { return ListPresentUnit[UnitSelectionMenu.SelectedIndex]; } }

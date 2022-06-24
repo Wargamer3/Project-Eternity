@@ -128,7 +128,7 @@ namespace ProjectEternity.Core.Units.MultiForm
             ChangeUnit(ActiveUnitIndex);
         }
 
-        public override GameScreens.GameScreen GetCustomizeScreen()
+        public override GameScreens.GameScreen GetCustomizeScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
         {
             return null;
         }
