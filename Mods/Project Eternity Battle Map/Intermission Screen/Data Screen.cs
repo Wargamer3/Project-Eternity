@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            sprMapMenuBackground = Content.Load<Texture2D>("Status Screen/Background Black");
+            sprMapMenuBackground = Content.Load<Texture2D>("Menus/Status Screen/Background Black");
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");

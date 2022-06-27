@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             base.Load();
 
             ListPresentUnit = PlayerRoster.TeamUnits.GetPresent();
-            sprBackground = Content.Load<Texture2D>("Intermission Screens/Pilot Selection");
+            sprBackground = Content.Load<Texture2D>("Menus/Intermission Screens/Pilot Selection");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
