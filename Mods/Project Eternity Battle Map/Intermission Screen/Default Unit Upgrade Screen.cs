@@ -52,6 +52,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private float HangarPosition = 320;
         private BasicEffect basicEffect;
         private VertexPositionTexture[] quad = new VertexPositionTexture[6];
+        private Model TestModel;
 
         public DefaultUnitUpgradesScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
             : base()
@@ -91,6 +92,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
+            TestModel = Content.Load<Model>("3D/Models/A110_010_gundammk2");
             sprMapMenuBackground = Content.Load<Texture2D>("Menus/Status Screen/Background Black");
             sprBackWall = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Back Wall");
             sprFacingWall = Content.Load<Texture2D>("Menus/Intermission Screens/Hangar/Facing Wall");
@@ -171,11 +173,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 else
                 {
                     HangarPosition += 5;
-                    if (HangarPosition > 480)
+
+                    if (SelectedNextUnitIndex == SelectedUnitIndex && HangarPosition >= 320)
                     {
-                        HangarPosition -= 480;
                         RemoveScreen(this);
                         PushScreen(NextUpgradeScreen);
+                    }
+                    else if (HangarPosition > 480)
+                    {
+                        HangarPosition -= 480;
+
+                        NextUnitIndex = SelectedUnitIndex;
+                        SelectedUnitIndex = PreviousUnitIndex;
+
+                        PreviousUnitIndex = SelectedUnitIndex - 1;
+                        if (PreviousUnitIndex < 0)
+                        {
+                            PreviousUnitIndex = ListPresentUnit.Count - 1;
+                        }
                     }
                 }
             }
@@ -494,13 +509,39 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             float Hangar1LeftWallWidth = (sprInnerWall.Width - 3) * Hangar1LeftWallScale;
             float Hangar1LeftWallX = HangarPositionDrawn - 90;
             Hangar1LeftWallCenter = Hangar1LeftWallX - Hangar1LeftWallWidth - (1 - Hangar1LeftWallScale) * 4;
-
             DrawQuad(g, sprBackWall, false, HangarPositionDrawn, CenterUnitPosition.Y - 188, 0f, 1f);
             DrawQuad(g, sprFloor, false, HangarPositionDrawn, CenterUnitPosition.Y, -(1 - Hangar1Scale) * FloorSkewMax, 1f);
             DrawQuad(g, sprInnerWall, true, Hangar1LeftWallCenter, CenterUnitPosition.Y - 186, 0, Hangar1LeftWallScale);
             DrawQuad(g, sprInnerWall, false, Hangar1RightWallCenter, CenterUnitPosition.Y - 186, 0, Hangar1RightWallScale);
-
             DrawQuad(g, ListPresentUnit[UnitIndex].SpriteUnit, true, RealHangarPosition + 50 * (1 - Hangar1Scale), CenterUnitPosition.Y - ListPresentUnit[UnitIndex].SpriteUnit.Height * 2 + 50, 0, 1f);
+            //DrawModel(TestModel, Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateScale(130f) * Matrix.CreateTranslation(RealHangarPosition + 50 * (1 - Hangar1Scale), CenterUnitPosition.Y + 50, 0), Matrix.Identity);
+        }
+
+        private void DrawModel(Model Model, Matrix World, Matrix View)
+        {
+            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
+            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+
+            GameScreen.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GameScreen.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.White, 1f, 0);
+            Projection = HalfPixelOffset * Projection;
+
+            foreach (ModelMesh ActiveMesh in Model.Meshes)
+            {
+                foreach (BasicEffect effect in ActiveMesh.Effects)
+                {
+                    effect.World = World;
+                    effect.View = View;
+                    effect.Projection = Projection;
+                    effect.LightingEnabled = true; // turn on the lighting subsystem.
+                    effect.DirectionalLight0.DiffuseColor = new Vector3(1, 1, 1); // a red light
+                    effect.DirectionalLight0.Direction = new Vector3(0.5f, 0.5f, 1);  // coming along the x-axis
+                    effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0); // with green highlights
+                }
+
+                ActiveMesh.Draw();
+            }
         }
     }
 }
