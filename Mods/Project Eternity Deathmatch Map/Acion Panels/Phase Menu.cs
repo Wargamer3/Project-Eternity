@@ -139,6 +139,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             while (!Map.ListPlayer[Map.ActivePlayerIndex].IsAlive);
 
+            Map.MapEnvironment.OnNewPlayerPhase();
+
             for (int S = 0; S < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; S++)
             {
                 Squad ActiveSquad = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[S];

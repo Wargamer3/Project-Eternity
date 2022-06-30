@@ -8,7 +8,7 @@ namespace ProjectEternity.Editors.MapEditor
 {
     public partial class ZoneEditor : Form
     {
-        private readonly MapZone ZoneToEdit;
+        public readonly MapZone ZoneToEdit;
 
         public ZoneEditor()
         {
@@ -17,7 +17,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         public ZoneEditor(MapZone ZoneToEdit)
         {
-            this.ZoneToEdit = ZoneToEdit;
+            this.ZoneToEdit = ZoneToEdit.Copy();
 
             InitializeComponent();
 

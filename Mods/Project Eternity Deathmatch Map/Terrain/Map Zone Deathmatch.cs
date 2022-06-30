@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -22,6 +23,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             UpdateOverlayTypeOfSky();
             UpdateOverlayWeater();
             UpdateOverlayVisibility();
+        }
+
+        public MapZoneDeathmatch(MapZoneDeathmatch Copy)
+            : base(Copy)
+        {
+            Map = Copy.Map;
+
+            UpdateOverlayTypeOfSky();
+            UpdateOverlayWeater();
+            UpdateOverlayVisibility();
+        }
+
+        public override void OnNewPlayerPhase()
+        {
+            if (Shape.ZoneShapeType == ZoneShape.ZoneShapeTypes.Full)
+            {
+                for (int S = 0; S < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; S++)
+                {
+                    Squad ActiveSquad = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[S];
+
+                    for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+                    {
+                        Map.ActivateAutomaticSkills(CurrentTimePeriod.PassiveSkill, ActiveSquad, ActiveSquad[U]);
+                    }
+                }
+            }
         }
 
         protected override void UpdateOverlayTypeOfSky()
@@ -68,5 +95,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public override MapZone Copy()
+        {
+            return new MapZoneDeathmatch(this);
+        }
     }
 }

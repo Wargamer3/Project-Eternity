@@ -1290,7 +1290,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        private void mapPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tsmMapProperties_Click(object sender, EventArgs e)
         {
             MapStatistics MS = new MapStatistics(ActiveMap.MapName, ActiveMap.MapSize, ActiveMap.TileSize, ActiveMap.CameraType, ActiveMap.CameraPosition, ActiveMap.PlayersMin, ActiveMap.PlayersMax, ActiveMap.Description);
             if (MS.ShowDialog() == DialogResult.OK)
@@ -1336,6 +1336,16 @@ namespace ProjectEternity.Editors.MapEditor
         private void tsmSave_Click(object sender, EventArgs e)
         {
             SaveItem(FilePath, null);
+        }
+
+        private void tsmGlobalEnvironment_Click(object sender, EventArgs e)
+        {
+            ZoneEditor GlobalZoneEditor = new ZoneEditor(BattleMapViewer.ActiveMap.MapEnvironment.GlobalZone);
+
+            if (GlobalZoneEditor.ShowDialog() == DialogResult.OK)
+            {
+                BattleMapViewer.ActiveMap.MapEnvironment.GlobalZone = GlobalZoneEditor.ZoneToEdit;
+            }
         }
 
         private void tabToolBox_SelectedIndexChanged(object sender, EventArgs e)

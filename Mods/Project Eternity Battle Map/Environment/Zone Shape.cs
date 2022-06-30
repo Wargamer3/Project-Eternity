@@ -17,6 +17,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ZoneShapeType = ZoneShapeType;
         }
 
+        public ZoneShape(ZoneShapeTypes ZoneShapeType, Vector2 Position, Vector2 Size, float Radius)
+        {
+            this.ZoneShapeType = ZoneShapeType;
+            this.Position = Position;
+            this.Size = Size;
+            this.Radius = Radius;
+        }
+
         public ZoneShape(BinaryReader BR)
         {
             ZoneShapeType = (ZoneShapeTypes)BR.ReadByte();

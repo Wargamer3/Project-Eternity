@@ -90,6 +90,7 @@
             this.lsVisualProps = new System.Windows.Forms.ListBox();
             this.pgPropProperties = new System.Windows.Forms.PropertyGrid();
             this.tabZones = new System.Windows.Forms.TabPage();
+            this.btnAddZoneFullMap = new System.Windows.Forms.Button();
             this.pgZoneProperties = new System.Windows.Forms.PropertyGrid();
             this.btnEditZone = new System.Windows.Forms.Button();
             this.btnAddZoneOval = new System.Windows.Forms.Button();
@@ -97,13 +98,13 @@
             this.btnRemoveZone = new System.Windows.Forms.Button();
             this.btnAddZoneRectangle = new System.Windows.Forms.Button();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
-            this.mapPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmMapProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.BattleMapViewer = new ProjectEternity.GameScreens.BattleMapScreen.BattleMapViewerControl();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tslInformation = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuToolBar = new System.Windows.Forms.MenuStrip();
-            this.btnAddZoneFullMap = new System.Windows.Forms.Button();
+            this.tsmGlobalEnvironment = new System.Windows.Forms.ToolStripMenuItem();
             this.tbConditions.SuspendLayout();
             this.tabToolBox.SuspendLayout();
             this.tabTiles.SuspendLayout();
@@ -843,6 +844,16 @@
             this.tabZones.Text = "Zones";
             this.tabZones.UseVisualStyleBackColor = true;
             // 
+            // btnAddZoneFullMap
+            // 
+            this.btnAddZoneFullMap.Location = new System.Drawing.Point(6, 204);
+            this.btnAddZoneFullMap.Name = "btnAddZoneFullMap";
+            this.btnAddZoneFullMap.Size = new System.Drawing.Size(109, 23);
+            this.btnAddZoneFullMap.TabIndex = 33;
+            this.btnAddZoneFullMap.Text = "Add Full Map";
+            this.btnAddZoneFullMap.UseVisualStyleBackColor = true;
+            this.btnAddZoneFullMap.Click += new System.EventHandler(this.btnAddZoneFullMap_Click);
+            // 
             // pgZoneProperties
             // 
             this.pgZoneProperties.Location = new System.Drawing.Point(6, 249);
@@ -908,12 +919,12 @@
             this.tsmSave.Text = "Save";
             this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
-            // mapPropertiesToolStripMenuItem
+            // tsmMapProperties
             // 
-            this.mapPropertiesToolStripMenuItem.Name = "mapPropertiesToolStripMenuItem";
-            this.mapPropertiesToolStripMenuItem.Size = new System.Drawing.Size(99, 20);
-            this.mapPropertiesToolStripMenuItem.Text = "Map properties";
-            this.mapPropertiesToolStripMenuItem.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
+            this.tsmMapProperties.Name = "tsmMapProperties";
+            this.tsmMapProperties.Size = new System.Drawing.Size(99, 20);
+            this.tsmMapProperties.Text = "Map properties";
+            this.tsmMapProperties.Click += new System.EventHandler(this.tsmMapProperties_Click);
             // 
             // splitContainer1
             // 
@@ -966,22 +977,20 @@
             // 
             this.mnuToolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmSave,
-            this.mapPropertiesToolStripMenuItem});
+            this.tsmMapProperties,
+            this.tsmGlobalEnvironment});
             this.mnuToolBar.Location = new System.Drawing.Point(0, 0);
             this.mnuToolBar.Name = "mnuToolBar";
             this.mnuToolBar.Size = new System.Drawing.Size(928, 24);
             this.mnuToolBar.TabIndex = 9;
             this.mnuToolBar.Text = "menuStrip1";
             // 
-            // btnAddZoneFullMap
+            // tsmGlobalEnvironment
             // 
-            this.btnAddZoneFullMap.Location = new System.Drawing.Point(6, 204);
-            this.btnAddZoneFullMap.Name = "btnAddZoneFullMap";
-            this.btnAddZoneFullMap.Size = new System.Drawing.Size(109, 23);
-            this.btnAddZoneFullMap.TabIndex = 33;
-            this.btnAddZoneFullMap.Text = "Add Full Map";
-            this.btnAddZoneFullMap.UseVisualStyleBackColor = true;
-            this.btnAddZoneFullMap.Click += new System.EventHandler(this.btnAddZoneFullMap_Click);
+            this.tsmGlobalEnvironment.Name = "tsmGlobalEnvironment";
+            this.tsmGlobalEnvironment.Size = new System.Drawing.Size(124, 20);
+            this.tsmGlobalEnvironment.Text = "Global Environment";
+            this.tsmGlobalEnvironment.Click += new System.EventHandler(this.tsmGlobalEnvironment_Click);
             // 
             // ProjectEternityMapEditor
             // 
@@ -1072,7 +1081,7 @@
         private System.Windows.Forms.ListBox lstTriggers;
         private System.Windows.Forms.PropertyGrid pgScriptProperties;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
-        private System.Windows.Forms.ToolStripMenuItem mapPropertiesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmMapProperties;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tslInformation;
@@ -1113,5 +1122,6 @@
         private System.Windows.Forms.Button btnEditZone;
         private System.Windows.Forms.PropertyGrid pgZoneProperties;
         private System.Windows.Forms.Button btnAddZoneFullMap;
+        private System.Windows.Forms.ToolStripMenuItem tsmGlobalEnvironment;
     }
 }

@@ -82,6 +82,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        public void OnNewPlayerPhase()
+        {
+            GlobalZone.OnNewPlayerPhase();
+
+            foreach (MapZone ActiveZone in ListMapZone)
+            {
+                ActiveZone.OnNewPlayerPhase();
+            }
+        }
+
         public void BeginDraw(CustomSpriteBatch g)
         {
             GlobalZone.BeginDraw(g);

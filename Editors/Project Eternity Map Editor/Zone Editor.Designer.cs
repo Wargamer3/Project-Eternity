@@ -75,6 +75,8 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbSkyControl = new System.Windows.Forms.GroupBox();
             this.lblSkyUsage = new System.Windows.Forms.Label();
             this.cbSkyUsage = new System.Windows.Forms.ComboBox();
+            this.btnConfirm = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.gbWeatherControl.SuspendLayout();
             this.gbTimePeriods.SuspendLayout();
             this.txtTimePeriodPassiveSkill.SuspendLayout();
@@ -245,7 +247,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbTimePeriods.Controls.Add(this.lblTimePeriodTimeStart);
             this.gbTimePeriods.Location = new System.Drawing.Point(317, 12);
             this.gbTimePeriods.Name = "gbTimePeriods";
-            this.gbTimePeriods.Size = new System.Drawing.Size(212, 441);
+            this.gbTimePeriods.Size = new System.Drawing.Size(212, 404);
             this.gbTimePeriods.TabIndex = 2;
             this.gbTimePeriods.TabStop = false;
             this.gbTimePeriods.Text = "Time periods";
@@ -254,7 +256,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             this.txtTimePeriodPassiveSkill.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTimePeriodPassiveSkill.Controls.Add(this.btnTimePeriodPassiveSkill);
-            this.txtTimePeriodPassiveSkill.Location = new System.Drawing.Point(76, 386);
+            this.txtTimePeriodPassiveSkill.Location = new System.Drawing.Point(76, 328);
             this.txtTimePeriodPassiveSkill.Name = "txtTimePeriodPassiveSkill";
             this.txtTimePeriodPassiveSkill.Size = new System.Drawing.Size(130, 20);
             this.txtTimePeriodPassiveSkill.TabIndex = 34;
@@ -276,7 +278,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodPassiveSkill
             // 
             this.lblTimePeriodPassiveSkill.AutoSize = true;
-            this.lblTimePeriodPassiveSkill.Location = new System.Drawing.Point(6, 389);
+            this.lblTimePeriodPassiveSkill.Location = new System.Drawing.Point(6, 331);
             this.lblTimePeriodPassiveSkill.Name = "lblTimePeriodPassiveSkill";
             this.lblTimePeriodPassiveSkill.Size = new System.Drawing.Size(64, 13);
             this.lblTimePeriodPassiveSkill.TabIndex = 10;
@@ -285,7 +287,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodName
             // 
             this.lblTimePeriodName.AutoSize = true;
-            this.lblTimePeriodName.Location = new System.Drawing.Point(6, 311);
+            this.lblTimePeriodName.Location = new System.Drawing.Point(6, 253);
             this.lblTimePeriodName.Name = "lblTimePeriodName";
             this.lblTimePeriodName.Size = new System.Drawing.Size(35, 13);
             this.lblTimePeriodName.TabIndex = 8;
@@ -293,7 +295,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtTimePeriodName
             // 
-            this.txtTimePeriodName.Location = new System.Drawing.Point(47, 308);
+            this.txtTimePeriodName.Location = new System.Drawing.Point(47, 250);
             this.txtTimePeriodName.Name = "txtTimePeriodName";
             this.txtTimePeriodName.Size = new System.Drawing.Size(159, 20);
             this.txtTimePeriodName.TabIndex = 7;
@@ -301,7 +303,7 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // txtTimePeriodDayStart
             // 
-            this.txtTimePeriodDayStart.Location = new System.Drawing.Point(149, 360);
+            this.txtTimePeriodDayStart.Location = new System.Drawing.Point(149, 302);
             this.txtTimePeriodDayStart.Name = "txtTimePeriodDayStart";
             this.txtTimePeriodDayStart.Size = new System.Drawing.Size(57, 20);
             this.txtTimePeriodDayStart.TabIndex = 6;
@@ -310,7 +312,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodDayStart
             // 
             this.lblTimePeriodDayStart.AutoSize = true;
-            this.lblTimePeriodDayStart.Location = new System.Drawing.Point(6, 362);
+            this.lblTimePeriodDayStart.Location = new System.Drawing.Point(6, 304);
             this.lblTimePeriodDayStart.Name = "lblTimePeriodDayStart";
             this.lblTimePeriodDayStart.Size = new System.Drawing.Size(49, 13);
             this.lblTimePeriodDayStart.TabIndex = 5;
@@ -319,7 +321,7 @@ namespace ProjectEternity.Editors.MapEditor
             // btnRemoveTimePeriod
             // 
             this.btnRemoveTimePeriod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveTimePeriod.Location = new System.Drawing.Point(131, 412);
+            this.btnRemoveTimePeriod.Location = new System.Drawing.Point(131, 375);
             this.btnRemoveTimePeriod.Name = "btnRemoveTimePeriod";
             this.btnRemoveTimePeriod.Size = new System.Drawing.Size(75, 23);
             this.btnRemoveTimePeriod.TabIndex = 4;
@@ -330,7 +332,7 @@ namespace ProjectEternity.Editors.MapEditor
             // btnAddTimePeriod
             // 
             this.btnAddTimePeriod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddTimePeriod.Location = new System.Drawing.Point(44, 412);
+            this.btnAddTimePeriod.Location = new System.Drawing.Point(44, 375);
             this.btnAddTimePeriod.Name = "btnAddTimePeriod";
             this.btnAddTimePeriod.Size = new System.Drawing.Size(75, 23);
             this.btnAddTimePeriod.TabIndex = 3;
@@ -343,13 +345,13 @@ namespace ProjectEternity.Editors.MapEditor
             this.lsTimePeriod.FormattingEnabled = true;
             this.lsTimePeriod.Location = new System.Drawing.Point(6, 19);
             this.lsTimePeriod.Name = "lsTimePeriod";
-            this.lsTimePeriod.Size = new System.Drawing.Size(200, 277);
+            this.lsTimePeriod.Size = new System.Drawing.Size(200, 225);
             this.lsTimePeriod.TabIndex = 2;
             this.lsTimePeriod.SelectedIndexChanged += new System.EventHandler(this.lsTimePeriod_SelectedIndexChanged);
             // 
             // txtTimePeriodTimeStart
             // 
-            this.txtTimePeriodTimeStart.Location = new System.Drawing.Point(149, 334);
+            this.txtTimePeriodTimeStart.Location = new System.Drawing.Point(149, 276);
             this.txtTimePeriodTimeStart.Name = "txtTimePeriodTimeStart";
             this.txtTimePeriodTimeStart.Size = new System.Drawing.Size(57, 20);
             this.txtTimePeriodTimeStart.TabIndex = 1;
@@ -358,7 +360,7 @@ namespace ProjectEternity.Editors.MapEditor
             // lblTimePeriodTimeStart
             // 
             this.lblTimePeriodTimeStart.AutoSize = true;
-            this.lblTimePeriodTimeStart.Location = new System.Drawing.Point(6, 336);
+            this.lblTimePeriodTimeStart.Location = new System.Drawing.Point(6, 278);
             this.lblTimePeriodTimeStart.Name = "lblTimePeriodTimeStart";
             this.lblTimePeriodTimeStart.Size = new System.Drawing.Size(53, 13);
             this.lblTimePeriodTimeStart.TabIndex = 0;
@@ -608,11 +610,35 @@ namespace ProjectEternity.Editors.MapEditor
             this.cbSkyUsage.Size = new System.Drawing.Size(121, 21);
             this.cbSkyUsage.TabIndex = 38;
             // 
+            // btnConfirm
+            // 
+            this.btnConfirm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnConfirm.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnConfirm.Location = new System.Drawing.Point(361, 430);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(75, 23);
+            this.btnConfirm.TabIndex = 35;
+            this.btnConfirm.Text = "Confirm";
+            this.btnConfirm.UseVisualStyleBackColor = true;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(448, 430);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 35;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            // 
             // ZoneEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(537, 465);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.gbSkyControl);
             this.Controls.Add(this.gbVisibilityControl);
             this.Controls.Add(this.groupBox1);
@@ -693,5 +719,7 @@ namespace ProjectEternity.Editors.MapEditor
         private System.Windows.Forms.GroupBox gbSkyControl;
         private System.Windows.Forms.Label lblSkyUsage;
         private System.Windows.Forms.ComboBox cbSkyUsage;
+        private System.Windows.Forms.Button btnConfirm;
+        private System.Windows.Forms.Button btnCancel;
     }
 }

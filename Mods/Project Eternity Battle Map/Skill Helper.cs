@@ -65,7 +65,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ActiveUnit.ReactivateEffects();
 
             GlobalBattleContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
+        }
 
+        public void ActivateAutomaticSkills(BaseAutomaticSkill SkillToActivate, Squad TargetSquad, Unit TargetUnit)
+        {
+            Character TargetPilot;
+            if (TargetUnit != null)
+                TargetPilot = TargetUnit.Pilot;
+            else
+                TargetPilot = null;
+
+            GlobalBattleContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
+
+            SkillToActivate.AddSkillEffectsToTarget(string.Empty);
+
+            GlobalBattleContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
         }
     }
 }

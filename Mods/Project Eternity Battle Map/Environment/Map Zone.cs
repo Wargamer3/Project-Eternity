@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.AI;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -74,6 +75,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        public MapZone(MapZone Copy)
+        {
+            Map = Copy.Map;
+
+            _Name = Copy._Name;
+            Shape = new ZoneShape(Copy.Shape.ZoneShapeType, Copy.Shape.Position, Copy.Shape.Size, Copy.Shape.Radius);
+            _AIPath = Copy.AIPath;
+
+            ListTimePeriod = new List<TimePeriod>(Copy.ListTimePeriod.Count);
+            for (int P = 0; P < Copy.ListTimePeriod.Count; P++)
+            {
+                ListTimePeriod.Add(new TimePeriod(Copy.ListTimePeriod[P], Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget));
+            }
+
+            CurrentTimePeriod = ListTimePeriod[0];
+
+            if (ListTimePeriod.Count > 1)
+            {
+                NextTimePeriod = ListTimePeriod[1];
+                NextTimePeriodIndex = 1;
+            }
+        }
+
         public void Save(BinaryWriter BW)
         {
             BW.Write(_Name);
@@ -118,11 +142,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateNextTimePeriod();
         }
 
+        public abstract void OnNewPlayerPhase();
+
         protected abstract void UpdateOverlayTypeOfSky();
 
         protected abstract void UpdateOverlayWeater();
 
         protected abstract void UpdateOverlayVisibility();
+
+        public abstract MapZone Copy();
 
         private void UpdateNextTimePeriod()
         {

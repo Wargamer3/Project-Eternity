@@ -86,6 +86,37 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Load(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
+        public TimePeriod(TimePeriod Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            Name = Copy.Name;
+
+            TimeStart = Copy.TimeStart;
+            DayStart = Copy.DayStart;
+
+            PassiveSkillPath = Copy.PassiveSkillPath;
+            if (PassiveSkillPath != "None")
+            {
+                PassiveSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + PassiveSkillPath + ".pecs", PassiveSkillPath, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            }
+
+            WeatherType = Copy.WeatherType;
+            WeatherUsage = Copy.WeatherUsage;
+
+            SkyType = Copy.SkyType;
+            SkyUsage = Copy.SkyUsage;
+
+            VisibilityType = Copy.VisibilityType;
+            VisibilityUsage = Copy.VisibilityUsage;
+
+            WindUsage = Copy.WindUsage;
+            WindSpeed = Copy.WindSpeed;
+            WindDirection = Copy.WindDirection;
+
+            TransitionStartLength = Copy.TransitionStartLength;
+            TransitionEndLength = Copy.TransitionEndLength;
+            CrossfadeLength = Copy.CrossfadeLength;
+        }
+
         protected virtual void Load(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
