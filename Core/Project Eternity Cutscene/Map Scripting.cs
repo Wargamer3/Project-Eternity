@@ -265,16 +265,15 @@ namespace ProjectEternity.Core.Scripts
             sprPixel = content.Load<Texture2D>("Pixel");
             fntScriptName = content.Load<SpriteFont>("Fonts/Arial8");
 
-            imgScriptTopLeft = content.Load<Texture2D>("ScriptTopLeft2");
-            imgScriptTopMiddle = content.Load<Texture2D>("ScriptTopMiddle2");
-            imgScriptTopRight = content.Load<Texture2D>("ScriptTopRight2");
-            imgScriptMiddleLeft = content.Load<Texture2D>("ScriptMiddleLeft2");
-            imgScriptMiddleMiddle = content.Load<Texture2D>("ScriptMiddleMiddle2");
-            imgScriptMiddleRight = content.Load<Texture2D>("ScriptMiddleRight2");
-            imgScriptBottomLeft = content.Load<Texture2D>("ScriptBottomLeft2");
-            imgScriptBottomMiddle = content.Load<Texture2D>("ScriptBottomMiddle2");
-            imgScriptBottomRight = content.Load<Texture2D>("ScriptBottomRight2");
-
+            imgScriptTopLeft = content.Load<Texture2D>("Menus/Scripts/ScriptTopLeft2");
+            imgScriptTopMiddle = content.Load<Texture2D>("Menus/Scripts/ScriptTopMiddle2");
+            imgScriptTopRight = content.Load<Texture2D>("Menus/Scripts/ScriptTopRight2");
+            imgScriptMiddleLeft = content.Load<Texture2D>("Menus/Scripts/ScriptMiddleLeft2");
+            imgScriptMiddleMiddle = content.Load<Texture2D>("Menus/Scripts/ScriptMiddleMiddle2");
+            imgScriptMiddleRight = content.Load<Texture2D>("Menus/Scripts/ScriptMiddleRight2");
+            imgScriptBottomLeft = content.Load<Texture2D>("Menus/Scripts/ScriptBottomLeft2");
+            imgScriptBottomMiddle = content.Load<Texture2D>("Menus/Scripts/ScriptBottomMiddle2");
+            imgScriptBottomRight = content.Load<Texture2D>("Menus/Scripts/ScriptBottomRight2");
         }
 
         public void SetListMapScript(List<MapScript> ListMapScript)

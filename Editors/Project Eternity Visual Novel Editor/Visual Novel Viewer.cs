@@ -50,7 +50,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
             g = new CustomSpriteBatch(new SpriteBatch(GraphicsDevice));
             sprPixel = content.Load<Texture2D>("Pixel");
-            imgScript = content.Load<Texture2D>("Script");
+            imgScript = content.Load<Texture2D>("Menus/Scripts/Script");
             fntFrameCount = content.Load<SpriteFont>("Fonts/Calibri8");
         }
 
