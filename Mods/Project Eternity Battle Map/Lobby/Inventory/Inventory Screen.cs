@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BoxButton ConsumableFilterButton;
         private DropDownButton CurrentLocalPlayerButton;
 
-        private IUIElement[] ArrayMenuButton;
+        private IUIElement[] ArrayUIElement;
 
         public static int LeftSideWidth;
         public static int TopSectionHeight;
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             UnitFilterButton.Select();
 
-            ArrayMenuButton = new IUIElement[]
+            ArrayUIElement = new IUIElement[]
             {
                 CurrentLocalPlayerButton, ReturnToLobbyButton,
                 UnitFilterButton, CharacterFilterButton, EquipmentFilterButton, ConsumableFilterButton,
@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            foreach (IUIElement ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveButton in ArrayUIElement)
             {
                 ActiveButton.Update(gameTime);
             }
@@ -202,7 +202,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ActiveSubScreen.Draw(g);
 
-            foreach (IUIElement ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveButton in ArrayUIElement)
             {
                 ActiveButton.Draw(g);
             }

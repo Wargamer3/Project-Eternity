@@ -165,10 +165,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             foreach (string ActiveKey in IniDefaultUnits.ReadAllKeys())
             {
                 string UnitPath = IniDefaultUnits.ReadField(ActiveKey, "Path");
-                string Pilot = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
+                string PilotPath = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
 
                 Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                Character NewCharacter = new Character(Pilot, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                Character NewCharacter = new Character(PilotPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                 NewCharacter.Level = 1;
                 NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
 

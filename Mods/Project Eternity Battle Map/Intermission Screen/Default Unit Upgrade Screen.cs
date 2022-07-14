@@ -534,10 +534,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     effect.World = World;
                     effect.View = View;
                     effect.Projection = Projection;
-                    effect.LightingEnabled = true; // turn on the lighting subsystem.
-                    effect.DirectionalLight0.DiffuseColor = new Vector3(1, 1, 1); // a red light
-                    effect.DirectionalLight0.Direction = new Vector3(0.5f, 0.5f, 1);  // coming along the x-axis
-                    effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0); // with green highlights
+                    effect.LightingEnabled = true;
+                    effect.DirectionalLight0.DiffuseColor = new Vector3(1.7f, 1.7f, 1.7f);
+                    effect.DirectionalLight0.Direction = new Vector3(0.2f, 0.2f, 1);
+                    effect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0);
                 }
 
                 ActiveMesh.Draw();
