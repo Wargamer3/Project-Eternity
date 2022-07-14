@@ -120,6 +120,7 @@
     <Compile Include="Editor\ITileAttributes.cs" />
     <Compile Include="Intermission Screen\Data Save Screen.cs" />
     <Compile Include="Intermission Screen\Commander\Commander Loadout Screen.cs" />
+    <Compile Include="Lobby\Shop\Shop Inventory.cs" />
     <Compile Include="Lobby\Game Options\Game Options Gametype Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Mutators Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Game Rules Screen.cs" />
@@ -127,6 +128,11 @@
     <Compile Include="Lobby\Game Options\Game Options Select Map Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Screen.cs" />
     <Compile Include="Lobby\Game Preparation Screen.cs" />
+    <Compile Include="Lobby\Shop\Character Screen.cs" />
+    <Compile Include="Lobby\Shop\Consumable Screen.cs" />
+    <Compile Include="Lobby\Shop\Equipment Screen.cs" />
+    <Compile Include="Lobby\Shop\Shop Screen.cs" />
+    <Compile Include="Lobby\Shop\Squad Screen.cs" />
     <Compile Include="Lobby\Inventory\Equipment Screen.cs" />
     <Compile Include="Lobby\Inventory\Consumable Screen.cs" />
     <Compile Include="Lobby\Inventory\Character Screen.cs" />
@@ -135,7 +141,6 @@
     <Compile Include="Lobby\Local Player Selection Screen.cs" />
     <Compile Include="Lobby\Inventory\Inventory Screen.cs" />
     <Compile Include="Lobby\Player\Player Inventory.cs" />
-    <Compile Include="Lobby\Shop Screen.cs" />
     <Compile Include="Lobby\UI\Box Numeric Up Down.cs" />
     <Compile Include="Lobby\UI\Box Drop Down Button.cs" />
     <Compile Include="Lobby\Create Room Screen.cs" />

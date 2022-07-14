@@ -94,6 +94,7 @@
     <Compile Include="3D\Lines 3D.cs" />
     <Compile Include="Effects\Projectile Effects.cs" />
     <Compile Include="Formula Parser.cs" />
+    <Compile Include="Ini File Reader.cs" />
     <Compile Include="Ini File.cs" />
     <Compile Include="Byte Writer.cs" />
     <Compile Include="Byte Reader.cs" />
