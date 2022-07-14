@@ -75,6 +75,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawStringRightAligned(fntArial12, ListUnitToBuy[i].Price + " cr", new Vector2(Owner.LeftSideWidth - 12, DrawY + 11), Color.White);
                 DrawY += 50;
             }
+            for (int i = 0; i < Inventory.ListLockedUnit.Count; ++i)
+            {
+                DrawBox(g, new Vector2(5, DrawY), Owner.LeftSideWidth - 95, 45, Color.Gray);
+                DrawBox(g, new Vector2(11, DrawY + 4), 38, 38, Color.Gray);
+                if (Inventory.ListLockedUnit[i].UnitToBuy != null)
+                {
+                    g.DrawString(fntArial12, Inventory.ListLockedUnit[i].UnitToBuy.ItemName, new Vector2(48, DrawY + 11), Color.White);
+                    g.Draw(Inventory.ListLockedUnit[i].UnitToBuy.SpriteMap, new Vector2(11 + 3, DrawY + 7), Color.White);
+                }
+
+                DrawBox(g, new Vector2(Owner.LeftSideWidth - 90, DrawY), 85, 45, Color.Gray);
+                g.DrawStringRightAligned(fntArial12, Inventory.ListLockedUnit[i].Price + " cr", new Vector2(Owner.LeftSideWidth - 12, DrawY + 11), Color.White);
+                DrawY += 50;
+            }
 
             //Right side
             DrawY = Owner.MiddleSectionY + 5;
