@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BattleMapOverlay CrossfadeOverlayTypeOfSky;
         private BattleMapOverlay CrossfadeOverlayVisibility;
         private string _AIPath;
-        public AIContainer SquadAI;
+        public AIContainer ZoneAI;
 
         public MapZone(BattleMap Map, ZoneShape.ZoneShapeTypes ZoneShapeType)
         {
@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListTimePeriod = new List<TimePeriod>(ListTimePeriodCount);
             for (int P = 0; P < ListTimePeriodCount; P++)
             {
-                ListTimePeriod.Add(new TimePeriod(BR, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget));
+                ListTimePeriod.Add(new TimePeriod(BR, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget));
             }
 
             CurrentTimePeriod = ListTimePeriod[0];
@@ -86,7 +86,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListTimePeriod = new List<TimePeriod>(Copy.ListTimePeriod.Count);
             for (int P = 0; P < Copy.ListTimePeriod.Count; P++)
             {
-                ListTimePeriod.Add(new TimePeriod(Copy.ListTimePeriod[P], Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget));
+                ListTimePeriod.Add(new TimePeriod(Copy.ListTimePeriod[P], Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget));
             }
 
             CurrentTimePeriod = ListTimePeriod[0];

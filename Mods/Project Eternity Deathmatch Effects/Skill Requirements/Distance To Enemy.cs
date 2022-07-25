@@ -1,8 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
-using System;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -16,8 +16,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public DistanceToEnemyRequirement(DeathmatchContext Context)
-            : base("Distance To Enemy Requirement", Context)
+        public DistanceToEnemyRequirement(DeathmatchParams Params)
+            : base("Distance To Enemy Requirement", Params)
         {
         }
 
@@ -31,17 +31,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            foreach (Player ActivePlayer in Context.Map.ListPlayer)
+            foreach (Player ActivePlayer in Params.Map.ListPlayer)
             {
-                if (ActivePlayer.Team != Context.Map.ListPlayer[Context.Map.ActivePlayerIndex].Team)
+                if (ActivePlayer.Team != Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].Team)
                 {
                     continue;
                 }
 
                 foreach (Squad ActiveSquad in ActivePlayer.ListSquad)
                 {
-                    float X1 = Context.EffectOwnerSquad.X;
-                    float Y1 = Context.EffectOwnerSquad.Y;
+                    float X1 = Params.GlobalContext.EffectOwnerSquad.X;
+                    float Y1 = Params.GlobalContext.EffectOwnerSquad.Y;
                     float X2 = ActiveSquad.X;
                     float Y2 = ActiveSquad.Y;
 
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BaseSkillRequirement Copy()
         {
-            DistanceToEnemyRequirement NewSkillEffect = new DistanceToEnemyRequirement(Context);
+            DistanceToEnemyRequirement NewSkillEffect = new DistanceToEnemyRequirement(Params);
 
             NewSkillEffect._DistanceToEnemy = _DistanceToEnemy;
             NewSkillEffect._IncludeDiagonals = _IncludeDiagonals;

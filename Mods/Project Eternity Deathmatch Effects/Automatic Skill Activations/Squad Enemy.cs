@@ -12,14 +12,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public EffectActivationSquadEnemy(DeathmatchContext GlobalContext)
-            : base(Name, GlobalContext)
+        public EffectActivationSquadEnemy(DeathmatchParams Params)
+            : base(Name, Params)
         {
         }
 
         public override bool CanExecuteEffectOnTarget(BaseEffect ActiveSkillEffect)
         {
-            for (int U = GlobalContext.EffectTargetSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+            for (int U = Params.GlobalContext.EffectTargetSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
                 if (ActiveSkillEffect.CanActivate())
                     return true;
@@ -34,18 +34,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSkillEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
             {
-                LifeType = SkillEffect.LifetimeTypeTurns + GlobalContext.Map.ActivePlayerIndex;
+                LifeType = SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex;
             }
 
-            for (int U = GlobalContext.EffectTargetSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+            for (int U = Params.GlobalContext.EffectTargetSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                GlobalContext.Map.ActiveSquad[U].Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
+                Params.Map.ActiveSquad[U].Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
             }
         }
 
         public override AutomaticSkillTargetType Copy()
         {
-            return new EffectActivationSquadEnemy(GlobalContext);
+            return new EffectActivationSquadEnemy(Params);
         }
     }
 }

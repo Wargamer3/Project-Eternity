@@ -7,17 +7,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public abstract class DeathmatchUnit : Unit
     {
-        protected DeathmatchMap Map;
+        protected DeathmatchParams Params;
 
-        protected DeathmatchUnit(DeathmatchMap Map)
+        protected DeathmatchUnit(DeathmatchParams Params)
         {
-            this.Map = Map;
+            this.Params = Params;
         }
 
-        protected DeathmatchUnit(string Name, DeathmatchMap Map)
+        protected DeathmatchUnit(string Name, DeathmatchParams Params)
             : base(Name)
         {
-            this.Map = Map;
+            this.Params = Params;
         }
 
         public override void ReloadSkills(Unit Copy, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             DeathmatchUnit DeathmatchUnitCopy = (DeathmatchUnit)Copy;
 
-            this.Map = DeathmatchUnitCopy.Map;
+            this.Params = DeathmatchUnitCopy.Params;
 
             base.ReloadSkills(Copy, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
         }

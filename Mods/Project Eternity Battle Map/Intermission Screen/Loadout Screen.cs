@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             int OldNumberOfGameScreen = ListGameScreen.Count;
             ListSelectedSquad = new List<Squad>();
-            NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(string.Empty);
+            NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(string.Empty, string.Empty);
             NewMap.BattleMapPath = BattleMap.NextMapPath;
             NewMap.ListGameScreen = ListGameScreen;
             NewMap.PlayerRoster = PlayerRoster;

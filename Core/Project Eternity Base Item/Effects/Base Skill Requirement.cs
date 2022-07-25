@@ -8,6 +8,8 @@ namespace ProjectEternity.Core.Item
 {
     public abstract class BaseSkillRequirement
     {
+        public static readonly Dictionary<string, BaseSkillRequirement> DicDefaultRequirement = new Dictionary<string, BaseSkillRequirement>();//When you just need a placeholder outside of a game.
+
         public static string OnCreatedRequirementName = "On Created";
         public static string AfterMovingRequirementName = "After Moving";
 
@@ -47,6 +49,19 @@ namespace ProjectEternity.Core.Item
         public abstract BaseSkillRequirement Copy();
 
         public abstract void CopyMembers(BaseSkillRequirement Copy);
+
+        public virtual BaseSkillRequirement CopyAndReload(string ParamsID)
+        {
+            BaseSkillRequirement NewCopy = Copy();
+            NewCopy.CopyMembers(NewCopy);
+            NewCopy.DoReload(ParamsID);
+
+            return NewCopy;
+        }
+
+        protected virtual void DoReload(string ParamsID)
+        {
+        }
 
         public override string ToString()
         {

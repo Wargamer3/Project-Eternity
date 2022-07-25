@@ -13,25 +13,19 @@ namespace ProjectEternity.Editors.SkillChainEditor
     public partial class SkillChainEditor : BaseEditor
     {
         private bool AllowEvent;
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public SkillChainEditor()
         {
             InitializeComponent();
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             foreach (KeyValuePair<string, BaseEffect> ActiveEffect in Projectile.GetCoreProjectileEffects(null))
             {
-                DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+                BaseEffect.DicDefaultEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
             }
 
             tvSkills.NodeMouseClick += (sender, args) => tvSkills.SelectedNode = args.Node;
-            cboEffectType.Items.AddRange(DicEffect.Values.ToArray());
-            cboRequirementType.Items.AddRange(DicRequirement.Values.ToArray());
+            cboEffectType.Items.AddRange(BaseEffect.DicDefaultEffect.Values.ToArray());
+            cboRequirementType.Items.AddRange(BaseSkillRequirement.DicDefaultRequirement.Values.ToArray());
         }
 
         public SkillChainEditor(string FilePath, object[] Params)
@@ -91,7 +85,7 @@ namespace ProjectEternity.Editors.SkillChainEditor
             int tvSkillsNodesCount = BR.ReadInt32();
             for (int N = 0; N < tvSkillsNodesCount; ++N)
             {
-                BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BR, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
                 CreateTree(ActiveSkill, tvSkills.Nodes);
             }
 
@@ -180,7 +174,7 @@ namespace ProjectEternity.Editors.SkillChainEditor
                     ParentNode = SelectedNode.Parent;
                 }
 
-                BaseEffect NewEffect = DicEffect.First().Value.Copy();
+                BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value.Copy();
                 BaseAutomaticSkill ActiveSkill = (BaseAutomaticSkill)ParentNode.Tag;
                 ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Add(NewEffect);
                 ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffectTarget.Add(new List<string>());
@@ -200,9 +194,9 @@ namespace ProjectEternity.Editors.SkillChainEditor
             BaseSkillActivation NewActivation = new BaseSkillActivation();
             NewSkill.CurrentSkillLevel.ListActivation.Add(NewActivation);
 
-            NewActivation.ListRequirement.Add(DicRequirement.First().Value.Copy());
+            NewActivation.ListRequirement.Add(BaseSkillRequirement.DicDefaultRequirement.First().Value.Copy());
             NewActivation.ListEffectTarget.Add(new List<string>());
-            NewActivation.ListEffect.Add(DicEffect.First().Value.Copy());
+            NewActivation.ListEffect.Add(BaseEffect.DicDefaultEffect.First().Value.Copy());
 
             TreeNode SelectedNode = tvSkills.SelectedNode;
             TreeNode EffectNode = null;

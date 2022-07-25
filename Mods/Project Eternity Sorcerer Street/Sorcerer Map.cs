@@ -518,7 +518,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string GameMode)
+        public override BattleMap GetNewMap(string GameMode, string ParamsID)
         {
             return new SorcererStreetMap(GameMode);
         }

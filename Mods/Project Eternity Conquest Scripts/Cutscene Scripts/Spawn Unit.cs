@@ -226,7 +226,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
                 _SpawnPosition = FinalSpawnPosition;
 
-                UnitConquest NewUnit = new UnitConquest(_UnitToSpawn.Remove(0, 9), Map.Content, Map.DicRequirement, Map.DicEffect);
+                UnitConquest NewUnit = new UnitConquest(_UnitToSpawn.Remove(0, 9), Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect);
                 NewUnit.ID = _UnitToSpawnID;
 
                 if (!string.IsNullOrEmpty(AIPath))

@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public BeforeGettingHitRequirement(DeathmatchContext Context)
-            : base(BeforeGettingHitRequirementName, Context)
+        public BeforeGettingHitRequirement(DeathmatchParams Params)
+            : base(BeforeGettingHitRequirementName, Params)
         {
         }
 
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BaseSkillRequirement Copy()
         {
-            BeforeGettingHitRequirement NewSkillEffect = new BeforeGettingHitRequirement(Context);
+            BeforeGettingHitRequirement NewSkillEffect = new BeforeGettingHitRequirement(Params);
 
             return NewSkillEffect;
         }

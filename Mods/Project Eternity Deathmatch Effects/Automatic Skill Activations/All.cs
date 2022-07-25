@@ -12,21 +12,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public EffectActivationAll(DeathmatchContext GlobalContext)
-            : base(Name, GlobalContext)
+        public EffectActivationAll(DeathmatchParams Params)
+            : base(Name, Params)
         {
         }
 
         public override bool CanExecuteEffectOnTarget(BaseEffect ActiveSkillEffect)
         {
-            for (int P = GlobalContext.Map.ListPlayer.Count - 1; P >= 0; --P)
+            for (int P = Params.Map.ListPlayer.Count - 1; P >= 0; --P)
             {
-                if (P != GlobalContext.Map.ActivePlayerIndex)
+                if (P != Params.Map.ActivePlayerIndex)
                     continue;
 
-                for (int S = GlobalContext.Map.ListPlayer[P].ListSquad.Count - 1; S >= 0; --S)
+                for (int S = Params.Map.ListPlayer[P].ListSquad.Count - 1; S >= 0; --S)
                 {
-                    for (int U = GlobalContext.Map.ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
+                    for (int U = Params.Map.ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
                     {
                         if (ActiveSkillEffect.CanActivate())
                             return true;
@@ -43,19 +43,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSkillEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
             {
-                LifeType = SkillEffect.LifetimeTypeTurns + GlobalContext.Map.ActivePlayerIndex;
+                LifeType = SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex;
             }
 
-            for (int P = GlobalContext.Map.ListPlayer.Count - 1; P >= 0; --P)
+            for (int P = Params.Map.ListPlayer.Count - 1; P >= 0; --P)
             {
-                if (P != GlobalContext.Map.ActivePlayerIndex)
+                if (P != Params.Map.ActivePlayerIndex)
                     continue;
 
-                for (int S = GlobalContext.Map.ListPlayer[P].ListSquad.Count - 1; S >= 0; --S)
+                for (int S = Params.Map.ListPlayer[P].ListSquad.Count - 1; S >= 0; --S)
                 {
-                    for (int U = GlobalContext.Map.ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
+                    for (int U = Params.Map.ListPlayer[P].ListSquad[S].UnitsAliveInSquad - 1; U >= 0; --U)
                     {
-                        GlobalContext.Map.ListPlayer[P].ListSquad[S][U].Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
+                        Params.Map.ListPlayer[P].ListSquad[S][U].Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
                     }
                 }
             }
@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override AutomaticSkillTargetType Copy()
         {
-            return new EffectActivationAll(GlobalContext);
+            return new EffectActivationAll(Params);
         }
     }
 }

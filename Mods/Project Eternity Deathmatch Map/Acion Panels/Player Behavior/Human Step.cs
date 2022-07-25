@@ -2,6 +2,7 @@
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -59,6 +60,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActionPanelMoveVehicle.AddIfUsable(Map, this);
 
                 Map.sndConfirm.Play();
+            }
+            else if (ActiveInputManager.InputCommand1Pressed())
+            {
+                for (int P = 0; P < Map.ListPlayer.Count; P++)
+                {
+                    int CursorSelect = Map.CheckForSquadAtPosition(P, Map.CursorPosition, Vector3.Zero);
+
+                    if (CursorSelect >= 0)
+                    {
+                        List<ActionPanel> DicOptionalPanel = Map.ListPlayer[P].ListSquad[CursorSelect].CurrentLeader.OnInputPressed(P, Map.ListPlayer[P].ListSquad[CursorSelect], ListActionMenuChoice);
+                        foreach (ActionPanel OptionalPanel in DicOptionalPanel)
+                        {
+                            AddChoiceToCurrentPanel(OptionalPanel);
+                        }
+                    }
+                }
             }
         }
 

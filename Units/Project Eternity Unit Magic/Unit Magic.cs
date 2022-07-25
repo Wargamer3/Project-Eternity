@@ -36,7 +36,7 @@ namespace ProjectEternity.Units.Magic
         public readonly MagicUserContext GlobalMagicContext;
         public readonly MagicUserParams MagicParams;
 
-        private BattleMap Map;
+        private BattleParams Params;
 
         public UnitMagic()
             : base()
@@ -56,10 +56,10 @@ namespace ProjectEternity.Units.Magic
             this.ListMagicSpell = ListMagicSpell;
         }
 
-        public UnitMagic(BattleMap Map)
+        public UnitMagic(BattleParams Params)
             : this()
         {
-            this.Map = Map;
+            this.Params = Params;
         }
 
         public UnitMagic(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
@@ -68,11 +68,11 @@ namespace ProjectEternity.Units.Magic
         {
         }
 
-        public UnitMagic(string Name, ContentManager Content, BattleMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+        public UnitMagic(string Name, ContentManager Content, BattleParams Params, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name)
         {
-            this.Map = Map;
+            this.Params = Params;
             this.ItemName = Name;
             ArrayCharacterActive = new Core.Characters.Character[0];
             ListMagicSpell = new List<MagicSpell>();
@@ -132,11 +132,11 @@ namespace ProjectEternity.Units.Magic
         public override void ReinitializeMembers(Unit InitializedUnitBase)
         {
             UnitMagic Other = (UnitMagic)InitializedUnitBase;
-            Map = Other.Map;
+            Params = Other.Params;
 
             if (OriginalUnit == null)
             {
-                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
+                OriginalUnit = FromFullName(OriginalUnitName, Params.Map.Content, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
                 _UnitStat = OriginalUnit.UnitStat;
             }
         }
@@ -152,19 +152,19 @@ namespace ProjectEternity.Units.Magic
 
         public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
-            return new List<ActionPanel>() { new ActionPanelSpellSelection(Map, this), new ActionPanelChannelExternalMana(ListActionMenuChoice, this) };
+            return new List<ActionPanel>() { new ActionPanelSpellSelection(Params.Map, this), new ActionPanelChannelExternalMana(ListActionMenuChoice, this) };
         }
 
         public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            if (Map == null)
+            if (Params.Map == null)
             {
                 return new UnitMagic(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             else
             {
-                return new UnitMagic(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                return new UnitMagic(Name, Content, Params, Params.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 

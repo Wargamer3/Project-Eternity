@@ -8,6 +8,8 @@ namespace ProjectEternity.Core.Item
 {
     public abstract class AutomaticSkillTargetType
     {
+        public static readonly Dictionary<string, AutomaticSkillTargetType> DicDefaultTarget = new Dictionary<string, AutomaticSkillTargetType>();//When you just need a placeholder outside of a game.
+
         public readonly string TargetType;
 
         public AutomaticSkillTargetType(string TargetType)
@@ -18,6 +20,18 @@ namespace ProjectEternity.Core.Item
         public abstract bool CanExecuteEffectOnTarget(BaseEffect ActiveSkillEffect);
         public abstract void ExecuteAndAddEffectToTarget(BaseEffect ActiveSkillEffect, string SkillName);
         public abstract AutomaticSkillTargetType Copy();
+
+        public virtual AutomaticSkillTargetType CopyAndReload(string ParamsID)
+        {
+            AutomaticSkillTargetType NewCopy = Copy();
+            NewCopy.DoReload(ParamsID);
+
+            return NewCopy;
+        }
+
+        protected virtual void DoReload(string ParamsID)
+        {
+        }
 
         public static Dictionary<string, AutomaticSkillTargetType> LoadAllTargetTypes()
         {

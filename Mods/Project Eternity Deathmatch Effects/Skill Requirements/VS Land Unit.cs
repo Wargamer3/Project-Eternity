@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public VSLandUnitRequirement(DeathmatchContext Context)
-            : base(VSLandUnitRequirementName, Context)
+        public VSLandUnitRequirement(DeathmatchParams Params)
+            : base(VSLandUnitRequirementName, Params)
         {
         }
 
@@ -25,12 +25,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            return Context.EffectTargetSquad != null && Context.EffectTargetSquad.CurrentMovement == "Land";
+            return Params.GlobalContext.EffectTargetSquad != null && Params.GlobalContext.EffectTargetSquad.CurrentMovement == "Land";
         }
 
         public override BaseSkillRequirement Copy()
         {
-            VSLandUnitRequirement NewSkillEffect = new VSLandUnitRequirement(Context);
+            VSLandUnitRequirement NewSkillEffect = new VSLandUnitRequirement(Params);
 
             return NewSkillEffect;
         }

@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (Params != null)
             {
-                sprTileset = Params.LocalContext.Map.Content.Load<Texture2D>("Maps/Tilesets/" + TerrainAttribute.Tileset);
+                sprTileset = Params.Map.Content.Load<Texture2D>("Maps/Tilesets/" + TerrainAttribute.Tileset);
             }
         }
 
@@ -53,12 +53,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override string DoExecuteEffect()
         {
-            if (!Params.LocalContext.Map.ListTileSet.Contains(sprTileset))
+            if (!Params.Map.ListTileSet.Contains(sprTileset))
             {
-                Params.LocalContext.Map.ListTileSet.Add(sprTileset);
+                Params.Map.ListTileSet.Add(sprTileset);
             }
 
-            int TilesetIndex = Params.LocalContext.Map.ListTileSet.IndexOf(sprTileset);
+            int TilesetIndex = Params.Map.ListTileSet.IndexOf(sprTileset);
 
             foreach (MovementAlgorithmTile ActivePosition in Params.LocalContext.ArrayAttackPosition)
             {
@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActivePosition.Owner.ReplaceTile(X, Y, ActivePosition.LayerIndex, ActiveTile);
             }
 
-            Params.LocalContext.Map.LayerManager.LayerHolderDrawable.Reset();
+            Params.Map.LayerManager.LayerHolderDrawable.Reset();
 
             return TerrainAttribute.Tileset + " (" + TerrainAttribute.Origin.X + ", " + TerrainAttribute.Origin.Y + ")";
         }

@@ -14,8 +14,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public WithinAttackRangeRequirement(DeathmatchContext Context)
-            : base(WithinAttackRangeRequirementName, Context)
+        public WithinAttackRangeRequirement(DeathmatchParams Params)
+            : base(WithinAttackRangeRequirementName, Params)
         {
         }
 
@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BaseSkillRequirement Copy()
         {
-            WithinAttackRangeRequirement NewSkillEffect = new WithinAttackRangeRequirement(Context);
+            WithinAttackRangeRequirement NewSkillEffect = new WithinAttackRangeRequirement(Params);
             NewSkillEffect._Range = _Range;
             NewSkillEffect._ConsiderWalls = _ConsiderWalls;
 

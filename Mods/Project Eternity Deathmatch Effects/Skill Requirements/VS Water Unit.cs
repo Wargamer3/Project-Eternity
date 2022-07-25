@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public VSWaterUnitRequirement(DeathmatchContext Context)
-            : base(VSWaterUnitRequirementName, Context)
+        public VSWaterUnitRequirement(DeathmatchParams Params)
+            : base(VSWaterUnitRequirementName, Params)
         {
         }
 
@@ -25,12 +25,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            return Context.EffectTargetSquad != null && Context.EffectTargetSquad.CurrentMovement == "Sea";
+            return Params.GlobalContext.EffectTargetSquad != null && Params.GlobalContext.EffectTargetSquad.CurrentMovement == "Sea";
         }
 
         public override BaseSkillRequirement Copy()
         {
-            VSWaterUnitRequirement NewSkillEffect = new VSWaterUnitRequirement(Context);
+            VSWaterUnitRequirement NewSkillEffect = new VSWaterUnitRequirement(Params);
 
             return NewSkillEffect;
         }

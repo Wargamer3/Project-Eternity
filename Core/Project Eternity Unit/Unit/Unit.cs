@@ -17,6 +17,8 @@ namespace ProjectEternity.Core.Units
 {
     public abstract partial class Unit : ShopItem
     {
+        public static readonly Dictionary<string, Unit> DicDefaultUnitType = new Dictionary<string, Unit>();//When you just need a placeholder outside of a game.
+
         public static char[] Grades = new char[6] { '-', 'S', 'A', 'B', 'C', 'D' };
 
         /// <summary>
@@ -942,6 +944,14 @@ namespace ProjectEternity.Core.Units
         /// <param name="ActiveSquad">Can be null if not using a Squad</param>
         public virtual void OnTurnEnd(int ActivePlayerIndex, Squad ActiveSquad)
         { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ActiveSquad">Can be null if not using a Squad</param>
+        /// <param name="ListActionMenuChoice">Action Panel Holder</param>
+        public virtual List<ActionPanel> OnInputPressed(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        { return new List<ActionPanel>(); }
 
         /// <summary>
         /// 

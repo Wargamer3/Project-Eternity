@@ -31,17 +31,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public static string SupportAttackRequirementName = "Support Attack Requirement";
         public static string SupportDefendRequirementName = "Support Defend Requirement";
 
-        protected DeathmatchContext Context;
+        private DeathmatchParams _Params;
+        protected DeathmatchParams Params { get { return _Params; } }
 
-        public DeathmatchSkillRequirement(string SkillRequirementName, DeathmatchContext Context)
+        public DeathmatchSkillRequirement(string SkillRequirementName, DeathmatchParams Params)
             : base(SkillRequirementName)
         {
-            this.Context = Context;
+            this._Params = Params;
         }
 
         public override bool CanActivatePassive()
         {
             return false;
+        }
+
+        protected override void DoReload(string ParamsID)
+        {
+            this._Params = DeathmatchParams.DicParams[ParamsID];
         }
     }
 }

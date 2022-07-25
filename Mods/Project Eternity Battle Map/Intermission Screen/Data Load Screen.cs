@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
@@ -13,12 +13,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private SpriteFont fntFinlanderFont;
 
-        public Dictionary<string, Unit> DicUnitType;
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
-        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-        public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
-
         private readonly Roster PlayerRoster;
         private double TimeSinceSaveInSeconds;
 
@@ -31,19 +25,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
-
-            DicUnitType = Unit.LoadAllUnits();
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
         }
 
         public override void Update(GameTime gameTime)
         {
             if (TimeSinceSaveInSeconds == 0)
             {
-                DataScreen.LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                DataScreen.LoadProgression(PlayerRoster, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
                 TimeSinceSaveInSeconds = gameTime.ElapsedGameTime.TotalSeconds;
             }
             else

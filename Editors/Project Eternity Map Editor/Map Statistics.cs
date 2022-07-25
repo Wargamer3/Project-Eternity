@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.Editors.MapEditor
 {
@@ -13,23 +14,51 @@ namespace ProjectEternity.Editors.MapEditor
         private enum ItemSelectionChoices { Backgrounds, Foregrounds };
         ItemSelectionChoices ItemSelectionChoice;
 
-        public MapStatistics(string MapName, Microsoft.Xna.Framework.Point MapSize, Microsoft.Xna.Framework.Point TileSize, string CameraType,
-            Microsoft.Xna.Framework.Vector3 CameraStartPosition, byte PlayersMin, byte PlayersMax, string Description)
+        public MapStatistics(BattleMap ActiveMap)
         {
             InitializeComponent();
-            txtMapName.Text = MapName;
-            txtMapWidth.Text = MapSize.X.ToString();
-            txtMapHeight.Text = MapSize.Y.ToString();
-            txtTileWidth.Text = TileSize.X.ToString();
-            txtTileHeight.Text = TileSize.Y.ToString();
-            cbCameraType.SelectedText = CameraType;
-            txtCameraStartPositionX.Value = (int)Math.Max(0,CameraStartPosition.X);
-            txtCameraStartPositionY.Value = (int)Math.Max(0, CameraStartPosition.Y);
-            txtPlayersMin.Value = PlayersMin;
-            txtPlayersMax.Value = PlayersMax;
-            txtDescription.Text = Description;
+            txtMapName.Text = ActiveMap.MapName;
+            txtMapWidth.Text = ActiveMap.MapSize.X.ToString();
+            txtMapHeight.Text = ActiveMap.MapSize.Y.ToString();
+            txtTileWidth.Text = ActiveMap.TileSize.X.ToString();
+            txtTileHeight.Text = ActiveMap.TileSize.Y.ToString();
+            cbCameraType.SelectedIndex = 0;
+            if (ActiveMap.CameraType == "3D")
+            {
+                cbCameraType.SelectedIndex = 1;
+            }
+            txtCameraStartPositionX.Value = (int)Math.Max(0, ActiveMap.CameraPosition.X);
+            txtCameraStartPositionY.Value = (int)Math.Max(0, ActiveMap.CameraPosition.Y);
+            txtPlayersMin.Value = ActiveMap.PlayersMin;
+            txtPlayersMax.Value = ActiveMap.PlayersMax;
+            txtDescription.Text = ActiveMap.Description;
             ListBackgroundsPath = new List<string>();
             ListForegroundsPath = new List<string>();
+            txtTimeStart.Value = (decimal)ActiveMap.MapEnvironment.TimeStart;
+            txtHoursInDay.Value = (decimal)ActiveMap.MapEnvironment.HoursInDay;
+
+            if (ActiveMap.MapEnvironment.TimeLoopType == EnvironmentManager.TimeLoopTypes.FirstDay)
+            {
+                rbLoopFirstDay.Checked = true;
+            }
+            else if (ActiveMap.MapEnvironment.TimeLoopType == EnvironmentManager.TimeLoopTypes.LastDay)
+            {
+                rbLoopLastDay.Checked = true;
+            }
+            else
+            {
+                rbStopTime.Checked = true;
+            }
+
+            txtlblTimeMultiplier.Value = (decimal)ActiveMap.MapEnvironment.TimeMultiplier;
+            if (ActiveMap.MapEnvironment.TimePeriodType == EnvironmentManager.TimePeriods.Turns)
+            {
+                rbUseTurns.Checked = true;
+            }
+            else
+            {
+                rbUseRealTime.Checked = true;
+            }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

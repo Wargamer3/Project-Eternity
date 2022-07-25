@@ -6,6 +6,9 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GUI
 {
@@ -35,6 +38,27 @@ namespace ProjectEternity.GUI
                 GameScreens.GameScreen.LoadHelpers(RootGraphicDevice.Content);
                 TextHelper.LoadHelpers(RootGraphicDevice.Content);
                 GameScreens.GameScreen.GraphicsDevice = RootGraphicDevice.GraphicsDevice;
+
+                foreach (KeyValuePair<string, Unit> ActiveUnitType in Unit.LoadAllUnits())
+                {
+                    Unit.DicDefaultUnitType.Add(ActiveUnitType.Key, ActiveUnitType.Value);
+                }
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadAllEffects())
+                {
+                    BaseEffect.DicDefaultEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
+                }
+                foreach (KeyValuePair<string, BaseSkillRequirement> ActiveRequirement in BaseSkillRequirement.LoadAllRequirements())
+                {
+                    BaseSkillRequirement.DicDefaultRequirement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                }
+                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadAllTargetTypes())
+                {
+                    AutomaticSkillTargetType.DicDefaultTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+                }
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadAllTargetTypes())
+                {
+                    ManualSkillTarget.DicDefaultTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
+                }
             }
 
             BaseEditor.GetItemsByRoot = GetItemsByRoot;

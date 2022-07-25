@@ -12,12 +12,12 @@ namespace ProjectEternity.UnitTests
     public partial class DeathmatchTests
     {
         private static DeathmatchMap DummyMap;
-        private static DeathmatchContext GlobalDeathmatchContext;
+        private static BattleContext GlobalDeathmatchContext;
 
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            GlobalDeathmatchContext = new DeathmatchContext();
+            GlobalDeathmatchContext = new BattleContext();
             DummyMap = DeathmatchMapHelper.CreateDummyMap(GlobalDeathmatchContext);
         }
 
@@ -44,11 +44,11 @@ namespace ProjectEternity.UnitTests
             BaseSkillActivation TestSkillActivation = new BaseSkillActivation();
 
             TestSkillActivation.ListEffectTarget.Add(new List<string>() { "Self" });
-            TestSkillActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy() });
+            TestSkillActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>() { DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy() });
             TestSkillActivation.ActivationPercentage = 100;
             TestSkillActivation.ListRequirement.Add(Requirement);
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "100";
             NewEffect.NumberType = Core.Operators.NumberTypes.Absolute;
             NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
@@ -97,7 +97,7 @@ namespace ProjectEternity.UnitTests
             Squad DummyDefenderSquad = CreateDummySquad();
             Unit DummyUnit = DummySquad.CurrentLeader;
 
-            BaseAutomaticSkill TestSkill = CreateDummySkill(new BattleStartRequirement(GlobalDeathmatchContext));
+            BaseAutomaticSkill TestSkill = CreateDummySkill(new BattleStartRequirement(DummyMap.GlobalBattleParams));
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
             
             var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
@@ -112,7 +112,7 @@ namespace ProjectEternity.UnitTests
             Squad DummyDefenderSquad = CreateDummySquad();
             Unit DummyUnit = DummySquad.CurrentLeader;
 
-            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeAttackRequirement(GlobalDeathmatchContext));
+            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeAttackRequirement(DummyMap.GlobalBattleParams));
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
             var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
@@ -127,7 +127,7 @@ namespace ProjectEternity.UnitTests
             Squad DummyDefenderSquad = CreateDummySquad();
             Unit DummyUnit = DummySquad.CurrentLeader;
 
-            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeAttackRequirement(GlobalDeathmatchContext));
+            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeAttackRequirement(DummyMap.GlobalBattleParams));
             DummyDefenderSquad.CurrentLeader.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
             var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
@@ -144,7 +144,7 @@ namespace ProjectEternity.UnitTests
             Squad DummyDefenderSquad = CreateDummySquad();
             Unit DummyUnit = DummySquad.CurrentLeader;
 
-            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeHitRequirement(GlobalDeathmatchContext));
+            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeHitRequirement(DummyMap.GlobalBattleParams));
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
             var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
@@ -160,7 +160,7 @@ namespace ProjectEternity.UnitTests
             Squad DummyDefenderSquad = CreateDummySquad();
             DummyDefenderSquad.SquadName = "Defender";
 
-            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeGettingHitRequirement(GlobalDeathmatchContext));
+            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeGettingHitRequirement(DummyMap.GlobalBattleParams));
             DummyDefenderSquad.CurrentLeader.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
             var Result = DummyMap.CalculateFinalHP(DummySquad, DummySquad.CurrentLeader.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);
@@ -184,7 +184,7 @@ namespace ProjectEternity.UnitTests
 
             Assert.AreEqual(0, DummyMap.CalculateHitRate(DummyUnit, DummyUnit.CurrentAttack, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
 
-            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeMissRequirement(GlobalDeathmatchContext));
+            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeMissRequirement(DummyMap.GlobalBattleParams));
             DummyUnit.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
             DummyUnit.Pilot.ArrayPilotSkillLevels = new Core.Characters.Character.SkillLevels[1] { new Core.Characters.Character.SkillLevels() };
 
@@ -217,7 +217,7 @@ namespace ProjectEternity.UnitTests
 
             Assert.AreEqual(0, DummyMap.CalculateHitRate(DummyUnit, DummyUnit.CurrentAttack, DummySquad, DummyDefenderUnit, DummyDefenderSquad, Unit.BattleDefenseChoices.Defend));
 
-            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeGettingMissedRequirement(GlobalDeathmatchContext));
+            BaseAutomaticSkill TestSkill = CreateDummySkill(new BeforeGettingMissedRequirement(DummyMap.GlobalBattleParams));
             DummyDefenderSquad.CurrentLeader.Pilot.ArrayPilotSkill = new BaseAutomaticSkill[1] { TestSkill };
 
             var Result = DummyMap.CalculateFinalHP(DummySquad, DummyUnit.CurrentAttack, null, 0, BattleMap.FormationChoices.Focused, DummyDefenderSquad, null, 1, 0, true, false);

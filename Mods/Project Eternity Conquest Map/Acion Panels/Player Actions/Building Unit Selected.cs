@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 }
                 else if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
                 {
-                    UnitConquest NewUnit = new UnitConquest(Map.ListCurrentBuildingChoice[Map.BuildingMenuCursor], Map.Content, Map.DicRequirement, Map.DicEffect);
+                    UnitConquest NewUnit = new UnitConquest(Map.ListCurrentBuildingChoice[Map.BuildingMenuCursor], Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect);
                     //Make sure to give the Squad an unused ID.
                     uint NewUnitID = Map.GetNextUnusedUnitID();
 

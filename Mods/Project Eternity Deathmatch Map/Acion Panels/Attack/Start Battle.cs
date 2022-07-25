@@ -91,6 +91,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.PushScreen(ListNextAnimationScreen[0]);
                 ListNextAnimationScreen.Remove(ListNextAnimationScreen[0]);
             }
+            else if (CurrentAttack.Pri == WeaponPrimaryProperty.PER)
+            {
+                ListActionMenuChoice.Remove(this);
+            }
             else
             {
                 ListActionMenuChoice.RemoveAllSubActionPanels();

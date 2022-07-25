@@ -23,12 +23,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             public string Name;
             public string Description;
+            public bool IsUnlocked;
             public Texture2D sprPreview;
 
-            public Gametype(string Name, string Description, Texture2D sprPreview)
+            public Gametype(string Name, string Description, bool IsUnlocked, Texture2D sprPreview)
             {
                 this.Name = Name;
                 this.Description = Description;
+                this.IsUnlocked = IsUnlocked;
                 this.sprPreview = sprPreview;
             }
         }
@@ -59,25 +61,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
 
-            Gametype GametypeCampaign = new Gametype("Campaign", "Classic mission based mode, no respawn.", null);
-            Gametype GametypeHorde = new Gametype("Horde", "Wave survival mode, respawn at the start of each wave.", null);
-            Gametype GametypeBaseDefense = new Gametype("Base Defense", "Wave survival mode, respawn at the start of each wave. Must defend a base by building turrets.", null);
+            Gametype GametypeCampaign = new Gametype("Campaign", "Classic mission based mode, no respawn.", true, null);
+            Gametype GametypeHorde = new Gametype("Horde", "Wave survival mode, respawn at the start of each wave.", true, null);
+            Gametype GametypeBaseDefense = new Gametype("Base Defense", "Wave survival mode, respawn at the start of each wave. Must defend a base by building turrets.", false, null);
 
-            Gametype GametypeDeathmatch = new Gametype("Deathmatch", "Gain points for kills and assists, respawn on death.", null);
-            Gametype GametypeCaptureTheFlag = new Gametype("Capture The Flag", "Capture a flag in the enemy base and bring it back to your own flag to score a point.", null);
-            Gametype GametypeObjective = new Gametype("Objective", "One team must complete objectives while another prevent them.", null);
-            Gametype GametypeAssault = new Gametype("Assault", "Team deathmatch with limited respawns.", null);
-            Gametype GametypeConquest = new Gametype("Conquest", "Teams must fight to capture respawn bases that give them points. The starting base may or may not be capturable.", null);
-            Gametype GametypeOnslaught = new Gametype("Onslaught", "Teams must fight to capture respawn bases that give them access to the enemy base's core. Last team with a core win.", null);
-            Gametype GametypeTitan = new Gametype("Titan", "Both teams have a flying base protected by a shield. Capture missile silos to bring the shield down. Destroy the core to win.", null);
-            Gametype GametypeBaseAssault = new Gametype("Base Assault", "Each team has 3 bases to attack and defend. After destroying the walls with artillery you can plant a bomb to completely destroy it.", null);
-            Gametype GametypeKingOfTheHill = new Gametype("King Of The Hill", "Hold a position without enemies to win points.", null);
-            Gametype GametypeBunny = new Gametype("Bunny", "Unit that holds the flag become the bunny and gets points for kills, everyone else try to kill the bunny.", null);
-            Gametype GametypeFreezeTag = new Gametype("Freeze Tag", "Killing an enemy freeze him, when every enemies are frozen you win. Teamates can unfreeze allie by staying next to them for 2 turns.", null);
-            Gametype GametypeJailbreak = new Gametype("Jailbreak", "Killing an enemy send him to your prison, capture everyone to win. Teamates can be freed by standing on a switch.", null);
-            Gametype GametypeMutant = new Gametype("Mutant", "First kill transform you into the mutant, a unit with overpowered stats and attacks. Only the Mutant can kill or be killed.", null);
-            Gametype GametypeProtectThaPimp = new Gametype("Protect Tha Pimp", "Try to kill the enemy Pimp before it can escape. The pimp move slower and only has a 1 HKO melee attack.", null);
-            Gametype GametypeKaiju = new Gametype("Kaiju", "One player controls giant monsters while the other players use their units.", null);
+            Gametype GametypeDeathmatch = new Gametype("Deathmatch", "Gain points for kills and assists, respawn on death.", true, null);
+            Gametype GametypeCaptureTheFlag = new Gametype("Capture The Flag", "Capture a flag in the enemy base and bring it back to your own flag to score a point.", true, null);
+            Gametype GametypeObjective = new Gametype("Objective", "One team must complete objectives while another prevent them.", false, null);
+            Gametype GametypeAssault = new Gametype("Assault", "Team deathmatch with limited respawns.", false, null);
+            Gametype GametypeConquest = new Gametype("Conquest", "Teams must fight to capture respawn bases that give them points. The starting base may or may not be capturable.", false, null);
+            Gametype GametypeOnslaught = new Gametype("Onslaught", "Teams must fight to capture respawn bases that give them access to the enemy base's core. Last team with a core win.", false, null);
+            Gametype GametypeTitan = new Gametype("Titan", "Both teams have a flying base protected by a shield. Capture missile silos to bring the shield down. Destroy the core to win.", true, null);
+            Gametype GametypeBaseAssault = new Gametype("Base Assault", "Each team has 3 bases to attack and defend. After destroying the walls with artillery you can plant a bomb to completely destroy it.", false, null);
+            Gametype GametypeKingOfTheHill = new Gametype("King Of The Hill", "Hold a position without enemies to win points.", false, null);
+            Gametype GametypeBunny = new Gametype("Bunny", "Unit that holds the flag become the bunny and gets points for kills, everyone else try to kill the bunny.", false, null);
+            Gametype GametypeFreezeTag = new Gametype("Freeze Tag", "Killing an enemy freeze him, when every enemies are frozen you win. Teamates can unfreeze allie by staying next to them for 2 turns.", false, null);
+            Gametype GametypeJailbreak = new Gametype("Jailbreak", "Killing an enemy send him to your prison, capture everyone to win. Teamates can be freed by standing on a switch.", false, null);
+            Gametype GametypeMutant = new Gametype("Mutant", "First kill transform you into the mutant, a unit with overpowered stats and attacks. Only the Mutant can kill or be killed.", false, null);
+            Gametype GametypeProtectThaPimp = new Gametype("Protect Tha Pimp", "Try to kill the enemy Pimp before it can escape. The pimp move slower and only has a 1 HKO melee attack.", false, null);
+            Gametype GametypeKaiju = new Gametype("Kaiju", "One player controls giant monsters while the other players use their units.", false, null);
 
             SelectedGametype = GametypeCampaign;
             ArrayGametypeCategory = new GametypeCategory[2];
@@ -127,7 +129,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int G = 0; G < ActiveCategory.ArrayGametype.Length; ++G)
             {
-                if (CurrentIndex >= GametypeScrollbarValue)
+                if (CurrentIndex >= GametypeScrollbarValue && ActiveCategory.ArrayGametype[G].IsUnlocked)
                 {
                     if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
                         && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20
@@ -213,11 +215,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (CurrentIndex >= GametypeScrollbarValue)
                 {
-                    g.DrawString(fntText, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), Color.White);
-                    if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
-                        && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20)
+                    if (ActiveCategory.ArrayGametype[G].IsUnlocked)
                     {
-                        g.Draw(sprPixel, new Rectangle(LeftPanelX, (int)DrawY, PanelWidth, 20), Color.FromNonPremultiplied(255, 255, 255, 127));
+                        g.DrawString(fntText, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), Color.White);
+
+                        if (MouseHelper.MouseStateCurrent.X >= LeftPanelX && MouseHelper.MouseStateCurrent.X < LeftPanelX + PanelWidth
+                            && MouseHelper.MouseStateCurrent.Y >= DrawY && MouseHelper.MouseStateCurrent.Y < DrawY + 20)
+                        {
+                            g.Draw(sprPixel, new Rectangle(LeftPanelX, (int)DrawY, PanelWidth, 20), Color.FromNonPremultiplied(255, 255, 255, 127));
+                        }
+                    }
+                    else
+                    {
+                        g.DrawString(fntText, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), Color.Gray);
                     }
                     DrawY += 20;
                 }

@@ -29,8 +29,8 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    UnitMap SpawnUnit = new UnitMap(Unit.FromType(ActiveFactory.ListSpawnUnit[0].UnitTypeName, ActiveFactory.ListSpawnUnit[0].UnitStat.Name, Map.Content, Map.DicUnitType,
-                        Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget));
+                    UnitMap SpawnUnit = new UnitMap(Unit.FromType(ActiveFactory.ListSpawnUnit[0].UnitTypeName, ActiveFactory.ListSpawnUnit[0].UnitStat.Name, Map.Content, Map.Params.DicUnitType,
+                        Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget));
                     SpawnUnit.ActiveUnit.ArrayCharacterActive = new Core.Characters.Character[0];
 
                     Vector3 StartPosition;

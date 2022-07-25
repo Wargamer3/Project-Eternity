@@ -12,14 +12,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public EffectActivationSquad(DeathmatchContext GlobalContext)
-            : base(Name, GlobalContext)
+        public EffectActivationSquad(DeathmatchParams Params)
+            : base(Name, Params)
         {
         }
 
         public override bool CanExecuteEffectOnTarget(BaseEffect ActiveSkillEffect)
         {
-            for (int U = GlobalContext.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+            for (int U = Params.GlobalContext.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
                 if (ActiveSkillEffect.CanActivate())
                     return true;
@@ -34,21 +34,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSkillEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
             {
-                LifeType = SkillEffect.LifetimeTypeTurns + GlobalContext.Map.ActivePlayerIndex;
+                LifeType = SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex;
             }
 
-            for (int U = GlobalContext.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+            for (int U = Params.GlobalContext.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                GlobalContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
-                    GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerSquad[U], GlobalContext.EffectTargetUnit.Pilot, GlobalContext.ActiveParser);
-                
-                GlobalContext.EffectTargetUnit.Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
+                Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter,
+                    Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerSquad[U], Params.GlobalContext.EffectTargetUnit.Pilot, Params.GlobalContext.ActiveParser);
+
+                Params.GlobalContext.EffectTargetUnit.Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
             }
         }
 
         public override AutomaticSkillTargetType Copy()
         {
-            return new EffectActivationSquad(GlobalContext);
+            return new EffectActivationSquad(Params);
         }
     }
 }

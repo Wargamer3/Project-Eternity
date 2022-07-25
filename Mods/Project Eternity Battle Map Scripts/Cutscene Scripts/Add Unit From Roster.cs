@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
-                Map.PlayerRoster.AddUnitFromRoster(_UnitEventID, ArrayCharacter, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
+                Map.PlayerRoster.AddUnitFromRoster(_UnitEventID, ArrayCharacter, Map.Params.DicUnitType, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget, Map.Params.DicManualSkillTarget);
                 ExecuteEvent(this, 0);
                 IsEnded = true;
             }

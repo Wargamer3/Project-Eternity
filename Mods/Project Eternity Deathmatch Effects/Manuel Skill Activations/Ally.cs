@@ -10,27 +10,27 @@ namespace ProjectEternity.Core.Skill
 
         }
 
-        public PilotSkillActivationAlly(DeathmatchContext Context)
+        public PilotSkillActivationAlly(DeathmatchParams Context)
             : base("Ally", true, Context)
         {
         }
 
         public override bool CanActivateOnTarget(ManualSkill ActiveSkill)
         {
-            for (int P = Context.Map.ListPlayer.Count - 1; P >= 0; --P)
+            for (int P = Params.Map.ListPlayer.Count - 1; P >= 0; --P)
             {
-                if (P != Context.Map.ActivePlayerIndex)
+                if (P != Params.Map.ActivePlayerIndex)
                     continue;
 
-                for (int Squad = Context.Map.ListPlayer[P].ListSquad.Count - 1; Squad >= 0; --Squad)
+                for (int Squad = Params.Map.ListPlayer[P].ListSquad.Count - 1; Squad >= 0; --Squad)
                 {
-                    if (Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader == null || Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot == null || Context.Map.ListPlayer[P].ListSquad[Squad].IsDead)
+                    if (Params.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader == null || Params.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot == null || Params.Map.ListPlayer[P].ListSquad[Squad].IsDead)
                         continue;
 
-                    Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
-                        Context.Map.ListPlayer[P].ListSquad[Squad], Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader, Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot, Context.Map.ActiveParser);
+                    Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter,
+                        Params.Map.ListPlayer[P].ListSquad[Squad], Params.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader, Params.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot, Params.Map.ActiveParser);
                     
-                    if (ActiveSkill.CanActivateEffectsOnTarget(Context.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot.Effects))
+                    if (ActiveSkill.CanActivateEffectsOnTarget(Params.Map.ListPlayer[P].ListSquad[Squad].CurrentLeader.Pilot.Effects))
                         return true;
                 }
             }
@@ -40,12 +40,12 @@ namespace ProjectEternity.Core.Skill
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
-            Context.Map.PushScreen(new SelectSkillTargetScreen(Context.Map, ActiveSkill, Context.EffectOwnerCharacter, Context.EffectOwnerUnit, Context.EffectOwnerSquad, Context, this));
+            Params.Map.PushScreen(new SelectSkillTargetScreen(Params.Map, ActiveSkill, Params.GlobalContext.EffectOwnerCharacter, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerSquad, Params, this));
         }
 
         public override ManualSkillTarget Copy()
         {
-            return new PilotSkillActivationAlly(Context);
+            return new PilotSkillActivationAlly(Params);
         }
     }
 }

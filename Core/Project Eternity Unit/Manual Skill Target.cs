@@ -8,6 +8,8 @@ namespace ProjectEternity.Core.Skill
 {
     public abstract class ManualSkillTarget
     {
+        public static readonly Dictionary<string, ManualSkillTarget> DicDefaultTarget = new Dictionary<string, ManualSkillTarget>();//When you just need a placeholder outside of a game.
+
         public readonly string TargetType;
         public readonly bool MustBeUsedAlone;
 
@@ -45,6 +47,18 @@ namespace ProjectEternity.Core.Skill
             ManualSkillTarget NewManualSkillTarget = DicManualSkillTarget[TargetType].Copy();
 
             return NewManualSkillTarget;
+        }
+
+        public virtual ManualSkillTarget CopyAndReload(string ParamsID)
+        {
+            ManualSkillTarget NewCopy = Copy();
+            NewCopy.DoReload(ParamsID);
+
+            return NewCopy;
+        }
+
+        protected virtual void DoReload(string ParamsID)
+        {
         }
 
         public static Dictionary<string, ManualSkillTarget> LoadAllTargetTypes()

@@ -63,9 +63,11 @@ namespace ProjectEternity
                 switch ((MenuChoices)SelectedChoice)
                 {
                     case MenuChoices.Normal:
+                        BattleContext.LoadDefaultValues();
                         int OldNumberOfGameScreen = ListGameScreen.Count;
                         StreamReader BR = new StreamReader("Content/Map path.ini");
-                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), string.Empty);
+                        BattleMap NewMap = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(string.Empty, string.Empty);
+                        NewMap.BattleMapPath = BR.ReadLine();
                         BR.Close();
                         NewMap.ListGameScreen = ListGameScreen;
                         NewMap.PlayerRoster = new Roster();
@@ -99,7 +101,8 @@ namespace ProjectEternity
 
                     case MenuChoices.SuperTreeWar:
                         int OldNumberOfGameScreenSTW = ListGameScreen.Count;
-                        DeathmatchMap NewMapSTW = new DeathmatchMap("Super Tree Wars/Holy Temple", string.Empty);
+                        BattleMap NewMapSTW = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(string.Empty, string.Empty);
+                        NewMapSTW.BattleMapPath = "Super Tree Wars/Holy Temple";
                         NewMapSTW.ListGameScreen = ListGameScreen;
                         NewMapSTW.PlayerRoster = new Roster();
                         NewMapSTW.PlayerRoster.LoadRoster();
@@ -129,6 +132,7 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.Intermission:
+                        BattleContext.LoadDefaultValues();
                         BattleMap.NextMapType = "Deathmatch";
                         BattleMap.NextMapPath = "New Item";
 
@@ -136,10 +140,12 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.MultiplayerClassic:
+                        BattleContext.LoadDefaultValues();
                         PushScreen(new MultiplayerScreen());
                         break;
 
                     case MenuChoices.MultiplayerLobby:
+                        BattleContext.LoadDefaultValues();
                         Constants.Width = 800;
                         Constants.Height = 600;
                         Constants.ScreenSize = 0;
@@ -150,6 +156,7 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.MultiplayerLobbyOffline:
+                        BattleContext.LoadDefaultValues();
                         Constants.Width = 800;
                         Constants.Height = 600;
                         Constants.ScreenSize = 0;

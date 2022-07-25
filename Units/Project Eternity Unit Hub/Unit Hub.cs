@@ -17,7 +17,7 @@ namespace ProjectEternity.Core.Units.Hub
         
         private readonly Unit OriginalUnit;
         public readonly string OriginalUnitName;
-        private BattleMap Map;
+        private BattleParams Params;
         private int ActiveVisualNovelIndex;
         public List<string> ListVisualNovel;
         
@@ -26,9 +26,9 @@ namespace ProjectEternity.Core.Units.Hub
         {
         }
 
-        public UnitHub(BattleMap Map)
+        public UnitHub(BattleParams Params)
         {
-            this.Map = Map;
+            this.Params = Params;
         }
 
         public UnitHub(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
@@ -37,11 +37,11 @@ namespace ProjectEternity.Core.Units.Hub
         {
         }
 
-        public UnitHub(string Name, ContentManager Content, BattleMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+        public UnitHub(string Name, ContentManager Content, BattleParams Params, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name)
         {
-            this.Map = Map;
+            this.Params = Params;
 
             ActiveVisualNovelIndex = 0;
 
@@ -98,7 +98,7 @@ namespace ProjectEternity.Core.Units.Hub
         public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
             VisualNovel NewVisualNovel = new VisualNovel(ListVisualNovel[ActiveVisualNovelIndex]);
-            NewVisualNovel.ListGameScreen = Map.ListGameScreen;
+            NewVisualNovel.ListGameScreen = Params.Map.ListGameScreen;
             NewVisualNovel.Load();
 
             if (ActiveVisualNovelIndex + 1 < ListVisualNovel.Count)
@@ -110,7 +110,7 @@ namespace ProjectEternity.Core.Units.Hub
         public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return new UnitHub(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            return new UnitHub(Name, Content, Params, Params.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         protected override void DoQuickSave(BinaryWriter BW)

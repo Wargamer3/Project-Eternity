@@ -87,6 +87,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public ActionPanelHolder ListActionMenuChoice;
 
+        DeathmatchParams Params;
+
         #endregion
 
         public MultiplayerScreen()
@@ -107,11 +109,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Stage = MenuChoices.None;
             CurrentSelection = MenuChoices.PlayerList;
             ListPlayerType = new string[5] { "Closed", "Open", "Human", "CPU", "Online" };
+            Params = new DeathmatchParams();
         }
 
         public override void Load()
         {
-            NewMap = new DeathmatchMap(null, "Classic");
+            NewMap = new DeathmatchMap(null, "Classic", Params);
             DirectoryInfo MapDirectory = new DirectoryInfo(Content.RootDirectory + "\\Maps\\Deathmatch");
             fntArial8 = Content.Load<SpriteFont>("Fonts/Arial8");
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
@@ -252,7 +255,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Random Random = new Random();
             MapAttributes ActiveMapAttributes = ListMap.Where(x => x.Name == "Autoplay").First();
-            DeathmatchMap Autoplay = new DeathmatchMap(ActiveMapAttributes.Name, "Classic");
+            DeathmatchMap Autoplay = new DeathmatchMap(ActiveMapAttributes.Name, "Classic", new DeathmatchParams());
             Autoplay.ListGameScreen = ListGameScreen;
             while (Autoplay.ListPlayer.Count < ActiveMapAttributes.MaxNumberOfPlayers)
             {

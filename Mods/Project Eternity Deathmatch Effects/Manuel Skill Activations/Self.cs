@@ -11,33 +11,33 @@ namespace ProjectEternity.Core.Skill
 
         }
 
-        public PilotSkillActivationSelf(DeathmatchContext Context)
-            : base("Self", false, Context)
+        public PilotSkillActivationSelf(DeathmatchParams Params)
+            : base("Self", false, Params)
         {
 
         }
 
         public override bool CanActivateOnTarget(ManualSkill ActiveSkill)
         {
-            if (Context.EffectOwnerSquad.CurrentLeader == null || Context.EffectOwnerSquad.CurrentLeader.Pilot == null || Context.EffectOwnerSquad.IsDead)
+            if (Params.GlobalContext.EffectOwnerSquad.CurrentLeader == null || Params.GlobalContext.EffectOwnerSquad.CurrentLeader.Pilot == null || Params.GlobalContext.EffectOwnerSquad.IsDead)
                 return false;
 
-            Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.Map.ActiveParser);
+            Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.Map.ActiveParser);
             
-            return ActiveSkill.CanActivateEffectsOnTarget(Context.EffectOwnerCharacter.Effects);
+            return ActiveSkill.CanActivateEffectsOnTarget(Params.GlobalContext.EffectOwnerCharacter.Effects);
         }
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
-            Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter, Context.Map.ActiveParser);
+            Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.Map.ActiveParser);
 
-            AddAndExecuteEffect(ActiveSkill, Context.EffectOwnerCharacter.Effects, SkillEffect.LifetimeTypeTurns + Context.Map.ActivePlayerIndex);
-            Context.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;
+            AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectOwnerCharacter.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
+            Params.GlobalContext.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;
         }
 
         public override ManualSkillTarget Copy()
         {
-            return new PilotSkillActivationSelf(Context);
+            return new PilotSkillActivationSelf(Params);
         }
     }
 }

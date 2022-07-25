@@ -13,8 +13,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public VSPilotRequirement(DeathmatchContext Context)
-            : base(VSPilotRequirementName, Context)
+        public VSPilotRequirement(DeathmatchParams Params)
+            : base(VSPilotRequirementName, Params)
         {
         }
 
@@ -30,12 +30,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            return Context.EffectTargetUnit != null && Context.EffectTargetUnit.Pilot != null && Context.EffectTargetUnit.Pilot.Name == _PilotName;
+            return Params.GlobalContext.EffectTargetUnit != null && Params.GlobalContext.EffectTargetUnit.Pilot != null && Params.GlobalContext.EffectTargetUnit.Pilot.Name == _PilotName;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            VSPilotRequirement NewSkillEffect = new VSPilotRequirement(Context);
+            VSPilotRequirement NewSkillEffect = new VSPilotRequirement(Params);
 
             NewSkillEffect._PilotName = _PilotName;
 

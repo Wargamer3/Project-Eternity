@@ -26,11 +26,6 @@ namespace ProjectEternity.Editors.UnitModularEditor
         private List<PartArm> ListRightArm;
         private List<PartLegs> ListLegs;
 
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-        private Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
-
         public ProjectEternityUnitModularEditor()
         {
             InitializeComponent();
@@ -42,11 +37,6 @@ namespace ProjectEternity.Editors.UnitModularEditor
             ListLeftArm = new List<PartArm>();
             ListRightArm = new List<PartArm>();
             ListLegs = new List<PartLegs>();
-
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
             ResetControls();
         }
@@ -1133,7 +1123,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
                 switch (ItemSelectionChoice)
                 {
                     case ItemSelectionChoices.Pilot:
-                        Character NewPilot = new Character(Items[I], null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                        Character NewPilot = new Character(Items[I], null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
                         if (NewPilot != null)
                         {
                             if (lstPilots.Items.Contains(NewPilot.Name))
@@ -1227,7 +1217,7 @@ namespace ProjectEternity.Editors.UnitModularEditor
             {
                 string Name = (string)lstPilots.Items[P];
                 //Add the pilot.
-                ListPilot.Add(new Character(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget));
+                ListPilot.Add(new Character(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget));
             }
 
             for (int Head = 0; Head < lstHead.Items.Count; Head++)

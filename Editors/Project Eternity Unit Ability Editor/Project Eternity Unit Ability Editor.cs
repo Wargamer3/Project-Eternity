@@ -13,21 +13,13 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
         private BaseAutomaticSkill ActiveSkill;
         private bool AllowEvents;
 
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-
         public ProjectEternityUnitAbilityEditor()
         {
             InitializeComponent();
 
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-
             AllowEvents = true;
-            cboEffectType.Items.AddRange(DicEffect.Values.OrderBy(x => x.EffectTypeName).ToArray());
-            cboRequirementType.Items.AddRange(DicRequirement.Values.ToArray());
+            cboEffectType.Items.AddRange(BaseEffect.DicDefaultEffect.Values.OrderBy(x => x.EffectTypeName).ToArray());
+            cboRequirementType.Items.AddRange(BaseSkillRequirement.DicDefaultRequirement.Values.ToArray());
         }
 
         public ProjectEternityUnitAbilityEditor(string FilePath, object[] Params)
@@ -78,7 +70,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
             string Name = FilePath.Substring(0, FilePath.Length - 4).Substring(24);
             this.Text = Name + " - Project Eternity Unit Ability Editor";
 
-            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             txtDescription.Text = ActiveSkill.Description;
 
@@ -201,7 +193,7 @@ namespace ProjectEternity.Editors.UnitAbilityEditor
             if (lstLevels.SelectedItems.Count > 0 && lstActivations.SelectedItems.Count > 0)
             {
                 BaseSkillActivation ActiveSkillActivation = ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[lstActivations.SelectedIndex];
-                BaseEffect NewEffect = DicEffect.First().Value;
+                BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value;
                 NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
 
                 ActiveSkillActivation.ListEffect.Add(NewEffect);

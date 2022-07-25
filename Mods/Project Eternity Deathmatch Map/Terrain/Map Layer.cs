@@ -125,7 +125,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (BattleMap.DicBattmeMapType.Count > 0 && !string.IsNullOrEmpty(NewMapSwitchPoint.SwitchMapPath)
                     && Map.ListSubMap.Find(x => x.BattleMapPath == NewMapSwitchPoint.SwitchMapPath) == null)
                 {
-                    BattleMap NewMap = BattleMap.DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(string.Empty);
+                    BattleMap NewMap = BattleMap.DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(string.Empty, string.Empty);
                     NewMap.BattleMapPath = NewMapSwitchPoint.SwitchMapPath;
                     NewMap.ListGameScreen = Map.ListGameScreen;
                     NewMap.ListSubMap = Map.ListSubMap;

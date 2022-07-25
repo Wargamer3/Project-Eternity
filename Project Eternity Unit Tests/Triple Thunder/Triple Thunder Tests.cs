@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Effects;
 using ProjectEternity.GameScreens.TripleThunderScreen;
 
 namespace ProjectEternity.UnitTests.TripleThunderTests

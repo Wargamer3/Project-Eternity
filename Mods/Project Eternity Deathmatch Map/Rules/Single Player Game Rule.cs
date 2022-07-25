@@ -63,10 +63,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                             for (int U = 0; U < NewSquad.UnitsInSquad; ++U)
                             {
-                                NewSquad.At(U).ReinitializeMembers(Owner.DicUnitType[NewSquad.At(U).UnitTypeName]);
+                                NewSquad.At(U).ReinitializeMembers(Owner.Params.DicUnitType[NewSquad.At(U).UnitTypeName]);
                             }
 
-                            NewSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                            NewSquad.ReloadSkills(Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                             Owner.SpawnSquad(PlayerIndex, NewSquad, 0, new Vector2(ActiveLayer.ListSingleplayerSpawns[S].Position.X, ActiveLayer.ListSingleplayerSpawns[S].Position.Y), L);
                             ++SpawnSquadIndex;
 

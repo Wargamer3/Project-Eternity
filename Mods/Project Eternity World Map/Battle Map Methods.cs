@@ -238,7 +238,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string GameMode)
+        public override BattleMap GetNewMap(string GameMode, string ParamsID)
         {
             return new WorldMap(BattleMapPath, GameMode);
         }

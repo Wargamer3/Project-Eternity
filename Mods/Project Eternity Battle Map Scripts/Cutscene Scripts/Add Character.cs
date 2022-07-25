@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string[] ArrayCharacterName = _CharacterName[0].Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                 for (int C = 0; C < ArrayCharacterName.Length; C++)
                 {
-                    Character NewCharacter = new Character(ArrayCharacterName[C], GameScreen.ContentFallback, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget);
+                    Character NewCharacter = new Character(ArrayCharacterName[C], GameScreen.ContentFallback, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget, Map.Params.DicManualSkillTarget);
                     if (_IsPresent)
                     {
                         NewCharacter.TeamTags.AddTag("Present");

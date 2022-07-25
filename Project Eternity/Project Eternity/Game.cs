@@ -264,8 +264,6 @@ namespace ProjectEternity
 
             SplashScreen.SetStatus("Loading Ressources");
 
-            SystemList.LoadSystemLists();
-
             BattleMap.LoadMapTypes();
 
             SplashScreen.CloseForm();

@@ -140,11 +140,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (PartByType[0] == "Standard Parts")
                     {
-                        SystemList.ListPart.Add(PartDropPath, new UnitStandardPart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget));
+                        SystemList.ListPart.Add(PartDropPath, new UnitStandardPart("Content/Units/" + PartDropPath + ".pep", Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget));
                     }
                     else if (PartByType[0] == "Consumable Parts")
                     {
-                        SystemList.ListPart.Add(PartDropPath, new UnitConsumablePart("Content/Units/" + PartDropPath + ".pep", Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget, Map.DicManualSkillTarget));
+                        SystemList.ListPart.Add(PartDropPath, new UnitConsumablePart("Content/Units/" + PartDropPath + ".pep", Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget, Map.Params.DicManualSkillTarget));
                     }
                 }
             }
@@ -225,11 +225,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (UpdateBattleEventsOnClose)
                     {
-                        Map.GlobalBattleContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Map.ActiveParser);
+                        Map.Params.GlobalContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Map.ActiveParser);
 
                         Map.UpdateMapEvent(BattleMap.EventTypeOnBattle, 1);
 
-                        Map.GlobalBattleContext.SetContext(null, null, null, null, null, null, Map.ActiveParser);
+                        Map.Params.GlobalContext.SetContext(null, null, null, null, null, null, Map.ActiveParser);
                     }
 
                     //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)

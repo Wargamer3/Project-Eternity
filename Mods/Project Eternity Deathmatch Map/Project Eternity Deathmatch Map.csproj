@@ -130,7 +130,11 @@
     <Compile Include="Battle Behaviors.cs" />
     <Compile Include="Battle Formulas.cs" />
     <Compile Include="Battle Previewer.cs" />
+    <Compile Include="Effects\Automatic Skill Deathmatch.cs" />
+    <Compile Include="Effects\Deathmatch Effect.cs" />
     <Compile Include="Deathmatch Map Helper.cs" />
+    <Compile Include="Deathmatch Params.cs" />
+    <Compile Include="Effects\Manual Skill Activation Deathmatch.cs" />
     <Compile Include="PER Attack.cs" />
     <Compile Include="Rules\Titan Game Rule.cs" />
     <Compile Include="Rules\Classic MP Game Rule.cs" />
@@ -168,8 +172,7 @@
     <Compile Include="Menus\Non Demo\Non Demo Battle Frame.cs" />
     <Compile Include="Menus\Game Over Menu.cs" />
     <Compile Include="Rules\Lobby Victory Screen.cs" />
-    <Compile Include="Deathmatch Context.cs" />
-    <Compile Include="Deathmatch Map Requirement.cs" />
+    <Compile Include="Effects\Deathmatch Map Requirement.cs" />
     <Compile Include="Deathmatch Map Timeline.cs" />
     <Compile Include="Delayed Attack.cs" />
     <Compile Include="Formula Parser.cs" />

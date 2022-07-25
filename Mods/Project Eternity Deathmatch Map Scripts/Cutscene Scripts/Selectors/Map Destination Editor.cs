@@ -8,12 +8,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public partial class MapDestinationEditor : Form
     {
+        DeathmatchParams Params;
+
         private readonly List<Vector2> ListTerrainChangeLocation;
         public DeathmatchMap ActiveMap { get { return (DeathmatchMap)BattleMapViewer.ActiveMap; } }
 
         public MapDestinationEditor(List<Vector2> ListTerrainChangeLocation)
         {
             InitializeComponent();
+
+            Params = new DeathmatchParams();
 
             this.ListTerrainChangeLocation = ListTerrainChangeLocation;
         }
@@ -88,7 +92,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             string MapLogicName = Items[0].Substring(0, Items[0].Length - 4).Substring(24);
             BattleMapViewer.Preload();
-            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty);
+            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty, Params);
             BattleMapViewer.ActiveMap = NewMap;
             NewMap.ListGameScreen = new List<GameScreen>();
             NewMap.Content = BattleMapViewer.content;

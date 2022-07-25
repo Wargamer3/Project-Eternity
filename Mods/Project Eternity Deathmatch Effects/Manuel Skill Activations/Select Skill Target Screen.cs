@@ -14,18 +14,18 @@ namespace ProjectEternity.Core.Skill
         private readonly Character SkillPilot;
         private readonly Unit SkillUnit;
         private readonly Squad SkillSquad;
-        private readonly DeathmatchContext Context;
+        private readonly DeathmatchParams Params;
         private readonly ManualSkillTarget Owner;
         private BattlePreviewer BattlePreview;
 
-        public SelectSkillTargetScreen(DeathmatchMap Map, ManualSkill ActiveSkill, Character SkillPilot, Unit SkillUnit, Squad SkillSquad, DeathmatchContext Context, ManualSkillTarget Owner)
+        public SelectSkillTargetScreen(DeathmatchMap Map, ManualSkill ActiveSkill, Character SkillPilot, Unit SkillUnit, Squad SkillSquad, DeathmatchParams Params, ManualSkillTarget Owner)
         {
             this.Map = Map;
             this.ActiveSkill = ActiveSkill;
             this.SkillPilot = SkillPilot;
             this.SkillUnit = SkillUnit;
             this.SkillSquad = SkillSquad;
-            this.Context = Context;
+            this.Params = Params;
             this.Owner = Owner;
         }
 
@@ -61,11 +61,11 @@ namespace ProjectEternity.Core.Skill
                     int SquadIndex = Map.CheckForSquadAtPosition(P, Map.CursorPosition, Vector3.Zero);
                     if (SquadIndex >= 0)
                     {
-                        Context.SetContext(SkillSquad, SkillUnit, SkillPilot,
-                            Context.Map.ListPlayer[P].ListSquad[SquadIndex], Context.Map.ListPlayer[P].ListSquad[SquadIndex].CurrentLeader, Context.Map.ListPlayer[P].ListSquad[SquadIndex].CurrentLeader.Pilot, Context.Map.ActiveParser);
+                        Params.GlobalContext.SetContext(SkillSquad, SkillUnit, SkillPilot,
+                            Params.Map.ListPlayer[P].ListSquad[SquadIndex], Params.Map.ListPlayer[P].ListSquad[SquadIndex].CurrentLeader, Params.Map.ListPlayer[P].ListSquad[SquadIndex].CurrentLeader.Pilot, Params.Map.ActiveParser);
 
-                        Context.EffectTargetUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
-                        if (ActiveSkill.CanActivateEffectsOnTarget(Context.EffectTargetCharacter.Effects))
+                        Params.GlobalContext.EffectTargetUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
+                        if (ActiveSkill.CanActivateEffectsOnTarget(Params.GlobalContext.EffectTargetCharacter.Effects))
                         {
                             TargetSquad = Map.ListPlayer[P].ListSquad[SquadIndex];
                         }
@@ -75,11 +75,11 @@ namespace ProjectEternity.Core.Skill
                 if (TargetSquad == null)
                     return;
 
-                Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
-                    TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Context.Map.ActiveParser);
+                Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter,
+                    TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Params.Map.ActiveParser);
 
-                Owner.AddAndExecuteEffect(ActiveSkill, Context.EffectTargetCharacter.Effects, SkillEffect.LifetimeTypeTurns + Context.Map.ActivePlayerIndex);
-                Context.EffectTargetUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
+                Owner.AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectTargetCharacter.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
+                Params.GlobalContext.EffectTargetUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
                 SkillPilot.SP -= ActiveSkill.SPCost;
 
                 Map.CursorPosition = SkillSquad.Position;

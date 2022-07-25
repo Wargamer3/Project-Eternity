@@ -43,7 +43,7 @@ namespace ProjectEternity.Core.Units.Builder
             if (ActiveInputManager.InputConfirmPressed())
             {
                 List<Squad> ListOtherSquads = FindOtherSquad("Tower");
-                Unit NewLeader = Unit.FromType("Normal", "Electric Wall", Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
+                Unit NewLeader = Unit.FromType("Normal", "Electric Wall", Map.Content, Map.Params.DicUnitType, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
                 NewLeader.ArrayCharacterActive = new Character[0];
 
                 //Initialise the Unit stats.
@@ -67,7 +67,7 @@ namespace ProjectEternity.Core.Units.Builder
 
                             if (!Map.CheckForObstacleAtPosition(Position, Vector3.Zero))
                             {
-                                NewLeader = Unit.FromType("Normal", "Electric Wall", Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
+                                NewLeader = Unit.FromType("Normal", "Electric Wall", Map.Content, Map.Params.DicUnitType, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
                                 NewLeader.ArrayCharacterActive = new Character[0];
 
                                 //Initialise the Unit stats.

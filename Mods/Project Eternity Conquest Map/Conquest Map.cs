@@ -1368,7 +1368,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string GameMode)
+        public override BattleMap GetNewMap(string GameMode, string ParamsID)
         {
             return new ConquestMap(GameMode);
         }

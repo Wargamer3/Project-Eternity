@@ -10,15 +10,9 @@ namespace ProjectEternity.Editors.UnitConquestEditor
 {
     public partial class UnitConquestEditor : BaseEditor
     {
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-
         public UnitConquestEditor()
         {
             InitializeComponent();
-
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
         }
 
         public UnitConquestEditor(string FilePath, object[] Params)
@@ -81,7 +75,7 @@ namespace ProjectEternity.Editors.UnitConquestEditor
         private void LoadUnit(string UnitPath)
         {
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(23);
-            UnitConquest LoadedUnit = new UnitConquest(Name, null, DicRequirement, DicEffect);
+            UnitConquest LoadedUnit = new UnitConquest(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect);
 
             this.Text = LoadedUnit.RelativePath + " - Project Eternity Conquest Unit Editor";
 

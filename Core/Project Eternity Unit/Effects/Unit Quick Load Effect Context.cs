@@ -5,6 +5,8 @@ namespace ProjectEternity.Core.Effects
 {
     public class UnitQuickLoadEffectContext
     {
+        public static readonly UnitQuickLoadEffectContext DefaultQuickLoadContext = new UnitQuickLoadEffectContext();
+
         private Dictionary<uint, Squad> _ArrayEffectOwnerSquad;
 
         public Dictionary<uint, Squad> ArrayEffectOwnerSquad { get { return _ArrayEffectOwnerSquad; } }

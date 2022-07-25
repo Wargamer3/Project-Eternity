@@ -41,11 +41,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private bool SelectedAlphaAppearing = true;
         private bool UnitEquipmentAvailable;
         private SpriteFont fntArial12;
-        public Dictionary<string, Unit> DicUnitType;
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
-        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-        public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
         public FormulaParser ActiveParser;
         public IntermissionScreen()
             : base()
@@ -65,12 +60,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                     new PartMenu("Exit", new string[] { }) };
             Menu[2].Open = true;
 
-            DicUnitType = Unit.LoadAllUnits();
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
-
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
             UnitEquipmentAvailable = false;
@@ -79,8 +68,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerRoster.LoadRoster();
             foreach (RosterUnit ActiveUnit in PlayerRoster.DicRosterUnit.Values)
             {
-                Unit NewUnit = Unit.FromType(ActiveUnit.UnitTypeName, ActiveUnit.FilePath, GameScreen.ContentFallback, DicUnitType, DicRequirement,
-                    DicEffect, DicAutomaticSkillTarget);
+                Unit NewUnit = Unit.FromType(ActiveUnit.UnitTypeName, ActiveUnit.FilePath, GameScreen.ContentFallback, Unit.DicDefaultUnitType,
+                    BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
                 NewUnit.TeamTags.AddTag("Present");
                 NewUnit.TeamTags.AddTag("Event");
@@ -89,7 +78,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (RosterCharacter ActiveCharacter in PlayerRoster.DicRosterCharacter.Values)
             {
-                Character NewCharacter = new Character(ActiveCharacter.FilePath, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                Character NewCharacter = new Character(ActiveCharacter.FilePath, GameScreen.ContentFallback, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
 
                 NewCharacter.TeamTags.AddTag("Present");
                 NewCharacter.TeamTags.AddTag("Event");

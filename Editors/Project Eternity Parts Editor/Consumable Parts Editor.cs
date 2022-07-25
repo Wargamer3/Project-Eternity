@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
@@ -15,19 +14,9 @@ namespace ProjectEternity.Editors.PartsEditor
     {
         private bool AllowEvents;
 
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-        private Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
-
         public ProjectEternityConsumablePartEditor()
         {
             InitializeComponent();
-
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
         }
 
         public ProjectEternityConsumablePartEditor(string FilePath, object[] Params)
@@ -103,7 +92,7 @@ namespace ProjectEternity.Editors.PartsEditor
         /// <param name="SkillPath">Path from which to open the Skill.</param>
         private void LoadSkill(string SkillPath)
         {
-            ManualSkill ActiveSkill = new ManualSkill(SkillPath, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            ManualSkill ActiveSkill = new ManualSkill(SkillPath, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
 
             txtRange.Text = ActiveSkill.Range.ToString();
             txtDescription.Text = ActiveSkill.Description;
@@ -168,7 +157,7 @@ namespace ProjectEternity.Editors.PartsEditor
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            BaseEffect NewEffect = DicEffect.First().Value.Copy();
+            BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value.Copy();
             NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
             ListViewItem NewListViewItem = new ListViewItem(NewEffect.EffectTypeName);
             NewListViewItem.Tag = NewEffect;

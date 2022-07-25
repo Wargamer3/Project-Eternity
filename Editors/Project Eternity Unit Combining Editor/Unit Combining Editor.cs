@@ -14,20 +14,10 @@ namespace ProjectEternity.Editors.UnitCombiningEditor
         private enum ItemSelectionChoices { CombiningUnit, OriginalUnit, CombinedUnit };
 
         private ItemSelectionChoices ItemSelectionChoice;
-        
-        private Dictionary<string, Unit> DicUnitType;
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
 
         public UnitCombiningEditor()
         {
             InitializeComponent();
-
-            DicUnitType = Unit.LoadAllUnits();
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
         }
 
         public UnitCombiningEditor(string FilePath, object[] Params)
@@ -81,7 +71,7 @@ namespace ProjectEternity.Editors.UnitCombiningEditor
         private void LoadUnit(string UnitPath)
         {
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(24);
-            UnitCombining NewUnit = new UnitCombining(Name, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            UnitCombining NewUnit = new UnitCombining(Name, null, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             txtOriginalUnit.Text = NewUnit.OriginalUnitName;
             txtCombinedUnit.Text = NewUnit.CombinedUnitName;

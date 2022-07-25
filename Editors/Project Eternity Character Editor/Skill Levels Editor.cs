@@ -8,22 +8,14 @@ namespace ProjectEternity.Editors.CharacterEditor
 {
     public partial class SkillLevelsEditor : Form
     {
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
-        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-
         public SkillLevelsEditor(string SkillName)
         {
             InitializeComponent();
 
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-
             lblName.Text = SkillName;
             dgvLevels.Rows.Clear();
 
-            BaseAutomaticSkill NewSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + SkillName + ".pecs", SkillName, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            BaseAutomaticSkill NewSkill = new BaseAutomaticSkill("Content/Characters/Skills/" + SkillName + ".pecs", SkillName, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             for(int L = 0; L < NewSkill.ListSkillLevel.Count; ++L)
             {

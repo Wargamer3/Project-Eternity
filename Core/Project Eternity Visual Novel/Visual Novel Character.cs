@@ -19,11 +19,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
             ListSpeakerPriority = new List<SpeakerPriority>();
 
-            Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
-            _LoadedCharacter = new Character(CharacterName, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            _LoadedCharacter = new Character(CharacterName, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
         }
 
         public VisualNovelCharacter(BinaryReader BR)
@@ -37,11 +33,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 ListSpeakerPriority.Add(new SpeakerPriority((SpeakerPriority.PriorityTypes)BR.ReadByte(), BR.ReadString()));
             }
 
-            Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
-            _LoadedCharacter = new Character(CharacterName, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            _LoadedCharacter = new Character(CharacterName, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
         }
 
         public void Save(BinaryWriter BW)

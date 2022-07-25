@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
-using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.Core.Item
 {
@@ -13,6 +12,8 @@ namespace ProjectEternity.Core.Item
     /// </summary>
     public abstract class BaseEffect
     {
+        public static readonly Dictionary<string, BaseEffect> DicDefaultEffect = new Dictionary<string, BaseEffect>();//When you just need a placeholder outside of a game.
+
         public string LifetimeType;
         public int LifetimeTypeValue;//Not used if Permanent, limit the number of stacks for Stacking, define how long it last for turn and battle.
         public bool IsStacking;
@@ -221,6 +222,10 @@ namespace ProjectEternity.Core.Item
             return NewCopy;
         }
         
+        /// <summary>
+        /// Reload memebers
+        /// </summary>
+        /// <param name="Copy"></param>
         public void CopyMembers(BaseEffect Copy)
         {
             Lifetime = Copy.Lifetime;
@@ -242,7 +247,20 @@ namespace ProjectEternity.Core.Item
             }
         }
 
-        protected abstract BaseEffect DoCopy();
+        public virtual BaseEffect CopyAndReload(string ParamsID)
+        {
+            BaseEffect NewCopy = Copy();
+            NewCopy.CopyMembers(NewCopy);
+            NewCopy.DoReload(ParamsID);
+
+            return NewCopy;
+        }
+
+        protected virtual void DoReload(string ParamsID)
+        {
+        }
+
+        protected abstract BaseEffect DoCopy();//Do a copy that will copy global params into the local params
 
         protected abstract void DoCopyMembers(BaseEffect Copy);
 

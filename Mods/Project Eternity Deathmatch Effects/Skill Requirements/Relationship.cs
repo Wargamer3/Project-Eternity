@@ -18,8 +18,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public RelationshipRequirement(DeathmatchContext Context)
-            : base("Relationship Requirement", Context)
+        public RelationshipRequirement(DeathmatchParams Params)
+            : base("Relationship Requirement", Params)
         {
             _DistanceToEnemy = 0;
             _IncludeDiagonals = false;
@@ -42,15 +42,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            if (Context.EffectOwnerCharacter != Context.EffectOwnerUnit.Pilot)
+            if (Params.GlobalContext.EffectOwnerCharacter != Params.GlobalContext.EffectOwnerUnit.Pilot)
                 return false;
 
-            foreach (Player ActivePlayer in Context.Map.ListPlayer)
+            foreach (Player ActivePlayer in Params.Map.ListPlayer)
             {
                 foreach (Squad ActiveSquad in ActivePlayer.ListSquad)
                 {
-                    float X1 = Context.EffectOwnerSquad.X;
-                    float Y1 = Context.EffectOwnerSquad.Y;
+                    float X1 = Params.GlobalContext.EffectOwnerSquad.X;
+                    float Y1 = Params.GlobalContext.EffectOwnerSquad.Y;
                     float X2 = ActiveSquad.X;
                     float Y2 = ActiveSquad.Y;
 
@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         public override BaseSkillRequirement Copy()
         {
-            RelationshipRequirement NewSkillEffect = new RelationshipRequirement(Context);
+            RelationshipRequirement NewSkillEffect = new RelationshipRequirement(Params);
 
             NewSkillEffect._DistanceToEnemy = _DistanceToEnemy;
             NewSkillEffect._IncludeDiagonals = _IncludeDiagonals;

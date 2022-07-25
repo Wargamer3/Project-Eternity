@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public AfterAttackRequirement(DeathmatchContext Context)
-            : base(AfterAttackRequirementName, Context)
+        public AfterAttackRequirement(DeathmatchParams Params)
+            : base(AfterAttackRequirementName, Params)
         {
         }
 
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BaseSkillRequirement Copy()
         {
-            AfterAttackRequirement NewSkillEffect = new AfterAttackRequirement(Context);
+            AfterAttackRequirement NewSkillEffect = new AfterAttackRequirement(Params);
 
             return NewSkillEffect;
         }

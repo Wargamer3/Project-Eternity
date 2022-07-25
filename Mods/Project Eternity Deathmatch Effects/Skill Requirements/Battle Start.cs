@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public BattleStartRequirement(DeathmatchContext Context)
-            : base(BattleStartRequirementName, Context)
+        public BattleStartRequirement(DeathmatchParams Params)
+            : base(BattleStartRequirementName, Params)
         {
         }
 
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BaseSkillRequirement Copy()
         {
-            BattleStartRequirement NewSkillEffect = new BattleStartRequirement(Context);
+            BattleStartRequirement NewSkillEffect = new BattleStartRequirement(Params);
 
             return NewSkillEffect;
         }

@@ -48,9 +48,9 @@ namespace ProjectEternity.Core.Units
         public abstract void DrawOverlayOnMap(CustomSpriteBatch g, Vector3 Position);
 
         public abstract void DrawTimeOfDayOverlayOnMap(CustomSpriteBatch g, Vector3 Position, int TimeOfDay);
-        
+
         public virtual List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, ActionPanelHolder ListActionMenuChoice)
-        { return null; }
+        { return new List<ActionPanel>(); }
 
         public void StartTurn()
         {

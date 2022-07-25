@@ -407,7 +407,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 Result.AttackAttackerFinalEN = Attacker.EN;
             }
 
-            GlobalBattleContext.Result = Result;
+            Params.GlobalContext.Result = Result;
 
             if (ActivateSkills)
             {
@@ -519,12 +519,12 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             {
                 if (Attacker != null)
                 {
-                    GlobalBattleContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, ActiveParser);
+                    Params.GlobalContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, ActiveParser);
                 }
 
                 UpdateMapEvent(EventTypeOnBattle, 1);
 
-                GlobalBattleContext.SetContext(null, null, null, null, null, null, ActiveParser);
+                Params.GlobalContext.SetContext(null, null, null, null, null, null, ActiveParser);
 
                 //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)
 
@@ -715,18 +715,18 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             {
                 TargetSquad = SupportDefender;
             }
-            
-            GlobalBattleContext.Result.SetTarget(-1, -1, -1, null);
-            GlobalBattleContext.SupportAttack = null;
-            GlobalBattleContext.SupportDefend = null;
+
+            Params.GlobalContext.Result.SetTarget(-1, -1, -1, null);
+            Params.GlobalContext.SupportAttack = null;
+            Params.GlobalContext.SupportDefend = null;
 
             if (SupportAttacker != null)
             {
-                GlobalBattleContext.SupportAttack = SupportAttacker.CurrentLeader;
+                Params.GlobalContext.SupportAttack = SupportAttacker.CurrentLeader;
             }
             if (SupportDefender != null)
             {
-                GlobalBattleContext.SupportDefend = SupportDefender.CurrentLeader;
+                Params.GlobalContext.SupportDefend = SupportDefender.CurrentLeader;
             }
 
             int TotalLeaderDamage = 0;

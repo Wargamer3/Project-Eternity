@@ -13,8 +13,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public AttackDefendedRequirement(DeathmatchContext Context)
-            : base(AttackDefendedRequirementName, Context)
+        public AttackDefendedRequirement(DeathmatchParams Params)
+            : base(AttackDefendedRequirementName, Params)
         {
         }
 
@@ -30,12 +30,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            return Context.EffectTargetUnit != null && Context.EffectTargetUnit.CurrentAttack != null && Context.EffectTargetUnit.CurrentAttack.RelativePath == _AttackName;
+            return Params.GlobalContext.EffectTargetUnit != null && Params.GlobalContext.EffectTargetUnit.CurrentAttack != null && Params.GlobalContext.EffectTargetUnit.CurrentAttack.RelativePath == _AttackName;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            AttackDefendedRequirement NewSkillEffect = new AttackDefendedRequirement(Context);
+            AttackDefendedRequirement NewSkillEffect = new AttackDefendedRequirement(Params);
 
             NewSkillEffect._AttackName = _AttackName;
 

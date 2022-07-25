@@ -16,17 +16,9 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
         private ItemSelectionChoices ItemSelectionChoice;
         private bool AllowEvents;
 
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-
         public UnitTransformingEditor()
         {
             InitializeComponent();
-
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
         }
 
         public UnitTransformingEditor(string FilePath, object[] Params)
@@ -82,7 +74,7 @@ namespace ProjectEternity.Editors.UnitTransformingEditor
         private void LoadUnit(string UnitPath)
         {
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(27);
-            UnitTransforming NewUnit = new UnitTransforming(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            UnitTransforming NewUnit = new UnitTransforming(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             for (int U = 0; U < NewUnit.ArrayTransformingUnit.Length; ++U)
             {

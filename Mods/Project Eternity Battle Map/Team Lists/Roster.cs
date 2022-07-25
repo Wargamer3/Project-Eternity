@@ -198,17 +198,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FileStream FS = new FileStream("Content/New game characters loadout.txt", FileMode.Open, FileAccess.ReadWrite);
             StreamReader SR = new StreamReader(FS);
 
-            Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
-
             //Read everything
             while (!SR.EndOfStream)
             {
                 string PilotName = SR.ReadLine();
 
-                Character NewCharacter = new Character(PilotName, GameScreen.ContentFallback, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                Character NewCharacter = new Character(PilotName, GameScreen.ContentFallback, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
                 NewCharacter.Level = 1;
                 TeamCharacters.ListAll.Add(NewCharacter);
             }
@@ -217,15 +212,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void LoadUnitsLoadout()
         {
-            Unit.LoadAllUnits();
-
             FileStream FS = new FileStream("Content/New game units loadout.txt", FileMode.Open, FileAccess.ReadWrite);
             StreamReader SR = new StreamReader(FS);
-
-            Dictionary<string, Unit> DicUnitType = Unit.LoadAllUnits();
-            Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             //Read everything
             while (!SR.EndOfStream)
@@ -233,7 +221,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string UnitName = SR.ReadLine();
 
                 string[] UnitInfo = UnitName.Split(new[] { "\\", "/" }, StringSplitOptions.None);
-                Unit _SpawnUnit = Unit.FromType(UnitInfo[0], UnitName.Remove(0, UnitInfo[0].Length + 1), GameScreen.ContentFallback, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                Unit _SpawnUnit = Unit.FromType(UnitInfo[0], UnitName.Remove(0, UnitInfo[0].Length + 1), GameScreen.ContentFallback, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
                 TeamUnits.ListAll.Add(_SpawnUnit);
             }

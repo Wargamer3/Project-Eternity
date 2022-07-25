@@ -53,7 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Automatic Skill Deathmatch.cs" />
     <Compile Include="Automatic Skill Activations\All.cs" />
     <Compile Include="Automatic Skill Activations\All Allies.cs" />
     <Compile Include="Automatic Skill Activations\Aura.cs" />
@@ -93,7 +92,6 @@
     <Compile Include="Automatic Skill Activations\All Enemies.cs" />
     <Compile Include="Manuel Skill Activations\Ally.cs" />
     <Compile Include="Manuel Skill Activations\Ally Squad.cs" />
-    <Compile Include="Manual Skill Activation Deathmatch.cs" />
     <Compile Include="Manuel Skill Activations\Enemy.cs" />
     <Compile Include="Manuel Skill Activations\Enemy Squad.cs" />
     <Compile Include="Manuel Skill Activations\Every Ally.cs" />

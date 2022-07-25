@@ -1,4 +1,5 @@
 ﻿using ProjectEternity.Core.Units;
+using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -8,12 +9,12 @@ namespace ProjectEternity.UnitTests.BattleBehavior
     public partial class AlwaysDodgeBattleBehaviorTests
     {
         private static DeathmatchMap DummyMap;
-        private static DeathmatchContext GlobalDeathmatchContext;
+        private static BattleContext GlobalDeathmatchContext;
 
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            GlobalDeathmatchContext = new DeathmatchContext();
+            GlobalDeathmatchContext = new BattleContext();
             DummyMap = DeathmatchMapHelper.CreateDummyMap(GlobalDeathmatchContext);
         }
 

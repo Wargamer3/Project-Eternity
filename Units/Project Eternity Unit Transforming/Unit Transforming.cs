@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Characters;
+using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units.Normal;
@@ -55,8 +56,8 @@ namespace ProjectEternity.Core.Units.Transforming
             : base(null)
         { }
 
-        public UnitTransforming(DeathmatchMap Map)
-            : base(Map)
+        public UnitTransforming(DeathmatchParams Params)
+            : base(Params)
         { }
         
         public UnitTransforming(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
@@ -65,9 +66,9 @@ namespace ProjectEternity.Core.Units.Transforming
         {
         }
 
-        public UnitTransforming(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public UnitTransforming(string Name, ContentManager Content, DeathmatchParams Params, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
-            : base(Name, Map)
+            : base(Name, Params)
         {
             this.ItemName = Name;
             PermanentTransformation = false;
@@ -113,7 +114,6 @@ namespace ProjectEternity.Core.Units.Transforming
         public override void ReinitializeMembers(Unit InitializedUnitBase)
         {
             UnitTransforming Other = (UnitTransforming)InitializedUnitBase;
-            Map = Other.Map;
         }
 
         public void ChangeUnit(int NewActiveUnitIndex)
@@ -193,22 +193,38 @@ namespace ProjectEternity.Core.Units.Transforming
             }
         }
 
+        public override List<ActionPanel> OnInputPressed(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
+        {
+            if (InputHelper.InputCommand1Pressed())
+            {
+                int NextIndex = ActiveUnitIndex + 1;
+                if (NextIndex >= ArrayTransformingUnit.Length)
+                {
+                    NextIndex = 0;
+                }
+                ChangeUnit(NextIndex);
+                Params.Map.UpdateSquadCurrentMovement(ActiveSquad);
+            }
+
+            return new List<ActionPanel>();
+        }
+
         public override List<ActionPanel> OnMenuMovement(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
             if (Boosts.PostMovementModifier.Transform)
             {
-                return new List<ActionPanel>() { new ActionPanelTransform(Map, ActivePlayerIndex, ActiveSquad) };
+                return new List<ActionPanel>() { new ActionPanelTransform(Params.Map, ActivePlayerIndex, ActiveSquad) };
             }
 
-            return null;
+            return new List<ActionPanel>();
         }
 
         public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
             int NumberOfTransformingUnitsInSquad = 0;
-            for (int U = Map.ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+            for (int U = Params.Map.ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                UnitTransforming ActiveUnit = (UnitTransforming)Map.ActiveSquad[U];
+                UnitTransforming ActiveUnit = (UnitTransforming)Params.Map.ActiveSquad[U];
                 if (ActiveUnit != null)
                 {
                     if (!ActiveUnit.PermanentTransformation)
@@ -218,7 +234,7 @@ namespace ProjectEternity.Core.Units.Transforming
 
             if (NumberOfTransformingUnitsInSquad >= 1)
             {
-                return new List<ActionPanel>() { new ActionPanelTransform(Map, ActivePlayerIndex, ActiveSquad) };
+                return new List<ActionPanel>() { new ActionPanelTransform(Params.Map, ActivePlayerIndex, ActiveSquad) };
             }
 
             return new List<ActionPanel>();
@@ -227,7 +243,7 @@ namespace ProjectEternity.Core.Units.Transforming
         public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return new UnitTransforming(Name, Content, Map, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            return new UnitTransforming(Name, Content, Params, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         protected override void DoQuickSave(BinaryWriter BW)

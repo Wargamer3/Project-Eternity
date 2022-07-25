@@ -12,13 +12,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BattleStartRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BattleStartRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BattleStartRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -32,13 +32,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BattleStartRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BattleStartRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BattleStartRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -52,13 +52,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeAttackRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeAttackRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeAttackRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -72,13 +72,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeAttackRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeAttackRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeAttackRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -92,13 +92,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeGettingAttackedRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeGettingAttackedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeGettingAttackedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -112,13 +112,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeGettingAttackedRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeGettingAttackedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeGettingAttackedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -132,13 +132,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeHitRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeHitRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeHitRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -152,13 +152,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeHitRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeHitRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeHitRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -172,13 +172,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeGettingHitRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeGettingHitRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeGettingHitRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -192,13 +192,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeGettingHitRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeGettingHitRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeGettingHitRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -212,13 +212,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeMissRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeMissRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeMissRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -232,13 +232,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeMissRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeMissRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeMissRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -252,13 +252,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeGettingMissedRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeGettingMissedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeGettingMissedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -272,13 +272,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeGettingMissedRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeGettingMissedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeGettingMissedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -292,13 +292,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeGettingDestroyedRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeGettingDestroyedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeGettingDestroyedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -312,13 +312,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void BeforeGettingDestroyedRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.BeforeGettingDestroyedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.BeforeGettingDestroyedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -332,13 +332,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterAttackRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterAttackRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterAttackRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -352,13 +352,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterAttackRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterAttackRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterAttackRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -372,13 +372,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterGettingAttackedRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterGettingAttackedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterGettingAttackedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -392,13 +392,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterGettingAttackedRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterGettingAttackedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterGettingAttackedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -412,13 +412,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterHitRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterHitRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterHitRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -432,13 +432,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterHitRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterHitRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterHitRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -452,13 +452,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterGettingHitRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterGettingHitRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterGettingHitRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -472,13 +472,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterGettingHitRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterGettingHitRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterGettingHitRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -492,13 +492,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterMissRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterMissRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterMissRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -512,13 +512,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterMissRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterMissRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterMissRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -532,13 +532,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterGettingMissedRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterGettingMissedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterGettingMissedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -552,13 +552,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterGettingMissedRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterGettingMissedRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterGettingMissedRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -572,13 +572,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterGettingDestroyRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterGettingDestroyRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterGettingDestroyRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -592,13 +592,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AfterGettingDestroyRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.AfterGettingDestroyRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AfterGettingDestroyRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -612,14 +612,14 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void VSPilotRequirementFail()
         {
-            VSPilotRequirement NewRequirement = (VSPilotRequirement)DummyMap.DicRequirement[DeathmatchSkillRequirement.VSPilotRequirementName].Copy();
+            VSPilotRequirement NewRequirement = (VSPilotRequirement)DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.VSPilotRequirementName].Copy();
             NewRequirement.PilotName = "";
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -634,14 +634,14 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void VSPilotRequirementSuccess()
         {
-            VSPilotRequirement NewRequirement = (VSPilotRequirement)DummyMap.DicRequirement[DeathmatchSkillRequirement.VSPilotRequirementName].Copy();
+            VSPilotRequirement NewRequirement = (VSPilotRequirement)DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.VSPilotRequirementName].Copy();
             NewRequirement.PilotName = "Dummy Pilot";
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -656,14 +656,14 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void VSUnitRequirementFail()
         {
-            VSUnitRequirement NewRequirement = (VSUnitRequirement)DummyMap.DicRequirement[DeathmatchSkillRequirement.VSUnitRequirementName].Copy();
+            VSUnitRequirement NewRequirement = (VSUnitRequirement)DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.VSUnitRequirementName].Copy();
             NewRequirement.UnitName = "";
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -678,14 +678,14 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void VSUnitRequirementSuccess()
         {
-            VSUnitRequirement NewRequirement = (VSUnitRequirement)DummyMap.DicRequirement[DeathmatchSkillRequirement.VSUnitRequirementName].Copy();
+            VSUnitRequirement NewRequirement = (VSUnitRequirement)DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.VSUnitRequirementName].Copy();
             NewRequirement.UnitName = "Dummy Unit";
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -700,14 +700,14 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AttackUsedRequirementFail()
         {
-            AttackUsedRequirement NewRequirement = (AttackUsedRequirement)DummyMap.DicRequirement[DeathmatchSkillRequirement.AttackUsedRequirementName].Copy();
+            AttackUsedRequirement NewRequirement = (AttackUsedRequirement)DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AttackUsedRequirementName].Copy();
             NewRequirement.AttackName = "";
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -722,14 +722,14 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AttackUsedRequirementSuccess()
         {
-            AttackUsedRequirement NewRequirement = (AttackUsedRequirement)DummyMap.DicRequirement[DeathmatchSkillRequirement.AttackUsedRequirementName].Copy();
+            AttackUsedRequirement NewRequirement = (AttackUsedRequirement)DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AttackUsedRequirementName].Copy();
             NewRequirement.AttackName = "Dummy Attack";
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -744,14 +744,14 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AttackDefendedRequirementFail()
         {
-            AttackDefendedRequirement NewRequirement = (AttackDefendedRequirement)DummyMap.DicRequirement[DeathmatchSkillRequirement.AttackDefendedRequirementName].Copy();
+            AttackDefendedRequirement NewRequirement = (AttackDefendedRequirement)DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AttackDefendedRequirementName].Copy();
             NewRequirement.AttackName = "";
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -766,14 +766,14 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void AttackDefendedRequirementSuccess()
         {
-            AttackDefendedRequirement NewRequirement = (AttackDefendedRequirement)DummyMap.DicRequirement[DeathmatchSkillRequirement.AttackDefendedRequirementName].Copy();
+            AttackDefendedRequirement NewRequirement = (AttackDefendedRequirement)DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.AttackDefendedRequirementName].Copy();
             NewRequirement.AttackName = "Dummy Attack";
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -788,13 +788,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void SupportAttackRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.SupportAttackRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.SupportAttackRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -809,13 +809,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void SupportAttackRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.SupportAttackRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.SupportAttackRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -829,13 +829,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void SupportDefendRequirementFail()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.SupportDefendRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.SupportDefendRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();
@@ -849,13 +849,13 @@ namespace ProjectEternity.UnitTests
         [TestMethod]
         public void SupportDefendRequirementSuccess()
         {
-            BaseSkillRequirement NewRequirement = DummyMap.DicRequirement[DeathmatchSkillRequirement.SupportDefendRequirementName].Copy();
+            BaseSkillRequirement NewRequirement = DummyMap.Params.DicRequirement[DeathmatchSkillRequirement.SupportDefendRequirementName].Copy();
 
-            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.DicEffect[FinalDamageEffect.Name].Copy();
+            FinalDamageEffect NewEffect = (FinalDamageEffect)DummyMap.Params.DicEffect[FinalDamageEffect.Name].Copy();
             NewEffect.FinalDamageValue = "1000";
 
             BaseAutomaticSkill DummySkill = CreateDummySkill(NewRequirement,
-                                                            DummyMap.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
+                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
                                                             NewEffect);
 
             Squad DummySquad = CreateDummySquad();

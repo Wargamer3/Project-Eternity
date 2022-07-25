@@ -1,4 +1,6 @@
-﻿namespace ProjectEternity.Core.Effects
+﻿using System;
+
+namespace ProjectEternity.Core.Effects
 {
     /// <summary>
     /// Local parameters used by Effects.

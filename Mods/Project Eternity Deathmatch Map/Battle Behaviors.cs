@@ -106,7 +106,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ListMAPAttackTarget.Count > 0)
                 {
-                    GlobalDeathmatchContext.ArrayAttackPosition = AttackChoice.ToArray();
+                    GlobalBattleParams.GlobalContext.ArrayAttackPosition = AttackChoice.ToArray();
 
                     AttackWithMAPAttack(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, ListMVHoverPoints, ListMAPAttackTarget);
 

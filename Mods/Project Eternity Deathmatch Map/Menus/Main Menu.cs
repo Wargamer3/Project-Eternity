@@ -96,7 +96,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         int OldNumberOfGameScreen = ListGameScreen.Count;
                         StreamReader BR = new StreamReader("Content/Map path.ini");
-                        DeathmatchMap NewMap = new DeathmatchMap(BR.ReadLine(), string.Empty);
+                        BattleMap NewMap = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(string.Empty, string.Empty);
+                        NewMap.BattleMapPath = BR.ReadLine();
                         BR.Close();
                         NewMap.ListGameScreen = ListGameScreen;
                         NewMap.PlayerRoster = new Roster();
@@ -155,15 +156,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             sndIntroSong.Stop();
                             sndConfirm.Play();
+                            BattleContext.LoadDefaultValues();
 
                             Roster PlayerRoster = new Roster();
                             PlayerRoster.LoadRoster();
-                            Dictionary<string, Unit> DicUnitType = Unit.LoadAllUnits();
-                            Dictionary<string, BaseSkillRequirement> DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-                            Dictionary<string, BaseEffect> DicEffect = BaseEffect.LoadAllEffects();
-                            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-                            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
-                            DataScreen.LoadProgression(PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                            DataScreen.LoadProgression(PlayerRoster, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
                             PushScreen(new NewIntermissionScreen(PlayerRoster));
                         }
                         else

@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public VSFlyingUnitRequirement(DeathmatchContext Context)
-            : base(VSFlyingUnitRequirementName, Context)
+        public VSFlyingUnitRequirement(DeathmatchParams Params)
+            : base(VSFlyingUnitRequirementName, Params)
         {
         }
 
@@ -25,12 +25,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            return Context.EffectTargetSquad != null && Context.EffectTargetSquad.IsFlying;
+            return Params.GlobalContext.EffectTargetSquad != null && Params.GlobalContext.EffectTargetSquad.IsFlying;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            VSFlyingUnitRequirement NewSkillEffect = new VSFlyingUnitRequirement(Context);
+            VSFlyingUnitRequirement NewSkillEffect = new VSFlyingUnitRequirement(Params);
 
             return NewSkillEffect;
         }

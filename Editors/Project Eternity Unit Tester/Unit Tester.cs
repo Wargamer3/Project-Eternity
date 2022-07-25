@@ -18,21 +18,13 @@ namespace ProjectEternity.Editors.UnitTester
         private StatsBoosts DefenderBoosts;
         private bool AllowUpdate;
 
-        private Dictionary<string, Unit> DicUnitType = Unit.LoadAllUnits();
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-        private Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
+        private Dictionary<string, Unit> DicUnitType;
 
         public UnitTester()
         {
             InitializeComponent();
 
             DicUnitType = Unit.LoadAllUnits();
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
             FilePath = null;
             AttackerBoosts = new StatsBoosts();
@@ -450,7 +442,7 @@ namespace ProjectEternity.Editors.UnitTester
                         if (Name != null)
                         {
                             string[] UnitInfo = Name.Split(new[] { "\\", "/" }, StringSplitOptions.None);
-                            Unit NewUnit = Unit.FromType(UnitInfo[0], Name.Remove(0, UnitInfo[0].Length + 1), null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                            Unit NewUnit = Unit.FromType(UnitInfo[0], Name.Remove(0, UnitInfo[0].Length + 1), null, DicUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
                             if (tabControl1.SelectedIndex == 0)//Attacker
                             {
@@ -534,7 +526,7 @@ namespace ProjectEternity.Editors.UnitTester
 
                     case ItemSelectionChoices.Pilot:
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(Items[I].LastIndexOf("Characters") + 11);
-                        Character NewPilot = new Character(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                        Character NewPilot = new Character(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
                         NewPilot.Level = 1;
                         NewPilot.Init();
 
@@ -576,7 +568,7 @@ namespace ProjectEternity.Editors.UnitTester
 
                     case ItemSelectionChoices.Weapon:
                         Name = Items[I].Substring(0, Items[I].Length - 4).Substring(16);
-                        Attack NewWeapon = new Attack(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                        Attack NewWeapon = new Attack(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
                         txtWeaponDamage.Text = NewWeapon.PowerFormula;
                         txtWeaponAccuracy.Value = NewWeapon.Accuracy;

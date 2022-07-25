@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public SupportDefendRequirement(DeathmatchContext Context)
-            : base(SupportDefendRequirementName, Context)
+        public SupportDefendRequirement(DeathmatchParams Params)
+            : base(SupportDefendRequirementName, Params)
         {
         }
 
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BaseSkillRequirement Copy()
         {
-            SupportDefendRequirement NewSkillEffect = new SupportDefendRequirement(Context);
+            SupportDefendRequirement NewSkillEffect = new SupportDefendRequirement(Params);
 
             return NewSkillEffect;
         }

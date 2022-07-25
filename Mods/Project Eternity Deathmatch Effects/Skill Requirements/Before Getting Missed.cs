@@ -10,8 +10,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public BeforeGettingMissedRequirement(DeathmatchContext Context)
-            : base(BeforeGettingMissedRequirementName, Context)
+        public BeforeGettingMissedRequirement(DeathmatchParams Params)
+            : base(BeforeGettingMissedRequirementName, Params)
         {
         }
 
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override BaseSkillRequirement Copy()
         {
-            BeforeGettingMissedRequirement NewSkillEffect = new BeforeGettingMissedRequirement(Context);
+            BeforeGettingMissedRequirement NewSkillEffect = new BeforeGettingMissedRequirement(Params);
 
             return NewSkillEffect;
         }

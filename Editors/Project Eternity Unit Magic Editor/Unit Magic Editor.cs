@@ -15,19 +15,9 @@ namespace ProjectEternity.Editors.UnitHubEditor
 
         private ItemSelectionChoices ItemSelectionChoice;
 
-        private Dictionary<string, Unit> DicUnitType;
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-
         public UnitMagicEditor()
         {
             InitializeComponent();
-
-            DicUnitType = Unit.LoadAllUnits();
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
         }
 
         public UnitMagicEditor(string FilePath, object[] Params)
@@ -75,7 +65,7 @@ namespace ProjectEternity.Editors.UnitHubEditor
         private void LoadUnit(string UnitPath)
         {
             string Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(20);
-            UnitMagic NewUnit = new UnitMagic(Name, null, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            UnitMagic NewUnit = new UnitMagic(Name, null, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             txtOriginalUnit.Text = NewUnit.OriginalUnitName;
 

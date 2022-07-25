@@ -70,10 +70,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         for (int U = 0; U < NewSquad.UnitsInSquad; ++U)
                         {
-                            NewSquad.At(U).ReinitializeMembers(Owner.DicUnitType[NewSquad.At(U).UnitTypeName]);
+                            NewSquad.At(U).ReinitializeMembers(Owner.Params.DicUnitType[NewSquad.At(U).UnitTypeName]);
                         }
 
-                        NewSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                        NewSquad.ReloadSkills(Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                         Owner.SpawnSquad(PlayerIndex, NewSquad, 0, new Vector2(ActiveSpawn.InternalPosition.X, ActiveSpawn.InternalPosition.Y), ActiveSpawn.LayerIndex);
                         NewSquad.CurrentLeader.PilotSP = 0;
                         NewSquad.CurrentLeader.ConsumeEN(NewSquad.CurrentLeader.MaxEN);
@@ -204,10 +204,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
             {
-                ActiveSquad.At(U).ReinitializeMembers(Owner.DicUnitType[ActiveSquad.At(U).UnitTypeName]);
+                ActiveSquad.At(U).ReinitializeMembers(Owner.Params.DicUnitType[ActiveSquad.At(U).UnitTypeName]);
             }
 
-            ActiveSquad.ReloadSkills(Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+            ActiveSquad.ReloadSkills(Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
 
             int RandomSapwnPointIndex = RandomHelper.Next(ListPossibleSpawnPoint.Count);
             MovementAlgorithmTile RandomSpawnPoint = ListPossibleSpawnPoint[RandomSapwnPointIndex];

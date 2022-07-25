@@ -14,20 +14,12 @@ namespace ProjectEternity.Editors.RelationshipEditor
         private BaseAutomaticSkill ActiveSkill;
         private bool AllowEvents;
 
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
-        public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-
         public ProjectEternityRelationshipEditor()
         {
             InitializeComponent();
 
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-
             AllowEvents = true;
-            cboEffectType.Items.AddRange(DicEffect.Values.OrderBy(x => x.EffectTypeName).ToArray());
+            cboEffectType.Items.AddRange(BaseEffect.DicDefaultEffect.Values.OrderBy(x => x.EffectTypeName).ToArray());
         }
 
         public ProjectEternityRelationshipEditor(string FilePath, object[] Params)
@@ -78,7 +70,7 @@ namespace ProjectEternity.Editors.RelationshipEditor
             string Name = FilePath.Substring(0, FilePath.Length - 5).Substring(26);
             this.Text = Name + " - Project Eternity Relationship Editor";
 
-            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            ActiveSkill = new BaseAutomaticSkill(SkillPath, Name, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             txtDescription.Text = ActiveSkill.Description;
 
@@ -118,7 +110,7 @@ namespace ProjectEternity.Editors.RelationshipEditor
             if (lstLevels.SelectedItems.Count > 0)
             {
                 BaseSkillActivation ActiveSkillActivation = ActiveSkill.ListSkillLevel[lstLevels.SelectedIndex].ListActivation[0];
-                BaseEffect NewEffect = DicEffect.First().Value;
+                BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value;
                 NewEffect.LifetimeType = SkillEffect.LifetimeTypePermanent;
 
                 ActiveSkillActivation.ListEffect.Add(NewEffect);

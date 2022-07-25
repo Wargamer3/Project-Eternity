@@ -35,9 +35,15 @@ namespace ProjectEternity.Editors.MapEditor
 
         protected ITileAttributes TileAttributesEditor;
 
+        private static DeathmatchParams Params;
+
         public ProjectEternityMapEditor()
         {
             InitializeComponent();
+            if (Params == null)
+            {
+                Params = new DeathmatchParams();
+            }
 
             #region cbShowGrid
 
@@ -127,7 +133,7 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                DeathmatchMap NewMap = new DeathmatchMap(FilePath, string.Empty);
+                DeathmatchMap NewMap = new DeathmatchMap(FilePath, string.Empty, ProjectEternityMapEditor.Params);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.LayerManager.ListLayer.Add(new MapLayer(NewMap, 0));
 
@@ -160,7 +166,7 @@ namespace ProjectEternity.Editors.MapEditor
             string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(24);
 
             BattleMapViewer.Preload();
-            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty);
+            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty, Params);
             Helper = new DeathmatchMapHelper(NewMap);
             InitMap(NewMap);
 
@@ -1292,7 +1298,8 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void tsmMapProperties_Click(object sender, EventArgs e)
         {
-            MapStatistics MS = new MapStatistics(ActiveMap.MapName, ActiveMap.MapSize, ActiveMap.TileSize, ActiveMap.CameraType, ActiveMap.CameraPosition, ActiveMap.PlayersMin, ActiveMap.PlayersMax, ActiveMap.Description);
+            MapStatistics MS = new MapStatistics(ActiveMap);
+
             if (MS.ShowDialog() == DialogResult.OK)
             {
                 Point MapSize = new Point((int)MS.txtMapWidth.Value, (int)MS.txtMapHeight.Value);
@@ -1317,6 +1324,33 @@ namespace ProjectEternity.Editors.MapEditor
                 ActiveMap.PlayersMin = (byte)MS.txtPlayersMin.Value;
                 ActiveMap.PlayersMax = (byte)MS.txtPlayersMax.Value;
                 ActiveMap.Description = MS.txtDescription.Text;
+
+
+                ActiveMap.MapEnvironment.TimeStart = (float)MS.txtTimeStart.Value;
+                ActiveMap.MapEnvironment.HoursInDay = (float)MS.txtHoursInDay.Value;
+
+                if (MS.rbLoopFirstDay.Checked)
+                {
+                    ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.FirstDay;
+                }
+                else if (MS.rbLoopLastDay.Checked)
+                {
+                    ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.LastDay;
+                }
+                else
+                {
+                    ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.Stop;
+                }
+
+                ActiveMap.MapEnvironment.TimeMultiplier = (float)MS.txtlblTimeMultiplier.Value;
+                if (MS.rbUseTurns.Checked)
+                {
+                    ActiveMap.MapEnvironment.TimePeriodType = EnvironmentManager.TimePeriods.Turns;
+                }
+                else
+                {
+                    ActiveMap.MapEnvironment.TimePeriodType = EnvironmentManager.TimePeriods.RealTime;
+                }
 
                 Point TilePos = TilesetViewer.ActiveTile;
                 Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];

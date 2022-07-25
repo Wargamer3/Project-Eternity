@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             ListPlayer[PlayerIndex].IsAlive = true;
 
-            NewSquad.Init(GlobalBattleContext);
+            NewSquad.Init(GlobalBattleParams.GlobalContext);
             ActivateAutomaticSkills(NewSquad, string.Empty);
             NewSquad.ID = ID;
             NewSquad.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));
@@ -107,10 +107,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Squad ActiveSquad = (Squad)UnitToAdd;
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
             {
-                ActiveSquad.At(U).ReinitializeMembers(DicUnitType[ActiveSquad.At(U).UnitTypeName]);
+                ActiveSquad.At(U).ReinitializeMembers(GlobalBattleParams.DicUnitType[ActiveSquad.At(U).UnitTypeName]);
             }
 
-            ActiveSquad.ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            ActiveSquad.ReloadSkills(GlobalBattleParams.DicUnitType, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
             ListPlayer[PlayerIndex].ListSquad.Add(ActiveSquad);
             ListPlayer[PlayerIndex].UpdateAliveStatus();
             ActiveSquad.SetPosition(new Vector3(NewPosition.InternalPosition.X, NewPosition.InternalPosition.Y, NewPosition.LayerIndex));
@@ -273,7 +273,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PlayerRoster.LoadRoster();
 
             Load();
-            DataScreen.LoadProgression(BR, PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            DataScreen.LoadProgression(BR, PlayerRoster, GlobalBattleParams.DicUnitType, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
 
             //Initialise the ScreenSize based on the map loaded.
             ScreenSize = new Point(Constants.Width / TileSize.X, Constants.Height / TileSize.Y);
@@ -386,7 +386,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (string.IsNullOrEmpty(TeamEventID))
                         {
-                            ArrayNewUnit[U] = DicUnitType[UnitTypeName].FromFile(RelativePath, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                            ArrayNewUnit[U] = GlobalBattleParams.DicUnitType[UnitTypeName].FromFile(RelativePath, Content, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget);
                         }
                         else
                         {
@@ -400,7 +400,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
                         }
 
-                        ArrayNewUnit[U].QuickLoad(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                        ArrayNewUnit[U].QuickLoad(BR, Content, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
                     }
 
                     NewSquad = new Squad(ActiveSquadSquadName, ArrayNewUnit[0],
@@ -466,7 +466,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            GlobalQuickLoadContext.SetContext(DicLoadedSquad);
+            GlobalBattleParams.GlobalQuickLoadContext.SetContext(DicLoadedSquad);
 
             for (int P = 0; P < ListPlayer.Count; P++)
             {
@@ -479,7 +479,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             for (int C = 0; C < ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive.Length; C++)
                             {
                                 Character ActiveCharacter = ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive[C];
-                                ActiveCharacter.Effects.QuickLoad(BR, ActiveParser, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                                ActiveCharacter.Effects.QuickLoad(BR, ActiveParser, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget);
                             }
                         }
                     }
@@ -490,7 +490,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int S = 0; S < ListPlayer[P].ListSquad.Count; ++S)
                 {
-                    ListPlayer[P].ListSquad[S].ReloadSkills(DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                    ListPlayer[P].ListSquad[S].ReloadSkills(GlobalBattleParams.DicUnitType, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
 
                 }
             }
@@ -514,14 +514,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new MultiplayerScreen();
         }
 
-        public override BattleMap GetNewMap(string GameMode)
+        public override BattleMap GetNewMap(string GameMode, string ParamsID)
         {
-            return new DeathmatchMap(GameMode);
+            DeathmatchParams Params;
+
+            if (!DeathmatchParams.DicParams.TryGetValue(ParamsID, out Params))
+            {
+                Params = new DeathmatchParams();
+                DeathmatchParams.DicParams.TryAdd(ParamsID, Params);
+                Params.Reload(this.Params, ParamsID);
+            }
+
+            return new DeathmatchMap(GameMode, Params);
         }
 
         public override string GetMapType()
         {
-            return "Deathmatch";
+            return MapType;
         }
 
         public override void AddPlatform(BattleMapPlatform NewPlatform)

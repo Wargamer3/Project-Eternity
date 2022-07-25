@@ -11,26 +11,26 @@ namespace ProjectEternity.Core.Skill
 
         }
 
-        public PilotSkillActivationSelfSquad(DeathmatchContext Context)
-            : base("Self Squad", false, Context)
+        public PilotSkillActivationSelfSquad(DeathmatchParams Params)
+            : base("Self Squad", false, Params)
         {
         }
 
         public override bool CanActivateOnTarget(ManualSkill ActiveSkill)
         {
-            if (Context.EffectOwnerSquad.CurrentLeader == null || Context.EffectOwnerSquad.CurrentLeader.Pilot == null || Context.EffectOwnerSquad.IsDead)
+            if (Params.GlobalContext.EffectOwnerSquad.CurrentLeader == null || Params.GlobalContext.EffectOwnerSquad.CurrentLeader.Pilot == null || Params.GlobalContext.EffectOwnerSquad.IsDead)
                 return false;
             
-            for (int U = Context.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+            for (int U = Params.GlobalContext.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                if (Context.EffectOwnerSquad[U] == null || Context.EffectOwnerSquad[U].Pilot == null)
+                if (Params.GlobalContext.EffectOwnerSquad[U] == null || Params.GlobalContext.EffectOwnerSquad[U].Pilot == null)
                     continue;
 
-                Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
-                    Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerSquad[U].Pilot,
-                    Context.Map.ActiveParser);
+                Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter,
+                    Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerSquad[U].Pilot,
+                    Params.Map.ActiveParser);
                 
-                if (ActiveSkill.CanActivateEffectsOnTarget(Context.EffectOwnerSquad[U].Pilot.Effects))
+                if (ActiveSkill.CanActivateEffectsOnTarget(Params.GlobalContext.EffectOwnerSquad[U].Pilot.Effects))
                     return true;
             }
 
@@ -39,20 +39,20 @@ namespace ProjectEternity.Core.Skill
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
-            for (int U = Context.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+            for (int U = Params.GlobalContext.EffectOwnerSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                Context.SetContext(Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerCharacter,
-                    Context.EffectOwnerSquad, Context.EffectOwnerUnit, Context.EffectOwnerSquad[U].Pilot,
-                    Context.Map.ActiveParser);
+                Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter,
+                    Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerSquad[U].Pilot,
+                    Params.Map.ActiveParser);
 
-                AddAndExecuteEffect(ActiveSkill, Context.EffectOwnerSquad[U].Pilot.Effects, SkillEffect.LifetimeTypeTurns + Context.Map.ActivePlayerIndex);
-                Context.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;
+                AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectOwnerSquad[U].Pilot.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
+                Params.GlobalContext.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;
             }
         }
 
         public override ManualSkillTarget Copy()
         {
-            return new PilotSkillActivationSelfSquad(Context);
+            return new PilotSkillActivationSelfSquad(Params);
         }
     }
 }

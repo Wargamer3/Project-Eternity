@@ -28,8 +28,8 @@ namespace ProjectEternity.Core.Units.Combining
         {
         }
 
-        public UnitCombining(DeathmatchMap Map)
-            : base(Map)
+        public UnitCombining(DeathmatchParams Params)
+            : base(Params)
         {
             OriginalUnitName = string.Empty;
             CombinedUnitName = string.Empty;
@@ -42,9 +42,9 @@ namespace ProjectEternity.Core.Units.Combining
         {
         }
 
-        public UnitCombining(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+        public UnitCombining(string Name, ContentManager Content, DeathmatchParams Params, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
-            : base(Name, Map)
+            : base(Name, Params)
         {
             ItemName = Name;
             Combined = false;
@@ -87,12 +87,11 @@ namespace ProjectEternity.Core.Units.Combining
         public override void ReinitializeMembers(Unit InitializedUnitBase)
         {
             UnitCombining Other = (UnitCombining)InitializedUnitBase;
-            Map = Other.Map;
 
             if (OriginalUnit == null)
             {
-                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
-                CombinedUnit = FromFullName(CombinedUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget  );
+                OriginalUnit = FromFullName(OriginalUnitName, Params.Map.Content, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+                CombinedUnit = FromFullName(CombinedUnitName, Params.Map.Content, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget  );
 
                 _UnitStat = OriginalUnit.UnitStat;
                 _HP = OriginalUnit.MaxHP;
@@ -107,7 +106,7 @@ namespace ProjectEternity.Core.Units.Combining
         {
             Combined = true;
             ListFoundCombiningUnit.Add(FoundCombiningUnit);
-            Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Remove(FoundCombiningUnit);
+            Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].ListSquad.Remove(FoundCombiningUnit);
 
             //Used to avoid updating HP, EN and PermanentTransformation on Init.
             double HPPercentage = HP / (double)MaxHP;
@@ -132,10 +131,10 @@ namespace ProjectEternity.Core.Units.Combining
                 if (ActiveSquad.CurrentLeader.RelativePath != RelativePath)
                 {
                     Vector3 FinalPosition;
-                    Map.GetEmptyPosition(ActiveSquad.Position, out FinalPosition);
+                    Params.Map.GetEmptyPosition(ActiveSquad.Position, out FinalPosition);
 
                     ActiveSquad.SetPosition(FinalPosition);
-                    Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Add(ActiveSquad);
+                    Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].ListSquad.Add(ActiveSquad);
                 }
             }
 
@@ -160,7 +159,7 @@ namespace ProjectEternity.Core.Units.Combining
 
                 if (ActiveSquad.UnitsAliveInSquad == 1)
                 {
-                    foreach (Squad OtherSquad in Map.ListPlayer[Map.ActivePlayerIndex].ListSquad)
+                    foreach (Squad OtherSquad in Params.Map.ListPlayer[Params.Map.ActivePlayerIndex].ListSquad)
                     {
                         if (ActiveSquad.UnitsAliveInSquad == 1)
                         {
@@ -176,13 +175,13 @@ namespace ProjectEternity.Core.Units.Combining
 
                     if (ListFoundCombiningUnit.Count == ArrayCombiningUnitName.Length)
                     {
-                        return new List<ActionPanel>() { new ActionPanelCombine(Map, this) };
+                        return new List<ActionPanel>() { new ActionPanelCombine(Params.Map, this) };
                     }
                 }
             }
             else
             {
-                return new List<ActionPanel>() { new ActionPanelSplit(Map, this) };
+                return new List<ActionPanel>() { new ActionPanelSplit(Params.Map, this) };
             }
 
             return new List<ActionPanel>();
@@ -191,13 +190,13 @@ namespace ProjectEternity.Core.Units.Combining
         public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            if (Map == null)
+            if (Params.Map == null)
             {
                 return new UnitCombining(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             else
             {
-                return new UnitCombining(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                return new UnitCombining(Name, Content, Params, Params.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 

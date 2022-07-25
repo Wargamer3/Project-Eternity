@@ -8,11 +8,10 @@ using FMOD;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.GameScreens.BattleMapScreen.Online;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Skill;
-using ProjectEternity.Core.Characters;
+using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

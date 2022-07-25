@@ -14,8 +14,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public VSUnitRequirement(DeathmatchContext Context)
-            : base(VSUnitRequirementName, Context)
+        public VSUnitRequirement(DeathmatchParams Params)
+            : base(VSUnitRequirementName, Params)
         {
         }
 
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            return Context.EffectTargetUnit != null && Context.EffectTargetUnit.RelativePath == _UnitName;
+            return Params.GlobalContext.EffectTargetUnit != null && Params.GlobalContext.EffectTargetUnit.RelativePath == _UnitName;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            VSUnitRequirement NewSkillEffect = new VSUnitRequirement(Context);
+            VSUnitRequirement NewSkillEffect = new VSUnitRequirement(Params);
 
             NewSkillEffect._UnitName = _UnitName;
             NewSkillEffect._Not = _Not;

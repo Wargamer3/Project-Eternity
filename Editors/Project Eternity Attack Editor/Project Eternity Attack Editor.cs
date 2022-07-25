@@ -19,17 +19,9 @@ namespace ProjectEternity.Editors.AttackEditor
         private MAPAttackEditor MAPAttackEditor;
         private PERAttackEditor PERAttackEditor;
 
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-
         public ProjectEternityAttackEditor()
         {
             InitializeComponent();
-
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             cbAirRank.SelectedIndex = 0;
             cbLandRank.SelectedIndex = 0;
@@ -305,7 +297,7 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             string Name = AttackPath.Substring(0, AttackPath.Length - 4).Substring(16);
 
-            Attack ActiveWeapon = new Attack(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            Attack ActiveWeapon = new Attack(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
             LoadAttack(ActiveWeapon);
         }
 

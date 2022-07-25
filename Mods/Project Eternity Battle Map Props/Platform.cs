@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             string MapType = _MapPath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)[0];
-            BattleMap NewMap = BattleMap.DicBattmeMapType[MapType].GetNewMap("Platform");
+            BattleMap NewMap = BattleMap.DicBattmeMapType[MapType].GetNewMap("Platform", "Platform " + Map.ListPlatform.Count + 1);
 
             NewMap.BattleMapPath = _MapPath.Remove(0, MapType.Length + 1);
             NewMap.ListGameScreen = Map.ListGameScreen;

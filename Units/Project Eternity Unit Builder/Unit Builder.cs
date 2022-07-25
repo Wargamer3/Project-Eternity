@@ -14,7 +14,7 @@ namespace ProjectEternity.Core.Units.Builder
     {
         public override string UnitTypeName => "Builder";
 
-        private DeathmatchMap Map;
+        private DeathmatchParams Params;
         private Unit OriginalUnit;
         public readonly string OriginalUnitName;
         public List<String> ListUnitToBuild;
@@ -24,9 +24,9 @@ namespace ProjectEternity.Core.Units.Builder
         {
         }
 
-        public UnitBuilder(DeathmatchMap Map)
+        public UnitBuilder(DeathmatchParams Params)
         {
-            this.Map = Map;
+            this.Params = Params;
         }
 
         public UnitBuilder(string Name, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
@@ -35,11 +35,11 @@ namespace ProjectEternity.Core.Units.Builder
         {
         }
 
-        public UnitBuilder(string Name, ContentManager Content, DeathmatchMap Map, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
+        public UnitBuilder(string Name, ContentManager Content, DeathmatchParams Params, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : base(Name)
         {
-            this.Map = Map;
+            this.Params = Params;
             this.ItemName = Name;
 
             FileStream FS = new FileStream("Content/Units/Builder/" + Name + ".peu", FileMode.Open, FileAccess.Read);
@@ -85,11 +85,11 @@ namespace ProjectEternity.Core.Units.Builder
         public override void ReinitializeMembers(Unit InitializedUnitBase)
         {
             UnitBuilder Other = (UnitBuilder)InitializedUnitBase;
-            Map = Other.Map;
+            Params = Other.Params;
 
             if (OriginalUnit == null)
             {
-                OriginalUnit = FromFullName(OriginalUnitName, Map.Content, Map.DicUnitType, Map.DicRequirement, Map.DicEffect, Map.DicAutomaticSkillTarget);
+                OriginalUnit = FromFullName(OriginalUnitName, Params.Map.Content, Params.DicUnitType, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
                 _UnitStat = OriginalUnit.UnitStat;
                 _HP = OriginalUnit.MaxHP;
                 _EN = OriginalUnit.MaxEN;
@@ -107,19 +107,19 @@ namespace ProjectEternity.Core.Units.Builder
 
         public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, Squad ActiveSquad, ActionPanelHolder ListActionMenuChoice)
         {
-            return new List<ActionPanel>() { new ActionPanelBuild(Map, this) };
+            return new List<ActionPanel>() { new ActionPanelBuild(Params.Map, this) };
         }
 
         public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            if (Map == null)
+            if (Params.Map == null)
             {
                 return new UnitBuilder(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
             else
             {
-                return new UnitBuilder(Name, Content, Map, Map.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                return new UnitBuilder(Name, Content, Params, Params.DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }
         }
 

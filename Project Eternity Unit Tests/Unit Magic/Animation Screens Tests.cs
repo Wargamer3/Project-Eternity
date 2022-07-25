@@ -9,6 +9,7 @@ using ProjectEternity.Units.Magic;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.AnimationScreen;
+using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.UnitTests
@@ -17,7 +18,7 @@ namespace ProjectEternity.UnitTests
     public class AnimationScreenTests
     {
         private static DeathmatchMap DummyMap;
-        private static DeathmatchContext GlobalDeathmatchContext;
+        private static BattleContext GlobalDeathmatchContext;
         Squad DummySquad;
         Squad EnemySquad;
         AnimationScreen DummyAnimation;
@@ -26,7 +27,7 @@ namespace ProjectEternity.UnitTests
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            GlobalDeathmatchContext = new DeathmatchContext();
+            GlobalDeathmatchContext = new BattleContext();
             DummyMap = DeathmatchMapHelper.CreateDummyMap(GlobalDeathmatchContext);
         }
 

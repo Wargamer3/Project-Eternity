@@ -28,8 +28,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (string.IsNullOrEmpty(Owner.ListPlayer[P].ListSpawnPoint[S].LeaderTypeName))
                         continue;
 
-                    Unit NewLeaderUnit = Unit.FromType(Owner.ListPlayer[P].ListSpawnPoint[S].LeaderTypeName, Owner.ListPlayer[P].ListSpawnPoint[S].LeaderName, Owner.Content, Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget);
-                    Character NewLeaderPilot = new Character(Owner.ListPlayer[P].ListSpawnPoint[S].LeaderPilot, Owner.Content, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                    Unit NewLeaderUnit = Unit.FromType(Owner.ListPlayer[P].ListSpawnPoint[S].LeaderTypeName, Owner.ListPlayer[P].ListSpawnPoint[S].LeaderName, Owner.Content, Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget);
+                    Character NewLeaderPilot = new Character(Owner.ListPlayer[P].ListSpawnPoint[S].LeaderPilot, Owner.Content, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                     NewLeaderPilot.Level = 1;
                     NewLeaderUnit.ArrayCharacterActive = new Character[1] { NewLeaderPilot };
 
@@ -38,16 +38,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (!string.IsNullOrEmpty(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanAName))
                     {
-                        NewWingmanAUnit = Unit.FromType(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanATypeName, Owner.ListPlayer[P].ListSpawnPoint[S].WingmanAName, Owner.Content, Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget);
-                        Character NewWingmanAPilot = new Character(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanAPilot, Owner.Content, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                        NewWingmanAUnit = Unit.FromType(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanATypeName, Owner.ListPlayer[P].ListSpawnPoint[S].WingmanAName, Owner.Content, Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget);
+                        Character NewWingmanAPilot = new Character(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanAPilot, Owner.Content, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                         NewWingmanAPilot.Level = 1;
                         NewWingmanAUnit.ArrayCharacterActive = new Character[1] { NewWingmanAPilot };
                     }
 
                     if (!string.IsNullOrEmpty(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanBName))
                     {
-                        NewWingmanBUnit = Unit.FromType(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanBTypeName, Owner.ListPlayer[P].ListSpawnPoint[S].WingmanBName, Owner.Content, Owner.DicUnitType, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget);
-                        Character NewWingmanBPilot = new Character(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanBPilot, Owner.Content, Owner.DicRequirement, Owner.DicEffect, Owner.DicAutomaticSkillTarget, Owner.DicManualSkillTarget);
+                        NewWingmanBUnit = Unit.FromType(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanBTypeName, Owner.ListPlayer[P].ListSpawnPoint[S].WingmanBName, Owner.Content, Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget);
+                        Character NewWingmanBPilot = new Character(Owner.ListPlayer[P].ListSpawnPoint[S].WingmanBPilot, Owner.Content, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
                         NewWingmanBPilot.Level = 1;
                         NewWingmanBUnit.ArrayCharacterActive = new Character[1] { NewWingmanBPilot };
                     }

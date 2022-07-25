@@ -11,62 +11,6 @@ using ProjectEternity.Core.Effects;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    /// <summary>
-    /// Used to pass battle information to Skills.
-    /// </summary>
-    public class BattleContext : UnitEffectContext
-    {
-        public BattleMap.BattleResult Result;
-        public BattleMap.BattleResult EnemyResult;
-        public Unit SupportAttack;
-        public Unit SupportDefend;
-        public MovementAlgorithmTile[] ArrayAttackPosition;
-
-        public BattleContext()
-        {
-            SupportAttack = null;
-            SupportDefend = null;
-            ArrayAttackPosition = new MovementAlgorithmTile[0];
-        }
-    }
-
-    /// <summary>
-    /// Local parameters used by Effects.
-    /// </summary>
-    public class BattleParams
-    {
-        // This class is shared through every RobotEffects used to temporary pass variables to effects.
-        // Because it is shared through all effect, its variables will constantly change and must be kept as a member after being activated.
-        // There should never be more than one instance of the global context.
-        public readonly BattleContext GlobalContext;
-        // When an effect is copied to be activated, the global context is copied into the local context.
-        // This context is local and can't be changed.
-        public readonly BattleContext LocalContext;
-
-        public BattleParams(BattleContext GlobalContext)
-        {
-            this.GlobalContext = GlobalContext;
-            LocalContext = new BattleContext();
-        }
-
-        public BattleParams(BattleParams Clone)
-            : this(Clone.GlobalContext)
-        {
-        }
-
-        internal void CopyGlobalIntoLocal()
-        {
-            LocalContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
-                GlobalContext.EffectTargetSquad, GlobalContext.EffectTargetUnit, GlobalContext.EffectTargetCharacter, GlobalContext.ActiveParser);
-
-            LocalContext.Result = GlobalContext.Result;
-            LocalContext.EnemyResult = GlobalContext.EnemyResult;
-            LocalContext.SupportAttack = GlobalContext.SupportAttack;
-            LocalContext.SupportDefend = GlobalContext.SupportDefend;
-            GlobalContext.ArrayAttackPosition.CopyTo(LocalContext.ArrayAttackPosition, 0);
-        }
-    }
-
     public partial class BattleMap
     {
         public struct BattleResult

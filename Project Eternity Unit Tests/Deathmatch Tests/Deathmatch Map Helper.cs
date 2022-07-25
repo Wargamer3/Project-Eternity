@@ -10,13 +10,10 @@ namespace ProjectEternity.UnitTests
 {
     class DeathmatchMapHelper
     {
-        public static DeathmatchMap CreateDummyMap(DeathmatchContext GlobalDeathmatchContext)
+        public static DeathmatchMap CreateDummyMap(BattleContext GlobalDeathmatchContext)
         {
-            DeathmatchMap DummyMap = new DeathmatchMap(GlobalDeathmatchContext);
+            DeathmatchMap DummyMap = new DeathmatchMap(new DeathmatchParams(GlobalDeathmatchContext, null));
             DummyMap.LayerManager.ListLayer.Add(new MapLayer(DummyMap, 0));
-            DummyMap.LoadEffects();
-            DummyMap.LoadSkillRequirements();
-            DummyMap.LoadAutomaticSkillActivation();
             DummyMap.LoadDeathmatchAIScripts();
 
             DummyMap.NonDemoScreen = new NonDemoScreen(DummyMap);
@@ -35,7 +32,7 @@ namespace ProjectEternity.UnitTests
             return DummyMap;
         }
 
-        public static Squad CreateDummySquad(DeathmatchContext GlobalDeathmatchContext)
+        public static Squad CreateDummySquad(BattleContext GlobalDeathmatchContext)
         {
             Unit DummyLeader = CreateDummyUnit();
             Squad DummySquad = new Squad("Dummy", DummyLeader);
@@ -44,7 +41,7 @@ namespace ProjectEternity.UnitTests
             return DummySquad;
         }
 
-        public static Squad CreateDummySquadWithWingmans(DeathmatchContext GlobalDeathmatchContext)
+        public static Squad CreateDummySquadWithWingmans(BattleContext GlobalDeathmatchContext)
         {
             Unit DummyLeader = CreateDummyUnit();
             Unit DummyWingmanA = CreateDummyUnit();

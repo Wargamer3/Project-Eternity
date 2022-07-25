@@ -1,13 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Scripts;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-
     public sealed partial class ExtraBattleMapCutsceneScriptHolder
     {
         public class ScriptLaunchNextMap : BattleMapScript
@@ -29,7 +26,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
-                BattleMap NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(string.Empty);
+                BattleMap NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(string.Empty, string.Empty);
 
                 NewMap.BattleMapPath = BattleMap.NextMapPath;
                 NewMap.ListGameScreen = Owner.ListGameScreen;

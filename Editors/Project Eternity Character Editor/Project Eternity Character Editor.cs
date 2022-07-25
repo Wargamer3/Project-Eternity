@@ -21,19 +21,9 @@ namespace ProjectEternity.Editors.CharacterEditor
         private SkillLevelsEditor[] ArraySkillLevelsEditor;
         private RelationshipEditor frmRelationshipEditor;
 
-        private Dictionary<string, BaseSkillRequirement> DicRequirement;
-        private Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-        private Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
-
         public ProjectEternityCharacterEditor()
         {
             InitializeComponent();
-
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
-            DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
         }
 
         public ProjectEternityCharacterEditor(string FilePath, object[] Params)
@@ -348,7 +338,7 @@ namespace ProjectEternity.Editors.CharacterEditor
         private void LoadCharacter(string CharacterPath)
         {
             Name = CharacterPath.Substring(0, CharacterPath.Length - 4).Substring(CharacterPath.LastIndexOf("Characters") + 11);
-            Character NewCharacter = new Character(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            Character NewCharacter = new Character(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
             QuoteEditor = new CharacterQuotesEditor();
             StatsEditor = new CharacterStatsEditor(NewCharacter);
             frmDetailsEditor = new DetailsEditor();

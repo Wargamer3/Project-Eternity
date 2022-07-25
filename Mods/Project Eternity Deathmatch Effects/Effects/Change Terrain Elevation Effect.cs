@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override string DoExecuteEffect()
         {
-            MapLayer ActiveLayer = Params.LocalContext.Map.LayerManager.ListLayer[0];
+            MapLayer ActiveLayer = Params.Map.LayerManager.ListLayer[0];
 
             foreach (MovementAlgorithmTile ActivePosition in Params.LocalContext.ArrayAttackPosition)
             {
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         int FinalX = (int)ActivePosition.InternalPosition.X + X;
                         int FinalY = (int)ActivePosition.InternalPosition.Y + Y;
 
-                        if (Math.Abs(X) + Math.Abs(Y) > Radius || FinalX < 0 || FinalX >= Params.LocalContext.Map.MapSize.X || FinalY < 0 || FinalY >= Params.LocalContext.Map.MapSize.Y)
+                        if (Math.Abs(X) + Math.Abs(Y) > Radius || FinalX < 0 || FinalX >= Params.Map.MapSize.X || FinalY < 0 || FinalY >= Params.Map.MapSize.Y)
                             continue;
 
                         ActiveLayer.ArrayTerrain[FinalX, FinalY].Height -= Depth;
@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            Params.LocalContext.Map.LayerManager.LayerHolderDrawable.Reset();
+            Params.Map.LayerManager.LayerHolderDrawable.Reset();
             return "Depth: " + _Depth + " - Radius: " + _Radius;
 
         }

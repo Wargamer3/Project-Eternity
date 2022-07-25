@@ -21,10 +21,6 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private DetailsEditor frmDetails;
         private UnitSizeEditor frmUnitSizeEditor;
 
-        public Dictionary<string, BaseSkillRequirement> DicRequirement;
-        public Dictionary<string, BaseEffect> DicEffect;
-        private Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
-
         public UnitNormalEditor()
         {
             InitializeComponent();
@@ -33,10 +29,6 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             frmAttacks = new Attacks();
             frmDetails = new DetailsEditor();
             frmUnitSizeEditor = new UnitSizeEditor();
-
-            DicRequirement = BaseSkillRequirement.LoadAllRequirements();
-            DicEffect = BaseEffect.LoadAllEffects();
-            DicAutomaticSkillTarget = AutomaticSkillTargetType.LoadAllTargetTypes();
 
             txtName.Text = "";
             txtPrice.Text = "0";
@@ -273,7 +265,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void LoadUnit(string UnitPath)
         {
             Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(21);
-            UnitNormal LoadedUnit = new UnitNormal(Name, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            UnitNormal LoadedUnit = new UnitNormal(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             frmAttacks.UnitName = Name;
 

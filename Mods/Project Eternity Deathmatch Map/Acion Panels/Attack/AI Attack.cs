@@ -142,7 +142,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (ListMAPAttackTarget.Count > 0)
                         {
-                            Map.GlobalDeathmatchContext.ArrayAttackPosition = ListAttackTerrain.ToArray();
+                            Map.Params.GlobalContext.ArrayAttackPosition = ListAttackTerrain.ToArray();
 
                             Map.AttackWithMAPAttack(ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack, new List<Vector3>(), ListMAPAttackTarget);
 

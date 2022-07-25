@@ -12,8 +12,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public EffectActivationEnemy(DeathmatchContext GlobalContext)
-            : base(Name, GlobalContext)
+        public EffectActivationEnemy(DeathmatchParams Params)
+            : base(Name, Params)
         {
         }
 
@@ -28,15 +28,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSkillEffect.LifetimeType == SkillEffect.LifetimeTypeTurns)
             {
-                LifeType = SkillEffect.LifetimeTypeTurns + GlobalContext.Map.ActivePlayerIndex;
+                LifeType = SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex;
             }
 
-            GlobalContext.EffectTargetUnit.Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
+            Params.GlobalContext.EffectTargetUnit.Pilot.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName, LifeType);
         }
 
         public override AutomaticSkillTargetType Copy()
         {
-            return new EffectActivationEnemy(GlobalContext);
+            return new EffectActivationEnemy(Params);
         }
     }
 }
