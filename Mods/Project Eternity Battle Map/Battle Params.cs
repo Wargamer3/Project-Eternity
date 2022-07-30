@@ -33,6 +33,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
         public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
+        public BattleParams()
+        {
+            GlobalContext = new BattleContext();
+            LocalContext = new BattleContext();
+
+            GlobalQuickLoadContext = new UnitQuickLoadEffectContext();
+
+            DicUnitType = new Dictionary<string, Unit>();
+            DicEffect = new Dictionary<string, BaseEffect>();
+            DicRequirement = new Dictionary<string, BaseSkillRequirement>();
+            DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
+            DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
+        }
+
         public BattleParams(BattleContext GlobalContext)
         {
             this.GlobalContext = GlobalContext;

@@ -40,6 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
 
+        public BattleMapPlayer ActivePlayer;
         public Squad ActiveSquad;
         private List<Attack> ListAttack;
         private BattleMap Map;
@@ -70,8 +71,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListGameScreen = Map.ListGameScreen;
         }
 
-        public void OpenStatusMenuScreen(Squad ActiveSquad)
+        public void OpenStatusMenuScreen(BattleMapPlayer ActivePlayer, Squad ActiveSquad)
         {
+            this.ActivePlayer = ActivePlayer;
             this.ActiveSquad = ActiveSquad;
             ListAttack = ActiveSquad.CurrentLeader.ListAttack;
             StatusPannel = StatusPannels.Summary;
@@ -681,7 +683,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.PilotMorale.ToString(), new Vector2(390, 110), Color.White);
 
             g.DrawString(fntFinlanderFont, "Kills", new Vector2(410, 80), Color.Yellow);
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.PilotKills.ToString(), new Vector2(540, 80), Color.White);
+            g.DrawStringRightAligned(fntFinlanderFont, ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[ActiveSquad.CurrentLeader.Pilot.ID].ToString(), new Vector2(540, 80), Color.White);
 
             g.DrawString(fntFinlanderFont, "PP", new Vector2(410, 110), Color.Yellow);
             g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.PilotPilotPoints.ToString(), new Vector2(540, 110), Color.White);

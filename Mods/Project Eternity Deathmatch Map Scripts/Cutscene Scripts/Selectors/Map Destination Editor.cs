@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -17,7 +18,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             InitializeComponent();
 
-            Params = new DeathmatchParams();
+            Params = new DeathmatchParams(new BattleContext());
 
             this.ListTerrainChangeLocation = ListTerrainChangeLocation;
         }

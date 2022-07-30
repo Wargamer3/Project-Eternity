@@ -21,6 +21,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         SpriteFont fntArial12;
         SpriteFont fntArial14;
 
+        private readonly BattleMapPlayer Player;
         private readonly Roster PlayerRoster;
         protected StatusMenuScreen StatusMenu;
 
@@ -37,9 +38,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private List<Unit> ListPresentUnit;
         private List<Commander> ListSelectedCommander;
 
-        public LoadoutScreen(Roster PlayerRoster, List<Commander> ListSelectedCommander)
+        public LoadoutScreen(BattleMapPlayer Player, Roster PlayerRoster, List<Commander> ListSelectedCommander)
             : base()
         {
+            this.Player = Player;
             this.PlayerRoster = PlayerRoster;
             this.ListSelectedCommander = ListSelectedCommander;
             Stage = Stages.SquadSelection;
@@ -69,11 +71,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Keep the map in cache in case the player goes back and forth between menus.
             if (NewMap == null)
             {
-                LoadMap(ListGameScreen, PlayerRoster);
+                LoadMap(ListGameScreen, Player, PlayerRoster);
             }
         }
 
-        public static void LoadMap(List<GameScreen> ListGameScreen, Roster PlayerRoster)
+        public static void LoadMap(List<GameScreen> ListGameScreen, BattleMapPlayer Player, Roster PlayerRoster)
         {
             int OldNumberOfGameScreen = ListGameScreen.Count;
             ListSelectedSquad = new List<Squad>();
@@ -81,6 +83,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             NewMap.BattleMapPath = BattleMap.NextMapPath;
             NewMap.ListGameScreen = ListGameScreen;
             NewMap.PlayerRoster = PlayerRoster;
+            NewMap.AddLocalPlayer(Player);
             NewMap.Load();
 
             //Remove any GameScreen created by the map so they don't show up immediately.

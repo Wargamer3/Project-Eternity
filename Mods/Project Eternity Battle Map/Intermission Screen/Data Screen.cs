@@ -25,12 +25,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private FMODSound sndDeny;
         private FMODSound sndCancel;
 
+        private readonly BattleMapPlayer Player;
         private readonly Roster PlayerRoster;
 
         private int CursorIndex;
 
-        public DataScreen(Roster PlayerRoster)
+        public DataScreen(BattleMapPlayer Player, Roster PlayerRoster)
         {
+            this.Player = Player;
             this.PlayerRoster = PlayerRoster;
         }
 
@@ -71,11 +73,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (CursorIndex == 0)
                 {
-                    PushScreen(new DataSaveScreen(PlayerRoster));
+                    PushScreen(new DataSaveScreen(Player, PlayerRoster));
                 }
                 else if (CursorIndex == 1)
                 {
-                    PushScreen(new DataLoadScreen(PlayerRoster));
+                    PushScreen(new DataLoadScreen(Player, PlayerRoster));
                 }
                 else if (CursorIndex == 2)
                 {
@@ -106,24 +108,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprPixel, new Rectangle(17, 52 + CursorIndex * 30, 100, 30), Color.FromNonPremultiplied(255, 255, 255, 127));
         }
 
-        private void SaveProgression()
-        {
-            //Create the Part file.
-            FileStream FS = new FileStream("User Data/Saves/SRWE Save.bin", FileMode.Create, FileAccess.Write);
-            BinaryWriter BW = new BinaryWriter(FS);
-
-            SaveProgression(BW, PlayerRoster);
-
-            FS.Close();
-            BW.Close();
-        }
-
-        public static void SaveProgression(BinaryWriter BW, Roster PlayerRoster)
+        public static void SaveProgression(BinaryWriter BW, BattleMapPlayer Player, Roster PlayerRoster)
         {
             BW.Write(BattleMap.NextMapType);
             BW.Write(BattleMap.NextMapPath);
             BW.Write(BattleMap.ClearedStages);
-            BW.Write(Constants.Money);
 
             BW.Write(BattleMap.DicGlobalVariables.Count);
             foreach (KeyValuePair<string, string> GlobalVariable in BattleMap.DicGlobalVariables)
@@ -140,6 +129,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             PlayerRoster.SaveProgression(BW);
+            Player.Records.Save(BW);
 
             BW.Write(SystemList.ListPart.Count);
             foreach (string ActivePart in SystemList.ListPart.Keys)
@@ -148,19 +138,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public static void LoadProgression(Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public static void LoadProgression(BattleMapPlayer Player, Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             FileStream FS = new FileStream("User Data/Saves/SRWE Save.bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS);
 
-            LoadProgression(BR, PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            LoadProgression(BR, Player, PlayerRoster, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             FS.Close();
             BR.Close();
         }
 
-        public static void LoadProgression(BinaryReader BR, Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public static void LoadProgression(BinaryReader BR, BattleMapPlayer Player, Roster PlayerRoster, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             BattleMap.DicGlobalVariables.Clear();
@@ -169,7 +159,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BattleMap.NextMapType = BR.ReadString();
             BattleMap.NextMapPath = BR.ReadString();
             BattleMap.ClearedStages = BR.ReadInt32();
-            Constants.Money = BR.ReadInt32();
 
             int DicGlobalVariablesCount = BR.ReadInt32();
             for (int R = 0; R < DicGlobalVariablesCount; R++)
@@ -188,6 +177,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             PlayerRoster.LoadProgression(BR, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+            Player.Records.Load(BR);
 
             SystemList.ListPart.Clear();
             int ListPartCount = BR.ReadInt32();

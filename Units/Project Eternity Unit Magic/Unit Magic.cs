@@ -158,7 +158,7 @@ namespace ProjectEternity.Units.Magic
         public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            if (Params.Map == null)
+            if (Params == null || Params.Map == null)
             {
                 return new UnitMagic(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }

@@ -20,7 +20,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public static readonly ConcurrentDictionary<string, DeathmatchParams> DicParams = new ConcurrentDictionary<string, DeathmatchParams>();
 
         public DeathmatchParams()
-            : base(new BattleContext())
+            : base()
+        {
+        }
+
+        public DeathmatchParams(BattleContext GlobalContext)
+            : base(GlobalContext)
         {
         }
 

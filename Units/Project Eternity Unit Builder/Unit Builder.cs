@@ -113,7 +113,7 @@ namespace ProjectEternity.Core.Units.Builder
         public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            if (Params.Map == null)
+            if (Params == null || Params.Map == null)
             {
                 return new UnitBuilder(Name, Content, null, DicRequirement, DicEffect, DicAutomaticSkillTarget);
             }

@@ -44,6 +44,7 @@ namespace ProjectEternity.Editors.RosterEditor
             for (int C = 0; C < ListCharacter.Count; C++)
             {
                 BW.Write(ListCharacter[C].FullName);
+                BW.Write(ListCharacter[C].ID);
 
                 BW.Write(ListCharacter[C].DicCharacterLink.Count);
                 foreach (KeyValuePair<string, Character.CharacterLinkTypes> ActiveLink in ListCharacter[C].DicCharacterLink)
@@ -57,7 +58,7 @@ namespace ProjectEternity.Editors.RosterEditor
             {
                 BW.Write(ListUnit[U].UnitTypeName);
                 BW.Write(ListUnit[U].RelativePath);
-                BW.Write(ListUnit[U].TeamEventID);
+                BW.Write(ListUnit[U].ID);
 
                 BW.Write(ListUnit[U].UnitStat.DicUnitLink.Count);
                 foreach (KeyValuePair<string, UnitStats.UnitLinkTypes> ActiveLink in ListUnit[U].UnitStat.DicUnitLink)
@@ -87,6 +88,7 @@ namespace ProjectEternity.Editors.RosterEditor
             for (int C = 0; C < ListCharacterCount; C++)
             {
                 Character NewCharacter = new Character(BR.ReadString(), null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
+                NewCharacter.ID = BR.ReadString();
 
                 lstCharacters.Items.Add(NewCharacter.FullName);
                 lstCharactersToShareFrom.Items.Add(NewCharacter.FullName);
@@ -110,7 +112,7 @@ namespace ProjectEternity.Editors.RosterEditor
                 string UnitName = BR.ReadString();
                 string EventID = BR.ReadString();
                 Unit NewUnit = Unit.FromType(UnitTypeName, UnitName, null, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
-                NewUnit.TeamEventID = EventID;
+                NewUnit.ID = EventID;
 
                 lstUnits.Items.Add(NewUnit.ItemName);
                 lstUnitsToShareFrom.Items.Add(NewUnit.ItemName);
@@ -187,6 +189,15 @@ namespace ProjectEternity.Editors.RosterEditor
             }
         }
 
+        private void txtCharacterEventID_TextChanged(object sender, EventArgs e)
+        {
+            if (lstCharacters.SelectedIndex >= 0)
+            {
+                Character ActiveCharacter = ListCharacter[lstCharacters.SelectedIndex];
+                ActiveCharacter.ID = txtCharacterEventID.Text;
+            }
+        }
+
         private void btnAddCharacter_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Character;
@@ -214,6 +225,7 @@ namespace ProjectEternity.Editors.RosterEditor
                 lblSKL.Text = ActiveCharacter.SKL.ToString();
                 lblEVA.Text = ActiveCharacter.EVA.ToString();
                 lblHIT.Text = ActiveCharacter.HIT.ToString();
+                txtCharacterEventID.Text = ActiveCharacter.ID;
 
                 Character.CharacterLinkTypes CharacterLinkType = Character.CharacterLinkTypes.None;
 
@@ -318,12 +330,12 @@ namespace ProjectEternity.Editors.RosterEditor
             }
         }
 
-        private void txtEventID_TextChanged(object sender, EventArgs e)
+        private void txtUnitEventID_TextChanged(object sender, EventArgs e)
         {
             if (lstUnits.SelectedIndex >= 0)
             {
                 Unit ActiveUnit = ListUnit[lstUnits.SelectedIndex];
-                ActiveUnit.TeamEventID = txtEventID.Text;
+                ActiveUnit.ID = txtUnitEventID.Text;
             }
         }
 
@@ -354,7 +366,7 @@ namespace ProjectEternity.Editors.RosterEditor
                 lblArmor.Text = ActiveUnit.Armor.ToString();
                 lblMobility.Text = ActiveUnit.Mobility.ToString();
                 lblMaxMovement.Text = ActiveUnit.MaxMovement.ToString();
-                txtEventID.Text = ActiveUnit.TeamEventID;
+                txtUnitEventID.Text = ActiveUnit.ID;
 
                 UnitStats.UnitLinkTypes UnitLinkType = UnitStats.UnitLinkTypes.None;
 

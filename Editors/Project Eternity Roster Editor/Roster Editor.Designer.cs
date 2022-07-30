@@ -37,6 +37,8 @@
             this.btnRemoveCharacter = new System.Windows.Forms.Button();
             this.btnAddCharacter = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gbCharacterEventID = new System.Windows.Forms.GroupBox();
+            this.txtCharacterEventID = new System.Windows.Forms.TextBox();
             this.lblHIT = new System.Windows.Forms.Label();
             this.lblEVA = new System.Windows.Forms.Label();
             this.lblSKL = new System.Windows.Forms.Label();
@@ -66,6 +68,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.gbUnitEventID = new System.Windows.Forms.GroupBox();
+            this.txtUnitEventID = new System.Windows.Forms.TextBox();
             this.lblMaxMovement = new System.Windows.Forms.Label();
             this.lblMobility = new System.Windows.Forms.Label();
             this.lblArmor = new System.Windows.Forms.Label();
@@ -87,16 +91,15 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.lstUnitsToShareFrom = new System.Windows.Forms.ListBox();
-            this.txtEventID = new System.Windows.Forms.TextBox();
-            this.gbEventID = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.gbCharacterEventID.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox10.SuspendLayout();
+            this.gbUnitEventID.SuspendLayout();
             this.groupBox11.SuspendLayout();
-            this.gbEventID.SuspendLayout();
             this.SuspendLayout();
             // 
             // lstUnits
@@ -187,6 +190,7 @@
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.gbCharacterEventID);
             this.groupBox3.Controls.Add(this.lblHIT);
             this.groupBox3.Controls.Add(this.lblEVA);
             this.groupBox3.Controls.Add(this.lblSKL);
@@ -217,6 +221,24 @@
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Details";
+            // 
+            // gbCharacterEventID
+            // 
+            this.gbCharacterEventID.Controls.Add(this.txtCharacterEventID);
+            this.gbCharacterEventID.Location = new System.Drawing.Point(282, 212);
+            this.gbCharacterEventID.Name = "gbCharacterEventID";
+            this.gbCharacterEventID.Size = new System.Drawing.Size(132, 86);
+            this.gbCharacterEventID.TabIndex = 106;
+            this.gbCharacterEventID.TabStop = false;
+            this.gbCharacterEventID.Text = "Event ID";
+            // 
+            // txtCharacterEventID
+            // 
+            this.txtCharacterEventID.Location = new System.Drawing.Point(6, 19);
+            this.txtCharacterEventID.Name = "txtCharacterEventID";
+            this.txtCharacterEventID.Size = new System.Drawing.Size(120, 20);
+            this.txtCharacterEventID.TabIndex = 104;
+            this.txtCharacterEventID.TextChanged += new System.EventHandler(this.txtCharacterEventID_TextChanged);
             // 
             // lblHIT
             // 
@@ -497,7 +519,7 @@
             // 
             this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox10.Controls.Add(this.gbEventID);
+            this.groupBox10.Controls.Add(this.gbUnitEventID);
             this.groupBox10.Controls.Add(this.lblMaxMovement);
             this.groupBox10.Controls.Add(this.lblMobility);
             this.groupBox10.Controls.Add(this.lblArmor);
@@ -523,6 +545,24 @@
             this.groupBox10.TabIndex = 7;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Details";
+            // 
+            // gbUnitEventID
+            // 
+            this.gbUnitEventID.Controls.Add(this.txtUnitEventID);
+            this.gbUnitEventID.Location = new System.Drawing.Point(6, 163);
+            this.gbUnitEventID.Name = "gbUnitEventID";
+            this.gbUnitEventID.Size = new System.Drawing.Size(132, 86);
+            this.gbUnitEventID.TabIndex = 105;
+            this.gbUnitEventID.TabStop = false;
+            this.gbUnitEventID.Text = "Event ID";
+            // 
+            // txtUnitEventID
+            // 
+            this.txtUnitEventID.Location = new System.Drawing.Point(6, 19);
+            this.txtUnitEventID.Name = "txtUnitEventID";
+            this.txtUnitEventID.Size = new System.Drawing.Size(120, 20);
+            this.txtUnitEventID.TabIndex = 104;
+            this.txtUnitEventID.TextChanged += new System.EventHandler(this.txtUnitEventID_TextChanged);
             // 
             // lblMaxMovement
             // 
@@ -728,24 +768,6 @@
             this.lstUnitsToShareFrom.TabIndex = 0;
             this.lstUnitsToShareFrom.SelectedIndexChanged += new System.EventHandler(this.lstUnits_SelectedIndexChanged);
             // 
-            // txtEventID
-            // 
-            this.txtEventID.Location = new System.Drawing.Point(6, 19);
-            this.txtEventID.Name = "txtEventID";
-            this.txtEventID.Size = new System.Drawing.Size(120, 20);
-            this.txtEventID.TabIndex = 104;
-            this.txtEventID.TextChanged += new System.EventHandler(this.txtEventID_TextChanged);
-            // 
-            // gbEventID
-            // 
-            this.gbEventID.Controls.Add(this.txtEventID);
-            this.gbEventID.Location = new System.Drawing.Point(6, 163);
-            this.gbEventID.Name = "gbEventID";
-            this.gbEventID.Size = new System.Drawing.Size(132, 86);
-            this.gbEventID.TabIndex = 105;
-            this.gbEventID.TabStop = false;
-            this.gbEventID.Text = "Event ID";
-            // 
             // ProjectEternityRosterEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -765,14 +787,16 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.gbCharacterEventID.ResumeLayout(false);
+            this.gbCharacterEventID.PerformLayout();
             this.groupBox9.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox10.ResumeLayout(false);
             this.groupBox10.PerformLayout();
+            this.gbUnitEventID.ResumeLayout(false);
+            this.gbUnitEventID.PerformLayout();
             this.groupBox11.ResumeLayout(false);
-            this.gbEventID.ResumeLayout(false);
-            this.gbEventID.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -839,8 +863,10 @@
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.ListBox lstUnitsToShareFrom;
-        private System.Windows.Forms.GroupBox gbEventID;
-        private System.Windows.Forms.TextBox txtEventID;
+        private System.Windows.Forms.GroupBox gbUnitEventID;
+        private System.Windows.Forms.TextBox txtUnitEventID;
+        private System.Windows.Forms.GroupBox gbCharacterEventID;
+        private System.Windows.Forms.TextBox txtCharacterEventID;
     }
 }
 

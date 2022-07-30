@@ -191,8 +191,9 @@ namespace ProjectEternity
 
                             Roster PlayerRoster = new Roster();
                             PlayerRoster.LoadRoster();
-                            DataScreen.LoadProgression(PlayerRoster, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
-                            PushScreen(new NewIntermissionScreen(PlayerRoster));
+                            BattleMapPlayer Player = new BattleMapPlayer();
+                            DataScreen.LoadProgression(Player, PlayerRoster, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
+                            PushScreen(new NewIntermissionScreen(Player, PlayerRoster));
                         }
                         else
                         {

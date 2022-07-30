@@ -155,6 +155,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Camera3D CameraOverride;//Used by vehicles.
         public byte PlayersMin;
         public byte PlayersMax;
+        public byte MaxSquadsPerPlayer;
         public string Description;
 
         public List<Color> ListMultiplayerColor;
@@ -275,9 +276,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected void SaveProperties(BinaryWriter BW)
         {
+            //Prioritise displyable informations to avoid reading unnecessary information
             BW.Write(MapSize.X);
             BW.Write(MapSize.Y);
 
+            BW.Write(PlayersMin);
+            BW.Write(PlayersMax);
+            BW.Write(MaxSquadsPerPlayer);
+
+            BW.Write(Description);
+
+            BW.Write(ListMultiplayerColor.Count);
+            for (int D = 0; D < ListMultiplayerColor.Count; D++)
+            {
+                BW.Write(ListMultiplayerColor[D].R);
+                BW.Write(ListMultiplayerColor[D].G);
+                BW.Write(ListMultiplayerColor[D].B);
+            }
+
+            //The rest
             BW.Write(TileSize.X);
             BW.Write(TileSize.Y);
 
@@ -285,11 +302,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Write((int)Math.Max(0, CameraPosition.X));
             BW.Write((int)Math.Max(0, CameraPosition.Y));
-
-            BW.Write(PlayersMin);
-            BW.Write(PlayersMax);
-
-            BW.Write(Description);
 
             BW.Write(ListBackgroundsPath.Count);
             for (int B = 0; B < ListBackgroundsPath.Count; B++)
@@ -300,15 +312,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int F = 0; F < ListForegroundsPath.Count; F++)
             {
                 BW.Write(ListForegroundsPath[F]);
-            }
-
-            BW.Write(ListMultiplayerColor.Count);
-            //Deathmatch colors
-            for (int D = 0; D < ListMultiplayerColor.Count; D++)
-            {
-                BW.Write(ListMultiplayerColor[D].R);
-                BW.Write(ListMultiplayerColor[D].G);
-                BW.Write(ListMultiplayerColor[D].B);
             }
         }
 
@@ -429,6 +432,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MapSize.X = BR.ReadInt32();
             MapSize.Y = BR.ReadInt32();
 
+            PlayersMin = BR.ReadByte();
+            PlayersMax = BR.ReadByte();
+            MaxSquadsPerPlayer = BR.ReadByte();
+
+            Description = BR.ReadString();
+
+            int ArrayMultiplayerColorLength = BR.ReadInt32();
+            ListMultiplayerColor = new List<Color>(ArrayMultiplayerColorLength);
+
+            for (int D = 0; D < ArrayMultiplayerColorLength; D++)
+            {
+                ListMultiplayerColor.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
+            }
+
             TileSize.X = BR.ReadInt32();
             TileSize.Y = BR.ReadInt32();
 
@@ -439,11 +456,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CursorPosition = CameraPosition;
             CursorPositionVisible = CursorPosition;
 
-            PlayersMin = BR.ReadByte();
-            PlayersMax = BR.ReadByte();
-
-            Description = BR.ReadString();
-
             int ListBackgroundsPathCount = BR.ReadInt32();
             for (int B = 0; B < ListBackgroundsPathCount; B++)
             {
@@ -453,14 +465,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int F = 0; F < ListForegroundsPathCount; F++)
             {
                 ListForegroundsPath.Add(BR.ReadString());
-            }
-
-            int ArrayMultiplayerColorLength = BR.ReadInt32();
-            ListMultiplayerColor = new List<Color>(ArrayMultiplayerColorLength);
-
-            for (int D = 0; D < ArrayMultiplayerColorLength; D++)
-            {
-                ListMultiplayerColor.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
             }
         }
 

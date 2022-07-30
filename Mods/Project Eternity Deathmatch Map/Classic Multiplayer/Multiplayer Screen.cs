@@ -109,7 +109,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Stage = MenuChoices.None;
             CurrentSelection = MenuChoices.PlayerList;
             ListPlayerType = new string[5] { "Closed", "Open", "Human", "CPU", "Online" };
-            Params = new DeathmatchParams();
+            Params = new DeathmatchParams(new BattleContext());
         }
 
         public override void Load()
@@ -255,7 +255,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Random Random = new Random();
             MapAttributes ActiveMapAttributes = ListMap.Where(x => x.Name == "Autoplay").First();
-            DeathmatchMap Autoplay = new DeathmatchMap(ActiveMapAttributes.Name, "Classic", new DeathmatchParams());
+            DeathmatchMap Autoplay = new DeathmatchMap(ActiveMapAttributes.Name, "Classic", new DeathmatchParams(new BattleContext()));
             Autoplay.ListGameScreen = ListGameScreen;
             while (Autoplay.ListPlayer.Count < ActiveMapAttributes.MaxNumberOfPlayers)
             {

@@ -18,15 +18,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private const int MaxCommander = 3;
 
+        private readonly BattleMapPlayer Player;
         private readonly Roster PlayerRoster;
 
         private int CursorIndex;
         private static List<Commander> ListPresentCommander;
         private static List<Commander> ListSelectedCommander;
 
-        public CommanderLoadoutScreen(Roster PlayerRoster)
+        public CommanderLoadoutScreen(BattleMapPlayer Player, Roster PlayerRoster)
             : base()
         {
+            this.Player = Player;
             this.PlayerRoster = PlayerRoster;
 
             ListSelectedCommander = new List<Commander>();
@@ -63,7 +65,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (ListSelectedCommander.Count == MaxCommander || ListSelectedCommander.Count == ListPresentCommander.Count || ListPresentCommander.Count == 0)
                 {
-                    LoadoutScreen.LoadMap(ListGameScreen, PlayerRoster);
+                    LoadoutScreen.LoadMap(ListGameScreen, Player, PlayerRoster);
                     BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
                     Player1.Inventory.ActiveLoadout.ListSpawnCommander.AddRange(ListSelectedCommander);
                     LoadoutScreen.StartMap(this, gameTime, Player1);

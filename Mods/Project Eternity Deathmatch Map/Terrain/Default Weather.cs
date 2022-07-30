@@ -18,9 +18,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 			this.Map = Map;
 			DicTile2DByTileset = new Dictionary<int, Tile2DHolder>();
 
-			for (int L = 0; L < 1; L++)
+			if (Map.ListTilesetPreset.Count > 0)
 			{
-				CreateMap(Map, Map.LayerManager.ListLayer[L], null);
+				for (int L = 0; L < 1; L++)
+				{
+					CreateMap(Map, Map.LayerManager.ListLayer[L], null);
+				}
 			}
 		}
 

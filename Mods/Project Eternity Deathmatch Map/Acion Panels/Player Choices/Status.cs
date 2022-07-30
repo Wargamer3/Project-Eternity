@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            Map.StatusMenu.OpenStatusMenuScreen(ActiveSquad);
+            Map.StatusMenu.OpenStatusMenuScreen(Map.ListPlayer[Map.ActivePlayerIndex], ActiveSquad);
 
             Map.ListActionMenuChoice.Remove(this);
         }

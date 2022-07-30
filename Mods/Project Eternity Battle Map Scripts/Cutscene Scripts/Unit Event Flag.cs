@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                UnitToAssign.TeamEventID = EventID;
+                UnitToAssign.ID = EventID;
 
                 ExecuteEvent(this, 0);
                 IsEnded = true;

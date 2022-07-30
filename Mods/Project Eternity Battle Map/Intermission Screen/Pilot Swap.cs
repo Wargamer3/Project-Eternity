@@ -11,6 +11,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public sealed class PilotSwapScreen : GameScreen
     {
+        private readonly BattleMapPlayer ActivePlayer;
         private readonly Roster PlayerRoster;
         private readonly FormulaParser ActiveParser;
 
@@ -32,9 +33,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         int Stage;
 
-        public PilotSwapScreen(Roster PlayerRoster, FormulaParser ActiveParser)
+        public PilotSwapScreen(BattleMapPlayer ActivePlayer, Roster PlayerRoster, FormulaParser ActiveParser)
             : base()
         {
+            this.ActivePlayer = ActivePlayer;
             this.PlayerRoster = PlayerRoster;
             this.ActiveParser = ActiveParser;
 
@@ -53,7 +55,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             UnitList = new UnitListScreen(PlayerRoster, ActiveParser);
             UnitList.Load();
-            PilotList = new PilotListScreen(PlayerRoster);
+            PilotList = new PilotListScreen(ActivePlayer, PlayerRoster);
             PilotList.Load();
             PilotList.ListCharacterInfo.Insert(0, new PilotListScreen.CharacterInfo(-1));
 

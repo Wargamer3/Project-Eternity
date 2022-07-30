@@ -37,6 +37,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int[] ArrayUpgradeCost;
         private int UpgradeTotalCost;
 
+        private readonly BattleMapPlayer Player;
         private readonly Unit SelectedUnit;
         private readonly List<Attack> ListAttack;
         private readonly List<Unit> ListPresentUnit;
@@ -54,9 +55,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private VertexPositionTexture[] quad = new VertexPositionTexture[6];
         private Model TestModel;
 
-        public DefaultUnitUpgradesScreen(List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
+        public DefaultUnitUpgradesScreen(BattleMapPlayer Player, List<Unit> ListPresentUnit, int SelectedUnitIndex, FormulaParser ActiveParser)
             : base()
         {
+            this.Player = Player;
             this.ListPresentUnit = ListPresentUnit;
             this.SelectedUnitIndex = SelectedUnitIndex;
 
@@ -203,7 +205,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (CustomizeScreen == null)
                 {
-                    CustomizeScreen = new DefaultUnitUpgradesScreen(ListPresentUnit, SelectedNextUnitIndex, ActiveParser);
+                    CustomizeScreen = new DefaultUnitUpgradesScreen(Player, ListPresentUnit, SelectedNextUnitIndex, ActiveParser);
                 }
 
                 NextUpgradeScreen = CustomizeScreen;
@@ -217,7 +219,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (CustomizeScreen == null)
                 {
-                    CustomizeScreen = new DefaultUnitUpgradesScreen(ListPresentUnit, SelectedNextUnitIndex, ActiveParser);
+                    CustomizeScreen = new DefaultUnitUpgradesScreen(Player, ListPresentUnit, SelectedNextUnitIndex, ActiveParser);
                 }
 
                 NextUpgradeScreen = CustomizeScreen;
@@ -228,7 +230,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else if (InputHelper.InputConfirmPressed())
             {
-                if (UpgradeTotalCost <= Constants.Money)
+                if (UpgradeTotalCost <= Player.Records.CurrentMoney)
                 {
                     SelectedUnit.UnitStat.HPUpgrades.Value += HPUpgradeCount;
                     SelectedUnit.UnitStat.ENUpgrades.Value += ENUpgradeCount;
@@ -241,7 +243,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     ArmorUpgradeCount = 0;
                     MobilityUpgradeCount = 0;
                     AttackUpgradeCount = 0;
-                    Constants.Money -= UpgradeTotalCost;
+                    Player.Records.CurrentMoney -= (uint)UpgradeTotalCost;
                     UpdateCost();
                 }
             }
@@ -382,13 +384,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Y = 350;
             g.DrawString(fntFinlanderFont, "Money", new Vector2(460, Y += 5), Color.White);
-            g.DrawStringRightAligned(fntFinlanderFont, Constants.Money.ToString(), new Vector2(625, Y), Color.White);
+            g.DrawStringRightAligned(fntFinlanderFont, Player.Records.CurrentMoney.ToString(), new Vector2(625, Y), Color.White);
 
             g.DrawString(fntFinlanderFont, "Cost", new Vector2(460, Y += 40), Color.White);
             g.DrawStringRightAligned(fntFinlanderFont, UpgradeTotalCost.ToString(), new Vector2(625, Y), Color.White);
 
             g.DrawString(fntFinlanderFont, "Result", new Vector2(460, Y += 40), Color.White);
-            g.DrawStringRightAligned(fntFinlanderFont, (Constants.Money - UpgradeTotalCost).ToString(), new Vector2(625, Y), Color.White);
+            g.DrawStringRightAligned(fntFinlanderFont, (Player.Records.CurrentMoney - UpgradeTotalCost).ToString(), new Vector2(625, Y), Color.White);
         }
 
         private void DrawUpgradeBar(CustomSpriteBatch g, int Y, int UpgradeCount, int UpgradesToBuy)

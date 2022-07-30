@@ -15,6 +15,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntArial8;
         private SpriteFont fntArial10;
 
+        private readonly BattleMapPlayer Player;
+
         private int CursorAlpha;
         private bool CursorAppearing;
         private int CursorIndex;
@@ -25,9 +27,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private int CheckOutAmount;
 
-        public Shop()
+        public Shop(BattleMapPlayer Player)
             : base()
         {
+            this.Player = Player;
+
             CursorIndex = 0;
             CursorIndexMax = 0;
             CursorIndexStart = 0;
@@ -136,10 +140,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
                 else
                 {
-                    if (Constants.Money - CheckOutAmount >= 0)
+                    if (Player.Records.CurrentMoney - CheckOutAmount >= 0)
                     {
                         BuyItem(MainFilter);
-                        Constants.Money -= CheckOutAmount;
+                        Player.Records.CurrentMoney -= (uint)CheckOutAmount;
                         CheckOutAmount = 0;
                     }
                 }
@@ -178,12 +182,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else//Item cost (None selected).
                 g.DrawStringRightAligned(fntArial10, "0", new Vector2(170, Constants.Height - 60), Color.White);
             //Bottom.
-            g.DrawString(fntArial10, Constants.Money.ToString(), new Vector2(2, Constants.Height - 60), Color.White);
+            g.DrawString(fntArial10, Player.Records.CurrentMoney.ToString(), new Vector2(2, Constants.Height - 60), Color.White);
             //Remaining funds
-            if (Constants.Money - CheckOutAmount >= 0)
-                g.DrawStringRightAligned(fntArial10, (Constants.Money - CheckOutAmount).ToString(), new Vector2(300, Constants.Height - 60), Color.White);
+            if (Player.Records.CurrentMoney - CheckOutAmount >= 0)
+                g.DrawStringRightAligned(fntArial10, (Player.Records.CurrentMoney - CheckOutAmount).ToString(), new Vector2(300, Constants.Height - 60), Color.White);
             else
-                g.DrawStringRightAligned(fntArial10, (Constants.Money - CheckOutAmount).ToString(), new Vector2(300, Constants.Height - 60), Color.Red);
+                g.DrawStringRightAligned(fntArial10, (Player.Records.CurrentMoney - CheckOutAmount).ToString(), new Vector2(300, Constants.Height - 60), Color.Red);
         }
 
         /// <summary>

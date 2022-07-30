@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 Unit SpawnUnit = Unit.FromType(RosterUnit.UnitTypeName, RosterUnit.FilePath, GameScreen.ContentFallback, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 SpawnUnit.UnitStat.DicUnitLink = new Dictionary<string, UnitStats.UnitLinkTypes>(RosterUnit.DicUnitLink);
-                SpawnUnit.TeamEventID = RosterUnit.EventID;
+                SpawnUnit.ID = RosterUnit.EventID;
                 SpawnUnit.TeamTags.AddTag("Present");
                 TeamUnits.Add(SpawnUnit);
 
@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             for (int C = 0; C < DicCharacterCount; C++)
             {
-                RosterCharacter NewCharacter = new RosterCharacter(BR.ReadString());
+                RosterCharacter NewCharacter = new RosterCharacter(BR.ReadString(), BR.ReadString());
 
                 DicRosterCharacter.Add(NewCharacter.FilePath, NewCharacter);
 
@@ -183,7 +183,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     foreach (Unit ActiveLinkUnit in TeamUnits.ListAll)
                     {
-                        if (ActiveLinkUnit.TeamEventID == UnitLink.Key)
+                        if (ActiveLinkUnit.ID == UnitLink.Key)
                         {
                             ActiveUnit.ShareStats(ActiveLinkUnit, UnitLink.Value);
                             break;

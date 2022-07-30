@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -89,13 +90,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     case "atk":
                         if (Map.Params.GlobalContext.EffectOwnerSquad == null)
                             throw new Exception(Input + " is invalid");
-                        return UnitStatFromUnit(Map.Params.GlobalContext.EffectOwnerUnit, Map.Params.GlobalContext.EffectOwnerSquad, Expression[1]);
+                        return UnitStatFromUnit(Map.ListPlayer[Map.ActivePlayerIndex], Map.Params.GlobalContext.EffectOwnerUnit, Map.Params.GlobalContext.EffectOwnerSquad, Expression[1]);
 
                     case "def":
                     case "defender":
                         if (Map.Params.GlobalContext.EffectTargetSquad == null)
                             throw new Exception(Input + " is invalid");
-                        return UnitStatFromUnit(Map.Params.GlobalContext.EffectTargetUnit, Map.Params.GlobalContext.EffectTargetSquad, Expression[1]);
+                        return UnitStatFromUnit(Map.ListPlayer[Map.TargetPlayerIndex], Map.Params.GlobalContext.EffectTargetUnit, Map.Params.GlobalContext.EffectTargetSquad, Expression[1]);
 
                     default:
                         if (Expression[0].Contains("player"))
@@ -148,6 +149,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public string UnitValueFromVariable(List<Player> ListPlayer, string[] Expression)
         {
             string ReturnExpression = null;
+            Player ActivePlayer = null;
             Squad ActiveSquad = null;
             Unit ActiveUnit = null;
 
@@ -170,6 +172,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                         ++UnitNumber;
                                     else
                                     {
+                                        ActivePlayer = ListPlayer[P];
                                         ActiveSquad = ListPlayer[P].ListSquad[S];
                                         ActiveUnit = ActiveSquad.CurrentLeader;
                                         ReturnExpression = "1";
@@ -196,6 +199,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                         ++UnitNumber;
                                     else
                                     {
+                                        ActivePlayer = ListPlayer[P];
                                         ActiveSquad = ListPlayer[P].ListSquad[S];
                                         ActiveUnit = ActiveSquad.CurrentLeader;
                                         ReturnExpression = "1";
@@ -239,6 +243,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                         {
                                             if (ListPlayer[P].ListSquad[S][U].HP > 0)
                                             {
+                                                ActivePlayer = ListPlayer[P];
                                                 ActiveSquad = ListPlayer[P].ListSquad[S];
                                                 ActiveUnit = ActiveSquad.CurrentLeader;
                                                 ReturnExpression = "1";
@@ -259,13 +264,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (Expression.Length >= 4)
             {
-                ReturnExpression = UnitStatFromUnit(ActiveUnit, ActiveSquad, Expression[3]);
+                ReturnExpression = UnitStatFromUnit(ActivePlayer, ActiveUnit, ActiveSquad, Expression[3]);
             }
 
             return ReturnExpression;
         }
 
-        private string UnitStatFromUnit(Unit ActiveUnit, Squad ActiveSquad, string Expression)
+        private string UnitStatFromUnit(Player ActivePlayer, Unit ActiveUnit, Squad ActiveSquad, string Expression)
         {
             string ReturnExpression = null;
 
@@ -366,6 +371,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 case "will":
                     ReturnExpression = ActiveUnit.Pilot.Will.ToString();
                     break;
+
+                case "kills":
+                    return ActivePlayer.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills[ActiveUnit.ID].ToString();
             }
 
             return ReturnExpression;
@@ -374,6 +382,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public string SquadValueFromVariable(List<Player> ListPlayer, string[] Expression)
         {
             string ReturnExpression = null;
+            Player ActivePlayer = null;
             Squad ActiveSquad = null;
             Unit ActiveUnit = null;
 
@@ -397,6 +406,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     ++SquadNumber;
                                 else
                                 {
+                                    ActivePlayer = ListPlayer[P];
                                     ActiveSquad = ListPlayer[P].ListSquad[S];
                                     ActiveUnit = ActiveSquad.CurrentLeader;
                                     ReturnExpression = "1";
@@ -420,6 +430,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     ++SquadNumber;
                                 else
                                 {
+                                    ActivePlayer = ListPlayer[P];
                                     ActiveSquad = ListPlayer[P].ListSquad[S];
                                     ActiveUnit = ActiveSquad.CurrentLeader;
                                     ReturnExpression = "1";
@@ -464,6 +475,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                         {
                                             if (ListPlayer[P].ListSquad[S][U].HP > 0)
                                             {
+                                                ActivePlayer = ListPlayer[P];
                                                 ActiveSquad = ListPlayer[P].ListSquad[S];
                                                 ActiveUnit = ActiveSquad.CurrentLeader;
                                                 ReturnExpression = "1";
@@ -540,7 +552,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         break;
 
                     default:
-                        return UnitStatFromUnit(ActiveUnit, ActiveSquad, Expression[4]);
+                        return UnitStatFromUnit(ActivePlayer, ActiveUnit, ActiveSquad, Expression[4]);
                 }
 
                 #endregion
@@ -551,9 +563,46 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActiveUnit == null)
                     return ReturnExpression;
 
-                return UnitStatFromUnit(ActiveUnit, ActiveSquad, Expression[4]);
+                return UnitStatFromUnit(ActivePlayer, ActiveUnit, ActiveSquad, Expression[4]);
             }
 
+            return ReturnExpression;
+        }
+
+        public string ValueFromRecords(string[] Expression)
+        {
+            string ReturnExpression = null;
+            switch (Expression[1])
+            {
+                case "unit":
+                    return UnitStatFromUnitRecords(Map.Params.GlobalContext.EffectTargetUnit, Expression);
+                case "pilot":
+                    return CharacterRecords(Map.Params.GlobalContext.EffectTargetCharacter, Expression);
+            }
+            return ReturnExpression;
+        }
+
+        public string UnitStatFromUnitRecords(Unit ActiveUnit, string[] Expression)
+        {
+            BattleMapScreen.PlayerRecords ActivePlayerRecords = Map.ListPlayer[Map.ActivePlayerIndex].Records;
+
+            string ReturnExpression = null;
+            switch (Expression[2])
+            {
+                case "kills":
+                    return ActivePlayerRecords.PlayerUnitRecords.DicUnitIDByNumberOfKills[ActiveUnit.ID].ToString();
+            }
+            return ReturnExpression;
+        }
+
+        public string CharacterRecords(Character ActiveUnit,string[] Expression)
+        {
+            BattleMapScreen.PlayerRecords ActivePlayerRecords = Map.ListPlayer[Map.ActivePlayerIndex].Records;
+
+            string ReturnExpression = null;
+            switch (Expression[2])
+            {
+            }
             return ReturnExpression;
         }
     }

@@ -533,6 +533,11 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     Attacker.UpdateSquad();
                     if (ActiveSquadSupport != null && ActiveSquadSupport.ActiveSquadSupport != null)
                         ActiveSquadSupport.ActiveSquadSupport.UpdateSquad();
+
+                    if (Attacker.IsDead)
+                    {
+                        GameRule.OnSquadDefeated(DefenderPlayerIndex, TargetSquad, AttackerPlayerIndex, Attacker);
+                    }
                 }
 
                 TargetSquad.UpdateSquad();
@@ -605,7 +610,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     if (AttackerPlayerIndex == 0)
                     {
                         int Money = 500;
-                        Constants.Money += (int)(Money * Attacker.Boosts.MoneyMultiplier);
+                        ListPlayer[AttackerPlayerIndex].Records.CurrentMoney += (uint)(Money * Attacker.Boosts.MoneyMultiplier);
                     }
 
                     if (AttackerSquad != null)//Can get hurt by the environment
@@ -613,24 +618,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                         BattleRecap = new LevelUpMenu(this, Attacker.Pilot, Attacker, AttackerSquad, ListPlayer[AttackerPlayerIndex].IsPlayerControlled);
                         BattleRecap.TotalExpGained += (int)((Result.Target.Pilot.EXPValue + Result.Target.UnitStat.EXPValue) * Attacker.Boosts.EXPMultiplier);
 
-                        FinalizeDeath(AttackerSquad, AttackerPlayerIndex, DefenderSquad, DefenderPlayerIndex, Result.Target);
-                        Attacker.PilotKills += 1;
-
-                        for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
-                        {
-                            Attacker.ArrayCharacterActive[C].Will += Attacker.ArrayCharacterActive[C].Personality.WillGainDestroyedEnemy;
-                        }
-
-                        for (int U = 0; U < AttackerSquad.UnitsAliveInSquad; U++)
-                        {
-                            if (Attacker == AttackerSquad[U])
-                                continue;
-
-                            for (int C = 1; C < AttackerSquad[U].ArrayCharacterActive.Length; C++)
-                            {
-                                AttackerSquad[U].ArrayCharacterActive[C].Will += 2;
-                            }
-                        }
+                        FinalizeDeath(Attacker, AttackerSquad, AttackerPlayerIndex, Result.Target, DefenderSquad, DefenderPlayerIndex);
                     }
                 }
                 else if (Result.AttackMissed)
@@ -668,9 +656,8 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return BattleRecap;
         }
 
-        private void FinalizeDeath(Squad Attacker, int AttackerPlayerIndex,
-                                   Squad Defender, int DefenderPlayerIndex,
-                                   Unit DeadDefender)
+        private void FinalizeDeath(Unit Attacker, Squad AttackerSquad, int AttackerPlayerIndex,
+                                   Unit DeadDefender, Squad DefenderSquad, int DefenderPlayerIndex)
         {
             //Unit killed.
             //Every allies gain morale.
@@ -680,7 +667,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 {
                     for (int U = 0; U < ListPlayer[P].ListSquad.Count; U++)
                     {
-                        if (ListPlayer[P].ListSquad[U].CurrentLeader == null || ListPlayer[P].ListSquad[U] == Attacker)
+                        if (ListPlayer[P].ListSquad[U].CurrentLeader == null || ListPlayer[P].ListSquad[U] == AttackerSquad)
                             continue;
 
                         for (int C = 0; C < ListPlayer[P].ListSquad[U].CurrentLeader.ArrayCharacterActive.Length; C++)
@@ -703,6 +690,25 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     }
                 }
             }
+
+            for (int C = 0; C < Attacker.ArrayCharacterActive.Length; C++)
+            {
+                Attacker.ArrayCharacterActive[C].Will += Attacker.ArrayCharacterActive[C].Personality.WillGainDestroyedEnemy;
+            }
+
+            for (int U = 0; U < AttackerSquad.UnitsAliveInSquad; U++)
+            {
+                if (Attacker == AttackerSquad[U])
+                    continue;
+
+                for (int C = 1; C < AttackerSquad[U].ArrayCharacterActive.Length; C++)
+                {
+                    AttackerSquad[U].ArrayCharacterActive[C].Will += 2;
+                }
+            }
+
+            ListPlayer[AttackerPlayerIndex].Records.PlayerUnitRecords.AddUnitKill(Attacker.ID);
+            ListPlayer[AttackerPlayerIndex].Records.PlayerUnitRecords.AddCharacterKill(Attacker.Pilot.ID);
         }
 
         public SquadBattleResult CalculateFinalHP(Squad Attacker, Attack CurrentAttack, Squad SupportAttacker, int AttackerPlayerIndex, FormationChoices AttackerFormationChoice,

@@ -32,6 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private enum MenuChoice { StartBattle = 0, View = 1, Customize = 2, Data = 3, Multiplayer = 4, Exit = 5 };
 
+        private BattleMapPlayer ActivePlayer;
         private Roster PlayerRoster;
 
         private PartMenu[] Menu;
@@ -42,6 +43,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private bool UnitEquipmentAvailable;
         private SpriteFont fntArial12;
         public FormulaParser ActiveParser;
+
         public IntermissionScreen()
             : base()
         {
@@ -55,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Menu = new PartMenu[] { new PartMenu("Start battle", new string[] { }),
                                     new PartMenu("View", new string[] {"Pilot View", "Unit View", "Parts View" }),
                                     new PartMenu("Customize", new string[] { "Squad Customize", "Unit Customize", "Unit Equipment", "Pilot Selection", "Parts Equip", "Shop", "Forge"}),
-                                    new PartMenu("Data", new string[] { "Save", "Load", "Options"}),
+                                    new PartMenu("Data", new string[] { "Save", "Load", "Records", "Options"}),
                                     new PartMenu("VR training", new string[] { }),
                                     new PartMenu("Exit", new string[] { }) };
             Menu[2].Open = true;
@@ -64,6 +66,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             UnitEquipmentAvailable = false;
 
+            ActivePlayer = new BattleMapPlayer("", "", "", false, 0, true, Color.Blue);
             PlayerRoster = new Roster();
             PlayerRoster.LoadRoster();
             foreach (RosterUnit ActiveUnit in PlayerRoster.DicRosterUnit.Values)
@@ -71,19 +74,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Unit NewUnit = Unit.FromType(ActiveUnit.UnitTypeName, ActiveUnit.FilePath, GameScreen.ContentFallback, Unit.DicDefaultUnitType,
                     BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
+                NewUnit.ID = ActiveUnit.EventID;
                 NewUnit.TeamTags.AddTag("Present");
                 NewUnit.TeamTags.AddTag("Event");
                 PlayerRoster.TeamUnits.Add(NewUnit);
+
+                ActivePlayer.Records.PlayerUnitRecords.RegisterUnit(NewUnit.ID);
             }
 
             foreach (RosterCharacter ActiveCharacter in PlayerRoster.DicRosterCharacter.Values)
             {
                 Character NewCharacter = new Character(ActiveCharacter.FilePath, GameScreen.ContentFallback, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
 
+                NewCharacter.ID = ActiveCharacter.ID;
                 NewCharacter.TeamTags.AddTag("Present");
                 NewCharacter.TeamTags.AddTag("Event");
 
                 PlayerRoster.TeamCharacters.Add(NewCharacter);
+
+                ActivePlayer.Records.PlayerUnitRecords.RegisterCharacter(NewCharacter.ID);
             }
 
             List<Unit> ListPresentUnit = PlayerRoster.TeamUnits.GetPresent();
@@ -159,7 +168,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     switch ((MenuChoice)SelectedChoice)
                     {
                         case MenuChoice.StartBattle:
-                            PushScreen(new LoadoutScreen(PlayerRoster, new List<Commander>()));
+                            PushScreen(new LoadoutScreen(ActivePlayer, PlayerRoster, new List<Commander>()));
                             break;
 
                         case MenuChoice.View:
@@ -172,7 +181,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             else if (SubMenu == 2)//Parts
                             {
                             }
-                            PushScreen(new Shop());
+                            PushScreen(new Shop(ActivePlayer));
                             break;
 
                         case MenuChoice.Customize:
@@ -182,7 +191,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             }
                             else if (SubMenu == 1)//Unit
                             {
-                                PushScreen(new UnitUpgradesScreen(PlayerRoster, ActiveParser));
+                                PushScreen(new UnitUpgradesScreen(ActivePlayer, PlayerRoster, ActiveParser));
                             }
                             else if (SubMenu == 2)//Unit
                             {
@@ -193,7 +202,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             }
                             else if (SubMenu == 3)//Pilot
                             {
-                                PushScreen(new PilotSwapScreen(PlayerRoster, ActiveParser));
+                                PushScreen(new PilotSwapScreen(ActivePlayer, PlayerRoster, ActiveParser));
                             }
                             else if (SubMenu == 4)//Parts
                             {
@@ -201,7 +210,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             }
                             else if (SubMenu == 5)//Shop
                             {
-                                PushScreen(new Shop());
+                                PushScreen(new Shop(ActivePlayer));
                             }
                             else if (SubMenu == 6)//Forge
                             {
@@ -213,6 +222,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             if (SubMenu == 0)//Save
                             {
                                 SaveProgression();
+                            }
+                            else if (SubMenu == 2)//Save
+                            {
+                                PushScreen(new RecordsScreen(ActivePlayer, PlayerRoster));
                             }
                             break;
 

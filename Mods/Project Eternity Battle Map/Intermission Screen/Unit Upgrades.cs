@@ -8,9 +8,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public sealed class UnitUpgradesScreen : UnitListScreen
     {
-        public UnitUpgradesScreen(Roster PlayerRoster, FormulaParser ActiveParser)
+        private readonly BattleMapPlayer Player;
+
+        public UnitUpgradesScreen(BattleMapPlayer Player, Roster PlayerRoster, FormulaParser ActiveParser)
             : base(PlayerRoster, ActiveParser)
         {
+            this.Player = Player;
         }
 
         public override void Load()
@@ -30,7 +33,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (CustomizeScreen == null)
                 {
-                    CustomizeScreen = new DefaultUnitUpgradesScreen(ListPresentUnit, UnitSelectionMenu.SelectedIndex, ActiveParser);
+                    CustomizeScreen = new DefaultUnitUpgradesScreen(Player, ListPresentUnit, UnitSelectionMenu.SelectedIndex, ActiveParser);
                 }
 
                 PushScreen(CustomizeScreen);

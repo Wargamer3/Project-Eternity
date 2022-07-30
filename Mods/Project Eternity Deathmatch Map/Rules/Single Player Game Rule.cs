@@ -163,7 +163,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             BattleMap.ClearedStages++;
             GameScreen.FMODSystem.sndActiveBGM.Stop();
-            NewIntermissionScreen NewIntermissionScreen = new NewIntermissionScreen(Owner.PlayerRoster);
+            NewIntermissionScreen NewIntermissionScreen = new NewIntermissionScreen(Owner.ListPlayer[0], Owner.PlayerRoster);
             Owner.RemoveAllScreens();
             Owner.PushScreen(NewIntermissionScreen);
         }

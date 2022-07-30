@@ -254,15 +254,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void SaveLocally()
+        public void SaveLocally(string PlayerName)
         {
-            FileStream FS = new FileStream("User data/Shop.bin", FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream FS = new FileStream("User data/Shop Unlocks/Battle Map/" + PlayerName + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
+            BW.Write(ListAvailableCharacterToBuy.Count);
+
+            foreach (ShopItemCharacter ActiveCharacter in ListAvailableCharacterToBuy)
+            {
+                BW.Write(ActiveCharacter.Path);
+            }
+
+            BW.Write(ListAvailableUnitToBuy.Count);
+
+            foreach (ShopItemUnit ActiveUnit in ListAvailableUnitToBuy)
+            {
+                BW.Write(ActiveUnit.Path);
+            }
 
             BW.Close();
             FS.Close();
         }
+
         public void LoadShopCharacter(int StartIndex, int EndIndex, List<ShopItemCharacter> ListShopPlayerCharacter)
         {
             lock (ListCharacterToPrioritiseLoadPath)

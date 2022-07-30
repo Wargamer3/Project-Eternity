@@ -285,6 +285,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             MapSize.X = BR.ReadInt32();
             MapSize.Y = BR.ReadInt32();
+
+            Room.MinNumberOfPlayer = BR.ReadByte();
+            Room.MaxNumberOfPlayer = BR.ReadByte();
+            Room.MaxSquadPerPlayer = BR.ReadByte();
+
+            string Description = BR.ReadString();
+
+            int NumberOfTeams = BR.ReadInt32();
+            ListMapTeam = new List<Color>(NumberOfTeams);
+            //Deathmatch colors
+            for (int D = 0; D < NumberOfTeams; D++)
+            {
+                ListMapTeam.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
+            }
+
             int TileSizeX = BR.ReadInt32();
             int TileSizeY = BR.ReadInt32();
 
@@ -292,11 +307,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int CameraPositionX = BR.ReadInt32();
             int CameraPositionY = BR.ReadInt32();
-
-            Room.MinNumberOfPlayer = BR.ReadByte();
-            Room.MaxNumberOfPlayer = BR.ReadByte();
-
-            string Description = BR.ReadString();
 
             int ListBackgroundsPathCount = BR.ReadInt32();
             for (int B = 0; B < ListBackgroundsPathCount; B++)
@@ -307,14 +317,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int F = 0; F < ListForegroundsPathCount; F++)
             {
                 string ForegroundsPath = BR.ReadString();
-            }
-
-            int NumberOfTeams = BR.ReadInt32();
-            ListMapTeam = new List<Color>(NumberOfTeams);
-            //Deathmatch colors
-            for (int D = 0; D < NumberOfTeams; D++)
-            {
-                ListMapTeam.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
             }
 
             FS.Close();

@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     foreach (Unit ActiveUnit in Map.PlayerRoster.TeamUnits.GetAll())
                     {
-                        if (ActiveUnit.TeamEventID == _EventID)
+                        if (ActiveUnit.ID == _EventID)
                         {
                             UnitSpawner.LeaderToSpawn = new ScriptUnit(Map);
                             UnitSpawner.LeaderToSpawn.OverrideUnit(ActiveUnit);

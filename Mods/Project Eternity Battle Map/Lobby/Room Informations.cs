@@ -24,6 +24,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public byte CurrentPlayerCount { get; set; }
         public byte MinNumberOfPlayer { get; set; }
         public byte MaxNumberOfPlayer { get; set; }
+        public byte MaxSquadPerPlayer { get; set; }
         public string OwnerServerIP { get; }
         public int OwnerServerPort { get; }
         public bool IsDead { get; set; }//Used when the DataManager need to tell that a Room is deleted.

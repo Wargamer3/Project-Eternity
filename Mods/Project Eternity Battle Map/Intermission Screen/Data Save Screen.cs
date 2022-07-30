@@ -10,11 +10,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private SpriteFont fntFinlanderFont;
 
+        private readonly BattleMapPlayer Player;
         private readonly Roster PlayerRoster;
         private double TimeSinceSaveInSeconds;
 
-        public DataSaveScreen(Roster PlayerRoster)
+        public DataSaveScreen(BattleMapPlayer Player, Roster PlayerRoster)
         {
+            this.Player = Player;
             this.PlayerRoster = PlayerRoster;
             TimeSinceSaveInSeconds = 0;
         }
@@ -32,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 FileStream FS = new FileStream("User Data/Saves/SRWE Save.bin", FileMode.Create, FileAccess.Write);
                 BinaryWriter BW = new BinaryWriter(FS);
 
-                DataScreen.SaveProgression(BW, PlayerRoster);
+                DataScreen.SaveProgression(BW, Player, PlayerRoster);
 
                 FS.Close();
                 BW.Close();

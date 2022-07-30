@@ -147,6 +147,7 @@ namespace ProjectEternity.Core.Characters
         public string BattleThemeName;
         public ManualSkill AceBonus;
 
+        public string ID;
         public string Name;
         public string FullName;
         public string PortraitPath;
@@ -178,7 +179,6 @@ namespace ProjectEternity.Core.Characters
         public int MaxSP { get { return ArrayLevelMaxSP[Level - 1] + BonusMaxSP; } }
 
         public int BonusMaxSP;
-        public int Kills;// The number of enemy pilots the pilot has shot down over the course of the game. Ace Bonuses are unlocked at certain amount of kills.
         public int PilotPoints;// Pilot Points. They are gained by successfully completing objectives and defeating enemy units. They are used to upgrade Pilot Stats.
         public Dictionary<string, CharacterLinkTypes> DicCharacterLink;//List which Characters it can link to and how.
 
@@ -289,6 +289,7 @@ namespace ProjectEternity.Core.Characters
             //Init variables.
             Name = BR.ReadString();
             PortraitPath = BR.ReadString();
+            ID = string.Empty;
 
             ArrayPortraitBustPath = new string[BR.ReadInt32()];
             for (int B = 0; B < ArrayPortraitBustPath.Length; ++B)
@@ -559,7 +560,6 @@ namespace ProjectEternity.Core.Characters
         {
             Level = BR.ReadInt32();
             EXP = BR.ReadInt32();
-            Kills = BR.ReadInt32();
             PilotPoints = BR.ReadInt32();
             InitStats();
         }
@@ -567,7 +567,6 @@ namespace ProjectEternity.Core.Characters
         public void QuickSave(BinaryWriter BW)
         {
             BW.Write(EXP);
-            BW.Write(Kills);
             BW.Write(Level);
             BW.Write(Will);
             BW.Write(PilotPoints);
@@ -578,7 +577,6 @@ namespace ProjectEternity.Core.Characters
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             EXP = BR.ReadInt32();
-            Kills = BR.ReadInt32();
             Level = BR.ReadInt32();
             Will = BR.ReadInt32();
             PilotPoints = BR.ReadInt32();
@@ -599,7 +597,6 @@ namespace ProjectEternity.Core.Characters
             BW.Write(FullName);
             BW.Write(Level);
             BW.Write(EXP);
-            BW.Write(Kills);
             BW.Write(PilotPoints);
         }
     }

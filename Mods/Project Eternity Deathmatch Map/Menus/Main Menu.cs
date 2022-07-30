@@ -158,10 +158,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             sndConfirm.Play();
                             BattleContext.LoadDefaultValues();
 
+                            BattleMapPlayer Player = new BattleMapPlayer();
                             Roster PlayerRoster = new Roster();
                             PlayerRoster.LoadRoster();
-                            DataScreen.LoadProgression(PlayerRoster, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
-                            PushScreen(new NewIntermissionScreen(PlayerRoster));
+                            DataScreen.LoadProgression(Player, PlayerRoster, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
+                            PushScreen(new NewIntermissionScreen(Player, PlayerRoster));
                         }
                         else
                         {

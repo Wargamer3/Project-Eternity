@@ -42,7 +42,7 @@ namespace ProjectEternity.Core.Units
 
         public TagSystem TeamTags;//Used to make units unavailable
         public string UnitTags;//Used to categorize units
-        public string TeamEventID;
+        public string ID;//Unique ID
 
         public string SpriteMapPath;
         public Texture2D SpriteMap;
@@ -168,22 +168,6 @@ namespace ProjectEternity.Core.Units
                     return ArrayCharacterActive[0].MaxSP;
                 else
                     return 0;
-            }
-        }
-
-        public int PilotKills
-        {
-            get
-            {
-                if (ArrayCharacterActive.Length > 0)
-                    return ArrayCharacterActive[0].Kills;
-                else
-                    return 0;
-            }
-            set
-            {
-                if (ArrayCharacterActive.Length > 0)
-                    ArrayCharacterActive[0].Kills = value;
             }
         }
 
@@ -322,7 +306,7 @@ namespace ProjectEternity.Core.Units
             ArrayCharacterActive = new Character[0];
             ArrayParts = new UnitPart[0];
             TeamTags = new TagSystem();
-            TeamEventID = "";
+            ID = "";
         }
 
         public void ShareStats(Unit UnitToShareFrom, UnitStats.UnitLinkTypes UnitLinkType)
@@ -402,7 +386,7 @@ namespace ProjectEternity.Core.Units
         {
             BW.Write(UnitTypeName);
             BW.Write(RelativePath);
-            BW.Write(TeamEventID);
+            BW.Write(ID);
 
             BW.Write(HP);
             BW.Write(EN);
@@ -424,7 +408,7 @@ namespace ProjectEternity.Core.Units
                 }
             }
 
-            if (string.IsNullOrEmpty(TeamEventID))
+            if (string.IsNullOrEmpty(ID))
             {
                 BW.Write(ArrayCharacterActive.Length);
                 for (int C = 0; C < ArrayCharacterActive.Length; ++C)
@@ -464,7 +448,7 @@ namespace ProjectEternity.Core.Units
                 string PartName = BR.ReadString();
             }
 
-            if (string.IsNullOrEmpty(TeamEventID))
+            if (string.IsNullOrEmpty(ID))
             {
                 int ArrayCharacterActiveLength = BR.ReadInt32();
                 ArrayCharacterActive = new Character[ArrayCharacterActiveLength];
@@ -496,7 +480,7 @@ namespace ProjectEternity.Core.Units
             string UnitTypeName = BR.ReadString();
             string TeamEventID = BR.ReadString();
             Unit NewUnit = Unit.FromType(UnitTypeName, UnitFullName, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
-            NewUnit.TeamEventID = TeamEventID;
+            NewUnit.ID = TeamEventID;
             NewUnit.UnitStat.HPUpgrades.Value = BR.ReadInt32();
             NewUnit.UnitStat.ENUpgrades.Value = BR.ReadInt32();
             NewUnit.UnitStat.ArmorUpgrades.Value = BR.ReadInt32();
@@ -542,7 +526,7 @@ namespace ProjectEternity.Core.Units
         {
             BW.Write(RelativePath);
             BW.Write(UnitTypeName);
-            BW.Write(TeamEventID);
+            BW.Write(ID);
             BW.Write(_UnitStat.HPUpgrades.Value);
             BW.Write(_UnitStat.ENUpgrades.Value);
             BW.Write(_UnitStat.ArmorUpgrades.Value);

@@ -151,8 +151,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.Write(BattleMapPath);
             BW.Write(typeof(DeathmatchMap).AssemblyQualifiedName);
 
-            DataScreen.SaveProgression(BW, PlayerRoster);
-
             BW.Write(DicMapVariables.Count);
             foreach (KeyValuePair<string, double> Variables in DicMapVariables)
             {
@@ -263,6 +261,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListMapScript[S].Save(BW);
             }
 
+            DataScreen.SaveProgression(BW, ListPlayer[0], PlayerRoster);
+
             FS.Close();
             BW.Close();
         }
@@ -273,7 +273,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             PlayerRoster.LoadRoster();
 
             Load();
-            DataScreen.LoadProgression(BR, PlayerRoster, GlobalBattleParams.DicUnitType, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
 
             //Initialise the ScreenSize based on the map loaded.
             ScreenSize = new Point(Constants.Width / TileSize.X, Constants.Height / TileSize.Y);
@@ -392,7 +391,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             foreach (Unit ActiveUnit in PlayerRoster.TeamUnits.GetAll())
                             {
-                                if (ActiveUnit.TeamEventID == TeamEventID)
+                                if (ActiveUnit.ID == TeamEventID)
                                 {
                                     ArrayNewUnit[U] = ActiveUnit;
                                     break;
@@ -504,6 +503,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListMapScript[S].Load(BR);
             }
 
+            DataScreen.LoadProgression(BR, ListPlayer[0], PlayerRoster, GlobalBattleParams.DicUnitType, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget, GlobalBattleParams.DicManualSkillTarget);
             ListActionMenuChoice.Add(new ActionPanelPhaseChange(this));
 
             return this;
@@ -517,6 +517,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override BattleMap GetNewMap(string GameMode, string ParamsID)
         {
             DeathmatchParams Params;
+            DeathmatchMap NewMap;
 
             if (!DeathmatchParams.DicParams.TryGetValue(ParamsID, out Params))
             {
@@ -525,7 +526,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Params.Reload(this.Params, ParamsID);
             }
 
-            return new DeathmatchMap(GameMode, Params);
+            NewMap = new DeathmatchMap(GameMode, Params);
+            Params.Map = NewMap;
+            return NewMap;
         }
 
         public override string GetMapType()

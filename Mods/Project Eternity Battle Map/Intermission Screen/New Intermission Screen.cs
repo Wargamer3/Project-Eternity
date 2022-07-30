@@ -28,8 +28,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         };
 
-        private enum MenuChoice { PilotStatus, PilotTraining, PilotSwap, UnitStatus, UnitUpgrade, UnitParts, UnitEquipment, Shop, Commander, ChangeBGM, Options, Data, NextStage };
+        private enum MenuChoice { PilotStatus, PilotTraining, PilotSwap, UnitStatus, UnitUpgrade, UnitParts, UnitEquipment, Shop, Commander, ChangeBGM, Options, Records, Data, NextStage };
 
+        private readonly BattleMapPlayer ActivePlayer;
         private readonly Roster PlayerRoster;
 
         private PartMenu[] Menu;
@@ -43,9 +44,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         FormulaParser ActiveParser;
 
-        public NewIntermissionScreen(Roster PlayerRoster)
+        public NewIntermissionScreen(BattleMapPlayer ActivePlayer, Roster PlayerRoster)
             : base()
         {
+            this.ActivePlayer = ActivePlayer;
             this.PlayerRoster = PlayerRoster;
             ActiveParser = new IntermissionScreenFormulaParser();
 
@@ -56,7 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Menu = new PartMenu[] { new PartMenu("Pilot", new string[] { "Pilot Status", "Pilot Training", "Pilot Swap" }),
                                     new PartMenu("Unit", new string[] { "Unit Status", "Unit Upgrade", "Unit Parts", "Unit Equipment" }),
-                                    new PartMenu("Misc", new string[] { "Shop", "Commander", "Change BGM", "Options", "Data", "MOVE OUT!" }) };
+                                    new PartMenu("Misc", new string[] { "Shop", "Commander", "Change BGM", "Options", "Records", "Data", "MOVE OUT!" }) };
             Menu[0].Open = true;
             Menu[1].Open = true;
             Menu[2].Open = true;
@@ -76,6 +78,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Menu[2].IsAvailable[3] = true;
             Menu[2].IsAvailable[4] = true;
             Menu[2].IsAvailable[5] = true;
+            Menu[2].IsAvailable[6] = true;
 
             MenuElements = Menu[0].Categories.Length + Menu[1].Categories.Length + Menu[2].Categories.Length;
 
@@ -86,7 +89,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListPresentCharacter = PlayerRoster.TeamCharacters.GetPresent();
             ListPresentUnit = PlayerRoster.TeamUnits.GetPresent();
-            ListPresentCharacter = ListPresentCharacter.OrderByDescending(C => C.Kills).ToList();
+            ListPresentCharacter = ListPresentCharacter.OrderByDescending(C => ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[C.ID]).ToList();
 
             for (int U = 0; U < ListPresentUnit.Count; ++U)
             {
@@ -119,17 +122,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 switch ((MenuChoice)SelectedChoice)
                 {
                     case MenuChoice.PilotStatus:
-                        PushScreen(new PilotListScreen(PlayerRoster));
+                        PushScreen(new PilotListScreen(ActivePlayer, PlayerRoster));
                         break;
 
                     case MenuChoice.PilotTraining:
-                        PushScreen(new PilotTrainingScreen(PlayerRoster));
+                        PushScreen(new PilotTrainingScreen(ActivePlayer, PlayerRoster));
                         break;
 
                     case MenuChoice.PilotSwap:
                         if (Menu[0].IsAvailable[2])
                         {
-                            PushScreen(new PilotSwapScreen(PlayerRoster, ActiveParser));
+                            PushScreen(new PilotSwapScreen(ActivePlayer, PlayerRoster, ActiveParser));
                         }
                         break;
 
@@ -138,7 +141,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case MenuChoice.UnitUpgrade:
-                        PushScreen(new UnitUpgradesScreen(PlayerRoster, ActiveParser));
+                        PushScreen(new UnitUpgradesScreen(ActivePlayer, PlayerRoster, ActiveParser));
                         break;
 
                     case MenuChoice.UnitParts:
@@ -155,7 +158,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     case MenuChoice.Shop:
                         if (Menu[2].IsAvailable[0])
                         {
-                            PushScreen(new Shop());
+                            PushScreen(new Shop(ActivePlayer));
                         }
                         break;
 
@@ -166,13 +169,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         }
                         break;
 
+                    case MenuChoice.Records:
+                        PushScreen(new RecordsScreen(ActivePlayer, PlayerRoster));
+                        break;
+
                     case MenuChoice.Data:
-                        PushScreen(new DataScreen(PlayerRoster));
+                        PushScreen(new DataScreen(ActivePlayer, PlayerRoster));
                         break;
 
                     case MenuChoice.NextStage:
                         //PushScreen(new CommanderLoadoutScreen(PlayerRoster));
-                        PushScreen(new LoadoutScreen(PlayerRoster, new List<Commander>()));
+                        PushScreen(new LoadoutScreen(ActivePlayer, PlayerRoster, new List<Commander>()));
                         //LoadoutScreen.LoadMap(ListGameScreen, PlayerRoster);
                         //LoadoutScreen.StartMap(this, gameTime);
                         break;
@@ -214,7 +221,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Y += 3;
             DrawBox(g, new Vector2(0, Y), Constants.Width, fntArial15.LineSpacing * 3 + 6, Color.White);
             g.DrawString(fntArial15, "Money", new Vector2(10, Y + 3), Color.White);
-            g.DrawStringRightAligned(fntArial15, Constants.Money.ToString(), new Vector2(340, Y + 3), Color.White);
+            g.DrawStringRightAligned(fntArial15, ActivePlayer.Records.CurrentMoney.ToString(), new Vector2(340, Y + 3), Color.White);
             g.DrawString(fntArial15, "Next Stage", new Vector2(350, Y + 3), Color.White);
             g.DrawStringRightAligned(fntArial15, BattleMap.NextMapPath, new Vector2(630, Y + 3), Color.White);
             Y += fntArial15.LineSpacing;
@@ -241,14 +248,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawString(fntArial15, "Level:", new Vector2(X + 140, Y += fntArial15.LineSpacing), Color.White);
                 g.DrawStringRightAligned(fntArial15, MainCharacter.Level.ToString(), new Vector2(X + 240, Y + 3), Color.White);
                 g.DrawString(fntArial15, "Kills:", new Vector2(X + 140, Y += fntArial15.LineSpacing), Color.White);
-                g.DrawStringRightAligned(fntArial15, MainCharacter.Kills.ToString(), new Vector2(X + 240, Y + 3), Color.White);
+                g.DrawStringRightAligned(fntArial15, ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[MainCharacter.ID].ToString(), new Vector2(X + 240, Y + 3), Color.White);
 
                 Y = 170;
                 for (int i = 2; i <= 7 && i - 1 < ListPresentCharacter.Count; ++i)
                 {
                     Character ActiveCharacter = ListPresentCharacter[i - 1];
                     g.DrawString(fntArial26, "#" + i, new Vector2(X + 15, Y), Color.White);
-                    g.DrawStringRightAligned(fntArial26, ActiveCharacter.Kills.ToString(), new Vector2(X + 130, Y), Color.White);
+                    g.DrawStringRightAligned(fntArial26, ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[ActiveCharacter.ID].ToString(), new Vector2(X + 130, Y), Color.White);
                     g.DrawString(fntArial26, ActiveCharacter.Name, new Vector2(X + 150, Y), Color.White);
                     Y += fntArial26.LineSpacing;
                 }

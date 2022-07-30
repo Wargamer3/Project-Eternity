@@ -122,7 +122,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         #endregion
 
         public DeathmatchMap()
-            : this(new DeathmatchParams())
+            : this(new DeathmatchParams(new BattleContext()))
         {
             DeathmatchParams.DicParams.TryAdd(string.Empty, GlobalBattleParams);
         }

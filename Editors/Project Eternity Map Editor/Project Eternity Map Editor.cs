@@ -42,7 +42,7 @@ namespace ProjectEternity.Editors.MapEditor
             InitializeComponent();
             if (Params == null)
             {
-                Params = new DeathmatchParams();
+                Params = new DeathmatchParams(new BattleContext());
             }
 
             #region cbShowGrid

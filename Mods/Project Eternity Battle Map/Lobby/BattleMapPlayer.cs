@@ -31,7 +31,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool IsOnline;
         public int Team;
         public int Level;
-        public uint Money;
         public bool IsPlayerControlled;
         public Color Color;
         public GameplayTypes GameplayType;
@@ -41,10 +40,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string OnlinePlayerType;
         public IOnlineConnection OnlineClient;//Used by the server
 
+        public PlayerRecords Records;
         public PlayerInventory Inventory;
+
+        public BattleMapPlayer()
+        {
+            Records = new PlayerRecords();
+            Inventory = new PlayerInventory();
+            InputManager = new KeyboardInput();
+        }
 
         public BattleMapPlayer(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
         {
+
             this.ConnectionID = ID;
             this.Name = Name;
             this.OnlinePlayerType = OnlinePlayerType;
@@ -54,6 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Color = Color;
 
             Guild = string.Empty;
+            Records = new PlayerRecords();
             Inventory = new PlayerInventory();
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
@@ -70,6 +79,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Color = Color;
 
             Guild = string.Empty;
+            Records = new PlayerRecords();
             Inventory = new PlayerInventory();
 
             if (OnlinePlayerType == PlayerTypes.Offline)
@@ -110,6 +120,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return;
             }
 
+            Records = Clone.Records;
             ConnectionID = Clone.ConnectionID;
             Name = Clone.Name;
             Guild = Clone.Guild;
@@ -118,7 +129,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             IsOnline = Clone.IsOnline;
             Team = Clone.Team;
             Level = Clone.Level;
-            Money = Clone.Money;
             IsPlayerControlled = Clone.IsPlayerControlled;
             Color = Clone.Color;
             GameplayType = Clone.GameplayType;
@@ -150,9 +160,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
             Enum.TryParse(BR.ReadString(), out GameplayType);
-            Money = BR.ReadUInt32();
 
             Inventory.Load(BR, Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+            Records.Load(BR);
 
             BR.Close();
             FS.Close();
@@ -215,9 +225,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
             BW.Write(GameplayType.ToString());
-            BW.Write(Money);
 
             Inventory.Save(BW);
+            Records.Save(BW);
 
             BW.Close();
             FS.Close();

@@ -13,11 +13,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private SpriteFont fntFinlanderFont;
 
+        private readonly BattleMapPlayer Player;
         private readonly Roster PlayerRoster;
         private double TimeSinceSaveInSeconds;
 
-        public DataLoadScreen(Roster PlayerRoster)
+        public DataLoadScreen(BattleMapPlayer Player, Roster PlayerRoster)
         {
+            this.Player = Player;
             this.PlayerRoster = PlayerRoster;
             TimeSinceSaveInSeconds = 0;
         }
@@ -31,7 +33,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (TimeSinceSaveInSeconds == 0)
             {
-                DataScreen.LoadProgression(PlayerRoster, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
+                DataScreen.LoadProgression(Player, PlayerRoster, Unit.DicDefaultUnitType, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget, ManualSkillTarget.DicDefaultTarget);
                 TimeSinceSaveInSeconds = gameTime.ElapsedGameTime.TotalSeconds;
             }
             else

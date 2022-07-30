@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             {
                                 CharacterToAssign = ActiveCharacter;
 
-                                ActiveUnit.TeamEventID = EventID;
+                                ActiveUnit.ID = EventID;
                                 break;
                             }
                         }

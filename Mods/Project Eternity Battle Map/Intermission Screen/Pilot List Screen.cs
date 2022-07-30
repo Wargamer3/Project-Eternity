@@ -44,6 +44,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private SpriteFont fntFinlanderFont;
 
+        private readonly BattleMapPlayer ActivePlayer;
         private readonly Roster PlayerRoster;
 
         public int PilotChoice;
@@ -57,9 +58,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<CharacterInfo> ListCharacterInfo;
         public CharacterInfo SelectedCharacter { get { return ListCharacterInfo[PilotChoice + (CurrentPage - 1) * MaxPerPage]; } }
 
-        public PilotListScreen(Roster PlayerRoster)
+        public PilotListScreen(BattleMapPlayer ActivePlayer, Roster PlayerRoster)
             : base()
         {
+            this.ActivePlayer = ActivePlayer;
             this.PlayerRoster = PlayerRoster;
 
             CurrentPage = 1;
@@ -194,7 +196,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     g.DrawString(fntFinlanderFont, ActiveCharacter.Name, new Vector2(X, Y), Color.White);
                     g.DrawStringRightAligned(fntFinlanderFont, ActiveCharacter.Level.ToString(), new Vector2(230, Y), Color.White);
-                    g.DrawStringRightAligned(fntFinlanderFont, ActiveCharacter.Kills.ToString(), new Vector2(340, Y), Color.White);
+                    g.DrawStringRightAligned(fntFinlanderFont, ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[ActiveCharacter.ID].ToString(), new Vector2(340, Y), Color.White);
                 }
                 else
                 {
