@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ListVolatileSubstance = new List<VolatileSubstance>();
 
-            TimeStart = BR.ReadSingle();
+            CurrentHour = TimeStart = BR.ReadSingle();
             HoursInDay = BR.ReadSingle();
             TimeLoopType = (TimeLoopTypes)BR.ReadByte();
             TimeMultiplier = BR.ReadSingle();

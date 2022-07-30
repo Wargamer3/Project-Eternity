@@ -136,11 +136,11 @@
     <Compile Include="Lobby\Player\Unit Records.cs" />
     <Compile Include="Lobby\Shop\Pending Unlock Screen.cs" />
     <Compile Include="Lobby\Shop\Shop Inventory.cs" />
-    <Compile Include="Lobby\Game Options\Game Options Gametype Screen.cs" />
-    <Compile Include="Lobby\Game Options\Game Options Mutators Screen.cs" />
-    <Compile Include="Lobby\Game Options\Game Options Game Rules Screen.cs" />
-    <Compile Include="Lobby\Game Options\Game Options Bot Config Screen.cs" />
-    <Compile Include="Lobby\Game Options\Game Options Select Map Screen.cs" />
+    <Compile Include="Lobby\Game Options\Gametype Screen.cs" />
+    <Compile Include="Lobby\Game Options\Mutators Screen.cs" />
+    <Compile Include="Lobby\Game Options\Game Rules Screen.cs" />
+    <Compile Include="Lobby\Game Options\Bot Config Screen.cs" />
+    <Compile Include="Lobby\Game Options\Select Map Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Options Screen.cs" />
     <Compile Include="Lobby\Game Preparation Screen.cs" />
     <Compile Include="Lobby\Shop\Character Screen.cs" />

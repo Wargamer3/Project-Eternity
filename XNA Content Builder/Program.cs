@@ -21,65 +21,24 @@ namespace XNA_Content_Builder
                 Builder = new ContentBuilder();
                 ContentExternal = new ContentManager(Services, "../Content/");
 
+                string[] ArrayFoldersToConvert = File.ReadAllLines("XNA Folders to convert.txt");
                 string[] Files;
 
                 #region Ressources building
 
-                #region Units map icons
-
-                if (Directory.Exists("../Content/Units"))
+                foreach (string ActiveFolder in ArrayFoldersToConvert)
                 {
-                    Files = Directory.GetFiles("../Content/Units", "*.png", SearchOption.AllDirectories);
-                    // Tell the ContentBuilder what to build.
-                    for (int F = 0; F < Files.Count(); F++)
+                    if (Directory.Exists("../" + ActiveFolder))
                     {
-                        if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
-                            Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                        Files = Directory.GetFiles("../" + ActiveFolder, "*.png", SearchOption.AllDirectories);
+                        // Tell the ContentBuilder what to build.
+                        for (int F = 0; F < Files.Count(); F++)
+                        {
+                            if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
+                                Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
+                        }
                     }
                 }
-
-                #endregion
-
-                #region Map tilesets
-
-                if (Directory.Exists("../Content/Maps/Tilesets"))
-                {
-                    Files = Directory.GetFiles("../Content/Maps/Tilesets", "*.png", SearchOption.AllDirectories);
-                    // Tell the ContentBuilder what to build.
-                    for (int F = 0; F < Files.Count(); F++)
-                    {
-                        if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
-                            Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
-                    }
-                }
-
-                #endregion
-
-                #region Sprite Sheets
-
-                if (Directory.Exists("../Content/Animations/Sprite Sheets"))
-                {
-                    Files = Directory.GetFiles("../Content/Animations/Sprite Sheets", "*.png", SearchOption.AllDirectories);
-                    // Tell the ContentBuilder what to build.
-                    for (int F = 0; F < Files.Count(); F++)
-                    {
-                        //if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
-                        Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
-                    }
-                }
-
-                if (Directory.Exists("../Content/Animations/Sprites"))
-                {
-                    Files = Directory.GetFiles("../Content/Animations/Sprites", "*.png", SearchOption.AllDirectories);
-                    // Tell the ContentBuilder what to build.
-                    for (int F = 0; F < Files.Count(); F++)
-                    {
-                        if (!File.Exists(Path.ChangeExtension(Files[F], ".xnb")))
-                            Builder.Add(Path.GetFullPath(Files[F]), Files[F].Substring(0, Files[F].Length - 4).Remove(0, 11), "TextureImporter", "TextureProcessor");
-                    }
-                }
-
-                #endregion
 
                 // Build this new model data.
                 string buildError = Builder.Build();

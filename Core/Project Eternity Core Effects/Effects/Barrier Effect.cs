@@ -37,6 +37,9 @@ namespace ProjectEternity.Core.Effects
         public BarrierEffect(UnitEffectParams Params)
             : base(Name, true, Params)
         {
+            ListEffectiveAttack = new List<string>();
+            ListBreakingAttack = new List<string>();
+            ListBreakingSkill = new List<string>();
         }
 
         protected override void Load(BinaryReader BR)
