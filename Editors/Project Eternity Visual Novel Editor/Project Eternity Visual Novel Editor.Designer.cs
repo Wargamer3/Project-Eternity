@@ -33,11 +33,6 @@
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExportLocalizationFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmEditCurrentDialog = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsScriptEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.dfsfToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmsNewDialog = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabBustDialog = new System.Windows.Forms.TabPage();
             this.btnBustDataOverride = new System.Windows.Forms.Button();
@@ -51,6 +46,7 @@
             this.txtText = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbBoth = new System.Windows.Forms.RadioButton();
             this.rbNone = new System.Windows.Forms.RadioButton();
             this.rbRightCharacter = new System.Windows.Forms.RadioButton();
             this.rbLeftCharacter = new System.Windows.Forms.RadioButton();
@@ -114,9 +110,7 @@
             this.lstDialogs = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tmrAnimation = new System.Windows.Forms.Timer(this.components);
-            this.rbBoth = new System.Windows.Forms.RadioButton();
             this.mnuToolBar.SuspendLayout();
-            this.cmsScriptEditor.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabBustDialog.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -163,44 +157,6 @@
             this.tsmEditCurrentDialog.Size = new System.Drawing.Size(119, 20);
             this.tsmEditCurrentDialog.Text = "Edit Current Dialog";
             this.tsmEditCurrentDialog.Click += new System.EventHandler(this.tsmEditCurrentDialog_Click);
-            // 
-            // cmsScriptEditor
-            // 
-            this.cmsScriptEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dfsfToolStripMenuItem,
-            this.tsmEdit,
-            this.tsmDelete});
-            this.cmsScriptEditor.Name = "contextMenuStrip1";
-            this.cmsScriptEditor.Size = new System.Drawing.Size(108, 70);
-            // 
-            // dfsfToolStripMenuItem
-            // 
-            this.dfsfToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tmsNewDialog});
-            this.dfsfToolStripMenuItem.Name = "dfsfToolStripMenuItem";
-            this.dfsfToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.dfsfToolStripMenuItem.Text = "New";
-            // 
-            // tmsNewDialog
-            // 
-            this.tmsNewDialog.Name = "tmsNewDialog";
-            this.tmsNewDialog.Size = new System.Drawing.Size(108, 22);
-            this.tmsNewDialog.Text = "Dialog";
-            this.tmsNewDialog.Click += new System.EventHandler(this.tmsNewDialog_Click);
-            // 
-            // tsmEdit
-            // 
-            this.tsmEdit.Name = "tsmEdit";
-            this.tsmEdit.Size = new System.Drawing.Size(107, 22);
-            this.tsmEdit.Text = "Edit";
-            this.tsmEdit.Click += new System.EventHandler(this.tsmEdit_Click);
-            // 
-            // tsmDelete
-            // 
-            this.tsmDelete.Name = "tsmDelete";
-            this.tsmDelete.Size = new System.Drawing.Size(107, 22);
-            this.tsmDelete.Text = "Delete";
-            this.tsmDelete.Click += new System.EventHandler(this.tsmDelete_Click);
             // 
             // tabControl1
             // 
@@ -352,6 +308,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Active character";
             // 
+            // rbBoth
+            // 
+            this.rbBoth.AutoSize = true;
+            this.rbBoth.Location = new System.Drawing.Point(206, 20);
+            this.rbBoth.Name = "rbBoth";
+            this.rbBoth.Size = new System.Drawing.Size(47, 17);
+            this.rbBoth.TabIndex = 3;
+            this.rbBoth.Text = "Both";
+            this.rbBoth.UseVisualStyleBackColor = true;
+            this.rbBoth.CheckedChanged += new System.EventHandler(this.rbBoth_CheckedChanged);
+            // 
             // rbNone
             // 
             this.rbNone.AutoSize = true;
@@ -360,6 +327,7 @@
             this.rbNone.Name = "rbNone";
             this.rbNone.Size = new System.Drawing.Size(51, 17);
             this.rbNone.TabIndex = 2;
+            this.rbNone.TabStop = true;
             this.rbNone.Text = "None";
             this.rbNone.UseVisualStyleBackColor = true;
             this.rbNone.CheckedChanged += new System.EventHandler(this.rbNone_CheckedChanged);
@@ -962,9 +930,6 @@
             this.VisualNovelViewer.Name = "VisualNovelViewer";
             this.VisualNovelViewer.Size = new System.Drawing.Size(648, 520);
             this.VisualNovelViewer.TabIndex = 1;
-            this.VisualNovelViewer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbVisualNovelPreview_MouseClick);
-            this.VisualNovelViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbVisualNovelPreview_MouseDown);
-            this.VisualNovelViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbVisualNovelPreview_MouseMove);
             // 
             // cboBackground
             // 
@@ -1043,7 +1008,7 @@
             this.lstDialogs.Name = "lstDialogs";
             this.lstDialogs.Size = new System.Drawing.Size(256, 108);
             this.lstDialogs.TabIndex = 20;
-            this.lstDialogs.SelectedIndexChanged += new System.EventHandler(this.lstTimeline_SelectedIndexChanged);
+            this.lstDialogs.SelectedIndexChanged += new System.EventHandler(this.lstDialogs_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -1058,17 +1023,6 @@
             // 
             this.tmrAnimation.Interval = 16;
             this.tmrAnimation.Tick += new System.EventHandler(this.tmrAnimation_Tick);
-            // 
-            // rbBoth
-            // 
-            this.rbBoth.AutoSize = true;
-            this.rbBoth.Location = new System.Drawing.Point(206, 20);
-            this.rbBoth.Name = "rbBoth";
-            this.rbBoth.Size = new System.Drawing.Size(47, 17);
-            this.rbBoth.TabIndex = 3;
-            this.rbBoth.Text = "Both";
-            this.rbBoth.UseVisualStyleBackColor = true;
-            this.rbBoth.CheckedChanged += new System.EventHandler(this.rbBoth_CheckedChanged);
             // 
             // ProjectEternityVisualNovelEditor
             // 
@@ -1087,7 +1041,6 @@
             this.Resize += new System.EventHandler(this.ProjectEternityVisualNovelEditor_Resize);
             this.mnuToolBar.ResumeLayout(false);
             this.mnuToolBar.PerformLayout();
-            this.cmsScriptEditor.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabBustDialog.ResumeLayout(false);
             this.tabBustDialog.PerformLayout();
@@ -1135,11 +1088,6 @@
         private System.Windows.Forms.Button btnAddCharacter;
         private System.Windows.Forms.Button btnDeleteCharacter;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ContextMenuStrip cmsScriptEditor;
-        private System.Windows.Forms.ToolStripMenuItem dfsfToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem tsmDelete;
-        private System.Windows.Forms.ToolStripMenuItem tmsNewDialog;
-        private System.Windows.Forms.ToolStripMenuItem tsmEdit;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox txtTextPreview;
         public System.Windows.Forms.TextBox txtText;

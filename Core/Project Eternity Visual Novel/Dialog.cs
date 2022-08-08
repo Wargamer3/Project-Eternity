@@ -70,24 +70,30 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             BottomPortaitVisibleState = PortaitVisibleStates.Invisible;
         }
 
-        public override bool Equals(object obj)
+        public override string ToString()
         {
-            Dialog OtherDialog = obj as Dialog;
-            if (OtherDialog == null)
-                return false;
-            else
-            {
-                if (LeftCharacter == OtherDialog.LeftCharacter && RightCharacter == OtherDialog.RightCharacter && Back == OtherDialog.Back
-                    && Text == OtherDialog.Text && TextPreview == OtherDialog.TextPreview && ListNextDialog == OtherDialog.ListNextDialog)
-                    return true;
+            string LeftCharacterText = "";
+            string RightCharacterText = "";
+            string BackgroundText = "";
+            //Add a * before the LeftCharacter name to show it's the one selected.
+            if (ActiveBustCharacterState == Dialog.ActiveBustCharacterStates.Left)
+                LeftCharacterText += "*";
+            //Add its name.
+            if (LeftCharacter != null)
+                LeftCharacterText += LeftCharacter.Name;
 
-                return false;
-            }
-        }
+            //Add a * before the RightCharacter name to show it's the one selected.
+            if (ActiveBustCharacterState == Dialog.ActiveBustCharacterStates.Right)
+                RightCharacterText += "*";
+            //Add its name.
+            if (RightCharacter != null)
+                RightCharacterText += RightCharacter.Name;
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            //Add the Background name.
+            if (Back != null)
+                BackgroundText += Back.Name;
+            //Set the final text in the lstDialogs.
+            return LeftCharacterText + " - " + RightCharacterText + " - " + BackgroundText + Text;
         }
     }
 }
