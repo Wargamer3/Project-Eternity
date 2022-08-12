@@ -14,11 +14,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public List<MapLayer> ListLayer;
 
         private readonly DeathmatchMap Map;
+        private readonly TileInformationPopupManager TileInformationManager;
 
         public LayerHolderDeathmatch(DeathmatchMap Map)
         {
             this.Map = Map;
             ListLayer = new List<MapLayer>();
+            TileInformationManager = new TileInformationPopupManager(Map, this);
+            TileInformationManager.Load(Map.Content);
         }
 
         public LayerHolderDeathmatch(DeathmatchMap Map, BinaryReader BR)
@@ -40,6 +43,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
             }
+
+            TileInformationManager = new TileInformationPopupManager(Map, this);
+            TileInformationManager.Load(Map.Content);
         }
 
         public override BaseMapLayer this[int i]
@@ -67,6 +73,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             LayerHolderDrawable.Update(gameTime);
+            TileInformationManager.Update(gameTime);
 
             if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.K))
             {
@@ -127,6 +134,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             LayerHolderDrawable.Draw(g);
+            TileInformationManager.Draw(g);
         }
 
         public override void EndDraw(CustomSpriteBatch g)

@@ -256,6 +256,7 @@
     <Compile Include="Terrain3D.cs" />
     <Compile Include="Tile 3D.cs" />
     <Compile Include="Environment\Time Period.cs" />
+    <Compile Include="Tile Information Popup.cs" />
     <Compile Include="Tile2DHolder.cs" />
     <Compile Include="Tile3DHolder.cs" />
   </ItemGroup>
