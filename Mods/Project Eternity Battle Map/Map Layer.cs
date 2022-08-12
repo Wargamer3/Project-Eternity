@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
     public interface ILayerHolderDrawable
     {
-        Point GetMenuPosition();
+        Point GetVisiblePosition(Vector3 Position);
 
         void AddDrawablePath(List<MovementAlgorithmTile> ListPoint);
 

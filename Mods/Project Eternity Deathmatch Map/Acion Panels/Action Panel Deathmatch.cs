@@ -22,9 +22,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.Map = Map;
 
-            Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetMenuPosition();
+            Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetVisiblePosition(Map.CursorPosition);
 
-            BaseMenuX = MenuPosition.X;
+            BaseMenuX = MenuPosition.X + Map.TileSize.X;
             BaseMenuY = MenuPosition.Y;
 
             UpdateFinalMenuPosition();

@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DicDamageNumberByPosition.Clear();
         }
 
-        public Point GetMenuPosition()
+        public Point GetVisiblePosition(Vector3 Position)
         {
             Point BaseMenuPosition;
 
-            BaseMenuPosition.X = (int)((Map.CursorPosition.X - Map.CameraPosition.X + 1) * Map.TileSize.X);
-            BaseMenuPosition.Y = (int)((Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y);
+            BaseMenuPosition.X = (int)((Position.X - Map.CameraPosition.X) * Map.TileSize.X);
+            BaseMenuPosition.Y = (int)((Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y);
 
             return BaseMenuPosition;
         }

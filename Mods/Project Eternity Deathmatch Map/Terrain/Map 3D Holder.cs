@@ -402,11 +402,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return false;
         }
 
-        public Point GetMenuPosition()
+        public Point GetVisiblePosition(Vector3 Position)
         {
             Point BaseMenuPosition;
 
-            Vector3 Visible3DPosition = new Vector3(Map.CursorPosition.X * Map.TileSize.X, Map.CursorPosition.Z * LayerHeight, Map.CursorPosition.Y * Map.TileSize.Y);
+            Vector3 Visible3DPosition = new Vector3(Position.X * Map.TileSize.X, Position.Z * LayerHeight, Position.Y * Map.TileSize.Y);
 
             if (Map.ActivePlatform !=null)
             {
@@ -417,7 +417,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             Vector3 Position2D = GameScreen.GraphicsDevice.Viewport.Project(Visible3DPosition, PolygonEffect.Projection, PolygonEffect.View, Matrix.Identity);
 
-            BaseMenuPosition.X = (int)Position2D.X + Map.TileSize.X;
+            BaseMenuPosition.X = (int)Position2D.X;
             BaseMenuPosition.Y = (int)Position2D.Y;
 
             return BaseMenuPosition;
