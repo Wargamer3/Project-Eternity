@@ -142,15 +142,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         BR.BaseStream.Seek(0, SeekOrigin.Begin);
                         NewMapSize.X = BR.ReadInt32();
                         NewMapSize.Y = BR.ReadInt32();
-                        int TileSizeX = BR.ReadInt32();
-                        int TileSizeY = BR.ReadInt32();
-                        string CameraType = BR.ReadString();
-
-                        int CameraPositionX = BR.ReadInt32();
-                        int CameraPositionY = BR.ReadInt32();
 
                         byte PlayersMin = BR.ReadByte();
                         byte PlayersMax = BR.ReadByte();
+                        byte MaxSquadsPerPlayer = BR.ReadByte();
 
                         string Description = BR.ReadString();
 

@@ -86,7 +86,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
                                     //A dialog linked to an other dialog.
                                     case ScriptLinkType.ToDialog:
-                                        if (MousePos.X >= VisualNovelViewer.ActiveVisualNovel.ListDialog[S].Position.X + 83 && MousePos.X < VisualNovelViewer.ActiveVisualNovel.ListDialog[S].Position.X + 90
+                                        if (MousePos.X >= VisualNovelViewer.ActiveVisualNovel.ListDialog[S].Position.X + VisualNovelViewer.BoxWidth + 7 && MousePos.X < VisualNovelViewer.ActiveVisualNovel.ListDialog[S].Position.X + VisualNovelViewer.BoxWidth + 14
                                             && MousePos.Y >= VisualNovelViewer.ActiveVisualNovel.ListDialog[S].Position.Y + 28 && MousePos.Y < VisualNovelViewer.ActiveVisualNovel.ListDialog[S].Position.Y + 35)
                                         {
                                             //If it's not already linked.

@@ -170,65 +170,64 @@ namespace ProjectEternity.Editors.VisualNovelEditor
                 GameScreen.DrawLine(g, new Vector2(TimelineLimitX - ScriptEditorOrigin.X, 0), new Vector2(TimelineLimitX - ScriptEditorOrigin.X, this.Height), Color.Gray);
             }
 
-            for (int D = 0; D < ActiveVisualNovel.ListDialog.Count; D++)
+            foreach (Dialog ActiveDialog in ActiveVisualNovel.ListDialog)
             {
-                if (ActiveVisualNovel.ListDialog[D].Position.X + 90 - ScriptEditorOrigin.X < 0
-                    && ActiveVisualNovel.ListDialog[D].Position.X - 10 - ScriptEditorOrigin.X > this.Width
-                    && ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y - BoxHeight < 0
-                    && ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y > this.Height)
+                if (ActiveDialog.Position.X + 90 - ScriptEditorOrigin.X < 0
+                    && ActiveDialog.Position.X - 10 - ScriptEditorOrigin.X > this.Width
+                    && ActiveDialog.Position.Y - ScriptEditorOrigin.Y - BoxHeight < 0
+                    && ActiveDialog.Position.Y - ScriptEditorOrigin.Y > this.Height)
                     continue;
 
                 //Draw the image for Script.
-                DrawScriptBox(g, ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X, ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y, BoxWidth, BoxHeight);
+                DrawScriptBox(g, ActiveDialog.Position.X - ScriptEditorOrigin.X, ActiveDialog.Position.Y - ScriptEditorOrigin.Y, BoxWidth, BoxHeight);
 
                 //If the Script is selected, rectangle it.
-                if (ListDialogSelected.Contains(ActiveVisualNovel.ListDialog[D]))
+                if (ListDialogSelected.Contains(ActiveDialog))
                 {
-                    GameScreen.DrawRectangle(g, new Vector2(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X,
-                                                ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y),
-                                new Vector2(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X + BoxWidth,
-                                            ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y + BoxHeight), Color.Black);
+                    GameScreen.DrawRectangle(g, new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X,
+                                                ActiveDialog.Position.Y - ScriptEditorOrigin.Y),
+                                new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth,
+                                            ActiveDialog.Position.Y - ScriptEditorOrigin.Y + BoxHeight), Color.Black);
                 }
 
                 //If it's in the Timeline, draw it's frame number.
-                if (ActiveVisualNovel.Timeline.Contains(ActiveVisualNovel.ListDialog[D]))
+                if (ActiveVisualNovel.Timeline.Contains(ActiveDialog))
                 {
-                    g.DrawString(fntFrameCount, "Frame " + (ActiveVisualNovel.Timeline.IndexOf((Dialog)ActiveVisualNovel.ListDialog[D]) + 1),
-                        new Vector2(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X + 2,
-                                    ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y), Color.White);
+                    g.DrawString(fntFrameCount, "Frame " + (ActiveVisualNovel.Timeline.IndexOf((Dialog)ActiveDialog) + 1),
+                        new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + 2,
+                                    ActiveDialog.Position.Y - ScriptEditorOrigin.Y), Color.White);
                 }
 
-                g.Draw(sprPixel, new Rectangle(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X - 10,
-                    ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y + 2, 7, 7), Color.Black);
-                g.DrawString(fntFrameCount, "Dialog", new Vector2(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X + 2,
-                    ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y + 12), Color.White);
+                g.Draw(sprPixel, new Rectangle(ActiveDialog.Position.X - ScriptEditorOrigin.X - 10,
+                    ActiveDialog.Position.Y - ScriptEditorOrigin.Y + 2, 7, 7), Color.Black);
+                g.DrawString(fntFrameCount, "Dialog", new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + 2,
+                    ActiveDialog.Position.Y - ScriptEditorOrigin.Y + 12), Color.White);
 
-                g.DrawStringRightAligned(fntFrameCount, "Dialogs", new Vector2(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X + BoxWidth - 5,
-                    ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y + 24), Color.White);
-                g.Draw(sprPixel, new Rectangle(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X + BoxWidth + 7,
-                    ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y + 28, 7, 7), Color.Black);
+                g.DrawStringRightAligned(fntFrameCount, "Dialogs", new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth - 5,
+                    ActiveDialog.Position.Y - ScriptEditorOrigin.Y + 24), Color.White);
+                g.Draw(sprPixel, new Rectangle(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth + 7,
+                    ActiveDialog.Position.Y - ScriptEditorOrigin.Y + 28, 7, 7), Color.Black);
 
-                if (string.IsNullOrEmpty(ActiveVisualNovel.ListDialog[D].TextPreview))
+                if (string.IsNullOrEmpty(ActiveDialog.TextPreview))
                 {
-                    if (!string.IsNullOrEmpty(ActiveVisualNovel.ListDialog[D].Text))
+                    if (!string.IsNullOrEmpty(ActiveDialog.Text))
                     {
-                        g.DrawStringRightAligned(fntFrameCount, TextHelper.FitToWidth(fntFrameCount, ActiveVisualNovel.ListDialog[D].Text, 80)[0],
-                            new Vector2(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X + BoxWidth - 5,
-                            ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y + 36), Color.White);
+                        g.DrawStringRightAligned(fntFrameCount, TextHelper.FitToWidth(fntFrameCount, ActiveDialog.Text, 80)[0],
+                            new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth - 5,
+                            ActiveDialog.Position.Y - ScriptEditorOrigin.Y + 36), Color.White);
                     }
                 }
                 else
                 {
-                    g.DrawStringRightAligned(fntFrameCount, TextHelper.FitToWidth(fntFrameCount, ActiveVisualNovel.ListDialog[D].TextPreview, 80)[0],
-                        new Vector2(ActiveVisualNovel.ListDialog[D].Position.X - ScriptEditorOrigin.X + BoxWidth - 5,
-                        ActiveVisualNovel.ListDialog[D].Position.Y - ScriptEditorOrigin.Y + 36), Color.White);
+                    g.DrawStringRightAligned(fntFrameCount, TextHelper.FitToWidth(fntFrameCount, ActiveDialog.TextPreview, 80)[0],
+                        new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth - 5,
+                        ActiveDialog.Position.Y - ScriptEditorOrigin.Y + 36), Color.White);
                 }
 
-                Dialog CurrentDialog = (Dialog)ActiveVisualNovel.ListDialog[D];
-                for (int D2 = 0; D2 < CurrentDialog.ListNextDialog.Count; D2++)
+                for (int D2 = 0; D2 < ActiveDialog.ListNextDialog.Count; D2++)
                 {
-                    GameScreen.DrawLine(g, new Vector2(CurrentDialog.Position.X - ScriptEditorOrigin.X + BoxWidth + 10, CurrentDialog.Position.Y - ScriptEditorOrigin.Y + 31),
-                                new Vector2(ActiveVisualNovel.ListDialog[CurrentDialog.ListNextDialog[D2]].Position.X - ScriptEditorOrigin.X - 7, ActiveVisualNovel.ListDialog[CurrentDialog.ListNextDialog[D2]].Position.Y - ScriptEditorOrigin.Y + 5), Color.Black);
+                    GameScreen.DrawLine(g, new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth + 10, ActiveDialog.Position.Y - ScriptEditorOrigin.Y + 31),
+                                new Vector2(ActiveVisualNovel.ListDialog[ActiveDialog.ListNextDialog[D2]].Position.X - ScriptEditorOrigin.X - 7, ActiveVisualNovel.ListDialog[ActiveDialog.ListNextDialog[D2]].Position.Y - ScriptEditorOrigin.Y + 5), Color.Black);
                 }
             }
             //Draw a line between the mouse and the starting LinkedScript seletected.

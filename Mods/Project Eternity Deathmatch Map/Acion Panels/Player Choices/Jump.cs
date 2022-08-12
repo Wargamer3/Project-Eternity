@@ -37,32 +37,44 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return;
             }
 
-            Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X + 1, ActiveSquad.Position.Y, (int)ActiveSquad.Z);
-            if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+            if (ActiveSquad.Position.X + 1 < Map.MapSize.Y)
             {
-                Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
-                return;
+                Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X + 1, ActiveSquad.Position.Y, (int)ActiveSquad.Z);
+                if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                {
+                    Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
+                    return;
+                }
             }
 
-            NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X - 1, ActiveSquad.Position.Y, (int)ActiveSquad.Z);
-            if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+            if (ActiveSquad.Position.X - 1 >= 0)
             {
-                Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
-                return;
+                Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X - 1, ActiveSquad.Position.Y, (int)ActiveSquad.Z);
+                if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                {
+                    Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
+                    return;
+                }
             }
 
-            NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y + 1, (int)ActiveSquad.Z);
-            if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+            if (ActiveSquad.Position.Y + 1 < Map.MapSize.Y)
             {
-                Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
-                return;
+                Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y + 1, (int)ActiveSquad.Z);
+                if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                {
+                    Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
+                    return;
+                }
             }
 
-            NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y - 1, (int)ActiveSquad.Z);
-            if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+            if (ActiveSquad.Position.Y - 1 >= 0)
             {
-                Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
-                return;
+                Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y - 1, (int)ActiveSquad.Z);
+                if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
+                {
+                    Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
+                    return;
+                }
             }
         }
 

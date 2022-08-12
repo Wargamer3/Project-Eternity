@@ -434,16 +434,31 @@ namespace ProjectEternity.Editors.VisualNovelEditor
         {
             if (lstDialogs.SelectedItem != null)
             {
-                int Index = lstDialogs.SelectedIndex;
-                int IndexScript = VisualNovelViewer.ActiveVisualNovel.ListDialog.IndexOf((Dialog)lstDialogs.SelectedItem);
-                Dialog RemovedDialog = VisualNovelViewer.ActiveVisualNovel.ListDialog.ElementAt(IndexScript);
+                Dialog RemovedDialog = (Dialog)lstDialogs.SelectedItem;
+                int Index = VisualNovelViewer.ActiveVisualNovel.ListDialog.IndexOf(RemovedDialog);
+
                 //Move the current tile set.
                 if (VisualNovelViewer.ActiveVisualNovel.Timeline.Contains(RemovedDialog))
                     VisualNovelViewer.ActiveVisualNovel.Timeline.Remove(RemovedDialog);
-                VisualNovelViewer.ActiveVisualNovel.ListDialog.RemoveAt(Index);
-                lstDialogs.Items.RemoveAt(Index);
+
+                foreach (Dialog ActiveDialog in VisualNovelViewer.ActiveVisualNovel.ListDialog)
+                {
+                    for (int i = ActiveDialog.ListNextDialog.Count - 1; i >= 0; --i)
+                    {
+                        if (ActiveDialog.ListNextDialog[i] == Index)
+                        {
+                            ActiveDialog.ListNextDialog.RemoveAt(i);
+                        }
+                        else if (ActiveDialog.ListNextDialog[i] > Index)
+                        {
+                            ActiveDialog.ListNextDialog[i] -= 1;
+                        }
+                    }
+                }
 
                 VisualNovelViewer.ActiveVisualNovel.ListDialog.Remove(RemovedDialog);
+                lstDialogs.Items.Remove(RemovedDialog);
+
                 //Replace the index with a new one.
                 if (lstDialogs.Items.Count > 0)
                 {
