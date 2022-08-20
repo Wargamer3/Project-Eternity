@@ -58,6 +58,7 @@
     <Compile Include="Cutscene Scripts\Damage Zone.cs" />
     <Compile Include="Cutscene Scripts\Edit Map.cs" />
     <Compile Include="Cutscene Scripts\Change Terrain.cs" />
+    <Compile Include="Cutscene Scripts\Spawn Weapon.cs" />
     <Compile Include="Cutscene Scripts\Spawn Health Crate.cs" />
     <Compile Include="Cutscene Scripts\Victory Screen.cs" />
     <Compile Include="Cutscene Scripts\Selectors\Map Editor Selector.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Cutscene Scripts\Change Foreground.cs" />
     <Compile Include="Cutscene Scripts\Transform Unit.cs" />
     <Compile Include="Cutscene Scripts\Spawn Transforming Unit Fast.cs" />
+    <Compile Include="Cutscene Scripts\View Tiles Popup.cs" />
     <Compile Include="Deathmatch Cutscene Script Holder.cs" />
     <Compile Include="Cutscene Scripts\Helpers\DefenseBattleBehaviorStringConverter.cs" />
     <Compile Include="Cutscene Scripts\Add Unit To Team.cs" />
