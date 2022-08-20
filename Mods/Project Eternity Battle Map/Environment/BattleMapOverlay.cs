@@ -10,5 +10,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void BeginDraw(CustomSpriteBatch g);
         void Draw(CustomSpriteBatch g);
         void EndDraw(CustomSpriteBatch g);
+        void Reset();
     }
 }

@@ -26,6 +26,11 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             return ListTerrainType[ActiveTerrain.TerrainTypeIndex];
         }
 
+        public override string GetTerrainType(int TerrainTypeIndex)
+        {
+            return ListTerrainType[TerrainTypeIndex];
+        }
+
         public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
         {
             /*ListPlayer[ActivePlayerIndex].ListSquad.Remove((Squad)UnitToRemove);

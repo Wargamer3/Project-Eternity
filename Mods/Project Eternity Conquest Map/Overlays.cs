@@ -27,6 +27,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             }
         }
 
+        public void Reset()
+        {
+        }
+
         public void Update(GameTime gameTime)
         {
             FogOfWarIntensityFinder.ResetNodes();

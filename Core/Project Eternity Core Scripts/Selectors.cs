@@ -110,7 +110,7 @@ namespace ProjectEternity.Core.Scripts
             }
         }
 
-        public class WeaponSelector : UITypeEditor
+        public class AttackSelector : UITypeEditor
         {
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
             {
@@ -127,7 +127,7 @@ namespace ProjectEternity.Core.Scripts
 
                     if (Items != null)
                     {
-                        value = Path.GetFileNameWithoutExtension(Items[0]);
+                        value = Items[0].Substring(0, Items[0].Length - 4).Substring(16);
                     }
                 }
                 return value;
@@ -174,6 +174,29 @@ namespace ProjectEternity.Core.Scripts
                     if (Items != null)
                     {
                         value = Path.GetFileNameWithoutExtension(Items[0]);
+                    }
+                }
+                return value;
+            }
+        }
+
+        public class AnimationSpritesSelector : UITypeEditor
+        {
+            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+            {
+                return UITypeEditorEditStyle.Modal;
+            }
+
+            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+            {
+                IWindowsFormsEditorService svc = (IWindowsFormsEditorService)
+                    provider.GetService(typeof(IWindowsFormsEditorService));
+                if (svc != null)
+                {
+                    List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites);
+                    if (Items != null)
+                    {
+                        value = Items[0].Substring(0, Items[0].Length - 4).Substring(27);
                     }
                 }
                 return value;

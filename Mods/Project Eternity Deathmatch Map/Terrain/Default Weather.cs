@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
 			if (Map.ListTilesetPreset.Count > 0)
 			{
-				for (int L = 0; L < 1; L++)
+				for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
 				{
 					CreateMap(Map, Map.LayerManager.ListLayer[L], null);
 				}
@@ -46,6 +46,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 			}
 		}
 
+        public void Reset()
+        {
+            DicTile2DByTileset.Clear();
+
+            for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
+            {
+                CreateMap(Map, Map.LayerManager.ListLayer[L], null);
+            }
+        }
+
         public virtual void Update(GameTime gameTime)
         {
 
@@ -67,7 +77,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public virtual void Draw(CustomSpriteBatch g)
 		{
-			g.Draw(Map.MapRenderTarget, Vector2.Zero, Color.White);
+			g.Draw(Map.MapRenderTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 		}
 
         public virtual void EndDraw(CustomSpriteBatch g)

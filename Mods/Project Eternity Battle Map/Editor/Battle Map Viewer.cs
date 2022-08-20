@@ -157,9 +157,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             GraphicsDevice.Clear(Color.Black);
 
-            for (int S = ActiveMap.ListGameScreen.Count - 1; S >= 0; --S)
-                if (ActiveMap.Alive)
-                    ActiveMap.BeginDraw(g);
+            if (ActiveMap.ListTileSet.Count > 0)
+            {
+                ActiveMap.BeginDraw(g);
+            }
 
             GraphicsDevice.SetRenderTarget(null);
             g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);

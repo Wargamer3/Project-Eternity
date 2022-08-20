@@ -245,7 +245,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            [Editor(typeof(Selectors.WeaponSelector), typeof(UITypeEditor)),
+            [Editor(typeof(Selectors.AttackSelector), typeof(UITypeEditor)),
             CategoryAttribute("Right Unit"),
             DescriptionAttribute("The name of the right Unit's Weapon.")]
             public string AttackingUnitWeaponName
@@ -260,7 +260,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            [Editor(typeof(Selectors.WeaponSelector), typeof(UITypeEditor)),
+            [Editor(typeof(Selectors.AttackSelector), typeof(UITypeEditor)),
             CategoryAttribute("Left Unit"),
             DescriptionAttribute("The name of the left Unit's Weapon.")]
             public string DefendingUnitWeaponName

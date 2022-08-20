@@ -22,7 +22,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             return ListTerrainType[ActiveTerrain.TerrainTypeIndex];
         }
-        
+
+        public override string GetTerrainType(int TerrainTypeIndex)
+        {
+            return ListTerrainType[TerrainTypeIndex];
+        }
+
         public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
         {
             return CheckForSquadAtPosition(PlayerIndex, Position, Displacement) >= 0;

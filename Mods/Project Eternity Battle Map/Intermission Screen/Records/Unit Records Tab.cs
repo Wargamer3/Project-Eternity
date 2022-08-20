@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Characters;
+using ProjectEternity.GameScreens.UI;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

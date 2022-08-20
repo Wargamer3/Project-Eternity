@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         scriptVisualNovel = (VisualNovelCutsceneScriptHolder.ScriptVisualNovel)GetDataContainerByID(_TargetID, VisualNovelCutsceneScriptHolder.ScriptVisualNovel.ScriptName);
                         if (scriptVisualNovel != null)
                         {
-                            ActiveVisualNovel = scriptVisualNovel.ActiveVisualNovel = new VisualNovel(scriptVisualNovel.VisualNovelName);
+                            ActiveVisualNovel = scriptVisualNovel.ActiveVisualNovel = new VisualNovel(scriptVisualNovel.VisualNovelName, Map.DicCutsceneScript);
                             scriptVisualNovel.ActiveVisualNovel.OnVisualNovelFrameChanged = OnVisualNovelFrameChanged;
                             scriptVisualNovel.ActiveVisualNovel.OnVisualNovelPaused = OnVisualNovelPaused;
                             scriptVisualNovel.ActiveVisualNovel.OnVisualNovelResumed = OnVisualNovelResumed;

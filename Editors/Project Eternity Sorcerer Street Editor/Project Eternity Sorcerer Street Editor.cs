@@ -61,7 +61,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                             {
                                 if (ActiveMap.ListTilesetPreset.Count > 0)
                                 {
-                                    TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset);
+                                    TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset, new Point(X, Y), L);
                                     DrawableTile NewTile = new DrawableTile(TilePreset);
                                     NewTerrain.WorldPosition = new Vector3(X, Y, 0);
 
@@ -86,7 +86,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
             public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
             {
-                TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset);
+                TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset, new Point(X, Y), LayerIndex);
                 NewTerrain.WorldPosition = new Vector3(X, Y, 0);
 
                 ActiveMap.ListLayer[LayerIndex].ArrayTerrain[X, Y] = NewTerrain;

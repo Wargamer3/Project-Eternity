@@ -125,8 +125,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// <summary>
         /// Used to create the empty array of the map.
         /// </summary>
-        public Terrain(Terrain Other)
-            : base(Other.InternalPosition.X, Other.InternalPosition.Y, Other.LayerIndex, Other.LayerDepth)
+        public Terrain(Terrain Other, Point Position, int LayerIndex)
+            : base(Position.X, Position.Y, LayerIndex, Other.LayerDepth)
         {
             this.WorldPosition = Other.WorldPosition;
             this.TerrainTypeIndex = Other.TerrainTypeIndex;

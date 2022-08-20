@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         {
                             if (ActiveMap.ListTilesetPreset.Count > 0)
                             {
-                                Terrain NewTerrain = new Terrain(TerrainPreset);
+                                Terrain NewTerrain = new Terrain(TerrainPreset, new Point(X, Y), L);
                                 DrawableTile NewTile = new DrawableTile(TilePreset);
                                 NewTerrain.WorldPosition = new Vector3(X, Y, 0);
 
@@ -80,7 +80,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void ReplaceTerrain(int X, int Y, Terrain TerrainPreset, int LayerIndex, bool ConsiderSubLayers)
         {
-            Terrain NewTerrain = new Terrain(TerrainPreset);
+            Terrain NewTerrain = new Terrain(TerrainPreset, new Point(X, Y), LayerIndex);
+            NewTerrain.Owner = ActiveMap;
             NewTerrain.WorldPosition = new Vector3(X, Y, TerrainPreset.Height);
 
             if (ConsiderSubLayers)
@@ -100,12 +101,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ConsiderSubLayers)
             {
                 GetRealLayer(LayerIndex).LayerGrid.ReplaceTile(X, Y, NewTile);
+                GetRealLayer(LayerIndex).ArrayTerrain[X, Y].DrawableTile = NewTile;
             }
             else
             {
                 ActiveMap.LayerManager.ListLayer[LayerIndex].LayerGrid.ReplaceTile(X, Y, NewTile);
-                ActiveMap.LayerManager.LayerHolderDrawable.Reset();
+                ActiveMap.LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y].DrawableTile = NewTile;
             }
+
+            ActiveMap.Reset();
         }
 
         public void RemoveTileset(int TilesetIndex)
@@ -156,7 +160,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int Y = 0; Y < ActiveMap.MapSize.Y; Y++)
                 {
-                    Terrain NewTerrain = new Terrain(TerrainPreset);
+                    Terrain NewTerrain = new Terrain(TerrainPreset, new Point(X, Y), ActiveMap.LayerManager.ListLayer.Count - 1);
                     DrawableTile NewTile = new DrawableTile(TilePreset);
                     NewTerrain.WorldPosition = new Vector3(X, Y, ActiveMap.LayerManager.ListLayer.Count - 1);
 

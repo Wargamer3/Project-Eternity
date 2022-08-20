@@ -444,7 +444,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void TogglePreview(bool UsePreview)
         {
-            ShowUnits = !ShowUnits;
+            ShowUnits = UsePreview;
 
             if (!UsePreview)
             {
@@ -456,6 +456,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             LayerManager.TogglePreview(UsePreview);
+        }
+
+        public void Reset()
+        {
+            LayerManager.LayerHolderDrawable.Reset();
+            MapEnvironment.Reset();
         }
 
         public Terrain GetTerrain(float X, float Y, int LayerIndex)

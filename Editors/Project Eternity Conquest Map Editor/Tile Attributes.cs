@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using ProjectEternity.Editors.MapEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.ConquestMapScreen;
 
@@ -28,7 +27,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
 
         public void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset)
         {
-            ActiveTerrain = this.ActiveTerrain = new TerrainConquest(ActiveTerrain);
+            ActiveTerrain = this.ActiveTerrain = new TerrainConquest(ActiveTerrain, ActiveTerrain.InternalPosition, ActiveTerrain.LayerIndex);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
         }
 

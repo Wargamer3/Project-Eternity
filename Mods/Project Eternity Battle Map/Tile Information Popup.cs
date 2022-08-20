@@ -9,28 +9,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class TileInformationPopupManager
     {
-        private struct TileInformationPopup
+        protected class TileInformationPopup
         {
             public double TimeOffset;
             public MovementAlgorithmTile CurrentTile;
             public Vector2 PopupPosition;
 
-            public TileInformationPopup(ILayerHolderDrawable LayerHolder, double TimeOffset, MovementAlgorithmTile CurrentTile)
+            public string TileName;
+            public List<string> ListVisibleExtraText;
+
+            public TileInformationPopup(BattleMap Map, ILayerHolderDrawable LayerHolder, double TimeOffset, MovementAlgorithmTile CurrentTile)
             {
                 this.TimeOffset = TimeOffset;
                 this.CurrentTile = CurrentTile;
 
+                TileName = Map.GetTerrainType(CurrentTile.TerrainTypeIndex);
+
+                ListVisibleExtraText = new List<string>();
+
                 Point TileScreenPosition = LayerHolder.GetVisiblePosition(CurrentTile.WorldPosition);
-                PopupPosition = new Vector2(TileScreenPosition.X, TileScreenPosition.Y);
+                PopupPosition = new Vector2(TileScreenPosition.X, TileScreenPosition.Y) + new Vector2(Map.TileSize.X / 2, Map.TileSize.Y / 2);
             }
         }
 
         private Texture2D sprCircle;
 
-        BattleMap Map;
-        LayerHolder LayerHolder;
+        private BattleMap Map;
+        protected LayerHolder LayerHolder;
 
-        private List<TileInformationPopup> ListTilePopup;
+        protected List<TileInformationPopup> ListTilePopup;
         private double CurrentTime;
 
         private float OffsetBetweenPopup = 0.3f;
@@ -40,20 +47,38 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private float CirclePhase3LengthInSeconds = 0.2f;
         private float CirclePhase4LengthInSeconds = 0.2f;
 
-        private double CirclePhaseLengthInSeconds;
+        public double EndOfAnimatonInSeconds;
+
+        public bool HasFinishedAnimating;
+        public bool IsClosed;
 
         public TileInformationPopupManager(BattleMap Map, LayerHolder LayerHolder)
         {
             this.Map = Map;
             this.LayerHolder = LayerHolder;
 
-            CirclePhaseLengthInSeconds = CirclePhase1LengthInSeconds + CirclePhase2LengthInSeconds + CirclePhase3LengthInSeconds + CirclePhase4LengthInSeconds + 4;
-
             ListTilePopup = new List<TileInformationPopup>();
         }
+
         public void Load(ContentManager Content)
         {
             sprCircle = Content.Load<Texture2D>("Circle");
+        }
+
+        public void SetPopups(List<Vector2> ListPosition, int LayerIndex)
+        {
+            ListTilePopup.Clear();
+
+            double CurrentOffset = CurrentTime;
+
+            foreach (Vector2 ActivePosition in ListPosition)
+            {
+                TileInformationPopup NewTilePopup = new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, CurrentOffset, Map.GetMovementTile((int)ActivePosition.X, (int)ActivePosition.Y, LayerIndex));
+                ListTilePopup.Add(NewTilePopup);
+                CurrentOffset += OffsetBetweenPopup;
+            }
+
+            EndOfAnimatonInSeconds = CirclePhase1LengthInSeconds + CirclePhase2LengthInSeconds + CirclePhase3LengthInSeconds + CirclePhase4LengthInSeconds + OffsetBetweenPopup * ListTilePopup.Count;
         }
 
         public void SetPopups(List<Vector3> ListPosition)
@@ -64,25 +89,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (Vector3 ActivePosition in ListPosition)
             {
-                ListTilePopup.Add(new TileInformationPopup(LayerHolder.LayerHolderDrawable, CurrentOffset, Map.GetMovementTile((int)ActivePosition.X, (int)ActivePosition.Y, (int)ActivePosition.Z)));
+                ListTilePopup.Add(new TileInformationPopup(Map, LayerHolder.LayerHolderDrawable, CurrentOffset, Map.GetMovementTile((int)ActivePosition.X, (int)ActivePosition.Y, (int)ActivePosition.Z)));
                 CurrentOffset += OffsetBetweenPopup;
             }
+
+            EndOfAnimatonInSeconds = CirclePhase1LengthInSeconds + CirclePhase2LengthInSeconds + CirclePhase3LengthInSeconds + CirclePhase4LengthInSeconds + OffsetBetweenPopup * ListTilePopup.Count;
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
-            CirclePhaseLengthInSeconds = CirclePhase1LengthInSeconds + CirclePhase2LengthInSeconds + CirclePhase3LengthInSeconds + CirclePhase4LengthInSeconds + 4;
-
             CurrentTime += gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (CurrentTime > CirclePhaseLengthInSeconds)
+            if (CurrentTime >= EndOfAnimatonInSeconds)
             {
-                CurrentTime -= CirclePhaseLengthInSeconds;
+                HasFinishedAnimating = true;
+
+                if (CurrentTime >= EndOfAnimatonInSeconds + 5)
+                {
+                    IsClosed = true;
+                }
             }
         }
 
         public void Draw(CustomSpriteBatch g)
         {
+            if (IsClosed)
+            {
+                return;
+            }
+
             foreach (TileInformationPopup ActivePopup in ListTilePopup)
             {
                 float PopupTime = (float)(CurrentTime - ActivePopup.TimeOffset);
@@ -180,8 +215,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                GameScreen.DrawBox(g, Destination + new Vector2(), 100, 50, Color.White);
-                TextHelper.DrawText(g, "Water tile", Destination + new Vector2(5, 5), Color.White);
+                int BoxWidth = 100;
+                int BoxHeight = 30;
+                if (ActiveTile.ListVisibleExtraText.Count > 0)
+                {
+                    BoxWidth = 150;
+                    BoxHeight += 8 + ActiveTile.ListVisibleExtraText.Count * 20;
+                }
+
+                GameScreen.DrawBox(g, Destination + new Vector2(), BoxWidth, BoxHeight, Color.White);
+                TextHelper.DrawText(g, ActiveTile.TileName, Destination + new Vector2(5, 5), Color.White);
+
+                if (ActiveTile.ListVisibleExtraText.Count > 0)
+                {
+                    TextHelper.DrawText(g, "-----------------", Destination + new Vector2(5, 15), Color.White);
+                    TextHelper.DrawTextMultiline(g, ActiveTile.ListVisibleExtraText, TextHelper.TextAligns.Left, Destination.X + 5, Destination.Y + 32, 0);
+                }
             }
         }
     }

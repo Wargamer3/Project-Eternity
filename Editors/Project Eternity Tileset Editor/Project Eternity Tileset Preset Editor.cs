@@ -344,7 +344,7 @@ namespace ProjectEternity.Editors.MapEditor
 
                 for (int T = 1; T < ListActiveTile.Count; ++T)
                 {
-                    ArrayTerrain[ListActiveTile[T].X, ListActiveTile[T].Y] = new Terrain(OriginalTerrain);
+                    ArrayTerrain[ListActiveTile[T].X, ListActiveTile[T].Y] = new Terrain(OriginalTerrain, new Microsoft.Xna.Framework.Point(ListActiveTile[T].X, ListActiveTile[T].Y), 0);
                 }
             }
         }

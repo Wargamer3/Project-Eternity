@@ -368,6 +368,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return ListTerrainType[ActiveTerrain.TerrainTypeIndex];
         }
 
+        public override string GetTerrainType(int TerrainTypeIndex)
+        {
+            return ListTerrainType[TerrainTypeIndex];
+        }
+
         public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();

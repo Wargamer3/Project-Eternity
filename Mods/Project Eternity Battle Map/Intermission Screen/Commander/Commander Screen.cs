@@ -4,6 +4,7 @@ using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.GameScreens.UI;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

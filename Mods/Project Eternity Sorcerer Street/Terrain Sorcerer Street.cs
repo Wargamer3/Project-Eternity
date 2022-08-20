@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -18,8 +19,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Player Owner;
         public int TerrainLevel;
 
-        public TerrainSorcererStreet(Terrain Other)
-            : base(Other)
+        public TerrainSorcererStreet(Terrain Other, Point Position, int LayerIndex)
+            : base(Other, Position, LayerIndex)
         {
             TerrainTypeIndex = Other.TerrainTypeIndex;
             TerrainLevel = 0;

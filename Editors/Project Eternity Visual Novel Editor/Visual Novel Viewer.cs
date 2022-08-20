@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Editor;
-using ProjectEternity.Core.Scripts;
 using ProjectEternity.GameScreens;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.VisualNovelScreen;
@@ -228,6 +227,19 @@ namespace ProjectEternity.Editors.VisualNovelEditor
                 {
                     GameScreen.DrawLine(g, new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth + 10, ActiveDialog.Position.Y - ScriptEditorOrigin.Y + 31),
                                 new Vector2(ActiveVisualNovel.ListDialog[ActiveDialog.ListNextDialog[D2]].Position.X - ScriptEditorOrigin.X - 7, ActiveVisualNovel.ListDialog[ActiveDialog.ListNextDialog[D2]].Position.Y - ScriptEditorOrigin.Y + 5), Color.Black);
+                }
+
+                if (ActiveDialog.CutsceneBefore != null && ActiveDialog.CutsceneBefore.ListCutsceneBehavior.Count > 0)
+                {
+                    g.DrawStringRightAligned(fntFrameCount, ActiveDialog.CutsceneBefore.DicActionScript.Count.ToString(),
+                        new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth - 25,
+                        ActiveDialog.Position.Y - ScriptEditorOrigin.Y), Color.Red);
+                }
+                if (ActiveDialog.CutsceneAfter != null && ActiveDialog.CutsceneAfter.DicActionScript.Count > 0)
+                {
+                    g.DrawStringRightAligned(fntFrameCount, ActiveDialog.CutsceneAfter.DicActionScript.Count.ToString(),
+                        new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth - 10,
+                        ActiveDialog.Position.Y - ScriptEditorOrigin.Y), Color.Red);
                 }
             }
             //Draw a line between the mouse and the starting LinkedScript seletected.

@@ -4,7 +4,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.ControlHelper;
 
-namespace ProjectEternity.GameScreens.BattleMapScreen
+namespace ProjectEternity.GameScreens.UI
 {
     public class BoxScrollbar: IUIElement
     {
@@ -68,6 +68,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 MovingScrollbarSelectionPoint = -1;
             }
+        }
+
+        public void SetValue(float NewValue)
+        {
+            ScrollbarBarPositionY = Position.Y + SectionSize + (NewValue / ScrollbarValueMax) * ScrollbarBarUsableHeight;
         }
 
         public void ChangeMaxValue(float NewMaxValue)

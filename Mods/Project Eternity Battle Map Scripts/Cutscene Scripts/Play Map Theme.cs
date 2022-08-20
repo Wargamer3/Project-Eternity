@@ -8,7 +8,6 @@ using ProjectEternity.Core.Scripts;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-
     public sealed partial class ExtraBattleMapCutsceneScriptHolder
     {
         public class ScriptPlayMapTheme : BattleMapScript

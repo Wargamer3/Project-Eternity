@@ -16,6 +16,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Owner = Owner;
         }
 
+        public void Reset()
+        {
+        }
+
         public void Update(GameTime gameTime)
         {
             Color Color1;
@@ -121,6 +125,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 GameScreen.GraphicsDevice,
                 GameScreen.GraphicsDevice.PresentationParameters.BackBufferWidth,
                 GameScreen.GraphicsDevice.PresentationParameters.BackBufferHeight, false, SurfaceFormat.NormalizedByte4, DepthFormat.Depth24Stencil8);
+        }
+
+        public void Reset()
+        {
         }
 
         public void Update(GameTime gameTime)
@@ -250,6 +258,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 GameScreen.GraphicsDevice.PresentationParameters.BackBufferHeight);
 
             data = new Color[texture.Width * texture.Height];
+        }
+
+        public void Reset()
+        {
         }
 
         public void Update(GameTime gameTime)

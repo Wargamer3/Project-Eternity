@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -66,6 +67,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int Z = 0; Z < ListMapZone.Count; ++Z)
             {
                 ListMapZone[Z].Save(BW);
+            }
+        }
+
+        public void Reset()
+        {
+            GlobalZone.Reset();
+
+            foreach (MapZone ActiveZone in ListMapZone)
+            {
+                ActiveZone.Reset();
             }
         }
 

@@ -1202,12 +1202,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public string GetTerrainType(float PosX, float PosY, int LayerIndex)
         {
-            return GetTerrainType(GetTerrain((int)PosX, (int)PosY, LayerIndex));
+            return GetTerrainType(GetTerrain((int)PosX, (int)PosY, LayerIndex).TerrainTypeIndex);
         }
 
-        public string GetTerrainType(MovementAlgorithmTile ActiveTerrain)
+        public override string GetTerrainType(int TerrainTypeIndex)
         {
-            return ListTerrainType[ActiveTerrain.TerrainTypeIndex];
+            return ListTerrainType[TerrainTypeIndex];
         }
 
         public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)

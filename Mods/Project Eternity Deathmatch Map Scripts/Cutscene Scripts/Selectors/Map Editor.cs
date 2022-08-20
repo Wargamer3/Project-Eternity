@@ -453,8 +453,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 {
                                     for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                     {
-                                        Helper.ReplaceTerrain(X, Y, new Terrain(PresetTerrain), 0, true);
-                                        Helper.ReplaceTile(X, Y, new DrawableTile(PresetTile), 0, true);
+                                        Helper.ReplaceTerrain(X, Y, PresetTerrain, 0, true);
+                                        Helper.ReplaceTile(X, Y, PresetTile, 0, true);
                                     }
                                 }
                             }

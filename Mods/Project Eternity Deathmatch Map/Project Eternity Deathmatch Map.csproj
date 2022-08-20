@@ -208,6 +208,7 @@
     <Compile Include="Terrain\Weather Lightning Manager.cs" />
     <Compile Include="Terrain\Weather Intensity Manager.cs" />
     <Compile Include="Terrain\Weather Rain Size Manager.cs" />
+    <Compile Include="Tile Information Popup.cs" />
     <Compile Include="Unit Deployment Screen.cs" />
   </ItemGroup>
   <ItemGroup>

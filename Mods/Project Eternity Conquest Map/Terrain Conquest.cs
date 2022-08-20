@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen
@@ -25,8 +26,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public int CapturePoints;
         public int CapturedPlayerIndex;//Index of the player which captured the Property.
 
-        public TerrainConquest(Terrain Other)
-            : base(Other)
+        public TerrainConquest(Terrain Other, Point Position, int LayerIndex)
+            : base(Other, Position, LayerIndex)
         {
             TerrainTypeIndex = 0;
         }

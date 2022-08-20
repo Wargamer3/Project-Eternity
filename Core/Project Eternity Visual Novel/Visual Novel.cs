@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
 
@@ -101,11 +102,14 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
         public VisualNovelEnded OnVisualNovelEnded;
 
         public string VisualNovelPath;
+        private readonly Dictionary<string, CutsceneScript> DicCutsceneScript;
 
         private Vector2 LeftPosition;
         private Vector2 RightPosition;
 
         public const int VNBoxHeight = 128;
+
+        private BoxScrollbar ChoicesScrollbar;
 
         private VisualNovel()
             : base()
@@ -128,10 +132,24 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             this.VisualNovelPath = VisualNovelPath;
         }
 
+        public VisualNovel(string VisualNovelPath, Dictionary<string, CutsceneScript> DicCutsceneScript)
+            : this(VisualNovelPath)
+        {
+            this.DicCutsceneScript = DicCutsceneScript;
+        }
+
         public override void Load()
         {
+            Dictionary<string, CutsceneScript> DicCutsceneScript = this.DicCutsceneScript;
+            if (DicCutsceneScript == null)
+            {
+                DicCutsceneScript = CutsceneScriptHolder.LoadAllScripts();
+            }
+
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
             fntMultiDialogFont = Content.Load<SpriteFont>("Fonts/VisualNovelMultiDialogFont");
+
+            ChoicesScrollbar = new BoxScrollbar(new Vector2(Constants.Width - 20, Constants.Height - VNBoxHeight), VNBoxHeight, 4, OnScrollbarChange);
 
             LeftPosition = new Vector2(0, Constants.Height - VNBoxHeight);
             RightPosition = new Vector2(Constants.Width, Constants.Height - VNBoxHeight);
@@ -413,10 +431,8 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                     if (PositionX == 0)
                         Timeline.Add(NewDialog);
 
-                    Dictionary<string, CutsceneScript> Scripts = CutsceneScriptHolder.LoadAllScripts();
-
-                    NewDialog.CutsceneBefore = new Cutscene(null, BR, Scripts);
-                    NewDialog.CutsceneAfter = new Cutscene(null, BR, Scripts);
+                    NewDialog.CutsceneBefore = new Cutscene(null, BR, DicCutsceneScript);
+                    NewDialog.CutsceneAfter = new Cutscene(null, BR, DicCutsceneScript);
                 }
 
                 #endregion
@@ -682,6 +698,8 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             if (IsPaused || CurrentDialog == null)
                 return;
 
+            ChoicesScrollbar.Update(gameTime);
+
             //Left Character.
             if (LeftCharacter != null)
             {
@@ -712,18 +730,26 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                     IncrementTimeline();
                 }
             }
+
             if (InputHelper.InputUpPressed())
             {
                 DialogChoice -= DialogChoice > 0 ? 1 : 0;
                 if (DialogChoice <= DialogChoiceMinIndex)
+                {
                     DialogChoiceMinIndex = DialogChoice;
+                    ChoicesScrollbar.SetValue(DialogChoiceMinIndex);
+                }
             }
             else if (InputHelper.InputDownPressed())
             {
                 DialogChoice += DialogChoice < CurrentDialog.ListNextDialog.Count - 1 ? 1 : 0;
                 if (DialogChoice - MaxDialogChoice >= DialogChoiceMinIndex)
+                {
                     DialogChoiceMinIndex = DialogChoice - MaxDialogChoice + 1;
+                    ChoicesScrollbar.SetValue(DialogChoiceMinIndex);
+                }
             }
+
             if (InputHelper.InputConfirmPressed())
             {
                 if (CurrentDialog.CutsceneAfter != null)
@@ -732,7 +758,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 if (TimelineIndex < Timeline.Count)
                 {
                     //If there is no dialog linked to the CurrentDialog.
-                    if (CurrentDialog.ListNextDialog.Count == 0)
+                    if (CurrentDialog.ListNextDialog.Count == 0 || string.IsNullOrEmpty(ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].Text))
                     {
                         IncrementTimeline();
                         if (TimelineIndex >= Timeline.Count)
@@ -745,7 +771,6 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                     }
                     else
                     {
-                        //If ListNextDialog.Count is not 0, it means there were linked dialogs, so change the current dialog to the one chosen.
                         CurrentDialog = ListDialog[CurrentDialog.ListNextDialog[DialogChoice]];
                         OnNewFrame();
                     }
@@ -758,6 +783,11 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             {//Show/Hide the sumary.
                 PushScreen(new ExtraMenu(this, fntFinlanderFont, TimelineIndexMax));
             }
+        }
+
+        private void OnScrollbarChange(float ScrollbarValue)
+        {
+            DialogChoiceMinIndex = (int)ScrollbarValue;
         }
 
         public override void BeginDraw(CustomSpriteBatch g)
@@ -859,7 +889,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 int TextEndY = (int)fntFinlanderFont.MeasureString(CurrentDialog.Text).Y;
 
                 //Draw the linked Dialogs TextPreview.
-                for (int i = DialogChoiceMinIndex, D = 0 ; D < MaxDialogChoice; ++D, ++i)
+                for (int i = DialogChoiceMinIndex, D = 0; D < MaxDialogChoice; ++D, ++i)
                 {
                     g.Draw(sprPixel, new Rectangle((int)Position.X + 10, (int)Position.Y + 13 + TextEndY + D * 25, 5, 5), Color.Black);
                     g.DrawString(fntFinlanderFont, ListDialog[CurrentDialog.ListNextDialog[i]].TextPreview, new Vector2(Position.X + 20, Position.Y + TextEndY + D * 25), Color.White);
@@ -867,6 +897,11 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                     {
                         g.Draw(sprPixel, new Rectangle((int)Position.X + 20, (int)Position.Y + 5 + TextEndY + D * 25, 400, fntFinlanderFont.LineSpacing), Color.FromNonPremultiplied(255, 255, 255, 100));
                     }
+                }
+
+                if (CurrentDialog.ListNextDialog.Count >= MaxDialogChoice)
+                {
+                    ChoicesScrollbar.Draw(g);
                 }
             }
         }
@@ -929,6 +964,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 LastDialog = CurrentDialog;
                 CurrentDialog = Timeline[TimelineIndex];
             }
+
             OnNewFrame();
         }
 
@@ -957,6 +993,9 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
             if (MaxDialogChoice >= CurrentDialog.ListNextDialog.Count)
                 MaxDialogChoice = CurrentDialog.ListNextDialog.Count;
+
+            ChoicesScrollbar.SetValue(0);
+            ChoicesScrollbar.ChangeMaxValue(Math.Max(1, CurrentDialog.ListNextDialog.Count - MaxDialogChoice));
         }
     }
 }

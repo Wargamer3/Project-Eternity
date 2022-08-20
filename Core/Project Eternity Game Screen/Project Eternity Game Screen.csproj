@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Box Scrollbar.cs" />
     <Compile Include="Game Screen Helpers.cs" />
     <Compile Include="Debug Screen.cs" />
     <Compile Include="GameScreen.cs" />

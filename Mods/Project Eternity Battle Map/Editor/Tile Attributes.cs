@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public virtual void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset)
         {
-            ActiveTerrain = new Terrain(ActiveTerrain);
+            ActiveTerrain = new Terrain(ActiveTerrain, ActiveTerrain.InternalPosition, ActiveTerrain.LayerIndex);
             this.ActiveTerrain = ActiveTerrain;
             this.ActivePreset = ActivePreset;
             cboBattleAnimationBackground.Items.Clear();

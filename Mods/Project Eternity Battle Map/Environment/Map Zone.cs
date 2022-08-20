@@ -111,6 +111,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        public void Reset()
+        {
+            if (OverlayWeather != null)
+            {
+                OverlayWeather.Reset();
+            }
+            if (OverlayTypeOfSky != null)
+            {
+                OverlayTypeOfSky.Reset();
+            }
+            if (OverlayVisibility != null)
+            {
+                OverlayVisibility.Reset();
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             if (OverlayWeather != null)

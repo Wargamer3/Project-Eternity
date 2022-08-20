@@ -70,6 +70,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ParticleSystem.LoadContent(Map.Content, GameScreen.GraphicsDevice, Projection);
         }
 
+        public void Reset()
+        {
+        }
+
         public void Update(GameTime gameTime)
         {
             double TimeElapsedInSeconds = gameTime.ElapsedGameTime.TotalSeconds;

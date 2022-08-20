@@ -36,6 +36,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 			WetEffect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(Matrix.Identity));
 		}
 
+		public void Reset()
+		{
+		}
+
 		public void Update(GameTime gameTime)
 		{
 		}
@@ -55,5 +59,5 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 		public void SetCrossfadeValue(double Value)
 		{
 		}
-	}
+    }
 }

@@ -204,7 +204,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Reset()
         {
-            //Nothing to do.
         }
 
         public void Draw(CustomSpriteBatch g)
@@ -394,12 +393,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                                       (int)(Owner.ListSingleplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y),
                                                       null,
-                                        BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
+                                        BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 
                         g.DrawString(Map.fntArial9, Owner.ListSingleplayerSpawns[i].Tag,
                             new Vector2((Owner.ListSingleplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
                                         (Owner.ListSingleplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
-                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                            Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.2f);
                     }
 
                     for (int i = 0; i < Owner.ListMultiplayerSpawns.Count; i++)

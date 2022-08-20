@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using ProjectEternity.Editors.MapEditor;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.SorcererStreetScreen;
 
@@ -28,7 +27,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
         public void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset)
         {
-            ActiveTerrain = this.ActiveTerrain = new TerrainSorcererStreet((TerrainSorcererStreet)ActiveTerrain);
+            ActiveTerrain = this.ActiveTerrain = new TerrainSorcererStreet((TerrainSorcererStreet)ActiveTerrain, ActiveTerrain.InternalPosition, ActiveTerrain.LayerIndex);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
         }
 

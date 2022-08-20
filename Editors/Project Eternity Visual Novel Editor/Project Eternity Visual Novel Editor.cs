@@ -218,15 +218,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
         private void tsmEditCurrentDialog_Click(object sender, EventArgs e)
         {
-            if (cbShowFlowchart.Checked)
-            {
-                if (VisualNovelViewer.ListDialogSelected.Count > 0)
-                {
-                    DialogEditor.SetDialog(VisualNovelViewer.ListDialogSelected[0]);
-                    DialogEditor.ShowDialog();
-                }
-            }
-            else if (lstDialogs.SelectedItem != null)
+            if (lstDialogs.SelectedItem != null)
             {
                 DialogEditor.SetDialog((Dialog)lstDialogs.SelectedItem);
                 DialogEditor.ShowDialog();

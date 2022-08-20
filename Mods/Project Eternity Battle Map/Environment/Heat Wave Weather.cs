@@ -68,6 +68,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ParticleSystem.LoadContent(Map.Content, GameScreen.GraphicsDevice, Projection, "Shaders/Particle shader Heat Wave");
         }
 
+        public void Reset()
+        {
+        }
+
         public void Update(GameTime gameTime)
         {
             double TimeElapsedInSeconds = gameTime.ElapsedGameTime.TotalSeconds;
