@@ -206,8 +206,11 @@ namespace ProjectEternity.Core.Editor
                     // If the device state is ok, check whether it is big enough.
                     PresentationParameters pp = GraphicsDevice.PresentationParameters;
 
-                    deviceNeedsReset = (ClientSize.Width > pp.BackBufferWidth) ||
-                                       (ClientSize.Height > pp.BackBufferHeight);
+                    /*deviceNeedsReset = (ClientSize.Width > pp.BackBufferWidth) ||
+                                       (ClientSize.Height > pp.BackBufferHeight);*/
+
+                    deviceNeedsReset = (ClientSize.Width != pp.BackBufferWidth) ||
+                                       (ClientSize.Height != pp.BackBufferHeight);
                     break;
             }
 

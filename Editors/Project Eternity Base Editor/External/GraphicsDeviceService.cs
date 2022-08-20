@@ -117,8 +117,10 @@ namespace ProjectEternity.Core.Editor
             if (DeviceResetting != null)
                 DeviceResetting(this, EventArgs.Empty);
 
-            parameters.BackBufferWidth = Math.Max(parameters.BackBufferWidth, width);
-            parameters.BackBufferHeight = Math.Max(parameters.BackBufferHeight, height);
+            //parameters.BackBufferWidth = Math.Max(parameters.BackBufferWidth, width);
+            //parameters.BackBufferHeight = Math.Max(parameters.BackBufferHeight, height);
+            parameters.BackBufferWidth = width;
+            parameters.BackBufferHeight = height;
 
             graphicsDevice.Reset(parameters);
 
