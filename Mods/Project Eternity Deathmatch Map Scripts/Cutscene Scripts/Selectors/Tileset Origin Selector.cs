@@ -44,8 +44,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (Editor.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    TerrainAttirubte.Origin.X = Editor.TilesetViewer.ActiveTile.X;
-                    TerrainAttirubte.Origin.Y = Editor.TilesetViewer.ActiveTile.Y;
+                    TerrainAttirubte.Origin = Editor.TilesetViewer.TileBrushSize;
                 }
             }
             return value;

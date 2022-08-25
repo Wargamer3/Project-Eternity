@@ -47,14 +47,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             List<VertexPositionNormalTexture> ListTempVertex = new List<VertexPositionNormalTexture>();
             List<ushort> ListTempIndex = new List<ushort>();
+            int IndexCounter = 0;
             for (int T = 0; T < ListTile3D.Count; T++)
             {
                 ListTempVertex.AddRange(ListTile3D[T].ArrayVertex);
 
                 for (int I = 0; I < ListTile3D[T].ArrayIndex.Length; I++)
                 {
-                    ListTempIndex.Add((ushort)(T * 4 + ListTile3D[T].ArrayIndex[I]));
+                    ListTempIndex.Add((ushort)(IndexCounter + ListTile3D[T].ArrayIndex[I]));
                 }
+
+                IndexCounter += ListTile3D[T].ArrayVertex.Length;
             }
 
             ArrayVertex = ListTempVertex.ToArray();

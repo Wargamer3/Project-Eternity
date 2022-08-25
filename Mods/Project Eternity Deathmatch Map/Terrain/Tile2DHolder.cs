@@ -77,9 +77,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             foreach (Terrain ActiveTile in ListTile2D)
             {
                 Color FinalColor = Color.White;
-                float FinalHeight = ActiveTile.WorldPosition.Z;
+                float FinalHeight = ActiveTile.WorldPosition.Z - 1;
 
-                if (FinalHeight > ActiveTile.Owner.CameraPosition.Z)
+                if (FinalHeight > ActiveTile.Owner.CameraPosition.Z && !ActiveTile.Owner.IsEditor)
                 {
                     FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.CameraPosition.Z) * 255);
                 }

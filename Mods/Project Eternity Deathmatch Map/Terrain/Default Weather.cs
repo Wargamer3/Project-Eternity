@@ -12,24 +12,36 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 		protected readonly DeathmatchMap Map;
 
 		protected readonly Dictionary<int, Tile2DHolder> DicTile2DByTileset;
+        protected readonly Dictionary<int, Dictionary<int, Tile2DHolder>> DicTile2DByLayerByTileset;
 
-		public DefaultWeather(DeathmatchMap Map, ZoneShape Shape)
+        public DefaultWeather(DeathmatchMap Map, ZoneShape Shape)
 		{
 			this.Map = Map;
 			DicTile2DByTileset = new Dictionary<int, Tile2DHolder>();
+            DicTile2DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile2DHolder>>();
 
-			if (Map.ListTilesetPreset.Count > 0)
+            if (Map.ListTilesetPreset.Count > 0)
 			{
 				for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
 				{
-					CreateMap(Map, Map.LayerManager.ListLayer[L], null);
+					CreateMap(Map, Map.LayerManager.ListLayer[L], L, null);
 				}
 			}
 		}
 
-		public void CreateMap(DeathmatchMap Map, MapLayer Owner, Effect WetEffect)
-		{
-			for (int X = Map.MapSize.X - 1; X >= 0; --X)
+		public void CreateMap(DeathmatchMap Map, MapLayer Owner, int LayerIndex, Effect WetEffect)
+        {
+            foreach (SubMapLayer ActiveSubLayer in Owner.ListSubLayer)
+            {
+                CreateMap(Map, ActiveSubLayer, LayerIndex, WetEffect);
+            }
+
+            if (!DicTile2DByLayerByTileset.ContainsKey(LayerIndex))
+            {
+                DicTile2DByLayerByTileset.Add(LayerIndex, new Dictionary<int, Tile2DHolder>());
+            }
+
+            for (int X = Map.MapSize.X - 1; X >= 0; --X)
 			{
 				for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)
 				{
@@ -39,20 +51,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 					if (!DicTile2DByTileset.ContainsKey(ActiveTile.TilesetIndex))
 					{
 						DicTile2DByTileset.Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName, Map.Content, WetEffect));
-					}
+                    }
+                    if (!DicTile2DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+                    {
+                        DicTile2DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile2DHolder(Map.ListTilesetPreset[ActiveTile.TilesetIndex].TilesetName, Map.Content, WetEffect));
+                    }
 
-					DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTerrain);
-				}
+                    DicTile2DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTerrain);
+                    DicTile2DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTerrain);
+                }
 			}
 		}
 
         public void Reset()
         {
             DicTile2DByTileset.Clear();
+            DicTile2DByLayerByTileset.Clear();
 
             for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
             {
-                CreateMap(Map, Map.LayerManager.ListLayer[L], null);
+                CreateMap(Map, Map.LayerManager.ListLayer[L], L, null);
             }
         }
 
@@ -67,9 +85,35 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             g.GraphicsDevice.SetRenderTarget(Map.MapRenderTarget);
             g.GraphicsDevice.Clear(Color.White);
-            foreach (Tile2DHolder ActiveTileset in DicTile2DByTileset.Values)
+
+            if (Map.ShowLayerIndex == -1)
             {
-                ActiveTileset.Draw(g);
+                if (Map.IsEditor)
+                {
+                    foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByTileset)
+                    {
+                        ActiveTileSet.Value.Draw(g);
+                    }
+                }
+                else
+                {
+                    int MaxLayerIndex = Map.LayerManager.ListLayer.Count;
+
+                    for (int L = 0; L < MaxLayerIndex; L++)
+                    {
+                        foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
+                        {
+                            ActiveTileSet.Value.Draw(g);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[Map.ShowLayerIndex])
+                {
+                    ActiveTileSet.Value.Draw(g);
+                }
             }
 
             g.Begin();

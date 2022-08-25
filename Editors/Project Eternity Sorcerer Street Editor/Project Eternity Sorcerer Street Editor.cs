@@ -229,7 +229,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             if (TA.ShowDialog() == DialogResult.OK)
             {
                 //Set the current tile attributes based on the TileAttibutes return.
-                Point TilePos = TilesetViewer.ActiveTile;
+                Rectangle TilePos = TilesetViewer.TileBrushSize;
                 ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y].TerrainTypeIndex = TA.TerrainTypeIndex;
             }
         }

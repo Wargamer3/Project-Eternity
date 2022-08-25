@@ -145,6 +145,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected void CreateMap(DeathmatchMap Map, MapLayer Owner, int LayerIndex)
         {
+            foreach (SubMapLayer ActiveSubLayer in Owner.ListSubLayer)
+            {
+                CreateMap(Map, ActiveSubLayer, LayerIndex);
+            }
+
             Map2D GroundLayer = Owner.LayerGrid;
 
             if (!DicTile3DByLayerByTileset.ContainsKey(LayerIndex))
@@ -164,29 +169,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
 
                     float Z = Owner.ArrayTerrain[X, Y].WorldPosition.Z * LayerHeight;
-                    float ZFront = Z;
-                    float ZBack = Z;
-                    float ZRight = Z;
-                    float ZLeft = Z;
-                    if (Y + 1 < Map.MapSize.Y)
+                    float MinZ = Z - Owner.ArrayTerrain[X, Y].Height * LayerHeight;
+                    float ZFront = MinZ;
+                    float ZBack = MinZ;
+                    float ZRight = MinZ;
+                    float ZLeft = MinZ;
+                    if (Y + 1 < Map.MapSize.Y && ConsiderTerrain(Owner.ArrayTerrain[X, Y + 1].DrawableTile.Terrain3DInfo.TerrainStyle))
                     {
                         ZFront = Owner.ArrayTerrain[X, Y + 1].WorldPosition.Z * LayerHeight;
                     }
-                    if (Y - 1 >= 0)
+                    if (Y - 1 >= 0 && ConsiderTerrain(Owner.ArrayTerrain[X, Y - 1].DrawableTile.Terrain3DInfo.TerrainStyle))
                     {
                         ZBack = Owner.ArrayTerrain[X, Y - 1].WorldPosition.Z * LayerHeight;
                     }
-                    if (X - 1 >= 0)
+                    if (X - 1 >= 0 && ConsiderTerrain(Owner.ArrayTerrain[X - 1, Y].DrawableTile.Terrain3DInfo.TerrainStyle))
                     {
                         ZLeft = Owner.ArrayTerrain[X - 1, Y].WorldPosition.Z * LayerHeight;
                     }
-                    if (X + 1 < Map.MapSize.X)
+                    if (X + 1 < Map.MapSize.X && ConsiderTerrain(Owner.ArrayTerrain[X + 1, Y].DrawableTile.Terrain3DInfo.TerrainStyle))
                     {
                         ZRight = Owner.ArrayTerrain[X + 1, Y].WorldPosition.Z * LayerHeight;
                     }
 
                     List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
-                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z - Owner.ArrayTerrain[X, Y].Height * LayerHeight,
+                                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, MinZ,
                                             Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
 
                     foreach (Tile3D ActiveTile in ListNew3DTile)
@@ -211,6 +217,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 CreateMap(Map, Owner.ListSubLayer[L], LayerIndex);
             }
+        }
+
+        private bool ConsiderTerrain(Terrain3D.TerrainStyles TerrainInfo)
+        {
+            return TerrainInfo != Terrain3D.TerrainStyles.Invisible
+                && TerrainInfo != Terrain3D.TerrainStyles.SlopeBackToFront
+                && TerrainInfo != Terrain3D.TerrainStyles.SlopeFrontToBack
+                && TerrainInfo != Terrain3D.TerrainStyles.SlopeLeftToRight
+                && TerrainInfo != Terrain3D.TerrainStyles.SlopeRightToLeft;
         }
 
         private void Create3DCursor()
@@ -667,7 +682,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
                     {
-                        Draw(g, View, Map.LayerManager.ListLayer[L], false);
+                        DrawItems(g, View, Map.LayerManager.ListLayer[L], false);
                     }
                 }
                 else
@@ -687,7 +702,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ActiveTileSet.Value.Draw(g.GraphicsDevice);
                         }
 
-                        Draw(g, View, Map.LayerManager.ListLayer[L], false);
+                        DrawItems(g, View, Map.LayerManager.ListLayer[L], false);
                     }
                 }
             }
@@ -700,11 +715,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ActiveTileSet.Value.Draw(g.GraphicsDevice);
                 }
 
-                Draw(g, View, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
+                DrawItems(g, View, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
             }
         }
 
-        public void Draw(CustomSpriteBatch g, Matrix View, MapLayer Owner, bool IsSubLayer)
+        public void DrawItems(CustomSpriteBatch g, Matrix View, MapLayer Owner, bool IsSubLayer)
         {
             if (!Owner.IsVisible)
             {

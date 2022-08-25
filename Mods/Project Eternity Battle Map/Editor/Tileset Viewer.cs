@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Point TileSize;
 
         public Point DrawOffset;
-        public Point ActiveTile;//X, Y position of the cursor in the TilePreview, used to select the origin for the next Tile.
+        public Rectangle TileBrushSize;//X, Y position of the cursor in the TilePreview, used to select the origin for the next Tile.
 
         protected override void Initialize()
         {
@@ -40,6 +40,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.sprTileset = sprTileset;
             this.TileSize = TileSize;
+
+            TileBrushSize = new Rectangle(0, 0, TileSize.X, TileSize.Y);
         }
 
         public void InitTileset(string Tileset, Point TileSize)
@@ -49,6 +51,36 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 sprTileset = content.Load<Texture2D>("Maps/Tilesets/" + Tileset);
             }
             this.TileSize = TileSize;
+        }
+
+        public void SelectTile(Point TileToSelect, bool ExpendSelection)
+        {
+            if (ExpendSelection)
+            {
+                if (TileToSelect.X > TileBrushSize.X)
+                {
+                    TileBrushSize.Width = TileToSelect.X - TileBrushSize.X + TileSize.X;
+                }
+                if (TileToSelect.Y > TileBrushSize.Y)
+                {
+                    TileBrushSize.Height = TileToSelect.Y - TileBrushSize.Y + TileSize.Y;
+                }
+            }
+            else
+            {
+                TileBrushSize.Location = TileToSelect;
+                TileBrushSize.Width = TileSize.X;
+                TileBrushSize.Height = TileSize.Y;
+            }
+        }
+
+        public Point GetTileFromBrush(Point MapTileToPaint)
+        {
+            Point RealTile = new Point();
+            RealTile.X = TileBrushSize.X + MapTileToPaint.X % TileBrushSize.Width;
+            RealTile.Y = TileBrushSize.Y + MapTileToPaint.Y % TileBrushSize.Height;
+
+            return RealTile;
         }
 
         /// <summary>
@@ -65,10 +97,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (sprTileset != null)
             {
                 g.Draw(sprTileset, new Vector2(-DrawOffset.X, -DrawOffset.Y), Color.White);
-                g.Draw(sprPixel, new Rectangle(ActiveTile.X - DrawOffset.X, ActiveTile.Y - DrawOffset.Y, TileSize.X, 1), Color.Red);
-                g.Draw(sprPixel, new Rectangle(ActiveTile.X - DrawOffset.X, ActiveTile.Y - DrawOffset.Y, 1, TileSize.Y), Color.Red);
-                g.Draw(sprPixel, new Rectangle(ActiveTile.X - DrawOffset.X, ActiveTile.Y - DrawOffset.Y + TileSize.Y, TileSize.X, 1), Color.Red);
-                g.Draw(sprPixel, new Rectangle(ActiveTile.X - DrawOffset.X + TileSize.X, ActiveTile.Y - DrawOffset.Y, 1, TileSize.Y), Color.Red);
+                g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y, TileBrushSize.Width, 1), Color.Red);
+                g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y, 1, TileBrushSize.Height), Color.Red);
+                g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y + TileBrushSize.Height, TileBrushSize.Width, 1), Color.Red);
+                g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X + TileBrushSize.Width, TileBrushSize.Y - DrawOffset.Y, 1, TileBrushSize.Height), Color.Red);
             }
 
             g.End();

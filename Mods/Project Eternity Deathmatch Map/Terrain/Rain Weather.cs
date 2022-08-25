@@ -173,9 +173,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             WetEffect.Parameters["LightDirection"].SetValue(Vector3.Normalize(new Vector3(80, 15, 8)));
 
             DicTile2DByTileset.Clear();
+            DicTile2DByLayerByTileset.Clear();
             for (int L = 0; L < 1; L++)
             {
-                CreateMap(Map, Map.LayerManager.ListLayer[L], WetEffect);
+                CreateMap(Map, Map.LayerManager.ListLayer[L], L, WetEffect);
             }
         }
 

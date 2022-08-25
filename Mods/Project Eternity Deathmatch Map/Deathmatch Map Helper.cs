@@ -162,6 +162,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     Terrain NewTerrain = new Terrain(TerrainPreset, new Point(X, Y), ActiveMap.LayerManager.ListLayer.Count - 1);
                     DrawableTile NewTile = new DrawableTile(TilePreset);
+                    NewTerrain.DrawableTile = NewTile;
+                    NewTerrain.Owner = ActiveMap;
                     NewTerrain.WorldPosition = new Vector3(X, Y, ActiveMap.LayerManager.ListLayer.Count - 1);
 
                     ArrayTerrain[X, Y] = NewTerrain;
@@ -173,6 +175,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             NewLayer.LayerGrid.ReplaceGrid(ArrayTile2D);
 
             ActiveMap.LayerManager.ListLayer.Add(NewLayer);
+            ActiveMap.Reset();
+
             return NewLayer;
         }
 

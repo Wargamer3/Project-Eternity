@@ -42,10 +42,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 TilesetViewerLeft.InitTileset(Owner.ListTileSet[cboTilesLeft.SelectedIndex], Owner.TileSize);
                 TilesetViewerRight.InitTileset(Owner.ListTileSet[cboTilesRight.SelectedIndex], Owner.TileSize);
 
-                TilesetViewerBack.ActiveTile = TileInfo.Terrain3DInfo.FrontFace.Origin.Location;
-                TilesetViewerFront.ActiveTile = TileInfo.Terrain3DInfo.BackFace.Origin.Location;
-                TilesetViewerLeft.ActiveTile = TileInfo.Terrain3DInfo.LeftFace.Origin.Location;
-                TilesetViewerRight.ActiveTile = TileInfo.Terrain3DInfo.RightFace.Origin.Location;
+                TilesetViewerBack.TileBrushSize = TileInfo.Terrain3DInfo.FrontFace.Origin;
+                TilesetViewerFront.TileBrushSize = TileInfo.Terrain3DInfo.BackFace.Origin;
+                TilesetViewerLeft.TileBrushSize = TileInfo.Terrain3DInfo.LeftFace.Origin;
+                TilesetViewerRight.TileBrushSize = TileInfo.Terrain3DInfo.RightFace.Origin;
             }
             else
             {
@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             System.Drawing.Point MousePos = new System.Drawing.Point(((MouseEventArgs)e).X, ((MouseEventArgs)e).Y);
             Point NewOrigin = new Point(MousePos.X / Owner.TileSize.X * Owner.TileSize.X,
                                                  MousePos.Y / Owner.TileSize.Y * Owner.TileSize.Y);
-            TilesetViewerFront.ActiveTile = NewOrigin;
+            TilesetViewerFront.TileBrushSize = new Rectangle(NewOrigin.X, NewOrigin.Y, Owner.TileSize.X, Owner.TileSize.Y);
 
             TileInfo.Terrain3DInfo.FrontFace.Origin = new Rectangle(NewOrigin.X, NewOrigin.Y, Owner.TileSize.X, Owner.TileSize.Y);
             UpdatePreview();
@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             System.Drawing.Point MousePos = new System.Drawing.Point(((MouseEventArgs)e).X, ((MouseEventArgs)e).Y);
             Point NewOrigin = new Point(MousePos.X / Owner.TileSize.X * Owner.TileSize.X,
                                                  MousePos.Y / Owner.TileSize.Y * Owner.TileSize.Y);
-            TilesetViewerBack.ActiveTile = NewOrigin;
+            TilesetViewerBack.TileBrushSize = new Rectangle(NewOrigin.X, NewOrigin.Y, Owner.TileSize.X, Owner.TileSize.Y);
 
             TileInfo.Terrain3DInfo.BackFace.Origin = new Rectangle(NewOrigin.X, NewOrigin.Y, Owner.TileSize.X, Owner.TileSize.Y);
             UpdatePreview();
@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             System.Drawing.Point MousePos = new System.Drawing.Point(((MouseEventArgs)e).X, ((MouseEventArgs)e).Y);
             Point NewOrigin = new Point(MousePos.X / Owner.TileSize.X * Owner.TileSize.X,
                                                  MousePos.Y / Owner.TileSize.Y * Owner.TileSize.Y);
-            TilesetViewerLeft.ActiveTile = NewOrigin;
+            TilesetViewerLeft.TileBrushSize = new Rectangle(NewOrigin.X, NewOrigin.Y, Owner.TileSize.X, Owner.TileSize.Y);
 
             TileInfo.Terrain3DInfo.LeftFace.Origin = new Rectangle(NewOrigin.X, NewOrigin.Y, Owner.TileSize.X, Owner.TileSize.Y);
             UpdatePreview();
@@ -165,7 +165,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             System.Drawing.Point MousePos = new System.Drawing.Point(((MouseEventArgs)e).X, ((MouseEventArgs)e).Y);
             Point NewOrigin = new Point(MousePos.X / Owner.TileSize.X * Owner.TileSize.X,
                                                  MousePos.Y / Owner.TileSize.Y * Owner.TileSize.Y);
-            TilesetViewerRight.ActiveTile = NewOrigin;
+            TilesetViewerRight.TileBrushSize = new Rectangle(NewOrigin.X, NewOrigin.Y, Owner.TileSize.X, Owner.TileSize.Y);
 
             TileInfo.Terrain3DInfo.RightFace.Origin = new Rectangle(NewOrigin.X, NewOrigin.Y, Owner.TileSize.X, Owner.TileSize.Y);
             UpdatePreview();

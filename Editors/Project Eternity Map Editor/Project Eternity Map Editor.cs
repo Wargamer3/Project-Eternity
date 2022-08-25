@@ -231,7 +231,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
             else if (tabToolBox.SelectedIndex == 1)
             {
-                if (TilesetViewer.ActiveTile != null)
+                if (TilesetViewer.TileBrushSize != null)
                     tslInformation.Text += " Left click to place a new spawn point";
                 tslInformation.Text += " Right click to remove a spawn point";
                 if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
@@ -250,8 +250,9 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 Point DrawOffset = TilesetViewer.DrawOffset;//Used to avoid warnings.
                 //Set the ActiveTile to the mouse position.
-                TilesetViewer.ActiveTile = new Point(((((MouseEventArgs)e).X + DrawOffset.X) / BattleMapViewer.ActiveMap.TileSize.X) * BattleMapViewer.ActiveMap.TileSize.X,
-                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / BattleMapViewer.ActiveMap.TileSize.Y) * BattleMapViewer.ActiveMap.TileSize.Y);
+                TilesetViewer.SelectTile(new Point(((((MouseEventArgs)e).X + DrawOffset.X) / BattleMapViewer.ActiveMap.TileSize.X) * BattleMapViewer.ActiveMap.TileSize.X,
+                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / BattleMapViewer.ActiveMap.TileSize.Y) * BattleMapViewer.ActiveMap.TileSize.Y),
+                                                     Control.ModifierKeys == Keys.Shift);
             }
         }
 
@@ -319,7 +320,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (cboTiles.SelectedIndex >= 0)
             {
-                Point TilePos = TilesetViewer.ActiveTile;
+                Rectangle TilePos = TilesetViewer.TileBrushSize;
                 Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
                 TileAttributesEditor.Init(SelectedTerrain, ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex]);
@@ -333,7 +334,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btn3DTileAttributes_Click(object sender, EventArgs e)
         {
-            Point TilePos = TilesetViewer.ActiveTile;
+            Rectangle TilePos = TilesetViewer.TileBrushSize;
             TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
                 ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y],
                 ActiveMap);
@@ -539,7 +540,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void PlaceTile(int X, int Y, int LayerIndex, bool ConsiderSubLayers)
         {
-            Point TilePos = TilesetViewer.ActiveTile;
+            Point TilePos = TilesetViewer.GetTileFromBrush(new Point(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y));
             if (TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
                 || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
             {
@@ -928,7 +929,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnAddExtraLayer_Click(object sender, EventArgs e)
         {
-            Point TilePos = TilesetViewer.ActiveTile;
+            Rectangle TilePos = TilesetViewer.TileBrushSize;
             Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
@@ -1352,7 +1353,7 @@ namespace ProjectEternity.Editors.MapEditor
                     ActiveMap.MapEnvironment.TimePeriodType = EnvironmentManager.TimePeriods.RealTime;
                 }
 
-                Point TilePos = TilesetViewer.ActiveTile;
+                Rectangle TilePos = TilesetViewer.TileBrushSize;
                 Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
                 DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 

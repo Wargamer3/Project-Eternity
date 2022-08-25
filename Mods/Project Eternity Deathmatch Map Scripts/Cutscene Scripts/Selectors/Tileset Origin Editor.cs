@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Windows;
+using System.Windows.Forms;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -11,7 +13,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void TilesetViewer_MouseClick(object sender, MouseEventArgs e)
         {
-            TilesetViewer.ActiveTile = new Microsoft.Xna.Framework.Point(e.X, e.Y);
+            Rectangle OldBrush = TilesetViewer.TileBrushSize;
+            TilesetViewer.TileBrushSize = new Rectangle(e.X, e.Y, OldBrush.Width, OldBrush.Height);
         }
     }
 }

@@ -93,7 +93,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         //Just create a new Tile.
                         else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
                         {
-                            Point TilePos = TilesetViewer.ActiveTile;
+                            Rectangle TilePos = TilesetViewer.TileBrushSize;
                             Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
                             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
@@ -195,8 +195,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Point DrawOffset = TilesetViewer.DrawOffset;//Used to avoid warnings.
                 //Set the ActiveTile to the mouse position.
-                TilesetViewer.ActiveTile = new Point(((((MouseEventArgs)e).X + DrawOffset.X) / BattleMapViewer.ActiveMap.TileSize.X) * BattleMapViewer.ActiveMap.TileSize.X,
-                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / BattleMapViewer.ActiveMap.TileSize.Y) * BattleMapViewer.ActiveMap.TileSize.Y);
+                TilesetViewer.SelectTile(new Point(((((MouseEventArgs)e).X + DrawOffset.X) / BattleMapViewer.ActiveMap.TileSize.X) * BattleMapViewer.ActiveMap.TileSize.X,
+                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / BattleMapViewer.ActiveMap.TileSize.Y) * BattleMapViewer.ActiveMap.TileSize.Y), false);
             }
         }
 
@@ -249,7 +249,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (cboTiles.SelectedIndex >= 0)
             {
-                Point TilePos = TilesetViewer.ActiveTile;
+                Rectangle TilePos = TilesetViewer.TileBrushSize;
                 Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
                 TileAttributesEditor.Init(SelectedTerrain, ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex]);

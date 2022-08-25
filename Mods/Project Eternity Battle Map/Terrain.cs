@@ -128,6 +128,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Terrain(Terrain Other, Point Position, int LayerIndex)
             : base(Position.X, Position.Y, LayerIndex, Other.LayerDepth)
         {
+            this.Height = Other.Height;
             this.WorldPosition = Other.WorldPosition;
             this.TerrainTypeIndex = Other.TerrainTypeIndex;
             this.MVEnterCost = Other.MVEnterCost;

@@ -340,7 +340,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             "FrontLeftCorner",
             "FrontRightCorner",
             "BackLeftCorner",
-            "BackRightCorner"});
+            "BackRightCorner",
+            "Pyramid",
+            "Pipe Left To Right",
+            "Pipe Front To Back",
+            "Pipe Up To Down"});
             this.cbo3DStyle.Location = new System.Drawing.Point(102, 19);
             this.cbo3DStyle.Name = "cbo3DStyle";
             this.cbo3DStyle.Size = new System.Drawing.Size(93, 21);
