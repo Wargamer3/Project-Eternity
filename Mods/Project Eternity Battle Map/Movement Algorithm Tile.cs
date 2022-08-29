@@ -25,5 +25,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.LayerIndex = LayerIndex;
             this.LayerDepth = LayerDepth;
         }
+
+        public Vector3 GetRealPosition(Vector3 Position)
+        {
+            Vector2 PositionInTile = new Vector2(Position.X - InternalPosition.X + 0.5f, Position.Y - InternalPosition.Y + 0.5f);
+
+            return WorldPosition + new Vector3(PositionInTile, DrawableTile.Terrain3DInfo.GetZOffset(PositionInTile, Height));
+        }
     }
 }

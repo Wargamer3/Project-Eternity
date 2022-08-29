@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
-using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Units
 {
@@ -22,7 +22,7 @@ namespace ProjectEternity.Core.Units
         public Vector3 Position { get { return _Position; } }
         public Vector3 Speed { get { return _Speed; } set { _Speed = value; } }
 
-        public UnitMap3D Unit3D;
+        public UnitMap3D Unit3DSprite;
         private HoldableItem _ItemHeld;
         public HoldableItem ItemHeld => _ItemHeld;
         public List<UnitMapComponent> ListTransportedUnit;
@@ -89,9 +89,9 @@ namespace ProjectEternity.Core.Units
         {
             _Position = Position;
 
-            if (Unit3D != null)
+            if (Unit3DSprite != null)
             {
-                Unit3D.SetPosition(Position.X, Position.Z, Position.Y);
+                Unit3DSprite.SetPosition(Position.X, Position.Z, Position.Y);
             }
         }
 

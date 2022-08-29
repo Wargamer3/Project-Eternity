@@ -93,7 +93,8 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             {
                 new EditorInfo(new string[] { GUIRootPathUnitsNormal, GUIRootPathUnits }, "Units/Normal/", new string[] { ".peu", ".txt" }, typeof(UnitNormalEditor)),
                 new EditorInfo(new string[] { GUIRootPathUnitsNormalMapSprites }, "Units/Normal/Map Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitSprites }, "Units/Normal/Unit Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false)
+                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitSprites }, "Units/Normal/Unit Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
+                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitModels }, "Units/Normal/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
             };
 
             return Info;
@@ -107,6 +108,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Write(txtName.Text);
             BW.Write(frmDetails.txtMapSprite.Text);
             BW.Write(frmDetails.txtUnitSprite.Text);
+            BW.Write(frmDetails.txt3DModel.Text);
             BW.Write(frmDetails.txtTags.Text);
             BW.Write(txtDescription.Text);
             BW.Write(Convert.ToInt32(txtPrice.Text));
@@ -258,10 +260,6 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Close();
         }
 
-        /// <summary>
-        /// Load a Unit item at selected path.
-        /// </summary>
-        /// <param name="PartPath">Path from which to open the Unit.</param>
         private void LoadUnit(string UnitPath)
         {
             Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(21);
@@ -355,6 +353,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
             frmDetails.txtMapSprite.Text = LoadedUnit.SpriteMapPath;
             frmDetails.txtUnitSprite.Text = LoadedUnit.SpriteUnitPath;
+            frmDetails.txt3DModel.Text = LoadedUnit.Model3DPath;
             frmDetails.txtTags.Text = LoadedUnit.UnitTags;
 
             #region Abilities

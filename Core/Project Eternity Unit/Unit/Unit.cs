@@ -48,6 +48,8 @@ namespace ProjectEternity.Core.Units
         public Texture2D SpriteMap;
         public string SpriteUnitPath;
         public Texture2D SpriteUnit;
+        public string Model3DPath;
+        public AnimatedModel Unit3DModel;
 
         protected int _HP;
         protected int _EN;

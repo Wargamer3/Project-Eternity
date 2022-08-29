@@ -35,6 +35,7 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathUnitsNormal = "Units\\Normal";
         public const string GUIRootPathUnitsNormalMapSprites = "Units/Normal/Map Sprites";
         public const string GUIRootPathUnitsNormalUnitSprites = "Units/Normal/Unit Sprites";
+        public const string GUIRootPathUnitsNormalUnitModels = "Units/Normal/Models";
         public const string GUIRootPathUnitsBuilder = "Units\\Builder";
         public const string GUIRootPathUnitsConquest = "Units\\Conquest";
         public const string GUIRootPathUnitsMultiForm = "Units\\Multi-Form";

@@ -49,17 +49,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             if (Content != null)
             {
-                NewSquad.Unit3D = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
+                NewSquad.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
                 Color OutlineColor = ListPlayer[PlayerIndex].Color;
-                NewSquad.Unit3D.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
+                NewSquad.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
             }
+
             ListPlayer[PlayerIndex].IsAlive = true;
 
             NewSquad.Init(GlobalBattleParams.GlobalContext);
             ActivateAutomaticSkills(NewSquad, string.Empty);
             NewSquad.ID = ID;
             NewSquad.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));
-            NewSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(_World);
+            NewSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
 
             ListPlayer[PlayerIndex].ListSquad.Add(NewSquad);
 
@@ -115,7 +116,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListPlayer[PlayerIndex].UpdateAliveStatus();
             ActiveSquad.SetPosition(new Vector3(NewPosition.InternalPosition.X, NewPosition.InternalPosition.Y, NewPosition.LayerIndex));
 
-            ActiveSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(_World);
+            ActiveSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
         }
 
         public override List<MovementAlgorithmTile> GetSpawnLocations(int Team)
@@ -431,7 +432,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         //Do not spawn squads as it will trigger effect that were already activated
                         if (Content != null)
                         {
-                            NewSquad.Unit3D = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
+                            NewSquad.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
                         }
 
                         if (!string.IsNullOrEmpty(ActiveSquadSquadAI))
@@ -579,7 +580,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //If the selected unit have the order to move, draw the possible positions it can go to.
                 foreach (Squad ActiveSquad in ListPlayer[P].ListSquad)
                 {
-                    ActiveSquad.Unit3D.UnitEffect3D.Parameters["World"].SetValue(World);
+                    ActiveSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(World);
                 }
             }
         }

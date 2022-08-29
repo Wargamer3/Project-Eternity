@@ -1380,7 +1380,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public void SpawnUnit(int PlayerIndex, UnitConquest NewUnit, Vector3 Position)
         {
-            NewUnit.Components.Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.SpriteMap, 1);
+            NewUnit.Components.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewUnit.SpriteMap, 1);
             NewUnit.InitStat();
 
             while (ListPlayer.Count <= PlayerIndex)

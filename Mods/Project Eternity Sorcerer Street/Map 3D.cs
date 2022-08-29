@@ -274,14 +274,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
-                Map.ListPlayer[P].GamePiece.Unit3D.SetViewMatrix(Camera.View);
+                Map.ListPlayer[P].GamePiece.Unit3DSprite.SetViewMatrix(Camera.View);
 
-                Map.ListPlayer[P].GamePiece.Unit3D.SetPosition(
+                Map.ListPlayer[P].GamePiece.Unit3DSprite.SetPosition(
                     -Map.MapSize.X / 2 + 0.5f + Map.ListPlayer[P].GamePiece.Position.X,
                     Radius,
                     -Map.MapSize.Y / 2 + 0.5f + Map.ListPlayer[P].GamePiece.Position.Y);
 
-                Map.ListPlayer[P].GamePiece.Unit3D.Draw(GameScreen.GraphicsDevice);
+                Map.ListPlayer[P].GamePiece.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
             }
             g.Begin();
         }

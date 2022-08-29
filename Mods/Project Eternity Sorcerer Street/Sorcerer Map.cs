@@ -292,7 +292,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void AddPlayer(Player NewPlayer)
         {
             NewPlayer.GamePiece.SpriteMap = Content.Load<Texture2D>("Units/Default");
-            NewPlayer.GamePiece.Unit3D = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewPlayer.GamePiece.SpriteMap, 1);
+            NewPlayer.GamePiece.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewPlayer.GamePiece.SpriteMap, 1);
 
             ListPlayer.Add(NewPlayer);
         }

@@ -7,7 +7,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 {
     public partial class DetailsEditor : Form
     {
-        private enum ItemSelectionChoices { MapSprite, UnitSprite };
+        private enum ItemSelectionChoices { MapSprite, UnitSprite, Model };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
@@ -28,6 +28,12 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitsNormalUnitSprites));
         }
 
+        private void btnChange3DModel_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.Model;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnitsNormalUnitModels));
+        }
+
         protected void ListMenuItemsSelected(List<string> Items)
         {
             if (Items == null)
@@ -46,6 +52,11 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                     case ItemSelectionChoices.UnitSprite:
                         Name = Items[I].Substring(0, Items[0].Length - 4).Substring(33);
                         txtUnitSprite.Text = Name;
+                        break;
+
+                    case ItemSelectionChoices.Model:
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(28);
+                        txt3DModel.Text = Name;
                         break;
                 }
             }

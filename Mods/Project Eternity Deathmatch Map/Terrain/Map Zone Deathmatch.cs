@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnNewPlayerPhase()
         {
-            if (Shape.ZoneShapeType == ZoneShape.ZoneShapeTypes.Full)
+            if (CurrentTimePeriod.PassiveSkill != null && Shape.ZoneShapeType == ZoneShape.ZoneShapeTypes.Full)
             {
                 for (int S = 0; S < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; S++)
                 {

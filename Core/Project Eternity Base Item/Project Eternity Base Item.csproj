@@ -67,6 +67,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3D\Animation\AnimatedModel.cs" />
+    <Compile Include="3D\Animation\Animation3D.cs" />
+    <Compile Include="3D\Animation\AnimationClipReader.cs" />
+    <Compile Include="3D\Animation\KeyFrame3D.cs" />
+    <Compile Include="3D\Animation\BoneTimeline.cs" />
+    <Compile Include="3D\Animation\AnimationBone.cs" />
+    <Compile Include="3D\Animation\ModelAnimationInfo.cs" />
+    <Compile Include="3D\Animation\ModelAnimationInfoReader.cs" />
     <Compile Include="3D\Cross Ring 3D.cs" />
     <Compile Include="3D\Orbiting Camera 3D.cs" />
     <Compile Include="3D\Default Camera 3D.cs" />

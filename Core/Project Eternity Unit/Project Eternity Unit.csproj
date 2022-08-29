@@ -79,6 +79,7 @@
     <Compile Include="Squad.cs" />
     <Compile Include="Standard Parts.cs" />
     <Compile Include="Map Components.cs" />
+    <Compile Include="UnitMap3D.cs" />
     <Compile Include="Unit\Stats Boosts.cs" />
     <Compile Include="Unit\Unit Stats.cs" />
     <Compile Include="Unit\Unit Map.cs" />

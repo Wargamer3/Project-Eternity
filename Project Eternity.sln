@@ -418,6 +418,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Deahtmatch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Vehicle Editor", "Editors\Project Eternity Vehicle Editor\Project Eternity Vehicle Editor.csproj", "{ECE46C76-C267-4A77-93EF-7F523DA0EA9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Eternity Content Processors", "Core\Project Eternity Content Processors\Project Eternity Content Processors.csproj", "{AA1D1633-E0DD-45E4-96FF-D33516D8289F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -847,6 +849,9 @@ Global
 		{ECE46C76-C267-4A77-93EF-7F523DA0EA9B}.Debug|x86.ActiveCfg = Debug|x86
 		{ECE46C76-C267-4A77-93EF-7F523DA0EA9B}.Debug|x86.Build.0 = Debug|x86
 		{ECE46C76-C267-4A77-93EF-7F523DA0EA9B}.Release|x86.ActiveCfg = Release|x86
+		{AA1D1633-E0DD-45E4-96FF-D33516D8289F}.Debug|x86.ActiveCfg = Debug|x86
+		{AA1D1633-E0DD-45E4-96FF-D33516D8289F}.Debug|x86.Build.0 = Debug|x86
+		{AA1D1633-E0DD-45E4-96FF-D33516D8289F}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -960,6 +965,7 @@ Global
 		{FDC08C07-6562-4922-AFEC-7F2D4336FB0D} = {C3D7FA27-03E1-44B0-ADF9-1FE00A076CD6}
 		{B5B74445-13BD-4DEE-927A-B8006BC51769} = {91335A24-5729-4ACA-AFDE-C08AA961AD6B}
 		{ECE46C76-C267-4A77-93EF-7F523DA0EA9B} = {F774D98B-8C76-48C4-BD9A-AFB29F5E728C}
+		{AA1D1633-E0DD-45E4-96FF-D33516D8289F} = {DDBEFB7A-32E0-4FF3-BE92-66E31BE553D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDDE4437-1061-4E3A-8C8F-A1F2AA9F76A8}

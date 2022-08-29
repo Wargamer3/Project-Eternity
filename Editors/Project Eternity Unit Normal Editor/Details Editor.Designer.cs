@@ -37,6 +37,9 @@
             this.txtUnitSprite = new System.Windows.Forms.TextBox();
             this.gbTags = new System.Windows.Forms.GroupBox();
             this.txtTags = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnChange3DModel = new System.Windows.Forms.Button();
+            this.txt3DModel = new System.Windows.Forms.TextBox();
             this.gbSprites.SuspendLayout();
             this.gbTags.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +66,7 @@
             // btnMapSprite
             // 
             this.btnMapSprite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMapSprite.Location = new System.Drawing.Point(251, 29);
+            this.btnMapSprite.Location = new System.Drawing.Point(251, 30);
             this.btnMapSprite.Name = "btnMapSprite";
             this.btnMapSprite.Size = new System.Drawing.Size(128, 23);
             this.btnMapSprite.TabIndex = 2;
@@ -75,6 +78,9 @@
             // 
             this.gbSprites.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbSprites.Controls.Add(this.label1);
+            this.gbSprites.Controls.Add(this.btnChange3DModel);
+            this.gbSprites.Controls.Add(this.txt3DModel);
             this.gbSprites.Controls.Add(this.lblUnitSprite);
             this.gbSprites.Controls.Add(this.btnChangeUnitSprite);
             this.gbSprites.Controls.Add(this.txtUnitSprite);
@@ -83,7 +89,7 @@
             this.gbSprites.Controls.Add(this.txtMapSprite);
             this.gbSprites.Location = new System.Drawing.Point(12, 12);
             this.gbSprites.Name = "gbSprites";
-            this.gbSprites.Size = new System.Drawing.Size(385, 104);
+            this.gbSprites.Size = new System.Drawing.Size(385, 137);
             this.gbSprites.TabIndex = 3;
             this.gbSprites.TabStop = false;
             this.gbSprites.Text = "Sprites";
@@ -100,7 +106,7 @@
             // btnChangeUnitSprite
             // 
             this.btnChangeUnitSprite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChangeUnitSprite.Location = new System.Drawing.Point(251, 68);
+            this.btnChangeUnitSprite.Location = new System.Drawing.Point(251, 69);
             this.btnChangeUnitSprite.Name = "btnChangeUnitSprite";
             this.btnChangeUnitSprite.Size = new System.Drawing.Size(128, 23);
             this.btnChangeUnitSprite.TabIndex = 5;
@@ -123,9 +129,9 @@
             this.gbTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbTags.Controls.Add(this.txtTags);
-            this.gbTags.Location = new System.Drawing.Point(12, 122);
+            this.gbTags.Location = new System.Drawing.Point(12, 155);
             this.gbTags.Name = "gbTags";
-            this.gbTags.Size = new System.Drawing.Size(385, 111);
+            this.gbTags.Size = new System.Drawing.Size(385, 109);
             this.gbTags.TabIndex = 5;
             this.gbTags.TabStop = false;
             this.gbTags.Text = "Tags";
@@ -136,14 +142,44 @@
             this.txtTags.Location = new System.Drawing.Point(3, 16);
             this.txtTags.Multiline = true;
             this.txtTags.Name = "txtTags";
-            this.txtTags.Size = new System.Drawing.Size(379, 92);
+            this.txtTags.Size = new System.Drawing.Size(379, 90);
             this.txtTags.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 94);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "3D Model";
+            // 
+            // btnChange3DModel
+            // 
+            this.btnChange3DModel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnChange3DModel.Location = new System.Drawing.Point(251, 108);
+            this.btnChange3DModel.Name = "btnChange3DModel";
+            this.btnChange3DModel.Size = new System.Drawing.Size(128, 23);
+            this.btnChange3DModel.TabIndex = 8;
+            this.btnChange3DModel.Text = "Change 3D Model";
+            this.btnChange3DModel.UseVisualStyleBackColor = true;
+            this.btnChange3DModel.Click += new System.EventHandler(this.btnChange3DModel_Click);
+            // 
+            // txt3DModel
+            // 
+            this.txt3DModel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt3DModel.Location = new System.Drawing.Point(6, 110);
+            this.txt3DModel.Name = "txt3DModel";
+            this.txt3DModel.ReadOnly = true;
+            this.txt3DModel.Size = new System.Drawing.Size(239, 20);
+            this.txt3DModel.TabIndex = 6;
             // 
             // DetailsEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(406, 241);
+            this.ClientSize = new System.Drawing.Size(406, 276);
             this.Controls.Add(this.gbTags);
             this.Controls.Add(this.gbSprites);
             this.Name = "DetailsEditor";
@@ -166,5 +202,8 @@
         public System.Windows.Forms.TextBox txtUnitSprite;
         private System.Windows.Forms.GroupBox gbTags;
         public System.Windows.Forms.TextBox txtTags;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnChange3DModel;
+        public System.Windows.Forms.TextBox txt3DModel;
     }
 }

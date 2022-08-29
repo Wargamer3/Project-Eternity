@@ -296,12 +296,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Create3DCursor();
             }
+            for (int P = 0; P < Map.ListPlayer.Count; P++)
+            {
+                //If the selected unit have the order to move, draw the possible positions it can go to.
+                foreach (Squad ActiveSquad in Map.ListPlayer[P].ListSquad)
+                {
+                    //If it's dead, don't draw it unless it's an event unit.
+                    if ((ActiveSquad.CurrentLeader == null && !ActiveSquad.IsEventSquad)
+                        || ActiveSquad.IsDead)
+                        continue;
+
+                    ActiveSquad.CurrentLeader.Unit3DModel.Update(gameTime);
+                }
+            }
         }
 
         public void SetTarget(Vector3 Target)
         {
-            Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, CameraDistance), Matrix.CreateRotationY(0.2f)) + Target;
-            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, CameraHeight, 0f));
+            Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, 300), Matrix.CreateRotationY(0.2f)) + Target;
+            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 400, 0f));
             Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);
         }
 
@@ -447,11 +460,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 int X = (int)ActivePoint.WorldPosition.X;
                 int Y = (int)ActivePoint.WorldPosition.Y;
                 float Z = ActivePoint.WorldPosition.Z * LayerHeight + 0.1f;
+                float MinZ = Z - ActivePoint.Height * LayerHeight;
                 DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                 ListDrawablePoint3D.Add(ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, Z + 0.1f, ActivePoint.Owner.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
+                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
             }
 
             DicDrawablePointPerColor.Add(new Vector4(PointColor.R / 255f, PointColor.G / 255f, PointColor.B / 255f, PointColor.A / 255f), ListDrawablePoint3D);
@@ -471,12 +485,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 int X = (int)ActivePoint.WorldPosition.X;
                 int Y = (int)ActivePoint.WorldPosition.Y;
-                float Z = ActivePoint.WorldPosition.Z * LayerHeight + 0.1f;
+                float Z = ActivePoint.WorldPosition.Z * LayerHeight + 0.15f;
+                float MinZ = Z - ActivePoint.Height * LayerHeight;
                 DrawableTile ActiveTerrain = ActivePoint.DrawableTile;
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                 ListDrawableArrowPerColor.Add(ActiveTerrain3D.CreateTile3D(0, GetCursorTextureOffset(Previous, ActivePoint, Next),
-                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, Z + 0.15f, ActivePoint.Owner.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
+                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
             }
         }
 
@@ -644,7 +659,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             DrawSquads(g, View);
 
             DrawDelayedAttacks(g);
@@ -792,16 +807,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         || ActiveSquad.IsDead)
                         continue;
 
-                    ActiveSquad.Unit3D.SetViewMatrix(View);
-
                     if (Map.MovementAnimation.Contains(ActiveSquad))
                     {
                         Vector3 CurrentPosition = Map.MovementAnimation.GetPosition(ActiveSquad);
 
-                        float TerrainZ = 0;
                         if (ActiveSquad.Speed == Vector3.Zero)
                         {
-                            TerrainZ = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)CurrentPosition.X, (int)CurrentPosition.Y].WorldPosition.Z;
+                            CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition);
                         }
 
                         if (ActiveSquad.ItemHeld != null)
@@ -809,21 +821,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ActiveSquad.ItemHeld.Item3D.SetViewMatrix(View);
 
                             ActiveSquad.ItemHeld.Item3D.SetPosition(
-                                (CurrentPosition.X + 0.5f) * Map.TileSize.X,
-                                (TerrainZ + 1f) * LayerHeight,
-                                CurrentPosition.Y * Map.TileSize.Y);
+                                CurrentPosition.X * Map.TileSize.X,
+                                (CurrentPosition.Z + 1f) * LayerHeight,
+                                (CurrentPosition.Y - 0.5f) * Map.TileSize.Y);
 
                             ActiveSquad.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
                         }
 
-                        ActiveSquad.Unit3D.SetPosition(
-                            (CurrentPosition.X + 0.5f) * Map.TileSize.X,
-                            (TerrainZ + 0.5f) * LayerHeight,
-                            (CurrentPosition.Y + 0.5f) * Map.TileSize.Y);
+                        if (ActiveSquad.CurrentLeader.Unit3DModel == null)
+                        {
+                            ActiveSquad.Unit3DSprite.SetViewMatrix(View);
 
-                        ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
+                            ActiveSquad.Unit3DSprite.SetPosition(
+                                CurrentPosition.X * Map.TileSize.X,
+                                (CurrentPosition.Z + 0.5f) * LayerHeight,
+                                CurrentPosition.Y * Map.TileSize.Y);
 
-                        ActiveSquad.Unit3D.Draw(GameScreen.GraphicsDevice);
+                            ActiveSquad.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(true);
+
+                            ActiveSquad.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                        }
+                        else
+                        {
+                            ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Walking");
+                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+                                * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
+                        }
                     }
                     else
                     {
@@ -833,10 +856,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         else
                             UnitColor = Color.White;
 
-                        float TerrainZ = 0;
+                        Vector3 CurrentPosition = ActiveSquad.Position;
+
                         if (ActiveSquad.Speed == Vector3.Zero)
                         {
-                            TerrainZ = Map.LayerManager.ListLayer[(int)ActiveSquad.Z].ArrayTerrain[(int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y].WorldPosition.Z;
+                            CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition);
                         }
 
                         if (ActiveSquad.ItemHeld != null)
@@ -844,21 +868,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ActiveSquad.ItemHeld.Item3D.SetViewMatrix(View);
 
                             ActiveSquad.ItemHeld.Item3D.SetPosition(
-                                (ActiveSquad.Position.X + 0.5f) * Map.TileSize.X,
-                                (TerrainZ + 1f) * LayerHeight,
-                                ActiveSquad.Position.Y * Map.TileSize.Y);
+                                CurrentPosition.X  * Map.TileSize.X,
+                                (CurrentPosition.Z + 1f) * LayerHeight,
+                                (CurrentPosition.Y - 0.5f) * Map.TileSize.Y);
 
                             ActiveSquad.ItemHeld.Item3D.Draw(GameScreen.GraphicsDevice);
                         }
 
-                        ActiveSquad.Unit3D.SetPosition(
-                            (ActiveSquad.Position.X + 0.5f) * Map.TileSize.X,
-                            (TerrainZ + 0.5f) * LayerHeight,
-                            (ActiveSquad.Position.Y + 0.5f) * Map.TileSize.Y);
+                        if (ActiveSquad.CurrentLeader.Unit3DModel == null)
+                        {
+                            ActiveSquad.Unit3DSprite.SetViewMatrix(View);
 
-                        ActiveSquad.Unit3D.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActiveSquad.CanMove && P == Map.ActivePlayerIndex);
+                            ActiveSquad.Unit3DSprite.SetPosition(
+                                CurrentPosition.X * Map.TileSize.X,
+                                (CurrentPosition.Z + 0.5f) * LayerHeight,
+                                CurrentPosition.Y * Map.TileSize.Y);
 
-                        ActiveSquad.Unit3D.Draw(GameScreen.GraphicsDevice);
+                            ActiveSquad.Unit3DSprite.UnitEffect3D.Parameters["Greyscale"].SetValue(!ActiveSquad.CanMove && P == Map.ActivePlayerIndex);
+
+                            ActiveSquad.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
+                        }
+                        else
+                        {
+
+                            ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Waving");
+                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+                                * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
+                        }
                     }
                 }
             }
@@ -944,7 +980,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveSeat.User != null)
                     {
-                        ActiveSeat.User.Unit3D.SetViewMatrix(View);
+                        ActiveSeat.User.Unit3DSprite.SetViewMatrix(View);
 
                         Vector3 UserPositon = new Vector3(ActiveVehicle.Position.X - ActiveVehicle.sprVehicle.Width / 2 + ActiveSeat.SeatOffset.X,
                             ActiveVehicle.Position.Y, ActiveVehicle.Position.Z - ActiveVehicle.sprVehicle.Height / 2 + ActiveSeat.SeatOffset.Y);
@@ -955,12 +991,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 -ActiveVehicle.Position.Z))
                             * Matrix.CreateRotationY(ActiveVehicle.Yaw) * Matrix.CreateTranslation(ActiveVehicle.Position);
                         Vector3 UserPos2 = Vector3.Transform(UserPositon, a);
-                        ActiveSeat.User.Unit3D.SetPosition(
+                        ActiveSeat.User.Unit3DSprite.SetPosition(
                             UserPos2.X,
                             UserPos2.Y + 8,
                             UserPos2.Z);
 
-                        ActiveSeat.User.Unit3D.Draw(GameScreen.GraphicsDevice);
+                        ActiveSeat.User.Unit3DSprite.Draw(GameScreen.GraphicsDevice);
                     }
                 }
             }

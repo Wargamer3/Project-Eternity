@@ -507,5 +507,38 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             return new Tile3D(TilesetIndex, ArrayVertex, ArrayIndex);
         }
+
+        public float GetZOffset(Vector2 PositionInTile, float Height)
+        {
+            switch (TerrainStyle)
+            {
+                case TerrainStyles.SlopeFrontToBack:
+                    break;
+
+                case TerrainStyles.SlopeBackToFront:
+                    break;
+
+                case TerrainStyles.SlopeLeftToRight:
+                    break;
+
+                case TerrainStyles.SlopeRightToLeft:
+
+                    return Height * (1 - PositionInTile.X) - Height;
+
+                case TerrainStyles.WedgeFrontToBack:
+                    break;
+
+                case TerrainStyles.WedgeBackToFront:
+                    break;
+
+                case TerrainStyles.WedgeLeftToRight:
+                    break;
+
+                case TerrainStyles.WedgeRightToLeft:
+                    return 1 - (1 - Height) * PositionInTile.X - Height;
+            }
+
+            return 0;
+        }
     }
 }

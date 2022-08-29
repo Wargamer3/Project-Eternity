@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void MoveSquad(BattleMap Map)
         {
-            const float MovementSpeed = 0.2f;
+            float MovementSpeed = 0.2f;
             List<UnitMapComponent> ListRemovedSquad = new List<UnitMapComponent>();
 
             foreach(KeyValuePair<UnitMapComponent, List<Vector3>> ActiveUnitMap in DicMovingMapUnitByNextPosition)
@@ -87,19 +87,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     UpdatedPosition.Y = NextPosition.Y;
                 }
 
-                if (UpdatedPosition.Z < NextPosition.Z - MovementSpeed)
-                {
-                    UpdatedPosition.Z += MovementSpeed;
-                    if (UpdatedPosition.Z > NextPosition.Z + MovementSpeed)
-                        UpdatedPosition.Z = NextPosition.Z;
-                }
-                else if (UpdatedPosition.Z > NextPosition.Z + MovementSpeed)
-                {
-                    UpdatedPosition.Z -= MovementSpeed;
-                    if (UpdatedPosition.Z < NextPosition.Z - MovementSpeed)
-                        UpdatedPosition.Z = NextPosition.Z;
-                }
-                else
+                if (UpdatedPosition.X % 1 > 0.5f)
                 {
                     UpdatedPosition.Z = NextPosition.Z;
                 }
