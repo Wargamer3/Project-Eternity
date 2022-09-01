@@ -16,6 +16,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private int ActivePlayerIndex;
         private int ActiveSquadIndex;
         private MovementAlgorithmTile LastPosition;
+        private UnitMapComponent.Directions LastDirection;
         private Vector3 LastCameraPosition;
         private MovementAlgorithmTile LastCusorMVPosition;
         private Squad ActiveSquad;
@@ -32,12 +33,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMovedOverPoint = new List<Vector3>();
         }
 
-        public ActionPanelMovePart1(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, MovementAlgorithmTile LastPosition, Vector3 LastCameraPosition, bool IsPostAttack = false)
+        public ActionPanelMovePart1(DeathmatchMap Map, int ActivePlayerIndex, int ActiveSquadIndex, MovementAlgorithmTile LastPosition, UnitMapComponent.Directions LastDirection, Vector3 LastCameraPosition, bool IsPostAttack = false)
             : base(PanelName, Map, !IsPostAttack)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.ActiveSquadIndex = ActiveSquadIndex;
             this.LastPosition = LastPosition;
+            this.LastDirection = LastDirection;
             this.LastCameraPosition = LastCameraPosition;
             this.IsPostAttack = IsPostAttack;
 
@@ -49,6 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void OnSelect()
         {
             ActiveSquad.SetPosition(new Vector3(LastPosition.InternalPosition.X, LastPosition.InternalPosition.Y, LastPosition.LayerIndex));
+            ActiveSquad.Direction = LastDirection;
             Map.CursorPosition = ActiveSquad.Position;
             Map.CursorPositionVisible = Map.CursorPosition;
             LastCusorMVPosition = LastPosition;
@@ -237,6 +240,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
             LastPosition = Map.GetMovementTile(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32());
+            LastDirection = (UnitMapComponent.Directions)BR.ReadByte();
             LastCameraPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
 
@@ -250,6 +254,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(LastPosition.InternalPosition.X);
             BW.AppendInt32(LastPosition.InternalPosition.Y);
             BW.AppendInt32(LastPosition.LayerIndex);
+            BW.AppendByte((byte)LastDirection);
             BW.AppendFloat(LastCameraPosition.X);
             BW.AppendFloat(LastCameraPosition.Y);
             BW.AppendFloat(LastCameraPosition.Z);

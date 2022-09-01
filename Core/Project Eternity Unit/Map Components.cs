@@ -6,6 +6,7 @@ namespace ProjectEternity.Core.Units
 {
     public abstract class UnitMapComponent
     {
+        public enum Directions : byte { Up, Down, Left, Right }
         public uint ID;
 
         public Point MapSize;//Size of the Unit on the map.
@@ -18,6 +19,7 @@ namespace ProjectEternity.Core.Units
         public bool IsPlayerControlled;
 
         protected Vector3 _Position;
+        public Directions Direction;
         protected Vector3 _Speed;
         public Vector3 Position { get { return _Position; } }
         public Vector3 Speed { get { return _Speed; } set { _Speed = value; } }

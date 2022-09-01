@@ -81,10 +81,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Position != Map.CursorPosition)
             {
-                //Movement initialisation.
                 Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoint);
 
-                //Move the Unit to the cursor position
                 ActiveSquad.SetPosition(Map.CursorPosition);
 
                 Map.CursorPosition = ActiveSquad.Position;
@@ -130,10 +128,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
 
-            //Movement initialisation.
             Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoint);
 
-            //Move the Unit to the cursor position
             ActiveSquad.SetPosition(Map.CursorPosition);
 
             Map.CursorPosition = ActiveSquad.Position;

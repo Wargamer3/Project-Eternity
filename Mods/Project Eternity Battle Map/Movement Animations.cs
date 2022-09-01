@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void MoveSquad(BattleMap Map)
         {
-            float MovementSpeed = 0.2f;
+            float MovementSpeed = 0.02f;
             List<UnitMapComponent> ListRemovedSquad = new List<UnitMapComponent>();
 
             foreach(KeyValuePair<UnitMapComponent, List<Vector3>> ActiveUnitMap in DicMovingMapUnitByNextPosition)
@@ -96,6 +96,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (UpdatedPosition.X == NextPosition.X && UpdatedPosition.Y == NextPosition.Y && UpdatedPosition.Z == NextPosition.Z)
                 {
+                    if (ActiveUnitMap.Value.Count > 1)
+                    {
+                        NextPosition = ActiveUnitMap.Value[1];
+                        if (UpdatedPosition.X < NextPosition.X)
+                        {
+                            ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Right;
+                        }
+                        else if (UpdatedPosition.X > NextPosition.X)
+                        {
+                            ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Left;
+                        }
+                        else if (UpdatedPosition.Y < NextPosition.Y)
+                        {
+                            ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Down;
+                        }
+                        else if (UpdatedPosition.Y > NextPosition.Y)
+                        {
+                            ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Up;
+                        }
+                    }
+
                     ListRemovedSquad.Add(ActiveUnitMap.Key);
                 }
             }
@@ -121,6 +142,39 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Skip()
         {
+            foreach (KeyValuePair<UnitMapComponent, List<Vector3>> ActiveUnitMap in DicMovingMapUnitByNextPosition)
+            {
+                Vector3 StartPosition = DicMovingMapUnitByPosition[ActiveUnitMap.Key];
+                Vector3 LastPosition = DicMovingMapUnitByPosition[ActiveUnitMap.Key];
+
+                if (ActiveUnitMap.Value.Count == 1)
+                {
+                    LastPosition = ActiveUnitMap.Value[ActiveUnitMap.Value.Count - 1];
+                }
+                else if (ActiveUnitMap.Value.Count > 1)
+                {
+                    StartPosition = ActiveUnitMap.Value[ActiveUnitMap.Value.Count - 2];
+                    LastPosition = ActiveUnitMap.Value[ActiveUnitMap.Value.Count - 1];
+                }
+
+                if (StartPosition.X < LastPosition.X)
+                {
+                    ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Right;
+                }
+                else if (StartPosition.X > LastPosition.X)
+                {
+                    ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Left;
+                }
+                else if (StartPosition.Y < LastPosition.Y)
+                {
+                    ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Down;
+                }
+                else if (StartPosition.Y > LastPosition.Y)
+                {
+                    ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Up;
+                }
+            }
+
             DicMovingMapUnitByPosition.Clear();
             DicMovingMapUnitByNextPosition.Clear();
         }

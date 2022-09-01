@@ -421,10 +421,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int CursorLayer = (int)Map.CursorPosition.Z;
             for (int Y = (int)Map.CursorPosition.Y; Y < Map.MapSize.Y; ++Y)
             {
-                if (Map.LayerManager.ListLayer[CursorLayer].ArrayTerrain[CursorX, Y].TerrainTypeIndex == UnitStats.TerrainWallIndex)
+                if (CursorLayer < Map.LayerManager.ListLayer.Count && Map.LayerManager.ListLayer[CursorLayer].ArrayTerrain[CursorX, Y].TerrainTypeIndex == UnitStats.TerrainWallIndex)
                 {
                     return true;
                 }
+                ++CursorLayer;
             }
 
             return false;
@@ -844,7 +845,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         else
                         {
                             ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Walking");
-                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+                            Matrix RotationMatrix = Matrix.Identity;
+                            if (ActiveSquad.Direction == UnitMapComponent.Directions.Right)
+                            {
+                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
+                            }
+                            else if (ActiveSquad.Direction == UnitMapComponent.Directions.Up)
+                            {
+                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
+                            }
+                            else if (ActiveSquad.Direction == UnitMapComponent.Directions.Left)
+                            {
+                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
+                            }
+
+                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                                 * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
                         }
                     }
@@ -890,9 +905,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                         else
                         {
-
                             ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Waving");
-                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+                            Matrix RotationMatrix = Matrix.Identity;
+                            if (ActiveSquad.Direction == UnitMapComponent.Directions.Right)
+                            {
+                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
+                            }
+                            else if (ActiveSquad.Direction == UnitMapComponent.Directions.Up)
+                            {
+                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
+                            }
+                            else if (ActiveSquad.Direction == UnitMapComponent.Directions.Left)
+                            {
+                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
+                            }
+
+                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                                 * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
                         }
                     }
