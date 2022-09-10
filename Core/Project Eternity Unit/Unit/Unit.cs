@@ -593,24 +593,24 @@ namespace ProjectEternity.Core.Units
             return AttackToDrop;
         }
 
-        public void UpdateAllAttacks(Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
+        public void UpdateAllAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
             foreach (Attack ActiveAttack in ListAttack)
             {
                 if (!ActiveAttack.CanAttack)
                 {
-                    ActiveAttack.UpdateAttack(this, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove);
+                    ActiveAttack.UpdateAttack(this, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TargetMovementType, CanMove);
                 }
             }
         }
 
-        public void UpdateNonMAPAttacks(Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
+        public void UpdateNonMAPAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
             foreach (Attack ActiveAttack in ListAttack)
             {
                 if (ActiveAttack.Pri != WeaponPrimaryProperty.MAP)
                 {
-                    ActiveAttack.UpdateAttack(this, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove);
+                    ActiveAttack.UpdateAttack(this, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TargetMovementType, CanMove);
                 }
                 else
                 {

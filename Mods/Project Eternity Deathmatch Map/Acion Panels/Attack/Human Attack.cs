@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void OnSelect()
         {
             //Attack Support
-            ActiveSquadSupport.PrepareAttackSupport(Map, Map.ActivePlayerIndex, ActiveSquad, TargetPlayerIndex, TargetSquadIndex);
+            ActiveSquadSupport.PrepareAttackSupport(Map, ActivePlayerIndex, ActiveSquad, TargetPlayerIndex, TargetSquadIndex);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -196,7 +196,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (ActiveSquad.UnitsAliveInSquad == 1)
                         {
                             Map.AttackPicker.Reset(ActiveSquad.CurrentLeader, ListAttackActiveSquad);
-                            ActiveSquad.CurrentLeader.UpdateNonMAPAttacks(ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, ActiveSquad.CanMove);
+                            ActiveSquad.CurrentLeader.UpdateNonMAPAttacks(ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, ActiveSquad.CanMove);
 
                             AttackIndex = 0;//Make sure you select the first weapon.
                             Map.BattleMenuStage = BattleMenuStages.ChooseAttack;
@@ -490,8 +490,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.DisableAllAttacks();
                     ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.UpdateAllAttacks(
-                        ActiveSquadSupport.ActiveSquadSupport.Position,
-                        TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement,
+                        ActiveSquadSupport.ActiveSquadSupport.Position, Map.ListPlayer[ActivePlayerIndex].Team,
+                        TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement,
                         ActiveSquadSupport.ActiveSquadSupport.CanMove);
 
                     WeaponOld = ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack;

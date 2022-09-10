@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         Unit Defender = DefendingSquad.CurrentLeader;
 
                         AttackerSupportUnit.DisableAllAttacks();
-                        AttackerSupportUnit.UpdateAllAttacks(AttackerSupportSquad.Position, DefendingSquad.Position, DefendingSquad.ArrayMapSize, DefendingSquad.CurrentMovement, true);
+                        AttackerSupportUnit.UpdateAllAttacks(AttackerSupportSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, DefendingSquad.Position, Map.ListPlayer[DefendingPlayerIndex].Team, DefendingSquad.ArrayMapSize, DefendingSquad.CurrentMovement, true);
 
                         if (AttackerSupportUnit.CanAttack)
                         {

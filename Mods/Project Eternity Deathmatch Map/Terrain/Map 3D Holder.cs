@@ -814,7 +814,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (ActiveSquad.Speed == Vector3.Zero)
                         {
-                            CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition);
+                            CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition + new Vector3(0.5f, 0.5f, 0));
                         }
 
                         if (ActiveSquad.ItemHeld != null)
@@ -875,7 +875,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (ActiveSquad.Speed == Vector3.Zero)
                         {
-                            CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition);
+                            CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X + 0.5f), (int)Math.Floor(CurrentPosition.Y + 0.5f)].GetRealPosition(CurrentPosition + new Vector3(0.5f, 0.5f, 0));
                         }
 
                         if (ActiveSquad.ItemHeld != null)
@@ -977,8 +977,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             foreach (PERAttack ActiveAttack in Map.ListPERAttack)
             {
-                ActiveAttack.Map3DComponent.SetViewMatrix(View);
-                ActiveAttack.Map3DComponent.Draw(g.GraphicsDevice);
+                if (ActiveAttack.Map3DComponent != null)
+                {
+                    ActiveAttack.Map3DComponent.SetViewMatrix(View);
+                    ActiveAttack.Map3DComponent.Draw(g.GraphicsDevice);
+                }
+
+                Vector3 CurrentPosition = ActiveAttack.Position;
+
+                CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X), (int)Math.Floor(CurrentPosition.Y)].GetRealPosition(CurrentPosition);
+
+                ActiveAttack.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f)
+                    * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
             }
         }
 

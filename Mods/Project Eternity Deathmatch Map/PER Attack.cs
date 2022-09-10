@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
-using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -18,6 +19,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Vector3 Speed;
         public int Lifetime;
         public Attack3D Map3DComponent;
+        public AnimatedModel Unit3DModel;
+        public bool IsOnGround = false;//Follow slopes if on ground
+        public bool AllowRicochet = true;//Follow 45 degree walls
 
         public PERAttack(Attack ActiveAttack, Squad Owner, int PlayerIndex, DeathmatchMap Map, Vector3 Position, Vector3 Speed, int Lifetime)
         {
@@ -29,29 +33,37 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Speed = Speed;
             this.Lifetime = Lifetime;
 
-            if (ActiveAttack.PERAttributes.ProjectileAnimation.IsAnimated)
+            if (!string.IsNullOrEmpty(ActiveAttack.PERAttributes.ProjectileAnimation.Path))
             {
-                Map3DComponent = new Attack3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite.ActiveSprite, ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite.FrameCount);
-            }
-            else
-            {
-                Map3DComponent = new Attack3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), ActiveAttack.PERAttributes.ProjectileAnimation.StaticSprite, 1);
+                if (ActiveAttack.PERAttributes.ProjectileAnimation.IsAnimated)
+                {
+                    Map3DComponent = new Attack3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite.ActiveSprite, ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite.FrameCount);
+                }
+                else
+                {
+                    Map3DComponent = new Attack3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), ActiveAttack.PERAttributes.ProjectileAnimation.StaticSprite, 1);
+                }
+
+                Map3DComponent.SetPosition(
+                    Position.X * 32 + 16 + 0.5f,
+                    Position.Z * 32,
+                    Position.Y * 32 + 16 + 0.5f);
             }
 
-            Map3DComponent.SetPosition(
-                Position.X * 32 + 16 + 0.5f,
-                Position.Z * 32,
-                Position.Y * 32 + 16 + 0.5f);
+            Unit3DModel = ActiveAttack.PERAttributes.Projectile3DModel;
         }
 
         public void SetPosition(Vector3 NewPosition)
         {
             Position = NewPosition;
 
-            Map3DComponent.SetPosition(
-                Position.X * 32 + 0.5f,
-                Position.Z * 32,
-                Position.Y * 32 + 0.5f);
+            if (Map3DComponent != null)
+            {
+                Map3DComponent.SetPosition(
+                    Position.X * 32 + 0.5f,
+                    Position.Z * 32,
+                    Position.Y * 32 + 0.5f);
+            }
         }
 
         public void ProcessMovement(Vector3 NextPosition, Terrain ActiveTerrain)

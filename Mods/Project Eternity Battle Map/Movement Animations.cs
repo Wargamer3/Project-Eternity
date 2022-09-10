@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void MoveSquad(BattleMap Map)
         {
-            float MovementSpeed = 0.02f;
+            float MovementSpeed = 0.2f;
             List<UnitMapComponent> ListRemovedSquad = new List<UnitMapComponent>();
 
             foreach(KeyValuePair<UnitMapComponent, List<Vector3>> ActiveUnitMap in DicMovingMapUnitByNextPosition)

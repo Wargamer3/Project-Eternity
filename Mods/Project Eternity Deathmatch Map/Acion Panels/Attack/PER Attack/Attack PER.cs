@@ -4,8 +4,8 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -42,9 +42,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            PERAttackPahtfinding Pathfinder = new PERAttackPahtfinding(Map, ActiveSquad);
-            Pathfinder.ComputeAttackTargets();
-            ListAttackTerrain = Pathfinder.ListUsableAttackTerrain;
+            if (ActiveSquad.CurrentLeader.CurrentAttack.PERAttributes.ProjectileSpeed == 0)
+            {
+                ListAttackTerrain = new List<MovementAlgorithmTile>();
+                ListAttackTerrain.Add(Map.GetMovementTile((int)ActiveSquad.Position.X, (int)ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z));
+            }
+            else
+            {
+                PERAttackPahtfinding Pathfinder = new PERAttackPahtfinding(Map, ActiveSquad);
+                Pathfinder.ComputeAttackTargets();
+                ListAttackTerrain = Pathfinder.ListUsableAttackTerrain;
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -52,8 +60,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
             Map.LayerManager.AddDrawablePath(ListAttackDirectionHelper);
 
-            if (ActiveInputManager.InputConfirmPressed() && Map.CursorPosition.X != ActiveSquad.Position.X
-                && Map.CursorPosition.Y != ActiveSquad.Position.Y && Map.CursorPosition.Z != ActiveSquad.Position.Z)
+            if (ActiveInputManager.InputConfirmPressed())
             {
                 CreateAttack(ActiveSquad.CurrentLeader.CurrentAttack);
                 Map.sndConfirm.Play();
@@ -77,25 +84,41 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int A = 0; A < AttackUsed.PERAttributes.NumberOfProjectiles; ++A)
             {
-                float RandLateral = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxLateralSpread;
-                float RandForward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxForwardSpread;
-                float RandUpward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxUpwardSpread;
+                Vector3 AttackPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.WorldPosition.Z);
 
-                Vector3 AttackPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.WorldPosition.Z + 0.5f);
-                Vector3 AttackForwardVector = Map.CursorPosition - ActiveSquad.Position;
-                AttackForwardVector.Normalize();
-                Vector3 AttackLateralVector = new Vector3(AttackForwardVector.Y, -AttackForwardVector.X, AttackForwardVector.Z);
+                if (AttackUsed.PERAttributes.AttackType == PERAttackAttributes.AttackTypes.Shoot)
+                {
+                    AttackPosition.Z += 0.5f;
+                }
 
-                Vector3 AttackSpeed = new Vector3();
-                AttackSpeed -= AttackLateralVector * AttackUsed.PERAttributes.MaxLateralSpread / 2;
-                AttackSpeed += AttackLateralVector * RandLateral * AttackUsed.PERAttributes.MaxLateralSpread;
-                AttackSpeed += AttackForwardVector * RandForward * AttackUsed.PERAttributes.ProjectileSpeed;
-                AttackSpeed += AttackForwardVector * AttackUsed.PERAttributes.ProjectileSpeed;
+                if (AttackUsed.PERAttributes.ProjectileSpeed == 0)
+                {
+                    PERAttack NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, Vector3.Zero, AttackUsed.PERAttributes.MaxLifetime);
 
-                PERAttack NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, AttackSpeed, AttackUsed.PERAttributes.MaxLifetime);
+                    ListNewList.Add(NewAttack);
+                    Map.ListPERAttack.Add(NewAttack);
+                }
+                else
+                {
+                    float RandLateral = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxLateralSpread;
+                    float RandForward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxForwardSpread;
+                    float RandUpward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxUpwardSpread;
 
-                ListNewList.Add(NewAttack);
-                Map.ListPERAttack.Add(NewAttack);
+                    Vector3 AttackForwardVector = Map.CursorPosition - ActiveSquad.Position;
+                    AttackForwardVector.Normalize();
+                    Vector3 AttackLateralVector = new Vector3(AttackForwardVector.Y, -AttackForwardVector.X, AttackForwardVector.Z);
+
+                    Vector3 AttackSpeed = new Vector3();
+                    AttackSpeed -= AttackLateralVector * AttackUsed.PERAttributes.MaxLateralSpread / 2;
+                    AttackSpeed += AttackLateralVector * RandLateral * AttackUsed.PERAttributes.MaxLateralSpread;
+                    AttackSpeed += AttackForwardVector * RandForward * AttackUsed.PERAttributes.ProjectileSpeed;
+                    AttackSpeed += AttackForwardVector * AttackUsed.PERAttributes.ProjectileSpeed;
+
+                    PERAttack NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, AttackSpeed, AttackUsed.PERAttributes.MaxLifetime);
+
+                    ListNewList.Add(NewAttack);
+                    Map.ListPERAttack.Add(NewAttack);
+                }
             }
 
             if (AttackUsed.MaxAmmo > 0)

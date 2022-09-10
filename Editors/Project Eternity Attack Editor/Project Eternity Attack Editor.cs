@@ -6,6 +6,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Attacks;
 using System.Windows.Forms;
+using ProjectEternity.Editors.ImageViewer;
 
 namespace ProjectEternity.Editors.AttackEditor
 {
@@ -63,7 +64,11 @@ namespace ProjectEternity.Editors.AttackEditor
 
         public override EditorInfo[] LoadEditors()
         {
-            EditorInfo[] Info = new EditorInfo[] { new EditorInfo(new string[] { GUIRootPathAttacks }, "Attacks/", new string[] { ".pew" }, typeof(ProjectEternityAttackEditor)) };
+            EditorInfo[] Info = new EditorInfo[]
+            {
+                new EditorInfo(new string[] { GUIRootPathAttacks }, "Attacks/", new string[] { ".pew" }, typeof(ProjectEternityAttackEditor)),
+                new EditorInfo(new string[] { GUIRootPathAttackModels }, "Attacks/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
+            };
 
             return Info;
         }
@@ -174,9 +179,11 @@ namespace ProjectEternity.Editors.AttackEditor
                     BW.Write(PERAttackEditor.cbCanBeShotDown.Checked);
                     BW.Write(PERAttackEditor.cbHoming.Checked);
                     BW.Write((byte)PERAttackEditor.txtMaxLifetime.Value);
+                    BW.Write((byte)PERAttackEditor.cbAttackType.SelectedIndex);
 
                     BW.Write(PERAttackEditor.IsProjectileAnimated);
                     BW.Write(PERAttackEditor.txtProjectilePath.Text);
+                    BW.Write(PERAttackEditor.txt3DModelPath.Text);
                     BW.Write((byte)PERAttackEditor.txtNumberOfProjectiles.Value);
                     BW.Write((float)PERAttackEditor.txtLateralMaxSpread.Value);
                     BW.Write((float)PERAttackEditor.txtForwardMaxSpread.Value);
@@ -379,9 +386,11 @@ namespace ProjectEternity.Editors.AttackEditor
                     PERAttackEditor.cbCanBeShotDown.Checked = ActiveWeapon.PERAttributes.CanBeShotDown;
                     PERAttackEditor.cbHoming.Checked = ActiveWeapon.PERAttributes.Homing;
                     PERAttackEditor.txtMaxLifetime.Value = ActiveWeapon.PERAttributes.MaxLifetime;
+                    PERAttackEditor.cbAttackType.SelectedIndex = (int)ActiveWeapon.PERAttributes.AttackType;
 
                     PERAttackEditor.IsProjectileAnimated = ActiveWeapon.PERAttributes.ProjectileAnimation.IsAnimated;
                     PERAttackEditor.txtProjectilePath.Text = ActiveWeapon.PERAttributes.ProjectileAnimation.Path;
+                    PERAttackEditor.txt3DModelPath.Text = ActiveWeapon.PERAttributes.Projectile3DModelPath;
 
                     PERAttackEditor.txtNumberOfProjectiles.Value = ActiveWeapon.PERAttributes.NumberOfProjectiles;
                     PERAttackEditor.txtLateralMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxLateralSpread;

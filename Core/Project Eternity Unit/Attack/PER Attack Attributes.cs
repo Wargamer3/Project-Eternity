@@ -8,14 +8,18 @@ namespace ProjectEternity.Core.Attacks
     public struct PERAttackAttributes
     {
         public enum GroundCollisions { DestroySelf, Stop, Bounce }
+        public enum AttackTypes { Shoot, Throw, Kick, Hold }
 
         public float ProjectileSpeed;
         public bool AffectedByGravity;
         public bool CanBeShotDown;
         public bool Homing;
         public byte MaxLifetime;
+        public AttackTypes AttackType;
 
         public SimpleAnimation ProjectileAnimation;
+        public string Projectile3DModelPath;
+        public AnimatedModel Projectile3DModel;
 
         public byte NumberOfProjectiles;
         public float MaxLateralSpread;
@@ -32,11 +36,23 @@ namespace ProjectEternity.Core.Attacks
             CanBeShotDown = BR.ReadBoolean();
             Homing = BR.ReadBoolean();
             MaxLifetime = BR.ReadByte();
+            AttackType = (AttackTypes)BR.ReadByte();
 
             ProjectileAnimation = new SimpleAnimation(BR, false);
+            Projectile3DModelPath = BR.ReadString();
+            Projectile3DModel = null;
             if (Content != null)
             {
-                ProjectileAnimation.Load(Content, "Animations/Sprites/");
+                if (!string.IsNullOrEmpty(ProjectileAnimation.Path))
+                {
+                    ProjectileAnimation.Load(Content, "Animations/Sprites/");
+                }
+
+                if (!string.IsNullOrEmpty(Projectile3DModelPath))
+                {
+                    Projectile3DModel = new AnimatedModel("Attacks/Models/" + Projectile3DModelPath);
+                    Projectile3DModel.LoadContent(Content);
+                }
             }
 
             NumberOfProjectiles = BR.ReadByte();

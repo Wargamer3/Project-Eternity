@@ -1,13 +1,13 @@
-﻿using ProjectEternity.Core.Editor;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.AttackEditor
 {
     public partial class PERAttackEditor : Form
     {
-        private enum ItemSelectionChoices { AnimationProjectile, TextureProjectile };
+        private enum ItemSelectionChoices { AnimationProjectile, TextureProjectile, Model };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
@@ -28,6 +28,12 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             ItemSelectionChoice = ItemSelectionChoices.TextureProjectile;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites));
+        }
+
+        private void btn3DModelPath_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.Model;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttackModels));
         }
 
         private void btnSelectSkillChain_Click(object sender, EventArgs e)
@@ -55,6 +61,11 @@ namespace ProjectEternity.Editors.AttackEditor
                         Name = Items[I].Substring(0, Items[0].Length - 4).Substring(27);
                         IsProjectileAnimated = false;
                         txtProjectilePath.Text = Name;
+                        break;
+
+                    case ItemSelectionChoices.Model:
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(23);
+                        txt3DModelPath.Text = Name;
                         break;
                 }
             }

@@ -283,9 +283,9 @@ namespace ProjectEternity.Core.Attacks
                 ListQuoteSet.Add(BR.ReadString());
         }
 
-        public void UpdateAttack(Unit CurrentUnit, Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
+        public void UpdateAttack(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
-            if (CanAttackTarget(CurrentUnit, StartPosition, TargetPosition, ArrayTargetMapSize, TargetMovementType, CanMove))
+            if (CanAttackTarget(CurrentUnit, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TargetMovementType, CanMove))
             {
                 _CanAttack = true;
             }
@@ -300,7 +300,7 @@ namespace ProjectEternity.Core.Attacks
             _CanAttack = false;
         }
 
-        private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, Vector3 TargetPosition, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
+        private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
         {
             //If the Mech have enough EN to use the weapon and the weapon have enough ammo to fire.
             if (CurrentUnit.EN < ENCost || (Ammo <= 0 && MaxAmmo > 0)
@@ -345,6 +345,9 @@ namespace ProjectEternity.Core.Attacks
                 }
                 else
                 {
+                    if (TargetTeam == UnitTeam)
+                        return false;
+
                     for (int X = 0; X < ArrayTargetMapSize.GetLength(0); X++)
                     {
                         for (int Y = 0; Y < ArrayTargetMapSize.GetLength(1); Y++)

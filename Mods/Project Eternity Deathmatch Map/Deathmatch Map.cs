@@ -783,15 +783,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int P = 0; P < ListPlayer.Count; P++)
             {
-                if (ListPlayer[P].Team == UnitTeam)//Don't check your team.
-                    continue;
-
                 for (int U = 0; U < ListPlayer[P].ListSquad.Count; U++)
                 {
                     if (ListPlayer[P].ListSquad[U].CurrentLeader == null)
                         continue;
 
-                    CurrentUnit.UpdateAllAttacks(StartPosition, ListPlayer[P].ListSquad[U].Position,
+                    CurrentUnit.UpdateAllAttacks(StartPosition, UnitTeam, ListPlayer[P].ListSquad[U].Position, ListPlayer[P].Team,
                             ListPlayer[P].ListSquad[U].ArrayMapSize, ListPlayer[P].ListSquad[U].CurrentMovement, CanMove);
                 }
             }

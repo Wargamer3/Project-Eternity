@@ -185,7 +185,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (Map.ListPlayer[P].ListSquad[U].CurrentLeader == null)
                             continue;
 
-                        ActiveSquad.CurrentLeader.UpdateAllAttacks(ActiveSquad.Position, Map.ListPlayer[P].ListSquad[U].Position,
+                        ActiveSquad.CurrentLeader.UpdateAllAttacks(ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, Map.ListPlayer[P].ListSquad[U].Position, Map.ListPlayer[P].Team,
                                 Map.ListPlayer[P].ListSquad[U].ArrayMapSize, Map.ListPlayer[P].ListSquad[U].CurrentMovement, false);
 
                         if (ActiveAttack.CanAttack)
@@ -287,7 +287,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
                 if (ActiveSquad.CurrentWingmanA.PLAAttack != null)
                 {
-                    ActiveSquad.CurrentWingmanA.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, true);
+                    ActiveSquad.CurrentWingmanA.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, true);
 
                     if (ActiveSquad.CurrentWingmanA.PLAAttack.CanAttack)
                     {
@@ -301,7 +301,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
                 if (ActiveSquad.CurrentWingmanB.PLAAttack != null)
                 {
-                    ActiveSquad.CurrentWingmanB.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, TargetSquad.Position, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, true);
+                    ActiveSquad.CurrentWingmanB.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, true);
 
                     if (ActiveSquad.CurrentWingmanB.PLAAttack.CanAttack)
                     {

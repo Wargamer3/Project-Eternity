@@ -29,13 +29,18 @@
         private void InitializeComponent()
         {
             this.gbProjectileAttributes = new System.Windows.Forms.GroupBox();
+            this.lblAttackType = new System.Windows.Forms.Label();
+            this.cbAttackType = new System.Windows.Forms.ComboBox();
+            this.btn3DModelPath = new System.Windows.Forms.Button();
+            this.txt3DModelPath = new System.Windows.Forms.TextBox();
+            this.cbHoming = new System.Windows.Forms.CheckBox();
             this.lblMaxLifetime = new System.Windows.Forms.Label();
             this.txtMaxLifetime = new System.Windows.Forms.NumericUpDown();
             this.cbCanBeShotDown = new System.Windows.Forms.CheckBox();
             this.btnUseTextureProjectile = new System.Windows.Forms.Button();
             this.btnUseAnimatedProjectile = new System.Windows.Forms.Button();
             this.txtProjectilePath = new System.Windows.Forms.TextBox();
-            this.lblProjectilePath = new System.Windows.Forms.Label();
+            this.lblProjectilePaths = new System.Windows.Forms.Label();
             this.lblProjectileSpeed = new System.Windows.Forms.Label();
             this.txtProjectileSpeed = new System.Windows.Forms.NumericUpDown();
             this.cbAffectedByGravity = new System.Windows.Forms.CheckBox();
@@ -51,13 +56,12 @@
             this.lblSkillChain = new System.Windows.Forms.Label();
             this.txtSkillChain = new System.Windows.Forms.TextBox();
             this.btnSelectSkillChain = new System.Windows.Forms.Button();
-            this.gbGroundCollision = new System.Windows.Forms.GroupBox();
+            this.gbOnCollision = new System.Windows.Forms.GroupBox();
             this.lblBounceLimit = new System.Windows.Forms.Label();
             this.txtBounceLimit = new System.Windows.Forms.NumericUpDown();
             this.rbStop = new System.Windows.Forms.RadioButton();
             this.rbBounce = new System.Windows.Forms.RadioButton();
             this.rbDestroySelf = new System.Windows.Forms.RadioButton();
-            this.cbHoming = new System.Windows.Forms.CheckBox();
             this.gbProjectileAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxLifetime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtProjectileSpeed)).BeginInit();
@@ -66,12 +70,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtForwardMaxSpread)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtLateralMaxSpread)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtNumberOfProjectiles)).BeginInit();
-            this.gbGroundCollision.SuspendLayout();
+            this.gbOnCollision.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBounceLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // gbProjectileAttributes
             // 
+            this.gbProjectileAttributes.Controls.Add(this.lblAttackType);
+            this.gbProjectileAttributes.Controls.Add(this.cbAttackType);
+            this.gbProjectileAttributes.Controls.Add(this.btn3DModelPath);
+            this.gbProjectileAttributes.Controls.Add(this.txt3DModelPath);
             this.gbProjectileAttributes.Controls.Add(this.cbHoming);
             this.gbProjectileAttributes.Controls.Add(this.lblMaxLifetime);
             this.gbProjectileAttributes.Controls.Add(this.txtMaxLifetime);
@@ -79,21 +87,72 @@
             this.gbProjectileAttributes.Controls.Add(this.btnUseTextureProjectile);
             this.gbProjectileAttributes.Controls.Add(this.btnUseAnimatedProjectile);
             this.gbProjectileAttributes.Controls.Add(this.txtProjectilePath);
-            this.gbProjectileAttributes.Controls.Add(this.lblProjectilePath);
+            this.gbProjectileAttributes.Controls.Add(this.lblProjectilePaths);
             this.gbProjectileAttributes.Controls.Add(this.lblProjectileSpeed);
             this.gbProjectileAttributes.Controls.Add(this.txtProjectileSpeed);
             this.gbProjectileAttributes.Controls.Add(this.cbAffectedByGravity);
             this.gbProjectileAttributes.Location = new System.Drawing.Point(12, 12);
             this.gbProjectileAttributes.Name = "gbProjectileAttributes";
-            this.gbProjectileAttributes.Size = new System.Drawing.Size(323, 146);
+            this.gbProjectileAttributes.Size = new System.Drawing.Size(416, 146);
             this.gbProjectileAttributes.TabIndex = 0;
             this.gbProjectileAttributes.TabStop = false;
             this.gbProjectileAttributes.Text = "Projectile Attributes";
             // 
+            // lblAttackType
+            // 
+            this.lblAttackType.AutoSize = true;
+            this.lblAttackType.Location = new System.Drawing.Point(217, 123);
+            this.lblAttackType.Name = "lblAttackType";
+            this.lblAttackType.Size = new System.Drawing.Size(65, 13);
+            this.lblAttackType.TabIndex = 58;
+            this.lblAttackType.Text = "Attack Type";
+            // 
+            // cbAttackType
+            // 
+            this.cbAttackType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAttackType.FormattingEnabled = true;
+            this.cbAttackType.Items.AddRange(new object[] {
+            "Shoot",
+            "Throw",
+            "Kick",
+            "Hold"});
+            this.cbAttackType.Location = new System.Drawing.Point(289, 119);
+            this.cbAttackType.Name = "cbAttackType";
+            this.cbAttackType.Size = new System.Drawing.Size(121, 21);
+            this.cbAttackType.TabIndex = 3;
+            // 
+            // btn3DModelPath
+            // 
+            this.btn3DModelPath.Location = new System.Drawing.Point(146, 89);
+            this.btn3DModelPath.Name = "btn3DModelPath";
+            this.btn3DModelPath.Size = new System.Drawing.Size(108, 23);
+            this.btn3DModelPath.TabIndex = 57;
+            this.btn3DModelPath.Text = "3D Model";
+            this.btn3DModelPath.UseVisualStyleBackColor = true;
+            this.btn3DModelPath.Click += new System.EventHandler(this.btn3DModelPath_Click);
+            // 
+            // txt3DModelPath
+            // 
+            this.txt3DModelPath.Location = new System.Drawing.Point(146, 63);
+            this.txt3DModelPath.Name = "txt3DModelPath";
+            this.txt3DModelPath.ReadOnly = true;
+            this.txt3DModelPath.Size = new System.Drawing.Size(108, 20);
+            this.txt3DModelPath.TabIndex = 56;
+            // 
+            // cbHoming
+            // 
+            this.cbHoming.AutoSize = true;
+            this.cbHoming.Location = new System.Drawing.Point(260, 67);
+            this.cbHoming.Name = "cbHoming";
+            this.cbHoming.Size = new System.Drawing.Size(62, 17);
+            this.cbHoming.TabIndex = 55;
+            this.cbHoming.Text = "Homing";
+            this.cbHoming.UseVisualStyleBackColor = true;
+            // 
             // lblMaxLifetime
             // 
             this.lblMaxLifetime.AutoSize = true;
-            this.lblMaxLifetime.Location = new System.Drawing.Point(174, 93);
+            this.lblMaxLifetime.Location = new System.Drawing.Point(264, 94);
             this.lblMaxLifetime.Name = "lblMaxLifetime";
             this.lblMaxLifetime.Size = new System.Drawing.Size(66, 13);
             this.lblMaxLifetime.TabIndex = 54;
@@ -101,7 +160,7 @@
             // 
             // txtMaxLifetime
             // 
-            this.txtMaxLifetime.Location = new System.Drawing.Point(246, 89);
+            this.txtMaxLifetime.Location = new System.Drawing.Point(336, 90);
             this.txtMaxLifetime.Name = "txtMaxLifetime";
             this.txtMaxLifetime.Size = new System.Drawing.Size(71, 20);
             this.txtMaxLifetime.TabIndex = 53;
@@ -109,7 +168,7 @@
             // cbCanBeShotDown
             // 
             this.cbCanBeShotDown.AutoSize = true;
-            this.cbCanBeShotDown.Location = new System.Drawing.Point(171, 43);
+            this.cbCanBeShotDown.Location = new System.Drawing.Point(261, 44);
             this.cbCanBeShotDown.Name = "cbCanBeShotDown";
             this.cbCanBeShotDown.Size = new System.Drawing.Size(117, 17);
             this.cbCanBeShotDown.TabIndex = 52;
@@ -144,14 +203,14 @@
             this.txtProjectilePath.Size = new System.Drawing.Size(134, 20);
             this.txtProjectilePath.TabIndex = 49;
             // 
-            // lblProjectilePath
+            // lblProjectilePaths
             // 
-            this.lblProjectilePath.AutoSize = true;
-            this.lblProjectilePath.Location = new System.Drawing.Point(6, 47);
-            this.lblProjectilePath.Name = "lblProjectilePath";
-            this.lblProjectilePath.Size = new System.Drawing.Size(77, 13);
-            this.lblProjectilePath.TabIndex = 48;
-            this.lblProjectilePath.Text = "Projectile path:";
+            this.lblProjectilePaths.AutoSize = true;
+            this.lblProjectilePaths.Location = new System.Drawing.Point(6, 47);
+            this.lblProjectilePaths.Name = "lblProjectilePaths";
+            this.lblProjectilePaths.Size = new System.Drawing.Size(82, 13);
+            this.lblProjectilePaths.TabIndex = 48;
+            this.lblProjectilePaths.Text = "Projectile paths:";
             // 
             // lblProjectileSpeed
             // 
@@ -172,7 +231,7 @@
             // cbAffectedByGravity
             // 
             this.cbAffectedByGravity.AutoSize = true;
-            this.cbAffectedByGravity.Location = new System.Drawing.Point(171, 20);
+            this.cbAffectedByGravity.Location = new System.Drawing.Point(261, 21);
             this.cbAffectedByGravity.Name = "cbAffectedByGravity";
             this.cbAffectedByGravity.Size = new System.Drawing.Size(116, 17);
             this.cbAffectedByGravity.TabIndex = 2;
@@ -296,19 +355,19 @@
             this.btnSelectSkillChain.UseVisualStyleBackColor = true;
             this.btnSelectSkillChain.Click += new System.EventHandler(this.btnSelectSkillChain_Click);
             // 
-            // gbGroundCollision
+            // gbOnCollision
             // 
-            this.gbGroundCollision.Controls.Add(this.lblBounceLimit);
-            this.gbGroundCollision.Controls.Add(this.txtBounceLimit);
-            this.gbGroundCollision.Controls.Add(this.rbStop);
-            this.gbGroundCollision.Controls.Add(this.rbBounce);
-            this.gbGroundCollision.Controls.Add(this.rbDestroySelf);
-            this.gbGroundCollision.Location = new System.Drawing.Point(267, 164);
-            this.gbGroundCollision.Name = "gbGroundCollision";
-            this.gbGroundCollision.Size = new System.Drawing.Size(161, 117);
-            this.gbGroundCollision.TabIndex = 2;
-            this.gbGroundCollision.TabStop = false;
-            this.gbGroundCollision.Text = "Ground Collision";
+            this.gbOnCollision.Controls.Add(this.lblBounceLimit);
+            this.gbOnCollision.Controls.Add(this.txtBounceLimit);
+            this.gbOnCollision.Controls.Add(this.rbStop);
+            this.gbOnCollision.Controls.Add(this.rbBounce);
+            this.gbOnCollision.Controls.Add(this.rbDestroySelf);
+            this.gbOnCollision.Location = new System.Drawing.Point(267, 164);
+            this.gbOnCollision.Name = "gbOnCollision";
+            this.gbOnCollision.Size = new System.Drawing.Size(161, 117);
+            this.gbOnCollision.TabIndex = 2;
+            this.gbOnCollision.TabStop = false;
+            this.gbOnCollision.Text = "On Collision";
             // 
             // lblBounceLimit
             // 
@@ -358,22 +417,12 @@
             this.rbDestroySelf.Text = "Destroy Self";
             this.rbDestroySelf.UseVisualStyleBackColor = true;
             // 
-            // cbHoming
-            // 
-            this.cbHoming.AutoSize = true;
-            this.cbHoming.Location = new System.Drawing.Point(170, 66);
-            this.cbHoming.Name = "cbHoming";
-            this.cbHoming.Size = new System.Drawing.Size(62, 17);
-            this.cbHoming.TabIndex = 55;
-            this.cbHoming.Text = "Homing";
-            this.cbHoming.UseVisualStyleBackColor = true;
-            // 
             // PERAttackEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(439, 341);
-            this.Controls.Add(this.gbGroundCollision);
+            this.Controls.Add(this.gbOnCollision);
             this.Controls.Add(this.gbAttackAttributes);
             this.Controls.Add(this.gbProjectileAttributes);
             this.Name = "PERAttackEditor";
@@ -388,8 +437,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtForwardMaxSpread)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtLateralMaxSpread)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtNumberOfProjectiles)).EndInit();
-            this.gbGroundCollision.ResumeLayout(false);
-            this.gbGroundCollision.PerformLayout();
+            this.gbOnCollision.ResumeLayout(false);
+            this.gbOnCollision.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtBounceLimit)).EndInit();
             this.ResumeLayout(false);
 
@@ -408,10 +457,10 @@
         private System.Windows.Forms.Button btnUseTextureProjectile;
         private System.Windows.Forms.Button btnUseAnimatedProjectile;
         public System.Windows.Forms.TextBox txtProjectilePath;
-        private System.Windows.Forms.Label lblProjectilePath;
+        private System.Windows.Forms.Label lblProjectilePaths;
         private System.Windows.Forms.Label lblForwardMaxSpread;
         private System.Windows.Forms.Label lblLateralMaxSpread;
-        private System.Windows.Forms.GroupBox gbGroundCollision;
+        private System.Windows.Forms.GroupBox gbOnCollision;
         private System.Windows.Forms.Label lblBounceLimit;
         public System.Windows.Forms.NumericUpDown txtBounceLimit;
         private System.Windows.Forms.Label lblMaxLifetime;
@@ -427,5 +476,9 @@
         private System.Windows.Forms.Label lblUpwardMaxSpread;
         public System.Windows.Forms.NumericUpDown txtUpwardMaxSpread;
         public System.Windows.Forms.CheckBox cbHoming;
+        private System.Windows.Forms.Button btn3DModelPath;
+        public System.Windows.Forms.TextBox txt3DModelPath;
+        private System.Windows.Forms.Label lblAttackType;
+        public System.Windows.Forms.ComboBox cbAttackType;
     }
 }

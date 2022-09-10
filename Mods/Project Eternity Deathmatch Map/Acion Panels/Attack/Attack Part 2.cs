@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.ListPlayer[ActivePlayerIndex].Team != Map.ListPlayer[P].Team)//If it's an ennemy.
                         {
-                            ActiveSquad.CurrentLeader.CurrentAttack.UpdateAttack(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.CursorPosition,
+                            ActiveSquad.CurrentLeader.CurrentAttack.UpdateAttack(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, Map.CursorPosition, Map.ListPlayer[P].Team,
                                 ActiveSquad.ArrayMapSize, Map.ListPlayer[P].ListSquad[TargetSelect].CurrentMovement, ActiveSquad.CanMove);
 
                             if (!ActiveSquad.CurrentLeader.CurrentAttack.CanAttack)

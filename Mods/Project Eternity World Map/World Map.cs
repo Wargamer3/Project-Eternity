@@ -406,7 +406,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
                 for (int W = 0; W < CurrentUnit.ListAttack.Count; W++)
                 {
-                    CurrentUnit.ListAttack[W].UpdateAttack(CurrentUnit, Position, ListPlayer[TargetPlayerIndex].ListConstruction[C].Position,
+                    CurrentUnit.ListAttack[W].UpdateAttack(CurrentUnit, Position, ListPlayer[ActivePlayerIndex].Team, ListPlayer[TargetPlayerIndex].ListConstruction[C].Position, ListPlayer[TargetPlayerIndex].Team,
                         ListPlayer[TargetPlayerIndex].ListConstruction[C].ArrayMapSize, ListPlayer[TargetPlayerIndex].ListConstruction[C].CurrentMovement, HasMoved);
                 }
             }

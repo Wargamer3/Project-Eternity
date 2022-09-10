@@ -50,7 +50,8 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathUnitStandardParts = "Units\\Standard Parts";
         public const string GUIRootPathUnitConsumableParts = "Units\\Consumable Parts";
         public const string GUIRootPathAttacks = "Attacks";
-        public const string GUIRootPathAttackAttributes = "Attacks\\Attributes";
+        public const string GUIRootPathAttackAttributes = "Attacks/Attributes";
+        public const string GUIRootPathAttackModels = "Attacks/Models";
         public const string GUIRootPathAIs = "AIs";
         public const string GUIRootPathVehicles = "Vehicles";
         public const string GUIRootPathVehicleSprites = "Vehicles/Sprites";
