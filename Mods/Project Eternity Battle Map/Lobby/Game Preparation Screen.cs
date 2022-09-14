@@ -267,7 +267,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateReadyOrHost();
         }
 
-        public void UpdateSelectedMap(string MapName, string MapType, string MapPath, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
+        public void UpdateSelectedMap(string MapName, string MapType, string MapPath, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, List<string> ListMandatoryMutator)
         {
             Room.MapName = MapName;
             Room.MapType = MapType;
@@ -275,6 +275,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             LoadMapInfo();
             Room.MinNumberOfPlayer = MinNumberOfPlayer;
             Room.MaxNumberOfPlayer = MaxNumberOfPlayer;
+            Room.ListMandatoryMutator = ListMandatoryMutator;
         }
 
         private void LoadMapInfo()
@@ -292,6 +293,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             string Description = BR.ReadString();
 
+            Room.ListMandatoryMutator.Clear();
+            int ListMandatoryMutatorCount = BR.ReadInt32();
+            for (int M = 0; M < ListMandatoryMutatorCount; M++)
+            {
+                Room.ListMandatoryMutator.Add(BR.ReadString());
+            }
+
             int NumberOfTeams = BR.ReadInt32();
             ListMapTeam = new List<Color>(NumberOfTeams);
             //Deathmatch colors
@@ -299,26 +307,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ListMapTeam.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
             }
-
-            int TileSizeX = BR.ReadInt32();
-            int TileSizeY = BR.ReadInt32();
-
-            string CameraType = BR.ReadString();
-
-            int CameraPositionX = BR.ReadInt32();
-            int CameraPositionY = BR.ReadInt32();
-
-            int ListBackgroundsPathCount = BR.ReadInt32();
-            for (int B = 0; B < ListBackgroundsPathCount; B++)
-            {
-                string BackgroundsPath = BR.ReadString();
-            }
-            int ListForegroundsPathCount = BR.ReadInt32();
-            for (int F = 0; F < ListForegroundsPathCount; F++)
-            {
-                string ForegroundsPath = BR.ReadString();
-            }
-
             FS.Close();
             BR.Close();
         }
@@ -380,7 +368,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ReadyButton.Disable();
 
-                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.MapName, Room.MapType, Room.MapPath, Room.MinNumberOfPlayer, Room.MaxNumberOfPlayer));
+                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.MapName, Room.MapType, Room.MapPath, Room.MinNumberOfPlayer, Room.MaxNumberOfPlayer, Room.ListMandatoryMutator));
             }
         }
 
@@ -442,6 +430,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 NewMap.BattleMapPath = Room.MapPath;
                 NewMap.ListGameScreen = ListGameScreen;
+                NewMap.SetMutators(Room.ListMutator);
 
                 for (int P = 0; P < 10; P++)
                 {

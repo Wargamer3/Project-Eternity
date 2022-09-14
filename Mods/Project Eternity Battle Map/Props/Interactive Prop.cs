@@ -69,9 +69,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnUnitStop(MovingSquad);
         }
 
-        public abstract List<ActionPanel> OnUnitSelected(Squad SelectedUnit);
+        public abstract void OnUnitSelected(ActionPanel PanelOwner, Squad SelectedUnit);
 
-        public abstract List<ActionPanel> OnUnitBeforeStop(Squad StoppedUnit, Vector3 PositionToStopOn);
+        public abstract void OnUnitBeforeStop(ActionPanel PanelOwner, Squad StoppedUnit, Vector3 PositionToStopOn);
 
         public abstract void OnMovedOverBeforeStop(Squad SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn);
 
@@ -104,49 +104,49 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public static Dictionary<string, InteractiveProp> LoadProps(params object[] Args)
         {
-            Dictionary<string, InteractiveProp> DicMapCondition = new Dictionary<string, InteractiveProp>();
+            Dictionary<string, InteractiveProp> DicInteractiveProp = new Dictionary<string, InteractiveProp>();
             string[] Files = Directory.GetFiles("Props/Battle Map", "*.dll", SearchOption.AllDirectories);
             for (int F = 0; F < Files.Length; F++)
             {
-                System.Reflection.Assembly ActiveAssembly = System.Reflection.Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
                 List<InteractiveProp> ListInteractiveProp = ReflectionHelper.GetObjectsFromBaseTypes<InteractiveProp>(typeof(InteractiveProp), ActiveAssembly.GetTypes(), Args);
 
                 foreach (InteractiveProp Instance in ListInteractiveProp)
                 {
-                    DicMapCondition.Add(Instance.PropName, Instance);
+                    DicInteractiveProp.Add(Instance.PropName, Instance);
                 }
             }
 
-            return DicMapCondition;
+            return DicInteractiveProp;
         }
 
         public static Dictionary<string, InteractiveProp> LoadFromAssemblyFiles(string[] ArrayFilePath, params object[] Args)
         {
-            Dictionary<string, InteractiveProp> DicUnitType = new Dictionary<string, InteractiveProp>();
+            Dictionary<string, InteractiveProp> DicInteractiveProp = new Dictionary<string, InteractiveProp>();
 
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
                 Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
                 foreach (KeyValuePair<string, InteractiveProp> ActiveUnit in LoadFromAssembly(ActiveAssembly, Args))
                 {
-                    DicUnitType.Add(ActiveUnit.Key, ActiveUnit.Value);
+                    DicInteractiveProp.Add(ActiveUnit.Key, ActiveUnit.Value);
                 }
             }
 
-            return DicUnitType;
+            return DicInteractiveProp;
         }
 
         public static Dictionary<string, InteractiveProp> LoadFromAssembly(Assembly ActiveAssembly, params object[] Args)
         {
-            Dictionary<string, InteractiveProp> DicUnitType = new Dictionary<string, InteractiveProp>();
+            Dictionary<string, InteractiveProp> DicInteractiveProp = new Dictionary<string, InteractiveProp>();
             List<InteractiveProp> ListSkillEffect = ReflectionHelper.GetObjectsFromBaseTypes<InteractiveProp>(typeof(InteractiveProp), ActiveAssembly.GetTypes(), Args);
 
             foreach (InteractiveProp Instance in ListSkillEffect)
             {
-                DicUnitType.Add(Instance.PropName, Instance);
+                DicInteractiveProp.Add(Instance.PropName, Instance);
             }
 
-            return DicUnitType;
+            return DicInteractiveProp;
         }
 
     }

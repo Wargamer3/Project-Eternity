@@ -157,6 +157,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public byte PlayersMax;
         public byte MaxSquadsPerPlayer;
         public string Description;
+        public List<string> ListMandatoryMutator;
 
         public List<Color> ListMultiplayerColor;
         public List<BattleMap> ListSubMap;
@@ -241,6 +242,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListForegroundsPath = new List<string>();
             ListLight = new List<BattleMapLight>();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
+            ListMandatoryMutator = new List<string>();
 
             CameraType = "2D";
             Description = "";
@@ -285,6 +287,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(MaxSquadsPerPlayer);
 
             BW.Write(Description);
+
+            BW.Write(ListMandatoryMutator.Count);
+            for (int M = 0; M < ListMandatoryMutator.Count; M++)
+            {
+                BW.Write(ListMandatoryMutator[M]);
+            }
 
             BW.Write(ListMultiplayerColor.Count);
             for (int D = 0; D < ListMultiplayerColor.Count; D++)
@@ -437,6 +445,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxSquadsPerPlayer = BR.ReadByte();
 
             Description = BR.ReadString();
+
+            int ListMandatoryMutatorCount = BR.ReadInt32();
+            for (int M = 0; M < ListMandatoryMutatorCount; M++)
+            {
+                ListMandatoryMutator.Add(BR.ReadString());
+            }
 
             int ArrayMultiplayerColorLength = BR.ReadInt32();
             ListMultiplayerColor = new List<Color>(ArrayMultiplayerColorLength);

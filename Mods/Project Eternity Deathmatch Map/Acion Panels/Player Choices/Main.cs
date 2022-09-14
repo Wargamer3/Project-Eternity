@@ -66,16 +66,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActiveSquad.CurrentWingmanA != null)
                     AddChoiceToCurrentPanel(new ActionPanelFormation(Map, ActivePlayerIndex, ActiveSquadIndex));
 
-                List<ActionPanel> DicOptionalPanel = ActiveSquad.OnMenuSelect(ActivePlayerIndex, Map.ListActionMenuChoice);
-                foreach (ActionPanel OptionalPanel in DicOptionalPanel)
-                {
-                    AddChoiceToCurrentPanel(OptionalPanel);
-                }
+                ActiveSquad.OnMenuSelect(this, ActivePlayerIndex, Map.ListActionMenuChoice);
 
-                foreach (ActionPanel OptionalPanel in GetPropPanelsOnUnitSelected(ActiveSquad))
-                {
-                    AddChoiceToCurrentPanel(OptionalPanel);
-                }
+                AddPropPanelsOnUnitSelected();
 
                 if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainLand)
                     && ActiveSquad.CurrentMovement != UnitStats.TerrainLand
@@ -132,6 +125,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActionPanelRepair.AddIfUsable(Map, this, ActiveSquad);
                 ActionPanelResupply.AddIfUsable(Map, this, ActiveSquad);
             }
+
+            AddMutatorPanels();
         }
 
         public static void AddIfUsable(DeathmatchMap Map, ActionPanel Owner)
@@ -183,16 +178,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private List<ActionPanel> GetPropPanelsOnUnitSelected(Squad SelectedUnit)
+        private void AddPropPanelsOnUnitSelected()
         {
-            List<ActionPanel> ListPanel = new List<ActionPanel>();
-
             foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
             {
-                ListPanel.AddRange(ActiveProp.OnUnitSelected(SelectedUnit));
+                ActiveProp.OnUnitSelected(this, ActiveSquad);
             }
+        }
 
-            return ListPanel;
+        private void AddMutatorPanels()
+        {
+            foreach (DeathmatchMutator ActiveMutator in Map.ListMutator)
+            {
+                ActiveMutator.OnSquadSelected(this, ActivePlayerIndex, ActiveSquadIndex);
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)

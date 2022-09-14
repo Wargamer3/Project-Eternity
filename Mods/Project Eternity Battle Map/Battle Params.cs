@@ -32,6 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, BaseSkillRequirement> DicRequirement;
         public Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
         public Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
+        public Dictionary<string, Mutator> DicMutator;
 
         public BattleParams()
         {
@@ -45,6 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicRequirement = new Dictionary<string, BaseSkillRequirement>();
             DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
+            DicMutator = new Dictionary<string, Mutator>();
         }
 
         public BattleParams(BattleContext GlobalContext)
@@ -59,12 +61,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicRequirement = new Dictionary<string, BaseSkillRequirement>();
             DicAutomaticSkillTarget = new Dictionary<string, AutomaticSkillTargetType>();
             DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
+            DicMutator = new Dictionary<string, Mutator>();
 
             LoadUnits();
             LoadEffects();
             LoadSkillRequirements();
             LoadAutomaticSkillActivation();
             LoadManualSkillActivation();
+            LoadMutators();
         }
 
         public void Reload(BattleParams Clone, string ParamsID)
@@ -205,7 +209,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected virtual void LoadAutomaticSkillActivation()
         {
-            DicAutomaticSkillTarget.Clear();
             foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll"), typeof(AutomaticSkillTargetType)))
             {
                 DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
@@ -235,7 +238,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected virtual void LoadManualSkillActivation()
         {
-            DicManualSkillTarget.Clear();
             foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll")))
             {
                 DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
@@ -262,6 +264,37 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
                 }
             }
+        }
+
+        protected virtual void LoadMutators()
+        {
+            /*foreach (KeyValuePair<string, Mutator> ActiveMuator in Mutator.LoadFromAssemblyFiles(Directory.GetFiles("Mutators", "*.dll")))
+            {
+                DicMutator.Add(ActiveMuator.Key, ActiveMuator.Value);
+            }
+
+            foreach (KeyValuePair<string, Mutator> ActiveMuator in Mutator.LoadFromAssemblyFiles(Directory.GetFiles("Mutators/Battle Map", "*.dll")))
+            {
+                DicMutator.Add(ActiveMuator.Key, ActiveMuator.Value);
+            }
+
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Mutators", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                foreach (KeyValuePair<string, Mutator> ActiveMuator in Mutator.LoadFromAssembly(ActiveAssembly))
+                {
+                    DicMutator.Add(ActiveMuator.Key, ActiveMuator.Value);
+                }
+            }
+
+            ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Mutators/Battle Map", "*.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                foreach (KeyValuePair<string, Mutator> ActiveMuator in Mutator.LoadFromAssembly(ActiveAssembly, this))
+                {
+                    DicMutator.Add(ActiveMuator.Key, ActiveMuator.Value);
+                }
+            }*/
         }
     }
 }

@@ -69,11 +69,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     Map.CursorPosition = CollidingSquad.Position;
                     Map.CursorPositionVisible = Map.CursorPosition;
-                    List<ActionPanel> SquadSelect = CollidingSquad.OnMenuSelect(ActivePlayerIndex, Map.ListActionMenuChoice);
-                    foreach (ActionPanel ActivePanel in SquadSelect)
-                    {
-                        Map.ListActionMenuChoice.Add(ActivePanel);
-                    }
+                    CollidingSquad.OnMenuSelect(this, ActivePlayerIndex, Map.ListActionMenuChoice);
                 }
             }
 

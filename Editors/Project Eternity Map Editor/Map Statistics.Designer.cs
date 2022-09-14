@@ -36,7 +36,7 @@
             this.lblMapName = new System.Windows.Forms.Label();
             this.btnAccept = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbCameraStartPosition = new System.Windows.Forms.GroupBox();
             this.lblCameraY = new System.Windows.Forms.Label();
             this.txtCameraStartPositionY = new System.Windows.Forms.NumericUpDown();
             this.lblCameraX = new System.Windows.Forms.Label();
@@ -70,7 +70,10 @@
             this.lblTimeMultiplier = new System.Windows.Forms.Label();
             this.txtlblTimeMultiplier = new System.Windows.Forms.NumericUpDown();
             this.gbTimeUsage = new System.Windows.Forms.GroupBox();
-            this.groupBox1.SuspendLayout();
+            this.gbMandatoryMutators = new System.Windows.Forms.GroupBox();
+            this.dgvMandatoryMutators = new System.Windows.Forms.DataGridView();
+            this.clMutatorName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gbCameraStartPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).BeginInit();
             this.gbDescription.SuspendLayout();
@@ -86,6 +89,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtTimeStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).BeginInit();
             this.gbTimeUsage.SuspendLayout();
+            this.gbMandatoryMutators.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryMutators)).BeginInit();
             this.SuspendLayout();
             // 
             // lblMapWidth
@@ -145,7 +150,7 @@
             // btnAccept
             // 
             this.btnAccept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAccept.Location = new System.Drawing.Point(545, 246);
+            this.btnAccept.Location = new System.Drawing.Point(545, 297);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(75, 23);
             this.btnAccept.TabIndex = 10;
@@ -156,7 +161,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClose.Location = new System.Drawing.Point(626, 246);
+            this.btnClose.Location = new System.Drawing.Point(626, 297);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 11;
@@ -164,18 +169,18 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // groupBox1
+            // gbCameraStartPosition
             // 
-            this.groupBox1.Controls.Add(this.lblCameraY);
-            this.groupBox1.Controls.Add(this.txtCameraStartPositionY);
-            this.groupBox1.Controls.Add(this.lblCameraX);
-            this.groupBox1.Controls.Add(this.txtCameraStartPositionX);
-            this.groupBox1.Location = new System.Drawing.Point(12, 151);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(126, 73);
-            this.groupBox1.TabIndex = 12;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Camera Start Position";
+            this.gbCameraStartPosition.Controls.Add(this.lblCameraY);
+            this.gbCameraStartPosition.Controls.Add(this.txtCameraStartPositionY);
+            this.gbCameraStartPosition.Controls.Add(this.lblCameraX);
+            this.gbCameraStartPosition.Controls.Add(this.txtCameraStartPositionX);
+            this.gbCameraStartPosition.Location = new System.Drawing.Point(12, 151);
+            this.gbCameraStartPosition.Name = "gbCameraStartPosition";
+            this.gbCameraStartPosition.Size = new System.Drawing.Size(126, 73);
+            this.gbCameraStartPosition.TabIndex = 12;
+            this.gbCameraStartPosition.TabStop = false;
+            this.gbCameraStartPosition.Text = "Camera Start Position";
             // 
             // lblCameraY
             // 
@@ -248,7 +253,7 @@
             this.gbDescription.Controls.Add(this.txtDescription);
             this.gbDescription.Location = new System.Drawing.Point(478, 12);
             this.gbDescription.Name = "gbDescription";
-            this.gbDescription.Size = new System.Drawing.Size(223, 228);
+            this.gbDescription.Size = new System.Drawing.Size(223, 279);
             this.gbDescription.TabIndex = 15;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
@@ -256,7 +261,7 @@
             // btnOpenTranslationFile
             // 
             this.btnOpenTranslationFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 199);
+            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 250);
             this.btnOpenTranslationFile.Name = "btnOpenTranslationFile";
             this.btnOpenTranslationFile.Size = new System.Drawing.Size(145, 23);
             this.btnOpenTranslationFile.TabIndex = 11;
@@ -271,7 +276,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(211, 177);
+            this.txtDescription.Size = new System.Drawing.Size(211, 228);
             this.txtDescription.TabIndex = 0;
             // 
             // gbPlayers
@@ -555,11 +560,41 @@
             this.gbTimeUsage.TabStop = false;
             this.gbTimeUsage.Text = "Time usage";
             // 
+            // gbMandatoryMutators
+            // 
+            this.gbMandatoryMutators.Controls.Add(this.dgvMandatoryMutators);
+            this.gbMandatoryMutators.Location = new System.Drawing.Point(277, 232);
+            this.gbMandatoryMutators.Name = "gbMandatoryMutators";
+            this.gbMandatoryMutators.Size = new System.Drawing.Size(200, 88);
+            this.gbMandatoryMutators.TabIndex = 23;
+            this.gbMandatoryMutators.TabStop = false;
+            this.gbMandatoryMutators.Text = "Mandatory Mutators";
+            // 
+            // dgvMandatoryMutators
+            // 
+            this.dgvMandatoryMutators.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvMandatoryMutators.ColumnHeadersVisible = false;
+            this.dgvMandatoryMutators.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clMutatorName});
+            this.dgvMandatoryMutators.Location = new System.Drawing.Point(6, 19);
+            this.dgvMandatoryMutators.MultiSelect = false;
+            this.dgvMandatoryMutators.Name = "dgvMandatoryMutators";
+            this.dgvMandatoryMutators.RowHeadersVisible = false;
+            this.dgvMandatoryMutators.Size = new System.Drawing.Size(188, 63);
+            this.dgvMandatoryMutators.TabIndex = 1;
+            // 
+            // clMutatorName
+            // 
+            this.clMutatorName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.clMutatorName.HeaderText = "Name";
+            this.clMutatorName.Name = "clMutatorName";
+            // 
             // MapStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(713, 281);
+            this.ClientSize = new System.Drawing.Size(713, 332);
+            this.Controls.Add(this.gbMandatoryMutators);
             this.Controls.Add(this.gbTimeUsage);
             this.Controls.Add(this.gbTimeLimits);
             this.Controls.Add(this.lblCameraType);
@@ -572,7 +607,7 @@
             this.Controls.Add(this.gbDescription);
             this.Controls.Add(this.btnSetForegrounds);
             this.Controls.Add(this.btnSetBackgrounds);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gbCameraStartPosition);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.lblMapName);
@@ -583,8 +618,8 @@
             this.Controls.Add(this.lblMapWidth);
             this.Name = "MapStatistics";
             this.Text = "Map properties";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gbCameraStartPosition.ResumeLayout(false);
+            this.gbCameraStartPosition.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).EndInit();
             this.gbDescription.ResumeLayout(false);
@@ -604,6 +639,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).EndInit();
             this.gbTimeUsage.ResumeLayout(false);
             this.gbTimeUsage.PerformLayout();
+            this.gbMandatoryMutators.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryMutators)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -618,7 +655,7 @@
         private System.Windows.Forms.Label lblMapName;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gbCameraStartPosition;
         private System.Windows.Forms.Label lblCameraY;
         private System.Windows.Forms.Label lblCameraX;
         private System.Windows.Forms.Button btnSetBackgrounds;
@@ -652,5 +689,8 @@
         public System.Windows.Forms.NumericUpDown txtHoursInDay;
         public System.Windows.Forms.NumericUpDown txtlblTimeMultiplier;
         public System.Windows.Forms.NumericUpDown txtTimeStart;
+        private System.Windows.Forms.GroupBox gbMandatoryMutators;
+        public System.Windows.Forms.DataGridView dgvMandatoryMutators;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clMutatorName;
     }
 }

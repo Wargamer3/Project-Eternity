@@ -33,6 +33,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int MaxNumberOfBots;
         public int MaxSquadsPerBot;
 
+        public List<string> ListMandatoryMutator;
+        public List<Mutator> ListMutator;
+
         public string CurrentDifficulty;
 
         public readonly List<BattleMapPlayer> ListRoomPlayer;
@@ -50,6 +53,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListRoomPlayer = new List<BattleMapPlayer>();
             ListRoomBot = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
+            ListMandatoryMutator = new List<string>();
+            ListMutator = new List<Mutator>();
             RoomName = string.Empty;
             RoomType = string.Empty;
             RoomSubtype = string.Empty;
@@ -76,6 +81,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListRoomPlayer = new List<BattleMapPlayer>();
             ListRoomBot = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
+            ListMandatoryMutator = new List<string>();
+            ListMutator = new List<Mutator>();
             CurrentDifficulty = "Easy";
             UseTeams = true;
             IsDead = false;
@@ -95,6 +102,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.MapPath = MapName;
             this.ListRoomPlayer = new List<BattleMapPlayer>();
             this.ListLocalPlayerID = ListLocalPlayerID;
+            ListMandatoryMutator = new List<string>();
+            ListMutator = new List<Mutator>();
             UseTeams = true;
             MaxSquadsPerBot = 1;
         }
@@ -119,6 +128,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListRoomPlayer = new List<BattleMapPlayer>();
             ListRoomBot = new List<BattleMapPlayer>();
             ListLocalPlayerID = new List<string>();
+            ListMandatoryMutator = new List<string>();
+            ListMutator = new List<Mutator>();
             CurrentDifficulty = "Easy";
             UseTeams = true;
             MaxSquadsPerBot = 1;

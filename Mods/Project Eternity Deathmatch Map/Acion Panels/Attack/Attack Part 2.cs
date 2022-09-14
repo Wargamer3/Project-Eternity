@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            ListAttackChoice = Map.GetAttackChoice(ActiveSquad);
+            ListAttackChoice = Map.GetAttackChoice(ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack.RangeMaximum);
         }
 
         public override void DoUpdate(GameTime gameTime)

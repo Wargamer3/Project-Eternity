@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -106,17 +107,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int P = ListPERAttackToUpdate.Count - 1; P >= 0; --P)
                 {
                     PERAttackMovement ActiveAttack = ListPERAttackToUpdate[P];
+                    Terrain StartTerrain = Map.GetTerrain(ActiveAttack.StartPosition.X, ActiveAttack.StartPosition.Y, (int)ActiveAttack.StartPosition.Z);
+
                     Vector3 NextPostion = ActiveAttack.StartPosition + ActiveAttack.Movement * (float)Progress;
+                    if (ActiveAttack.Owner.ActiveAttack.PERAttributes.AffectedByGravity && !ActiveAttack.Owner.IsOnGround)
+                    {
+                        NextPostion = ActiveAttack.StartPosition + (ActiveAttack.Movement - new Vector3(0, 0, (float)Progress * 16f)) * (float)Progress;
+                    }
 
                     if (NextPostion.X < 0 || NextPostion.X >= Map.MapSize.X || NextPostion.Y < 0 || NextPostion.Y >= Map.MapSize.Y || NextPostion.Z < 0 || NextPostion.Z >= Map.LayerManager.ListLayer.Count)
                     {
                         ListPERAttackToUpdate.RemoveAt(P);
-                        ActiveAttack.Owner.DestroySelf();
+                        ActiveAttack.Owner.IsOnGround = true;
+                        //ActiveAttack.Owner.DestroySelf();
                         return;
                     }
                     Terrain NextTerrain = Map.GetTerrain(NextPostion.X, NextPostion.Y, (int)NextPostion.Z);
+                    Vector3 NextTerrainRealPosition = NextTerrain.GetRealPosition(NextPostion);
 
-                    if (NextTerrain != ActiveAttack.LastTerrain && ActiveAttack.ListCrossedTerrain.Contains(NextTerrain))
+                    if (StartTerrain != NextTerrain && NextPostion.Z < NextTerrainRealPosition.Z && NextTerrain.TerrainTypeIndex == UnitStats.TerrainLandIndex)
+                    {
+                        ActiveAttack.Owner.SetPosition(NextTerrainRealPosition);
+                        ListPERAttackToUpdate.RemoveAt(P);
+                        ActiveAttack.Owner.IsOnGround = true;
+                    }
+                    else if (NextTerrain != ActiveAttack.LastTerrain && ActiveAttack.ListCrossedTerrain.Contains(NextTerrain))
                     {
                         ActiveAttack.Owner.SetPosition(ActiveAttack.LastPosition);
                         ActiveAttack.Owner.ProcessMovement(NextPostion, NextTerrain);

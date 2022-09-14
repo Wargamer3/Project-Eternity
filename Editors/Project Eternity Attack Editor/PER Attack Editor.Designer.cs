@@ -451,7 +451,6 @@
         private System.Windows.Forms.Label lblProjectileSpeed;
         public System.Windows.Forms.NumericUpDown txtProjectileSpeed;
         private System.Windows.Forms.Label lblSkillChain;
-        private System.Windows.Forms.TextBox txtSkillChain;
         private System.Windows.Forms.Button btnSelectSkillChain;
         private System.Windows.Forms.Label lblNumberOfProjectiles;
         private System.Windows.Forms.Button btnUseTextureProjectile;
@@ -480,5 +479,6 @@
         public System.Windows.Forms.TextBox txt3DModelPath;
         private System.Windows.Forms.Label lblAttackType;
         public System.Windows.Forms.ComboBox cbAttackType;
+        public System.Windows.Forms.TextBox txtSkillChain;
     }
 }

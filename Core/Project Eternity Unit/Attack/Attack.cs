@@ -175,7 +175,7 @@ namespace ProjectEternity.Core.Attacks
             }
             else if (this.Pri == WeaponPrimaryProperty.PER)
             {
-                PERAttributes = new PERAttackAttributes(BR, Content);
+                PERAttributes = new PERAttackAttributes(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 KnockbackAttributes = new KnockbackAttackAttributes();
             }
             else

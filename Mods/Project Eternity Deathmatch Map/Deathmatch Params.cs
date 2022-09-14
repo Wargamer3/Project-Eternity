@@ -131,5 +131,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
         }
+
+        protected override void LoadMutators()
+        {
+            base.LoadMutators();
+
+            foreach (KeyValuePair<string, Mutator> ActiveAutomaticSkill in Mutator.LoadFromAssemblyFiles(Directory.GetFiles("Mutators/Deathmatch Map", "*.dll"), this))
+            {
+                DicMutator.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+            }
+
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Mutators/Deathmatch Map", " *.csx", SearchOption.TopDirectoryOnly);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                foreach (KeyValuePair<string, Mutator> ActiveAutomaticSkill in Mutator.LoadFromAssembly(ActiveAssembly, this))
+                {
+                    DicMutator.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
+                }
+            }
+        }
     }
 }

@@ -65,6 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public MapMenu BattleMapMenu;
         public UnitDeploymentScreen UnitDeploymentScreen;
         public DeathmatchParams GlobalBattleParams;
+        public List<DeathmatchMutator> ListMutator;
 
         public int ActiveSquadIndex
         {
@@ -145,6 +146,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Pathfinder = new MovementAlgorithmDeathmatch(this);
             ListDelayedAttack = new List<DelayedAttack>();
             ListPERAttack = new List<PERAttack>();
+            ListMutator = new List<DeathmatchMutator>();
+
             ListTerrainType = new List<string>();
             ListTerrainType.Add(UnitStats.TerrainAir);
             ListTerrainType.Add(UnitStats.TerrainLand);
@@ -440,6 +443,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             ListPlayer.Add(NewLocalCharacter);
             ListLocalPlayerInfo.Add(NewLocalCharacter);
+        }
+
+        public override void SetMutators(List<Mutator> ListMutator)
+        {
+            foreach (DeathmatchMutator ActiveMutator in ListMutator)
+            {
+                this.ListMutator.Add(ActiveMutator);
+            }
         }
 
         public override void TogglePreview(bool UsePreview)
@@ -886,10 +897,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return MovementChoice;
         }
 
-        public List<MovementAlgorithmTile> GetAttackChoice(Squad ActiveSquad)
+        public List<MovementAlgorithmTile> GetAttackChoice(Squad ActiveSquad, int RangeMaximum)
         {
-            int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
-
             BattleMap ActiveMap = this;
             if (ActivePlatform != null)
             {
@@ -897,7 +906,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, RangeMaximum);
 
             List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
 
@@ -910,16 +919,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     continue;
                 }
-                bool UnitFound = false;
-                for (int P = 0; P < ListPlayer.Count && !UnitFound; P++)
-                {
-                    int SquadIndex = CheckForSquadAtPosition(P, ListAllNode[i].WorldPosition, Vector3.Zero);
-                    if (SquadIndex >= 0)
-                        UnitFound = true;
-                }
-                //If there is no Unit.
-                if (!UnitFound)
-                    MovementChoice.Add(ListAllNode[i]);
+
+                MovementChoice.Add(ListAllNode[i]);
             }
 
             return MovementChoice;

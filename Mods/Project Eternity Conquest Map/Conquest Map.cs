@@ -979,6 +979,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
         }
 
+        public override void SetMutators(List<Mutator> ListMutator)
+        {
+        }
+
         public override void AddPlatform(BattleMapPlatform NewPlatform)
         {
             /*foreach (Player ActivePlayer in ListPlayer)

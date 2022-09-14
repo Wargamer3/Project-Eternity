@@ -97,7 +97,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void Init()
         {
             shadowOverlay = new ShadowOverlay(Map);
-            sprRain = Map.Content.Load<Texture2D>("Line");
+            sprRain = Map.Content.Load<Texture2D>("Rain Line");
             DisplacementEffect = Map.Content.Load<Effect>("Shaders/Displacement");
             // Look up the resolution and format of our main backbuffer.
             PresentationParameters pp = GameScreen.GraphicsDevice.PresentationParameters;

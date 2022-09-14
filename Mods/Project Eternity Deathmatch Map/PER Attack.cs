@@ -6,6 +6,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -22,6 +23,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public AnimatedModel Unit3DModel;
         public bool IsOnGround = false;//Follow slopes if on ground
         public bool AllowRicochet = true;//Follow 45 degree walls
+
+        public List<BaseAutomaticSkill> ListActiveSkill;
 
         public PERAttack(Attack ActiveAttack, Squad Owner, int PlayerIndex, DeathmatchMap Map, Vector3 Position, Vector3 Speed, int Lifetime)
         {

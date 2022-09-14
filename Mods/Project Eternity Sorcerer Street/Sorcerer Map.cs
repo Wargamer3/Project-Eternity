@@ -165,7 +165,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-
         public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
         {
             /*ListPlayer[ActivePlayerIndex].ListSquad.Remove((SorcererStreetUnit)UnitToRemove);
@@ -199,6 +198,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //Player NewDeahtmatchPlayer = new Player(NewPlayer);
             //ListPlayer.Add(NewDeahtmatchPlayer);
             //ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);
+        }
+
+        public override void SetMutators(List<Mutator> ListMutator)
+        {
         }
 
         public override void AddPlatform(BattleMapPlatform NewPlatform)

@@ -23,8 +23,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public readonly string MapPlayers;
             public readonly string MapDescription;
             public readonly Texture2D MapImage;
+            public readonly List<string> ListMandatoryMutator;
 
-            public MapInfo(string MapName, string MapType, string MapPath, Point NewMapSize, byte PlayersMin, byte PlayersMax, string MapDescription, Texture2D MapImage)
+            public MapInfo(string MapName, string MapType, string MapPath, Point NewMapSize, byte PlayersMin, byte PlayersMax, string MapDescription, List<string> ListMandatoryMutator, Texture2D MapImage)
             {
                 this.MapName = MapName;
                 this.MapType = MapType;
@@ -33,7 +34,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 this.PlayersMin = PlayersMin;
                 this.PlayersMax = PlayersMax;
                 this.MapDescription = MapDescription;
+                this.ListMandatoryMutator = ListMandatoryMutator;
                 this.MapImage = MapImage;
+
                 if (PlayersMin != PlayersMax)
                 {
                     MapPlayers = PlayersMin + "-" + PlayersMax + " Players";
@@ -110,8 +113,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void SelectMap(MapInfo MapInfoToSelect)
         {
             ActiveMapInfo = MapInfoToSelect;
+            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapType, ActiveMapInfo.MapPath, ActiveMapInfo.PlayersMin, ActiveMapInfo.PlayersMax, ActiveMapInfo.ListMandatoryMutator);
             OptionsScreen.OnMapUpdate();
-            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapType, ActiveMapInfo.MapPath, ActiveMapInfo.PlayersMin, ActiveMapInfo.PlayersMax);
         }
 
         public void UpdateMaps()
@@ -150,10 +153,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                         string Description = BR.ReadString();
 
+                        int ListMandatoryMutatorCount = BR.ReadInt32();
+                        List<string> ListMandatoryMutator = new List<string>(ListMandatoryMutatorCount);
+                        for (int M = 0; M < ListMandatoryMutatorCount; M++)
+                        {
+                            ListMandatoryMutator.Add(BR.ReadString());
+                        }
+
                         BR.Close();
                         FS.Close();
 
-                        DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapType, FilePath, NewMapSize, PlayersMin, PlayersMax, Description, null));
+                        DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapType, FilePath, NewMapSize, PlayersMin, PlayersMax, Description, ListMandatoryMutator, null));
                     }
                 }
             }

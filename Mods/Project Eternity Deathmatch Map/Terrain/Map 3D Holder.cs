@@ -985,7 +985,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Vector3 CurrentPosition = ActiveAttack.Position;
 
-                CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X), (int)Math.Floor(CurrentPosition.Y)].GetRealPosition(CurrentPosition);
+                if (ActiveAttack.IsOnGround)
+                {
+                    CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X), (int)Math.Floor(CurrentPosition.Y)].GetRealPosition(CurrentPosition);
+                }
 
                 ActiveAttack.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f)
                     * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));

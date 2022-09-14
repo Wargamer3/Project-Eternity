@@ -194,7 +194,7 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public override List<ActionPanel> OnMenuSelect(int ActivePlayerIndex, ActionPanelHolder ListActionMenuChoice)
+        public override void OnMenuSelect(ActionPanel PanelOwner, int ActivePlayerIndex, ActionPanelHolder ListActionMenuChoice)
         {
             List<ActionPanel> DicActionPanel = new List<ActionPanel>();
 
@@ -205,11 +205,10 @@ namespace ProjectEternity.Core.Units
                     if (OptionalPanel != null && !DicActionPanel.Contains(OptionalPanel))
                     {
                         DicActionPanel.Add(OptionalPanel);
+                        PanelOwner.AddChoiceToCurrentPanel(OptionalPanel);
                     }
                 }
             }
-
-            return DicActionPanel;
         }
 
         public bool IsUnitAtPosition(Vector3 PositionToCheck)

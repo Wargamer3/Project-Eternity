@@ -6,6 +6,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
+using System.Linq;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -48,7 +49,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int SelectedActiveMutatorsIndex;
 
         private List<Mutator> ListAvailableMutators;
-        private List<Mutator> ListActiveMutators;
         private Mutator ActiveMutator;
 
         private readonly RoomInformations Room;
@@ -59,10 +59,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Room = Room;
             this.Owner = Owner;
 
-            ListAvailableMutators = new List<Mutator>();
-            ListActiveMutators = new List<Mutator>();
-
-            AvailableMutatorsValue = -1;
+            AvailableMutatorsValue = 0;
             SelectedActiveMutatorsIndex = -1;
 
             PanelY = (int)(Constants.Height * 0.15);
@@ -81,11 +78,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Load()
         {
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
-            for (int i = 0; i < 40; ++i)
-            {
-                ListAvailableMutators.Add(new Mutator("Test" + i, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"));
-            }
-            AvailableMutatorsScrollbar = new BoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY + 30), PanelHeight - 30, ListAvailableMutators.Count, OnAvailableMutatorsScrollbarChange);
+
+            AvailableMutatorsScrollbar = new BoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY + 30), PanelHeight - 30, 5, OnAvailableMutatorsScrollbarChange);
             ActiveMutatorsScrollbar = new BoxScrollbar(new Vector2(RightPanelX + PanelWidth - 20, PanelY + 30), PanelHeight - 30, 10, OnActiveMutatorsScrollbarChange);
             
             AddButton = new BoxButton(new Rectangle(ButtonsX, ButtonsY, ButtonsWidth, ButtonsHeight), fntText, "Add", OnButtonOver, OnAddPressed);
@@ -123,7 +117,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (SelectedAvailableMutatorsIndex >= 0)
             {
                 Owner.sndButtonClick.Play();
-                ListActiveMutators.Add(ListAvailableMutators[SelectedAvailableMutatorsIndex]);
+                Room.ListMutator.Add(ListAvailableMutators[SelectedAvailableMutatorsIndex]);
                 ListAvailableMutators.RemoveAt(SelectedAvailableMutatorsIndex);
             }
         }
@@ -133,7 +127,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (SelectedAvailableMutatorsIndex >= 0)
             {
                 Owner.sndButtonClick.Play();
-                ListActiveMutators.AddRange(ListAvailableMutators);
+                Room.ListMutator.AddRange(ListAvailableMutators);
                 ListAvailableMutators.Clear();
             }
         }
@@ -143,8 +137,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (SelectedActiveMutatorsIndex >= 0)
             {
                 Owner.sndButtonClick.Play();
-                ListAvailableMutators.Add(ListActiveMutators[SelectedActiveMutatorsIndex]);
-                ListActiveMutators.RemoveAt(SelectedActiveMutatorsIndex);
+                ListAvailableMutators.Add(Room.ListMutator[SelectedActiveMutatorsIndex]);
+                Room.ListMutator.RemoveAt(SelectedActiveMutatorsIndex);
             }
         }
 
@@ -153,8 +147,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (SelectedActiveMutatorsIndex >= 0)
             {
                 Owner.sndButtonClick.Play();
-                ListAvailableMutators.AddRange(ListActiveMutators);
-                ListActiveMutators.Clear();
+                ListAvailableMutators.AddRange(Room.ListMutator);
+                Room.ListMutator.Clear();
             }
         }
 
@@ -170,16 +164,33 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             int CurrentActiveMutatorsIndex = (int)(MouseHelper.MouseStateCurrent.Y - DrawY) / 20 + ActiveMutatorsValue;
-            if (CurrentActiveMutatorsIndex >= 0 && CurrentActiveMutatorsIndex < ListActiveMutators.Count && MouseHelper.InputLeftButtonPressed()
+            if (CurrentActiveMutatorsIndex >= 0 && CurrentActiveMutatorsIndex < Room.ListMutator.Count && MouseHelper.InputLeftButtonPressed()
                 && MouseHelper.MouseStateCurrent.X >= RightPanelX && MouseHelper.MouseStateCurrent.X < RightPanelX + PanelWidth - 20)
             {
                 SelectedActiveMutatorsIndex = CurrentActiveMutatorsIndex;
-                ActiveMutator = ListActiveMutators[CurrentActiveMutatorsIndex];
+                ActiveMutator = Room.ListMutator[CurrentActiveMutatorsIndex];
             }
 
             foreach (IUIElement ActiveButton in ArrayMenuButton)
             {
                 ActiveButton.Update(gameTime);
+            }
+        }
+
+        public void UpdateMutators()
+        {
+            ListAvailableMutators = BattleMap.DicBattmeMapType[Room.MapType].Params.DicMutator.Values.ToList();
+            Room.ListMutator.Clear();
+
+            foreach (string ActiveMutatorName in Room.ListMandatoryMutator)
+            {
+                Mutator FoundMutator;
+
+                if (BattleMap.DicBattmeMapType[Room.MapType].Params.DicMutator.TryGetValue(ActiveMutatorName, out FoundMutator))
+                {
+                    Room.ListMutator.Add(FoundMutator);
+                    ListAvailableMutators.Remove(FoundMutator);
+                }
             }
         }
 
@@ -222,9 +233,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawStringRightAligned(fntText, "Active Mutators", new Vector2(RightPanelX + PanelWidth - 15, PanelY + 6), Color.White);
 
             DrawY = PanelY + 32;
-            for (int M = AvailableMutatorsValue; M < ListActiveMutators.Count; M++)
+            for (int M = AvailableMutatorsValue; M < Room.ListMutator.Count; M++)
             {
-                Mutator ActiveMutator = ListActiveMutators[M];
+                Mutator ActiveMutator = Room.ListMutator[M];
 
                 g.DrawString(fntText, ActiveMutator.Name, new Vector2(RightPanelX + 5, DrawY), Color.White);
 

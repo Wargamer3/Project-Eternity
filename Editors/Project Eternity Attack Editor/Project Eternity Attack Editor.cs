@@ -189,6 +189,8 @@ namespace ProjectEternity.Editors.AttackEditor
                     BW.Write((float)PERAttackEditor.txtForwardMaxSpread.Value);
                     BW.Write((float)PERAttackEditor.txtUpwardMaxSpread.Value);
 
+                    BW.Write(PERAttackEditor.txtSkillChain.Text);
+
                     if (PERAttackEditor.rbDestroySelf.Checked)
                     {
                         BW.Write((byte)PERAttackAttributes.GroundCollisions.DestroySelf);

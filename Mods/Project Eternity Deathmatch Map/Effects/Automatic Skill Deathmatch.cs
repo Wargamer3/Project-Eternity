@@ -7,7 +7,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private DeathmatchParams _Params;
         protected DeathmatchParams Params { get { return _Params; } }
 
-
         public AutomaticDeathmatchTargetType(string TargetType, DeathmatchParams Params)
             : base(TargetType)
         {

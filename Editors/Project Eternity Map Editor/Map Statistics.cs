@@ -59,6 +59,11 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 rbUseRealTime.Checked = true;
             }
+
+            foreach (string ActiveMutatorName in ActiveMap.ListMandatoryMutator)
+            {
+                dgvMandatoryMutators.Rows.Add(ActiveMutatorName);
+            }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

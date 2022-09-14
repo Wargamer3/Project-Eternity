@@ -52,7 +52,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-            ListAttackTerrain = Map.GetAttackChoice(ActiveSquad);
+            ListAttackTerrain = Map.GetAttackChoice(ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack.RangeMaximum);
             ListMAPAttackTarget = Map.GetEnemies(CurrentAttack.MAPAttributes.FriendlyFire, ListAttackTerrain);
 
             ListAttackChoice = new List<Vector3>();

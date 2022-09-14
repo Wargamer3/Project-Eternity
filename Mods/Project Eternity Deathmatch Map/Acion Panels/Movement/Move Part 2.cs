@@ -70,11 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AddChoiceToCurrentPanel(new ActionPanelWait(Map, ActiveSquad, ListMVHoverPoint));
                 }
 
-                foreach (ActionPanel OptionalPanel in GetPropPanelsOnUnitStop(ActiveSquad))
-                {
-                    AddChoiceToCurrentPanel(OptionalPanel);
-                }
-
+                AddPropPanelsOnUnitStop(ActiveSquad);
                 ActionPanelRepair.AddIfUsable(Map, this, ActiveSquad);
                 ActionPanelGetInVehicle.AddIfUsable(Map, this, ActiveSquad, ListMVHoverPoint);
             }
@@ -90,15 +86,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private List<ActionPanel> GetPropPanelsOnUnitStop(Squad StoppedUnit)
+        private void AddPropPanelsOnUnitStop(Squad StoppedUnit)
         {
-            List<ActionPanel> ListPanel = new List<ActionPanel>();
-
             foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
             {
-                ListPanel.AddRange(ActiveProp.OnUnitBeforeStop(StoppedUnit, CursorPosition));
+                ActiveProp.OnUnitBeforeStop(this, StoppedUnit, CursorPosition);
             }
-            return ListPanel;
         }
 
         public override void DoUpdate(GameTime gameTime)

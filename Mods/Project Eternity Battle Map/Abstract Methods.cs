@@ -30,6 +30,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected abstract void DoAddLocalPlayer(BattleMapPlayer NewPlayer);
 
+        public abstract void SetMutators(List<Mutator> ListMutator);
+
         public abstract void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove);
 
         public abstract void AddUnit(int PlayerIndex, UnitMapComponent UnitToAdd, MovementAlgorithmTile NewPosition);

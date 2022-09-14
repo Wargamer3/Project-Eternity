@@ -56,7 +56,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int YStep = 25;
             int YStart = 122;
 
-            //Move the cursor.
             if (ActiveInputManager.InputUpPressed())
             {
                 --AttackIndex;
@@ -85,10 +84,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int A = 0; A < ListAttack.Count; A++)
                 {
-                    if (ActiveInputManager.IsInZone(0, YStart + A * YStep, Constants.Width, YStart + (A + 1) * YStep))
+                    if (AttackIndex != A && ActiveInputManager.IsInZone(0, YStart + A * YStep, Constants.Width, YStart + (A + 1) * YStep))
                     {
                         AttackIndex = A;
                         ActiveSquad.CurrentLeader.CurrentAttack = ListAttack[A];
+                        Map.AttackPicker.SetCursorIndex(AttackIndex);
+
+                        Map.sndSelection.Play();
                         break;
                     }
                 }

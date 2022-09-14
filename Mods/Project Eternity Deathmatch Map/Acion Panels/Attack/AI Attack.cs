@@ -255,7 +255,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void PrepareToAttack()
         {
-            ListAttackTerrain = Map.GetAttackChoice(ActiveSquad);
+            ListAttackTerrain = Map.GetAttackChoice(ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack.RangeMaximum);
             ListAttackChoice = new List<Vector3>();
             foreach (MovementAlgorithmTile ActiveTerrain in ListAttackTerrain)
             {
@@ -278,7 +278,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Prepare the Cursor to move.
             AICursorNextPosition.X = TargetSquad.X;
             AICursorNextPosition.Y = TargetSquad.Y;
-            Map.GetAttackChoice(ActiveSquad);
 
             ActiveSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
 

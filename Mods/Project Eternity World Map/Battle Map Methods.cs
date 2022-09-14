@@ -232,7 +232,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             return true;
         }
 
-
         public override void SaveTemporaryMap()
         {
             throw new NotImplementedException();

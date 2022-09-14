@@ -219,6 +219,10 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
         }
 
+        public override void SetMutators(List<Mutator> ListMutator)
+        {
+        }
+
         public override void TogglePreview(bool UsePreview)
         {
             ShowUnits = !ShowUnits;

@@ -130,6 +130,7 @@
     <Compile Include="Battle Behaviors.cs" />
     <Compile Include="Battle Formulas.cs" />
     <Compile Include="Battle Previewer.cs" />
+    <Compile Include="Deathmatch Mutator.cs" />
     <Compile Include="Effects\Automatic Skill Deathmatch.cs" />
     <Compile Include="Effects\Deathmatch Effect.cs" />
     <Compile Include="Deathmatch Map Helper.cs" />

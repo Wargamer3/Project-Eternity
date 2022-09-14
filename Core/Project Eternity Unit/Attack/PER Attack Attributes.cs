@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Microsoft.Xna.Framework.Content;
+using ProjectEternity.Core.Effects;
+using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.Core.Attacks
@@ -26,10 +30,14 @@ namespace ProjectEternity.Core.Attacks
         public float MaxForwardSpread;
         public float MaxUpwardSpread;
 
+        public string SkillChainName;
+        public List<BaseAutomaticSkill> ListActiveSkill;
+
         public GroundCollisions GroundCollision;
         public byte BounceLimit;
 
-        public PERAttackAttributes(BinaryReader BR, ContentManager Content)
+        public PERAttackAttributes(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             ProjectileSpeed = BR.ReadSingle();
             AffectedByGravity = BR.ReadBoolean();
@@ -60,6 +68,8 @@ namespace ProjectEternity.Core.Attacks
             MaxForwardSpread = BR.ReadSingle();
             MaxUpwardSpread = BR.ReadSingle();
 
+            SkillChainName = BR.ReadString();
+
             GroundCollision = (GroundCollisions)BR.ReadByte();
             if (GroundCollision == GroundCollisions.Bounce)
             {
@@ -68,6 +78,53 @@ namespace ProjectEternity.Core.Attacks
             else
             {
                 BounceLimit = 0;
+            }
+
+            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
+            {
+                FileStream FSSkillChain = new FileStream("Content/Attacks/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
+                BinaryReader BRSkillChain = new BinaryReader(FSSkillChain, Encoding.UTF8);
+                BRSkillChain.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int tvSkillsNodesCount = BRSkillChain.ReadInt32();
+                ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
+                for (int N = 0; N < tvSkillsNodesCount; ++N)
+                {
+                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+
+                    InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
+
+                    ListActiveSkill.Add(ActiveSkill);
+                }
+
+                BRSkillChain.Close();
+                FSSkillChain.Close();
+            }
+            else
+            {
+                ListActiveSkill = new List<BaseAutomaticSkill>();
+            }
+        }
+
+        private void InitSkillChainTarget(BaseAutomaticSkill ActiveSkill, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            foreach (BaseSkillLevel ActiveSkillLevel in ActiveSkill.ListSkillLevel)
+            {
+                foreach (BaseSkillActivation ActiveSkillActivation in ActiveSkillLevel.ListActivation)
+                {
+                    for (int E = 0; E < ActiveSkillActivation.ListEffect.Count; ++E)
+                    {
+                        if (ActiveSkillActivation.ListEffect[E] is ProjectileEffect)
+                        {
+                            ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Self Attack"]);
+                        }
+
+                        foreach (BaseAutomaticSkill ActiveFollowingSkill in ActiveSkillActivation.ListEffect[E].ListFollowingSkill)
+                        {
+                            InitSkillChainTarget(ActiveFollowingSkill, DicAutomaticSkillTarget);
+                        }
+                    }
+                }
             }
         }
     }

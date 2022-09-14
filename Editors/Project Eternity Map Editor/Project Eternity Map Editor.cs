@@ -1326,6 +1326,14 @@ namespace ProjectEternity.Editors.MapEditor
                 ActiveMap.PlayersMax = (byte)MS.txtPlayersMax.Value;
                 ActiveMap.Description = MS.txtDescription.Text;
 
+                ActiveMap.ListMandatoryMutator.Clear();
+                foreach (DataGridViewRow ActiveRow in MS.dgvMandatoryMutators.Rows)
+                {
+                    if (ActiveRow.Cells[0].Value != null)
+                    {
+                        ActiveMap.ListMandatoryMutator.Add((string)ActiveRow.Cells[0].Value);
+                    }
+                }
 
                 ActiveMap.MapEnvironment.TimeStart = (float)MS.txtTimeStart.Value;
                 ActiveMap.MapEnvironment.HoursInDay = (float)MS.txtHoursInDay.Value;

@@ -21,6 +21,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public List<MovementAlgorithmTile> ListAttackTerrain;
         private BattlePreviewer BattlePreview;
 
+        List<PERAttack> ListNewList = new List<PERAttack>();
+
         public ActionPanelAttackPER(DeathmatchMap Map)
             : base(PanelName, Map)
         {
@@ -62,7 +64,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveInputManager.InputConfirmPressed())
             {
-                CreateAttack(ActiveSquad.CurrentLeader.CurrentAttack);
+                Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad);
+                Vector3 AttackPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.LayerIndex);
+
+                if (ActiveSquad.CurrentLeader.CurrentAttack.PERAttributes.AttackType == PERAttackAttributes.AttackTypes.Shoot)
+                {
+                    AttackPosition.Z = ActiveTerrain.WorldPosition.Z + 0.5f;
+                }
+
+                CreateAttack(ActiveSquad.CurrentLeader.CurrentAttack, AttackPosition, new List<BaseAutomaticSkill>());
+
+                if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)
+                {
+                    ActiveSquad.CurrentLeader.CurrentAttack.ConsumeAmmo();
+                }
+
+                ActiveSquad.EndTurn();
+
+                foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
+                {
+                    ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
+                }
+
+                RemoveAllSubActionPanels();
+
+                Map.CursorPosition = ActiveSquad.Position;
+                Map.CursorPositionVisible = ActiveSquad.Position;
                 Map.sndConfirm.Play();
             }
             else
@@ -77,26 +104,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private void CreateAttack(Attack AttackUsed)
+        private void CreateAttack(Attack AttackUsed, Vector3 AttackPosition, List<BaseAutomaticSkill> ListFollowingSkill)
         {
-            Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad);
-            List<PERAttack> ListNewList = new List<PERAttack>();
-
             for (int A = 0; A < AttackUsed.PERAttributes.NumberOfProjectiles; ++A)
             {
-                Vector3 AttackPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.WorldPosition.Z);
-
-                if (AttackUsed.PERAttributes.AttackType == PERAttackAttributes.AttackTypes.Shoot)
-                {
-                    AttackPosition.Z += 0.5f;
-                }
+                PERAttack NewAttack = null;
 
                 if (AttackUsed.PERAttributes.ProjectileSpeed == 0)
                 {
-                    PERAttack NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, Vector3.Zero, AttackUsed.PERAttributes.MaxLifetime);
-
-                    ListNewList.Add(NewAttack);
-                    Map.ListPERAttack.Add(NewAttack);
+                    NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, Vector3.Zero, AttackUsed.PERAttributes.MaxLifetime);
+                    NewAttack.IsOnGround = true;
                 }
                 else
                 {
@@ -114,29 +131,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AttackSpeed += AttackForwardVector * RandForward * AttackUsed.PERAttributes.ProjectileSpeed;
                     AttackSpeed += AttackForwardVector * AttackUsed.PERAttributes.ProjectileSpeed;
 
-                    PERAttack NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, AttackSpeed, AttackUsed.PERAttributes.MaxLifetime);
+                    NewAttack = new PERAttack(AttackUsed, ActiveSquad, ActivePlayerIndex, Map, AttackPosition, AttackSpeed, AttackUsed.PERAttributes.MaxLifetime);
 
                     ListNewList.Add(NewAttack);
-                    Map.ListPERAttack.Add(NewAttack);
                 }
+
+                //Clone the following skills so they are not share by every bullets.
+                NewAttack.ListActiveSkill = new List<BaseAutomaticSkill>(ListFollowingSkill.Count);
+                foreach (BaseAutomaticSkill ActiveFollowingSkill in ListFollowingSkill)
+                {
+                    NewAttack.ListActiveSkill.Add(new BaseAutomaticSkill(ActiveFollowingSkill));
+                }
+
+                Map.ListPERAttack.Add(NewAttack);
             }
-
-            if (AttackUsed.MaxAmmo > 0)
-            {
-                AttackUsed.ConsumeAmmo();
-            }
-
-            ActiveSquad.EndTurn();
-
-            foreach (InteractiveProp ActiveProp in Map.LayerManager[(int)ActiveSquad.Position.Z].ListProp)
-            {
-                ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
-            }
-
-            RemoveAllSubActionPanels();
-
-            Map.CursorPosition = ActiveSquad.Position;
-            Map.CursorPositionVisible = ActiveSquad.Position;
 
             Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, ListNewList));
         }

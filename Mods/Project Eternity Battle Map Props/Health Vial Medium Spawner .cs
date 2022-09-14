@@ -57,18 +57,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
-        public override List<ActionPanel> OnUnitSelected(Squad SelectedUnit)
+        public override void OnUnitSelected(ActionPanel PanelOwner, Squad SelectedUnit)
         {
-            List<ActionPanel> ListPanel = new List<ActionPanel>();
-
-            return ListPanel;
         }
 
-        public override List<ActionPanel> OnUnitBeforeStop(Squad StoppedUnit, Vector3 PositionToStopOn)
+        public override void OnUnitBeforeStop(ActionPanel PanelOwner, Squad StoppedUnit, Vector3 PositionToStopOn)
         {
-            List<ActionPanel> ListPanel = new List<ActionPanel>();
-
-            return ListPanel;
         }
 
         public override void OnMovedOverBeforeStop(Squad SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn)
