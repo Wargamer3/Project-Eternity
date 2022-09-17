@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.Core.Magic
 {
-    public class MagicProjectile : Projectile
+    public class MagicProjectile : Projectile2D
     {
         protected MagicUserParams MagicParams;
 

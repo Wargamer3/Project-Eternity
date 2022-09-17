@@ -154,13 +154,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             float TimeRemaing = travel_time(HighAngle.X, Speed) + travel_time(HighAngle.Z, Speed);
 
             ListLinePoint.Clear();
-            while (TimeRemaing >= 0 && Position.Y >= TargetPosition.Z)
+            while (Position.Y >= TargetPosition.Z)
             {
                 TimeRemaing -= 0.1f;
                 ListLinePoint.Add(Position);
-                //Position.X += CosA * 13 * 0.1f;
-                //Position.Y += SinA * Speed * 0.1f;
-                //Position.Z += CosA2 * 13 * 0.1f;
                 Position.X += HighAngle.X * 0.1f;
                 Position.Y += (HighAngle.Y - (GravityValue)) * 0.1f;
                 Position.Z += HighAngle.Z * 0.1f;
@@ -194,6 +191,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AttackToThrow.Speed = new Vector3(ThrowSpeed.X, ThrowSpeed.Z, ThrowSpeed.Y);
                 AttackToThrow.IsOnGround = false;
                 ListAttackToUpdate.Add(AttackToThrow);
+                RemoveAllSubActionPanels();
                 Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, ListAttackToUpdate));
             }
             else

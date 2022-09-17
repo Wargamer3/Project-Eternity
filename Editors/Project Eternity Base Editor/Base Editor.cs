@@ -52,6 +52,7 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathAttacks = "Attacks";
         public const string GUIRootPathAttackAttributes = "Attacks/Attributes";
         public const string GUIRootPathAttackModels = "Attacks/Models";
+        public const string GUIRootPathAttackSkillChains = "Attacks/Skill Chains";
         public const string GUIRootPathAIs = "AIs";
         public const string GUIRootPathVehicles = "Vehicles";
         public const string GUIRootPathVehicleSprites = "Vehicles/Sprites";

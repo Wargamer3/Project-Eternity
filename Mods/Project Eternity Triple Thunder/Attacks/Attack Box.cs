@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
     public enum AnimationTypes { FullAnimation, PartialAnimation, SkeletonAnimation, Null }
     public enum ComboRotationTypes { None, RotateAroundWeaponSlot, RotateAroundRobot }
 
-    public abstract class AttackBox : Projectile
+    public abstract class AttackBox : Projectile2D
     {
         public List<RobotAnimation> ListAttackedRobots;//List of robot already attacked.
         public RobotAnimation Owner;

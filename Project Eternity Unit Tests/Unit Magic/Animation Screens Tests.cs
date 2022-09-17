@@ -232,7 +232,7 @@ namespace ProjectEternity.UnitTests
             return DummyTimeline;
         }
 
-        private MagicSpell CreateFireball(UnitMagic ActiveUser, ProjectileParams MagicProjectileParams)
+        private MagicSpell CreateFireball(UnitMagic ActiveUser, Projectile2DParams MagicProjectileParams)
         {
             MagicSpell ActiveSpell = new MagicSpell(ActiveUser, ActiveUser);
             MagicUserParams Params = new MagicUserParams(ActiveSpell.GlobalContext);

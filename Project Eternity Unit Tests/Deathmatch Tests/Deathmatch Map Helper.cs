@@ -12,7 +12,7 @@ namespace ProjectEternity.UnitTests
     {
         public static DeathmatchMap CreateDummyMap(BattleContext GlobalDeathmatchContext)
         {
-            DeathmatchMap DummyMap = new DeathmatchMap(new DeathmatchParams(GlobalDeathmatchContext, null));
+            DeathmatchMap DummyMap = new DeathmatchMap(new DeathmatchParams(GlobalDeathmatchContext));
             DummyMap.LayerManager.ListLayer.Add(new MapLayer(DummyMap, 0));
             DummyMap.LoadDeathmatchAIScripts();
 

@@ -7,17 +7,17 @@ using ProjectEternity.Core.Magic;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.GameScreens.AnimationScreen;
-using static ProjectEternity.Core.ProjectileParams;
+using static ProjectEternity.Core.Projectile2DParams;
 
 namespace ProjectEternity.Units.Magic
 {
     public class MagicAttackAnimationInfo : AnimationInfo
     {
         private MagicSpell Owner;
-        private ProjectileContext GlobalContext;
+        private Projectile2DContext GlobalContext;
         private SharedProjectileParams SharedParams;
 
-        public MagicAttackAnimationInfo(string AnimationName, MagicSpell Owner, ProjectileContext GlobalContext, SharedProjectileParams SharedParams)
+        public MagicAttackAnimationInfo(string AnimationName, MagicSpell Owner, Projectile2DContext GlobalContext, SharedProjectileParams SharedParams)
             : base(AnimationName)
         {
             this.Owner = Owner;
@@ -38,10 +38,10 @@ namespace ProjectEternity.Units.Magic
 
             SharedParams.OwnerPosition = OriginalPosition;
             SharedParams.OwnerAngle = 0;
-            List<Projectile> ListProjectileAfterStartAnimationEnded;
+            List<Projectile2D> ListProjectileAfterStartAnimationEnded;
             Attack SpellAttack = GetAnimationStartSandbox(Owner, OriginalPosition, out ListProjectileAfterStartAnimationEnded);
 
-            foreach (Projectile ActiveProjectile in ListProjectileAfterStartAnimationEnded)
+            foreach (Projectile2D ActiveProjectile in ListProjectileAfterStartAnimationEnded)
             {
                 AnimationEndSanbox.AddProjectile(ActiveProjectile);
             }
@@ -61,7 +61,7 @@ namespace ProjectEternity.Units.Magic
             SharedParams.OwnerAngle = 0;
             GetAnimationStartSandbox(Owner, OriginalPosition, out ListProjectileAfterStartAnimationEnded);
 
-            foreach (Projectile ActiveProjectile in ListProjectileAfterStartAnimationEnded)
+            foreach (Projectile2D ActiveProjectile in ListProjectileAfterStartAnimationEnded)
             {
                 NewTimeline.AddProjectile(ActiveProjectile);
             }
@@ -76,7 +76,7 @@ namespace ProjectEternity.Units.Magic
             return DicExtraTimeline;
         }
 
-        private Attack GetAnimationStartSandbox(MagicSpell ActiveSpell, Vector2 AnimationOrigin, out List<Projectile> ListOutputProjectile)
+        private Attack GetAnimationStartSandbox(MagicSpell ActiveSpell, Vector2 AnimationOrigin, out List<Projectile2D> ListOutputProjectile)
         {
             MagicProjectileSandboxStartAnimation AnimationStartSandbox = new MagicProjectileSandboxStartAnimation();
 
@@ -90,7 +90,7 @@ namespace ProjectEternity.Units.Magic
 
             ListOutputProjectile = AnimationStartSandbox.SimulateAttack(SpellAttack);
 
-            foreach (Projectile ActiveProjectile in ListOutputProjectile)
+            foreach (Projectile2D ActiveProjectile in ListOutputProjectile)
             {
                 float MinX = float.MaxValue;
                 float MinY = float.MaxValue;

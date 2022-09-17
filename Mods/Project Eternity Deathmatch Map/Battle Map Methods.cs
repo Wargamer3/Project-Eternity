@@ -119,6 +119,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
         }
 
+        public void AddProjectile(Projectile3D NewProjectile)
+        {
+        }
+
         public override List<MovementAlgorithmTile> GetSpawnLocations(int Team)
         {
             List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
@@ -529,6 +533,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             NewMap = new DeathmatchMap(GameMode, Params);
             Params.Map = NewMap;
+            Params.GlobalAttackContext.Map = NewMap;
+            Params.GlobalSquadContext.Map = NewMap;
             return NewMap;
         }
 

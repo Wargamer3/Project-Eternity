@@ -12,7 +12,7 @@ using ProjectEternity.GameScreens.TripleThunderScreen.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class RobotAnimation : ComplexAnimation, ICollisionObject<RobotAnimation>
+    public class RobotAnimation : ComplexAnimation, ICollisionObjectHolder2D<RobotAnimation>
     {
         public uint ID;
         public readonly string Name;
@@ -39,8 +39,8 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public List<WorldPolygon> ListIgnoredGroundPolygon;
 
         public int CurrentLane;//Current max Y position.
-        private CollisionObject<RobotAnimation> CollisionBox;
-        public CollisionObject<RobotAnimation> Collision => CollisionBox;
+        private CollisionObject2D<RobotAnimation> CollisionBox;
+        public CollisionObject2D<RobotAnimation> Collision => CollisionBox;
 
         public bool LockAnimation;
         protected WeaponBase CurrentStanceAnimations;
@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             PrimaryWeapons = new WeaponHolder(0);
             IsInAir = false;
             CurrentLane = 1350;
-            CollisionBox = new CollisionObject<RobotAnimation>();
+            CollisionBox = new CollisionObject2D<RobotAnimation>();
             ListCollidingGroundPolygon = new List<WorldPolygon>();
             ListIgnoredGroundPolygon = new List<WorldPolygon>();
             Effects = new EffectHolder();
@@ -680,7 +680,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             CurrentLayer.SetRobotContext(this, ActiveWeapon, Angle, Position);
         }
 
-        public void SetAttackContext(Projectile ActiveAttackBox, RobotAnimation Owner, float Angle, Vector2 Position)
+        public void SetAttackContext(Projectile2D ActiveAttackBox, RobotAnimation Owner, float Angle, Vector2 Position)
         {
             CurrentLayer.SetAttackContext(ActiveAttackBox, Owner, Angle, Position);
         }

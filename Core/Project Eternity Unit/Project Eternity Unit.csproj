@@ -62,6 +62,8 @@
     <Compile Include="Attack\PER Attack Attributes.cs" />
     <Compile Include="Attack\MAP Attack Attributes.cs" />
     <Compile Include="Attack\Attack 3D.cs" />
+    <Compile Include="Attack\Attack PER Effect.cs" />
+    <Compile Include="Attack\Squad PER Effect.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Effects\CSV Converter.cs" />
     <Compile Include="Effects\Status Type Converter.cs" />

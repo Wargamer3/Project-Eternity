@@ -22,10 +22,10 @@ namespace ProjectEternity.Core.Magic
 
         public Matrix Transform;
 
-        private readonly ProjectileContext GlobalProjectileContext;
-        private readonly ProjectileParams.SharedProjectileParams SharedParams;
+        private readonly Projectile2DContext GlobalProjectileContext;
+        private readonly Projectile2DParams.SharedProjectileParams SharedParams;
 
-        public MagicEditor(MagicSpell ActiveMagicSpell, ProjectileContext GlobalProjectileContext, ProjectileParams.SharedProjectileParams SharedParams)
+        public MagicEditor(MagicSpell ActiveMagicSpell, Projectile2DContext GlobalProjectileContext, Projectile2DParams.SharedProjectileParams SharedParams)
         {
             this.ActiveMagicSpell = ActiveMagicSpell;
             this.GlobalProjectileContext = GlobalProjectileContext;

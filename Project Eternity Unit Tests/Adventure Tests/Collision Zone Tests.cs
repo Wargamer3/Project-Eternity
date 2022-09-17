@@ -22,7 +22,7 @@ namespace ProjectEternity.UnitTests.AdventureTests
         [TestMethod]
         public void TestCollisionZoneAdd()
         {
-            CollisionZone<Bullet> TestCollisionZone = new CollisionZone<Bullet>(2000, 100, -500, -500);
+            CollisionZone2D<Bullet> TestCollisionZone = new CollisionZone2D<Bullet>(2000, 100, -500, -500);
             Vector2[] LocalPoints1 = CreateCube(Vector2.Zero, 40);
             Vector2[] LocalPoints2 = CreateCube(Vector2.Zero, 5);
 
@@ -37,7 +37,7 @@ namespace ProjectEternity.UnitTests.AdventureTests
         [TestMethod]
         public void TestCollisionZoneAddAndMove()
         {
-            CollisionZone<Bullet> TestCollisionZone = new CollisionZone<Bullet>(2000, 100, -500, -500);
+            CollisionZone2D<Bullet> TestCollisionZone = new CollisionZone2D<Bullet>(2000, 100, -500, -500);
             Vector2[] LocalPoints1 = CreateCube(Vector2.Zero, 40);
             Vector2[] LocalPoints2 = CreateCube(Vector2.Zero, 40);
 
@@ -56,7 +56,7 @@ namespace ProjectEternity.UnitTests.AdventureTests
         [TestMethod]
         public void TestCollisionZoneCollision()
         {
-            CollisionZone<Bullet> TestCollisionZone = new CollisionZone<Bullet>(2000, 100, -500, -500);
+            CollisionZone2D<Bullet> TestCollisionZone = new CollisionZone2D<Bullet>(2000, 100, -500, -500);
             Vector2[] LocalPoints1 = CreateCube(Vector2.Zero, 40);
             Vector2[] LocalPoints2 = CreateCube(Vector2.Zero, 40);
 
@@ -68,7 +68,7 @@ namespace ProjectEternity.UnitTests.AdventureTests
         [TestMethod]
         public void TestCollisionZoneCollisionFail()
         {
-            CollisionZone<Bullet> TestCollisionZone = new CollisionZone<Bullet>(2000, 100, -500, -500);
+            CollisionZone2D<Bullet> TestCollisionZone = new CollisionZone2D<Bullet>(2000, 100, -500, -500);
             Vector2[] LocalPoints1 = CreateCube(Vector2.Zero, 40);
             Vector2[] LocalPoints2 = CreateCube(new Vector2(500, 500), 40);
 
@@ -82,7 +82,7 @@ namespace ProjectEternity.UnitTests.AdventureTests
         [TestMethod]
         public void TestCollisionZoneRemove()
         {
-            CollisionZone<Bullet> TestCollisionZone = new CollisionZone<Bullet>(2000, 100, -500, -500);
+            CollisionZone2D<Bullet> TestCollisionZone = new CollisionZone2D<Bullet>(2000, 100, -500, -500);
             Vector2[] LocalPoints1 = CreateCube(Vector2.Zero, 40);
             Vector2[] LocalPoints2 = CreateCube(Vector2.Zero, 40);
 
@@ -96,7 +96,7 @@ namespace ProjectEternity.UnitTests.AdventureTests
             Assert.AreEqual(TestCollisionZone.ArraySubZone[25], TestCollisionZone.ListObjectInZoneAndOverlappingParents.First.Value.Collision.ListParent.Find(TestCollisionZone.ArraySubZone[25]).Value);
         }
 
-        private bool DetectCollisionBetweenSelfAndOthers(CollisionZone<Bullet> BulletCollisions, Bullet ActiveBullet)
+        private bool DetectCollisionBetweenSelfAndOthers(CollisionZone2D<Bullet> BulletCollisions, Bullet ActiveBullet)
         {
             System.Collections.Generic.HashSet<Bullet> Obstacles = BulletCollisions.GetCollidableObjects(ActiveBullet);
             foreach (Bullet ActivePlayer in Obstacles)

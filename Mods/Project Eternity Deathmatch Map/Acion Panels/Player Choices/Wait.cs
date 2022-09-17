@@ -5,7 +5,6 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen

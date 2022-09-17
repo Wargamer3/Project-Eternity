@@ -3,7 +3,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Magic;
 using ProjectEternity.Core.Online;
-using static ProjectEternity.Core.ProjectileParams;
+using static ProjectEternity.Core.Projectile2DParams;
 
 namespace ProjectEternity.Units.Magic
 {
@@ -11,7 +11,7 @@ namespace ProjectEternity.Units.Magic
     {
         private MagicSpell ActiveSpell;
         private MagicEditor ActiveMagicEditor;
-        private ProjectileContext GlobalProjectileContext;
+        private Projectile2DContext GlobalProjectileContext;
         private SharedProjectileParams SharedParams;
 
         public ActionPanelSpellEditor()
@@ -19,7 +19,7 @@ namespace ProjectEternity.Units.Magic
         {
         }
 
-        public ActionPanelSpellEditor(ActionPanelHolder ListActionMenuChoice, MagicSpell ActiveSpell, ProjectileContext GlobalProjectileContext, SharedProjectileParams SharedParams)
+        public ActionPanelSpellEditor(ActionPanelHolder ListActionMenuChoice, MagicSpell ActiveSpell, Projectile2DContext GlobalProjectileContext, SharedProjectileParams SharedParams)
             : base(ActiveSpell.Name, ListActionMenuChoice, true)
         {
             this.ActiveSpell = ActiveSpell;

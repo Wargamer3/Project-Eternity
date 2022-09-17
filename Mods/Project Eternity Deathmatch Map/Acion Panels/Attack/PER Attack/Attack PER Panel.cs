@@ -21,8 +21,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public List<MovementAlgorithmTile> ListAttackTerrain;
         private BattlePreviewer BattlePreview;
 
-        List<PERAttack> ListNewList = new List<PERAttack>();
-
         public ActionPanelAttackPER(DeathmatchMap Map)
             : base(PanelName, Map)
         {
@@ -57,6 +55,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public void SetRobotContext(Squad ActiveRobotAnimation, Attack ActiveWeapon, Vector3 Angle, Vector3 Position)
+        {
+           Map.GlobalBattleParams.GlobalSquadContext.SetRobotContext(ActiveRobotAnimation, ActiveWeapon, Angle, Position);
+        }
+
         public override void DoUpdate(GameTime gameTime)
         {
             Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
@@ -67,12 +70,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad);
                 Vector3 AttackPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.LayerIndex);
 
+                Terrain TargetTerrain = Map.GetTerrain(Map.CursorPosition.X, Map.CursorPosition.Y, (int)Map.CursorPosition.Z);
+                Vector3 TargetPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.LayerIndex);
+
                 if (ActiveSquad.CurrentLeader.CurrentAttack.PERAttributes.AttackType == PERAttackAttributes.AttackTypes.Shoot)
                 {
                     AttackPosition.Z = ActiveTerrain.WorldPosition.Z + 0.5f;
                 }
 
-                CreateAttack(ActiveSquad.CurrentLeader.CurrentAttack, AttackPosition, new List<BaseAutomaticSkill>());
+                SetRobotContext(ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack, Vector3.Normalize(TargetPosition - AttackPosition), AttackPosition);
+
+                if (ActiveSquad.CurrentLeader.CurrentAttack.PERAttributes.HasSkills)
+                {
+                    ActiveSquad.CurrentLeader.CurrentAttack.PERAttributes.UpdateSkills(SquadPERRequirement.OnShoot);
+                }
+                else
+                {
+                    CreateAttack(Map, ActivePlayerIndex, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack, AttackPosition, Map.CursorPosition - ActiveSquad.Position, new List<BaseAutomaticSkill>());
+                }
+
 
                 if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)
                 {
@@ -104,8 +120,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private void CreateAttack(Attack AttackUsed, Vector3 AttackPosition, List<BaseAutomaticSkill> ListFollowingSkill)
+        public static void CreateAttack(DeathmatchMap Map, int ActivePlayerIndex, Squad ActiveSquad, Attack AttackUsed, Vector3 AttackPosition, Vector3 AttackForwardVector, List<BaseAutomaticSkill> ListFollowingSkill)
         {
+            List<PERAttack> ListNewList = new List<PERAttack>();
+
             for (int A = 0; A < AttackUsed.PERAttributes.NumberOfProjectiles; ++A)
             {
                 PERAttack NewAttack = null;
@@ -121,7 +139,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     float RandForward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxForwardSpread;
                     float RandUpward = (float)RandomHelper.Random.NextDouble() * AttackUsed.PERAttributes.MaxUpwardSpread;
 
-                    Vector3 AttackForwardVector = Map.CursorPosition - ActiveSquad.Position;
                     AttackForwardVector.Normalize();
                     Vector3 AttackLateralVector = new Vector3(AttackForwardVector.Y, -AttackForwardVector.X, AttackForwardVector.Z);
 
@@ -146,7 +163,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.ListPERAttack.Add(NewAttack);
             }
 
-            Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, ListNewList));
+            ActionPanelUpdatePERAttacks ExistingPERAttackPanel = Map.ListActionMenuChoice.Last() as ActionPanelUpdatePERAttacks;
+            if (ExistingPERAttackPanel != null)
+            {
+                ExistingPERAttackPanel.Add(ListNewList);
+            }
+            else
+            {
+                Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, ListNewList));
+            }
         }
 
         public override void DoRead(ByteReader BR)

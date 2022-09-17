@@ -772,6 +772,22 @@ namespace ProjectEternity.Core.Units
             {
                 ArrayCharacterActive[C].ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
+
+            for (int A = 0; A < _UnitStat.ListAttack.Count; ++A)
+            {
+                if (_UnitStat.ListAttack[A].PERAttributes.ListActiveSkill != null)
+                {
+                    foreach (BaseAutomaticSkill ActivePERAttackSkill in _UnitStat.ListAttack[A].PERAttributes.ListActiveSkill)
+                    {
+                        ActivePERAttackSkill.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                    }
+                }
+
+                foreach (BaseAutomaticSkill ActiveAttackSkill in _UnitStat.ListAttack[A].ArrayAttackAttributes)
+                {
+                    ActiveAttackSkill.ReloadSkills(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                }
+            }
         }
 
         public abstract void ReinitializeMembers(Unit InitializedUnitBase);

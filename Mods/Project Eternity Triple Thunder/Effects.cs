@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
     /// <summary>
     /// Local parameters used by Effects.
     /// </summary>
-    public class TripleThunderAttackParams : ProjectileParams
+    public class TripleThunderAttackParams : Projectile2DParams
     {
         // This class is shared through every RobotEffects used to temporary pass variables to effects.
         // Because it is shared through all effect, its variables will constantly change and must be kept as a member after being activated.
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         }
     }
 
-    public class TripleThunderAttackContext : ProjectileContext
+    public class TripleThunderAttackContext : Projectile2DContext
     {
         public RobotAnimation Owner;
     }

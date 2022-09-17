@@ -14,29 +14,6 @@ using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class WeaponSelector : UITypeEditor
-    {
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-        {
-            return UITypeEditorEditStyle.Modal;
-        }
-
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
-        {
-            IWindowsFormsEditorService svc = (IWindowsFormsEditorService)
-                provider.GetService(typeof(IWindowsFormsEditorService));
-            if (svc != null)
-            {
-                List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttacks);
-                if (Items != null)
-                {
-                    value = Items[0].Substring(0, Items[0].Length - 4).Substring(16);
-                }
-            }
-            return value;
-        }
-    }
-
     public class AnimationSpritesSelector : UITypeEditor
     {
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
@@ -202,7 +179,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #region Properties
 
-        [Editor(typeof(WeaponSelector), typeof(UITypeEditor)),
+        [Editor(typeof(AttackSelector), typeof(UITypeEditor)),
         CategoryAttribute("Spawner"),
         DescriptionAttribute("The Weapon path."),
         DefaultValueAttribute(0)]

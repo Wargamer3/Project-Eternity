@@ -501,7 +501,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public void LoadTripleThunderEffects()
         {
-            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in Projectile.GetCoreProjectileEffects(AttackParams))
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in Projectile2D.GetCoreProjectileEffects(AttackParams))
             {
                 DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
             }

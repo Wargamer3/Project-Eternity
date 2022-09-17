@@ -7,15 +7,15 @@ using ProjectEternity.Core.Magic;
 
 namespace ProjectEternity.Units.Magic
 {
-    public class MagicProjectileSandbox : IProjectileSandbox
+    public class MagicProjectileSandbox : IProjectile2DSandbox
     {
-        public List<Projectile> ListProjectile;
+        public List<Projectile2D> ListProjectile;
         public float TotalDamage;
         public float TotalManaCost;
 
         public MagicProjectileSandbox()
         {
-            ListProjectile = new List<Projectile>();
+            ListProjectile = new List<Projectile2D>();
         }
 
         public void Reset()
@@ -29,7 +29,7 @@ namespace ProjectEternity.Units.Magic
         {
             for (int M = 0; M < ListProjectile.Count; M++)
             {
-                Projectile ActiveMagic = ListProjectile[M];
+                Projectile2D ActiveMagic = ListProjectile[M];
 
                 if (ActiveMagic.IsAlive)
                 {
@@ -38,7 +38,7 @@ namespace ProjectEternity.Units.Magic
             }
         }
 
-        public void AddProjectile(Projectile ActiveMagic)
+        public void AddProjectile(Projectile2D ActiveMagic)
         {
             TotalDamage += ActiveMagic.Damage;
             ListProjectile.Add(ActiveMagic);

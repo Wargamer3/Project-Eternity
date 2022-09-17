@@ -13,16 +13,16 @@ namespace ProjectEternity.Core.Magic
         private float OffsetY;
 
         public MagicCoreOffset()
-            : this(new MagicUserParams(new MagicUserContext()), new ProjectileParams(new ProjectileContext()))
+            : this(new MagicUserParams(new MagicUserContext()), new Projectile2DParams(new Projectile2DContext()))
         {
         }
 
-        public MagicCoreOffset(MagicUserParams Params, ProjectileParams AttackParams)
+        public MagicCoreOffset(MagicUserParams Params, Projectile2DParams AttackParams)
             : this(Params, AttackParams, 0, 0)
         {
         }
 
-        public MagicCoreOffset(MagicUserParams Params, ProjectileParams AttackParams, float OffsetX, float OffsetY)
+        public MagicCoreOffset(MagicUserParams Params, Projectile2DParams AttackParams, float OffsetX, float OffsetY)
             : base("Offset Core", 0, 0, 40, Params, AttackParams)
         {
             SetAttributes(
@@ -54,17 +54,17 @@ namespace ProjectEternity.Core.Magic
 
     internal class OffsetEffect : MagicEffect
     {
-        private ProjectileParams AttackParams;
+        private Projectile2DParams AttackParams;
         private MagicCoreOffset Owner;
         public static int Key = 1;
         private Vector2 Offset;
 
-        public OffsetEffect(MagicUserParams MagicParams, ProjectileParams AttackParams, MagicCoreOffset Owner, Vector2 Offset)
+        public OffsetEffect(MagicUserParams MagicParams, Projectile2DParams AttackParams, MagicCoreOffset Owner, Vector2 Offset)
             : base("Offset Effect " + Key++, false, MagicParams)
         {
             IsStacking = true;
             MaximumStack = -1;//Allow a user to have more than one effect.
-            this.AttackParams = new ProjectileParams(AttackParams);
+            this.AttackParams = new Projectile2DParams(AttackParams);
             this.Owner = Owner;
             this.Offset = Offset;
         }
@@ -106,9 +106,9 @@ namespace ProjectEternity.Core.Magic
     internal class Fireball : MagicProjectile
     {
         private IMagicUser Parent;
-        private ProjectileParams Params;
+        private Projectile2DParams Params;
 
-        public Fireball(MagicUserParams MagicParams, ProjectileParams Params, IMagicUser Parent)
+        public Fireball(MagicUserParams MagicParams, Projectile2DParams Params, IMagicUser Parent)
             : base(MagicParams, 500)
         {
             this.Params = Params;
@@ -153,11 +153,11 @@ namespace ProjectEternity.Core.Magic
         public double ExtraAngleInDegrees;
 
         public MagicCoreFireball()
-            : this(new MagicUserParams(new MagicUserContext()), new ProjectileParams(new ProjectileContext()))
+            : this(new MagicUserParams(new MagicUserContext()), new Projectile2DParams(new Projectile2DContext()))
         {
         }
 
-        public MagicCoreFireball(MagicUserParams MagicParams, ProjectileParams Params)
+        public MagicCoreFireball(MagicUserParams MagicParams, Projectile2DParams Params)
             : base("Fireball Core", 1, 10, 40, MagicParams, Params)
         {
             SetAttributes(new MagicElementAttribute[] { new MagicElementAttributeSlider("Extra Angle", 0, -180, 180, (NewAngle) => ExtraAngleInDegrees = NewAngle) });
@@ -187,14 +187,14 @@ namespace ProjectEternity.Core.Magic
     public class CreateFireballEffect : MagicEffect
     {
         private MagicCoreFireball Owner;
-        private ProjectileParams Params;
+        private Projectile2DParams Params;
         private double ExtraAngleInDegrees;
 
-        public CreateFireballEffect(double ExtraAngleInDegrees, MagicUserParams MagicParams, ProjectileParams Params, MagicCoreFireball Owner)
+        public CreateFireballEffect(double ExtraAngleInDegrees, MagicUserParams MagicParams, Projectile2DParams Params, MagicCoreFireball Owner)
             : base("Fireball Effect", false, MagicParams)
         {
             this.ExtraAngleInDegrees = ExtraAngleInDegrees;
-            this.Params = new ProjectileParams(Params);
+            this.Params = new Projectile2DParams(Params);
             this.Owner = Owner;
 
             IsStacking = true;

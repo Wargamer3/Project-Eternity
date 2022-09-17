@@ -3,14 +3,14 @@ using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.AdventureScreen
 {
-    public class WorldObject : ICollisionObject<WorldObject>
+    public class WorldObject : ICollisionObjectHolder2D<WorldObject>
     {
-        CollisionObject<WorldObject> CollisionBox;
-        public CollisionObject<WorldObject> Collision => CollisionBox;
+        CollisionObject2D<WorldObject> CollisionBox;
+        public CollisionObject2D<WorldObject> Collision => CollisionBox;
 
         public WorldObject(Vector2[] ArrayVertex, int MaxWidth, int MaxHeight)
         {
-            CollisionBox = new CollisionObject<WorldObject>(ArrayVertex, MaxWidth, MaxHeight);
+            CollisionBox = new CollisionObject2D<WorldObject>(ArrayVertex, MaxWidth, MaxHeight);
         }
     }
 }

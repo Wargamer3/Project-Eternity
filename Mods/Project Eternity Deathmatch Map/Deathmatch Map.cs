@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
     }
 
-    public partial class DeathmatchMap : BattleMap
+    public partial class DeathmatchMap : BattleMap, IProjectile3DSandbox
     {
         #region Variables
 
@@ -132,6 +132,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base()
         {
             this.Params = GlobalBattleParams = Params;
+            Params.AttackParams.SharedParams.Content = Content;
 
             GameRule = new SinglePlayerGameRule(this);
             LayerManager = new LayerHolderDeathmatch(this);

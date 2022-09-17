@@ -7,9 +7,9 @@ using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.Units.Magic
 {
-    public class MagicProjectileSandboxStartAnimation : IProjectileSandbox
+    public class MagicProjectileSandboxStartAnimation : IProjectile2DSandbox
     {
-        public List<Projectile> ListProjectile;
+        public List<Projectile2D> ListProjectile;
         public float TotalDamage;
         public float TotalManaCost;
         private Polygon SanboxCollisionBox;
@@ -19,7 +19,7 @@ namespace ProjectEternity.Units.Magic
         public MagicProjectileSandboxStartAnimation()
         {
             TotalSimulationTime = 100000 * 60;
-            ListProjectile = new List<Projectile>();
+            ListProjectile = new List<Projectile2D>();
 
             Vector2[] SanboxPoints = new Vector2[4]
             {
@@ -38,13 +38,13 @@ namespace ProjectEternity.Units.Magic
             TotalManaCost = 0;
         }
         
-        public void AddProjectile(Projectile ActiveProjectile)
+        public void AddProjectile(Projectile2D ActiveProjectile)
         {
             TotalDamage += ActiveProjectile.Damage;
             ListProjectile.Add(ActiveProjectile);
         }
 
-        public List<Projectile> SimulateAttack(Attack ActiveAttack)
+        public List<Projectile2D> SimulateAttack(Attack ActiveAttack)
         {
             bool AttackHasStarted = false;
             double OriginalGametime = Constants.TotalGameTime;
@@ -55,7 +55,7 @@ namespace ProjectEternity.Units.Magic
 
             int MaxNumberOfExecutions = 100000;
             int NumberOfExecutions = 0;
-            List<Projectile> ListOutputProjectile = new List<Projectile>();
+            List<Projectile2D> ListOutputProjectile = new List<Projectile2D>();
 
             while (NumberOfExecutions++ < MaxNumberOfExecutions && (!AttackHasStarted || ListProjectile.Count  != ListOutputProjectile.Count))
             {
@@ -76,7 +76,7 @@ namespace ProjectEternity.Units.Magic
 
                 for (int P = 0; P < ListProjectile.Count; P++)
                 {
-                    Projectile ActiveProjectile = ListProjectile[P];
+                    Projectile2D ActiveProjectile = ListProjectile[P];
 
                     if (ActiveProjectile.IsAlive)
                     {

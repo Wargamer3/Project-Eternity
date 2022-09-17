@@ -32,6 +32,7 @@ namespace ProjectEternity.Core.Attacks
 
         public string SkillChainName;
         public List<BaseAutomaticSkill> ListActiveSkill;
+        public bool HasSkills => ListActiveSkill.Count > 0;
 
         public GroundCollisions GroundCollision;
         public byte BounceLimit;
@@ -114,9 +115,15 @@ namespace ProjectEternity.Core.Attacks
                 {
                     for (int E = 0; E < ActiveSkillActivation.ListEffect.Count; ++E)
                     {
-                        if (ActiveSkillActivation.ListEffect[E] is ProjectileEffect)
+                        if (ActiveSkillActivation.ListEffect[E] is AttackPEREffect)
                         {
-                            ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Self Attack"]);
+                            ActiveSkillActivation.ListEffectTarget[E].Add("Attack PER");
+                            ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Attack PER"]);
+                        }
+                        else if (ActiveSkillActivation.ListEffect[E] is SquadPEREffect)
+                        {
+                            ActiveSkillActivation.ListEffectTarget[E].Add("Squad PER");
+                            ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Squad PER"]);
                         }
 
                         foreach (BaseAutomaticSkill ActiveFollowingSkill in ActiveSkillActivation.ListEffect[E].ListFollowingSkill)
@@ -125,6 +132,14 @@ namespace ProjectEternity.Core.Attacks
                         }
                     }
                 }
+            }
+        }
+
+        public void UpdateSkills(string RequirementName)
+        {
+            for (int S = 0; S < ListActiveSkill.Count; ++S)
+            {
+                ListActiveSkill[S].AddSkillEffectsToTarget(RequirementName);
             }
         }
     }

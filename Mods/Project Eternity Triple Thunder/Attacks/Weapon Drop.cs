@@ -7,7 +7,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class WeaponDrop : Projectile
+    public class WeaponDrop : Projectile2D
     {
         public readonly Texture2D sprWeapon;
 

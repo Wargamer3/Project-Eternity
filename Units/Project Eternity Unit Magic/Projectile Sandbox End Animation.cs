@@ -7,9 +7,9 @@ using ProjectEternity.Core.Attacks;
 
 namespace ProjectEternity.Units.Magic
 {
-    public class MagicProjectileSandboxEndAnimation : IProjectileSandbox
+    public class MagicProjectileSandboxEndAnimation : IProjectile2DSandbox
     {
-        public List<Projectile> ListProjectile;
+        public List<Projectile2D> ListProjectile;
         public float TotalDamage;
         public float TotalManaCost;
         private Polygon SanboxCollisionBox;
@@ -20,7 +20,7 @@ namespace ProjectEternity.Units.Magic
         public MagicProjectileSandboxEndAnimation(Rectangle EnemyBounds)
         {
             TotalSimulationTime = 100000 * 60;
-            ListProjectile = new List<Projectile>();
+            ListProjectile = new List<Projectile2D>();
 
             Vector2[] SanboxPoints = new Vector2[4]
             {
@@ -49,7 +49,7 @@ namespace ProjectEternity.Units.Magic
         }
 
 
-        public void AddProjectile(Projectile ActiveMagic)
+        public void AddProjectile(Projectile2D ActiveMagic)
         {
             TotalDamage += ActiveMagic.Damage;
             ListProjectile.Add(ActiveMagic);
@@ -66,7 +66,7 @@ namespace ProjectEternity.Units.Magic
 
             int MaxNumberOfExecutions = 100000;
             int NumberOfExecutions = 0;
-            List<Projectile> ListOutputProjectile = new List<Projectile>();
+            List<Projectile2D> ListOutputProjectile = new List<Projectile2D>();
 
             while (NumberOfExecutions++ < MaxNumberOfExecutions && (!AttackHasStarted || ListProjectile.Count  != ListOutputProjectile.Count))
             {
@@ -87,7 +87,7 @@ namespace ProjectEternity.Units.Magic
 
                 for (int M = 0; M < ListProjectile.Count; M++)
                 {
-                    Projectile ActiveProjectile = ListProjectile[M];
+                    Projectile2D ActiveProjectile = ListProjectile[M];
 
                     if (ActiveProjectile.IsAlive)
                     {

@@ -7,7 +7,7 @@ namespace ProjectEternity.Editors.AttackEditor
 {
     public partial class PERAttackEditor : Form
     {
-        private enum ItemSelectionChoices { AnimationProjectile, TextureProjectile, Model };
+        private enum ItemSelectionChoices { AnimationProjectile, TextureProjectile, Model, SkillChain };
 
         private ItemSelectionChoices ItemSelectionChoice;
 
@@ -18,13 +18,13 @@ namespace ProjectEternity.Editors.AttackEditor
             InitializeComponent();
         }
 
-        private void btnUseAnimatedProjectile_Click(object sender, System.EventArgs e)
+        private void btnUseAnimatedProjectile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.AnimationProjectile;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimations));
         }
 
-        private void btnUseTextureProjectile_Click(object sender, System.EventArgs e)
+        private void btnUseTextureProjectile_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.TextureProjectile;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsSprites));
@@ -38,7 +38,8 @@ namespace ProjectEternity.Editors.AttackEditor
 
         private void btnSelectSkillChain_Click(object sender, EventArgs e)
         {
-
+            ItemSelectionChoice = ItemSelectionChoices.SkillChain;
+            ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAttackSkillChains));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
@@ -66,6 +67,11 @@ namespace ProjectEternity.Editors.AttackEditor
                     case ItemSelectionChoices.Model:
                         Name = Items[I].Substring(0, Items[0].Length - 4).Substring(23);
                         txt3DModelPath.Text = Name;
+                        break;
+
+                    case ItemSelectionChoices.SkillChain:
+                        Name = Items[I].Substring(0, Items[0].Length - 5).Substring(29);
+                        txtSkillChain.Text = Name;
                         break;
                 }
             }

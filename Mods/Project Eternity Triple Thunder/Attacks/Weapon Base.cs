@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                         {
                             ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Self Robot"]);
                         }
-                        else if (ActiveSkillActivation.ListEffect[E] is ProjectileEffect)
+                        else if (ActiveSkillActivation.ListEffect[E] is Projectile2DEffect)
                         {
                             ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Self Attack"]);
                         }

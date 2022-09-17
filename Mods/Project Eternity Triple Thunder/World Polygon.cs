@@ -6,20 +6,20 @@ using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class WorldPolygon : ICollisionObject<WorldPolygon>
+    public class WorldPolygon : ICollisionObjectHolder2D<WorldPolygon>
     {
         private bool _BlockBullets;
         private bool _IsPlatform;
 
-        CollisionObject<WorldPolygon> CollisionBox;
-        public CollisionObject<WorldPolygon> Collision => CollisionBox;
+        CollisionObject2D<WorldPolygon> CollisionBox;
+        public CollisionObject2D<WorldPolygon> Collision => CollisionBox;
 
         public WorldPolygon(Vector2[] ArrayVertex, int MaxWidth, int MaxHeight)
         {
             _BlockBullets = true;
             _IsPlatform = false;
 
-            CollisionBox = new CollisionObject<WorldPolygon>(ArrayVertex, MaxWidth, MaxHeight);
+            CollisionBox = new CollisionObject2D<WorldPolygon>(ArrayVertex, MaxWidth, MaxHeight);
         }
 
         public void Save(BinaryWriter BW)

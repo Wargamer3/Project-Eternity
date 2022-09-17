@@ -30,8 +30,8 @@ namespace ProjectEternity.Units.Magic
         public readonly string OriginalUnitName;
         public List<MagicSpell> ListMagicSpell;
 
-        public readonly ProjectileContext GlobalProjectileContext;
-        public readonly ProjectileParams MagicProjectileParams;
+        public readonly Projectile2DContext GlobalProjectileContext;
+        public readonly Projectile2DParams MagicProjectileParams;
 
         public readonly MagicUserContext GlobalMagicContext;
         public readonly MagicUserParams MagicParams;
@@ -43,8 +43,8 @@ namespace ProjectEternity.Units.Magic
         {
             ArrayCharacterActive = new Core.Characters.Character[0];
             ListMagicSpell = new List<MagicSpell>();
-            GlobalProjectileContext = new ProjectileContext();
-            MagicProjectileParams = new ProjectileParams(GlobalProjectileContext);
+            GlobalProjectileContext = new Projectile2DContext();
+            MagicProjectileParams = new Projectile2DParams(GlobalProjectileContext);
 
             GlobalMagicContext = new MagicUserContext();
             MagicParams = new MagicUserParams(GlobalMagicContext);
@@ -76,8 +76,8 @@ namespace ProjectEternity.Units.Magic
             this.ItemName = Name;
             ArrayCharacterActive = new Core.Characters.Character[0];
             ListMagicSpell = new List<MagicSpell>();
-            GlobalProjectileContext = new ProjectileContext();
-            MagicProjectileParams = new ProjectileParams(GlobalProjectileContext);
+            GlobalProjectileContext = new Projectile2DContext();
+            MagicProjectileParams = new Projectile2DParams(GlobalProjectileContext);
 
             GlobalMagicContext = new MagicUserContext();
             MagicParams = new MagicUserParams(GlobalMagicContext);

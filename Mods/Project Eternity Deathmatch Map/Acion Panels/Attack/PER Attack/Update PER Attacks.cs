@@ -60,27 +60,39 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public void Add(List<PERAttack> ListNewPERAttack)
+        {
+            foreach (PERAttack ActivePERAttack in ListNewPERAttack)
+            {
+                Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position.X, ActivePERAttack.Position.Y, (int)ActivePERAttack.Position.Z);
+                Vector3 NextPosition = ActivePERAttack.Position + ActivePERAttack.Speed;
+                ListPERAttackToUpdate.Add(new PERAttackMovement(ActivePERAttack, ActivePERAttack.Position, NextPosition, CurrentTerrain));
+            }
+        }
+
         public override void OnSelect()
         {
             if (ListPERAttackToUpdate.Count == 0)
             {
                 for (int A = Map.ListPERAttack.Count - 1; A >= 0; --A)
                 {
-                    PERAttack ActivePERAttack = Map.ListPERAttack[A];
+                    PERAttack ActiveAttack = Map.ListPERAttack[A];
 
-                    if (ActivePERAttack.PlayerIndex == Map.ActivePlayerIndex)
+                    if (ActiveAttack.PlayerIndex == Map.ActivePlayerIndex)
                     {
-                        --ActivePERAttack.Lifetime;
+                        --ActiveAttack.Lifetime;
 
-                        if (ActivePERAttack.Lifetime <= 0)
+                        if (ActiveAttack.Lifetime <= 0)
                         {
                             Map.ListPERAttack.RemoveAt(A);
+                            SetAttackContext(ActiveAttack, ActiveAttack.Owner, Vector3.Normalize(ActiveAttack.Speed), ActiveAttack.Position);
+                            ActiveAttack.UpdateSkills(AttackPERRequirement.OnDeath);
                         }
                         else
                         {
-                            Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position.X, ActivePERAttack.Position.Y, (int)ActivePERAttack.Position.Z);
-                            Vector3 NextPosition = ActivePERAttack.Position + ActivePERAttack.Speed;
-                            ListPERAttackToUpdate.Add(new PERAttackMovement(ActivePERAttack, ActivePERAttack.Position, NextPosition, CurrentTerrain));
+                            Terrain CurrentTerrain = Map.GetTerrain(ActiveAttack.Position.X, ActiveAttack.Position.Y, (int)ActiveAttack.Position.Z);
+                            Vector3 NextPosition = ActiveAttack.Position + ActiveAttack.Speed;
+                            ListPERAttackToUpdate.Add(new PERAttackMovement(ActiveAttack, ActiveAttack.Position, NextPosition, CurrentTerrain));
                         }
                     }
                 }
@@ -90,6 +102,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 RemoveFromPanelList(this);
             }
+        }
+
+        public void SetAttackContext(Projectile3D ActiveAttackBox, Squad AttackOwner, Vector3 Angle, Vector3 Position)
+        {
+            Map.GlobalBattleParams.GlobalAttackContext.Owner = AttackOwner;
+            Map.GlobalBattleParams.GlobalAttackContext.OwnerProjectile = ActiveAttackBox;
+            Map.GlobalBattleParams.GlobalAttackContext.OwnerSandbox = Map;
+            Map.GlobalBattleParams.AttackParams.SharedParams.OwnerAngle = Angle;
+            Map.GlobalBattleParams.AttackParams.SharedParams.OwnerPosition = Position;
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -119,8 +140,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         ListPERAttackToUpdate.RemoveAt(P);
                         ActiveAttack.Owner.IsOnGround = true;
-                        //ActiveAttack.Owner.DestroySelf();
-                        return;
+
+                        if (ActiveAttack.Owner.ActiveAttack.PERAttributes.GroundCollision == Core.Attacks.PERAttackAttributes.GroundCollisions.DestroySelf)
+                        {
+                            SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                            ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnDeath);
+                            ActiveAttack.Owner.DestroySelf();
+                        }
+                        continue;
                     }
                     Terrain NextTerrain = Map.GetTerrain(NextPostion.X, NextPostion.Y, (int)NextPostion.Z);
                     Vector3 NextTerrainRealPosition = NextTerrain.GetRealPosition(NextPostion);
@@ -130,13 +157,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ActiveAttack.Owner.SetPosition(NextTerrainRealPosition);
                         ListPERAttackToUpdate.RemoveAt(P);
                         ActiveAttack.Owner.IsOnGround = true;
+
+                        if (ActiveAttack.Owner.ActiveAttack.PERAttributes.GroundCollision == Core.Attacks.PERAttackAttributes.GroundCollisions.DestroySelf)
+                        {
+                            SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                            ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnDeath);
+                            ActiveAttack.Owner.DestroySelf();
+                        }
                     }
                     else if (NextTerrain != ActiveAttack.LastTerrain && ActiveAttack.ListCrossedTerrain.Contains(NextTerrain))
                     {
                         ActiveAttack.Owner.SetPosition(ActiveAttack.LastPosition);
+                        SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
                         ActiveAttack.Owner.ProcessMovement(NextPostion, NextTerrain);
                         ActiveAttack.LastPosition = NextPostion;
                         ActiveAttack.LastTerrain = NextTerrain;
+
+                        ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnTileChange);
                     }
                     else
                     {

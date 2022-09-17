@@ -10,11 +10,11 @@ using ProjectEternity.GameScreens.TripleThunderScreen.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {
-    public class Layer : IProjectileSandbox
+    public class Layer : IProjectile2DSandbox
     {
         private readonly List<DelayedExecutableOnlineScript> ListDelayedOnlineCommand;
 
-        private readonly CollisionZone<WorldPolygon> WorldCollisions;
+        private readonly CollisionZone2D<WorldPolygon> WorldCollisions;
         public readonly List<WorldPolygon> ListWorldCollisionPolygon;//Only used to save and load
         public Dictionary<uint, RobotAnimation> DicRobot;
         public List<Vehicle> ListVehicle;
@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public Dictionary<uint, WeaponDrop> DicWeaponDrop;
         public readonly List<WeaponDrop> ListWeaponDropToAdd;
         private List<uint> ListWeaponDropToRemove;
-        public List<Projectile> ListAttackCollisionBox;
+        public List<Projectile2D> ListAttackCollisionBox;
         public Polygon GroundLevelCollision;
         public List<SimpleAnimation> ListImages;
         public List<Prop> ListProp;
@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public Layer(FightingZone Owner)
         {
             ListDelayedOnlineCommand = new List<DelayedExecutableOnlineScript>();
-            WorldCollisions = new CollisionZone<WorldPolygon>(1, 1, 0 ,0);
+            WorldCollisions = new CollisionZone2D<WorldPolygon>(1, 1, 0 ,0);
             ListWorldCollisionPolygon = new List<WorldPolygon>();
             ListImages = new List<SimpleAnimation>();
             ListProp = new List<Prop>();
@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListWeaponDropToAdd = new List<WeaponDrop>();
             ListWeaponDropToRemove = new List<uint>();
             GroundLevelCollision = new Polygon();
-            ListAttackCollisionBox = new List<Projectile>();
+            ListAttackCollisionBox = new List<Projectile2D>();
             this.Owner = Owner;
         }
 
@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Dictionary<string, Prop> DicPropsByName = Prop.GetAllPropsByName();
 
             int ListPolygonCount = BR.ReadInt32();
-            WorldCollisions = new CollisionZone<WorldPolygon>((int)Math.Max(Owner.CameraBounds.Width * 1.5, Owner.CameraBounds.Height * 1.5),
+            WorldCollisions = new CollisionZone2D<WorldPolygon>((int)Math.Max(Owner.CameraBounds.Width * 1.5, Owner.CameraBounds.Height * 1.5),
                 50,
                 (int)(Math.Min(Owner.CameraBounds.X * 1.5, -Owner.CameraBounds.X * 1.5)),
                 (int)(Math.Min(Owner.CameraBounds.Y * 1.5, -Owner.CameraBounds.Y * 1.5)));
@@ -355,7 +355,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             Owner.GlobalRobotContext.SetRobotContext(this, ActiveRobotAnimation, ActiveWeapon, Angle, Position);
         }
 
-        public void SetAttackContext(Projectile ActiveAttackBox, RobotAnimation AttackOwner, float Angle, Vector2 Position)
+        public void SetAttackContext(Projectile2D ActiveAttackBox, RobotAnimation AttackOwner, float Angle, Vector2 Position)
         {
             Owner.GlobalAttackContext.Owner = AttackOwner;
             Owner.GlobalAttackContext.OwnerProjectile = ActiveAttackBox;
@@ -528,7 +528,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public HashSet<WorldPolygon> GetCollidingWorldObjects(Projectile ActiveAttackBox)
+        public HashSet<WorldPolygon> GetCollidingWorldObjects(Projectile2D ActiveAttackBox)
         {
             return WorldCollisions.GetCollidableObjects(ActiveAttackBox.Collision);
         }
@@ -669,7 +669,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        public void AddProjectile(Projectile NewProjectile)
+        public void AddProjectile(Projectile2D NewProjectile)
         {
             bool AttackReplaced = false;
             for (int A = 0; A < ListAttackCollisionBox.Count && !AttackReplaced; A++)

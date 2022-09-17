@@ -6,18 +6,18 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.AdventureScreen
 {
-    public class Bullet : Projectile, ICollisionObject<Bullet>
+    public class Bullet : Projectile2D, ICollisionObjectHolder2D<Bullet>
     {
         public List<Player> ListAttackedRobots;//List of Player already attacked.
-        private CollisionObject<Bullet> CollisionBox;
-        public CollisionObject<Bullet> Collision => CollisionBox;
+        private CollisionObject2D<Bullet> CollisionBox;
+        public CollisionObject2D<Bullet> Collision => CollisionBox;
         private readonly AdventureMap Owner;
 
         public Bullet(AdventureMap Owner, Vector2[] ArrayVertex, int MaxWidth, int MaxHeight)
         {
             this.Owner = Owner;
 
-            CollisionBox = new CollisionObject<Bullet>(ArrayVertex, MaxWidth, MaxHeight);
+            CollisionBox = new CollisionObject2D<Bullet>(ArrayVertex, MaxWidth, MaxHeight);
             ListAttackedRobots = new List<Player>();
             Damage = 5;
         }

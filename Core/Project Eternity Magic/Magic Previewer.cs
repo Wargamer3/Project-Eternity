@@ -5,37 +5,37 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.ControlHelper;
-using static ProjectEternity.Core.ProjectileParams;
+using static ProjectEternity.Core.Projectile2DParams;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.Core.Magic
 {
-    class MagicPreviewerPanel : ActionPanel, IProjectileSandbox
+    class MagicPreviewerPanel : ActionPanel, IProjectile2DSandbox
     {
         private readonly Texture2D sprPixel;
 
         private readonly Polygon SandboxCollisionBox;
         private readonly Polygon EnemyCollisionBox;
-        private readonly List<Projectile> ListProjectile;
+        private readonly List<Projectile2D> ListProjectile;
         private readonly List<BaseAutomaticSkill> ListMagicSpell;
         private int RestartButtonX = 5;
         private int RestartButtonY = 50;
         private int CloseButtonX = Constants.Width - 100;
         private int CloseButtonY = 50;
 
-        public MagicPreviewerPanel(ContentManager Content, MagicSpell ActiveMagicSpell, ActionPanelHolder ListActionMenuChoice, ProjectileContext GlobalProjectileContext, SharedProjectileParams SharedParams)
+        public MagicPreviewerPanel(ContentManager Content, MagicSpell ActiveMagicSpell, ActionPanelHolder ListActionMenuChoice, Projectile2DContext GlobalProjectileContext, SharedProjectileParams SharedParams)
             : this(Content, ActiveMagicSpell, ListActionMenuChoice, GlobalProjectileContext, SharedParams,
                   new Vector2(Constants.Width - 50, Constants.Height / 2),
                   new Rectangle(50, Constants.Height / 2, 100, 100))
         {
         }
 
-        public MagicPreviewerPanel(ContentManager Content, MagicSpell ActiveMagicSpell, ActionPanelHolder ListActionMenuChoice, ProjectileContext GlobalProjectileContext, SharedProjectileParams SharedParams, Vector2 UserPosition, Rectangle EnemyBounds)
+        public MagicPreviewerPanel(ContentManager Content, MagicSpell ActiveMagicSpell, ActionPanelHolder ListActionMenuChoice, Projectile2DContext GlobalProjectileContext, SharedProjectileParams SharedParams, Vector2 UserPosition, Rectangle EnemyBounds)
             : base("Previewer", ListActionMenuChoice, true)
         {
             sprPixel = Content.Load<Texture2D>("pixel");
 
-            ListProjectile = new List<Projectile>();
+            ListProjectile = new List<Projectile2D>();
 
             Vector2[] SandboxPoints = new Vector2[4]
             {
@@ -66,7 +66,7 @@ namespace ProjectEternity.Core.Magic
             ListMagicSpell = NewSpell.ComputeSpell();
         }
 
-        public void AddProjectile(Projectile NewProjectile)
+        public void AddProjectile(Projectile2D NewProjectile)
         {
             ListProjectile.Add(NewProjectile);
         }
@@ -84,7 +84,7 @@ namespace ProjectEternity.Core.Magic
 
             for (int P = 0; P < ListProjectile.Count; P++)
             {
-                Projectile ActiveProjectile = ListProjectile[P];
+                Projectile2D ActiveProjectile = ListProjectile[P];
 
                 if (ActiveProjectile.IsAlive)
                 {

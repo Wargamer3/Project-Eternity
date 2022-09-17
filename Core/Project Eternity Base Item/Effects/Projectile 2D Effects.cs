@@ -6,26 +6,26 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Core.Effects
 {
-    public abstract class ProjectileEffect : BaseEffect
+    public abstract class Projectile2DEffect : BaseEffect
     {
         /// <summary>
         /// Should only use the Local Context when inside the DoExecuteEffect method.
         /// Should only use the Global Context when inside the CanActivate method.
         /// </summary>
-        protected readonly ProjectileParams Params;
+        protected readonly Projectile2DParams Params;
 
-        public ProjectileEffect(string EffectTypeName, bool IsPassive)
+        public Projectile2DEffect(string EffectTypeName, bool IsPassive)
             : base(EffectTypeName, IsPassive)
         {
             Params = null;
         }
 
-        public ProjectileEffect(string EffectTypeName, bool IsPassive, ProjectileParams Params)
+        public Projectile2DEffect(string EffectTypeName, bool IsPassive, Projectile2DParams Params)
             : base(EffectTypeName, IsPassive)
         {
             if (Params != null)
             {
-                this.Params = new ProjectileParams(Params);
+                this.Params = new Projectile2DParams(Params);
             }
         }
 
@@ -42,7 +42,7 @@ namespace ProjectEternity.Core.Effects
         }
     }
 
-    public sealed class ChangeAttackSpeedEffect : ProjectileEffect
+    public sealed class ChangeAttackSpeedEffect : Projectile2DEffect
     {
         public static string Name = "Change Attack Speed";
 
@@ -58,7 +58,7 @@ namespace ProjectEternity.Core.Effects
             _SignOperator = Operators.SignOperators.Equal;
         }
 
-        public ChangeAttackSpeedEffect(ProjectileParams Params)
+        public ChangeAttackSpeedEffect(Projectile2DParams Params)
             : base(Name, false, Params)
         {
             _Speed = 0;
@@ -205,7 +205,7 @@ namespace ProjectEternity.Core.Effects
         #endregion
     }
 
-    public sealed class BounceAttackOffGroundEffect : ProjectileEffect
+    public sealed class BounceAttackOffGroundEffect : Projectile2DEffect
     {
         public static string Name = "Bounce Attack Off Ground";
 
@@ -214,7 +214,7 @@ namespace ProjectEternity.Core.Effects
         {
         }
 
-        public BounceAttackOffGroundEffect(ProjectileParams Params)
+        public BounceAttackOffGroundEffect(Projectile2DParams Params)
             : base(Name, false, Params)
         {
         }
@@ -256,7 +256,7 @@ namespace ProjectEternity.Core.Effects
         }
     }
 
-    public sealed class RotateAttackEffect : ProjectileEffect
+    public sealed class RotateAttackEffect : Projectile2DEffect
     {
         public static string Name = "Rotate Attack";
 
@@ -267,7 +267,7 @@ namespace ProjectEternity.Core.Effects
         {
         }
 
-        public RotateAttackEffect(ProjectileParams Params)
+        public RotateAttackEffect(Projectile2DParams Params)
             : base(Name, false, Params)
         {
         }
@@ -327,7 +327,7 @@ namespace ProjectEternity.Core.Effects
         #endregion
     }
 
-    public sealed class MatchTerrainTiltWithAttackEffect : ProjectileEffect
+    public sealed class MatchTerrainTiltWithAttackEffect : Projectile2DEffect
     {
         public static string Name = "Match Terrain Tilt With Attack";
 
@@ -336,7 +336,7 @@ namespace ProjectEternity.Core.Effects
         {
         }
 
-        public MatchTerrainTiltWithAttackEffect(ProjectileParams Params)
+        public MatchTerrainTiltWithAttackEffect(Projectile2DParams Params)
             : base(Name, false, Params)
         {
         }
@@ -373,7 +373,7 @@ namespace ProjectEternity.Core.Effects
         }
     }
 
-    public sealed class ReviveAttackEffect : ProjectileEffect
+    public sealed class ReviveAttackEffect : Projectile2DEffect
     {
         public static string Name = "Revive Attack";
 
@@ -385,7 +385,7 @@ namespace ProjectEternity.Core.Effects
             _MaxExecutions = -1;
         }
 
-        public ReviveAttackEffect(ProjectileParams Params)
+        public ReviveAttackEffect(Projectile2DParams Params)
             : base(Name, false, Params)
         {
             _MaxExecutions = -1;
@@ -452,7 +452,7 @@ namespace ProjectEternity.Core.Effects
         #endregion
     }
 
-    public sealed class DestroyAttackEffect : ProjectileEffect
+    public sealed class DestroyAttackEffect : Projectile2DEffect
     {
         public static string Name = "Destroy Attack";
 
@@ -461,7 +461,7 @@ namespace ProjectEternity.Core.Effects
         {
         }
 
-        public DestroyAttackEffect(ProjectileParams Params)
+        public DestroyAttackEffect(Projectile2DParams Params)
             : base(Name, false, Params)
         {
         }
@@ -498,7 +498,7 @@ namespace ProjectEternity.Core.Effects
         }
     }
 
-    public sealed class ToggleAttackGravityEffect : ProjectileEffect
+    public sealed class ToggleAttackGravityEffect : Projectile2DEffect
     {
         public static string Name = "Toggle Attack Gravity";
 
@@ -510,7 +510,7 @@ namespace ProjectEternity.Core.Effects
             _UseGravity = false;
         }
 
-        public ToggleAttackGravityEffect(ProjectileParams Params)
+        public ToggleAttackGravityEffect(Projectile2DParams Params)
             : base(Name, false, Params)
         {
             _UseGravity = false;

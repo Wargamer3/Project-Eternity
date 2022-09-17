@@ -78,6 +78,7 @@
     <Compile Include="Battle Map Cutscene Script Holder.cs" />
     <Compile Include="Battle Context.cs" />
     <Compile Include="Battle Params.cs" />
+    <Compile Include="Editor\AttackSelector.cs" />
     <Compile Include="Editor\Tile Attributes 3D.cs">
       <SubType>Form</SubType>
     </Compile>

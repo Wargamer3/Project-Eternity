@@ -39,8 +39,8 @@ namespace ProjectEternity.UnitTests.UnitMagicTests
             UnitMagic ActiveUser = new UnitMagic("Dummy Magic", ListMagicSpell);
             MagicSpell ActiveSpell = new MagicSpell(ActiveUser, ActiveUser);
             MagicUserParams Params = new MagicUserParams(ActiveSpell.GlobalContext);
-            ProjectileContext GlobalContext = new ProjectileContext();
-            ProjectileParams MagicProjectileParams = new ProjectileParams(GlobalContext);
+            Projectile2DContext GlobalContext = new Projectile2DContext();
+            Projectile2DParams MagicProjectileParams = new Projectile2DParams(GlobalContext);
             GlobalContext.OwnerSandbox = Sandbox;
             MagicSpell FireballSpell = new MagicSpell(ActiveUser);
             ListMagicSpell.Add(FireballSpell);
@@ -77,8 +77,8 @@ namespace ProjectEternity.UnitTests.UnitMagicTests
             ActiveUser.ChanneledMana = 1000;
             MagicSpell ActiveSpell = new MagicSpell(ActiveUser, ActiveUser);
             MagicUserParams MagicParams = new MagicUserParams(ActiveSpell.GlobalContext);
-            ProjectileContext GlobalContext = new ProjectileContext();
-            ProjectileParams MagicProjectileParams = new ProjectileParams(GlobalContext);
+            Projectile2DContext GlobalContext = new Projectile2DContext();
+            Projectile2DParams MagicProjectileParams = new Projectile2DParams(GlobalContext);
             GlobalContext.OwnerSandbox = Sandbox;
             MagicSpell FireballSpell = new MagicSpell(ActiveUser);
             ListMagicSpell.Add(FireballSpell);
@@ -113,8 +113,8 @@ namespace ProjectEternity.UnitTests.UnitMagicTests
             ActiveUser.ChanneledMana = 1000;
             MagicSpell ActiveSpell = new MagicSpell(ActiveUser, ActiveUser);
             MagicUserParams Params = new MagicUserParams(ActiveSpell.GlobalContext);
-            ProjectileContext GlobalContext = new ProjectileContext();
-            ProjectileParams MagicProjectileParams = new ProjectileParams(GlobalContext);
+            Projectile2DContext GlobalContext = new Projectile2DContext();
+            Projectile2DParams MagicProjectileParams = new Projectile2DParams(GlobalContext);
             GlobalContext.OwnerSandbox = Sandbox;
             ListMagicSpell.Add(ActiveSpell);
 

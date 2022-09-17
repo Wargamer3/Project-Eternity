@@ -332,7 +332,7 @@ namespace ProjectEternity.Core.Magic
             return DicMagicCoreByType;
         }
 
-        public static Dictionary<string, MagicElement> LoadProjectileCores(MagicUserParams Params, ProjectileParams AttackParams)
+        public static Dictionary<string, MagicElement> LoadProjectileCores(MagicUserParams Params, Projectile2DParams AttackParams)
         {
             Dictionary<string, MagicElement> DicMagicCoreByType = new Dictionary<string, MagicElement>();
 
@@ -462,13 +462,13 @@ namespace ProjectEternity.Core.Magic
 
     public abstract class ProjectileMagicCore : MagicCore
     {
-        protected ProjectileParams AttackParams;
+        protected Projectile2DParams AttackParams;
 
         protected ProjectileMagicCore(string Name, int BasePower, int RequiredMana, int Radius,
-            MagicUserParams Params, ProjectileParams AttackParams)
+            MagicUserParams Params, Projectile2DParams AttackParams)
             : base(Name, BasePower, RequiredMana, Radius, Params)
         {
-            this.AttackParams = new ProjectileParams(AttackParams);
+            this.AttackParams = new Projectile2DParams(AttackParams);
         }
     }
 }

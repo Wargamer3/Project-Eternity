@@ -6,13 +6,13 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.AdventureScreen
 {
-    public class Bomb : ICollisionObject<Bomb>
+    public class Bomb : ICollisionObjectHolder2D<Bomb>
     {
         private const float Size = 32;
         private readonly AdventureMap Owner;
 
-        private CollisionObject<Bomb> CollisionBox;
-        public CollisionObject<Bomb> Collision => CollisionBox;
+        private CollisionObject2D<Bomb> CollisionBox;
+        public CollisionObject2D<Bomb> Collision => CollisionBox;
 
         private double SecondsBeforeExplosion;
 
@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.AdventureScreen
                 new Vector2(StartingPoint.X + Size, StartingPoint.Y - Size),
             };
 
-            CollisionBox = new CollisionObject<Bomb>(LocalPoints, 32, 32);
+            CollisionBox = new CollisionObject2D<Bomb>(LocalPoints, 32, 32);
             SecondsBeforeExplosion = 5;
         }
 
@@ -51,13 +51,13 @@ namespace ProjectEternity.GameScreens.AdventureScreen
         }
     }
 
-    public class SimpleLinearExplosion : Projectile, ICollisionObject<SimpleLinearExplosion>
+    public class SimpleLinearExplosion : Projectile2D, ICollisionObjectHolder2D<SimpleLinearExplosion>
     {
         private const float Size = 32;
 
         private readonly AdventureMap Owner;
-        private readonly CollisionObject<SimpleLinearExplosion> CollisionBox;
-        public CollisionObject<SimpleLinearExplosion> Collision => CollisionBox;
+        private readonly CollisionObject2D<SimpleLinearExplosion> CollisionBox;
+        public CollisionObject2D<SimpleLinearExplosion> Collision => CollisionBox;
 
         private Vector2 ForwardLeftVector { get { return CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardLeftVector]; } }
         private Vector2 ForwardRightVector { get { return CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardRightVector]; } }
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.AdventureScreen
                 new Vector2(StartingPoint.X + Size, StartingPoint.Y - Size),
             };
 
-            CollisionBox = new CollisionObject<SimpleLinearExplosion>(LocalPoints, 32, 32);
+            CollisionBox = new CollisionObject2D<SimpleLinearExplosion>(LocalPoints, 32, 32);
 
             //Going Left
             if (Speed.X < 0)
@@ -245,11 +245,11 @@ namespace ProjectEternity.GameScreens.AdventureScreen
         }
     }
 
-    public class ComplexLinearExplosion : Projectile, ICollisionObject<ComplexLinearExplosion>
+    public class ComplexLinearExplosion : Projectile2D, ICollisionObjectHolder2D<ComplexLinearExplosion>
     {
         private readonly AdventureMap Owner;
-        CollisionObject<ComplexLinearExplosion> CollisionBox;
-        public CollisionObject<ComplexLinearExplosion> Collision => CollisionBox;
+        CollisionObject2D<ComplexLinearExplosion> CollisionBox;
+        public CollisionObject2D<ComplexLinearExplosion> Collision => CollisionBox;
 
         private Vector2 ForwardLeftVector { get { return CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardLeftVector]; } }
         private Vector2 ForwardRightVector { get { return CollisionBox.ListCollisionPolygon[0].ArrayVertex[IndexForwardRightVector]; } }
@@ -280,7 +280,7 @@ namespace ProjectEternity.GameScreens.AdventureScreen
                 new Vector2(StartingPoint.X + Size, StartingPoint.Y - Size),
             };
 
-            CollisionBox = new CollisionObject<ComplexLinearExplosion>(LocalPoints, 32, 32);
+            CollisionBox = new CollisionObject2D<ComplexLinearExplosion>(LocalPoints, 32, 32);
 
             //Going Left
             if (Speed.X < 0)

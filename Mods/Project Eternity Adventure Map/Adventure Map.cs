@@ -12,9 +12,9 @@ namespace ProjectEternity.GameScreens.AdventureScreen
     public class AdventureMap : GameScreen
     {
         private readonly List<Bullet> BulletCollisions;//Don't use a CollisionZone for Bullets as they only check collisions with other objects.
-        private readonly CollisionZone<Player> PlayerCollisions;
-        private readonly CollisionZone<WorldObject> WorldCollisions;
-        private readonly CollisionZone<Bomb> BombCollisions;
+        private readonly CollisionZone2D<Player> PlayerCollisions;
+        private readonly CollisionZone2D<WorldObject> WorldCollisions;
+        private readonly CollisionZone2D<Bomb> BombCollisions;
         private readonly List<SimpleLinearExplosion> ExplosionCollisions;
         public Rectangle Camera;
         public Rectangle CameraBounds;
@@ -31,9 +31,9 @@ namespace ProjectEternity.GameScreens.AdventureScreen
         public AdventureMap()
         {
             BulletCollisions = new List<Bullet>(1024);
-            PlayerCollisions = new CollisionZone<Player>(2000, 100, -500, -500);
-            WorldCollisions = new CollisionZone<WorldObject>(2000, 100, -500, -500);
-            BombCollisions = new CollisionZone<Bomb>(2000, 100, -500, -500);
+            PlayerCollisions = new CollisionZone2D<Player>(2000, 100, -500, -500);
+            WorldCollisions = new CollisionZone2D<WorldObject>(2000, 100, -500, -500);
+            BombCollisions = new CollisionZone2D<Bomb>(2000, 100, -500, -500);
             ExplosionCollisions = new List<SimpleLinearExplosion>();
 
             ListWorldCollisionPolygon = new List<Polygon>();

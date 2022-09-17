@@ -7,17 +7,17 @@ using ProjectEternity.Core.Magic;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.GameScreens.AnimationScreen;
-using static ProjectEternity.Core.ProjectileParams;
+using static ProjectEternity.Core.Projectile2DParams;
 
 namespace ProjectEternity.Units.Magic
 {
     public class MagicAttackAnimationStartInfo : AnimationInfo
     {
         private MagicSpell Owner;
-        private ProjectileContext GlobalContext;
+        private Projectile2DContext GlobalContext;
         private SharedProjectileParams SharedParams;
 
-        public MagicAttackAnimationStartInfo(string AnimationName, MagicSpell Owner, ProjectileContext GlobalContext, SharedProjectileParams SharedParams)
+        public MagicAttackAnimationStartInfo(string AnimationName, MagicSpell Owner, Projectile2DContext GlobalContext, SharedProjectileParams SharedParams)
             : base(AnimationName)
         {
             this.Owner = Owner;

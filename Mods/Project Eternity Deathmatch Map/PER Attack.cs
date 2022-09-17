@@ -6,27 +6,23 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class PERAttack
+    public class PERAttack : Projectile3D
     {
         private readonly DeathmatchMap Map;
         public Attack ActiveAttack;
         public Squad Owner;
         public int PlayerIndex;//Only decrement TurnsRemaining if the current player index correspond
         public Vector3 Position;
-        public Vector3 Speed;
-        public int Lifetime;
         public Attack3D Map3DComponent;
         public AnimatedModel Unit3DModel;
         public bool IsOnGround = false;//Follow slopes if on ground
         public bool AllowRicochet = true;//Follow 45 degree walls
 
-        public List<BaseAutomaticSkill> ListActiveSkill;
-
         public PERAttack(Attack ActiveAttack, Squad Owner, int PlayerIndex, DeathmatchMap Map, Vector3 Position, Vector3 Speed, int Lifetime)
+            : base(Lifetime)
         {
             this.ActiveAttack = ActiveAttack;
             this.Owner = Owner;
@@ -34,11 +30,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Map = Map;
             this.Position = Position;
             this.Speed = Speed;
-            this.Lifetime = Lifetime;
 
             if (!string.IsNullOrEmpty(ActiveAttack.PERAttributes.ProjectileAnimation.Path))
             {
                 if (ActiveAttack.PERAttributes.ProjectileAnimation.IsAnimated)
+                {
+                    Map3DComponent = new Attack3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite.ActiveSprite, ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite.FrameCount);
+                }
+                else if (ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite != null)
                 {
                     Map3DComponent = new Attack3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite.ActiveSprite, ActiveAttack.PERAttributes.ProjectileAnimation.ActualSprite.FrameCount);
                 }
@@ -430,6 +429,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
             }
+        }
+
+        public override void DoUpdate(GameTime gameTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Draw(CustomSpriteBatch g)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetAngle(float Angle)
+        {
+            throw new NotImplementedException();
         }
     }
 }

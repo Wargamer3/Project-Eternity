@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Core
 {
-    public interface IProjectileSandbox
-    {
-        void AddProjectile(Projectile NewProjectile);
-    }
-
-    public abstract class Projectile : ICollisionObject<Projectile>
+    public abstract class Projectile2D : ICollisionObjectHolder2D<Projectile2D>
     {
         public bool IsAlive;
         private bool HasLifetime;
@@ -23,11 +17,11 @@ namespace ProjectEternity.Core
         protected bool AffectedByGravity;
         public double DistanceTravelled;
 
-        CollisionObject<Projectile> CollisionBox;
-        public CollisionObject<Projectile> Collision => CollisionBox;
+        CollisionObject2D<Projectile2D> CollisionBox;
+        public CollisionObject2D<Projectile2D> Collision => CollisionBox;
         public List<BaseAutomaticSkill> ListActiveSkill;
 
-        public Projectile()
+        public Projectile2D()
         {
             HasLifetime = false;
             IsAlive = true;
@@ -35,10 +29,10 @@ namespace ProjectEternity.Core
             DistanceTravelled = 0;
             Speed = Vector2.Zero;
             ListActiveSkill = new List<BaseAutomaticSkill>();
-            CollisionBox = new CollisionObject<Projectile>();
+            CollisionBox = new CollisionObject2D<Projectile2D>();
         }
 
-        public Projectile(double Lifetime)
+        public Projectile2D(double Lifetime)
         {
             this.Lifetime = Lifetime;
 
@@ -49,7 +43,7 @@ namespace ProjectEternity.Core
             TimeAlive = 0;
             Speed = Vector2.Zero;
             ListActiveSkill = new List<BaseAutomaticSkill>();
-            CollisionBox = new CollisionObject<Projectile>();
+            CollisionBox = new CollisionObject2D<Projectile2D>();
         }
 
         public void Update(GameTime gameTime)
@@ -95,7 +89,7 @@ namespace ProjectEternity.Core
             }
         }
 
-        public static Dictionary<string, BaseEffect> GetCoreProjectileEffects(ProjectileParams Params)
+        public static Dictionary<string, BaseEffect> GetCoreProjectileEffects(Projectile2DParams Params)
         {
             Dictionary<string, BaseEffect> DicEffect = new Dictionary<string, BaseEffect>();
 
@@ -109,57 +103,5 @@ namespace ProjectEternity.Core
 
             return DicEffect;
         }
-    }
-
-
-    /// <summary>
-    /// Local parameters used by Effects.
-    /// </summary>
-    public class ProjectileParams
-    {
-        public class SharedProjectileParams
-        {
-            public Vector2 OwnerPosition;
-            public float OwnerAngle;
-            public ContentManager Content;
-        }
-
-        // This class is shared through every RobotEffects used to temporary pass variables to effects.
-        // Because it is shared through all effect, its variables will constantly change and must be kept as a member after being activated.
-        // There should never be more than one instance of the global context.
-        protected readonly ProjectileContext GlobalContext;
-        // When an effect is copied to be activated, the global context is copied into the local context.
-        // This context is local and can't be changed.
-        public readonly ProjectileContext LocalContext;
-
-        //Global params that can't be cached in the LocalContext.
-        public readonly SharedProjectileParams SharedParams;
-
-        public ProjectileParams(ProjectileContext GlobalContext)
-            : this(GlobalContext, new ProjectileContext(), new SharedProjectileParams())
-        {
-        }
-
-        public ProjectileParams(ProjectileParams Clone)
-            : this(Clone.GlobalContext)
-        {
-            SharedParams = Clone.SharedParams;
-        }
-
-        protected ProjectileParams(ProjectileContext GlobalContext, ProjectileContext LocalContext, SharedProjectileParams SharedParams)
-        {
-            this.GlobalContext = GlobalContext;
-            this.LocalContext = LocalContext;
-            this.SharedParams = SharedParams;
-
-            LocalContext.OwnerSandbox = GlobalContext.OwnerSandbox;
-            LocalContext.OwnerProjectile = GlobalContext.OwnerProjectile;
-        }
-    }
-
-    public class ProjectileContext
-    {
-        public IProjectileSandbox OwnerSandbox;
-        public Projectile OwnerProjectile;
     }
 }

@@ -398,6 +398,7 @@ namespace ProjectEternity.Editors.AttackEditor
                     PERAttackEditor.txtLateralMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxLateralSpread;
                     PERAttackEditor.txtForwardMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxForwardSpread;
                     PERAttackEditor.txtUpwardMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxUpwardSpread;
+                    PERAttackEditor.txtSkillChain.Text = ActiveWeapon.PERAttributes.SkillChainName;
 
                     if (ActiveWeapon.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.DestroySelf)
                     {

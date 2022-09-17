@@ -39,8 +39,8 @@ namespace ProjectEternity.Editors.SpellEditor
 
         public void Init(string Name)
         {
-            ProjectileContext GlobalProjectileContext = new ProjectileContext();
-            ProjectileParams MagicProjectileParams = new ProjectileParams(GlobalProjectileContext);
+            Projectile2DContext GlobalProjectileContext = new Projectile2DContext();
+            Projectile2DParams MagicProjectileParams = new Projectile2DParams(GlobalProjectileContext);
 
             MagicUserContext GlobalMagicContext = new MagicUserContext();
             MagicUserParams MagicParams = new MagicUserParams(GlobalMagicContext);

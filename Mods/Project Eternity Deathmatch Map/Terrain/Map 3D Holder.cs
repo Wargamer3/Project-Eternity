@@ -977,12 +977,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             foreach (PERAttack ActiveAttack in Map.ListPERAttack)
             {
-                if (ActiveAttack.Map3DComponent != null)
-                {
-                    ActiveAttack.Map3DComponent.SetViewMatrix(View);
-                    ActiveAttack.Map3DComponent.Draw(g.GraphicsDevice);
-                }
-
                 Vector3 CurrentPosition = ActiveAttack.Position;
 
                 if (ActiveAttack.IsOnGround)
@@ -990,8 +984,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X), (int)Math.Floor(CurrentPosition.Y)].GetRealPosition(CurrentPosition);
                 }
 
-                ActiveAttack.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f)
-                    * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
+                if (ActiveAttack.Map3DComponent != null)
+                {
+                    ActiveAttack.Map3DComponent.SetPosition(CurrentPosition.X * 32, CurrentPosition.Z * 32 + 16, CurrentPosition.Y * 32);
+                    ActiveAttack.Map3DComponent.SetViewMatrix(View);
+                    ActiveAttack.Map3DComponent.Draw(g.GraphicsDevice);
+                }
+                else if (ActiveAttack.Unit3DModel != null)
+                {
+                    ActiveAttack.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f)
+                        * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
+                }
             }
         }
 

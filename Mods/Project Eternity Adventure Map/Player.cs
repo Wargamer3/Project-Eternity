@@ -7,15 +7,15 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.AdventureScreen
 {
-    public class Player : ICollisionObject<Player>
+    public class Player : ICollisionObjectHolder2D<Player>
     {
         public AIContainer PlayerAI;
         private bool HasKnockback;
         private Vector2 Position;
         public float HP;
         private Vector2 Speed;
-        private CollisionObject<Player> CollisionBox;
-        public CollisionObject<Player> Collision => CollisionBox;
+        private CollisionObject2D<Player> CollisionBox;
+        public CollisionObject2D<Player> Collision => CollisionBox;
         private readonly AdventureMap Owner;
 
         public Player(AdventureMap Owner, Vector2[] ArrayVertex, int MaxWidth, int MaxHeight)
@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.AdventureScreen
             this.Owner = Owner;
             HP = 100;
 
-            CollisionBox = new CollisionObject<Player>(ArrayVertex, MaxWidth, MaxHeight);
+            CollisionBox = new CollisionObject2D<Player>(ArrayVertex, MaxWidth, MaxHeight);
         }
 
         public void Update(GameTime gameTime)
