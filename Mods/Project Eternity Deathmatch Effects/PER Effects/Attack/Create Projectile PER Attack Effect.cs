@@ -49,7 +49,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override string DoExecuteEffect()
         {
-            ActionPanelAttackPER.CreateAttack(Params.LocalContext.Map, Params.LocalContext.Map.ActivePlayerIndex, Params.LocalContext.Owner, WeaponToUse, Params.SharedParams.OwnerPosition, _Speed, ListFollowingSkill);
+            foreach (PERAttack NewAttack in ActionPanelAttackPER.CreateAttack(Params.LocalContext.Map, Params.LocalContext.Map.ActivePlayerIndex, Params.LocalContext.Owner, WeaponToUse, Params.SharedParams.OwnerPosition, _Speed, ListFollowingSkill))
+            {
+                NewAttack.IsOnGround = Params.LocalContext.OwnerProjectile.IsOnGround;
+            }
 
             return null;
         }

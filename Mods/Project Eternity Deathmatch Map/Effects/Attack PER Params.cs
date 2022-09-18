@@ -11,7 +11,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         // This class is shared through every RobotEffects used to temporary pass variables to effects.
         // Because it is shared through all effect, its variables will constantly change and must be kept as a member after being activated.
         // There should never be more than one instance of the global context.
-        private readonly new AttackPERContext GlobalContext;
+        public readonly new AttackPERContext GlobalContext;
         // When an effect is copied to be activated, the global context is copied into the local context.
         // This context is local and can't be changed.
         public readonly new AttackPERContext LocalContext;
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(GlobalContext, LocalContext, SharedParams)
         {
             this.GlobalContext = GlobalContext;
-            this.LocalContext = LocalContext;
+            this.LocalContext = new AttackPERContext();
         }
 
         public AttackPERParams(AttackPERParams Clone)
@@ -33,6 +33,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             LocalContext.Owner = GlobalContext.Owner;
             LocalContext.Map = GlobalContext.Map;
+            LocalContext.OwnerProjectile = GlobalContext.OwnerProjectile;
+            LocalContext.OwnerSandbox = GlobalContext.OwnerSandbox;
         }
     }
 }

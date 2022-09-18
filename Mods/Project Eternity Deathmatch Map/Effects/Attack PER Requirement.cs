@@ -6,13 +6,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public const string OnDeath = "On Death Attack PER";
         public const string OnTileChange = "On Tile Change Attack PER";
+        public const string OnDistanceTravelled = "Distance Travelled Attack PER";
 
-        protected readonly AttackPERParams Params;
+        private AttackPERParams _Params;
+        protected AttackPERParams Params { get { return _Params; } }
 
         public AttackPERRequirement(string EffectTypeName, AttackPERParams Params)
             : base(EffectTypeName)
         {
-            this.Params = Params;
+            this._Params = Params;
+        }
+
+        protected override void DoReload(string ParamsID)
+        {
+            this._Params = DeathmatchParams.DicParams[ParamsID].AttackParams;
         }
     }
 }

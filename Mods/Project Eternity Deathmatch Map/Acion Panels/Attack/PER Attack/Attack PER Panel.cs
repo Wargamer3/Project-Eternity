@@ -120,7 +120,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public static void CreateAttack(DeathmatchMap Map, int ActivePlayerIndex, Squad ActiveSquad, Attack AttackUsed, Vector3 AttackPosition, Vector3 AttackForwardVector, List<BaseAutomaticSkill> ListFollowingSkill)
+        public static List<PERAttack> CreateAttack(DeathmatchMap Map, int ActivePlayerIndex, Squad ActiveSquad, Attack AttackUsed, Vector3 AttackPosition, Vector3 AttackForwardVector, List<BaseAutomaticSkill> ListFollowingSkill)
         {
             List<PERAttack> ListNewList = new List<PERAttack>();
 
@@ -172,6 +172,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Map.ListActionMenuChoice.Add(new ActionPanelUpdatePERAttacks(Map, ListNewList));
             }
+
+            return ListNewList;
         }
 
         public override void DoRead(ByteReader BR)

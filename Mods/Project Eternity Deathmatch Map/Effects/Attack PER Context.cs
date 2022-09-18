@@ -1,5 +1,7 @@
-﻿using ProjectEternity.Core.Units;
+﻿using System;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Units;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -7,5 +9,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public DeathmatchMap Map;
         public Squad Owner;
+        public new PERAttack OwnerProjectile;
     }
 }

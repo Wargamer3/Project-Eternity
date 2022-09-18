@@ -187,7 +187,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     return;
 
                 List<PERAttack> ListAttackToUpdate = new List<PERAttack>();
-                AttackToThrow.Position = ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0.0f);
+                Vector3 StartPosition = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f));
+                AttackToThrow.Position = StartPosition;
                 AttackToThrow.Speed = new Vector3(ThrowSpeed.X, ThrowSpeed.Z, ThrowSpeed.Y);
                 AttackToThrow.IsOnGround = false;
                 ListAttackToUpdate.Add(AttackToThrow);

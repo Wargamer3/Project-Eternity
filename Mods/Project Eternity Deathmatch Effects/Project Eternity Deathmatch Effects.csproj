@@ -73,7 +73,8 @@
     <Compile Include="Effects\Selectors\Tileset Selector.cs" />
     <Compile Include="PER Effects\Attack\Create Projectile PER Attack Effect.cs" />
     <Compile Include="PER Requirements\Attack\On Death Attack PER Requirement.cs" />
-    <Compile Include="PER Requirements\Attack\On Tile Change Attack PER Requirement.cs" />
+    <Compile Include="PER Requirements\Attack\On Tile Change Attack PER Requirement - Copier.cs" />
+    <Compile Include="PER Requirements\Attack\Distance Travelled Attack PER Requirement.cs" />
     <Compile Include="PER Requirements\Squad\On Shoot Squad PER Requirement.cs" />
     <Compile Include="PER Effects\Squad\Shoot Squad PER Attack Effect.cs" />
     <Compile Include="Skill Requirements\After Attack.cs" />

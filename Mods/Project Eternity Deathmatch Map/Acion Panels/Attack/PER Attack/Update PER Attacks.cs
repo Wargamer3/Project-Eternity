@@ -17,7 +17,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public readonly Vector3 StartPosition;
             public readonly Vector3 EndPosition;
             public readonly Vector3 Movement;
-            public Vector3 LastPosition;
+            public Vector3 LastRealPosition;
             public Terrain LastTerrain;
             public readonly List<Terrain> ListCrossedTerrain;
 
@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 this.Owner = Owner;
                 this.StartPosition = StartPosition;
                 this.EndPosition = EndPosition;
-                LastPosition = StartPosition;
+                LastRealPosition = StartPosition;
                 LastTerrain = CurrentTerrain;
                 Movement = EndPosition - StartPosition;
                 ListCrossedTerrain = Owner.GetCrossedTerrain(EndPosition);
@@ -37,6 +37,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private const double AnimationLengthInSeconds = 2;
         private double TimeElapsed;
+        private float MaxInclineDeviationAllowed = 0.1f;
 
         private List<PERAttackMovement> ListPERAttackToUpdate;
 
@@ -104,7 +105,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void SetAttackContext(Projectile3D ActiveAttackBox, Squad AttackOwner, Vector3 Angle, Vector3 Position)
+        public void SetAttackContext(PERAttack ActiveAttackBox, Squad AttackOwner, Vector3 Angle, Vector3 Position)
         {
             Map.GlobalBattleParams.GlobalAttackContext.Owner = AttackOwner;
             Map.GlobalBattleParams.GlobalAttackContext.OwnerProjectile = ActiveAttackBox;
@@ -130,7 +131,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     PERAttackMovement ActiveAttack = ListPERAttackToUpdate[P];
                     Terrain StartTerrain = Map.GetTerrain(ActiveAttack.StartPosition.X, ActiveAttack.StartPosition.Y, (int)ActiveAttack.StartPosition.Z);
 
+                    double Movement = ActiveAttack.Movement.Length() * Progress;
+                    ActiveAttack.Owner.DistanceTravelled = Movement;
+
                     Vector3 NextPostion = ActiveAttack.StartPosition + ActiveAttack.Movement * (float)Progress;
+
                     if (ActiveAttack.Owner.ActiveAttack.PERAttributes.AffectedByGravity && !ActiveAttack.Owner.IsOnGround)
                     {
                         NextPostion = ActiveAttack.StartPosition + (ActiveAttack.Movement - new Vector3(0, 0, (float)Progress * 16f)) * (float)Progress;
@@ -149,12 +154,47 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                         continue;
                     }
+
                     Terrain NextTerrain = Map.GetTerrain(NextPostion.X, NextPostion.Y, (int)NextPostion.Z);
                     Vector3 NextTerrainRealPosition = NextTerrain.GetRealPosition(NextPostion);
-
-                    if (StartTerrain != NextTerrain && NextPostion.Z < NextTerrainRealPosition.Z && NextTerrain.TerrainTypeIndex == UnitStats.TerrainLandIndex)
+                    float Incline = NextPostion.Z - ActiveAttack.LastRealPosition.Z;
+                    if (ActiveAttack.Owner.IsOnGround)
                     {
-                        ActiveAttack.Owner.SetPosition(NextTerrainRealPosition);
+                        Incline = NextTerrainRealPosition.Z - ActiveAttack.LastRealPosition.Z;
+                    }
+
+                    if (ActiveAttack.Owner.IsOnGround && NextTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex && ActiveAttack.LastRealPosition.Z + MaxInclineDeviationAllowed < Map.LayerManager.ListLayer.Count)
+                    {
+                        Terrain UpperNextTerrain = Map.GetTerrain(NextPostion.X, NextPostion.Y, (int)(NextPostion.Z + MaxInclineDeviationAllowed));
+                        if (UpperNextTerrain != NextTerrain)
+                        {
+                            Vector3 UpperNextTerrainRealPosition = NextTerrain.GetRealPosition(NextPostion);
+                            Incline = UpperNextTerrainRealPosition.Z - ActiveAttack.LastRealPosition.Z;
+                        }
+                    }
+
+                    if (NextTerrain != ActiveAttack.LastTerrain)
+                    {
+                        SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                        ActiveAttack.Owner.ProcessMovement(NextPostion, NextTerrain);
+                        ActiveAttack.LastTerrain = NextTerrain;
+
+                        ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnTileChange);
+                    }
+                    else if (ActiveAttack.Owner.IsOnGround && Incline > 0 && Incline < MaxInclineDeviationAllowed && ActiveAttack.Owner.Speed.Z == 0)
+                    {
+                        ActiveAttack.Owner.SetPosition(NextPostion);
+                        ActiveAttack.Owner.IsOnGround = true;
+                    }
+                    else if (Incline > 0 && Incline < MaxInclineDeviationAllowed && ActiveAttack.Owner.Speed.Z == 0)
+                    {
+                        ActiveAttack.Owner.SetPosition(NextPostion);
+                        ActiveAttack.Owner.IsOnGround = true;
+                    }
+                    else if (StartTerrain != NextTerrain && NextPostion.Z < NextTerrainRealPosition.Z && NextTerrain.TerrainTypeIndex == UnitStats.TerrainLandIndex)
+                    {
+                        NextPostion.Z = NextTerrain.WorldPosition.Z;
+                        ActiveAttack.Owner.SetPosition(NextPostion);
                         ListPERAttackToUpdate.RemoveAt(P);
                         ActiveAttack.Owner.IsOnGround = true;
 
@@ -165,20 +205,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ActiveAttack.Owner.DestroySelf();
                         }
                     }
-                    else if (NextTerrain != ActiveAttack.LastTerrain && ActiveAttack.ListCrossedTerrain.Contains(NextTerrain))
-                    {
-                        ActiveAttack.Owner.SetPosition(ActiveAttack.LastPosition);
-                        SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
-                        ActiveAttack.Owner.ProcessMovement(NextPostion, NextTerrain);
-                        ActiveAttack.LastPosition = NextPostion;
-                        ActiveAttack.LastTerrain = NextTerrain;
-
-                        ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnTileChange);
-                    }
-                    else
+                    else 
                     {
                         ActiveAttack.Owner.SetPosition(NextPostion);
                     }
+
+                    SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                    ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnDistanceTravelled);
+
+                    ActiveAttack.LastRealPosition = NextTerrainRealPosition;
                 }
             }
         }
