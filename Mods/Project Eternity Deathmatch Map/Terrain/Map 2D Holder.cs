@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 float PosX = (CurrentPosition.X - CameraPosition.X) * TileSize.X;
                 float PosY = (CurrentPosition.Y - CameraPosition.Y) * TileSize.Y;
 
-                if (ActiveSquad.IsFlying)
+                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
                 {
                     g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
                     PosY -= 7;
@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 float PosX = (ActiveSquad.X - CameraPosition.X) * TileSize.X;
                 float PosY = (ActiveSquad.Y - CameraPosition.Y) * TileSize.Y;
 
-                if (ActiveSquad.IsFlying)
+                if (ActiveSquad.CurrentTerrainIndex == UnitStats.TerrainAirIndex)
                 {
                     g.Draw(Map.sprUnitHover, new Vector2(PosX, PosY), Color.White);
                     PosY -= 7;

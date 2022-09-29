@@ -33,103 +33,94 @@
             this.tsmDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmRelationships = new System.Windows.Forms.ToolStripMenuItem();
             this.cbCanPilot = new System.Windows.Forms.CheckBox();
-            this.gbOtherStats = new System.Windows.Forms.GroupBox();
             this.lblChargeCancelLevel = new System.Windows.Forms.Label();
             this.txtChargeCancelLevel = new System.Windows.Forms.NumericUpDown();
-            this.cbSpaceRank = new System.Windows.Forms.ComboBox();
-            this.cbLandRank = new System.Windows.Forms.ComboBox();
-            this.cbSeaRank = new System.Windows.Forms.ComboBox();
-            this.cbAirRank = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbItemInformation = new System.Windows.Forms.GroupBox();
             this.lblEXP = new System.Windows.Forms.Label();
             this.txtEXP = new System.Windows.Forms.NumericUpDown();
             this.btnEditStats = new System.Windows.Forms.Button();
             this.btnEditQuotes = new System.Windows.Forms.Button();
             this.lblName = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gbPilotSkills = new System.Windows.Forms.GroupBox();
             this.ckLockedSkill6 = new System.Windows.Forms.CheckBox();
             this.ckLockedSkill5 = new System.Windows.Forms.CheckBox();
             this.ckLockedSkill4 = new System.Windows.Forms.CheckBox();
             this.ckLockedSkill3 = new System.Windows.Forms.CheckBox();
             this.ckLockedSkill2 = new System.Windows.Forms.CheckBox();
             this.ckLockedSkill1 = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblLocked = new System.Windows.Forms.Label();
             this.btnEditLevels6 = new System.Windows.Forms.Button();
             this.btnEditLevels5 = new System.Windows.Forms.Button();
             this.btnEditLevels4 = new System.Windows.Forms.Button();
             this.btnEditLevels3 = new System.Windows.Forms.Button();
             this.btnEditLevels2 = new System.Windows.Forms.Button();
             this.btnEditLevels1 = new System.Windows.Forms.Button();
-            this.label36 = new System.Windows.Forms.Label();
+            this.lblSkillName6 = new System.Windows.Forms.Label();
             this.txtPilotSkill6 = new System.Windows.Forms.TextBox();
             this.btnSetSkill6 = new System.Windows.Forms.Button();
-            this.label33 = new System.Windows.Forms.Label();
+            this.lblSkillName5 = new System.Windows.Forms.Label();
             this.txtPilotSkill5 = new System.Windows.Forms.TextBox();
             this.btnSetSkill5 = new System.Windows.Forms.Button();
-            this.label30 = new System.Windows.Forms.Label();
+            this.lblSkillName4 = new System.Windows.Forms.Label();
             this.txtPilotSkill4 = new System.Windows.Forms.TextBox();
             this.btnSetSkill4 = new System.Windows.Forms.Button();
-            this.label18 = new System.Windows.Forms.Label();
+            this.lblSkillName3 = new System.Windows.Forms.Label();
             this.txtPilotSkill3 = new System.Windows.Forms.TextBox();
             this.btnSetSkill3 = new System.Windows.Forms.Button();
-            this.label15 = new System.Windows.Forms.Label();
+            this.lblSkillName2 = new System.Windows.Forms.Label();
             this.txtPilotSkill2 = new System.Windows.Forms.TextBox();
             this.btnSetSkill2 = new System.Windows.Forms.Button();
-            this.label14 = new System.Windows.Forms.Label();
+            this.lblSkillName1 = new System.Windows.Forms.Label();
             this.txtPilotSkill1 = new System.Windows.Forms.TextBox();
             this.btnSetSkill1 = new System.Windows.Forms.Button();
             this.btnSetBattleTheme = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gbBattleTheme = new System.Windows.Forms.GroupBox();
             this.txtBattleTheme = new System.Windows.Forms.TextBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.gbAceBonus = new System.Windows.Forms.GroupBox();
             this.txtAceBonus = new System.Windows.Forms.TextBox();
             this.btnAceBonus = new System.Windows.Forms.Button();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.gbPilotSpirits = new System.Windows.Forms.GroupBox();
             this.txtPilotSpirit6LevelRequired = new System.Windows.Forms.NumericUpDown();
             this.txtPilotSpirit5LevelRequired = new System.Windows.Forms.NumericUpDown();
             this.txtPilotSpirit4LevelRequired = new System.Windows.Forms.NumericUpDown();
             this.txtPilotSpirit3LevelRequired = new System.Windows.Forms.NumericUpDown();
             this.txtPilotSpirit2LevelRequired = new System.Windows.Forms.NumericUpDown();
             this.txtPilotSpirit1LevelRequired = new System.Windows.Forms.NumericUpDown();
-            this.label21 = new System.Windows.Forms.Label();
+            this.lblSpiritName6 = new System.Windows.Forms.Label();
             this.txtPilotSpirit6 = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
+            this.lblLevelRequired6 = new System.Windows.Forms.Label();
+            this.lblSPCost6 = new System.Windows.Forms.Label();
             this.txtPilotSpirit6SP = new System.Windows.Forms.MaskedTextBox();
             this.btnSetSpirit6 = new System.Windows.Forms.Button();
-            this.label24 = new System.Windows.Forms.Label();
+            this.lblSpiritName5 = new System.Windows.Forms.Label();
             this.txtPilotSpirit5 = new System.Windows.Forms.TextBox();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
+            this.lblLevelRequired5 = new System.Windows.Forms.Label();
+            this.lblSPCost5 = new System.Windows.Forms.Label();
             this.txtPilotSpirit5SP = new System.Windows.Forms.MaskedTextBox();
             this.btnSetSpirit5 = new System.Windows.Forms.Button();
-            this.label27 = new System.Windows.Forms.Label();
+            this.lblSpiritName4 = new System.Windows.Forms.Label();
             this.txtPilotSpirit4 = new System.Windows.Forms.TextBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
+            this.lblLevelRequired4 = new System.Windows.Forms.Label();
+            this.lblSPCost4 = new System.Windows.Forms.Label();
             this.txtPilotSpirit4SP = new System.Windows.Forms.MaskedTextBox();
             this.btnSetSpirit4 = new System.Windows.Forms.Button();
-            this.label39 = new System.Windows.Forms.Label();
+            this.lblSpiritName3 = new System.Windows.Forms.Label();
             this.txtPilotSpirit3 = new System.Windows.Forms.TextBox();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
+            this.lblLevelRequired3 = new System.Windows.Forms.Label();
+            this.lblSPCost3 = new System.Windows.Forms.Label();
             this.txtPilotSpirit3SP = new System.Windows.Forms.MaskedTextBox();
             this.btnSetSpirit3 = new System.Windows.Forms.Button();
-            this.label42 = new System.Windows.Forms.Label();
+            this.lblSpiritName2 = new System.Windows.Forms.Label();
             this.txtPilotSpirit2 = new System.Windows.Forms.TextBox();
-            this.label43 = new System.Windows.Forms.Label();
-            this.label44 = new System.Windows.Forms.Label();
+            this.lblLevelRequired2 = new System.Windows.Forms.Label();
+            this.lblSPCost2 = new System.Windows.Forms.Label();
             this.txtPilotSpirit2SP = new System.Windows.Forms.MaskedTextBox();
             this.btnSetSpirit2 = new System.Windows.Forms.Button();
-            this.label45 = new System.Windows.Forms.Label();
+            this.lblSpiritName1 = new System.Windows.Forms.Label();
             this.txtPilotSpirit1 = new System.Windows.Forms.TextBox();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
+            this.lblLevelRequired1 = new System.Windows.Forms.Label();
+            this.lblSPCost1 = new System.Windows.Forms.Label();
             this.txtPilotSpirit1SP = new System.Windows.Forms.MaskedTextBox();
             this.btnSetSpirit1 = new System.Windows.Forms.Button();
             this.gbPersonality = new System.Windows.Forms.GroupBox();
@@ -139,19 +130,22 @@
             this.txtSlave = new System.Windows.Forms.TextBox();
             this.btnSelectSlave = new System.Windows.Forms.Button();
             this.gbAdvanced = new System.Windows.Forms.GroupBox();
-            this.txtPostMVLevel = new System.Windows.Forms.NumericUpDown();
-            this.lblPostMVLevel = new System.Windows.Forms.Label();
             this.txtReMoveLevel = new System.Windows.Forms.NumericUpDown();
             this.lblReMoveLevel = new System.Windows.Forms.Label();
+            this.txtPostMVLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblPostMVLevel = new System.Windows.Forms.Label();
+            this.gbTerrain = new System.Windows.Forms.GroupBox();
+            this.dgvTerrainRanks = new System.Windows.Forms.DataGridView();
+            this.Movement = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.menuStrip1.SuspendLayout();
-            this.gbOtherStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtChargeCancelLevel)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.gbItemInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtEXP)).BeginInit();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
+            this.gbPilotSkills.SuspendLayout();
+            this.gbBattleTheme.SuspendLayout();
+            this.gbAceBonus.SuspendLayout();
+            this.gbPilotSpirits.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtPilotSpirit6LevelRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPilotSpirit5LevelRequired)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPilotSpirit4LevelRequired)).BeginInit();
@@ -161,8 +155,10 @@
             this.gbPersonality.SuspendLayout();
             this.gbSlave.SuspendLayout();
             this.gbAdvanced.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).BeginInit();
+            this.gbTerrain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTerrainRanks)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -211,23 +207,6 @@
             this.cbCanPilot.UseVisualStyleBackColor = true;
             this.cbCanPilot.CheckedChanged += new System.EventHandler(this.cbCanPilot_CheckedChanged);
             // 
-            // gbOtherStats
-            // 
-            this.gbOtherStats.Controls.Add(this.cbSpaceRank);
-            this.gbOtherStats.Controls.Add(this.cbLandRank);
-            this.gbOtherStats.Controls.Add(this.cbSeaRank);
-            this.gbOtherStats.Controls.Add(this.cbAirRank);
-            this.gbOtherStats.Controls.Add(this.label2);
-            this.gbOtherStats.Controls.Add(this.label3);
-            this.gbOtherStats.Controls.Add(this.label4);
-            this.gbOtherStats.Controls.Add(this.label5);
-            this.gbOtherStats.Location = new System.Drawing.Point(474, 78);
-            this.gbOtherStats.Name = "gbOtherStats";
-            this.gbOtherStats.Size = new System.Drawing.Size(125, 119);
-            this.gbOtherStats.TabIndex = 2;
-            this.gbOtherStats.TabStop = false;
-            this.gbOtherStats.Text = "Other stats";
-            // 
             // lblChargeCancelLevel
             // 
             this.lblChargeCancelLevel.AutoSize = true;
@@ -250,106 +229,6 @@
             this.txtChargeCancelLevel.Size = new System.Drawing.Size(39, 20);
             this.txtChargeCancelLevel.TabIndex = 61;
             // 
-            // cbSpaceRank
-            // 
-            this.cbSpaceRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSpaceRank.FormattingEnabled = true;
-            this.cbSpaceRank.Items.AddRange(new object[] {
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbSpaceRank.Location = new System.Drawing.Point(80, 97);
-            this.cbSpaceRank.Name = "cbSpaceRank";
-            this.cbSpaceRank.Size = new System.Drawing.Size(37, 21);
-            this.cbSpaceRank.TabIndex = 10;
-            this.cbSpaceRank.TabStop = false;
-            // 
-            // cbLandRank
-            // 
-            this.cbLandRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbLandRank.FormattingEnabled = true;
-            this.cbLandRank.Items.AddRange(new object[] {
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbLandRank.Location = new System.Drawing.Point(80, 44);
-            this.cbLandRank.Name = "cbLandRank";
-            this.cbLandRank.Size = new System.Drawing.Size(37, 21);
-            this.cbLandRank.TabIndex = 8;
-            this.cbLandRank.TabStop = false;
-            // 
-            // cbSeaRank
-            // 
-            this.cbSeaRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSeaRank.FormattingEnabled = true;
-            this.cbSeaRank.Items.AddRange(new object[] {
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbSeaRank.Location = new System.Drawing.Point(80, 71);
-            this.cbSeaRank.Name = "cbSeaRank";
-            this.cbSeaRank.Size = new System.Drawing.Size(37, 21);
-            this.cbSeaRank.TabIndex = 9;
-            this.cbSeaRank.TabStop = false;
-            // 
-            // cbAirRank
-            // 
-            this.cbAirRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAirRank.FormattingEnabled = true;
-            this.cbAirRank.Items.AddRange(new object[] {
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbAirRank.Location = new System.Drawing.Point(80, 17);
-            this.cbAirRank.Name = "cbAirRank";
-            this.cbAirRank.Size = new System.Drawing.Size(37, 21);
-            this.cbAirRank.TabIndex = 7;
-            this.cbAirRank.TabStop = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 100);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 13);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Space rank:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 74);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 13);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "Sea rank:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 48);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(58, 13);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Land rank:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 22);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(46, 13);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Air rank:";
-            // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(50, 19);
@@ -357,21 +236,21 @@
             this.txtName.Size = new System.Drawing.Size(176, 20);
             this.txtName.TabIndex = 22;
             // 
-            // groupBox1
+            // gbItemInformation
             // 
-            this.groupBox1.Controls.Add(this.lblEXP);
-            this.groupBox1.Controls.Add(this.txtEXP);
-            this.groupBox1.Controls.Add(this.btnEditStats);
-            this.groupBox1.Controls.Add(this.btnEditQuotes);
-            this.groupBox1.Controls.Add(this.lblName);
-            this.groupBox1.Controls.Add(this.cbCanPilot);
-            this.groupBox1.Controls.Add(this.txtName);
-            this.groupBox1.Location = new System.Drawing.Point(12, 27);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(626, 45);
-            this.groupBox1.TabIndex = 23;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Item Information";
+            this.gbItemInformation.Controls.Add(this.lblEXP);
+            this.gbItemInformation.Controls.Add(this.txtEXP);
+            this.gbItemInformation.Controls.Add(this.btnEditStats);
+            this.gbItemInformation.Controls.Add(this.btnEditQuotes);
+            this.gbItemInformation.Controls.Add(this.lblName);
+            this.gbItemInformation.Controls.Add(this.cbCanPilot);
+            this.gbItemInformation.Controls.Add(this.txtName);
+            this.gbItemInformation.Location = new System.Drawing.Point(12, 27);
+            this.gbItemInformation.Name = "gbItemInformation";
+            this.gbItemInformation.Size = new System.Drawing.Size(626, 45);
+            this.gbItemInformation.TabIndex = 23;
+            this.gbItemInformation.TabStop = false;
+            this.gbItemInformation.Text = "Item Information";
             // 
             // lblEXP
             // 
@@ -423,45 +302,45 @@
             this.lblName.TabIndex = 23;
             this.lblName.Text = "Name:";
             // 
-            // groupBox2
+            // gbPilotSkills
             // 
-            this.groupBox2.Controls.Add(this.ckLockedSkill6);
-            this.groupBox2.Controls.Add(this.ckLockedSkill5);
-            this.groupBox2.Controls.Add(this.ckLockedSkill4);
-            this.groupBox2.Controls.Add(this.ckLockedSkill3);
-            this.groupBox2.Controls.Add(this.ckLockedSkill2);
-            this.groupBox2.Controls.Add(this.ckLockedSkill1);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.btnEditLevels6);
-            this.groupBox2.Controls.Add(this.btnEditLevels5);
-            this.groupBox2.Controls.Add(this.btnEditLevels4);
-            this.groupBox2.Controls.Add(this.btnEditLevels3);
-            this.groupBox2.Controls.Add(this.btnEditLevels2);
-            this.groupBox2.Controls.Add(this.btnEditLevels1);
-            this.groupBox2.Controls.Add(this.label36);
-            this.groupBox2.Controls.Add(this.txtPilotSkill6);
-            this.groupBox2.Controls.Add(this.btnSetSkill6);
-            this.groupBox2.Controls.Add(this.label33);
-            this.groupBox2.Controls.Add(this.txtPilotSkill5);
-            this.groupBox2.Controls.Add(this.btnSetSkill5);
-            this.groupBox2.Controls.Add(this.label30);
-            this.groupBox2.Controls.Add(this.txtPilotSkill4);
-            this.groupBox2.Controls.Add(this.btnSetSkill4);
-            this.groupBox2.Controls.Add(this.label18);
-            this.groupBox2.Controls.Add(this.txtPilotSkill3);
-            this.groupBox2.Controls.Add(this.btnSetSkill3);
-            this.groupBox2.Controls.Add(this.label15);
-            this.groupBox2.Controls.Add(this.txtPilotSkill2);
-            this.groupBox2.Controls.Add(this.btnSetSkill2);
-            this.groupBox2.Controls.Add(this.label14);
-            this.groupBox2.Controls.Add(this.txtPilotSkill1);
-            this.groupBox2.Controls.Add(this.btnSetSkill1);
-            this.groupBox2.Location = new System.Drawing.Point(404, 238);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(373, 253);
-            this.groupBox2.TabIndex = 24;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Pilot skills";
+            this.gbPilotSkills.Controls.Add(this.ckLockedSkill6);
+            this.gbPilotSkills.Controls.Add(this.ckLockedSkill5);
+            this.gbPilotSkills.Controls.Add(this.ckLockedSkill4);
+            this.gbPilotSkills.Controls.Add(this.ckLockedSkill3);
+            this.gbPilotSkills.Controls.Add(this.ckLockedSkill2);
+            this.gbPilotSkills.Controls.Add(this.ckLockedSkill1);
+            this.gbPilotSkills.Controls.Add(this.lblLocked);
+            this.gbPilotSkills.Controls.Add(this.btnEditLevels6);
+            this.gbPilotSkills.Controls.Add(this.btnEditLevels5);
+            this.gbPilotSkills.Controls.Add(this.btnEditLevels4);
+            this.gbPilotSkills.Controls.Add(this.btnEditLevels3);
+            this.gbPilotSkills.Controls.Add(this.btnEditLevels2);
+            this.gbPilotSkills.Controls.Add(this.btnEditLevels1);
+            this.gbPilotSkills.Controls.Add(this.lblSkillName6);
+            this.gbPilotSkills.Controls.Add(this.txtPilotSkill6);
+            this.gbPilotSkills.Controls.Add(this.btnSetSkill6);
+            this.gbPilotSkills.Controls.Add(this.lblSkillName5);
+            this.gbPilotSkills.Controls.Add(this.txtPilotSkill5);
+            this.gbPilotSkills.Controls.Add(this.btnSetSkill5);
+            this.gbPilotSkills.Controls.Add(this.lblSkillName4);
+            this.gbPilotSkills.Controls.Add(this.txtPilotSkill4);
+            this.gbPilotSkills.Controls.Add(this.btnSetSkill4);
+            this.gbPilotSkills.Controls.Add(this.lblSkillName3);
+            this.gbPilotSkills.Controls.Add(this.txtPilotSkill3);
+            this.gbPilotSkills.Controls.Add(this.btnSetSkill3);
+            this.gbPilotSkills.Controls.Add(this.lblSkillName2);
+            this.gbPilotSkills.Controls.Add(this.txtPilotSkill2);
+            this.gbPilotSkills.Controls.Add(this.btnSetSkill2);
+            this.gbPilotSkills.Controls.Add(this.lblSkillName1);
+            this.gbPilotSkills.Controls.Add(this.txtPilotSkill1);
+            this.gbPilotSkills.Controls.Add(this.btnSetSkill1);
+            this.gbPilotSkills.Location = new System.Drawing.Point(404, 238);
+            this.gbPilotSkills.Name = "gbPilotSkills";
+            this.gbPilotSkills.Size = new System.Drawing.Size(373, 253);
+            this.gbPilotSkills.TabIndex = 24;
+            this.gbPilotSkills.TabStop = false;
+            this.gbPilotSkills.Text = "Pilot skills";
             // 
             // ckLockedSkill6
             // 
@@ -517,14 +396,14 @@
             this.ckLockedSkill1.TabIndex = 70;
             this.ckLockedSkill1.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // lblLocked
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(251, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
-            this.label1.TabIndex = 69;
-            this.label1.Text = "Locked";
+            this.lblLocked.AutoSize = true;
+            this.lblLocked.Location = new System.Drawing.Point(251, 16);
+            this.lblLocked.Name = "lblLocked";
+            this.lblLocked.Size = new System.Drawing.Size(43, 13);
+            this.lblLocked.TabIndex = 69;
+            this.lblLocked.Text = "Locked";
             // 
             // btnEditLevels6
             // 
@@ -592,14 +471,14 @@
             this.btnEditLevels1.UseVisualStyleBackColor = true;
             this.btnEditLevels1.Click += new System.EventHandler(this.btnEditLevels1_Click);
             // 
-            // label36
+            // lblSkillName6
             // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(80, 211);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(55, 13);
-            this.label36.TabIndex = 61;
-            this.label36.Text = "Skill name";
+            this.lblSkillName6.AutoSize = true;
+            this.lblSkillName6.Location = new System.Drawing.Point(80, 211);
+            this.lblSkillName6.Name = "lblSkillName6";
+            this.lblSkillName6.Size = new System.Drawing.Size(55, 13);
+            this.lblSkillName6.TabIndex = 61;
+            this.lblSkillName6.Text = "Skill name";
             // 
             // txtPilotSkill6
             // 
@@ -620,14 +499,14 @@
             this.btnSetSkill6.UseVisualStyleBackColor = true;
             this.btnSetSkill6.Click += new System.EventHandler(this.btnSetSkill6_Click);
             // 
-            // label33
+            // lblSkillName5
             // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(80, 172);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(55, 13);
-            this.label33.TabIndex = 54;
-            this.label33.Text = "Skill name";
+            this.lblSkillName5.AutoSize = true;
+            this.lblSkillName5.Location = new System.Drawing.Point(80, 172);
+            this.lblSkillName5.Name = "lblSkillName5";
+            this.lblSkillName5.Size = new System.Drawing.Size(55, 13);
+            this.lblSkillName5.TabIndex = 54;
+            this.lblSkillName5.Text = "Skill name";
             // 
             // txtPilotSkill5
             // 
@@ -648,14 +527,14 @@
             this.btnSetSkill5.UseVisualStyleBackColor = true;
             this.btnSetSkill5.Click += new System.EventHandler(this.btnSetSkill5_Click);
             // 
-            // label30
+            // lblSkillName4
             // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(80, 133);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(55, 13);
-            this.label30.TabIndex = 47;
-            this.label30.Text = "Skill name";
+            this.lblSkillName4.AutoSize = true;
+            this.lblSkillName4.Location = new System.Drawing.Point(80, 133);
+            this.lblSkillName4.Name = "lblSkillName4";
+            this.lblSkillName4.Size = new System.Drawing.Size(55, 13);
+            this.lblSkillName4.TabIndex = 47;
+            this.lblSkillName4.Text = "Skill name";
             // 
             // txtPilotSkill4
             // 
@@ -676,14 +555,14 @@
             this.btnSetSkill4.UseVisualStyleBackColor = true;
             this.btnSetSkill4.Click += new System.EventHandler(this.btnSetSkill4_Click);
             // 
-            // label18
+            // lblSkillName3
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(80, 94);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(55, 13);
-            this.label18.TabIndex = 40;
-            this.label18.Text = "Skill name";
+            this.lblSkillName3.AutoSize = true;
+            this.lblSkillName3.Location = new System.Drawing.Point(80, 94);
+            this.lblSkillName3.Name = "lblSkillName3";
+            this.lblSkillName3.Size = new System.Drawing.Size(55, 13);
+            this.lblSkillName3.TabIndex = 40;
+            this.lblSkillName3.Text = "Skill name";
             // 
             // txtPilotSkill3
             // 
@@ -704,14 +583,14 @@
             this.btnSetSkill3.UseVisualStyleBackColor = true;
             this.btnSetSkill3.Click += new System.EventHandler(this.btnSetSkill3_Click);
             // 
-            // label15
+            // lblSkillName2
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(80, 55);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(55, 13);
-            this.label15.TabIndex = 33;
-            this.label15.Text = "Skill name";
+            this.lblSkillName2.AutoSize = true;
+            this.lblSkillName2.Location = new System.Drawing.Point(80, 55);
+            this.lblSkillName2.Name = "lblSkillName2";
+            this.lblSkillName2.Size = new System.Drawing.Size(55, 13);
+            this.lblSkillName2.TabIndex = 33;
+            this.lblSkillName2.Text = "Skill name";
             // 
             // txtPilotSkill2
             // 
@@ -732,14 +611,14 @@
             this.btnSetSkill2.UseVisualStyleBackColor = true;
             this.btnSetSkill2.Click += new System.EventHandler(this.btnSetSkill2_Click);
             // 
-            // label14
+            // lblSkillName1
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(80, 16);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(55, 13);
-            this.label14.TabIndex = 28;
-            this.label14.Text = "Skill name";
+            this.lblSkillName1.AutoSize = true;
+            this.lblSkillName1.Location = new System.Drawing.Point(80, 16);
+            this.lblSkillName1.Name = "lblSkillName1";
+            this.lblSkillName1.Size = new System.Drawing.Size(55, 13);
+            this.lblSkillName1.TabIndex = 28;
+            this.lblSkillName1.Text = "Skill name";
             // 
             // txtPilotSkill1
             // 
@@ -770,42 +649,42 @@
             this.btnSetBattleTheme.UseVisualStyleBackColor = true;
             this.btnSetBattleTheme.Click += new System.EventHandler(this.btnSetBattleTheme_Click);
             // 
-            // groupBox3
+            // gbBattleTheme
             // 
-            this.groupBox3.Controls.Add(this.txtBattleTheme);
-            this.groupBox3.Controls.Add(this.btnSetBattleTheme);
-            this.groupBox3.Location = new System.Drawing.Point(243, 78);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(225, 74);
-            this.groupBox3.TabIndex = 26;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Battle theme";
+            this.gbBattleTheme.Controls.Add(this.txtBattleTheme);
+            this.gbBattleTheme.Controls.Add(this.btnSetBattleTheme);
+            this.gbBattleTheme.Location = new System.Drawing.Point(211, 78);
+            this.gbBattleTheme.Name = "gbBattleTheme";
+            this.gbBattleTheme.Size = new System.Drawing.Size(187, 74);
+            this.gbBattleTheme.TabIndex = 26;
+            this.gbBattleTheme.TabStop = false;
+            this.gbBattleTheme.Text = "Battle theme";
             // 
             // txtBattleTheme
             // 
             this.txtBattleTheme.Location = new System.Drawing.Point(6, 19);
             this.txtBattleTheme.Name = "txtBattleTheme";
             this.txtBattleTheme.ReadOnly = true;
-            this.txtBattleTheme.Size = new System.Drawing.Size(213, 20);
+            this.txtBattleTheme.Size = new System.Drawing.Size(175, 20);
             this.txtBattleTheme.TabIndex = 26;
             // 
-            // groupBox4
+            // gbAceBonus
             // 
-            this.groupBox4.Controls.Add(this.txtAceBonus);
-            this.groupBox4.Controls.Add(this.btnAceBonus);
-            this.groupBox4.Location = new System.Drawing.Point(12, 158);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(225, 74);
-            this.groupBox4.TabIndex = 27;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Ace bonus";
+            this.gbAceBonus.Controls.Add(this.txtAceBonus);
+            this.gbAceBonus.Controls.Add(this.btnAceBonus);
+            this.gbAceBonus.Location = new System.Drawing.Point(12, 158);
+            this.gbAceBonus.Name = "gbAceBonus";
+            this.gbAceBonus.Size = new System.Drawing.Size(187, 74);
+            this.gbAceBonus.TabIndex = 27;
+            this.gbAceBonus.TabStop = false;
+            this.gbAceBonus.Text = "Ace bonus";
             // 
             // txtAceBonus
             // 
             this.txtAceBonus.Location = new System.Drawing.Point(6, 19);
             this.txtAceBonus.Name = "txtAceBonus";
             this.txtAceBonus.ReadOnly = true;
-            this.txtAceBonus.Size = new System.Drawing.Size(213, 20);
+            this.txtAceBonus.Size = new System.Drawing.Size(175, 20);
             this.txtAceBonus.TabIndex = 67;
             this.txtAceBonus.Text = "None";
             // 
@@ -819,56 +698,56 @@
             this.btnAceBonus.UseVisualStyleBackColor = true;
             this.btnAceBonus.Click += new System.EventHandler(this.btnAceBonus_Click);
             // 
-            // groupBox5
+            // gbPilotSpirits
             // 
-            this.groupBox5.Controls.Add(this.txtPilotSpirit6LevelRequired);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit5LevelRequired);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit4LevelRequired);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit3LevelRequired);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit2LevelRequired);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit1LevelRequired);
-            this.groupBox5.Controls.Add(this.label21);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit6);
-            this.groupBox5.Controls.Add(this.label22);
-            this.groupBox5.Controls.Add(this.label23);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit6SP);
-            this.groupBox5.Controls.Add(this.btnSetSpirit6);
-            this.groupBox5.Controls.Add(this.label24);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit5);
-            this.groupBox5.Controls.Add(this.label25);
-            this.groupBox5.Controls.Add(this.label26);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit5SP);
-            this.groupBox5.Controls.Add(this.btnSetSpirit5);
-            this.groupBox5.Controls.Add(this.label27);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit4);
-            this.groupBox5.Controls.Add(this.label28);
-            this.groupBox5.Controls.Add(this.label29);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit4SP);
-            this.groupBox5.Controls.Add(this.btnSetSpirit4);
-            this.groupBox5.Controls.Add(this.label39);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit3);
-            this.groupBox5.Controls.Add(this.label40);
-            this.groupBox5.Controls.Add(this.label41);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit3SP);
-            this.groupBox5.Controls.Add(this.btnSetSpirit3);
-            this.groupBox5.Controls.Add(this.label42);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit2);
-            this.groupBox5.Controls.Add(this.label43);
-            this.groupBox5.Controls.Add(this.label44);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit2SP);
-            this.groupBox5.Controls.Add(this.btnSetSpirit2);
-            this.groupBox5.Controls.Add(this.label45);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit1);
-            this.groupBox5.Controls.Add(this.label46);
-            this.groupBox5.Controls.Add(this.label47);
-            this.groupBox5.Controls.Add(this.txtPilotSpirit1SP);
-            this.groupBox5.Controls.Add(this.btnSetSpirit1);
-            this.groupBox5.Location = new System.Drawing.Point(12, 238);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(386, 253);
-            this.groupBox5.TabIndex = 65;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Pilot spirits";
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit6LevelRequired);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit5LevelRequired);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit4LevelRequired);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit3LevelRequired);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit2LevelRequired);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit1LevelRequired);
+            this.gbPilotSpirits.Controls.Add(this.lblSpiritName6);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit6);
+            this.gbPilotSpirits.Controls.Add(this.lblLevelRequired6);
+            this.gbPilotSpirits.Controls.Add(this.lblSPCost6);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit6SP);
+            this.gbPilotSpirits.Controls.Add(this.btnSetSpirit6);
+            this.gbPilotSpirits.Controls.Add(this.lblSpiritName5);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit5);
+            this.gbPilotSpirits.Controls.Add(this.lblLevelRequired5);
+            this.gbPilotSpirits.Controls.Add(this.lblSPCost5);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit5SP);
+            this.gbPilotSpirits.Controls.Add(this.btnSetSpirit5);
+            this.gbPilotSpirits.Controls.Add(this.lblSpiritName4);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit4);
+            this.gbPilotSpirits.Controls.Add(this.lblLevelRequired4);
+            this.gbPilotSpirits.Controls.Add(this.lblSPCost4);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit4SP);
+            this.gbPilotSpirits.Controls.Add(this.btnSetSpirit4);
+            this.gbPilotSpirits.Controls.Add(this.lblSpiritName3);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit3);
+            this.gbPilotSpirits.Controls.Add(this.lblLevelRequired3);
+            this.gbPilotSpirits.Controls.Add(this.lblSPCost3);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit3SP);
+            this.gbPilotSpirits.Controls.Add(this.btnSetSpirit3);
+            this.gbPilotSpirits.Controls.Add(this.lblSpiritName2);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit2);
+            this.gbPilotSpirits.Controls.Add(this.lblLevelRequired2);
+            this.gbPilotSpirits.Controls.Add(this.lblSPCost2);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit2SP);
+            this.gbPilotSpirits.Controls.Add(this.btnSetSpirit2);
+            this.gbPilotSpirits.Controls.Add(this.lblSpiritName1);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit1);
+            this.gbPilotSpirits.Controls.Add(this.lblLevelRequired1);
+            this.gbPilotSpirits.Controls.Add(this.lblSPCost1);
+            this.gbPilotSpirits.Controls.Add(this.txtPilotSpirit1SP);
+            this.gbPilotSpirits.Controls.Add(this.btnSetSpirit1);
+            this.gbPilotSpirits.Location = new System.Drawing.Point(12, 238);
+            this.gbPilotSpirits.Name = "gbPilotSpirits";
+            this.gbPilotSpirits.Size = new System.Drawing.Size(386, 253);
+            this.gbPilotSpirits.TabIndex = 65;
+            this.gbPilotSpirits.TabStop = false;
+            this.gbPilotSpirits.Text = "Pilot spirits";
             // 
             // txtPilotSpirit6LevelRequired
             // 
@@ -912,14 +791,14 @@
             this.txtPilotSpirit1LevelRequired.Size = new System.Drawing.Size(71, 20);
             this.txtPilotSpirit1LevelRequired.TabIndex = 64;
             // 
-            // label21
+            // lblSpiritName6
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(80, 211);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(59, 13);
-            this.label21.TabIndex = 61;
-            this.label21.Text = "Spirit name";
+            this.lblSpiritName6.AutoSize = true;
+            this.lblSpiritName6.Location = new System.Drawing.Point(80, 211);
+            this.lblSpiritName6.Name = "lblSpiritName6";
+            this.lblSpiritName6.Size = new System.Drawing.Size(59, 13);
+            this.lblSpiritName6.TabIndex = 61;
+            this.lblSpiritName6.Text = "Spirit name";
             // 
             // txtPilotSpirit6
             // 
@@ -930,23 +809,23 @@
             this.txtPilotSpirit6.TabIndex = 62;
             this.txtPilotSpirit6.Text = "None";
             // 
-            // label22
+            // lblLevelRequired6
             // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(306, 211);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(74, 13);
-            this.label22.TabIndex = 63;
-            this.label22.Text = "Level required";
+            this.lblLevelRequired6.AutoSize = true;
+            this.lblLevelRequired6.Location = new System.Drawing.Point(306, 211);
+            this.lblLevelRequired6.Name = "lblLevelRequired6";
+            this.lblLevelRequired6.Size = new System.Drawing.Size(74, 13);
+            this.lblLevelRequired6.TabIndex = 63;
+            this.lblLevelRequired6.Text = "Level required";
             // 
-            // label23
+            // lblSPCost6
             // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(259, 211);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(44, 13);
-            this.label23.TabIndex = 60;
-            this.label23.Text = "SP cost";
+            this.lblSPCost6.AutoSize = true;
+            this.lblSPCost6.Location = new System.Drawing.Point(259, 211);
+            this.lblSPCost6.Name = "lblSPCost6";
+            this.lblSPCost6.Size = new System.Drawing.Size(44, 13);
+            this.lblSPCost6.TabIndex = 60;
+            this.lblSPCost6.Text = "SP cost";
             // 
             // txtPilotSpirit6SP
             // 
@@ -970,14 +849,14 @@
             this.btnSetSpirit6.UseVisualStyleBackColor = true;
             this.btnSetSpirit6.Click += new System.EventHandler(this.btnSetSpirit6_Click);
             // 
-            // label24
+            // lblSpiritName5
             // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(80, 172);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(59, 13);
-            this.label24.TabIndex = 54;
-            this.label24.Text = "Spirit name";
+            this.lblSpiritName5.AutoSize = true;
+            this.lblSpiritName5.Location = new System.Drawing.Point(80, 172);
+            this.lblSpiritName5.Name = "lblSpiritName5";
+            this.lblSpiritName5.Size = new System.Drawing.Size(59, 13);
+            this.lblSpiritName5.TabIndex = 54;
+            this.lblSpiritName5.Text = "Spirit name";
             // 
             // txtPilotSpirit5
             // 
@@ -988,23 +867,23 @@
             this.txtPilotSpirit5.TabIndex = 55;
             this.txtPilotSpirit5.Text = "None";
             // 
-            // label25
+            // lblLevelRequired5
             // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(306, 172);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(74, 13);
-            this.label25.TabIndex = 56;
-            this.label25.Text = "Level required";
+            this.lblLevelRequired5.AutoSize = true;
+            this.lblLevelRequired5.Location = new System.Drawing.Point(306, 172);
+            this.lblLevelRequired5.Name = "lblLevelRequired5";
+            this.lblLevelRequired5.Size = new System.Drawing.Size(74, 13);
+            this.lblLevelRequired5.TabIndex = 56;
+            this.lblLevelRequired5.Text = "Level required";
             // 
-            // label26
+            // lblSPCost5
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(259, 172);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(44, 13);
-            this.label26.TabIndex = 53;
-            this.label26.Text = "SP cost";
+            this.lblSPCost5.AutoSize = true;
+            this.lblSPCost5.Location = new System.Drawing.Point(259, 172);
+            this.lblSPCost5.Name = "lblSPCost5";
+            this.lblSPCost5.Size = new System.Drawing.Size(44, 13);
+            this.lblSPCost5.TabIndex = 53;
+            this.lblSPCost5.Text = "SP cost";
             // 
             // txtPilotSpirit5SP
             // 
@@ -1028,14 +907,14 @@
             this.btnSetSpirit5.UseVisualStyleBackColor = true;
             this.btnSetSpirit5.Click += new System.EventHandler(this.btnSetSpirit5_Click);
             // 
-            // label27
+            // lblSpiritName4
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(80, 133);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(59, 13);
-            this.label27.TabIndex = 47;
-            this.label27.Text = "Spirit name";
+            this.lblSpiritName4.AutoSize = true;
+            this.lblSpiritName4.Location = new System.Drawing.Point(80, 133);
+            this.lblSpiritName4.Name = "lblSpiritName4";
+            this.lblSpiritName4.Size = new System.Drawing.Size(59, 13);
+            this.lblSpiritName4.TabIndex = 47;
+            this.lblSpiritName4.Text = "Spirit name";
             // 
             // txtPilotSpirit4
             // 
@@ -1046,23 +925,23 @@
             this.txtPilotSpirit4.TabIndex = 48;
             this.txtPilotSpirit4.Text = "None";
             // 
-            // label28
+            // lblLevelRequired4
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(306, 133);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(74, 13);
-            this.label28.TabIndex = 49;
-            this.label28.Text = "Level required";
+            this.lblLevelRequired4.AutoSize = true;
+            this.lblLevelRequired4.Location = new System.Drawing.Point(306, 133);
+            this.lblLevelRequired4.Name = "lblLevelRequired4";
+            this.lblLevelRequired4.Size = new System.Drawing.Size(74, 13);
+            this.lblLevelRequired4.TabIndex = 49;
+            this.lblLevelRequired4.Text = "Level required";
             // 
-            // label29
+            // lblSPCost4
             // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(259, 133);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(44, 13);
-            this.label29.TabIndex = 46;
-            this.label29.Text = "SP cost";
+            this.lblSPCost4.AutoSize = true;
+            this.lblSPCost4.Location = new System.Drawing.Point(259, 133);
+            this.lblSPCost4.Name = "lblSPCost4";
+            this.lblSPCost4.Size = new System.Drawing.Size(44, 13);
+            this.lblSPCost4.TabIndex = 46;
+            this.lblSPCost4.Text = "SP cost";
             // 
             // txtPilotSpirit4SP
             // 
@@ -1086,14 +965,14 @@
             this.btnSetSpirit4.UseVisualStyleBackColor = true;
             this.btnSetSpirit4.Click += new System.EventHandler(this.btnSetSpirit4_Click);
             // 
-            // label39
+            // lblSpiritName3
             // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(80, 94);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(59, 13);
-            this.label39.TabIndex = 40;
-            this.label39.Text = "Spirit name";
+            this.lblSpiritName3.AutoSize = true;
+            this.lblSpiritName3.Location = new System.Drawing.Point(80, 94);
+            this.lblSpiritName3.Name = "lblSpiritName3";
+            this.lblSpiritName3.Size = new System.Drawing.Size(59, 13);
+            this.lblSpiritName3.TabIndex = 40;
+            this.lblSpiritName3.Text = "Spirit name";
             // 
             // txtPilotSpirit3
             // 
@@ -1104,23 +983,23 @@
             this.txtPilotSpirit3.TabIndex = 41;
             this.txtPilotSpirit3.Text = "None";
             // 
-            // label40
+            // lblLevelRequired3
             // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(306, 94);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(74, 13);
-            this.label40.TabIndex = 42;
-            this.label40.Text = "Level required";
+            this.lblLevelRequired3.AutoSize = true;
+            this.lblLevelRequired3.Location = new System.Drawing.Point(306, 94);
+            this.lblLevelRequired3.Name = "lblLevelRequired3";
+            this.lblLevelRequired3.Size = new System.Drawing.Size(74, 13);
+            this.lblLevelRequired3.TabIndex = 42;
+            this.lblLevelRequired3.Text = "Level required";
             // 
-            // label41
+            // lblSPCost3
             // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(259, 94);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(44, 13);
-            this.label41.TabIndex = 39;
-            this.label41.Text = "SP cost";
+            this.lblSPCost3.AutoSize = true;
+            this.lblSPCost3.Location = new System.Drawing.Point(259, 94);
+            this.lblSPCost3.Name = "lblSPCost3";
+            this.lblSPCost3.Size = new System.Drawing.Size(44, 13);
+            this.lblSPCost3.TabIndex = 39;
+            this.lblSPCost3.Text = "SP cost";
             // 
             // txtPilotSpirit3SP
             // 
@@ -1144,14 +1023,14 @@
             this.btnSetSpirit3.UseVisualStyleBackColor = true;
             this.btnSetSpirit3.Click += new System.EventHandler(this.btnSetSpirit3_Click);
             // 
-            // label42
+            // lblSpiritName2
             // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(80, 55);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(59, 13);
-            this.label42.TabIndex = 33;
-            this.label42.Text = "Spirit name";
+            this.lblSpiritName2.AutoSize = true;
+            this.lblSpiritName2.Location = new System.Drawing.Point(80, 55);
+            this.lblSpiritName2.Name = "lblSpiritName2";
+            this.lblSpiritName2.Size = new System.Drawing.Size(59, 13);
+            this.lblSpiritName2.TabIndex = 33;
+            this.lblSpiritName2.Text = "Spirit name";
             // 
             // txtPilotSpirit2
             // 
@@ -1162,23 +1041,23 @@
             this.txtPilotSpirit2.TabIndex = 34;
             this.txtPilotSpirit2.Text = "None";
             // 
-            // label43
+            // lblLevelRequired2
             // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(306, 55);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(74, 13);
-            this.label43.TabIndex = 35;
-            this.label43.Text = "Level required";
+            this.lblLevelRequired2.AutoSize = true;
+            this.lblLevelRequired2.Location = new System.Drawing.Point(306, 55);
+            this.lblLevelRequired2.Name = "lblLevelRequired2";
+            this.lblLevelRequired2.Size = new System.Drawing.Size(74, 13);
+            this.lblLevelRequired2.TabIndex = 35;
+            this.lblLevelRequired2.Text = "Level required";
             // 
-            // label44
+            // lblSPCost2
             // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(259, 55);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(44, 13);
-            this.label44.TabIndex = 32;
-            this.label44.Text = "SP cost";
+            this.lblSPCost2.AutoSize = true;
+            this.lblSPCost2.Location = new System.Drawing.Point(259, 55);
+            this.lblSPCost2.Name = "lblSPCost2";
+            this.lblSPCost2.Size = new System.Drawing.Size(44, 13);
+            this.lblSPCost2.TabIndex = 32;
+            this.lblSPCost2.Text = "SP cost";
             // 
             // txtPilotSpirit2SP
             // 
@@ -1202,14 +1081,14 @@
             this.btnSetSpirit2.UseVisualStyleBackColor = true;
             this.btnSetSpirit2.Click += new System.EventHandler(this.btnSetSpirit2_Click);
             // 
-            // label45
+            // lblSpiritName1
             // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(80, 16);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(59, 13);
-            this.label45.TabIndex = 28;
-            this.label45.Text = "Spirit name";
+            this.lblSpiritName1.AutoSize = true;
+            this.lblSpiritName1.Location = new System.Drawing.Point(80, 16);
+            this.lblSpiritName1.Name = "lblSpiritName1";
+            this.lblSpiritName1.Size = new System.Drawing.Size(59, 13);
+            this.lblSpiritName1.TabIndex = 28;
+            this.lblSpiritName1.Text = "Spirit name";
             // 
             // txtPilotSpirit1
             // 
@@ -1220,23 +1099,23 @@
             this.txtPilotSpirit1.TabIndex = 28;
             this.txtPilotSpirit1.Text = "None";
             // 
-            // label46
+            // lblLevelRequired1
             // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(306, 16);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(74, 13);
-            this.label46.TabIndex = 28;
-            this.label46.Text = "Level required";
+            this.lblLevelRequired1.AutoSize = true;
+            this.lblLevelRequired1.Location = new System.Drawing.Point(306, 16);
+            this.lblLevelRequired1.Name = "lblLevelRequired1";
+            this.lblLevelRequired1.Size = new System.Drawing.Size(74, 13);
+            this.lblLevelRequired1.TabIndex = 28;
+            this.lblLevelRequired1.Text = "Level required";
             // 
-            // label47
+            // lblSPCost1
             // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(259, 16);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(44, 13);
-            this.label47.TabIndex = 27;
-            this.label47.Text = "SP cost";
+            this.lblSPCost1.AutoSize = true;
+            this.lblSPCost1.Location = new System.Drawing.Point(259, 16);
+            this.lblSPCost1.Name = "lblSPCost1";
+            this.lblSPCost1.Size = new System.Drawing.Size(44, 13);
+            this.lblSPCost1.TabIndex = 27;
+            this.lblSPCost1.Text = "SP cost";
             // 
             // txtPilotSpirit1SP
             // 
@@ -1266,7 +1145,7 @@
             this.gbPersonality.Controls.Add(this.btnPersonality);
             this.gbPersonality.Location = new System.Drawing.Point(12, 78);
             this.gbPersonality.Name = "gbPersonality";
-            this.gbPersonality.Size = new System.Drawing.Size(225, 74);
+            this.gbPersonality.Size = new System.Drawing.Size(187, 74);
             this.gbPersonality.TabIndex = 27;
             this.gbPersonality.TabStop = false;
             this.gbPersonality.Text = "Personality";
@@ -1276,7 +1155,7 @@
             this.txtPersonality.Location = new System.Drawing.Point(6, 19);
             this.txtPersonality.Name = "txtPersonality";
             this.txtPersonality.ReadOnly = true;
-            this.txtPersonality.Size = new System.Drawing.Size(213, 20);
+            this.txtPersonality.Size = new System.Drawing.Size(175, 20);
             this.txtPersonality.TabIndex = 26;
             // 
             // btnPersonality
@@ -1293,9 +1172,9 @@
             // 
             this.gbSlave.Controls.Add(this.txtSlave);
             this.gbSlave.Controls.Add(this.btnSelectSlave);
-            this.gbSlave.Location = new System.Drawing.Point(243, 158);
+            this.gbSlave.Location = new System.Drawing.Point(211, 158);
             this.gbSlave.Name = "gbSlave";
-            this.gbSlave.Size = new System.Drawing.Size(225, 74);
+            this.gbSlave.Size = new System.Drawing.Size(187, 74);
             this.gbSlave.TabIndex = 68;
             this.gbSlave.TabStop = false;
             this.gbSlave.Text = "Slave";
@@ -1305,7 +1184,7 @@
             this.txtSlave.Location = new System.Drawing.Point(6, 19);
             this.txtSlave.Name = "txtSlave";
             this.txtSlave.ReadOnly = true;
-            this.txtSlave.Size = new System.Drawing.Size(213, 20);
+            this.txtSlave.Size = new System.Drawing.Size(175, 20);
             this.txtSlave.TabIndex = 67;
             this.txtSlave.Text = "None";
             // 
@@ -1334,27 +1213,6 @@
             this.gbAdvanced.TabStop = false;
             this.gbAdvanced.Text = "Advanced";
             // 
-            // txtPostMVLevel
-            // 
-            this.txtPostMVLevel.Location = new System.Drawing.Point(127, 19);
-            this.txtPostMVLevel.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtPostMVLevel.Name = "txtPostMVLevel";
-            this.txtPostMVLevel.Size = new System.Drawing.Size(39, 20);
-            this.txtPostMVLevel.TabIndex = 66;
-            // 
-            // lblPostMVLevel
-            // 
-            this.lblPostMVLevel.AutoSize = true;
-            this.lblPostMVLevel.Location = new System.Drawing.Point(6, 21);
-            this.lblPostMVLevel.Name = "lblPostMVLevel";
-            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
-            this.lblPostMVLevel.TabIndex = 65;
-            this.lblPostMVLevel.Text = "Post MV Level:";
-            // 
             // txtReMoveLevel
             // 
             this.txtReMoveLevel.Location = new System.Drawing.Point(127, 45);
@@ -1376,40 +1234,97 @@
             this.lblReMoveLevel.TabIndex = 67;
             this.lblReMoveLevel.Text = "Re-Move Level:";
             // 
+            // txtPostMVLevel
+            // 
+            this.txtPostMVLevel.Location = new System.Drawing.Point(127, 19);
+            this.txtPostMVLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtPostMVLevel.Name = "txtPostMVLevel";
+            this.txtPostMVLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtPostMVLevel.TabIndex = 66;
+            // 
+            // lblPostMVLevel
+            // 
+            this.lblPostMVLevel.AutoSize = true;
+            this.lblPostMVLevel.Location = new System.Drawing.Point(6, 21);
+            this.lblPostMVLevel.Name = "lblPostMVLevel";
+            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
+            this.lblPostMVLevel.TabIndex = 65;
+            this.lblPostMVLevel.Text = "Post MV Level:";
+            // 
+            // gbTerrain
+            // 
+            this.gbTerrain.Controls.Add(this.dgvTerrainRanks);
+            this.gbTerrain.Location = new System.Drawing.Point(404, 78);
+            this.gbTerrain.Name = "gbTerrain";
+            this.gbTerrain.Size = new System.Drawing.Size(195, 154);
+            this.gbTerrain.TabIndex = 69;
+            this.gbTerrain.TabStop = false;
+            this.gbTerrain.Text = "Terrain";
+            // 
+            // dgvTerrainRanks
+            // 
+            this.dgvTerrainRanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvTerrainRanks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTerrainRanks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Movement,
+            this.Column2});
+            this.dgvTerrainRanks.Location = new System.Drawing.Point(6, 17);
+            this.dgvTerrainRanks.Name = "dgvTerrainRanks";
+            this.dgvTerrainRanks.RowHeadersVisible = false;
+            this.dgvTerrainRanks.ShowCellErrors = false;
+            this.dgvTerrainRanks.Size = new System.Drawing.Size(181, 131);
+            this.dgvTerrainRanks.TabIndex = 35;
+            // 
+            // Movement
+            // 
+            this.Movement.HeaderText = "Movement";
+            this.Movement.Name = "Movement";
+            this.Movement.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Movement.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Rank";
+            this.Column2.Name = "Column2";
+            // 
             // ProjectEternityCharacterEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(787, 499);
+            this.Controls.Add(this.gbTerrain);
             this.Controls.Add(this.gbAdvanced);
             this.Controls.Add(this.gbSlave);
             this.Controls.Add(this.gbPersonality);
-            this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.gbOtherStats);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.gbPilotSpirits);
+            this.Controls.Add(this.gbAceBonus);
+            this.Controls.Add(this.gbBattleTheme);
+            this.Controls.Add(this.gbPilotSkills);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gbItemInformation);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ProjectEternityCharacterEditor";
             this.Text = "Project Eternity Character Editor";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.gbOtherStats.ResumeLayout(false);
-            this.gbOtherStats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtChargeCancelLevel)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gbItemInformation.ResumeLayout(false);
+            this.gbItemInformation.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtEXP)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
+            this.gbPilotSkills.ResumeLayout(false);
+            this.gbPilotSkills.PerformLayout();
+            this.gbBattleTheme.ResumeLayout(false);
+            this.gbBattleTheme.PerformLayout();
+            this.gbAceBonus.ResumeLayout(false);
+            this.gbAceBonus.PerformLayout();
+            this.gbPilotSpirits.ResumeLayout(false);
+            this.gbPilotSpirits.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtPilotSpirit6LevelRequired)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPilotSpirit5LevelRequired)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPilotSpirit4LevelRequired)).EndInit();
@@ -1422,8 +1337,10 @@
             this.gbSlave.PerformLayout();
             this.gbAdvanced.ResumeLayout(false);
             this.gbAdvanced.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).EndInit();
+            this.gbTerrain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTerrainRanks)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1432,78 +1349,69 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.GroupBox gbOtherStats;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox cbSpaceRank;
-        private System.Windows.Forms.ComboBox cbLandRank;
-        private System.Windows.Forms.ComboBox cbSeaRank;
-        private System.Windows.Forms.ComboBox cbAirRank;
         private System.Windows.Forms.CheckBox cbCanPilot;
         private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gbItemInformation;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Button btnEditQuotes;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox gbPilotSkills;
         private System.Windows.Forms.Button btnSetSkill1;
         private System.Windows.Forms.Button btnSetBattleTheme;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox gbBattleTheme;
         private System.Windows.Forms.TextBox txtBattleTheme;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.GroupBox gbAceBonus;
+        private System.Windows.Forms.Label lblSkillName1;
         private System.Windows.Forms.TextBox txtPilotSkill1;
-        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label lblSkillName3;
         private System.Windows.Forms.TextBox txtPilotSkill3;
         private System.Windows.Forms.Button btnSetSkill3;
-        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label lblSkillName2;
         private System.Windows.Forms.TextBox txtPilotSkill2;
         private System.Windows.Forms.Button btnSetSkill2;
-        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label lblSkillName6;
         private System.Windows.Forms.TextBox txtPilotSkill6;
         private System.Windows.Forms.Button btnSetSkill6;
-        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label lblSkillName5;
         private System.Windows.Forms.TextBox txtPilotSkill5;
         private System.Windows.Forms.Button btnSetSkill5;
-        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label lblSkillName4;
         private System.Windows.Forms.TextBox txtPilotSkill4;
         private System.Windows.Forms.Button btnSetSkill4;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.GroupBox gbPilotSpirits;
+        private System.Windows.Forms.Label lblSpiritName6;
         private System.Windows.Forms.TextBox txtPilotSpirit6;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label lblLevelRequired6;
+        private System.Windows.Forms.Label lblSPCost6;
         private System.Windows.Forms.MaskedTextBox txtPilotSpirit6SP;
         private System.Windows.Forms.Button btnSetSpirit6;
-        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label lblSpiritName5;
         private System.Windows.Forms.TextBox txtPilotSpirit5;
-        private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label lblLevelRequired5;
+        private System.Windows.Forms.Label lblSPCost5;
         private System.Windows.Forms.MaskedTextBox txtPilotSpirit5SP;
         private System.Windows.Forms.Button btnSetSpirit5;
-        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label lblSpiritName4;
         private System.Windows.Forms.TextBox txtPilotSpirit4;
-        private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label lblLevelRequired4;
+        private System.Windows.Forms.Label lblSPCost4;
         private System.Windows.Forms.MaskedTextBox txtPilotSpirit4SP;
         private System.Windows.Forms.Button btnSetSpirit4;
-        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label lblSpiritName3;
         private System.Windows.Forms.TextBox txtPilotSpirit3;
-        private System.Windows.Forms.Label label40;
-        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label lblLevelRequired3;
+        private System.Windows.Forms.Label lblSPCost3;
         private System.Windows.Forms.MaskedTextBox txtPilotSpirit3SP;
         private System.Windows.Forms.Button btnSetSpirit3;
-        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label lblSpiritName2;
         private System.Windows.Forms.TextBox txtPilotSpirit2;
-        private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label lblLevelRequired2;
+        private System.Windows.Forms.Label lblSPCost2;
         private System.Windows.Forms.MaskedTextBox txtPilotSpirit2SP;
         private System.Windows.Forms.Button btnSetSpirit2;
-        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label lblSpiritName1;
         private System.Windows.Forms.TextBox txtPilotSpirit1;
-        private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label lblLevelRequired1;
+        private System.Windows.Forms.Label lblSPCost1;
         private System.Windows.Forms.MaskedTextBox txtPilotSpirit1SP;
         private System.Windows.Forms.Button btnSetSpirit1;
         private System.Windows.Forms.TextBox txtAceBonus;
@@ -1522,7 +1430,7 @@
         private System.Windows.Forms.CheckBox ckLockedSkill3;
         private System.Windows.Forms.CheckBox ckLockedSkill2;
         private System.Windows.Forms.CheckBox ckLockedSkill1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblLocked;
         private System.Windows.Forms.Label lblEXP;
         private System.Windows.Forms.NumericUpDown txtEXP;
         private System.Windows.Forms.NumericUpDown txtPilotSpirit6LevelRequired;
@@ -1546,6 +1454,10 @@
         private System.Windows.Forms.Label lblPostMVLevel;
         private System.Windows.Forms.NumericUpDown txtReMoveLevel;
         private System.Windows.Forms.Label lblReMoveLevel;
+        private System.Windows.Forms.GroupBox gbTerrain;
+        private System.Windows.Forms.DataGridView dgvTerrainRanks;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Movement;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column2;
     }
 }
 

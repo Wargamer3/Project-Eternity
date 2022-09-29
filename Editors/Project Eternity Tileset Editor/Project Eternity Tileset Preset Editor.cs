@@ -164,31 +164,7 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 Point ActiveTile = ListActiveTile[0];
                 Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.TerrainTypeIndex = cboTerrainType.SelectedIndex;
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void txtMVEnterCost_TextChanged(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.MVEnterCost = (int)txtMVEnterCost.Value;
-
-                UpdateAllTiles();
-            }
-        }
-
-        private void txtMVMoveCost_TextChanged(object sender, EventArgs e)
-        {
-            if (ListActiveTile.Count > 0)
-            {
-                Point ActiveTile = ListActiveTile[0];
-                Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.MVMoveCost = (int)txtMVMoveCost.Value;
+                ActiveTerrain.TerrainTypeIndex = (byte)cboTerrainType.SelectedIndex;
 
                 UpdateAllTiles();
             }
@@ -315,7 +291,7 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 Point ActiveTile = ListActiveTile[0];
                 Terrain ActiveTerrain = ArrayTerrain[ActiveTile.X, ActiveTile.Y];
-                ActiveTerrain.BattleBackgroundAnimationIndex = cboBattleAnimationBackground.SelectedIndex - 1;
+                ActiveTerrain.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
 
                 UpdateAllTiles();
             }
@@ -401,9 +377,6 @@ namespace ProjectEternity.Editors.MapEditor
 
             if (ListActiveTile.Count == 1)
             {
-                txtMVEnterCost.Text = ArrayTerrain[ActiveTile.X, ActiveTile.Y].MVEnterCost.ToString();
-                txtMVMoveCost.Text = ArrayTerrain[ActiveTile.X, ActiveTile.Y].MVMoveCost.ToString();
-
                 cboTerrainType.SelectedIndex = ArrayTerrain[ActiveTile.X, ActiveTile.Y].TerrainTypeIndex;
                 cboBattleAnimationBackground.SelectedIndex = ArrayTerrain[ActiveTile.X, ActiveTile.Y].BattleBackgroundAnimationIndex + 1;
 

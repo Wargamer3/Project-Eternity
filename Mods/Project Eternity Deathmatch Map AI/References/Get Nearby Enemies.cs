@@ -58,7 +58,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
 
                             Terrain ActiveTerrain = Info.Map.GetTerrain(x, y, (int)Info.ActiveSquad.Z);
 
-                            if (ActiveTerrain.MVMoveCost == -1)
+                            if (!Info.Map.TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, ActiveTerrain.TerrainTypeIndex))
                             {
                                 ListEnemy.RemoveAt(i);
                             }

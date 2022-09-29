@@ -420,12 +420,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         SquadToKill.Speed = FinalSpeed;
 
                         SquadToKill.SetPosition(SquadTerrain.WorldPosition);
-
-                        if (FinalSpeed.Z > 0)
-                        {
-                            SquadToKill.CurrentMovement = UnitStats.TerrainAir;
-                            SquadToKill.IsFlying = false;
-                        }
                     }
                 }
             }

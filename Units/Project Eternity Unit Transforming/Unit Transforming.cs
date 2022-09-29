@@ -164,18 +164,18 @@ namespace ProjectEternity.Core.Units.Transforming
             if (ArrayTransformingUnit[ActiveUnit].WillRequirement >= 0 && PilotMorale < ArrayTransformingUnit[ActiveUnit].WillRequirement)
                 return false;
 
-            if (ArrayTransformingUnit[ActiveUnit].UnitTransformed.ListTerrainChoices.Contains(UnitStats.TerrainAir) &&
-                !ArrayTransformingUnit[ActiveUnit].UnitTransformed.ListTerrainChoices.Contains(UnitStats.TerrainLand))
+            if (ArrayTransformingUnit[ActiveUnit].UnitTransformed.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex) &&
+                !ArrayTransformingUnit[ActiveUnit].UnitTransformed.DicRankByMovement.ContainsKey(UnitStats.TerrainLandIndex))
             {
                 if (CurrentWingmanA != null)
                 {
-                    if (!CurrentWingmanA.ListTerrainChoices.Contains(UnitStats.TerrainAir))
+                    if (!CurrentWingmanA.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
                         return false;
                     else
                     {
                         if (CurrentWingmanB != null)
                         {
-                            if (!CurrentWingmanB.ListTerrainChoices.Contains(UnitStats.TerrainAir))
+                            if (!CurrentWingmanB.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
                                 return false;
                         }
                     }
@@ -203,7 +203,6 @@ namespace ProjectEternity.Core.Units.Transforming
                     NextIndex = 0;
                 }
                 ChangeUnit(NextIndex);
-                Params.Map.UpdateSquadCurrentMovement(ActiveSquad);
             }
 
             return new List<ActionPanel>();

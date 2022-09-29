@@ -8,24 +8,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     partial class DeathmatchMap
     {
-        public char GetTerrainLetterAttribute(Core.Units.UnitStats UnitStat, string TerrainType)
+        public char GetTerrainLetterAttribute(UnitStats UnitStat, byte MovementTypeIndex)
         {
-            return Grades[UnitStat.TerrainAttributeValue(TerrainType)];
+            return Grades[UnitStat.TerrainAttributeValue(MovementTypeIndex)];
         }
 
-        public string GetTerrainType(float PosX, float PosY, int LayerIndex)
+        public byte GetTerrainType(float PosX, float PosY, int LayerIndex)
         {
-            return GetTerrainType(GetTerrain(PosX, PosY, LayerIndex));
-        }
-
-        public string GetTerrainType(MovementAlgorithmTile ActiveTerrain)
-        {
-            return ListTerrainType[ActiveTerrain.TerrainTypeIndex];
-        }
-
-        public override string GetTerrainType(int TerrainTypeIndex)
-        {
-            return ListTerrainType[TerrainTypeIndex];
+            return GetTerrain(PosX, PosY, LayerIndex).TerrainTypeIndex;
         }
 
         public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
@@ -89,8 +79,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         continue;
 
                     //Remove 5 EN each time the Squad spend a turn in the air.
-                    if (ActiveSquad.CurrentMovement == Core.Units.UnitStats.TerrainAir)
-                        ActiveSquad.CurrentLeader.ConsumeEN(5);
+                    int ENUsedPerTurn = TerrainRestrictions.GetENUsedPerTurnCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, ActiveSquad.CurrentTerrainIndex);
+                    if (ENUsedPerTurn > 0)
+                        ActiveSquad.CurrentLeader.ConsumeEN(ENUsedPerTurn);
 
                     for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)
                     {

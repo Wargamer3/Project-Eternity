@@ -16,21 +16,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             return ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
-        public string GetTerrainType(float PosX, float PosY, int LayerIndex)
-        {
-            return GetTerrainType(GetTerrain((int)PosX, (int)PosY, LayerIndex));
-        }
-
-        public string GetTerrainType(MovementAlgorithmTile ActiveTerrain)
-        {
-            return ListTerrainType[ActiveTerrain.TerrainTypeIndex];
-        }
-
-        public override string GetTerrainType(int TerrainTypeIndex)
-        {
-            return ListTerrainType[TerrainTypeIndex];
-        }
-
         public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
         {
             /*ListPlayer[ActivePlayerIndex].ListSquad.Remove((Squad)UnitToRemove);
@@ -102,7 +87,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
 
-            string CurrentTerrainType = GetTerrainType(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, (int)StartingPosition.LayerIndex);
+            byte CurrentTerrainType = GetTerrain((int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y, (int)StartingPosition.LayerIndex).TerrainTypeIndex;
             float CurrentZ = StartingPosition.WorldPosition.Z;
 
             int ClosestLayerIndexDown = -1;
@@ -115,13 +100,13 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 MapLayer ActiveLayer = ListLayer[L];
                 Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
-                string NextTerrainType = GetTerrainType(NextX, NextY, L);
+                byte NextTerrainType = GetTerrain(NextX, NextY, L).TerrainTypeIndex;
                 float NextTerrainZ = NextTerrain.WorldPosition.Z;
 
                 //Check lower or higher neighbors if on solid ground
-                if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid)
+                if (CurrentTerrainType != UnitStats.TerrainAirIndex && CurrentTerrainType != UnitStats.TerrainVoidIndex)
                 {
-                    if (NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid)
+                    if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex)
                     {
                         //Prioritize going downward
                         if (NextTerrainZ <= CurrentZ)
@@ -186,6 +171,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
             return ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
+
         public override List<MovementAlgorithmTile> GetSpawnLocations(int Team)
         {
             List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
@@ -218,12 +204,12 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 MapLayer ActiveLayer = ListLayer[L];
                 Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
-                string NextTerrainType = GetTerrainType(NextX, NextX, L);
+                byte NextTerrainType = GetTerrain(NextX, NextX, L).TerrainTypeIndex;
                 float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
-                if (NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid && ZDiff < MaxClearance)
+                if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex && ZDiff < MaxClearance)
                 {
                     return false;
                 }

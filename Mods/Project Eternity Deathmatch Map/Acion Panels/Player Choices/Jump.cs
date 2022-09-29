@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public static void AddIfUsable(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
         {
-            if (ActiveSquad.CurrentMovement != UnitStats.TerrainLand)
+            if (ActiveSquad.CurrentTerrainIndex != UnitStats.TerrainLandIndex)
             {
                 return;
             }

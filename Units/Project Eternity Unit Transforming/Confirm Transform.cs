@@ -29,7 +29,6 @@ namespace ProjectEternity.Core.Units.Transforming
         public override void OnSelect()
         {
             TransformingUnit.ChangeUnit(TransformationChoice);
-            Map.UpdateSquadCurrentMovement(ActiveSquad);
         }
 
         public override void DoUpdate(GameTime gameTime)

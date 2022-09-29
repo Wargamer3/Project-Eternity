@@ -25,7 +25,7 @@ namespace ProjectEternity.UnitTests
             {
                 for (int Y = 0; Y < 20; ++Y)
                 {
-                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new Terrain(X, Y, 0, 0, 1, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
+                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new Terrain(X, Y, 0, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
                 }
             }
 
@@ -79,17 +79,17 @@ namespace ProjectEternity.UnitTests
 
             Attack DummyAttack = new Attack("Dummy Attack", string.Empty, 0, "10000", 0, 5, WeaponPrimaryProperty.None,
                 WeaponSecondaryProperty.None, 10, 0, 6, 1, 100, "Laser",
-                new Dictionary<string, char>() { { "Air", 'S' }, { "Land", 'S' }, { "Sea", 'S' }, { "Space", 'S' } });
+                new Dictionary<byte, byte>() { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 } });
 
             DummyAttack.PostMovementLevel = 1;
 
             DummyUnit.ArrayCharacterActive = new Character[1] { DummyCharacter };
             DummyUnit.ListAttack.Add(DummyAttack);
             DummyUnit.CurrentAttack = DummyAttack;
-            DummyUnit.UnitStat.DicTerrainValue.Add("Air", 1);
-            DummyUnit.UnitStat.DicTerrainValue.Add("Land", 1);
-            DummyUnit.UnitStat.DicTerrainValue.Add("Sea", 1);
-            DummyUnit.UnitStat.DicTerrainValue.Add("Space", 1);
+            DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
+            DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
+            DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
+            DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
 
             return DummyUnit;
         }

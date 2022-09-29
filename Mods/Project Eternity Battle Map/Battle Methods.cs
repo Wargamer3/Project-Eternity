@@ -51,14 +51,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public bool CanNullifyAttack(Attack ActiveWeapon, string AttackerMovementType, string DefenderMovementType, Squad DefenderSquad, StatsBoosts DefenderBoosts)
+        public bool CanNullifyAttack(Attack ActiveWeapon, byte AttackerMovementType, byte DefenderMovementType, Squad DefenderSquad, StatsBoosts DefenderBoosts)
         {
             //Check if the Unit can counter the attack.
             bool NullifyAttack = false;
 
-            if (ActiveWeapon.DicTerrainAttribute["Sea"] == '-' &&
-                (DefenderMovementType == "Sea" ||
-                AttackerMovementType == "Sea"))
+            if (ActiveWeapon.DicRankByMovement[Core.Units.UnitStats.TerrainSeaIndex] == Array.IndexOf(Unit.Grades, '-') &&
+                (DefenderMovementType == Core.Units.UnitStats.TerrainSeaIndex ||
+                AttackerMovementType == Core.Units.UnitStats.TerrainSeaIndex))
             {
                 NullifyAttack = true;
             }

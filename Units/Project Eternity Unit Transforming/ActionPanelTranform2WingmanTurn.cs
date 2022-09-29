@@ -44,7 +44,6 @@ namespace ProjectEternity.Core.Units.Transforming
             if (InputHelper.InputConfirmPressed() || MouseHelper.InputLeftButtonReleased())
             {
                 TransformingUnit.ChangeUnit(TransformationChoice);
-                Map.UpdateSquadCurrentMovement(ActiveSquad);
 
                 Map.ActiveSquadIndex = -1;
                 Map.sndConfirm.Play();

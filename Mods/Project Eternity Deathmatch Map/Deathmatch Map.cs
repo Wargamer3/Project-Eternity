@@ -149,13 +149,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListPERAttack = new List<PERAttack>();
             ListMutator = new List<DeathmatchMutator>();
 
-            ListTerrainType = new List<string>();
-            ListTerrainType.Add(UnitStats.TerrainAir);
-            ListTerrainType.Add(UnitStats.TerrainLand);
-            ListTerrainType.Add(UnitStats.TerrainSea);
-            ListTerrainType.Add(UnitStats.TerrainSpace);
-            ListTerrainType.Add(UnitStats.TerrainWall);
-            ListTerrainType.Add(UnitStats.TerrainVoid);
+            TerrainRestrictions = new UnitAndTerrainValues();
+            TerrainRestrictions.Load();
         }
 
         public DeathmatchMap(string GameMode, DeathmatchParams Params)
@@ -801,68 +796,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         continue;
 
                     CurrentUnit.UpdateAllAttacks(StartPosition, UnitTeam, ListPlayer[P].ListSquad[U].Position, ListPlayer[P].Team,
-                            ListPlayer[P].ListSquad[U].ArrayMapSize, ListPlayer[P].ListSquad[U].CurrentMovement, CanMove);
+                            ListPlayer[P].ListSquad[U].ArrayMapSize, ListPlayer[P].ListSquad[U].CurrentTerrainIndex, CanMove);
                 }
             }
         }
-        
+
         public int GetSquadMaxMovement(Squad ActiveSquad)
         {
-            if (ActiveSquad.CurrentMovement == UnitStats.TerrainAir)
-            {
-                int StartingMV = Math.Min(ActiveSquad.CurrentLeader.MaxMovement, ActiveSquad.CurrentLeader.EN);//Maximum distance you can reach.
-                StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
+            int StartingMV = ActiveSquad.CurrentLeader.MaxMovement;//Maximum distance you can reach.
+            StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
 
-                if (ActiveSquad.CurrentWingmanA != null)
-                {
-                    if (ActiveSquad.CurrentWingmanA.EN < StartingMV)
-                        StartingMV = ActiveSquad.CurrentWingmanA.EN;
-                }
+            if (ActiveSquad.CurrentWingmanA != null)
+            {
+                StartingMV += ActiveSquad.CurrentWingmanA.MaxMovement;
                 if (ActiveSquad.CurrentWingmanB != null)
                 {
-                    if (ActiveSquad.CurrentWingmanB.EN < StartingMV)
-                        StartingMV = ActiveSquad.CurrentWingmanB.EN;
-                }
-                return StartingMV;
-            }
-            else
-            {
-                int StartingMV = ActiveSquad.CurrentLeader.MaxMovement;//Maximum distance you can reach.
-                StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
-
-                if (ActiveSquad.CurrentWingmanA != null)
-                {
                     StartingMV += ActiveSquad.CurrentWingmanA.MaxMovement;
-                    if (ActiveSquad.CurrentWingmanB != null)
-                    {
-                        StartingMV += ActiveSquad.CurrentWingmanA.MaxMovement;
-                        StartingMV = (int)Math.Ceiling((double)(StartingMV / 3));
-                    }
-                    else
-                        StartingMV = (int)Math.Ceiling((double)(StartingMV / 2));
+                    StartingMV = (int)Math.Ceiling((double)(StartingMV / 3));
                 }
-                return StartingMV;
+                else
+                    StartingMV = (int)Math.Ceiling((double)(StartingMV / 2));
             }
-        }
-
-        public void UpdateSquadCurrentMovement(Squad ActiveSquad)
-        {
-            //Unit can't stay on this terrain.
-            if (!ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(ActiveSquad.CurrentMovement))
-            {
-                //Can be in air.
-                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-                {
-                    ActiveSquad.CurrentMovement = UnitStats.TerrainAir;
-                    ActiveSquad.IsFlying = true;
-                }
-                //Can be on land.
-                else if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainLand))
-                {
-                    ActiveSquad.CurrentMovement = UnitStats.TerrainLand;
-                    ActiveSquad.IsFlying = false;
-                }
-            }
+            return StartingMV;
         }
 
         public List<MovementAlgorithmTile> GetMVChoice(Squad ActiveSquad, BattleMap ActiveMap)
@@ -1022,13 +977,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return null;
             }
             
-            int CurrentTerrainType = StartingPosition.TerrainTypeIndex;
+            byte CurrentTerrainType = StartingPosition.TerrainTypeIndex;
             float CurrentZ = StartingPosition.WorldPosition.Z;
 
             MovementAlgorithmTile ClosestLayerIndexDown = null;
             MovementAlgorithmTile ClosestLayerIndexUp = StartingPosition;
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
+            bool CanMoveCurrent = TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, CurrentTerrainType);
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
@@ -1040,19 +996,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     break;
                 }
 
-                int NextTerrainType = NextTerrain.TerrainTypeIndex;
+                byte NextTerrainType = NextTerrain.TerrainTypeIndex;
                 float NextTerrainZ = NextTerrain.WorldPosition.Z;
 
                 //Check lower or higher neighbors if on solid ground
-                if (CurrentTerrainType != UnitStats.TerrainAirIndex && CurrentTerrainType != UnitStats.TerrainVoidIndex && CurrentTerrainType != UnitStats.TerrainWallIndex)
+                if (CanMoveCurrent)
                 {
-                    if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex && NextTerrainType != UnitStats.TerrainWallIndex)
+                    if (TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, NextTerrainType))
                     {
                         //Prioritize going downward
                         if (NextTerrainZ <= CurrentZ)
                         {
                             float ZDiff = CurrentZ - NextTerrainZ;
-                            if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(NextTerrainZ, NextX, NextY, L, MaxClearance))
+                            if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(ActiveSquad, NextTerrainZ, NextX, NextY, L, MaxClearance))
                             {
                                 ClosestTerrainDistanceDown = ZDiff;
                                 ClosestLayerIndexDown = NextTerrain;
@@ -1064,7 +1020,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             float ZDiff = NextTerrainZ - CurrentZ;
                             if (ZDiff >= ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                             {
-                                if (PreviousTerrain.TerrainTypeIndex == UnitStats.TerrainLandIndex)
+                                if (TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, PreviousTerrain.TerrainTypeIndex))
                                 {
                                     ClosestTerrainDistanceUp = ZDiff;
                                     ClosestLayerIndexUp = NextTerrain;
@@ -1133,19 +1089,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return LayerManager.ListLayer[NextLayerIndex].ArrayTerrain[(int)StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY];
         }
 
-        private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
+        private bool HasEnoughClearance(Squad ActiveSquad, float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
         {
             for (int L = StartLayer + 1; L < LayerManager.ListLayer.Count; L++)
             {
                 MapLayer ActiveLayer = LayerManager.ListLayer[L];
                 Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
-                string NextTerrainType = GetTerrainType(NextX, NextY, L);
+                byte NextTerrainType = GetTerrainType(NextX, NextY, L);
                 float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
-                if (NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid && ZDiff < MaxClearance)
+                if (TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, NextTerrainType) && ZDiff < MaxClearance)
                 {
                     return false;
                 }
@@ -1156,20 +1112,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void FinalizeMovement(Squad ActiveSquad, int UsedMovement, List<Vector3> ListMVHoverPoints)
         {
-            if (ActiveSquad.CurrentMovement != UnitStats.TerrainAir && GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z) != UnitStats.TerrainAir)
-            {
-                ActiveSquad.CurrentMovement = GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z);
-            }
-            
+            ActiveSquad.CurrentTerrainIndex = GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z);
+
             if (UsedMovement > 0)
             {
-                if (ActiveSquad.CurrentMovement == UnitStats.TerrainAir)
+                float TotalENCost = 0;
+                foreach (Vector3 TerrainCrossed in ListMVHoverPoints)
                 {
-                    ActiveSquad.CurrentLeader.ConsumeEN(1);
+                    TotalENCost += TerrainRestrictions.GetENCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, GetTerrainType(TerrainCrossed.X, TerrainCrossed.Y, (int)TerrainCrossed.Z));
+                }
+                if (TotalENCost > 0)
+                {
+                    ActiveSquad.CurrentLeader.ConsumeEN((int)TotalENCost);
                     if (ActiveSquad.CurrentWingmanA != null)
-                        ActiveSquad.CurrentWingmanA.ConsumeEN(1);
+                        ActiveSquad.CurrentWingmanA.ConsumeEN((int)TotalENCost);
                     if (ActiveSquad.CurrentWingmanB != null)
-                        ActiveSquad.CurrentWingmanB.ConsumeEN(1);
+                        ActiveSquad.CurrentWingmanB.ConsumeEN((int)TotalENCost);
                 }
             }
 

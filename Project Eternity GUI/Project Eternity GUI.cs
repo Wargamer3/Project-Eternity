@@ -38,6 +38,7 @@ namespace ProjectEternity.GUI
                 GameScreens.GameScreen.LoadHelpers(RootGraphicDevice.Content);
                 TextHelper.LoadHelpers(RootGraphicDevice.Content);
                 GameScreens.GameScreen.GraphicsDevice = RootGraphicDevice.GraphicsDevice;
+                UnitAndTerrainValues.Default.Load();
 
                 foreach (KeyValuePair<string, Unit> ActiveUnitType in Unit.LoadAllUnits())
                 {
@@ -795,6 +796,12 @@ namespace ProjectEternity.GUI
         {
             Editors.SystemListEditor.SystemListEditor NewTester = new Editors.SystemListEditor.SystemListEditor();
             NewTester.LoadData();
+            NewTester.Show();
+        }
+
+        private void tsmTerrainAndUnitTypes_Click(object sender, EventArgs e)
+        {
+            Editors.SystemListEditor.TerrainAndUnitTypesEditor NewTester = new Editors.SystemListEditor.TerrainAndUnitTypesEditor();
             NewTester.Show();
         }
     }

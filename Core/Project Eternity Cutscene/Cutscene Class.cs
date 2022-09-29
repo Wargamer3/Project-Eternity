@@ -240,7 +240,6 @@ namespace ProjectEternity.Core.Scripts
 
         public void Save(string FilePath)
         {
-            //Create the Part file.
             FileStream FS = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS);
 

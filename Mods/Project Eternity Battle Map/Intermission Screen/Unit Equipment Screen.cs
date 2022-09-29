@@ -40,8 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int CurrentMaxArmor;
         private int CurrentMaxMobility;
         private int CurrentMaxMV;
-        private List<string> ListTerrainChoices;
-        private Dictionary<string, char> DicTerrainLetterAttribute;
+        private Dictionary<byte, byte> DicTerrainLetterAttribute;
         private List<UnitMultiForm> ListUnit;
 
         private DrawableMenu UnitSelectionMenu;
@@ -57,8 +56,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.PlayerRoster = PlayerRoster;
 
             Stage = 0;
-            ListTerrainChoices = new List<string>();
-            DicTerrainLetterAttribute = new Dictionary<string, char>();
+            DicTerrainLetterAttribute = new Dictionary<byte, byte>();
         }
 
         public override void Load()
@@ -109,7 +107,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         Stage = 1;
                         EquipmentSelectionMenu = new DrawableMenu(DrawMenuEquipment, SelectedUnit.ArrayUnitStat.Length, 5);
-                        ListTerrainChoices.AddRange(SelectedUnit.ListTerrainChoices);
                         GoToPartChange();
                     }
                     else
@@ -157,14 +154,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CurrentMaxMobility = SelectedUnit.Mobility;
             CurrentMaxMV = SelectedUnit.MaxMovement;
 
-            SelectedUnit.ListTerrainChoices.Clear();
-            SelectedUnit.ListTerrainChoices.AddRange(ListTerrainChoices);
-
-            DicTerrainLetterAttribute.Clear();
-            DicTerrainLetterAttribute.Add(UnitStats.TerrainAir, SelectedUnit.TerrainLetterAttribute(UnitStats.TerrainAir));
-            DicTerrainLetterAttribute.Add(UnitStats.TerrainLand, SelectedUnit.TerrainLetterAttribute(UnitStats.TerrainLand));
-            DicTerrainLetterAttribute.Add(UnitStats.TerrainSea, SelectedUnit.TerrainLetterAttribute(UnitStats.TerrainSea));
-            DicTerrainLetterAttribute.Add(UnitStats.TerrainSpace, SelectedUnit.TerrainLetterAttribute(UnitStats.TerrainSpace));
+            DicTerrainLetterAttribute = new Dictionary<byte, byte>(SelectedUnit.DicRankByMovement);
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -223,22 +213,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawStatChange(g, CurrentMaxMV, SelectedUnit.MaxMovement, StartX + 150, Y);
 
             g.DrawString(fntFinlanderFont, "Move Type", new Vector2(StartX + 15, Y += LineSpacing), Color.White);
-            if (ListTerrainChoices.Contains(UnitStats.TerrainAir))
+            if (DicTerrainLetterAttribute.ContainsKey(UnitStats.TerrainAirIndex))
                 g.Draw(sprSky, new Vector2(StartX + 150, Y + 7), Color.White);
             else
                 g.Draw(sprLand, new Vector2(StartX + 150, Y + 7), Color.White);
 
-            if (SelectedUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
+            if (SelectedUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
                 g.Draw(sprSky, new Vector2(StartX + 230, Y + 7), Color.White);
             else
                 g.Draw(sprLand, new Vector2(StartX + 230, Y + 7), Color.White);
 
             g.DrawString(fntFinlanderFont, "Terrain", new Vector2(StartX + 15, Y += LineSpacing), Color.White);
 
-            DrawTerrainChange(g, UnitStats.TerrainAir, sprSky, StartX + 40, Y + 28);
-            DrawTerrainChange(g, UnitStats.TerrainLand, sprLand, StartX + 90, Y + 28);
-            DrawTerrainChange(g, UnitStats.TerrainSea, sprSea, StartX + 140, Y + 28);
-            DrawTerrainChange(g, UnitStats.TerrainSpace, sprSpace, StartX + 190, Y + 28);
+            DrawTerrainChange(g, UnitStats.TerrainAirIndex, sprSky, StartX + 40, Y + 28);
+            DrawTerrainChange(g, UnitStats.TerrainLandIndex, sprLand, StartX + 90, Y + 28);
+            DrawTerrainChange(g, UnitStats.TerrainSeaIndex, sprSea, StartX + 140, Y + 28);
+            DrawTerrainChange(g, UnitStats.TerrainSpaceIndex, sprSpace, StartX + 190, Y + 28);
         }
 
         private void DrawPartMenu(CustomSpriteBatch g, bool ShowListPartCursor)
@@ -265,13 +255,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntFinlanderFont, NewStat.ToString(), new Vector2(X + 80, Y), DrawColor);
         }
 
-        private void DrawTerrainChange(CustomSpriteBatch g, string Terrain, Texture2D Sprite, int X, int Y)
+        private void DrawTerrainChange(CustomSpriteBatch g, byte TerrainIndex, Texture2D Sprite, int X, int Y)
         {
             g.Draw(Sprite, new Vector2(X, Y), Color.White);
-            g.DrawString(fntFinlanderFont, DicTerrainLetterAttribute[Terrain].ToString(), new Vector2(X + 25, Y + 4), Color.White);
+            g.DrawString(fntFinlanderFont, DicTerrainLetterAttribute[TerrainIndex].ToString(), new Vector2(X + 25, Y + 4), Color.White);
 
             g.Draw(Sprite, new Vector2(X, Y + 46), Color.White);
-            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute(Terrain).ToString(), new Vector2(X + 25, Y + 50), Color.White);
+            g.DrawString(fntFinlanderFont, SelectedUnit.TerrainLetterAttribute(TerrainIndex).ToString(), new Vector2(X + 25, Y + 50), Color.White);
         }
 
         public void DrawMenuUnit(CustomSpriteBatch g, int ItemIndex, int X, int Y)

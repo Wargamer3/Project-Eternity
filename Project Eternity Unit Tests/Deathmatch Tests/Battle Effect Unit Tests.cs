@@ -949,7 +949,7 @@ namespace ProjectEternity.UnitTests
         {
             UnitTerrainEffect NewEffect = (UnitTerrainEffect)DummyMap.Params.DicEffect[UnitTerrainEffect.Name].Copy();
             NewEffect.Value = "5";
-            NewEffect.Terrain = "Land";
+            NewEffect.Terrain = Core.Units.UnitStats.TerrainLandIndex;
             NewEffect.NumberType = Operators.NumberTypes.Absolute;
             NewEffect.CanDowngrade = false;
 
@@ -961,36 +961,7 @@ namespace ProjectEternity.UnitTests
             GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummyMap.ActiveParser);
 
             DummySkill.AddSkillEffectsToTarget(string.Empty);
-            Assert.AreEqual(0, GlobalDeathmatchContext.EffectOwnerUnit.Boosts.DicTerrainLetterAttributeModifier["Land"]);
-        }
-
-        [TestMethod]
-        public void TestUnitMovementTypeEffect()
-        {
-            UnitMovementTypeEffect NewEffect = (UnitMovementTypeEffect)DummyMap.Params.DicEffect[UnitMovementTypeEffect.Name].Copy();
-            NewEffect.UseAir = true;
-            NewEffect.UseLand = true;
-            NewEffect.UseSea = true;
-            NewEffect.UseSpace = true;
-
-            BaseAutomaticSkill DummySkill = CreateDummySkill(DummyMap.Params.DicRequirement[PassiveRequirement.Name].Copy(),
-                                                            DummyMap.Params.DicAutomaticSkillTarget[EffectActivationSelf.Name].Copy(),
-                                                            NewEffect);
-
-            Squad DummySquad = CreateDummySquad();
-            GlobalDeathmatchContext.SetContext(DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummySquad, DummySquad.CurrentLeader, DummySquad.CurrentLeader.Pilot, DummyMap.ActiveParser);
-
-            Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.ListTerrainChoices.Contains("Air"));
-            Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.ListTerrainChoices.Contains("Land"));
-            Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.ListTerrainChoices.Contains("Sea"));
-            Assert.IsFalse(GlobalDeathmatchContext.EffectOwnerUnit.ListTerrainChoices.Contains("Space"));
-
-            DummySkill.AddSkillEffectsToTarget(string.Empty);
-
-            Assert.IsTrue(GlobalDeathmatchContext.EffectOwnerUnit.ListTerrainChoices.Contains("Air"));
-            Assert.IsTrue(GlobalDeathmatchContext.EffectOwnerUnit.ListTerrainChoices.Contains("Land"));
-            Assert.IsTrue(GlobalDeathmatchContext.EffectOwnerUnit.ListTerrainChoices.Contains("Sea"));
-            Assert.IsTrue(GlobalDeathmatchContext.EffectOwnerUnit.ListTerrainChoices.Contains("Space"));
+            Assert.AreEqual(0, GlobalDeathmatchContext.EffectOwnerUnit.Boosts.DicTerrainLetterAttributeModifier[Core.Units.UnitStats.TerrainLandIndex]);
         }
     }
 }

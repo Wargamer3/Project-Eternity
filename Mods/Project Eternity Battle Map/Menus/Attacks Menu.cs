@@ -246,16 +246,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawStringRightAligned(ActiveFont, CurrentAttack.ENCost.ToString(),
                 new Vector2(XStart + 430, YStart + 178), Color.White);
             g.Draw(sprSky, new Vector2(XStart + 442, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, CurrentAttack.DicTerrainAttribute[UnitStats.TerrainAir].ToString(),
+            g.DrawString(ActiveFont, CurrentAttack.DicRankByMovement[UnitStats.TerrainAirIndex].ToString(),
                 new Vector2(XStart + 467, YStart + 178), Color.White);
             g.Draw(sprLand, new Vector2(XStart + 488, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, CurrentAttack.DicTerrainAttribute[UnitStats.TerrainLand].ToString(),
+            g.DrawString(ActiveFont, CurrentAttack.DicRankByMovement[UnitStats.TerrainLandIndex].ToString(),
                 new Vector2(XStart + 513, YStart + 178), Color.White);
             g.Draw(sprSea, new Vector2(XStart + 534, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, CurrentAttack.DicTerrainAttribute[UnitStats.TerrainSea].ToString(),
+            g.DrawString(ActiveFont, CurrentAttack.DicRankByMovement[UnitStats.TerrainSeaIndex].ToString(),
                 new Vector2(XStart + 559, YStart + 178), Color.White);
             g.Draw(sprSpace, new Vector2(XStart + 580, YStart + 182), Color.White);
-            g.DrawString(ActiveFont, CurrentAttack.DicTerrainAttribute[UnitStats.TerrainSpace].ToString(),
+            g.DrawString(ActiveFont, CurrentAttack.DicRankByMovement[UnitStats.TerrainSpaceIndex].ToString(),
                 new Vector2(XStart + 605, YStart + 178), Color.White);
 
             DrawBox(g, new Vector2(XStart, YStart + 220), 630, 140, Color.White);

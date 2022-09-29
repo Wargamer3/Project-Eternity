@@ -64,37 +64,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListPlayer[PlayerIndex].ListSquad.Add(NewSquad);
 
-            if (NewSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-            {
-                if (NewSquad.CurrentWingmanA != null)
-                {
-                    if (NewSquad.CurrentWingmanA.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-                    {
-                        if (NewSquad.CurrentWingmanB != null)
-                        {
-                            if (NewSquad.CurrentWingmanB.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-                            {
-                                NewSquad.IsFlying = true;
-                                NewSquad.CurrentMovement = UnitStats.TerrainAir;
-                            }
-                        }
-                        else
-                        {
-                            NewSquad.IsFlying = true;
-                            NewSquad.CurrentMovement = UnitStats.TerrainAir;
-                        }
-                    }
-                }
-                else
-                {
-                    NewSquad.IsFlying = true;
-                    NewSquad.CurrentMovement = UnitStats.TerrainAir;
-                }
-            }
-            else
-            {
-                NewSquad.CurrentMovement = UnitStats.TerrainLand;
-            }
+            NewSquad.CurrentTerrainIndex = UnitStats.TerrainLandIndex;
         }
 
         public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
@@ -212,8 +182,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     BW.Write(ActiveSquad.Y);
                     BW.Write(ActiveSquad.Z);
                     BW.Write(ActiveSquad.SquadName);
-                    BW.Write(ActiveSquad.CurrentMovement);
-                    BW.Write(ActiveSquad.IsFlying);
+                    BW.Write(ActiveSquad.CurrentTerrainIndex);
                     BW.Write(ActiveSquad.IsUnderTerrain);
                     BW.Write(ActiveSquad.IsPlayerControlled);
                     if (ActiveSquad.SquadAI == null || ActiveSquad.SquadAI.Path == null)
@@ -370,8 +339,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     float ActiveSquadPositionY = BR.ReadSingle();
                     float ActiveSquadPositionZ = BR.ReadSingle();
                     string ActiveSquadSquadName = BR.ReadString();
-                    string ActiveSquadCurrentMovement = BR.ReadString();
-                    bool ActiveSquadIsFlying = BR.ReadBoolean();
+                    byte ActiveSquadCurrentMovement = BR.ReadByte();
                     bool ActiveSquadIsUnderTerrain = BR.ReadBoolean();
                     bool ActiveSquadIsPlayerControlled = BR.ReadBoolean();
                     string ActiveSquadSquadAI = BR.ReadString();
@@ -461,8 +429,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                     Character.DicBattleTheme.Add(NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName, new FMODSound(FMODSystem, "Content/Maps/BGM/" + NewSquad.At(U).ArrayCharacterActive[C].BattleThemeName + ".mp3"));
                     }
 
-                    NewSquad.CurrentMovement = ActiveSquadCurrentMovement;
-                    NewSquad.IsFlying = ActiveSquadIsFlying;
+                    NewSquad.CurrentTerrainIndex = ActiveSquadCurrentMovement;
                     NewSquad.IsUnderTerrain = ActiveSquadIsUnderTerrain;
                     NewSquad.IsPlayerControlled = ActiveSquadIsPlayerControlled;
                     NewSquad.SetPosition(new Vector3(ActiveSquadPositionX, ActiveSquadPositionY, ActiveSquadPositionZ));

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Attacks;
-using System.Windows.Forms;
 using ProjectEternity.Editors.ImageViewer;
 
 namespace ProjectEternity.Editors.AttackEditor
@@ -24,10 +24,6 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             InitializeComponent();
 
-            cbAirRank.SelectedIndex = 0;
-            cbLandRank.SelectedIndex = 0;
-            cbSeaRank.SelectedIndex = 0;
-            cbSpaceRank.SelectedIndex = 0;
             txtName.Text = "New Item";
             txtName.ReadOnly = false;
             menuStrip1.Visible = false;
@@ -225,10 +221,22 @@ namespace ProjectEternity.Editors.AttackEditor
 
             BW.Write((byte)AttackType);
 
-            BW.Write((byte)cbAirRank.SelectedIndex);
-            BW.Write((byte)cbLandRank.SelectedIndex);
-            BW.Write((byte)cbSeaRank.SelectedIndex);
-            BW.Write((byte)cbSpaceRank.SelectedIndex);
+            List<Tuple<byte, byte>> ListRankByMovement = new List<Tuple<byte, byte>>();
+            foreach (DataGridViewRow ActiveRow in dgvTerrainRanks.Rows)
+            {
+                if (ActiveRow.Cells[1].Value != null)
+                {
+                    ListRankByMovement.Add(new Tuple<byte, byte>((byte)UnitAndTerrainValues.Default.ListUnitMovement.IndexOf(UnitAndTerrainValues.Default.ListUnitMovement.Find(x => x.Name == ActiveRow.Cells[0].Value.ToString())),
+                        (byte)Unit.ListRank.IndexOf(ActiveRow.Cells[1].Value.ToString()[0])));
+                }
+            }
+
+            BW.Write(ListRankByMovement.Count);
+            foreach (Tuple<byte, byte> ActiveRankByMovement in ListRankByMovement)
+            {
+                BW.Write(ActiveRankByMovement.Item1);
+                BW.Write(ActiveRankByMovement.Item2);
+            }
 
             BW.Write(AdvancedSettings.lvSecondaryAttack.Items.Count);
             for (int S = 0; S < AdvancedSettings.lvSecondaryAttack.Items.Count; S++)
@@ -332,7 +340,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
             string AttackType = ActiveWeapon.AttackType;
 
-            Dictionary<string, char> DicTerrainAttribute = ActiveWeapon.DicTerrainAttribute;
+            Dictionary<byte, byte> DicTerrainAttribute = ActiveWeapon.DicRankByMovement;
 
             txtName.Text = ItemName;
             txtDescription.Text = Description;
@@ -491,129 +499,33 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Terrain grades
 
-            #region Air
-
-            switch (DicTerrainAttribute[UnitStats.TerrainAir])
+            for (byte M = 0; M < UnitAndTerrainValues.Default.ListUnitMovement.Count; M++)
             {
-                case '-':
-                    cbAirRank.SelectedIndex = 0;
-                    break;
+                UnitMovementType ActiveMovement = UnitAndTerrainValues.Default.ListUnitMovement[M];
+                int NewRowIndex = dgvTerrainRanks.Rows.Add();
 
-                case 'S':
-                    cbAirRank.SelectedIndex = 1;
-                    break;
+                DataGridViewComboBoxCell MovementCell = new DataGridViewComboBoxCell();
+                DataGridViewComboBoxCell RankCell = new DataGridViewComboBoxCell();
 
-                case 'A':
-                    cbAirRank.SelectedIndex = 2;
-                    break;
+                foreach (UnitMovementType ActiveMovementChoice in UnitAndTerrainValues.Default.ListUnitMovement)
+                {
+                    MovementCell.Items.Add(ActiveMovementChoice.Name);
+                }
+                foreach (char ActiveRank in Unit.ListRank)
+                {
+                    RankCell.Items.Add(ActiveRank);
+                }
 
-                case 'B':
-                    cbAirRank.SelectedIndex = 3;
-                    break;
+                MovementCell.Value = ActiveMovement.Name;
 
-                case 'C':
-                    cbAirRank.SelectedIndex = 4;
-                    break;
+                if (ActiveWeapon.DicRankByMovement.ContainsKey(M))
+                {
+                    RankCell.Value = Unit.ListRank[ActiveWeapon.DicRankByMovement[M]];
+                }
 
-                case 'D':
-                    cbAirRank.SelectedIndex = 5;
-                    break;
+                dgvTerrainRanks.Rows[NewRowIndex].Cells[0] = MovementCell;
+                dgvTerrainRanks.Rows[NewRowIndex].Cells[1] = RankCell;
             }
-
-            #endregion
-
-            #region Land
-
-            switch (DicTerrainAttribute[UnitStats.TerrainLand])
-            {
-                case '-':
-                    cbLandRank.SelectedIndex = 0;
-                    break;
-
-                case 'S':
-                    cbLandRank.SelectedIndex = 1;
-                    break;
-
-                case 'A':
-                    cbLandRank.SelectedIndex = 2;
-                    break;
-
-                case 'B':
-                    cbLandRank.SelectedIndex = 3;
-                    break;
-
-                case 'C':
-                    cbLandRank.SelectedIndex = 4;
-                    break;
-
-                case 'D':
-                    cbLandRank.SelectedIndex = 5;
-                    break;
-            }
-
-            #endregion
-
-            #region Sea
-
-            switch (DicTerrainAttribute[UnitStats.TerrainSea])
-            {
-                case '-':
-                    cbSeaRank.SelectedIndex = 0;
-                    break;
-
-                case 'S':
-                    cbSeaRank.SelectedIndex = 1;
-                    break;
-
-                case 'A':
-                    cbSeaRank.SelectedIndex = 2;
-                    break;
-
-                case 'B':
-                    cbSeaRank.SelectedIndex = 3;
-                    break;
-
-                case 'C':
-                    cbSeaRank.SelectedIndex = 4;
-                    break;
-
-                case 'D':
-                    cbSeaRank.SelectedIndex = 5;
-                    break;
-            }
-
-            #endregion
-
-            #region Space
-
-            switch (DicTerrainAttribute[UnitStats.TerrainSpace])
-            {
-                case '-':
-                    cbSpaceRank.SelectedIndex = 0;
-                    break;
-
-                case 'S':
-                    cbSpaceRank.SelectedIndex = 1;
-                    break;
-
-                case 'A':
-                    cbSpaceRank.SelectedIndex = 2;
-                    break;
-
-                case 'B':
-                    cbSpaceRank.SelectedIndex = 3;
-                    break;
-
-                case 'C':
-                    cbSpaceRank.SelectedIndex = 4;
-                    break;
-
-                case 'D':
-                    cbSpaceRank.SelectedIndex = 5;
-                    break;
-            }
-
-            #endregion
 
             #endregion
 

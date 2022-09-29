@@ -139,8 +139,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (LandedLayer >= 0)
                         {
                             ListSquadAutoMovement[S].Owner.Speed = new Vector3(ListSquadAutoMovement[S].Owner.Speed.X, ListSquadAutoMovement[S].Owner.Speed.Y, 0);
-                            ListSquadAutoMovement[S].Owner.IsFlying = false;
-                            ListSquadAutoMovement[S].Owner.CurrentMovement = UnitStats.TerrainLand;
+                            ListSquadAutoMovement[S].Owner.CurrentTerrainIndex = Map.GetTerrainType(ListSquadAutoMovement[S].Owner.Position.X, ListSquadAutoMovement[S].Owner.Position.Y, LandedLayer);
                             ListSquadAutoMovement[S].Owner.SetPosition(new Vector3(ListSquadAutoMovement[S].Owner.Position.X, ListSquadAutoMovement[S].Owner.Position.Y, LandedLayer));
                         }
                     }
@@ -243,7 +242,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private bool IsOnGround(SquadAutoMovement ActiveSquad)
         {
-            return ActiveSquad.Owner.CurrentMovement == UnitStats.TerrainLand
+            return ActiveSquad.Owner.CurrentTerrainIndex == UnitStats.TerrainLandIndex
                 && Map.LayerManager.ListLayer[(int)ActiveSquad.Owner.Z].ArrayTerrain[(int)ActiveSquad.Owner.X, (int)ActiveSquad.Owner.Y].TerrainTypeIndex != UnitStats.TerrainVoidIndex;
         }
 

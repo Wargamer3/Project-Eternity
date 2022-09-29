@@ -196,7 +196,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (ActiveSquad.UnitsAliveInSquad == 1)
                         {
                             Map.AttackPicker.Reset(ActiveSquad.CurrentLeader, ListAttackActiveSquad);
-                            ActiveSquad.CurrentLeader.UpdateNonMAPAttacks(ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement, ActiveSquad.CanMove);
+                            ActiveSquad.CurrentLeader.UpdateNonMAPAttacks(ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentTerrainIndex, ActiveSquad.CanMove);
 
                             AttackIndex = 0;//Make sure you select the first weapon.
                             Map.BattleMenuStage = BattleMenuStages.ChooseAttack;
@@ -491,7 +491,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.DisableAllAttacks();
                     ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.UpdateAllAttacks(
                         ActiveSquadSupport.ActiveSquadSupport.Position, Map.ListPlayer[ActivePlayerIndex].Team,
-                        TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentMovement,
+                        TargetSquad.Position, Map.ListPlayer[TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentTerrainIndex,
                         ActiveSquadSupport.ActiveSquadSupport.CanMove);
 
                     WeaponOld = ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack;

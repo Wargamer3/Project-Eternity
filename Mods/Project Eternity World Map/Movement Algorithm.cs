@@ -10,7 +10,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         WorldMap Map;
 
         protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float OffsetX, float OffsetY,
-            UnitMapComponent MapComponent, bool IgnoreObstacles)
+            UnitMapComponent MapComponent, UnitStats Stats, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.X + OffsetY), ActiveDestination.LayerIndex);
                 //Wall
-                if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
+                if (ActiveTile == null || ActiveTile.MovementCost == -1
                     || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
                 {
                     continue;

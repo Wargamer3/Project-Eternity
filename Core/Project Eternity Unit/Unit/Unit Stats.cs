@@ -10,20 +10,16 @@ namespace ProjectEternity.Core.Units
 {
     public class UnitStats
     {
-        public const string TerrainAir = "Air";
-        public const int TerrainAirIndex = 0;
-        public const string TerrainLand = "Land";
-        public const int TerrainLandIndex = 1;
-        public const string TerrainSea = "Sea";
-        public const int TerrainSeaIndex = 2;
-        public const string TerrainSpace = "Space";
-        public const int TerrainSpaceIndex = 3;
-        public const string TerrainWall = "Wall";
-        public const int TerrainWallIndex = 4;
-        public const string TerrainVoid = "Void";
-        public const int TerrainVoidIndex = 5;
-        public const string TerrainUnderground = "Underground";
-        public const string TerrainUnderwater = "Underwater";
+        public const byte TerrainAirIndex = 0;
+        public const byte TerrainLandIndex = 1;
+        public const byte TerrainSeaIndex = 2;
+        public const byte TerrainSpaceIndex = 3;
+        public const byte TerrainWallIndex = 4;
+        public const byte TerrainVoidIndex = 5;
+        public const byte TerrainUnderwaterIndex = 6;
+        public const byte TerrainUndergroundIndex = 7;
+
+        public static readonly List<string> ListUnitSize = new List<string>() { UnitSizeLLL, UnitSizeLL, UnitSizeL, UnitSizeM, UnitSizeS, UnitSizeSS };
 
         public const string UnitSizeLLL = "LLL";
         public const string UnitSizeLL = "LL";
@@ -78,7 +74,7 @@ namespace ProjectEternity.Core.Units
         public readonly StatsBoosts Boosts;
         public Dictionary<string, UnitLinkTypes> DicUnitLink;//List which Units it can link to and how.
 
-        public string Size;
+        public byte SizeIndex;
         public bool[,] ArrayMapSize;//Custom mask for actual place a Unit is taking.
 
         public List<Attack> ListAttack;
@@ -90,8 +86,8 @@ namespace ProjectEternity.Core.Units
         public byte ReMoveLevel;
         public byte ChargedAttackCancelLevel;
 
-        public List<string> ListTerrainChoices;
-        public Dictionary<string, int> DicTerrainValue;
+        public Dictionary<byte, byte> DicRankByMovement;
+        public byte UnitTypeIndex;
         public BaseAutomaticSkill[] ArrayUnitAbility;
 
         public UnitAnimations Animations;
@@ -135,15 +131,14 @@ namespace ProjectEternity.Core.Units
 
             DicUnitLink = new Dictionary<string, UnitLinkTypes>();
             Boosts = new StatsBoosts();
-            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainAir, 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainLand, 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainSea, 0);
-            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainSpace, 0);
+            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainAirIndex, 0);
+            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainLandIndex, 0);
+            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainSeaIndex, 0);
+            Boosts.DicTerrainLetterAttributeModifier.Add(UnitStats.TerrainSpaceIndex, 0);
 
             ArrayUnitAbility = new BaseAutomaticSkill[0];
             ListAttack = new List<Attack>();
-            DicTerrainValue = new Dictionary<string, int>();
-            ListTerrainChoices = new List<string>();
+            DicRankByMovement = new Dictionary<byte, byte>();
             ListCharacterIDWhitelist = new List<string>();
 
             Animations = new UnitAnimations();
@@ -175,18 +170,15 @@ namespace ProjectEternity.Core.Units
             AttackUpgradesCost = (AttackUpgradesCosts)BR.ReadByte();
 
             int TerrainGradeCount = BR.ReadInt32();
-            DicTerrainValue = new Dictionary<string, int>(TerrainGradeCount);
+            DicRankByMovement = new Dictionary<byte, byte>(TerrainGradeCount);
             for (int G = 0; G < TerrainGradeCount; ++G)
             {
-                DicTerrainValue.Add(BR.ReadString(), BR.ReadInt32());
+                DicRankByMovement.Add(BR.ReadByte(), BR.ReadByte());
             }
 
-            int TerrainChoicesCount = BR.ReadInt32();
-            ListTerrainChoices = new List<string>(TerrainChoicesCount);
-            for (int i = 0; i < TerrainChoicesCount; i++)
-                ListTerrainChoices.Add(BR.ReadString());
+            UnitTypeIndex = BR.ReadByte();
 
-            Size = BR.ReadString();
+            SizeIndex = BR.ReadByte();
 
             int SizeWidth = BR.ReadInt32();
             int SizeHeight = BR.ReadInt32();
@@ -264,20 +256,13 @@ namespace ProjectEternity.Core.Units
             AttackUpgradesSpeed = (AttackUpgradesSpeeds)Convert.ToInt32(UnitFile.ReadField("Unit Stats", "AttackUpgradesValueIndex"));
             AttackUpgradesCost = (AttackUpgradesCosts)Convert.ToInt32(UnitFile.ReadField("Unit Stats", "AttackUpgradesCostIndex"));
 
-            string[] TerrainValues = new string[] { "-", "S", "A", "B", "C", "D" };
-            DicTerrainValue = new Dictionary<string, int>();
+            DicRankByMovement = new Dictionary<byte, byte>();
             foreach (KeyValuePair<string, string> ActiveField in UnitFile.ReadHeader("Unit Terrain"))
             {
-                DicTerrainValue.Add(ActiveField.Key, Array.IndexOf(TerrainValues, ActiveField.Value));
+                DicRankByMovement.Add(Convert.ToByte(ActiveField.Key), Convert.ToByte(ActiveField.Value));
             }
             
-            ListTerrainChoices = new List<string>();
-            foreach (KeyValuePair<string, string> ActiveField in UnitFile.ReadHeader("Unit Movements"))
-            {
-                ListTerrainChoices.Add(ActiveField.Key);
-            }
-
-            Size = UnitFile.ReadField("Unit Stats", "Size");
+            SizeIndex = (byte)UnitStats.ListUnitSize.IndexOf(UnitFile.ReadField("Unit Stats", "Size"));
 
             int SizeWidth = Convert.ToInt32(UnitFile.ReadField("Unit Stats", "Size Mask Width"));
             int SizeHeight = Convert.ToInt32(UnitFile.ReadField("Unit Stats", "Size Mask Height"));
@@ -411,24 +396,24 @@ namespace ProjectEternity.Core.Units
             return ArrayMapSize[FinalX, FinalY];
         }
 
-        public int TerrainAttributeValue(string Terrain)
+        public int TerrainAttributeValue(byte MovementTypeIndex)
         {
-            return DicTerrainValue[Terrain] + Boosts.DicTerrainLetterAttributeModifier[Terrain];
+            return DicRankByMovement[MovementTypeIndex] + Boosts.DicTerrainLetterAttributeModifier[MovementTypeIndex];
         }
 
         public float GetClearance()
         {
-            if (Size == UnitStats.UnitSizeLLL)
+            if (UnitStats.ListUnitSize[SizeIndex] == UnitStats.UnitSizeLLL)
                 return 3;
-            else if (Size == UnitStats.UnitSizeLL)
+            else if (UnitStats.ListUnitSize[SizeIndex] == UnitStats.UnitSizeLL)
                 return 2;
-            else if (Size == UnitStats.UnitSizeL)
+            else if (UnitStats.ListUnitSize[SizeIndex] == UnitStats.UnitSizeL)
                 return 1;
-            else if (Size == UnitStats.UnitSizeM)
+            else if (UnitStats.ListUnitSize[SizeIndex] == UnitStats.UnitSizeM)
                 return 1;
-            else if (Size == UnitStats.UnitSizeS)
+            else if (UnitStats.ListUnitSize[SizeIndex] == UnitStats.UnitSizeS)
                 return 1;
-            else if (Size == UnitStats.UnitSizeSS)
+            else if (UnitStats.ListUnitSize[SizeIndex] == UnitStats.UnitSizeSS)
                 return 0.75f;
 
             return 1;

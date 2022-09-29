@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -14,7 +15,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         }
 
         protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float OffsetX, float OffsetY,
-            UnitMapComponent MapComponent, bool IgnoreObstacles)
+            UnitMapComponent MapComponent, UnitStats Stats, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
@@ -24,7 +25,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             {
                 MovementAlgorithmTile ActiveTile = GetTile((int)(StartingNode.WorldPosition.X + OffsetX), (int)(StartingNode.WorldPosition.X + OffsetY), ActiveDestination.LayerIndex);
                 //Wall
-                if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
+                if (ActiveTile == null || ActiveTile.MovementCost == -1
                     || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
                 {
                     continue;
@@ -45,7 +46,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public override float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo)
         {
-            return TerrainToGo.MVMoveCost;
+            return 1;
         }
 
         public override MovementAlgorithmTile GetTile(int PosX, int PosY, int LayerIndex)

@@ -66,7 +66,7 @@ namespace ProjectEternity.Core.Attacks
         private bool _CanAttack;//Tell if an ennemy is in range.
 
         public List<string> ListQuoteSet;
-        public Dictionary<string, char> DicTerrainAttribute;
+        public Dictionary<byte, byte> DicRankByMovement;
 
         public MAPAttackAttributes MAPAttributes;
         public PERAttackAttributes PERAttributes;
@@ -86,15 +86,15 @@ namespace ProjectEternity.Core.Attacks
         {
             Animations = new List<AttackContext>();
             Animations.Add(new AttackContext());
-            DicTerrainAttribute = new Dictionary<string, char>();
-            DicTerrainAttribute.Add(UnitStats.TerrainLand, 'A');
-            DicTerrainAttribute.Add(UnitStats.TerrainAir, 'A');
-            DicTerrainAttribute.Add(UnitStats.TerrainSea, 'A');
-            DicTerrainAttribute.Add(UnitStats.TerrainSpace, 'A');
+            DicRankByMovement = new Dictionary<byte, byte>();
+            DicRankByMovement.Add(UnitStats.TerrainLandIndex, 1);
+            DicRankByMovement.Add(UnitStats.TerrainAirIndex, 1);
+            DicRankByMovement.Add(UnitStats.TerrainSeaIndex, 1);
+            DicRankByMovement.Add(UnitStats.TerrainSpaceIndex, 1);
         }
 
         public Attack(string Name, string Description, int Price, string PowerFormula, byte RangeMin, byte RangeMax, WeaponPrimaryProperty Pri, WeaponSecondaryProperty Sec,
-            sbyte Hit, sbyte Crit, byte AmmoMax, byte ENCost, byte MoraleRequirement, string Type, Dictionary<string, char> DicTerrainAttribute)
+            sbyte Hit, sbyte Crit, byte AmmoMax, byte ENCost, byte MoraleRequirement, string Type, Dictionary<byte, byte> DicTerrainAttribute)
             : base(Name, Description, Price)
         {
             ArrayAttackAttributes = new BaseAutomaticSkill[0];
@@ -109,11 +109,11 @@ namespace ProjectEternity.Core.Attacks
             this.ENCost = ENCost;
             this.MoraleRequirement = MoraleRequirement;
             this.AttackType = Type;
-            this.DicTerrainAttribute = DicTerrainAttribute;
+            this.DicRankByMovement = DicTerrainAttribute;
         }
 
         public Attack(Attack Weapon)
-            : this(Weapon.RelativePath, Weapon.Description, Weapon.Price, Weapon.PowerFormula, Weapon.RangeMinimum, Weapon.RangeMaximum, Weapon.Pri, Weapon.Sec, Weapon.Accuracy, Weapon.Critical, Weapon.MaxAmmo, Weapon.ENCost, Weapon.MoraleRequirement, Weapon.AttackType, Weapon.DicTerrainAttribute)
+            : this(Weapon.RelativePath, Weapon.Description, Weapon.Price, Weapon.PowerFormula, Weapon.RangeMinimum, Weapon.RangeMaximum, Weapon.Pri, Weapon.Sec, Weapon.Accuracy, Weapon.Critical, Weapon.MaxAmmo, Weapon.ENCost, Weapon.MoraleRequirement, Weapon.AttackType, Weapon.DicRankByMovement)
         {
         }
 
@@ -232,17 +232,12 @@ namespace ProjectEternity.Core.Attacks
                 Style = WeaponStyle.R;
             }
 
-            byte TerrainGradeAir = BR.ReadByte();
-            byte TerrainGradeLand = BR.ReadByte();
-            byte TerrainGradeSea = BR.ReadByte();
-            byte TerrainGradeSpace = BR.ReadByte();
-
-            char[] Grades = new char[6] { '-', 'S', 'A', 'B', 'C', 'D' };
-            DicTerrainAttribute = new Dictionary<string, char>(4);
-            DicTerrainAttribute.Add(UnitStats.TerrainAir, Grades[TerrainGradeAir]);
-            DicTerrainAttribute.Add(UnitStats.TerrainLand, Grades[TerrainGradeLand]);
-            DicTerrainAttribute.Add(UnitStats.TerrainSea, Grades[TerrainGradeSea]);
-            DicTerrainAttribute.Add(UnitStats.TerrainSpace, Grades[TerrainGradeSpace]);
+            int TerrainGradeCount = BR.ReadInt32();
+            DicRankByMovement = new Dictionary<byte, byte>(TerrainGradeCount);
+            for (int G = 0; G < TerrainGradeCount; ++G)
+            {
+                DicRankByMovement.Add(BR.ReadByte(), BR.ReadByte());
+            }
 
             int ListSecondaryAttackCount = BR.ReadInt32();
             ListSecondaryAttack = new List<Attack>(ListSecondaryAttackCount);
@@ -283,7 +278,7 @@ namespace ProjectEternity.Core.Attacks
                 ListQuoteSet.Add(BR.ReadString());
         }
 
-        public void UpdateAttack(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
+        public void UpdateAttack(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, byte TargetMovementType, bool CanMove)
         {
             if (CanAttackTarget(CurrentUnit, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TargetMovementType, CanMove))
             {
@@ -300,14 +295,14 @@ namespace ProjectEternity.Core.Attacks
             _CanAttack = false;
         }
 
-        private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
+        private bool CanAttackTarget(Unit CurrentUnit, Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, byte TargetMovementType, bool CanMove)
         {
             //If the Mech have enough EN to use the weapon and the weapon have enough ammo to fire.
             if (CurrentUnit.EN < ENCost || (Ammo <= 0 && MaxAmmo > 0)
                 || MoraleRequirement > CurrentUnit.PilotMorale)
                 return false;
 
-            if (!DicTerrainAttribute.ContainsKey(TargetMovementType) ||  DicTerrainAttribute[TargetMovementType] == '-')
+            if (!DicRankByMovement.ContainsKey(TargetMovementType) ||  DicRankByMovement[TargetMovementType] == '-')
                 return false;
 
             //Define the minimum and maximum value of the attack range.
@@ -456,9 +451,9 @@ namespace ProjectEternity.Core.Attacks
             return ItemName;
         }
 
-        public int TerrainAttribute(string Terrain)
+        public int TerrainAttribute(byte TerrainIndex)
         {
-            switch (DicTerrainAttribute[Terrain])
+            switch (Unit.Grades[DicRankByMovement[TerrainIndex]])
             {
                 case 'S':
                     return 20;

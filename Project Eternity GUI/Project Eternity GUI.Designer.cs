@@ -85,11 +85,12 @@
             this.cmsItemMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmNew = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmNewFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmClone = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmRename = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmProperties = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmClone = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmTerrainAndUnitTypes = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -172,7 +173,8 @@
             this.fileToolStripMenuItem,
             this.tsmUnitTester,
             this.tsmRosterEditor,
-            this.tsmSystemList});
+            this.tsmSystemList,
+            this.tsmTerrainAndUnitTypes});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(758, 24);
@@ -279,56 +281,63 @@
             this.tsmRename,
             this.tsmProperties});
             this.cmsItemMenu.Name = "cmsItemProperties";
-            this.cmsItemMenu.Size = new System.Drawing.Size(181, 180);
+            this.cmsItemMenu.Size = new System.Drawing.Size(133, 158);
             // 
             // tsmNew
             // 
             this.tsmNew.Name = "tsmNew";
-            this.tsmNew.Size = new System.Drawing.Size(180, 22);
+            this.tsmNew.Size = new System.Drawing.Size(132, 22);
             this.tsmNew.Text = "New";
             this.tsmNew.Click += new System.EventHandler(this.tsmNew_Click);
             // 
             // tsmNewFolder
             // 
             this.tsmNewFolder.Name = "tsmNewFolder";
-            this.tsmNewFolder.Size = new System.Drawing.Size(180, 22);
+            this.tsmNewFolder.Size = new System.Drawing.Size(132, 22);
             this.tsmNewFolder.Text = "New folder";
             this.tsmNewFolder.Click += new System.EventHandler(this.tsmNewFolder_Click);
+            // 
+            // tsmClone
+            // 
+            this.tsmClone.Name = "tsmClone";
+            this.tsmClone.Size = new System.Drawing.Size(132, 22);
+            this.tsmClone.Text = "Clone";
+            this.tsmClone.Click += new System.EventHandler(this.tsmClone_Click);
             // 
             // tsmEdit
             // 
             this.tsmEdit.Name = "tsmEdit";
-            this.tsmEdit.Size = new System.Drawing.Size(180, 22);
+            this.tsmEdit.Size = new System.Drawing.Size(132, 22);
             this.tsmEdit.Text = "Edit";
             this.tsmEdit.Click += new System.EventHandler(this.tsmEdit_Click);
             // 
             // tsmDelete
             // 
             this.tsmDelete.Name = "tsmDelete";
-            this.tsmDelete.Size = new System.Drawing.Size(180, 22);
+            this.tsmDelete.Size = new System.Drawing.Size(132, 22);
             this.tsmDelete.Text = "Delete";
             this.tsmDelete.Click += new System.EventHandler(this.tsmDelete_Click);
             // 
             // tsmRename
             // 
             this.tsmRename.Name = "tsmRename";
-            this.tsmRename.Size = new System.Drawing.Size(180, 22);
+            this.tsmRename.Size = new System.Drawing.Size(132, 22);
             this.tsmRename.Text = "Rename";
             this.tsmRename.Click += new System.EventHandler(this.tsmRename_Click);
             // 
             // tsmProperties
             // 
             this.tsmProperties.Name = "tsmProperties";
-            this.tsmProperties.Size = new System.Drawing.Size(180, 22);
+            this.tsmProperties.Size = new System.Drawing.Size(132, 22);
             this.tsmProperties.Text = "Properties";
             this.tsmProperties.Click += new System.EventHandler(this.tsmProperties_Click);
             // 
-            // tsmClone
+            // tsmTerrainAndUnitTypes
             // 
-            this.tsmClone.Name = "tsmClone";
-            this.tsmClone.Size = new System.Drawing.Size(180, 22);
-            this.tsmClone.Text = "Clone";
-            this.tsmClone.Click += new System.EventHandler(this.tsmClone_Click);
+            this.tsmTerrainAndUnitTypes.Name = "tsmTerrainAndUnitTypes";
+            this.tsmTerrainAndUnitTypes.Size = new System.Drawing.Size(134, 20);
+            this.tsmTerrainAndUnitTypes.Text = "Terrain and Unit Types";
+            this.tsmTerrainAndUnitTypes.Click += new System.EventHandler(this.tsmTerrainAndUnitTypes_Click);
             // 
             // GUI
             // 
@@ -375,6 +384,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmSystemList;
         public System.Windows.Forms.TreeView tvItems;
         private System.Windows.Forms.ToolStripMenuItem tsmClone;
+        private System.Windows.Forms.ToolStripMenuItem tsmTerrainAndUnitTypes;
     }
 }
 

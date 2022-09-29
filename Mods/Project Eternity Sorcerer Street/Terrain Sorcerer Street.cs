@@ -33,11 +33,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(XPos, YPos, LayerIndex, LayerDepth)
         {
             TerrainTypeIndex = 0;
-            MVMoveCost = 1;
             TerrainLevel = 0;
         }
         
-        public TerrainSorcererStreet(int XPos, int YPos, int LayerIndex, float LayerDepth, int TerrainTypeIndex)
+        public TerrainSorcererStreet(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
             : base(XPos, YPos, LayerIndex, LayerDepth)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;

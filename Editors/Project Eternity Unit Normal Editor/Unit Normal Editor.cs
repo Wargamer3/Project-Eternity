@@ -127,65 +127,37 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Write(frmAttacks.AttackUpgradesValueIndex);
             BW.Write(frmAttacks.AttackUpgradesCostIndex);
 
-            Dictionary<string, int> DicTerrainValue = new Dictionary<string, int>();
-            DicTerrainValue.Add(UnitStats.TerrainAir, 0);
-            DicTerrainValue.Add(UnitStats.TerrainLand, 0);
-            DicTerrainValue.Add(UnitStats.TerrainSea, 0);
-            DicTerrainValue.Add(UnitStats.TerrainSpace, 0);
-            if (cbTerrainAir.SelectedIndex >= 0)
+            List<Tuple<byte, byte>> ListRankByMovement = new List<Tuple<byte, byte>>();
+            foreach (DataGridViewRow ActiveRow in dgvTerrainRanks.Rows)
             {
-                DicTerrainValue[UnitStats.TerrainAir] = cbTerrainAir.SelectedIndex;
-            }
-            if (cbTerrainLand.SelectedIndex >= 0)
-            {
-                DicTerrainValue[UnitStats.TerrainLand] = cbTerrainLand.SelectedIndex;
-            }
-            if (cbTerrainSea.SelectedIndex >= 0)
-            {
-                DicTerrainValue[UnitStats.TerrainSea] = cbTerrainSea.SelectedIndex;
-            }
-            if (cbTerrainSpace.SelectedIndex >= 0)
-            {
-                DicTerrainValue[UnitStats.TerrainSpace] = cbTerrainSpace.SelectedIndex;
+                if (ActiveRow.Cells[1].Value != null)
+                {
+                    ListRankByMovement.Add(new Tuple<byte, byte>((byte)UnitAndTerrainValues.Default.ListUnitMovement.IndexOf(UnitAndTerrainValues.Default.ListUnitMovement.Find(x => x.Name == ActiveRow.Cells[0].Value.ToString())),
+                        (byte)Unit.ListRank.IndexOf(ActiveRow.Cells[1].Value.ToString()[0])));
+                }
             }
 
-            BW.Write(DicTerrainValue.Count);
-            foreach (KeyValuePair<string, int> TerrainValue in DicTerrainValue)
+            BW.Write(ListRankByMovement.Count);
+            foreach (Tuple<byte, byte> ActiveRankByMovement in ListRankByMovement)
             {
-                BW.Write(TerrainValue.Key);
-                BW.Write(TerrainValue.Value);
+                BW.Write(ActiveRankByMovement.Item1);
+                BW.Write(ActiveRankByMovement.Item2);
             }
 
-            List<string> UnitMovements = new List<string>();
-            if (cboMovementAir.Checked)
-                UnitMovements.Add(UnitStats.TerrainAir);
-            if (cboMovementLand.Checked)
-                UnitMovements.Add(UnitStats.TerrainLand);
-            if (cboMovementSea.Checked)
-                UnitMovements.Add(UnitStats.TerrainSea);
-            if (cboMovementSpace.Checked)
-                UnitMovements.Add(UnitStats.TerrainSpace);
-            if (cboMovementUnderground.Checked)
-                UnitMovements.Add(UnitStats.TerrainUnderground);
-            if (cboMovementUnderwater.Checked)
-                UnitMovements.Add(UnitStats.TerrainUnderwater);
-
-            BW.Write(UnitMovements.Count);
-            for (int i = 0; i < UnitMovements.Count; i++)
-                BW.Write(UnitMovements[i]);
+            BW.Write((byte)cbUnitType.SelectedIndex);
 
             if (rbSizeLLL.Checked)
-                BW.Write("LLL");
+                BW.Write((byte)UnitStats.ListUnitSize.IndexOf(UnitStats.UnitSizeLLL));
             else if (rbSizeLL.Checked)
-                BW.Write("LL");
+                BW.Write((byte)UnitStats.ListUnitSize.IndexOf(UnitStats.UnitSizeLL));
             else if (rbSizeL.Checked)
-                BW.Write("L");
+                BW.Write((byte)UnitStats.ListUnitSize.IndexOf(UnitStats.UnitSizeL));
             else if (rbSizeM.Checked)
-                BW.Write("M");
+                BW.Write((byte)UnitStats.ListUnitSize.IndexOf(UnitStats.UnitSizeM));
             else if (rbSizeS.Checked)
-                BW.Write("S");
+                BW.Write((byte)UnitStats.ListUnitSize.IndexOf(UnitStats.UnitSizeS));
             else if (rbSizeSS.Checked)
-                BW.Write("SS");
+                BW.Write((byte)UnitStats.ListUnitSize.IndexOf(UnitStats.UnitSizeSS));
 
             if (frmUnitSizeEditor.rbNone.Checked)
             {
@@ -386,36 +358,52 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             txtReMoveLevel.Value = LoadedUnit.UnitStat.ReMoveLevel;
             txtChargeCancelLevel.Value = LoadedUnit.UnitStat.ChargedAttackCancelLevel;
 
-            List<char> Grades = new List<char> { '-', 'S', 'A', 'B', 'C', 'D' };
-            cbTerrainAir.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainAir];
-            cbTerrainLand.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainLand];
-            cbTerrainSea.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainSea];
-            cbTerrainSpace.SelectedIndex = LoadedUnit.DicTerrainValue[UnitStats.TerrainSpace];
+            for (byte M = 0; M < UnitAndTerrainValues.Default.ListUnitMovement.Count; M++)
+            {
+                UnitMovementType ActiveMovement = UnitAndTerrainValues.Default.ListUnitMovement[M];
+                int NewRowIndex = dgvTerrainRanks.Rows.Add();
 
-            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-                cboMovementAir.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
-                cboMovementLand.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
-                cboMovementSea.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
-                cboMovementSpace.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainUnderground))
-                cboMovementUnderground.Checked = true;
-            if (LoadedUnit.ListTerrainChoices.Contains(UnitStats.TerrainUnderwater))
-                cboMovementUnderwater.Checked = true;
+                DataGridViewComboBoxCell MovementCell = new DataGridViewComboBoxCell();
+                DataGridViewComboBoxCell RankCell = new DataGridViewComboBoxCell();
 
-            if (LoadedUnit.Size == UnitStats.UnitSizeLLL)
+                foreach (UnitMovementType ActiveMovementChoice in UnitAndTerrainValues.Default.ListUnitMovement)
+                {
+                    MovementCell.Items.Add(ActiveMovementChoice.Name);
+                }
+                foreach (char ActiveRank in Unit.ListRank)
+                {
+                    RankCell.Items.Add(ActiveRank);
+                }
+
+                MovementCell.Value = ActiveMovement.Name;
+
+                if (LoadedUnit.DicRankByMovement.ContainsKey(M))
+                {
+                    RankCell.Value = Unit.ListRank[LoadedUnit.DicRankByMovement[M]];
+                }
+
+                dgvTerrainRanks.Rows[NewRowIndex].Cells[0] = MovementCell;
+                dgvTerrainRanks.Rows[NewRowIndex].Cells[1] = RankCell;
+            }
+
+            foreach (string ActiveUnitType in UnitAndTerrainValues.Default.ListUnitType)
+            {
+                cbUnitType.Items.Add(ActiveUnitType);
+            }
+
+            cbUnitType.SelectedIndex = 0;
+
+            if (UnitStats.ListUnitSize[LoadedUnit.SizeIndex] == UnitStats.UnitSizeLLL)
                 rbSizeLLL.Checked = true;
-            else if (LoadedUnit.Size == UnitStats.UnitSizeLL)
+            else if (UnitStats.ListUnitSize[LoadedUnit.SizeIndex] == UnitStats.UnitSizeLL)
                 rbSizeLL.Checked = true;
-            else if (LoadedUnit.Size == UnitStats.UnitSizeL)
+            else if (UnitStats.ListUnitSize[LoadedUnit.SizeIndex] == UnitStats.UnitSizeL)
                 rbSizeL.Checked = true;
-            else if (LoadedUnit.Size == UnitStats.UnitSizeM)
+            else if (UnitStats.ListUnitSize[LoadedUnit.SizeIndex] == UnitStats.UnitSizeM)
                 rbSizeM.Checked = true;
-            else if (LoadedUnit.Size == UnitStats.UnitSizeS)
+            else if (UnitStats.ListUnitSize[LoadedUnit.SizeIndex] == UnitStats.UnitSizeS)
                 rbSizeS.Checked = true;
-            else if (LoadedUnit.Size == UnitStats.UnitSizeSS)
+            else if (UnitStats.ListUnitSize[LoadedUnit.SizeIndex] == UnitStats.UnitSizeSS)
                 rbSizeSS.Checked = true;
 
             if (LoadedUnit.UnitStat.ArrayMapSize.GetLength(0) == 1 && LoadedUnit.UnitStat.ArrayMapSize.GetLength(1) == 1)
@@ -503,36 +491,12 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             ExportIniFile.AddValue("Unit Stats", "AttackUpgradesValueIndex", frmAttacks.AttackUpgradesValueIndex.ToString());
             ExportIniFile.AddValue("Unit Stats", "AttackUpgradesCostIndex", frmAttacks.AttackUpgradesCostIndex.ToString());
 
-            if (cbTerrainAir.SelectedIndex >= 0)
+            foreach (DataGridViewRow TerrainValue in dgvTerrainRanks.Rows)
             {
-                ExportIniFile.AddValue("Unit Terrain", UnitStats.TerrainAir, cbTerrainAir.Text);
-            }
-            if (cbTerrainLand.SelectedIndex >= 0)
-            {
-                ExportIniFile.AddValue("Unit Terrain", UnitStats.TerrainLand, cbTerrainLand.Text);
-            }
-            if (cbTerrainSea.SelectedIndex >= 0)
-            {
-                ExportIniFile.AddValue("Unit Terrain", UnitStats.TerrainSea, cbTerrainSea.Text);
-            }
-            if (cbTerrainSpace.SelectedIndex >= 0)
-            {
-                ExportIniFile.AddValue("Unit Terrain", UnitStats.TerrainSpace, cbTerrainSpace.Text);
+                ExportIniFile.AddValue("Unit Terrain", (string)TerrainValue.Cells[0].Value, (string)TerrainValue.Cells[1].Value);
             }
 
-            List<string> UnitMovements = new List<string>();
-            if (cboMovementAir.Checked)
-                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainAir, "");
-            if (cboMovementLand.Checked)
-                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainLand, "");
-            if (cboMovementSea.Checked)
-                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainSea, "");
-            if (cboMovementSpace.Checked)
-                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainSpace, "");
-            if (cboMovementUnderground.Checked)
-                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainUnderground, "");
-            if (cboMovementUnderwater.Checked)
-                ExportIniFile.AddValue("Unit Movements", UnitStats.TerrainUnderwater, "");
+            ExportIniFile.AddValue("Unit Stats", "Movement Type", cbUnitType.Text);
 
             if (rbSizeLLL.Checked)
                 ExportIniFile.AddValue("Unit Stats", "Size", "LLL");

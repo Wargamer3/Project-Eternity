@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public static string Name = "Unit Terrain Effect";
 
-        private string _Terrain;
+        private byte _TerrainIndex;
         private Operators.NumberTypes _NumberType;
         private string _Value;
         private bool _CanDowngrade;
@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override void Load(BinaryReader BR)
         {
-            _Terrain = BR.ReadString();
+            _TerrainIndex = BR.ReadByte();
             _NumberType = (Operators.NumberTypes)BR.ReadByte();
             _Value = BR.ReadString();
             _CanDowngrade = BR.ReadBoolean();
@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override void Save(BinaryWriter BW)
         {
-            BW.Write(_Terrain);
+            BW.Write(_TerrainIndex);
             BW.Write((byte)_NumberType);
             BW.Write(_Value);
             BW.Write(_CanDowngrade);
@@ -76,28 +76,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (_CanDowngrade)
                 {
-                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = FinalValue;
+                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex] = FinalValue;
                 }
-                else if (FinalValue < Params.LocalContext.EffectTargetUnit.DicTerrainValue[_Terrain])
+                else if (FinalValue < Params.LocalContext.EffectTargetUnit.DicRankByMovement[_TerrainIndex])
                 {
-                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = Math.Max(Params.LocalContext.EffectTargetUnit.DicTerrainValue[_Terrain], FinalValue);
+                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex] = Math.Max(Params.LocalContext.EffectTargetUnit.DicRankByMovement[_TerrainIndex], FinalValue);
                 }
 
-                return "Absolute - " + _Terrain + " - " + (_CanDowngrade ? "Downgradable - " : "")
-                    + Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain]
+                return "Absolute - " + _TerrainIndex + " - " + (_CanDowngrade ? "Downgradable - " : "")
+                    + Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex]
                     + ExtraText;
             }
             else if (NumberType == Operators.NumberTypes.Relative)
             {
-                Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = Math.Min(Unit.Grades.Length, Math.Max(0, Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] + FinalValue));
+                Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex] = Math.Min(Unit.Grades.Length, Math.Max(0, Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex] + FinalValue));
 
-                return "Absolute - " + _Terrain + " - " + (_CanDowngrade ? "Downgradable - " : "")
-                    + Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain]
+                return "Absolute - " + _TerrainIndex + " - " + (_CanDowngrade ? "Downgradable - " : "")
+                    + Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex]
                     + ExtraText;
             }
 
-            return _Terrain + " - " + (_CanDowngrade ? "Downgradable - " : "")
-                + Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain]
+            return _TerrainIndex + " - " + (_CanDowngrade ? "Downgradable - " : "")
+                + Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex]
                 + ExtraText;
         }
 
@@ -107,16 +107,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (_CanDowngrade)
                 {
-                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = LastEvaluationResult;
+                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex] = LastEvaluationResult;
                 }
-                else if (LastEvaluationResult < Params.LocalContext.EffectTargetUnit.DicTerrainValue[_Terrain])
+                else if (LastEvaluationResult < Params.LocalContext.EffectTargetUnit.DicRankByMovement[_TerrainIndex])
                 {
-                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = Math.Max(Params.LocalContext.EffectTargetUnit.DicTerrainValue[_Terrain], LastEvaluationResult);
+                    Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex] = Math.Max(Params.LocalContext.EffectTargetUnit.DicRankByMovement[_TerrainIndex], LastEvaluationResult);
                 }
             }
             else if (NumberType == Operators.NumberTypes.Relative)
             {
-                Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] = Math.Min(Unit.Grades.Length, Math.Max(0, Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_Terrain] + LastEvaluationResult));
+                Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex] = Math.Min(Unit.Grades.Length, Math.Max(0, Params.LocalContext.EffectTargetUnit.Boosts.DicTerrainLetterAttributeModifier[_TerrainIndex] + LastEvaluationResult));
             }
         }
 
@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             UnitTerrainEffect NewEffect = new UnitTerrainEffect(Params);
 
-            NewEffect._Terrain = _Terrain;
+            NewEffect._TerrainIndex = _TerrainIndex;
             NewEffect._NumberType = _NumberType;
             NewEffect._Value = _Value;
             NewEffect._CanDowngrade = _CanDowngrade;
@@ -136,7 +136,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             UnitTerrainEffect NewEffect = (UnitTerrainEffect)Copy;
 
-            _Terrain = NewEffect._Terrain;
+            _TerrainIndex = NewEffect._TerrainIndex;
             _NumberType = NewEffect._NumberType;
             _Value = NewEffect._Value;
             _CanDowngrade = NewEffect._CanDowngrade;
@@ -162,10 +162,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         [CategoryAttribute("Effect Attributes"),
         DescriptionAttribute(".")]
-        public string Terrain
+        public byte Terrain
         {
-            get { return _Terrain; }
-            set { _Terrain = value; }
+            get { return _TerrainIndex; }
+            set { _TerrainIndex = value; }
         }
 
         [CategoryAttribute("Effect Attributes"),

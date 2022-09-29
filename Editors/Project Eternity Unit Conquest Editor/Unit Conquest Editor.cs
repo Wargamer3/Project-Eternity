@@ -79,7 +79,8 @@ namespace ProjectEternity.Editors.UnitConquestEditor
 
             this.Text = LoadedUnit.RelativePath + " - Project Eternity Conquest Unit Editor";
 
-            cbMovementType.Text = LoadedUnit.ListTerrainChoices[0];
+            cbMovementType.SelectedItem = LoadedUnit.MovementType;
+            cbArmourType.SelectedItem = LoadedUnit.ArmourType;
             txtHP.Value = LoadedUnit.MaxHP / 10;
             txtMovement.Value = LoadedUnit.MaxMovement;
             txtAmmo.Value = LoadedUnit.Ammo;

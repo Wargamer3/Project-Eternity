@@ -52,13 +52,27 @@
     <Compile Include="System List Editor.Designer.cs">
       <DependentUpon>System List Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Terrain and Unit Types Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Terrain and Unit Types Editor.Designer.cs">
+      <DependentUpon>Terrain and Unit Types Editor.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="System List Editor.resx">
       <DependentUpon>System List Editor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Terrain and Unit Types Editor.resx">
+      <DependentUpon>Terrain and Unit Types Editor.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
       <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
       <Name>Project Eternity Base Editor</Name>

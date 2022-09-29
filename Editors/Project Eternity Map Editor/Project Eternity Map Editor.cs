@@ -1279,7 +1279,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                 {
                                     Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, lsLayers.SelectedIndex, 0,
-                                       0, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
+                                       0, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
                                        0, true);
 
                                     Helper.ReplaceTile(X, Y, 

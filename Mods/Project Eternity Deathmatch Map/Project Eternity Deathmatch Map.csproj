@@ -103,10 +103,6 @@
     <Compile Include="Acion Panels\Player Behavior\Human Step.cs" />
     <Compile Include="Acion Panels\Player Behavior\Pre Phase AI Step.cs" />
     <Compile Include="Acion Panels\Player Choices\Main.cs" />
-    <Compile Include="Acion Panels\Player Choices\Change Movement Type\Dig.cs" />
-    <Compile Include="Acion Panels\Player Choices\Change Movement Type\Dive.cs" />
-    <Compile Include="Acion Panels\Player Choices\Change Movement Type\Fly.cs" />
-    <Compile Include="Acion Panels\Player Choices\Change Movement Type\Land.cs" />
     <Compile Include="Acion Panels\Player Choices\Formation.cs" />
     <Compile Include="Acion Panels\Player Choices\Jump.cs" />
     <Compile Include="Acion Panels\Vehicle\Control Vehicle.cs" />

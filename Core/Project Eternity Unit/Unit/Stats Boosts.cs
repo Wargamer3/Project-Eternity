@@ -75,7 +75,7 @@ namespace ProjectEternity.Core.Units
         public float ArmorMultiplier;
         public float MobilityMultiplier;
         public float MVMaxMultiplier;
-        public Dictionary<string, int> DicTerrainLetterAttributeModifier;
+        public Dictionary<byte, int> DicTerrainLetterAttributeModifier;
 
         public int AccuracyModifier;
         public int AccuracyFixedModifier;//Give a fixed accuracy value.
@@ -89,7 +89,7 @@ namespace ProjectEternity.Core.Units
             PostAttackModifier = new PostActionValue();
             ParryModifier = new List<string>();
             NullifyAttackModifier = new List<string>();
-            DicTerrainLetterAttributeModifier = new Dictionary<string, int>();
+            DicTerrainLetterAttributeModifier = new Dictionary<byte, int>();
             SupportAttackModifier = 0;
             SupportDefendModifier = 0;
             Reset();
@@ -151,9 +151,9 @@ namespace ProjectEternity.Core.Units
             MobilityMultiplier = 1;
             MVMaxMultiplier = 1;
 
-            Dictionary<string, int> DicTerrainLetterAttributeModifierCopy = new Dictionary<string, int>(DicTerrainLetterAttributeModifier.Count);
+            Dictionary<byte, int> DicTerrainLetterAttributeModifierCopy = new Dictionary<byte, int>(DicTerrainLetterAttributeModifier.Count);
 
-            foreach (var Terrain in DicTerrainLetterAttributeModifier)
+            foreach (KeyValuePair<byte, int> Terrain in DicTerrainLetterAttributeModifier)
             {
                 DicTerrainLetterAttributeModifierCopy.Add(Terrain.Key, 0);
             }
@@ -250,7 +250,7 @@ namespace ProjectEternity.Core.Units
             BW.Write(MVMaxMultiplier);
 
             BW.Write(DicTerrainLetterAttributeModifier.Count);
-            foreach (KeyValuePair<string, int> ActiveTerrain in DicTerrainLetterAttributeModifier)
+            foreach (KeyValuePair<byte, int> ActiveTerrain in DicTerrainLetterAttributeModifier)
             {
                 BW.Write(ActiveTerrain.Key);
                 BW.Write(ActiveTerrain.Value);
@@ -345,10 +345,10 @@ namespace ProjectEternity.Core.Units
             MVMaxMultiplier = BR.ReadSingle();
 
             int DicTerrainLetterAttributeModifierCount = BR.ReadInt32();
-            DicTerrainLetterAttributeModifier = new Dictionary<string, int>(DicTerrainLetterAttributeModifierCount);
+            DicTerrainLetterAttributeModifier = new Dictionary<byte, int>(DicTerrainLetterAttributeModifierCount);
             for (int T = 0; T < DicTerrainLetterAttributeModifierCount; ++T)
             {
-                DicTerrainLetterAttributeModifier.Add(BR.ReadString(), BR.ReadInt32());
+                DicTerrainLetterAttributeModifier.Add(BR.ReadByte(), BR.ReadInt32());
             }
 
             AccuracyModifier = BR.ReadInt32();

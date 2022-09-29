@@ -213,9 +213,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             for (int S = Map.ListPlayer[ActivePlayerIndex].ListSquad.Count - 1; S >= 0; --S)
             {
-                if (Map.ListPlayer[ActivePlayerIndex].ListSquad[S].Speed != Vector3.Zero
-                    || (Map.ListPlayer[ActivePlayerIndex].ListSquad[S].CurrentMovement == Core.Units.UnitStats.TerrainAir
-                            && !Map.ListPlayer[ActivePlayerIndex].ListSquad[S].IsFlying))
+                if (Map.ListPlayer[ActivePlayerIndex].ListSquad[S].Speed != Vector3.Zero)
                 {
                     Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelAutoMove(Map));
                     return;

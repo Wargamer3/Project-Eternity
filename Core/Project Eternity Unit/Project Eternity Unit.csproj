@@ -81,8 +81,17 @@
     <Compile Include="Squad.cs" />
     <Compile Include="Standard Parts.cs" />
     <Compile Include="Map Components.cs" />
+    <Compile Include="Terrain\DataGridValue.cs" />
+    <Compile Include="Terrain\Restrictions\ITerrainRestriction.cs" />
+    <Compile Include="Terrain\Terrain Type.cs" />
+    <Compile Include="Terrain\UnitAndTerrainValues.cs" />
+    <Compile Include="Terrain\Restrictions\Unit Rank Restriction.cs" />
+    <Compile Include="Terrain\Restrictions\Unit Size Restriction.cs" />
+    <Compile Include="Terrain\Restrictions\Unit Type Restriction.cs" />
+    <Compile Include="Terrain\Unit Movement Type.cs" />
     <Compile Include="UnitMap3D.cs" />
     <Compile Include="Unit\Stats Boosts.cs" />
+    <Compile Include="Terrain\Restrictions\Tag Restriction.cs" />
     <Compile Include="Unit\Unit Stats.cs" />
     <Compile Include="Unit\Unit Map.cs" />
     <Compile Include="Unit\Unit.cs" />

@@ -9,10 +9,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public readonly int LayerIndex;
         public readonly float LayerDepth;
         public float Height;
-        public int MVEnterCost;//How much energy is required to enter in it.
-        public int MVMoveCost;//How much energy is required to move in it.
+        public bool PreventLeavingUpward;
+        public bool PreventLeavingDownward;
+        public bool PreventLeavingLeft;
+        public bool PreventLeavingRight;
         public float MovementCost;//How much energy required to move there.
-        public int TerrainTypeIndex;//What kind of terrain it is.
+        public byte TerrainTypeIndex;//What kind of terrain it is.
         public BattleMap Owner;
         public DrawableTile DrawableTile;//Used to know the type of slope.
 

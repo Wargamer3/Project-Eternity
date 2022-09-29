@@ -37,6 +37,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public Vector3 LastPosition;
         public List<Player> ListPlayer;
         public MovementAlgorithm Pathfinder;
+        public List<string> ListTerrainType;
 
         public ConquestMap()
         {
@@ -1102,7 +1103,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
 
         public int GetSquadMaxMovement(UnitConquest ActiveUnit)
         {
-            if (ActiveUnit.CurrentMovement == "Air")
+            if (ActiveUnit.CurrentMovement == UnitStats.TerrainAirIndex)
             {
                 int StartingMV = Math.Min(ActiveUnit.MaxMovement, ActiveUnit.EN);//Maximum distance you can reach.
 
@@ -1123,8 +1124,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             if (ActiveUnit.Position != LastPosition && ActiveTerrain.CapturePoints > 0)
                 ActiveTerrain.CapturePoints = 20;
 
-            if (!ActiveUnit.IsFlying)
-                ActiveUnit.CurrentMovement = ListTerrainType[ActiveTerrain.TerrainTypeIndex];
+            ActiveUnit.CurrentMovement = ActiveTerrain.TerrainTypeIndex;
 
             //Make it so it can't move anymore.
             ActiveUnit.EndTurn();
@@ -1204,21 +1204,11 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
 
-        public string GetTerrainType(float PosX, float PosY, int LayerIndex)
-        {
-            return GetTerrainType(GetTerrain((int)PosX, (int)PosY, LayerIndex).TerrainTypeIndex);
-        }
-
-        public override string GetTerrainType(int TerrainTypeIndex)
-        {
-            return ListTerrainType[TerrainTypeIndex];
-        }
-
         public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
 
-            string CurrentTerrainType = GetTerrainType(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, (int)StartingPosition.LayerIndex);
+            byte CurrentTerrainType = GetTerrain((int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y, (int)StartingPosition.LayerIndex).TerrainTypeIndex;
             float CurrentZ = StartingPosition.WorldPosition.Z + StartingPosition.LayerIndex;
 
             int ClosestLayerIndexDown = -1;
@@ -1231,13 +1221,13 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 MapLayer ActiveLayer = ListLayer[L];
                 Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
-                string NextTerrainType = GetTerrainType(NextX, NextY, L);
+                byte NextTerrainType = GetTerrain(NextX, NextY, L).TerrainTypeIndex;
                 float NextTerrainZ = NextTerrain.WorldPosition.Z + L;
 
                 //Check lower or higher neighbors if on solid ground
-                if (CurrentTerrainType != UnitStats.TerrainAir && CurrentTerrainType != UnitStats.TerrainVoid)
+                if (CurrentTerrainType != UnitStats.TerrainAirIndex && CurrentTerrainType != UnitStats.TerrainVoidIndex)
                 {
-                    if (NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid)
+                    if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex)
                     {
                         //Prioritize going downward
                         if (NextTerrainZ <= CurrentZ)
@@ -1343,12 +1333,12 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 MapLayer ActiveLayer = ListLayer[L];
                 Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
 
-                string NextTerrainType = GetTerrainType(NextX, NextX, L);
+                byte NextTerrainType = GetTerrain(NextX, NextX, L).TerrainTypeIndex;
                 float NextTerrainZ = ActiveTerrain.WorldPosition.Z + L;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
-                if (NextTerrainType != UnitStats.TerrainAir && NextTerrainType != UnitStats.TerrainVoid && ZDiff < MaxClearance)
+                if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex && ZDiff < MaxClearance)
                 {
                     return false;
                 }

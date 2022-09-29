@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    int TerrainTypeIndex = BR.ReadInt32();
+                    byte TerrainTypeIndex = BR.ReadByte();
 
                     switch (Map.ListTerrainType[TerrainTypeIndex])
                     {

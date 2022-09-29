@@ -453,32 +453,31 @@ namespace ProjectEternity.Editors.UnitTester
                                 txtAttackerArmor.Value = NewUnit.Armor;
                                 txtAttackerMobility.Value = NewUnit.Mobility;
 
-                                List<char> Grades = new List<char> { '-', 'S', 'A', 'B', 'C', 'D' };
-                                cbAttackerTerrainAir.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainAir];
-                                cbAttackerTerrainLand.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainLand];
-                                cbAttackerTerrainSea.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainSea];
-                                cbAttackerTerrainSpace.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainSpace];
+                                cbAttackerTerrainAir.SelectedIndex = NewUnit.DicRankByMovement[UnitStats.TerrainAirIndex];
+                                cbAttackerTerrainLand.SelectedIndex = NewUnit.DicRankByMovement[UnitStats.TerrainLandIndex];
+                                cbAttackerTerrainSea.SelectedIndex = NewUnit.DicRankByMovement[UnitStats.TerrainSeaIndex];
+                                cbAttackerTerrainSpace.SelectedIndex = NewUnit.DicRankByMovement[UnitStats.TerrainSpaceIndex];
 
-                                if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
+                                if (NewUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
                                     rbAttackerMovementAir.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
+                                else if (NewUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainLandIndex))
                                     rbAttackerMovementLand.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
+                                else if (NewUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainSeaIndex))
                                     rbAttackerMovementSea.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
+                                else if (NewUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainSpaceIndex))
                                     rbAttackerMovementSpace.Checked = true;
 
-                                if (NewUnit.Size == UnitStats.UnitSizeLLL)
+                                if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeLLL)
                                     rbAttackerSizeLLL.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeLL)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeLL)
                                     rbAttackerSizeLL.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeL)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeL)
                                     rbAttackerSizeL.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeM)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeM)
                                     rbAttackerSizeM.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeS)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeS)
                                     rbAttackerSizeS.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeSS)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeSS)
                                     rbAttackerSizeSS.Checked = true;
                             }
                             else if (tabControl1.SelectedIndex == 1)//Defender
@@ -490,31 +489,31 @@ namespace ProjectEternity.Editors.UnitTester
                                 txtDefenderArmor.Value = NewUnit.Armor;
                                 txtDefenderMobility.Value = NewUnit.Mobility;
                                 
-                                cbDefenderTerrainAir.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainAir];
-                                cbDefenderTerrainLand.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainLand];
-                                cbDefenderTerrainSea.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainSea];
-                                cbDefenderTerrainSpace.SelectedIndex = NewUnit.DicTerrainValue[UnitStats.TerrainSpace];
+                                cbDefenderTerrainAir.SelectedIndex = NewUnit.DicRankByMovement[UnitStats.TerrainAirIndex];
+                                cbDefenderTerrainLand.SelectedIndex = NewUnit.DicRankByMovement[UnitStats.TerrainLandIndex];
+                                cbDefenderTerrainSea.SelectedIndex = NewUnit.DicRankByMovement[UnitStats.TerrainSeaIndex];
+                                cbDefenderTerrainSpace.SelectedIndex = NewUnit.DicRankByMovement[UnitStats.TerrainSpaceIndex];
 
-                                if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainAir))
+                                if (NewUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
                                     rbDefenderMovementAir.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainLand))
+                                else if (NewUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainLandIndex))
                                     rbDefenderMovementLand.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSea))
+                                else if (NewUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainSeaIndex))
                                     rbDefenderMovementSea.Checked = true;
-                                else if (NewUnit.ListTerrainChoices.Contains(UnitStats.TerrainSpace))
+                                else if (NewUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainSpaceIndex))
                                     rbDefenderMovementSpace.Checked = true;
 
-                                if (NewUnit.Size == UnitStats.UnitSizeLLL)
+                                if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeLLL)
                                     rbDefenderSizeLLL.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeLL)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeLL)
                                     rbDefenderSizeLL.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeL)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeL)
                                     rbDefenderSizeL.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeM)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeM)
                                     rbAttackerSizeM.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeS)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeS)
                                     rbDefenderSizeS.Checked = true;
-                                else if (NewUnit.Size == UnitStats.UnitSizeSS)
+                                else if (UnitStats.ListUnitSize[NewUnit.SizeIndex] == UnitStats.UnitSizeSS)
                                     rbDefenderSizeSS.Checked = true;
                             }
                         }
@@ -540,10 +539,10 @@ namespace ProjectEternity.Editors.UnitTester
                             txtAttackerPilotHIT.Value = NewPilot.HIT;
                             txtAttackerPilotMorale.Value = 100;
                             
-                            cbAttackerAirRank.SelectedIndex = ListGrade.IndexOf(NewPilot.TerrainGrade.TerrainGradeAir);
-                            cbAttackerLandRank.SelectedIndex = ListGrade.IndexOf(NewPilot.TerrainGrade.TerrainGradeLand);
-                            cbAttackerSeaRank.SelectedIndex = ListGrade.IndexOf(NewPilot.TerrainGrade.TerrainGradeSea);
-                            cbAttackerSpaceRank.SelectedIndex = ListGrade.IndexOf(NewPilot.TerrainGrade.TerrainGradeSpace);
+                            cbAttackerAirRank.SelectedIndex = NewPilot.DicRankByMovement[UnitStats.TerrainAirIndex];
+                            cbAttackerLandRank.SelectedIndex = NewPilot.DicRankByMovement[UnitStats.TerrainLandIndex];
+                            cbAttackerSeaRank.SelectedIndex = NewPilot.DicRankByMovement[UnitStats.TerrainSeaIndex];
+                            cbAttackerSpaceRank.SelectedIndex = NewPilot.DicRankByMovement[UnitStats.TerrainSpaceIndex];
                         }
                         else if (tabControl1.SelectedIndex == 1)//Defender
                         {
@@ -555,10 +554,10 @@ namespace ProjectEternity.Editors.UnitTester
                             txtDefenderPilotHIT.Value = NewPilot.HIT;
 
 
-                            cbDefenderAirRank.SelectedIndex = ListGrade.IndexOf(NewPilot.TerrainGrade.TerrainGradeAir);
-                            cbDefenderLandRank.SelectedIndex = ListGrade.IndexOf(NewPilot.TerrainGrade.TerrainGradeLand);
-                            cbDefenderSeaRank.SelectedIndex = ListGrade.IndexOf(NewPilot.TerrainGrade.TerrainGradeSea);
-                            cbDefenderSpaceRank.SelectedIndex = ListGrade.IndexOf(NewPilot.TerrainGrade.TerrainGradeSpace);
+                            cbDefenderAirRank.SelectedIndex = NewPilot.DicRankByMovement[UnitStats.TerrainAirIndex];
+                            cbDefenderLandRank.SelectedIndex = NewPilot.DicRankByMovement[UnitStats.TerrainLandIndex];
+                            cbDefenderSeaRank.SelectedIndex = NewPilot.DicRankByMovement[UnitStats.TerrainSeaIndex];
+                            cbDefenderSpaceRank.SelectedIndex = NewPilot.DicRankByMovement[UnitStats.TerrainSpaceIndex];
                         }
                         break;
 
@@ -578,10 +577,10 @@ namespace ProjectEternity.Editors.UnitTester
                         else if (NewWeapon.Style == WeaponStyle.R)
                             rbWeaponRange.Checked = true;
 
-                        cbWeaponAirRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute[UnitStats.TerrainAir]);
-                        cbWeaponLandRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute[UnitStats.TerrainLand]);
-                        cbWeaponSeaRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute[UnitStats.TerrainSea]);
-                        cbWeaponSpaceRank.SelectedIndex = ListGrade.IndexOf(NewWeapon.DicTerrainAttribute[UnitStats.TerrainSpace]);
+                        cbWeaponAirRank.SelectedIndex = NewWeapon.DicRankByMovement[UnitStats.TerrainAirIndex];
+                        cbWeaponLandRank.SelectedIndex = NewWeapon.DicRankByMovement[UnitStats.TerrainLandIndex];
+                        cbWeaponSeaRank.SelectedIndex = NewWeapon.DicRankByMovement[UnitStats.TerrainSeaIndex];
+                        cbWeaponSpaceRank.SelectedIndex = NewWeapon.DicRankByMovement[UnitStats.TerrainSpaceIndex];
                         break;
 
                         #endregion

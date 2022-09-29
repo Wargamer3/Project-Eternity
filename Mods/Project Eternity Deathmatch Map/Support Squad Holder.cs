@@ -57,10 +57,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     int SquadIndex = Map.CheckForSquadAtPosition(ActivePlayerIndex, AttackingSquad.Position, new Microsoft.Xna.Framework.Vector3(X, Y, 0));
 
-                    //Can't support if the attacking unit is flying and the support can't fly.
+                    //Can't support if the support can't enter the same terrain as the attacker, supporter will be visible in the battle animation.
                     if (SquadIndex >= 0 && ActivePlayer.ListSquad[SquadIndex].CurrentLeader.Boosts.SupportAttackModifier > 0
-                        && (!AttackingSquad.IsFlying
-                            || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir)))
+                        && Map.TerrainRestrictions.CanMove(ActivePlayer.ListSquad[SquadIndex], ActivePlayer.ListSquad[SquadIndex].CurrentLeader.UnitStat, AttackingSquad.CurrentTerrainIndex))
                     {
                         if (!ActivePlayer.ListSquad[SquadIndex].CanMove || ActivePlayer.ListSquad[SquadIndex] == AttackingSquad)
                             continue;
@@ -70,7 +69,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         Unit Defender = DefendingSquad.CurrentLeader;
 
                         AttackerSupportUnit.DisableAllAttacks();
-                        AttackerSupportUnit.UpdateAllAttacks(AttackerSupportSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, DefendingSquad.Position, Map.ListPlayer[DefendingPlayerIndex].Team, DefendingSquad.ArrayMapSize, DefendingSquad.CurrentMovement, true);
+                        AttackerSupportUnit.UpdateAllAttacks(AttackerSupportSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, DefendingSquad.Position, Map.ListPlayer[DefendingPlayerIndex].Team, DefendingSquad.ArrayMapSize, DefendingSquad.CurrentTerrainIndex, true);
 
                         if (AttackerSupportUnit.CanAttack)
                         {
@@ -127,10 +126,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         int SquadIndex = Map.CheckForSquadAtPosition(DefendingPlayerIndex, DefendingSquad.Position, new Microsoft.Xna.Framework.Vector3(X, Y, 0));
 
-                        //Can't support if the defending unit is flying and the support can't fly.
+                        //Can't support if the support can't enter the same terrain as the defending, supporter will be visible in the battle animation.
                         if (SquadIndex >= 0 && ActivePlayer.ListSquad[SquadIndex].CurrentLeader.Boosts.SupportDefendModifier > 0
-                            && (!DefendingSquad.IsFlying
-                                || ActivePlayer.ListSquad[SquadIndex].CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir)))
+                            && Map.TerrainRestrictions.CanMove(ActivePlayer.ListSquad[SquadIndex], ActivePlayer.ListSquad[SquadIndex].CurrentLeader.UnitStat, DefendingSquad.CurrentTerrainIndex))
                         {
                             ActivePlayer.ListSquad[SquadIndex].CurrentLeader.CurrentAttack = null;
                             AddSupportSquad(ActivePlayer.ListSquad[SquadIndex]);

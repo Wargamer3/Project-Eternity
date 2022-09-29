@@ -56,7 +56,6 @@ namespace ProjectEternity.Core.Units.Transforming
                 else
                 {
                     TransformingUnit.ChangeUnit(ActionMenuCursor);
-                    Map.UpdateSquadCurrentMovement(ActiveSquad);
                 }
 
                 Map.sndConfirm.Play();

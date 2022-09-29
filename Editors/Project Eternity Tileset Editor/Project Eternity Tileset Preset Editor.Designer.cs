@@ -33,8 +33,6 @@ namespace ProjectEternity.Editors.MapEditor
         {
             this.cboTerrainType = new System.Windows.Forms.ComboBox();
             this.lblTerrainType = new System.Windows.Forms.Label();
-            this.lblMvEnterCost = new System.Windows.Forms.Label();
-            this.lblMVMoveCost = new System.Windows.Forms.Label();
             this.lstTerrainBonus = new System.Windows.Forms.ListBox();
             this.lblTerrainBonus = new System.Windows.Forms.Label();
             this.cboTerrainBonusType = new System.Windows.Forms.ComboBox();
@@ -51,10 +49,8 @@ namespace ProjectEternity.Editors.MapEditor
             this.lblBattleAnimationBackground = new System.Windows.Forms.Label();
             this.cboBattleAnimationBackground = new System.Windows.Forms.ComboBox();
             this.btnDeleteBattleAnimationBackground = new System.Windows.Forms.Button();
-            this.txtMVMoveCost = new System.Windows.Forms.NumericUpDown();
             this.btnNewBattleAnimationBackground = new System.Windows.Forms.Button();
             this.txtBonusValue = new System.Windows.Forms.NumericUpDown();
-            this.txtMVEnterCost = new System.Windows.Forms.NumericUpDown();
             this.gbTileset = new System.Windows.Forms.GroupBox();
             this.sclTileWidth = new System.Windows.Forms.HScrollBar();
             this.panTilesetPreview = new System.Windows.Forms.Panel();
@@ -64,9 +60,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.lblActiveTileset = new System.Windows.Forms.Label();
             this.mnuToolBar.SuspendLayout();
             this.gbTileInformation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMVMoveCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMVEnterCost)).BeginInit();
             this.gbTileset.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,24 +86,6 @@ namespace ProjectEternity.Editors.MapEditor
             this.lblTerrainType.Size = new System.Drawing.Size(71, 13);
             this.lblTerrainType.TabIndex = 0;
             this.lblTerrainType.Text = "Terrain type";
-            // 
-            // lblMvEnterCost
-            // 
-            this.lblMvEnterCost.AutoSize = true;
-            this.lblMvEnterCost.Location = new System.Drawing.Point(6, 58);
-            this.lblMvEnterCost.Name = "lblMvEnterCost";
-            this.lblMvEnterCost.Size = new System.Drawing.Size(73, 13);
-            this.lblMvEnterCost.TabIndex = 2;
-            this.lblMvEnterCost.Text = "MV enter cost";
-            // 
-            // lblMVMoveCost
-            // 
-            this.lblMVMoveCost.AutoSize = true;
-            this.lblMVMoveCost.Location = new System.Drawing.Point(6, 97);
-            this.lblMVMoveCost.Name = "lblMVMoveCost";
-            this.lblMVMoveCost.Size = new System.Drawing.Size(75, 13);
-            this.lblMVMoveCost.TabIndex = 4;
-            this.lblMVMoveCost.Text = "MV move cost";
             // 
             // lstTerrainBonus
             // 
@@ -226,18 +202,14 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbTileInformation.Controls.Add(this.lblBattleAnimationBackground);
             this.gbTileInformation.Controls.Add(this.cboBattleAnimationBackground);
             this.gbTileInformation.Controls.Add(this.btnDeleteBattleAnimationBackground);
-            this.gbTileInformation.Controls.Add(this.txtMVMoveCost);
             this.gbTileInformation.Controls.Add(this.btnNewBattleAnimationBackground);
             this.gbTileInformation.Controls.Add(this.txtBonusValue);
-            this.gbTileInformation.Controls.Add(this.txtMVEnterCost);
             this.gbTileInformation.Controls.Add(this.lblTerrainType);
             this.gbTileInformation.Controls.Add(this.cboTerrainType);
             this.gbTileInformation.Controls.Add(this.lblTerrainBonusActivation);
             this.gbTileInformation.Controls.Add(this.cboTerrainBonusActivation);
-            this.gbTileInformation.Controls.Add(this.lblMvEnterCost);
             this.gbTileInformation.Controls.Add(this.btnClearBonuses);
             this.gbTileInformation.Controls.Add(this.btnRemoveBonus);
-            this.gbTileInformation.Controls.Add(this.lblMVMoveCost);
             this.gbTileInformation.Controls.Add(this.btnAddNewBonus);
             this.gbTileInformation.Controls.Add(this.lstTerrainBonus);
             this.gbTileInformation.Controls.Add(this.lblTerrainBonus);
@@ -281,14 +253,6 @@ namespace ProjectEternity.Editors.MapEditor
             this.btnDeleteBattleAnimationBackground.UseVisualStyleBackColor = true;
             this.btnDeleteBattleAnimationBackground.Click += new System.EventHandler(this.btnDeleteBattleAnimationBackground_Click);
             // 
-            // txtMVMoveCost
-            // 
-            this.txtMVMoveCost.Location = new System.Drawing.Point(6, 113);
-            this.txtMVMoveCost.Name = "txtMVMoveCost";
-            this.txtMVMoveCost.Size = new System.Drawing.Size(121, 20);
-            this.txtMVMoveCost.TabIndex = 20;
-            this.txtMVMoveCost.ValueChanged += new System.EventHandler(this.txtMVMoveCost_TextChanged);
-            // 
             // btnNewBattleAnimationBackground
             // 
             this.btnNewBattleAnimationBackground.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -307,19 +271,6 @@ namespace ProjectEternity.Editors.MapEditor
             this.txtBonusValue.Size = new System.Drawing.Size(121, 20);
             this.txtBonusValue.TabIndex = 18;
             this.txtBonusValue.ValueChanged += new System.EventHandler(this.txtBonusValue_TextChanged);
-            // 
-            // txtMVEnterCost
-            // 
-            this.txtMVEnterCost.Location = new System.Drawing.Point(6, 74);
-            this.txtMVEnterCost.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.txtMVEnterCost.Name = "txtMVEnterCost";
-            this.txtMVEnterCost.Size = new System.Drawing.Size(121, 20);
-            this.txtMVEnterCost.TabIndex = 17;
-            this.txtMVEnterCost.ValueChanged += new System.EventHandler(this.txtMVEnterCost_TextChanged);
             // 
             // gbTileset
             // 
@@ -404,9 +355,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.mnuToolBar.PerformLayout();
             this.gbTileInformation.ResumeLayout(false);
             this.gbTileInformation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMVMoveCost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBonusValue)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMVEnterCost)).EndInit();
             this.gbTileset.ResumeLayout(false);
             this.gbTileset.PerformLayout();
             this.ResumeLayout(false);
@@ -418,8 +367,6 @@ namespace ProjectEternity.Editors.MapEditor
 
         private System.Windows.Forms.ComboBox cboTerrainType;
         private System.Windows.Forms.Label lblTerrainType;
-        private System.Windows.Forms.Label lblMvEnterCost;
-        private System.Windows.Forms.Label lblMVMoveCost;
         private System.Windows.Forms.ListBox lstTerrainBonus;
         private System.Windows.Forms.Label lblTerrainBonus;
         private System.Windows.Forms.ComboBox cboTerrainBonusType;
@@ -438,9 +385,7 @@ namespace ProjectEternity.Editors.MapEditor
         private System.Windows.Forms.Label lblActiveTileset;
         private Panel panTilesetPreview;
         private TextBox txtTilesetName;
-        private NumericUpDown txtMVMoveCost;
         private NumericUpDown txtBonusValue;
-        private NumericUpDown txtMVEnterCost;
         private HScrollBar sclTileWidth;
         private VScrollBar sclTileHeight;
         private Button btnDeleteBattleAnimationBackground;

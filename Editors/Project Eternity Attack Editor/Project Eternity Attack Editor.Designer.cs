@@ -51,15 +51,6 @@
             this.lblMaximumRange = new System.Windows.Forms.Label();
             this.lblMinimumRange = new System.Windows.Forms.Label();
             this.lblDamage = new System.Windows.Forms.Label();
-            this.gbOtherStats = new System.Windows.Forms.GroupBox();
-            this.cbSpaceRank = new System.Windows.Forms.ComboBox();
-            this.cbLandRank = new System.Windows.Forms.ComboBox();
-            this.cbSeaRank = new System.Windows.Forms.ComboBox();
-            this.cbAirRank = new System.Windows.Forms.ComboBox();
-            this.lblSpaceRank = new System.Windows.Forms.Label();
-            this.lblSeaRank = new System.Windows.Forms.Label();
-            this.lblLandRank = new System.Windows.Forms.Label();
-            this.lblAirRank = new System.Windows.Forms.Label();
             this.gbPrimaryProperty = new System.Windows.Forms.GroupBox();
             this.rbPER = new System.Windows.Forms.RadioButton();
             this.rbALL = new System.Windows.Forms.RadioButton();
@@ -80,6 +71,10 @@
             this.rbAttackTypeSolidShot = new System.Windows.Forms.RadioButton();
             this.rbAttackTypeBlank = new System.Windows.Forms.RadioButton();
             this.gbSecondaryProperties = new System.Windows.Forms.GroupBox();
+            this.txtReMoveLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblReMoveLevel = new System.Windows.Forms.Label();
+            this.txtPostMovementLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblPostMVLevel = new System.Windows.Forms.Label();
             this.lblEvasionBonus = new System.Windows.Forms.Label();
             this.txtPostMovementEvasionBonus = new System.Windows.Forms.NumericUpDown();
             this.cbPartialAttack = new System.Windows.Forms.CheckBox();
@@ -96,10 +91,10 @@
             this.lblName = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
-            this.txtReMoveLevel = new System.Windows.Forms.NumericUpDown();
-            this.lblReMoveLevel = new System.Windows.Forms.Label();
-            this.txtPostMovementLevel = new System.Windows.Forms.NumericUpDown();
-            this.lblPostMVLevel = new System.Windows.Forms.Label();
+            this.gbTerrain = new System.Windows.Forms.GroupBox();
+            this.dgvTerrainRanks = new System.Windows.Forms.DataGridView();
+            this.Movement = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.gbStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmoConsumption)).BeginInit();
             this.txtMinDamage.SuspendLayout();
@@ -111,16 +106,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtMoraleRequirement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaximumAmmo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtENCost)).BeginInit();
-            this.gbOtherStats.SuspendLayout();
             this.gbPrimaryProperty.SuspendLayout();
             this.gbAttackType.SuspendLayout();
             this.gbSecondaryProperties.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementEvasionBonus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementAccuracyMalus)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.gbItemInformtion.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementLevel)).BeginInit();
+            this.gbTerrain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTerrainRanks)).BeginInit();
             this.SuspendLayout();
             // 
             // gbStats
@@ -418,123 +414,6 @@
             this.lblDamage.TabIndex = 1;
             this.lblDamage.Text = "Damage:";
             // 
-            // gbOtherStats
-            // 
-            this.gbOtherStats.Controls.Add(this.cbSpaceRank);
-            this.gbOtherStats.Controls.Add(this.cbLandRank);
-            this.gbOtherStats.Controls.Add(this.cbSeaRank);
-            this.gbOtherStats.Controls.Add(this.cbAirRank);
-            this.gbOtherStats.Controls.Add(this.lblSpaceRank);
-            this.gbOtherStats.Controls.Add(this.lblSeaRank);
-            this.gbOtherStats.Controls.Add(this.lblLandRank);
-            this.gbOtherStats.Controls.Add(this.lblAirRank);
-            this.gbOtherStats.Location = new System.Drawing.Point(515, 238);
-            this.gbOtherStats.Name = "gbOtherStats";
-            this.gbOtherStats.Size = new System.Drawing.Size(128, 127);
-            this.gbOtherStats.TabIndex = 3;
-            this.gbOtherStats.TabStop = false;
-            this.gbOtherStats.Text = "Other stats";
-            // 
-            // cbSpaceRank
-            // 
-            this.cbSpaceRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSpaceRank.FormattingEnabled = true;
-            this.cbSpaceRank.Items.AddRange(new object[] {
-            "-",
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbSpaceRank.Location = new System.Drawing.Point(79, 100);
-            this.cbSpaceRank.Name = "cbSpaceRank";
-            this.cbSpaceRank.Size = new System.Drawing.Size(43, 21);
-            this.cbSpaceRank.TabIndex = 3;
-            // 
-            // cbLandRank
-            // 
-            this.cbLandRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbLandRank.FormattingEnabled = true;
-            this.cbLandRank.Items.AddRange(new object[] {
-            "-",
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbLandRank.Location = new System.Drawing.Point(79, 46);
-            this.cbLandRank.Name = "cbLandRank";
-            this.cbLandRank.Size = new System.Drawing.Size(43, 21);
-            this.cbLandRank.TabIndex = 1;
-            // 
-            // cbSeaRank
-            // 
-            this.cbSeaRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSeaRank.FormattingEnabled = true;
-            this.cbSeaRank.Items.AddRange(new object[] {
-            "-",
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbSeaRank.Location = new System.Drawing.Point(79, 73);
-            this.cbSeaRank.Name = "cbSeaRank";
-            this.cbSeaRank.Size = new System.Drawing.Size(43, 21);
-            this.cbSeaRank.TabIndex = 2;
-            // 
-            // cbAirRank
-            // 
-            this.cbAirRank.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAirRank.FormattingEnabled = true;
-            this.cbAirRank.Items.AddRange(new object[] {
-            "-",
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbAirRank.Location = new System.Drawing.Point(79, 19);
-            this.cbAirRank.Name = "cbAirRank";
-            this.cbAirRank.Size = new System.Drawing.Size(43, 21);
-            this.cbAirRank.TabIndex = 0;
-            // 
-            // lblSpaceRank
-            // 
-            this.lblSpaceRank.AutoSize = true;
-            this.lblSpaceRank.Location = new System.Drawing.Point(6, 103);
-            this.lblSpaceRank.Name = "lblSpaceRank";
-            this.lblSpaceRank.Size = new System.Drawing.Size(65, 13);
-            this.lblSpaceRank.TabIndex = 15;
-            this.lblSpaceRank.Text = "Space rank:";
-            // 
-            // lblSeaRank
-            // 
-            this.lblSeaRank.AutoSize = true;
-            this.lblSeaRank.Location = new System.Drawing.Point(6, 76);
-            this.lblSeaRank.Name = "lblSeaRank";
-            this.lblSeaRank.Size = new System.Drawing.Size(53, 13);
-            this.lblSeaRank.TabIndex = 14;
-            this.lblSeaRank.Text = "Sea rank:";
-            // 
-            // lblLandRank
-            // 
-            this.lblLandRank.AutoSize = true;
-            this.lblLandRank.Location = new System.Drawing.Point(6, 49);
-            this.lblLandRank.Name = "lblLandRank";
-            this.lblLandRank.Size = new System.Drawing.Size(58, 13);
-            this.lblLandRank.TabIndex = 13;
-            this.lblLandRank.Text = "Land rank:";
-            // 
-            // lblAirRank
-            // 
-            this.lblAirRank.AutoSize = true;
-            this.lblAirRank.Location = new System.Drawing.Point(6, 22);
-            this.lblAirRank.Name = "lblAirRank";
-            this.lblAirRank.Size = new System.Drawing.Size(46, 13);
-            this.lblAirRank.TabIndex = 12;
-            this.lblAirRank.Text = "Air rank:";
-            // 
             // gbPrimaryProperty
             // 
             this.gbPrimaryProperty.Controls.Add(this.rbPER);
@@ -664,7 +543,7 @@
             this.gbAttackType.Controls.Add(this.rbAttackTypeBlank);
             this.gbAttackType.Location = new System.Drawing.Point(515, 27);
             this.gbAttackType.Name = "gbAttackType";
-            this.gbAttackType.Size = new System.Drawing.Size(128, 205);
+            this.gbAttackType.Size = new System.Drawing.Size(195, 205);
             this.gbAttackType.TabIndex = 5;
             this.gbAttackType.TabStop = false;
             this.gbAttackType.Text = "Attack type";
@@ -778,6 +657,53 @@
             this.gbSecondaryProperties.TabStop = false;
             this.gbSecondaryProperties.Text = "Secondary properties";
             // 
+            // txtReMoveLevel
+            // 
+            this.txtReMoveLevel.Location = new System.Drawing.Point(134, 87);
+            this.txtReMoveLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtReMoveLevel.Name = "txtReMoveLevel";
+            this.txtReMoveLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtReMoveLevel.TabIndex = 72;
+            // 
+            // lblReMoveLevel
+            // 
+            this.lblReMoveLevel.AutoSize = true;
+            this.lblReMoveLevel.Location = new System.Drawing.Point(6, 89);
+            this.lblReMoveLevel.Name = "lblReMoveLevel";
+            this.lblReMoveLevel.Size = new System.Drawing.Size(83, 13);
+            this.lblReMoveLevel.TabIndex = 71;
+            this.lblReMoveLevel.Text = "Re-Move Level:";
+            // 
+            // txtPostMovementLevel
+            // 
+            this.txtPostMovementLevel.Location = new System.Drawing.Point(134, 113);
+            this.txtPostMovementLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtPostMovementLevel.Name = "txtPostMovementLevel";
+            this.txtPostMovementLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtPostMovementLevel.TabIndex = 70;
+            this.txtPostMovementLevel.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblPostMVLevel
+            // 
+            this.lblPostMVLevel.AutoSize = true;
+            this.lblPostMVLevel.Location = new System.Drawing.Point(6, 115);
+            this.lblPostMVLevel.Name = "lblPostMVLevel";
+            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
+            this.lblPostMVLevel.TabIndex = 69;
+            this.lblPostMVLevel.Text = "Post MV Level:";
+            // 
             // lblEvasionBonus
             // 
             this.lblEvasionBonus.AutoSize = true;
@@ -859,7 +785,7 @@
             this.tsmAdvanced});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(649, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(722, 24);
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -935,64 +861,55 @@
             this.lblDescription.TabIndex = 37;
             this.lblDescription.Text = "Description:";
             // 
-            // txtReMoveLevel
+            // gbTerrain
             // 
-            this.txtReMoveLevel.Location = new System.Drawing.Point(134, 87);
-            this.txtReMoveLevel.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtReMoveLevel.Name = "txtReMoveLevel";
-            this.txtReMoveLevel.Size = new System.Drawing.Size(39, 20);
-            this.txtReMoveLevel.TabIndex = 72;
+            this.gbTerrain.Controls.Add(this.dgvTerrainRanks);
+            this.gbTerrain.Location = new System.Drawing.Point(515, 238);
+            this.gbTerrain.Name = "gbTerrain";
+            this.gbTerrain.Size = new System.Drawing.Size(195, 154);
+            this.gbTerrain.TabIndex = 70;
+            this.gbTerrain.TabStop = false;
+            this.gbTerrain.Text = "Terrain";
             // 
-            // lblReMoveLevel
+            // dgvTerrainRanks
             // 
-            this.lblReMoveLevel.AutoSize = true;
-            this.lblReMoveLevel.Location = new System.Drawing.Point(6, 89);
-            this.lblReMoveLevel.Name = "lblReMoveLevel";
-            this.lblReMoveLevel.Size = new System.Drawing.Size(83, 13);
-            this.lblReMoveLevel.TabIndex = 71;
-            this.lblReMoveLevel.Text = "Re-Move Level:";
+            this.dgvTerrainRanks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvTerrainRanks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTerrainRanks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Movement,
+            this.Column2});
+            this.dgvTerrainRanks.Location = new System.Drawing.Point(6, 17);
+            this.dgvTerrainRanks.Name = "dgvTerrainRanks";
+            this.dgvTerrainRanks.RowHeadersVisible = false;
+            this.dgvTerrainRanks.ShowCellErrors = false;
+            this.dgvTerrainRanks.Size = new System.Drawing.Size(181, 120);
+            this.dgvTerrainRanks.TabIndex = 35;
             // 
-            // txtPostMVLevel
+            // Movement
             // 
-            this.txtPostMovementLevel.Location = new System.Drawing.Point(134, 113);
-            this.txtPostMovementLevel.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtPostMovementLevel.Name = "txtPostMVLevel";
-            this.txtPostMovementLevel.Size = new System.Drawing.Size(39, 20);
-            this.txtPostMovementLevel.TabIndex = 70;
-            this.txtPostMovementLevel.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.Movement.HeaderText = "Movement";
+            this.Movement.Name = "Movement";
+            this.Movement.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Movement.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // lblPostMVLevel
+            // Column2
             // 
-            this.lblPostMVLevel.AutoSize = true;
-            this.lblPostMVLevel.Location = new System.Drawing.Point(6, 115);
-            this.lblPostMVLevel.Name = "lblPostMVLevel";
-            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
-            this.lblPostMVLevel.TabIndex = 69;
-            this.lblPostMVLevel.Text = "Post MV Level:";
+            this.Column2.HeaderText = "Rank";
+            this.Column2.Name = "Column2";
             // 
             // ProjectEternityAttackEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 382);
+            this.ClientSize = new System.Drawing.Size(722, 382);
+            this.Controls.Add(this.gbTerrain);
             this.Controls.Add(this.gbItemInformtion);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.gbSecondaryProperties);
             this.Controls.Add(this.gbAttackType);
             this.Controls.Add(this.gbPrimaryProperty);
-            this.Controls.Add(this.gbOtherStats);
             this.Controls.Add(this.gbStats);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ProjectEternityAttackEditor";
@@ -1009,22 +926,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtMoraleRequirement)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaximumAmmo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtENCost)).EndInit();
-            this.gbOtherStats.ResumeLayout(false);
-            this.gbOtherStats.PerformLayout();
             this.gbPrimaryProperty.ResumeLayout(false);
             this.gbPrimaryProperty.PerformLayout();
             this.gbAttackType.ResumeLayout(false);
             this.gbAttackType.PerformLayout();
             this.gbSecondaryProperties.ResumeLayout(false);
             this.gbSecondaryProperties.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementEvasionBonus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementAccuracyMalus)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.gbItemInformtion.ResumeLayout(false);
             this.gbItemInformtion.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPostMovementLevel)).EndInit();
+            this.gbTerrain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTerrainRanks)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1038,15 +955,6 @@
         private System.Windows.Forms.Label lblMinimumRange;
         private System.Windows.Forms.Label lblCritical;
         private System.Windows.Forms.Label lblAccuracy;
-        private System.Windows.Forms.GroupBox gbOtherStats;
-        private System.Windows.Forms.ComboBox cbSpaceRank;
-        private System.Windows.Forms.ComboBox cbLandRank;
-        private System.Windows.Forms.ComboBox cbSeaRank;
-        private System.Windows.Forms.ComboBox cbAirRank;
-        private System.Windows.Forms.Label lblSpaceRank;
-        private System.Windows.Forms.Label lblSeaRank;
-        private System.Windows.Forms.Label lblLandRank;
-        private System.Windows.Forms.Label lblAirRank;
         private System.Windows.Forms.GroupBox gbPrimaryProperty;
         private System.Windows.Forms.GroupBox gbAttackType;
         private System.Windows.Forms.RadioButton rbAttackTypeEnergyShot;
@@ -1104,6 +1012,10 @@
         private System.Windows.Forms.Label lblReMoveLevel;
         private System.Windows.Forms.NumericUpDown txtPostMovementLevel;
         private System.Windows.Forms.Label lblPostMVLevel;
+        private System.Windows.Forms.GroupBox gbTerrain;
+        private System.Windows.Forms.DataGridView dgvTerrainRanks;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Movement;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column2;
     }
 }
 

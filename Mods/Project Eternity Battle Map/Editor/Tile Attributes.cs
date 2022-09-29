@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -40,6 +41,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             cboTerrainBonusType.Items.Add("Armor");
             cboTerrainBonusType.Items.Add("Accuracy");
             cboTerrainBonusType.Items.Add("Evasion");
+
+            cboTerrainType.Items.Clear();
+            foreach (TerrainType ActiveTerrain in UnitAndTerrainValues.Default.ListTerrainType)
+            {
+                cboTerrainType.Items.Add(ActiveTerrain.Name);
+            }
         }
 
         public virtual void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset)
@@ -60,12 +67,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 cboBattleAnimationForeground.Items.Add(ActivePath);
             }
 
-            txtMVEnterCost.Value = ActiveTerrain.MVEnterCost;
-            txtMVMoveCost.Value = ActiveTerrain.MVMoveCost;
             txtHeight.Value = (decimal)ActiveTerrain.Height;
+
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
-            cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex + 1;
-            cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex + 1;
+            cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex;
+            cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex;
 
             lstTerrainBonus.Items.Clear();
             //Load the lstTerrainBonus.
@@ -91,23 +97,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void cboTerrainType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActiveTerrain.TerrainTypeIndex = cboTerrainType.SelectedIndex;
-        }
-
-        private void txtMVEnterCost_TextChanged(object sender, EventArgs e)
-        {
-            if (txtMVEnterCost.Text.Length == 0)
-                ActiveTerrain.MVEnterCost = 0;
-            else
-                ActiveTerrain.MVEnterCost = (int)txtMVEnterCost.Value;
-        }
-
-        private void txtMVMoveCost_TextChanged(object sender, EventArgs e)
-        {
-            if (txtMVMoveCost.Text.Length == 0)
-                ActiveTerrain.MVMoveCost = 0;
-            else
-                ActiveTerrain.MVMoveCost = (int)txtMVMoveCost.Value;
+            ActiveTerrain.TerrainTypeIndex = (byte)cboTerrainType.SelectedIndex;
         }
 
         private void txtHeight_ValueChanged(object sender, EventArgs e)
@@ -209,12 +199,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void cboBattleAnimationBackground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActiveTerrain.BattleBackgroundAnimationIndex = cboBattleAnimationBackground.SelectedIndex - 1;
+            ActiveTerrain.BattleBackgroundAnimationIndex = (byte)cboBattleAnimationBackground.SelectedIndex;
         }
 
         private void cboBattleAnimationForeground_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActiveTerrain.BattleForegroundAnimationIndex = cboBattleAnimationForeground.SelectedIndex - 1;
+            ActiveTerrain.BattleForegroundAnimationIndex = (byte)cboBattleAnimationForeground.SelectedIndex;
         }
 
         private void btnNewBattleAnimationBackground_Click(object sender, EventArgs e)

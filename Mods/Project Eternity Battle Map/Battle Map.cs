@@ -9,16 +9,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Vehicle;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
-using static ProjectEternity.GameScreens.BattleMapScreen.MovementAlgorithmTile;
-using ProjectEternity.Core.Vehicle;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -130,7 +127,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
         public List<Terrain.TilesetPreset> ListTilesetPreset;
-        public List<string> ListTerrainType;//Used to store the types of the terrain used.
+        public UnitAndTerrainValues TerrainRestrictions;
 
         public bool IsInit = false;
         public Point TileSize;

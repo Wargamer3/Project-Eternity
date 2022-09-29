@@ -180,7 +180,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             foreach (Vector2 ActivePosition in ListPosition)
             {
                 Terrain ActiveTerrain = Map.GetTerrain(ActivePosition.X, ActivePosition.Y, 0);
-                if (ActiveTerrain.MVEnterCost < 0)
+                if (!Map.TerrainRestrictions.CanMove(HubSquad, HubSquad.CurrentLeader.UnitStat, ActiveTerrain.TerrainTypeIndex))
                     return false;
             }
 

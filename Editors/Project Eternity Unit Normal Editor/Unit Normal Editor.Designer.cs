@@ -36,7 +36,11 @@
             this.txtPrice = new System.Windows.Forms.TextBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbUnitBoosts = new System.Windows.Forms.GroupBox();
+            this.txtReMoveLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblReMoveLevel = new System.Windows.Forms.Label();
+            this.txtPostMVLevel = new System.Windows.Forms.NumericUpDown();
+            this.lblPostMVLevel = new System.Windows.Forms.Label();
             this.lblChargeCancelLevel = new System.Windows.Forms.Label();
             this.txtChargeCancelLevel = new System.Windows.Forms.NumericUpDown();
             this.txtMaxClimb = new System.Windows.Forms.NumericUpDown();
@@ -48,48 +52,36 @@
             this.txtBaseHP = new System.Windows.Forms.NumericUpDown();
             this.lblPartsSlots = new System.Windows.Forms.Label();
             this.txtPartsSlots = new System.Windows.Forms.NumericUpDown();
-            this.lvlMovement = new System.Windows.Forms.Label();
+            this.lblMovement = new System.Windows.Forms.Label();
             this.lblMobility = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lblArmor = new System.Windows.Forms.Label();
+            this.lblBaseEN = new System.Windows.Forms.Label();
+            this.lblBaseHP = new System.Windows.Forms.Label();
             this.tabList = new System.Windows.Forms.TabControl();
             this.tabAnimations = new System.Windows.Forms.TabPage();
             this.btnSelectAnimation = new System.Windows.Forms.Button();
             this.lstAnimations = new System.Windows.Forms.ListView();
             this.txtAnimationName = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.lblAnimationPath = new System.Windows.Forms.Label();
             this.tabAbilities = new System.Windows.Forms.TabPage();
             this.lstAbilities = new System.Windows.Forms.ListBox();
             this.btnAddAbility = new System.Windows.Forms.Button();
             this.btnMoveUpAbility = new System.Windows.Forms.Button();
             this.btnRemoveAbility = new System.Windows.Forms.Button();
             this.btnMoveDownAbility = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gbPilotWhitelist = new System.Windows.Forms.GroupBox();
             this.btnRemovePilot = new System.Windows.Forms.Button();
             this.btnAddPilot = new System.Windows.Forms.Button();
             this.lstPilots = new System.Windows.Forms.ListBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gbItemInformation = new System.Windows.Forms.GroupBox();
             this.txtEXP = new System.Windows.Forms.NumericUpDown();
             this.lblEXP = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.cbTerrainAir = new System.Windows.Forms.ComboBox();
-            this.cbTerrainLand = new System.Windows.Forms.ComboBox();
-            this.cbTerrainSea = new System.Windows.Forms.ComboBox();
-            this.cbTerrainSpace = new System.Windows.Forms.ComboBox();
-            this.lblTerrainSpace = new System.Windows.Forms.Label();
-            this.lblTerrainSea = new System.Windows.Forms.Label();
-            this.lblTerrainLand = new System.Windows.Forms.Label();
-            this.lblTerrainAir = new System.Windows.Forms.Label();
-            this.cboUnderwater = new System.Windows.Forms.GroupBox();
-            this.cboMovementUnderwater = new System.Windows.Forms.CheckBox();
-            this.cboMovementUnderground = new System.Windows.Forms.CheckBox();
-            this.cboMovementSpace = new System.Windows.Forms.CheckBox();
-            this.cboMovementSea = new System.Windows.Forms.CheckBox();
-            this.cboMovementLand = new System.Windows.Forms.CheckBox();
-            this.cboMovementAir = new System.Windows.Forms.CheckBox();
+            this.lblName = new System.Windows.Forms.Label();
+            this.gbTerrain = new System.Windows.Forms.GroupBox();
+            this.dgvTerrainRanks = new System.Windows.Forms.DataGridView();
+            this.Movement = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.btnEditMapSize = new System.Windows.Forms.Button();
             this.rbSizeSS = new System.Windows.Forms.RadioButton();
@@ -100,12 +92,12 @@
             this.rbSizeLLL = new System.Windows.Forms.RadioButton();
             this.gbAttacks = new System.Windows.Forms.GroupBox();
             this.btnEditAttack = new System.Windows.Forms.Button();
-            this.txtReMoveLevel = new System.Windows.Forms.NumericUpDown();
-            this.lblReMoveLevel = new System.Windows.Forms.Label();
-            this.txtPostMVLevel = new System.Windows.Forms.NumericUpDown();
-            this.lblPostMVLevel = new System.Windows.Forms.Label();
+            this.gbUnitType = new System.Windows.Forms.GroupBox();
+            this.cbUnitType = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.gbUnitBoosts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtChargeCancelLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxClimb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBaseMovement)).BeginInit();
@@ -117,15 +109,14 @@
             this.tabList.SuspendLayout();
             this.tabAnimations.SuspendLayout();
             this.tabAbilities.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.gbPilotWhitelist.SuspendLayout();
+            this.gbItemInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtEXP)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            this.cboUnderwater.SuspendLayout();
+            this.gbTerrain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTerrainRanks)).BeginInit();
             this.groupBox6.SuspendLayout();
             this.gbAttacks.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).BeginInit();
+            this.gbUnitType.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -194,34 +185,76 @@
             this.lblDescription.TabIndex = 26;
             this.lblDescription.Text = "Description:";
             // 
-            // groupBox1
+            // gbUnitBoosts
             // 
-            this.groupBox1.Controls.Add(this.txtReMoveLevel);
-            this.groupBox1.Controls.Add(this.lblReMoveLevel);
-            this.groupBox1.Controls.Add(this.txtPostMVLevel);
-            this.groupBox1.Controls.Add(this.lblPostMVLevel);
-            this.groupBox1.Controls.Add(this.lblChargeCancelLevel);
-            this.groupBox1.Controls.Add(this.txtChargeCancelLevel);
-            this.groupBox1.Controls.Add(this.txtMaxClimb);
-            this.groupBox1.Controls.Add(this.lblMaxClimb);
-            this.groupBox1.Controls.Add(this.txtBaseMovement);
-            this.groupBox1.Controls.Add(this.txtBaseMobility);
-            this.groupBox1.Controls.Add(this.txtBaseArmor);
-            this.groupBox1.Controls.Add(this.txtBaseEN);
-            this.groupBox1.Controls.Add(this.txtBaseHP);
-            this.groupBox1.Controls.Add(this.lblPartsSlots);
-            this.groupBox1.Controls.Add(this.txtPartsSlots);
-            this.groupBox1.Controls.Add(this.lvlMovement);
-            this.groupBox1.Controls.Add(this.lblMobility);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Location = new System.Drawing.Point(12, 181);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(270, 175);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Unit boosts";
+            this.gbUnitBoosts.Controls.Add(this.txtReMoveLevel);
+            this.gbUnitBoosts.Controls.Add(this.lblReMoveLevel);
+            this.gbUnitBoosts.Controls.Add(this.txtPostMVLevel);
+            this.gbUnitBoosts.Controls.Add(this.lblPostMVLevel);
+            this.gbUnitBoosts.Controls.Add(this.lblChargeCancelLevel);
+            this.gbUnitBoosts.Controls.Add(this.txtChargeCancelLevel);
+            this.gbUnitBoosts.Controls.Add(this.txtMaxClimb);
+            this.gbUnitBoosts.Controls.Add(this.lblMaxClimb);
+            this.gbUnitBoosts.Controls.Add(this.txtBaseMovement);
+            this.gbUnitBoosts.Controls.Add(this.txtBaseMobility);
+            this.gbUnitBoosts.Controls.Add(this.txtBaseArmor);
+            this.gbUnitBoosts.Controls.Add(this.txtBaseEN);
+            this.gbUnitBoosts.Controls.Add(this.txtBaseHP);
+            this.gbUnitBoosts.Controls.Add(this.lblPartsSlots);
+            this.gbUnitBoosts.Controls.Add(this.txtPartsSlots);
+            this.gbUnitBoosts.Controls.Add(this.lblMovement);
+            this.gbUnitBoosts.Controls.Add(this.lblMobility);
+            this.gbUnitBoosts.Controls.Add(this.lblArmor);
+            this.gbUnitBoosts.Controls.Add(this.lblBaseEN);
+            this.gbUnitBoosts.Controls.Add(this.lblBaseHP);
+            this.gbUnitBoosts.Location = new System.Drawing.Point(12, 181);
+            this.gbUnitBoosts.Name = "gbUnitBoosts";
+            this.gbUnitBoosts.Size = new System.Drawing.Size(270, 175);
+            this.gbUnitBoosts.TabIndex = 6;
+            this.gbUnitBoosts.TabStop = false;
+            this.gbUnitBoosts.Text = "Unit boosts";
+            // 
+            // txtReMoveLevel
+            // 
+            this.txtReMoveLevel.Location = new System.Drawing.Point(225, 97);
+            this.txtReMoveLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtReMoveLevel.Name = "txtReMoveLevel";
+            this.txtReMoveLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtReMoveLevel.TabIndex = 66;
+            // 
+            // lblReMoveLevel
+            // 
+            this.lblReMoveLevel.AutoSize = true;
+            this.lblReMoveLevel.Location = new System.Drawing.Point(136, 99);
+            this.lblReMoveLevel.Name = "lblReMoveLevel";
+            this.lblReMoveLevel.Size = new System.Drawing.Size(83, 13);
+            this.lblReMoveLevel.TabIndex = 65;
+            this.lblReMoveLevel.Text = "Re-Move Level:";
+            // 
+            // txtPostMVLevel
+            // 
+            this.txtPostMVLevel.Location = new System.Drawing.Point(90, 97);
+            this.txtPostMVLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtPostMVLevel.Name = "txtPostMVLevel";
+            this.txtPostMVLevel.Size = new System.Drawing.Size(39, 20);
+            this.txtPostMVLevel.TabIndex = 64;
+            // 
+            // lblPostMVLevel
+            // 
+            this.lblPostMVLevel.AutoSize = true;
+            this.lblPostMVLevel.Location = new System.Drawing.Point(5, 99);
+            this.lblPostMVLevel.Name = "lblPostMVLevel";
+            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
+            this.lblPostMVLevel.TabIndex = 63;
+            this.lblPostMVLevel.Text = "Post MV Level:";
             // 
             // lblChargeCancelLevel
             // 
@@ -357,14 +390,14 @@
             0,
             0});
             // 
-            // lvlMovement
+            // lblMovement
             // 
-            this.lvlMovement.AutoSize = true;
-            this.lvlMovement.Location = new System.Drawing.Point(6, 73);
-            this.lvlMovement.Name = "lvlMovement";
-            this.lvlMovement.Size = new System.Drawing.Size(60, 13);
-            this.lvlMovement.TabIndex = 4;
-            this.lvlMovement.Text = "Movement:";
+            this.lblMovement.AutoSize = true;
+            this.lblMovement.Location = new System.Drawing.Point(6, 73);
+            this.lblMovement.Name = "lblMovement";
+            this.lblMovement.Size = new System.Drawing.Size(60, 13);
+            this.lblMovement.TabIndex = 4;
+            this.lblMovement.Text = "Movement:";
             // 
             // lblMobility
             // 
@@ -375,32 +408,32 @@
             this.lblMobility.TabIndex = 3;
             this.lblMobility.Text = "Mobility:";
             // 
-            // label3
+            // lblArmor
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 47);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Base Armor:";
+            this.lblArmor.AutoSize = true;
+            this.lblArmor.Location = new System.Drawing.Point(6, 47);
+            this.lblArmor.Name = "lblArmor";
+            this.lblArmor.Size = new System.Drawing.Size(64, 13);
+            this.lblArmor.TabIndex = 2;
+            this.lblArmor.Text = "Base Armor:";
             // 
-            // label2
+            // lblBaseEN
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(150, 21);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Base EN:";
+            this.lblBaseEN.AutoSize = true;
+            this.lblBaseEN.Location = new System.Drawing.Point(150, 21);
+            this.lblBaseEN.Name = "lblBaseEN";
+            this.lblBaseEN.Size = new System.Drawing.Size(52, 13);
+            this.lblBaseEN.TabIndex = 1;
+            this.lblBaseEN.Text = "Base EN:";
             // 
-            // label6
+            // lblBaseHP
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 21);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(52, 13);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Base HP:";
+            this.lblBaseHP.AutoSize = true;
+            this.lblBaseHP.Location = new System.Drawing.Point(6, 21);
+            this.lblBaseHP.Name = "lblBaseHP";
+            this.lblBaseHP.Size = new System.Drawing.Size(52, 13);
+            this.lblBaseHP.TabIndex = 0;
+            this.lblBaseHP.Text = "Base HP:";
             // 
             // tabList
             // 
@@ -417,7 +450,7 @@
             this.tabAnimations.Controls.Add(this.btnSelectAnimation);
             this.tabAnimations.Controls.Add(this.lstAnimations);
             this.tabAnimations.Controls.Add(this.txtAnimationName);
-            this.tabAnimations.Controls.Add(this.label7);
+            this.tabAnimations.Controls.Add(this.lblAnimationPath);
             this.tabAnimations.Location = new System.Drawing.Point(4, 22);
             this.tabAnimations.Name = "tabAnimations";
             this.tabAnimations.Padding = new System.Windows.Forms.Padding(3);
@@ -455,14 +488,14 @@
             this.txtAnimationName.Size = new System.Drawing.Size(252, 20);
             this.txtAnimationName.TabIndex = 4;
             // 
-            // label7
+            // lblAnimationPath
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 211);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(81, 13);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "Animation Path:";
+            this.lblAnimationPath.AutoSize = true;
+            this.lblAnimationPath.Location = new System.Drawing.Point(6, 211);
+            this.lblAnimationPath.Name = "lblAnimationPath";
+            this.lblAnimationPath.Size = new System.Drawing.Size(81, 13);
+            this.lblAnimationPath.TabIndex = 3;
+            this.lblAnimationPath.Text = "Animation Path:";
             // 
             // tabAbilities
             // 
@@ -474,7 +507,7 @@
             this.tabAbilities.Location = new System.Drawing.Point(4, 22);
             this.tabAbilities.Name = "tabAbilities";
             this.tabAbilities.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAbilities.Size = new System.Drawing.Size(264, 272);
+            this.tabAbilities.Size = new System.Drawing.Size(264, 275);
             this.tabAbilities.TabIndex = 1;
             this.tabAbilities.Text = "Abilities";
             this.tabAbilities.UseVisualStyleBackColor = true;
@@ -527,17 +560,17 @@
             this.btnMoveDownAbility.UseVisualStyleBackColor = true;
             this.btnMoveDownAbility.Click += new System.EventHandler(this.btnMoveDownAbility_Click);
             // 
-            // groupBox2
+            // gbPilotWhitelist
             // 
-            this.groupBox2.Controls.Add(this.btnRemovePilot);
-            this.groupBox2.Controls.Add(this.btnAddPilot);
-            this.groupBox2.Controls.Add(this.lstPilots);
-            this.groupBox2.Location = new System.Drawing.Point(12, 362);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(271, 120);
-            this.groupBox2.TabIndex = 19;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Pilot whitelist";
+            this.gbPilotWhitelist.Controls.Add(this.btnRemovePilot);
+            this.gbPilotWhitelist.Controls.Add(this.btnAddPilot);
+            this.gbPilotWhitelist.Controls.Add(this.lstPilots);
+            this.gbPilotWhitelist.Location = new System.Drawing.Point(12, 362);
+            this.gbPilotWhitelist.Name = "gbPilotWhitelist";
+            this.gbPilotWhitelist.Size = new System.Drawing.Size(271, 120);
+            this.gbPilotWhitelist.TabIndex = 19;
+            this.gbPilotWhitelist.TabStop = false;
+            this.gbPilotWhitelist.Text = "Pilot whitelist";
             // 
             // btnRemovePilot
             // 
@@ -567,22 +600,22 @@
             this.lstPilots.Size = new System.Drawing.Size(167, 95);
             this.lstPilots.TabIndex = 0;
             // 
-            // groupBox3
+            // gbItemInformation
             // 
-            this.groupBox3.Controls.Add(this.txtEXP);
-            this.groupBox3.Controls.Add(this.lblEXP);
-            this.groupBox3.Controls.Add(this.txtName);
-            this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.lblPrice);
-            this.groupBox3.Controls.Add(this.txtDescription);
-            this.groupBox3.Controls.Add(this.lblDescription);
-            this.groupBox3.Controls.Add(this.txtPrice);
-            this.groupBox3.Location = new System.Drawing.Point(12, 27);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(548, 148);
-            this.groupBox3.TabIndex = 28;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Item Information";
+            this.gbItemInformation.Controls.Add(this.txtEXP);
+            this.gbItemInformation.Controls.Add(this.lblEXP);
+            this.gbItemInformation.Controls.Add(this.txtName);
+            this.gbItemInformation.Controls.Add(this.lblName);
+            this.gbItemInformation.Controls.Add(this.lblPrice);
+            this.gbItemInformation.Controls.Add(this.txtDescription);
+            this.gbItemInformation.Controls.Add(this.lblDescription);
+            this.gbItemInformation.Controls.Add(this.txtPrice);
+            this.gbItemInformation.Location = new System.Drawing.Point(12, 27);
+            this.gbItemInformation.Name = "gbItemInformation";
+            this.gbItemInformation.Size = new System.Drawing.Size(548, 148);
+            this.gbItemInformation.TabIndex = 28;
+            this.gbItemInformation.TabStop = false;
+            this.gbItemInformation.Text = "Item Information";
             // 
             // txtEXP
             // 
@@ -612,206 +645,49 @@
             this.txtName.Size = new System.Drawing.Size(247, 20);
             this.txtName.TabIndex = 29;
             // 
-            // label1
+            // lblName
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 28;
-            this.label1.Text = "Name:";
+            this.lblName.AutoSize = true;
+            this.lblName.Location = new System.Drawing.Point(6, 22);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(38, 13);
+            this.lblName.TabIndex = 28;
+            this.lblName.Text = "Name:";
             // 
-            // groupBox4
+            // gbTerrain
             // 
-            this.groupBox4.Controls.Add(this.cbTerrainAir);
-            this.groupBox4.Controls.Add(this.cbTerrainLand);
-            this.groupBox4.Controls.Add(this.cbTerrainSea);
-            this.groupBox4.Controls.Add(this.cbTerrainSpace);
-            this.groupBox4.Controls.Add(this.lblTerrainSpace);
-            this.groupBox4.Controls.Add(this.lblTerrainSea);
-            this.groupBox4.Controls.Add(this.lblTerrainLand);
-            this.groupBox4.Controls.Add(this.lblTerrainAir);
-            this.groupBox4.Location = new System.Drawing.Point(566, 27);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(156, 125);
-            this.groupBox4.TabIndex = 29;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Terrain";
+            this.gbTerrain.Controls.Add(this.dgvTerrainRanks);
+            this.gbTerrain.Location = new System.Drawing.Point(566, 27);
+            this.gbTerrain.Name = "gbTerrain";
+            this.gbTerrain.Size = new System.Drawing.Size(156, 245);
+            this.gbTerrain.TabIndex = 29;
+            this.gbTerrain.TabStop = false;
+            this.gbTerrain.Text = "Terrain";
             // 
-            // cbTerrainAir
+            // dgvTerrainRanks
             // 
-            this.cbTerrainAir.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbTerrainAir.FormattingEnabled = true;
-            this.cbTerrainAir.Items.AddRange(new object[] {
-            "-",
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbTerrainAir.Location = new System.Drawing.Point(53, 19);
-            this.cbTerrainAir.Name = "cbTerrainAir";
-            this.cbTerrainAir.Size = new System.Drawing.Size(97, 21);
-            this.cbTerrainAir.TabIndex = 7;
+            this.dgvTerrainRanks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTerrainRanks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Movement,
+            this.Column2});
+            this.dgvTerrainRanks.Location = new System.Drawing.Point(6, 17);
+            this.dgvTerrainRanks.Name = "dgvTerrainRanks";
+            this.dgvTerrainRanks.RowHeadersVisible = false;
+            this.dgvTerrainRanks.ShowCellErrors = false;
+            this.dgvTerrainRanks.Size = new System.Drawing.Size(142, 222);
+            this.dgvTerrainRanks.TabIndex = 35;
             // 
-            // cbTerrainLand
+            // Movement
             // 
-            this.cbTerrainLand.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbTerrainLand.FormattingEnabled = true;
-            this.cbTerrainLand.Items.AddRange(new object[] {
-            "-",
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbTerrainLand.Location = new System.Drawing.Point(53, 45);
-            this.cbTerrainLand.Name = "cbTerrainLand";
-            this.cbTerrainLand.Size = new System.Drawing.Size(97, 21);
-            this.cbTerrainLand.TabIndex = 6;
+            this.Movement.HeaderText = "Movement";
+            this.Movement.Name = "Movement";
+            this.Movement.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Movement.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // cbTerrainSea
+            // Column2
             // 
-            this.cbTerrainSea.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbTerrainSea.FormattingEnabled = true;
-            this.cbTerrainSea.Items.AddRange(new object[] {
-            "-",
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbTerrainSea.Location = new System.Drawing.Point(53, 71);
-            this.cbTerrainSea.Name = "cbTerrainSea";
-            this.cbTerrainSea.Size = new System.Drawing.Size(97, 21);
-            this.cbTerrainSea.TabIndex = 5;
-            // 
-            // cbTerrainSpace
-            // 
-            this.cbTerrainSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbTerrainSpace.FormattingEnabled = true;
-            this.cbTerrainSpace.Items.AddRange(new object[] {
-            "-",
-            "S",
-            "A",
-            "B",
-            "C",
-            "D"});
-            this.cbTerrainSpace.Location = new System.Drawing.Point(53, 98);
-            this.cbTerrainSpace.Name = "cbTerrainSpace";
-            this.cbTerrainSpace.Size = new System.Drawing.Size(97, 21);
-            this.cbTerrainSpace.TabIndex = 4;
-            // 
-            // lblTerrainSpace
-            // 
-            this.lblTerrainSpace.AutoSize = true;
-            this.lblTerrainSpace.Location = new System.Drawing.Point(6, 100);
-            this.lblTerrainSpace.Name = "lblTerrainSpace";
-            this.lblTerrainSpace.Size = new System.Drawing.Size(41, 13);
-            this.lblTerrainSpace.TabIndex = 3;
-            this.lblTerrainSpace.Text = "Space:";
-            // 
-            // lblTerrainSea
-            // 
-            this.lblTerrainSea.AutoSize = true;
-            this.lblTerrainSea.Location = new System.Drawing.Point(6, 74);
-            this.lblTerrainSea.Name = "lblTerrainSea";
-            this.lblTerrainSea.Size = new System.Drawing.Size(29, 13);
-            this.lblTerrainSea.TabIndex = 2;
-            this.lblTerrainSea.Text = "Sea:";
-            // 
-            // lblTerrainLand
-            // 
-            this.lblTerrainLand.AutoSize = true;
-            this.lblTerrainLand.Location = new System.Drawing.Point(6, 48);
-            this.lblTerrainLand.Name = "lblTerrainLand";
-            this.lblTerrainLand.Size = new System.Drawing.Size(34, 13);
-            this.lblTerrainLand.TabIndex = 1;
-            this.lblTerrainLand.Text = "Land:";
-            // 
-            // lblTerrainAir
-            // 
-            this.lblTerrainAir.AutoSize = true;
-            this.lblTerrainAir.Location = new System.Drawing.Point(6, 22);
-            this.lblTerrainAir.Name = "lblTerrainAir";
-            this.lblTerrainAir.Size = new System.Drawing.Size(22, 13);
-            this.lblTerrainAir.TabIndex = 0;
-            this.lblTerrainAir.Text = "Air:";
-            // 
-            // cboUnderwater
-            // 
-            this.cboUnderwater.Controls.Add(this.cboMovementUnderwater);
-            this.cboUnderwater.Controls.Add(this.cboMovementUnderground);
-            this.cboUnderwater.Controls.Add(this.cboMovementSpace);
-            this.cboUnderwater.Controls.Add(this.cboMovementSea);
-            this.cboUnderwater.Controls.Add(this.cboMovementLand);
-            this.cboUnderwater.Controls.Add(this.cboMovementAir);
-            this.cboUnderwater.Location = new System.Drawing.Point(566, 158);
-            this.cboUnderwater.Name = "cboUnderwater";
-            this.cboUnderwater.Size = new System.Drawing.Size(156, 170);
-            this.cboUnderwater.TabIndex = 30;
-            this.cboUnderwater.TabStop = false;
-            this.cboUnderwater.Text = "Movement types";
-            // 
-            // cboMovementUnderwater
-            // 
-            this.cboMovementUnderwater.AutoSize = true;
-            this.cboMovementUnderwater.Location = new System.Drawing.Point(6, 134);
-            this.cboMovementUnderwater.Name = "cboMovementUnderwater";
-            this.cboMovementUnderwater.Size = new System.Drawing.Size(81, 17);
-            this.cboMovementUnderwater.TabIndex = 5;
-            this.cboMovementUnderwater.Text = "Underwater";
-            this.cboMovementUnderwater.UseVisualStyleBackColor = true;
-            // 
-            // cboMovementUnderground
-            // 
-            this.cboMovementUnderground.AutoSize = true;
-            this.cboMovementUnderground.Location = new System.Drawing.Point(6, 111);
-            this.cboMovementUnderground.Name = "cboMovementUnderground";
-            this.cboMovementUnderground.Size = new System.Drawing.Size(88, 17);
-            this.cboMovementUnderground.TabIndex = 4;
-            this.cboMovementUnderground.Text = "Underground";
-            this.cboMovementUnderground.UseVisualStyleBackColor = true;
-            // 
-            // cboMovementSpace
-            // 
-            this.cboMovementSpace.AutoSize = true;
-            this.cboMovementSpace.Location = new System.Drawing.Point(6, 88);
-            this.cboMovementSpace.Name = "cboMovementSpace";
-            this.cboMovementSpace.Size = new System.Drawing.Size(57, 17);
-            this.cboMovementSpace.TabIndex = 3;
-            this.cboMovementSpace.Text = "Space";
-            this.cboMovementSpace.UseVisualStyleBackColor = true;
-            // 
-            // cboMovementSea
-            // 
-            this.cboMovementSea.AutoSize = true;
-            this.cboMovementSea.Location = new System.Drawing.Point(6, 65);
-            this.cboMovementSea.Name = "cboMovementSea";
-            this.cboMovementSea.Size = new System.Drawing.Size(45, 17);
-            this.cboMovementSea.TabIndex = 2;
-            this.cboMovementSea.Text = "Sea";
-            this.cboMovementSea.UseVisualStyleBackColor = true;
-            // 
-            // cboMovementLand
-            // 
-            this.cboMovementLand.AutoSize = true;
-            this.cboMovementLand.Location = new System.Drawing.Point(6, 42);
-            this.cboMovementLand.Name = "cboMovementLand";
-            this.cboMovementLand.Size = new System.Drawing.Size(50, 17);
-            this.cboMovementLand.TabIndex = 1;
-            this.cboMovementLand.Text = "Land";
-            this.cboMovementLand.UseVisualStyleBackColor = true;
-            // 
-            // cboMovementAir
-            // 
-            this.cboMovementAir.AutoSize = true;
-            this.cboMovementAir.Location = new System.Drawing.Point(6, 19);
-            this.cboMovementAir.Name = "cboMovementAir";
-            this.cboMovementAir.Size = new System.Drawing.Size(38, 17);
-            this.cboMovementAir.TabIndex = 0;
-            this.cboMovementAir.Text = "Air";
-            this.cboMovementAir.UseVisualStyleBackColor = true;
+            this.Column2.HeaderText = "Rank";
+            this.Column2.Name = "Column2";
             // 
             // groupBox6
             // 
@@ -925,47 +801,24 @@
             this.btnEditAttack.UseVisualStyleBackColor = true;
             this.btnEditAttack.Click += new System.EventHandler(this.btnEditAttacks_Click);
             // 
-            // txtReMoveLevel
+            // gbUnitType
             // 
-            this.txtReMoveLevel.Location = new System.Drawing.Point(225, 97);
-            this.txtReMoveLevel.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtReMoveLevel.Name = "txtReMoveLevel";
-            this.txtReMoveLevel.Size = new System.Drawing.Size(39, 20);
-            this.txtReMoveLevel.TabIndex = 66;
+            this.gbUnitType.Controls.Add(this.cbUnitType);
+            this.gbUnitType.Location = new System.Drawing.Point(566, 278);
+            this.gbUnitType.Name = "gbUnitType";
+            this.gbUnitType.Size = new System.Drawing.Size(156, 50);
+            this.gbUnitType.TabIndex = 30;
+            this.gbUnitType.TabStop = false;
+            this.gbUnitType.Text = "Unit Type";
             // 
-            // lblReMoveLevel
+            // cbUnitType
             // 
-            this.lblReMoveLevel.AutoSize = true;
-            this.lblReMoveLevel.Location = new System.Drawing.Point(136, 99);
-            this.lblReMoveLevel.Name = "lblReMoveLevel";
-            this.lblReMoveLevel.Size = new System.Drawing.Size(83, 13);
-            this.lblReMoveLevel.TabIndex = 65;
-            this.lblReMoveLevel.Text = "Re-Move Level:";
-            // 
-            // txtPostMVLevel
-            // 
-            this.txtPostMVLevel.Location = new System.Drawing.Point(90, 97);
-            this.txtPostMVLevel.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtPostMVLevel.Name = "txtPostMVLevel";
-            this.txtPostMVLevel.Size = new System.Drawing.Size(39, 20);
-            this.txtPostMVLevel.TabIndex = 64;
-            // 
-            // lblPostMVLevel
-            // 
-            this.lblPostMVLevel.AutoSize = true;
-            this.lblPostMVLevel.Location = new System.Drawing.Point(5, 99);
-            this.lblPostMVLevel.Name = "lblPostMVLevel";
-            this.lblPostMVLevel.Size = new System.Drawing.Size(79, 13);
-            this.lblPostMVLevel.TabIndex = 63;
-            this.lblPostMVLevel.Text = "Post MV Level:";
+            this.cbUnitType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbUnitType.FormattingEnabled = true;
+            this.cbUnitType.Location = new System.Drawing.Point(6, 19);
+            this.cbUnitType.Name = "cbUnitType";
+            this.cbUnitType.Size = new System.Drawing.Size(144, 21);
+            this.cbUnitType.TabIndex = 7;
             // 
             // UnitNormalEditor
             // 
@@ -974,20 +827,22 @@
             this.ClientSize = new System.Drawing.Size(734, 485);
             this.Controls.Add(this.gbAttacks);
             this.Controls.Add(this.groupBox6);
-            this.Controls.Add(this.cboUnderwater);
-            this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.gbUnitType);
+            this.Controls.Add(this.gbTerrain);
+            this.Controls.Add(this.gbPilotWhitelist);
             this.Controls.Add(this.tabList);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gbUnitBoosts);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.gbItemInformation);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "UnitNormalEditor";
             this.Text = "Unit Normal Editor";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gbUnitBoosts.ResumeLayout(false);
+            this.gbUnitBoosts.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtChargeCancelLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxClimb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtBaseMovement)).EndInit();
@@ -1000,19 +855,16 @@
             this.tabAnimations.ResumeLayout(false);
             this.tabAnimations.PerformLayout();
             this.tabAbilities.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.gbPilotWhitelist.ResumeLayout(false);
+            this.gbItemInformation.ResumeLayout(false);
+            this.gbItemInformation.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtEXP)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            this.cboUnderwater.ResumeLayout(false);
-            this.cboUnderwater.PerformLayout();
+            this.gbTerrain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTerrainRanks)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.gbAttacks.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPostMVLevel)).EndInit();
+            this.gbUnitType.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1025,36 +877,22 @@
         private System.Windows.Forms.TextBox txtPrice;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblDescription;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label lvlMovement;
+        private System.Windows.Forms.GroupBox gbUnitBoosts;
+        private System.Windows.Forms.Label lblMovement;
         private System.Windows.Forms.Label lblMobility;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblArmor;
+        private System.Windows.Forms.Label lblBaseEN;
+        private System.Windows.Forms.Label lblBaseHP;
         private System.Windows.Forms.TabControl tabList;
         private System.Windows.Forms.TabPage tabAnimations;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox gbPilotWhitelist;
         private System.Windows.Forms.Button btnRemovePilot;
         private System.Windows.Forms.Button btnAddPilot;
         private System.Windows.Forms.ListBox lstPilots;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox gbItemInformation;
         private System.Windows.Forms.TextBox txtName;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Label lblTerrainAir;
-        private System.Windows.Forms.ComboBox cbTerrainAir;
-        private System.Windows.Forms.ComboBox cbTerrainLand;
-        private System.Windows.Forms.ComboBox cbTerrainSea;
-        private System.Windows.Forms.ComboBox cbTerrainSpace;
-        private System.Windows.Forms.Label lblTerrainSpace;
-        private System.Windows.Forms.Label lblTerrainSea;
-        private System.Windows.Forms.Label lblTerrainLand;
-        private System.Windows.Forms.GroupBox cboUnderwater;
-        private System.Windows.Forms.CheckBox cboMovementAir;
-        private System.Windows.Forms.CheckBox cboMovementLand;
-        private System.Windows.Forms.CheckBox cboMovementSpace;
-        private System.Windows.Forms.CheckBox cboMovementSea;
-        private System.Windows.Forms.CheckBox cboMovementUnderground;
+        private System.Windows.Forms.Label lblName;
+        private System.Windows.Forms.GroupBox gbTerrain;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.RadioButton rbSizeLLL;
         private System.Windows.Forms.RadioButton rbSizeSS;
@@ -1072,7 +910,7 @@
         private System.Windows.Forms.GroupBox gbAttacks;
         private System.Windows.Forms.Button btnEditAttack;
         private System.Windows.Forms.TextBox txtAnimationName;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblAnimationPath;
         private System.Windows.Forms.ListView lstAnimations;
         private System.Windows.Forms.Button btnSelectAnimation;
         private System.Windows.Forms.Label lblPartsSlots;
@@ -1082,7 +920,6 @@
         private System.Windows.Forms.Label lblEXP;
         private System.Windows.Forms.ToolStripMenuItem tsmExport;
         private System.Windows.Forms.ToolStripMenuItem tsmDetails;
-        private System.Windows.Forms.CheckBox cboMovementUnderwater;
         private System.Windows.Forms.NumericUpDown txtBaseEN;
         private System.Windows.Forms.NumericUpDown txtBaseHP;
         private System.Windows.Forms.NumericUpDown txtBaseMobility;
@@ -1096,5 +933,10 @@
         private System.Windows.Forms.Label lblReMoveLevel;
         private System.Windows.Forms.NumericUpDown txtPostMVLevel;
         private System.Windows.Forms.Label lblPostMVLevel;
+        private System.Windows.Forms.DataGridView dgvTerrainRanks;
+        private System.Windows.Forms.GroupBox gbUnitType;
+        private System.Windows.Forms.ComboBox cbUnitType;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Movement;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Column2;
     }
 }

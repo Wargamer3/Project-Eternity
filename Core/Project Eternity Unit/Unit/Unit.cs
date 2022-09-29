@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using FMOD;
@@ -20,6 +19,8 @@ namespace ProjectEternity.Core.Units
         public static readonly Dictionary<string, Unit> DicDefaultUnitType = new Dictionary<string, Unit>();//When you just need a placeholder outside of a game.
 
         public static char[] Grades = new char[6] { '-', 'S', 'A', 'B', 'C', 'D' };
+
+        public static readonly List<char> ListRank = new List<char>() { '-', 'S', 'A', 'B', 'C', 'D' };
 
         /// <summary>
         /// List of Unit path refered by their Name.
@@ -55,7 +56,7 @@ namespace ProjectEternity.Core.Units
         protected int _EN;
         public int HP { get { return _HP; } }
         public int EN { get { return _EN; } }
-        public string Size { get { return _UnitStat.Size; } }
+        public byte SizeIndex { get { return _UnitStat.SizeIndex; } }
 
         #region Stats getters
 
@@ -266,9 +267,7 @@ namespace ProjectEternity.Core.Units
 
         public UnitAnimations Animations { get { return _UnitStat.Animations; } }
 
-        public Dictionary<string, int> DicTerrainValue { get { return _UnitStat.DicTerrainValue; } }
-
-        public List<string> ListTerrainChoices { get { return _UnitStat.ListTerrainChoices; } }
+        public Dictionary<byte, byte> DicRankByMovement { get { return _UnitStat.DicRankByMovement; } }
 
         public List<string> ListIgnoreSkill;//List used to ignore other skills.
         public List<string> ListCharacterIDWhitelist { get { return _UnitStat.ListCharacterIDWhitelist; } }
@@ -593,7 +592,7 @@ namespace ProjectEternity.Core.Units
             return AttackToDrop;
         }
 
-        public void UpdateAllAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
+        public void UpdateAllAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, byte TargetMovementType, bool CanMove)
         {
             foreach (Attack ActiveAttack in ListAttack)
             {
@@ -604,7 +603,7 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public void UpdateNonMAPAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, string TargetMovementType, bool CanMove)
+        public void UpdateNonMAPAttacks(Vector3 StartPosition, int UnitTeam, Vector3 TargetPosition, int TargetTeam, bool[,] ArrayTargetMapSize, byte TargetMovementType, bool CanMove)
         {
             foreach (Attack ActiveAttack in ListAttack)
             {
@@ -883,24 +882,24 @@ namespace ProjectEternity.Core.Units
         {
             get
             {
-                switch (Size)
+                switch (UnitStats.ListUnitSize[SizeIndex])
                 {
-                    case "SS":
+                    case UnitStats.UnitSizeSS:
                         return -20;
 
-                    case "S":
+                    case UnitStats.UnitSizeS:
                         return -10;
 
-                    case "M":
+                    case UnitStats.UnitSizeM:
                         return 0;
 
-                    case "L":
+                    case UnitStats.UnitSizeL:
                         return 10;
 
-                    case "2L":
+                    case UnitStats.UnitSizeLL:
                         return 20;
 
-                    case "3L":
+                    case UnitStats.UnitSizeLLL:
                         return 30;
                 }
                 return 0;
@@ -975,14 +974,14 @@ namespace ProjectEternity.Core.Units
 
         #region TerrainAttributes
 
-        public char TerrainLetterAttribute(string Terrain)
+        public char TerrainLetterAttribute(byte MovementTypeIndex)
         {
-            return Grades[Math.Min(Grades.Length - 1, _UnitStat.TerrainAttributeValue(Terrain))];
+            return Grades[Math.Min(Grades.Length - 1, _UnitStat.TerrainAttributeValue(MovementTypeIndex))];
         }
 
-        public int TerrainMobilityAttribute(string Terrain)
+        public int TerrainMobilityAttribute(byte MovementTypeIndex)
         {
-            switch (TerrainLetterAttribute(Terrain))
+            switch (TerrainLetterAttribute(MovementTypeIndex))
             {
                 case 'S':
                     return 20;
@@ -1002,9 +1001,9 @@ namespace ProjectEternity.Core.Units
             return 0;
         }
 
-        public int TerrainArmorAttribute(string Terrain)
+        public int TerrainArmorAttribute(byte MovementTypeIndex)
         {
-            switch (TerrainLetterAttribute(Terrain))
+            switch (TerrainLetterAttribute(MovementTypeIndex))
             {
                 case 'S':
                     return 20;

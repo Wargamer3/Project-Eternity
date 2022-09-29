@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -25,7 +26,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override bool CanActivatePassive()
         {
-            return Params.GlobalContext.EffectTargetSquad != null && Params.GlobalContext.EffectTargetSquad.CurrentMovement == "Sea";
+            return Params.GlobalContext.EffectTargetSquad != null && Params.GlobalContext.EffectTargetSquad.CurrentTerrainIndex == UnitStats.TerrainSeaIndex;
         }
 
         public override BaseSkillRequirement Copy()

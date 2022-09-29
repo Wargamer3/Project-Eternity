@@ -222,15 +222,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Owner.ActivateAutomaticSkills(ActiveSquad, string.Empty);
             ActiveSquad.SetPosition(Owner.CursorPosition);
 
-            if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-            {
-                ActiveSquad.IsFlying = true;
-                ActiveSquad.CurrentMovement = UnitStats.TerrainAir;
-            }
-            else
-            {
-                ActiveSquad.CurrentMovement = UnitStats.TerrainLand;
-            }
+            ActiveSquad.CurrentTerrainIndex = Owner.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z);
         }
 
         public virtual void Update(GameTime gameTime)

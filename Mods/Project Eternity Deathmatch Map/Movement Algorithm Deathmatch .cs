@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         protected override List<MovementAlgorithmTile> AddSuccessor(MovementAlgorithmTile StartingNode, float OffsetX, float OffsetY,
-            UnitMapComponent MapComponent, bool IgnoreObstacles)
+            UnitMapComponent MapComponent, UnitStats UnitStat, bool IgnoreObstacles)
         {
             List<MovementAlgorithmTile> ListTerrainSuccessor = new List<MovementAlgorithmTile>();
             List<MovementAlgorithmTile> ListLayerPossibility;
@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             foreach (MovementAlgorithmTile ActiveTile in ListLayerPossibility)
             {
                 //Wall
-                if (ActiveTile == null || ActiveTile.MVEnterCost == -1 || ActiveTile.MovementCost == -1
+                if (ActiveTile == null || !Map.TerrainRestrictions.CanMove(MapComponent, UnitStat, ActiveTile.TerrainTypeIndex) || ActiveTile.MovementCost == -1
                     || ActiveTile.TerrainTypeIndex == UnitStats.TerrainWallIndex || ActiveTile.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
                 {
                     continue;
@@ -66,43 +66,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override float GetMVCost(UnitMapComponent MapComponent, UnitStats UnitStat, MovementAlgorithmTile CurrentNode, MovementAlgorithmTile TerrainToGo)
         {
-            float MovementCostToNeighbor = 0;
-            if (MapComponent.CurrentMovement == UnitStats.TerrainAir)
-            {
-                if (Map.GetTerrainLetterAttribute(UnitStat, UnitStats.TerrainAir) == 'C'
-                    || Map.GetTerrainLetterAttribute(UnitStat, UnitStats.TerrainAir) == 'D'
-                    || Map.GetTerrainLetterAttribute(UnitStat, UnitStats.TerrainAir) == '-')
-                {
-                    MovementCostToNeighbor += 0.5f;
-                }
-                else
-                {
-                    MovementCostToNeighbor += 1;
-                }
-            }
-            else
-            {
-                string TerrainType = Map.GetTerrainType(TerrainToGo);
-
-                if (!UnitStat.ListTerrainChoices.Contains(TerrainType))
-                {
-                    return -1;
-                }
-
-                char TerrainCharacter = Map.GetTerrainLetterAttribute(UnitStat, TerrainType);
-
-                if ((TerrainCharacter == 'C' || TerrainCharacter == 'D' || TerrainCharacter == '-') && TerrainType != UnitStats.TerrainLand)
-                    MovementCostToNeighbor += TerrainToGo.MVMoveCost + 0.5f;
-                else if (TerrainCharacter == 'S' && TerrainToGo.MVMoveCost > 1)
-                    MovementCostToNeighbor += TerrainToGo.MVMoveCost / 2;
-                else
-                    MovementCostToNeighbor += TerrainToGo.MVMoveCost;
-
-                if (TerrainToGo.TerrainTypeIndex != GetTile((int)CurrentNode.WorldPosition.X, (int)CurrentNode.WorldPosition.Y, (int)MapComponent.Z).TerrainTypeIndex)
-                    MovementCostToNeighbor += TerrainToGo.MVEnterCost;
-            }
-
-            return MovementCostToNeighbor;
+            return Map.TerrainRestrictions.GetMVCost(MapComponent, UnitStat, TerrainToGo.TerrainTypeIndex);
         }
 
         public override MovementAlgorithmTile GetTile(int PosX, int PosY, int LayerIndex)

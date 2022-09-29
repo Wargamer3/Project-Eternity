@@ -54,7 +54,6 @@
     <Compile Include="Effects\Critical Base Damage Effect.cs" />
     <Compile Include="Effects\Critical Hit Rate Effect.cs" />
     <Compile Include="Effects\Damage Taken Effect.cs" />
-    <Compile Include="Effects\Unit Movement Type Effect.cs" />
     <Compile Include="Effects\EN Cost Effect.cs" />
     <Compile Include="Effects\EN Regen Effect.cs" />
     <Compile Include="Effects\Evasion Rate Effect.cs" />

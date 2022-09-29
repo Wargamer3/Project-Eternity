@@ -73,11 +73,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
 
             ListActionMenuChoice = new ActionPanelHolder();
             CursorPosition = new Vector3(9, 13, 0);
-            ListTerrainType = new List<string>();
-            ListTerrainType.Add("Air");
-            ListTerrainType.Add("Land");
-            ListTerrainType.Add("Sea");
-            ListTerrainType.Add("Space");
 
             ListTileSet = new List<Texture2D>();
             ListTileSetPath = new List<string>();
@@ -411,7 +406,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 for (int W = 0; W < CurrentUnit.ListAttack.Count; W++)
                 {
                     CurrentUnit.ListAttack[W].UpdateAttack(CurrentUnit, Position, ListPlayer[ActivePlayerIndex].Team, ListPlayer[TargetPlayerIndex].ListConstruction[C].Position, ListPlayer[TargetPlayerIndex].Team,
-                        ListPlayer[TargetPlayerIndex].ListConstruction[C].ArrayMapSize, ListPlayer[TargetPlayerIndex].ListConstruction[C].CurrentMovement, HasMoved);
+                        ListPlayer[TargetPlayerIndex].ListConstruction[C].ArrayMapSize, ListPlayer[TargetPlayerIndex].ListConstruction[C].CurrentTerrainIndex, HasMoved);
                 }
             }
         }

@@ -13,8 +13,7 @@ namespace ProjectEternity.Core.Units
         private int _ActionsRemaining;//How many can this Unit move this turn.
         public bool CanMove { get { return _ActionsRemaining > 0; } }
         public int ActionsRemaining { get { return _ActionsRemaining; } set { _ActionsRemaining = value; } }
-        public string CurrentMovement;//How the Unit is currently moving.
-        public bool IsFlying;
+        public byte CurrentTerrainIndex;//How the Unit is currently moving.
         public bool IsUnderTerrain;
         public bool IsPlayerControlled;
 

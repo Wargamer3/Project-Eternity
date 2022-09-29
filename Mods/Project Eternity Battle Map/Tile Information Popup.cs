@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 this.TimeOffset = TimeOffset;
                 this.CurrentTile = CurrentTile;
 
-                TileName = Map.GetTerrainType(CurrentTile.TerrainTypeIndex);
+                TileName = Map.TerrainRestrictions.ListTerrainType[CurrentTile.TerrainTypeIndex].Name;
 
                 ListVisibleExtraText = new List<string>();
 

@@ -6,6 +6,7 @@ using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using UnitStats = ProjectEternity.Core.Units.UnitStats;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -31,7 +32,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return AttackFormula;
         }
 
-        public int AttackFormula(Unit Attacker, Attack CurrentAttack, string AttackerTerrainType)
+        public int AttackFormula(Unit Attacker, Attack CurrentAttack, byte AttackerTerrainType)
         {
             int WeaponTerrain = CurrentAttack.TerrainAttribute(AttackerTerrainType);
             
@@ -44,7 +45,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return DefenseFormula;
         }
 
-        public int DefenseFormula(Unit Defender, string DefenderTerrainType, Terrain DefenderTerrain)
+        public int DefenseFormula(Unit Defender, byte DefenderTerrainType, Terrain DefenderTerrain)
         {
             int Armor = Defender.Armor + GetTerrainBonus(DefenderTerrain, TerrainActivation.OnEveryTurns, TerrainBonus.Armor);
             int DefenderTerrainRate = Defender.TerrainArmorAttribute(DefenderTerrainType);
@@ -59,32 +60,17 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             Squad DefenderSquad = ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
             Unit Defender = DefenderSquad[TargetUnitIndex];
 
-            string AttackerTerrainType;
-            string DefenderTerrainType;
+            byte AttackerTerrainType;
+            byte DefenderTerrainType;
             Terrain DefenderTerrain;
 
-            if (AttackerSquad.IsFlying)
-            {
-                AttackerTerrainType = UnitStats.TerrainAir;
-            }
-            else
-            {
-                AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, (int)AttackerSquad.Z);
-            }
+            AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, (int)AttackerSquad.Z);
 
-            if (DefenderSquad.IsFlying)
-            {
-                DefenderTerrainType = UnitStats.TerrainAir;
-                DefenderTerrain = null;
-            }
-            else
-            {
-                DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, (int)DefenderSquad.Z);
-                DefenderTerrain = GetTerrain(DefenderSquad);
-            }
+            DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, (int)DefenderSquad.Z);
+            DefenderTerrain = GetTerrain(DefenderSquad);
 
             //Check if the Unit can counter the attack.
-            bool NullifyAttack = CanNullifyAttack(CurrentAttack, AttackerTerrainType, DefenderSquad.CurrentMovement, DefenderSquad, Defender.Boosts);
+            bool NullifyAttack = CanNullifyAttack(CurrentAttack, AttackerTerrainType, DefenderSquad.CurrentTerrainIndex, DefenderSquad, Defender.Boosts);
 
             int Attack = AttackFormula(Attacker, CurrentAttack, AttackerTerrainType);
             int Defense = DefenseFormula(Defender, DefenderTerrainType, DefenderTerrain);
@@ -100,12 +86,12 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return (int)((((Attacker.PilotHIT / 2 + 130) * ((100 + FinalAttackerTerrainMultiplier) / 100.0)) + CurrentAttack.Accuracy + Attacker.Boosts.AccuracyModifier) * Attacker.Boosts.AccuracyMultiplier);
         }
 
-        public int Accuracy(Unit Attacker, Attack CurrentAttack, string AttackerTerrainType)
+        public int Accuracy(Unit Attacker, Attack CurrentAttack, byte AttackerTerrainType)
         {
             int AttackerTerrain = 0;
             int AttackerPilotTerrain = 0;
             char AttackerTerrainLetter = Attacker.TerrainLetterAttribute(AttackerTerrainType);
-            char AttackerPilotTerrainLetter = Attacker.Pilot.TerrainGrade.GetTerrain(AttackerTerrainType);
+            char AttackerPilotTerrainLetter = Character.ListGrade[Attacker.Pilot.DicRankByMovement[AttackerTerrainType]];
 
             switch (AttackerTerrainLetter)
             {
@@ -193,14 +179,14 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             return (int)((Defender.PilotEVA / 2 + Defender.Mobility) * ((100 + FinalDefenderTerrainMultiplier) / 100.0)) + other;
         }
 
-        public int Evasion(Unit Defender, string DefenderTerrainType, Terrain DefenderTerrain)
+        public int Evasion(Unit Defender, byte DefenderTerrainType, Terrain DefenderTerrain)
         {
             int DefenderTerrainRate = 0;
             int DefenderPilotTerrain = 0;
-            char AttackerTerrainLetter = Defender.TerrainLetterAttribute(DefenderTerrainType);
-            char AttackerPilotTerrainLetter = Defender.Pilot.TerrainGrade.GetTerrain(DefenderTerrainType);
+            char DefenderTerrainLetter = Defender.TerrainLetterAttribute(DefenderTerrainType);
+            char DefenderPilotTerrainLetter = Character.ListGrade[Defender.Pilot.DicRankByMovement[DefenderTerrainType]];
 
-            switch (AttackerTerrainLetter)
+            switch (DefenderTerrainLetter)
             {
                 case 'S':
                     DefenderTerrainRate = 20;
@@ -223,7 +209,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                     break;
             }
 
-            switch (AttackerPilotTerrainLetter)
+            switch (DefenderPilotTerrainLetter)
             {
                 case 'S':
                     DefenderPilotTerrain = 20;
@@ -279,7 +265,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
         }
 
         //(((Attacker Hit Rate + Defender Evasion) * Size Difference Multiplier) + Additive final hit rate effect) * Multiplying final hit rate effect
-        public int CalculateHitRate(Unit Attacker, Attack CurrentAttack, string AttackerTerrainType, Unit Defender, string DefenderTerrainType, Terrain DefenderTerrain, Unit.BattleDefenseChoices DefenseChoice)
+        public int CalculateHitRate(Unit Attacker, Attack CurrentAttack, byte AttackerTerrainType, Unit Defender, byte DefenderTerrainType, Terrain DefenderTerrain, Unit.BattleDefenseChoices DefenseChoice)
         {
             int SizeCompare = Attacker.SizeValue - Defender.SizeValue;
 
@@ -309,29 +295,14 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 return 100;
             }
 
-            string AttackerTerrainType;
-            string DefenderTerrainType;
+            byte AttackerTerrainType;
+            byte DefenderTerrainType;
             Terrain DefenderTerrain;
 
-            if (AttackerSquad.IsFlying)
-            {
-                AttackerTerrainType = UnitStats.TerrainAir;
-            }
-            else
-            {
-                AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, (int)AttackerSquad.Z);
-            }
+            AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, (int)AttackerSquad.Z);
 
-            if (DefenderSquad.IsFlying)
-            {
-                DefenderTerrainType = UnitStats.TerrainAir;
-                DefenderTerrain = null;
-            }
-            else
-            {
-                DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, (int)DefenderSquad.Z);
-                DefenderTerrain = GetTerrain(DefenderSquad);
-            }
+            DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, (int)DefenderSquad.Z);
+            DefenderTerrain = GetTerrain(DefenderSquad);
 
             return CalculateHitRate(Attacker, CurrentAttack, AttackerTerrainType, Defender, DefenderTerrainType, DefenderTerrain, DefenseChoice);
         }

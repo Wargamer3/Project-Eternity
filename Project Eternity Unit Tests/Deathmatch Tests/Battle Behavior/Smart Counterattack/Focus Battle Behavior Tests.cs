@@ -38,7 +38,7 @@ namespace ProjectEternity.UnitTests.BattleBehavior
 
             Attack DummyAttack = new Attack("Dummy Attack", string.Empty, 0, "40000", 0, 5, WeaponPrimaryProperty.None,
                 WeaponSecondaryProperty.None, 10, 0, 6, 1, 100, "Laser",
-                new Dictionary<string, char>() { { "Air", 'S' }, { "Land", 'S' }, { "Sea", 'S' }, { "Space", 'S' } });
+                new Dictionary<byte, byte>() { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 } });
             EnemySquad.CurrentLeader.ListAttack.Add(DummyAttack);
 
             EnemySquad.IsPlayerControlled = false;

@@ -39,11 +39,10 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             : base(XPos, YPos, LayerIndex, LayerDepth)
         {
             TerrainTypeIndex = 0;
-            MVMoveCost = 1;
             CapturedPlayerIndex = -1;
         }
 
-        public TerrainConquest(int XPos, int YPos, int LayerIndex, float LayerDepth, int TerrainTypeIndex)
+        public TerrainConquest(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
             : base(XPos, YPos, LayerIndex, LayerDepth)
         {
             this.TerrainTypeIndex = TerrainTypeIndex;
@@ -52,7 +51,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         public TerrainConquest(BinaryReader BR, int XPos, int YPos, int LayerIndex, float LayerDepth)
             : base(XPos, YPos, LayerIndex, LayerDepth)
         {
-            TerrainTypeIndex = BR.ReadInt32();
+            TerrainTypeIndex = BR.ReadByte();
 
             if (TerrainTypeIndex >= 13)
                 CapturePoints = 20;

@@ -70,55 +70,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 AddPropPanelsOnUnitSelected();
 
-                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainLand)
-                    && ActiveSquad.CurrentMovement != UnitStats.TerrainLand
-                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z) == UnitStats.TerrainLand)
-                {
-                    AddChoiceToCurrentPanel(new ActionPanelLand(Map, ActiveSquad));
-                }
-
-                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainUnderwater)
-                    && ActiveSquad.CurrentMovement != UnitStats.TerrainUnderwater
-                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z) == UnitStats.TerrainSea)
-                {
-                    AddChoiceToCurrentPanel(new ActionPanelDive(Map, ActiveSquad));
-                }
-
-                if (ActiveSquad.CurrentMovement != UnitStats.TerrainAir)
-                {
-                    if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-                    {
-                        if (ActiveSquad.CurrentWingmanA != null)
-                        {
-                            if (ActiveSquad.CurrentWingmanA.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-                            {
-                                if (ActiveSquad.CurrentWingmanB != null)
-                                {
-                                    if (ActiveSquad.CurrentWingmanB.ListTerrainChoices.Contains(UnitStats.TerrainAir))
-                                    {
-                                        AddChoiceToCurrentPanel(new ActionPanelFly(Map, ActiveSquad));
-                                    }
-                                }
-                                else
-                                {
-                                    AddChoiceToCurrentPanel(new ActionPanelFly(Map, ActiveSquad));
-                                }
-                            }
-                        }
-                        else
-                        {
-                            AddChoiceToCurrentPanel(new ActionPanelFly(Map, ActiveSquad));
-                        }
-                    }
-                }
-
-                if (ActiveSquad.CurrentLeader.ListTerrainChoices.Contains(UnitStats.TerrainUnderground)
-                    && ActiveSquad.CurrentMovement != UnitStats.TerrainUnderground
-                    && Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z) == UnitStats.TerrainLand)
-                {
-                    AddChoiceToCurrentPanel(new ActionPanelDig(Map, ActiveSquad));
-                }
-
                 CheckForMapSwitch();
 
                 ActionPanelJump.AddIfUsable(Map, this, ActiveSquad);

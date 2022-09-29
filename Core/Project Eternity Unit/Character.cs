@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
+using System.Collections.Generic;
 using FMOD;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Units;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.Core.Characters
 {
@@ -15,47 +15,7 @@ namespace ProjectEternity.Core.Characters
     {
         public enum CharacterLinkTypes : byte { None = 0x00, EXP = 0x01, Level = 0x02, MEL = 0x04, RNG = 0x08, DEF = 0x10, SKL = 0x20, EVA = 0x40, HIT = 0x80 };
 
-        public struct TerrainGrades
-        {
-            public char TerrainGradeAir;
-            public char TerrainGradeLand;
-            public char TerrainGradeSea;
-            public char TerrainGradeSpace;
-
-            public TerrainGrades(char TerrainGradeAir, char TerrainGradeLand, char TerrainGradeSea, char TerrainGradeSpace)
-            {
-                this.TerrainGradeAir = TerrainGradeAir;
-                this.TerrainGradeLand = TerrainGradeLand;
-                this.TerrainGradeSea = TerrainGradeSea;
-                this.TerrainGradeSpace = TerrainGradeSpace;
-            }
-
-            public TerrainGrades(byte TerrainGradeAir, byte TerrainGradeLand, byte TerrainGradeSea, byte TerrainGradeSpace)
-            {
-                char[] Grades = new char[5] { 'S', 'A', 'B', 'C', 'D' };
-                this.TerrainGradeAir = Grades[TerrainGradeAir];
-                this.TerrainGradeLand = Grades[TerrainGradeLand];
-                this.TerrainGradeSea = Grades[TerrainGradeSea];
-                this.TerrainGradeSpace = Grades[TerrainGradeSpace];
-            }
-
-            public char GetTerrain(string TerrainType)
-            {
-                switch (TerrainType)
-                {
-                    case UnitStats.TerrainAir:
-                        return TerrainGradeAir;
-                    case UnitStats.TerrainLand:
-                        return TerrainGradeLand;
-                    case UnitStats.TerrainSea:
-                        return TerrainGradeSea;
-                    case UnitStats.TerrainSpace:
-                        return TerrainGradeSpace;
-                }
-
-                return 'B';
-            }
-        };
+        public static List<char> ListGrade = new List<char> { 'S', 'A', 'B', 'C', 'D' };
 
         public class QuoteSet
         {
@@ -158,7 +118,7 @@ namespace ProjectEternity.Core.Characters
         public byte PostMVLevel;
         public byte ReMoveLevel;
         public byte ChargedAttackCancelLevel;
-        public TerrainGrades TerrainGrade;
+        public Dictionary<byte, byte> DicRankByMovement;
         private SharableInt32 _EXP;
         public int EXP { private set { _EXP.Value = value; } get { return _EXP.Value; } }
 
@@ -267,7 +227,7 @@ namespace ProjectEternity.Core.Characters
             ArrayRelationshipBonus = new BaseAutomaticSkill[0];
             ArrayPilotSpirit = new ManualSkill[0];
 
-            TerrainGrade = new TerrainGrades(0, 0, 0, 0);
+            DicRankByMovement = new Dictionary<byte, byte>();
 
             MaxWill = 150;
             Will = 100;
@@ -384,16 +344,16 @@ namespace ProjectEternity.Core.Characters
                     ArrayLevelMaxSP[L] = BR.ReadInt32();
                 }
 
-                byte TerrainGradeAir = BR.ReadByte();
-                byte TerrainGradeLand = BR.ReadByte();
-                byte TerrainGradeSea = BR.ReadByte();
-                byte TerrainGradeSpace = BR.ReadByte();
+                int TerrainGradeCount = BR.ReadInt32();
+                DicRankByMovement = new Dictionary<byte, byte>(TerrainGradeCount);
+                for (int G = 0; G < TerrainGradeCount; ++G)
+                {
+                    DicRankByMovement.Add(BR.ReadByte(), BR.ReadByte());
+                }
 
                 PostMVLevel = BR.ReadByte();
                 ReMoveLevel = BR.ReadByte();
                 ChargedAttackCancelLevel = BR.ReadByte();
-
-                TerrainGrade = new TerrainGrades(TerrainGradeAir, TerrainGradeLand, TerrainGradeSea, TerrainGradeSpace);
             }
 
             int ListQuoteSetVersusNameCount = BR.ReadInt32();

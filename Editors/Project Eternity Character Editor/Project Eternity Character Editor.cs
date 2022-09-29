@@ -6,6 +6,8 @@ using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Characters;
+using System.Windows.Forms;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.Editors.CharacterEditor
 {
@@ -34,10 +36,6 @@ namespace ProjectEternity.Editors.CharacterEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                cbAirRank.SelectedIndex = 0;
-                cbLandRank.SelectedIndex = 0;
-                cbSeaRank.SelectedIndex = 0;
-                cbSpaceRank.SelectedIndex = 0;
                 SaveItem(FilePath, FilePath);
             }
 
@@ -247,10 +245,23 @@ namespace ProjectEternity.Editors.CharacterEditor
                     }
                 }
 
-                BW.Write((byte)cbAirRank.SelectedIndex);
-                BW.Write((byte)cbLandRank.SelectedIndex);
-                BW.Write((byte)cbSeaRank.SelectedIndex);
-                BW.Write((byte)cbSpaceRank.SelectedIndex);
+                List<Tuple<byte, byte>> ListRankByMovement = new List<Tuple<byte, byte>>();
+                foreach (DataGridViewRow ActiveRow in dgvTerrainRanks.Rows)
+                {
+                    if (ActiveRow.Cells[1].Value != null)
+                    {
+                        ListRankByMovement.Add(new Tuple<byte, byte>((byte)UnitAndTerrainValues.Default.ListUnitMovement.IndexOf(UnitAndTerrainValues.Default.ListUnitMovement.Find(x => x.Name == ActiveRow.Cells[0].Value.ToString())),
+                            (byte)Character.ListGrade.IndexOf(ActiveRow.Cells[1].Value.ToString()[0])));
+                    }
+                }
+
+                BW.Write(ListRankByMovement.Count);
+                foreach (Tuple<byte, byte> ActiveRankByMovement in ListRankByMovement)
+                {
+                    BW.Write(ActiveRankByMovement.Item1);
+                    BW.Write(ActiveRankByMovement.Item2);
+                }
+
                 BW.Write((byte)txtPostMVLevel.Value);
                 BW.Write((byte)txtReMoveLevel.Value);
                 BW.Write((byte)txtChargeCancelLevel.Value);
@@ -367,12 +378,33 @@ namespace ProjectEternity.Editors.CharacterEditor
             if (NewCharacter.Slave != null)
                 txtSlave.Text = NewCharacter.Slave.FullName;
 
-            List<char> ListGrade = new List<char> { 'S', 'A', 'B', 'C', 'D' };
+            for (byte M = 0; M < UnitAndTerrainValues.Default.ListUnitMovement.Count; M++)
+            {
+                UnitMovementType ActiveMovement = UnitAndTerrainValues.Default.ListUnitMovement[M];
+                int NewRowIndex = dgvTerrainRanks.Rows.Add();
 
-            cbAirRank.SelectedIndex = ListGrade.IndexOf(NewCharacter.TerrainGrade.TerrainGradeAir);
-            cbLandRank.SelectedIndex = ListGrade.IndexOf(NewCharacter.TerrainGrade.TerrainGradeLand);
-            cbSeaRank.SelectedIndex = ListGrade.IndexOf(NewCharacter.TerrainGrade.TerrainGradeSea);
-            cbSpaceRank.SelectedIndex = ListGrade.IndexOf(NewCharacter.TerrainGrade.TerrainGradeSpace);
+                DataGridViewComboBoxCell MovementCell = new DataGridViewComboBoxCell();
+                DataGridViewComboBoxCell RankCell = new DataGridViewComboBoxCell();
+
+                foreach (UnitMovementType ActiveMovementChoice in UnitAndTerrainValues.Default.ListUnitMovement)
+                {
+                    MovementCell.Items.Add(ActiveMovementChoice.Name);
+                }
+                foreach (char ActiveRank in Character.ListGrade)
+                {
+                    RankCell.Items.Add(ActiveRank);
+                }
+
+                MovementCell.Value = ActiveMovement.Name;
+
+                if (NewCharacter.DicRankByMovement.ContainsKey(M))
+                {
+                    RankCell.Value = Character.ListGrade[NewCharacter.DicRankByMovement[M]];
+                }
+
+                dgvTerrainRanks.Rows[NewRowIndex].Cells[0] = MovementCell;
+                dgvTerrainRanks.Rows[NewRowIndex].Cells[1] = RankCell;
+            }
 
             txtPostMVLevel.Value = 1;
             txtReMoveLevel.Value = 0;
@@ -508,18 +540,12 @@ namespace ProjectEternity.Editors.CharacterEditor
             if (cbCanPilot.Checked)
             {
                 gbPersonality.Enabled = true;
-                cbAirRank.Enabled = true;
-                cbLandRank.Enabled = true;
-                cbSeaRank.Enabled = true;
-                cbSpaceRank.Enabled = true;
+                gbTerrain.Enabled = true;
             }
             else
             {
                 gbPersonality.Enabled = false;
-                cbAirRank.Enabled = false;
-                cbLandRank.Enabled = false;
-                cbSeaRank.Enabled = false;
-                cbSpaceRank.Enabled = false;
+                gbTerrain.Enabled = false;
             }
         }
 

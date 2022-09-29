@@ -69,6 +69,7 @@ namespace ProjectEternity.Core.Units.Conquest
         public int MaxGaz;
         public int Material;
         public int MaxMaterial;
+        public string MovementType;
         public string ArmourType;
         public int GazCostPerTurn;
         public int VisionRange;
@@ -92,9 +93,7 @@ namespace ProjectEternity.Core.Units.Conquest
         
         public bool CanMove { get { return MapComponents.CanMove; } }
 
-        public string CurrentMovement { get { return MapComponents.CurrentMovement; } set { MapComponents.CurrentMovement = value; } }
-
-        public bool IsFlying { get { return MapComponents.IsFlying; } set { MapComponents.IsFlying = value; } }
+        public byte CurrentMovement { get { return MapComponents.CurrentTerrainIndex; } set { MapComponents.CurrentTerrainIndex = value; } }
 
         public UnitConquest()
             : base()
@@ -104,7 +103,6 @@ namespace ProjectEternity.Core.Units.Conquest
             : base(Name)
         {
             _UnitStat = new UnitStats(new bool[1, 1] { { true } });
-            _UnitStat.ListTerrainChoices = new List<string>(1);
             _UnitStat.ArrayUnitAbility = new BaseAutomaticSkill[0];
             MapComponents = new ConquestMapComponent(this, Content);
             ArrayCharacterActive = new Character[0];
@@ -118,7 +116,7 @@ namespace ProjectEternity.Core.Units.Conquest
             MaxAmmo = BR.ReadInt32();
             MaxGaz = BR.ReadInt32();
             MaxMaterial = BR.ReadInt32();
-            ListTerrainChoices.Add(BR.ReadString());
+            MovementType = BR.ReadString();
             ArmourType = BR.ReadString();
             GazCostPerTurn = BR.ReadInt32();
             VisionRange = BR.ReadInt32();

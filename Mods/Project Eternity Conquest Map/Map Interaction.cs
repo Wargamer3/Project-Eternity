@@ -155,7 +155,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     UnitConquest ActiveUnit = ListPlayer[P].ListUnit[U];
 
                     //Remove 5 EN each time the Squad spend a turn in the air.
-                    if (ActiveUnit.CurrentMovement == "Air")
+                    if (ActiveUnit.CurrentMovement == Core.Units.UnitStats.TerrainAirIndex)
                         ActiveUnit.ConsumeEN(5);
                 }
             }

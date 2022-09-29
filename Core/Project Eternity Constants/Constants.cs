@@ -15,7 +15,6 @@ namespace ProjectEternity.Core
         public static GraphicsDeviceManager graphics;
         public static int Width = 640;//1920
         public static int Height = 480;//1080
-        public static int Money = 0;
         public static bool ShowAnimation = true;
         public static bool ShowBattleRecap = true;
         public static UnitRepresentationStates UnitRepresentationState = UnitRepresentationStates.NonColoredWithBorder;
