@@ -105,6 +105,7 @@
     <Compile Include="Acion Panels\Player Choices\Main.cs" />
     <Compile Include="Acion Panels\Player Choices\Formation.cs" />
     <Compile Include="Acion Panels\Player Choices\Jump.cs" />
+    <Compile Include="Acion Panels\Player Choices\ChangeTerrain.cs" />
     <Compile Include="Acion Panels\Vehicle\Control Vehicle.cs" />
     <Compile Include="Acion Panels\Vehicle\Move Vehicle.cs" />
     <Compile Include="Acion Panels\Vehicle\Pick Seat.cs" />

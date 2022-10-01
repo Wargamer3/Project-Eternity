@@ -977,38 +977,46 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return null;
             }
             
-            byte CurrentTerrainType = StartingPosition.TerrainTypeIndex;
+            byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
+            TerrainType CurrentTerrainType = TerrainRestrictions.ListTerrainType[CurrentTerrainIndex];
+
             float CurrentZ = StartingPosition.WorldPosition.Z;
 
             MovementAlgorithmTile ClosestLayerIndexDown = null;
             MovementAlgorithmTile ClosestLayerIndexUp = StartingPosition;
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
-            bool CanMoveCurrent = TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, CurrentTerrainType);
+
+            bool IsOnUsableTerrain = CurrentTerrainType.ListRestriction.Count > 0;
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
                 MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, L);
-                Terrain PreviousTerrain = LayerManager.ListLayer[L].ArrayTerrain[(int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y];
+                byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
+                TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
+                bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;
 
-                if (L > StartingPosition.LayerIndex && PreviousTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
+                Terrain PreviousTerrain = LayerManager.ListLayer[L].ArrayTerrain[(int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y];
+                TerrainType PreviousTerrainType = TerrainRestrictions.ListTerrainType[PreviousTerrain.TerrainTypeIndex];
+                bool IsPreviousTerrainnUsable = PreviousTerrainType.ListRestriction.Count > 0 && PreviousTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+
+                if (L > StartingPosition.LayerIndex && PreviousTerrainType.ListRestriction.Count == 0)
                 {
                     break;
                 }
 
-                byte NextTerrainType = NextTerrain.TerrainTypeIndex;
                 float NextTerrainZ = NextTerrain.WorldPosition.Z;
 
                 //Check lower or higher neighbors if on solid ground
-                if (CanMoveCurrent)
+                if (IsOnUsableTerrain)
                 {
-                    if (TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, NextTerrainType))
+                    if (IsNextTerrainnUsable)
                     {
                         //Prioritize going downward
                         if (NextTerrainZ <= CurrentZ)
                         {
                             float ZDiff = CurrentZ - NextTerrainZ;
-                            if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(ActiveSquad, NextTerrainZ, NextX, NextY, L, MaxClearance))
+                            if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(NextTerrainZ, NextX, NextY, L, MaxClearance))
                             {
                                 ClosestTerrainDistanceDown = ZDiff;
                                 ClosestLayerIndexDown = NextTerrain;
@@ -1020,7 +1028,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             float ZDiff = NextTerrainZ - CurrentZ;
                             if (ZDiff >= ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                             {
-                                if (TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, PreviousTerrain.TerrainTypeIndex))
+                                if (IsPreviousTerrainnUsable)
                                 {
                                     ClosestTerrainDistanceUp = ZDiff;
                                     ClosestLayerIndexUp = NextTerrain;
@@ -1033,7 +1041,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Already in void, check for any neighbors
                 else
                 {
-                    if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainType == CurrentTerrainType)
+                    if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainIndex == CurrentTerrainIndex)
                     {
                         return NextTerrain;
                     }
@@ -1089,7 +1097,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return LayerManager.ListLayer[NextLayerIndex].ArrayTerrain[(int)StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY];
         }
 
-        private bool HasEnoughClearance(Squad ActiveSquad, float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
+        private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
         {
             for (int L = StartLayer + 1; L < LayerManager.ListLayer.Count; L++)
             {
@@ -1101,7 +1109,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
-                if (TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, NextTerrainType) && ZDiff < MaxClearance)
+                if (TerrainRestrictions.ListTerrainType[NextTerrainType].ListRestriction.Count > 0 && ZDiff < MaxClearance)
                 {
                     return false;
                 }

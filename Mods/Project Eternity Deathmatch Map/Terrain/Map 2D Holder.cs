@@ -61,6 +61,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
+        public void Reset()
+        {
+        }
+
+        public void CursorMoved()
+        {
+        }
+
         public void BeginDraw(CustomSpriteBatch g)
         {
             Map.MapEnvironment.BeginDraw(g);
@@ -200,10 +208,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     g.Draw(GameScreen.sprPixel, new Rectangle((int)(DrawablePoint.WorldPosition.X - CameraPosition.X) * TileSize.X, (int)(DrawablePoint.WorldPosition.Y - CameraPosition.Y) * TileSize.Y, TileSize.X, TileSize.Y), DrawablePointPerColor.Key);
                 }
             }
-        }
-
-        public void Reset()
-        {
         }
 
         public void Draw(CustomSpriteBatch g)

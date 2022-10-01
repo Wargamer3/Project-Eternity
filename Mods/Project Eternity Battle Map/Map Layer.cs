@@ -68,6 +68,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         void Reset();
 
+        void CursorMoved();
+
         void Update(GameTime gameTime);
 
         void BeginDraw(CustomSpriteBatch g);

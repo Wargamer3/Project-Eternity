@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Editor;
@@ -21,11 +22,15 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private DetailsEditor frmDetails;
         private UnitSizeEditor frmUnitSizeEditor;
 
+        private SolidBrush GridBrush;
+        
         public UnitNormalEditor()
         {
             InitializeComponent();
             FilePath = null;
 
+            GridBrush = new SolidBrush(dgvTerrainRanks.RowHeadersDefaultCellStyle.ForeColor);
+            
             frmAttacks = new Attacks();
             frmDetails = new DetailsEditor();
             frmUnitSizeEditor = new UnitSizeEditor();
@@ -372,14 +377,14 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 }
                 foreach (char ActiveRank in Unit.ListRank)
                 {
-                    RankCell.Items.Add(ActiveRank);
+                    RankCell.Items.Add(ActiveRank.ToString());
                 }
 
                 MovementCell.Value = ActiveMovement.Name;
 
                 if (LoadedUnit.DicRankByMovement.ContainsKey(M))
                 {
-                    RankCell.Value = Unit.ListRank[LoadedUnit.DicRankByMovement[M]];
+                    RankCell.Value = Unit.ListRank[LoadedUnit.DicRankByMovement[M]].ToString();
                 }
 
                 dgvTerrainRanks.Rows[NewRowIndex].Cells[0] = MovementCell;
@@ -593,6 +598,35 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 ItemSelectionChoice = ItemSelectionChoices.Animations;
                 ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimations));
             }
+        }
+
+        private void dgvTerrainRanks_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            bool validClick = (e.RowIndex != -1 && e.ColumnIndex != -1); //Make sure the clicked row/column is valid.
+            var datagridview = sender as DataGridView;
+
+            // Check to make sure the cell clicked is the cell containing the combobox 
+            if (datagridview.Rows[e.RowIndex].Cells[0] is DataGridViewComboBoxCell && validClick)
+            {
+                datagridview.BeginEdit(true);
+                ((ComboBox)datagridview.EditingControl).DroppedDown = true;
+            }
+        }
+
+        private void dgvTerrainRanks_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            dgvTerrainRanks.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+
+        private void dgvTerrainRanks_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            object o = dgvTerrainRanks.Rows[e.RowIndex].HeaderCell.Value;
+
+            e.Graphics.DrawString(
+                o != null ? o.ToString() : "",
+                dgvTerrainRanks.Font,
+                GridBrush,
+                new PointF((float)e.RowBounds.Left + 2, (float)e.RowBounds.Top + 4));
         }
 
         #region Abilities

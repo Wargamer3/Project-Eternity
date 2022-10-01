@@ -8,6 +8,8 @@ namespace ProjectEternity.Core.Units
     {
         public string Name;
 
+        public string ActivationName;
+        public string AnnulatioName;
         public byte WallHardness;
 
         public List<ITerrainRestriction> ListRestriction;
@@ -15,12 +17,16 @@ namespace ProjectEternity.Core.Units
         public TerrainType()
         {
             Name = "New Terrain";
+            ActivationName = string.Empty;
+            AnnulatioName = string.Empty;
             ListRestriction = new List<ITerrainRestriction>();
         }
 
         public TerrainType(BinaryReader BR, UnitAndTerrainValues Parent)
         {
             Name = BR.ReadString();
+            ActivationName = BR.ReadString();
+            AnnulatioName = BR.ReadString();
             WallHardness = BR.ReadByte();
 
             int ListRestrictionCount = BR.ReadInt32();
@@ -35,6 +41,8 @@ namespace ProjectEternity.Core.Units
         public void Save(BinaryWriter BW)
         {
             BW.Write(Name);
+            BW.Write(ActivationName);
+            BW.Write(AnnulatioName);
             BW.Write(WallHardness);
 
             BW.Write(ListRestriction.Count);

@@ -4,10 +4,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Vehicle;
+using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -29,8 +28,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Texture2D sprCursor;
         private Tile3D Cursor;
         private List<Tile3D> ListEditorCursorFace;
+
         private Dictionary<int, Tile3DHolder> DicTile3DByTileset;
         private Dictionary<int, Dictionary<int, Tile3DHolder>> DicTile3DByLayerByTileset;
+        private Dictionary<int, Tile3DHolder> DicHiddenTile3DByTileset = new Dictionary<int, Tile3DHolder>();
+        private List<DrawableTile> ListIgnoredTerrain = new List<DrawableTile>();
+
         private Dictionary<Vector4, List<Tile3D>> DicDrawablePointPerColor;
         private List<Tile3D> ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
@@ -105,28 +108,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             MapEffect.Parameters["FogColor"].SetValue(new Vector3(0.0f, 0.0f, 0.0f));
 
             DicDrawablePointPerColor = new Dictionary<Vector4, List<Tile3D>>();
-            DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
-            DicTile3DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile3DHolder>>();
             ListDrawableArrowPerColor = new List<Tile3D>();
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
-            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
-            {
-                CreateMap(Map, LayerManager.ListLayer[L], L);
-            }
-
-            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
-            {
-                ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
-            }
-
-            foreach (KeyValuePair<int, Dictionary<int, Tile3DHolder>> ActiveLayer in DicTile3DByLayerByTileset)
-            {
-                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in ActiveLayer.Value)
-                {
-                    ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
-                }
-            }
+            CreateMap(Map, LayerManager);
 
             float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].WorldPosition.Z;
             Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
@@ -140,6 +125,36 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.CursorPosition.X = Map.MapSize.X / 2;
                 Map.CursorPosition.Y = Map.MapSize.Y / 2;
                 Map.CursorPosition.Z = (LayerManager.ListLayer.Count - 1) / 2;
+            }
+        }
+
+        private void CreateMap(DeathmatchMap Map, LayerHolderDeathmatch LayerManager)
+        {
+            DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
+            DicHiddenTile3DByTileset = new Dictionary<int, Tile3DHolder>();
+            DicTile3DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile3DHolder>>();
+
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
+            {
+                CreateMap(Map, LayerManager.ListLayer[L], L);
+            }
+
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+            {
+                ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+            }
+
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicHiddenTile3DByTileset)
+            {
+                ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+            }
+
+            foreach (KeyValuePair<int, Dictionary<int, Tile3DHolder>> ActiveLayer in DicTile3DByLayerByTileset)
+            {
+                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in ActiveLayer.Value)
+                {
+                    ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+                }
             }
         }
 
@@ -195,20 +210,41 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                             X * Map.TileSize.X, Y * Map.TileSize.Y, Z, MinZ,
                                             Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
 
-                    foreach (Tile3D ActiveTile in ListNew3DTile)
+                    if (ListIgnoredTerrain.Contains(ActiveTerrain))
                     {
-                        if (!DicTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                        foreach (Tile3D ActiveTile in ListNew3DTile)
                         {
-                            DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
-                        }
+                            if (!DicHiddenTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                            {
+                                DicHiddenTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex], 0.5f));
+                            }
 
-                        if (!DicTile3DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+                            if (!DicTile3DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+                            {
+                                DicTile3DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
+                            }
+
+                            DicHiddenTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile);
+                            DicTile3DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile);
+                        }
+                    }
+                    else
+                    {
+                        foreach (Tile3D ActiveTile in ListNew3DTile)
                         {
-                            DicTile3DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
-                        }
+                            if (!DicTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
+                            {
+                                DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
+                            }
 
-                        DicTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile);
-                        DicTile3DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile);
+                            if (!DicTile3DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
+                            {
+                                DicTile3DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
+                            }
+
+                            DicTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile);
+                            DicTile3DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile);
+                        }
                     }
                 }
             }
@@ -591,25 +627,102 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Reset()
         {
-            DicTile3DByTileset.Clear();
-            DicTile3DByLayerByTileset.Clear();
+            CreateMap(Map, Map.LayerManager);
+        }
 
-            for (int L = 0; L < Map.LayerManager.ListLayer.Count; L++)
-            {
-                CreateMap(Map, Map.LayerManager.ListLayer[L], L);
-            }
+        public void CursorMoved()
+        {
+            FilterTerrainObscuringUnits();
+        }
 
-            foreach (KeyValuePair<int, Dictionary<int, Tile3DHolder>> ActiveLayer in DicTile3DByLayerByTileset)
+        private void FilterTerrainObscuringUnits()
+        {
+            ListIgnoredTerrain.Clear();
+
+            foreach (Player ActivePlayer in Map.ListPlayer)
             {
-                foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in ActiveLayer.Value)
+                foreach (Squad ActiveSquad in ActivePlayer.ListSquad)
                 {
-                    ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+                    if (ActiveSquad.Z + 1 < Map.LayerManager.ListLayer.Count)
+                    {
+                        Terrain UpperTerrain = Map.GetTerrain(ActiveSquad.X, ActiveSquad.Z, (int)ActiveSquad.Z + 1);
+                        TerrainType UpperTerrainType = Map.TerrainRestrictions.ListTerrainType[UpperTerrain.TerrainTypeIndex];
+
+                        if (UpperTerrainType.ListRestriction.Count > 0 || UpperTerrain.DrawableTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
+                            && !ListIgnoredTerrain.Contains(UpperTerrain.DrawableTile))
+                        {
+                            ListIgnoredTerrain.Add(UpperTerrain.DrawableTile);
+                            FloodFill(new Vector3(UpperTerrain.InternalPosition.X, UpperTerrain.InternalPosition.Y, UpperTerrain.LayerIndex), UpperTerrain.TerrainTypeIndex);
+                        }
+                    }
                 }
             }
 
-            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
+            CreateMap(Map, Map.LayerManager);
+        }
+
+        private void FloodFill(Vector3 StartingPosition, byte TargetTerrainIndex)
+        {
+            int Z = (int)StartingPosition.Z;
+
+            Stack<Vector3> ListTerrainPositionToHide = new Stack<Vector3>();
+
+            ListTerrainPositionToHide.Push(StartingPosition);
+            while (ListTerrainPositionToHide.Count != 0)
             {
-                ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+                Vector3 ActivePosition = ListTerrainPositionToHide.Pop();
+                float ActiveY = ActivePosition.Y;
+                Terrain ActiveTerrain = Map.GetTerrain(ActivePosition.X, ActiveY, Z);
+
+                while (ActiveY >= 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                {
+                    if (--ActiveY >= 0)
+                    {
+                        ActiveTerrain = Map.GetTerrain(ActivePosition.X, ActiveY, Z);
+                    }
+                }
+
+                ActiveY++;
+                bool spanLeft = false;
+                bool spanRight = false;
+
+                while (ActiveY < Map.MapSize.Y && Map.GetTerrainType(ActivePosition.X, ActiveY, Z) == TargetTerrainIndex)
+                {
+                    ListIgnoredTerrain.Add(Map.GetTerrain(ActivePosition.X, ActiveY, Z).DrawableTile);
+
+                    if (ActivePosition.X - 1 >= 0)
+                    {
+                        ActiveTerrain = Map.GetTerrain(ActivePosition.X - 1, ActiveY, Z);
+
+                        if (!spanLeft && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        {
+                            ListTerrainPositionToHide.Push(new Vector3(ActivePosition.X - 1, ActiveY, Z));
+                            spanLeft = true;
+                        }
+                        else if (spanLeft && ActivePosition.X - 1 == 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        {
+                            spanLeft = false;
+
+                        }
+                    }
+
+                    if (ActivePosition.X + 1 < Map.MapSize.X)
+                    {
+                        ActiveTerrain = Map.GetTerrain(ActivePosition.X + 1, ActiveY, Z);
+
+                        if (!spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        {
+                            ListTerrainPositionToHide.Push(new Vector3(ActivePosition.X + 1, ActiveY, Z));
+                            spanRight = true;
+                        }
+                        else if (spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
+                        {
+                            spanRight = false;
+                        }
+                    }
+
+                    ActiveY++;
+                }
             }
         }
 
@@ -624,9 +737,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             Matrix View = Map.Camera.View;
             Matrix World = PolygonEffect.World;
+            Vector3 CameraPosition = Map.Camera.CameraPosition3D;
+
             if (Map.CameraOverride != null)
             {
                 View = Map.CameraOverride.View;
+                CameraPosition = Map.CameraOverride.CameraPosition3D;
             }
             PolygonEffect.View = View;
             Matrix ViewProjection = View * PolygonEffect.Projection;
@@ -666,6 +782,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawDelayedAttacks(g);
 
             DrawPERAttacks(g, View);
+
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicHiddenTile3DByTileset)
+            {
+                ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, CameraPosition);
+
+                ActiveTileSet.Value.Draw(g.GraphicsDevice);
+            }
 
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 

@@ -15,12 +15,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int PrimitivesCount => ListTile3D.Count * 2;
         private int VerticesCount => ListTile3D.Count * 4;
 
-        public Tile3DHolder(Effect UnitEffect3D, Texture2D Sprite)
+        public Tile3DHolder(Effect UnitEffect3D, Texture2D Sprite, float TextureAlpha = 1)
         {
             ListTile3D = new List<Tile3D>();
 
             Effect3D = UnitEffect3D.Clone();
             Effect3D.Parameters["t0"].SetValue(Sprite);
+            Effect3D.Parameters["TextureAlpha"].SetValue(TextureAlpha);
         }
 
         public void AddTile(Tile3D NewTile)

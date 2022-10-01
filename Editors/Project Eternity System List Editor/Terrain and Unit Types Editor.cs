@@ -93,8 +93,6 @@ namespace ProjectEternity.Editors.SystemListEditor
             {
                 UnitMovementType SelectedUnitMovementType = (UnitMovementType)lsUnitMovementTypes.SelectedItem;
                 txtUnitMovementTypeName.Text = SelectedUnitMovementType.Name;
-                txtUnitMovementTypeActivationName.Text = SelectedUnitMovementType.ActivationName;
-                txtUnitMovementTypeAnnulationName.Text = SelectedUnitMovementType.AnnulatioName;
             }
         }
 
@@ -105,30 +103,6 @@ namespace ProjectEternity.Editors.SystemListEditor
                 UnitMovementType SelectedUnitMovementType = (UnitMovementType)lsUnitMovementTypes.SelectedItem;
                 SelectedUnitMovementType.Name = txtUnitMovementTypeName.Text;
                 Values.ListUnitMovement[lsUnitMovementTypes.SelectedIndex].Name = txtUnitMovementTypeName.Text;
-
-                lsUnitMovementTypes.Items[lsUnitMovementTypes.SelectedIndex] = SelectedUnitMovementType;
-            }
-        }
-
-        private void txtUnitMovementTypeActivationName_TextChanged(object sender, EventArgs e)
-        {
-            if (lsUnitMovementTypes.SelectedIndex >= 0)
-            {
-                UnitMovementType SelectedUnitMovementType = (UnitMovementType)lsUnitMovementTypes.SelectedItem;
-                SelectedUnitMovementType.ActivationName = txtUnitMovementTypeActivationName.Text;
-                Values.ListUnitMovement[lsUnitMovementTypes.SelectedIndex].ActivationName = txtUnitMovementTypeActivationName.Text;
-
-                lsUnitMovementTypes.Items[lsUnitMovementTypes.SelectedIndex] = SelectedUnitMovementType;
-            }
-        }
-
-        private void txtUnitMovementTypeAnnulationName_TextChanged(object sender, EventArgs e)
-        {
-            if (lsUnitMovementTypes.SelectedIndex >= 0)
-            {
-                UnitMovementType SelectedUnitMovementType = (UnitMovementType)lsUnitMovementTypes.SelectedItem;
-                SelectedUnitMovementType.AnnulatioName = txtUnitMovementTypeAnnulationName.Text;
-                Values.ListUnitMovement[lsUnitMovementTypes.SelectedIndex].AnnulatioName = txtUnitMovementTypeAnnulationName.Text;
 
                 lsUnitMovementTypes.Items[lsUnitMovementTypes.SelectedIndex] = SelectedUnitMovementType;
             }
@@ -161,6 +135,8 @@ namespace ProjectEternity.Editors.SystemListEditor
                 TerrainType SelectedTerrain = (TerrainType)lsTerrainTypes.SelectedItem;
                 txtTerrainTypeName.Text = SelectedTerrain.Name;
                 txtWallHardness.Value = SelectedTerrain.WallHardness;
+                txtUnitMovementTypeActivationName.Text = SelectedTerrain.ActivationName;
+                txtUnitMovementTypeAnnulationName.Text = SelectedTerrain.AnnulatioName;
 
                 tvTerrainRestrictions.Nodes.Clear();
                 foreach (ITerrainRestriction ActiveRestriction in SelectedTerrain.ListRestriction)
@@ -170,7 +146,10 @@ namespace ProjectEternity.Editors.SystemListEditor
                     tvTerrainRestrictions.Nodes.Add(NewNode);
                 }
 
-                tvTerrainRestrictions.SelectedNode = tvTerrainRestrictions.Nodes[0];
+                if (tvTerrainRestrictions.Nodes.Count > 0)
+                {
+                    tvTerrainRestrictions.SelectedNode = tvTerrainRestrictions.Nodes[0];
+                }
             }
         }
 
@@ -180,6 +159,28 @@ namespace ProjectEternity.Editors.SystemListEditor
             {
                 TerrainType SelectedTerrain = (TerrainType)lsTerrainTypes.SelectedItem;
                 SelectedTerrain.Name = txtTerrainTypeName.Text;
+                lsTerrainTypes.Items[lsTerrainTypes.SelectedIndex] = SelectedTerrain;
+            }
+        }
+
+        private void txtUnitMovementTypeActivationName_TextChanged(object sender, EventArgs e)
+        {
+            if (lsTerrainTypes.SelectedIndex >= 0)
+            {
+                TerrainType SelectedTerrain = (TerrainType)lsTerrainTypes.SelectedItem;
+                SelectedTerrain.ActivationName = txtUnitMovementTypeActivationName.Text;
+
+                lsTerrainTypes.Items[lsTerrainTypes.SelectedIndex] = SelectedTerrain;
+            }
+        }
+
+        private void txtUnitMovementTypeAnnulationName_TextChanged(object sender, EventArgs e)
+        {
+            if (lsTerrainTypes.SelectedIndex >= 0)
+            {
+                TerrainType SelectedTerrain = (TerrainType)lsTerrainTypes.SelectedItem;
+                SelectedTerrain.AnnulatioName = txtUnitMovementTypeAnnulationName.Text;
+
                 lsTerrainTypes.Items[lsTerrainTypes.SelectedIndex] = SelectedTerrain;
             }
         }

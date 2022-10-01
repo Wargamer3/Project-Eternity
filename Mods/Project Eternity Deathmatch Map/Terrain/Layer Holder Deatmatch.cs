@@ -48,6 +48,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             TileInformationManager.Load(Map.Content);
         }
 
+        public void CursorMoved()
+        {
+            LayerHolderDrawable.CursorMoved();
+        }
+
         public override BaseMapLayer this[int i]
         {
             get

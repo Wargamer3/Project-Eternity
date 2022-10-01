@@ -57,6 +57,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AddToPanelListAndSelect(new ActionPanelDeploy(Map, ActiveSquad));
             }
 
+            ActionPanelChangeTerrain.AddIfUsable(Map, this, ActiveSquad);
+
             AddChoiceToCurrentPanel(new ActionPanelStatus(Map, ActiveSquad));
             AddChoiceToCurrentPanel(new ActionPanelDebug(ActiveSquad, Map));
 
