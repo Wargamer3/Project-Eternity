@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
-using Microsoft.Xna.Framework.Graphics;
-using System.Reflection;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -21,13 +21,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool[,] ArrayMapSize;
         public bool CanBlockPath;
         public UnitMap3D Unit3D;
+        public AnimatedModel Unit3DModel;
 
+        public Matrix Projection;
         protected InteractiveProp(string PropName, PropCategories PropCategory,  bool[,] ArrayMapSize, bool CanBlockPath)
         {
             this.PropName = PropName;
             this.PropCategory = PropCategory;
             this.ArrayMapSize = ArrayMapSize;
             this.CanBlockPath = CanBlockPath;
+
+            float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
+            Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                               aspectRatio,
+                                                               1, 10000);
         }
 
         public abstract void Load(ContentManager Content);
@@ -83,7 +90,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void Draw(CustomSpriteBatch g);
 
-        public abstract void Draw3D(GraphicsDevice GraphicsDevice, CustomSpriteBatch g);
+        public abstract void Draw3D(GraphicsDevice GraphicsDevice, Matrix View, CustomSpriteBatch g);
 
         public InteractiveProp Copy(Vector3 Position, int LayerIndex)
         {

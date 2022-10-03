@@ -182,10 +182,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public override void Draw3D(GraphicsDevice GraphicsDevice, CustomSpriteBatch g)
+        public override void Draw3D(GraphicsDevice GraphicsDevice, Matrix View, CustomSpriteBatch g)
         {
             if (!IsUsed && Unit3D != null)
             {
+                Unit3D.SetViewMatrix(View);
                 Unit3D.Draw(GraphicsDevice);
             }
         }

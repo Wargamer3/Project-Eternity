@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             Point TilePos = new Point(MouseX, MouseY);
                             Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, 0);
 
-                            TileAttributesEditor.Init(SelectedTerrain, ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex]);
+                            TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
 
                             if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                             {
@@ -252,7 +252,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Rectangle TilePos = TilesetViewer.TileBrushSize;
                 Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
-                TileAttributesEditor.Init(SelectedTerrain, ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex]);
+                TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
 
                 if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                 {

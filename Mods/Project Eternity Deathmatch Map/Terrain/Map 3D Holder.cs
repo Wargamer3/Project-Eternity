@@ -17,7 +17,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         const float CameraHeight = 700;
         const float CameraDistance = 500;
-        const float LayerHeight = 32;
+        public static readonly float LayerHeight = 32;
 
         private DeathmatchMap Map;
 
@@ -872,18 +872,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int P = 0; P < Owner.ListProp.Count; ++P)
             {
-                Owner.ListProp[P].Unit3D.SetViewMatrix(View);
-                float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].WorldPosition.Z;
-
-                Owner.ListProp[P].Unit3D.SetPosition(
-                    (Owner.ListProp[P].Position.X + 0.5f) * Map.TileSize.X,
-                    TerrainZ * LayerHeight,
-                    (Owner.ListProp[P].Position.Y + 0.5f) * Map.TileSize.Y);
-            }
-
-            for (int P = 0; P < Owner.ListProp.Count; ++P)
-            {
-                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice, g);
+                Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice,View, g);
             }
 
             for (int P = 0; P < Owner.ListAttackPickup.Count; ++P)
@@ -1115,8 +1104,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 else if (ActiveAttack.Unit3DModel != null)
                 {
-                    ActiveAttack.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f)
-                        * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
+                    ActiveAttack.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
                 }
             }
         }

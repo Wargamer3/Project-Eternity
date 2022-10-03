@@ -127,6 +127,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public List<Texture2D> ListTileSet;//Picture of the tilesets used for the map.
         public List<Terrain.TilesetPreset> ListTilesetPreset;
+        public List<string> ListBattleBackgroundAnimationPath;
         public UnitAndTerrainValues TerrainRestrictions;
 
         public bool IsInit = false;
@@ -233,6 +234,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             GameTurn = 0;
             ListTileSet = new List<Texture2D>();
+            ListBattleBackgroundAnimationPath = new List<string>();
             ListBackground = new List<AnimationBackground>();
             ListBackgroundsPath = new List<string>();
             ListForeground = new List<AnimationBackground>();
@@ -326,7 +328,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(ListTilesetPreset.Count);
             for (int T = 0; T < ListTilesetPreset.Count; T++)
             {
-                Terrain.TilesetPreset.SaveTerrainPreset(BW, ListTilesetPreset[T].ArrayTerrain, ListTilesetPreset[T].TilesetName, ListTilesetPreset[T].ListBattleBackgroundAnimationPath);
+                Terrain.TilesetPreset.SaveTerrainPreset(BW, ListTilesetPreset[T].ArrayTerrain, ListTilesetPreset[T].TilesetName);
+            }
+
+            BW.Write(ListBattleBackgroundAnimationPath.Count);
+            foreach (string BattleBackgroundAnimationPath in ListBattleBackgroundAnimationPath)
+            {
+                BW.Write(BattleBackgroundAnimationPath);
             }
         }
 
@@ -485,7 +493,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int Tiles = BR.ReadInt32();
             for (int T = 0; T < Tiles; T++)
             {
-                ListTilesetPreset.Add(new Terrain.TilesetPreset(BR, TileSize.X, TileSize.Y, T));
+                ListTilesetPreset.Add(new Terrain.TilesetPreset(BR, TileSize.X, TileSize.Y, T, false));
 
                 #region Load Tilesets
 
@@ -500,6 +508,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 #endregion
+            }
+
+            int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();
+            ListBattleBackgroundAnimationPath = new List<string>(ListBattleBackgroundAnimationPathCount);
+            for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
+            {
+                ListBattleBackgroundAnimationPath.Add(BR.ReadString());
             }
         }
 

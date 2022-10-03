@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private ItemSelectionChoices ItemSelectionChoice;
 
         public Terrain ActiveTerrain;
-        Terrain.TilesetPreset ActivePreset;
+        BattleMap Map;
 
         Terrain ITileAttributes.ActiveTerrain => ActiveTerrain;
 
@@ -49,20 +49,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public virtual void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset)
+        public virtual void Init(Terrain ActiveTerrain, BattleMap Map)
         {
             ActiveTerrain = new Terrain(ActiveTerrain, ActiveTerrain.InternalPosition, ActiveTerrain.LayerIndex);
             this.ActiveTerrain = ActiveTerrain;
-            this.ActivePreset = ActivePreset;
+            this.Map = Map;
             cboBattleAnimationBackground.Items.Clear();
             cboBattleAnimationBackground.Items.Add("None");
-            foreach (string ActivePath in ActivePreset.ListBattleBackgroundAnimationPath)
+            foreach (string ActivePath in Map.ListBattleBackgroundAnimationPath)
             {
                 cboBattleAnimationBackground.Items.Add(ActivePath);
             }
             cboBattleAnimationForeground.Items.Clear();
             cboBattleAnimationForeground.Items.Add("None");
-            foreach (string ActivePath in ActivePreset.ListBattleBackgroundAnimationPath)
+            foreach (string ActivePath in Map.ListBattleBackgroundAnimationPath)
             {
                 cboBattleAnimationForeground.Items.Add(ActivePath);
             }
@@ -240,7 +240,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         {
                             BackgroundPath = BackgroundPath.Substring(0, BackgroundPath.Length - 5).Substring(19);
 
-                            ActivePreset.ListBattleBackgroundAnimationPath.Add(BackgroundPath);
+                            Map.ListBattleBackgroundAnimationPath.Add(BackgroundPath);
                             cboBattleAnimationBackground.Items.Add(BackgroundPath);
                             cboBattleAnimationForeground.Items.Add(BackgroundPath);
                         }

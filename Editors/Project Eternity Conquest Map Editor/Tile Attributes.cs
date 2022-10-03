@@ -25,7 +25,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             cboTerrainType.SelectedIndex = TerrainTypeIndex;
         }
 
-        public void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset)
+        public void Init(Terrain ActiveTerrain, BattleMap Map)
         {
             ActiveTerrain = this.ActiveTerrain = new TerrainConquest(ActiveTerrain, ActiveTerrain.InternalPosition, ActiveTerrain.LayerIndex);
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;

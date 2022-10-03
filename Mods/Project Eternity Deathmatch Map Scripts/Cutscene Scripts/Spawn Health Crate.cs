@@ -147,8 +147,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     g.Draw(sprCrate, new Vector2(PosX, PosY), Color.White);
                 }
 
-                public override void Draw3D(GraphicsDevice GraphicsDevice, CustomSpriteBatch g)
+                public override void Draw3D(GraphicsDevice GraphicsDevice, Matrix View, CustomSpriteBatch g)
                 {
+                    Unit3D.SetViewMatrix(View);
                     Unit3D.Draw(GraphicsDevice);
                 }
 

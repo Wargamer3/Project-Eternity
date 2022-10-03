@@ -56,6 +56,12 @@
     <Compile Include="Destroyable Object.cs" />
     <Compile Include="Flag Spawner.cs" />
     <Compile Include="Flag.cs" />
+    <Compile Include="Prop Picker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prop Picker.Designer.cs">
+      <DependentUpon>Prop Picker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +95,11 @@
       <Name>Project Eternity Deathmatch Map</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Prop Picker.resx">
+      <DependentUpon>Prop Picker.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

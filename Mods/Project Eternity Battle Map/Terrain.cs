@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            public TilesetPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index)
+            public TilesetPreset(BinaryReader BR, int TileSizeX, int TileSizeY, int Index, bool LoadBackgroundPaths = true)
             {
                 TilesetName = BR.ReadString();
 
@@ -65,11 +65,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                ListBattleBackgroundAnimationPath = new List<string>();
-                int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();
-                for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
+                if (LoadBackgroundPaths)
                 {
-                    ListBattleBackgroundAnimationPath.Add(BR.ReadString());
+                    int ListBattleBackgroundAnimationPathCount = BR.ReadInt32();
+                    ListBattleBackgroundAnimationPath = new List<string>(ListBattleBackgroundAnimationPathCount);
+                    for (int B = 0; B < ListBattleBackgroundAnimationPathCount; B++)
+                    {
+                        ListBattleBackgroundAnimationPath.Add(BR.ReadString());
+                    }
                 }
             }
 
@@ -90,7 +93,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return NewTilesetPreset;
             }
 
-            public static void SaveTerrainPreset(BinaryWriter BW, Terrain[,] ArrayTerrain, string TilesetName, List<string> ListBattleBackgroundAnimationPath)
+            public static void SaveTerrainPreset(BinaryWriter BW, Terrain[,] ArrayTerrain, string TilesetName)
             {
                 BW.Write(TilesetName);
 
@@ -104,12 +107,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         ArrayTerrain[X, Y].Save(BW);
                     }
-                }
-
-                BW.Write(ListBattleBackgroundAnimationPath.Count);
-                foreach (string BattleBackgroundAnimationPath in ListBattleBackgroundAnimationPath)
-                {
-                    BW.Write(BattleBackgroundAnimationPath);
                 }
             }
         }

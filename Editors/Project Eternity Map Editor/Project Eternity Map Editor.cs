@@ -148,7 +148,8 @@ namespace ProjectEternity.Editors.MapEditor
             EditorInfo[] Info = new EditorInfo[]
             {
                 new EditorInfo(new string[] { GUIRootPathMaps, GUIRootPathDeathmatchMaps }, "Maps/Deathmatch/", new string[] { ".pem" }, typeof(ProjectEternityMapEditor)),
-                new EditorInfo(new string[] { GUIRootPathMapBGM }, "Maps/BGM/", new string[] { ".mp3" }, typeof(ProjectEternityMusicPlayerEditor), false)
+                new EditorInfo(new string[] { GUIRootPathMapBGM }, "Maps/BGM/", new string[] { ".mp3" }, typeof(ProjectEternityMusicPlayerEditor), false),
+                new EditorInfo(new string[] { GUIRootPathMapModels }, "Maps/Models/", new string[] { ".xnb" }, typeof(ProjectEternityMusicPlayerEditor), false, null, true),
             };
 
             return Info;
@@ -323,7 +324,7 @@ namespace ProjectEternity.Editors.MapEditor
                 Rectangle TilePos = TilesetViewer.TileBrushSize;
                 Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
-                TileAttributesEditor.Init(SelectedTerrain, ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex]);
+                TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
 
                 if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                 {
@@ -472,7 +473,7 @@ namespace ProjectEternity.Editors.MapEditor
                             Point TilePos = new Point(MouseX, MouseY);
                             Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, lsLayers.SelectedIndex);
 
-                            TileAttributesEditor.Init(SelectedTerrain, ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex]);
+                            TileAttributesEditor.Init(SelectedTerrain, ActiveMap);
 
                             if (TileAttributesEditor.ShowDialog() == DialogResult.OK)
                             {
@@ -1198,8 +1199,58 @@ namespace ProjectEternity.Editors.MapEditor
                             if (TilePath.StartsWith("Content/Maps/Tileset Presets"))
                             {
                                 string Name = TilePath.Substring(0, TilePath.Length - 4).Substring(29);
+                                if (cboTiles.Items.Contains(Name))
+                                {
+                                    MessageBox.Show("This tile is already listed.\r\n" + Name);
+                                    continue;
+                                }
+
                                 Terrain.TilesetPreset NewTileset = Terrain.TilesetPreset.FromFile(Name, BattleMapViewer.ActiveMap.ListTilesetPreset.Count);
-                                string Output = GetItemPathInRoot(GUIRootPathMapTilesets, NewTileset.TilesetName);
+                                for (int BackgroundIndex = 0; BackgroundIndex < NewTileset.ListBattleBackgroundAnimationPath.Count; BackgroundIndex++)
+                                {
+                                    string NewBattleBackgroundPath = NewTileset.ListBattleBackgroundAnimationPath[BackgroundIndex];
+
+                                    if (ActiveMap.ListBattleBackgroundAnimationPath.Contains(NewBattleBackgroundPath))
+                                    {
+                                        byte MapBackgroundIndex = (byte)ActiveMap.ListBattleBackgroundAnimationPath.IndexOf(NewBattleBackgroundPath);
+
+                                        for (int X = 0; X < NewTileset.ArrayTerrain.GetLength(0); ++X)
+                                        {
+                                            for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
+                                            {
+                                                if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
+                                                {
+                                                    NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = MapBackgroundIndex;
+                                                }
+                                                if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
+                                                {
+                                                    NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = MapBackgroundIndex;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        byte NewBattleBackgroundIndex = (byte)ActiveMap.ListBattleBackgroundAnimationPath.Count;
+                                        ActiveMap.ListBattleBackgroundAnimationPath.Add(NewBattleBackgroundPath);
+
+                                        for (int X = 0; X < NewTileset.ArrayTerrain.GetLength(0); ++X)
+                                        {
+                                            for (int Y = 0; Y < NewTileset.ArrayTerrain.GetLength(1); ++Y)
+                                            {
+                                                if (NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex == BackgroundIndex)
+                                                {
+                                                    NewTileset.ArrayTerrain[X, Y].BattleBackgroundAnimationIndex = NewBattleBackgroundIndex;
+                                                }
+                                                if (NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex == BackgroundIndex)
+                                                {
+                                                    NewTileset.ArrayTerrain[X, Y].BattleForegroundAnimationIndex = NewBattleBackgroundIndex;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
                                 BattleMapViewer.ActiveMap.ListTilesetPreset.Add(NewTileset);
                                 BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName));
 
@@ -1211,7 +1262,7 @@ namespace ProjectEternity.Editors.MapEditor
                                 if (cboTiles.Items.Contains(Name))
                                 {
                                     MessageBox.Show("This tile is already listed.\r\n" + Name);
-                                    return;
+                                    continue;
                                 }
                                 Microsoft.Xna.Framework.Graphics.Texture2D Tile = TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + Name);
 

@@ -156,7 +156,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(GameScreen.sprPixel, new Rectangle((int)PosX, (int)PosY, 32, 32), Color.Red);
         }
 
-        public override void Draw3D(GraphicsDevice GraphicsDevice, CustomSpriteBatch g)
+        public override void Draw3D(GraphicsDevice GraphicsDevice, Matrix View, CustomSpriteBatch g)
         {
         }
 

@@ -6,7 +6,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         Terrain ActiveTerrain { get; }
 
-        void Init(Terrain ActiveTerrain, Terrain.TilesetPreset ActivePreset);
+        void Init(Terrain ActiveTerrain, BattleMap Map);
         DialogResult ShowDialog();
     }
 }
