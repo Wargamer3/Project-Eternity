@@ -1285,8 +1285,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             string TargetSquadBackgroundPath = "Backgrounds 2D/Empty";
             string ActiveSquadForegroundPath = "Backgrounds 2D/Empty";
             string TargetSquadForegroundPath = "Backgrounds 2D/Empty";
-            DrawableTile ActiveSquadTile = GetTile(AttackingSquad);
-            DrawableTile TargetSquadTile = GetTile(EnemySquad);
             Terrain ActiveSquadTerrain = GetTerrain(AttackingSquad);
             Terrain TargetSquadTerrain = GetTerrain(EnemySquad);
 

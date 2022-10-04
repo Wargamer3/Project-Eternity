@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveSquad[U].HP < ActiveSquad[U].MaxHP)
                     {
-                        ListMVChoice.Add(Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z));
+                        ListMVChoice.Add(Map.GetTerrain(ActiveSquad.Position));
                         break;
                     }
                 }
@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].HP < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].MaxHP)
                         {
-                            ListMVChoice.Add(Map.GetTerrain(ActiveSquad.Position.X - 1, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z));
+                            ListMVChoice.Add(Map.GetTerrain(new Vector3(ActiveSquad.Position.X - 1, ActiveSquad.Position.Y, ActiveSquad.Position.Z)));
                             break;
                         }
                     }
@@ -84,7 +84,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].HP < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].MaxHP)
                         {
-                            ListMVChoice.Add(Map.GetTerrain(ActiveSquad.Position.X + 1, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z));
+                            ListMVChoice.Add(Map.GetTerrain(new Vector3(ActiveSquad.Position.X + 1, ActiveSquad.Position.Y, ActiveSquad.Position.Z)));
                             break;
                         }
                     }
@@ -101,7 +101,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].HP < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].MaxHP)
                         {
-                            ListMVChoice.Add(Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y - 1, (int)ActiveSquad.Position.Z));
+                            ListMVChoice.Add(Map.GetTerrain(new Vector3(ActiveSquad.Position.X, ActiveSquad.Position.Y - 1, ActiveSquad.Position.Z)));
                             break;
                         }
                     }
@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].HP < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[SquadIndex][U].MaxHP)
                         {
-                            ListMVChoice.Add(Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y + 1, (int)ActiveSquad.Position.Z));
+                            ListMVChoice.Add(Map.GetTerrain(new Vector3(ActiveSquad.Position.X, ActiveSquad.Position.Y + 1, ActiveSquad.Position.Z)));
                             break;
                         }
                     }
@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMVChoice = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int M = 0; M < AttackChoiceCount; ++M)
             {
-                ListMVChoice.Add(Map.GetTerrain(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32()));
+                ListMVChoice.Add(Map.GetTerrain(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32())));
             }
         }
 

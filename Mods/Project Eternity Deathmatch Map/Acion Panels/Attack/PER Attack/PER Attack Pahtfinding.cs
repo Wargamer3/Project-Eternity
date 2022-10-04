@@ -27,9 +27,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListRefusedAttackTerrain.Clear();
             ListUsableAttackTerrain.Clear();
 
-            MovementAlgorithmTile ActiveTerrain = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z);
+            MovementAlgorithmTile ActiveTerrain = Map.GetTerrain(ActiveSquad);
             Vector3 StartPosition = ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0.5f);
-            ListAllAttackTerrain.Add(Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z));
+            ListAllAttackTerrain.Add(ActiveTerrain);
 
             //Start Right, go downward
             Vector2 TestedFinalPos = new Vector2(Map.MapSize.X + 0.5f, ActiveSquad.Position.Y + 0.5f);
@@ -95,7 +95,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void ProcessLine(Vector3 StartPosition, MovementAlgorithmTile StartNode, Vector2 DestinationPosition, int DestinationLayerIndex)
         {
             MovementAlgorithmTile CurrentTerrain = StartNode;
-            MovementAlgorithmTile NextTerrain = Map.GetTerrain(StartPosition.X, StartPosition.Y, (int)StartPosition.Z);
+            MovementAlgorithmTile NextTerrain = Map.GetTerrain(StartPosition);
             Vector3 Diff = new Vector3(DestinationPosition.X - StartPosition.X, DestinationPosition.Y - StartPosition.Y, DestinationLayerIndex - StartPosition.Z);
             Diff.Normalize();
 
@@ -151,7 +151,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         break;
                     }
 
-                    NextTerrain = Map.GetTerrain(CornerNextX, CornerNextY, CornerNextZ);
+                    NextTerrain = Map.GetTerrain(new Vector3(CornerNextX, CornerNextY, CornerNextZ));
 
                     CurrentX = CornerNextX;
                     CurrentY = CornerNextY;
@@ -181,7 +181,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 #endregion
 
-                NextTerrain = Map.GetTerrain(NextX, NextY, NextZ);
+                NextTerrain = Map.GetTerrain(new Vector3(NextX, NextY, NextZ));
 
                 if (ListRefusedAttackTerrain.Contains(NextTerrain))
                 {

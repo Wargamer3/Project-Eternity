@@ -76,7 +76,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return null;
             }
 
-            return Map.LayerManager.ListLayer[LayerIndex].ArrayTerrain[PosX, PosY];
+            return Map.GetMovementTile(PosX, PosY, LayerIndex);
         }
 
         public override bool IsBlocked(MovementAlgorithmTile CurrentNode)

@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void ProcessMovement(Vector3 NextPosition, Terrain ActiveTerrain)
+        public bool ProcessMovement(Vector3 NextPosition, Terrain ActiveTerrain)
         {
             bool IsAttackingSelf = NextPosition == Position;
 
@@ -80,10 +80,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (Map.ListPlayer[ActiveTarget.Item1].ListSquad[ActiveTarget.Item2] == Owner && !IsAttackingSelf)
                 {
-                    return;
+                    return false;
                 }
-
-                DestroySelf();
 
                 if (ActiveAttack.ExplosionOption.ExplosionRadius > 0)
                 {
@@ -94,23 +92,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     ListAttackTarget.Push(ActiveTarget);
                     Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
                 }
+
+                return true;
             }
             else if (ActiveTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex)
             {
-                DestroySelf();
+                DamageTemporaryTerrain(new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex));
 
                 if (ActiveAttack.ExplosionOption.ExplosionRadius > 0)
                 {
                     HandleExplosion();
                 }
+
+                return true;
             }
 
             SetPosition(NextPosition);
 
             if (Position.X < 0 || Position.X >= Map.MapSize.X || Position.Y < 0 || Position.Y >= Map.MapSize.Y || Position.Z < 0 || Position.Z >= Map.LayerManager.ListLayer.Count)
             {
-                DestroySelf();
+                return true;
             }
+
+            return false;
         }
 
         public static List<MovementAlgorithmTile> PredictAttackMovement(DeathmatchMap Map, Vector3 StartPosition, Vector3 CursorPosition)
@@ -120,7 +124,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Vector3 Diff = CursorPosition - StartPosition;
             Diff.Normalize();
 
-            Terrain NextTerrain = Map.GetTerrain(StartPosition.X, StartPosition.Y, (int)StartPosition.Z);
+            Terrain NextTerrain = Map.GetTerrain(StartPosition);
             ListCrossedTerrain.Add(NextTerrain);
 
             float Progress = 0;
@@ -176,7 +180,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
                     }
 
-                    NextTerrain = Map.GetTerrain(CornerNextX, CornerNextY, CornerNextZ);
+                    Vector3 NextCornerPosition = new Vector3(CornerNextX, CornerNextY, CornerNextZ);
+                    NextTerrain = Map.GetTerrain(NextCornerPosition);
 
                     CurrentX = CornerNextX;
                     CurrentY = CornerNextY;
@@ -192,7 +197,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
                     }
 
-                    Tuple<int, int> ActiveCornerTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, new Vector3(CornerNextX, CornerNextY, CornerNextZ), true);
+                    Tuple<int, int> ActiveCornerTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, NextCornerPosition, true);
 
                     if (ActiveCornerTarget != null)
                     {
@@ -202,7 +207,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 #endregion
 
-                NextTerrain = Map.GetTerrain(NextX, NextY, NextZ);
+                Vector3 NextPosition = new Vector3(NextX, NextY, NextZ);
+                NextTerrain = Map.GetTerrain(NextPosition);
 
                 if (!ListCrossedTerrain.Contains(NextTerrain))
                 {
@@ -214,7 +220,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
                 }
 
-                Tuple<int, int> ActiveTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, new Vector3(NextX, NextY, NextZ), true);
+                Tuple<int, int> ActiveTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, NextPosition, true);
 
                 if (ActiveTarget != null)
                 {
@@ -241,7 +247,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             float DistanceToTravel = Diff.Length();
             Diff.Normalize();
 
-            Terrain NextTerrain = Map.GetTerrain(Position.X, Position.Y, (int)Position.Z);
+            Terrain NextTerrain = Map.GetTerrain(Position);
             float Progress = 0;
 
             int LastX = (int)Position.X;
@@ -295,7 +301,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
                     }
 
-                    NextTerrain = Map.GetTerrain(CornerNextX, CornerNextY, CornerNextZ);
+                    Vector3 CornerNextPosition = new Vector3(CornerNextX, CornerNextY, CornerNextZ);
+
+                    NextTerrain = Map.GetTerrain(CornerNextPosition);
 
                     CurrentX = CornerNextX;
                     CurrentY = CornerNextY;
@@ -311,7 +319,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
                     }
 
-                    Tuple<int, int> ActiveCornerTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, new Vector3(CornerNextX, CornerNextY, CornerNextZ), true);
+                    Tuple<int, int> ActiveCornerTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, CornerNextPosition, true);
 
                     if (ActiveCornerTarget != null)
                     {
@@ -321,7 +329,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 #endregion
 
-                NextTerrain = Map.GetTerrain(NextX, NextY, NextZ);
+                Vector3 FinalNextPosition = new Vector3(NextX, NextY, NextZ);
+                NextTerrain = Map.GetTerrain(FinalNextPosition);
 
                 if (!ListCrossedTerrain.Contains(NextTerrain))
                 {
@@ -400,7 +409,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     Squad SquadToKill = Map.ListPlayer[ActiveTarget.Item1].ListSquad[ActiveTarget.Item2];
 
-                    Terrain SquadTerrain = Map.GetTerrain(SquadToKill.X, SquadToKill.Y, (int)SquadToKill.Z);
+                    Terrain SquadTerrain = Map.GetTerrain(SquadToKill);
 
                     float DiffX = Math.Abs(Position.X - SquadToKill.Position.X);
                     float DiffY = Math.Abs(Position.Y - SquadToKill.Position.Y);
@@ -420,6 +429,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         SquadToKill.Speed = FinalSpeed;
 
                         SquadToKill.SetPosition(SquadTerrain.WorldPosition);
+                    }
+                }
+            }
+        }
+
+        private void DamageTemporaryTerrain(Vector3 Position)
+        {
+            Terrain TemporaryTerrain;
+
+            if (Map.DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
+            {
+                Map.DicTemporaryTerrain.Remove(Position);
+
+                MapLayer ActiveLayer = Map.LayerManager.ListLayer[(int)Position.Z];
+                for (int P = 0; P < ActiveLayer.ListProp.Count; P++)
+                {
+                    if (ActiveLayer.ListProp[P].Position == Position)
+                    {
+                        ActiveLayer.ListProp.RemoveAt(P);
                     }
                 }
             }

@@ -89,7 +89,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
-                    ListAttackTerrain.Add(Map.GetTerrain(TargetPosition.X, TargetPosition.Y, (int)TargetPosition.Z));
+                    ListAttackTerrain.Add(Map.GetTerrain(TargetPosition));
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
-                    ListAttackTerrain.Add(Map.GetTerrain(TargetPosition.X, TargetPosition.Y, (int)TargetPosition.Z));
+                    ListAttackTerrain.Add(Map.GetTerrain(TargetPosition));
                 }
             }
         }
@@ -119,7 +119,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
-                    ListAttackTerrain.Add(Map.GetTerrain(TargetPosition.X, TargetPosition.Y, (int)TargetPosition.Z));
+                    ListAttackTerrain.Add(Map.GetTerrain(TargetPosition));
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (TargetPosition.X >= 0f && TargetPosition.X < Map.MapSize.X && TargetPosition.Y >= 0f && TargetPosition.Y < Map.MapSize.Y)
                 {
-                    ListAttackTerrain.Add(Map.GetTerrain(TargetPosition.X, TargetPosition.Y, (int)TargetPosition.Z));
+                    ListAttackTerrain.Add(Map.GetTerrain(TargetPosition));
                 }
             }
         }
@@ -160,7 +160,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAttackTerrain = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                ListAttackTerrain.Add(Map.GetTerrain(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32()));
+                ListAttackTerrain.Add(Map.GetTerrain(new Vector3(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32())));
             }
 
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;

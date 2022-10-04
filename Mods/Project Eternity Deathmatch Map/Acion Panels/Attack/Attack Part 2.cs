@@ -125,10 +125,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAttackChoice = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                int NewTerrainX = BR.ReadInt32();
-                int NewTerrainY = BR.ReadInt32();
-                int NewTerrainZ = BR.ReadInt32();
-                ListAttackChoice.Add(Map.GetTerrain(NewTerrainX, NewTerrainY, NewTerrainZ));
+                ListAttackChoice.Add(Map.GetTerrain(new Vector3(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32())));
             }
 
             bool IsBattlePreviewOpen = BR.ReadBoolean();

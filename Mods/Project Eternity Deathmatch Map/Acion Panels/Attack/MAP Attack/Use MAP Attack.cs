@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAttackChoice = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                ListAttackChoice.Add(Map.GetTerrain(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32()));
+                ListAttackChoice.Add(Map.GetTerrain(new Vector3(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32())));
             }
 
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;

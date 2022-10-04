@@ -100,7 +100,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void TogglePreview(bool UsePreview)
         {
-
             if (!UsePreview || Map.CameraType == "2D")
             {
                 LayerHolderDrawable = new DeathmatchMap2DHolder(Map, Map.LayerManager);
@@ -109,11 +108,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
             }
-        }
-
-        public override DrawableTile GetTile(int X, int Y, int LayerIndex)
-        {
-            return ListLayer[LayerIndex].LayerGrid.GetTile(X, Y);
         }
 
         public override void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)

@@ -49,12 +49,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            float TileX = Map.CursorPosition.X;
-            float TileY = Map.CursorPosition.Y;
-            int TileZ = (int)Math.Floor(Map.CursorPosition.Z);
-
-            Terrain ActiveTerrain = Map.GetTerrain(TileX, TileY, TileZ);
-            DrawableTile ActiveTile = Map.LayerManager.GetTile((int)TileX, (int)TileY, TileZ);
+            Terrain ActiveTerrain = Map.GetTerrain(Map.CursorPosition);
+            DrawableTile ActiveTile = ActiveTerrain.DrawableTile;
             g.Draw(Map.sprCursorTerrainSelection, new Vector2(FinalMenuX, FinalMenuY), Color.White);
             g.Draw(Map.ListTileSet[ActiveTile.TilesetIndex], new Vector2(FinalMenuX + 6, FinalMenuY + 22), ActiveTile.Origin, Color.White);
             string BonusValue;

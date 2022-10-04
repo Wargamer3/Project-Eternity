@@ -13,11 +13,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return Grades[UnitStat.TerrainAttributeValue(MovementTypeIndex)];
         }
 
-        public byte GetTerrainType(float PosX, float PosY, int LayerIndex)
-        {
-            return GetTerrain(PosX, PosY, LayerIndex).TerrainTypeIndex;
-        }
-
         public bool CheckForObstacleAtPosition(int PlayerIndex, Vector3 Position, Vector3 Displacement)
         {
             return CheckForSquadAtPosition(PlayerIndex, Position, Displacement) >= 0;

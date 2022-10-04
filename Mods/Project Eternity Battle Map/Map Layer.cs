@@ -38,9 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public abstract void Update(GameTime gameTime);
 
         public abstract void TogglePreview(bool UsePreview);
-
-        public abstract DrawableTile GetTile(int X, int Y, int LayerIndex);
-
+        
         public abstract void AddDrawablePoints(List<MovementAlgorithmTile> ListPoint, Color PointColor);
 
         public abstract void AddDrawablePath(List<MovementAlgorithmTile> ListPoint);

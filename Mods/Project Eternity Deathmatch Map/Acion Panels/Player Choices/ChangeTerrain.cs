@@ -44,13 +44,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public static void AddIfUsable(DeathmatchMap Map, ActionPanel Owner, Squad ActiveSquad)
         {
-            TerrainType CurrentTerrain = Map.TerrainRestrictions.ListTerrainType[Map.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z)];
+            TerrainType CurrentTerrain = Map.TerrainRestrictions.ListTerrainType[Map.GetTerrain(ActiveSquad).TerrainTypeIndex];
 
             #region X - 1
 
             if (ActiveSquad.X - 1 >= 0)
             {
-                Terrain NeighbourTerrain = Map.GetTerrain(ActiveSquad.X - 1, ActiveSquad.Y, (int)ActiveSquad.Z);
+                Terrain NeighbourTerrain = Map.GetTerrain(new Vector3(ActiveSquad.X - 1, ActiveSquad.Y, ActiveSquad.Z));
                 TerrainType NeighbourTerrainType = Map.TerrainRestrictions.ListTerrainType[NeighbourTerrain.TerrainTypeIndex];
 
                 if (CurrentTerrain != NeighbourTerrainType && CurrentTerrain.ActivationName != NeighbourTerrainType.ActivationName && NeighbourTerrainType.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat))
@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.X + 1 < Map.MapSize.X)
             {
-                Terrain NeighbourTerrain = Map.GetTerrain(ActiveSquad.X + 1, ActiveSquad.Y, (int)ActiveSquad.Z);
+                Terrain NeighbourTerrain = Map.GetTerrain(new Vector3(ActiveSquad.X + 1, ActiveSquad.Y, ActiveSquad.Z));
                 TerrainType NeighbourTerrainType = Map.TerrainRestrictions.ListTerrainType[NeighbourTerrain.TerrainTypeIndex];
 
                 if (CurrentTerrain != NeighbourTerrainType && CurrentTerrain.ActivationName != NeighbourTerrainType.ActivationName && NeighbourTerrainType.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat))
@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Y - 1 >= 0)
             {
-                Terrain NeighbourTerrain = Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y - 1, (int)ActiveSquad.Z);
+                Terrain NeighbourTerrain = Map.GetTerrain(new Vector3(ActiveSquad.X, ActiveSquad.Y - 1, ActiveSquad.Z));
                 TerrainType NeighbourTerrainType = Map.TerrainRestrictions.ListTerrainType[NeighbourTerrain.TerrainTypeIndex];
 
                 if (CurrentTerrain != NeighbourTerrainType && CurrentTerrain.ActivationName != NeighbourTerrainType.ActivationName && NeighbourTerrainType.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat))
@@ -95,7 +95,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Y + 1 < Map.MapSize.Y)
             {
-                Terrain NeighbourTerrain = Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y + 1, (int)ActiveSquad.Z);
+                Terrain NeighbourTerrain = Map.GetTerrain(new Vector3(ActiveSquad.X, ActiveSquad.Y + 1, ActiveSquad.Z));
                 TerrainType NeighbourTerrainType = Map.TerrainRestrictions.ListTerrainType[NeighbourTerrain.TerrainTypeIndex];
 
                 if (CurrentTerrain != NeighbourTerrainType && CurrentTerrain.ActivationName != NeighbourTerrainType.ActivationName && NeighbourTerrainType.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat))
@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Z - 1 >= 0)
             {
-                Terrain NeighbourTerrain = Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z - 1);
+                Terrain NeighbourTerrain = Map.GetTerrain(new Vector3(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.Z - 1));
                 TerrainType NeighbourTerrainType = Map.TerrainRestrictions.ListTerrainType[NeighbourTerrain.TerrainTypeIndex];
 
                 if (CurrentTerrain != NeighbourTerrainType && CurrentTerrain.ActivationName != NeighbourTerrainType.ActivationName && NeighbourTerrainType.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat))
@@ -126,7 +126,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Z + 1 < Map.LayerManager.ListLayer.Count)
             {
-                Terrain NeighbourTerrain = Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z + 1);
+                Terrain NeighbourTerrain = Map.GetTerrain(new Vector3(ActiveSquad.X, ActiveSquad.Y, ActiveSquad.Z + 1));
                 TerrainType NeighbourTerrainType = Map.TerrainRestrictions.ListTerrainType[NeighbourTerrain.TerrainTypeIndex];
 
                 if (CurrentTerrain != NeighbourTerrainType && CurrentTerrain.ActivationName != NeighbourTerrainType.ActivationName && NeighbourTerrainType.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat))

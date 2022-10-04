@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         
         private SpriteFont fntArial16;
 
-        public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+        public override MovementAlgorithmTile CursorTerrain { get { return GetTerrain(CursorPosition); } }
 
         private List<Player> ListLocalPlayerInfo;
         public List<Player> ListPlayer;
@@ -66,6 +66,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public UnitDeploymentScreen UnitDeploymentScreen;
         public DeathmatchParams GlobalBattleParams;
         public List<DeathmatchMutator> ListMutator;
+        public Dictionary<Vector3, Terrain> DicTemporaryTerrain;
 
         public int ActiveSquadIndex
         {
@@ -148,6 +149,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListDelayedAttack = new List<DelayedAttack>();
             ListPERAttack = new List<PERAttack>();
             ListMutator = new List<DeathmatchMutator>();
+            DicTemporaryTerrain = new Dictionary<Vector3, Terrain>();
 
             TerrainRestrictions = new UnitAndTerrainValues();
             TerrainRestrictions.Load();
@@ -471,19 +473,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             MapEnvironment.Reset();
         }
 
-        public Terrain GetTerrain(float X, float Y, int LayerIndex)
+        public Terrain GetTerrain(Vector3 Position)
         {
-            return LayerManager.ListLayer[LayerIndex].ArrayTerrain[(int)X, (int)Y];
+            Terrain TemporaryTerrain;
+            if (DicTemporaryTerrain.TryGetValue(Position, out TemporaryTerrain))
+            {
+                return TemporaryTerrain;
+            }
+            return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
         }
 
         public Terrain GetTerrain(UnitMapComponent ActiveUnit)
         {
-            return LayerManager.ListLayer[(int)ActiveUnit.Z].ArrayTerrain[(int)ActiveUnit.X, (int)ActiveUnit.Y];
+            return GetTerrain(ActiveUnit.Position);
         }
 
-        public DrawableTile GetTile(UnitMapComponent ActiveUnit)
+        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
         {
-            return LayerManager.GetTile((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
+            if (X < 0 || X >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= LayerManager.ListLayer.Count)
+            {
+                return null;
+            }
+
+            return GetTerrain(new Vector3(X, Y, LayerIndex));
         }
 
         public List<MovementAlgorithmTile> GetAllTerrain(UnitMapComponent ActiveUnit, BattleMap ActiveMap)
@@ -996,7 +1008,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
                 bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;
 
-                Terrain PreviousTerrain = LayerManager.ListLayer[L].ArrayTerrain[(int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y];
+                Terrain PreviousTerrain = GetTerrain(new Vector3(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, L));
                 TerrainType PreviousTerrainType = TerrainRestrictions.ListTerrainType[PreviousTerrain.TerrainTypeIndex];
                 bool IsPreviousTerrainnUsable = PreviousTerrainType.ListRestriction.Count > 0 && PreviousTerrainType.ActivationName == CurrentTerrainType.ActivationName;
 
@@ -1069,16 +1081,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
-        {
-            if (X < 0 || X >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= LayerManager.ListLayer.Count)
-            {
-                return null;
-            }
-
-            return LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
-        }
-
         public MovementAlgorithmTile GetTerrainIncludingPlatforms(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, int NextLayerIndex)
         {
             if (!IsAPlatform)
@@ -1094,17 +1096,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            return LayerManager.ListLayer[NextLayerIndex].ArrayTerrain[(int)StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY];
+            return GetTerrain(new Vector3(StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY, NextLayerIndex));
         }
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
         {
             for (int L = StartLayer + 1; L < LayerManager.ListLayer.Count; L++)
             {
-                MapLayer ActiveLayer = LayerManager.ListLayer[L];
-                Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
+                Terrain ActiveTerrain = GetTerrain(new Vector3(NextX, NextY, L));
 
-                byte NextTerrainType = GetTerrainType(NextX, NextY, L);
+                byte NextTerrainType = ActiveTerrain.TerrainTypeIndex;
                 float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
@@ -1120,14 +1121,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void FinalizeMovement(Squad ActiveSquad, int UsedMovement, List<Vector3> ListMVHoverPoints)
         {
-            ActiveSquad.CurrentTerrainIndex = GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Position.Z);
+            ActiveSquad.CurrentTerrainIndex = GetTerrain(ActiveSquad).TerrainTypeIndex;
 
             if (UsedMovement > 0)
             {
                 float TotalENCost = 0;
                 foreach (Vector3 TerrainCrossed in ListMVHoverPoints)
                 {
-                    TotalENCost += TerrainRestrictions.GetENCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, GetTerrainType(TerrainCrossed.X, TerrainCrossed.Y, (int)TerrainCrossed.Z));
+                    TotalENCost += TerrainRestrictions.GetENCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, GetTerrain(TerrainCrossed).TerrainTypeIndex);
                 }
                 if (TotalENCost > 0)
                 {

@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListPERAttackToUpdate = new List<PERAttackMovement>();
             foreach (PERAttack ActivePERAttack in ListNewPERAttack)
             {
-                Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position.X, ActivePERAttack.Position.Y, (int)ActivePERAttack.Position.Z);
+                Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position);
                 Vector3 NextPosition = ActivePERAttack.Position + ActivePERAttack.Speed;
                 ListPERAttackToUpdate.Add(new PERAttackMovement(ActivePERAttack, ActivePERAttack.Position, NextPosition, CurrentTerrain));
             }
@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             foreach (PERAttack ActivePERAttack in ListNewPERAttack)
             {
-                Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position.X, ActivePERAttack.Position.Y, (int)ActivePERAttack.Position.Z);
+                Terrain CurrentTerrain = Map.GetTerrain(ActivePERAttack.Position);
                 Vector3 NextPosition = ActivePERAttack.Position + ActivePERAttack.Speed;
                 ListPERAttackToUpdate.Add(new PERAttackMovement(ActivePERAttack, ActivePERAttack.Position, NextPosition, CurrentTerrain));
             }
@@ -91,7 +91,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                         else
                         {
-                            Terrain CurrentTerrain = Map.GetTerrain(ActiveAttack.Position.X, ActiveAttack.Position.Y, (int)ActiveAttack.Position.Z);
+                            Terrain CurrentTerrain = Map.GetTerrain(ActiveAttack.Position);
                             Vector3 NextPosition = ActiveAttack.Position + ActiveAttack.Speed;
                             ListPERAttackToUpdate.Add(new PERAttackMovement(ActiveAttack, ActiveAttack.Position, NextPosition, CurrentTerrain));
                         }
@@ -129,7 +129,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int P = ListPERAttackToUpdate.Count - 1; P >= 0; --P)
                 {
                     PERAttackMovement ActiveAttack = ListPERAttackToUpdate[P];
-                    Terrain StartTerrain = Map.GetTerrain(ActiveAttack.StartPosition.X, ActiveAttack.StartPosition.Y, (int)ActiveAttack.StartPosition.Z);
+                    Terrain StartTerrain = Map.GetTerrain(ActiveAttack.StartPosition);
 
                     double Movement = ActiveAttack.Movement.Length() * Progress;
                     ActiveAttack.Owner.DistanceTravelled = Movement;
@@ -155,7 +155,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         continue;
                     }
 
-                    Terrain NextTerrain = Map.GetTerrain(NextPostion.X, NextPostion.Y, (int)NextPostion.Z);
+                    Terrain NextTerrain = Map.GetTerrain(new Vector3((int)NextPostion.X, (int)NextPostion.Y, (int)NextPostion.Z));
                     Vector3 NextTerrainRealPosition = NextTerrain.GetRealPosition(NextPostion);
                     float Incline = NextPostion.Z - ActiveAttack.LastRealPosition.Z;
                     if (ActiveAttack.Owner.IsOnGround)
@@ -165,7 +165,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (ActiveAttack.Owner.IsOnGround && NextTerrain.TerrainTypeIndex == UnitStats.TerrainWallIndex && ActiveAttack.LastRealPosition.Z + MaxInclineDeviationAllowed < Map.LayerManager.ListLayer.Count)
                     {
-                        Terrain UpperNextTerrain = Map.GetTerrain(NextPostion.X, NextPostion.Y, (int)(NextPostion.Z + MaxInclineDeviationAllowed));
+                        Terrain UpperNextTerrain = Map.GetTerrain(new Vector3(NextPostion.X, NextPostion.Y, NextPostion.Z + MaxInclineDeviationAllowed));
                         if (UpperNextTerrain != NextTerrain)
                         {
                             Vector3 UpperNextTerrainRealPosition = NextTerrain.GetRealPosition(NextPostion);
@@ -176,7 +176,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (NextTerrain != ActiveAttack.LastTerrain)
                     {
                         SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
-                        ActiveAttack.Owner.ProcessMovement(NextPostion, NextTerrain);
+                        if (ActiveAttack.Owner.ProcessMovement(NextPostion, NextTerrain))
+                        {
+                            ListPERAttackToUpdate.RemoveAt(P);
+
+                            if (ActiveAttack.Owner.ActiveAttack.PERAttributes.GroundCollision == Core.Attacks.PERAttackAttributes.GroundCollisions.DestroySelf)
+                            {
+                                SetAttackContext(ActiveAttack.Owner, ActiveAttack.Owner.Owner, Vector3.Normalize(ActiveAttack.Owner.Speed), ActiveAttack.Owner.Position);
+                                ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnDeath);
+                                ActiveAttack.Owner.DestroySelf();
+                            }
+                        }
+
                         ActiveAttack.LastTerrain = NextTerrain;
 
                         ActiveAttack.Owner.UpdateSkills(AttackPERRequirement.OnTileChange);

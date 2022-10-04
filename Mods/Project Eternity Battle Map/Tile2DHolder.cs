@@ -10,7 +10,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class Tile2DHolder
     {
-        private List<Terrain> ListTile3D;
+        private List<Terrain> ListTile2D;
         Texture2D sprTileset;
         Texture2D sprTilesetBumpMap;
         Texture2D sprTilesetHeightMap;//R = Depth, G = Wall Left to right angle, B = Wall Up to down angle where 255 = upward wall
@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Tile2DHolder(string TilesetName, ContentManager Content, Effect WetEffect)
         {
             this.WetEffect = WetEffect.Clone();
-            ListTile3D = new List<Terrain>();
+            ListTile2D = new List<Terrain>();
             CanUseEffect = true;
 
             if (Content != null)
@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void AddTile(Terrain NewTile)
         {
-            ListTile3D.Add(NewTile);
+            ListTile2D.Add(NewTile);
         }
 
         public void Draw(CustomSpriteBatch g)
@@ -68,7 +68,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             }
 
-            foreach (var ActiveTile in ListTile3D)
+            foreach (Terrain ActiveTile in ListTile2D)
             {
                 Color FinalColor = Color.White;
                 float FinalHeight = ActiveTile.WorldPosition.Z;

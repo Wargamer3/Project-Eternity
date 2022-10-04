@@ -136,8 +136,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void UpdateList()
         {
-            Vector3 StartPosition = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f)) * 32;
-            Vector3 TargetPosition = Map.GetTerrain(Map.CursorPosition.X, Map.CursorPosition.Y, (int)Map.CursorPosition.Z).GetRealPosition(Map.CursorPosition + new Vector3(0.5f, 0.5f, 0f)) * 32;
+            Vector3 StartPosition = Map.GetTerrain(ActiveSquad).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f)) * 32;
+            Vector3 TargetPosition = Map.GetTerrain(Map.CursorPosition).GetRealPosition(Map.CursorPosition + new Vector3(0.5f, 0.5f, 0f)) * 32;
             Vector3 FinalStartPosition = new Vector3(StartPosition.X, StartPosition.Z, StartPosition.Y);
             Vector3 FinalTargetPosition = new Vector3(TargetPosition.X, TargetPosition.Z, TargetPosition.Y);
             Vector3 Distance = FinalTargetPosition - FinalStartPosition;
@@ -187,7 +187,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     return;
 
                 List<PERAttack> ListAttackToUpdate = new List<PERAttack>();
-                Vector3 StartPosition = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y, (int)ActiveSquad.Position.Z).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f));
+                Vector3 StartPosition = Map.GetTerrain(ActiveSquad).GetRealPosition(ActiveSquad.Position + new Vector3(0.5f, 0.5f, 0f));
                 AttackToThrow.Position = StartPosition;
                 AttackToThrow.Speed = new Vector3(ThrowSpeed.X, ThrowSpeed.Z, ThrowSpeed.Y);
                 AttackToThrow.IsOnGround = false;

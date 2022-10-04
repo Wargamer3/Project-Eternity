@@ -130,7 +130,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     List<MovementAlgorithmTile> ListTerrainChoice = new List<MovementAlgorithmTile>();
                     foreach (Vector3 ActiveTerrain in ListMVChoice)
                     {
-                        ListTerrainChoice.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+                        ListTerrainChoice.Add(Map.GetTerrain(ActiveTerrain));
                     }
                     Owner.AddChoiceToCurrentPanel(new ActionPanelResupply(Map, Owner, ActiveSquad, ListMVChoice, ListTerrainChoice));
                 }
@@ -185,9 +185,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListTerrainChoice = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int M = 0; M < AttackChoiceCount; ++M)
             {
-                Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
-                ListMVChoice.Add(NewTerrain);
-                ListTerrainChoice.Add(Map.GetTerrain(NewTerrain.X, NewTerrain.Y, (int)NewTerrain.Z));
+                Vector3 NewTerrainPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
+                ListMVChoice.Add(NewTerrainPosition);
+                ListTerrainChoice.Add(Map.GetTerrain(NewTerrainPosition));
             }
         }
 

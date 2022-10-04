@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         Vector3 NewPosition = new Vector3(Map.CursorPosition.X +X - CurrentAttack.MAPAttributes.Width,
                                                Map.CursorPosition.Y + Y - CurrentAttack.MAPAttributes.Height, Map.CursorPosition.Z);
                         ListAttackChoice.Add(NewPosition);
-                        ListAttackTerrain.Add(Map.GetTerrain(NewPosition.X, NewPosition.Y, (int)NewPosition.Z));
+                        ListAttackTerrain.Add(Map.GetTerrain(NewPosition));
                     }
                 }
             }
@@ -108,7 +108,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
                 ListAttackChoice.Add(NewTerrain);
-                ListAttackTerrain.Add(Map.GetTerrain(NewTerrain.X, NewTerrain.Y, (int)NewTerrain.Z));
+                ListAttackTerrain.Add(Map.GetTerrain(NewTerrain));
             }
 
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;

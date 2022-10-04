@@ -75,12 +75,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 DestroyableObject Owner = (DestroyableObject)context.Instance;
                 TileAttributes TileAttributesForm = new TileAttributes();
-                TileAttributesForm.Init((Terrain)value, Owner.Map);
                 TileAttributesForm.cboTerrainType.Items.Insert(0, "None");
+                if (value == null)
+                {
+                    TileAttributesForm.Init(new Terrain(0, 0, 0, 0), Owner.Map);
+                }
+                else
+                {
+                    ++((Terrain)value).TerrainTypeIndex;
+                    TileAttributesForm.Init((Terrain)value, Owner.Map);
+                }
+
                 TileAttributesForm.ShowDialog();
 
-                value = TileAttributesForm.ActiveTerrain;
+                if (TileAttributesForm.cboTerrainType.SelectedIndex == 0)
+                {
+                    value = null;
+                }
+                else
+                {
+                    --TileAttributesForm.ActiveTerrain.TerrainTypeIndex;
+                    value = TileAttributesForm.ActiveTerrain;
+                }
             }
+
             return value;
         }
     }
@@ -100,6 +118,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private InteractiveProp _DroppedProp;
 
         private Terrain _ReplacementTerrain;
+        private float Depth;
 
         public DestroyableObject(DeathmatchMap Map)
             : base("Destroyable Object", PropCategories.Interactive, new bool[,] { { true } }, false)
@@ -111,7 +130,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             _DestroyedSpritePath = string.Empty;
             _DestroyedModelPath = string.Empty;
 
-            _ReplacementTerrain = new Terrain(0, 0, 0, 0);
+            _ReplacementTerrain = null;
         }
 
         public override void Load(ContentManager Content)
@@ -127,6 +146,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             _DestroyedModelPath = BR.ReadString();
 
             string DroppedPropPath = BR.ReadString();
+
+            bool HasTerrain = BR.ReadBoolean();
+
+            if (HasTerrain)
+            {
+                _ReplacementTerrain = new Terrain(BR, (int)Position.X, (int)Position.Y, (int)Position.Z, Depth);
+                _ReplacementTerrain.Owner = Map;
+                _ReplacementTerrain.WorldPosition.Z = _ReplacementTerrain.Height + Position.Z;
+                _ReplacementTerrain.DrawableTile = new DrawableTile(Rectangle.Empty, -1);
+                Map.DicTemporaryTerrain.Add(Position, _ReplacementTerrain);
+            }
 
             if (!string.IsNullOrEmpty(_SpritePath))
             {
@@ -147,7 +177,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Map.Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
 
-            float TerrainZ = Map.LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y].WorldPosition.Z;
+            float TerrainZ = Map.GetTerrain(Position).WorldPosition.Z;
 
             Unit3D.SetPosition(
                 (Position.X + 0.5f) * Map.TileSize.X,
@@ -171,6 +201,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else
             {
                 BW.Write(string.Empty);
+            }
+
+            if (_ReplacementTerrain != null)
+            {
+                BW.Write(true);
+                _ReplacementTerrain.Save(BW);
+            }
+            else
+            {
+                BW.Write(false);
             }
         }
 

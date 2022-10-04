@@ -2,9 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen

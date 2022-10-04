@@ -267,7 +267,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     List<MovementAlgorithmTile> ListTerrainChoice = new List<MovementAlgorithmTile>();
                     foreach (Vector3 ActiveTerrain in ListMVChoice)
                     {
-                        ListTerrainChoice.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+                        ListTerrainChoice.Add(Map.GetTerrain(ActiveTerrain));
                     }
                     Map.LayerManager.AddDrawablePoints(ListTerrainChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
                 }

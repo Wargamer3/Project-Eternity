@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Position.X + 1 < Map.MapSize.Y)
             {
-                Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X + 1, ActiveSquad.Position.Y, (int)ActiveSquad.Z);
+                Terrain NeighborTerrin = Map.GetTerrain(new Vector3(ActiveSquad.Position.X + 1, ActiveSquad.Position.Y, ActiveSquad.Z));
                 if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
                 {
                     Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Position.X - 1 >= 0)
             {
-                Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X - 1, ActiveSquad.Position.Y, (int)ActiveSquad.Z);
+                Terrain NeighborTerrin = Map.GetTerrain(new Vector3(ActiveSquad.Position.X - 1, ActiveSquad.Position.Y, ActiveSquad.Z));
                 if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
                 {
                     Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Position.Y + 1 < Map.MapSize.Y)
             {
-                Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y + 1, (int)ActiveSquad.Z);
+                Terrain NeighborTerrin = Map.GetTerrain(new Vector3(ActiveSquad.Position.X, ActiveSquad.Position.Y + 1, ActiveSquad.Z));
                 if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
                 {
                     Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));
@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveSquad.Position.Y - 1 >= 0)
             {
-                Terrain NeighborTerrin = Map.GetTerrain(ActiveSquad.Position.X, ActiveSquad.Position.Y - 1, (int)ActiveSquad.Z);
+                Terrain NeighborTerrin = Map.GetTerrain(new Vector3(ActiveSquad.Position.X, ActiveSquad.Position.Y - 1, ActiveSquad.Z));
                 if (NeighborTerrin.TerrainTypeIndex == UnitStats.TerrainVoidIndex)
                 {
                     Owner.AddChoiceToCurrentPanel(new ActionPanelJump(Map, ActiveSquad));

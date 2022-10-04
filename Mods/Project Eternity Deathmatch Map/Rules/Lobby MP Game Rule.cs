@@ -222,7 +222,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Owner.ActivateAutomaticSkills(ActiveSquad, string.Empty);
             ActiveSquad.SetPosition(Owner.CursorPosition);
 
-            ActiveSquad.CurrentTerrainIndex = Owner.GetTerrainType(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z);
+            ActiveSquad.CurrentTerrainIndex = Owner.GetTerrain(ActiveSquad).TerrainTypeIndex;
         }
 
         public virtual void Update(GameTime gameTime)

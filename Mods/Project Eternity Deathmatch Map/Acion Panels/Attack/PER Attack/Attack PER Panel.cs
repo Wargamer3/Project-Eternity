@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad);
                 Vector3 AttackPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.LayerIndex);
 
-                Terrain TargetTerrain = Map.GetTerrain(Map.CursorPosition.X, Map.CursorPosition.Y, (int)Map.CursorPosition.Z);
+                Terrain TargetTerrain = Map.GetTerrain(Map.CursorPosition);
                 Vector3 TargetPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.5f, ActiveTerrain.WorldPosition.Y + 0.5f, ActiveTerrain.LayerIndex);
 
                 if (ActiveSquad.CurrentLeader.CurrentAttack.PERAttributes.AttackType == PERAttackAttributes.AttackTypes.Shoot)
@@ -197,7 +197,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAttackTerrain = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
-                ListAttackTerrain.Add(Map.GetTerrain(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32()));
+                ListAttackTerrain.Add(Map.GetTerrain(new Vector3(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32())));
             }
 
             bool IsBattlePreviewOpen = BR.ReadBoolean();

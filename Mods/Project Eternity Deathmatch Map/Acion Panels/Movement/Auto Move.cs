@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (LandedLayer >= 0)
                         {
                             ListSquadAutoMovement[S].Owner.Speed = new Vector3(ListSquadAutoMovement[S].Owner.Speed.X, ListSquadAutoMovement[S].Owner.Speed.Y, 0);
-                            ListSquadAutoMovement[S].Owner.CurrentTerrainIndex = Map.GetTerrainType(ListSquadAutoMovement[S].Owner.Position.X, ListSquadAutoMovement[S].Owner.Position.Y, LandedLayer);
+                            ListSquadAutoMovement[S].Owner.CurrentTerrainIndex = Map.GetTerrain(new Vector3(ListSquadAutoMovement[S].Owner.Position.X, (int)ListSquadAutoMovement[S].Owner.Position.Y, LandedLayer)).TerrainTypeIndex;
                             ListSquadAutoMovement[S].Owner.SetPosition(new Vector3(ListSquadAutoMovement[S].Owner.Position.X, ListSquadAutoMovement[S].Owner.Position.Y, LandedLayer));
                         }
                     }
@@ -179,7 +179,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 return true;
             }
 
-            Terrain NextTerrain = Map.GetTerrain(NextPosition.X, NextPosition.Y, (int)NextPosition.Z);
+            Terrain NextTerrain = Map.GetTerrain(NextPosition);
 
             if (NextTerrain == ActiveSquad.LastTerrain)
             {
@@ -220,7 +220,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             for (int L = 0; L < Map.LayerManager.ListLayer.Count; ++L)
             {
-                Terrain NextTerrain = Map.LayerManager.ListLayer[L].ArrayTerrain[(int)ActiveSquad.Owner.Position.X, (int)ActiveSquad.Owner.Position.Y];
+                Terrain NextTerrain = Map.GetTerrain(new Vector3(ActiveSquad.Owner.Position.X, ActiveSquad.Owner.Position.Y, L));
 
                 if (NextTerrain.TerrainTypeIndex == UnitStats.TerrainLandIndex)
                 {
@@ -243,7 +243,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private bool IsOnGround(SquadAutoMovement ActiveSquad)
         {
             return ActiveSquad.Owner.CurrentTerrainIndex == UnitStats.TerrainLandIndex
-                && Map.LayerManager.ListLayer[(int)ActiveSquad.Owner.Z].ArrayTerrain[(int)ActiveSquad.Owner.X, (int)ActiveSquad.Owner.Y].TerrainTypeIndex != UnitStats.TerrainVoidIndex;
+                && Map.GetTerrain(ActiveSquad.Owner).TerrainTypeIndex != UnitStats.TerrainVoidIndex;
         }
 
         protected override void OnCancelPanel()

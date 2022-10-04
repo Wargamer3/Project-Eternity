@@ -64,9 +64,9 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             byte DefenderTerrainType;
             Terrain DefenderTerrain;
 
-            AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, (int)AttackerSquad.Z);
+            AttackerTerrainType = GetTerrain(AttackerSquad).TerrainTypeIndex;
 
-            DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, (int)DefenderSquad.Z);
+            DefenderTerrainType = GetTerrain(DefenderSquad).TerrainTypeIndex;
             DefenderTerrain = GetTerrain(DefenderSquad);
 
             //Check if the Unit can counter the attack.
@@ -299,9 +299,9 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             byte DefenderTerrainType;
             Terrain DefenderTerrain;
 
-            AttackerTerrainType = GetTerrainType(AttackerSquad.X, AttackerSquad.Y, (int)AttackerSquad.Z);
+            AttackerTerrainType = GetTerrain(AttackerSquad).TerrainTypeIndex;
 
-            DefenderTerrainType = GetTerrainType(DefenderSquad.X, DefenderSquad.Y, (int)DefenderSquad.Z);
+            DefenderTerrainType = GetTerrain(DefenderSquad).TerrainTypeIndex;
             DefenderTerrain = GetTerrain(DefenderSquad);
 
             return CalculateHitRate(Attacker, CurrentAttack, AttackerTerrainType, Defender, DefenderTerrainType, DefenderTerrain, DefenseChoice);

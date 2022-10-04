@@ -645,7 +645,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (ActiveSquad.Z + 1 < Map.LayerManager.ListLayer.Count)
                     {
-                        Terrain UpperTerrain = Map.GetTerrain(ActiveSquad.X, ActiveSquad.Z, (int)ActiveSquad.Z + 1);
+                        Terrain UpperTerrain = Map.GetTerrain(new Vector3(ActiveSquad.X, ActiveSquad.Z, ActiveSquad.Z + 1));
                         TerrainType UpperTerrainType = Map.TerrainRestrictions.ListTerrainType[UpperTerrain.TerrainTypeIndex];
 
                         if (UpperTerrainType.ListRestriction.Count > 0 || UpperTerrain.DrawableTile.Terrain3DInfo.TerrainStyle != Terrain3D.TerrainStyles.Invisible
@@ -672,13 +672,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Vector3 ActivePosition = ListTerrainPositionToHide.Pop();
                 float ActiveY = ActivePosition.Y;
-                Terrain ActiveTerrain = Map.GetTerrain(ActivePosition.X, ActiveY, Z);
+                Terrain ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z));
 
                 while (ActiveY >= 0 && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
                 {
                     if (--ActiveY >= 0)
                     {
-                        ActiveTerrain = Map.GetTerrain(ActivePosition.X, ActiveY, Z);
+                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z));
                     }
                 }
 
@@ -686,13 +686,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 bool spanLeft = false;
                 bool spanRight = false;
 
-                while (ActiveY < Map.MapSize.Y && Map.GetTerrainType(ActivePosition.X, ActiveY, Z) == TargetTerrainIndex)
+                while (ActiveY < Map.MapSize.Y && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex)
                 {
-                    ListIgnoredTerrain.Add(Map.GetTerrain(ActivePosition.X, ActiveY, Z).DrawableTile);
+                    ListIgnoredTerrain.Add(Map.GetTerrain(new Vector3(ActivePosition.X, ActiveY, Z)).DrawableTile);
 
                     if (ActivePosition.X - 1 >= 0)
                     {
-                        ActiveTerrain = Map.GetTerrain(ActivePosition.X - 1, ActiveY, Z);
+                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X - 1, ActiveY, Z));
 
                         if (!spanLeft && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
                         {
@@ -708,7 +708,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (ActivePosition.X + 1 < Map.MapSize.X)
                     {
-                        ActiveTerrain = Map.GetTerrain(ActivePosition.X + 1, ActiveY, Z);
+                        ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X + 1, ActiveY, Z));
 
                         if (!spanRight && ActiveTerrain.TerrainTypeIndex == TargetTerrainIndex && !ListIgnoredTerrain.Contains(ActiveTerrain.DrawableTile))
                         {

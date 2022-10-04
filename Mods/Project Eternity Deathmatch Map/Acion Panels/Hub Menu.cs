@@ -179,7 +179,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (Vector2 ActivePosition in ListPosition)
             {
-                Terrain ActiveTerrain = Map.GetTerrain(ActivePosition.X, ActivePosition.Y, 0);
+                Terrain ActiveTerrain = Map.GetTerrain(new Vector3(ActivePosition.X, ActivePosition.Y, 0f));
                 if (!Map.TerrainRestrictions.CanMove(HubSquad, HubSquad.CurrentLeader.UnitStat, ActiveTerrain.TerrainTypeIndex))
                     return false;
             }

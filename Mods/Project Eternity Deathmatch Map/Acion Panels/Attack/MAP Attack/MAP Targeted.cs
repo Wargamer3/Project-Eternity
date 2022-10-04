@@ -66,7 +66,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Map.LayerManager.AddDrawablePoints(ListAttackTerrain, Color.FromNonPremultiplied(255, 0, 0, 190));
             ListCursorTarget.Clear();
-            ListCursorTarget.Add(Map.GetTerrain(Map.CursorPosition.X, Map.CursorPosition.Y, (int)Map.CursorPosition.Z));
+            ListCursorTarget.Add(Map.GetTerrain(Map.CursorPosition));
             Map.LayerManager.AddDrawablePoints(ListCursorTarget, Color.DarkRed);
 
             if (ActiveInputManager.InputConfirmPressed())
@@ -226,7 +226,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());
                 ListAttackChoice.Add(NewTerrain);
-                ListAttackTerrain.Add(Map.GetTerrain(NewTerrain.X, NewTerrain.Y, (int)NewTerrain.Z));
+                ListAttackTerrain.Add(Map.GetTerrain(NewTerrain));
             }
 
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;

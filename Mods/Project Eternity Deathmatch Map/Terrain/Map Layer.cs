@@ -89,6 +89,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
+            LayerGrid = new DeathmatchMap2D(Map, this, BR);
+            int ListSubLayerCount = BR.ReadInt32();
+            ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
+            for (int L = 0; L < ListSubLayerCount; L++)
+            {
+                ListSubLayer.Add(new SubMapLayer(Map, BR, LayerIndex));
+            }
+
+            for (int Y = 0; Y < Map.MapSize.Y; Y++)
+            {
+                for (int X = 0; X < Map.MapSize.X; X++)
+                {
+                    ArrayTerrain[X, Y].DrawableTile = LayerGrid.ArrayTile[X, Y];
+                }
+            }
+
             int ListSingleplayerSpawnsCount = BR.ReadInt32();
             ListSingleplayerSpawns = new List<EventPoint>(ListSingleplayerSpawnsCount);
 
@@ -149,22 +165,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListProp.Add(Map.DicInteractiveProp[BR.ReadString()].LoadCopy(BR, LayerIndex));
             }
 
-            LayerGrid = new DeathmatchMap2D(Map, this, BR);
-            int ListSubLayerCount = BR.ReadInt32();
-            ListSubLayer = new List<SubMapLayer>(ListSubLayerCount);
-            for (int L = 0; L < ListSubLayerCount; L++)
-            {
-                ListSubLayer.Add(new SubMapLayer(Map, BR, LayerIndex));
-            }
-
-            for (int Y = 0; Y < Map.MapSize.Y; Y++)
-            {
-                for (int X = 0; X < Map.MapSize.X; X++)
-                {
-                    ArrayTerrain[X, Y].DrawableTile = LayerGrid.ArrayTile[X, Y];
-                }
-            }
-
             LayerGrid.Depth = Depth;
         }
 
@@ -181,6 +181,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     ArrayTerrain[X, Y].Save(BW);
                 }
+            }
+
+            LayerGrid.Save(BW);
+            BW.Write(ListSubLayer.Count);
+            for (int L = 0; L < ListSubLayer.Count; L++)
+            {
+                ListSubLayer[L].Save(BW);
             }
 
             BW.Write(ListSingleplayerSpawns.Count);
@@ -208,13 +215,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int P = 0; P < ListProp.Count; P++)
             {
                 ListProp[P].Save(BW);
-            }
-
-            LayerGrid.Save(BW);
-            BW.Write(ListSubLayer.Count);
-            for (int L = 0; L < ListSubLayer.Count; L++)
-            {
-                ListSubLayer[L].Save(BW);
             }
         }
 

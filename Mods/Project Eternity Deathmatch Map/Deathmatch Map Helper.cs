@@ -27,12 +27,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public Terrain GetTerrain(int X, int Y, int LayerIndex)
         {
-            return ActiveMap.GetTerrain(X, Y, LayerIndex);
+            return ActiveMap.GetTerrain(new Vector3(X, Y, LayerIndex));
         }
 
         public DrawableTile GetTile(int X, int Y, int LayerIndex)
         {
-            return ActiveMap.LayerManager.GetTile(X, Y, LayerIndex);
+            return ActiveMap.GetTerrain(new Vector3(X, Y, LayerIndex)).DrawableTile;
         }
 
         public void ResizeTerrain(int NewWidth, int NewHeight, Terrain TerrainPreset, DrawableTile TilePreset)

@@ -34,7 +34,7 @@ namespace ProjectEternity.Core.Units.Builder
             ListBuildTerrain = new List<MovementAlgorithmTile>();
             foreach (Vector3 ActiveTerrain in ListBuildSpot)
             {
-                ListBuildTerrain.Add(Map.GetTerrain(ActiveTerrain.X, ActiveTerrain.Y, (int)ActiveTerrain.Z));
+                ListBuildTerrain.Add(Map.GetTerrain(ActiveTerrain));
             }
         }
 

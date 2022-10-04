@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMVChoice = Map.GetMVChoice(ActiveSquad, LastPosition.Owner);
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
             ListMovedOverPoint = new List<Vector3>();
-            ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z));
+            ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad));
             ListMovedOverPoint.Add(ActiveSquad.Position);
             ActiveSquad.CurrentLeader.CurrentAttack = null;
         }
@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ListMovedOverTerrain.Clear();
                 ListMovedOverPoint.Clear();
-                ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad.X, ActiveSquad.Y, (int)ActiveSquad.Z));
+                ListMovedOverTerrain.Add(Map.GetTerrain(ActiveSquad));
                 ListMovedOverPoint.Add(ActiveSquad.Position);
                 LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
             }
@@ -139,7 +139,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 CurrentMVCost += Map.Pathfinder.GetMVCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, LastTerrin, ActiveTerrain);
             }
 
-            MovementAlgorithmTile NextTerrain = Map.GetTerrain(Map.CursorPosition.X, Map.CursorPosition.Y, (int)Map.CursorPosition.Z);
+            MovementAlgorithmTile NextTerrain = Map.GetTerrain(Map.CursorPosition);
             CurrentMVCost += Map.Pathfinder.GetMVCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, LastTerrin, NextTerrain);
 
             if (CurrentMVCost <= MaxMV)
@@ -177,7 +177,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMovedOverTerrain.Clear();
             ListMovedOverPoint.Clear();
 
-            MovementAlgorithmTile CurrentTerrain = Map.GetTerrain(Map.CursorPosition.X, Map.CursorPosition.Y, (int)Map.CursorPosition.Z);
+            MovementAlgorithmTile CurrentTerrain = Map.GetTerrain(Map.CursorPosition);
 
             do
             {
