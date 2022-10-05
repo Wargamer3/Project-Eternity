@@ -355,7 +355,8 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 PlaceTile((int)BattleMapViewer.ActiveMap.CursorPosition.X, (int)BattleMapViewer.ActiveMap.CursorPosition.Y, (int)BattleMapViewer.ActiveMap.CursorPosition.Z, false);
             }
-            return true;
+            
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         protected virtual void pnMapPreview_MouseMove(object sender, MouseEventArgs e)
