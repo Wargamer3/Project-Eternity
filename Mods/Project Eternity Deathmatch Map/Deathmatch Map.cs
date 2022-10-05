@@ -429,6 +429,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public override void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal)
+        {
+            Player NewPlayer = new Player(SharedPlayer);
+            ListPlayer.Add(NewPlayer);
+
+            if (IsLocal)
+            {
+                ListLocalPlayerInfo.Add(NewPlayer);
+            }
+        }
+
         protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
         {
             Player NewDeahtmatchPlayer = new Player(NewPlayer);
@@ -517,6 +528,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            GlobalBattleParams.Map = this;
+
             if (!IsFrozen)
             {
                 if (ShowUnits)

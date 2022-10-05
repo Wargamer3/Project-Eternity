@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
-using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             _AttackName = string.Empty;
         }
 
-        public CreateProjectilePERAttackEffect(AttackPERParams Params)
+        public CreateProjectilePERAttackEffect(DeathmatchParams Params)
             : base(Name, false, Params)
         {
             _AttackName = string.Empty;
@@ -49,9 +49,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override string DoExecuteEffect()
         {
-            foreach (PERAttack NewAttack in ActionPanelAttackPER.CreateAttack(Params.LocalContext.Map, Params.LocalContext.Map.ActivePlayerIndex, Params.LocalContext.Owner, WeaponToUse, Params.SharedParams.OwnerPosition, _Speed, ListFollowingSkill))
+            foreach (PERAttack NewAttack in ActionPanelAttackPER.CreateAttack(Params.Map, Params.Map.ActivePlayerIndex, LocalContext.Owner, WeaponToUse, Params.AttackParams.SharedParams.OwnerPosition, _Speed, ListFollowingSkill))
             {
-                NewAttack.IsOnGround = Params.LocalContext.OwnerProjectile.IsOnGround;
+                NewAttack.IsOnGround = LocalContext.OwnerProjectile.IsOnGround;
             }
 
             return null;
@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             NewEffect._Speed = _Speed;
             if (Params != null && !string.IsNullOrEmpty(_AttackName))
             {
-                NewEffect.WeaponToUse = new Attack(_AttackName, Params.SharedParams.Content, NewEffect.Params.LocalContext.Map.Params.DicRequirement, NewEffect.Params.LocalContext.Map.Params.DicEffect, NewEffect.Params.LocalContext.Map.Params.DicAutomaticSkillTarget);
+                NewEffect.WeaponToUse = new Attack(_AttackName, Params.AttackParams.SharedParams.Content, NewEffect.Params.Map.Params.DicRequirement, NewEffect.Params.Map.Params.DicEffect, NewEffect.Params.Map.Params.DicAutomaticSkillTarget);
             }
 
             return NewEffect;
@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (WeaponToUse == null && Params != null && !string.IsNullOrEmpty(_AttackName))
             {
-                WeaponToUse = new Attack(_AttackName, Params.SharedParams.Content, Params.LocalContext.Map.Params.DicRequirement, Params.LocalContext.Map.Params.DicEffect, Params.LocalContext.Map.Params.DicAutomaticSkillTarget);
+                WeaponToUse = new Attack(_AttackName, Params.AttackParams.SharedParams.Content, Params.Map.Params.DicRequirement, Params.Map.Params.DicEffect, Params.Map.Params.DicAutomaticSkillTarget);
             }
         }
 

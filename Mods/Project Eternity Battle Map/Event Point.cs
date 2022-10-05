@@ -56,11 +56,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
     public class MapSwitchPoint : EventPoint
     {
+        private string _SwitchText;
+
         public MapSwitchPoint(Vector3 Position, string Tag, byte ColorRed, byte ColorGreen, byte ColorBlue)
             : base(Position, Tag, ColorRed, ColorGreen, ColorBlue)
         {
             SwitchMapPath = "";
-            SwitchMapType = "Deathmatch";
             SwitchText = "";
         }
 
@@ -68,7 +69,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             : base(Copy)
         {
             SwitchMapPath = "";
-            SwitchMapType = "Deathmatch";
             SwitchText = "";
         }
 
@@ -76,9 +76,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             : base(BR)
         {
             SwitchMapPath = BR.ReadString();
-            SwitchMapType = BR.ReadString();
             SwitchText = BR.ReadString();
             OtherMapEntryPoint = new Point(BR.ReadInt32(), BR.ReadInt32());
+            LayerIndex = BR.ReadInt32();
         }
 
         public override void Save(BinaryWriter BW)
@@ -86,10 +86,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             base.Save(BW);
 
             BW.Write(SwitchMapPath);
-            BW.Write(SwitchMapType);
             BW.Write(SwitchText);
             BW.Write(OtherMapEntryPoint.X);
             BW.Write(OtherMapEntryPoint.Y);
+            BW.Write(LayerIndex);
         }
 
         #region Properties
@@ -101,15 +101,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         [CategoryAttribute("Map Switch Attributes"),
         DescriptionAttribute(".")]
-        public string SwitchMapType { get; set; }
-
-        [CategoryAttribute("Map Switch Attributes"),
-        DescriptionAttribute(".")]
-        public string SwitchText { get; set; }
+        public string SwitchText { get { return _SwitchText; } set { _SwitchText = value; } }
 
         [CategoryAttribute("Map Switch Attributes"),
         DescriptionAttribute(".")]
         public Point OtherMapEntryPoint { get; set; }
+
+        [CategoryAttribute("Map Switch Attributes"),
+        DescriptionAttribute(".")]
+        public int LayerIndex { get; set; }
 
         #endregion
     }

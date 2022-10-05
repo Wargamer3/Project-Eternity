@@ -202,7 +202,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ActiveAttack.Owner.SetPosition(NextPostion);
                         ActiveAttack.Owner.IsOnGround = true;
                     }
-                    else if (StartTerrain != NextTerrain && NextPostion.Z < NextTerrainRealPosition.Z && NextTerrain.TerrainTypeIndex == UnitStats.TerrainLandIndex)
+                    else if (!ActiveAttack.Owner.IsOnGround && StartTerrain != NextTerrain && NextPostion.Z < NextTerrainRealPosition.Z && NextTerrain.TerrainTypeIndex == UnitStats.TerrainLandIndex)
                     {
                         NextPostion.Z = NextTerrain.WorldPosition.Z;
                         ActiveAttack.Owner.SetPosition(NextPostion);

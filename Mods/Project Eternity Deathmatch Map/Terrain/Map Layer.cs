@@ -138,14 +138,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 MapSwitchPoint NewMapSwitchPoint = new MapSwitchPoint(BR);
                 ListMapSwitchPoint.Add(NewMapSwitchPoint);
+                string SwitchMapType = NewMapSwitchPoint.SwitchMapPath.Split(new string[] { "/" }, StringSplitOptions.None)[0];
                 if (BattleMap.DicBattmeMapType.Count > 0 && !string.IsNullOrEmpty(NewMapSwitchPoint.SwitchMapPath)
                     && Map.ListSubMap.Find(x => x.BattleMapPath == NewMapSwitchPoint.SwitchMapPath) == null)
                 {
-                    BattleMap NewMap = BattleMap.DicBattmeMapType[NewMapSwitchPoint.SwitchMapType].GetNewMap(string.Empty, string.Empty);
-                    NewMap.BattleMapPath = NewMapSwitchPoint.SwitchMapPath;
+                    DeathmatchMap NewMap = (DeathmatchMap)BattleMap.DicBattmeMapType[SwitchMapType].GetNewMap(string.Empty, string.Empty);
+                    NewMap.BattleMapPath = NewMapSwitchPoint.SwitchMapPath.Substring(SwitchMapType.Length + 1);
                     NewMap.ListGameScreen = Map.ListGameScreen;
                     NewMap.ListSubMap = Map.ListSubMap;
                     NewMap.Load();
+                    foreach (Player ActivePlayer in Map.ListAllPlayer)
+                    {
+                        NewMap.SharePlayer(ActivePlayer, Map.ListLocalPlayer.Contains(ActivePlayer));
+                    }
                 }
             }
 

@@ -18,14 +18,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void AddPlatform(BattleMapPlatform NewPlatform);
 
+        public abstract void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal);
+
         public void AddLocalPlayer(BattleMapPlayer NewPlayer)
         {
             DoAddLocalPlayer(NewPlayer);
-
-            foreach (BattleMap ActiveSubMap in ListSubMap)
-            {
-                ActiveSubMap.DoAddLocalPlayer(NewPlayer);
-            }
         }
 
         protected abstract void DoAddLocalPlayer(BattleMapPlayer NewPlayer);

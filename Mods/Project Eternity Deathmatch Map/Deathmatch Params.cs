@@ -76,7 +76,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Deathmatch Map", "*.dll"), typeof(DeathmatchAttackPEREffect), AttackParams))
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Deathmatch Map", "*.dll"), typeof(DeathmatchAttackPEREffect), this))
             {
                 DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
             }
@@ -84,13 +84,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Deathmatch Map", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(DeathmatchAttackPEREffect), AttackParams))
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(DeathmatchAttackPEREffect), this))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
                 }
             }
 
-            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Deathmatch Map", "*.dll"), typeof(DeathmatchSquadPEREffect), SquadParams))
+            foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Deathmatch Map", "*.dll"), typeof(DeathmatchSquadPEREffect), this))
             {
                 DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
             }
@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Deathmatch Map", "*.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(DeathmatchSquadPEREffect), SquadParams))
+                foreach (KeyValuePair<string, BaseEffect> ActiveEffect in BaseEffect.LoadFromAssembly(ActiveAssembly, typeof(DeathmatchSquadPEREffect), this))
                 {
                     DicEffect.Add(ActiveEffect.Key, ActiveEffect.Value);
                 }

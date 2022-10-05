@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Remove(ActiveSquad);
             Map.ListPlayer[Map.ActivePlayerIndex].UpdateAliveStatus();
-            DeathmatchMap SwitchMap = (DeathmatchMap)Map.ListSubMap.Find(x => x.BattleMapPath == ActiveSwitchPoint.SwitchMapPath);
+            DeathmatchMap SwitchMap = (DeathmatchMap)Map.ListSubMap.Find(x => x.GetMapType() + "/" + x.BattleMapPath == ActiveSwitchPoint.SwitchMapPath);
 
             if (!SwitchMap.IsInit)
             {

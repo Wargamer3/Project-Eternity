@@ -7,8 +7,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class AttackPERContext : Projectile3DContext
     {
-        public DeathmatchMap Map;
         public Squad Owner;
         public new PERAttack OwnerProjectile;
+
+        public AttackPERContext()
+        {
+        }
+
+        public AttackPERContext(AttackPERContext GlobalContext)
+        {
+            Owner = GlobalContext.Owner;
+            OwnerProjectile = GlobalContext.OwnerProjectile;
+            OwnerSandbox = GlobalContext.OwnerSandbox;
+        }
     }
 }

@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             int TilesetIndex = Params.Map.ListTileSet.IndexOf(sprTileset);
 
-            foreach (MovementAlgorithmTile ActivePosition in Params.LocalContext.ArrayAttackPosition)
+            foreach (MovementAlgorithmTile ActivePosition in LocalContext.ArrayAttackPosition)
             {
                 int X = ActivePosition.InternalPosition.X;
                 int Y = ActivePosition.InternalPosition.Y;

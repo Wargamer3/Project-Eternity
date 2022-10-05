@@ -6,7 +6,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class SquadPERContext
     {
-        public DeathmatchMap Map;
         public Squad Target;
         public Attack TargetWeapon;
         public Vector3 TargetWeaponAngle;
@@ -14,6 +13,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public SquadPERContext()
         {
+        }
+
+        public SquadPERContext(SquadPERContext GlobalContext)
+        {
+            Target = GlobalContext.Target;
+            TargetWeapon = GlobalContext.TargetWeapon;
+            TargetWeaponAngle = GlobalContext.TargetWeaponAngle;
+            TargetWeaponPosition = GlobalContext.TargetWeaponPosition;
         }
 
         public void SetRobotContext(Squad ActiveRobotAnimation, Attack ActiveWeapon, Vector3 Angle, Vector3 Position)

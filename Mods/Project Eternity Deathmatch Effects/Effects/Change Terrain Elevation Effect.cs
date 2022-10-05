@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             MapLayer ActiveLayer = Params.Map.LayerManager.ListLayer[0];
 
-            foreach (MovementAlgorithmTile ActivePosition in Params.LocalContext.ArrayAttackPosition)
+            foreach (MovementAlgorithmTile ActivePosition in LocalContext.ArrayAttackPosition)
             {
                 for (int X = -_Radius; X <= _Radius; ++X)
                 {

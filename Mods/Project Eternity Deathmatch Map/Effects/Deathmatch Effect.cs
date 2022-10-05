@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -13,6 +13,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         /// </summary>
         private DeathmatchParams _Params;
         protected DeathmatchParams Params { get { return _Params; } }
+        // When an effect is copied to be activated, the global context is copied into the local context.
+        // This context is local and can't be changed.
+        public readonly BattleContext LocalContext;
 
         public DeathmatchEffect(string EffectTypeName, bool IsPassive)
            : base(EffectTypeName, IsPassive)
@@ -24,7 +27,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(EffectTypeName, IsPassive)
         {
             if (Params != null)
+            {
                 this._Params = Params;
+                LocalContext = new BattleContext(_Params.GlobalContext);
+            }
         }
 
         protected override void DoReload(string ParamsID)

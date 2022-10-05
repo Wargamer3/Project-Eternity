@@ -973,9 +973,22 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ActiveSquad.SetPosition(new Vector3(NewPosition.WorldPosition.X, NewPosition.WorldPosition.Y, NewPosition.LayerIndex));*/
         }
 
+
+        public override void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal)
+        {
+            /*Player NewPlayer = new Player(SharedPlayer);
+            ListPlayer.Add(NewPlayer);
+
+            if (IsLocal)
+            {
+                ListLocalPlayerInfo.Add(NewPlayer);
+            }*/
+        }
+
         protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
         {
             /*Player NewDeahtmatchPlayer = new Player(NewPlayer);
+
             ListPlayer.Add(NewDeahtmatchPlayer);
             ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
         }

@@ -19,9 +19,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         // Because it is shared through all effect, its variables will constantly change and must be kept as a member after being activated.
         // There should never be more than one instance of the global context.
         public readonly BattleContext GlobalContext;
-        // When an effect is copied to be activated, the global context is copied into the local context.
-        // This context is local and can't be changed.
-        public readonly BattleContext LocalContext;
 
         public readonly UnitQuickLoadEffectContext GlobalQuickLoadContext;
 
@@ -37,7 +34,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleParams()
         {
             GlobalContext = new BattleContext();
-            LocalContext = new BattleContext();
 
             GlobalQuickLoadContext = new UnitQuickLoadEffectContext();
 
@@ -52,7 +48,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleParams(BattleContext GlobalContext)
         {
             this.GlobalContext = GlobalContext;
-            LocalContext = new BattleContext();
 
             GlobalQuickLoadContext = new UnitQuickLoadEffectContext();
 
@@ -97,19 +92,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value.CopyAndReload(ParamsID));
             }
-        }
-
-        internal void CopyGlobalIntoLocal()
-        {
-            LocalContext.SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
-                GlobalContext.EffectTargetSquad, GlobalContext.EffectTargetUnit, GlobalContext.EffectTargetCharacter, GlobalContext.ActiveParser);
-
-            LocalContext.Result = GlobalContext.Result;
-            LocalContext.EnemyResult = GlobalContext.EnemyResult;
-            LocalContext.SupportAttack = GlobalContext.SupportAttack;
-            LocalContext.SupportDefend = GlobalContext.SupportDefend;
-            LocalContext.ArrayAttackPosition = new MovementAlgorithmTile[GlobalContext.ArrayAttackPosition.Length];
-            GlobalContext.ArrayAttackPosition.CopyTo(LocalContext.ArrayAttackPosition, 0);
         }
 
         protected virtual void LoadUnits()

@@ -340,6 +340,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
+            ListSubMap.Add(this);
             if (!IsServer)
             {
                 MapRenderTarget = new RenderTarget2D(GraphicsDevice, Constants.Width, Constants.Height, false,

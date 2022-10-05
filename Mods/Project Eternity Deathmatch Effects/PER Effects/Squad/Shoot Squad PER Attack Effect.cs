@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public ShootSquadPERAttackEffect(SquadPERParams Params)
+        public ShootSquadPERAttackEffect(DeathmatchParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,9 +33,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override string DoExecuteEffect()
         {
-            ActionPanelAttackPER.CreateAttack(Params.LocalContext.Map, Params.LocalContext.Map.ActivePlayerIndex, Params.LocalContext.Target, Params.LocalContext.TargetWeapon,
-                Params.LocalContext.TargetWeaponPosition,
-                Params.LocalContext.Map.CursorPosition - Params.LocalContext.Target.Position,
+            ActionPanelAttackPER.CreateAttack(Params.Map, Params.Map.ActivePlayerIndex, LocalContext.Target, LocalContext.TargetWeapon,
+                LocalContext.TargetWeaponPosition,
+                Params.Map.CursorPosition - LocalContext.Target.Position,
                 ListFollowingSkill);
             return null;
         }

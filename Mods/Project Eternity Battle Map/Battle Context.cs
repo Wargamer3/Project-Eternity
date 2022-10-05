@@ -30,6 +30,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayAttackPosition = new MovementAlgorithmTile[0];
         }
 
+        public BattleContext(BattleContext GlobalContext)
+        {
+            Result = GlobalContext.Result;
+            EnemyResult = GlobalContext.EnemyResult;
+            SupportAttack = GlobalContext.SupportAttack;
+            SupportDefend = GlobalContext.SupportDefend;
+            ArrayAttackPosition = GlobalContext.ArrayAttackPosition;
+
+            SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
+                 GlobalContext.EffectTargetSquad, GlobalContext.EffectTargetUnit, GlobalContext.EffectTargetCharacter, GlobalContext.ActiveParser);
+        }
+
         public static void LoadDefaultValues()
         {
             foreach (KeyValuePair<string, Unit> ActiveUnitType in Unit.LoadAllUnits())

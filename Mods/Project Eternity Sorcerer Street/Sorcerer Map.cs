@@ -194,11 +194,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LayerManager.LayerHolderDrawable.Reset();*/
         }
 
+        public override void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal)
+        {
+            /*Player NewPlayer = new Player(SharedPlayer);
+            ListPlayer.Add(NewPlayer);
+
+            if (IsLocal)
+            {
+                ListLocalPlayerInfo.Add(NewPlayer);
+            }*/
+        }
+
         protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
         {
-            //Player NewDeahtmatchPlayer = new Player(NewPlayer);
-            //ListPlayer.Add(NewDeahtmatchPlayer);
-            //ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);
+            /*Player NewDeahtmatchPlayer = new Player(NewPlayer);
+
+            ListPlayer.Add(NewDeahtmatchPlayer);
+            ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
         }
 
         public override void SetMutators(List<Mutator> ListMutator)

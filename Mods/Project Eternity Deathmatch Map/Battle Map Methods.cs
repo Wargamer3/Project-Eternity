@@ -500,8 +500,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             NewMap = new DeathmatchMap(GameMode, Params);
             Params.Map = NewMap;
-            Params.GlobalAttackContext.Map = NewMap;
-            Params.GlobalSquadContext.Map = NewMap;
             return NewMap;
         }
 

@@ -7,7 +7,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public abstract class DeathmatchSquadPEREffect : SquadPEREffect
     {
-        protected readonly SquadPERParams Params;
+        protected readonly DeathmatchParams Params;
+        // When an effect is copied to be activated, the global context is copied into the local context.
+        // This context is local and can't be changed.
+        public readonly SquadPERContext LocalContext;
 
         public DeathmatchSquadPEREffect(string EffectTypeName, bool IsPassive)
             : base(EffectTypeName, IsPassive)
@@ -20,12 +23,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         /// </summary>
         /// <param name="EffectTypeName"></param>
         /// <param name="EffectContext"></param>
-        public DeathmatchSquadPEREffect(string EffectTypeName, bool IsPassive, SquadPERParams Params)
+        public DeathmatchSquadPEREffect(string EffectTypeName, bool IsPassive, DeathmatchParams Params)
             : base(EffectTypeName, IsPassive)
         {
             if (Params != null)
             {
-                this.Params = new SquadPERParams(Params);
+                this.Params = Params;
+                LocalContext = new SquadPERContext(Params.GlobalSquadContext);
             }
         }
 
