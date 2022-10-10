@@ -2,7 +2,7 @@
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    class ElementalTerrain : TerrainSorcererStreet
+    public class ElementalTerrain : TerrainSorcererStreet
     {
         public ElementalTerrain(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
             : base(XPos, YPos, LayerIndex, LayerDepth, TerrainTypeIndex)
@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelCreatureCardSelectionPhase(Map, ActivePlayerIndex));
             }
-            else if (Owner.Team == Map.ListPlayer[ActivePlayerIndex].Team)
+            else if (PlayerOwner.Team == Map.ListPlayer[ActivePlayerIndex].Team)
             {
                 Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelTerrainLevelUpCommands(Map));
             }
@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
-    class GateTerrain : TerrainSorcererStreet
+    public class GateTerrain : TerrainSorcererStreet
     {
         public GateTerrain(int XPos, int YPos, int LayerIndex, float LayerDepth, byte TerrainTypeIndex)
             : base(XPos, YPos, LayerIndex, LayerDepth, TerrainTypeIndex)

@@ -175,7 +175,15 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.SorcererStreet:
-                        PushScreen(new GameScreens.SorcererStreetScreen.SorcererStreetMap("New Item", string.Empty));
+                        GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = new GameScreens.SorcererStreetScreen.SorcererStreetMap("New Item", string.Empty);
+                        NewMapSS.ListGameScreen = ListGameScreen;
+                        GameScreens.SorcererStreetScreen.Player NewPlayerSS = new GameScreens.SorcererStreetScreen.Player("", "", true, false, 0, new GameScreens.SorcererStreetScreen.Card[0]);
+                        NewMapSS.AddPlayer(NewPlayerSS);
+                        NewMapSS.Load();
+                        NewMapSS.Init();
+                        NewMapSS.TogglePreview(true);
+
+                        ListGameScreen.Insert(0, NewMapSS);
                         break;
 
                     case MenuChoices.Racing:

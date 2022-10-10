@@ -185,7 +185,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (CardCursorIndex < ActivePlayer.ListCardInHand.Count)
                 {
-                    ActivePlayer.ListCardInHand[CardCursorIndex].DrawCardInfo(g, Map.fntArial12);
+                    ActivePlayer.ListCardInHand[CardCursorIndex].DrawCardInfo(g, Map, Map.fntArial12);
                 }
 
                 if (EndCardText != string.Empty)

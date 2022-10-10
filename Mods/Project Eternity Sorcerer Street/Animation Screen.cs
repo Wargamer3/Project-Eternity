@@ -28,7 +28,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
-            fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
+            if (Content != null)
+            {
+                fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
+            }
 
             foreach (KeyValuePair<string, Timeline> Timeline in LoadTimelines(typeof(CoreTimeline)))
             {

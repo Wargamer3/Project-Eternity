@@ -7,24 +7,25 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
-namespace ProjectEternity.GameScreens.DeathmatchMapScreen
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class LayerHolderDeathmatch : LayerHolder
+    public class LayerHolderSorcererStreet : LayerHolder
     {
         public List<MapLayer> ListLayer;
 
-        private readonly DeathmatchMap Map;
+        private readonly SorcererStreetMap Map;
         private readonly TileInformationPopupManager TileInformationManager;
 
-        public LayerHolderDeathmatch(DeathmatchMap Map)
+        public LayerHolderSorcererStreet(SorcererStreetMap Map)
         {
             this.Map = Map;
             ListLayer = new List<MapLayer>();
+            LayerHolderDrawable = new Map2DDrawable(Map, Map.LayerManager);
             TileInformationManager = new TileInformationPopupManager(Map, this);
             TileInformationManager.Load(Map.Content);
         }
 
-        public LayerHolderDeathmatch(DeathmatchMap Map, BinaryReader BR)
+        public LayerHolderSorcererStreet(SorcererStreetMap Map, BinaryReader BR)
         {
             this.Map = Map;
             int LayerCount = BR.ReadInt32();
@@ -37,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (Map.CameraType == "2D")
             {
-                LayerHolderDrawable = new DeathmatchMap2DHolder(Map, Map.LayerManager);
+                LayerHolderDrawable = new Map2DDrawable(Map, Map.LayerManager);
             }
             else
             {
@@ -94,7 +95,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             if ((KeyboardHelper.KeyHold(Keys.LeftControl) || KeyboardHelper.KeyHold(Keys.RightControl)) && KeyboardHelper.KeyPressed(Keys.U))
             {
-                LayerHolderDrawable = new DeathmatchMap2DHolder(Map, Map.LayerManager);
+                LayerHolderDrawable = new Map2DDrawable(Map, Map.LayerManager);
             }
         }
 
@@ -102,7 +103,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (!UsePreview || Map.CameraType == "2D")
             {
-                LayerHolderDrawable = new DeathmatchMap2DHolder(Map, Map.LayerManager);
+                LayerHolderDrawable = new Map2DDrawable(Map, Map.LayerManager);
             }
             else
             {

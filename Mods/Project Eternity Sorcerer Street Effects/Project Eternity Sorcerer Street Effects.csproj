@@ -45,8 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sorcerer Street Effect.cs" />
-    <Compile Include="Sorceret Street Automatic Skill Target.cs" />
     <Compile Include="Automatic Skills\Enemy Target Type.cs" />
     <Compile Include="Automatic Skills\Self Target Type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,7 +53,6 @@
     <Compile Include="Automatic Skills\All Target Type.cs" />
     <Compile Include="Requirements\Before Attack Requirement.cs" />
     <Compile Include="Requirements\Before Defense Requirement.cs" />
-    <Compile Include="Sorcerer Street Requirement.cs" />
     <Compile Include="Requirements\Boosts Phase Requirement.cs" />
     <Compile Include="Requirements\Enchant Phase Requirement.cs" />
     <Compile Include="Requirements\Item Phase Requirement.cs" />
@@ -64,6 +61,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
       <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
       <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">
+      <Project>{D6FC98BD-A6EE-4223-B995-65299D714A4C}</Project>
+      <Name>Project Eternity Battle Map</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Sorcerer Street\Project Eternity Sorcerer Street.csproj">

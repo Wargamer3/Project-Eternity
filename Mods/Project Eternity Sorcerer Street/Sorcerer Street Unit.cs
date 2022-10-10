@@ -9,6 +9,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class SorcererStreetUnit : UnitMapComponent
     {
         public Texture2D SpriteMap;
+        public AnimatedModel Unit3DModel;
 
         public override int Width => 32;
 
@@ -17,6 +18,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override bool IsActive => throw new System.NotImplementedException();
 
         public override bool[,] ArrayMapSize { get { return new bool[,] { { true } }; } }
+
+        public SorcererStreetUnit()
+        {
+            Direction = Directions.Down;
+        }
 
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)
         {

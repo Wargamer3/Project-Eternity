@@ -16,17 +16,54 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public partial class SorcererStreetMap : BattleMap
     {
+        #region Ressources
+
+        public Texture2D sprCardBack;
+
+        public Texture2D sprPlayerBackground;
         public Texture2D sprArrowUp;
         public Texture2D sprEndTurn;
 
-        public override MovementAlgorithmTile CursorTerrain { get { return ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+        public Texture2D sprElementAir;
+        public Texture2D sprElementEarth;
+        public Texture2D sprElementFire;
+        public Texture2D sprElementWater;
+        public Texture2D sprElementNeutral;
+        public Texture2D sprElementMulti;
 
-        public readonly List<MapLayer> ListLayer;
+        public Texture2D sprMenuG;
+        public Texture2D sprMenuTG;
+        public Texture2D sprMenuST;
+        public Texture2D sprMenuHP;
+        public Texture2D sprMenuMHP;
+
+        public Texture2D sprMenuHand;
+        public Texture2D sprMenuCursor;
+
+        public Texture2D sprDirectionNorth;
+        public Texture2D sprDirectionEast;
+        public Texture2D sprDirectionWest;
+        public Texture2D sprDirectionSouth;
+
+        public Texture2D sprRarityE;
+        public Texture2D sprRarityN;
+        public Texture2D sprRarityR;
+        public Texture2D sprRarityS;
+
+        #endregion
+
+        public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+
         public readonly Vector3 LastPosition;
-        public readonly List<Player> ListPlayer;
+        private List<Player> ListLocalPlayerInfo;
+        public List<Player> ListPlayer;
+        public List<Player> ListLocalPlayer { get { return ListLocalPlayerInfo; } }
+        public List<Player> ListAllPlayer { get { return ListPlayer; } }
         public readonly MovementAlgorithm Pathfinder;
         public readonly SorcererStreetBattleContext GlobalSorcererStreetBattleContext;
+        public readonly SorcererStreetBattleParams SorcererStreetParams;
         public readonly List<string> ListTerrainType = new List<string>();
+        public LayerHolderSorcererStreet LayerManager;
 
         public SorcererStreetMap()
         {
@@ -34,9 +71,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListActionMenuChoice = new ActionPanelHolder();
             Pathfinder = new MovementAlgorithmSorcererStreet(this);
             ListPlayer = new List<Player>();
-            GlobalSorcererStreetBattleContext = new SorcererStreetBattleContext();
-            ListLayer = new List<MapLayer>();
+            ListLocalPlayerInfo = new List<Player>();
+            Params = SorcererStreetParams = new SorcererStreetBattleParams();
+            GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
+            LayerManager = new LayerHolderSorcererStreet(this);
+            MapEnvironment = new EnvironmentManagerSorcererStreet(this);
 
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;
@@ -66,7 +106,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListTileSet = new List<Texture2D>();
             this.CameraPosition = Vector3.Zero;
 
-            this.ListPlayer = new List<Player>();
+            GameRule = new SinglePlayerGameRule(this);
         }
 
         public SorcererStreetMap(string GameMode)
@@ -91,12 +131,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MapScript.SaveMapScripts(BW, ListMapScript);
 
             SaveTilesets(BW);
-            
-            BW.Write(ListLayer.Count);
-            foreach (MapLayer ActiveLayer in ListLayer)
-            {
-                ActiveLayer.Save(BW);
-            }
+
+            LayerManager.Save(BW);
+
+            MapEnvironment.Save(BW);
 
             FS.Close();
             BW.Close();
@@ -105,8 +143,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Load()
         {
             base.Load();
+
+            sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
+
             sprArrowUp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Arrow Up");
             sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/End Turn");
+            sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Air");
+            sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Earth");
+            sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Fire");
+            sprElementWater = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Water");
+            sprElementMulti = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Multi");
+            sprElementNeutral = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Neutral");
+
+            sprPlayerBackground = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Background");
+
+            sprMenuG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/G");
+            sprMenuTG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/TG");
+            sprMenuST = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/ST");
+            sprMenuHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/HP");
+            sprMenuMHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/MHP");
+
+            sprMenuHand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Hand");
+            sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
+
+            sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/South");
+            sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/West");
+            sprDirectionEast = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/East");
+            sprDirectionSouth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/South");
+
+            sprRarityE = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity E");
+            sprRarityN = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity N");
+            sprRarityR = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity R");
+            sprRarityS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity S");
 
             LoadMap();
             LoadMapAssets();
@@ -141,7 +209,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             LoadTilesets(BR);
 
-            LoadMapGrid(BR);
+            LayerManager = new LayerHolderSorcererStreet(this, BR);
+
+            MapEnvironment = new EnvironmentManagerSorcererStreet(BR, this);
 
             BR.Close();
             FS.Close();
@@ -149,21 +219,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             TogglePreview(BackgroundOnly);
         }
 
-        protected void LoadMapGrid(BinaryReader BR)
+        public override void Init()
         {
-            int LayerCount = BR.ReadInt32();
-
-            for (int L = 0; L < LayerCount; ++L)
+            base.Init();
+            foreach (Player ActivePlayer in ListPlayer)
             {
-                if (L == 0)
+                if (ActivePlayer.Team >= 0 && ActivePlayer.Team < ListMultiplayerColor.Count)
                 {
-                    ListLayer.Add(new MapLayer(this, ListBackground, ListForeground, BR, L));
-                }
-                else
-                {
-                    ListLayer.Add(new MapLayer(this, null, null, BR, L));
+                    ActivePlayer.Color = ListMultiplayerColor[ActivePlayer.Team];
                 }
             }
+
+            GameRule.Init();
+
+            if (IsClient && ListPlayer.Count > 0)
+            {
+                ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this, ActivePlayerIndex));
+            }
+
+            OnNewTurn();
         }
 
         public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
@@ -211,6 +285,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ListPlayer.Add(NewDeahtmatchPlayer);
             ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
+        }
+
+        public void AddPlayer(Player NewPlayer)
+        {
+            if (Content != null)
+            {
+                NewPlayer.GamePiece.SpriteMap = Content.Load<Texture2D>("Units/Default");
+                NewPlayer.GamePiece.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewPlayer.GamePiece.SpriteMap, 1);
+                NewPlayer.GamePiece.Unit3DModel = new AnimatedModel("Units/Normal/Models/Bomberman/Default");
+                NewPlayer.GamePiece.Unit3DModel.LoadContent(Content);
+                NewPlayer.GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Waving", "Idle", Content);
+                NewPlayer.GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Walking", "Walking", Content);
+                NewPlayer.GamePiece.Unit3DModel.PlayAnimation("Walking");
+            }
+
+            ListPlayer.Add(NewPlayer);
         }
 
         public override void SetMutators(List<Mutator> ListMutator)
@@ -272,6 +362,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 OnNewTurn();
             }
+
+            ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this, ActivePlayerIndex));
         }
 
         protected void OnNewTurn()
@@ -284,20 +376,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void TogglePreview(bool UsePreview)
         {
-            ShowUnits = !ShowUnits;
+            ShowUnits = UsePreview;
 
-            for (int i = 0; i < ListLayer.Count; ++i)
+            if (!UsePreview)
             {
-                if (UsePreview)
+                //Reset game
+                if (IsInit)
                 {
-                    //Recreate the 3D Map to match the updates done on the 2D grid.
-                    ListLayer[i].LayerGrid = new Map3D(this, ListLayer[i], ListLayer[i].OriginalLayerGrid, GameScreen.GraphicsDevice);
-                }
-                else
-                {
-                    ListLayer[i].LayerGrid = ListLayer[i].OriginalLayerGrid;
+                    Init();
                 }
             }
+
+            LayerManager.TogglePreview(UsePreview);
+        }
+
+        public void Reset()
+        {
+            LayerManager.LayerHolderDrawable.Reset();
+            MapEnvironment.Reset();
         }
 
         public override bool CheckForObstacleAtPosition(Vector3 Position, Vector3 Displacement)
@@ -305,56 +401,171 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return false;
         }
 
-        public void AddPlayer(Player NewPlayer)
-        {
-            NewPlayer.GamePiece.SpriteMap = Content.Load<Texture2D>("Units/Default");
-            NewPlayer.GamePiece.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewPlayer.GamePiece.SpriteMap, 1);
-
-            ListPlayer.Add(NewPlayer);
-        }
-        
         public override void Update(GameTime gameTime)
         {
-            for (int i = 0; i < ListLayer.Count; ++i)
+            if (!IsFrozen)
             {
-                ListLayer[i].Update(gameTime);
+                if (ShowUnits)
+                {
+                    MapEnvironment.Update(gameTime);
+                }
+
+                for (int B = 0; B < ListBackground.Count; ++B)
+                {
+                    ListBackground[B].Update(gameTime);
+                }
+
+                for (int F = 0; F < ListForeground.Count; ++F)
+                {
+                    ListForeground[F].Update(gameTime);
+                }
+
+                LayerManager.Update(gameTime);
+
+                UpdateCursorVisiblePosition(gameTime);
+
+                if (!IsOnTop || IsAPlatform)//Everything should be handled by the main map.
+                {
+                    return;
+                }
+
+                if (!IsInit)
+                {
+                    Init();
+                }
+                if (MovementAnimation.Count > 0)
+                {
+                    MovementAnimation.MoveSquad(this);
+                }
+                if (!MovementAnimation.IsBlocking || MovementAnimation.Count == 0)
+                {
+                    GameRule.Update(gameTime);
+                }
+
+                foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+                {
+                    ActivePlatform.Update(gameTime);
+                }
             }
+        }
+
+        public override void Update(double ElapsedSeconds)
+        {
+            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
 
             if (!IsInit)
             {
-                Init();
-            }
-            else if (MovementAnimation.Count > 0)
-            {
-                MovementAnimation.MoveSquad(this);
-            }
-            else if (ListPlayer.Count > 0)
-            {
-                if (!ListActionMenuChoice.HasMainPanel)
+                if (ListGameScreen.Count == 0)
                 {
-                    if (ListPlayer[ActivePlayerIndex].IsHuman)
+                    Load();
+                    Init();
+                    TogglePreview(true);
+
+                    if (ListGameScreen.Count == 0)
                     {
-                        ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerDefault(this, ActivePlayerIndex));
+                        foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                        {
+                            ActivePlayer.Send(new ServerIsReadyScriptServer());
+                        }
                     }
                     else
                     {
+                        IsInit = false;
                     }
                 }
+                else
+                {
+                    ListGameScreen[0].Update(UpdateTime);
+                    if (!ListGameScreen[0].Alive)
+                    {
+                        ListGameScreen.RemoveAt(0);
+                    }
 
-                ListActionMenuChoice.Last().Update(gameTime);
+                    if (ListGameScreen.Count == 0)
+                    {
+                        foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                        {
+                            ActivePlayer.Send(new ServerIsReadyScriptServer());
+                        }
+
+                        IsInit = true;
+                    }
+                }
             }
 
-            UpdateCursorVisiblePosition(gameTime);
+            LayerManager.Update(UpdateTime);
+
+            if (!ListPlayer[ActivePlayerIndex].IsPlayerControlled && ListActionMenuChoice.HasMainPanel)
+            {
+                ListActionMenuChoice.Last().Update(UpdateTime);
+            }
         }
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
+            g.GraphicsDevice.SetRenderTarget(null);
+            g.BeginUnscaled(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            GraphicsDevice.Clear(Color.Black);
+
+            LayerManager.BeginDraw(g);
+
+            g.End();
+
+            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                ActivePlatform.BeginDraw(g);
+            }
         }
 
         public override void Draw(CustomSpriteBatch g)
         {
-            g.End();
-            g.Begin(SpriteSortMode.Deferred, null);
+            if (!IsInit)
+            {
+                return;
+            }
+
+            if (!IsAPlatform)
+            {
+                g.GraphicsDevice.Clear(Color.Black);
+            }
+
+            //Handle screen shaking.
+            if (IsShaking)
+            {
+                g.End();
+
+                //Run during initialization
+                ShakingRenderTraget = new RenderTarget2D(GraphicsDevice, Constants.Width, Constants.Height, false,
+                    GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
+                GraphicsDevice.SetRenderTarget(ShakingRenderTraget);
+
+                g.Begin();
+            }
+
+            if (ListBackground.Count > 0)
+            {
+                g.End();
+                for (int B = 0; B < ListBackground.Count; B++)
+                {
+                    ListBackground[B].Draw(g, Constants.Width, Constants.Height);
+                }
+                g.Begin();
+            }
+
+            LayerManager.Draw(g);
+
+            if (ListForeground.Count > 0)
+            {
+                g.End();
+                for (int F = 0; F < ListForeground.Count; F++)
+                {
+                    ListForeground[F].Draw(g, Constants.Width, Constants.Height);
+                }
+                g.Begin();
+            }
+
+            GameRule.Draw(g);
 
             if (IsOnTop)
             {
@@ -363,11 +574,72 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ListActionMenuChoice.Last().Draw(g);
                 }
             }
+
+            #region Handle screen shaking.
+
+            if (IsShaking)
+            {
+                g.End();
+
+                //Switches rendertarget back to backbuffer
+                GraphicsDevice.SetRenderTarget(null);
+
+                GraphicsDevice.Clear(Color.Black);
+
+                g.Begin();
+
+                // counter is a float initially set to zero
+                ShakeCounter += 0.45f;
+                Vector2 Translation = new Vector2(ShakeOffsetX + ShakeAngleVariation.X * (float)Math.Sin(ShakeCounter),
+                                                                                                    ShakeOffsetY + ShakeAngleVariation.Y * (float)Math.Sin(ShakeCounter));
+                //Reached the peak of the sin function.
+                if (ShakeCounter >= MathHelper.PiOver2)
+                {
+                    //Remember where and how the shake ended.
+                    ShakeOffsetX = ShakeOffsetX + ShakeAngleVariation.X;
+                    ShakeOffsetY = ShakeOffsetY + ShakeAngleVariation.Y;
+
+                    //Calculate new shake angle.
+                    ShakeAngle = (ShakeAngle + 150 + RandomHelper.Next(60)) % 360;
+                    float Angle = MathHelper.ToRadians(ShakeAngle);
+                    ShakeAngleVariation.X = (float)Math.Cos(Angle);
+                    ShakeAngleVariation.Y = (float)Math.Sin(Angle);
+
+                    float DestinationX = ShakeRadiusMax * ShakeAngleVariation.X;
+                    float DestinationY = ShakeRadiusMax * ShakeAngleVariation.Y;
+
+                    ShakeAngleVariation.X = DestinationX - ShakeOffsetX;
+                    ShakeAngleVariation.Y = DestinationY - ShakeOffsetY;
+                    ShakeCounter = 0;
+
+                    if (IsShakingEnded)
+                        IsShaking = false;
+                }
+
+                g.Draw(ShakingRenderTraget, Translation, null, Color.White,
+                    0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.9f);
+            }
+
+            #endregion
+
+            #region Handle fade to black
+
+            if (FadeIsActive)
+            {
+                g.Draw(sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), Color.FromNonPremultiplied(0, 0, 0, (int)FadeAlpha));
+            }
+
+            #endregion
+        }
+
+        public TerrainSorcererStreet GetTerrain(Vector3 Position)
+        {
+            return LayerManager.ListLayer[(int)Position.Z].ArrayTerrain[(int)Position.X, (int)Position.Y];
         }
 
         public TerrainSorcererStreet GetTerrain(int X, int Y, int LayerIndex)
         {
-            return ListLayer[LayerIndex].ArrayTerrain[X, Y];
+            return LayerManager.ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
         public TerrainSorcererStreet GetTerrain(UnitMapComponent ActiveUnit)
@@ -375,30 +647,61 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return GetTerrain((int)ActiveUnit.X, (int)ActiveUnit.Y, (int)ActiveUnit.Z);
         }
 
-        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
+        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
+        {
+            if (X < 0 || X >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= LayerManager.ListLayer.Count)
+            {
+                return null;
+            }
+
+            return GetTerrain(new Vector3(X, Y, LayerIndex));
+        }
+
+        public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();
+            int NextX = StartingPosition.InternalPosition.X + OffsetX;
+            int NextY = StartingPosition.InternalPosition.Y + OffsetY;
 
-            byte CurrentTerrainType = GetTerrain((int)StartingPosition.WorldPosition.X, (int)StartingPosition.WorldPosition.Y, (int)StartingPosition.LayerIndex).TerrainTypeIndex;
+            if (NextX < 0 || NextX >= MapSize.X || NextY < 0 || NextY >= MapSize.Y)
+            {
+                return null;
+            }
+
+            byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
+            TerrainType CurrentTerrainType = TerrainRestrictions.ListTerrainType[CurrentTerrainIndex];
+
             float CurrentZ = StartingPosition.WorldPosition.Z;
 
-            int ClosestLayerIndexDown = -1;
-            int ClosestLayerIndexUp = 0;
+            MovementAlgorithmTile ClosestLayerIndexDown = null;
+            MovementAlgorithmTile ClosestLayerIndexUp = StartingPosition;
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
 
-            for (int L = 0; L < ListLayer.Count; L++)
-            {
-                MapLayer ActiveLayer = ListLayer[L];
-                Terrain NextTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
+            bool IsOnUsableTerrain = CurrentTerrainType.ListRestriction.Count > 0;
 
-                byte NextTerrainType = GetTerrain(NextX, NextY, L).TerrainTypeIndex;
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
+            {
+                MovementAlgorithmTile NextTerrain = GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, L);
+                byte NextTerrainIndex = NextTerrain.TerrainTypeIndex;
+                TerrainType NextTerrainType = TerrainRestrictions.ListTerrainType[NextTerrainIndex];
+                bool IsNextTerrainnUsable = NextTerrainType.ListRestriction.Count > 0 && NextTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+
+                Terrain PreviousTerrain = GetTerrain(new Vector3(StartingPosition.WorldPosition.X, StartingPosition.WorldPosition.Y, L));
+                TerrainType PreviousTerrainType = TerrainRestrictions.ListTerrainType[PreviousTerrain.TerrainTypeIndex];
+                bool IsPreviousTerrainnUsable = PreviousTerrainType.ListRestriction.Count > 0 && PreviousTerrainType.ActivationName == CurrentTerrainType.ActivationName;
+
+                if (L > StartingPosition.LayerIndex && PreviousTerrainType.ListRestriction.Count == 0)
+                {
+                    break;
+                }
+
                 float NextTerrainZ = NextTerrain.WorldPosition.Z;
 
                 //Check lower or higher neighbors if on solid ground
-                if (CurrentTerrainType != UnitStats.TerrainAirIndex && CurrentTerrainType != UnitStats.TerrainVoidIndex)
+                if (IsOnUsableTerrain)
                 {
-                    if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex)
+                    if (IsNextTerrainnUsable)
                     {
                         //Prioritize going downward
                         if (NextTerrainZ <= CurrentZ)
@@ -407,7 +710,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             if (ZDiff <= ClosestTerrainDistanceDown && HasEnoughClearance(NextTerrainZ, NextX, NextY, L, MaxClearance))
                             {
                                 ClosestTerrainDistanceDown = ZDiff;
-                                ClosestLayerIndexDown = L;
+                                ClosestLayerIndexDown = NextTerrain;
                                 ListLayerPossibility.Add(NextTerrain);
                             }
                         }
@@ -416,9 +719,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             float ZDiff = NextTerrainZ - CurrentZ;
                             if (ZDiff >= ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                             {
-                                ClosestTerrainDistanceUp = ZDiff;
-                                ClosestLayerIndexUp = L;
-                                ListLayerPossibility.Add(NextTerrain);
+                                if (IsPreviousTerrainnUsable)
+                                {
+                                    ClosestTerrainDistanceUp = ZDiff;
+                                    ClosestLayerIndexUp = NextTerrain;
+                                    ListLayerPossibility.Add(NextTerrain);
+                                }
                             }
                         }
                     }
@@ -426,7 +732,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 //Already in void, check for any neighbors
                 else
                 {
-                    if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainType == CurrentTerrainType)
+                    if (NextTerrainZ == StartingPosition.LayerIndex && NextTerrainIndex == CurrentTerrainIndex)
                     {
                         return NextTerrain;
                     }
@@ -437,46 +743,54 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         if (ZDiff < ClosestTerrainDistanceUp && ZDiff <= ClimbValue)
                         {
                             ClosestTerrainDistanceUp = ZDiff;
-                            ClosestLayerIndexUp = L;
+                            ClosestLayerIndexUp = NextTerrain;
                             ListLayerPossibility.Add(NextTerrain);
                         }
                     }
                 }
             }
 
-            if (ClosestLayerIndexDown >= 0)
+            if (ClosestLayerIndexDown != null)
             {
-                return ListLayer[ClosestLayerIndexDown].ArrayTerrain[NextX, NextY];
+                return ClosestLayerIndexDown;
             }
             else
             {
-                return ListLayer[ClosestLayerIndexUp].ArrayTerrain[NextX, NextY];
+                return ClosestLayerIndexUp;
             }
         }
 
-        public override MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex)
+
+        public MovementAlgorithmTile GetTerrainIncludingPlatforms(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, int NextLayerIndex)
         {
-            if (X < 0 || Y >= MapSize.X || Y < 0 || Y >= MapSize.Y || LayerIndex < 0 || LayerIndex >= ListLayer.Count)
+            if (!IsAPlatform)
             {
-                return null;
+                foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+                {
+                    MovementAlgorithmTile FoundTile = ActivePlatform.FindTileFromLocalPosition(StartingPosition.InternalPosition.X + OffsetX, StartingPosition.InternalPosition.Y + OffsetY, NextLayerIndex);
+
+                    if (FoundTile != null)
+                    {
+                        return FoundTile;
+                    }
+                }
             }
 
-            return ListLayer[LayerIndex].ArrayTerrain[X, Y];
+            return GetTerrain(new Vector3(StartingPosition.WorldPosition.X + OffsetX, (int)StartingPosition.WorldPosition.Y + OffsetY, NextLayerIndex));
         }
 
         private bool HasEnoughClearance(float CurrentZ, int NextX, int NextY, int StartLayer, float MaxClearance)
         {
-            for (int L = StartLayer + 1; L < ListLayer.Count; L++)
+            for (int L = StartLayer + 1; L < LayerManager.ListLayer.Count; L++)
             {
-                MapLayer ActiveLayer = ListLayer[L];
-                Terrain ActiveTerrain = ActiveLayer.ArrayTerrain[NextX, NextY];
+                Terrain ActiveTerrain = GetTerrain(new Vector3(NextX, NextY, L));
 
-                byte NextTerrainType = GetTerrain(NextX, NextX, L).TerrainTypeIndex;
+                byte NextTerrainType = ActiveTerrain.TerrainTypeIndex;
                 float NextTerrainZ = ActiveTerrain.WorldPosition.Z;
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
-                if (NextTerrainType != UnitStats.TerrainAirIndex && NextTerrainType != UnitStats.TerrainVoidIndex && ZDiff < MaxClearance)
+                if (TerrainRestrictions.ListTerrainType[NextTerrainType].ListRestriction.Count > 0 && ZDiff < MaxClearance)
                 {
                     return false;
                 }
@@ -495,20 +809,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             string PlayerTag = (Team + 1).ToString();
-            for (int L = 0; L < ListLayer.Count; L++)
+            for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
-                MapLayer ActiveLayer = ListLayer[L];
+                MapLayer ActiveLayer = LayerManager.ListLayer[L];
                 for (int S = 0; S < ActiveLayer.ListMultiplayerSpawns.Count; S++)
                 {
                     if (ActiveLayer.ListMultiplayerSpawns[S].Tag == PlayerTag)
                     {
-                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                        ListPossibleSpawnPoint.Add(GetTerrain(new Vector3(ActiveLayer.ListMultiplayerSpawns[S].Position.X, ActiveLayer.ListMultiplayerSpawns[S].Position.Y, L)));
                     }
                 }
             }
 
             return ListPossibleSpawnPoint;
         }
+
 
         public override BattleMap LoadTemporaryMap(BinaryReader BR)
         {
@@ -538,15 +853,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override byte[] GetSnapshotData()
         {
             return new byte[0];
-        }
-
-        public override void Update(double ElapsedSeconds)
-        {
-            GameTime UpdateTime = new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(ElapsedSeconds));
-            for (int L = 0; L < ListLayer.Count; L++)
-            {
-                ListLayer[L].Update(UpdateTime);
-            }
         }
 
         public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer)

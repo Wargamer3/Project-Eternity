@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -26,6 +28,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int DiscardCost;
 
         public string AttackAnimationPath;
+        public AnimatedModel Map3DModel;
 
         public int CurrentHP;
         public int CurrentST;
@@ -93,6 +96,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             BR.Close();
             FS.Close();
+
+            Map3DModel = new AnimatedModel("Units/Normal/Models/Bomberman/Default");
+            Map3DModel.LoadContent(Content);
+            Map3DModel.AddAnimation("Units/Normal/Models/Bomberman/Waving", "Idle", Content);
+            Map3DModel.AddAnimation("Units/Normal/Models/Bomberman/Walking", "Walking", Content);
+            Map3DModel.PlayAnimation("Walking");
         }
 
         public CreatureCard(int MaxHP, int MaxST)

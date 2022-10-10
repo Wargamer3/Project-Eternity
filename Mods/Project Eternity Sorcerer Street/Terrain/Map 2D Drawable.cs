@@ -5,9 +5,9 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
-namespace ProjectEternity.GameScreens.DeathmatchMapScreen
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class DeathmatchMap2DHolder : ILayerHolderDrawable
+    public class Map2DDrawable : ILayerHolderDrawable
     {
         protected Point MapSize { get { return Map.MapSize; } }
 
@@ -15,12 +15,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected Vector3 CameraPosition { get { return Map.CameraPosition; } }
 
-        private readonly DeathmatchMap Map;
+        private readonly SorcererStreetMap Map;
 
         private Dictionary<Color, List<MovementAlgorithmTile>> DicDrawablePointPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
 
-        public DeathmatchMap2DHolder(DeathmatchMap Map, LayerHolderDeathmatch LayerManager)
+        public Map2DDrawable(SorcererStreetMap Map, LayerHolderSorcererStreet LayerManager)
         {
             this.Map = Map;
             DicDrawablePointPerColor = new Dictionary<Color, List<MovementAlgorithmTile>>();
@@ -239,9 +239,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
-                for (int S = 0; S < Map.ListPlayer[P].ListSquad.Count; S++)
+                g.Draw(GameScreen.sprPixel,
+                    new Rectangle((int)Map.ListPlayer[P].GamePiece.X * Map.TileSize.X, (int)Map.ListPlayer[P].GamePiece.Y * Map.TileSize.Y,
+                    Map.TileSize.X / 2, Map.TileSize.Y / 2), Color.FromNonPremultiplied(127, 127, 127, 127));
+
+                g.DrawString(Map.fntArial12, "P", new Vector2(Map.ListPlayer[P].GamePiece.X * Map.TileSize.X + 2, Map.ListPlayer[P].GamePiece.Y * Map.TileSize.Y), Color.Red);
+            }
+
+            for (int X = MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = MapSize.Y - 1; Y >= 0; --Y)
                 {
-                    DrawUnitMap(g, Map.ListPlayer[P].Color, Map.ListPlayer[P].ListSquad[S], !Map.ListPlayer[P].ListSquad[S].CanMove && P == Map.ActivePlayerIndex);
+                    if (Map.GetTerrain(X, Y, 0).DefendingCreature != null)
+                    {
+                        g.Draw(GameScreen.sprPixel,
+                            new Rectangle((int)X * Map.TileSize.X + 16, (int)Y * Map.TileSize.Y,
+                            Map.TileSize.X / 2, Map.TileSize.Y / 2), Color.FromNonPremultiplied(127, 127, 127, 127));
+
+                        g.DrawString(Map.fntArial12, "C", new Vector2(X * Map.TileSize.X + 2 + 16, Y * Map.TileSize.Y), Color.Red);
+                    }
                 }
             }
         }
@@ -251,7 +267,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int BorderX = (int)(TileSize.X * 0.1);
             int BorderY = (int)(TileSize.Y * 0.1);
 
-            foreach (DelayedAttack ActiveAttack in Map.ListDelayedAttack)
+            /*foreach (DelayedAttack ActiveAttack in Map.ListDelayedAttack)
             {
                 foreach (MovementAlgorithmTile ActivePosition in ActiveAttack.ListAttackPosition)
                 {
@@ -262,15 +278,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             TileSize.X - BorderX * 2,
                             TileSize.Y - BorderY * 2), Color.FromNonPremultiplied(139, 0, 0, 190));
                 }
-            }
+            }*/
         }
 
         private void DrawPERAttacks(CustomSpriteBatch g)
         {
-            foreach (PERAttack ActiveAttack in Map.ListPERAttack)
+            /*foreach (PERAttack ActiveAttack in Map.ListPERAttack)
             {
                 ActiveAttack.ActiveAttack.PERAttributes.ProjectileAnimation.Draw(g, new Vector2(ActiveAttack.Position.X, ActiveAttack.Position.Y));
-            }
+            }*/
         }
 
         private void DrawDamageNumbers(CustomSpriteBatch g)

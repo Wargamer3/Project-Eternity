@@ -19,18 +19,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public Tile2DHolder(string TilesetName, ContentManager Content, Effect WetEffect)
         {
-            this.WetEffect = WetEffect.Clone();
             ListTile2D = new List<Terrain>();
-            CanUseEffect = true;
+
+            if (WetEffect != null)
+            {
+                this.WetEffect = WetEffect.Clone();
+                CanUseEffect = true;
+            }
+            else
+            {
+                CanUseEffect = false;
+            }
 
             if (Content != null)
             {
-                if (File.Exists("Content/Maps/Tilesets/" + TilesetName + ".xnb"))
-                {
-                    sprTileset = Content.Load<Texture2D>("Maps/Tilesets/" + TilesetName);
-                }
+                sprTileset = Content.Load<Texture2D>("Maps/Tilesets/" + TilesetName);
 
-                if (File.Exists("Content/Maps/Tilesets/" + TilesetName + " NormalMap.xnb"))
+                if (CanUseEffect && File.Exists("Content/Maps/Tilesets/" + TilesetName + " NormalMap.xnb"))
                 {
                     sprTilesetBumpMap = Content.Load<Texture2D>("Maps/Tilesets/" + TilesetName + " NormalMap");
                     this.WetEffect.Parameters["NormalMap"].SetValue(sprTilesetBumpMap);
@@ -40,7 +45,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     CanUseEffect = false;
                 }
 
-                if (File.Exists("Content/Maps/Tilesets/" + TilesetName + " HeightMap.xnb"))
+                if (CanUseEffect && File.Exists("Content/Maps/Tilesets/" + TilesetName + " HeightMap.xnb"))
                 {
                     sprTilesetHeightMap = Content.Load<Texture2D>("Maps/Tilesets/" + TilesetName + " HeightMap");
                     this.WetEffect.Parameters["HeightMap"].SetValue(sprTilesetHeightMap);
@@ -71,6 +76,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             foreach (Terrain ActiveTile in ListTile2D)
             {
                 Color FinalColor = Color.White;
+                float FinalHeight = ActiveTile.WorldPosition.Z - 1;
+
+                if (FinalHeight > ActiveTile.Owner.CameraPosition.Z && !ActiveTile.Owner.IsEditor)
+                {
+                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.CameraPosition.Z) * 255);
+                }
+
+                g.Draw(sprTileset,
+                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.CameraPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.CameraPosition.Y) * ActiveTile.Owner.TileSize.Y),
+                        ActiveTile.DrawableTile.Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ActiveTile.LayerDepth);
+            }
+
+            g.End();
+        }
+
+        public void Draw(CustomSpriteBatch g, Vector2 Offset)
+        {
+            if (CanUseEffect)
+            {
+                g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, WetEffect);
+            }
+            else
+            {
+                g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            }
+
+            foreach (Terrain ActiveTile in ListTile2D)
+            {
+                Color FinalColor = Color.White;
                 float FinalHeight = ActiveTile.WorldPosition.Z;
 
                 if (FinalHeight > ActiveTile.Owner.CameraPosition.Z)
@@ -79,7 +113,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 g.Draw(sprTileset,
-                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.CameraPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.CameraPosition.Y) * ActiveTile.Owner.TileSize.Y),
+                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.CameraPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.CameraPosition.Y) * ActiveTile.Owner.TileSize.Y) + Offset,
                         ActiveTile.DrawableTile.Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ActiveTile.LayerDepth);
             }
 

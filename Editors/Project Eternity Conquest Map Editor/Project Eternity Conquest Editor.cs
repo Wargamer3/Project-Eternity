@@ -225,10 +225,9 @@ namespace ProjectEternity.Editors.ConquestMapEditor
         //Open a tile attributes dialog.
         protected override void btnTileAttributes_Click(object sender, EventArgs e)
         {
-            TileAttributes TA = new TileAttributes(TerrainTypeIndex);
+            TileAttributes TA = new TileAttributes(0);
             if (TA.ShowDialog() == DialogResult.OK)
             {//Set the current tile attributes based on the TileAttibutes return.
-                TerrainTypeIndex = TA.TerrainTypeIndex;
             }
         }
     }

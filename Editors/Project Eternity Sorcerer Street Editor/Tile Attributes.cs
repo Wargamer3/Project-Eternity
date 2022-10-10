@@ -7,7 +7,8 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 {
     public partial class TileAttributes : Form, ITileAttributes
     {
-        public int TerrainTypeIndex;//What kind of terrain it is.
+        public byte TerrainTypeIndex;
+        public float Height;
 
         TerrainSorcererStreet ActiveTerrain;
 
@@ -18,11 +19,12 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             InitializeComponent();
         }
 
-        public TileAttributes(int TerrainTypeIndex)
+        public TileAttributes(byte TerrainTypeIndex, float Height)
         {
             InitializeComponent();
 
             cboTerrainType.SelectedIndex = TerrainTypeIndex;
+            txtHeight.Value = (decimal)Height;
         }
 
         public void Init(Terrain ActiveTerrain,  BattleMap Map)
@@ -31,35 +33,15 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
         }
 
-        private void txtMVEnterCost_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtMVMoveCost_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtBonusValue_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
         private void cboTerrainType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TerrainTypeIndex = cboTerrainType.SelectedIndex;
+            TerrainTypeIndex = (byte)cboTerrainType.SelectedIndex;
         }
 
+        private void txtHeight_ValueChanged(object sender, EventArgs e)
+        {
+            Height = (float)txtHeight.Value;
+        }
 
         private void btnAccept_Click(object sender, EventArgs e)
         {

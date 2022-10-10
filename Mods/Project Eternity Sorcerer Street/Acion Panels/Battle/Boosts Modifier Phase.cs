@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int Y = 0; Y < Map.MapSize.Y; ++Y)
                 {
-                    for (int L = 0; L < Map.ListLayer.Count; ++L)
+                    for (int L = 0; L < Map.LayerManager.ListLayer.Count; ++L)
                     {
                         TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(X, Y, L);
 

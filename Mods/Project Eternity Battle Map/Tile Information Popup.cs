@@ -62,7 +62,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Load(ContentManager Content)
         {
-            sprCircle = Content.Load<Texture2D>("Circle");
+            if (Content != null)
+            {
+                sprCircle = Content.Load<Texture2D>("Circle");
+            }
         }
 
         public void SetPopups(List<Vector2> ListPosition, int LayerIndex)

@@ -81,13 +81,20 @@
     <Compile Include="Animation Screen.cs" />
     <Compile Include="Camera 3D.cs" />
     <Compile Include="Cards\Card.cs" />
-    <Compile Include="Battle Context.cs" />
     <Compile Include="Cards\Creature Card.cs" />
     <Compile Include="Cards\Item Card.cs" />
     <Compile Include="Cards\Spell Card.cs" />
-    <Compile Include="Map 2D.cs" />
-    <Compile Include="Map 3D.cs" />
-    <Compile Include="Map Layer.cs" />
+    <Compile Include="Params.cs" />
+    <Compile Include="Effects\Sorcerer Street Effect.cs" />
+    <Compile Include="Effects\Sorcerer Street Requirement.cs" />
+    <Compile Include="Effects\Sorceret Street Automatic Skill Target.cs" />
+    <Compile Include="Rules\Single Player Game Rule.cs" />
+    <Compile Include="Terrain\Default Weather.cs" />
+    <Compile Include="Terrain\Environment Manager.cs" />
+    <Compile Include="Terrain\Layer Holder.cs" />
+    <Compile Include="Terrain\Map 2D Drawable.cs" />
+    <Compile Include="Terrain\Map 3D Drawable.cs" />
+    <Compile Include="Terrain\Map Layer.cs" />
     <Compile Include="Movement Algorithm.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Sorcerer Map.cs" />
@@ -96,6 +103,9 @@
     <Compile Include="Cutscene Script Holder.cs" />
     <Compile Include="Terrains.cs" />
     <Compile Include="Terrain Sorcerer Street.cs" />
+    <Compile Include="Terrain\Map 2D.cs" />
+    <Compile Include="Terrain\Map Zone.cs" />
+    <Compile Include="Terrain\Sub Map Layer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">
@@ -146,6 +156,11 @@
     <ProjectReference Include="..\..\External\FMOD\FMOD.csproj">
       <Project>{dfb48e6d-a44c-4784-89a3-86f21a108531}</Project>
       <Name>FMOD</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\External\Roslyn\Roslyn.csproj">
+      <Project>{4EEEA09D-CFBC-43A7-9491-1D7738FC49E7}</Project>
+      <Name>Roslyn</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">

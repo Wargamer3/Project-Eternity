@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public const string NorthGate = "North Gate";
 
         public CreatureCard DefendingCreature;
-        public Player Owner;
+        public Player PlayerOwner;
         public int TerrainLevel;
 
         public TerrainSorcererStreet(Terrain Other, Point Position, int LayerIndex)
@@ -46,6 +46,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Save(BinaryWriter BW)
         {
             BW.Write(TerrainTypeIndex);
+            BW.Write(Height);
         }
 
         public virtual void OnSelect(SorcererStreetMap Map, int ActivePlayerIndex)

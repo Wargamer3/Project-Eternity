@@ -186,13 +186,13 @@
     <Compile Include="Formula Parser.cs" />
     <Compile Include="Terrain\Shadow overlay.cs" />
     <Compile Include="Terrain\Default Weather.cs" />
-    <Compile Include="Terrain\Map Zone Deathmatch.cs" />
-    <Compile Include="Terrain\Environment Manager Deathmatch.cs" />
-    <Compile Include="Terrain\Map 2D Holder.cs" />
+    <Compile Include="Terrain\Map Zone.cs" />
+    <Compile Include="Terrain\Environment Manager.cs" />
+    <Compile Include="Terrain\Map 2D Drawable.cs" />
     <Compile Include="Terrain\Map 2D.cs" />
     <Compile Include="Map Interaction.cs" />
-    <Compile Include="Terrain\Layer Holder Deatmatch.cs" />
-    <Compile Include="Terrain\Map 3D Holder.cs" />
+    <Compile Include="Terrain\Layer Holder.cs" />
+    <Compile Include="Terrain\Map 3D Drawable.cs" />
     <Compile Include="Terrain\Map Layer.cs" />
     <Compile Include="Acion Panels\Map Menu\Map Menu.cs" />
     <Compile Include="Menus\Non Demo\Non Demo Screen.cs" />
@@ -212,7 +212,6 @@
     <Compile Include="Deathmatch Unit.cs" />
     <Compile Include="Classic Multiplayer\Multiplayer Screen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Terrain\Tile2DHolder.cs" />
     <Compile Include="Terrain\Weather Lightning Manager.cs" />
     <Compile Include="Terrain\Weather Intensity Manager.cs" />
     <Compile Include="Terrain\Weather Rain Size Manager.cs" />

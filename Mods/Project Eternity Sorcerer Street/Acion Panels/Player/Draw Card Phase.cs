@@ -127,7 +127,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Y = Constants.Height / 10;
             float FinalScale = (float)Math.Sin(RealRotationTimer) * MaxScale;
 
-            Card.DrawCardMiniature(g, DrawnCard.sprCard, GameScreen.sprPixel, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer);
+            Card.DrawCardMiniature(g, DrawnCard.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer);
         }
 
         private void DrawOutro(CustomSpriteBatch g)
@@ -146,7 +146,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float ComputedScale = StartScale + (EndScale - StartScale) * (RotationTimer / AnimationTime);
             float FinalScale = (float)Math.Sin(RealRotationTimer) * ComputedScale;
 
-            Card.DrawCardMiniature(g, DrawnCard.sprCard, GameScreen.sprPixel, Color.White, X, Y, FinalScale, ComputedScale, RealRotationTimer);
+            Card.DrawCardMiniature(g, DrawnCard.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, ComputedScale, RealRotationTimer);
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -162,11 +162,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 DrawnCard.DrawCard(g);
-                DrawnCard.DrawCardInfo(g, Map.fntArial12);
+                DrawnCard.DrawCardInfo(g, Map, Map.fntArial12);
 
-                GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 70), 200, 30, Color.White);
-                g.DrawStringMiddleAligned(Map.fntArial12, "Drew 1 card", new Vector2(Constants.Width / 2, Constants.Height - 65), Color.White);
-                g.Draw(GameScreen.sprPixel, new Rectangle(Constants.Width / 2 + 76, Constants.Height - 65, 18, 18), Color.White);
+                GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 70), 200, 40, Color.White);
+                g.DrawStringMiddleAligned(Map.fntArial12, "Drew 1 card", new Vector2(Constants.Width / 2, Constants.Height - 59), Color.White);
+                g.Draw(Map.sprMenuHand, new Vector2(Constants.Width / 2 + 76, Constants.Height - 65), null, Color.White, 0f, Vector2.Zero, 0.7f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f);
             }
         }
     }

@@ -46,7 +46,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 Player NewPlayer = new Player(PlayerName, "", true, false, _PlayerTeam, ArrayCardInDeck);
 
-                Map.AddPlayer(NewPlayer);
+                if (_PlayerTeam == 0)
+                {
+                    Map.ListPlayer.Clear();
+                    Map.AddPlayer(NewPlayer);
+                }
+                else
+                {
+                    Map.AddPlayer(NewPlayer);
+                }
                 IsEnded = true;
             }
 

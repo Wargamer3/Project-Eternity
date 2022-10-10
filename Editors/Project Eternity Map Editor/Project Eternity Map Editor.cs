@@ -19,8 +19,6 @@ namespace ProjectEternity.Editors.MapEditor
 
         private ItemSelectionChoices ItemSelectionChoice;
 
-        protected int TerrainTypeIndex = 0;
-
         private CheckBox cbShowGrid;
         private CheckBox cbPreviewMap;
         private CheckBox cbShowAllLayers;

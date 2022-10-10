@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetUnit GamePiece;
         public int Magic;
         public Directions CurrentDirection;
+        public bool IsPlayerControlled;
         public Color Color;
         public readonly Card[] ArrayCardInDeck;
         public readonly List<Card> ListCardInHand;

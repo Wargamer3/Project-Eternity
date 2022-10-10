@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
-using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.SorcererStreetScreen;
 
 namespace ProjectEternity.UnitTests.SorcererStreetTests
@@ -70,17 +68,20 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         [TestMethod]
         public void TestCreatureModifierPhaseSkillActivation()
         {
-            Player DummyPlayer1 = new Player("Player 1", "Human", true, false, 0, new Card[0]);
-            Player DummyPlayer2 = new Player("Player 2", "Human", true, false, 0, new Card[0]);
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
+            Player DummyPlayer1 = new Player("Player 1", "Human", true, false, 0, new Card[] { DummyInvaderCard });
+            Player DummyPlayer2 = new Player("Player 2", "Human", true, false, 0, new Card[] { DummyDefenderCard });
 
             SorcererStreetMap DummyMap = CreateDummyMap();
+            DummyMap.AddPlayer(DummyPlayer1);
+            DummyMap.AddPlayer(DummyPlayer2);
+
             SorcererStreetBattleParams BattleParams = new SorcererStreetBattleParams(DummyMap.GlobalSorcererStreetBattleContext);
 
             TerrainSorcererStreet DummyTerrain = DummyMap.GetTerrain(DummyPlayer2.GamePiece);
             DummyTerrain.DefendingCreature = DummyDefenderCard;
-            DummyTerrain.Owner = DummyPlayer2;
+            DummyTerrain.PlayerOwner = DummyPlayer2;
 
             ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, 0, DummyInvaderCard);
             BattleStartPhase.Load();
@@ -115,35 +116,35 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             SorcererStreetMap DummyMap = new SorcererStreetMap();
             DummyMap.GameTurn = 1;
-            DummyMap.ListLayer.Add(new MapLayer(DummyMap, 0));
+            DummyMap.LayerManager.ListLayer.Add(new MapLayer(DummyMap, 0));
             DummyMap.ListGameScreen = new List<GameScreens.GameScreen>();
-            DummyMap.ListLayer[0].ArrayTerrain = new TerrainSorcererStreet[20, 20];
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain = new TerrainSorcererStreet[20, 20];
             for (int X = 0; X < 20; ++X)
             {
                 for (int Y = 0; Y < 20; ++Y)
                 {
-                    DummyMap.ListLayer[0].ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, 0, 0, 1);
+                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, 0, 0, 1);
                 }
             }
 
-            DummyMap.ListLayer[0].ArrayTerrain[0, 0].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[1, 0].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[2, 0].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[3, 0].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[4, 0].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[4, 1].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[4, 2].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[4, 3].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[4, 4].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[4, 5].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[3, 5].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[2, 5].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[1, 5].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[0, 5].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[0, 4].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[0, 3].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[0, 2].TerrainTypeIndex = 2;
-            DummyMap.ListLayer[0].ArrayTerrain[0, 1].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 0].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[1, 0].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[2, 0].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[3, 0].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[4, 0].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[4, 1].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[4, 2].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[4, 3].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[4, 4].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[4, 5].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[3, 5].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[2, 5].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[1, 5].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 5].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 4].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 3].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 2].TerrainTypeIndex = 2;
+            DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 1].TerrainTypeIndex = 2;
 
             DummyMap.Init();
 

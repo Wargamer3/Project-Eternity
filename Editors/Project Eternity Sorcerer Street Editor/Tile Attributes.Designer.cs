@@ -31,6 +31,9 @@
             this.cboTerrainType = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnAccept = new System.Windows.Forms.Button();
+            this.lblHeight = new System.Windows.Forms.Label();
+            this.txtHeight = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.txtHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // cboTerrainType
@@ -83,16 +86,36 @@
             this.btnAccept.UseVisualStyleBackColor = true;
             this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
             // 
+            // lblHeight
+            // 
+            this.lblHeight.Location = new System.Drawing.Point(12, 71);
+            this.lblHeight.Name = "lblHeight";
+            this.lblHeight.Size = new System.Drawing.Size(71, 13);
+            this.lblHeight.TabIndex = 12;
+            this.lblHeight.Text = "Height";
+            // 
+            // txtHeight
+            // 
+            this.txtHeight.DecimalPlaces = 2;
+            this.txtHeight.Location = new System.Drawing.Point(12, 87);
+            this.txtHeight.Name = "txtHeight";
+            this.txtHeight.Size = new System.Drawing.Size(120, 20);
+            this.txtHeight.TabIndex = 13;
+            this.txtHeight.ValueChanged += new System.EventHandler(this.txtHeight_ValueChanged);
+            // 
             // TileAttributes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(222, 226);
+            this.Controls.Add(this.txtHeight);
+            this.Controls.Add(this.lblHeight);
             this.Controls.Add(this.btnAccept);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cboTerrainType);
             this.Name = "TileAttributes";
             this.Text = "Tile Attributes";
+            ((System.ComponentModel.ISupportInitialize)(this.txtHeight)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -101,5 +124,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnAccept;
         public System.Windows.Forms.ComboBox cboTerrainType;
+        private System.Windows.Forms.Label lblHeight;
+        private System.Windows.Forms.NumericUpDown txtHeight;
     }
 }

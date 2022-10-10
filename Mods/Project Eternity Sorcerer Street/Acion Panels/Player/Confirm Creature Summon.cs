@@ -66,7 +66,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
 
             ActiveTerrain.DefendingCreature = ActiveCard;
-            ActiveTerrain.Owner = ActivePlayer;
+            ActiveTerrain.PlayerOwner = ActivePlayer;
 
             Map.ListActionMenuChoice.RemoveAllActionPanels();
             Map.EndPlayerPhase();
@@ -103,13 +103,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             ActiveCard.DrawCard(g);
-            ActiveCard.DrawCardInfo(g, Map.fntArial12);
+            ActiveCard.DrawCardInfo(g, Map, Map.fntArial12);
 
             GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 120), 200, 90, Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "Summon this creature?", new Vector2(Constants.Width / 2, Constants.Height - 110), Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "Yes", new Vector2(Constants.Width / 2, Constants.Height - 85), Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "No", new Vector2(Constants.Width / 2, Constants.Height - 60), Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(Constants.Width / 2 - 80, Constants.Height - 85 + CursorIndex * 25, 18, 18), Color.White);
+            g.Draw(Map.sprMenuCursor, new Rectangle(Constants.Width / 2 - 60, Constants.Height - 85 + CursorIndex * 25, 40, 40), Color.White);
         }
     }
 }
