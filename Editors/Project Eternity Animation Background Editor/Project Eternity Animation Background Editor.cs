@@ -57,7 +57,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
             return new EditorInfo[]
             {
                 new EditorInfo(new string[] { GUIRootPathAnimationsBackgrounds3D, GUIRootPathAnimationsBackgroundsAll }, "Animations/Backgrounds 3D/", new string[] { ".peab" }, typeof(AnimationBackgroundEditor)),
-                new EditorInfo(new string[] { GUIRootPathAnimationsBackgroundSprites, GUIRootPathAnimationsBackground2DUsableItems }, "Animations/Background Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer))
+                new EditorInfo(new string[] { GUIRootPathAnimationsBackground3DModels, GUIRootPathAnimationsBackground3DUsableItems }, "Animations/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer)),
             };
         }
 
@@ -109,10 +109,25 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
             SaveItem(FilePath, Path.GetFileName(FilePath));
         }
 
+        private void tsmProperties_Click(object sender, EventArgs e)
+        {
+            PropertiesDialog.ShowDialog();
+
+            AnimationBackgroundViewer.ActiveAnimationBackground.DefaultCameraPosition = new Vector3(
+                                                                            (float)PropertiesDialog.txtBackgroundStartX.Value,
+                                                                            (float)PropertiesDialog.txtBackgroundStartY.Value,
+                                                                            (float)PropertiesDialog.txtBackgroundStartZ.Value);
+
+            AnimationBackgroundViewer.ActiveAnimationBackground.DefaultCameraRotation = new Vector3(
+                                                                            (float)PropertiesDialog.txtBackgroundYaw.Value,
+                                                                            (float)PropertiesDialog.txtBackgroundPitch.Value,
+                                                                            (float)PropertiesDialog.txtBackgroundRoll.Value);
+        }
+
         private void btnLoadNewBackgroundType_Click(object sender, EventArgs e)
         {
             ItemSelectionChoice = ItemSelectionChoices.Sprite;
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimationsBackgroundSprites));
+            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimationsBackground3DUsableItems));
         }
 
         private void btnCreateNewProp_Click(object sender, EventArgs e)
@@ -120,9 +135,9 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
             CreatePropAtMousePosition(AnimationBackgroundViewer.Width / 2, AnimationBackgroundViewer.Height / 2);
         }
 
-        private void btnRemoveSprite_Click(object sender, EventArgs e)
+        private void btnRemoveItem_Click(object sender, EventArgs e)
         {
-            BillboardSystem ActiveParticleSystem = lstItemChoices.SelectedNode.Tag as BillboardSystem;
+            AnimationBackground3DBase ActiveParticleSystem = lstItemChoices.SelectedNode.Tag as AnimationBackground3DBase;
 
             if (ActiveParticleSystem != null)
             {
@@ -134,9 +149,9 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
             {
                 TreeNode SelectedNode = lstItemChoices.SelectedNode.Parent;
                 int SelectedNodeIndex = SelectedNode.Index;
-                ActiveParticleSystem = SelectedNode.Tag as BillboardSystem;
+                ActiveParticleSystem = SelectedNode.Tag as AnimationBackground3DBase;
 
-                ActiveParticleSystem.RemoveParticle(SelectedNodeIndex);
+                ActiveParticleSystem.RemoveItem(SelectedNodeIndex);
                 lstItemChoices.Nodes.RemoveAt(SelectedNodeIndex);
             }
         }
@@ -151,15 +166,9 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
                 }
                 else
                 {
-                    BillboardSystem ActiveParticleSystem = lstItemChoices.SelectedNode.Parent.Tag as BillboardSystem;
-                    if (ActiveParticleSystem.RotateTowardCamera)
-                    {
-                        pgAnimationProperties.SelectedObject = new AnimationBackground3D.TemporaryBackgroundRotatedObject(ActiveParticleSystem, lstItemChoices.SelectedNode.Index);
-                    }
-                    else
-                    {
-                        pgAnimationProperties.SelectedObject = new AnimationBackground3D.TemporaryBackgroundPolygonObject(ActiveParticleSystem, lstItemChoices.SelectedNode.Index);
-                    }
+                    AnimationBackground3DBase ActiveParticleSystem = lstItemChoices.SelectedNode.Parent.Tag as AnimationBackground3DBase;
+
+                    pgAnimationProperties.SelectedObject = ActiveParticleSystem.GetEditableObject(lstItemChoices.SelectedNode.Index);
                 }
             }
         }
@@ -278,19 +287,17 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
 
         #endregion
 
-        #region Methods
-
         private void CreatePropAtMousePosition(int MouseX, int MouseY)
         {
             if (lstItemChoices.SelectedNode != null)
             {
                 TreeNode SelectedNode = lstItemChoices.SelectedNode;
-                BillboardSystem ActiveParticleSystem = lstItemChoices.SelectedNode.Tag as BillboardSystem;
+                AnimationBackground3DBase ActiveParticleSystem = lstItemChoices.SelectedNode.Tag as AnimationBackground3DBase;
 
                 if (ActiveParticleSystem == null && lstItemChoices.SelectedNode.Parent != null)
                 {
                     SelectedNode = lstItemChoices.SelectedNode.Parent;
-                    ActiveParticleSystem = lstItemChoices.SelectedNode.Parent.Tag as BillboardSystem;
+                    ActiveParticleSystem = lstItemChoices.SelectedNode.Parent.Tag as AnimationBackground3DBase;
                 }
                 if (ActiveParticleSystem != null)
                 {
@@ -308,7 +315,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
                     float zFactor = -NearWorldPoint.Y / Direction.Y;
                     Vector3 ZeroWorldPoint = NearWorldPoint + Direction * zFactor;
 
-                    ActiveParticleSystem.AddParticle(ZeroWorldPoint);
+                    ActiveParticleSystem.AddItem(ZeroWorldPoint);
                     SelectedNode.Nodes.Add("Prop " + (SelectedNode.Nodes.Count + 1));
                 }
             }
@@ -325,32 +332,17 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
                 switch (ItemSelectionChoice)
                 {
                     case ItemSelectionChoices.Sprite:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(38);
+                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(19);
                         TreeNode NewTreeNode = new TreeNode(Name);
-                        NewTreeNode.Tag = AnimationBackgroundViewer.AddBackgroundSystem(Name);
+                        AnimationBackground3DBase NewBackgroundSystem = AnimationBackgroundViewer.AddBackgroundSystem(Name);
+                        AnimationBackgroundViewer.ActiveAnimationBackground.ListBackground.Add(NewBackgroundSystem);
+                        NewTreeNode.Tag = NewBackgroundSystem;
                         lstItemChoices.Nodes.Add(NewTreeNode);
                         lstItemChoices.SelectedNode = NewTreeNode;
                         btnCreateNewProp_Click(null, null);
                         break;
                 }
             }
-        }
-
-        #endregion
-
-        private void tsmProperties_Click(object sender, EventArgs e)
-        {
-            PropertiesDialog.ShowDialog();
-
-            AnimationBackgroundViewer.ActiveAnimationBackground.DefaultCameraPosition = new Vector3(
-                                                                            (float)PropertiesDialog.txtBackgroundStartX.Value,
-                                                                            (float)PropertiesDialog.txtBackgroundStartY.Value,
-                                                                            (float)PropertiesDialog.txtBackgroundStartZ.Value);
-
-            AnimationBackgroundViewer.ActiveAnimationBackground.DefaultCameraRotation = new Vector3(
-                                                                            (float)PropertiesDialog.txtBackgroundYaw.Value,
-                                                                            (float)PropertiesDialog.txtBackgroundPitch.Value,
-                                                                            (float)PropertiesDialog.txtBackgroundRoll.Value);
         }
     }
 }

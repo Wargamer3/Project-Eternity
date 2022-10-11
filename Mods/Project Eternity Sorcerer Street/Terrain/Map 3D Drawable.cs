@@ -345,8 +345,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void SetTarget(Vector3 Target)
         {
-            Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, 300), Matrix.CreateRotationY(0.2f)) + Target;
-            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 400, 0f));
+            Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, 300), Matrix.CreateRotationY(MathHelper.ToRadians(45))) + Target;
+            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 200, 0f));
             Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);
         }
 

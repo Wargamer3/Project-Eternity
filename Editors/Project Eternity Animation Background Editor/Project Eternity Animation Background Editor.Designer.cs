@@ -132,7 +132,7 @@
             this.btnRemoveSprite.TabIndex = 4;
             this.btnRemoveSprite.Text = "Remove Item";
             this.btnRemoveSprite.UseVisualStyleBackColor = true;
-            this.btnRemoveSprite.Click += new System.EventHandler(this.btnRemoveSprite_Click);
+            this.btnRemoveSprite.Click += new System.EventHandler(this.btnRemoveItem_Click);
             // 
             // btnLoadNewBackgroundType
             // 

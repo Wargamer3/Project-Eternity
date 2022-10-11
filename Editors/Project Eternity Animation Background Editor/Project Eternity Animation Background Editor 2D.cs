@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.AnimationScreen;
+using ProjectEternity.Editors.ImageViewer;
 
 namespace ProjectEternity.Editors.AnimationBackgroundEditor
 {
@@ -46,6 +47,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
             return new EditorInfo[]
             {
                 new EditorInfo(new string[] { GUIRootPathAnimationsBackgrounds2D, GUIRootPathAnimationsBackgroundsAll }, "Animations/Backgrounds 2D/", new string[] { ".peab" }, typeof(AnimationBackgroundEditor2D)),
+                new EditorInfo(new string[] { GUIRootPathAnimationsBackgroundSprites, GUIRootPathAnimationsBackground2DUsableItems, GUIRootPathAnimationsBackground3DUsableItems }, "Animations/Background Sprites/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer)),
             };
         }
 

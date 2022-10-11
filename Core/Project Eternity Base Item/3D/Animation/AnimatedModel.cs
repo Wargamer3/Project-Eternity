@@ -8,7 +8,7 @@ namespace ProjectEternity.Core
 {
     public class AnimatedModel
     {
-        private string FilePath = "";
+        public readonly string FilePath = "";
 
         private Model OriginalModel = null;
         private ModelAnimationInfo AnimationInformation = null;
@@ -35,6 +35,8 @@ namespace ProjectEternity.Core
 
                 ListBone.Add(NewBone);
             }
+
+            ActiveAnimation = AnimationInformation.ListAnimation[0];
         }
 
         public void AddAnimation(string AnimationPath, string AnimationName, ContentManager Content)

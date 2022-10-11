@@ -29,7 +29,9 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathAnimationsBackgrounds2D = "Animations/Backgrounds 2D";
         public const string GUIRootPathAnimationsBackground2DObject = "Animations/Background 2D Objects";
         public const string GUIRootPathAnimationsBackgroundSprites = "Animations/Backgrounds/Sprites";
-        public const string GUIRootPathAnimationsBackground2DUsableItems = "Animations/Backgrounds Usable Items";
+        public const string GUIRootPathAnimationsBackground2DUsableItems = "Animations/Backgrounds 2D Usable Items";
+        public const string GUIRootPathAnimationsBackground3DUsableItems = "Animations/Backgrounds 3D Usable Items";
+        public const string GUIRootPathAnimationsBackground3DModels = "Animations/Models";
         public const string GUIRootPathSFX = "SFX";
         public const string GUIRootPathUnits = "Units";
         public const string GUIRootPathUnitsNormal = "Units\\Normal";

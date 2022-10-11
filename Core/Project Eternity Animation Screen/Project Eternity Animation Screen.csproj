@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backgrounds\Animation Background 3D Base.cs" />
-    <Compile Include="Backgrounds\Animation Background 3D Billboard Complex.cs" />
+    <Compile Include="Backgrounds\Animation Background 3D Model.cs" />
     <Compile Include="Backgrounds\Animation Background Object 2D.cs" />
     <Compile Include="Animation Timeline Viewer.cs">
       <SubType>UserControl</SubType>

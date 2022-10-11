@@ -553,6 +553,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.Begin();
             }
 
+            g.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1, 0);
+
             LayerManager.Draw(g);
 
             if (ListForeground.Count > 0)

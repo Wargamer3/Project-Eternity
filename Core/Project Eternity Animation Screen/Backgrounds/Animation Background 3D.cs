@@ -265,6 +265,63 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             }
         }
 
+        public class TemporaryBackgroundModelObject : TemporaryBackground
+        {
+            AnimationBackground3DObject BackgroundModel;
+
+            public TemporaryBackgroundModelObject(AnimationBackground3DObject BackgroundModel)
+            {
+                this.BackgroundModel = BackgroundModel;
+            }
+
+            public void Move(Vector3 Movement)
+            {
+                Position += Movement;
+            }
+
+            [CategoryAttribute("Object Attributes"),
+            DescriptionAttribute(".")]
+            public Vector3 Position
+            {
+                get
+                {
+                    return BackgroundModel.Position;
+                }
+                set
+                {
+                    BackgroundModel.Position = value;
+                }
+            }
+
+            [CategoryAttribute("Object Attributes"),
+            DescriptionAttribute(".")]
+            public Vector3 Rotation
+            {
+                get
+                {
+                    return new Vector3(MathHelper.ToDegrees(BackgroundModel.Rotation.X), MathHelper.ToDegrees(BackgroundModel.Rotation.Y), MathHelper.ToDegrees(BackgroundModel.Rotation.Z));
+                }
+                set
+                {
+                    BackgroundModel.Rotation = new Vector3(MathHelper.ToRadians(value.X), MathHelper.ToRadians(value.Y), MathHelper.ToRadians(value.Z));
+                }
+            }
+
+            [CategoryAttribute("Object Attributes"),
+            DescriptionAttribute(".")]
+            public Vector3 Size
+            {
+                get
+                {
+                    return BackgroundModel.Size;
+                }
+                set
+                {
+                    BackgroundModel.Size = value;
+                }
+            }
+        }
+
         public struct IndexedLines
         {
             private VertexPositionColor[] ArrayVertex;
@@ -310,9 +367,33 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             : this("", Content, g)
         {
             ListBackground = new List<AnimationBackground3DBase>();
+        }
 
-            MoveSpeed = Vector3.Zero;
+        public AnimationBackground3D(string AnimationBackgroundPath, ContentManager Content, GraphicsDevice g)
+            : base("3D", AnimationBackgroundPath, Content, g)
+        {
             IndexedLinesEffect = new BasicEffect(g);
+
+            FileStream FS = new FileStream("Content/Animations/" + AnimationBackgroundPath + ".peab", FileMode.Open, FileAccess.Read);
+            BinaryReader BR = new BinaryReader(FS);
+
+            WorldType = (WorldTypes)BR.ReadByte();
+            WorldWidth = BR.ReadInt32();
+            WorldDepth = BR.ReadInt32();
+
+            DefaultCameraPosition = new Vector3(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
+            DefaultCameraRotation = new Vector3(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
+            ResetCamera();
+
+            int ListBackgroundObjectSystemCount = BR.ReadInt32();
+            ListBackground = new List<AnimationBackground3DBase>(ListBackgroundObjectSystemCount);
+            for (int B = 0; B < ListBackgroundObjectSystemCount; ++B)
+            {
+                ListBackground.Add(AnimationBackground3DBase.LoadFromFile(Content, BR, g));
+            }
+
+            FS.Close();
+            BR.Close();
 
             int GridWidth = 5;
             int GridDepth = 5;
@@ -349,31 +430,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             BackgroundGrid = new IndexedLines(ArrayBackgroundGridVertex, ArrayBackgroundGridIndices);
 
+            MoveSpeed = Vector3.Zero;
+
             InitBounds();
-        }
-
-        public AnimationBackground3D(string AnimationBackgroundPath, ContentManager Content, GraphicsDevice g)
-            : base("3D", AnimationBackgroundPath, Content, g)
-        {
-            FileStream FS = new FileStream("Content/Animations/" + AnimationBackgroundPath + ".peab", FileMode.Open, FileAccess.Read);
-            BinaryReader BR = new BinaryReader(FS);
-
-            WorldType = (WorldTypes)BR.ReadByte();
-            WorldWidth = BR.ReadInt32();
-            WorldDepth = BR.ReadInt32();
-
-            DefaultCameraPosition = new Vector3(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
-            DefaultCameraRotation = new Vector3(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
-            ResetCamera();
-
-            int ListBackgroundObjectSystemCount = BR.ReadInt32();
-            for (int B = 0; B < ListBackgroundObjectSystemCount; ++B)
-            {
-                ListBackground.Add(AnimationBackground3DBase.LoadFromFile(Content, BR, g));
-            }
-
-            FS.Close();
-            BR.Close();
         }
 
         public override void Save(BinaryWriter BW)
@@ -483,6 +542,10 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public override void Draw(CustomSpriteBatch g, int ScreenWidth, int ScreenHeight)
         {
             CameraRotation.Forward.Normalize();
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+
             CameraRotation.Up.Normalize();
             CameraRotation.Right.Normalize();
 
@@ -501,7 +564,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                                                                     aspectRatio,
                                                                     1, 10000);
 
-            foreach (var ActiveBillboardSystem in ListBackground)
+            foreach (AnimationBackground3DBase ActiveBillboardSystem in ListBackground)
             {
                 ActiveBillboardSystem.Draw(g, View, Projection, ScreenWidth, ScreenHeight);
             }

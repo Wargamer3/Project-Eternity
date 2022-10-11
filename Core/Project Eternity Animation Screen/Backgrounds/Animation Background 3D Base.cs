@@ -25,9 +25,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             {
                 return new AnimationBackground3DBillboard(Content, BR, g);
             }
-            else if (BackgroundType == AnimationBackground3DBillboardComplex.BackgroundTypeName)
+            else if (BackgroundType == AnimationBackground3DModel.BackgroundTypeName)
             {
-                return new AnimationBackground3DBillboardComplex(Content, BR);
+                return new AnimationBackground3DModel(Content, BR);
             }
 
             return null;
@@ -43,6 +43,10 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         protected abstract void DoSave(BinaryWriter BW);
 
         public abstract void Update(GameTime gameTime);
+
+        public abstract void AddItem(Vector3 Position);
+
+        public abstract void RemoveItem(int Index);
 
         public abstract List<string> GetChild();
 

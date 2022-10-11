@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -78,6 +78,16 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
 
             ActiveBillboardSystem.Update(gameTime);
+        }
+
+        public override void AddItem(Vector3 Position)
+        {
+            ActiveBillboardSystem.AddParticle(Position);
+        }
+
+        public override void RemoveItem(int Index)
+        {
+            ActiveBillboardSystem.RemoveParticle(Index);
         }
 
         public override List<string> GetChild()
