@@ -1,6 +1,6 @@
-﻿namespace ProjectEternity.Editors.AttackSkillChainEditor
+﻿namespace ProjectEternity.Editors.SorcererStreetSkillChainEditor
 {
-    partial class AttackSkillChainEditor
+    partial class SorcererStreetSkillChainEditor
     {
         /// <summary>
         /// Required designer variable.

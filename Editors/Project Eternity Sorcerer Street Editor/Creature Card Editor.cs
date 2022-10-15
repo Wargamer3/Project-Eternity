@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.SorcererStreetScreen;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.ItemCard;
@@ -12,6 +13,10 @@ namespace ProjectEternity.Editors.CardEditor
 {
     public partial class CreatureCardEditor : BaseEditor
     {
+        private enum ItemSelectionChoices { Animation, Skill };
+
+        private ItemSelectionChoices ItemSelectionChoice;
+
         public CreatureCardEditor()
         {
             InitializeComponent();
@@ -54,10 +59,14 @@ namespace ProjectEternity.Editors.CardEditor
             BW.Write(txtDescription.Text);
 
             BW.Write((int)txtMagicCost.Value);
+            BW.Write((byte)txtCardSacrificed.Value);
             BW.Write((byte)cboRarity.SelectedIndex);
+
+            BW.Write(txtAttackAnimation.Text);
 
             BW.Write((int)txtMaxHP.Value);
             BW.Write((int)txtMaxST.Value);
+            BW.Write(txtSkill.Text);
 
             #region Affinities
 
@@ -164,12 +173,6 @@ namespace ProjectEternity.Editors.CardEditor
             BW.Write((byte)ElementalAffinity.Air);
             BW.Write((int)txtAir.Value);
 
-            BW.Write(lstSkill.Items.Count);
-            for (int S = 0; S < lstSkill.Items.Count; ++S)
-            {
-                BW.Write(lstSkill.Items[S].ToString());
-            }
-
             FS.Close();
             BW.Close();
         }
@@ -177,7 +180,7 @@ namespace ProjectEternity.Editors.CardEditor
         private void LoadCard(string UnitPath)
         {
             Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(39);
-            CreatureCard LoadedCard = new CreatureCard(Name, null);
+            CreatureCard LoadedCard = new CreatureCard(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             this.Text = LoadedCard.Name + " - Project Eternity Creature Card Editor";
 
@@ -186,9 +189,12 @@ namespace ProjectEternity.Editors.CardEditor
 
             txtMagicCost.Value = LoadedCard.MagicCost;
             cboRarity.SelectedIndex = (int)LoadedCard.Rarity;
+            txtCardSacrificed.Value = LoadedCard.DiscardCardRequired;
+            txtAttackAnimation.Text = LoadedCard.AttackAnimationPath;
 
             txtMaxHP.Value = LoadedCard.MaxHP;
             txtMaxST.Value = LoadedCard.MaxST;
+            txtSkill.Text = LoadedCard.SkillChainName;
 
             #region Affinities
 
@@ -285,24 +291,18 @@ namespace ProjectEternity.Editors.CardEditor
             }
 
             #endregion
-
-            for (int S = 0; S < LoadedCard.ListSkill.Count; ++S)
-            {
-                lstSkill.Items.Add(LoadedCard.ListSkill[S].Name);
-            }
         }
 
-        private void btnAddSkill_Click(object sender, EventArgs e)
+        private void btnSetAttackAnimation_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            ItemSelectionChoice = ItemSelectionChoices.Animation;
+            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimations));
         }
 
-        private void btnRemoveSkill_Click(object sender, EventArgs e)
+        private void btnSetSkill_Click(object sender, EventArgs e)
         {
-            if (lstSkill.SelectedIndex >= 0)
-            {
-                lstSkill.Items.RemoveAt(lstSkill.SelectedIndex);
-            }
+            ItemSelectionChoice = ItemSelectionChoices.Skill;
+            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathSorcererStreetSkillChains));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
@@ -310,10 +310,28 @@ namespace ProjectEternity.Editors.CardEditor
             if (Items == null)
                 return;
 
+            string Name;
             for (int I = 0; I < Items.Count; I++)
             {
-                string Name = Items[I].Substring(0, Items[I].Length - 4).Substring(24);
-                lstSkill.Items.Add(Name);
+                switch (ItemSelectionChoice)
+                {
+                    case ItemSelectionChoices.Animation:
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(19);
+                        txtAttackAnimation.Text = Name;
+                        break;
+
+                    case ItemSelectionChoices.Skill:
+                        if (Items[I] == null)
+                        {
+                            txtSkill.Text = string.Empty;
+                        }
+                        else
+                        {
+                            Name = Items[I].Substring(0, Items[I].Length - 5).Substring(37);
+                            txtSkill.Text = Name;
+                        }
+                        break;
+                }
             }
         }
 

@@ -209,7 +209,7 @@ namespace ProjectEternity.Core
                 ArrayParticles[i * 4 + 3].UV = new Vector2(0, 1);
             }
 
-            Effect effect = Content.Load<Effect>("Shaders/Particle shader 3D");
+            Effect effect = Content.Load<Effect>("Shaders/Billboard System");
 
             // If we have several particle systems, the content manager will return
             // a single shared effect instance to them all. But we want to preconfigure
@@ -470,7 +470,7 @@ namespace ProjectEternity.Core
 
         public void RemoveParticle(int Index)
         {
-            BillboardVertex[] NewArrayParticles = new BillboardVertex[ArrayParticles.Length - 4];
+            BillboardVertex[] NewArrayParticles = new BillboardVertex[ArrayParticles.Length];
             Array.Copy(ArrayParticles, NewArrayParticles, Index * 4);
             Array.Copy(ArrayParticles, (Index + 1) * 4, NewArrayParticles, Index * 4, ArrayParticles.Length - (Index + 1) * 4);
             ArrayParticles = NewArrayParticles;

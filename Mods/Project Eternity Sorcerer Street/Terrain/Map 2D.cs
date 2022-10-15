@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen

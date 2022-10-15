@@ -22,6 +22,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private float AnimationTimer;
         private float MaxAnimationScale;
         private string EndCardText;//Card on the far right used to close the pannel.
+        public bool DrawDrawInfo;
 
         public ActionPanelCardSelectionPhase(string Name, SorcererStreetMap Map)
             : base(Name, Map.ListActionMenuChoice, null, false)
@@ -142,7 +143,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void DrawIntro(CustomSpriteBatch g)
         {
             //Have every cards flips to reveal themselves
-
             for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
             {
                 Color CardColor = Color.White;
@@ -183,15 +183,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == CardCursorIndex, C * 80 + 80, 0.26f, AnimationTimer, 0.04f);
                 }
 
-                if (CardCursorIndex < ActivePlayer.ListCardInHand.Count)
+                if (DrawDrawInfo && CardCursorIndex < ActivePlayer.ListCardInHand.Count)
                 {
                     ActivePlayer.ListCardInHand[CardCursorIndex].DrawCardInfo(g, Map, Map.fntArial12);
                 }
 
                 if (EndCardText != string.Empty)
                 {
-                    DrawCardMiniature(g, Map.sprEndTurn, Color.Green, CardCursorIndex == ActivePlayer.ListCardInHand.Count, Constants.Width - 140, 0.26f, AnimationTimer, 0.04f);
-                    g.DrawStringMiddleAligned(Map.fntArial12, "END", new Vector2(Constants.Width - 140, Constants.Height - 100), Color.White);
+                    DrawCardMiniature(g, Map.sprEndTurn, Color.White, CardCursorIndex == ActivePlayer.ListCardInHand.Count, Constants.Width - 140, 0.46f, AnimationTimer, 0.05f);
                 }
             }
         }

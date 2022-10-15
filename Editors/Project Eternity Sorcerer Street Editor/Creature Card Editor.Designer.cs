@@ -31,6 +31,11 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.gbCardInformation = new System.Windows.Forms.GroupBox();
+            this.txtCardSacrificed = new System.Windows.Forms.NumericUpDown();
+            this.lblCardSacrificed = new System.Windows.Forms.Label();
+            this.txtAttackAnimation = new System.Windows.Forms.TextBox();
+            this.lblAttackAnimation = new System.Windows.Forms.Label();
+            this.btnSetAttackAnimation = new System.Windows.Forms.Button();
             this.cboRarity = new System.Windows.Forms.ComboBox();
             this.lblRarity = new System.Windows.Forms.Label();
             this.txtMagicCost = new System.Windows.Forms.NumericUpDown();
@@ -72,12 +77,12 @@
             this.cbItemLimitTools = new System.Windows.Forms.CheckBox();
             this.cbItemLimitScrolls = new System.Windows.Forms.CheckBox();
             this.cbItemLimitWeapon = new System.Windows.Forms.CheckBox();
-            this.gbSkills = new System.Windows.Forms.GroupBox();
-            this.btnRemoveSkill = new System.Windows.Forms.Button();
-            this.btnAddSkill = new System.Windows.Forms.Button();
-            this.lstSkill = new System.Windows.Forms.ListBox();
+            this.btnSetSkill = new System.Windows.Forms.Button();
+            this.txtSkill = new System.Windows.Forms.TextBox();
+            this.lblSkill = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.gbCardInformation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCardSacrificed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicCost)).BeginInit();
             this.gbCreatureInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxST)).BeginInit();
@@ -91,7 +96,6 @@
             this.gbAffinities.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.gbSkills.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -113,6 +117,11 @@
             // 
             // gbCardInformation
             // 
+            this.gbCardInformation.Controls.Add(this.txtCardSacrificed);
+            this.gbCardInformation.Controls.Add(this.lblCardSacrificed);
+            this.gbCardInformation.Controls.Add(this.txtAttackAnimation);
+            this.gbCardInformation.Controls.Add(this.lblAttackAnimation);
+            this.gbCardInformation.Controls.Add(this.btnSetAttackAnimation);
             this.gbCardInformation.Controls.Add(this.cboRarity);
             this.gbCardInformation.Controls.Add(this.lblRarity);
             this.gbCardInformation.Controls.Add(this.txtMagicCost);
@@ -128,6 +137,49 @@
             this.gbCardInformation.TabStop = false;
             this.gbCardInformation.Text = "Card Information";
             // 
+            // txtCardSacrificed
+            // 
+            this.txtCardSacrificed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCardSacrificed.Location = new System.Drawing.Point(130, 71);
+            this.txtCardSacrificed.Name = "txtCardSacrificed";
+            this.txtCardSacrificed.Size = new System.Drawing.Size(68, 20);
+            this.txtCardSacrificed.TabIndex = 47;
+            // 
+            // lblCardSacrificed
+            // 
+            this.lblCardSacrificed.AutoSize = true;
+            this.lblCardSacrificed.Location = new System.Drawing.Point(6, 73);
+            this.lblCardSacrificed.Name = "lblCardSacrificed";
+            this.lblCardSacrificed.Size = new System.Drawing.Size(82, 13);
+            this.lblCardSacrificed.TabIndex = 46;
+            this.lblCardSacrificed.Text = "Card Sacrificed:";
+            // 
+            // txtAttackAnimation
+            // 
+            this.txtAttackAnimation.Location = new System.Drawing.Point(6, 137);
+            this.txtAttackAnimation.Name = "txtAttackAnimation";
+            this.txtAttackAnimation.Size = new System.Drawing.Size(148, 20);
+            this.txtAttackAnimation.TabIndex = 37;
+            // 
+            // lblAttackAnimation
+            // 
+            this.lblAttackAnimation.AutoSize = true;
+            this.lblAttackAnimation.Location = new System.Drawing.Point(6, 121);
+            this.lblAttackAnimation.Name = "lblAttackAnimation";
+            this.lblAttackAnimation.Size = new System.Drawing.Size(90, 13);
+            this.lblAttackAnimation.TabIndex = 36;
+            this.lblAttackAnimation.Text = "Attack Animation:";
+            // 
+            // btnSetAttackAnimation
+            // 
+            this.btnSetAttackAnimation.Location = new System.Drawing.Point(160, 135);
+            this.btnSetAttackAnimation.Name = "btnSetAttackAnimation";
+            this.btnSetAttackAnimation.Size = new System.Drawing.Size(38, 23);
+            this.btnSetAttackAnimation.TabIndex = 3;
+            this.btnSetAttackAnimation.Text = "Set";
+            this.btnSetAttackAnimation.UseVisualStyleBackColor = true;
+            this.btnSetAttackAnimation.Click += new System.EventHandler(this.btnSetAttackAnimation_Click);
+            // 
             // cboRarity
             // 
             this.cboRarity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -137,7 +189,7 @@
             "Strange",
             "Rare",
             "Extra"});
-            this.cboRarity.Location = new System.Drawing.Point(75, 73);
+            this.cboRarity.Location = new System.Drawing.Point(75, 97);
             this.cboRarity.Name = "cboRarity";
             this.cboRarity.Size = new System.Drawing.Size(123, 21);
             this.cboRarity.TabIndex = 35;
@@ -145,7 +197,7 @@
             // lblRarity
             // 
             this.lblRarity.AutoSize = true;
-            this.lblRarity.Location = new System.Drawing.Point(6, 76);
+            this.lblRarity.Location = new System.Drawing.Point(6, 100);
             this.lblRarity.Name = "lblRarity";
             this.lblRarity.Size = new System.Drawing.Size(37, 13);
             this.lblRarity.TabIndex = 34;
@@ -153,9 +205,9 @@
             // 
             // txtMagicCost
             // 
-            this.txtMagicCost.Location = new System.Drawing.Point(75, 45);
+            this.txtMagicCost.Location = new System.Drawing.Point(130, 45);
             this.txtMagicCost.Name = "txtMagicCost";
-            this.txtMagicCost.Size = new System.Drawing.Size(123, 20);
+            this.txtMagicCost.Size = new System.Drawing.Size(68, 20);
             this.txtMagicCost.TabIndex = 33;
             // 
             // lblMagicCost
@@ -170,7 +222,7 @@
             // lblDescription
             // 
             this.lblDescription.AutoSize = true;
-            this.lblDescription.Location = new System.Drawing.Point(6, 97);
+            this.lblDescription.Location = new System.Drawing.Point(6, 160);
             this.lblDescription.Name = "lblDescription";
             this.lblDescription.Size = new System.Drawing.Size(63, 13);
             this.lblDescription.TabIndex = 31;
@@ -180,10 +232,10 @@
             // 
             this.txtDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtDescription.Location = new System.Drawing.Point(6, 113);
+            this.txtDescription.Location = new System.Drawing.Point(6, 176);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(192, 185);
+            this.txtDescription.Size = new System.Drawing.Size(192, 122);
             this.txtDescription.TabIndex = 30;
             // 
             // txtName
@@ -204,13 +256,16 @@
             // 
             // gbCreatureInformation
             // 
+            this.gbCreatureInformation.Controls.Add(this.lblSkill);
+            this.gbCreatureInformation.Controls.Add(this.txtSkill);
+            this.gbCreatureInformation.Controls.Add(this.btnSetSkill);
             this.gbCreatureInformation.Controls.Add(this.txtMaxST);
             this.gbCreatureInformation.Controls.Add(this.lblMaxST);
             this.gbCreatureInformation.Controls.Add(this.txtMaxHP);
             this.gbCreatureInformation.Controls.Add(this.lblMaxHP);
             this.gbCreatureInformation.Location = new System.Drawing.Point(222, 27);
             this.gbCreatureInformation.Name = "gbCreatureInformation";
-            this.gbCreatureInformation.Size = new System.Drawing.Size(142, 73);
+            this.gbCreatureInformation.Size = new System.Drawing.Size(142, 138);
             this.gbCreatureInformation.TabIndex = 29;
             this.gbCreatureInformation.TabStop = false;
             this.gbCreatureInformation.Text = "Creature Information";
@@ -554,52 +609,37 @@
             this.cbItemLimitWeapon.Text = "Weapon:";
             this.cbItemLimitWeapon.UseVisualStyleBackColor = true;
             // 
-            // gbSkills
+            // btnSetSkill
             // 
-            this.gbSkills.Controls.Add(this.btnRemoveSkill);
-            this.gbSkills.Controls.Add(this.btnAddSkill);
-            this.gbSkills.Controls.Add(this.lstSkill);
-            this.gbSkills.Location = new System.Drawing.Point(222, 106);
-            this.gbSkills.Name = "gbSkills";
-            this.gbSkills.Size = new System.Drawing.Size(142, 227);
-            this.gbSkills.TabIndex = 56;
-            this.gbSkills.TabStop = false;
-            this.gbSkills.Text = "Skills";
+            this.btnSetSkill.Location = new System.Drawing.Point(6, 113);
+            this.btnSetSkill.Name = "btnSetSkill";
+            this.btnSetSkill.Size = new System.Drawing.Size(130, 23);
+            this.btnSetSkill.TabIndex = 40;
+            this.btnSetSkill.Text = "Set Skill";
+            this.btnSetSkill.UseVisualStyleBackColor = true;
+            this.btnSetSkill.Click += new System.EventHandler(this.btnSetSkill_Click);
             // 
-            // btnRemoveSkill
+            // txtSkill
             // 
-            this.btnRemoveSkill.Location = new System.Drawing.Point(6, 201);
-            this.btnRemoveSkill.Name = "btnRemoveSkill";
-            this.btnRemoveSkill.Size = new System.Drawing.Size(130, 23);
-            this.btnRemoveSkill.TabIndex = 2;
-            this.btnRemoveSkill.Text = "Remove Skill";
-            this.btnRemoveSkill.UseVisualStyleBackColor = true;
-            this.btnRemoveSkill.Click += new System.EventHandler(this.btnRemoveSkill_Click);
+            this.txtSkill.Location = new System.Drawing.Point(6, 87);
+            this.txtSkill.Name = "txtSkill";
+            this.txtSkill.Size = new System.Drawing.Size(130, 20);
+            this.txtSkill.TabIndex = 41;
             // 
-            // btnAddSkill
+            // lblSkill
             // 
-            this.btnAddSkill.Location = new System.Drawing.Point(6, 172);
-            this.btnAddSkill.Name = "btnAddSkill";
-            this.btnAddSkill.Size = new System.Drawing.Size(130, 23);
-            this.btnAddSkill.TabIndex = 1;
-            this.btnAddSkill.Text = "Add Skill";
-            this.btnAddSkill.UseVisualStyleBackColor = true;
-            this.btnAddSkill.Click += new System.EventHandler(this.btnAddSkill_Click);
-            // 
-            // lstSkill
-            // 
-            this.lstSkill.FormattingEnabled = true;
-            this.lstSkill.Location = new System.Drawing.Point(6, 19);
-            this.lstSkill.Name = "lstSkill";
-            this.lstSkill.Size = new System.Drawing.Size(130, 147);
-            this.lstSkill.TabIndex = 0;
+            this.lblSkill.AutoSize = true;
+            this.lblSkill.Location = new System.Drawing.Point(6, 71);
+            this.lblSkill.Name = "lblSkill";
+            this.lblSkill.Size = new System.Drawing.Size(29, 13);
+            this.lblSkill.TabIndex = 42;
+            this.lblSkill.Text = "Skill:";
             // 
             // CreatureCardEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(650, 337);
-            this.Controls.Add(this.gbSkills);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.gbAffinities);
@@ -614,6 +654,7 @@
             this.menuStrip1.PerformLayout();
             this.gbCardInformation.ResumeLayout(false);
             this.gbCardInformation.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCardSacrificed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicCost)).EndInit();
             this.gbCreatureInformation.ResumeLayout(false);
             this.gbCreatureInformation.PerformLayout();
@@ -629,7 +670,6 @@
             this.gbAffinities.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
-            this.gbSkills.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -681,9 +721,13 @@
         private System.Windows.Forms.CheckBox cbItemLimitTools;
         private System.Windows.Forms.CheckBox cbItemLimitScrolls;
         private System.Windows.Forms.CheckBox cbItemLimitWeapon;
-        private System.Windows.Forms.GroupBox gbSkills;
-        private System.Windows.Forms.Button btnRemoveSkill;
-        private System.Windows.Forms.Button btnAddSkill;
-        private System.Windows.Forms.ListBox lstSkill;
+        private System.Windows.Forms.TextBox txtAttackAnimation;
+        private System.Windows.Forms.Label lblAttackAnimation;
+        private System.Windows.Forms.Button btnSetAttackAnimation;
+        private System.Windows.Forms.NumericUpDown txtCardSacrificed;
+        private System.Windows.Forms.Label lblCardSacrificed;
+        private System.Windows.Forms.Label lblSkill;
+        private System.Windows.Forms.TextBox txtSkill;
+        private System.Windows.Forms.Button btnSetSkill;
     }
 }

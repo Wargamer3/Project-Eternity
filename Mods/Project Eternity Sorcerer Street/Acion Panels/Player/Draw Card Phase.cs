@@ -96,7 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActivePlayer.ListCardInHand.Clear();
             for (int C = 0; C < ListCardInHandCount; ++C)
             {
-                ActivePlayer.ListCardInHand.Add(Card.LoadCard(BR.ReadString(), Map.Content));
+                ActivePlayer.ListCardInHand.Add(Card.LoadCard(BR.ReadString(), Map.Content, Map.SorcererStreetParams.DicRequirement, Map.SorcererStreetParams.DicEffect, Map.SorcererStreetParams.DicAutomaticSkillTarget));
             }
         }
 

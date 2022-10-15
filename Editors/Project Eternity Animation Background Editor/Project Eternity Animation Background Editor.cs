@@ -152,7 +152,7 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
                 ActiveParticleSystem = SelectedNode.Tag as AnimationBackground3DBase;
 
                 ActiveParticleSystem.RemoveItem(SelectedNodeIndex);
-                lstItemChoices.Nodes.RemoveAt(SelectedNodeIndex);
+                lstItemChoices.Nodes.Remove(lstItemChoices.SelectedNode);
             }
         }
 
@@ -162,7 +162,9 @@ namespace ProjectEternity.Editors.AnimationBackgroundEditor
             {
                 if (lstItemChoices.SelectedNode.Parent == null)
                 {
-                    pgAnimationProperties.SelectedObject = lstItemChoices.SelectedNode.Tag;
+                    AnimationBackground3DBase ActiveParticleSystem = lstItemChoices.SelectedNode.Tag as AnimationBackground3DBase;
+
+                    pgAnimationProperties.SelectedObject = ActiveParticleSystem.GetEditableObject(-1);
                 }
                 else
                 {

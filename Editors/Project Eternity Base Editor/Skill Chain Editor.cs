@@ -9,7 +9,7 @@ using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.Editors.SkillChainEditor
 {
-    public abstract partial class SkillChainEditor : BaseEditor
+    public partial class SkillChainEditor : BaseEditor
     {
         protected bool AllowEvent;
 

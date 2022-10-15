@@ -6,6 +6,7 @@ using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.Player;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Item;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -18,6 +19,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private readonly Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain;
+        List<List<MovementAlgorithmTile>> ListPath;
 
         public ActionPanelChooseDirection(SorcererStreetMap Map)
             : base(PanelName, Map, false)
@@ -30,6 +32,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ActivePlayerIndex = ActivePlayerIndex;
             this.DicNextTerrain = DicNextTerrain;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            ListPath = new List<List<MovementAlgorithmTile>>();
+
+            foreach (TerrainSorcererStreet ActiveTerrain in DicNextTerrain.Values)
+            {
+                List<MovementAlgorithmTile> ListArrow = new List<MovementAlgorithmTile>();
+                ListArrow.Add(Map.GetTerrain(ActivePlayer.GamePiece));
+
+                ListArrow.Add(ActiveTerrain);
+                ListPath.Add(ListArrow);
+            }
         }
 
         public override void OnSelect()
@@ -38,6 +50,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            foreach (List<MovementAlgorithmTile> ListArrow in ListPath)
+            {
+                Map.LayerManager.AddDrawablePath(ListArrow);
+            }
+
             if (InputHelper.InputUpPressed() && DicNextTerrain.ContainsKey(Directions.Up))
             {
                 ActivePlayer.CurrentDirection = Directions.Up;
@@ -57,6 +74,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputConfirmPressed() && ActivePlayer.CurrentDirection != Directions.None)
             {
                 FinalizeChoice();
+            }
+
+            if (ActivePlayer.CurrentDirection != Directions.None)
+            {
+                Map.LayerManager.AddDrawablePoints(new List<MovementAlgorithmTile>() { DicNextTerrain[ActivePlayer.CurrentDirection] }, Color.White);
             }
         }
 
@@ -83,28 +105,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            if (DicNextTerrain.Keys.Contains(Directions.Right))
-            {
-                if (ActivePlayer.CurrentDirection == Directions.Right)
-                {
-                    g.Draw(GameScreen.sprPixel, new Rectangle((int)ActivePlayer.GamePiece.X + 32, (int)ActivePlayer.GamePiece.Y, 20, 20), Color.Red);
-                }
-                else
-                {
-                    g.Draw(GameScreen.sprPixel, new Rectangle((int)ActivePlayer.GamePiece.X + 32, (int)ActivePlayer.GamePiece.Y, 20, 20), Color.AliceBlue);
-                }
-            }
-            if (DicNextTerrain.Keys.Contains(Directions.Down))
-            {
-                if (ActivePlayer.CurrentDirection == Directions.Down)
-                {
-                    g.Draw(GameScreen.sprPixel, new Rectangle((int)ActivePlayer.GamePiece.X, (int)ActivePlayer.GamePiece.Y + 32, 20, 20), Color.Red);
-                }
-                else
-                {
-                    g.Draw(GameScreen.sprPixel, new Rectangle((int)ActivePlayer.GamePiece.X, (int)ActivePlayer.GamePiece.Y + 32, 20, 20), Color.AliceBlue);
-                }
-            }
         }
     }
 }

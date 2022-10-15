@@ -94,9 +94,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             List<string> ListChild = new List<string>();
 
-            for (int P = 0; P < ActiveBillboardSystem.FirstFreeParticle; P += 4)
+            for (int P = 0; P < ActiveBillboardSystem.FirstFreeParticle; ++P)
             {
-                ListChild.Add("Prop " + (P / 4 + 1));
+                ListChild.Add("Prop " + (P + 1));
             }
 
             return ListChild;
@@ -255,6 +255,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override object GetEditableObject(int Index)
         {
+            if (Index < 0)
+            {
+                return ActiveBillboardSystem;
+            }
+
             if (ActiveBillboardSystem.RotateTowardCamera)
             {
                 return new AnimationBackground3D.TemporaryBackgroundRotatedObject(ActiveBillboardSystem, Index);
@@ -289,7 +294,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                         ActiveBillboardSystem.SetViewProjection(World * View, Projection);
 
-                        //g.GraphicsDevice.Viewport.Unproject(MyVector3Location, Projection, View, World);
                         ActiveBillboardSystem.Draw(GameScreen.GraphicsDevice);
                     }
                 }
@@ -298,7 +302,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override string ToString()
         {
-            return ActiveBillboardSystem.TextureName.Substring(31);
+            return ActiveBillboardSystem.TextureName.Substring(30);
         }
     }
 }

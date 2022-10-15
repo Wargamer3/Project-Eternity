@@ -44,6 +44,12 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Skill Chain Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Skill Chain Editor.Designer.cs">
+      <DependentUpon>Skill Chain Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Spell Card Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +89,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Skill Chain Editor.resx">
+      <DependentUpon>Skill Chain Editor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Spell Card Editor.resx">
       <DependentUpon>Spell Card Editor.cs</DependentUpon>
     </EmbeddedResource>

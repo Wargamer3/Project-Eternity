@@ -75,11 +75,6 @@ namespace ProjectEternity.Editors.CardEditor
 
             txtMagicCost.Value = LoadedCard.MagicCost;
             cboRarity.SelectedIndex = (int)LoadedCard.Rarity;
-
-            for (int S = 0; S < LoadedCard.ListSkill.Count; ++S)
-            {
-                lstSkill.Items.Add(LoadedCard.ListSkill[S].Name);
-            }
         }
 
         private void btnAddSkill_Click(object sender, EventArgs e)

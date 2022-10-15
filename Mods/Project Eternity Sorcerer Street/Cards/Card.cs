@@ -26,7 +26,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int MagicCost;
         public Texture2D sprCard;
         public EffectHolder Effects;
-        public List<BaseAutomaticSkill> ListSkill;
+        public string SkillChainName;
+        public List<BaseAutomaticSkill> ListActiveSkill;
 
         public Card()
             : this("None", "None")
@@ -38,22 +39,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Path = Path;
             this.CardType = CardType;
             Effects = new EffectHolder();
-            ListSkill = new List<BaseAutomaticSkill>();
+            ListActiveSkill = new List<BaseAutomaticSkill>();
         }
 
-        public static Card LoadCard(string Path, ContentManager Content)
+        public static Card LoadCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             string[] UnitInfo = Path.Split(new[] { "/" }, StringSplitOptions.None);
 
-            return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), Content);
+            return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
         }
 
-        private static Card FromType(string CardType, string Path, ContentManager Content)
+        private static Card FromType(string CardType, string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             switch(CardType)
             {
                 case "Creature Cards":
-                    return new CreatureCard(Path, Content);
+                    return new CreatureCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
 
                 case SpellCard.SpellCardType:
                     return new SpellCard(Path, Content);
@@ -62,11 +65,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             throw new Exception("Unkown card type: " + CardType);
         }
 
+        public void InitSkillChainTarget(BaseAutomaticSkill ActiveSkill, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            foreach (BaseSkillLevel ActiveSkillLevel in ActiveSkill.ListSkillLevel)
+            {
+                foreach (BaseSkillActivation ActiveSkillActivation in ActiveSkillLevel.ListActivation)
+                {
+                    for (int E = 0; E < ActiveSkillActivation.ListEffect.Count; ++E)
+                    {
+                        if (ActiveSkillActivation.ListEffect[E] is SorcererStreetEffect)
+                        {
+                            ActiveSkillActivation.ListEffectTarget[E].Add("Sorcerer Street Self");
+                            ActiveSkillActivation.ListEffectTargetReal[E].Add(DicAutomaticSkillTarget["Sorcerer Street Self"]);
+                        }
+
+                        foreach (BaseAutomaticSkill ActiveFollowingSkill in ActiveSkillActivation.ListEffect[E].ListFollowingSkill)
+                        {
+                            InitSkillChainTarget(ActiveFollowingSkill, DicAutomaticSkillTarget);
+                        }
+                    }
+                }
+            }
+        }
+
         public void ActivateSkill(string RequirementName)
         {
-            for (int E = 0; E < ListSkill.Count; ++E)
+            for (int E = 0; E < ListActiveSkill.Count; ++E)
             {
-                ListSkill[E].AddSkillEffectsToTarget(RequirementName);
+                ListActiveSkill[E].AddSkillEffectsToTarget(RequirementName);
             }
         }
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -16,6 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public readonly int MaxHP;
         public readonly int MaxST;
+        public readonly byte DiscardCardRequired;
 
         public ElementalAffinity[] ArrayAffinity;
         public ElementalAffinity[] ArrayLandLimit;
@@ -46,14 +48,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AttackAnimationPath = "Sorcerer Street/New Item";
         }
 
-        public CreatureCard(string Path, ContentManager Content)
+        public CreatureCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
             : this(Path)
         {
-            if (Content != null)
-            {
-                sprCard = Content.Load<Texture2D>("Sorcerer Street/Creature Cards/fighter");
-            }
-
             FileStream FS = new FileStream("Content/Sorcerer Street/Creature Cards/" + Path + ".pec", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
@@ -61,10 +59,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Description = BR.ReadString();
 
             MagicCost = BR.ReadInt32();
+            DiscardCardRequired = BR.ReadByte();
             Rarity = (CardRarities)BR.ReadByte();
+
+            AttackAnimationPath = BR.ReadString();
 
             CurrentHP = MaxHP = BR.ReadInt32();
             CurrentST = MaxST = BR.ReadInt32();
+            SkillChainName = BR.ReadString();
 
             int ArrayAffinityLength = BR.ReadInt32();
             ArrayAffinity = new ElementalAffinity[ArrayAffinityLength];
@@ -93,15 +95,41 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 DicTerrainRequiement.Add((ElementalAffinity)BR.ReadByte(), BR.ReadInt32());
             }
+            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
+            {
+                FileStream FSSkillChain = new FileStream("Content/Sorcerer Street/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
+                BinaryReader BRSkillChain = new BinaryReader(FSSkillChain, Encoding.UTF8);
+                BRSkillChain.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int tvSkillsNodesCount = BRSkillChain.ReadInt32();
+                ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
+                for (int N = 0; N < tvSkillsNodesCount; ++N)
+                {
+                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+
+                    InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
+
+                    ListActiveSkill.Add(ActiveSkill);
+                }
+
+                BRSkillChain.Close();
+                FSSkillChain.Close();
+            }
+            else
+            {
+                ListActiveSkill = new List<BaseAutomaticSkill>();
+            }
 
             BR.Close();
             FS.Close();
 
-            Map3DModel = new AnimatedModel("Units/Normal/Models/Bomberman/Default");
-            Map3DModel.LoadContent(Content);
-            Map3DModel.AddAnimation("Units/Normal/Models/Bomberman/Waving", "Idle", Content);
-            Map3DModel.AddAnimation("Units/Normal/Models/Bomberman/Walking", "Walking", Content);
-            Map3DModel.PlayAnimation("Walking");
+            if (Content != null)
+            {
+                sprCard = Content.Load<Texture2D>("Sorcerer Street/Creature Cards/" + Path);
+
+                Map3DModel = new AnimatedModel("Sorcerer Street/Models/Bad Guy");
+                Map3DModel.LoadContent(Content);
+            }
         }
 
         public CreatureCard(int MaxHP, int MaxST)

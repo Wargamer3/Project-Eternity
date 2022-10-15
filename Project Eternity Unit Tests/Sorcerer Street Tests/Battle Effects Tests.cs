@@ -104,7 +104,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             NewActivation.ListEffectTargetReal.Add(new List<AutomaticSkillTargetType>());
             NewActivation.ListEffectTargetReal[0].Add(Target);
 
-            DummyInvaderCard.ListSkill.Add(HPIncreaseSkill);
+            DummyInvaderCard.ListActiveSkill.Add(HPIncreaseSkill);
 
             ActionPanelBattleCreatureModifierPhase CreaturePhase = new ActionPanelBattleCreatureModifierPhase(DummyMap.ListActionMenuChoice, DummyMap);
             CreaturePhase.OnSelect();

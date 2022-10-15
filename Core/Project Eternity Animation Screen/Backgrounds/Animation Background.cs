@@ -15,6 +15,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public float Yaw, Pitch, Roll;
         public Matrix CameraRotation;
         protected Vector3 CameraPosition;
+        public bool IsEditor;
         public Vector3 Position { get { return CameraPosition; } }
         public Vector3 MoveSpeed;
         public Vector3 DefaultCameraPosition;

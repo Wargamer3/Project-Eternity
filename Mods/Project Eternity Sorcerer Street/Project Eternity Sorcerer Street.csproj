@@ -47,13 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acion Panels\Action Menu.cs" />
-    <Compile Include="Acion Panels\Battle\Attack Phase.cs" />
-    <Compile Include="Acion Panels\Battle\Boosts Modifier Phase.cs" />
-    <Compile Include="Acion Panels\Battle\Creature Modifier Phase.cs" />
-    <Compile Include="Acion Panels\Battle\Enchant Modifier Phase.cs" />
-    <Compile Include="Acion Panels\Battle\Item Modifier Phase.cs" />
-    <Compile Include="Acion Panels\Battle\Item Selection Phase.cs" />
-    <Compile Include="Acion Panels\Battle\Land Modifier Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 9 Defender Win.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 9 Defender Defeated.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 7 Attack.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 8 Battle Result.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 6 Boosts Modifier.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 3 Creature Modifier.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 4 Enchant Modifier.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 5 Item Modifier.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 1 Item Selection.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 2 Land Modifier.cs" />
     <Compile Include="Acion Panels\Battle\Start Phase.cs" />
     <Compile Include="Acion Panels\Battle\Attack Animation Phase.cs" />
     <Compile Include="Acion Panels\Player\Choose Direction.cs" />

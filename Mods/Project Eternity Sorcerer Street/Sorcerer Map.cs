@@ -16,6 +16,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public partial class SorcererStreetMap : BattleMap
     {
+        public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+
         #region Ressources
 
         public Texture2D sprCardBack;
@@ -39,6 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public Texture2D sprMenuHand;
         public Texture2D sprMenuCursor;
+        public Texture2D sprVS;
 
         public Texture2D sprDirectionNorth;
         public Texture2D sprDirectionEast;
@@ -50,9 +53,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprRarityR;
         public Texture2D sprRarityS;
 
-        #endregion
+        public Texture2D sprTileBorderEmpty;
+        public Texture2D sprTileBorderColor;
 
-        public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
+        #endregion
 
         public readonly Vector3 LastPosition;
         private List<Player> ListLocalPlayerInfo;
@@ -147,7 +151,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
 
             sprArrowUp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Arrow Up");
-            sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/End Turn");
+            sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/End Card");
             sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Air");
             sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Earth");
             sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Fire");
@@ -165,6 +169,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             sprMenuHand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Hand");
             sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
+            sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
 
             sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/South");
             sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/West");
@@ -175,6 +180,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprRarityN = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity N");
             sprRarityR = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity R");
             sprRarityS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity S");
+
+            sprTileBorderEmpty = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Empty");
+            sprTileBorderColor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border");
 
             LoadMap();
             LoadMapAssets();

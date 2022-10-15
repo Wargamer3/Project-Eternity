@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Collections.Generic;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.GameScreens.SorcererStreetScreen;
 
@@ -67,7 +67,7 @@ namespace ProjectEternity.Editors.CardEditor
         private void LoadCard(string UnitPath)
         {
             Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(39);
-            CreatureCard LoadedCard = new CreatureCard(Name, null);
+            CreatureCard LoadedCard = new CreatureCard(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             this.Text = LoadedCard.Name + " - Project Eternity Item Card Editor";
 
@@ -76,11 +76,6 @@ namespace ProjectEternity.Editors.CardEditor
 
             txtMagicCost.Value = LoadedCard.MagicCost;
             cboRarity.SelectedIndex = (int)LoadedCard.Rarity;
-
-            for (int S = 0; S < LoadedCard.ListSkill.Count; ++S)
-            {
-                lstSkill.Items.Add(LoadedCard.ListSkill[S].Name);
-            }
         }
 
         private void btnAddSkill_Click(object sender, EventArgs e)

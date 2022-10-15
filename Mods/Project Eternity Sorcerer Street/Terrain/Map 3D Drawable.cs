@@ -51,7 +51,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             PolygonEffect = new BasicEffect(g);
 
             PolygonEffect.TextureEnabled = true;
-            PolygonEffect.EnableDefaultLighting();
 
             float aspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
 
@@ -210,6 +209,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                             X * Map.TileSize.X, Y * Map.TileSize.Y, Z, MinZ,
                                             Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
 
+                    Tile3D TopTile = ListNew3DTile[0];
+                    if (TopTile.ArrayVertex.Length == 4)
+                    {
+                        float TextureWidth = Map.TileSize.X / (float)Map.ListTileSet[TopTile.TilesetIndex].Width / 10;
+                        float TextureHeight = Map.TileSize.Y / (float)Map.ListTileSet[TopTile.TilesetIndex].Height / 10;
+
+                        TopTile.ArrayVertex[0] = new VertexPositionNormalTexture(TopTile.ArrayVertex[0].Position, TopTile.ArrayVertex[0].Normal, new Vector2(TopTile.ArrayVertex[0].TextureCoordinate.X - TextureWidth, TopTile.ArrayVertex[0].TextureCoordinate.Y - TextureHeight));
+                        TopTile.ArrayVertex[1] = new VertexPositionNormalTexture(TopTile.ArrayVertex[1].Position, TopTile.ArrayVertex[1].Normal, new Vector2(TopTile.ArrayVertex[1].TextureCoordinate.X + TextureWidth, TopTile.ArrayVertex[1].TextureCoordinate.Y - TextureHeight));
+                        TopTile.ArrayVertex[2] = new VertexPositionNormalTexture(TopTile.ArrayVertex[2].Position, TopTile.ArrayVertex[2].Normal, new Vector2(TopTile.ArrayVertex[2].TextureCoordinate.X - TextureWidth, TopTile.ArrayVertex[2].TextureCoordinate.Y + TextureHeight));
+                        TopTile.ArrayVertex[3] = new VertexPositionNormalTexture(TopTile.ArrayVertex[3].Position, TopTile.ArrayVertex[3].Normal, new Vector2(TopTile.ArrayVertex[3].TextureCoordinate.X + TextureWidth, TopTile.ArrayVertex[3].TextureCoordinate.Y + TextureHeight));
+                    }
+
                     if (ListIgnoredTerrain.Contains(ActiveTerrain))
                     {
                         foreach (Tile3D ActiveTile in ListNew3DTile)
@@ -311,16 +322,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (!Map.IsAPlatform)
             {
-                if (Map.ActivePlatform != null)
-                {
-                    SetTarget(new Vector3(Map.TileSize.X * Map.ActivePlatform.Map.CursorTerrain.WorldPosition.X,
-                        Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Z * LayerHeight,
-                        Map.TileSize.Y * Map.ActivePlatform.Map.CursorTerrain.WorldPosition.Y));
-                }
-                else
-                {
-                    SetTarget(new Vector3(Map.TileSize.X * Map.CursorPositionVisible.X, Map.CursorPosition.Z * LayerHeight, Map.TileSize.Y * Map.CursorPositionVisible.Y));
-                }
+                SetTarget(new Vector3(Map.TileSize.X * Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.X, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Z * LayerHeight, Map.TileSize.Y * Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Y));
 
                 Camera.Update(gameTime);
             }
@@ -345,8 +347,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void SetTarget(Vector3 Target)
         {
-            Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, 300), Matrix.CreateRotationY(MathHelper.ToRadians(45))) + Target;
-            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 200, 0f));
+            Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, 200), Matrix.CreateRotationY(MathHelper.ToRadians(40))) + Target;
+            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 150, 0f));
             Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);
         }
 
@@ -851,6 +853,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 DrawItems(g, View, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
             }
+
+            g.GraphicsDevice.DepthStencilState = DepthStencilState.None;
+            for (int L = 0; L < Map.LayerManager.ListLayer.Count; ++L)
+            {
+                for (int X = 0; X < Map.MapSize.X; ++X)
+                {
+                    for (int Y = 0; Y < Map.MapSize.Y; ++Y)
+                    {
+                        float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].WorldPosition.Z * LayerHeight + 0.3f;
+                        Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
+                        DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
+                        Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+
+                        if (ActiveTerrain3D.TerrainStyle != Terrain3D.TerrainStyles.Invisible)
+                        {
+                            if (Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].DefendingCreature != null)
+                            {
+                                PolygonEffect.Texture = Map.sprTileBorderColor;
+                            }
+                            else
+                            {
+                                PolygonEffect.Texture = Map.sprTileBorderEmpty;
+                            }
+                            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+
+                            Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+
+                            Cursor.Draw(g.GraphicsDevice);
+                        }
+                    }
+                }
+            }
         }
 
         public void DrawItems(CustomSpriteBatch g, Matrix View, MapLayer Owner, bool IsSubLayer)
@@ -1043,10 +1078,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard DefendingCreature = ActiveTerrain.DefendingCreature;
                         if (DefendingCreature != null)
                         {
-                            Matrix RotationMatrix = Matrix.Identity;
+                            DefendingCreature.Map3DModel.Draw(View, PolygonEffect.Projection,  Matrix.CreateTranslation((ActiveTerrain.WorldPosition.X + 0.9f) * Map.TileSize.X, ActiveTerrain.WorldPosition.Z * LayerHeight, (ActiveTerrain.WorldPosition.Y + 0.9f) * Map.TileSize.Y));
 
-                            DefendingCreature.Map3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.15f) * RotationMatrix
-                                * Matrix.CreateTranslation((ActiveTerrain.WorldPosition.X + 0.9f) * Map.TileSize.X, ActiveTerrain.WorldPosition.Z * LayerHeight, (ActiveTerrain.WorldPosition.Y + 0.9f) * Map.TileSize.Y));
+                            Vector3 Visible3DPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.7f, ActiveTerrain.WorldPosition.Z * LayerHeight, ActiveTerrain.WorldPosition.Y + 0.9f);
+                            Vector3 Position = new Vector3(Visible3DPosition.X * Map.TileSize.X, Visible3DPosition.Y, Visible3DPosition.Z * Map.TileSize.Y);
+
+                            Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, View, Matrix.Identity);
+                            g.DrawString(Map.fntNonDemoDamage, "20", new Vector2(Position2D.X, Position2D.Y), Color.White);
                         }
                     }
                 } }

@@ -58,6 +58,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 RemoveFromPanelList(this);
+                AddToPanelListAndSelect(new ActionPanelBattleBattleResultPhase(ListActionMenuChoice, Map));
             }
         }
 

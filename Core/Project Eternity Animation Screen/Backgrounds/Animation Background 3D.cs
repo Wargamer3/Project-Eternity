@@ -569,24 +569,27 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 ActiveBillboardSystem.Draw(g, View, Projection, ScreenWidth, ScreenHeight);
             }
 
-            IndexedLinesEffect.View = View;
-            IndexedLinesEffect.Projection = Projection;
-            IndexedLinesEffect.World = Matrix.Identity;
-            IndexedLinesEffect.DiffuseColor = new Vector3(0, 0, 0);
-            // Activate the particle effect.
-            foreach (EffectPass pass in IndexedLinesEffect.CurrentTechnique.Passes)
+            if (IsEditor)
             {
-                pass.Apply();
+                IndexedLinesEffect.View = View;
+                IndexedLinesEffect.Projection = Projection;
+                IndexedLinesEffect.World = Matrix.Identity;
+                IndexedLinesEffect.DiffuseColor = new Vector3(0, 0, 0);
 
-                BackgroundGrid.Draw(g);
-            }
-            IndexedLinesEffect.DiffuseColor = new Vector3(1f, 0, 0);
-            // Activate the particle effect.
-            foreach (EffectPass pass in IndexedLinesEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
+                foreach (EffectPass pass in IndexedLinesEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
 
-                Bounds.Draw(g);
+                    BackgroundGrid.Draw(g);
+                }
+                IndexedLinesEffect.DiffuseColor = new Vector3(1f, 0, 0);
+                // Activate the particle effect.
+                foreach (EffectPass pass in IndexedLinesEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+
+                    Bounds.Draw(g);
+                }
             }
         }
     }

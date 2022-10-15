@@ -6,22 +6,22 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 
-namespace ProjectEternity.Editors.AttackSkillChainEditor
+namespace ProjectEternity.Editors.SorcererStreetSkillChainEditor
 {
-    public partial class AttackSkillChainEditor : SkillChainEditor.SkillChainEditor
+    public partial class SorcererStreetSkillChainEditor : SkillChainEditor.SkillChainEditor
     {
-        public AttackSkillChainEditor()
+        public SorcererStreetSkillChainEditor()
             : base()
         {
-            List<string> ListAllowedRequirements = new List<string>() { "SquadPERRequirement", "AttackPERRequirement" };
-            List<string> ListAllowedEffect = new List<string>() { "DeathmatchSquadPEREffect", "DeathmatchAttackPEREffect" };
+            List<string> ListAllowedRequirements = new List<string>() { "SorcererStreetRequirement" };
+            List<string> ListAllowedEffect = new List<string>() { "SorcererStreetEffect" };
 
             tvSkills.NodeMouseClick += (sender, args) => tvSkills.SelectedNode = args.Node;
             cboRequirementType.Items.AddRange(BaseSkillRequirement.DicDefaultRequirement.Values.Where(E => ListAllowedRequirements.Contains(E.GetType().BaseType.Name)).ToArray());
             cboEffectType.Items.AddRange(BaseEffect.DicDefaultEffect.Values.Where(E => ListAllowedEffect.Contains(E.GetType().BaseType.Name)).ToArray());
         }
 
-        public AttackSkillChainEditor(string FilePath, object[] Params)
+        public SorcererStreetSkillChainEditor(string FilePath, object[] Params)
             : this()
         {
             this.FilePath = FilePath;
@@ -37,7 +37,7 @@ namespace ProjectEternity.Editors.AttackSkillChainEditor
         {
             EditorInfo[] Info = new EditorInfo[]
             {
-                new EditorInfo(new string[] { GUIRootPathAttackSkillChains }, "Attacks/Skill Chains/", new string[] { ".pesc" }, typeof(AttackSkillChainEditor), true, null, true)
+                new EditorInfo(new string[] { GUIRootPathSorcererStreetSkillChains }, "Sorcerer Street/Skill Chains/", new string[] { ".pesc" }, typeof(SorcererStreetSkillChainEditor), true, null, true)
             };
 
             return Info;
@@ -47,10 +47,10 @@ namespace ProjectEternity.Editors.AttackSkillChainEditor
         {
             AllowEvent = false;
 
-            string Name = SkillChainPath.Substring(0, SkillChainPath.Length - 5).Substring(29);
-            this.Text = Name + " - Project Eternity Attack Skill Chain Editor";
+            string Name = SkillChainPath.Substring(0, SkillChainPath.Length - 5).Substring(37);
+            this.Text = Name + " - Project Eternity Sorcerer Street Skill Chain Editor";
 
-            FileStream FS = new FileStream("Content/Attacks/Skill Chains/" + Name + ".pesc", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("Content/Sorcerer Street/Skill Chains/" + Name + ".pesc", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
 

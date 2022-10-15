@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Card[] ArrayCardInDeck = new Card[_Deck.Length];
                 for (int C = 0; C < _Deck.Length; C++)
                 {
-                    ArrayCardInDeck[C] = Card.LoadCard(_Deck[C], Map.Content);
+                    ArrayCardInDeck[C] = Card.LoadCard(_Deck[C], Map.Content, Map.SorcererStreetParams.DicRequirement, Map.SorcererStreetParams.DicEffect, Map.SorcererStreetParams.DicAutomaticSkillTarget);
                 }
 
                 Player NewPlayer = new Player(PlayerName, "", true, false, _PlayerTeam, ArrayCardInDeck);
