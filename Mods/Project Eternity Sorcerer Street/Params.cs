@@ -36,6 +36,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CreatureCard UserCreature;
         public CreatureCard OpponentCreature;
 
+        public ActionPanelHolder ListBattlePanelHolder;
+
         public AnimationBackground Background;
 
         public SorcererStreetBattleContext()

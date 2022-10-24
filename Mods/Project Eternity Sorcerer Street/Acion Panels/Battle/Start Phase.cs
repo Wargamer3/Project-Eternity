@@ -56,6 +56,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.GlobalSorcererStreetBattleContext.DefenderCard.Position = new Vector2(Constants.Width - 282, 48);
             Map.GlobalSorcererStreetBattleContext.DefenderCard.Scale = new Vector2(0.6f);
 
+            Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = ListActionMenuChoice;
+
             ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleItemSelectionPhase(ListActionMenuChoice, Map, ActivePlayerIndex));
 
             Map.GlobalSorcererStreetBattleContext.Background = AnimationBackground.LoadAnimationBackground("Backgrounds 3D/Grass", Content, GraphicsDevice);

@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "BattleAttackPhase";
 
         private enum AttackSequences { FirstAttack, SecondAttack, End };
+        public const string InvasionRequirement = "Sorcerer Street Invasion";
         public const string BeforeAttackRequirement = "Sorcerer Street Before Attack";
         public const string BeforeDefenseRequirement = "Sorcerer Street Before Defense";
 

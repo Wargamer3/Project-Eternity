@@ -4,16 +4,16 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class IncreaseHPEffect : SorcererStreetEffect
+    public sealed class IncreaseSTEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Increase HP";
+        public static string Name = "Sorcerer Street Increase ST";
 
-        public IncreaseHPEffect()
+        public IncreaseSTEffect()
             : base(Name, false)
         {
         }
 
-        public IncreaseHPEffect(SorcererStreetBattleParams Params)
+        public IncreaseSTEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,14 +33,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.IncreaseSelfHP(30);
+            Params.IncreaseSelfST(30);
 
             return null;
         }
 
         protected override BaseEffect DoCopy()
         {
-            IncreaseHPEffect NewEffect = new IncreaseHPEffect(Params);
+            IncreaseSTEffect NewEffect = new IncreaseSTEffect(Params);
 
             return NewEffect;
         }
