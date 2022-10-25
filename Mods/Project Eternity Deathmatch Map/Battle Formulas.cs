@@ -4,9 +4,8 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Effects;
-using ProjectEternity.GameScreens.BattleMapScreen;
-using UnitStats = ProjectEternity.Core.Units.UnitStats;
 using ProjectEternity.Core.Characters;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

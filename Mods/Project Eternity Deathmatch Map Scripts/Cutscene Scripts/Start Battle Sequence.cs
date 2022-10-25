@@ -108,7 +108,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         if (Attacker.CurrentLeader.BattleTheme != null)
                         {
-                            GameScreen.FMODSystem.sndActiveBGM.Stop();
+                            if (GameScreen.FMODSystem.sndActiveBGM != null)
+                            {
+                                GameScreen.FMODSystem.sndActiveBGM.Stop();
+                            }
                             Attacker.CurrentLeader.BattleTheme.SetLoop(true);
                             Attacker.CurrentLeader.BattleTheme.PlayAsBGM();
                             GameScreen.FMODSystem.sndActiveBGMName = Attacker.CurrentLeader.BattleThemeName;

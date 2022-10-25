@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens.AnimationScreen;
 
