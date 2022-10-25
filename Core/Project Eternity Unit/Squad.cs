@@ -96,7 +96,7 @@ namespace ProjectEternity.Core.Units
             }
         }
 
-        public Squad(string SquadName, Unit Leader = null, Unit WingmanA = null, Unit WingmanB = null)
+        public Squad(string SquadName, Unit Leader = null, Unit WingmanA = null, Unit WingmanB = null, Unit WingmanC = null)
         {
             IsDead = false;
             ListUnitIndex = new List<int>();
@@ -110,7 +110,19 @@ namespace ProjectEternity.Core.Units
             ListParthDrop = new List<string>();
             TeamTags = new TagSystem();
 
-            if (WingmanB != null)
+            if (WingmanC != null)
+            {
+                ArrayUnit = new Unit[4];
+                ArrayUnit[0] = Leader;
+                ArrayUnit[1] = WingmanA;
+                ArrayUnit[2] = WingmanB;
+                ArrayUnit[3] = WingmanC;
+
+                ListUnitIndex.Add(1);
+                ListUnitIndex.Add(2);
+                ListUnitIndex.Add(3);
+            }
+            else if (WingmanB != null)
             {
                 ArrayUnit = new Unit[3];
                 ArrayUnit[0] = Leader;
@@ -169,6 +181,8 @@ namespace ProjectEternity.Core.Units
                 g.Draw(CurrentWingmanA.SpriteMap, new Rectangle((int)Position.X, (int)Position.Y, CurrentWingmanA.SpriteMap.Width / 2, CurrentWingmanA.SpriteMap.Height / 2), Color.White);
             if (CurrentWingmanB != null)
                 g.Draw(CurrentWingmanB.SpriteMap, new Rectangle((int)Position.X + CurrentLeader.SpriteMap.Width / 2, (int)Position.Y, CurrentWingmanB.SpriteMap.Width / 2, CurrentWingmanB.SpriteMap.Height / 2), Color.White);
+            if (CurrentWingmanC != null)
+                g.Draw(CurrentWingmanC.SpriteMap, new Rectangle((int)Position.X, (int)Position.Y + CurrentLeader.SpriteMap.Width / 2, CurrentWingmanB.SpriteMap.Height / 2, CurrentWingmanB.SpriteMap.Height / 2), Color.White);
         }
 
         public override void DrawOverlayOnMap(CustomSpriteBatch g, Vector3 Position)

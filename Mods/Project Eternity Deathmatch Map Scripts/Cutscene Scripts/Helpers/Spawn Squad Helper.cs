@@ -69,6 +69,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             public ScriptUnit LeaderToSpawn;
             public ScriptUnit WingmanAToSpawn;
             public ScriptUnit WingmanBToSpawn;
+            public ScriptUnit WingmanCToSpawn;
             public string AIPath;
             public string DefenseBattleBehavior;
             public string PartDropPath;
@@ -286,8 +287,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         WingmanBToSpawn.Init();
                     }
+                    if (WingmanCToSpawn != null)
+                    {
+                        WingmanCToSpawn.Init();
+                    }
 
-                    Squad NewSquad = new Squad("", LeaderToSpawn.SpawnUnit, WingmanAToSpawn == null ? null : WingmanAToSpawn.SpawnUnit, WingmanBToSpawn == null ? null : WingmanBToSpawn.SpawnUnit);
+                    Squad NewSquad = new Squad("", LeaderToSpawn.SpawnUnit, WingmanAToSpawn == null ? null : WingmanAToSpawn.SpawnUnit, WingmanBToSpawn == null ? null : WingmanBToSpawn.SpawnUnit, WingmanCToSpawn == null ? null : WingmanCToSpawn.SpawnUnit);
                     NewSquad.IsEventSquad = IsEventSquad;
                     NewSquad.IsPlayerControlled = IsPlayerControlled;
                     NewSquad.SquadDefenseBattleBehavior = DefenseBattleBehavior;

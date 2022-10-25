@@ -36,6 +36,8 @@
             this.tsmNewRequirement = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmExpendAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
             this.gbEffects = new System.Windows.Forms.GroupBox();
             this.lstEffects = new System.Windows.Forms.ListBox();
             this.btnRemoveEffect = new System.Windows.Forms.Button();
@@ -45,8 +47,6 @@
             this.gbRequirements = new System.Windows.Forms.GroupBox();
             this.cboRequirementType = new System.Windows.Forms.ComboBox();
             this.pgRequirement = new System.Windows.Forms.PropertyGrid();
-            this.tsmExpendAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
             this.gbSkillChain.SuspendLayout();
             this.cmsSkillChain.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -56,6 +56,8 @@
             // 
             // gbSkillChain
             // 
+            this.gbSkillChain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gbSkillChain.Controls.Add(this.tvSkills);
             this.gbSkillChain.Location = new System.Drawing.Point(12, 27);
             this.gbSkillChain.Name = "gbSkillChain";
@@ -117,8 +119,25 @@
             this.tsmSave.Text = "Save";
             this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
+            // tsmExpendAll
+            // 
+            this.tsmExpendAll.Name = "tsmExpendAll";
+            this.tsmExpendAll.Size = new System.Drawing.Size(75, 20);
+            this.tsmExpendAll.Text = "Expend All";
+            this.tsmExpendAll.Click += new System.EventHandler(this.tsmExpendAll_Click);
+            // 
+            // tsmCollapseAll
+            // 
+            this.tsmCollapseAll.Name = "tsmCollapseAll";
+            this.tsmCollapseAll.Size = new System.Drawing.Size(81, 20);
+            this.tsmCollapseAll.Text = "Collapse All";
+            this.tsmCollapseAll.Click += new System.EventHandler(this.tsmCollapseAll_Click);
+            // 
             // gbEffects
             // 
+            this.gbEffects.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbEffects.Controls.Add(this.lstEffects);
             this.gbEffects.Controls.Add(this.btnRemoveEffect);
             this.gbEffects.Controls.Add(this.btnAddEffects);
@@ -134,6 +153,8 @@
             // 
             // lstEffects
             // 
+            this.lstEffects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstEffects.FormattingEnabled = true;
             this.lstEffects.Location = new System.Drawing.Point(6, 19);
             this.lstEffects.Name = "lstEffects";
@@ -143,6 +164,7 @@
             // 
             // btnRemoveEffect
             // 
+            this.btnRemoveEffect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRemoveEffect.Location = new System.Drawing.Point(100, 122);
             this.btnRemoveEffect.Name = "btnRemoveEffect";
             this.btnRemoveEffect.Size = new System.Drawing.Size(75, 23);
@@ -161,6 +183,8 @@
             // 
             // cboEffectType
             // 
+            this.cboEffectType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboEffectType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboEffectType.FormattingEnabled = true;
             this.cboEffectType.Location = new System.Drawing.Point(6, 151);
@@ -183,6 +207,8 @@
             // 
             // gbRequirements
             // 
+            this.gbRequirements.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gbRequirements.Controls.Add(this.cboRequirementType);
             this.gbRequirements.Controls.Add(this.pgRequirement);
             this.gbRequirements.Enabled = false;
@@ -214,20 +240,6 @@
             this.pgRequirement.Size = new System.Drawing.Size(169, 288);
             this.pgRequirement.TabIndex = 2;
             this.pgRequirement.ToolbarVisible = false;
-            // 
-            // tsmExpendAll
-            // 
-            this.tsmExpendAll.Name = "tsmExpendAll";
-            this.tsmExpendAll.Size = new System.Drawing.Size(74, 20);
-            this.tsmExpendAll.Text = "Expend All";
-            this.tsmExpendAll.Click += new System.EventHandler(this.tsmExpendAll_Click);
-            // 
-            // tsmCollapseAll
-            // 
-            this.tsmCollapseAll.Name = "tsmCollapseAll";
-            this.tsmCollapseAll.Size = new System.Drawing.Size(81, 20);
-            this.tsmCollapseAll.Text = "Collapse All";
-            this.tsmCollapseAll.Click += new System.EventHandler(this.tsmCollapseAll_Click);
             // 
             // SkillChainEditor
             // 
