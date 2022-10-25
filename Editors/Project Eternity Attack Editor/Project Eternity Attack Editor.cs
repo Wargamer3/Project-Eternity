@@ -18,6 +18,7 @@ namespace ProjectEternity.Editors.AttackEditor
         private DashAttackEditor DashAttackEditor;
         private KnockbackAttackEditor KnockbackAttackEditor;
         private MAPAttackEditor MAPAttackEditor;
+        private ALLAttackEditor ALLAttackEditor;
         private PERAttackEditor PERAttackEditor;
 
         public ProjectEternityAttackEditor()
@@ -144,6 +145,10 @@ namespace ProjectEternity.Editors.AttackEditor
                 BW.Write((byte)DashAttackEditor.txtMaxDashReach.Value);
                 BW.Write((byte)DashAttackEditor.txtEnemyKnockback.Value);
                 BW.Write((byte)DashAttackEditor.txtSelfKnockback.Value);
+            }
+            else if (PrimaryProperty == WeaponPrimaryProperty.ALL)
+            {
+                BW.Write((byte)ALLAttackEditor.txtLevel.Value);
             }
             else if (PrimaryProperty == WeaponPrimaryProperty.MAP)
             {
@@ -326,6 +331,7 @@ namespace ProjectEternity.Editors.AttackEditor
             DashAttackEditor = new DashAttackEditor();
             KnockbackAttackEditor = new KnockbackAttackEditor();
             MAPAttackEditor = new MAPAttackEditor();
+            ALLAttackEditor = new ALLAttackEditor();
             PERAttackEditor = new PERAttackEditor();
 
             //Create the Part file.
@@ -366,6 +372,10 @@ namespace ProjectEternity.Editors.AttackEditor
 
             switch (ActiveWeapon.Pri)
             {
+                case WeaponPrimaryProperty.ALL:
+                    rbALL.Checked = true;
+                    ALLAttackEditor.txtLevel.Value = ActiveWeapon.ALLLevel;
+                    break;
                 case WeaponPrimaryProperty.Dash:
                     rbDASH.Checked = true;
                     DashAttackEditor.txtMaxDashReach.Value = ActiveWeapon.DashMaxReach;
@@ -620,6 +630,10 @@ namespace ProjectEternity.Editors.AttackEditor
             if (rbDASH.Checked)
             {
                 DashAttackEditor.ShowDialog();
+            }
+            else if (rbALL.Checked)
+            {
+                ALLAttackEditor.ShowDialog();
             }
             else if (rbMAP.Checked)
             {

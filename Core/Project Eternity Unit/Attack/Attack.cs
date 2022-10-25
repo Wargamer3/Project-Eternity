@@ -71,6 +71,7 @@ namespace ProjectEternity.Core.Attacks
         public MAPAttackAttributes MAPAttributes;
         public PERAttackAttributes PERAttributes;
         public KnockbackAttackAttributes KnockbackAttributes;
+        public byte ALLLevel;//Number of Units an ALL Attack can hit
         public byte DashMaxReach;
         public Attack Parent;
         public bool IsChargeable;
@@ -166,6 +167,10 @@ namespace ProjectEternity.Core.Attacks
             this.Critical = BR.ReadSByte();
 
             this.Pri = (WeaponPrimaryProperty)BR.ReadByte();
+            if (this.Pri == WeaponPrimaryProperty.ALL)
+            {
+                ALLLevel = BR.ReadByte();
+            }
             if (this.Pri == WeaponPrimaryProperty.Dash)
             {
                 DashMaxReach = BR.ReadByte();

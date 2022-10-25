@@ -81,6 +81,12 @@
     <Compile Include="Attack Formula Editor.Designer.cs">
       <DependentUpon>Attack Formula Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="All Editor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="All Editor.Designer.cs">
+      <DependentUpon>All Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dash Editor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Attack Formula Editor.resx">
       <DependentUpon>Attack Formula Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="All Editor.resx">
+      <DependentUpon>All Editor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dash Editor.resx">
       <DependentUpon>Dash Editor.cs</DependentUpon>
