@@ -224,7 +224,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected BattleMap()
             : base()
         {
-            MapSize = new Point(10, 10);
+            MapSize = new Point(20, 20);
             TileSize = new Point(32, 32);
             ShowLayerIndex = -1;
 

@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Core.Units.Transforming
 {
@@ -17,6 +19,7 @@ namespace ProjectEternity.Core.Units.Transforming
         private UnitTransforming TransformingUnit;
         private Squad ActiveSquad;
         private bool ShowSquadMembers;
+        private List<Unit> ListWingman;
 
         public ActionPanelTranform2WingmanTurn(DeathmatchMap Map)
             : base(PanelName, Map)
@@ -33,6 +36,11 @@ namespace ProjectEternity.Core.Units.Transforming
             this.ShowSquadMembers = ShowSquadMembers;
 
             TransformingUnit = (UnitTransforming)ActiveSquad[TransformingUnitIndex];
+            ListWingman = new List<Unit>();
+            for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 1; --U)
+            {
+                ListWingman.Add(ActiveSquad[U]);
+            }
         }
 
         public override void OnSelect()
@@ -102,7 +110,7 @@ namespace ProjectEternity.Core.Units.Transforming
             for (int U = 0; U < TransformingUnit.ArrayTransformingUnit.Length; ++U)
             {
                 g.Draw(GameScreen.sprPixel, new Rectangle((int)X + MinActionMenuWidth + MinActionMenuWidth, (int)Y + U * PannelHeight, 50, 20), Color.Navy);
-                if (TransformingUnit.CanTransform(U, ActiveSquad.CurrentWingmanA, ActiveSquad.CurrentWingmanB))
+                if (TransformingUnit.CanTransform(U, ListWingman))
                     TextHelper.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.White);
                 else
                     TextHelper.DrawText(g, TransformingUnit.ArrayTransformingUnit[U].TransformingUnitName, new Vector2(X + MinActionMenuWidth + MinActionMenuWidth, Y + U * PannelHeight), Color.Gray);

@@ -18,16 +18,7 @@ namespace ProjectEternity.UnitTests
 
             DummyMap.NonDemoScreen = new NonDemoScreen(DummyMap);
             DummyMap.ListGameScreen = new List<GameScreens.GameScreen>();
-
-            DummyMap.LayerManager.ListLayer.Add(new MapLayer(DummyMap, 1));
-            DummyMap.LayerManager.ListLayer[0].ArrayTerrain = new Terrain[20, 20];
-            for (int X = 0; X < 20; ++X)
-            {
-                for (int Y = 0; Y < 20; ++Y)
-                {
-                    DummyMap.LayerManager.ListLayer[0].ArrayTerrain[X, Y] = new Terrain(X, Y, 0, 0, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
-                }
-            }
+            DummyMap.TargetPlayerIndex = 1;
 
             return DummyMap;
         }
@@ -47,8 +38,8 @@ namespace ProjectEternity.UnitTests
             Unit DummyWingmanA = CreateDummyUnit();
             Unit DummyWingmanB = CreateDummyUnit();
 
-            DummyWingmanA.ListAttack[0].Pri = WeaponPrimaryProperty.PLA;
-            DummyWingmanB.ListAttack[0].Pri = WeaponPrimaryProperty.PLA;
+            DummyWingmanA.UnitStat.ListAttack[0].Pri = WeaponPrimaryProperty.PLA;
+            DummyWingmanB.UnitStat.ListAttack[0].Pri = WeaponPrimaryProperty.PLA;
 
             Squad DummySquad = new Squad("Dummy", DummyLeader, DummyWingmanA, DummyWingmanB);
             DummySquad.Init(GlobalDeathmatchContext);
@@ -68,6 +59,11 @@ namespace ProjectEternity.UnitTests
             DummyCharacter.ArrayLevelEVA = new int[1] { 100 };
             DummyCharacter.ArrayLevelHIT = new int[1] { 200 };
             DummyCharacter.ArrayLevelMaxSP = new int[1] { 50 };
+            DummyCharacter.DicRankByMovement.Add(0, 1);
+            DummyCharacter.DicRankByMovement.Add(1, 1);
+            DummyCharacter.DicRankByMovement.Add(2, 1);
+            DummyCharacter.DicRankByMovement.Add(3, 1);
+            DummyCharacter.PostMVLevel = 1;
             DummyCharacter.Init();
 
             Unit DummyUnit = new UnitNormal("Dummy Unit");
@@ -76,6 +72,7 @@ namespace ProjectEternity.UnitTests
             DummyUnit.Armor = 100;
             DummyUnit.Mobility = 50;
             DummyUnit.MaxMovement = 5;
+            DummyUnit.UnitStat.PostMVLevel = 1;
 
             Attack DummyAttack = new Attack("Dummy Attack", string.Empty, 0, "10000", 0, 5, WeaponPrimaryProperty.None,
                 WeaponSecondaryProperty.None, 10, 0, 6, 1, 100, "Laser",
@@ -84,12 +81,12 @@ namespace ProjectEternity.UnitTests
             DummyAttack.PostMovementLevel = 1;
 
             DummyUnit.ArrayCharacterActive = new Character[1] { DummyCharacter };
-            DummyUnit.ListAttack.Add(DummyAttack);
+            DummyUnit.UnitStat.ListAttack.Add(DummyAttack);
             DummyUnit.CurrentAttack = DummyAttack;
             DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
-            DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
-            DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
-            DummyUnit.UnitStat.DicRankByMovement.Add(0, 1);
+            DummyUnit.UnitStat.DicRankByMovement.Add(1, 1);
+            DummyUnit.UnitStat.DicRankByMovement.Add(2, 1);
+            DummyUnit.UnitStat.DicRankByMovement.Add(3, 1);
 
             return DummyUnit;
         }

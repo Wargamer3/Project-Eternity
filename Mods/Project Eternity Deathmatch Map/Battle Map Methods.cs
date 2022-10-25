@@ -52,6 +52,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewSquad.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewSquad.CurrentLeader.SpriteMap, 1);
                 Color OutlineColor = ListPlayer[PlayerIndex].Color;
                 NewSquad.Unit3DSprite.UnitEffect3D.Parameters["OutlineColor"].SetValue(new Vector4(OutlineColor.R / 255f, OutlineColor.G / 255f, OutlineColor.B / 255f, 1));
+                NewSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
             }
 
             ListPlayer[PlayerIndex].IsAlive = true;
@@ -60,7 +61,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActivateAutomaticSkills(NewSquad, string.Empty);
             NewSquad.ID = ID;
             NewSquad.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));
-            NewSquad.Unit3DSprite.UnitEffect3D.Parameters["World"].SetValue(_World);
 
             ListPlayer[PlayerIndex].ListSquad.Add(NewSquad);
 
@@ -175,39 +175,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.Write(ActivePlayer.ListSquad.Count);
                 foreach (Squad ActiveSquad in ActivePlayer.ListSquad)
                 {
-                    BW.Write(ActiveSquad.ID);
-                    BW.Write(ActiveSquad.CanMove);
-                    BW.Write(ActiveSquad.ActionsRemaining);
-                    BW.Write(ActiveSquad.X);
-                    BW.Write(ActiveSquad.Y);
-                    BW.Write(ActiveSquad.Z);
-                    BW.Write(ActiveSquad.SquadName);
-                    BW.Write(ActiveSquad.CurrentTerrainIndex);
-                    BW.Write(ActiveSquad.IsUnderTerrain);
-                    BW.Write(ActiveSquad.IsPlayerControlled);
-                    if (ActiveSquad.SquadAI == null || ActiveSquad.SquadAI.Path == null)
-                    {
-                        BW.Write(string.Empty);
-                    }
-                    else
-                    {
-                        BW.Write(ActiveSquad.SquadAI.Path);
-                    }
-
-                    int UnitsInSquad = ActiveSquad.UnitsInSquad;
-
-                    BW.Write(UnitsInSquad);
-                    BW.Write(ActiveSquad.CurrentLeaderIndex);
-                    BW.Write(ActiveSquad.CurrentWingmanAIndex);
-                    BW.Write(ActiveSquad.CurrentWingmanBIndex);
-
-                    for (int U = 0; U < UnitsInSquad; ++U)
-                        ActiveSquad.At(U).QuickSave(BW);
-
-                    //List of Attacked Teams.
-                    BW.Write(ActiveSquad.ListAttackedTeam.Count);
-                    for (int U = 0; U < ActiveSquad.ListAttackedTeam.Count; ++U)
-                        BW.Write(ActiveSquad.ListAttackedTeam[U]);
+                    ActiveSquad.QuickSave(BW);
                 }
             }
 

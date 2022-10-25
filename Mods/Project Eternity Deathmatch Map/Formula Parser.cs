@@ -508,14 +508,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     case "currentwingmana":
                     case "wingman1":
                     case "currentwingman1":
-                        ActiveUnit = ActiveSquad.CurrentWingmanA;
+                        ActiveUnit = ActiveSquad[1];
                         break;
 
                     case "wingmanb":
                     case "currentwingmanb":
                     case "wingman2":
                     case "currentwingman2":
-                        ActiveUnit = ActiveSquad.CurrentWingmanA;
+                        ActiveUnit = ActiveSquad[2];
                         break;
 
                     case "position":
@@ -537,14 +537,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     case "currentwingmananame":
                     case "wingman1name":
                     case "currentwingman1name":
-                        ReturnExpression = ActiveSquad.CurrentWingmanA.RelativePath;
+                        ReturnExpression = ActiveSquad[1].RelativePath;
                         break;
 
                     case "wingmanbname":
                     case "currentwingmanbname":
                     case "wingman2name":
                     case "currentwingman2name":
-                        ReturnExpression = ActiveSquad.CurrentWingmanB.RelativePath;
+                        ReturnExpression = ActiveSquad[2].RelativePath;
                         break;
 
                     case "id":

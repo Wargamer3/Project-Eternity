@@ -81,11 +81,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     continue;
                 }
 
-                ListMapMenuUnitPosition.Add(new Tuple<Unit, Vector3>(ActiveSquad.CurrentLeader, ActiveSquad.Position));
-                if (ActiveSquad.CurrentWingmanA != null)
-                    ListMapMenuUnitPosition.Add(new Tuple<Unit, Vector3>(ActiveSquad.CurrentWingmanA, ActiveSquad.Position));
-                if (ActiveSquad.CurrentWingmanB != null)
-                    ListMapMenuUnitPosition.Add(new Tuple<Unit, Vector3>(ActiveSquad.CurrentWingmanB, ActiveSquad.Position));
+                for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; ++U)
+                {
+                    ListMapMenuUnitPosition.Add(new Tuple<Unit, Vector3>(ActiveSquad[U], ActiveSquad.Position));
+                }
             }
             MapUnitListCurrentPageMax = (int)Math.Ceiling(ListMapMenuUnitPosition.Count / (double)UnitListMaxPerPage);
             MapUnitListCurrentPage = 1;

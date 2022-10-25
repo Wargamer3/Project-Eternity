@@ -54,86 +54,32 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         protected int ActiveUnitIndex;
+        protected List<int> ListPilotIndex;
+        protected List<int> ListCursorIndex;
 
         protected int PilotIndex
         {
             get
             {
-                switch (ActiveUnitIndex)
-                {
-                    case 0:
-                        return PilotIndexLeader;
-
-                    case 1:
-                        return PilotIndexWingmanA;
-
-                    case 2:
-                        return PilotIndexWingmanB;
-                }
-                return 0;
+                return ListPilotIndex[ActiveUnitIndex];
             }
             set
             {
-                switch (ActiveUnitIndex)
-                {
-                    case 0:
-                        PilotIndexLeader = value;
-                        break;
-
-                    case 1:
-                        PilotIndexWingmanA = value;
-                        break;
-
-                    case 2:
-                        PilotIndexWingmanB = value;
-                        break;
-                }
+                ListPilotIndex[ActiveUnitIndex] = value;
             }
         }
-
-        protected int PilotIndexLeader;
-        protected int PilotIndexWingmanA;
-        protected int PilotIndexWingmanB;
 
         protected int CursorIndex
         {
             get
             {
-                switch (ActiveUnitIndex)
-                {
-                    case 0:
-                        return CursorIndexLeader;
-
-                    case 1:
-                        return CursorIndexWingmanA;
-
-                    case 2:
-                        return CursorIndexWingmanB;
-                }
-                return 0;
+                return ListCursorIndex[ActiveUnitIndex];
             }
             set
             {
-                switch (ActiveUnitIndex)
-                {
-                    case 0:
-                        CursorIndexLeader = value;
-                        break;
-
-                    case 1:
-                        CursorIndexWingmanA = value;
-                        break;
-
-                    case 2:
-                        CursorIndexWingmanB = value;
-                        break;
-                }
+                ListCursorIndex[ActiveUnitIndex] = value;
             }
         }
-
-        protected int CursorIndexLeader;
-        protected int CursorIndexWingmanA;
-        protected int CursorIndexWingmanB;
 
         #endregion
 
@@ -172,19 +118,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActiveUnitIndex = 0;
 
-            PilotIndex = 0;
-            PilotIndexWingmanA = 0;
-            PilotIndexWingmanB = 0;
-
-            CursorIndex = 0;
-            CursorIndexWingmanA = 0;
-            CursorIndexWingmanB = 0;
+            ListPilotIndex = new List<int>();
+            ListCursorIndex = new List<int>();
 
             ListSelectedSpirit.Clear();
             PilotSpiritActivation = new List<ManualSkill>[ActiveSquad.UnitsAliveInSquad][];
             for (int U = 0; U < ActiveSquad.UnitsAliveInSquad; U++)
             {
                 PilotSpiritActivation[U] = new List<ManualSkill>[ActiveSquad[U].ArrayCharacterActive.Length];
+                ListPilotIndex.Add(0);
+                ListCursorIndex.Add(0);
 
                 for (int C = 0; C < ActiveSquad[U].ArrayCharacterActive.Length; C++)
                 {
@@ -391,11 +334,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //In spirit stats page.
             DrawBox(g, new Vector2(25, 0), 578, 25, Color.White);
 
-            DrawSpiritMenu(g, 0, 25, PilotIndexLeader, CursorIndexLeader, ActiveUnitIndex == 0);
-            if (ActiveSquad.CurrentWingmanA != null)
-                DrawSpiritMenu(g, 1, 225, PilotIndexWingmanA, CursorIndexWingmanA, ActiveUnitIndex == 1);
-            if (ActiveSquad.CurrentWingmanB != null)
-                DrawSpiritMenu(g, 2, 425, PilotIndexWingmanB, CursorIndexWingmanB, ActiveUnitIndex == 2);
+            for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; U--)
+            {
+                DrawSpiritMenu(g, U, 25 + 200 * U, ListPilotIndex[U], ListCursorIndex[U], ActiveUnitIndex == U);
+            }
         }
 
         public void DrawSpiritMenu(CustomSpriteBatch g, int DisplayedUnitIndex, int StartX, int PilotIndex, int CursorIndex, bool DrawCursor)

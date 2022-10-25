@@ -284,8 +284,7 @@ namespace ProjectEternity.Core.Units
         public Attack CurrentAttack { get { return _UnitStat.CurrentAttack; } set { _UnitStat.CurrentAttack = value; } }
 
         public string AttackAccuracy;
-        public string MAPAttackAccuracyA;
-        public string MAPAttackAccuracyB;
+        public List<string> ListMAPAttackAccuracy;
 
         public StatsBoosts Boosts { get { return _UnitStat.Boosts; } }
 
@@ -303,6 +302,7 @@ namespace ProjectEternity.Core.Units
             ListAttackTemporary = new List<TemporaryAttackPickup>();
             ListIgnoreSkill = new List<string>();
             AttackAccuracy = "";
+            ListMAPAttackAccuracy = new List<string>();
             _UnitStat = new UnitStats(new bool[1, 1] { { true } });
             ArrayCharacterActive = new Character[0];
             ArrayParts = new UnitPart[0];

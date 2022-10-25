@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Core.Units.Transforming
 {
@@ -16,6 +18,7 @@ namespace ProjectEternity.Core.Units.Transforming
         private Squad ActiveSquad;
         private bool ShowSquadMembers;
         private UnitTransforming TransformingUnit;
+        private List<Unit> ListWingman;
 
         public ActionPanelTransform2Wingman(DeathmatchMap Map)
             : base(PanelName, Map)
@@ -30,6 +33,11 @@ namespace ProjectEternity.Core.Units.Transforming
             this.ActiveSquad = ActiveSquad;
             this.ShowSquadMembers = ShowSquadMembers;
             TransformingUnit = (UnitTransforming)ActiveSquad[TransformingUnitIndex];
+            ListWingman = new List<Unit>();
+            for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 1; --U)
+            {
+                ListWingman.Add(ActiveSquad[U]);
+            }
         }
 
         public override void OnSelect()
@@ -37,7 +45,7 @@ namespace ProjectEternity.Core.Units.Transforming
             for (int i = 0; i < TransformingUnit.ArrayTransformingUnit.Length; ++i)
             {
                 AddChoiceToCurrentPanel(new ActionPanelConfirmTransform(TransformingUnit, i, ActiveSquad, Map,
-                    TransformingUnit.CanTransform(i, Map.ActiveSquad.CurrentWingmanA, Map.ActiveSquad.CurrentWingmanB)));
+                    TransformingUnit.CanTransform(i, ListWingman)));
             }
         }
 

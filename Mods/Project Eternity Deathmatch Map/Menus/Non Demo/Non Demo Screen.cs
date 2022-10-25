@@ -68,12 +68,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         #endregion
 
-        [Flags]
-        public enum NonDemoUnitStancePositions : byte
-        {
-            Leader = 0x1, WingmanA = 0x2, WingmanB = 0x4, Support = 0x8
-        };
-
         public NonDemoScreen(DeathmatchMap Map)
         {
             RequireFocus = true;
@@ -116,15 +110,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             NonDemoAnimationTimer = 50;
 
             int[] ArrayAttackerHP = new int[AttackingSquad.UnitsAliveInSquad];
-            for (int i = 0; i < AttackingSquad.UnitsAliveInSquad; i++)
+            for (int U = AttackingSquad.UnitsAliveInSquad - 1; U >= 0; U--)
             {
-                ArrayAttackerHP[i] = AttackingSquad[i].HP;
+                ArrayAttackerHP[U] = AttackingSquad[U].HP;
             }
 
             int[] ArrayDefenderHP = new int[DefendingSquad.UnitsAliveInSquad];
-            for (int i = 0; i < DefendingSquad.UnitsAliveInSquad; i++)
+            for (int U = DefendingSquad.UnitsAliveInSquad - 1; U >= 0; U--)
             {
-                ArrayDefenderHP[i] = DefendingSquad[i].HP;
+                ArrayDefenderHP[U] = DefendingSquad[U].HP;
             }
 
             NonDemoBattleFrame DefaultNonDemoBattleFrame = GetDefaultNonDemoBattleFrame(AttackerSquadResult, AttackingSquad, AttackingSupport.ActiveSquadSupport,
@@ -146,19 +140,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ListNonDemoBattleFrame.Add(GetSwitchWithLeaderFrame(DefaultNonDemoBattleFrame, IsRightAttacking));
                 NonDemoBattleFrame SupportNonDemoBattleFrame = GetSwitchWithLeaderHoldFrame(DefaultNonDemoBattleFrame, IsRightAttacking);
 
-                ListNonDemoBattleFrame.Add(GetStartFrame(SupportNonDemoBattleFrame, NonDemoUnitStancePositions.Support, IsRightAttacking));
+                ListNonDemoBattleFrame.Add(GetStartFrame(SupportNonDemoBattleFrame, new List<int>() { -1 }, IsRightAttacking));
 
-                NonDemoBattleFrame AttackNonDemoBattleFrame = GetAttackFrame(SupportNonDemoBattleFrame, NonDemoUnitStancePositions.Support, IsRightAttacking);
+                NonDemoBattleFrame AttackNonDemoBattleFrame = GetAttackFrame(SupportNonDemoBattleFrame, new List<int>() { -1 }, IsRightAttacking);
 
                 if (AttackerSquadResult.ResultSupportAttack.AttackMissed)
                 {
-                    ListNonDemoBattleFrame.Add(GetMissedFrame(AttackNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+                    ListNonDemoBattleFrame.Add(GetMissedFrame(AttackNonDemoBattleFrame, new List<int>() { 0 }, IsRightAttacking));
                 }
                 else
                 {
                     if (AttackerSquadResult.ResultSupportAttack.AttackWasCritical)
                     {
-                        ListNonDemoBattleFrame.Add(GetCriticalFrame(AttackNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+                        ListNonDemoBattleFrame.Add(GetCriticalFrame(AttackNonDemoBattleFrame, new List<int>() { 0 }, IsRightAttacking));
                     }
 
                     NonDemoBattleFrame GetHitNonDemoBattleFrame = GetGetHitAttackSupportFrame(AttackNonDemoBattleFrame, AttackerSquadResult.ResultSupportAttack, IsRightAttacking);
@@ -166,7 +160,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ListNonDemoBattleFrame.Add(GetHitNonDemoBattleFrame);
                 }
 
-                ListNonDemoBattleFrame.Add(GetEndFrame(SupportNonDemoBattleFrame, NonDemoUnitStancePositions.Support, IsRightAttacking));
+                ListNonDemoBattleFrame.Add(GetEndFrame(SupportNonDemoBattleFrame, new List<int>() { -1 }, IsRightAttacking));
             }
         }
 
@@ -193,8 +187,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             float AttackerPositionY = NonDemoRightUnitPosition.Y;
 
             NonDemoBattleFrameSquad AttackingSquadFrame = new NonDemoBattleFrameSquad();
+            AttackingSquadFrame.ArrayStance = new NonDemoBattleUnitFrame[1];
 
-            AttackingSquadFrame.LeaderStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentLeader, AttackerSquadResultSingle),
+            AttackingSquadFrame.ArrayStance[0] = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentLeader, AttackerSquadResultSingle),
                 AttackerPositionX, AttackerPositionY, false);
 
             NonDemoBattleFrame DefaultNonDemoBattleFrame = new NonDemoBattleFrame(NonDemoIdleFrame.FrameLength, new NonDemoBattleFrameSquad(), AttackingSquadFrame);
@@ -202,16 +197,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListNonDemoBattleFrame.Add(DefaultNonDemoBattleFrame);
 
             AttackingSquadFrame = new NonDemoBattleFrameSquad();
-            AttackingSquadFrame.LeaderStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentLeader, AttackerSquadResultSingle),
+            AttackingSquadFrame.ArrayStance[0] = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentLeader, AttackerSquadResultSingle),
                 AttackerPositionX, AttackerPositionY, false);
 
-            AttackingSquadFrame.LeaderStance = new NonDemoGetHitFrame(AttackingSquadFrame.LeaderStance, false, Map.fntNonDemoDamage,
+            AttackingSquadFrame.ArrayStance[0] = new NonDemoGetHitFrame(AttackingSquadFrame.ArrayStance[0], false, Map.fntNonDemoDamage,
                 Damage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
 
             DefaultNonDemoBattleFrame = new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, new NonDemoBattleFrameSquad(), AttackingSquadFrame);
 
             ListNonDemoBattleFrame.Add(DefaultNonDemoBattleFrame);
-
         }
 
         private void FillCombatAnimations(NonDemoBattleFrame DefaultNonDemoBattleFrame, Squad Attacker, Squad AttackerSupport, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
@@ -240,27 +234,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void FillCombatAnimationsWingmansSpread(NonDemoBattleFrame DefaultNonDemoBattleFrame, Squad Attacker, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
             Squad Defender, Squad DefenderSupport, bool IsRightAttacking, ref int[] ArrayDefenderHP, int[] ArrayAttackerHP)
         {
-            bool UseWingmans = false;
+            List<int> ListAttackersIndex = new List<int>();
 
-            if (ArrayAttackerHP[1] > 0 && ArrayDefenderHP[1] > 0 &&
-                Attacker.CurrentWingmanA.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
+            for (int U = Attacker.UnitsAliveInSquad - 1; U >= 1; --U)
             {
-                UseWingmans = true;
+                if (ArrayAttackerHP[U] > 0 && ArrayDefenderHP[U] > 0 &&
+                    Attacker[U].BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
+                {
+                    ListAttackersIndex.Add(U);
+                }
             }
 
-            NonDemoUnitStancePositions Targets = NonDemoUnitStancePositions.WingmanA;
-
-            if (ArrayAttackerHP[2] > 0 && ArrayDefenderHP[2] > 0 &&
-                Attacker.CurrentWingmanB.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
+            if (ListAttackersIndex.Count > 0)
             {
-                Targets = NonDemoUnitStancePositions.WingmanA | NonDemoUnitStancePositions.WingmanB;
-            }
+                ListNonDemoBattleFrame.Add(GetStartFrame(DefaultNonDemoBattleFrame, ListAttackersIndex, IsRightAttacking));
 
-            if (UseWingmans)
-            {
-                ListNonDemoBattleFrame.Add(GetStartFrame(DefaultNonDemoBattleFrame, Targets, IsRightAttacking));
-
-                NonDemoBattleFrame MissedFrame = GetMissedFrame(DefaultNonDemoBattleFrame, AttackerResult, 1, -1, Targets, IsRightAttacking);
+                NonDemoBattleFrame MissedFrame = GetMissedFrame(DefaultNonDemoBattleFrame, AttackerResult, 1, -1, ListAttackersIndex, IsRightAttacking);
 
                 //Both Missed.
                 if (MissedFrame != null)
@@ -269,7 +258,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 else
                 {//Both Critical.
-                    NonDemoBattleFrame CriticalFrame = GetCriticalFrame(DefaultNonDemoBattleFrame, AttackerResult, 1, -1, Targets, IsRightAttacking);
+                    NonDemoBattleFrame CriticalFrame = GetCriticalFrame(DefaultNonDemoBattleFrame, AttackerResult, 1, -1, ListAttackersIndex, IsRightAttacking);
                     if (CriticalFrame != null)
                     {
                         ListNonDemoBattleFrame.Add(CriticalFrame);
@@ -278,14 +267,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int i = 1; i < AttackerResult.ArrayResult.Length; i++)
                         {
-                            MissedFrame = GetMissedFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                            MissedFrame = GetMissedFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                             if (MissedFrame != null)
                             {
                                 ListNonDemoBattleFrame.Add(MissedFrame);
                             }
                             else
                             {
-                                CriticalFrame = GetCriticalFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                                CriticalFrame = GetCriticalFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                                 if (CriticalFrame != null)
                                 {
                                     ListNonDemoBattleFrame.Add(CriticalFrame);
@@ -293,8 +282,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
                         }
                     }
-                    NonDemoBattleFrame ShieldFrame = GetShieldFrame(DefaultNonDemoBattleFrame, AttackerResult, 1, -1, Targets, IsRightAttacking);
-                    NonDemoBattleFrame BarrierFrame = GetBarrierFrame(DefaultNonDemoBattleFrame, AttackerResult, 1, -1, Targets, IsRightAttacking);
+                    NonDemoBattleFrame ShieldFrame = GetShieldFrame(DefaultNonDemoBattleFrame, AttackerResult, 1, -1, ListAttackersIndex, IsRightAttacking);
+                    NonDemoBattleFrame BarrierFrame = GetBarrierFrame(DefaultNonDemoBattleFrame, AttackerResult, 1, -1, ListAttackersIndex, IsRightAttacking);
 
                     if (ShieldFrame != null)
                     {
@@ -304,7 +293,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int i = 1; i < AttackerResult.ArrayResult.Length; i++)
                         {
-                            ShieldFrame = GetShieldFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                            ShieldFrame = GetShieldFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                             if (ShieldFrame != null)
                             {
                                 ListNonDemoBattleFrame.Add(ShieldFrame);
@@ -319,7 +308,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int i = 1; i < AttackerResult.ArrayResult.Length; i++)
                         {
-                            BarrierFrame = GetBarrierFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                            BarrierFrame = GetBarrierFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                             if (BarrierFrame != null)
                             {
                                 ListNonDemoBattleFrame.Add(BarrierFrame);
@@ -327,31 +316,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
 
-                    ListNonDemoBattleFrame.Add(GetGetHitFrame(DefaultNonDemoBattleFrame, AttackerResult, Targets, IsRightAttacking));
+                    ListNonDemoBattleFrame.Add(GetGetHitFrame(DefaultNonDemoBattleFrame, AttackerResult, ListAttackersIndex, IsRightAttacking));
 
                     for (int i = 1; i < AttackerResult.ArrayResult.Length; i++)
                         ArrayDefenderHP[i] = Math.Max(Defender[i].Boosts.HPMinModifier, Defender[i].HP - AttackerResult.ArrayResult[i].AttackDamage);
                 }
 
-                ListNonDemoBattleFrame.Add(GetEndFrame(DefaultNonDemoBattleFrame, Targets, IsRightAttacking));
+                ListNonDemoBattleFrame.Add(GetEndFrame(DefaultNonDemoBattleFrame, ListAttackersIndex, IsRightAttacking));
             }
         }
 
         private void FillCombatAnimationsWingmansFocused(NonDemoBattleFrame DefaultNonDemoBattleFrame, ref bool LeaderHit, Squad Attacker, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
             Squad Defender, Squad DefenderSupport, bool IsRightAttacking, ref int[] ArrayDefenderHP, int[] ArrayAttackerHP)
         {
-            NonDemoUnitStancePositions Targets = NonDemoUnitStancePositions.Leader;
-            NonDemoUnitStancePositions[] ArrayAttackerStance = { NonDemoUnitStancePositions.WingmanA, NonDemoUnitStancePositions.WingmanB };
+            List<int> ListAttackersIndex = new List<int>() { 0 };
 
             for (int i = 1; i < AttackerResult.ArrayResult.Length && i < Attacker.UnitsAliveInSquad && i < Defender.UnitsAliveInSquad; i++)
             {
                 if (ArrayAttackerHP[i] > 0 && Attacker[i].BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
                 {
-                    ListNonDemoBattleFrame.Add(GetStartFrame(DefaultNonDemoBattleFrame, ArrayAttackerStance[i], IsRightAttacking));
+                    ListNonDemoBattleFrame.Add(GetStartFrame(DefaultNonDemoBattleFrame, new List<int>() { i }, IsRightAttacking));
 
-                    NonDemoBattleFrame AttackNonDemoBattleFrame = GetAttackFrame(DefaultNonDemoBattleFrame, ArrayAttackerStance[i], IsRightAttacking);
+                    NonDemoBattleFrame AttackNonDemoBattleFrame = GetAttackFrame(DefaultNonDemoBattleFrame, new List<int>() { i }, IsRightAttacking);
 
-                    NonDemoBattleFrame MissedFrame = GetMissedFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                    NonDemoBattleFrame MissedFrame = GetMissedFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                     if (MissedFrame != null)
                     {
                         ListNonDemoBattleFrame.Add(MissedFrame);
@@ -364,19 +352,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             {
                                 NonDemoBattleFrame SupportNonDemoBattleFrame = GetSwitchWithLeaderFrame(AttackNonDemoBattleFrame, IsRightAttacking);
                                 ListNonDemoBattleFrame.Add(SupportNonDemoBattleFrame);
-                                Targets = NonDemoUnitStancePositions.Support;
+                                ListAttackersIndex = new List<int>() { -1 };
                                 AttackNonDemoBattleFrame = SupportNonDemoBattleFrame;
                             }
                         }
 
                         LeaderHit = true;
-                        NonDemoBattleFrame CriticalFrame = GetCriticalFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                        NonDemoBattleFrame CriticalFrame = GetCriticalFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                         if (CriticalFrame != null)
                         {
                             ListNonDemoBattleFrame.Add(CriticalFrame);
                         }
-                        NonDemoBattleFrame ShieldFrame = GetShieldFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
-                        NonDemoBattleFrame BarrierFrame = GetBarrierFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                        NonDemoBattleFrame ShieldFrame = GetShieldFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
+                        NonDemoBattleFrame BarrierFrame = GetBarrierFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
 
                         if (ShieldFrame != null)
                         {
@@ -387,11 +375,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ListNonDemoBattleFrame.Add(BarrierFrame);
                         }
 
-                        ListNonDemoBattleFrame.Add(GetGetHitFrame(AttackNonDemoBattleFrame, AttackerResult, Targets, IsRightAttacking));
+                        ListNonDemoBattleFrame.Add(GetGetHitFrame(AttackNonDemoBattleFrame, AttackerResult, ListAttackersIndex, IsRightAttacking));
                         ArrayDefenderHP[0] = Math.Max(Defender.CurrentLeader.Boosts.HPMinModifier, ArrayDefenderHP[0] - AttackerResult.ArrayResult[i].AttackDamage);
                     }
 
-                    ListNonDemoBattleFrame.Add(GetEndFrame(AttackNonDemoBattleFrame, ArrayAttackerStance[i], IsRightAttacking));
+                    ListNonDemoBattleFrame.Add(GetEndFrame(AttackNonDemoBattleFrame, new List<int>() { i }, IsRightAttacking));
 
                     if (ArrayDefenderHP[0] <= 0)
                     {
@@ -404,19 +392,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void FillCombatAnimationsAll(NonDemoBattleFrame DefaultNonDemoBattleFrame, Squad Attacker, Squad AttackerSupport, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
             Squad Defender, Squad DefenderSupport, bool IsRightAttacking, ref int[] ArrayDefenderHP, int[] ArrayAttackerHP)
         {
-            ListNonDemoBattleFrame.Add(GetStartFrame(DefaultNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+            List<int> ListAttackersIndex = new List<int>() { 0 };
 
-            NonDemoUnitStancePositions Targets = NonDemoUnitStancePositions.Leader;
-            if (ArrayDefenderHP.Length > 2 && ArrayDefenderHP[2] > 0)
+            ListNonDemoBattleFrame.Add(GetStartFrame(DefaultNonDemoBattleFrame, ListAttackersIndex, IsRightAttacking));
+
+            for (int U = ArrayDefenderHP.Length - 1; U >= 1; --U)
             {
-                Targets = NonDemoUnitStancePositions.Leader | NonDemoUnitStancePositions.WingmanA | NonDemoUnitStancePositions.WingmanB;
-            }
-            else if (ArrayDefenderHP.Length > 1 && ArrayDefenderHP[1] > 0)
-            {
-                Targets = NonDemoUnitStancePositions.Leader | NonDemoUnitStancePositions.WingmanA;
+                if (ArrayDefenderHP.Length >= U && ArrayDefenderHP[U] > 0)
+                {
+                    ListAttackersIndex.Add(U);
+                }
             }
 
-            NonDemoBattleFrame MissedFrame = GetMissedFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, -1, Targets, IsRightAttacking);
+            NonDemoBattleFrame MissedFrame = GetMissedFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, -1, ListAttackersIndex, IsRightAttacking);
 
             //Both Missed.
             if (MissedFrame != null)
@@ -425,7 +413,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                MissedFrame = GetSwordCutOrShootDownFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, 0, Targets, IsRightAttacking);
+                MissedFrame = GetSwordCutOrShootDownFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, 0, ListAttackersIndex, IsRightAttacking);
                 //If leader use Sword Cut or shoot down, stop everything
                 if (MissedFrame != null)
                 {
@@ -434,7 +422,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 else
                 {
                     //Both Critical.
-                    NonDemoBattleFrame CriticalFrame = GetCriticalFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, -1, Targets, IsRightAttacking);
+                    NonDemoBattleFrame CriticalFrame = GetCriticalFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, -1, ListAttackersIndex, IsRightAttacking);
                     if (CriticalFrame != null)
                     {
                         ListNonDemoBattleFrame.Add(CriticalFrame);
@@ -443,14 +431,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int i = 0; i < AttackerResult.ArrayResult.Length; i++)
                         {
-                            MissedFrame = GetMissedFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                            MissedFrame = GetMissedFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                             if (MissedFrame != null)
                             {
                                 ListNonDemoBattleFrame.Add(MissedFrame);
                             }
                             else
                             {
-                                CriticalFrame = GetCriticalFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                                CriticalFrame = GetCriticalFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                                 if (CriticalFrame != null)
                                 {
                                     ListNonDemoBattleFrame.Add(CriticalFrame);
@@ -458,8 +446,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
                         }
                     }
-                    NonDemoBattleFrame ShieldFrame = GetShieldFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, -1, Targets, IsRightAttacking);
-                    NonDemoBattleFrame BarrierFrame = GetBarrierFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, -1, Targets, IsRightAttacking);
+                    NonDemoBattleFrame ShieldFrame = GetShieldFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, -1, ListAttackersIndex, IsRightAttacking);
+                    NonDemoBattleFrame BarrierFrame = GetBarrierFrame(DefaultNonDemoBattleFrame, AttackerResult, 0, -1, ListAttackersIndex, IsRightAttacking);
 
                     if (ShieldFrame != null)
                     {
@@ -469,7 +457,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int i = 0; i < AttackerResult.ArrayResult.Length; i++)
                         {
-                            ShieldFrame = GetShieldFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                            ShieldFrame = GetShieldFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                             if (ShieldFrame != null)
                             {
                                 ListNonDemoBattleFrame.Add(ShieldFrame);
@@ -484,7 +472,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int i = 0; i < AttackerResult.ArrayResult.Length; i++)
                         {
-                            BarrierFrame = GetBarrierFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                            BarrierFrame = GetBarrierFrame(DefaultNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                             if (BarrierFrame != null)
                             {
                                 ListNonDemoBattleFrame.Add(BarrierFrame);
@@ -492,14 +480,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                     }
 
-                    ListNonDemoBattleFrame.Add(GetGetHitFrame(DefaultNonDemoBattleFrame, AttackerResult, Targets, IsRightAttacking));
+                    ListNonDemoBattleFrame.Add(GetGetHitFrame(DefaultNonDemoBattleFrame, AttackerResult, ListAttackersIndex, IsRightAttacking));
 
                     for (int i = 0; i < AttackerResult.ArrayResult.Length; i++)
                         ArrayDefenderHP[i] = Math.Max(Defender[i].Boosts.HPMinModifier, Defender[i].HP - AttackerResult.ArrayResult[i].AttackDamage);
                 }
             }
 
-            ListNonDemoBattleFrame.Add(GetEndFrame(DefaultNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+            ListNonDemoBattleFrame.Add(GetEndFrame(DefaultNonDemoBattleFrame, new List<int>() { 0 }, IsRightAttacking));
         }
 
         private void FillCombatAnimationsLeader(NonDemoBattleFrame DefaultNonDemoBattleFrame, bool EnemyLeaderAlreadyAttacked, Squad Attacker, Squad AttackerSupport, SquadBattleResult AttackerResult, FormationChoices AttackerFormation,
@@ -507,14 +495,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (ArrayDefenderHP[0] > 0 && Attacker.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
             {
-                ListNonDemoBattleFrame.Add(GetStartFrame(DefaultNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+                List<int> ListAttackersIndex = new List<int>() { 0 };
 
-                NonDemoBattleFrame AttackNonDemoBattleFrame = GetAttackFrame(DefaultNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking);
+                ListNonDemoBattleFrame.Add(GetStartFrame(DefaultNonDemoBattleFrame, ListAttackersIndex, IsRightAttacking));
 
-                NonDemoUnitStancePositions Targets = NonDemoUnitStancePositions.Leader;
+                NonDemoBattleFrame AttackNonDemoBattleFrame = GetAttackFrame(DefaultNonDemoBattleFrame, ListAttackersIndex, IsRightAttacking);
+
                 int i = 0;
 
-                NonDemoBattleFrame MissedFrame = GetMissedFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                NonDemoBattleFrame MissedFrame = GetMissedFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                 if (MissedFrame != null)
                 {
                     ListNonDemoBattleFrame.Add(MissedFrame);
@@ -524,18 +513,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (!EnemyLeaderAlreadyAttacked && DefenderSupport != null)
                     {
                         ListNonDemoBattleFrame.Add(GetSwitchSupportDefenceWithLeaderFrame(AttackNonDemoBattleFrame, IsRightAttacking));
-                        Targets = NonDemoUnitStancePositions.Support;
+                        ListAttackersIndex = new List<int>() { -1 };
                         AttackNonDemoBattleFrame = GetSwitchSupportDefenceWithLeaderHoldFrame(AttackNonDemoBattleFrame, IsRightAttacking);
                     }
 
                     EnemyLeaderAlreadyAttacked = true;
-                    NonDemoBattleFrame CriticalFrame = GetCriticalFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                    NonDemoBattleFrame CriticalFrame = GetCriticalFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
                     if (CriticalFrame != null)
                     {
                         ListNonDemoBattleFrame.Add(CriticalFrame);
                     }
-                    NonDemoBattleFrame ShieldFrame = GetShieldFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
-                    NonDemoBattleFrame BarrierFrame = GetBarrierFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, Targets, IsRightAttacking);
+                    NonDemoBattleFrame ShieldFrame = GetShieldFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
+                    NonDemoBattleFrame BarrierFrame = GetBarrierFrame(AttackNonDemoBattleFrame, AttackerResult, i, i, ListAttackersIndex, IsRightAttacking);
 
                     if (ShieldFrame != null)
                     {
@@ -546,7 +535,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ListNonDemoBattleFrame.Add(BarrierFrame);
                     }
 
-                    ListNonDemoBattleFrame.Add(GetGetHitFrame(AttackNonDemoBattleFrame, AttackerResult, Targets, IsRightAttacking));
+                    ListNonDemoBattleFrame.Add(GetGetHitFrame(AttackNonDemoBattleFrame, AttackerResult, ListAttackersIndex, IsRightAttacking));
                     ArrayDefenderHP[i] = Math.Max(Defender.CurrentLeader.Boosts.HPMinModifier, ArrayDefenderHP[i] - AttackerResult.ArrayResult[i].AttackDamage);
                 }
 
@@ -557,7 +546,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     AttackNonDemoBattleFrame = DefaultNonDemoBattleFrame;
                 }
 
-                ListNonDemoBattleFrame.Add(GetEndFrame(AttackNonDemoBattleFrame, NonDemoUnitStancePositions.Leader, IsRightAttacking));
+                ListNonDemoBattleFrame.Add(GetEndFrame(AttackNonDemoBattleFrame, new List<int>() { 0 }, IsRightAttacking));
 
                 if (ArrayDefenderHP[i] <= 0)
                 {
@@ -574,23 +563,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             float AttackerPositionX = NonDemoRightUnitPosition.X;
             float AttackerPositionY = NonDemoRightUnitPosition.Y;
 
-            float AttackerWingmanAPositionX = (int)NonDemoRightUnitPosition.X + 5;
-            float AttackerWingmanAPositionY = (int)NonDemoRightUnitPosition.Y + 50;
-
-            float AttackerWingmanBPositionX = (int)NonDemoRightUnitPosition.X + 5;
-            float AttackerWingmanBPositionY = (int)NonDemoRightUnitPosition.Y + 100;
-
             float AttackerSupportPositionX = (int)NonDemoRightUnitPosition.X + 120;
             float AttackerSupportPositionY = (int)NonDemoRightUnitPosition.Y;
 
             float DefenderPositionX = NonDemoLeftUnitPosition.X;
             float DefenderPositionY = NonDemoLeftUnitPosition.Y;
-
-            float DefenderWingmanAPositionX = (int)NonDemoLeftUnitPosition.X + 5;
-            float DefenderWingmanAPositionY = (int)NonDemoLeftUnitPosition.Y + 50;
-
-            float DefenderWingmanBPositionX = (int)NonDemoLeftUnitPosition.X + 5;
-            float DefenderWingmanBPositionY = (int)NonDemoLeftUnitPosition.Y + 100;
 
             float DefenderSupportPositionX = (int)NonDemoRightUnitPosition.X - 120;
             float DefenderSupportPositionY = (int)NonDemoRightUnitPosition.Y;
@@ -600,83 +577,29 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AttackerPositionX = NonDemoLeftUnitPosition.X;
                 AttackerPositionY = NonDemoLeftUnitPosition.Y;
 
-                AttackerWingmanAPositionX = (int)NonDemoLeftUnitPosition.X + 5;
-                AttackerWingmanAPositionY = (int)NonDemoLeftUnitPosition.Y + 50;
-
-                AttackerWingmanBPositionX = (int)NonDemoLeftUnitPosition.X + 5;
-                AttackerWingmanBPositionY = (int)NonDemoLeftUnitPosition.Y + 100;
-
                 AttackerSupportPositionX = (int)NonDemoLeftUnitPosition.X - 120;
                 AttackerSupportPositionY = (int)NonDemoLeftUnitPosition.Y;
 
                 DefenderPositionX = NonDemoRightUnitPosition.X;
                 DefenderPositionY = NonDemoRightUnitPosition.Y;
 
-                DefenderWingmanAPositionX = (int)NonDemoRightUnitPosition.X + 5;
-                DefenderWingmanAPositionY = (int)NonDemoRightUnitPosition.Y + 50;
-
-                DefenderWingmanBPositionX = (int)NonDemoRightUnitPosition.X + 5;
-                DefenderWingmanBPositionY = (int)NonDemoRightUnitPosition.Y + 100;
-
                 DefenderSupportPositionX = (int)NonDemoRightUnitPosition.X + 120;
                 DefenderSupportPositionY = (int)NonDemoRightUnitPosition.Y;
             }
 
-            AttackingSquadFrame.LeaderStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(AttackingSquad.CurrentLeader, AttackerSquadResult.ArrayResult[0]),
-                AttackerPositionX, AttackerPositionY, IsAttackerOnRight);
+            AttackingSquadFrame.ArrayStance = new NonDemoBattleUnitFrame[AttackingSquad.UnitsAliveInSquad];
+            DefendingSquadFrame.ArrayStance = new NonDemoBattleUnitFrame[DefendingSquad.UnitsAliveInSquad];
 
-            DefendingSquadFrame.LeaderStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentLeader, DefenderSquadResult.ArrayResult[0]),
-                DefenderPositionX, DefenderPositionY, IsAttackerOnRight);
-
-            #region Wingmans
-
-            if (AttackingSquad.CurrentWingmanB != null)
+            for (int U = AttackingSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                AttackingSquadFrame.WingmanAStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(AttackingSquad.CurrentWingmanA, AttackerSquadResult.ArrayResult[1]),
-                    AttackerWingmanAPositionX, AttackerWingmanAPositionY, IsAttackerOnRight);
-
-                AttackingSquadFrame.WingmanBStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(AttackingSquad.CurrentWingmanB, AttackerSquadResult.ArrayResult[2]),
-                    AttackerWingmanBPositionX, AttackerWingmanBPositionY, IsAttackerOnRight);
+                AttackingSquadFrame.ArrayStance[U] = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(AttackingSquad[U], AttackerSquadResult.ArrayResult[U]),
+                    AttackerPositionX + U > 0 ? 5 : 0, AttackerPositionY + U * 50, IsAttackerOnRight);
             }
-            else
+            for (int U = DefendingSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
-                AttackingSquadFrame.WingmanBStance = null;
-
-                if (AttackingSquad.CurrentWingmanA != null)
-                {
-                    AttackingSquadFrame.WingmanAStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentWingmanA, AttackerSquadResult.ArrayResult[1]),
-                        AttackerWingmanAPositionX, AttackerWingmanAPositionY, IsAttackerOnRight);
-                }
-                else
-                {
-                    AttackingSquadFrame.WingmanAStance = null;
-                }
+                DefendingSquadFrame.ArrayStance[U] = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad[U], DefenderSquadResult.ArrayResult[U]),
+                    DefenderPositionX + U > 0 ? 5 : 0, DefenderPositionY + U * 50, IsAttackerOnRight);
             }
-
-            if (DefendingSquad.CurrentWingmanB != null)
-            {
-                DefendingSquadFrame.WingmanAStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentWingmanA, DefenderSquadResult.ArrayResult[1]),
-                    DefenderWingmanAPositionX, DefenderWingmanAPositionY, IsAttackerOnRight);
-
-                DefendingSquadFrame.WingmanBStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentWingmanB, DefenderSquadResult.ArrayResult[2]),
-                    DefenderWingmanBPositionX, AttackerWingmanAPositionY, IsAttackerOnRight);
-            }
-            else
-            {
-                DefendingSquadFrame.WingmanBStance = null;
-
-                if (DefendingSquad.CurrentWingmanA != null)
-                {
-                    DefendingSquadFrame.WingmanAStance = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentWingmanA, DefenderSquadResult.ArrayResult[1]),
-                    DefenderWingmanBPositionX, DefenderWingmanBPositionY, IsAttackerOnRight);
-                }
-                else
-                {
-                    DefendingSquadFrame.WingmanAStance = null;
-                }
-            }
-
-            #endregion
 
             #region Support
 
@@ -709,7 +632,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private NonDemoBattleFrame GetStartFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Attackers, bool IsRightAttacking)
+        private NonDemoBattleFrame GetStartFrame(NonDemoBattleFrame PreviousBattleFrame, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
             NonDemoBattleFrameSquad DefendingFrame;
@@ -725,27 +648,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            if ((Attackers & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+            foreach (int UnitIndex in ListAttackersIndex)
             {
-                AttackingFrame.LeaderStance = new NonDemoStartFrame(AttackingFrame.LeaderStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-            {
-                AttackingFrame.WingmanAStance = new NonDemoStartFrame(AttackingFrame.WingmanAStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-            {
-                AttackingFrame.WingmanBStance = new NonDemoStartFrame(AttackingFrame.WingmanBStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-            {
-                AttackingFrame.SupportStance = new NonDemoStartSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                if (UnitIndex >= 0)
+                {
+                    AttackingFrame.ArrayStance[UnitIndex] = new NonDemoStartFrame(AttackingFrame.ArrayStance[UnitIndex], IsRightAttacking);
+                }
+                else
+                {
+                    AttackingFrame.SupportStance = new NonDemoStartSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                }
             }
 
             return new NonDemoBattleFrame(NonDemoStartFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
-        private NonDemoBattleFrame GetAttackFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Attackers, bool IsRightAttacking)
+        private NonDemoBattleFrame GetAttackFrame(NonDemoBattleFrame PreviousBattleFrame, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
 
@@ -758,21 +676,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
             }
 
-            if ((Attackers & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+            foreach (int UnitIndex in ListAttackersIndex)
             {
-                AttackingFrame.LeaderStance = new NonDemoAttackFrame(AttackingFrame.LeaderStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-            {
-                AttackingFrame.WingmanAStance = new NonDemoAttackFrame(AttackingFrame.WingmanAStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-            {
-                AttackingFrame.WingmanBStance = new NonDemoAttackFrame(AttackingFrame.WingmanBStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-            {
-                AttackingFrame.SupportStance = new NonDemoAttackSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                if (UnitIndex >= 0)
+                {
+                    AttackingFrame.ArrayStance[UnitIndex] = new NonDemoAttackFrame(AttackingFrame.ArrayStance[UnitIndex], IsRightAttacking);
+                }
+                else
+                {
+                    AttackingFrame.SupportStance = new NonDemoAttackSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                }
             }
 
             if (IsRightAttacking)
@@ -785,7 +698,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private NonDemoBattleFrame GetEndFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Attackers, bool IsRightAttacking)
+        private NonDemoBattleFrame GetEndFrame(NonDemoBattleFrame PreviousBattleFrame, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
             NonDemoBattleFrameSquad DefendingFrame;
@@ -801,27 +714,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            if ((Attackers & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+            foreach (int UnitIndex in ListAttackersIndex)
             {
-                AttackingFrame.LeaderStance = new NonDemoEndFrame(AttackingFrame.LeaderStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-            {
-                AttackingFrame.WingmanAStance = new NonDemoEndFrame(AttackingFrame.WingmanAStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-            {
-                AttackingFrame.WingmanBStance = new NonDemoEndFrame(AttackingFrame.WingmanBStance, IsRightAttacking);
-            }
-            if ((Attackers & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-            {
-                AttackingFrame.SupportStance = new NonDemoEndSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                if (UnitIndex >= 0)
+                {
+                    AttackingFrame.ArrayStance[UnitIndex] = new NonDemoEndFrame(AttackingFrame.ArrayStance[UnitIndex], IsRightAttacking);
+                }
+                else
+                {
+                    AttackingFrame.SupportStance = new NonDemoEndSupportFrame(AttackingFrame.SupportStance, IsRightAttacking);
+                }
             }
 
             return new NonDemoBattleFrame(NonDemoEndFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
-        private NonDemoBattleFrame GetGetHitFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        private NonDemoBattleFrame GetGetHitFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
             NonDemoBattleFrameSquad DefendingFrame;
@@ -837,25 +745,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+            foreach (int UnitIndex in ListAttackersIndex)
             {
-                DefendingFrame.LeaderStance = new NonDemoGetHitFrame(DefendingFrame.LeaderStance, !IsRightAttacking, Map.fntNonDemoDamage,
-                    Result.ArrayResult[0].AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
-            }
-            if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-            {
-                DefendingFrame.WingmanAStance = new NonDemoGetHitFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, Map.fntNonDemoDamage,
-                    Result.ArrayResult[1].AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
-            }
-            if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-            {
-                DefendingFrame.WingmanBStance = new NonDemoGetHitFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, Map.fntNonDemoDamage,
-                    Result.ArrayResult[2].AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
-            }
-            if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-            {
-                DefendingFrame.SupportStance = new NonDemoGetHitSupportDefenceFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntNonDemoDamage,
-                    Result.ArrayResult[0].AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
+                if (UnitIndex >= 0)
+                {
+                    DefendingFrame.ArrayStance[UnitIndex] = new NonDemoGetHitFrame(DefendingFrame.ArrayStance[UnitIndex], !IsRightAttacking, Map.fntNonDemoDamage,
+                        Result.ArrayResult[UnitIndex].AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
+                }
+                else
+                {
+                    DefendingFrame.SupportStance = new NonDemoGetHitSupportDefenceFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntNonDemoDamage,
+                        Result.ArrayResult[0].AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
+                }
             }
 
             return new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, AttackingFrame, DefendingFrame);
@@ -877,13 +778,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            DefendingFrame.LeaderStance = new NonDemoGetHitFrame(DefendingFrame.LeaderStance, !IsRightAttacking, Map.fntNonDemoDamage,
+            DefendingFrame.ArrayStance[0] = new NonDemoGetHitFrame(DefendingFrame.ArrayStance[0], !IsRightAttacking, Map.fntNonDemoDamage,
                 Result.AttackDamage, sprNonDemoExplosion.Copy(), sndNonDemoAttack);
 
             return new NonDemoBattleFrame(NonDemoGetHitFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
-        private NonDemoBattleFrame GetMissedFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        private NonDemoBattleFrame GetMissedFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             if (End == -1)
                 End = Result.ArrayResult.Length - 1;
@@ -900,13 +801,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (AllMissed)
             {
-                return GetMissedFrame(PreviousBattleFrame, Targets, IsRightAttacking);
+                return GetMissedFrame(PreviousBattleFrame, ListAttackersIndex, IsRightAttacking);
             }
 
             return null;
         }
 
-        private NonDemoBattleFrame GetMissedFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        private NonDemoBattleFrame GetMissedFrame(NonDemoBattleFrame PreviousBattleFrame, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
             NonDemoBattleFrameSquad DefendingFrame;
@@ -922,27 +823,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+
+            foreach (int UnitIndex in ListAttackersIndex)
             {
-                DefendingFrame.LeaderStance = new NonDemoGetMissedFrame(DefendingFrame.LeaderStance, !IsRightAttacking, sprNonDemoMiss);
+                if (UnitIndex >= 0)
+                {
+                    DefendingFrame.ArrayStance[UnitIndex] = new NonDemoGetMissedFrame(DefendingFrame.ArrayStance[UnitIndex], !IsRightAttacking, sprNonDemoMiss);
+                }
+                else
+                {
+                    DefendingFrame.SupportStance = new NonDemoGetMissedFrame(DefendingFrame.SupportStance, !IsRightAttacking, sprNonDemoMiss);
+                }
             }
-            if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-            {
-                DefendingFrame.WingmanAStance = new NonDemoGetMissedFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, sprNonDemoMiss);
-            }
-            if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-            {
-                DefendingFrame.WingmanBStance = new NonDemoGetMissedFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, sprNonDemoMiss);
-            }
-            if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-            {
-                DefendingFrame.SupportStance = new NonDemoGetMissedFrame(DefendingFrame.SupportStance, !IsRightAttacking, sprNonDemoMiss);
-            }
+
 
             return new NonDemoBattleFrame(NonDemoGetMissedFrame.FrameLength, AttackingFrame, DefendingFrame);
         }
 
-        private NonDemoBattleFrame GetSwordCutOrShootDownFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        private NonDemoBattleFrame GetSwordCutOrShootDownFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             if (End == -1)
                 End = Result.ArrayResult.Length - 1;
@@ -985,40 +883,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (AllSwordCut)
                 {
-                    if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+                    foreach (int UnitIndex in ListAttackersIndex)
                     {
-                        DefendingFrame.LeaderStance = new NonDemoGetSwordCutFrame(DefendingFrame.LeaderStance, IsRightAttacking, Map.fntUnitAttack);
-                    }
-                    if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-                    {
-                        DefendingFrame.WingmanAStance = new NonDemoGetSwordCutFrame(DefendingFrame.WingmanAStance, IsRightAttacking, Map.fntUnitAttack);
-                    }
-                    if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-                    {
-                        DefendingFrame.WingmanBStance = new NonDemoGetSwordCutFrame(DefendingFrame.WingmanBStance, IsRightAttacking, Map.fntUnitAttack);
-                    }
-                    if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-                    {
-                        DefendingFrame.SupportStance = new NonDemoGetSwordCutFrame(DefendingFrame.SupportStance, IsRightAttacking, Map.fntUnitAttack);
+                        if (UnitIndex >= 0)
+                        {
+                            DefendingFrame.ArrayStance[UnitIndex] = new NonDemoGetSwordCutFrame(DefendingFrame.ArrayStance[UnitIndex], IsRightAttacking, Map.fntUnitAttack);
+                        }
+                        else
+                        {
+                            DefendingFrame.SupportStance = new NonDemoGetSwordCutFrame(DefendingFrame.SupportStance, IsRightAttacking, Map.fntUnitAttack);
+                        }
                     }
                 }
                 else if (AllShootDown)
                 {
-                    if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+                    foreach (int UnitIndex in ListAttackersIndex)
                     {
-                        DefendingFrame.LeaderStance = new NonDemoGetShootDownFrame(DefendingFrame.LeaderStance, IsRightAttacking, Map.fntUnitAttack);
-                    }
-                    if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-                    {
-                        DefendingFrame.WingmanAStance = new NonDemoGetShootDownFrame(DefendingFrame.WingmanAStance, IsRightAttacking, Map.fntUnitAttack);
-                    }
-                    if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-                    {
-                        DefendingFrame.WingmanBStance = new NonDemoGetShootDownFrame(DefendingFrame.WingmanBStance, IsRightAttacking, Map.fntUnitAttack);
-                    }
-                    if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-                    {
-                        DefendingFrame.SupportStance = new NonDemoGetShootDownFrame(DefendingFrame.SupportStance, IsRightAttacking, Map.fntUnitAttack);
+                        if (UnitIndex >= 0)
+                        {
+                            DefendingFrame.ArrayStance[UnitIndex] = new NonDemoGetShootDownFrame(DefendingFrame.ArrayStance[UnitIndex], IsRightAttacking, Map.fntUnitAttack);
+                        }
+                        else
+                        {
+                            DefendingFrame.SupportStance = new NonDemoGetShootDownFrame(DefendingFrame.SupportStance, IsRightAttacking, Map.fntUnitAttack);
+                        }
                     }
                 }
 
@@ -1028,7 +916,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return null;
         }
 
-        private NonDemoBattleFrame GetCriticalFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        private NonDemoBattleFrame GetCriticalFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             if (End == -1)
                 End = Result.ArrayResult.Length - 1;
@@ -1045,13 +933,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (AllCritical)
             {
-                return GetCriticalFrame(PreviousBattleFrame, Targets, IsRightAttacking);
+                return GetCriticalFrame(PreviousBattleFrame, ListAttackersIndex, IsRightAttacking);
             }
 
             return null;
         }
 
-        private NonDemoBattleFrame GetCriticalFrame(NonDemoBattleFrame PreviousBattleFrame, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        private NonDemoBattleFrame GetCriticalFrame(NonDemoBattleFrame PreviousBattleFrame, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             NonDemoBattleFrameSquad AttackingFrame;
             NonDemoBattleFrameSquad DefendingFrame;
@@ -1067,27 +955,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+            foreach (int UnitIndex in ListAttackersIndex)
             {
-                DefendingFrame.LeaderStance = new NonDemoGetCriticalHitFrame(DefendingFrame.LeaderStance, !IsRightAttacking, sprNonDemoCritical);
-            }
-            if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-            {
-                DefendingFrame.WingmanAStance = new NonDemoGetCriticalHitFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, sprNonDemoCritical);
-            }
-            if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-            {
-                DefendingFrame.WingmanBStance = new NonDemoGetCriticalHitFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, sprNonDemoCritical);
-            }
-            if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-            {
-                DefendingFrame.SupportStance = new NonDemoGetCriticalHitFrame(DefendingFrame.SupportStance, !IsRightAttacking, sprNonDemoCritical);
+                if (UnitIndex >= 0)
+                {
+                    DefendingFrame.ArrayStance[UnitIndex] = new NonDemoGetCriticalHitFrame(DefendingFrame.ArrayStance[UnitIndex], !IsRightAttacking, sprNonDemoCritical);
+                }
+                else
+                {
+                    DefendingFrame.SupportStance = new NonDemoGetCriticalHitFrame(DefendingFrame.SupportStance, !IsRightAttacking, sprNonDemoCritical);
+                }
             }
 
             return new NonDemoBattleFrame(NonDemoGetCriticalHitFrame.FrameLength, DefendingFrame, AttackingFrame);
         }
 
-        private NonDemoBattleFrame GetShieldFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        private NonDemoBattleFrame GetShieldFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             if (End == -1)
                 End = Result.ArrayResult.Length - 1;
@@ -1118,21 +1001,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     DefendingFrame = PreviousBattleFrame.RightStance.Copy();
                 }
 
-                if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+                foreach (int UnitIndex in ListAttackersIndex)
                 {
-                    DefendingFrame.LeaderStance = new NonDemoShieldFrame(DefendingFrame.LeaderStance, !IsRightAttacking, Map.fntUnitAttack);
-                }
-                if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-                {
-                    DefendingFrame.WingmanAStance = new NonDemoShieldFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, Map.fntUnitAttack);
-                }
-                if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-                {
-                    DefendingFrame.WingmanBStance = new NonDemoShieldFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, Map.fntUnitAttack);
-                }
-                if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-                {
-                    DefendingFrame.SupportStance = new NonDemoShieldFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntUnitAttack);
+                    if (UnitIndex >= 0)
+                    {
+                        DefendingFrame.ArrayStance[UnitIndex] = new NonDemoShieldFrame(DefendingFrame.ArrayStance[UnitIndex], !IsRightAttacking, Map.fntUnitAttack);
+                    }
+                    else
+                    {
+                        DefendingFrame.SupportStance = new NonDemoShieldFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntUnitAttack);
+                    }
                 }
 
                 return new NonDemoBattleFrame(NonDemoShieldFrame.FrameLength, DefendingFrame, AttackingFrame);
@@ -1141,7 +1019,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return null;
         }
 
-        private NonDemoBattleFrame GetBarrierFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, NonDemoUnitStancePositions Targets, bool IsRightAttacking)
+        private NonDemoBattleFrame GetBarrierFrame(NonDemoBattleFrame PreviousBattleFrame, SquadBattleResult Result, int Start, int End, List<int> ListAttackersIndex, bool IsRightAttacking)
         {
             if (End == -1)
                 End = Result.ArrayResult.Length - 1;
@@ -1172,21 +1050,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     DefendingFrame = PreviousBattleFrame.RightStance.Copy();
                 }
 
-                if ((Targets & NonDemoUnitStancePositions.Leader) == NonDemoUnitStancePositions.Leader)
+                foreach (int UnitIndex in ListAttackersIndex)
                 {
-                    DefendingFrame.LeaderStance = new NonDemoBarrierFrame(DefendingFrame.LeaderStance, !IsRightAttacking, Map.fntUnitAttack);
-                }
-                if ((Targets & NonDemoUnitStancePositions.WingmanA) == NonDemoUnitStancePositions.WingmanA)
-                {
-                    DefendingFrame.WingmanAStance = new NonDemoBarrierFrame(DefendingFrame.WingmanAStance, !IsRightAttacking, Map.fntUnitAttack);
-                }
-                if ((Targets & NonDemoUnitStancePositions.WingmanB) == NonDemoUnitStancePositions.WingmanB)
-                {
-                    DefendingFrame.WingmanBStance = new NonDemoBarrierFrame(DefendingFrame.WingmanBStance, !IsRightAttacking, Map.fntUnitAttack);
-                }
-                if ((Targets & NonDemoUnitStancePositions.Support) == NonDemoUnitStancePositions.Support)
-                {
-                    DefendingFrame.SupportStance = new NonDemoBarrierFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntUnitAttack);
+                    if (UnitIndex >= 0)
+                    {
+                        DefendingFrame.ArrayStance[UnitIndex] = new NonDemoBarrierFrame(DefendingFrame.ArrayStance[UnitIndex], !IsRightAttacking, Map.fntUnitAttack);
+                    }
+                    else
+                    {
+                        DefendingFrame.SupportStance = new NonDemoBarrierFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntUnitAttack);
+                    }
                 }
 
                 return new NonDemoBattleFrame(NonDemoBarrierFrame.FrameLength, DefendingFrame, AttackingFrame);
@@ -1208,7 +1081,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
             }
 
-            AttackingFrame.LeaderStance = new NonDemoSwitchWithSupportFrame(AttackingFrame.LeaderStance, IsRightAttacking);
+            AttackingFrame.ArrayStance[0] = new NonDemoSwitchWithSupportFrame(AttackingFrame.ArrayStance[0], IsRightAttacking);
             AttackingFrame.SupportStance = new NonDemoSwitchWithLeaderFrame(AttackingFrame.SupportStance, IsRightAttacking);
 
             if (IsRightAttacking)
@@ -1234,7 +1107,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 AttackingFrame = PreviousBattleFrame.LeftStance.Copy();
             }
 
-            AttackingFrame.LeaderStance = new NonDemoSwitchWithSupportHoldFrame(AttackingFrame.LeaderStance, IsRightAttacking);
+            AttackingFrame.ArrayStance[0] = new NonDemoSwitchWithSupportHoldFrame(AttackingFrame.ArrayStance[0], IsRightAttacking);
             AttackingFrame.SupportStance = new NonDemoSwitchWithLeaderHoldFrame(AttackingFrame.SupportStance, IsRightAttacking);
 
             if (IsRightAttacking)
@@ -1260,7 +1133,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            DefendingFrame.LeaderStance = new NonDemoSwitchWithSupportFrame(DefendingFrame.LeaderStance, !IsRightAttacking);
+            DefendingFrame.ArrayStance[0] = new NonDemoSwitchWithSupportFrame(DefendingFrame.ArrayStance[0], !IsRightAttacking);
             DefendingFrame.SupportStance = new NonDemoSwitchWithLeaderFrame(DefendingFrame.SupportStance, !IsRightAttacking);
 
             if (IsRightAttacking)
@@ -1286,7 +1159,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            DefendingFrame.LeaderStance = new NonDemoSwitchWithSupportHoldFrame(DefendingFrame.LeaderStance, !IsRightAttacking);
+            DefendingFrame.ArrayStance[0] = new NonDemoSwitchWithSupportHoldFrame(DefendingFrame.ArrayStance[0], !IsRightAttacking);
             DefendingFrame.SupportStance = new NonDemoSwitchWithLeaderHoldFrame(DefendingFrame.SupportStance, !IsRightAttacking);
 
             if (IsRightAttacking)
@@ -1315,7 +1188,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingFrame = PreviousBattleFrame.RightStance.Copy();
             }
 
-            DefendingFrame.LeaderStance = new NonDemoSwitchBackWithSupportFrame(DefendingFrame.LeaderStance, !IsRightAttacking);
+            DefendingFrame.ArrayStance[0] = new NonDemoSwitchBackWithSupportFrame(DefendingFrame.ArrayStance[0], !IsRightAttacking);
             DefendingFrame.SupportStance = new NonDemoSwitchBackWithLeaderFrame(DefendingFrame.SupportStance, !IsRightAttacking);
 
             return new NonDemoBattleFrame((int)NonDemoBattleFrame.SwitchLength, AttackingFrame, DefendingFrame);

@@ -831,17 +831,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int StartingMV = ActiveSquad.CurrentLeader.MaxMovement;//Maximum distance you can reach.
             StartingMV += ActiveSquad.CurrentLeader.Boosts.MovementModifier;
 
-            if (ActiveSquad.CurrentWingmanA != null)
+            for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 1; --U)
             {
-                StartingMV += ActiveSquad.CurrentWingmanA.MaxMovement;
-                if (ActiveSquad.CurrentWingmanB != null)
-                {
-                    StartingMV += ActiveSquad.CurrentWingmanA.MaxMovement;
-                    StartingMV = (int)Math.Ceiling((double)(StartingMV / 3));
-                }
-                else
-                    StartingMV = (int)Math.Ceiling((double)(StartingMV / 2));
+                StartingMV += ActiveSquad[U].MaxMovement;
             }
+
+            StartingMV = (int)Math.Ceiling((double)(StartingMV / ActiveSquad.UnitsAliveInSquad));
+
             return StartingMV;
         }
 
@@ -1145,11 +1141,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
                 if (TotalENCost > 0)
                 {
-                    ActiveSquad.CurrentLeader.ConsumeEN((int)TotalENCost);
-                    if (ActiveSquad.CurrentWingmanA != null)
-                        ActiveSquad.CurrentWingmanA.ConsumeEN((int)TotalENCost);
-                    if (ActiveSquad.CurrentWingmanB != null)
-                        ActiveSquad.CurrentWingmanB.ConsumeEN((int)TotalENCost);
+                    for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+                    {
+                        ActiveSquad[U].ConsumeEN((int)TotalENCost);
+                    }
                 }
             }
 

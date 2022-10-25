@@ -14,20 +14,20 @@ namespace ProjectEternity.Core.Units
     public class Squad : UnitMapComponent
     {
         private Unit[] ArrayUnit;
-        public Unit CurrentLeader { get { return CurrentLeaderIndex >= 0 ? ArrayUnit[CurrentLeaderIndex] : null; } }
+        public Unit CurrentLeader { get { return ListUnitIndex[0] >= 0 ? ArrayUnit[ListUnitIndex[0]] : null; } }
 
-        public Unit CurrentWingmanA { get { return CurrentWingmanAIndex >= 0 ? ArrayUnit[CurrentWingmanAIndex] : null; } }
+        private Unit CurrentWingmanA { get { return ListUnitIndex.Count > 1 && ListUnitIndex[1] >= 0 ? ArrayUnit[ListUnitIndex[1]] : null; } }
 
-        public Unit CurrentWingmanB { get { return CurrentWingmanBIndex >= 0 ? ArrayUnit[CurrentWingmanBIndex] : null; } }
+        private Unit CurrentWingmanB { get { return ListUnitIndex.Count > 2 && ListUnitIndex[2] >= 0 ? ArrayUnit[ListUnitIndex[2]] : null; } }
 
-        public int CurrentLeaderIndex;
-        public int CurrentWingmanAIndex;
-        public int CurrentWingmanBIndex;
+        private Unit CurrentWingmanC { get { return ListUnitIndex.Count > 3 && ListUnitIndex[3] >= 0 ? ArrayUnit[ListUnitIndex[3]] : null; } }
+
+        private List<int> ListUnitIndex;
 
         public string SquadName;
         public AIContainer SquadAI;
         public string SquadDefenseBattleBehavior;
-        
+
         public bool IsEventSquad;
         public bool IsNameLocked;
         public bool IsLeaderLocked;
@@ -61,8 +61,13 @@ namespace ProjectEternity.Core.Units
                     case 2:
                         return CurrentWingmanB;
 
+                    case 3:
+                        return CurrentWingmanC;
+
                     default:
-                        return null;
+                        if (i < 0 || i >= ListUnitIndex.Count)
+                            return null;
+                        return ArrayUnit[ListUnitIndex[i]];
                 }
             }
         }
@@ -94,12 +99,11 @@ namespace ProjectEternity.Core.Units
         public Squad(string SquadName, Unit Leader = null, Unit WingmanA = null, Unit WingmanB = null)
         {
             IsDead = false;
+            ListUnitIndex = new List<int>();
             StartTurn();
             this.SquadName = SquadName;
 
-            CurrentLeaderIndex = 0;
-            CurrentWingmanAIndex = -1;
-            CurrentWingmanBIndex = -1;
+            ListUnitIndex.Add(0);
 
             SquadDefenseBattleBehavior = "";
             ListAttackedTeam = new List<int>();
@@ -113,8 +117,8 @@ namespace ProjectEternity.Core.Units
                 ArrayUnit[1] = WingmanA;
                 ArrayUnit[2] = WingmanB;
 
-                CurrentWingmanAIndex = 1;
-                CurrentWingmanBIndex = 2;
+                ListUnitIndex.Add(1);
+                ListUnitIndex.Add(2);
             }
             else if (WingmanA != null)
             {
@@ -122,7 +126,7 @@ namespace ProjectEternity.Core.Units
                 ArrayUnit[0] = Leader;
                 ArrayUnit[1] = WingmanA;
 
-                CurrentWingmanAIndex = 1;
+                ListUnitIndex.Add(1);
             }
             else
             {
@@ -133,30 +137,19 @@ namespace ProjectEternity.Core.Units
 
         public void Init(UnitEffectContext Context)
         {
-            Context.SetContext(this, ArrayUnit[0], null, null, null, null, null);
-            
-            ArrayUnit[0].Init();
-            CurrentLeaderIndex = 0;
-            if (ArrayUnit.Length >= 2)
-            {
-                Context.SetContext(this, ArrayUnit[1], null, null, null, null, null);
-                ArrayUnit[1].Init();
-                CurrentWingmanAIndex = 1;
-            }
-            if (ArrayUnit.Length >= 3)
-            {
-                Context.SetContext(this, ArrayUnit[2], null, null, null, null, null);
-                ArrayUnit[2].Init();
-                CurrentWingmanBIndex = 2;
-            }
+            ListUnitIndex.Clear();
 
-            for (int U = 0; U < ArrayUnit.Length; U++)
+            for (int U = 0; U < ArrayUnit.Length; ++U)
             {
+                Context.SetContext(this, ArrayUnit[U], null, null, null, null, null);
+                ArrayUnit[U].Init();
+                ListUnitIndex.Add(U);
+
                 for (int C = 0; C < this[U].ArrayCharacterActive.Length; C++)
                 {
                     ArrayUnit[U].ArrayCharacterActive[C].SP = ArrayUnit[U].ArrayCharacterActive[C].MaxSP;
                 }
-                
+
                 //Load the Battle Themes.
                 for (int C = ArrayUnit[U].ArrayCharacterActive.Length - 1; C >= 0; --C)
                     if (!string.IsNullOrEmpty(ArrayUnit[U].ArrayCharacterActive[C].BattleThemeName))
@@ -220,30 +213,17 @@ namespace ProjectEternity.Core.Units
         {
             IsDead = false;
 
-            CurrentLeaderIndex = -1;
-            CurrentWingmanAIndex = -1;
-            CurrentWingmanBIndex = -1;
+            ListUnitIndex.Clear();
 
             for (int U = 0; U < ArrayUnit.Length; U++)
             {
                 if (ArrayUnit[U].HP > 0)
                 {
-                    if (CurrentLeader == null)
-                    {
-                        CurrentLeaderIndex = U;
-                    }
-                    else if (CurrentWingmanA == null && ArrayUnit[U] != CurrentLeader)
-                    {
-                        CurrentWingmanAIndex = U;
-                    }
-                    else if (CurrentWingmanB == null && ArrayUnit[U] != CurrentLeader && ArrayUnit[U] != CurrentWingmanA)
-                    {
-                        CurrentWingmanBIndex = U;
-                    }
+                    ListUnitIndex.Add(U);
                 }
             }
 
-            if (CurrentLeader == null)
+            if (ListUnitIndex.Count == 0)
                 IsDead = true;
         }
 
@@ -266,7 +246,7 @@ namespace ProjectEternity.Core.Units
 
         public int IndexOf(Unit ActiveUnit)
         {
-            for (int U = ArrayUnit.Length - 1; U>=0; --U)
+            for (int U = ArrayUnit.Length - 1; U >= 0; --U)
             {
                 if (ArrayUnit[U] == ActiveUnit)
                     return U;
@@ -276,41 +256,33 @@ namespace ProjectEternity.Core.Units
 
         public void SetLeader(int LeaderIndex)
         {
-            CurrentLeaderIndex = LeaderIndex;
-
-            if (LeaderIndex < 0 || LeaderIndex >= ArrayUnit.Length)
-                CurrentLeaderIndex = -1;
         }
 
         public void SetWingmanA(int WingmanAIndex)
         {
-            CurrentWingmanAIndex = WingmanAIndex;
-
-            if (WingmanAIndex < 0 || WingmanAIndex >= ArrayUnit.Length)
-                CurrentWingmanAIndex = -1;
+            if (WingmanAIndex >= 0 || WingmanAIndex < ArrayUnit.Length)
+                ListUnitIndex[1] = WingmanAIndex;
         }
 
         public void SetWingmanB(int WingmanBIndex)
         {
-            CurrentWingmanBIndex = WingmanBIndex;
-
-            if (WingmanBIndex < 0 || WingmanBIndex >= ArrayUnit.Length)
-                CurrentWingmanBIndex = -1;
+            if (WingmanBIndex >= 0 || WingmanBIndex < ArrayUnit.Length)
+                ListUnitIndex[2] = WingmanBIndex;
         }
 
         public void SetNewLeader(Unit NewLeader)
         {
-            ArrayUnit[CurrentLeaderIndex] = NewLeader;
+            ArrayUnit[0] = NewLeader;
         }
 
         public void SetNewWingmanA(Unit NewLeader)
         {
-            ArrayUnit[CurrentLeaderIndex] = NewLeader;
+            ArrayUnit[1] = NewLeader;
         }
 
         public void SetNewWingmanB(Unit NewLeader)
         {
-            ArrayUnit[CurrentLeaderIndex] = NewLeader;
+            ArrayUnit[2] = NewLeader;
         }
 
         public static Squad LoadSquadWithProgression(BinaryReader BR, List<Character> ListTeamCharacter, ContentManager Content, Dictionary<string, Unit> DicUnitType,
@@ -354,6 +326,40 @@ namespace ProjectEternity.Core.Units
             BW.Write(UnitsInSquad);
             for (int U = 0; U < ArrayUnit.Length; U++)
                 ArrayUnit[U].Save(BW);
+        }
+
+        public void QuickSave(BinaryWriter BW)
+        {
+            BW.Write(ID);
+            BW.Write(CanMove);
+            BW.Write(ActionsRemaining);
+            BW.Write(X);
+            BW.Write(Y);
+            BW.Write(Z);
+            BW.Write(SquadName);
+            BW.Write(CurrentTerrainIndex);
+            BW.Write(IsUnderTerrain);
+            BW.Write(IsPlayerControlled);
+            if (SquadAI == null || SquadAI.Path == null)
+            {
+                BW.Write(string.Empty);
+            }
+            else
+            {
+                BW.Write(SquadAI.Path);
+            }
+
+            BW.Write(ArrayUnit.Length);
+            for (int U = 0; U < ArrayUnit.Length; ++U)
+            {
+                BW.Write(ListUnitIndex[U]);
+                ArrayUnit[U].QuickSave(BW);
+            }
+
+            //List of Attacked Teams.
+            BW.Write(ListAttackedTeam.Count);
+            for (int U = 0; U < ListAttackedTeam.Count; ++U)
+                BW.Write(ListAttackedTeam[U]);
         }
 
         public override string ToString()

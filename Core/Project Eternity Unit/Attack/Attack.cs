@@ -74,9 +74,9 @@ namespace ProjectEternity.Core.Attacks
         public byte DashMaxReach;
         public Attack Parent;
         public bool IsChargeable;
-        public List<Attack> ListSecondaryAttack;
         public byte ChargedAttackCancelLevel;
         public List<Attack> ListChargedAttack;
+        public List<Attack> ListSecondaryAttack;
         public ExplosionOptions ExplosionOption;
         public readonly List<AttackContext> Animations;
         public readonly bool IsExternal;
@@ -110,6 +110,9 @@ namespace ProjectEternity.Core.Attacks
             this.MoraleRequirement = MoraleRequirement;
             this.AttackType = Type;
             this.DicRankByMovement = DicTerrainAttribute;
+
+            ListChargedAttack = new List<Attack>();
+            ListSecondaryAttack = new List<Attack>();
         }
 
         public Attack(Attack Weapon)

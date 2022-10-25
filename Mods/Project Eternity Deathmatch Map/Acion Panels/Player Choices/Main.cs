@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveSquad.CanMove)
             {
                 //Add the squad options.
-                if (ActiveSquad.CurrentWingmanA != null)
+                if (ActiveSquad.UnitsAliveInSquad > 1)
                     AddChoiceToCurrentPanel(new ActionPanelFormation(Map, ActivePlayerIndex, ActiveSquadIndex));
 
                 ActiveSquad.OnMenuSelect(this, ActivePlayerIndex, Map.ListActionMenuChoice);

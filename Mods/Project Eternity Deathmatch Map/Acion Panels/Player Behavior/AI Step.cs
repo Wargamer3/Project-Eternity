@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
@@ -23,10 +23,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int UnitsNotUpdatedCount = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count;
 
-            for (int U = 0; U < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; U++)
+            for (int S = 0; S < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; S++)
             {
-                Map.ActiveSquadIndex = U;
-                Squad ActiveSquad = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U];
+                Map.ActiveSquadIndex = S;
+                Squad ActiveSquad = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[S];
 
                 if (!Map.ActiveSquad.CanMove || Map.ActiveSquad.CurrentLeader == null)
                 {
@@ -34,11 +34,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     continue;
                 }
 
-                ActiveSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                if (ActiveSquad.CurrentWingmanA != null)
-                    ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                if (ActiveSquad.CurrentWingmanB != null)
-                    ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+                for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+                {
+                    ActiveSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+                }
 
                 if (ActiveSquad.X < Map.CameraPosition.X || ActiveSquad.Y < Map.CameraPosition.Y ||
                     ActiveSquad.X >= Map.CameraPosition.X + Map.ScreenSize.X || ActiveSquad.Y >= Map.CameraPosition.Y + Map.ScreenSize.Y)

@@ -52,19 +52,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             UpdateWingmansSelection(ActiveSquad, TargetSquad, BattleMenuOffenseFormationChoice);
 
-            if (ActiveSquad.CurrentWingmanA != null)
+            for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 1; --U)
             {
-                if (ActiveSquad.CurrentWingmanA.CanAttack)
-                    ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+                if (ActiveSquad[U].CanAttack)
+                    ActiveSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
                 else
-                    ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-            }
-            if (ActiveSquad.CurrentWingmanB != null)
-            {
-                if (ActiveSquad.CurrentWingmanB.CanAttack)
-                    ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                else
-                    ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                    ActiveSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
             }
 
             PrepareDefenseSquadForBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, TargetPlayerIndex, TargetSquadIndex);
@@ -231,89 +224,46 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (FormationChoice == FormationChoices.Focused)
             {
-                if (ActiveSquad.CurrentWingmanA != null)
+                for (int U = ActiveSquad.UnitsAliveInSquad - 1; U>= 1; --U)
                 {
-                    ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                    ActiveSquad.CurrentWingmanA.CurrentAttack = null;
-                    ActiveSquad.CurrentWingmanA.AttackAccuracy = "";
+                    ActiveSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                    ActiveSquad[U].CurrentAttack = null;
+                    ActiveSquad[U].AttackAccuracy = "";
 
-                    if (ActiveSquad.CurrentWingmanA.PLAAttack != null)
+                    if (ActiveSquad[U].PLAAttack != null)
                     {
-                        ActiveSquad.CurrentWingmanA.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, ListPlayer[ActivePlayerIndex].Team, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].Team, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
+                        ActiveSquad[U].PLAAttack.UpdateAttack(ActiveSquad[U], ActiveSquad.Position, ListPlayer[ActivePlayerIndex].Team, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].Team, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
 
-                        if (ActiveSquad.CurrentWingmanA.PLAAttack.CanAttack)
+                        if (ActiveSquad[U].PLAAttack.CanAttack)
                         {
-                            ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                            ActiveSquad.CurrentWingmanA.CurrentAttack = ActiveSquad.CurrentWingmanA.PLAAttack;
-                            ActiveSquad.CurrentWingmanA.AttackAccuracy = CalculateHitRate(ActiveSquad.CurrentWingmanA, ActiveSquad.CurrentWingmanA.CurrentAttack, ActiveSquad,
-                                ActiveSquad.CurrentWingmanA, OppositeSquad, OppositeSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
-                        }
-                    }
-                }
-
-                if (ActiveSquad.CurrentWingmanB != null)
-                {
-                    ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                    ActiveSquad.CurrentWingmanB.CurrentAttack = null;
-                    ActiveSquad.CurrentWingmanB.AttackAccuracy = "";
-
-                    if (ActiveSquad.CurrentWingmanB.PLAAttack != null)
-                    {
-                        ActiveSquad.CurrentWingmanB.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, ListPlayer[ActivePlayerIndex].Team, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].Team, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
-
-                        if (ActiveSquad.CurrentWingmanB.PLAAttack.CanAttack)
-                        {
-                            ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                            ActiveSquad.CurrentWingmanB.CurrentAttack = ActiveSquad.CurrentWingmanB.PLAAttack;
-                            ActiveSquad.CurrentWingmanB.AttackAccuracy = CalculateHitRate(ActiveSquad.CurrentWingmanB, ActiveSquad.CurrentWingmanB.CurrentAttack, ActiveSquad,
-                                ActiveSquad.CurrentWingmanB, OppositeSquad, OppositeSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
+                            ActiveSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+                            ActiveSquad[U].CurrentAttack = ActiveSquad[U].PLAAttack;
+                            ActiveSquad[U].AttackAccuracy = CalculateHitRate(ActiveSquad[U], ActiveSquad[U].CurrentAttack, ActiveSquad,
+                                ActiveSquad[U], OppositeSquad, OppositeSquad.CurrentLeader.BattleDefenseChoice).ToString() + "%";
                         }
                     }
                 }
             }
             else if (FormationChoice == FormationChoices.Spread)
             {
-                if (ActiveSquad.CurrentWingmanA != null)
+                for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 1; --U)
                 {
-                    ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                    ActiveSquad.CurrentWingmanA.CurrentAttack = null;
-                    ActiveSquad.CurrentWingmanA.AttackAccuracy = "";
+                    ActiveSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                    ActiveSquad[U].CurrentAttack = null;
+                    ActiveSquad[U].AttackAccuracy = "";
 
-                    if (ActiveSquad.CurrentWingmanA.PLAAttack != null)
+                    if (ActiveSquad[U].PLAAttack != null)
                     {
-                        if (OppositeSquad.CurrentWingmanA != null)
+                        if (OppositeSquad.UnitsAliveInSquad > U)
                         {
-                            ActiveSquad.CurrentWingmanA.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, ListPlayer[ActivePlayerIndex].Team, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].Team, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
+                            ActiveSquad[U].PLAAttack.UpdateAttack(ActiveSquad[U], ActiveSquad.Position, ListPlayer[ActivePlayerIndex].Team, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].Team, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
 
-                            if (ActiveSquad.CurrentWingmanA.PLAAttack.CanAttack)
+                            if (ActiveSquad[U].PLAAttack.CanAttack)
                             {
-                                ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                                ActiveSquad.CurrentWingmanA.CurrentAttack = ActiveSquad.CurrentWingmanA.PLAAttack;
-                                ActiveSquad.CurrentWingmanA.AttackAccuracy = CalculateHitRate(ActiveSquad.CurrentWingmanA, ActiveSquad.CurrentWingmanA.CurrentAttack, ActiveSquad,
-                                    ActiveSquad.CurrentWingmanA, OppositeSquad, OppositeSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
-                            }
-                        }
-                    }
-                }
-
-                if (ActiveSquad.CurrentWingmanB != null)
-                {
-                    ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                    ActiveSquad.CurrentWingmanB.CurrentAttack = null;
-                    ActiveSquad.CurrentWingmanB.AttackAccuracy = "";
-
-                    if (ActiveSquad.CurrentWingmanB.PLAAttack != null)
-                    {
-                        if (OppositeSquad.CurrentWingmanB != null)
-                        {
-                            ActiveSquad.CurrentWingmanB.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, ListPlayer[ActivePlayerIndex].Team, OppositeSquad.Position, ListPlayer[TargetPlayerIndex].Team, OppositeSquad.ArrayMapSize, OppositeSquad.CurrentTerrainIndex, true);
-
-                            if (ActiveSquad.CurrentWingmanB.PLAAttack.CanAttack)
-                            {
-                                ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                                ActiveSquad.CurrentWingmanB.CurrentAttack = ActiveSquad.CurrentWingmanB.PLAAttack;
-                                ActiveSquad.CurrentWingmanB.AttackAccuracy = CalculateHitRate(ActiveSquad.CurrentWingmanB, ActiveSquad.CurrentWingmanB.CurrentAttack, ActiveSquad,
-                                    ActiveSquad.CurrentWingmanB, OppositeSquad, OppositeSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
+                                ActiveSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+                                ActiveSquad[U].CurrentAttack = ActiveSquad[U].PLAAttack;
+                                ActiveSquad[U].AttackAccuracy = CalculateHitRate(ActiveSquad[U], ActiveSquad[U].CurrentAttack, ActiveSquad,
+                                    ActiveSquad[U], OppositeSquad, OppositeSquad[U].BattleDefenseChoice).ToString() + "%";
                             }
                         }
                     }
@@ -328,29 +278,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (Map.BattleMenuOffenseFormationChoice == FormationChoices.ALL)
             {
-                if (AttackingSquad.CurrentWingmanA != null)
+                for (int U = AttackingSquad.UnitsAliveInSquad - 1; U >= 1; --U)
                 {
-                    AttackingSquad.CurrentLeader.AttackAccuracy = "";
-                    AttackingSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                    if (AttackingSquad[U] != null)
+                    {
+                        AttackingSquad[U].AttackAccuracy = "";
+                        AttackingSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                    }
                 }
-                if (AttackingSquad.CurrentWingmanB != null)
+                AttackingSquad.CurrentLeader.ListMAPAttackAccuracy.Clear();
+                for (int U = 1; U < DefendingSquad.UnitsAliveInSquad; ++U)
                 {
-                    AttackingSquad.CurrentWingmanB.AttackAccuracy = "";
-                    AttackingSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                }
-
-                if (DefendingSquad.CurrentWingmanA != null)
-                {
-                    AttackingSquad.CurrentLeader.MAPAttackAccuracyA = Map.CalculateHitRate(AttackingSquad.CurrentLeader, CurrentAttack, AttackingSquad,
-                                                                        DefendingSquad.CurrentWingmanA, DefendingSquad,
-                                                                        DefendingSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
-                }
-
-                if (DefendingSquad.CurrentWingmanB != null)
-                {
-                    AttackingSquad.CurrentLeader.MAPAttackAccuracyB = Map.CalculateHitRate(AttackingSquad.CurrentLeader, CurrentAttack, AttackingSquad,
-                                                                        DefendingSquad.CurrentWingmanB, DefendingSquad,
-                                                                        DefendingSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
+                    AttackingSquad.CurrentLeader.ListMAPAttackAccuracy.Add(Map.CalculateHitRate(AttackingSquad.CurrentLeader, CurrentAttack, AttackingSquad,
+                                                                        DefendingSquad[U], DefendingSquad,
+                                                                        DefendingSquad[U].BattleDefenseChoice).ToString() + "%");
                 }
             }
             else
@@ -408,10 +349,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             DefendingSquad.CurrentLeader.CurrentAttack = null;
 
-            UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex, null, 1, CurrentAttack,
-                                    null, BattleMap.WingmanDamageModifier, null,
-                                    null, BattleMap.WingmanDamageModifier, null, 0,
-                                    DefendingPlayerIndex, DefendingSquadIndex, 0, false, true, Map);
+            UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex, new List<Unit>(), new List<float>(), new List<Attack>(),
+                                    0, DefendingPlayerIndex, DefendingSquadIndex, 0, false, true, Map);
 
             if (DefendingSquad.CurrentLeader.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack)
             {
@@ -422,131 +361,48 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)
             {
                 Map.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.ALL;
+                DefendingSquad.CurrentLeader.ListMAPAttackAccuracy.Clear();
 
-                if (AttackingSquad.CurrentWingmanA != null)
+                for (int U = 1; U < AttackingSquad.UnitsAliveInSquad; ++U)
                 {
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyA = Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
-                                                                        AttackingSquad.CurrentWingmanA, AttackingSquad,
-                                                                        AttackingSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
-                }
-                else
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyA = null;
-
-                if (AttackingSquad.CurrentWingmanB != null)
-                {
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyB = Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
-                                                                        AttackingSquad.CurrentWingmanB, AttackingSquad,
-                                                                        AttackingSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
-                }
-                else
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyB = null;
-            }
-
-            #region Wingman A
-
-            if (DefendingSquad.CurrentWingmanA != null)
-            {
-                if (DefendingSquad.CurrentWingmanA.CanAttack && DefendingSquad.CurrentWingmanA.PLAAttack != null &&
-                    Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL &&
-                    DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
-                    DefendingSquad.CurrentWingmanA.CurrentAttack = DefendingSquad.CurrentWingmanA.PLAAttack;
-                else
-                    DefendingSquad.CurrentWingmanA.CurrentAttack = null;
-
-                int CounterUnitIndex = -1;
-
-                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanA != null)
-                {
-                    CounterUnitIndex = 1;
-                }
-                else if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Focused)
-                {
-                    CounterUnitIndex = 0;
-                }
-
-                if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanA != null)
-                {
-                    UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        CounterUnitIndex, DefendingPlayerIndex, DefendingSquadIndex, 1, true, true, Map);
-                }
-                else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Focused)
-                {
-                    UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        CounterUnitIndex, DefendingPlayerIndex, DefendingSquadIndex, 1, true, true, Map);
-                }
-                else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.ALL)
-                {
-                    UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        CounterUnitIndex, DefendingPlayerIndex, DefendingSquadIndex, 1, true, true, Map);
-                }
-
-                if (DefendingSquad.CurrentWingmanA.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack)
-                {
-                    DefendingSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.DoNothing;
+                    DefendingSquad.CurrentLeader.ListMAPAttackAccuracy.Add(Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
+                                                                        AttackingSquad[U], AttackingSquad,
+                                                                        AttackingSquad[U].BattleDefenseChoice).ToString() + "%");
                 }
             }
 
-            #endregion
+            #region Wingmans
 
-            #region Wingman B
-
-            if (DefendingSquad.CurrentWingmanB != null)
+            for (int U = 1; U < DefendingSquad.UnitsAliveInSquad; ++U)
             {
-                if (DefendingSquad.CurrentWingmanB.CanAttack && DefendingSquad.CurrentWingmanB.PLAAttack != null &&
+                if (DefendingSquad[U].CanAttack && DefendingSquad[U].PLAAttack != null &&
                     Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL &&
                     DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
-                    DefendingSquad.CurrentWingmanB.CurrentAttack = DefendingSquad.CurrentWingmanB.PLAAttack;
-                else
-                    DefendingSquad.CurrentWingmanB.CurrentAttack = null;
-
-                int CounterUnitIndex = -1;
-
-                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanB != null)
                 {
-                    CounterUnitIndex = 2;
+                    DefendingSquad[U].CurrentAttack = DefendingSquad[U].PLAAttack;
+                }
+                else
+                {
+                    DefendingSquad[U].CurrentAttack = null;
+                }
+
+                int TargetUnitIndex = -1;
+
+                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.UnitsAliveInSquad > U)
+                {
+                    TargetUnitIndex = 1;
                 }
                 else if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Focused)
                 {
-                    CounterUnitIndex = 0;
+                    TargetUnitIndex = 0;
                 }
 
-                if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanB != null)
-                {
-                    UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        CounterUnitIndex, DefendingPlayerIndex, DefendingSquadIndex, 2, true, true, Map);
-                }
-                else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Focused)
-                {
-                    UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        CounterUnitIndex, DefendingPlayerIndex, DefendingSquadIndex, 2, true, true, Map);
-                }
-                else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.ALL)
-                {
-                    UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        CounterUnitIndex, DefendingPlayerIndex, DefendingSquadIndex, 2, true, true, Map);
-                }
+                UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex, new List<Unit>(), new List<float>(), new List<Attack>(),
+                    TargetUnitIndex, DefendingPlayerIndex, DefendingSquadIndex, U, true, true, Map);
 
-                if (DefendingSquad.CurrentWingmanB.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack)
+                if (DefendingSquad[U].BattleDefenseChoice != Unit.BattleDefenseChoices.Attack)
                 {
-                    DefendingSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.DoNothing;
+                    DefendingSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.DoNothing;
                 }
             }
 
@@ -562,27 +418,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Squad AttackingSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             Squad DefendingSquad = Map.ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
-            Attack CurrentWingmanAAttack = null;
-            Attack CurrentWingmanBAttack = null;
+
+            List<Unit> ListUnit = new List<Unit>() { AttackingSquad.CurrentLeader };
+            List<float> ListDamageModifier = new List<float>() { 1 };
+            List<Attack> ListAttack = new List<Attack>() { CurrentAttack };
 
             Map.UpdateWingmansSelection(DefendingSquad, AttackingSquad, Map.BattleMenuDefenseFormationChoice);
 
             DefendingSquad.CurrentLeader.CurrentAttack = null;
-            if (AttackingSquad.CurrentWingmanA != null)
+            for (int U = 1; U < AttackingSquad.UnitsAliveInSquad; ++U)
             {
-                CurrentWingmanAAttack = AttackingSquad.CurrentWingmanA.CurrentAttack;
-            }
-            if (AttackingSquad.CurrentWingmanB != null)
-            {
-                CurrentWingmanBAttack = AttackingSquad.CurrentWingmanB.CurrentAttack;
+                ListUnit.Add(AttackingSquad[U]);
+                ListDamageModifier.Add(BattleMap.WingmanDamageModifier);
+                ListAttack.Add(AttackingSquad[U].CurrentAttack);
             }
 
             if (Map.BattleMenuOffenseFormationChoice == BattleMap.FormationChoices.Focused)
             {
                 UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                                        AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                                        AttackingSquad.CurrentWingmanA, BattleMap.WingmanDamageModifier, CurrentWingmanAAttack,
-                                        AttackingSquad.CurrentWingmanB, BattleMap.WingmanDamageModifier, CurrentWingmanBAttack,
+                                        ListUnit, ListDamageModifier, ListAttack,
                                         0,
                                         DefendingPlayerIndex, DefendingSquadIndex, 0,
                                         false, false, Map);
@@ -590,9 +444,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else if (Map.BattleMenuOffenseFormationChoice == BattleMap.FormationChoices.Spread)
             {
                 UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                                        AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                                        null, BattleMap.WingmanDamageModifier, null,
-                                        null, BattleMap.WingmanDamageModifier, null,
+                                        new List<Unit>() { AttackingSquad.CurrentLeader }, new List<float>() { 1 }, new List<Attack>() { CurrentAttack },
                                         0,
                                         DefendingPlayerIndex, DefendingSquadIndex, 0,
                                         false, false, Map);
@@ -600,9 +452,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             else if (Map.BattleMenuOffenseFormationChoice == BattleMap.FormationChoices.ALL)
             {
                 UnitBaseDefencePattern(ActivePlayerIndex, ActiveSquadIndex,
-                                        AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                                        null, BattleMap.WingmanDamageModifier, null,
-                                        null, BattleMap.WingmanDamageModifier, null,
+                                        new List<Unit>() { AttackingSquad.CurrentLeader }, new List<float>() { 1 }, new List<Attack>() { CurrentAttack },
                                         0,
                                         DefendingPlayerIndex, DefendingSquadIndex, 0,
                                         false, false, Map);
@@ -612,44 +462,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefendingSquad.CurrentLeader.CurrentAttack.Pri == WeaponPrimaryProperty.ALL)
             {
                 Map.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.ALL;
-
-                if (AttackingSquad.CurrentWingmanA != null)
+                DefendingSquad.CurrentLeader.ListMAPAttackAccuracy.Clear();
+                for (int U = 1; U < AttackingSquad.UnitsAliveInSquad; ++U)
                 {
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyA = Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
-                                                                        AttackingSquad.CurrentWingmanA, AttackingSquad,
-                                                                        AttackingSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
+                    DefendingSquad.CurrentLeader.ListMAPAttackAccuracy.Add(Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
+                                                                        AttackingSquad[U], AttackingSquad,
+                                                                        AttackingSquad[U].BattleDefenseChoice).ToString() + "%");
                 }
-                else
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyA = null;
-
-                if (AttackingSquad.CurrentWingmanB != null)
-                {
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyB = Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
-                                                                        AttackingSquad.CurrentWingmanB, AttackingSquad,
-                                                                        AttackingSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
-                }
-                else
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyB = null;
             }
 
-            #region Wingman A
+            #region Wingmans
 
-            if (DefendingSquad.CurrentWingmanA != null)
+            for (int U = 1; U < DefendingSquad.UnitsAliveInSquad; ++U)
             {
-                if (DefendingSquad.CurrentWingmanA.CanAttack && DefendingSquad.CurrentWingmanA.PLAAttack != null &&
+                if (DefendingSquad[U].CanAttack && DefendingSquad[U].PLAAttack != null &&
                     Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL &&
                     DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
                 {
-                    DefendingSquad.CurrentWingmanA.CurrentAttack = DefendingSquad.CurrentWingmanA.PLAAttack;
+                    DefendingSquad[U].CurrentAttack = DefendingSquad[U].PLAAttack;
                 }
                 else
                 {
-                    DefendingSquad.CurrentWingmanA.CurrentAttack = null;
+                    DefendingSquad[U].CurrentAttack = null;
                 }
 
                 int TargetUnitIndex = -1;
 
-                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanA != null)
+                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.UnitsAliveInSquad > U)
                 {
                     TargetUnitIndex = 1;
                 }
@@ -658,100 +497,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     TargetUnitIndex = 0;
                 }
 
-                if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanA != null)
+                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.UnitsAliveInSquad > U)
                 {
                     UnitBaseDefencePattern(
                         ActivePlayerIndex, ActiveSquadIndex,
-                        AttackingSquad.CurrentWingmanA, BattleMap.WingmanDamageModifier, CurrentWingmanAAttack,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
+                        new List<Unit>() { AttackingSquad[U] }, new List<float>() { BattleMap.WingmanDamageModifier }, new List<Attack>() { ListAttack[U] },
                         TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 1,
+                        DefendingPlayerIndex, DefendingSquadIndex, U,
                         true, false, Map);
                 }
                 else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Focused)
                 {
                     UnitBaseDefencePattern(
                         ActivePlayerIndex, ActiveSquadIndex,
-                        null, 1, null,
-                        null, WingmanDamageModifier, null,
-                        null,BattleMap.WingmanDamageModifier, null,
+                        new List<Unit>(), new List<float>(), new List<Attack>(),
                         TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 1,
+                        DefendingPlayerIndex, DefendingSquadIndex, U,
                         true, false, Map);
                 }
                 else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.ALL)
                 {
                     UnitBaseDefencePattern(
                         ActivePlayerIndex, ActiveSquadIndex,
-                        AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
+                        new List<Unit>() { AttackingSquad.CurrentLeader }, new List<float>() { 1 }, new List<Attack>() { CurrentAttack },
                         TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 1,
-                        true, false, Map);
-                }
-            }
-
-            #endregion
-
-            #region Wingman B
-
-            if (DefendingSquad.CurrentWingmanB != null)
-            {
-                if (DefendingSquad.CurrentWingmanB.CanAttack && DefendingSquad.CurrentWingmanB.PLAAttack != null &&
-                    Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL &&
-                    DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
-                {
-                    DefendingSquad.CurrentWingmanB.CurrentAttack = DefendingSquad.CurrentWingmanB.PLAAttack;
-                }
-                else
-                {
-                    DefendingSquad.CurrentWingmanB.CurrentAttack = null;
-                }
-
-                int TargetUnitIndex = -1;
-
-                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanB != null)
-                {
-                    TargetUnitIndex = 2;
-                }
-                else if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Focused)
-                {
-                    TargetUnitIndex = 0;
-                }
-
-                if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanB != null)
-                {
-                    UnitBaseDefencePattern(
-                        ActivePlayerIndex, ActiveSquadIndex,
-                        AttackingSquad.CurrentWingmanB, WingmanDamageModifier, CurrentWingmanBAttack,
-                        null, WingmanDamageModifier, null,
-                        null, WingmanDamageModifier, null,
-                        TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 2,
-                        true, false, Map);
-                }
-                else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Focused)
-                {
-                    UnitBaseDefencePattern(
-                        ActivePlayerIndex, ActiveSquadIndex,
-                        null, 1, null,
-                        null, WingmanDamageModifier, null,
-                        null, WingmanDamageModifier, null,
-                        TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 2,
-                        true, false, Map);
-                }
-                else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.ALL)
-                {
-                    UnitBaseDefencePattern(
-                        ActivePlayerIndex, ActiveSquadIndex,
-                        AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                        null, WingmanDamageModifier, null,
-                        null, WingmanDamageModifier, null,
-                        TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 2,
+                        DefendingPlayerIndex, DefendingSquadIndex, U,
                         true, false, Map);
                 }
             }
@@ -768,17 +538,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             DefendingSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
             DefendingSquad.CurrentLeader.CurrentAttack = null;
-            
-            if (DefendingSquad.CurrentWingmanA != null)
-            {
-                DefendingSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                DefendingSquad.CurrentWingmanA.CurrentAttack = null;
-            }
 
-            if (DefendingSquad.CurrentWingmanB != null)
+            for (int U = 1; U < DefendingSquad.UnitsAliveInSquad; ++U)
             {
-                DefendingSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                DefendingSquad.CurrentWingmanB.CurrentAttack = null;
+                DefendingSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                DefendingSquad[U].CurrentAttack = null;
             }
 
             //Compute the Attacker's accuracy and Wingmans reaction.
@@ -792,16 +556,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DefendingSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
             DefendingSquad.CurrentLeader.CurrentAttack = null;
 
-            if (DefendingSquad.CurrentWingmanA != null)
+            for (int U = 1; U < DefendingSquad.UnitsAliveInSquad; ++U)
             {
-                DefendingSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
-                DefendingSquad.CurrentWingmanA.CurrentAttack = null;
-            }
-
-            if (DefendingSquad.CurrentWingmanB != null)
-            {
-                DefendingSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
-                DefendingSquad.CurrentWingmanB.CurrentAttack = null;
+                DefendingSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Evade;
+                DefendingSquad[U].CurrentAttack = null;
             }
 
             //Compute the Attacker's accuracy and Wingmans reaction.
@@ -814,28 +572,26 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Squad AttackingSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             Squad DefendingSquad = Map.ListPlayer[DefendingPlayerIndex].ListSquad[DefendingSquadIndex];
-            Attack CurrentWingmanAAttack = null;
-            Attack CurrentWingmanBAttack = null;
+
+            List<Unit> ListUnit = new List<Unit>() { AttackingSquad.CurrentLeader };
+            List<float> ListDamageModifier = new List<float>() { 1 };
+            List<Attack> ListAttack = new List<Attack>() { CurrentAttack };
 
             Map.UpdateWingmansSelection(DefendingSquad, AttackingSquad, Map.BattleMenuDefenseFormationChoice);
 
             DefendingSquad.CurrentLeader.CurrentAttack = null;
-            if (AttackingSquad.CurrentWingmanA != null)
+            for (int U = 1; U < AttackingSquad.UnitsAliveInSquad; ++U)
             {
-                CurrentWingmanAAttack = AttackingSquad.CurrentWingmanA.CurrentAttack;
-            }
-            if (AttackingSquad.CurrentWingmanB != null)
-            {
-                CurrentWingmanBAttack = AttackingSquad.CurrentWingmanB.CurrentAttack;
+                ListUnit.Add(AttackingSquad[U]);
+                ListDamageModifier.Add(BattleMap.WingmanDamageModifier);
+                ListAttack.Add(AttackingSquad[U].CurrentAttack);
             }
 
             if (Map.BattleMenuOffenseFormationChoice == BattleMap.FormationChoices.Focused)
             {
                 UnitBaseDefencePattern(
                     ActivePlayerIndex, ActiveSquadIndex,
-                    AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                    AttackingSquad.CurrentWingmanA, BattleMap.WingmanDamageModifier, CurrentWingmanAAttack,
-                    AttackingSquad.CurrentWingmanB, BattleMap.WingmanDamageModifier, CurrentWingmanBAttack,
+                    ListUnit, ListDamageModifier, ListAttack,
                     0,
                     DefendingPlayerIndex, DefendingSquadIndex, 0,
                     false, true, Map);
@@ -844,9 +600,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 UnitBaseDefencePattern(
                     ActivePlayerIndex, ActiveSquadIndex,
-                    AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                    null, BattleMap.WingmanDamageModifier, null,
-                    null, BattleMap.WingmanDamageModifier, null,
+                    new List<Unit>() { AttackingSquad.CurrentLeader }, new List<float>() { 1 }, new List<Attack>() { CurrentAttack },
                     0,
                     DefendingPlayerIndex, DefendingSquadIndex, 0,
                     false, true, Map);
@@ -855,9 +609,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 UnitBaseDefencePattern(
                     ActivePlayerIndex, ActiveSquadIndex,
-                    AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                    null, BattleMap.WingmanDamageModifier, null,
-                    null, BattleMap.WingmanDamageModifier, null,
+                    new List<Unit>() { AttackingSquad.CurrentLeader }, new List<float>() { 1 }, new List<Attack>() { CurrentAttack },
                     0,
                     DefendingPlayerIndex, DefendingSquadIndex, 0,
                     false, true, Map);
@@ -868,43 +620,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Map.BattleMenuDefenseFormationChoice = BattleMap.FormationChoices.ALL;
 
-                if (AttackingSquad.CurrentWingmanA != null)
+                DefendingSquad.CurrentLeader.ListMAPAttackAccuracy.Clear();
+                for (int U = 1; U < AttackingSquad.UnitsAliveInSquad; ++U)
                 {
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyA = Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
-                                                                        AttackingSquad.CurrentWingmanA, AttackingSquad,
-                                                                        AttackingSquad.CurrentWingmanA.BattleDefenseChoice).ToString() + "%";
+                    DefendingSquad.CurrentLeader.ListMAPAttackAccuracy.Add(Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
+                                                                        AttackingSquad[U], AttackingSquad,
+                                                                        AttackingSquad[U].BattleDefenseChoice).ToString() + "%");
                 }
-                else
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyA = null;
-
-                if (AttackingSquad.CurrentWingmanB != null)
-                {
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyB = Map.CalculateHitRate(DefendingSquad.CurrentLeader, DefendingSquad.CurrentLeader.CurrentAttack, DefendingSquad,
-                                                                        AttackingSquad.CurrentWingmanB, AttackingSquad,
-                                                                        AttackingSquad.CurrentWingmanB.BattleDefenseChoice).ToString() + "%";
-                }
-                else
-                    DefendingSquad.CurrentLeader.MAPAttackAccuracyB = null;
             }
 
-            #region Wingman A
+            #region Wingmans
 
-            if (DefendingSquad.CurrentWingmanA != null)
+            for (int U = 1; U < DefendingSquad.UnitsAliveInSquad; ++U)
             {
-                if (DefendingSquad.CurrentWingmanA.CanAttack && DefendingSquad.CurrentWingmanA.PLAAttack != null &&
+                if (DefendingSquad[U].CanAttack && DefendingSquad[U].PLAAttack != null &&
                     Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL &&
                     DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
                 {
-                    DefendingSquad.CurrentWingmanA.CurrentAttack = DefendingSquad.CurrentWingmanA.PLAAttack;
+                    DefendingSquad[U].CurrentAttack = DefendingSquad[U].PLAAttack;
                 }
                 else
                 {
-                    DefendingSquad.CurrentWingmanA.CurrentAttack = null;
+                    DefendingSquad[U].CurrentAttack = null;
                 }
 
                 int TargetUnitIndex = -1;
 
-                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanA != null)
+                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.UnitsAliveInSquad > U)
                 {
                     TargetUnitIndex = 1;
                 }
@@ -913,99 +655,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     TargetUnitIndex = 0;
                 }
 
-                if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanA != null)
+                if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Spread && AttackingSquad.UnitsAliveInSquad > U)
                 {
                     UnitBaseDefencePattern(
                         ActivePlayerIndex, ActiveSquadIndex,
-                        AttackingSquad.CurrentWingmanA, BattleMap.WingmanDamageModifier, CurrentWingmanAAttack,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
+                        new List<Unit>() { AttackingSquad[U] }, new List<float>() { BattleMap.WingmanDamageModifier }, new List<Attack>() { ListAttack[U] },
                         TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 1,
+                        DefendingPlayerIndex, DefendingSquadIndex, U,
                         true, true, Map);
                 }
                 else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Focused)
                 {
                     UnitBaseDefencePattern(
                         ActivePlayerIndex, ActiveSquadIndex,
-                        null, 1, null,
-                        null, WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
+                        new List<Unit>() { }, new List<float>() { }, new List<Attack>() { },
                         TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 1,
+                        DefendingPlayerIndex, DefendingSquadIndex, U,
                         true, true, Map);
                 }
                 else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.ALL)
                 {
                     UnitBaseDefencePattern(
                         ActivePlayerIndex, ActiveSquadIndex,
-                        AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
+                        new List<Unit>() { AttackingSquad.CurrentLeader }, new List<float>() { 1 }, new List<Attack>() { CurrentAttack },
                         TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 1,
-                        true, true, Map);
-                }
-            }
-
-            #endregion
-
-            #region Wingman B
-
-            if (DefendingSquad.CurrentWingmanB != null)
-            {
-                if (DefendingSquad.CurrentWingmanB.CanAttack && DefendingSquad.CurrentWingmanB.PLAAttack != null &&
-                    Map.BattleMenuDefenseFormationChoice != FormationChoices.ALL &&
-                    DefendingSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
-                    DefendingSquad.CurrentWingmanB.CurrentAttack = DefendingSquad.CurrentWingmanB.PLAAttack;
-                else
-                    DefendingSquad.CurrentWingmanB.CurrentAttack = null;
-
-                Unit TargetUnit = null;
-
-
-                int TargetUnitIndex = -1;
-
-                if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanB != null)
-                {
-                    TargetUnitIndex = 2;
-                }
-                else if (Map.BattleMenuDefenseFormationChoice == FormationChoices.Focused)
-                {
-                    TargetUnitIndex = 0;
-                }
-
-                if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Spread && AttackingSquad.CurrentWingmanB != null)
-                {
-                    UnitBaseDefencePattern(
-                        ActivePlayerIndex, ActiveSquadIndex,
-                        AttackingSquad.CurrentWingmanB, 1, CurrentWingmanBAttack,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        null, BattleMap.WingmanDamageModifier, null,
-                        TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 2,
-                        true, true, Map);
-                }
-                else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.Focused)
-                {
-                    UnitBaseDefencePattern(
-                        ActivePlayerIndex, ActiveSquadIndex,
-                        null, 1, null,
-                        null, WingmanDamageModifier, null,
-                        null, WingmanDamageModifier, null,
-                        TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 2,
-                        true, true, Map);
-                }
-                else if (Map.BattleMenuOffenseFormationChoice == FormationChoices.ALL)
-                {
-                    UnitBaseDefencePattern(
-                        ActivePlayerIndex, ActiveSquadIndex,
-                        AttackingSquad.CurrentLeader, 1, CurrentAttack,
-                        null, WingmanDamageModifier, null,
-                        null, WingmanDamageModifier, null,
-                        TargetUnitIndex,
-                        DefendingPlayerIndex, DefendingSquadIndex, 2,
+                        DefendingPlayerIndex, DefendingSquadIndex, U,
                         true, true, Map);
                 }
             }
@@ -1018,9 +692,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private static void UnitBaseDefencePattern(
             int ActivePlayerIndex, int ActiveSquadIndex,
-            Unit Attacker1, float DamageModifier1, Attack CurrentAttack1,
-            Unit Attacker2, float DamageModifier2, Attack CurrentAttack2,
-            Unit Attacker3, float DamageModifier3, Attack CurrentAttack3,
+            List<Unit> ListAttacker, List<float> ListDamageModifier, List<Attack> ListAttack,
             int TargetCounterIndex,
             int TargetPlayerIndex, int TargetSquadIndex, int TargetUnitIndex,
             bool UsePLAWeapon, bool TryToDefendAttack,
@@ -1032,53 +704,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Squad DefenderSquad = Map.ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
             Unit DefenderUnit = DefenderSquad[TargetUnitIndex];
 
-            int HitRate1;
-            int HitRate2;
-            int HitRate3;
+            List<int> ListHitRate = new List<int>();
 
-            if (Attacker1 == null || Attacker1.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack)
-                HitRate1 = 0;
-            else
-                HitRate1 = Map.CalculateHitRate(Attacker1, CurrentAttack1, AttackerSquad, DefenderUnit, DefenderSquad, Unit.BattleDefenseChoices.Attack);
-
-            if (Attacker2 == null || Attacker2.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack)
-                HitRate2 = 0;
-            else
-                HitRate2 = Map.CalculateHitRate(Attacker2, CurrentAttack2, AttackerSquad, DefenderUnit, DefenderSquad, Unit.BattleDefenseChoices.Attack);
-
-            if (Attacker3 == null || Attacker3.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack)
-                HitRate3 = 0;
-            else
-                HitRate3 = Map.CalculateHitRate(Attacker3, CurrentAttack3, AttackerSquad, DefenderUnit, DefenderSquad, Unit.BattleDefenseChoices.Attack);
+            for (int U = 0; U < ListAttacker.Count; U++)
+            {
+                Unit ActiveAttacker = ListAttacker[U];
+                if (ActiveAttacker.BattleDefenseChoice != Unit.BattleDefenseChoices.Attack)
+                    ListHitRate.Add(0);
+                else
+                    ListHitRate.Add(Map.CalculateHitRate(ActiveAttacker, ListAttack[U], AttackerSquad, DefenderUnit, DefenderSquad, Unit.BattleDefenseChoices.Attack));
+            }
 
             int DamageTaken = 0;
             int TempDamage;
 
-            if (HitRate1 > 0)
+            for (int U = 0; U < ListAttacker.Count; U++)
             {
-                TempDamage = Map.DamageFormula(Attacker1, CurrentAttack1, AttackerSquad, DamageModifier1, TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Unit.BattleDefenseChoices.Attack, false).AttackDamage;
-                if (DefenderUnit.HP - TempDamage < DefenderUnit.Boosts.HPMinModifier)
-                    DamageTaken = DefenderUnit.HP - DefenderUnit.Boosts.HPMinModifier;
-                else
-                    DamageTaken += TempDamage;
-            }
-
-            if (HitRate2 > 0)
-            {
-                TempDamage = Map.DamageFormula(Attacker2, CurrentAttack2, AttackerSquad, DamageModifier2, TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Unit.BattleDefenseChoices.Attack, false).AttackDamage;
-                if (DefenderUnit.HP - (TempDamage + DamageTaken) < DefenderUnit.Boosts.HPMinModifier)
-                    DamageTaken = DefenderUnit.HP - DefenderUnit.Boosts.HPMinModifier;
-                else
-                    DamageTaken += TempDamage;
-            }
-
-            if (HitRate3 > 0)
-            {
-                TempDamage = Map.DamageFormula(Attacker3, CurrentAttack3, AttackerSquad, DamageModifier3, TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Unit.BattleDefenseChoices.Attack, false).AttackDamage;
-                if (DefenderUnit.HP - (TempDamage + DamageTaken) < DefenderUnit.Boosts.HPMinModifier)
-                    DamageTaken = DefenderUnit.HP - DefenderUnit.Boosts.HPMinModifier;
-                else
-                    DamageTaken += TempDamage;
+                if (ListHitRate[U] > 0)
+                {
+                    Unit ActiveAttacker = ListAttacker[U];
+                    TempDamage = Map.DamageFormula(ActiveAttacker, ListAttack[U], AttackerSquad, ListDamageModifier[U], TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Unit.BattleDefenseChoices.Attack, false).AttackDamage;
+                    if (DefenderUnit.HP - TempDamage < DefenderUnit.Boosts.HPMinModifier)
+                        DamageTaken = DefenderUnit.HP - DefenderUnit.Boosts.HPMinModifier;
+                    else
+                        DamageTaken += TempDamage;
+                }
             }
 
             //The Unit won't die from being attacked.
@@ -1123,31 +773,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 DamageTaken = 0;
 
-                if (HitRate1 > 0)
+                for (int U = 0; U < ListAttacker.Count; U++)
                 {
-                    TempDamage = Map.DamageFormula(Attacker1, CurrentAttack1, AttackerSquad, DamageModifier1, TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Unit.BattleDefenseChoices.Defend, false).AttackDamage;
-                    if (DefenderUnit.HP - TempDamage < DefenderUnit.Boosts.HPMinModifier)
-                        DamageTaken = DefenderUnit.HP - DefenderUnit.Boosts.HPMinModifier;
-                    else
-                        DamageTaken += TempDamage;
-                }
-
-                if (HitRate2 > 0)
-                {
-                    TempDamage = Map.DamageFormula(Attacker2, CurrentAttack2, AttackerSquad, DamageModifier2, TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Unit.BattleDefenseChoices.Defend, false).AttackDamage;
-                    if (DefenderUnit.HP - TempDamage < DefenderUnit.Boosts.HPMinModifier)
-                        DamageTaken = DefenderUnit.HP - DefenderUnit.Boosts.HPMinModifier;
-                    else
-                        DamageTaken += TempDamage;
-                }
-
-                if (HitRate3 > 0)
-                {
-                    TempDamage = Map.DamageFormula(Attacker3, CurrentAttack3, AttackerSquad, DamageModifier3, TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Unit.BattleDefenseChoices.Defend, false).AttackDamage;
-                    if (DefenderUnit.HP - TempDamage < DefenderUnit.Boosts.HPMinModifier)
-                        DamageTaken = DefenderUnit.HP - DefenderUnit.Boosts.HPMinModifier;
-                    else
-                        DamageTaken += TempDamage;
+                    if (ListHitRate[U] > 0)
+                    {
+                        TempDamage = Map.DamageFormula(ListAttacker[U], ListAttack[U], AttackerSquad, ListDamageModifier[U], TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Unit.BattleDefenseChoices.Defend, false).AttackDamage;
+                        if (DefenderUnit.HP - TempDamage < DefenderUnit.Boosts.HPMinModifier)
+                            DamageTaken = DefenderUnit.HP - DefenderUnit.Boosts.HPMinModifier;
+                        else
+                            DamageTaken += TempDamage;
+                    }
                 }
 
                 if (DefenderUnit.HP - DamageTaken > 0)

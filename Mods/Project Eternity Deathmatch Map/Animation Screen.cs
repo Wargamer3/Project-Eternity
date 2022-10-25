@@ -397,9 +397,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         case "Enemy Wingman A Standing":
                         case "Enemy Wingman 1 Standing":
-                            if (EnemySquad.CurrentWingmanA != null)
+                            if (EnemySquad.UnitsAliveInSquad > 1)
                             {
-                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemySquad.CurrentWingmanA.Animations.Default.AnimationName);
+                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemySquad[1].Animations.Default.AnimationName);
 
                                 ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
                                 ActiveMarkerEvent.AnimationMarker.Load();
@@ -413,9 +413,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         case "Enemy Wingman B Standing":
                         case "Enemy Wingman 2 Standing":
-                            if (EnemySquad.CurrentWingmanB != null)
+                            if (EnemySquad.UnitsAliveInSquad > 2)
                             {
-                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemySquad.CurrentWingmanB.Animations.Default.AnimationName);
+                                ActiveMarkerEvent.AnimationMarker = new AnimationClass(EnemySquad[2].Animations.Default.AnimationName);
 
                                 ActiveMarkerEvent.AnimationMarker.DicTimeline = DicTimeline;
                                 ActiveMarkerEvent.AnimationMarker.Load();

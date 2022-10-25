@@ -213,7 +213,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         Stage = MenuChoices.SquadSelected;
 
-                        Unit OldWingmanA = ActiveSquad.CurrentWingmanA;
+                        Unit OldWingmanA = ActiveSquad[1];
                         if (OldWingmanA != null)
                         {
                             PlayerRoster.TeamUnits.Add(OldWingmanA);
@@ -235,7 +235,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         Stage = MenuChoices.SquadSelected;
 
-                        Unit OldWingmanB = ActiveSquad.CurrentWingmanB;
+                        Unit OldWingmanB = ActiveSquad[2];
                         if (OldWingmanB != null)
                         {
                             PlayerRoster.TeamUnits.Add(OldWingmanB);
@@ -305,32 +305,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 			{
                 if (S < ListPresentSquad.Count)
                 {
-                    string OutputText = ListPresentSquad[S].SquadName + "(";
+                    Squad DrawnSquad = ListPresentSquad[S];
 
-                    if (ListPresentSquad[S].CurrentLeader != null)
-                        OutputText += ListPresentSquad[S].CurrentLeader.RelativePath;
-                    if (ListPresentSquad[S].CurrentWingmanA != null)
-                        OutputText += " / " + ListPresentSquad[S].CurrentWingmanA.RelativePath;
-                    if (ListPresentSquad[S].CurrentWingmanB != null)
-                        OutputText += " / " + ListPresentSquad[S].CurrentWingmanB.RelativePath;
+                    string OutputText = DrawnSquad.SquadName + "(";
+
+                    if (DrawnSquad.CurrentLeader != null)
+                        OutputText += DrawnSquad.CurrentLeader.RelativePath;
+
+                    for (int U = 1; U < DrawnSquad.UnitsAliveInSquad; ++U)
+                    {
+                        OutputText += " / " + DrawnSquad[U].RelativePath;
+                    }
 
                     OutputText += ") [";
-                    if (ListPresentSquad[S].IsNameLocked)
+                    if (DrawnSquad.IsNameLocked)
                         OutputText += "*";
                     else
                         OutputText += " ";
                     OutputText += ",";
-                    if (ListPresentSquad[S].IsLeaderLocked)
+                    if (DrawnSquad.IsLeaderLocked)
                         OutputText += "*";
                     else
                         OutputText += " ";
                     OutputText += ",";
-                    if (ListPresentSquad[S].IsWingmanALocked)
+                    if (DrawnSquad.IsWingmanALocked)
                         OutputText += "*";
                     else
                         OutputText += " ";
                     OutputText += ",";
-                    if (ListPresentSquad[S].IsWingmanBLocked)
+                    if (DrawnSquad.IsWingmanBLocked)
                         OutputText += "*";
                     else
                         OutputText += " ";

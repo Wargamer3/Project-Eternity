@@ -159,7 +159,7 @@ namespace ProjectEternity.Core.Units.Transforming
             SpriteUnit = ArrayTransformingUnit[NewActiveUnitIndex].UnitTransformed.SpriteUnit;
         }
 
-        public bool CanTransform(int ActiveUnit, Unit CurrentWingmanA, Unit CurrentWingmanB)
+        public bool CanTransform(int ActiveUnit, List<Unit> ListWingman)
         {
             if (ArrayTransformingUnit[ActiveUnit].WillRequirement >= 0 && PilotMorale < ArrayTransformingUnit[ActiveUnit].WillRequirement)
                 return false;
@@ -167,18 +167,10 @@ namespace ProjectEternity.Core.Units.Transforming
             if (ArrayTransformingUnit[ActiveUnit].UnitTransformed.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex) &&
                 !ArrayTransformingUnit[ActiveUnit].UnitTransformed.DicRankByMovement.ContainsKey(UnitStats.TerrainLandIndex))
             {
-                if (CurrentWingmanA != null)
+                foreach (Unit ActiveWingman in ListWingman)
                 {
-                    if (!CurrentWingmanA.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
+                    if (!ActiveWingman.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
                         return false;
-                    else
-                    {
-                        if (CurrentWingmanB != null)
-                        {
-                            if (!CurrentWingmanB.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
-                                return false;
-                        }
-                    }
                 }
             }
             return true;

@@ -343,28 +343,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (LeftFormation == FormationChoices.ALL)
             {
                 BattleSumaryDrawLeaderLeft(g, DrawX, DrawY, SquadLeft.CurrentLeader, Color.FromNonPremultiplied(0xff, 0x00, 0x00, 255), ShowStats);
-                if (SquadLeft.CurrentLeader.MAPAttackAccuracyA != null)
-                    g.DrawStringMiddleAligned(fntAccuracySmall, SquadLeft.CurrentLeader.MAPAttackAccuracyA, new Vector2(DrawX + 212, DrawY + 35), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
-                if (SquadLeft.CurrentLeader.MAPAttackAccuracyB != null)
-                    g.DrawStringMiddleAligned(fntAccuracySmall, SquadLeft.CurrentLeader.MAPAttackAccuracyB, new Vector2(DrawX + 212, DrawY + 47), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
+                for (int A = 0; A < SquadLeft.CurrentLeader.ListMAPAttackAccuracy.Count; A++)
+                {
+                    g.DrawStringMiddleAligned(fntAccuracySmall, SquadLeft.CurrentLeader.ListMAPAttackAccuracy[A], new Vector2(DrawX + 212, DrawY + 35 + A * 12), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
+                }
             }
             else
                 BattleSumaryDrawLeaderLeft(g, DrawX, DrawY, SquadLeft.CurrentLeader, Color.FromNonPremultiplied(0xff, 0x00, 0x00, 255), ShowStats);
 
             #endregion
 
-            if (SquadLeft.CurrentWingmanA != null)
+            for (int U = SquadLeft.UnitsAliveInSquad - 1; U >= 1; --U)
             {
-                BattleSumaryDrawWingmanLeft(g, 5, 230, SquadLeft.CurrentWingmanA, Color.FromNonPremultiplied(0xff, 0x00, 0x00, 255), ShowStats);
-                DrawBox(g, new Vector2(5, 230), 240, 65, Color.Red);
-                DrawBox(g, new Vector2(245, 230), 70, 65, Color.Red);
-                g.DrawString(fntFinlanderFont, SquadLeft.CurrentWingmanA.UnitStat.Name, new Vector2(15, 230 + 5), Color.White);
-                g.DrawString(fntFinlanderFont, SquadLeft.CurrentWingmanA.HP.ToString(), new Vector2(15, 230 + 27), Color.White);
-            }
+                float Y = 160 + U * 70;
 
-            if (SquadLeft.CurrentWingmanB != null)
-            {
-                BattleSumaryDrawWingmanLeft(g, 5, 300, SquadLeft.CurrentWingmanB, Color.FromNonPremultiplied(0xff, 0x00, 0x00, 255), ShowStats);
+                BattleSumaryDrawWingmanLeft(g, 5, 230, SquadLeft[U], Color.FromNonPremultiplied(0xff, 0x00, 0x00, 255), ShowStats);
+                DrawBox(g, new Vector2(5, Y), 240, 65, Color.Red);
+                DrawBox(g, new Vector2(245, Y), 70, 65, Color.Red);
+                g.DrawString(fntFinlanderFont, SquadLeft[U].UnitStat.Name, new Vector2(15, Y + 5), Color.White);
+                g.DrawString(fntFinlanderFont, SquadLeft[U].HP.ToString(), new Vector2(15, Y + 27), Color.White);
             }
 
             if (Support != null)
@@ -470,23 +467,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (RightFormation == FormationChoices.ALL)
             {
                 BattleSumaryDrawLeaderRight(g, DrawX, DrawY, SquadRight.CurrentLeader, Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
-                if (SquadRight.CurrentLeader.MAPAttackAccuracyA != null)
-                    g.DrawStringMiddleAligned(fntAccuracySmall, SquadRight.CurrentLeader.MAPAttackAccuracyA, new Vector2(DrawX + 25, DrawY + 12), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
-                if (SquadRight.CurrentLeader.MAPAttackAccuracyB != null)
-                    g.DrawStringMiddleAligned(fntAccuracySmall, SquadRight.CurrentLeader.MAPAttackAccuracyB, new Vector2(DrawX + 25, DrawY + 24), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
+                for (int A = 0; A < SquadRight.CurrentLeader.ListMAPAttackAccuracy.Count; A++)
+                {
+                    g.DrawStringMiddleAligned(fntAccuracySmall, SquadRight.CurrentLeader.ListMAPAttackAccuracy[A], new Vector2(DrawX + 25, DrawY + 12 + 12 * A), Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
+                }
             }
             else
                 BattleSumaryDrawLeaderRight(g, DrawX, DrawY, SquadRight.CurrentLeader, Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
 
             #endregion
 
-            if (SquadRight.CurrentWingmanA != null)
+            for (int U = SquadRight.UnitsAliveInSquad - 1; U >= 1; --U)
             {
-                BattleSumaryDrawWingmanRight(g, 325, 230, SquadRight.CurrentWingmanA, Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
-            }
-            if (SquadRight.CurrentWingmanB != null)
-            {
-                BattleSumaryDrawWingmanRight(g, 325, 300, SquadRight.CurrentWingmanB, Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
+                float Y = 160 + U * 70;
+                BattleSumaryDrawWingmanRight(g, 325, 230, SquadRight[U], Color.FromNonPremultiplied(0x00, 0xc6, 0xff, 255));
             }
         }
 

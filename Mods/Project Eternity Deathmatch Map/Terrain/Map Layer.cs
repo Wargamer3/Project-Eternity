@@ -40,7 +40,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 for (int X = 0; X < Map.MapSize.X; X++)
                 {
-                    ArrayTerrain[X, Y] = new Terrain(X, Y, LayerIndex, _Depth);
+                    ArrayTerrain[X, Y] = new Terrain(X, Y, LayerIndex, _Depth, 1, new TerrainActivation[0], new TerrainBonus[0], new int[0]);
+                    ArrayTerrain[X, Y].Owner = Map;
+                    ArrayTerrain[X, Y].WorldPosition.Z = ArrayTerrain[X, Y].Height + LayerIndex;
                 }
             }
 

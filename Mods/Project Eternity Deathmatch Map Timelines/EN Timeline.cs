@@ -239,11 +239,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     case "wingman a":
                     case "wingman 1":
-                        return Owner.AttackingSquad.CurrentWingmanA.EN - Owner.BattleResult.ArrayResult[1].AttackAttackerFinalEN;
+                        return Owner.AttackingSquad[1].EN - Owner.BattleResult.ArrayResult[1].AttackAttackerFinalEN;
 
                     case "wingman b":
                     case "wingman 2":
-                        return Owner.AttackingSquad.CurrentWingmanB.EN - Owner.BattleResult.ArrayResult[2].AttackAttackerFinalEN;
+                        return Owner.AttackingSquad[2].EN - Owner.BattleResult.ArrayResult[2].AttackAttackerFinalEN;
                 }
             }
 

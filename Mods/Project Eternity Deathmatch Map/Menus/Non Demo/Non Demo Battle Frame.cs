@@ -11,26 +11,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             public struct NonDemoBattleFrameSquad
             {
-                public NonDemoBattleUnitFrame LeaderStance;
-                public NonDemoBattleUnitFrame WingmanAStance;
-                public NonDemoBattleUnitFrame WingmanBStance;
+                public NonDemoBattleUnitFrame[] ArrayStance;
                 public NonDemoBattleUnitFrame SupportStance;
 
                 public void Update(GameTime gameTime)
                 {
-                    if (LeaderStance != null)
+                    foreach (NonDemoBattleUnitFrame ActiveStance in ArrayStance)
                     {
-                        LeaderStance.Update(gameTime);
-                    }
-
-                    if (WingmanAStance != null)
-                    {
-                        WingmanAStance.Update(gameTime);
-                    }
-
-                    if (WingmanBStance != null)
-                    {
-                        WingmanBStance.Update(gameTime);
+                        ActiveStance.Update(gameTime);
                     }
 
                     if (SupportStance != null)
@@ -41,19 +29,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 public void OnEnd()
                 {
-                    if (LeaderStance != null)
+                    foreach (NonDemoBattleUnitFrame ActiveStance in ArrayStance)
                     {
-                        LeaderStance.OnEnd();
-                    }
-
-                    if (WingmanAStance != null)
-                    {
-                        WingmanAStance.OnEnd();
-                    }
-
-                    if (WingmanBStance != null)
-                    {
-                        WingmanBStance.OnEnd();
+                        ActiveStance.OnEnd();
                     }
 
                     if (SupportStance != null)
@@ -64,19 +42,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 public void Draw(CustomSpriteBatch g, int NonDemoAnimationTimer)
                 {
-                    if (LeaderStance != null)
+                    foreach (NonDemoBattleUnitFrame ActiveStance in ArrayStance)
                     {
-                        LeaderStance.Draw(g, NonDemoAnimationTimer);
-                    }
-
-                    if (WingmanAStance != null)
-                    {
-                        WingmanAStance.Draw(g, NonDemoAnimationTimer);
-                    }
-
-                    if (WingmanBStance != null)
-                    {
-                        WingmanBStance.Draw(g, NonDemoAnimationTimer);
+                        ActiveStance.Draw(g, NonDemoAnimationTimer);
                     }
 
                     if (SupportStance != null)
@@ -89,9 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     NonDemoBattleFrameSquad NewCopy = new NonDemoBattleFrameSquad();
 
-                    NewCopy.LeaderStance = LeaderStance;
-                    NewCopy.WingmanAStance = WingmanAStance;
-                    NewCopy.WingmanBStance = WingmanBStance;
+                    NewCopy.ArrayStance = ArrayStance;
                     NewCopy.SupportStance = SupportStance;
 
                     return NewCopy;

@@ -281,30 +281,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActiveSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
 
-            if (ActiveSquad.CurrentWingmanA != null)
+            for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 1; --U)
             {
-                ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                if (ActiveSquad.CurrentWingmanA.PLAAttack != null)
+                Unit ActiveWingman = ActiveSquad[U];
+
+                ActiveWingman.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                if (ActiveWingman.PLAAttack != null)
                 {
-                    ActiveSquad.CurrentWingmanA.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanA, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentTerrainIndex, true);
+                    ActiveWingman.PLAAttack.UpdateAttack(ActiveWingman, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentTerrainIndex, true);
 
-                    if (ActiveSquad.CurrentWingmanA.PLAAttack.CanAttack)
+                    if (ActiveWingman.PLAAttack.CanAttack)
                     {
-                        ActiveSquad.CurrentWingmanA.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
-                    }
-                }
-            }
-
-            if (ActiveSquad.CurrentWingmanB != null)
-            {
-                ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-                if (ActiveSquad.CurrentWingmanB.PLAAttack != null)
-                {
-                    ActiveSquad.CurrentWingmanB.PLAAttack.UpdateAttack(ActiveSquad.CurrentWingmanB, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, TargetSquad.Position, Map.ListPlayer[Map.TargetPlayerIndex].Team, TargetSquad.ArrayMapSize, TargetSquad.CurrentTerrainIndex, true);
-
-                    if (ActiveSquad.CurrentWingmanB.PLAAttack.CanAttack)
-                    {
-                        ActiveSquad.CurrentWingmanB.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
+                        ActiveWingman.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
                     }
                 }
             }
