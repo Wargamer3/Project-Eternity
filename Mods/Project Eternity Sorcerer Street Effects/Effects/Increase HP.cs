@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Globalization;
+using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -8,23 +10,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static string Name = "Sorcerer Street Increase HP";
 
+        private string _HPIncrease;
+
         public IncreaseHPEffect()
             : base(Name, false)
         {
+            _HPIncrease = string.Empty;
         }
 
         public IncreaseHPEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
+            _HPIncrease = string.Empty;
         }
-        
+
         protected override void Load(BinaryReader BR)
         {
+            _HPIncrease = BR.ReadString();
         }
 
         protected override void Save(BinaryWriter BW)
         {
+            BW.Write(_HPIncrease);
         }
+
 
         public override bool CanActivate()
         {
@@ -33,9 +42,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.IncreaseSelfHP(30);
+            string EvaluationResult = Params.Map.ActiveParser.Evaluate(_HPIncrease);
 
-            return null;
+            Params.IncreaseSelfHP(int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
+
+            return "HP" + _HPIncrease;
         }
 
         protected override BaseEffect DoCopy()
@@ -48,5 +59,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override void DoCopyMembers(BaseEffect Copy)
         {
         }
+
+        #region Properties
+
+        [CategoryAttribute("Effects"),
+        DescriptionAttribute(""),
+        DefaultValueAttribute("")]
+        public string HP
+        {
+            get
+            {
+                return _HPIncrease;
+            }
+            set
+            {
+                _HPIncrease = value;
+            }
+        }
+
+        #endregion
     }
 }

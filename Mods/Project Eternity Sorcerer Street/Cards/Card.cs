@@ -58,6 +58,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "Creature Cards":
                     return new CreatureCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
 
+                case "Item Cards":
+                    return new ItemCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+
                 case SpellCard.SpellCardType:
                     return new SpellCard(Path, Content);
             }
@@ -172,8 +175,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (RealRotationTimer < MathHelper.Pi)
             {
-                g.Draw(sprCardBack, new Vector2(X, Y), new Rectangle(0, 0, sprCardFront.Width, sprCardFront.Height), Color.White,
-                    0f, new Vector2(sprCardFront.Width / 2, sprCardFront.Height / 2), new Vector2(ScaleX, ScaleY), SpriteEffects.None, 0f);
+                g.Draw(sprCardBack, new Vector2(X, Y), new Rectangle(0, 0, sprCardBack.Width, sprCardBack.Height), Color.White,
+                    0f, new Vector2(sprCardBack.Width / 2, sprCardBack.Height / 2), new Vector2(ScaleX, ScaleY), SpriteEffects.None, 0f);
             }
             else
             {

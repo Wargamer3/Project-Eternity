@@ -1,32 +1,29 @@
 ﻿using System;
 using System.IO;
-using System.Globalization;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class IncreaseSTEffect : SorcererStreetEffect
+    public sealed class IncreaseInvaderSTEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Increase ST";
+        public static string Name = "Sorcerer Street Increase Invader ST";
 
-        private string _STIncrease;
+        private int _STIncrease;
 
-        public IncreaseSTEffect()
+        public IncreaseInvaderSTEffect()
             : base(Name, false)
         {
-            _STIncrease = string.Empty;
         }
 
-        public IncreaseSTEffect(SorcererStreetBattleParams Params)
+        public IncreaseInvaderSTEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
-            _STIncrease = string.Empty;
         }
         
         protected override void Load(BinaryReader BR)
         {
-            _STIncrease = BR.ReadString();
+            _STIncrease = BR.ReadInt32();
         }
 
         protected override void Save(BinaryWriter BW)
@@ -41,35 +38,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = Params.Map.ActiveParser.Evaluate(_STIncrease);
+            Params.GlobalContext.InvaderFinalST += _STIncrease;
 
-            Params.IncreaseSelfST(int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
-
-            return "ST+" + EvaluationResult;
+            return null;
         }
 
         protected override BaseEffect DoCopy()
         {
-            IncreaseSTEffect NewEffect = new IncreaseSTEffect(Params);
-
-            NewEffect._STIncrease = _STIncrease;
+            IncreaseInvaderSTEffect NewEffect = new IncreaseInvaderSTEffect(Params);
 
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
-            IncreaseSTEffect NewEffect = (IncreaseSTEffect)Copy;
-
-            _STIncrease = NewEffect._STIncrease;
         }
 
         #region Properties
 
-        [CategoryAttribute("Effects"),
+        [CategoryAttribute("Tileset"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public string ST
+        public int ST
         {
             get
             {

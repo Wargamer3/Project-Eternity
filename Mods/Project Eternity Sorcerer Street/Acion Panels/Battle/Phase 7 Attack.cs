@@ -49,7 +49,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (AttackSequence == AttackSequences.FirstAttack)
             {
                 ExecuteFirstAttack();
-                AttackSequence = AttackSequences.SecondAttack;
             }
             else if (AttackSequence == AttackSequences.SecondAttack)
             {
@@ -133,34 +132,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 FinalST = Map.GlobalSorcererStreetBattleContext.InvaderFinalST;
                 FinalHP = Map.GlobalSorcererStreetBattleContext.DefenderFinalHP;
 
-                Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature.ActivateSkill(BeforeAttackRequirement);
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature.ActivateSkill(BeforeDefenseRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, BeforeAttackRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, BeforeAttackRequirement);
             }
             else
             {
                 FinalST = Map.GlobalSorcererStreetBattleContext.DefenderFinalST;
                 FinalHP = Map.GlobalSorcererStreetBattleContext.InvaderFinalHP;
 
-                Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature.ActivateSkill(BeforeDefenseRequirement);
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature.ActivateSkill(BeforeAttackRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, BeforeDefenseRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, BeforeDefenseRequirement);
             }
 
             FinalHP = Math.Max(0, FinalHP - FinalST);
             SecondAttacker.CurrentHP = Math.Min(SecondAttacker.CurrentHP, FinalHP);
+
+            if (SecondAttacker.CurrentHP > 0)
+            {
+                AttackSequence = AttackSequences.SecondAttack;
+            }
+            else
+            {
+                AttackSequence = AttackSequences.End;
+            }
 
             if (PlayAnimations)
             {
@@ -170,7 +164,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 else
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(ListActionMenuChoice, Map, FirstAttackerItem.AttackAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(ListActionMenuChoice, Map, FirstAttackerItem.ItemActivationAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
                 }
             }
         }
@@ -187,30 +181,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 FinalST = Map.GlobalSorcererStreetBattleContext.DefenderFinalST;
                 FinalHP = Map.GlobalSorcererStreetBattleContext.InvaderFinalHP;
 
-                Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature.ActivateSkill(BeforeAttackRequirement);
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature.ActivateSkill(BeforeDefenseRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, BeforeAttackRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, BeforeAttackRequirement);
             }
             else
             {
                 FinalST = Map.GlobalSorcererStreetBattleContext.InvaderFinalST;
                 FinalHP = Map.GlobalSorcererStreetBattleContext.DefenderFinalHP;
 
-                Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature.ActivateSkill(BeforeDefenseRequirement);
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-                Map.GlobalSorcererStreetBattleContext.OpponentCreature = Map.GlobalSorcererStreetBattleContext.Defender;
-
-                Map.GlobalSorcererStreetBattleContext.UserCreature.ActivateSkill(BeforeAttackRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, BeforeDefenseRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, BeforeDefenseRequirement);
             }
 
             FinalHP = Math.Max(0, FinalHP - FinalST);

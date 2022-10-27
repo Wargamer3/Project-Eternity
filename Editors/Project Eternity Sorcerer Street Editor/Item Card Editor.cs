@@ -10,6 +10,10 @@ namespace ProjectEternity.Editors.CardEditor
 {
     public partial class ItemCardEditor : BaseEditor
     {
+        private enum ItemSelectionChoices { Skill, Animation };
+
+        private ItemSelectionChoices ItemSelectionChoice;
+
         public ItemCardEditor()
         {
             InitializeComponent();
@@ -53,12 +57,10 @@ namespace ProjectEternity.Editors.CardEditor
 
             BW.Write((int)txtMagicCost.Value);
             BW.Write((byte)cboRarity.SelectedIndex);
+            BW.Write((byte)cboCategory.SelectedIndex);
 
-            BW.Write(lstSkill.Items.Count);
-            for (int S = 0; S < lstSkill.Items.Count; ++S)
-            {
-                BW.Write(lstSkill.Items[S].ToString());
-            }
+            BW.Write(txtSkill.Text);
+            BW.Write(txtActivationAnimation.Text);
 
             FS.Close();
             BW.Close();
@@ -66,29 +68,37 @@ namespace ProjectEternity.Editors.CardEditor
 
         private void LoadCard(string UnitPath)
         {
-            Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(39);
-            CreatureCard LoadedCard = new CreatureCard(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
+            Name = UnitPath.Substring(0, UnitPath.Length - 4).Substring(35);
+            ItemCard LoadedCard = new ItemCard(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
 
             this.Text = LoadedCard.Name + " - Project Eternity Item Card Editor";
 
             txtName.Text = LoadedCard.Name;
             txtDescription.Text = LoadedCard.Description;
+            txtSkill.Text = LoadedCard.SkillChainName;
+            txtActivationAnimation.Text = LoadedCard.ItemActivationAnimationPath;
+
 
             txtMagicCost.Value = LoadedCard.MagicCost;
             cboRarity.SelectedIndex = (int)LoadedCard.Rarity;
+            cboCategory.SelectedIndex = (int)LoadedCard.ItemType;
         }
 
-        private void btnAddSkill_Click(object sender, EventArgs e)
+        private void tsmSave_Click(object sender, EventArgs e)
         {
-            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacterSkills));
+            SaveItem(FilePath, null);
         }
 
-        private void btnRemoveSkill_Click(object sender, EventArgs e)
+        private void btnSetSkill_Click(object sender, EventArgs e)
         {
-            if (lstSkill.SelectedIndex >= 0)
-            {
-                lstSkill.Items.RemoveAt(lstSkill.SelectedIndex);
-            }
+            ItemSelectionChoice = ItemSelectionChoices.Skill;
+            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathSorcererStreetSkillChains));
+        }
+
+        private void btnSetActivationAnimation_Click(object sender, EventArgs e)
+        {
+            ItemSelectionChoice = ItemSelectionChoices.Animation;
+            ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathAnimations));
         }
 
         protected void ListMenuItemsSelected(List<string> Items)
@@ -96,16 +106,29 @@ namespace ProjectEternity.Editors.CardEditor
             if (Items == null)
                 return;
 
+            string Name;
             for (int I = 0; I < Items.Count; I++)
             {
-                string Name = Items[I].Substring(0, Items[I].Length - 4).Substring(24);
-                lstSkill.Items.Add(Name);
-            }
-        }
+                switch (ItemSelectionChoice)
+                {
+                    case ItemSelectionChoices.Skill:
+                        if (Items[I] == null)
+                        {
+                            txtSkill.Text = string.Empty;
+                        }
+                        else
+                        {
+                            Name = Items[I].Substring(0, Items[I].Length - 5).Substring(37);
+                            txtSkill.Text = Name;
+                        }
+                        break;
 
-        private void tsmSave_Click(object sender, EventArgs e)
-        {
-            SaveItem(FilePath, null);
+                    case ItemSelectionChoices.Animation:
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(19);
+                        txtActivationAnimation.Text = Name;
+                        break;
+                }
+            }
         }
     }
 }

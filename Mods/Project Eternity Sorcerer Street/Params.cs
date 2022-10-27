@@ -13,8 +13,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetBattleContext
     {
-        public SorcererStreetMap Map;
-
         public CreatureCard Invader;
         public CreatureCard Defender;
 
@@ -33,8 +31,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Card InvaderItem;
         public Card DefenderItem;
 
+        public BaseEffect ActivatedEffect;
+
         public CreatureCard UserCreature;
         public CreatureCard OpponentCreature;
+
+        public Player UserPlayer;
+        public Player OpponentPlayer;
 
         public ActionPanelHolder ListBattlePanelHolder;
 
@@ -46,6 +49,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public SorcererStreetBattleContext(SorcererStreetBattleContext GlobalContext)
         {
+        }
+
+        public void ActiveSkill(CreatureCard UserCreature, CreatureCard OpponentCreature, Player UserPlayer, Player OpponentPlayer, string RequirementName)
+        {
+            this.UserCreature = UserCreature;
+            this.OpponentCreature = OpponentCreature;
+            this.UserPlayer = UserPlayer;
+            this.OpponentPlayer = OpponentPlayer;
+
+            UserCreature.ActivateSkill(RequirementName);
         }
     }
 
@@ -108,11 +121,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void IncreaseSelfST(int Value)
         {
-            if (GlobalContext.OpponentCreature == GlobalContext.Invader)
+            if (GlobalContext.UserCreature == GlobalContext.Invader)
             {
                 GlobalContext.InvaderFinalST += Value;
             }
-            else if (GlobalContext.OpponentCreature == GlobalContext.Defender)
+            else
             {
                 GlobalContext.DefenderFinalST += Value;
             }

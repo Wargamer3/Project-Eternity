@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool IsHuman;
         public bool IsOnline;
         public int Team;
+        public int Rank;//Rank in the game between players
         public SorcererStreetUnit GamePiece;
         public int Magic;
         public Directions CurrentDirection;

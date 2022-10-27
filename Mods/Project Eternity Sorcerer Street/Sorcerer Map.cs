@@ -76,11 +76,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Pathfinder = new MovementAlgorithmSorcererStreet(this);
             ListPlayer = new List<Player>();
             ListLocalPlayerInfo = new List<Player>();
-            Params = SorcererStreetParams = new SorcererStreetBattleParams();
-            GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
+
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
             LayerManager = new LayerHolderSorcererStreet(this);
             MapEnvironment = new EnvironmentManagerSorcererStreet(this);
+            ActiveParser = new SorcererStreetFormulaParser(this);
 
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;
@@ -116,6 +116,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetMap(string GameMode)
             : this()
         {
+            Params = SorcererStreetParams = new SorcererStreetBattleParams();
+            GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
         }
 
         public SorcererStreetMap(string BattleMapPath, string GameMode)
@@ -411,6 +413,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Update(GameTime gameTime)
         {
+            SorcererStreetParams.Map = this;
+
             if (!IsFrozen)
             {
                 if (ShowUnits)

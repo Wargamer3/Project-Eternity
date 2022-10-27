@@ -27,6 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public bool SupportCreature;
         public bool ItemCreature;
+        public bool Immediate;//Allow all territory command after taking a land (either vacant or after a battle)
         public int DiscardCost;
 
         public string AttackAnimationPath;

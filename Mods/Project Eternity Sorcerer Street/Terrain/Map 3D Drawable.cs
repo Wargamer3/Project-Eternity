@@ -320,7 +320,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
             }
 
-            if (!Map.IsAPlatform)
+            if (!Map.IsAPlatform && Map.ListPlayer.Count > 0)
             {
                 SetTarget(new Vector3(Map.TileSize.X * Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.X, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Z * LayerHeight, Map.TileSize.Y * Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Y));
 

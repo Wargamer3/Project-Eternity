@@ -31,22 +31,26 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.gbCardInformation = new System.Windows.Forms.GroupBox();
+            this.txtActivationAnimation = new System.Windows.Forms.TextBox();
+            this.lblActivationAnimation = new System.Windows.Forms.Label();
+            this.btnSetActivationAnimation = new System.Windows.Forms.Button();
+            this.lblSkill = new System.Windows.Forms.Label();
+            this.txtSkill = new System.Windows.Forms.TextBox();
+            this.btnSetSkill = new System.Windows.Forms.Button();
             this.cboRarity = new System.Windows.Forms.ComboBox();
             this.lblRarity = new System.Windows.Forms.Label();
             this.txtMagicCost = new System.Windows.Forms.NumericUpDown();
             this.lblMagicCost = new System.Windows.Forms.Label();
-            this.lblDescription = new System.Windows.Forms.Label();
-            this.txtDescription = new System.Windows.Forms.TextBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
-            this.gbSkills = new System.Windows.Forms.GroupBox();
-            this.btnRemoveSkill = new System.Windows.Forms.Button();
-            this.btnAddSkill = new System.Windows.Forms.Button();
-            this.lstSkill = new System.Windows.Forms.ListBox();
+            this.txtDescription = new System.Windows.Forms.TextBox();
+            this.gbDescription = new System.Windows.Forms.GroupBox();
+            this.cboCategory = new System.Windows.Forms.ComboBox();
+            this.lblCategory = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.gbCardInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicCost)).BeginInit();
-            this.gbSkills.SuspendLayout();
+            this.gbDescription.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -55,7 +59,7 @@
             this.tsmSave});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(377, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(434, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -68,20 +72,78 @@
             // 
             // gbCardInformation
             // 
+            this.gbCardInformation.Controls.Add(this.cboCategory);
+            this.gbCardInformation.Controls.Add(this.lblCategory);
+            this.gbCardInformation.Controls.Add(this.txtActivationAnimation);
+            this.gbCardInformation.Controls.Add(this.lblActivationAnimation);
+            this.gbCardInformation.Controls.Add(this.btnSetActivationAnimation);
+            this.gbCardInformation.Controls.Add(this.lblSkill);
+            this.gbCardInformation.Controls.Add(this.txtSkill);
+            this.gbCardInformation.Controls.Add(this.btnSetSkill);
             this.gbCardInformation.Controls.Add(this.cboRarity);
             this.gbCardInformation.Controls.Add(this.lblRarity);
             this.gbCardInformation.Controls.Add(this.txtMagicCost);
             this.gbCardInformation.Controls.Add(this.lblMagicCost);
-            this.gbCardInformation.Controls.Add(this.lblDescription);
-            this.gbCardInformation.Controls.Add(this.txtDescription);
             this.gbCardInformation.Controls.Add(this.txtName);
             this.gbCardInformation.Controls.Add(this.lblName);
             this.gbCardInformation.Location = new System.Drawing.Point(12, 27);
             this.gbCardInformation.Name = "gbCardInformation";
-            this.gbCardInformation.Size = new System.Drawing.Size(204, 306);
+            this.gbCardInformation.Size = new System.Drawing.Size(204, 239);
             this.gbCardInformation.TabIndex = 28;
             this.gbCardInformation.TabStop = false;
             this.gbCardInformation.Text = "Card Information";
+            // 
+            // txtActivationAnimation
+            // 
+            this.txtActivationAnimation.Location = new System.Drawing.Point(6, 212);
+            this.txtActivationAnimation.Name = "txtActivationAnimation";
+            this.txtActivationAnimation.Size = new System.Drawing.Size(148, 20);
+            this.txtActivationAnimation.TabIndex = 48;
+            // 
+            // lblActivationAnimation
+            // 
+            this.lblActivationAnimation.AutoSize = true;
+            this.lblActivationAnimation.Location = new System.Drawing.Point(6, 196);
+            this.lblActivationAnimation.Name = "lblActivationAnimation";
+            this.lblActivationAnimation.Size = new System.Drawing.Size(106, 13);
+            this.lblActivationAnimation.TabIndex = 47;
+            this.lblActivationAnimation.Text = "Activation Animation:";
+            // 
+            // btnSetActivationAnimation
+            // 
+            this.btnSetActivationAnimation.Location = new System.Drawing.Point(160, 210);
+            this.btnSetActivationAnimation.Name = "btnSetActivationAnimation";
+            this.btnSetActivationAnimation.Size = new System.Drawing.Size(38, 23);
+            this.btnSetActivationAnimation.TabIndex = 46;
+            this.btnSetActivationAnimation.Text = "Set";
+            this.btnSetActivationAnimation.UseVisualStyleBackColor = true;
+            this.btnSetActivationAnimation.Click += new System.EventHandler(this.btnSetActivationAnimation_Click);
+            // 
+            // lblSkill
+            // 
+            this.lblSkill.AutoSize = true;
+            this.lblSkill.Location = new System.Drawing.Point(6, 128);
+            this.lblSkill.Name = "lblSkill";
+            this.lblSkill.Size = new System.Drawing.Size(29, 13);
+            this.lblSkill.TabIndex = 45;
+            this.lblSkill.Text = "Skill:";
+            // 
+            // txtSkill
+            // 
+            this.txtSkill.Location = new System.Drawing.Point(6, 144);
+            this.txtSkill.Name = "txtSkill";
+            this.txtSkill.Size = new System.Drawing.Size(192, 20);
+            this.txtSkill.TabIndex = 44;
+            // 
+            // btnSetSkill
+            // 
+            this.btnSetSkill.Location = new System.Drawing.Point(6, 170);
+            this.btnSetSkill.Name = "btnSetSkill";
+            this.btnSetSkill.Size = new System.Drawing.Size(130, 23);
+            this.btnSetSkill.TabIndex = 43;
+            this.btnSetSkill.Text = "Set Skill";
+            this.btnSetSkill.UseVisualStyleBackColor = true;
+            this.btnSetSkill.Click += new System.EventHandler(this.btnSetSkill_Click);
             // 
             // cboRarity
             // 
@@ -122,25 +184,6 @@
             this.lblMagicCost.TabIndex = 32;
             this.lblMagicCost.Text = "Magic Cost:";
             // 
-            // lblDescription
-            // 
-            this.lblDescription.AutoSize = true;
-            this.lblDescription.Location = new System.Drawing.Point(6, 97);
-            this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(63, 13);
-            this.lblDescription.TabIndex = 31;
-            this.lblDescription.Text = "Description:";
-            // 
-            // txtDescription
-            // 
-            this.txtDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtDescription.Location = new System.Drawing.Point(6, 113);
-            this.txtDescription.Multiline = true;
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(192, 185);
-            this.txtDescription.TabIndex = 30;
-            // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(50, 19);
@@ -157,52 +200,55 @@
             this.lblName.TabIndex = 28;
             this.lblName.Text = "Name:";
             // 
-            // gbSkills
+            // txtDescription
             // 
-            this.gbSkills.Controls.Add(this.btnRemoveSkill);
-            this.gbSkills.Controls.Add(this.btnAddSkill);
-            this.gbSkills.Controls.Add(this.lstSkill);
-            this.gbSkills.Location = new System.Drawing.Point(222, 27);
-            this.gbSkills.Name = "gbSkills";
-            this.gbSkills.Size = new System.Drawing.Size(142, 227);
-            this.gbSkills.TabIndex = 56;
-            this.gbSkills.TabStop = false;
-            this.gbSkills.Text = "Skills";
+            this.txtDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtDescription.Location = new System.Drawing.Point(6, 19);
+            this.txtDescription.Multiline = true;
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.Size = new System.Drawing.Size(192, 144);
+            this.txtDescription.TabIndex = 30;
             // 
-            // btnRemoveSkill
+            // gbDescription
             // 
-            this.btnRemoveSkill.Location = new System.Drawing.Point(6, 201);
-            this.btnRemoveSkill.Name = "btnRemoveSkill";
-            this.btnRemoveSkill.Size = new System.Drawing.Size(130, 23);
-            this.btnRemoveSkill.TabIndex = 2;
-            this.btnRemoveSkill.Text = "Remove Skill";
-            this.btnRemoveSkill.UseVisualStyleBackColor = true;
-            this.btnRemoveSkill.Click += new System.EventHandler(this.btnRemoveSkill_Click);
+            this.gbDescription.Controls.Add(this.txtDescription);
+            this.gbDescription.Location = new System.Drawing.Point(222, 27);
+            this.gbDescription.Name = "gbDescription";
+            this.gbDescription.Size = new System.Drawing.Size(200, 169);
+            this.gbDescription.TabIndex = 32;
+            this.gbDescription.TabStop = false;
+            this.gbDescription.Text = "Description";
             // 
-            // btnAddSkill
+            // cbCategory
             // 
-            this.btnAddSkill.Location = new System.Drawing.Point(6, 172);
-            this.btnAddSkill.Name = "btnAddSkill";
-            this.btnAddSkill.Size = new System.Drawing.Size(130, 23);
-            this.btnAddSkill.TabIndex = 1;
-            this.btnAddSkill.Text = "Add Skill";
-            this.btnAddSkill.UseVisualStyleBackColor = true;
-            this.btnAddSkill.Click += new System.EventHandler(this.btnAddSkill_Click);
+            this.cboCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboCategory.FormattingEnabled = true;
+            this.cboCategory.Items.AddRange(new object[] {
+            "Weapon",
+            "Armor",
+            "Tool",
+            "Scroll"});
+            this.cboCategory.Location = new System.Drawing.Point(75, 100);
+            this.cboCategory.Name = "cbCategory";
+            this.cboCategory.Size = new System.Drawing.Size(123, 21);
+            this.cboCategory.TabIndex = 50;
             // 
-            // lstSkill
+            // lblCategory
             // 
-            this.lstSkill.FormattingEnabled = true;
-            this.lstSkill.Location = new System.Drawing.Point(6, 19);
-            this.lstSkill.Name = "lstSkill";
-            this.lstSkill.Size = new System.Drawing.Size(130, 147);
-            this.lstSkill.TabIndex = 0;
+            this.lblCategory.AutoSize = true;
+            this.lblCategory.Location = new System.Drawing.Point(6, 103);
+            this.lblCategory.Name = "lblCategory";
+            this.lblCategory.Size = new System.Drawing.Size(52, 13);
+            this.lblCategory.TabIndex = 49;
+            this.lblCategory.Text = "Category:";
             // 
             // ItemCardEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 337);
-            this.Controls.Add(this.gbSkills);
+            this.ClientSize = new System.Drawing.Size(434, 278);
+            this.Controls.Add(this.gbDescription);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.gbCardInformation);
             this.MainMenuStrip = this.menuStrip1;
@@ -213,7 +259,8 @@
             this.gbCardInformation.ResumeLayout(false);
             this.gbCardInformation.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicCost)).EndInit();
-            this.gbSkills.ResumeLayout(false);
+            this.gbDescription.ResumeLayout(false);
+            this.gbDescription.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -226,15 +273,19 @@
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.ToolStripMenuItem tsmSave;
-        private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblMagicCost;
         private System.Windows.Forms.NumericUpDown txtMagicCost;
         private System.Windows.Forms.Label lblRarity;
         private System.Windows.Forms.ComboBox cboRarity;
-        private System.Windows.Forms.GroupBox gbSkills;
-        private System.Windows.Forms.Button btnRemoveSkill;
-        private System.Windows.Forms.Button btnAddSkill;
-        private System.Windows.Forms.ListBox lstSkill;
+        private System.Windows.Forms.Label lblSkill;
+        private System.Windows.Forms.TextBox txtSkill;
+        private System.Windows.Forms.Button btnSetSkill;
+        private System.Windows.Forms.TextBox txtActivationAnimation;
+        private System.Windows.Forms.Label lblActivationAnimation;
+        private System.Windows.Forms.Button btnSetActivationAnimation;
+        private System.Windows.Forms.GroupBox gbDescription;
+        private System.Windows.Forms.ComboBox cboCategory;
+        private System.Windows.Forms.Label lblCategory;
     }
 }

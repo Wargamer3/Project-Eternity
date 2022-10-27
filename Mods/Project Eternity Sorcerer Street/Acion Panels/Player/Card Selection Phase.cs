@@ -160,6 +160,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public void DrawOutro(CustomSpriteBatch g)
+        {
+            //Have every cards flips to reveal themselves
+            for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
+            {
+                Color CardColor = Color.White;
+                if (ActivePlayer.ListCardInHand[C].CardType != CardType)
+                {
+                    CardColor = Color.DarkGray;
+                }
+
+                DrawCardMiniature(g, GameScreen.sprPixel, CardColor, C * 80 + 10, 0.26f);
+            }
+
+            if (EndCardText != string.Empty)
+            {
+                DrawCardMiniature(g, GameScreen.sprPixel, Color.Green, Constants.Width - 140, 0.26f);
+            }
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             if (AnimationPhase == AnimationPhases.IntroAnimation)
@@ -172,6 +192,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 //Display END at the right of the cards in the hand to end your turn
                 //Display Start at the right of the cards in the hand for a battle
 
+                float Scale = Constants.Width / 3764.70581f;
                 for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
                 {
                     Color CardColor = Color.White;
@@ -180,7 +201,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CardColor = Color.DarkGray;
                     }
 
-                    DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == CardCursorIndex, C * 80 + 80, 0.26f, AnimationTimer, 0.04f);
+                    DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == CardCursorIndex, C * 80 + 80, Scale, AnimationTimer, 0.02f);
                 }
 
                 if (DrawDrawInfo && CardCursorIndex < ActivePlayer.ListCardInHand.Count)
@@ -190,7 +211,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (EndCardText != string.Empty)
                 {
-                    DrawCardMiniature(g, Map.sprEndTurn, Color.White, CardCursorIndex == ActivePlayer.ListCardInHand.Count, Constants.Width - 140, 0.46f, AnimationTimer, 0.05f);
+                    DrawCardMiniature(g, Map.sprEndTurn, Color.White, CardCursorIndex == ActivePlayer.ListCardInHand.Count, Constants.Width - 80, 0.30f, AnimationTimer, 0.05f);
                 }
             }
         }

@@ -20,7 +20,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private AnimationPhases AnimationPhase;
         private float RotationTimer;
         private const float AnimationTime = 2 * MathHelper.TwoPi - MathHelper.PiOver2;
-        bool IsInit = false;
 
         public ActionPanelDrawCardPhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
@@ -37,11 +36,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             AnimationPhase = AnimationPhases.IntroAnimation;
-            DrawnCard = ActivePlayer.ListRemainingCardInDeck[0];
+
+            int RandomCardIndex = RandomHelper.Next(ActivePlayer.ListRemainingCardInDeck.Count);
+
+            DrawnCard = ActivePlayer.ListRemainingCardInDeck[RandomCardIndex];
 
             ActivePlayer.ListCardInHand.Add(DrawnCard);
 
-            ActivePlayer.ListRemainingCardInDeck.RemoveAt(0);
+            ActivePlayer.ListRemainingCardInDeck.RemoveAt(RandomCardIndex);
 
             if (ActivePlayer.ListRemainingCardInDeck.Count == 0)
             {
@@ -58,6 +60,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (RotationTimer > AnimationTime || InputHelper.InputConfirmPressed())
                 {
                     AnimationPhase = AnimationPhases.CardSummary;
+                    if (ActivePlayer.ListCardInHand.Count > 6)
+                    {
+                        AddToPanelListAndSelect(new ActionPanelDiscardCardPhase(Map, ActivePlayerIndex, 6));
+                    }
                 }
             }
             else if (AnimationPhase == AnimationPhases.CardSummary && InputHelper.InputConfirmPressed())

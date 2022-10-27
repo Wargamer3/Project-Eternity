@@ -87,6 +87,7 @@
     <Compile Include="Cards\Creature Card.cs" />
     <Compile Include="Cards\Item Card.cs" />
     <Compile Include="Cards\Spell Card.cs" />
+    <Compile Include="Formula Parser.cs" />
     <Compile Include="Params.cs" />
     <Compile Include="Effects\Sorcerer Street Effect.cs" />
     <Compile Include="Effects\Sorcerer Street Requirement.cs" />
