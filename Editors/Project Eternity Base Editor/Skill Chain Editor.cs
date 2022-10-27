@@ -114,7 +114,7 @@ namespace ProjectEternity.Editors.SkillChainEditor
                     ParentNode = SelectedNode.Parent;
                 }
 
-                BaseEffect NewEffect = BaseEffect.DicDefaultEffect.First().Value.Copy();
+                BaseEffect NewEffect = ((BaseEffect)cboEffectType.Items[0]).Copy();
                 BaseAutomaticSkill ActiveSkill = (BaseAutomaticSkill)ParentNode.Tag;
                 ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Add(NewEffect);
                 ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffectTarget.Add(new List<string>());
@@ -134,9 +134,9 @@ namespace ProjectEternity.Editors.SkillChainEditor
             BaseSkillActivation NewActivation = new BaseSkillActivation();
             NewSkill.CurrentSkillLevel.ListActivation.Add(NewActivation);
 
-            NewActivation.ListRequirement.Add(BaseSkillRequirement.DicDefaultRequirement.First().Value.Copy());
+            NewActivation.ListRequirement.Add(((BaseSkillRequirement)cboRequirementType.Items[0]).Copy());
             NewActivation.ListEffectTarget.Add(new List<string>());
-            NewActivation.ListEffect.Add(BaseEffect.DicDefaultEffect.First().Value.Copy());
+            NewActivation.ListEffect.Add(((BaseEffect)cboEffectType.Items[0]).Copy());
 
             TreeNode SelectedNode = tvSkills.SelectedNode;
             TreeNode EffectNode = null;
@@ -165,7 +165,7 @@ namespace ProjectEternity.Editors.SkillChainEditor
                 ActiveEffect.ListFollowingSkill.Add(NewSkill);
             }
 
-            if (tvSkills.SelectedNode != null)
+            if (EffectNode != null)
             {
                 CreateTree(NewSkill, EffectNode.Nodes);
             }

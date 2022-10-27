@@ -435,10 +435,6 @@ namespace ProjectEternity.Editors.AttackEditor
                     rbPER.Checked = true;
                     break;
 
-                case WeaponPrimaryProperty.ALL:
-                    rbALL.Checked = true;
-                    break;
-
                 case WeaponPrimaryProperty.PLA:
                     rbPLA.Checked = true;
                     break;

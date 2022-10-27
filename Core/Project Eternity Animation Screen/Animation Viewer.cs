@@ -48,6 +48,10 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         #region Cursors
 
+        public Cursor RotateUp;
+        public Cursor RotateDown;
+        public Cursor RotateLeft;
+        public Cursor RotateRight;
         public Cursor RotateUpLeft;
         public Cursor RotateUpRight;
         public Cursor RotateDownLeft;
@@ -117,6 +121,14 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             RotateDownLeft = CreateCursor(b, 4, 13);
             b = new Bitmap("Content/Cursors/DownRight.png");
             RotateDownRight = CreateCursor(b, 13, 13);
+            b = new Bitmap("Content/Cursors/Up.png");
+            RotateUp = CreateCursor(b, 13, 13);
+            b = new Bitmap("Content/Cursors/Down.png");
+            RotateDown = CreateCursor(b, 13, 13);
+            b = new Bitmap("Content/Cursors/Left.png");
+            RotateLeft = CreateCursor(b, 13, 13);
+            b = new Bitmap("Content/Cursors/Right.png");
+            RotateRight = CreateCursor(b, 13, 13);
 
             Zoom = 1;
             IsPlaying = false;
@@ -490,7 +502,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     int RecMaxY = RecMinY + ActiveAnimation.MultipleSelectionRectangle.Height;
 
                     if (Real.X >= RecMinX + ActiveAnimation.MultipleSelectionOrigin.X - 2 && Real.X <= RecMinX + ActiveAnimation.MultipleSelectionOrigin.X + 2 &&
-                        Real.Y >= RecMinY + ActiveAnimation.MultipleSelectionOrigin.Y - 2 && RecMinY <= RecMinX + ActiveAnimation.MultipleSelectionOrigin.Y + 2)
+                        Real.Y >= RecMinY + ActiveAnimation.MultipleSelectionOrigin.Y - 2 && RecMinY <= RecMinY + ActiveAnimation.MultipleSelectionOrigin.Y + 2)
                     {
                         BitmapAction = BitmapActions.Origin;
                         Cursor = Cursors.Hand;
@@ -504,9 +516,37 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                     #region Check for Rotation
 
+                    //Left
+                    else if (Real.X >= RecMinX - 20 && Real.X <= RecMinX - 10 &&
+                             Real.Y >= RecMinY && Real.Y <= RecMaxY)
+                    {
+                        BitmapAction = BitmapActions.Rotate;
+                        Cursor = RotateLeft;
+                    }
+                    //Right
+                    else if (Real.X >= RecMaxX + 10 && Real.X <= RecMaxX + 20 &&
+                             Real.Y >= RecMinY && Real.Y <= RecMaxY)
+                    {
+                        BitmapAction = BitmapActions.Rotate;
+                        Cursor = RotateRight;
+                    }
+                    //Up
+                    else if (Real.X >= RecMinX && Real.X <= RecMaxX &&
+                             Real.Y >= RecMinY - 20 && Real.Y <= RecMinY - 10)
+                    {
+                        BitmapAction = BitmapActions.Rotate;
+                        Cursor = RotateUp;
+                    }
+                    //Down
+                    else if (Real.X >= RecMinX && Real.X <= RecMaxX &&
+                             Real.Y >= RecMaxY + 10 && Real.Y <= RecMaxY + 20)
+                    {
+                        BitmapAction = BitmapActions.Rotate;
+                        Cursor = RotateDown;
+                    }
                     //Up Left
                     else if (Real.X >= RecMinX - 20 && Real.X <= RecMinX - 10 &&
-                        Real.Y >= RecMinY - 20 && Real.Y <= RecMinY - 10)
+                    Real.Y >= RecMinY - 20 && Real.Y <= RecMinY - 10)
                     {
                         BitmapAction = BitmapActions.Rotate;
                         Cursor = RotateUpLeft;
