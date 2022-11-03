@@ -37,11 +37,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Map.GlobalSorcererStreetBattleContext.ActivatedEffect = null;
 
-            if (Map.GlobalSorcererStreetBattleContext.InvaderItem != null)
+            if (Map.GlobalSorcererStreetBattleContext.InvaderItem != null && Map.GlobalSorcererStreetBattleContext.InvaderItem.CanActivateSkill(RequirementName))
             {
                 AnimationPhase = AnimationPhases.InvaderIntro;
             }
-            else if (Map.GlobalSorcererStreetBattleContext.DefenderItem != null)
+            else if (Map.GlobalSorcererStreetBattleContext.DefenderItem != null && Map.GlobalSorcererStreetBattleContext.DefenderItem.CanActivateSkill(RequirementName))
             {
                 AnimationPhase = AnimationPhases.DefenderIntro;
             }
@@ -67,9 +67,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     else if (AnimationPhase == AnimationPhases.DefenderIntro)
                     {
-                        Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender,Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, RequirementName);
+                        Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, RequirementName);
 
-                        Map.GlobalSorcererStreetBattleContext.InvaderItem.ActivateSkill(RequirementName);
+                        Map.GlobalSorcererStreetBattleContext.DefenderItem.ActivateSkill(RequirementName);
                         AnimationPhase = AnimationPhases.DefenderActivation;
                     }
                 }

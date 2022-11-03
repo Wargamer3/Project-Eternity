@@ -14,6 +14,11 @@ namespace ProjectEternity.Editors.MapEditor
         private enum ItemSelectionChoices { Backgrounds, Foregrounds };
         ItemSelectionChoices ItemSelectionChoice;
 
+        public MapStatistics()
+        {
+            InitializeComponent();
+        }
+
         public MapStatistics(BattleMap ActiveMap)
         {
             InitializeComponent();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public partial class SorcererStreetMap : BattleMap
     {
+        public enum Checkpoints { North, South, West, East }
         public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
 
         #region Ressources
@@ -24,6 +26,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public Texture2D sprPlayerBackground;
         public Texture2D sprArrowUp;
+
+        public Texture2D sprTerritory;
+        public Texture2D sprMap;
+        public Texture2D sprInfo;
+        public Texture2D sprOptions;
+        public Texture2D sprHelp;
         public Texture2D sprEndTurn;
 
         public Texture2D sprElementAir;
@@ -47,6 +55,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprDirectionEast;
         public Texture2D sprDirectionWest;
         public Texture2D sprDirectionSouth;
+        public Texture2D sprDirectionNorthFilled;
+        public Texture2D sprDirectionEastFilled;
+        public Texture2D sprDirectionWestFilled;
+        public Texture2D sprDirectionSouthFilled;
 
         public Texture2D sprRarityE;
         public Texture2D sprRarityN;
@@ -63,6 +75,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public List<Player> ListPlayer;
         public List<Player> ListLocalPlayer { get { return ListLocalPlayerInfo; } }
         public List<Player> ListAllPlayer { get { return ListPlayer; } }
+        public int MagicAtStart;
+        public int MagicGainPerLap;
+        public int TowerMagicGain;
+        public int MagicGoal;
+        public int HighestDieRoll;
+        public List<Checkpoints> ListCheckpoint;
         public readonly MovementAlgorithm Pathfinder;
         public readonly SorcererStreetBattleContext GlobalSorcererStreetBattleContext;
         public readonly SorcererStreetBattleParams SorcererStreetParams;
@@ -81,22 +99,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LayerManager = new LayerHolderSorcererStreet(this);
             MapEnvironment = new EnvironmentManagerSorcererStreet(this);
             ActiveParser = new SorcererStreetFormulaParser(this);
+            ListCheckpoint = new List<Checkpoints>();
 
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;
             ListTerrainType = new List<string>();
 
             ListTerrainType.Add("Not Assigned");
-            ListTerrainType.Add("Morph");
-            ListTerrainType.Add("Multi-Element");
+            ListTerrainType.Add(TerrainSorcererStreet.Castle);
             ListTerrainType.Add(TerrainSorcererStreet.FireElement);
             ListTerrainType.Add(TerrainSorcererStreet.WaterElement);
             ListTerrainType.Add(TerrainSorcererStreet.EarthElement);
             ListTerrainType.Add(TerrainSorcererStreet.AirElement);
-            ListTerrainType.Add(TerrainSorcererStreet.EastGate);
-            ListTerrainType.Add(TerrainSorcererStreet.WestGate);
-            ListTerrainType.Add(TerrainSorcererStreet.SouthGate);
-            ListTerrainType.Add(TerrainSorcererStreet.NorthGate);
+            ListTerrainType.Add(TerrainSorcererStreet.NeutralElement);
+            ListTerrainType.Add(TerrainSorcererStreet.MorphElement);
+            ListTerrainType.Add(TerrainSorcererStreet.MultiElement);
+            ListTerrainType.Add(TerrainSorcererStreet.EastTower);
+            ListTerrainType.Add(TerrainSorcererStreet.WestTower);
+            ListTerrainType.Add(TerrainSorcererStreet.SouthTower);
+            ListTerrainType.Add(TerrainSorcererStreet.NorthTower);
             ListTerrainType.Add("Warp");
             ListTerrainType.Add("Bridge");
             ListTerrainType.Add("Fortune Teller");
@@ -134,6 +155,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             SaveProperties(BW);
 
+            BW.Write(MagicAtStart);
+            BW.Write(MagicGainPerLap);
+            BW.Write(TowerMagicGain);
+            BW.Write(MagicGoal);
+            BW.Write(HighestDieRoll);
+
             MapScript.SaveMapScripts(BW, ListMapScript);
 
             SaveTilesets(BW);
@@ -153,7 +180,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
 
             sprArrowUp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Arrow Up");
-            sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/End Card");
+
+            sprTerritory = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Territory");
+            sprMap = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Map");
+            sprInfo = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Info");
+            sprOptions = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Options");
+            sprHelp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Help");
+            sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/End");
+
+
             sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Air");
             sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Earth");
             sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Fire");
@@ -173,10 +208,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
             sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
 
-            sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/South");
-            sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/West");
-            sprDirectionEast = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/East");
-            sprDirectionSouth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/South");
+            sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
+            sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West");
+            sprDirectionEast = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
+            sprDirectionSouth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
+            sprDirectionNorthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
+            sprDirectionWestFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West");
+            sprDirectionEastFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
+            sprDirectionSouthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Filled");
 
             sprRarityE = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity E");
             sprRarityN = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity N");
@@ -194,8 +233,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 DicCutsceneScript.Add(ActiveListScript.Name, ActiveListScript);
             }
-
-            OnNewTurn();
         }
 
         public override void Load(byte[] ArrayGameData)
@@ -214,6 +251,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MapName = Path.GetFileNameWithoutExtension(BattleMapPath);
 
             LoadProperties(BR);
+
+            MagicAtStart = BR.ReadInt32();
+            MagicGainPerLap = BR.ReadInt32();
+            TowerMagicGain = BR.ReadInt32();
+            MagicGoal = BR.ReadInt32();
+            HighestDieRoll = BR.ReadInt32();
 
             ListMapScript = MapScript.LoadMapScripts(BR, DicMapEvent, DicMapCondition, DicMapTrigger, out ListMapEvent);
 
@@ -311,6 +354,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             ListPlayer.Add(NewPlayer);
+            NewPlayer.TotalMagic = NewPlayer.Magic = MagicAtStart;
+            UpdatePlayersRank();
         }
 
         public override void SetMutators(List<Mutator> ListMutator)
@@ -357,6 +402,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void EndPlayerPhase()
         {
+            ListActionMenuChoice.RemoveAllActionPanels();
             //Reset the cursor.
             if (FMODSystem.sndActiveBGMName != sndBattleThemeName && !string.IsNullOrEmpty(sndBattleThemeName))
             {
@@ -374,6 +420,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this, ActivePlayerIndex));
+        }
+
+        public void UpdateTolls(Player ActivePlayer)
+        {
+            ActivePlayer.TotalMagic = ActivePlayer.Magic;
+            for (int X = MapSize.X - 1; X >= 0; --X)
+            {
+                for (int Y = MapSize.Y - 1; Y >= 0; --Y)
+                {
+                    TerrainSorcererStreet ActiveTerrain = GetTerrain(X, Y, 0);
+                    if (ActiveTerrain.PlayerOwner == ActivePlayer && ActiveTerrain.DefendingCreature != null)
+                    {
+                        ActiveTerrain.UpdateValue(ActivePlayer.DicChainLevelByTerrainTypeIndex[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+                        ActivePlayer.TotalMagic += ActiveTerrain.CurrentValue;
+                    }
+                }
+            }
+
+            UpdatePlayersRank();
+        }
+
+        public void UpdatePlayersRank()
+        {
+            List<Player> SortedList = ListPlayer.OrderBy(P => P.TotalMagic).ThenBy(P => ListPlayer.IndexOf(P)).ToList();
+
+            for (int P = 0; P < SortedList.Count; ++P)
+            {
+                SortedList[P].Rank = P + 1;
+            }
         }
 
         protected void OnNewTurn()
@@ -774,7 +849,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-
         public MovementAlgorithmTile GetTerrainIncludingPlatforms(MovementAlgorithmTile StartingPosition, int OffsetX, int OffsetY, int NextLayerIndex)
         {
             if (!IsAPlatform)
@@ -837,7 +911,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             return ListPossibleSpawnPoint;
         }
-
 
         public override BattleMap LoadTemporaryMap(BinaryReader BR)
         {

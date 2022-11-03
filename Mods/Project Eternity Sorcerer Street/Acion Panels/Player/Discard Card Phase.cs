@@ -1,76 +1,38 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelDiscardCardPhase : ActionPanelSorcererStreet
+    public class ActionPanelDiscardCardPhase : ActionPanelCardSelectionPhase
     {
         private const string PanelName = "DiscardCard";
 
-        private int ActivePlayerIndex;
-        private Player ActivePlayer;
         private int MaximumCardsAllowed;
 
-        private int CardCursorIndex;
-
         public ActionPanelDiscardCardPhase(SorcererStreetMap Map)
-            : base(PanelName, Map, false)
+            : base(PanelName, Map)
         {
+            DrawDrawInfo = true;
         }
 
         public ActionPanelDiscardCardPhase(SorcererStreetMap Map, int ActivePlayerIndex, int MaximumCardsAllowed)
-            : base(PanelName, Map, false)
+            : base(PanelName, Map.ListActionMenuChoice, Map, ActivePlayerIndex, null)
         {
-            this.ActivePlayerIndex = ActivePlayerIndex;
+            DrawDrawInfo = true;
+
             this.MaximumCardsAllowed = MaximumCardsAllowed;
-            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
-        public override void OnSelect()
+        public override void OnCardSelected(Card CardSelected)
         {
-            CardCursorIndex = 0;
-        }
+            ActivePlayer.ListCardInHand.Remove(CardSelected);
 
-        public override void DoUpdate(GameTime gameTime)
-        {
-            if (InputHelper.InputLeftPressed() && --CardCursorIndex < 0)
+            if (ActivePlayer.ListCardInHand.Count <= MaximumCardsAllowed)
             {
-                CardCursorIndex = ActivePlayer.ListCardInHand.Count - 1;
+                RemoveFromPanelList(this);
             }
-            else if (InputHelper.InputRightPressed() && ++CardCursorIndex >= ActivePlayer.ListCardInHand.Count)
-            {
-                CardCursorIndex = 0;
-            }
-            else if (InputHelper.InputConfirmPressed())
-            {
-                ActivePlayer.ListCardInHand.RemoveAt(CardCursorIndex);
-
-                if (ActivePlayer.ListCardInHand.Count <= MaximumCardsAllowed)
-                {
-                    RemoveFromPanelList(this);
-                }
-            }
-        }
-
-        protected override void OnCancelPanel()
-        {
-        }
-
-        public override void DoRead(ByteReader BR)
-        {
-            ActivePlayerIndex = BR.ReadInt32();
-            CardCursorIndex = BR.ReadInt32();
-            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
-        }
-
-        public override void DoWrite(ByteWriter BW)
-        {
-            BW.AppendInt32(ActivePlayerIndex);
-            BW.AppendInt32(CardCursorIndex);
         }
 
         protected override ActionPanel Copy()
@@ -80,6 +42,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            int BoxHeight = 70;
+            base.Draw(g);
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, 30, Constants.Height / 20);
+            GameScreen.DrawBox(g, new Vector2(30, Constants.Height / 20 + BoxHeight * 2), 200, 30, Color.White);
+            g.DrawStringCentered(Map.fntArial12, "Discard a card", new Vector2(130, Constants.Height / 20 + BoxHeight * 2 + 15), Color.White);
         }
     }
 }

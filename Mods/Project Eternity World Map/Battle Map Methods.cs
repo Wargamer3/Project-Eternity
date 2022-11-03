@@ -82,7 +82,6 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }*/
         }
 
-
         public override MovementAlgorithmTile GetNextLayerIndex(MovementAlgorithmTile StartingPosition, int NextX, int NextY, float MaxClearance, float ClimbValue, out List<MovementAlgorithmTile> ListLayerPossibility)
         {
             ListLayerPossibility = new List<MovementAlgorithmTile>();

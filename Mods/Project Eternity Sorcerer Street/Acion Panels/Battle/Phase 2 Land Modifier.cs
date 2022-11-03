@@ -73,22 +73,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
             }
 
-            //Skip this phase if it won't activate.
-            if (!HasTerrainBonus)
-            {
-                ContinueBattlePhase();
-            }
+            FinishPhase();
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
+            FinishPhase();
         }
 
         public void FinishPhase()
         {
             if (HasTerrainBonus)
             {
-                Map.GlobalSorcererStreetBattleContext.DefenderFinalHP += 10 * ActiveTerrain.TerrainLevel;
+                Map.GlobalSorcererStreetBattleContext.DefenderFinalHP += 10 * ActiveTerrain.LandLevel;
             }
 
             ContinueBattlePhase();

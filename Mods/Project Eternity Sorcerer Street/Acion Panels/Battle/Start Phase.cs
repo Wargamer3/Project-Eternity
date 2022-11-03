@@ -326,7 +326,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 X = FinalX;
             }
 
-            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Invader.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer);
+            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Defender.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer);
         }
 
         private void DisplayVersusText(CustomSpriteBatch g)

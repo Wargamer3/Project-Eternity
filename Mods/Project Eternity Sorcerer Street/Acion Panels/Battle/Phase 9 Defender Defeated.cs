@@ -29,6 +29,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (InputHelper.InputConfirmPressed())
             {
+                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(Map.GlobalSorcererStreetBattleContext.InvaderPlayer.GamePiece);
+
+                ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.Invader;
+                ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.InvaderPlayer;
+
+                Map.GlobalSorcererStreetBattleContext.InvaderPlayer.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+                Map.GlobalSorcererStreetBattleContext.DefenderPlayer.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+                Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.InvaderPlayer);
+                Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.DefenderPlayer);
                 Map.EndPlayerPhase();
                 RemoveFromPanelList(this);
             }
@@ -53,6 +62,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            //Draw creature being replaced
         }
     }
 }

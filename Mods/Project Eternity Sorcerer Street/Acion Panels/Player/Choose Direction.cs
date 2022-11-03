@@ -1,12 +1,12 @@
-﻿using System.Linq;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
-using static ProjectEternity.GameScreens.SorcererStreetScreen.Player;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using static ProjectEternity.Core.Units.UnitMapComponent;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -14,10 +14,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "ChooseDirection";
 
-        public TerrainSorcererStreet ChosenTerrain { get { return ActivePlayer.CurrentDirection == Directions.None ? null : DicNextTerrain[ActivePlayer.CurrentDirection]; } }
+        public TerrainSorcererStreet ChosenTerrain { get { return ActivePlayer.GamePiece.Direction == Directions.None ? null : DicNextTerrain[ActivePlayer.GamePiece.Direction]; } }
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
+        private int Movement;
         private readonly Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain;
         List<List<MovementAlgorithmTile>> ListPath;
 
@@ -26,10 +27,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public ActionPanelChooseDirection(SorcererStreetMap Map, int ActivePlayerIndex, Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain)
+        public ActionPanelChooseDirection(SorcererStreetMap Map, int ActivePlayerIndex, int Movement, Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
+            this.Movement = Movement;
             this.DicNextTerrain = DicNextTerrain;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
             ListPath = new List<List<MovementAlgorithmTile>>();
@@ -57,28 +59,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (InputHelper.InputUpPressed() && DicNextTerrain.ContainsKey(Directions.Up))
             {
-                ActivePlayer.CurrentDirection = Directions.Up;
+                ActivePlayer.GamePiece.Direction = Directions.Up;
             }
             else if (InputHelper.InputDownPressed() && DicNextTerrain.ContainsKey(Directions.Down))
             {
-                ActivePlayer.CurrentDirection = Directions.Down;
+                ActivePlayer.GamePiece.Direction = Directions.Down;
             }
             else if (InputHelper.InputLeftPressed() && DicNextTerrain.ContainsKey(Directions.Left))
             {
-                ActivePlayer.CurrentDirection = Directions.Left;
+                ActivePlayer.GamePiece.Direction = Directions.Left;
             }
             else if (InputHelper.InputRightPressed() && DicNextTerrain.ContainsKey(Directions.Right))
             {
-                ActivePlayer.CurrentDirection = Directions.Right;
+                ActivePlayer.GamePiece.Direction = Directions.Right;
             }
-            else if (InputHelper.InputConfirmPressed() && ActivePlayer.CurrentDirection != Directions.None)
+            else if (InputHelper.InputConfirmPressed() && ActivePlayer.GamePiece.Direction != Directions.None)
             {
                 FinalizeChoice();
             }
 
-            if (ActivePlayer.CurrentDirection != Directions.None)
+            if (ActivePlayer.GamePiece.Direction != Directions.None)
             {
-                Map.LayerManager.AddDrawablePoints(new List<MovementAlgorithmTile>() { DicNextTerrain[ActivePlayer.CurrentDirection] }, Color.White);
+                Map.LayerManager.AddDrawablePoints(new List<MovementAlgorithmTile>() { DicNextTerrain[ActivePlayer.GamePiece.Direction] }, Color.White);
             }
         }
 
@@ -105,6 +107,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            //Draw remaining movement count in the upper left corner
+            GameScreen.DrawBox(g, new Vector2(30, 30), 50, 50, Color.Black);
+            g.DrawString(Map.fntArial12, Movement.ToString(), new Vector2(37, 35), Color.White);
         }
     }
 }

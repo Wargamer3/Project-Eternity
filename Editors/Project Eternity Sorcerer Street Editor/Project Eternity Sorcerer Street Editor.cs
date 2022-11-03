@@ -293,8 +293,24 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             this.Text = BattleMapViewer.ActiveMap.MapName + " - Project Eternity Sorcerer Street Map Editor";
         }
 
-        //Open a tile attributes dialog.
-        protected override void btnTileAttributes_Click(object sender, EventArgs e)
+        protected override MapStatistics OpenMapProperties()
+        {
+            return new SorcererStreetMapStatistics((SorcererStreetMap)ActiveMap);
+        }
+
+        protected override void ApplyMapPropertiesChanges(MapStatistics MS)
+        {
+            SorcererStreetMapStatistics PropertiesEditor = (SorcererStreetMapStatistics)MS;
+            base.ApplyMapPropertiesChanges(MS);
+
+            SorcererStreetMap ActiveSorcererStreetMap = (SorcererStreetMap)ActiveMap;
+            ActiveSorcererStreetMap.MagicAtStart = (int)PropertiesEditor.txtMagicAtStart.Value;
+            ActiveSorcererStreetMap.MagicGainPerLap = (int)PropertiesEditor.txtMagicPerLap.Value;
+            ActiveSorcererStreetMap.TowerMagicGain = (int)PropertiesEditor.txtMagicPerTower.Value;
+            ActiveSorcererStreetMap.MagicGoal = (int)PropertiesEditor.txtMagicGoal.Value;
+            ActiveSorcererStreetMap.HighestDieRoll = (int)PropertiesEditor.txtHighestDieRoll.Value;
+    }
+    protected override void btnTileAttributes_Click(object sender, EventArgs e)
         {
             Rectangle TilePos = TilesetViewer.TileBrushSize;
             Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];

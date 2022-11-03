@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.SorcererStreetScreen;
+using static ProjectEternity.Core.Units.UnitMapComponent;
 
 namespace ProjectEternity.UnitTests.SorcererStreetTests
 {
@@ -30,7 +31,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             SorcererStreetMap DummyMap = CreateDummyMap();
             Player DummyPlayer = DummyMap.ListAllPlayer[0];
-            ActionPanelGainPhase GainPhase = new ActionPanelGainPhase(DummyMap, 0);
+            ActionPanelCastlePhase GainPhase = new ActionPanelCastlePhase(DummyMap, 0, 1);
 
             Assert.AreEqual(0, DummyPlayer.Magic);
             GainPhase.OnSelect();
@@ -84,7 +85,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             SorcererStreetMap DummyMap = CreateDummyMap();
             Player DummyPlayer = DummyMap.ListAllPlayer[0];
-            DummyPlayer.CurrentDirection = Player.Directions.Right;
+            DummyPlayer.GamePiece.Direction = Directions.Right;
             ActionPanelRollDicePhase RollDicePhase = new ActionPanelRollDicePhase(DummyMap, 0);
 
             RollDicePhase.RollDice();
@@ -110,7 +111,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             SorcererStreetMap DummyMap = CreateDummyMap();
             Player DummyPlayer = DummyMap.ListAllPlayer[0];
-            DummyPlayer.CurrentDirection = Player.Directions.Right;
+            DummyPlayer.GamePiece.Direction = Directions.Right;
             ActionPanelMovementPhase MovementPhase = new ActionPanelMovementPhase(DummyMap, 0, 3);
 
             DummyMap.ListActionMenuChoice.AddToPanelListAndSelect(MovementPhase);
@@ -160,12 +161,6 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             ActionPanelPlayerDefault PlayerDefault = (ActionPanelPlayerDefault)DummyMap.ListActionMenuChoice.Last();
             PlayerDefault.ConfirmStartOfTurn();
 
-            Assert.IsInstanceOfType(DummyMap.ListActionMenuChoice.Last(), typeof(ActionPanelGainPhase));
-            Assert.IsFalse(DummyMap.ListActionMenuChoice.HasSubPanels);
-
-            ActionPanelGainPhase GainPhase = (ActionPanelGainPhase)DummyMap.ListActionMenuChoice.Last();
-            GainPhase.FinishPhase();
-
             Assert.IsInstanceOfType(DummyMap.ListActionMenuChoice.Last(), typeof(ActionPanelDrawCardPhase));
             Assert.IsFalse(DummyMap.ListActionMenuChoice.HasSubPanels);
 
@@ -188,7 +183,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             Assert.IsTrue(DummyMap.ListActionMenuChoice.HasSubPanels);
 
             ActionPanelChooseDirection ChooseDirection = (ActionPanelChooseDirection)DummyMap.ListActionMenuChoice.Last();
-            DummyPlayer.CurrentDirection = Player.Directions.Right;
+            DummyPlayer.GamePiece.Direction = Directions.Right;
             ChooseDirection.FinalizeChoice();
 
             Assert.IsInstanceOfType(DummyMap.ListActionMenuChoice.Last(), typeof(ActionPanelMovementPhase));

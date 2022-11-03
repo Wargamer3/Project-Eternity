@@ -6,9 +6,9 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelConfirmCreatureSummon : ActionPanelSorcererStreet
+    public class ActionPanelConfirmCreatureSummonBattle : ActionPanelSorcererStreet
     {
-        private const string PanelName = "ConfirmCreatureSummon";
+        private const string PanelName = "ConfirmCreatureSummonBattle";
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
@@ -16,12 +16,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int CursorIndex;
 
-        public ActionPanelConfirmCreatureSummon(SorcererStreetMap Map)
+        public ActionPanelConfirmCreatureSummonBattle(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
         }
 
-        public ActionPanelConfirmCreatureSummon(SorcererStreetMap Map, int ActivePlayerIndex, CreatureCard ActiveCard)
+        public ActionPanelConfirmCreatureSummonBattle(SorcererStreetMap Map, int ActivePlayerIndex, CreatureCard ActiveCard)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
@@ -63,16 +63,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void FinishPhase()
         {
-            TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
-
             ActivePlayer.ListCardInHand.Remove(ActiveCard);
-            ActiveTerrain.DefendingCreature = ActiveCard;
-            ActiveTerrain.PlayerOwner = ActivePlayer;
             ActivePlayer.Magic -= ActiveCard.MagicCost;
 
-            ActivePlayer.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-            Map.UpdateTolls(ActivePlayer);
-            Map.EndPlayerPhase();
+            RemoveAllActionPanels();
+            Map.PushScreen(new ActionPanelBattleStartPhase(Map, ActivePlayerIndex, ActiveCard));
         }
 
         protected override void OnCancelPanel()
@@ -92,7 +87,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelConfirmCreatureSummon(Map);
+            return new ActionPanelConfirmCreatureSummonBattle(Map);
         }
 
         private void DrawIntro(CustomSpriteBatch g)

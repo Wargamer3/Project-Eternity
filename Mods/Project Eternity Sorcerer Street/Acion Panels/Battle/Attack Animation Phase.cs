@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (LeftSideAttackRightSide)
             {
-                AttackAnimation = new AnimationScreen(AttackAnimationPath, Map.GlobalSorcererStreetBattleContext.Invader.sprCard, false);
+                AttackAnimation = new AnimationScreen(AttackAnimationPath, Map.GlobalSorcererStreetBattleContext.Defender.sprCard, false);
                 if (Map.Content != null)
                 {
                     AttackAnimation.Load();
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                AttackAnimation = new AnimationScreen(AttackAnimationPath, Map.GlobalSorcererStreetBattleContext.Defender.sprCard, false);
+                AttackAnimation = new AnimationScreen(AttackAnimationPath, Map.GlobalSorcererStreetBattleContext.Invader.sprCard, false);
                 if (Map.Content != null)
                 {
                     AttackAnimation.Load();

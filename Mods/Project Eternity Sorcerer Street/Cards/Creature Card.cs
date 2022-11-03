@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -29,6 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool ItemCreature;
         public bool Immediate;//Allow all territory command after taking a land (either vacant or after a battle)
         public int DiscardCost;
+        public float TollMultiplier = 1;
 
         public string AttackAnimationPath;
         public AnimatedModel Map3DModel;
@@ -159,5 +161,53 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             return new ActionPanelConfirmCreatureSummon(Map, ActivePlayerIndex, this);
         }
+
+        public override void DrawCardInfo(CustomSpriteBatch g, SorcererStreetMap Map, SpriteFont fntCardInfo)
+        {
+            int BoxWidth = (int)(Constants.Width / 2.8);
+            int BoxHeight = (int)(Constants.Height / 2);
+            float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth;
+            float InfoBoxY = Constants.Height / 10;
+
+            float CurrentX = InfoBoxX + 10;
+            float CurrentY = InfoBoxY + 30;
+
+            base.DrawCardInfo(g, Map, fntCardInfo);
+
+            for (int A = 0; A < ArrayAffinity.Length; A++)
+            {
+                ElementalAffinity ActiveAffinity = ArrayAffinity[A];
+                switch (ActiveAffinity)
+                {
+                    case ElementalAffinity.Neutral:
+                        g.Draw(Map.sprElementNeutral, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        break;
+                    case ElementalAffinity.Fire:
+                        g.Draw(Map.sprElementFire, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        break;
+                    case ElementalAffinity.Air:
+                        g.Draw(Map.sprElementAir, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        break;
+                    case ElementalAffinity.Earth:
+                        g.Draw(Map.sprElementEarth, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        break;
+                    case ElementalAffinity.Water:
+                        g.Draw(Map.sprElementWater, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        break;
+                }
+            }
+
+            CurrentY += 20;
+
+            g.Draw(Map.sprMenuST, new Vector2((int)CurrentX - 5, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            g.DrawString(fntCardInfo, MaxST.ToString(), new Vector2(CurrentX + 15, CurrentY), Color.White);
+
+            g.Draw(Map.sprMenuHP, new Vector2((int)CurrentX + 45, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            g.DrawString(fntCardInfo, CurrentHP.ToString(), new Vector2(CurrentX + 65, CurrentY), Color.White);
+
+            g.Draw(Map.sprMenuMHP, new Vector2((int)CurrentX + 95, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            g.DrawString(fntCardInfo, MaxHP.ToString(), new Vector2(CurrentX + 115, CurrentY), Color.White);
+        }
+
     }
 }

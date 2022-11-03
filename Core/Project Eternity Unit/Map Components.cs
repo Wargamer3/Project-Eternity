@@ -6,7 +6,7 @@ namespace ProjectEternity.Core.Units
 {
     public abstract class UnitMapComponent
     {
-        public enum Directions : byte { Up, Down, Left, Right }
+        public enum Directions : byte { None, Up, Down, Left, Right, }
         public uint ID;
 
         public Point MapSize;//Size of the Unit on the map.

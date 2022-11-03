@@ -56,9 +56,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.AddPlayer(NewPlayer);
                 }
 
-                for (int C = 0; C < 5; ++C)
+                for (int C = 0; C < 4; ++C)
                 {
-                    NewPlayer.ListCardInHand.Add(ArrayCardInDeck[C]);
+                    NewPlayer.ListCardInHand.Add(ArrayCardInDeck[RandomHelper.Next(ArrayCardInDeck.Length)]);
                 }
 
                 IsEnded = true;

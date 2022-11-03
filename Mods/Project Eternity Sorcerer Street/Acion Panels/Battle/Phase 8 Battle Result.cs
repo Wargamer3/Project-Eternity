@@ -101,12 +101,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void KillInvader(CustomSpriteBatch g)
         {
-
+            //Play card destruction animation
         }
 
         private void KillDefender(CustomSpriteBatch g)
         {
-
+            //Play card destruction animation
         }
 
         private void InvaderWinAndLeave(CustomSpriteBatch g)

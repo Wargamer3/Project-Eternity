@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using static ProjectEternity.GameScreens.SorcererStreetScreen.Player;
+using static ProjectEternity.Core.Units.UnitMapComponent;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, ActivePlayer.CurrentDirection == Directions.None);
+            PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, ActivePlayer.GamePiece.Direction == Directions.None);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -52,9 +52,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 else
                 {
                     RemoveFromPanelList(this);
-                    TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
-
-                    ActiveTerrain.OnSelect(Map, ActivePlayerIndex);
                 }
             }
         }
@@ -95,24 +92,42 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActivePlayer.GamePiece.SetPosition(FinalPosition);
 
             --Movement;
+            NextTerrain.OnReached(Map, ActivePlayerIndex, Movement);
         }
 
         private void PrepareToMoveToNextTerrain(Vector3 PlayerPosition, int LayerIndex, bool AllowDirectionChange)
         {
-            Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, (int)PlayerPosition.X, (int)PlayerPosition.Y, LayerIndex, ActivePlayer.CurrentDirection);
+            Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, (int)PlayerPosition.X, (int)PlayerPosition.Y, LayerIndex, ActivePlayer.GamePiece.Direction);
 
-            if (!AllowDirectionChange)
+            if (DicNextTerrain.Count == 1)
             {
-                MoveToNextTerrain(DicNextTerrain[ActivePlayer.CurrentDirection]);
+                KeyValuePair<Directions, TerrainSorcererStreet> NextTerrain = DicNextTerrain.First();
+                ActivePlayer.GamePiece.Direction = NextTerrain.Key;
+                MoveToNextTerrain(NextTerrain.Value);
+            }
+            else if (!AllowDirectionChange)
+            {
+                if (DicNextTerrain.ContainsKey(ActivePlayer.GamePiece.Direction))
+                {
+                    MoveToNextTerrain(DicNextTerrain[ActivePlayer.GamePiece.Direction]);
+                }
+                else
+                {
+                    KeyValuePair<Directions, TerrainSorcererStreet> NextTerrain = DicNextTerrain.First();
+                    ActivePlayer.GamePiece.Direction = NextTerrain.Key;
+                    MoveToNextTerrain(NextTerrain.Value);
+                }
             }
             else if (DicNextTerrain.Count > 1)
             {
-                DirectionPicker = new ActionPanelChooseDirection(Map, ActivePlayerIndex, DicNextTerrain);
+                DirectionPicker = new ActionPanelChooseDirection(Map, ActivePlayerIndex, Movement, DicNextTerrain);
                 AddToPanelListAndSelect(DirectionPicker);
             }
             else
             {
-                MoveToNextTerrain(DicNextTerrain.First().Value);
+                KeyValuePair<Directions, TerrainSorcererStreet> NextTerrain = DicNextTerrain.First();
+                ActivePlayer.GamePiece.Direction = NextTerrain.Key;
+                MoveToNextTerrain(NextTerrain.Value);
             }
         }
 

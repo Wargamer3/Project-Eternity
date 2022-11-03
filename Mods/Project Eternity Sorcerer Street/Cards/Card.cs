@@ -91,6 +91,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public bool CanActivateSkill(string RequirementName)
+        {
+            for (int E = 0; E < ListActiveSkill.Count; ++E)
+            {
+                if (ListActiveSkill[E].CanAddSkillEffectsToTarget(RequirementName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void ActivateSkill(string RequirementName)
         {
             for (int E = 0; E < ListActiveSkill.Count; ++E)
@@ -108,10 +121,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public virtual void DrawCardInfo(CustomSpriteBatch g, SorcererStreetMap Map, SpriteFont fntCardInfo)
         {
-            float InfoBoxX = Constants.Width / 1.8f;
-            float InfoBoxY = Constants.Height / 10;
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = (int)(Constants.Height / 2);
+            float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth;
+            float InfoBoxY = Constants.Height / 10;
 
             GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
             g.DrawString(fntCardInfo, CardType + " Card", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
@@ -128,31 +141,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CurrentY += 20;
 
             g.DrawString(fntCardInfo, CardType, new Vector2(CurrentX, CurrentY), Color.White);
-            g.Draw(Map.sprElementFire, new Vector2((int)InfoBoxX + BoxWidth - 30, (int)CurrentY), Color.White);
 
             CurrentY += 20;
-
-            if (CardType == CreatureCard.CreatureCardType)
-            {
-                CreatureCard ActiveCard = (CreatureCard)this;
-                g.Draw(Map.sprMenuST, new Vector2((int)CurrentX, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
-                g.DrawString(fntCardInfo, ActiveCard.MaxST.ToString(), new Vector2(CurrentX + 20, CurrentY), Color.White);
-
-                g.Draw(Map.sprMenuHP, new Vector2((int)CurrentX + 50, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
-                g.DrawString(fntCardInfo, ActiveCard.CurrentHP.ToString(), new Vector2(CurrentX + 70, CurrentY), Color.White);
-
-                g.Draw(Map.sprMenuMHP, new Vector2((int)CurrentX + 100, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
-                g.DrawString(fntCardInfo, ActiveCard.MaxHP.ToString(), new Vector2(CurrentX + 120, CurrentY), Color.White);
-            }
 
             CurrentY += 24;
 
-            g.Draw(Map.sprMenuG, new Vector2((int)CurrentX, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 0f);
-            g.DrawString(fntCardInfo, MagicCost.ToString(), new Vector2(CurrentX + 20, CurrentY), Color.White);
+            g.Draw(Map.sprMenuG, new Vector2((int)CurrentX - 5, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 0f);
+            g.DrawString(fntCardInfo, MagicCost.ToString(), new Vector2(CurrentX + 15, CurrentY), Color.White);
 
-            CurrentY += 20;
+            CurrentY += 25;
 
-            g.DrawString(fntCardInfo, Description.ToString(), new Vector2(CurrentX, CurrentY), Color.White);
+            List<string> ListLine = TextHelper.FitToWidth(fntCardInfo, Description, BoxWidth - 20);
+            TextHelper.DrawTextMultiline(g, fntCardInfo, ListLine, TextHelper.TextAligns.Left, CurrentX + BoxWidth / 2, CurrentY, BoxWidth);
         }
 
         public static void DrawCardMiniature(CustomSpriteBatch g, Texture2D sprCardFront, Texture2D sprCardBack, Color CardFrontColor,

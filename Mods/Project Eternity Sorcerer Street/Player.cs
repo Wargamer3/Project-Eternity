@@ -5,17 +5,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class Player
     {
-        public enum Directions { None, Up, Down, Left, Right }
-
         public string Name;
         public string PlayerType;
         public bool IsHuman;
         public bool IsOnline;
         public int Team;
-        public int Rank;//Rank in the game between players
         public SorcererStreetUnit GamePiece;
+        public int Rank;//Rank in the game between players
         public int Magic;
-        public Directions CurrentDirection;
+        public int TotalMagic;
+        public int CompletedLaps;
+        public List<SorcererStreetMap.Checkpoints> ListPassedCheckpoint;
+        public Dictionary<byte, byte> DicChainLevelByTerrainTypeIndex;
         public bool IsPlayerControlled;
         public Color Color;
         public readonly Card[] ArrayCardInDeck;
@@ -40,10 +41,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Color = Color.Red;
             }
 
-            CurrentDirection = Directions.None;
+            ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
+            DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
+            GamePiece.Direction = Core.Units.UnitMapComponent.Directions.None;
             ListRemainingCardInDeck = new List<Card>(ArrayCardInDeck);
             ListCardInHand = new List<Card>();
+        }
+
+        public void IncreaseChainLevels(byte TerrainTypeIndex)
+        {
+            byte ChainValue;
+
+            if (!DicChainLevelByTerrainTypeIndex.TryGetValue(TerrainTypeIndex, out ChainValue))
+            {
+                DicChainLevelByTerrainTypeIndex.Add(TerrainTypeIndex, 1);
+            }
+            else
+            {
+                DicChainLevelByTerrainTypeIndex[TerrainTypeIndex] = (byte)(ChainValue + 1);
+            }
+        }
+
+        public void DecreaseChainLevels(byte TerrainTypeIndex)
+        {
+            byte ChainValue;
+
+            if (!DicChainLevelByTerrainTypeIndex.TryGetValue(TerrainTypeIndex, out ChainValue))
+            {
+                DicChainLevelByTerrainTypeIndex.Add(TerrainTypeIndex, 0);
+            }
+            else
+            {
+                DicChainLevelByTerrainTypeIndex[TerrainTypeIndex] = (byte)(ChainValue - 1);
+            }
         }
     }
 }

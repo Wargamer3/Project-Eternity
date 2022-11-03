@@ -1,22 +1,19 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelEndPlayerPhase : ActionPanelSorcererStreet
+    public class ActionPanelCreatureMovement : ActionPanelSorcererStreet
     {
-        public ActionPanelEndPlayerPhase(SorcererStreetMap Map)
-            : base("End", Map, false)
+        public ActionPanelCreatureMovement(SorcererStreetMap Map)
+            : base("Creature Movement", Map, false)
         {
         }
 
         public override void OnSelect()
         {
-            RemoveAllActionPanels();
-            Map.EndPlayerPhase();
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -37,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelEndPlayerPhase(Map);
+            return new ActionPanelCreatureMovement(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

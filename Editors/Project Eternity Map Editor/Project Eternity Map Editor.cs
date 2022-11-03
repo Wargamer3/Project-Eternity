@@ -1347,83 +1347,93 @@ namespace ProjectEternity.Editors.MapEditor
             }
         }
 
-        private void tsmMapProperties_Click(object sender, EventArgs e)
+        protected virtual MapStatistics OpenMapProperties()
         {
-            MapStatistics MS = new MapStatistics(ActiveMap);
+            return new MapStatistics(ActiveMap);
+        }
 
-            if (MS.ShowDialog() == DialogResult.OK)
+        protected virtual void ApplyMapPropertiesChanges(MapStatistics MS)
+        {
+            Point MapSize = new Point((int)MS.txtMapWidth.Value, (int)MS.txtMapHeight.Value);
+            Point TileSize = new Point((int)MS.txtTileWidth.Value, (int)MS.txtTileHeight.Value);
+            Vector3 CameraPosition = new Vector3((float)MS.txtCameraStartPositionX.Value, (float)MS.txtCameraStartPositionY.Value, 0);
+
+            if (TileSize.X != ActiveMap.TileSize.X || TileSize.Y != ActiveMap.TileSize.Y)
             {
-                Point MapSize = new Point((int)MS.txtMapWidth.Value, (int)MS.txtMapHeight.Value);
-                Point TileSize = new Point((int)MS.txtTileWidth.Value, (int)MS.txtTileHeight.Value);
-                Vector3 CameraPosition = new Vector3((float)MS.txtCameraStartPositionX.Value, (float)MS.txtCameraStartPositionY.Value, 0);
-
-                if (TileSize.X != ActiveMap.TileSize.X || TileSize.Y != ActiveMap.TileSize.Y)
+                for (int T = 0; T < ActiveMap.ListTilesetPreset.Count; ++T)
                 {
-                    for (int T = 0; T < ActiveMap.ListTilesetPreset.Count; ++T)
-                    {
-                        ActiveMap.ListTilesetPreset[T] = new Terrain.TilesetPreset(ActiveMap.ListTilesetPreset[T].TilesetName,
-                                                                                    ActiveMap.ListTilesetPreset[T].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X,
-                                                                                    ActiveMap.ListTilesetPreset[T].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y,
-                                                                                    TileSize.X, TileSize.Y, T);
-                    }
-
-                    ActiveMap.TileSize = new Point(TileSize.X, TileSize.Y);
+                    ActiveMap.ListTilesetPreset[T] = new Terrain.TilesetPreset(ActiveMap.ListTilesetPreset[T].TilesetName,
+                                                                                ActiveMap.ListTilesetPreset[T].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X,
+                                                                                ActiveMap.ListTilesetPreset[T].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y,
+                                                                                TileSize.X, TileSize.Y, T);
                 }
 
-                ActiveMap.CameraType = MS.cbCameraType.Text;
-                ActiveMap.CameraPosition = CameraPosition;
-                ActiveMap.PlayersMin = (byte)MS.txtPlayersMin.Value;
-                ActiveMap.PlayersMax = (byte)MS.txtPlayersMax.Value;
-                ActiveMap.Description = MS.txtDescription.Text;
-
-                ActiveMap.ListMandatoryMutator.Clear();
-                foreach (DataGridViewRow ActiveRow in MS.dgvMandatoryMutators.Rows)
-                {
-                    if (ActiveRow.Cells[0].Value != null)
-                    {
-                        ActiveMap.ListMandatoryMutator.Add((string)ActiveRow.Cells[0].Value);
-                    }
-                }
-
-                ActiveMap.MapEnvironment.TimeStart = (float)MS.txtTimeStart.Value;
-                ActiveMap.MapEnvironment.HoursInDay = (float)MS.txtHoursInDay.Value;
-
-                if (MS.rbLoopFirstDay.Checked)
-                {
-                    ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.FirstDay;
-                }
-                else if (MS.rbLoopLastDay.Checked)
-                {
-                    ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.LastDay;
-                }
-                else
-                {
-                    ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.Stop;
-                }
-
-                ActiveMap.MapEnvironment.TimeMultiplier = (float)MS.txtlblTimeMultiplier.Value;
-                if (MS.rbUseTurns.Checked)
-                {
-                    ActiveMap.MapEnvironment.TimePeriodType = EnvironmentManager.TimePeriods.Turns;
-                }
-                else
-                {
-                    ActiveMap.MapEnvironment.TimePeriodType = EnvironmentManager.TimePeriods.RealTime;
-                }
-
-                Rectangle TilePos = TilesetViewer.TileBrushSize;
-                Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-                DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-
-                Helper.ResizeTerrain(MapSize.X, MapSize.Y, PresetTerrain, PresetTile);
-
-                BattleMapViewer.RefreshScrollbars();
+                ActiveMap.TileSize = new Point(TileSize.X, TileSize.Y);
             }
+
+            ActiveMap.CameraType = MS.cbCameraType.Text;
+            ActiveMap.CameraPosition = CameraPosition;
+            ActiveMap.PlayersMin = (byte)MS.txtPlayersMin.Value;
+            ActiveMap.PlayersMax = (byte)MS.txtPlayersMax.Value;
+            ActiveMap.Description = MS.txtDescription.Text;
+
+            ActiveMap.ListMandatoryMutator.Clear();
+            foreach (DataGridViewRow ActiveRow in MS.dgvMandatoryMutators.Rows)
+            {
+                if (ActiveRow.Cells[0].Value != null)
+                {
+                    ActiveMap.ListMandatoryMutator.Add((string)ActiveRow.Cells[0].Value);
+                }
+            }
+
+            ActiveMap.MapEnvironment.TimeStart = (float)MS.txtTimeStart.Value;
+            ActiveMap.MapEnvironment.HoursInDay = (float)MS.txtHoursInDay.Value;
+
+            if (MS.rbLoopFirstDay.Checked)
+            {
+                ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.FirstDay;
+            }
+            else if (MS.rbLoopLastDay.Checked)
+            {
+                ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.LastDay;
+            }
+            else
+            {
+                ActiveMap.MapEnvironment.TimeLoopType = EnvironmentManager.TimeLoopTypes.Stop;
+            }
+
+            ActiveMap.MapEnvironment.TimeMultiplier = (float)MS.txtlblTimeMultiplier.Value;
+            if (MS.rbUseTurns.Checked)
+            {
+                ActiveMap.MapEnvironment.TimePeriodType = EnvironmentManager.TimePeriods.Turns;
+            }
+            else
+            {
+                ActiveMap.MapEnvironment.TimePeriodType = EnvironmentManager.TimePeriods.RealTime;
+            }
+
+            Rectangle TilePos = TilesetViewer.TileBrushSize;
+            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+
+            Helper.ResizeTerrain(MapSize.X, MapSize.Y, PresetTerrain, PresetTile);
+
+            BattleMapViewer.RefreshScrollbars();
 
             ActiveMap.ListBackgroundsPath.Clear();
             ActiveMap.ListBackgroundsPath.AddRange(MS.ListBackgroundsPath);
             ActiveMap.ListForegroundsPath.Clear();
             ActiveMap.ListForegroundsPath.AddRange(MS.ListForegroundsPath);
+        }
+
+        private void tsmMapProperties_Click(object sender, EventArgs e)
+        {
+            MapStatistics MS = OpenMapProperties();
+
+            if (MS.ShowDialog() == DialogResult.OK)
+            {
+                ApplyMapPropertiesChanges(MS);
+            }
         }
 
         private void tsmSave_Click(object sender, EventArgs e)

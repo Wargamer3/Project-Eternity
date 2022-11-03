@@ -1084,7 +1084,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             Vector3 Position = new Vector3(Visible3DPosition.X * Map.TileSize.X, Visible3DPosition.Y, Visible3DPosition.Z * Map.TileSize.Y);
 
                             Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, PolygonEffect.Projection, View, Matrix.Identity);
-                            g.DrawString(Map.fntNonDemoDamage, "20", new Vector2(Position2D.X, Position2D.Y), Color.White);
+                            g.DrawString(Map.fntNonDemoDamage, ActiveTerrain.CurrentToll.ToString(), new Vector2(Position2D.X, Position2D.Y), Color.White);
                         }
                     }
                 } }

@@ -1,8 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using System;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -90,6 +90,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     switch (Map.ListTerrainType[TerrainTypeIndex])
                     {
+                        case TerrainSorcererStreet.Castle:
+                            ArrayTerrain[X, Y] = new CastleTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            break;
+
                         case TerrainSorcererStreet.FireElement:
                         case TerrainSorcererStreet.WaterElement:
                         case TerrainSorcererStreet.EarthElement:
@@ -97,11 +101,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             ArrayTerrain[X, Y] = new ElementalTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
                             break;
 
-                        case TerrainSorcererStreet.EastGate:
-                        case TerrainSorcererStreet.WestGate:
-                        case TerrainSorcererStreet.SouthGate:
-                        case TerrainSorcererStreet.NorthGate:
-                            ArrayTerrain[X, Y] = new GateTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                        case TerrainSorcererStreet.EastTower:
+                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.East);
+                            break;
+                        case TerrainSorcererStreet.WestTower:
+                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.West);
+                            break;
+                        case TerrainSorcererStreet.SouthTower:
+                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.South);
+                            break;
+                        case TerrainSorcererStreet.NorthTower:
+                            ArrayTerrain[X, Y] = new TowerTerrain(X, Y, LayerIndex, Depth, TerrainTypeIndex);
+                            Map.ListCheckpoint.Add(SorcererStreetMap.Checkpoints.North);
                             break;
 
                         default:

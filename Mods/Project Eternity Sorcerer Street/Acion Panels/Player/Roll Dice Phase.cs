@@ -43,7 +43,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            VisibleDiceValue = Random.Next(0, 6);
+            VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
 
             if (InputHelper.InputConfirmPressed())
             {
@@ -58,10 +58,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void RollDice()
         {
-            VisibleDiceValue = Random.Next(0, 6);
+            VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
 
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, 3));
+            AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, VisibleDiceValue));
         }
 
         protected override void OnCancelPanel()

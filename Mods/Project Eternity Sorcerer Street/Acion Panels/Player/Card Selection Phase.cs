@@ -94,7 +94,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputConfirmPressed())
             {
-                if (CardCursorIndex < ActivePlayer.ListCardInHand.Count && ActivePlayer.ListCardInHand[CardCursorIndex].CardType == CardType)
+                if (CardType == null
+                    || (CardCursorIndex < ActivePlayer.ListCardInHand.Count && ActivePlayer.ListCardInHand[CardCursorIndex].CardType == CardType && ActivePlayer.Magic >= ActivePlayer.ListCardInHand[CardCursorIndex].MagicCost))
                 {
                     OnCardSelected(ActivePlayer.ListCardInHand[CardCursorIndex]);
                 }
@@ -110,7 +111,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             RemoveFromPanelList(this);
             AddToPanelListAndSelect(new ActionPanelRollDicePhase(Map, ActivePlayerIndex));
         }
-        
+
+        public void SwitchToTerritory()
+        {
+            RemoveFromPanelList(this);
+            AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
+        }
+
         protected override void OnCancelPanel()
         {
         }
@@ -146,9 +153,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
             {
                 Color CardColor = Color.White;
-                if (ActivePlayer.ListCardInHand[C].CardType != CardType)
+                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Magic < ActivePlayer.ListCardInHand[C].MagicCost))
                 {
-                    CardColor = Color.DarkGray;
+                    CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                 }
 
                 DrawCardMiniature(g, GameScreen.sprPixel, CardColor, C * 80 + 10, 0.26f);
@@ -166,9 +173,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
             {
                 Color CardColor = Color.White;
-                if (ActivePlayer.ListCardInHand[C].CardType != CardType)
+                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Magic < ActivePlayer.ListCardInHand[C].MagicCost))
                 {
-                    CardColor = Color.DarkGray;
+                    CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                 }
 
                 DrawCardMiniature(g, GameScreen.sprPixel, CardColor, C * 80 + 10, 0.26f);
@@ -196,9 +203,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
                 {
                     Color CardColor = Color.White;
-                    if (ActivePlayer.ListCardInHand[C].CardType != CardType)
+                    if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Magic < ActivePlayer.ListCardInHand[C].MagicCost))
                     {
-                        CardColor = Color.DarkGray;
+                        CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                     }
 
                     DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == CardCursorIndex, C * 80 + 80, Scale, AnimationTimer, 0.02f);

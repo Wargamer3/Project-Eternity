@@ -49,12 +49,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            return "Penetrate " + string.Join(",", ArrayAffinity);
         }
 
         protected override BaseEffect DoCopy()
         {
             PenetrateEffect NewEffect = new PenetrateEffect(Params);
+
+            NewEffect.ArrayAffinity = ArrayAffinity;
 
             return NewEffect;
         }

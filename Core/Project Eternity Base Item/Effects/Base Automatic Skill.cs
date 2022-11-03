@@ -138,6 +138,24 @@ namespace ProjectEternity.Core.Item
             }
         }
 
+        public bool CanAddSkillEffectsToTarget(string SkillRequirementToActivate)
+        {
+            if (CurrentSkillLevel.ActivationsCount == 0)
+            {
+                return false;
+            }
+
+            for (int A = 0; A < CurrentSkillLevel.ListActivation.Count; A++)
+            {
+                if (CurrentSkillLevel.ListActivation[A].CanActivate(SkillRequirementToActivate, Name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void AddSkillEffectsToTarget(string SkillRequirementToActivate)
         {
             //No activations remaining.
