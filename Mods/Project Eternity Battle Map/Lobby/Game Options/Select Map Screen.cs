@@ -127,9 +127,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             string RootDirectory = Content.RootDirectory + "/Maps/";
 
-            foreach (string ActiveMultiplayerFolder in Directory.EnumerateDirectories(Content.RootDirectory + "/Maps/", "Multiplayer", SearchOption.AllDirectories))
+            IEnumerable<string> ListMapFolder;
+            if (!string.IsNullOrEmpty(Room.RoomType))
             {
-                foreach (string ActiveCampaignFolder in Directory.EnumerateDirectories(ActiveMultiplayerFolder, Room.RoomType, SearchOption.AllDirectories))
+                ListMapFolder = Directory.EnumerateDirectories(Content.RootDirectory + "/Maps/" + Room.RoomType + "/", "Multiplayer", SearchOption.AllDirectories);
+            }
+            else
+            {
+                ListMapFolder = Directory.EnumerateDirectories(Content.RootDirectory + "/Maps/", "Multiplayer", SearchOption.AllDirectories);
+            }
+
+            foreach (string ActiveMultiplayerFolder in ListMapFolder)
+            {
+                foreach (string ActiveCampaignFolder in Directory.EnumerateDirectories(ActiveMultiplayerFolder, Room.RoomSubtype, SearchOption.AllDirectories))
                 {
                     foreach (string ActiveFile in Directory.EnumerateFiles(ActiveCampaignFolder, "*.pem", SearchOption.AllDirectories))
                     {

@@ -8,7 +8,7 @@ using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class PlayerInventory
+    public class BattleMapPlayerInventory
     {
         public List<PlayerLoadout> ListSquadLoadout;
         public List<Squad> ListOwnedSquad;
@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public PlayerLoadout ActiveLoadout;
 
-        public PlayerInventory()
+        public BattleMapPlayerInventory()
         {
             ListSquadLoadout = new List<PlayerLoadout>();
             ListOwnedSquad = new List<Squad>();

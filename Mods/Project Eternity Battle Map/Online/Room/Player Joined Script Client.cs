@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             for (int P = 0; P < ListJoiningPlayerInfoCount; P++)
             {
-                BattleMapPlayer JoiningPlayer = new BattleMapPlayer(Sender.ReadString(), Sender.ReadString(), BattleMapPlayer.PlayerTypes.Player, true, 0, true, Color.Blue);
+                BattleMapPlayer JoiningPlayer = new BattleMapPlayer(Sender.ReadString(), Sender.ReadString(), OnlinePlayerBase.PlayerTypes.Player, true, 0, true, Color.Blue);
 
                 ListJoiningPlayer.Add(JoiningPlayer);
             }

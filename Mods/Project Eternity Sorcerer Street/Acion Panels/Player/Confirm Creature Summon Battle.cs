@@ -101,7 +101,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             ActiveCard.DrawCard(g);
-            ActiveCard.DrawCardInfo(g, Map, Map.fntArial12);
+            ActiveCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
 
             GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 120), 200, 90, Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "Summon this creature?", new Vector2(Constants.Width / 2, Constants.Height - 110), Color.White);

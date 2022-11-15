@@ -293,7 +293,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Player NewPlayer;
                 if (PlayerManager.OnlinePlayerID == PlayerID)
                 {
-                    NewPlayer = new Player(PlayerManager.ListLocalPlayer[LocalPlayerIndex]);
+                    NewPlayer = new Player((BattleMapPlayer)PlayerManager.ListLocalPlayer[LocalPlayerIndex]);
                     NewPlayer.Team = PlayerTeam;
                     NewPlayer.Color = PlayerColor;
                     AddLocalCharacter(NewPlayer);
@@ -440,9 +440,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
+        protected override void DoAddLocalPlayer(OnlinePlayerBase NewPlayer)
         {
-            Player NewDeahtmatchPlayer = new Player(NewPlayer);
+            Player NewDeahtmatchPlayer = new Player((BattleMapPlayer)NewPlayer);
 
             ListPlayer.Add(NewDeahtmatchPlayer);
             ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);

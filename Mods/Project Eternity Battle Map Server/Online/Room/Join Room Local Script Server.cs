@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
@@ -11,10 +10,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         private readonly string RoomID;
         private readonly string CurrentDifficulty;
-        private readonly List<BattleMapPlayer> ListJoiningPlayer;
+        private readonly List<OnlinePlayerBase> ListJoiningPlayer;
         private readonly GameClientGroup ActiveGroup;
 
-        public JoinRoomLocalScriptServer(string RoomID, string CurrentDifficulty, List<BattleMapPlayer> ListJoiningPlayer, GameClientGroup ActiveGroup)
+        public JoinRoomLocalScriptServer(string RoomID, string CurrentDifficulty, List<OnlinePlayerBase> ListJoiningPlayer, GameClientGroup ActiveGroup)
             : base(ScriptName)
         {
             this.RoomID = RoomID;

@@ -17,6 +17,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public partial class SorcererStreetMap : BattleMap
     {
+        public static readonly string MapType = "Sorcerer Street";
+
         public enum Checkpoints { North, South, West, East }
         public override MovementAlgorithmTile CursorTerrain { get { return LayerManager.ListLayer[(int)CursorPosition.Z].ArrayTerrain[(int)CursorPosition.X, (int)CursorPosition.Y]; } }
 
@@ -34,19 +36,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprHelp;
         public Texture2D sprEndTurn;
 
-        public Texture2D sprElementAir;
-        public Texture2D sprElementEarth;
-        public Texture2D sprElementFire;
-        public Texture2D sprElementWater;
-        public Texture2D sprElementNeutral;
-        public Texture2D sprElementMulti;
-
-        public Texture2D sprMenuG;
-        public Texture2D sprMenuTG;
-        public Texture2D sprMenuST;
-        public Texture2D sprMenuHP;
-        public Texture2D sprMenuMHP;
-
         public Texture2D sprMenuHand;
         public Texture2D sprMenuCursor;
         public Texture2D sprVS;
@@ -60,10 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprDirectionWestFilled;
         public Texture2D sprDirectionSouthFilled;
 
-        public Texture2D sprRarityE;
-        public Texture2D sprRarityN;
-        public Texture2D sprRarityR;
-        public Texture2D sprRarityS;
+        public CardSymbols Symbols;
 
         public Texture2D sprTileBorderEmpty;
         public Texture2D sprTileBorderColor;
@@ -88,7 +74,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public LayerHolderSorcererStreet LayerManager;
 
         public SorcererStreetMap()
+            : this(new SorcererStreetBattleParams(new SorcererStreetBattleContext()))
         {
+        }
+
+        public SorcererStreetMap(SorcererStreetBattleParams Params)
+            : base()
+        {
+            this.Params = SorcererStreetParams = Params;
+
             RequireDrawFocus = false;
             ListActionMenuChoice = new ActionPanelHolder();
             Pathfinder = new MovementAlgorithmSorcererStreet(this);
@@ -130,19 +124,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ListTileSet = new List<Texture2D>();
             this.CameraPosition = Vector3.Zero;
-
-            GameRule = new SinglePlayerGameRule(this);
         }
 
-        public SorcererStreetMap(string GameMode)
-            : this()
+        public SorcererStreetMap(string GameMode, SorcererStreetBattleParams Params)
+            : this(Params)
         {
-            Params = SorcererStreetParams = new SorcererStreetBattleParams();
+            switch (GameMode)
+            {
+                default:
+                    GameRule = new SinglePlayerGameRule(this);
+                    break;
+            }
+
             GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
         }
 
-        public SorcererStreetMap(string BattleMapPath, string GameMode)
-            : this(GameMode)
+        public SorcererStreetMap(string BattleMapPath, string GameMode, SorcererStreetBattleParams Params)
+            : this(GameMode, Params)
         {
             this.BattleMapPath = BattleMapPath;
         }
@@ -188,21 +186,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprHelp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Help");
             sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/End");
 
-
-            sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Air");
-            sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Earth");
-            sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Fire");
-            sprElementWater = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Water");
-            sprElementMulti = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Multi");
-            sprElementNeutral = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Neutral");
-
             sprPlayerBackground = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Background");
-
-            sprMenuG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/G");
-            sprMenuTG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/TG");
-            sprMenuST = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/ST");
-            sprMenuHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/HP");
-            sprMenuMHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/MHP");
 
             sprMenuHand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Hand");
             sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
@@ -217,10 +201,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprDirectionEastFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
             sprDirectionSouthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Filled");
 
-            sprRarityE = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity E");
-            sprRarityN = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity N");
-            sprRarityR = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity R");
-            sprRarityS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity S");
+            Symbols = CardSymbols.Load(Content);
 
             sprTileBorderEmpty = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Empty");
             sprTileBorderColor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border");
@@ -332,28 +313,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }*/
         }
 
-        protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
+        protected override void DoAddLocalPlayer(OnlinePlayerBase NewPlayer)
         {
-            /*Player NewDeahtmatchPlayer = new Player(NewPlayer);
+            Player NewDeahtmatchPlayer = new Player((Player)NewPlayer);
 
-            ListPlayer.Add(NewDeahtmatchPlayer);
-            ListLocalPlayerInfo.Add(NewDeahtmatchPlayer);*/
+            AddPlayer(NewDeahtmatchPlayer);
         }
 
         public void AddPlayer(Player NewPlayer)
         {
-            if (Content != null)
-            {
-                NewPlayer.GamePiece.SpriteMap = Content.Load<Texture2D>("Units/Default");
-                NewPlayer.GamePiece.Unit3DSprite = new UnitMap3D(GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), NewPlayer.GamePiece.SpriteMap, 1);
-                NewPlayer.GamePiece.Unit3DModel = new AnimatedModel("Units/Normal/Models/Bomberman/Default");
-                NewPlayer.GamePiece.Unit3DModel.LoadContent(Content);
-                NewPlayer.GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Waving", "Idle", Content);
-                NewPlayer.GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Walking", "Walking", Content);
-                NewPlayer.GamePiece.Unit3DModel.PlayAnimation("Walking");
-            }
-
             ListPlayer.Add(NewPlayer);
+            ListLocalPlayerInfo.Add(NewPlayer);
             NewPlayer.TotalMagic = NewPlayer.Magic = MagicAtStart;
             UpdatePlayersRank();
         }
@@ -929,7 +899,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BattleMap GetNewMap(string GameMode, string ParamsID)
         {
-            return new SorcererStreetMap(GameMode);
+            SorcererStreetBattleParams Params;
+            SorcererStreetMap NewMap;
+
+            if (!SorcererStreetBattleParams.DicParams.TryGetValue(ParamsID, out Params))
+            {
+                Params = new SorcererStreetBattleParams();
+                SorcererStreetBattleParams.DicParams.TryAdd(ParamsID, Params);
+                Params.Reload(this.Params, ParamsID);
+            }
+
+            NewMap = new SorcererStreetMap(GameMode, Params);
+            Params.Map = NewMap;
+            return NewMap;
         }
 
         public override string GetMapType()

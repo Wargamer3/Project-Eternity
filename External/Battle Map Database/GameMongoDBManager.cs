@@ -95,7 +95,7 @@ namespace Database.BattleMap
 
             RoomsCollection.InsertOne(document);
 
-            return new PVPRoomInformations(document.GetValue("_id").AsObjectId.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
+            return new BattleMapRoomInformations(document.GetValue("_id").AsObjectId.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
         }
 
         public void RemoveRoom(string RoomID)

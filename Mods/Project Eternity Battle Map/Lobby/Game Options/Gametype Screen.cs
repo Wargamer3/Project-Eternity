@@ -7,9 +7,9 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class GameOptionsGametypeScreen : GameScreen
+    public class GameOptionsGametypeScreen : GameScreen
     {
-        private struct GametypeCategory
+        protected struct GametypeCategory
         {
             public string Category;
             public Gametype[] ArrayGametype;
@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 this.ArrayGametype = ArrayGametype;
             }
         }
-        private struct Gametype
+        protected struct Gametype
         {
             public string Name;
             public string Description;
@@ -48,9 +48,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         int LeftPanelX = (int)(Constants.Width * 0.03);
 
-        private GametypeCategory[] ArrayGametypeCategory;
+        protected GametypeCategory[] ArrayGametypeCategory;
         private int GametypeScrollbarValue;
-        private Gametype SelectedGametype;
+        protected Gametype SelectedGametype;
 
         public GameOptionsGametypeScreen(RoomInformations Room, GameOptionsScreen Owner)
         {
@@ -62,6 +62,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
 
+            LoadGameTypes();
+
+            int PanelY = (int)(Constants.Height * 0.15);
+            int PanelWidth = (int)(Constants.Width * 0.4);
+            int PanelHeight = (int)(Constants.Height * 0.75);
+
+            int LeftPanelX = (int)(Constants.Width * 0.03);
+
+            GametypeScrollbar = new BoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY), PanelHeight, 10, OnGametypeScrollbarChange);
+        }
+
+        protected virtual void LoadGameTypes()
+        {
             Gametype GametypeCampaign = new Gametype("Campaign", "Classic mission based mode, no respawn.", true, null);
             Gametype GametypeHorde = new Gametype("Horde", "Wave survival mode, respawn at the start of each wave.", true, null);
             Gametype GametypeBaseDefense = new Gametype("Base Defense", "Wave survival mode, respawn at the start of each wave. Must defend a base by building turrets.", false, null);
@@ -91,14 +104,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 GametypeOnslaught, GametypeTitan, GametypeBaseAssault, GametypeKingOfTheHill, GametypeBunny, GametypeFreezeTag,
                 GametypeJailbreak, GametypeMutant, GametypeProtectThaPimp, GametypeKaiju,
             });
-
-            int PanelY = (int)(Constants.Height * 0.15);
-            int PanelWidth = (int)(Constants.Width * 0.4);
-            int PanelHeight = (int)(Constants.Height * 0.75);
-
-            int LeftPanelX = (int)(Constants.Width * 0.03);
-
-            GametypeScrollbar = new BoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY), PanelHeight, 10, OnGametypeScrollbarChange);
         }
 
         public override void Update(GameTime gameTime)
@@ -137,7 +142,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         && InputHelper.InputConfirmPressed())
                     {
                         SelectedGametype = ActiveCategory.ArrayGametype[G];
-                        Room.RoomType = SelectedGametype.Name;
+                        Room.RoomSubtype = SelectedGametype.Name;
                         Owner.OnGametypeUpdate();
                         return true;
                     }

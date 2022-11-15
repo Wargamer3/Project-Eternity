@@ -523,11 +523,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
             Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            Projection = HalfPixelOffset * Projection;
 
             GameScreen.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GameScreen.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.White, 1f, 0);
-            Projection = HalfPixelOffset * Projection;
 
             foreach (ModelMesh ActiveMesh in Model.Meshes)
             {

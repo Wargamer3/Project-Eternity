@@ -65,9 +65,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int BoxHeight = 70;
 
+            int BoxPostion = Constants.Height / 20;
             for (int P = 0; P < Map.ListPlayer.Count; ++P)
             {
-                DrawPlayerInformation(g, Map, Map.ListPlayer[P], 30, Constants.Height / 20 + P * BoxHeight);
+                if (Map.ListPlayer[P].Inventory == null)
+                    continue;
+
+                DrawPlayerInformation(g, Map, Map.ListPlayer[P], 30, BoxPostion);
+                BoxPostion += BoxHeight;
             }
 
             int BoxWidth = 110;
@@ -98,11 +103,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Y += 25;
             //Draw Player Magic
-            g.Draw(Map.sprMenuG, new Rectangle((int)X, (int)Y, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)X, (int)Y, 18, 18), Color.White);
             g.DrawString(Map.fntArial12, ActivePlayer.Magic.ToString(), new Vector2(X + 20, Y), Color.White);
 
             //Draw Player Total Magic
-            g.Draw(Map.sprMenuTG, new Rectangle((int)X + 60, (int)Y, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 60, (int)Y, 18, 18), Color.White);
             g.DrawString(Map.fntArial12, ActivePlayer.TotalMagic.ToString(), new Vector2(X + 80, Y), Color.White);
 
             Y += 20;
@@ -152,16 +157,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (Map.ListTerrainType[HoverTerrain.TerrainTypeIndex])
             {
                 case TerrainSorcererStreet.FireElement:
-                    g.Draw(Map.sprElementFire, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementFire, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
                     break;
                 case TerrainSorcererStreet.WaterElement:
-                    g.Draw(Map.sprElementWater, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementWater, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
                     break;
                 case TerrainSorcererStreet.EarthElement:
-                    g.Draw(Map.sprElementEarth, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementEarth, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
                     break;
                 case TerrainSorcererStreet.AirElement:
-                    g.Draw(Map.sprElementAir, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementAir, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
                     break;
             }
         }

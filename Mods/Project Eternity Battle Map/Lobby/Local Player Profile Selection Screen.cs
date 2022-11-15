@@ -26,9 +26,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int SelectedProfileIndex;
         private int MapScrollbarValue;
         private List<string> ListPlayerProfile;
-        private readonly BattleMapPlayer ActivePlayer;
+        private readonly OnlinePlayerBase ActivePlayer;
 
-        public LocalPlayerProfileSelectionScreen(BattleMapPlayer ActivePlayer)
+        public LocalPlayerProfileSelectionScreen(OnlinePlayerBase ActivePlayer)
         {
             this.ActivePlayer = ActivePlayer;
         }
@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
-            ListPlayerProfile = BattleMapPlayer.GetProfileNames();
+            ListPlayerProfile = ActivePlayer.GetProfileNames();
 
             int MenuWidth = (int)(Constants.Width * 0.45);
             int MenuHeight = (int)(Constants.Height * 0.45);

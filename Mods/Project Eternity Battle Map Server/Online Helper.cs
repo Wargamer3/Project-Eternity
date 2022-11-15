@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public static class OnlineHelper
     {
-        public static Dictionary<string, OnlineScript> GetRoomScriptsServer(PVPRoomInformations NewRoom, GameServer Owner)
+        public static Dictionary<string, OnlineScript> GetRoomScriptsServer(BattleMapRoomInformations NewRoom, GameServer Owner)
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 
@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             return DicNewScript;
         }
 
-        public static Dictionary<string, OnlineScript> GetBattleMapScriptsServer(BattleMapClientGroup ActiveGroup, BattleMapPlayer ActivePlayer)
+        public static Dictionary<string, OnlineScript> GetBattleMapScriptsServer(BattleMapClientGroup ActiveGroup)
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 

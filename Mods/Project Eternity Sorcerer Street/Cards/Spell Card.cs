@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
+using ProjectEternity.Core.Item;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -18,6 +20,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : this(Path)
         {
 
+        }
+
+        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

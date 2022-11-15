@@ -4,14 +4,11 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class BattleMapPlayer
+    public abstract class OnlinePlayerBase
     {
         public const string PlayerTypeNA = "N/A";
         public const string PlayerTypeOffline = "Offline";
@@ -41,16 +38,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public IOnlineConnection OnlineClient;//Used by the server
 
         public PlayerRecords Records;
-        public PlayerInventory Inventory;
 
-        public BattleMapPlayer()
+        public abstract string SaveFileFolder { get; }
+
+        public OnlinePlayerBase()
         {
             Records = new PlayerRecords();
-            Inventory = new PlayerInventory();
             InputManager = new KeyboardInput();
         }
 
-        public BattleMapPlayer(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
+        public OnlinePlayerBase(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
         {
 
             this.ConnectionID = ID;
@@ -63,13 +60,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Guild = string.Empty;
             Records = new PlayerRecords();
-            Inventory = new PlayerInventory();
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
             InputManager = new KeyboardInput();
         }
 
-        public BattleMapPlayer(string ID, string Name, PlayerTypes OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
+        public OnlinePlayerBase(string ID, string Name, PlayerTypes OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
         {
             this.ConnectionID = ID;
             this.Name = Name;
@@ -80,7 +76,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Guild = string.Empty;
             Records = new PlayerRecords();
-            Inventory = new PlayerInventory();
 
             if (OnlinePlayerType == PlayerTypes.Offline)
             {
@@ -111,7 +106,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             InputManager = new KeyboardInput();
         }
 
-        public BattleMapPlayer(BattleMapPlayer Clone)
+        public OnlinePlayerBase(OnlinePlayerBase Clone)
         {
             if (Clone == null)
             {
@@ -137,15 +132,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             OnlinePlayerType = Clone.OnlinePlayerType;
             OnlineClient = Clone.OnlineClient;
-
-            Inventory = Clone.Inventory;
         }
+
+        public abstract void InitFirstTimeInventory();
 
         public void LoadLocally(ContentManager Content)
         {
-            if (!File.Exists("User data/Profiles/Battle Map/Last Selected Profile.txt"))
+            if (!File.Exists("User data/Profiles/" + SaveFileFolder + "Last Selected Profile.txt"))
             {
-                File.WriteAllText("User data/Profiles/Battle Map/Last Selected Profile.txt", "Player 1", Encoding.UTF8);
+                File.WriteAllText("User data/Profiles/" + SaveFileFolder + "Last Selected Profile.txt", "Player 1", Encoding.UTF8);
                 Name = "Player 1";
                 InitFirstTimeInventory();
                 SaveLocally();
@@ -154,90 +149,45 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (Name == null)
             {
-                Name = File.ReadAllText("User data/Profiles/Battle Map/Last Selected Profile.txt", Encoding.UTF8);
+                Name = File.ReadAllText("User data/Profiles/" + SaveFileFolder + "Last Selected Profile.txt", Encoding.UTF8);
             }
-            FileStream FS = new FileStream("User data/Profiles/Battle Map/" + Name + ".bin", FileMode.Open, FileAccess.Read);
+            FileStream FS = new FileStream("User data/Profiles/" + SaveFileFolder + Name + ".bin", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
             Enum.TryParse(BR.ReadString(), out GameplayType);
 
-            Inventory.Load(BR, Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
             Records.Load(BR);
+
+            DoLoadLocally(Content, BR);
 
             BR.Close();
             FS.Close();
         }
 
-        public void InitFirstTimeInventory()
-        {
-            IniFile IniDefaultUnits = IniFile.ReadFromFile("Content/Battle Lobby Default Units.ini");
-
-            foreach (string ActiveKey in IniDefaultUnits.ReadAllKeys())
-            {
-                string UnitPath = IniDefaultUnits.ReadField(ActiveKey, "Path");
-                string PilotPath = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
-
-                Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                Character NewCharacter = new Character(PilotPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                NewCharacter.Level = 1;
-                NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
-
-                Squad NewSquad = new Squad("Squad", NewUnit);
-                NewSquad.IsPlayerControlled = true;
-
-                Inventory.ListOwnedSquad.Add(NewSquad);
-                Inventory.ListOwnedCharacter.Add(NewCharacter);
-            }
-
-            Inventory.ActiveLoadout.ListSpawnSquad.Add(Inventory.ListOwnedSquad[0]);
-        }
-
-        public void FillLoadout(int UnitsInLoadout)
-        {
-            IniFile IniDefaultUnits = IniFile.ReadFromFile("Content/Battle Lobby Default Units.ini");
-            string ActiveKey = IniDefaultUnits.ReadAllKeys()[0];
-
-            string UnitPath = IniDefaultUnits.ReadField(ActiveKey, "Path");
-            string Pilot = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
-
-            while (Inventory.ActiveLoadout.ListSpawnSquad.Count < UnitsInLoadout)
-            {
-                Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                Character NewCharacter = new Character(Pilot, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                NewCharacter.Level = 1;
-                NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
-
-                Squad NewSquad = new Squad("Squad", NewUnit);
-                NewSquad.IsPlayerControlled = true;
-
-                Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
-            }
-
-            while (Inventory.ActiveLoadout.ListSpawnSquad.Count > UnitsInLoadout)
-            {
-                Inventory.ActiveLoadout.ListSpawnSquad.RemoveAt(Inventory.ActiveLoadout.ListSpawnSquad.Count - 1);
-            }
-        }
+        protected abstract void DoLoadLocally(ContentManager Content, BinaryReader BR);
 
         public void SaveLocally()
         {
-            FileStream FS = new FileStream("User data/Profiles/Battle Map/" + Name + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream FS = new FileStream("User data/Profiles/" + SaveFileFolder + Name + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
             BW.Write(GameplayType.ToString());
 
-            Inventory.Save(BW);
             Records.Save(BW);
+
+            DoSaveLocally(BW);
 
             BW.Close();
             FS.Close();
         }
 
-        public static List<string> GetProfileNames()
+        protected abstract void DoSaveLocally(BinaryWriter BW);
+
+        public List<string> GetProfileNames()
         {
             List<string> ListProfileName = new List<string>();
 
-            DirectoryInfo MapDirectory = new DirectoryInfo("User data/Profiles/Battle Map");
+            DirectoryInfo MapDirectory = new DirectoryInfo("User data/Profiles/" + SaveFileFolder);
 
             FileInfo[] ArrayMapFile = MapDirectory.GetFiles("*.bin");
             foreach (FileInfo ActiveFile in ArrayMapFile)

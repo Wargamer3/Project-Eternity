@@ -8,12 +8,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Ask Change Room Extras";
 
-        private readonly PVPRoomInformations Owner;
+        private readonly BattleMapRoomInformations Owner;
 
         public int MaxKill;
         public int MaxGameLengthInMinutes;
 
-        public AskChangeRoomExtrasBattleScriptServer(PVPRoomInformations Owner)
+        public AskChangeRoomExtrasBattleScriptServer(BattleMapRoomInformations Owner)
             : base(ScriptName)
         {
             this.Owner = Owner;

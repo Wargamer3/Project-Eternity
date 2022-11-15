@@ -7,7 +7,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class GameOptionsScreen : GameScreen
+    public class GameOptionsScreen : GameScreen
     {
         private SpriteFont fntText;
         public FMODSound sndButtonOver;
@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private IUIElement[] ArrayUIElement;
 
-        private readonly RoomInformations Room;
+        protected readonly RoomInformations Room;
 
         private GamePreparationScreen Owner;
 
@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
             ArrayOptionTab = new GameScreen[5];
-            ArrayOptionTab[0] = new GameOptionsGametypeScreen(Room, this);
+            ArrayOptionTab[0] = GetGametypeScreen();
             ArrayOptionTab[1] = SelectMapScreen = new GameOptionsSelectMapScreen(Room, this, Owner);
             ArrayOptionTab[2] = GameRuleScreen = new GameOptionsGameRulesScreen(Room);
             ArrayOptionTab[3] = MutatorsScreen = new GameOptionsMutatorsScreen(Room, this);
@@ -101,6 +101,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 GametypeButton, SelectMapButton, GameRulesButton, MutatorsButton, BotsConfigButton,
                 CloseButton,
             };
+        }
+
+        protected virtual GameScreen GetGametypeScreen()
+        {
+            return new GameOptionsGametypeScreen(Room, this);
         }
 
         private void OnButtonOver()

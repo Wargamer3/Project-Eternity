@@ -7,10 +7,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
     {
         public const string ScriptName = "Change Room Extras";
 
-        private readonly PVPRoomInformations Owner;
+        private readonly BattleMapRoomInformations Owner;
         private readonly GamePreparationScreen MissionSelectScreen;
 
-        public ChangeRoomExtrasMissionScriptClient(PVPRoomInformations Owner, GamePreparationScreen MissionSelectScreen)
+        public ChangeRoomExtrasMissionScriptClient(BattleMapRoomInformations Owner, GamePreparationScreen MissionSelectScreen)
             : base(ScriptName)
         {
             this.Owner = Owner;

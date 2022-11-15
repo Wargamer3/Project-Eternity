@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
-using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.SorcererStreetScreen;
 
 namespace ProjectEternity.UnitTests.SorcererStreetTests
@@ -25,8 +24,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
-            Player DummyPlayer1 = new Player("Player 1", "Human", true, false, 0, new Card[] { DummyInvaderCard });
-            Player DummyPlayer2 = new Player("Player 2", "Human", true, false, 0, new Card[] { DummyDefenderCard });
+            Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new Card[] { DummyInvaderCard });
+            Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new Card[] { DummyDefenderCard });
 
             SorcererStreetMap DummyMap = CreateDummyMap();
             DummyMap.AddPlayer(DummyPlayer1);
@@ -54,8 +53,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
-            Player DummyPlayer1 = new Player("Player 1", "Human", true, false, 0, new Card[] { DummyInvaderCard });
-            Player DummyPlayer2 = new Player("Player 2", "Human", true, false, 0, new Card[] { DummyDefenderCard });
+            Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new Card[] { DummyInvaderCard });
+            Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new Card[] { DummyDefenderCard });
 
             SorcererStreetMap DummyMap = CreateDummyMap();
             DummyMap.AddPlayer(DummyPlayer1);

@@ -16,7 +16,7 @@ namespace ProjectEternity
     public sealed class GameSelection : GameScreen
     {
         private enum MenuChoices { Normal, SuperTreeWar, Intermission, MultiplayerClassic, MultiplayerLobby, MultiplayerLobbyOffline,
-            WorldMap, Conquest, SorcererStreet, Racing, SuperTank, TripleThunderOnline, TripleThunderOffline };
+            WorldMap, Conquest, SorcererStreet, SorcererStreetLobby, Racing, SuperTank, TripleThunderOnline, TripleThunderOffline };
 
         private int SelectedChoice = 0;
 
@@ -46,14 +46,14 @@ namespace ProjectEternity
                 sndSelection.Play();
 
                 if (SelectedChoice == -1)
-                    SelectedChoice = 12;
+                    SelectedChoice = 13;
             }
             else if (InputHelper.InputDownPressed())
             {
                 SelectedChoice++;
                 sndSelection.Play();
 
-                if (SelectedChoice == 13)
+                if (SelectedChoice > 13)
                     SelectedChoice = 0;
             }
             else if (InputHelper.InputConfirmPressed())
@@ -72,7 +72,7 @@ namespace ProjectEternity
                         NewMap.ListGameScreen = ListGameScreen;
                         NewMap.PlayerRoster = new Roster();
                         NewMap.PlayerRoster.LoadRoster();
-                        BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
+                        BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
                         NewMap.AddLocalPlayer(Player1);
                         NewMap.Load();
                         NewMap.Init();
@@ -175,15 +175,27 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.SorcererStreet:
-                        GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = new GameScreens.SorcererStreetScreen.SorcererStreetMap("New Item", string.Empty);
+                        GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = (GameScreens.SorcererStreetScreen.SorcererStreetMap)BattleMap.DicBattmeMapType[GameScreens.SorcererStreetScreen.SorcererStreetMap.MapType].GetNewMap(string.Empty, string.Empty);
+                        NewMapSS.BattleMapPath = "New Item";
                         NewMapSS.ListGameScreen = ListGameScreen;
-                        GameScreens.SorcererStreetScreen.Player NewPlayerSS = new GameScreens.SorcererStreetScreen.Player("", "", true, false, 0, new GameScreens.SorcererStreetScreen.Card[0]);
+                        GameScreens.SorcererStreetScreen.Player NewPlayerSS = new GameScreens.SorcererStreetScreen.Player("", "", "", false, 0, true, Color.Blue, new GameScreens.SorcererStreetScreen.Card[0]);
                         NewMapSS.AddPlayer(NewPlayerSS);
                         NewMapSS.Load();
                         NewMapSS.Init();
                         NewMapSS.TogglePreview(true);
 
                         ListGameScreen.Insert(0, NewMapSS);
+                        break;
+
+                    case MenuChoices.SorcererStreetLobby:
+                        BattleContext.LoadDefaultValues();
+                        Constants.Width = 800;
+                        Constants.Height = 600;
+                        Constants.ScreenSize = 0;
+                        Constants.graphics.PreferredBackBufferWidth = Constants.Width;
+                        Constants.graphics.PreferredBackBufferHeight = Constants.Height;
+                        Constants.graphics.ApplyChanges();
+                        PushScreen(new GameScreens.SorcererStreetScreen.SorcererStreetLobby(false));
                         break;
 
                     case MenuChoices.Racing:
@@ -244,10 +256,11 @@ namespace ProjectEternity
             TextHelper.DrawText(g, "World Map", new Vector2(50, 50 + LineHeight * 6), Color.White);
             TextHelper.DrawText(g, "Conquest", new Vector2(50, 50 + LineHeight * 7), Color.White);
             TextHelper.DrawText(g, "Sorcerer Street", new Vector2(50, 50 + LineHeight * 8), Color.White);
-            TextHelper.DrawText(g, "Racing", new Vector2(50, 50 + LineHeight * 9), Color.White);
-            TextHelper.DrawText(g, "Super Tank", new Vector2(50, 50 + LineHeight * 10), Color.White);
-            TextHelper.DrawText(g, "Triple Thunder Online", new Vector2(50, 50 + LineHeight * 11), Color.White);
-            TextHelper.DrawText(g, "Triple Thunder Offline", new Vector2(50, 50 + LineHeight * 12), Color.White);
+            TextHelper.DrawText(g, "Sorcerer Street Lobby", new Vector2(50, 50 + LineHeight * 9), Color.White);
+            TextHelper.DrawText(g, "Racing", new Vector2(50, 50 + LineHeight * 10), Color.White);
+            TextHelper.DrawText(g, "Super Tank", new Vector2(50, 50 + LineHeight * 11), Color.White);
+            TextHelper.DrawText(g, "Triple Thunder Online", new Vector2(50, 50 + LineHeight * 12), Color.White);
+            TextHelper.DrawText(g, "Triple Thunder Offline", new Vector2(50, 50 + LineHeight * 13), Color.White);
 
             g.Draw(sprPixel, new Rectangle(50, 50 + SelectedChoice * LineHeight, Constants.Width - 100, LineHeight), Color.FromNonPremultiplied(255, 255, 255, 127));
         }

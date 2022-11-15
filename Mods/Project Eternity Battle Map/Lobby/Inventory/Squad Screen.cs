@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private SpriteFont fntArial12;
 
-        private readonly InventoryScreen Owner;
+        private readonly BattleMapInventoryScreen Owner;
 
         private int MaxLoadouts;
         private int LoadoutSize;
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected bool IsDragDropActive { get { return DragAndDropEquipment != null; } }
 
-        public InventorySquadScreen(InventoryScreen Owner)
+        public InventorySquadScreen(BattleMapInventoryScreen Owner)
         {
             this.Owner = Owner;
             MaxLoadouts = 0;
@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void DoDragDrop()
         {
             int DrawX = 101;
-            int DrawY = InventoryScreen.MiddleSectionY + 5 + 4;
+            int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5 + 4;
 
             if (InputHelper.InputConfirmReleased())
             {
@@ -137,10 +137,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private Squad GetOwnedSquadUnderMouse(int MouseX, int MouseY)
         {
-            int DrawX = InventoryScreen.LeftSideWidth + 5;
-            int DrawY = InventoryScreen.MiddleSectionY + 5 + 4;
+            int DrawX = BattleMapInventoryScreen.LeftSideWidth + 5;
+            int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5 + 4;
 
-            if (MouseX >= DrawX && MouseX < DrawX + 38 && MouseY >= DrawY && MouseY < InventoryScreen.MiddleSectionHeight)
+            if (MouseX >= DrawX && MouseX < DrawX + 38 && MouseY >= DrawY && MouseY < BattleMapInventoryScreen.MiddleSectionHeight)
             {
                 int Y = (MouseY - DrawY) / 40;
 
@@ -162,14 +162,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             //Left side
-            g.DrawString(fntArial12, "Loadouts", new Vector2(10, InventoryScreen.TopSectionHeight + 5), Color.White);
+            g.DrawString(fntArial12, "Loadouts", new Vector2(10, BattleMapInventoryScreen.TopSectionHeight + 5), Color.White);
 
-            int DrawY = InventoryScreen.MiddleSectionY + 5;
+            int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5;
             for (int L = 0; L < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count; ++L)
             {
-                DrawBox(g, new Vector2(5, DrawY), InventoryScreen.LeftSideWidth - 10, 45, Color.White);
-                DrawBox(g, new Vector2(InventoryScreen.LeftSideWidth - 95, DrawY + 5), 85, 35, Color.White);
-                g.DrawString(fntArial12, "Rename", new Vector2(InventoryScreen.LeftSideWidth - 88, DrawY + 11), Color.White);
+                DrawBox(g, new Vector2(5, DrawY), BattleMapInventoryScreen.LeftSideWidth - 10, 45, Color.White);
+                DrawBox(g, new Vector2(BattleMapInventoryScreen.LeftSideWidth - 95, DrawY + 5), 85, 35, Color.White);
+                g.DrawString(fntArial12, "Rename", new Vector2(BattleMapInventoryScreen.LeftSideWidth - 88, DrawY + 11), Color.White);
                 g.DrawString(fntArial12, "Loadout " + (L + 1), new Vector2(11, DrawY + 11), Color.White);
 
                 int DrawX = 101;
@@ -198,18 +198,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             //Right side
-            DrawY = InventoryScreen.MiddleSectionY + 5;
+            DrawY = BattleMapInventoryScreen.MiddleSectionY + 5;
             for (int i = 0; i < Owner.ActivePlayer.Inventory.ListOwnedSquad.Count; ++i)
             {
-                DrawBox(g, new Vector2(InventoryScreen.LeftSideWidth + 5, DrawY), InventoryScreen.LeftSideWidth - 95, 45, Color.White);
-                g.DrawString(fntArial12, Owner.ActivePlayer.Inventory.ListOwnedSquad[i].CurrentLeader.ItemName, new Vector2(InventoryScreen.LeftSideWidth + 48, DrawY + 11), Color.White);
-                DrawBox(g, new Vector2(InventoryScreen.LeftSideWidth + 11, DrawY + 4), 38, 38, Color.White);
-                g.Draw(Owner.ActivePlayer.Inventory.ListOwnedSquad[i].CurrentLeader.SpriteMap, new Vector2(InventoryScreen.LeftSideWidth + 11 + 3, DrawY + 7), Color.White);
+                DrawBox(g, new Vector2(BattleMapInventoryScreen.LeftSideWidth + 5, DrawY), BattleMapInventoryScreen.LeftSideWidth - 95, 45, Color.White);
+                g.DrawString(fntArial12, Owner.ActivePlayer.Inventory.ListOwnedSquad[i].CurrentLeader.ItemName, new Vector2(BattleMapInventoryScreen.LeftSideWidth + 48, DrawY + 11), Color.White);
+                DrawBox(g, new Vector2(BattleMapInventoryScreen.LeftSideWidth + 11, DrawY + 4), 38, 38, Color.White);
+                g.Draw(Owner.ActivePlayer.Inventory.ListOwnedSquad[i].CurrentLeader.SpriteMap, new Vector2(BattleMapInventoryScreen.LeftSideWidth + 11 + 3, DrawY + 7), Color.White);
 
-                if (MouseHelper.MouseStateCurrent.X >= InventoryScreen.LeftSideWidth + 11 && MouseHelper.MouseStateCurrent.X < InventoryScreen.LeftSideWidth + 11 + 38
+                if (MouseHelper.MouseStateCurrent.X >= BattleMapInventoryScreen.LeftSideWidth + 11 && MouseHelper.MouseStateCurrent.X < BattleMapInventoryScreen.LeftSideWidth + 11 + 38
                     && MouseHelper.MouseStateCurrent.Y >= DrawY + 4 && MouseHelper.MouseStateCurrent.Y < DrawY + 4 + 38)
                 {
-                    g.Draw(sprPixel, new Rectangle(InventoryScreen.LeftSideWidth + 11, DrawY + 4, 38, 38), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    g.Draw(sprPixel, new Rectangle(BattleMapInventoryScreen.LeftSideWidth + 11, DrawY + 4, 38, 38), Color.FromNonPremultiplied(255, 255, 255, 127));
                 }
                 DrawY += 50;
             }

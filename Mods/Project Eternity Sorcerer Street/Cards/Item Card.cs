@@ -68,5 +68,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprCard = Content.Load<Texture2D>("Sorcerer Street/Item Cards/" + Path);
             }
         }
+
+        public ItemCard(ItemCard Clone, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            : base(Clone.Path, ItemCardType)
+        {
+            Name = Clone.Name;
+            Description = Clone.Description;
+            ItemType = Clone.ItemType;
+
+            SkillChainName = Clone.SkillChainName;
+
+            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
+            {
+                ListActiveSkill = new List<BaseAutomaticSkill>(Clone.ListActiveSkill.Count);
+
+                for (int N = 0; N < Clone.ListActiveSkill.Count; ++N)
+                {
+                    ListActiveSkill.Add(new BaseAutomaticSkill(Clone.ListActiveSkill[N]));
+                }
+            }
+            else
+            {
+                ListActiveSkill = new List<BaseAutomaticSkill>();
+            }
+
+            sprCard = Clone.sprCard;
+        }
+
+
+        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            return new ItemCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+        }
     }
 }

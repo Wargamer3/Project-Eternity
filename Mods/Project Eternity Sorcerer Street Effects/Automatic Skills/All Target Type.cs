@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override AutomaticSkillTargetType Copy()
         {
-            throw new NotImplementedException();
+            return new SorcererStreetAllTargetType(GlobalContext);
         }
     }
 }

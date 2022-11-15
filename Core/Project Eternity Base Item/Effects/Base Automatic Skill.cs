@@ -51,19 +51,6 @@ namespace ProjectEternity.Core.Item
             BR.Close();
         }
 
-        public static BaseAutomaticSkill CreateDummy(string Name)
-        {
-            BaseAutomaticSkill NewSkill = new BaseAutomaticSkill();
-            NewSkill.Name = Name;
-            NewSkill.RelativePath = Name;
-            NewSkill.ListSkillLevel.Add(new BaseSkillLevel());
-            NewSkill.CurrentLevel = 1;
-            BaseSkillActivation NewActivation = new BaseSkillActivation();
-            NewSkill.CurrentSkillLevel.ListActivation.Add(NewActivation);
-
-            return NewSkill;
-        }
-
         public BaseAutomaticSkill(BinaryReader BR, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
@@ -86,6 +73,19 @@ namespace ProjectEternity.Core.Item
             {
                 ListSkillLevel.Add(new BaseSkillLevel(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
             }
+        }
+
+        public static BaseAutomaticSkill CreateDummy(string Name)
+        {
+            BaseAutomaticSkill NewSkill = new BaseAutomaticSkill();
+            NewSkill.Name = Name;
+            NewSkill.RelativePath = Name;
+            NewSkill.ListSkillLevel.Add(new BaseSkillLevel());
+            NewSkill.CurrentLevel = 1;
+            BaseSkillActivation NewActivation = new BaseSkillActivation();
+            NewSkill.CurrentSkillLevel.ListActivation.Add(NewActivation);
+
+            return NewSkill;
         }
 
         public void Save(BinaryWriter BW)

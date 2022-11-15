@@ -80,19 +80,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base()
         {
             GlobalContext = new SorcererStreetBattleContext();
-
-            LoadUnits();
-            LoadEffects();
-            LoadSkillRequirements();
-            LoadAutomaticSkillActivation();
-            LoadManualSkillActivation();
-            LoadMutators();
         }
 
         public SorcererStreetBattleParams(SorcererStreetBattleContext GlobalContext)
             : base()
         {
             this.GlobalContext = GlobalContext;
+
+            LoadEffects();
+            LoadSkillRequirements();
+            LoadAutomaticSkillActivation();
+            LoadManualSkillActivation();
+            LoadMutators();
         }
 
         public void IncreaseSelfHP(int Value)

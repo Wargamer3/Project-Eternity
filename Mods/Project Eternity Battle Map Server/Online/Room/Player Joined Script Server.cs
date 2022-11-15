@@ -9,9 +9,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Player Joined";
 
-        private readonly List<BattleMapPlayer> ListJoiningPlayerInfo;
+        private readonly List<OnlinePlayerBase> ListJoiningPlayerInfo;
 
-        public PlayerJoinedScriptServer(List<BattleMapPlayer> ListJoiningPlayerInfo)
+        public PlayerJoinedScriptServer(List<OnlinePlayerBase> ListJoiningPlayerInfo)
             : base(ScriptName)
         {
             this.ListJoiningPlayerInfo = ListJoiningPlayerInfo;

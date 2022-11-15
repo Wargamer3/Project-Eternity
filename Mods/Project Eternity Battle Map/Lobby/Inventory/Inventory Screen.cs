@@ -7,7 +7,7 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class InventoryScreen : GameScreen
+    public class BattleMapInventoryScreen : GameScreen
     {
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
@@ -41,9 +41,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public BattleMapPlayer ActivePlayer;
 
-        public InventoryScreen()
+        public BattleMapInventoryScreen()
         {
-            ActivePlayer = PlayerManager.ListLocalPlayer[0];
+            ActivePlayer = (BattleMapPlayer)PlayerManager.ListLocalPlayer[0];
             ActivePlayer.Level = 50;
 
             LeftSideWidth = (int)(Constants.Width * 0.5);

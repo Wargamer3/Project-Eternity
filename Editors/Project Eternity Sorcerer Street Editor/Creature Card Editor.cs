@@ -135,19 +135,19 @@ namespace ProjectEternity.Editors.CardEditor
             #region Item Limits
 
             List<byte> ListItemLimit = new List<byte>();
-            if (cbLandLimitNeutral.Checked)
+            if (cbItemLimitWeapon.Checked)
             {
                 ListItemLimit.Add((byte)ItemTypes.Weapon);
             }
-            if (cbLandLimitNeutral.Checked)
+            if (cbItemLimitArmor.Checked)
             {
                 ListItemLimit.Add((byte)ItemTypes.Armor);
             }
-            if (cbLandLimitNeutral.Checked)
+            if (cbItemLimitTools.Checked)
             {
                 ListItemLimit.Add((byte)ItemTypes.Tools);
             }
-            if (cbLandLimitNeutral.Checked)
+            if (cbItemLimitScrolls.Checked)
             {
                 ListItemLimit.Add((byte)ItemTypes.Scrolls);
             }
@@ -275,19 +275,19 @@ namespace ProjectEternity.Editors.CardEditor
             }
             if (LoadedCard.DicTerrainRequiement.ContainsKey(ElementalAffinity.Fire))
             {
-                txtNeutral.Value = LoadedCard.DicTerrainRequiement[ElementalAffinity.Fire];
+                txtFire.Value = LoadedCard.DicTerrainRequiement[ElementalAffinity.Fire];
             }
             if (LoadedCard.DicTerrainRequiement.ContainsKey(ElementalAffinity.Water))
             {
-                txtNeutral.Value = LoadedCard.DicTerrainRequiement[ElementalAffinity.Water];
+                txtWater.Value = LoadedCard.DicTerrainRequiement[ElementalAffinity.Water];
             }
             if (LoadedCard.DicTerrainRequiement.ContainsKey(ElementalAffinity.Earth))
             {
-                txtNeutral.Value = LoadedCard.DicTerrainRequiement[ElementalAffinity.Earth];
+                txtEarth.Value = LoadedCard.DicTerrainRequiement[ElementalAffinity.Earth];
             }
             if (LoadedCard.DicTerrainRequiement.ContainsKey(ElementalAffinity.Air))
             {
-                txtNeutral.Value = LoadedCard.DicTerrainRequiement[ElementalAffinity.Air];
+                txtAir.Value = LoadedCard.DicTerrainRequiement[ElementalAffinity.Air];
             }
 
             #endregion

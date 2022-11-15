@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 DicNewGameServerScript = OnlineHelper.GetTripleThunderScriptsClient(OnlineGameClient);
                 Host.IsGameReady = true;*/
             }
-            PVPRoomInformations MissionRoom = new PVPRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapPath, ListJoiningPlayerID, ScreenOwner.Content, RoomData);
+            BattleMapRoomInformations MissionRoom = new BattleMapRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapPath, ListJoiningPlayerID, ScreenOwner.Content, RoomData);
 
             NewRoom = MissionRoom;
 
@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient("Global"));
             }
 
-            Host.Send(new AskChangeLoadoutScriptClient(PlayerManager.ListLocalPlayer[0]));
+            Host.Send(new AskChangeLoadoutScriptClient((BattleMapPlayer)PlayerManager.ListLocalPlayer[0]));
 
             OnlineGameClient.DelayOnlineScript(this);
         }

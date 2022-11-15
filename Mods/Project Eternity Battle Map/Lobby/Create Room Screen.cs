@@ -31,16 +31,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #region Ressources
 
-        private FMODSound sndButtonOver;
-        private FMODSound sndButtonClick;
+        protected FMODSound sndButtonOver;
+        protected FMODSound sndButtonClick;
 
         private SpriteFont fntArial12;
 
-        private BoxButton CancelButton;
-        private BoxButton OKButton;
+        protected BoxButton CancelButton;
+        protected BoxButton OKButton;
 
-        private TextInput RoomNameInput;
-        private TextInput PasswordInput;
+        protected TextInput RoomNameInput;
+        protected TextInput PasswordInput;
 
         private DropDownButton RoomTypeButton;
         private DropDownButton RoomSubtypeButton;
@@ -49,13 +49,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
 
-        private readonly BattleMapOnlineClient OnlineGameClient;
-        private readonly CommunicationClient OnlineCommunicationClient;
-        private readonly string RoomType;
+        protected readonly BattleMapOnlineClient OnlineGameClient;
+        protected readonly CommunicationClient OnlineCommunicationClient;
+        protected readonly string RoomType;
 
-        private string RoomSubtype;
-        private byte MinNumberOfPlayer;
-        private byte MaxNumberOfPlayer;
+        protected string RoomSubtype;
+        protected byte MinNumberOfPlayer;
+        protected byte MaxNumberOfPlayer;
 
         public CreateRoomScreen(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, string RoomType)
         {
@@ -146,7 +146,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             RoomSubtype = "Capture The Flag";
         }
 
-        public void CreateRoom()
+        public virtual void CreateRoom()
         {
             sndButtonClick.Play();
             OKButton.Disable();
@@ -164,7 +164,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                PushScreen(new GamePreparationScreen(null, null, new PVPRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
+                PushScreen(new GamePreparationScreen(null, null, new BattleMapRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
                 RemoveScreen(this);
             }
         }

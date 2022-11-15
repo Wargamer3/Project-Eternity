@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Ask Change Map";
 
-        private readonly PVPRoomInformations Owner;
+        private readonly BattleMapRoomInformations Owner;
         private readonly GameServer OnlineServer;
 
         private string MapName;
@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private byte MinNumberOfPlayer;
         private byte MaxNumberOfPlayer;
 
-        public AskChangeMapScriptServer(PVPRoomInformations Owner, GameServer OnlineServer)
+        public AskChangeMapScriptServer(BattleMapRoomInformations Owner, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;

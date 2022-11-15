@@ -98,23 +98,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(Map.fntArial12, "Make it what terrain?", new Vector2(CurrentX, CurrentY), Color.White);
 
             CurrentY += 20;
-            g.Draw(Map.sprElementFire, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
-            g.Draw(Map.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprElementFire, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
             g.DrawStringRightAligned(Map.fntArial12, ChangeCost, new Vector2(CurrentX + 190, CurrentY), Color.White);
 
             CurrentY += 20;
-            g.Draw(Map.sprElementWater, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
-            g.Draw(Map.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprElementWater, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
             g.DrawStringRightAligned(Map.fntArial12, ChangeCost, new Vector2(CurrentX + 190, CurrentY), Color.White);
 
             CurrentY += 20;
-            g.Draw(Map.sprElementEarth, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
-            g.Draw(Map.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprElementEarth, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
             g.DrawStringRightAligned(Map.fntArial12, ChangeCost, new Vector2(CurrentX + 190, CurrentY), Color.White);
 
             CurrentY += 20;
-            g.Draw(Map.sprElementAir, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
-            g.Draw(Map.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprElementAir, new Vector2((int)InfoBoxX + 20, (int)CurrentY), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
             g.DrawStringRightAligned(Map.fntArial12, ChangeCost, new Vector2(CurrentX + 190, CurrentY), Color.White);
 
             CurrentY += 20;

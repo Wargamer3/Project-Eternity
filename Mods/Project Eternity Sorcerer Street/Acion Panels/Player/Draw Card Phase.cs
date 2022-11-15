@@ -168,7 +168,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 DrawnCard.DrawCard(g);
-                DrawnCard.DrawCardInfo(g, Map, Map.fntArial12);
+                DrawnCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
 
                 GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 70), 200, 40, Color.White);
                 g.DrawStringMiddleAligned(Map.fntArial12, "Drew 1 card", new Vector2(Constants.Width / 2, Constants.Height - 59), Color.White);

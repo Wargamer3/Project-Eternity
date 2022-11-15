@@ -151,6 +151,71 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Abilities = new CardAbilities();
         }
 
+        public CreatureCard(CreatureCard Clone, Dictionary<string, BaseSkillRequirement> DicRequirement,
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            : base(Clone.Path, CreatureCardType)
+        {
+            Name = Clone.Name;
+            Description = Clone.Description;
+
+            CurrentHP = MaxHP = Clone.MaxHP;
+            CurrentST = MaxST = Clone.MaxST;
+            DiscardCardRequired = Clone.DiscardCardRequired;
+
+            AttackAnimationPath = Clone.AttackAnimationPath;
+
+            SkillChainName = Clone.SkillChainName;
+
+            ArrayAffinity = new ElementalAffinity[Clone.ArrayAffinity.Length];
+            for (int A = 0; A < Clone.ArrayAffinity.Length; ++A)
+            {
+                ArrayAffinity[A] = Clone.ArrayAffinity[A];
+            }
+
+            ArrayLandLimit = new ElementalAffinity[Clone.ArrayLandLimit.Length];
+            for (int L = 0; L < Clone.ArrayLandLimit.Length; ++L)
+            {
+                ArrayLandLimit[L] = Clone.ArrayLandLimit[L];
+            }
+
+            ArrayItemLimit = new ItemCard.ItemTypes[Clone.ArrayItemLimit.Length];
+            for (int I = 0; I < Clone.ArrayItemLimit.Length; ++I)
+            {
+                ArrayItemLimit[I] = Clone.ArrayItemLimit[I];
+            }
+
+            DicTerrainRequiement = new Dictionary<ElementalAffinity, int>(Clone.DicTerrainRequiement.Count);
+            foreach (KeyValuePair<ElementalAffinity, int> ActiveRequirement in Clone.DicTerrainRequiement)
+            {
+                DicTerrainRequiement.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
+            {
+                ListActiveSkill = new List<BaseAutomaticSkill>(Clone.ListActiveSkill.Count);
+
+                for (int N = 0; N < Clone.ListActiveSkill.Count; ++N)
+                {
+                    ListActiveSkill.Add(new BaseAutomaticSkill(Clone.ListActiveSkill[N]));
+                }
+            }
+            else
+            {
+                ListActiveSkill = new List<BaseAutomaticSkill>();
+            }
+
+            sprCard = Clone.sprCard;
+            if (Map3DModel != null)
+            {
+                Map3DModel = Map3DModel.Clone();
+            }
+        }
+
+        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            return new CreatureCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+        }
+
         public void ResetBonuses()
         {
             BonusAttackFirst = false;
@@ -162,17 +227,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new ActionPanelConfirmCreatureSummon(Map, ActivePlayerIndex, this);
         }
 
-        public override void DrawCardInfo(CustomSpriteBatch g, SorcererStreetMap Map, SpriteFont fntCardInfo)
+        public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
         {
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = (int)(Constants.Height / 2);
-            float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth;
-            float InfoBoxY = Constants.Height / 10;
+            float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth + OffsetX;
+            float InfoBoxY = Constants.Height / 10 + OffsetY;
 
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY + 30;
 
-            base.DrawCardInfo(g, Map, fntCardInfo);
+            base.DrawCardInfo(g, Symbols, fntCardInfo, OffsetX, OffsetY);
 
             for (int A = 0; A < ArrayAffinity.Length; A++)
             {
@@ -180,32 +245,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (ActiveAffinity)
                 {
                     case ElementalAffinity.Neutral:
-                        g.Draw(Map.sprElementNeutral, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementNeutral, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
                         break;
                     case ElementalAffinity.Fire:
-                        g.Draw(Map.sprElementFire, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementFire, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
                         break;
                     case ElementalAffinity.Air:
-                        g.Draw(Map.sprElementAir, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementAir, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
                         break;
                     case ElementalAffinity.Earth:
-                        g.Draw(Map.sprElementEarth, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementEarth, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
                         break;
                     case ElementalAffinity.Water:
-                        g.Draw(Map.sprElementWater, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
+                        g.Draw(Symbols.sprElementWater, new Vector2((int)InfoBoxX + BoxWidth - 30 - 20 * A, (int)CurrentY), Color.White);
                         break;
                 }
             }
 
             CurrentY += 20;
 
-            g.Draw(Map.sprMenuST, new Vector2((int)CurrentX - 5, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            g.Draw(Symbols.sprMenuST, new Vector2((int)CurrentX - 5, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
             g.DrawString(fntCardInfo, MaxST.ToString(), new Vector2(CurrentX + 15, CurrentY), Color.White);
 
-            g.Draw(Map.sprMenuHP, new Vector2((int)CurrentX + 45, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            g.Draw(Symbols.sprMenuHP, new Vector2((int)CurrentX + 45, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
             g.DrawString(fntCardInfo, CurrentHP.ToString(), new Vector2(CurrentX + 65, CurrentY), Color.White);
 
-            g.Draw(Map.sprMenuMHP, new Vector2((int)CurrentX + 95, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            g.Draw(Symbols.sprMenuMHP, new Vector2((int)CurrentX + 95, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
             g.DrawString(fntCardInfo, MaxHP.ToString(), new Vector2(CurrentX + 115, CurrentY), Color.White);
         }
 

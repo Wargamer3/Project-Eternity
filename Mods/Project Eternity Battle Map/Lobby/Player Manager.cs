@@ -17,6 +17,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget;
         public static Dictionary<string, ManualSkillTarget> DicManualSkillTarget;
 
-        public static List<BattleMapPlayer> ListLocalPlayer = new List<BattleMapPlayer>();
+        public static List<OnlinePlayerBase> ListLocalPlayer = new List<OnlinePlayerBase>();
     }
 }

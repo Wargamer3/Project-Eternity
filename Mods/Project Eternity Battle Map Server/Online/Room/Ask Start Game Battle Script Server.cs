@@ -10,11 +10,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Ask Start Game";
 
-        private readonly PVPRoomInformations Owner;
+        private readonly BattleMapRoomInformations Owner;
         private readonly BattleMapClientGroup CreatedGroup;
         private readonly GameServer OnlineServer;
 
-        public AskStartGameBattleScriptServer(PVPRoomInformations Owner, BattleMapClientGroup CreatedGroup, GameServer OnlineServer)
+        public AskStartGameBattleScriptServer(BattleMapRoomInformations Owner, BattleMapClientGroup CreatedGroup, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;
@@ -34,12 +34,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void Execute(IOnlineConnection Sender)
         {
-            Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
-            for (int P = 0; P < Owner.ListRoomPlayer.Count; ++P)
-            {
-                DicSpawnSquadByPlayer.Add(Owner.ListRoomPlayer[P].Name, Owner.ListRoomPlayer[P].Inventory.ActiveLoadout.ListSpawnSquad);
-            }
-
             BattleMap NewMap;
 
             if (CreatedGroup.Room.MapPath == "Random")
@@ -59,13 +53,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             for (int P = 0; P < CreatedGroup.Room.ListOnlinePlayer.Count; P++)
             {
                 IOnlineConnection ActiveOnlinePlayer = CreatedGroup.Room.ListOnlinePlayer[P];
-                BattleMapPlayer ActivePlayer = Owner.ListRoomPlayer[P];
+                OnlinePlayerBase ActivePlayer = Owner.ListRoomPlayer[P];
                 ActivePlayer.OnlineClient = ActiveOnlinePlayer;
 
                 NewMap.AddLocalPlayer(ActivePlayer);
 
                 //Add Game Specific scripts
-                Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsServer(CreatedGroup, ActivePlayer);
+                Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsServer(CreatedGroup);
                 ActiveOnlinePlayer.AddOrReplaceScripts(DicNewScript);
             }
 

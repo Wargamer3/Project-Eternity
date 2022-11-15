@@ -130,6 +130,7 @@
     <Compile Include="Intermission Screen\Records\Unit Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Player Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Records Screen.cs" />
+    <Compile Include="Lobby\Online Player Base.cs" />
     <Compile Include="Lobby\Player\Battle Records.cs" />
     <Compile Include="Lobby\Player\Bonus Records.cs" />
     <Compile Include="Lobby\Player\Multiplayer Record.cs" />
@@ -170,7 +171,7 @@
     <Compile Include="Online\Login Success Script Client.cs" />
     <Compile Include="Online\Online Helper.cs" />
     <Compile Include="Online\Player Left Script Client.cs" />
-    <Compile Include="Lobby\PVP Room Informations.cs" />
+    <Compile Include="Lobby\Battle Map Room Informations.cs" />
     <Compile Include="Online\Room\Ask Change Loadout Script Client.cs" />
     <Compile Include="Online\Room\Ask Change Map Script Client.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Script Client.cs" />
@@ -194,7 +195,7 @@
     <Compile Include="Lobby\UI\Box Button.cs" />
     <Compile Include="Lobby\Lobby.cs" />
     <Compile Include="Lobby\Player Manager.cs" />
-    <Compile Include="Lobby\BattleMapPlayer.cs" />
+    <Compile Include="Lobby\Battle Map Player.cs" />
     <Compile Include="Lobby\Room Informations.cs" />
     <Compile Include="Movement Algorithm Tile.cs" />
     <Compile Include="Movement Animations.cs" />

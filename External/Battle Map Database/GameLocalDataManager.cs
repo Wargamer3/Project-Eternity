@@ -56,7 +56,7 @@ namespace Database.BattleMap
         {
             DateTimeOffset CurrentTime = DateTimeOffset.Now;
 
-            RoomInformations NewRoom = new PVPRoomInformations(RoomIDCount++.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
+            RoomInformations NewRoom = new BattleMapRoomInformations(RoomIDCount++.ToString(), RoomName, RoomType, RoomSubtype, Password, OwnerServerIP, OwnerServerPort, MinNumberOfPlayer, MaxNumberOfPlayer);
 
             if (ListRoom.ContainsKey(CurrentTime))
             {

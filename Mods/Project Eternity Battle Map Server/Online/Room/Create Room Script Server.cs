@@ -31,7 +31,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         {
             base.Execute(Sender);
 
-            PVPRoomInformations NewRoom = (PVPRoomInformations)CreatedGroup.Room;
+            BattleMapRoomInformations NewRoom = (BattleMapRoomInformations)CreatedGroup.Room;
 
             foreach (IOnlineConnection ActivePlayer in CreatedGroup.Room.ListOnlinePlayer)
             {

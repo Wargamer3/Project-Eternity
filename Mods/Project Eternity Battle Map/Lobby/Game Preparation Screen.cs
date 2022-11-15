@@ -34,8 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
 
-        private SpriteFont fntText;
-        private Texture2D fntTest;
+        protected SpriteFont fntText;
 
         private Texture2D sprHostText;
         private Texture2D sprReadyText;
@@ -55,7 +54,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
 
-        private readonly RoomInformations Room;
+        protected readonly RoomInformations Room;
         private Point MapSize;
         public List<Color> ListMapTeam;
         private List<TeamInfo> ListAllTeamInfo;
@@ -76,9 +75,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (Room.ListRoomPlayer.Count == 0)
             {
-                foreach (BattleMapPlayer ActivePlayer in PlayerManager.ListLocalPlayer)
+                foreach (OnlinePlayerBase ActivePlayer in PlayerManager.ListLocalPlayer)
                 {
-                    ActivePlayer.OnlinePlayerType = BattleMapPlayer.PlayerTypeHost;
+                    ActivePlayer.OnlinePlayerType = OnlinePlayerBase.PlayerTypeHost;
                     Room.AddLocalPlayer(ActivePlayer);
                 }
             }
@@ -98,7 +97,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
             ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20), SendMessage);
 
-            fntTest = Content.Load<Texture2D>("Triple Thunder/HUD/Menus/Numbers White");
             sprHostText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Host Text");
             sprReadyText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Ready Text");
 
@@ -234,7 +232,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void AssignButtons()
         {
             IsHost = false;
-            foreach (BattleMapPlayer ActivePlayer in Room.GetLocalPlayers())
+            foreach (OnlinePlayerBase ActivePlayer in Room.GetLocalPlayers())
             {
                 if (ActivePlayer.IsHost())
                 {
@@ -260,7 +258,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayMenuButton = ListButton.ToArray();
         }
 
-        public void AddPlayer(BattleMapPlayer NewPlayer)
+        public void AddPlayer(OnlinePlayerBase NewPlayer)
         {
             Room.ListRoomPlayer.Add(NewPlayer);
             
@@ -316,13 +314,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver.Play();
         }
 
-        public void UpdateCharacter(BattleMapPlayer PlayerToUpdate)
-        {
-            if (Room.GetLocalPlayer() == PlayerToUpdate)
-            {
-            }
-        }
-
         public void UpdateReadyOrHost()
         {
             AssignButtons();
@@ -331,9 +322,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 bool IsEveryoneReady = true;
 
-                foreach (BattleMapPlayer ActivePlayer in Room.ListRoomPlayer)
+                foreach (OnlinePlayerBase ActivePlayer in Room.ListRoomPlayer)
                 {
-                    if (ActivePlayer.OnlinePlayerType != BattleMapPlayer.PlayerTypeHost && ActivePlayer.OnlinePlayerType != BattleMapPlayer.PlayerTypeReady)
+                    if (ActivePlayer.OnlinePlayerType != OnlinePlayerBase.PlayerTypeHost && ActivePlayer.OnlinePlayerType != OnlinePlayerBase.PlayerTypeReady)
                     {
                         IsEveryoneReady = false;
                     }
@@ -374,7 +365,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #region Button methods
 
-        private void OpenRoomSettingsScreen()
+        protected virtual void OpenRoomSettingsScreen()
         {
             PushScreen(new GameOptionsScreen(Room, this));
         }
@@ -411,12 +402,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                Dictionary<string, List<Squad>> DicSpawnSquadByPlayer = new Dictionary<string, List<Squad>>();
-                for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
-                {
-                    DicSpawnSquadByPlayer.Add(Room.ListRoomPlayer[P].Name, Room.ListRoomPlayer[P].Inventory.ActiveLoadout.ListSpawnSquad);
-                }
-
                 BattleMap NewMap;
 
                 if (Room.MapPath == "Random")
@@ -436,12 +421,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (P < PlayerManager.ListLocalPlayer.Count)
                     {
-                        BattleMapPlayer ActivePlayer = PlayerManager.ListLocalPlayer[P];
+                        OnlinePlayerBase ActivePlayer = PlayerManager.ListLocalPlayer[P];
                         NewMap.AddLocalPlayer(ActivePlayer);
                     }
                     else if (P < Room.MaxNumberOfBots)
                     {
-                        BattleMapPlayer ActivePlayer = Room.ListRoomBot[P - PlayerManager.ListLocalPlayer.Count];
+                        OnlinePlayerBase ActivePlayer = Room.ListRoomBot[P - PlayerManager.ListLocalPlayer.Count];
                         NewMap.AddLocalPlayer(ActivePlayer);
                     }
                     else//Fill with empty players to ensure the enemy player is always player 10+
@@ -465,13 +450,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ReadyButton.Disable();
 
-                if (Room.GetLocalPlayer().OnlinePlayerType == BattleMapPlayer.PlayerTypePlayer)
+                if (Room.GetLocalPlayer().OnlinePlayerType == OnlinePlayerBase.PlayerTypePlayer)
                 {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(BattleMapPlayer.PlayerTypeReady));
+                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(OnlinePlayerBase.PlayerTypeReady));
                 }
                 else
                 {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(BattleMapPlayer.PlayerTypePlayer));
+                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(OnlinePlayerBase.PlayerTypePlayer));
                 }
             }
         }
@@ -548,23 +533,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ChatHelper.DrawChat(g, fntText, OnlineCommunicationClient.Chat, ChatInput);
             }
 
-            for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
-            {
-                int DrawX = 10;
-                int DrawY = 45 + P * 45;
-
-                DrawBox(g, new Vector2(DrawX - 5, DrawY - 10), LeftSideWidth - 10, 45, Color.White);
-                DrawPlayerBox(g, DrawX, DrawY, Room.ListRoomPlayer[P]);
-            }
-
-            for (int P = 0; P < Room.ListRoomBot.Count && P < Room.MaxNumberOfBots - Room.ListRoomPlayer.Count; ++P)
-            {
-                int DrawX = 10;
-                int DrawY = 45 + Room.ListRoomPlayer.Count * 45 + P * 45;
-
-                DrawBox(g, new Vector2(DrawX - 5, DrawY - 10), LeftSideWidth - 10, 45, Color.White);
-                DrawPlayerBox(g, DrawX, DrawY, Room.ListRoomBot[P]);
-            }
             if (SelectingTeam >= 0)
             {
                 int DrawX = 10;
@@ -579,6 +547,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                     g.DrawString(fntText, ListAllTeamInfo[T].TeamName, new Vector2(DrawX + 285, DrawY + 30 + T * 25), Color.White);
                 }
+            }
+
+            DrawPlayers(g);
+        }
+
+        protected virtual void DrawPlayers(CustomSpriteBatch g)
+        {
+            int LeftSideWidth = (int)(Constants.Width * 0.7);
+
+            for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
+            {
+                int DrawX = 10;
+                int DrawY = 45 + P * 45;
+
+                DrawBox(g, new Vector2(DrawX - 5, DrawY - 10), LeftSideWidth - 10, 45, Color.White);
+                DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomPlayer[P]);
+            }
+
+            for (int P = 0; P < Room.ListRoomBot.Count && P < Room.MaxNumberOfBots - Room.ListRoomPlayer.Count; ++P)
+            {
+                int DrawX = 10;
+                int DrawY = 45 + Room.ListRoomPlayer.Count * 45 + P * 45;
+
+                DrawBox(g, new Vector2(DrawX - 5, DrawY - 10), LeftSideWidth - 10, 45, Color.White);
+                DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomBot[P]);
             }
         }
 
@@ -604,11 +597,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            if (PlayerToDraw.OnlinePlayerType == BattleMapPlayer.PlayerTypeHost)
+            if (PlayerToDraw.OnlinePlayerType == OnlinePlayerBase.PlayerTypeHost)
             {
                 g.DrawString(fntText, "Host", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }
-            else if (PlayerToDraw.OnlinePlayerType == BattleMapPlayer.PlayerTypeReady)
+            else if (PlayerToDraw.OnlinePlayerType == OnlinePlayerBase.PlayerTypeReady)
             {
                 g.DrawString(fntText, "Ready", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }

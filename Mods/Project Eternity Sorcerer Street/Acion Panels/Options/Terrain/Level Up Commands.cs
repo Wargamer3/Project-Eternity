@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 TextColor = Color.Gray;
             }
             g.DrawString(Map.fntArial12, "Level 2", new Vector2(CurrentX + 10, CurrentY), TextColor);
-            g.Draw(Map.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
             g.DrawStringRightAligned(Map.fntArial12, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
             CurrentY += 20;
@@ -129,7 +129,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             g.DrawString(Map.fntArial12, "Level 3", new Vector2(CurrentX + 10, CurrentY), TextColor);
-            g.Draw(Map.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
             g.DrawStringRightAligned(Map.fntArial12, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
             CurrentY += 20;
@@ -140,7 +140,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             g.DrawString(Map.fntArial12, "Level 4", new Vector2(CurrentX + 10, CurrentY), TextColor);
-            g.Draw(Map.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
             g.DrawStringRightAligned(Map.fntArial12, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
             CurrentY += 20;
@@ -151,7 +151,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             g.DrawString(Map.fntArial12, "Level 5", new Vector2(CurrentX + 10, CurrentY), TextColor);
-            g.Draw(Map.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)CurrentX + 130, (int)CurrentY, 18, 18), Color.White);
             g.DrawStringRightAligned(Map.fntArial12, UpgradePrice.ToString(), new Vector2(CurrentX + BoxWidth - 30, CurrentY), TextColor);
 
             CurrentY += 20;

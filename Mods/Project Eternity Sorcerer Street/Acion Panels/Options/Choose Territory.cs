@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ActionPanelPlayerDefault.DrawLandInformation(g, Map, HoverTerrain);
                 if (HoverTerrain.DefendingCreature != null)
                 {
-                    HoverTerrain.DefendingCreature.DrawCardInfo(g, Map, Map.fntArial12);
+                    HoverTerrain.DefendingCreature.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
 
                     int BoxWidth = (int)(Constants.Width / 2.8);
                     int BoxHeight = (int)(Constants.Height / 8);

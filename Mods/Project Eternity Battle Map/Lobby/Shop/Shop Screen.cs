@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public ShopScreen()
         {
-            ActivePlayer = PlayerManager.ListLocalPlayer[0];
+            ActivePlayer = (BattleMapPlayer)PlayerManager.ListLocalPlayer[0];
             ActivePlayer.Level = 50;
 
             LeftSideWidth = (int)(Constants.Width * 0.5);

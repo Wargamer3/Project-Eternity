@@ -20,12 +20,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal);
 
-        public void AddLocalPlayer(BattleMapPlayer NewPlayer)
+        public void AddLocalPlayer(OnlinePlayerBase NewPlayer)
         {
             DoAddLocalPlayer(NewPlayer);
         }
 
-        protected abstract void DoAddLocalPlayer(BattleMapPlayer NewPlayer);
+        protected abstract void DoAddLocalPlayer(OnlinePlayerBase NewPlayer);
 
         public abstract void SetMutators(List<Mutator> ListMutator);
 

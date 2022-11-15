@@ -8,19 +8,19 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class PVPRoomInformations : RoomInformations
+    public class BattleMapRoomInformations : RoomInformations
     {
         public int MaxKill;
         public int MaxGameLengthInMinutes;
 
-        public PVPRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
+        public BattleMapRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
             : base(RoomID, RoomName, RoomType, RoomSubtype, false, MinNumberOfPlayer, MaxNumberOfPlayer, 1)
         {
             MaxKill = 20;
             MaxGameLengthInMinutes = 10;
         }
 
-        public PVPRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID, ContentManager Content, byte[] RoomData)
+        public BattleMapRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID, ContentManager Content, byte[] RoomData)
             : base(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapName, ListLocalPlayerID)
         {
             using (MemoryStream MS = new MemoryStream(RoomData))
@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public PVPRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort,
+        public BattleMapRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string Password, string OwnerServerIP, int OwnerServerPort,
             byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
             : base(RoomID, RoomName, RoomType, RoomSubtype, false, Password, OwnerServerIP, OwnerServerPort, 1, MinNumberOfPlayer, MaxNumberOfPlayer, false)
         {

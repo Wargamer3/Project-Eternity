@@ -1,0 +1,105 @@
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core;
+using ProjectEternity.Core.ControlHelper;
+
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
+{
+    public class EditBookCardScreen : GameScreen
+    {
+        #region Ressources
+
+        private SpriteFont fntArial12;
+        private SpriteFont fntArial26;
+
+        CardSymbols Symbols;
+
+        #endregion
+
+        private readonly Player ActivePlayer;
+        private readonly CardBook ActiveBook;
+        private readonly Card ActiveCard;
+        private readonly Card GlobalBookActiveCard;
+
+        int OriginalCardQuantityOwned;
+        int OriginalTotalCardQuantityOwned;
+
+        public EditBookCardScreen(Player ActivePlayer, CardBook ActiveBook, Card ActiveCard)
+        {
+            this.ActivePlayer = ActivePlayer;
+            this.ActiveBook = ActiveBook;
+            this.ActiveCard = ActiveCard;
+            GlobalBookActiveCard = ActivePlayer.Inventory.GlobalBook.DicCardsByType[ActiveCard.CardType][ActiveCard.Path];
+
+            OriginalCardQuantityOwned = ActiveCard.QuantityOwned;
+            OriginalTotalCardQuantityOwned = ActiveBook.TotalCards;
+        }
+
+        public override void Load()
+        {
+            fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            fntArial26 = Content.Load<SpriteFont>("Fonts/Arial26");
+
+            Symbols = CardSymbols.Load(Content);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (InputHelper.InputRightPressed() && ActiveCard.QuantityOwned  < GlobalBookActiveCard.QuantityOwned)
+            {
+                ++ActiveCard.QuantityOwned;
+                ++ActiveBook.TotalCards;
+            }
+            else if (InputHelper.InputLeftPressed() && ActiveCard.QuantityOwned - 1 > 0)
+            {
+                --ActiveCard.QuantityOwned;
+                --ActiveBook.TotalCards;
+            }
+            else if (InputHelper.InputConfirmPressed())
+            {
+                RemoveScreen(this);
+            }
+            else if (InputHelper.InputCancelPressed())
+            {
+                ActiveCard.QuantityOwned = OriginalCardQuantityOwned;
+                ActiveBook.TotalCards = OriginalTotalCardQuantityOwned;
+
+                RemoveScreen(this);
+            }
+        }
+
+        public override void Draw(CustomSpriteBatch g)
+        {
+            DrawBox(g, new Vector2(-5, -5), Constants.Width + 10, Constants.Height + 10, Color.White);
+
+            float X = -10;
+            float Y = Constants.Height / 20;
+            int HeaderHeight = Constants.Height / 16;
+            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
+
+            X = Constants.Width / 20;
+            Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
+            g.DrawString(fntArial12, "Book Edit", new Vector2(X, Y), Color.White);
+            g.DrawStringMiddleAligned(fntArial12, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
+            X = Constants.Width - Constants.Width / 8;
+            g.DrawStringRightAligned(fntArial12, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
+            g.DrawString(fntArial12, "OK", new Vector2(X + 20, Y), Color.White);
+
+            g.Draw(ActiveCard.sprCard, new Vector2(Constants.Width / 4, Constants.Height / 2), null, Color.White, 0f, new Vector2(ActiveCard.sprCard.Width / 2, ActiveCard.sprCard.Height / 2), 0.8f, SpriteEffects.None, 0f);
+            g.DrawStringCentered(fntArial26, "x" + ActiveCard.QuantityOwned, new Vector2(Constants.Width / 2, Constants.Height - Constants.Height / 16 - HeaderHeight - 30), Color.White);
+            ActiveCard.DrawCardInfo(g, Symbols, fntArial12, 0,  70);
+
+            X = -10;
+            Y = Constants.Height - Constants.Height / 16 - HeaderHeight;
+            DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
+            X = Constants.Width / 18;
+            Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
+            g.DrawString(fntArial12, GlobalBookActiveCard.QuantityOwned + " card(s) in possession"
+                + " [Arrows] Adjust Card Count"
+                + " [Q] Toggle Info"
+                + " [X] Confirm Card Count"
+                + " [Z] Return", new Vector2(X, Y), Color.White);
+        }
+    }
+}

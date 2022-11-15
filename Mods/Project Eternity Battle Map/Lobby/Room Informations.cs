@@ -38,9 +38,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public string CurrentDifficulty;
 
-        public readonly List<BattleMapPlayer> ListRoomPlayer;
+        public readonly List<OnlinePlayerBase> ListRoomPlayer;
 
-        public readonly List<BattleMapPlayer> ListRoomBot;
+        public readonly List<OnlinePlayerBase> ListRoomBot;
 
         private readonly List<string> ListLocalPlayerID;
 
@@ -50,8 +50,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.IsDead = IsDead;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
-            ListRoomPlayer = new List<BattleMapPlayer>();
-            ListRoomBot = new List<BattleMapPlayer>();
+            ListRoomPlayer = new List<OnlinePlayerBase>();
+            ListRoomBot = new List<OnlinePlayerBase>();
             ListLocalPlayerID = new List<string>();
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
@@ -78,8 +78,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.CurrentPlayerCount = CurrentClientCount;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
-            ListRoomPlayer = new List<BattleMapPlayer>();
-            ListRoomBot = new List<BattleMapPlayer>();
+            ListRoomPlayer = new List<OnlinePlayerBase>();
+            ListRoomBot = new List<OnlinePlayerBase>();
             ListLocalPlayerID = new List<string>();
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
@@ -100,7 +100,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.RoomSubtype = RoomSubtype;
             this.CurrentDifficulty = CurrentDifficulty;
             this.MapPath = MapName;
-            this.ListRoomPlayer = new List<BattleMapPlayer>();
+            this.ListRoomPlayer = new List<OnlinePlayerBase>();
+            ListRoomBot = new List<OnlinePlayerBase>();
             this.ListLocalPlayerID = ListLocalPlayerID;
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
@@ -125,8 +126,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.IsDead = IsDead;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
-            ListRoomPlayer = new List<BattleMapPlayer>();
-            ListRoomBot = new List<BattleMapPlayer>();
+            ListRoomPlayer = new List<OnlinePlayerBase>();
+            ListRoomBot = new List<OnlinePlayerBase>();
             ListLocalPlayerID = new List<string>();
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
@@ -135,7 +136,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxSquadsPerBot = 1;
         }
 
-        public void AddLocalPlayer(BattleMapPlayer NewPlayer)
+        public void AddLocalPlayer(OnlinePlayerBase NewPlayer)
         {
             ListRoomPlayer.Add(NewPlayer);
             ListLocalPlayerID.Add(NewPlayer.ConnectionID);
@@ -145,7 +146,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
         {
             ListOnlinePlayer.Add(NewPlayer);
-            BattleMapPlayer NewRoomPlayer = new BattleMapPlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue);
+            OnlinePlayerBase NewRoomPlayer = new BattleMapPlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue);
             NewRoomPlayer.OnlineClient = NewPlayer;
             NewRoomPlayer.GameplayType = GameplayTypes.None;
             ListRoomPlayer.Add(NewRoomPlayer);
@@ -186,9 +187,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             HandleHostChange();
         }
 
-        public BattleMapPlayer GetLocalPlayer()
+        public OnlinePlayerBase GetLocalPlayer()
         {
-            foreach (BattleMapPlayer LocalPlayer in ListRoomPlayer)
+            foreach (OnlinePlayerBase LocalPlayer in ListRoomPlayer)
             {
                 if (ListLocalPlayerID.Contains(LocalPlayer.ConnectionID))
                 {
@@ -199,11 +200,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return null;
         }
 
-        public List<BattleMapPlayer> GetLocalPlayers()
+        public List<OnlinePlayerBase> GetLocalPlayers()
         {
-            List<BattleMapPlayer> ListLocalPlayer = new List<BattleMapPlayer>();
+            List<OnlinePlayerBase> ListLocalPlayer = new List<OnlinePlayerBase>();
 
-            foreach (BattleMapPlayer LocalPlayer in ListRoomPlayer)
+            foreach (OnlinePlayerBase LocalPlayer in ListRoomPlayer)
             {
                 if (ListLocalPlayerID.Contains(LocalPlayer.ConnectionID))
                 {
@@ -214,11 +215,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return ListLocalPlayer;
         }
 
-        public List<BattleMapPlayer> GetOnlinePlayer(IOnlineConnection Sender)
+        public List<OnlinePlayerBase> GetOnlinePlayer(IOnlineConnection Sender)
         {
-            List<BattleMapPlayer> ListPlayerInfo = new List<BattleMapPlayer>();
+            List<OnlinePlayerBase> ListPlayerInfo = new List<OnlinePlayerBase>();
 
-            foreach (BattleMapPlayer ActiveOnlinePlayer in ListRoomPlayer)
+            foreach (OnlinePlayerBase ActiveOnlinePlayer in ListRoomPlayer)
             {
                 if (ActiveOnlinePlayer.ConnectionID == Sender.ID)
                 {
@@ -238,9 +239,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             bool HasHost = false;
 
-            foreach (BattleMapPlayer ActiveOnlinePlayer in ListRoomPlayer)
+            foreach (OnlinePlayerBase ActiveOnlinePlayer in ListRoomPlayer)
             {
-                if (ActiveOnlinePlayer.OnlinePlayerType == BattleMapPlayer.PlayerTypeHost)
+                if (ActiveOnlinePlayer.OnlinePlayerType == OnlinePlayerBase.PlayerTypeHost)
                 {
                     HasHost = true;
                 }
@@ -249,11 +250,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (!HasHost)
             {
                 int RandomNewHostIndex = RandomHelper.Next(ListRoomPlayer.Count);
-                ListRoomPlayer[RandomNewHostIndex].OnlinePlayerType = BattleMapPlayer.PlayerTypeHost;
+                ListRoomPlayer[RandomNewHostIndex].OnlinePlayerType = OnlinePlayerBase.PlayerTypeHost;
 
                 for (int P = 0; P < ListOnlinePlayer.Count; ++P)
                 {
-                    ListOnlinePlayer[P].Send(new ChangePlayerTypeScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, BattleMapPlayer.PlayerTypeHost));
+                    ListOnlinePlayer[P].Send(new ChangePlayerTypeScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, OnlinePlayerBase.PlayerTypeHost));
                 }
             }
         }

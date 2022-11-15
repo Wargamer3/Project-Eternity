@@ -4,13 +4,11 @@ using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class LocalPlayerSelectionScreen : GameScreen
+    public class LocalPlayerSelectionScreen : GameScreen
     {
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
@@ -140,17 +138,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             sndButtonClick.Play();
 
-            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
+            OnlinePlayerBase NewPlayer = GetNewPlayer();
 
-            if (!File.Exists("User data/Profiles/Battle Map/" + NewPlayer.Name + ".bin"))
+            PlayerManager.ListLocalPlayer.Add(NewPlayer);
+            NewPlayer.LoadLocally(GameScreen.ContentFallback);
+            UpdateUIElements();
+        }
+
+        protected virtual OnlinePlayerBase GetNewPlayer()
+        {
+            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
+            
+            if (!File.Exists("User data/Profiles/" + NewPlayer.SaveFileFolder + NewPlayer.Name + ".bin"))
             {
                 NewPlayer.InitFirstTimeInventory();
                 NewPlayer.SaveLocally();
             }
 
-            PlayerManager.ListLocalPlayer.Add(NewPlayer);
-            NewPlayer.LoadLocally(GameScreen.ContentFallback);
-            UpdateUIElements();
+            return NewPlayer;
         }
 
         private void OnRemovePlayerPressed()

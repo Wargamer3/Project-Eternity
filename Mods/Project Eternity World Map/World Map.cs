@@ -218,7 +218,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             }*/
         }
 
-        protected override void DoAddLocalPlayer(BattleMapPlayer NewPlayer)
+        protected override void DoAddLocalPlayer(OnlinePlayerBase NewPlayer)
         {
             /*Player NewDeahtmatchPlayer = new Player(NewPlayer);
 

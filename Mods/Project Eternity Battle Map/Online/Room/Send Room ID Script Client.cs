@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             Dictionary<string, OnlineScript> DicNewGameServerScript = new Dictionary<string, OnlineScript>();
             GamePreparationScreen NewMissionSelectScreen;
 
-            PVPRoomInformations MissionRoom = new PVPRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer);
+            BattleMapRoomInformations MissionRoom = new BattleMapRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer);
 
             GamePreparationScreen NewMissionSelect = new GamePreparationScreen(OnlineGameClient, OnlineCommunicationClient, MissionRoom);
             NewScreen = NewMissionSelect;
@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient("Global"));
             }
 
-            Host.Send(new AskChangeLoadoutScriptClient(PlayerManager.ListLocalPlayer[0]));
+            Host.Send(new AskChangeLoadoutScriptClient((BattleMapPlayer)PlayerManager.ListLocalPlayer[0]));
 
             ScreenOwner.RemoveScreen(ScreenOwner);
 

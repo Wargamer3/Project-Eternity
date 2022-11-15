@@ -81,6 +81,11 @@ namespace ProjectEternity.Core
             }
         }
 
+        public AnimatedModel Clone()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(GameTime gameTime)
         {
             AnimationTimeElapsed = AnimationTimeElapsed + (float)gameTime.ElapsedGameTime.TotalSeconds;

@@ -45,6 +45,9 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.gbCreatureInformation = new System.Windows.Forms.GroupBox();
+            this.lblSkill = new System.Windows.Forms.Label();
+            this.txtSkill = new System.Windows.Forms.TextBox();
+            this.btnSetSkill = new System.Windows.Forms.Button();
             this.txtMaxST = new System.Windows.Forms.NumericUpDown();
             this.lblMaxST = new System.Windows.Forms.Label();
             this.txtMaxHP = new System.Windows.Forms.NumericUpDown();
@@ -77,9 +80,6 @@
             this.cbItemLimitTools = new System.Windows.Forms.CheckBox();
             this.cbItemLimitScrolls = new System.Windows.Forms.CheckBox();
             this.cbItemLimitWeapon = new System.Windows.Forms.CheckBox();
-            this.btnSetSkill = new System.Windows.Forms.Button();
-            this.txtSkill = new System.Windows.Forms.TextBox();
-            this.lblSkill = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.gbCardInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCardSacrificed)).BeginInit();
@@ -205,7 +205,17 @@
             // 
             // txtMagicCost
             // 
+            this.txtMagicCost.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.txtMagicCost.Location = new System.Drawing.Point(130, 45);
+            this.txtMagicCost.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
             this.txtMagicCost.Name = "txtMagicCost";
             this.txtMagicCost.Size = new System.Drawing.Size(68, 20);
             this.txtMagicCost.TabIndex = 33;
@@ -270,9 +280,40 @@
             this.gbCreatureInformation.TabStop = false;
             this.gbCreatureInformation.Text = "Creature Information";
             // 
+            // lblSkill
+            // 
+            this.lblSkill.AutoSize = true;
+            this.lblSkill.Location = new System.Drawing.Point(6, 71);
+            this.lblSkill.Name = "lblSkill";
+            this.lblSkill.Size = new System.Drawing.Size(29, 13);
+            this.lblSkill.TabIndex = 42;
+            this.lblSkill.Text = "Skill:";
+            // 
+            // txtSkill
+            // 
+            this.txtSkill.Location = new System.Drawing.Point(6, 87);
+            this.txtSkill.Name = "txtSkill";
+            this.txtSkill.Size = new System.Drawing.Size(130, 20);
+            this.txtSkill.TabIndex = 41;
+            // 
+            // btnSetSkill
+            // 
+            this.btnSetSkill.Location = new System.Drawing.Point(6, 113);
+            this.btnSetSkill.Name = "btnSetSkill";
+            this.btnSetSkill.Size = new System.Drawing.Size(130, 23);
+            this.btnSetSkill.TabIndex = 40;
+            this.btnSetSkill.Text = "Set Skill";
+            this.btnSetSkill.UseVisualStyleBackColor = true;
+            this.btnSetSkill.Click += new System.EventHandler(this.btnSetSkill_Click);
+            // 
             // txtMaxST
             // 
             this.txtMaxST.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMaxST.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.txtMaxST.Location = new System.Drawing.Point(63, 45);
             this.txtMaxST.Name = "txtMaxST";
             this.txtMaxST.Size = new System.Drawing.Size(73, 20);
@@ -290,6 +331,11 @@
             // txtMaxHP
             // 
             this.txtMaxHP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMaxHP.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.txtMaxHP.Location = new System.Drawing.Point(63, 19);
             this.txtMaxHP.Name = "txtMaxHP";
             this.txtMaxHP.Size = new System.Drawing.Size(73, 20);
@@ -608,32 +654,6 @@
             this.cbItemLimitWeapon.TabIndex = 49;
             this.cbItemLimitWeapon.Text = "Weapon:";
             this.cbItemLimitWeapon.UseVisualStyleBackColor = true;
-            // 
-            // btnSetSkill
-            // 
-            this.btnSetSkill.Location = new System.Drawing.Point(6, 113);
-            this.btnSetSkill.Name = "btnSetSkill";
-            this.btnSetSkill.Size = new System.Drawing.Size(130, 23);
-            this.btnSetSkill.TabIndex = 40;
-            this.btnSetSkill.Text = "Set Skill";
-            this.btnSetSkill.UseVisualStyleBackColor = true;
-            this.btnSetSkill.Click += new System.EventHandler(this.btnSetSkill_Click);
-            // 
-            // txtSkill
-            // 
-            this.txtSkill.Location = new System.Drawing.Point(6, 87);
-            this.txtSkill.Name = "txtSkill";
-            this.txtSkill.Size = new System.Drawing.Size(130, 20);
-            this.txtSkill.TabIndex = 41;
-            // 
-            // lblSkill
-            // 
-            this.lblSkill.AutoSize = true;
-            this.lblSkill.Location = new System.Drawing.Point(6, 71);
-            this.lblSkill.Name = "lblSkill";
-            this.lblSkill.Size = new System.Drawing.Size(29, 13);
-            this.lblSkill.TabIndex = 42;
-            this.lblSkill.Text = "Skill:";
             // 
             // CreatureCardEditor
             // 

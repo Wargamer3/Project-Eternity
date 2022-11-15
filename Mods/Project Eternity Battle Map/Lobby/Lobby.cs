@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private FMODSound sndBGM;
         private FMODSound sndButtonOver;
-        private FMODSound sndButtonClick;
+        protected FMODSound sndButtonClick;
 
         private SpriteFont fntArial12;
         private Texture2D sprBackground;
@@ -54,19 +54,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
 
-        private readonly BattleMapOnlineClient OnlineGameClient;
-        private readonly CommunicationClient OnlineCommunicationClient;
+        protected readonly BattleMapOnlineClient OnlineGameClient;
+        protected readonly CommunicationClient OnlineCommunicationClient;
         public readonly Dictionary<string, RoomInformations> DicAllRoom;
-        private BattleMapPlayer[] ArrayLobbyPlayer;
-        private BattleMapPlayer[] ArrayLobbyFriends;
+        private OnlinePlayerBase[] ArrayLobbyPlayer;
+        private OnlinePlayerBase[] ArrayLobbyFriends;
         PlayerListTypes PlayerListType;
 
         public Lobby(bool UseOnline)
         {
             DicAllRoom = new Dictionary<string, RoomInformations>();
 
-            ArrayLobbyPlayer = new BattleMapPlayer[0];
-            ArrayLobbyFriends = new BattleMapPlayer[0];
+            ArrayLobbyPlayer = new OnlinePlayerBase[0];
+            ArrayLobbyFriends = new OnlinePlayerBase[0];
 
             if (UseOnline)
             {
@@ -149,6 +149,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ShopButton, InventoryButton,
             };
 
+            InitPlayer();
+        }
+
+        protected void InitPlayer()
+        {
             if (OnlineGameClient != null)
             {
                 InitOnlineGameClient();
@@ -156,11 +161,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, BattleMapPlayer.PlayerTypes.Host, false, 0, true, Color.Blue);
-
-                PlayerManager.ListLocalPlayer.Add(NewPlayer);
-                PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);
+                InitOfflinePlayer();
             }
+        }
+
+        protected virtual void InitOfflinePlayer()
+        {
+            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
+
+            PlayerManager.ListLocalPlayer.Add(NewPlayer);
+            NewPlayer.LoadLocally(GameScreen.ContentFallback);
         }
 
         public override void Unload()
@@ -170,7 +180,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             SoundSystem.ReleaseSound(sndButtonClick);
         }
 
-        private void InitOnlineGameClient()
+        protected void InitOnlineGameClient()
         {
             List<string> ListServerIP = new List<string>();
             bool TryConnecting = true;
@@ -199,15 +209,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     if (ListServerIP.Count == 0)
                     {
                         TryConnecting = false;
-                        PlayerManager.ListLocalPlayer.Add(new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, BattleMapPlayer.PlayerTypes.Offline, false, 0, true, Color.Blue));
-                        PlayerManager.ListLocalPlayer[0].LoadLocally(GameScreen.ContentFallback);
+                        InitOfflinePlayer();
                     }
                 }
             }
             while (TryConnecting);
         }
 
-        private void InitOnlineCommunicationClient()
+        protected void InitOnlineCommunicationClient()
         {
             List<string> ListServerIP = new List<string>();
             bool TryConnecting = true;
@@ -311,7 +320,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 for (int P = 0; P < ArrayLobbyPlayer.Length; P++)
                 {
-                    BattleMapPlayer ActivePlayer = ArrayLobbyPlayer[P];
+                    OnlinePlayerBase ActivePlayer = ArrayLobbyPlayer[P];
                     float X = 635;
                     float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
@@ -344,7 +353,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 for (int P = 0; P < ArrayLobbyFriends.Length; P++)
                 {
-                    BattleMapPlayer ActivePlayer = ArrayLobbyFriends[P];
+                    OnlinePlayerBase ActivePlayer = ArrayLobbyFriends[P];
                     float X = 635;
                     float Y = 166 + P * (fntArial12.LineSpacing + 4);
 
@@ -400,25 +409,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #region Buttons
 
-        private void SelectLocalPlayers()
+        protected virtual void SelectLocalPlayers()
         {
             PushScreen(new LocalPlayerSelectionScreen());
             sndButtonClick.Play();
         }
 
-        private void CreateARoom()
+        protected virtual void CreateARoom()
         {
             PushScreen(new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, ""));
             sndButtonClick.Play();
         }
 
-        private void OpenInventory()
+        protected virtual void OpenInventory()
         {
-            PushScreen(new InventoryScreen());
+            PushScreen(new BattleMapInventoryScreen());
             sndButtonClick.Play();
         }
 
-        private void OpenShop()
+        protected virtual void OpenShop()
         {
             PushScreen(new ShopScreen());
             sndButtonClick.Play();
@@ -456,12 +465,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));
         }
 
-        public void PopulatePlayers(BattleMapPlayer[] ArrayLobbyPlayer)
+        public void PopulatePlayers(OnlinePlayerBase[] ArrayLobbyPlayer)
         {
             this.ArrayLobbyPlayer = ArrayLobbyPlayer;
         }
 
-        public void PopulateFriends(BattleMapPlayer[] ArrayLobbyFriends)
+        public void PopulateFriends(OnlinePlayerBase[] ArrayLobbyFriends)
         {
             this.ArrayLobbyFriends = ArrayLobbyFriends;
         }

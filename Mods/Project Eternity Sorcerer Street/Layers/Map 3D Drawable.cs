@@ -338,7 +338,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             foreach (Player ActivePlayer in Map.ListPlayer)
             {
                 //If it's dead, don't draw it unless it's an event unit.
-                if (ActivePlayer.GamePiece.Unit3DModel == null)
+                if (ActivePlayer.Inventory == null || ActivePlayer.GamePiece.Unit3DModel == null)
                     continue;
 
                 ActivePlayer.GamePiece.Unit3DModel.Update(gameTime);

@@ -122,9 +122,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderCard.Name, new Vector2(Constants.Width / 4, Y), Color.White);
                 int X = Constants.Width / 4;
                 Y += 30;
-                g.Draw(Map.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
+                g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.MaxST.ToString(), new Vector2(X - 20, Y), Color.White);
-                g.Draw(Map.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
+                g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.MaxHP.ToString(), new Vector2(X + 45, Y), Color.White);
                 g.DrawStringMiddleAligned(Map.fntArial12, "Ability Values", new Vector2(Constants.Width / 2, Y), Color.White);
 
@@ -135,9 +135,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Y += 25;
                 g.DrawLine(GameScreen.sprPixel, new Vector2(Constants.Width / 7, Y), new Vector2(Constants.Width - Constants.Width / 7, Y), Color.White);
                 Y += 10;
-                g.Draw(Map.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
+                g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderFinalST.ToString(), new Vector2(X - 20, Y), Color.White);
-                g.Draw(Map.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
+                g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderFinalHP.ToString(), new Vector2(X + 45, Y), Color.White);
                 g.DrawStringMiddleAligned(Map.fntArial12, "Total", new Vector2(Constants.Width / 2, Y), Color.White);
 
@@ -146,9 +146,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Y = Constants.Height / 4 + 40;
                 g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderCard.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
                 Y += 30;
-                g.Draw(Map.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
+                g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.MaxST.ToString(), new Vector2(X - 20, Y), Color.White);
-                g.Draw(Map.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
+                g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.MaxHP.ToString(), new Vector2(X + 45, Y), Color.White);
 
                 Y += 25;
@@ -157,9 +157,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Y += 25;
                 g.DrawLine(GameScreen.sprPixel, new Vector2(Constants.Width / 7, Y), new Vector2(Constants.Width - Constants.Width / 7, Y), Color.White);
                 Y += 10;
-                g.Draw(Map.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
+                g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderFinalST.ToString(), new Vector2(X - 20, Y), Color.White);
-                g.Draw(Map.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
+                g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderFinalHP.ToString(), new Vector2(X + 45, Y), Color.White);
             }
             else
