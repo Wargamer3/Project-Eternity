@@ -31,6 +31,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.gbCardInformation = new System.Windows.Forms.GroupBox();
+            this.cboCategory = new System.Windows.Forms.ComboBox();
+            this.lblCategory = new System.Windows.Forms.Label();
             this.txtActivationAnimation = new System.Windows.Forms.TextBox();
             this.lblActivationAnimation = new System.Windows.Forms.Label();
             this.btnSetActivationAnimation = new System.Windows.Forms.Button();
@@ -45,8 +47,6 @@
             this.lblName = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.gbDescription = new System.Windows.Forms.GroupBox();
-            this.cboCategory = new System.Windows.Forms.ComboBox();
-            this.lblCategory = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.gbCardInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicCost)).BeginInit();
@@ -93,12 +93,36 @@
             this.gbCardInformation.TabStop = false;
             this.gbCardInformation.Text = "Card Information";
             // 
+            // cboCategory
+            // 
+            this.cboCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboCategory.FormattingEnabled = true;
+            this.cboCategory.Items.AddRange(new object[] {
+            "Weapon",
+            "Armor",
+            "Tool",
+            "Scroll"});
+            this.cboCategory.Location = new System.Drawing.Point(75, 100);
+            this.cboCategory.Name = "cboCategory";
+            this.cboCategory.Size = new System.Drawing.Size(123, 21);
+            this.cboCategory.TabIndex = 3;
+            // 
+            // lblCategory
+            // 
+            this.lblCategory.AutoSize = true;
+            this.lblCategory.Location = new System.Drawing.Point(6, 103);
+            this.lblCategory.Name = "lblCategory";
+            this.lblCategory.Size = new System.Drawing.Size(52, 13);
+            this.lblCategory.TabIndex = 49;
+            this.lblCategory.Text = "Category:";
+            // 
             // txtActivationAnimation
             // 
             this.txtActivationAnimation.Location = new System.Drawing.Point(6, 212);
             this.txtActivationAnimation.Name = "txtActivationAnimation";
             this.txtActivationAnimation.Size = new System.Drawing.Size(148, 20);
             this.txtActivationAnimation.TabIndex = 48;
+            this.txtActivationAnimation.TabStop = false;
             // 
             // lblActivationAnimation
             // 
@@ -115,6 +139,7 @@
             this.btnSetActivationAnimation.Name = "btnSetActivationAnimation";
             this.btnSetActivationAnimation.Size = new System.Drawing.Size(38, 23);
             this.btnSetActivationAnimation.TabIndex = 46;
+            this.btnSetActivationAnimation.TabStop = false;
             this.btnSetActivationAnimation.Text = "Set";
             this.btnSetActivationAnimation.UseVisualStyleBackColor = true;
             this.btnSetActivationAnimation.Click += new System.EventHandler(this.btnSetActivationAnimation_Click);
@@ -134,6 +159,7 @@
             this.txtSkill.Name = "txtSkill";
             this.txtSkill.Size = new System.Drawing.Size(192, 20);
             this.txtSkill.TabIndex = 44;
+            this.txtSkill.TabStop = false;
             // 
             // btnSetSkill
             // 
@@ -141,6 +167,7 @@
             this.btnSetSkill.Name = "btnSetSkill";
             this.btnSetSkill.Size = new System.Drawing.Size(130, 23);
             this.btnSetSkill.TabIndex = 43;
+            this.btnSetSkill.TabStop = false;
             this.btnSetSkill.Text = "Set Skill";
             this.btnSetSkill.UseVisualStyleBackColor = true;
             this.btnSetSkill.Click += new System.EventHandler(this.btnSetSkill_Click);
@@ -157,7 +184,7 @@
             this.cboRarity.Location = new System.Drawing.Point(75, 73);
             this.cboRarity.Name = "cboRarity";
             this.cboRarity.Size = new System.Drawing.Size(123, 21);
-            this.cboRarity.TabIndex = 35;
+            this.cboRarity.TabIndex = 2;
             // 
             // lblRarity
             // 
@@ -173,7 +200,7 @@
             this.txtMagicCost.Location = new System.Drawing.Point(75, 45);
             this.txtMagicCost.Name = "txtMagicCost";
             this.txtMagicCost.Size = new System.Drawing.Size(123, 20);
-            this.txtMagicCost.TabIndex = 33;
+            this.txtMagicCost.TabIndex = 1;
             // 
             // lblMagicCost
             // 
@@ -189,7 +216,7 @@
             this.txtName.Location = new System.Drawing.Point(50, 19);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(148, 20);
-            this.txtName.TabIndex = 29;
+            this.txtName.TabIndex = 0;
             // 
             // lblName
             // 
@@ -208,7 +235,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(192, 144);
-            this.txtDescription.TabIndex = 30;
+            this.txtDescription.TabIndex = 4;
             // 
             // gbDescription
             // 
@@ -219,29 +246,6 @@
             this.gbDescription.TabIndex = 32;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
-            // 
-            // cbCategory
-            // 
-            this.cboCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboCategory.FormattingEnabled = true;
-            this.cboCategory.Items.AddRange(new object[] {
-            "Weapon",
-            "Armor",
-            "Tool",
-            "Scroll"});
-            this.cboCategory.Location = new System.Drawing.Point(75, 100);
-            this.cboCategory.Name = "cbCategory";
-            this.cboCategory.Size = new System.Drawing.Size(123, 21);
-            this.cboCategory.TabIndex = 50;
-            // 
-            // lblCategory
-            // 
-            this.lblCategory.AutoSize = true;
-            this.lblCategory.Location = new System.Drawing.Point(6, 103);
-            this.lblCategory.Name = "lblCategory";
-            this.lblCategory.Size = new System.Drawing.Size(52, 13);
-            this.lblCategory.TabIndex = 49;
-            this.lblCategory.Text = "Category:";
             // 
             // ItemCardEditor
             // 

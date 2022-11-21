@@ -28,6 +28,8 @@ namespace ProjectEternity.Editors.CardEditor
             this.FilePath = FilePath;
             if (!File.Exists(FilePath))
             {
+                cboRarity.SelectedIndex = 0;
+                cboCategory.SelectedIndex = 0;
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
                 SaveItem(FilePath, FilePath);

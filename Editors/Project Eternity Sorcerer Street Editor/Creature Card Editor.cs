@@ -66,6 +66,7 @@ namespace ProjectEternity.Editors.CardEditor
 
             BW.Write((int)txtMaxHP.Value);
             BW.Write((int)txtMaxST.Value);
+            BW.Write(cboSubtype.Text);
             BW.Write(txtSkill.Text);
 
             #region Affinities
@@ -194,6 +195,7 @@ namespace ProjectEternity.Editors.CardEditor
 
             txtMaxHP.Value = LoadedCard.MaxHP;
             txtMaxST.Value = LoadedCard.MaxST;
+            cboSubtype.SelectedIndex = 0;
             txtSkill.Text = LoadedCard.SkillChainName;
 
             #region Affinities

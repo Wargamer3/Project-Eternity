@@ -115,8 +115,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CopyCard.QuantityOwned = QuantityOwned;
                 AddCard(CopyCard);
             }
-
-            DicCardsByType.Clear();
         }
 
         public void Save(BinaryWriter BW)

@@ -45,6 +45,8 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.gbCreatureInformation = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cboSubtype = new System.Windows.Forms.ComboBox();
             this.lblSkill = new System.Windows.Forms.Label();
             this.txtSkill = new System.Windows.Forms.TextBox();
             this.btnSetSkill = new System.Windows.Forms.Button();
@@ -143,7 +145,7 @@
             this.txtCardSacrificed.Location = new System.Drawing.Point(130, 71);
             this.txtCardSacrificed.Name = "txtCardSacrificed";
             this.txtCardSacrificed.Size = new System.Drawing.Size(68, 20);
-            this.txtCardSacrificed.TabIndex = 47;
+            this.txtCardSacrificed.TabIndex = 2;
             // 
             // lblCardSacrificed
             // 
@@ -160,6 +162,7 @@
             this.txtAttackAnimation.Name = "txtAttackAnimation";
             this.txtAttackAnimation.Size = new System.Drawing.Size(148, 20);
             this.txtAttackAnimation.TabIndex = 37;
+            this.txtAttackAnimation.TabStop = false;
             // 
             // lblAttackAnimation
             // 
@@ -176,6 +179,7 @@
             this.btnSetAttackAnimation.Name = "btnSetAttackAnimation";
             this.btnSetAttackAnimation.Size = new System.Drawing.Size(38, 23);
             this.btnSetAttackAnimation.TabIndex = 3;
+            this.btnSetAttackAnimation.TabStop = false;
             this.btnSetAttackAnimation.Text = "Set";
             this.btnSetAttackAnimation.UseVisualStyleBackColor = true;
             this.btnSetAttackAnimation.Click += new System.EventHandler(this.btnSetAttackAnimation_Click);
@@ -192,7 +196,7 @@
             this.cboRarity.Location = new System.Drawing.Point(75, 97);
             this.cboRarity.Name = "cboRarity";
             this.cboRarity.Size = new System.Drawing.Size(123, 21);
-            this.cboRarity.TabIndex = 35;
+            this.cboRarity.TabIndex = 3;
             // 
             // lblRarity
             // 
@@ -218,7 +222,7 @@
             0});
             this.txtMagicCost.Name = "txtMagicCost";
             this.txtMagicCost.Size = new System.Drawing.Size(68, 20);
-            this.txtMagicCost.TabIndex = 33;
+            this.txtMagicCost.TabIndex = 1;
             // 
             // lblMagicCost
             // 
@@ -246,14 +250,14 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(192, 122);
-            this.txtDescription.TabIndex = 30;
+            this.txtDescription.TabIndex = 8;
             // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(50, 19);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(148, 20);
-            this.txtName.TabIndex = 29;
+            this.txtName.TabIndex = 0;
             // 
             // lblName
             // 
@@ -266,6 +270,8 @@
             // 
             // gbCreatureInformation
             // 
+            this.gbCreatureInformation.Controls.Add(this.label1);
+            this.gbCreatureInformation.Controls.Add(this.cboSubtype);
             this.gbCreatureInformation.Controls.Add(this.lblSkill);
             this.gbCreatureInformation.Controls.Add(this.txtSkill);
             this.gbCreatureInformation.Controls.Add(this.btnSetSkill);
@@ -275,15 +281,37 @@
             this.gbCreatureInformation.Controls.Add(this.lblMaxHP);
             this.gbCreatureInformation.Location = new System.Drawing.Point(222, 27);
             this.gbCreatureInformation.Name = "gbCreatureInformation";
-            this.gbCreatureInformation.Size = new System.Drawing.Size(142, 138);
+            this.gbCreatureInformation.Size = new System.Drawing.Size(142, 183);
             this.gbCreatureInformation.TabIndex = 29;
             this.gbCreatureInformation.TabStop = false;
             this.gbCreatureInformation.Text = "Creature Information";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 72);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.TabIndex = 48;
+            this.label1.Text = "Subtype:";
+            // 
+            // cboSubtype
+            // 
+            this.cboSubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSubtype.FormattingEnabled = true;
+            this.cboSubtype.Items.AddRange(new object[] {
+            "None",
+            "Animal",
+            "Dragon"});
+            this.cboSubtype.Location = new System.Drawing.Point(6, 88);
+            this.cboSubtype.Name = "cboSubtype";
+            this.cboSubtype.Size = new System.Drawing.Size(130, 21);
+            this.cboSubtype.TabIndex = 7;
+            // 
             // lblSkill
             // 
             this.lblSkill.AutoSize = true;
-            this.lblSkill.Location = new System.Drawing.Point(6, 71);
+            this.lblSkill.Location = new System.Drawing.Point(6, 112);
             this.lblSkill.Name = "lblSkill";
             this.lblSkill.Size = new System.Drawing.Size(29, 13);
             this.lblSkill.TabIndex = 42;
@@ -291,17 +319,19 @@
             // 
             // txtSkill
             // 
-            this.txtSkill.Location = new System.Drawing.Point(6, 87);
+            this.txtSkill.Location = new System.Drawing.Point(6, 128);
             this.txtSkill.Name = "txtSkill";
             this.txtSkill.Size = new System.Drawing.Size(130, 20);
             this.txtSkill.TabIndex = 41;
+            this.txtSkill.TabStop = false;
             // 
             // btnSetSkill
             // 
-            this.btnSetSkill.Location = new System.Drawing.Point(6, 113);
+            this.btnSetSkill.Location = new System.Drawing.Point(6, 154);
             this.btnSetSkill.Name = "btnSetSkill";
             this.btnSetSkill.Size = new System.Drawing.Size(130, 23);
             this.btnSetSkill.TabIndex = 40;
+            this.btnSetSkill.TabStop = false;
             this.btnSetSkill.Text = "Set Skill";
             this.btnSetSkill.UseVisualStyleBackColor = true;
             this.btnSetSkill.Click += new System.EventHandler(this.btnSetSkill_Click);
@@ -317,7 +347,7 @@
             this.txtMaxST.Location = new System.Drawing.Point(63, 45);
             this.txtMaxST.Name = "txtMaxST";
             this.txtMaxST.Size = new System.Drawing.Size(73, 20);
-            this.txtMaxST.TabIndex = 39;
+            this.txtMaxST.TabIndex = 6;
             // 
             // lblMaxST
             // 
@@ -339,7 +369,7 @@
             this.txtMaxHP.Location = new System.Drawing.Point(63, 19);
             this.txtMaxHP.Name = "txtMaxHP";
             this.txtMaxHP.Size = new System.Drawing.Size(73, 20);
-            this.txtMaxHP.TabIndex = 37;
+            this.txtMaxHP.TabIndex = 5;
             // 
             // lblMaxHP
             // 
@@ -749,5 +779,7 @@
         private System.Windows.Forms.Label lblSkill;
         private System.Windows.Forms.TextBox txtSkill;
         private System.Windows.Forms.Button btnSetSkill;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cboSubtype;
     }
 }

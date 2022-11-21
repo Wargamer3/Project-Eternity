@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (CursorIndex)
                 {
                     case 0:
-                        PushScreen(new EditBookScreen(ActivePlayer));
+                        PushScreen(new ChooseBookScreen(ActivePlayer));
                         break;
                     case 1:
                         break;

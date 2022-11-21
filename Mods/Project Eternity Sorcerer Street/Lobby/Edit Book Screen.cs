@@ -39,10 +39,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int CursorIndex;
 
-        public EditBookScreen(Player ActivePlayer)
+        public EditBookScreen(Player ActivePlayer, CardBook ActiveBook)
         {
             this.ActivePlayer = ActivePlayer;
-            ActiveBook = ActivePlayer.Inventory.ActiveBook;
+            this.ActiveBook = ActiveBook;
         }
 
         public override void Load()
@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (CursorIndex)
                 {
                     case 0:
-                        PushScreen(new ChooseBookScreen(ActivePlayer));
+                        PushScreen(new EditBookCardListScreen(ActivePlayer, ActiveBook));
                         break;
                     case 1:
                         break;
@@ -86,6 +86,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case 3:
                         break;
                     case 4:
+                        PushScreen(new EditBookNameScreen(ActivePlayer, ActiveBook));
                         break;
                     case 5:
                         break;
@@ -100,9 +101,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputUpPressed())
             {
-                if (--CursorIndex < 6)
+                if (--CursorIndex < 0)
                 {
-                    CursorIndex = 4;
+                    CursorIndex = 6;
                 }
             }
             else if (InputHelper.InputDownPressed())

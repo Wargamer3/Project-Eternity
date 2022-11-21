@@ -18,6 +18,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public readonly int MaxHP;
         public readonly int MaxST;
+        public string Subtype;
         public readonly byte DiscardCardRequired;
 
         public ElementalAffinity[] ArrayAffinity;
@@ -69,6 +70,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             CurrentHP = MaxHP = BR.ReadInt32();
             CurrentST = MaxST = BR.ReadInt32();
+            Subtype = BR.ReadString();
             SkillChainName = BR.ReadString();
 
             int ArrayAffinityLength = BR.ReadInt32();

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.GameScreens.UI;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -34,15 +35,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #endregion
 
+        private BoxScrollbar MissionScrollbar;
+
         private const int NumberOfFilterCard = 13;
         private const int CardSpacing = 7;
         private const int CardWidth = 85;
         private const int CardHeight = 110;
+        private int HeaderHeight = Constants.Height / 16;
 
         private readonly Player ActivePlayer;
         private readonly CardBook ActiveBook;
 
         private int CursorIndex;
+        private int ScrollbarIndex;
 
         public EditBookCardListScreen(Player ActivePlayer, CardBook ActiveBook)
         {
@@ -52,6 +57,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load()
         {
+            float MaxY = Constants.Height / 6 + 130 * 2 + (CardHeight + 20) * ((ActiveBook.ListCard.Count - 14) / 7);
+            MissionScrollbar = new BoxScrollbar(new Vector2(Constants.Width - 20, Constants.Height / 6), Constants.Height - Constants.Height / 3, MaxY, OnMissionScrollbarChange);
+
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
             sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
@@ -75,10 +83,47 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprEnchantMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Multiple Enchant");
         }
 
+        private void OnMissionScrollbarChange(float ScrollbarValue)
+        {
+            ScrollbarIndex = (int)ScrollbarValue;
+        }
+
         public override void Update(GameTime gameTime)
         {
+            MissionScrollbar.Update(gameTime);
+
             if (InputHelper.InputConfirmPressed())
             {
+                switch (CursorIndex)
+                {
+                    case 0:
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "creatures"));
+                        break;
+
+                    case 1:
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "neutral"));
+                        break;
+
+                    case 2:
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "fire"));
+                        break;
+
+                    case 3:
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "water"));
+                        break;
+
+                    case 4:
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "earth"));
+                        break;
+
+                    case 5:
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "air"));
+                        break;
+
+                    case 6:
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "multi"));
+                        break;
+                }
                 if (CursorIndex > NumberOfFilterCard)
                 {
                     PushScreen(new EditBookCardScreen(ActivePlayer, ActiveBook, ActiveBook.ListCard[CursorIndex - NumberOfFilterCard - 1]));
@@ -125,7 +170,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         }
                         else
                         {
-                            CursorIndex += CursorIndex % 7;
+                            CursorIndex += 7;
                         }
                     }
                     else
@@ -160,20 +205,42 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CursorIndex -= 7;
                     }
                 }
+
+                int CursorY = (CardHeight + 20) * (CursorIndex / 7);
+
+                if (CursorY < ScrollbarIndex)
+                {
+                    ScrollbarIndex = (CardHeight + 20) * (CursorIndex / 7);
+                }
+                else if (CursorY > ScrollbarIndex + (CardHeight + 20) * 2)
+                {
+                    ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / 7) - 2);
+                }
             }
             else if (InputHelper.InputUpPressed())
             {
                 CursorIndex -= 7;
                 if (CursorIndex < 0)
                 {
-                    if ((CursorIndex + 7) % 7 < ActiveBook.ListCard.Count)
+                    if ((CursorIndex + 7) % 7 >= ActiveBook.ListCard.Count % 7)
                     {
-                        CursorIndex += ActiveBook.ListCard.Count + NumberOfFilterCard + 7 - 1;
+                        CursorIndex = (ActiveBook.ListCard.Count / 7 + 2 - 1) * 7 + (CursorIndex + 7) % 7;
                     }
                     else
                     {
-                        CursorIndex = ActiveBook.ListCard.Count + NumberOfFilterCard;
+                        CursorIndex = (ActiveBook.ListCard.Count / 7 + 2) * 7 + (CursorIndex + 7) % 7;
                     }
+                }
+
+                int CursorY = (CardHeight + 20) * (CursorIndex / 7);
+
+                if (CursorY < ScrollbarIndex)
+                {
+                    ScrollbarIndex = (CardHeight + 20) * (CursorIndex / 7);
+                }
+                else if (CursorY > ScrollbarIndex + (CardHeight + 20) * 2)
+                {
+                    ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / 7) - 2);
                 }
             }
         }
@@ -182,9 +249,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             DrawBox(g, new Vector2(-5, -5), Constants.Width + 10, Constants.Height + 10, Color.White);
 
+            DrawCategoryCards(g);
+            DrawBookCards(g, Constants.Height / 6 + (CardHeight + 20) * 2 - ScrollbarIndex);
+
             float X = -10;
             float Y = Constants.Height / 20;
-            int HeaderHeight = Constants.Height / 16;
             DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
 
             X = Constants.Width / 20;
@@ -195,25 +264,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringRightAligned(fntArial12, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
             g.DrawString(fntArial12, "OK", new Vector2(X + 20, Y), Color.White);
 
-            DrawCategoryCards(g);
-            DrawBookCards(g, Constants.Height / 6 + 130 * 2);
-
             int CursorX = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (CursorIndex % 7);
             int CursorY = Constants.Height / 6 + CardHeight/ 2 + (CardHeight + 20) * (CursorIndex / 7);
-            g.Draw(sprMenuCursor, new Rectangle(CursorX, CursorY, 40, 40), Color.White);
+            g.Draw(sprMenuCursor, new Rectangle(CursorX, CursorY - ScrollbarIndex, 40, 40), Color.White);
 
             X = -10;
-            Y = Constants.Height - 100;
+            Y = Constants.Height - Constants.Height / 20 - HeaderHeight;
             DrawBox(g, new Vector2(X, Y), Constants.Width + 20, HeaderHeight, Color.White);
             X = Constants.Width / 18;
             Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
             g.DrawString(fntArial12, "Edit this Book's contents", new Vector2(X, Y), Color.White);
+
+            MissionScrollbar.Draw(g);
         }
 
         private void DrawCategoryCards(CustomSpriteBatch g)
         {
             float X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3;
-            float Y = Constants.Height / 6;
+            float Y = Constants.Height / 6 - ScrollbarIndex;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);

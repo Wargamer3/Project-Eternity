@@ -95,6 +95,8 @@
     <Compile Include="Cards\Spell Card.cs" />
     <Compile Include="Formula Parser.cs" />
     <Compile Include="Lobby\Card Book.cs" />
+    <Compile Include="Lobby\Edit Book Card List Filter Screen.cs" />
+    <Compile Include="Lobby\Edit Book Name Screen.cs" />
     <Compile Include="Lobby\Edit Book Card Screen.cs" />
     <Compile Include="Lobby\Edit Book Card List Screen.cs" />
     <Compile Include="Lobby\Choose Book Screen.cs" />

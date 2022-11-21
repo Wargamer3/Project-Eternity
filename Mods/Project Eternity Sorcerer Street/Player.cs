@@ -110,6 +110,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             IniFile IniDefaultCards = IniFile.ReadFromFile("Content/Sorcerer Street Lobby Default Cards.ini");
 
+            /*foreach (string ActiveMultiplayerFolder in Directory.EnumerateDirectories(GameScreen.ContentFallback.RootDirectory + "/Sorcerer Street/", "* Cards"))
+            {
+                foreach (string ActiveCampaignFolder in Directory.EnumerateDirectories(ActiveMultiplayerFolder, "*", SearchOption.AllDirectories))
+                {
+                    foreach (string ActiveFile in Directory.EnumerateFiles(ActiveCampaignFolder, "*.pec", SearchOption.AllDirectories))
+                    {
+                        Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                        LoadedCard.QuantityOwned = 1;
+
+                        Inventory.GlobalBook.AddCard(LoadedCard);
+                    }
+                }
+            }*/
+
             foreach (string ActiveKey in IniDefaultCards.ReadAllKeys())
             {
                 string CardPath = IniDefaultCards.ReadField(ActiveKey, "Path");

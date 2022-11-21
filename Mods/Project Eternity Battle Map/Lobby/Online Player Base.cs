@@ -140,10 +140,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!File.Exists("User data/Profiles/" + SaveFileFolder + "Last Selected Profile.txt"))
             {
-                File.WriteAllText("User data/Profiles/" + SaveFileFolder + "Last Selected Profile.txt", "Player 1", Encoding.UTF8);
                 Name = "Player 1";
                 InitFirstTimeInventory();
                 SaveLocally();
+                File.WriteAllText("User data/Profiles/" + SaveFileFolder + "Last Selected Profile.txt", "Player 1", Encoding.UTF8);
                 return;
             }
 

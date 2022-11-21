@@ -74,7 +74,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (InputHelper.InputConfirmPressed())
             {
-                PushScreen(new EditBookCardListScreen(ActivePlayer, ActivePlayer.Inventory.ListBook[CursorIndex]));
+                if (CursorIndex < ActivePlayer.Inventory.ListBook.Count)
+                {
+                    PushScreen(new EditBookScreen(ActivePlayer, ActivePlayer.Inventory.ListBook[CursorIndex]));
+                }
+                else if (CursorIndex == ActivePlayer.Inventory.ListBook.Count)
+                {
+                    PushScreen(new EditBookNameScreen(ActivePlayer));
+                }
+                else
+                {
+                    RemoveScreen(this);
+                }
             }
             else if (InputHelper.InputCancelPressed())
             {
@@ -82,14 +93,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputUpPressed())
             {
-                if (--CursorIndex < 6)
+                if (--CursorIndex < 0)
                 {
-                    CursorIndex = 4;
+                    CursorIndex = ActivePlayer.Inventory.ListBook.Count + 1;
                 }
             }
             else if (InputHelper.InputDownPressed())
             {
-                if (++CursorIndex > 6)
+                if (++CursorIndex > ActivePlayer.Inventory.ListBook.Count + 1)
                 {
                     CursorIndex = 0;
                 }
@@ -123,6 +134,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.DrawString(fntArial12, ActivePlayer.Inventory.ListBook[B].BookName, new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
                 Y += EntryHeight + 10;
             }
+
             DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
             g.DrawString(fntArial12, "New", new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
             Y += EntryHeight + 10;
@@ -130,7 +142,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(fntArial12, "Return", new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
 
             g.Draw(sprMenuCursor, new Rectangle(95, Constants.Height / 7 + EntryHeight / 3 + CursorIndex * (EntryHeight + 10), 40, 40), Color.White);
-
             SorcererStreetInventoryScreen.DrawBookInformation(g, fntArial12, "Book Information", sprElementNeutral, sprElementFire, sprElementWater, sprElementEarth, sprElementAir, sprElementMulti,
                 sprItemsWeapon, sprItemsArmor, sprItemsTool, sprItemsScroll, sprSpellsSingle, sprSpellsMultiple, sprEnchantSingle, sprEnchantMultiple,
                 ActivePlayer.Inventory.GlobalBook);

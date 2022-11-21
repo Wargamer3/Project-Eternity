@@ -106,7 +106,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static Card LoadCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            string[] UnitInfo = Path.Split(new[] { "/" }, StringSplitOptions.None);
+            string[] UnitInfo = Path.Split(new[] { "/", "\\" }, StringSplitOptions.None);
 
             return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
