@@ -7,14 +7,14 @@ namespace ProjectEternity.Core
     {
         public string Name = "";
 
-        private AnimationBone Parent = null;
+        private readonly AnimationBone Parent = null;
 
-        public Matrix Transform = Matrix.Identity;
-        public Vector3 Scale = Vector3.One;
-        public Vector3 Translation = Vector3.Zero;
-        public Quaternion Rotation = Quaternion.Identity;
+        private readonly Matrix Transform = Matrix.Identity;
+        private Vector3 Scale = Vector3.One;
+        private Vector3 Translation = Vector3.Zero;
+        private Quaternion Rotation = Quaternion.Identity;
 
-        public Matrix InverseTransform;
+        public readonly Matrix InverseTransform;
         public Matrix AbsoluteTransform = Matrix.Identity;
 
         public AnimationBone(string Name, Matrix Transform, AnimationBone Parent)

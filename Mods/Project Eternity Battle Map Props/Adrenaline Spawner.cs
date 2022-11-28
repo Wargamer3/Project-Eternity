@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,8 +29,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load(ContentManager Content)
         {
-            sprAdrenaline = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Adrenaline");
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprAdrenaline, 1);
+            if (Content != null)
+            {
+                sprAdrenaline = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Adrenaline");
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprAdrenaline, 1);
+            }
         }
 
         public override void DoLoad(BinaryReader BR)

@@ -38,6 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                 //Add Game Specific scripts
                 Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetRoomScriptsServer(NewRoom, Owner);
 
+                DicNewScript.Add(AskChangeLoadoutScriptServer.ScriptName, new AskChangeLoadoutScriptServer(NewRoom));
                 DicNewScript.Add(AskStartGameBattleScriptServer.ScriptName, new AskStartGameBattleScriptServer(NewRoom, (BattleMapClientGroup)CreatedGroup, Owner));
                 DicNewScript.Add(AskChangeRoomExtrasMissionScriptServer.ScriptName, new AskChangeRoomExtrasMissionScriptServer(NewRoom));
 

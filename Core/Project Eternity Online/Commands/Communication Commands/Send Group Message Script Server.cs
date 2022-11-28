@@ -40,7 +40,7 @@ namespace ProjectEternity.Core.Online
                 DateTime MessageDate = DateTime.Parse(Date, DateTimeFormatInfo.InvariantInfo);
                 foreach (IOnlineConnection ActiveOnlinePlayer in SourceOwner.ListGroupMember)
                 {
-                    ActiveOnlinePlayer.Send(new ReceiveGroupMessageScriptServer(GroupID, new ChatManager.ChatMessage(MessageDate, Message, (ChatManager.MessageColors)MessageColor)));
+                    ActiveOnlinePlayer.Send(new ReceiveGroupMessageScriptServer(GroupID, new ChatManager.ChatMessage(MessageDate, FinalMessage, (ChatManager.MessageColors)MessageColor)));
                 }
 
                 if (SourceOwner.SaveLogs)

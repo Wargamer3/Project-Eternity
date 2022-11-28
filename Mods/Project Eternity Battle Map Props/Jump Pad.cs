@@ -27,8 +27,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load(ContentManager Content)
         {
-            sprFlag = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Flag Red");
-            Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
+            if (Content != null)
+            {
+                sprFlag = Content.Load<Texture2D>("Animations/Sprites/Spawn Weapons/Flag Red");
+                Unit3D = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Billboard 3D"), sprFlag, 1);
+            }
         }
 
         public override void DoLoad(BinaryReader BR)

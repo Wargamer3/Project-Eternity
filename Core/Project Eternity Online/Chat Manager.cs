@@ -50,8 +50,7 @@ namespace ProjectEternity.Core.Online
         public ChatManager()
         {
             DicChatHistory = new Dictionary<string, ChatTab>();
-            DicChatHistory.Add("Global", new ChatTab("Chat"));
-            _ActiveChatTabID = "Global";
+            OpenGlobalTab();
         }
 
         public void InsertTab(string TabID, string TabName)
@@ -79,6 +78,12 @@ namespace ProjectEternity.Core.Online
             }
 
             _ActiveChatTabID = TabID;
+        }
+
+        public void OpenGlobalTab()
+        {
+            DicChatHistory.Add("Global", new ChatTab("Chat"));
+            _ActiveChatTabID = "Global";
         }
 
         public void SelectTab(string ActiveTabID)

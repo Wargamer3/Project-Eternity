@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using SendRoomIDScriptClient = ProjectEternity.GameScreens.SorcererStreetScreen.Online.SendRoomIDScriptClient;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -31,7 +32,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                PushScreen(new SorcererStreetGamePreparationScreen(null, null, new BattleMapRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
+                PushScreen(new SorcererStreetGamePreparationScreen(null, null, new SorcererStreetRoomInformations("No ID needed", RoomNameInput.Text, RoomType, RoomSubtype, MinNumberOfPlayer, MaxNumberOfPlayer)));
                 RemoveScreen(this);
             }
         }

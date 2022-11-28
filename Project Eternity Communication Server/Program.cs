@@ -11,6 +11,8 @@ namespace ProjectEternity.Communication.Server
     {
         static void Main(string[] args)
         {
+            Console.Title = "Project Eternity Communication Server";
+
             Dictionary<string, OnlineScript> DicOnlineScripts = new Dictionary<string, OnlineScript>();
 
             IniFile ConnectionInfo = IniFile.ReadFromFile("Connection Info.ini");

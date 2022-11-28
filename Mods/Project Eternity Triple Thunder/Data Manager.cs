@@ -92,6 +92,11 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             throw new NotImplementedException();
         }
 
+        public PlayerPOCO GetPlayerInventory(string ID)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemovePlayer(IOnlineConnection onlineConnection)
         {
             throw new NotImplementedException();

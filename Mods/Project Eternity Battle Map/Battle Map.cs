@@ -540,14 +540,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             #region Load Backgrounds and Foregrounds
 
-            for (int B = 0; B < ListBackgroundsPath.Count; B++)
+            if (!IsServer)
             {
-                ListBackground.Add(AnimationBackground.LoadAnimationBackground(ListBackgroundsPath[B], Content, GraphicsDevice));
-            }
+                for (int B = 0; B < ListBackgroundsPath.Count; B++)
+                {
+                    ListBackground.Add(AnimationBackground.LoadAnimationBackground(ListBackgroundsPath[B], Content, GraphicsDevice));
+                }
 
-            for (int F = 0; F < ListForegroundsPath.Count; F++)
-            {
-                ListForeground.Add(AnimationBackground.LoadAnimationBackground(ListForegroundsPath[F], Content, GraphicsDevice));
+                for (int F = 0; F < ListForegroundsPath.Count; F++)
+                {
+                    ListForeground.Add(AnimationBackground.LoadAnimationBackground(ListForegroundsPath[F], Content, GraphicsDevice));
+                }
             }
 
             #endregion

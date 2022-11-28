@@ -175,36 +175,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             base.Load();
 
-            sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
+            if (!IsServer)
+            {
+                sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
 
-            sprArrowUp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Arrow Up");
+                sprArrowUp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Arrow Up");
 
-            sprTerritory = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Territory");
-            sprMap = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Map");
-            sprInfo = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Info");
-            sprOptions = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Options");
-            sprHelp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Help");
-            sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/End");
+                sprTerritory = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Territory");
+                sprMap = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Map");
+                sprInfo = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Info");
+                sprOptions = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Options");
+                sprHelp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Help");
+                sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/End");
 
-            sprPlayerBackground = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Background");
+                sprPlayerBackground = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Background");
 
-            sprMenuHand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Hand");
-            sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
-            sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
+                sprMenuHand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Hand");
+                sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
+                sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
 
-            sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
-            sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West");
-            sprDirectionEast = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
-            sprDirectionSouth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
-            sprDirectionNorthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
-            sprDirectionWestFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West");
-            sprDirectionEastFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
-            sprDirectionSouthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Filled");
+                sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
+                sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West");
+                sprDirectionEast = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
+                sprDirectionSouth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
+                sprDirectionNorthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
+                sprDirectionWestFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West");
+                sprDirectionEastFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
+                sprDirectionSouthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Filled");
 
-            Symbols = CardSymbols.Load(Content);
+                Symbols = CardSymbols.Load(Content);
 
-            sprTileBorderEmpty = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Empty");
-            sprTileBorderColor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border");
+                sprTileBorderEmpty = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Empty");
+                sprTileBorderColor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border");
+            }
 
             LoadMap();
             LoadMapAssets();
@@ -218,6 +221,51 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Load(byte[] ArrayGameData)
         {
+            ByteReader BR = new ByteReader(ArrayGameData);
+
+            int ListCharacterCount = BR.ReadInt32();
+            for (int P = 0; P < ListCharacterCount; ++P)
+            {
+                string PlayerID = BR.ReadString();
+                string PlayerName = BR.ReadString();
+                int PlayerTeam = BR.ReadInt32();
+                bool IsPlayerControlled = BR.ReadBoolean();
+                Color PlayerColor = Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255);
+
+                Player NewPlayer = null;
+                bool IsExistingPlayer = false;
+                foreach (Player ActivePlayer in PlayerManager.ListLocalPlayer)
+                {
+                    if (PlayerManager.OnlinePlayerID == PlayerID)
+                    {
+                        NewPlayer = new Player(ActivePlayer);
+                        NewPlayer.Team = PlayerTeam;
+                        NewPlayer.Color = PlayerColor;
+                        AddLocalCharacter(NewPlayer);
+                        //NewPlayer.InputManagerHelper = new PlayerRobotInputManager();
+                        //NewPlayer.UpdateControls(GameplayTypes.MouseAndKeyboard);
+                        IsExistingPlayer = true;
+                        break;
+                    }
+                }
+
+                if (!IsExistingPlayer)
+                {
+                    NewPlayer = new Player(PlayerID, PlayerName, "Online", true, PlayerTeam, false, PlayerColor, new Card[0]);
+                    NewPlayer.LoadGamePieceModel();
+                    ListAllPlayer.Add(NewPlayer);
+                }
+
+                NewPlayer.IsPlayerControlled = IsPlayerControlled;
+            }
+
+            BattleMapPath = BR.ReadString();
+
+            Load();
+            Init();
+            TogglePreview(true);
+
+            BR.Clear();
         }
 
         public void LoadMap(bool BackgroundOnly = false)
@@ -326,6 +374,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListLocalPlayerInfo.Add(NewPlayer);
             NewPlayer.TotalMagic = NewPlayer.Magic = MagicAtStart;
             UpdatePlayersRank();
+        }
+
+        public void AddLocalCharacter(Player NewLocalCharacter)
+        {
+            ListPlayer.Add(NewLocalCharacter);
+            ListLocalPlayerInfo.Add(NewLocalCharacter);
         }
 
         public override void SetMutators(List<Mutator> ListMutator)
@@ -550,7 +604,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
-            LayerManager.Update(UpdateTime);
+            if (!IsServer)
+            {
+                LayerManager.Update(UpdateTime);
+            }
 
             if (!ListPlayer[ActivePlayerIndex].IsPlayerControlled && ListActionMenuChoice.HasMainPanel)
             {
@@ -921,7 +978,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override byte[] GetSnapshotData()
         {
-            return new byte[0];
+            ByteWriter BW = new ByteWriter();
+
+            BW.AppendInt32(ListAllPlayer.Count);
+            foreach (Player ActivePlayer in ListAllPlayer)
+            {
+                BW.AppendString(ActivePlayer.ConnectionID);
+                BW.AppendString(ActivePlayer.Name);
+                BW.AppendInt32(ActivePlayer.Team);
+                BW.AppendBoolean(ActivePlayer.IsPlayerControlled);
+                BW.AppendByte(ActivePlayer.Color.R);
+                BW.AppendByte(ActivePlayer.Color.G);
+                BW.AppendByte(ActivePlayer.Color.B);
+            }
+
+            BW.AppendString(BattleMapPath);
+
+            byte[] Data = BW.GetBytes();
+            BW.ClearWriteBuffer();
+            return Data;
         }
 
         public override void RemoveOnlinePlayer(string PlayerID, IOnlineConnection ActivePlayer)

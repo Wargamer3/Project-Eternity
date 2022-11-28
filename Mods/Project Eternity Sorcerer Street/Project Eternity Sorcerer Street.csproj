@@ -94,6 +94,7 @@
     <Compile Include="Cards\Item Card.cs" />
     <Compile Include="Cards\Spell Card.cs" />
     <Compile Include="Formula Parser.cs" />
+    <Compile Include="Lobby\Sorcerer Street Room Informations.cs" />
     <Compile Include="Lobby\Card Book.cs" />
     <Compile Include="Lobby\Edit Book Card List Filter Screen.cs" />
     <Compile Include="Lobby\Edit Book Name Screen.cs" />
@@ -106,6 +107,13 @@
     <Compile Include="Lobby\Sorcerer Street Lobby.cs" />
     <Compile Include="Lobby\Sorcerer Street Inventory Screen.cs" />
     <Compile Include="Lobby\Sorcerer Street Inventory.cs" />
+    <Compile Include="Online\Ask Change Book Script Client.cs" />
+    <Compile Include="Online\Change Book Script Client.cs" />
+    <Compile Include="Online\Change Room Extras Battle Script Client.cs" />
+    <Compile Include="Online\Join Room Local Script Client.cs" />
+    <Compile Include="Online\Player Inventory Script Client.cs" />
+    <Compile Include="Online\Player Joined Script Client.cs" />
+    <Compile Include="Online\Send Room ID Script Client.cs" />
     <Compile Include="Sorcerer Street Params.cs" />
     <Compile Include="Effects\Sorcerer Street Effect.cs" />
     <Compile Include="Effects\Sorcerer Street Requirement.cs" />

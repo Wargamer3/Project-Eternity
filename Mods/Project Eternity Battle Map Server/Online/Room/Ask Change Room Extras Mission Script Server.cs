@@ -1,6 +1,5 @@
 ﻿using System;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {

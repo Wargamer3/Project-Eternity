@@ -24,17 +24,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public AnimatedModel Unit3DModel;
 
         public Matrix Projection;
-        protected InteractiveProp(string PropName, PropCategories PropCategory,  bool[,] ArrayMapSize, bool CanBlockPath)
+        protected InteractiveProp(string PropName, PropCategories PropCategory, bool[,] ArrayMapSize, bool CanBlockPath)
         {
             this.PropName = PropName;
             this.PropCategory = PropCategory;
             this.ArrayMapSize = ArrayMapSize;
             this.CanBlockPath = CanBlockPath;
 
-            float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
-            Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                               aspectRatio,
-                                                               1, 10000);
+            if (GameScreen.GraphicsDevice != null)
+            {
+                float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
+                Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                   aspectRatio,
+                                                                   1, 10000);
+            }
         }
 
         public abstract void Load(ContentManager Content);

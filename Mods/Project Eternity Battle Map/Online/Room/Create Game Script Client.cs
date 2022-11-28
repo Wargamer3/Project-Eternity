@@ -10,9 +10,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         private readonly BattleMapOnlineClient Owner;
         private readonly List<GameScreen> ListGameScreen;
-        private readonly BattleMapRoomInformations Room;
+        private readonly RoomInformations Room;
 
-        public CreateGameScriptClient(BattleMapOnlineClient Owner, List<GameScreen> ListGameScreen, BattleMapRoomInformations Room)
+        public CreateGameScriptClient(BattleMapOnlineClient Owner, List<GameScreen> ListGameScreen, RoomInformations Room)
             : base(ScriptName)
         {
             this.Owner = Owner;

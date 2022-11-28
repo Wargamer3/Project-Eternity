@@ -156,6 +156,11 @@ namespace Database.BattleMap
             }
         }
 
+        public PlayerPOCO GetPlayerInventory(string ID)
+        {
+            throw new NotImplementedException();
+        }
+
         private LocalPlayer FindPlayer(string Login, string Password)
         {
             foreach (LocalPlayer ActivePlayer in ListPlayer)

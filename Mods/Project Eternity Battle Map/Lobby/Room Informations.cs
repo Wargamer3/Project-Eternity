@@ -21,6 +21,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public bool IsPlaying { get; set; }
         public string Password { get; set; }
         public List<IOnlineConnection> ListOnlinePlayer { get; }
+        public List<IOnlineConnection> ListUniqueOnlineConnection { get; }//Ignore local players
         public byte CurrentPlayerCount { get; set; }
         public byte MinNumberOfPlayer { get; set; }
         public byte MaxNumberOfPlayer { get; set; }
@@ -50,6 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.IsDead = IsDead;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
+            ListUniqueOnlineConnection = new List<IOnlineConnection>();
             ListRoomPlayer = new List<OnlinePlayerBase>();
             ListRoomBot = new List<OnlinePlayerBase>();
             ListLocalPlayerID = new List<string>();
@@ -78,6 +80,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.CurrentPlayerCount = CurrentClientCount;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
+            ListUniqueOnlineConnection = new List<IOnlineConnection>();
             ListRoomPlayer = new List<OnlinePlayerBase>();
             ListRoomBot = new List<OnlinePlayerBase>();
             ListLocalPlayerID = new List<string>();
@@ -94,6 +97,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID)
         {
             ListOnlinePlayer = new List<IOnlineConnection>();
+            ListUniqueOnlineConnection = new List<IOnlineConnection>();
             this.RoomID = RoomID;
             this.RoomName = RoomName;
             this.RoomType = RoomType;
@@ -126,6 +130,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.IsDead = IsDead;
 
             ListOnlinePlayer = new List<IOnlineConnection>();
+            ListUniqueOnlineConnection = new List<IOnlineConnection>();
             ListRoomPlayer = new List<OnlinePlayerBase>();
             ListRoomBot = new List<OnlinePlayerBase>();
             ListLocalPlayerID = new List<string>();
@@ -143,15 +148,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 
-        public void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
-        {
-            ListOnlinePlayer.Add(NewPlayer);
-            OnlinePlayerBase NewRoomPlayer = new BattleMapPlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue);
-            NewRoomPlayer.OnlineClient = NewPlayer;
-            NewRoomPlayer.GameplayType = GameplayTypes.None;
-            ListRoomPlayer.Add(NewRoomPlayer);
-            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
-        }
+        public abstract void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType);
 
         public void RemovePlayer(IOnlineConnection OnlinePlayerToRemove)
         {
@@ -159,6 +156,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (ListOnlinePlayer[P] == OnlinePlayerToRemove)
                 {
+                    ListUniqueOnlineConnection.Remove(OnlinePlayerToRemove);
                     ListOnlinePlayer.RemoveAt(P);
                     ListRoomPlayer.RemoveAt(P);
 
@@ -175,6 +173,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void RemoveOnlinePlayer(int Index)
         {
+            ListUniqueOnlineConnection.Remove(ListOnlinePlayer[Index]);
             ListOnlinePlayer.RemoveAt(Index);
             ListRoomPlayer.RemoveAt(Index);
 
@@ -252,9 +251,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int RandomNewHostIndex = RandomHelper.Next(ListRoomPlayer.Count);
                 ListRoomPlayer[RandomNewHostIndex].OnlinePlayerType = OnlinePlayerBase.PlayerTypeHost;
 
-                for (int P = 0; P < ListOnlinePlayer.Count; ++P)
+                for (int P = 0; P < ListUniqueOnlineConnection.Count; ++P)
                 {
-                    ListOnlinePlayer[P].Send(new ChangePlayerTypeScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, OnlinePlayerBase.PlayerTypeHost));
+                    ListUniqueOnlineConnection[P].Send(new ChangePlayerTypeScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, OnlinePlayerBase.PlayerTypeHost));
                 }
             }
         }

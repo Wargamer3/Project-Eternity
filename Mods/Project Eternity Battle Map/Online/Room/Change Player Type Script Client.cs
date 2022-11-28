@@ -32,7 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            foreach (BattleMapPlayer ActivePlayer in Owner.ListRoomPlayer)
+            foreach (OnlinePlayerBase ActivePlayer in Owner.ListRoomPlayer)
             {
                 if (ActivePlayer.ConnectionID == PlayerID)
                 {

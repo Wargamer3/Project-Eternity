@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -18,6 +19,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             byte CurrentPlayerCount, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, bool IsDead)
             : base(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, Password, OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MinNumberOfPlayer, MaxNumberOfPlayer, IsDead)
         {
+        }
+
+        public override void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
+        {
+            ListOnlinePlayer.Add(NewPlayer);
+            ListUniqueOnlineConnection.Add(NewPlayer);
+            OnlinePlayerBase NewRoomPlayer = new BattleMapPlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue);
+            NewRoomPlayer.OnlineClient = NewPlayer;
+            NewRoomPlayer.GameplayType = GameplayTypes.None;
+            ListRoomPlayer.Add(NewRoomPlayer);
+            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
     }
 }

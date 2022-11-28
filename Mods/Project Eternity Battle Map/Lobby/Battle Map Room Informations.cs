@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Characters;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -56,6 +57,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             MaxKill = 20;
             MaxGameLengthInMinutes = 10;
+        }
+
+        public override void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
+        {
+            ListOnlinePlayer.Add(NewPlayer);
+            ListUniqueOnlineConnection.Add(NewPlayer);
+            OnlinePlayerBase NewRoomPlayer = new BattleMapPlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue);
+            NewRoomPlayer.OnlineClient = NewPlayer;
+            NewRoomPlayer.GameplayType = GameplayTypes.None;
+            ListRoomPlayer.Add(NewRoomPlayer);
+            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 
         public override byte[] GetRoomInfo()

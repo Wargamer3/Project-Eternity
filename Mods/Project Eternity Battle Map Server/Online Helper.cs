@@ -7,11 +7,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public static class OnlineHelper
     {
-        public static Dictionary<string, OnlineScript> GetRoomScriptsServer(BattleMapRoomInformations NewRoom, GameServer Owner)
+        public static Dictionary<string, OnlineScript> GetRoomScriptsServer(RoomInformations NewRoom, GameServer Owner)
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 
-            DicNewScript.Add(AskChangeLoadoutScriptServer.ScriptName, new AskChangeLoadoutScriptServer(NewRoom));
             DicNewScript.Add(AskChangePlayerTypeScriptServer.ScriptName, new AskChangePlayerTypeScriptServer(NewRoom));
             DicNewScript.Add(AskChangeTeamScriptServer.ScriptName, new AskChangeTeamScriptServer(NewRoom));
             DicNewScript.Add(AskChangeMapScriptServer.ScriptName, new AskChangeMapScriptServer(NewRoom, Owner));

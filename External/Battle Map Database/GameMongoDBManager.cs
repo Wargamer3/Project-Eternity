@@ -10,9 +10,9 @@ namespace Database.BattleMap
     public class GameMongoDBManager : IGameDataManager
     {
         private DateTime LastTimeChecked;
-        private MongoClient DatabaseTripleThunderClient;
+        private MongoClient DatabaseBattleMapClient;
         private MongoClient DatabaseUserInformationClient;
-        private IMongoDatabase DatabaseTripleThunder;
+        private IMongoDatabase DatabaseBattleMap;
         private IMongoDatabase DatabaseUserInformation;
         private IMongoCollection<BsonDocument> RoomsCollection;
         private IMongoCollection<BsonDocument> PlayersCollection;
@@ -25,11 +25,11 @@ namespace Database.BattleMap
         public void Init(string ConnectionChain, string UserInformationChain)
         {
             //If there's a dependency problem look at the config file and remove the extra stuff that got added automically (ie: Project Eternity Triple Thunder Server.exe.config)
-            DatabaseTripleThunderClient = new MongoClient(ConnectionChain);
+            DatabaseBattleMapClient = new MongoClient(ConnectionChain);
             DatabaseUserInformationClient = new MongoClient(UserInformationChain);
-            DatabaseTripleThunder = DatabaseTripleThunderClient.GetDatabase("BattleMap");
+            DatabaseBattleMap = DatabaseBattleMapClient.GetDatabase("BattleMap");
             DatabaseUserInformation = DatabaseUserInformationClient.GetDatabase("UserInformation");
-            RoomsCollection = DatabaseTripleThunder.GetCollection<BsonDocument>("Rooms");
+            RoomsCollection = DatabaseBattleMap.GetCollection<BsonDocument>("Rooms");
             PlayersCollection = DatabaseUserInformation.GetCollection<BsonDocument>("BattleMap");
         }
 
@@ -184,6 +184,25 @@ namespace Database.BattleMap
 
                 return FoundPlayer;
             }
+        }
+
+        public PlayerPOCO GetPlayerInventory(string ID)
+        {
+            FilterDefinition<BsonDocument> LastTimeCheckedFilter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
+            BsonDocument FoundPlayerDocument = PlayersCollection.Find(LastTimeCheckedFilter).FirstOrDefault();
+
+            PlayerPOCO FoundPlayer = new PlayerPOCO();
+            FoundPlayer.ID = FoundPlayerDocument.GetValue("_id").AsObjectId.ToString();
+            string Name = FoundPlayerDocument.GetValue("Name").AsString;
+            FoundPlayer.Name = Name;
+
+            ByteWriter BW = new ByteWriter();
+            BW.AppendString(Name);
+            BW.AppendInt32(FoundPlayerDocument.GetValue("Level").AsInt32);
+            FoundPlayer.Info = BW.GetBytes();
+            BW.ClearWriteBuffer();
+
+            return FoundPlayer;
         }
 
         private void UpdatePlayerIsLoggedIn(string ID, string GameServerIP, int GameServerPort)

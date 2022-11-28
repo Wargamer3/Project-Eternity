@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -23,6 +25,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public void Load(BinaryReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        {
+            CharacterModelPath = BR.ReadString();
+
+            GlobalBook = new CardBook(BR, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+
+            string ActiveBookName = BR.ReadString();
+
+            int ListBookCount = BR.ReadInt32();
+            for (int B = 0; B < ListBookCount; ++B)
+            {
+                CardBook LoadedBook = new CardBook(BR, GlobalBook, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                ListBook.Add(LoadedBook);
+
+                if (LoadedBook.BookName == ActiveBookName)
+                {
+                    ActiveBook = LoadedBook;
+                }
+            }
+        }
+
+        public void Load(ByteReader BR, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             CharacterModelPath = BR.ReadString();

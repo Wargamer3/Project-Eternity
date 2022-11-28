@@ -11,6 +11,7 @@ namespace ProjectEternity.Core.Online
         IRoomInformations TransferRoom(string RoomID, string NewOwnerServerIP);
         void UpdatePlayerCountInRoom(string RoomID, byte CurrentPlayerCount);
         PlayerPOCO LogInPlayer(string Login, string Password, string GameServerIP, int GameServerPort);
+        PlayerPOCO GetPlayerInventory(string ID);
         void RemovePlayer(IOnlineConnection PlayerToRemove);
     }
 }

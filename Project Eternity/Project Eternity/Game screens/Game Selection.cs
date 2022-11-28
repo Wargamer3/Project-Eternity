@@ -195,7 +195,7 @@ namespace ProjectEternity
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
                         Constants.graphics.ApplyChanges();
-                        PushScreen(new GameScreens.SorcererStreetScreen.SorcererStreetLobby(false));
+                        PushScreen(new GameScreens.SorcererStreetScreen.SorcererStreetLobby(true));
                         break;
 
                     case MenuChoices.Racing:

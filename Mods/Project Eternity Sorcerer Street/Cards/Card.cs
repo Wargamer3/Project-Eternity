@@ -103,6 +103,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListActiveSkill = new List<BaseAutomaticSkill>();
         }
 
+        public static Card LoadCard(string Path)
+        {
+            string[] UnitInfo = Path.Split(new[] { "/", "\\" }, StringSplitOptions.None);
+
+            return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), null, null, null, null);
+        }
+
         public static Card LoadCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
             Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {

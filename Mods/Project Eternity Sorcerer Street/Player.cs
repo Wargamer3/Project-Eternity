@@ -3,11 +3,11 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Item;
-using ProjectEternity.GameScreens.BattleMapScreen;
-using ProjectEternity.Core;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -90,17 +90,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCardInHand = new List<Card>();
         }
 
+        public void LoadGamePieceModel()
+        {
+            GamePiece.SpriteMap = GameScreen.ContentFallback.Load<Texture2D>("Units/Default");
+            GamePiece.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, GameScreen.ContentFallback.Load<Effect>("Shaders/Squad shader 3D"), GamePiece.SpriteMap, 1);
+            GamePiece.Unit3DModel = new AnimatedModel("Units/Normal/Models/Bomberman/Default");
+            GamePiece.Unit3DModel.LoadContent(GameScreen.ContentFallback);
+            GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Waving", "Idle", GameScreen.ContentFallback);
+            GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Walking", "Walking", GameScreen.ContentFallback);
+            GamePiece.Unit3DModel.PlayAnimation("Walking");
+        }
+
         protected override void DoLoadLocally(ContentManager Content, BinaryReader BR)
         {
             if (Content != null && GamePiece != null)
             {
-                GamePiece.SpriteMap = Content.Load<Texture2D>("Units/Default");
-                GamePiece.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, Content.Load<Effect>("Shaders/Squad shader 3D"), GamePiece.SpriteMap, 1);
-                GamePiece.Unit3DModel = new AnimatedModel("Units/Normal/Models/Bomberman/Default");
-                GamePiece.Unit3DModel.LoadContent(Content);
-                GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Waving", "Idle", Content);
-                GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Walking", "Walking", Content);
-                GamePiece.Unit3DModel.PlayAnimation("Walking");
+                LoadGamePieceModel();
             }
 
             Inventory.Load(BR, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);

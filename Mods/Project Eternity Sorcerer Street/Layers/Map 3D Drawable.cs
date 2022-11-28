@@ -44,80 +44,83 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprCursor = Map.sprCursor;
             ListEditorCursorFace = new List<Tile3D>();
 
-            MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D 2");
-            ColorEffect = Map.Content.Load<Effect>("Shaders/Color Only");
-            ColorEffect.Parameters["t0"].SetValue(GameScreen.sprPixel);
-
-            PolygonEffect = new BasicEffect(g);
-
-            PolygonEffect.TextureEnabled = true;
-
-            float aspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
-
-            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                    aspectRatio,
-                                                                    1, 10000);
-            PolygonEffect.Projection = Projection;
-
-            PolygonEffect.World = Matrix.Identity;
-            PolygonEffect.View = Matrix.Identity;
-
-            MapEffect.Parameters["World"].SetValue(Matrix.Transpose(PolygonEffect.World));
-
-            Matrix worldInverse = Matrix.Invert(PolygonEffect.World);
-
-            MapEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
-
-            // Key light.
-            MapEffect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
-            MapEffect.Parameters["DirLight0DiffuseColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
-            MapEffect.Parameters["DirLight0SpecularColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
-
-            // Fill light.
-            MapEffect.Parameters["DirLight1Direction"].SetValue(new Vector3(0.7198464f, 0.3420201f, 0.6040227f));
-            MapEffect.Parameters["DirLight1DiffuseColor"].SetValue(new Vector3(0.9647059f, 0.7607844f, 0.4078432f));
-            MapEffect.Parameters["DirLight1SpecularColor"].SetValue(Vector3.Zero);
-
-            // Back light.
-            MapEffect.Parameters["DirLight2Direction"].SetValue(new Vector3(0.4545195f, -0.7660444f, 0.4545195f));
-            MapEffect.Parameters["DirLight2DiffuseColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
-            MapEffect.Parameters["DirLight2SpecularColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
-
-            Vector3 diffuseColor = Vector3.One;
-            Vector3 emissiveColor = Vector3.Zero;
-            Vector3 ambientLightColor = new Vector3(0.05333332f, 0.09882354f, 0.1819608f);
-            Vector4 diffuse = new Vector4();
-            Vector3 emissive = new Vector3();
-            float alpha = 1;
-            diffuse.X = diffuseColor.X * alpha;
-            diffuse.Y = diffuseColor.Y * alpha;
-            diffuse.Z = diffuseColor.Z * alpha;
-            diffuse.W = alpha;
-
-            emissive.X = (emissiveColor.X + ambientLightColor.X * diffuseColor.X) * alpha;
-            emissive.Y = (emissiveColor.Y + ambientLightColor.Y * diffuseColor.Y) * alpha;
-            emissive.Z = (emissiveColor.Z + ambientLightColor.Z * diffuseColor.Z) * alpha;
-
-            MapEffect.Parameters["DiffuseColor"].SetValue(diffuse);
-            MapEffect.Parameters["EmissiveColor"].SetValue(emissive);
-            MapEffect.Parameters["SpecularColor"].SetValue(Vector3.One);
-            MapEffect.Parameters["SpecularPower"].SetValue(64);
-
-            MapEffect.Parameters["FogLimits"].SetValue(new Vector2(1200, 2000));
-            MapEffect.Parameters["FogColor"].SetValue(new Vector3(0.0f, 0.0f, 0.0f));
-
             DicDrawablePointPerColor = new Dictionary<Vector4, List<Tile3D>>();
             ListDrawableArrowPerColor = new List<Tile3D>();
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
 
-            CreateMap(Map, LayerManager);
+            if (!Map.IsServer)
+            {
+                MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D 2");
+                ColorEffect = Map.Content.Load<Effect>("Shaders/Color Only");
+                ColorEffect.Parameters["t0"].SetValue(GameScreen.sprPixel);
 
-            float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].WorldPosition.Z;
-            Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
-            DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
-            Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-            Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                0, 0, Z, 0, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                PolygonEffect = new BasicEffect(g);
+
+                PolygonEffect.TextureEnabled = true;
+
+                float aspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
+
+                Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                        aspectRatio,
+                                                                        1, 10000);
+                PolygonEffect.Projection = Projection;
+
+                PolygonEffect.World = Matrix.Identity;
+                PolygonEffect.View = Matrix.Identity;
+
+                MapEffect.Parameters["World"].SetValue(Matrix.Transpose(PolygonEffect.World));
+
+                Matrix worldInverse = Matrix.Invert(PolygonEffect.World);
+
+                MapEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
+
+                // Key light.
+                MapEffect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
+                MapEffect.Parameters["DirLight0DiffuseColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
+                MapEffect.Parameters["DirLight0SpecularColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
+
+                // Fill light.
+                MapEffect.Parameters["DirLight1Direction"].SetValue(new Vector3(0.7198464f, 0.3420201f, 0.6040227f));
+                MapEffect.Parameters["DirLight1DiffuseColor"].SetValue(new Vector3(0.9647059f, 0.7607844f, 0.4078432f));
+                MapEffect.Parameters["DirLight1SpecularColor"].SetValue(Vector3.Zero);
+
+                // Back light.
+                MapEffect.Parameters["DirLight2Direction"].SetValue(new Vector3(0.4545195f, -0.7660444f, 0.4545195f));
+                MapEffect.Parameters["DirLight2DiffuseColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
+                MapEffect.Parameters["DirLight2SpecularColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
+
+                Vector3 diffuseColor = Vector3.One;
+                Vector3 emissiveColor = Vector3.Zero;
+                Vector3 ambientLightColor = new Vector3(0.05333332f, 0.09882354f, 0.1819608f);
+                Vector4 diffuse = new Vector4();
+                Vector3 emissive = new Vector3();
+                float alpha = 1;
+                diffuse.X = diffuseColor.X * alpha;
+                diffuse.Y = diffuseColor.Y * alpha;
+                diffuse.Z = diffuseColor.Z * alpha;
+                diffuse.W = alpha;
+
+                emissive.X = (emissiveColor.X + ambientLightColor.X * diffuseColor.X) * alpha;
+                emissive.Y = (emissiveColor.Y + ambientLightColor.Y * diffuseColor.Y) * alpha;
+                emissive.Z = (emissiveColor.Z + ambientLightColor.Z * diffuseColor.Z) * alpha;
+
+                MapEffect.Parameters["DiffuseColor"].SetValue(diffuse);
+                MapEffect.Parameters["EmissiveColor"].SetValue(emissive);
+                MapEffect.Parameters["SpecularColor"].SetValue(Vector3.One);
+                MapEffect.Parameters["SpecularPower"].SetValue(64);
+
+                MapEffect.Parameters["FogLimits"].SetValue(new Vector2(1200, 2000));
+                MapEffect.Parameters["FogColor"].SetValue(new Vector3(0.0f, 0.0f, 0.0f));
+
+                CreateMap(Map, LayerManager);
+
+                float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].WorldPosition.Z;
+                Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
+                DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
+                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+                Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                    0, 0, Z, 0, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+            }
 
             if (Map.IsEditor)
             {

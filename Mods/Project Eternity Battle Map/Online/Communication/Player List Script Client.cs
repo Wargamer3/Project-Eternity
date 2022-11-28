@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 byte[] ArrayPlayerInfo = Sender.ReadByteArray();
                 ByteReader BR = new ByteReader(ArrayPlayerInfo);
 
-                ArrayLobbyPlayer[P] = new BattleMapPlayer(PlayerID, BR.ReadString(), OnlinePlayerBase.PlayerTypes.Online, true, 0, true, Color.Blue);
+                ArrayLobbyPlayer[P] = new BattleMapPlayer(PlayerID, BR.ReadString(), OnlinePlayerBase.PlayerTypes.Player, true, 0, true, Color.Blue);
                 ArrayLobbyPlayer[P].Level = BR.ReadInt32();
 
                 BR.Clear();

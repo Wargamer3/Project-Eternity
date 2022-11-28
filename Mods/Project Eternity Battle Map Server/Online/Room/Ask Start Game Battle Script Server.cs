@@ -10,11 +10,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Ask Start Game";
 
-        private readonly BattleMapRoomInformations Owner;
+        private readonly RoomInformations Owner;
         private readonly BattleMapClientGroup CreatedGroup;
         private readonly GameServer OnlineServer;
 
-        public AskStartGameBattleScriptServer(BattleMapRoomInformations Owner, BattleMapClientGroup CreatedGroup, GameServer OnlineServer)
+        public AskStartGameBattleScriptServer(RoomInformations Owner, BattleMapClientGroup CreatedGroup, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;

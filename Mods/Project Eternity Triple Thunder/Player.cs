@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen

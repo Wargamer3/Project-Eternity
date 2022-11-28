@@ -15,6 +15,7 @@ namespace ProjectEternity.Core
         private List<AnimationBone> ListBone = new List<AnimationBone>();
         private Animation3D ActiveAnimation = null;
         private Dictionary<string, Animation3D> ListAnimation = new Dictionary<string, Animation3D>();
+        private Dictionary<string, AnimatedModel> ListAnimationModel = new Dictionary<string, AnimatedModel>();
 
         private float AnimationTimeElapsed = 0;
         public bool IsLooping = false;
@@ -27,7 +28,7 @@ namespace ProjectEternity.Core
         public void LoadContent(ContentManager Content)
         {
             this.OriginalModel = Content.Load<Model>(FilePath);
-            AnimationInformation = OriginalModel.Tag as ModelAnimationInfo;
+            AnimationInformation = ((ModelAnimationInfo)OriginalModel.Tag).Clone();
 
             foreach (ModelBone ActiveBone in OriginalModel.Bones)
             {
@@ -50,6 +51,7 @@ namespace ProjectEternity.Core
             }
 
             ListAnimation.Add(AnimationName, NewAnimation.AnimationInformation.ListAnimation[0]);
+            ListAnimationModel.Add(AnimationName, NewAnimation);
         }
 
         public void PlayAnimation(string AnimationName)
@@ -79,11 +81,6 @@ namespace ProjectEternity.Core
             {
                 ActiveBone.Rewind();
             }
-        }
-
-        public AnimatedModel Clone()
-        {
-            throw new NotImplementedException();
         }
 
         public void Update(GameTime gameTime)

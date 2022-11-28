@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.SorcererStreetScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -9,6 +12,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetLobby(bool UseOnline)
             : base(UseOnline)
         {
+        }
+
+        protected override void PopulateGameClientScripts(Dictionary<string, OnlineScript> DicOnlineGameClientScripts)
+        {
+            base.PopulateGameClientScripts(DicOnlineGameClientScripts);
+            DicOnlineGameClientScripts.Add(PlayerInventoryScriptClient.ScriptName, new PlayerInventoryScriptClient());
+            DicOnlineGameClientScripts[JoinRoomLocalScriptClient.ScriptName] = new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false);
         }
 
         protected override void InitOfflinePlayer()

@@ -62,6 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 DicNewGameServerScript = OnlineHelper.GetTripleThunderScriptsClient(OnlineGameClient);
                 Host.IsGameReady = true;*/
             }
+
             BattleMapRoomInformations MissionRoom = new BattleMapRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapPath, ListJoiningPlayerID, ScreenOwner.Content, RoomData);
 
             NewRoom = MissionRoom;

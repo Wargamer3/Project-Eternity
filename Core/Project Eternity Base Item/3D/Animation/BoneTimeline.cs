@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.Core
@@ -56,6 +57,20 @@ namespace ProjectEternity.Core
                 ModelBone.SetCompleteTransform(TransformMatrix);
             }
         }
+
+        public BoneTimeline Clone()
+        {
+            BoneTimeline NewBoneTimeline = new BoneTimeline();
+
+            NewBoneTimeline.Name = Name;
+            foreach (KeyFrame3D ActiveKeyFrame in ListKeyFrame)
+            {
+                NewBoneTimeline.ListKeyFrame.Add(ActiveKeyFrame.Clone());
+            }
+
+            return NewBoneTimeline;
+        }
+
         public void Rewind()
         {
             CurrentKeyFrameIndex = 0;

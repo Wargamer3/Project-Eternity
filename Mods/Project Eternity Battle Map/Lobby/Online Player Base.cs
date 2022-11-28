@@ -12,13 +12,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public const string PlayerTypeNA = "N/A";
         public const string PlayerTypeOffline = "Offline";
-        public const string PlayerTypeOnline = "Online";
         public const string PlayerTypeHost = "Host";
         public const string PlayerTypePlayer = "Player";
         public const string PlayerTypeReady = "Ready";
         public const string PlayerTypeSpectator = "Spectator";
 
-        public enum PlayerTypes { Offline, Online, Host, Player, Ready, Spectator }
+        public enum PlayerTypes { Offline, Host, Player, Ready, Spectator }
 
         public string ConnectionID;
         public string Name;
@@ -80,10 +79,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (OnlinePlayerType == PlayerTypes.Offline)
             {
                 this.OnlinePlayerType = PlayerTypeOffline;
-            }
-            else if (OnlinePlayerType == PlayerTypes.Online)
-            {
-                this.OnlinePlayerType = PlayerTypeOnline;
             }
             else if (OnlinePlayerType == PlayerTypes.Host)
             {

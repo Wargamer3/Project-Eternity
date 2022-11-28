@@ -195,6 +195,11 @@ namespace Database.TripleThunder
             }
         }
 
+        public PlayerPOCO GetPlayerInventory(string ID)
+        {
+            throw new NotImplementedException();
+        }
+
         private void UpdatePlayerIsLoggedIn(string ID, string GameServerIP, int GameServerPort)
         {
             if (ID == null)

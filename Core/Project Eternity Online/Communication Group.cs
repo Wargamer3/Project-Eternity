@@ -36,6 +36,11 @@ namespace ProjectEternity.Core.Online
             ListGroupMember.RemoveAt(MemberIndex);
         }
 
+        internal void RemoveOnlinePlayer(IOnlineConnection MemberToRemove)
+        {
+            ListGroupMember.Remove(MemberToRemove);
+        }
+
         internal bool IsRunningSlow()
         {
             return false;

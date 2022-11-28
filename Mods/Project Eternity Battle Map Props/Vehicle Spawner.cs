@@ -66,20 +66,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load(ContentManager Content)
         {
-            PolygonEffect = new BasicEffect(GameScreen.GraphicsDevice);
+            if (Content != null)
+            {
+                PolygonEffect = new BasicEffect(GameScreen.GraphicsDevice);
 
-            PolygonEffect.TextureEnabled = true;
-            PolygonEffect.EnableDefaultLighting();
+                PolygonEffect.TextureEnabled = true;
+                PolygonEffect.EnableDefaultLighting();
 
-            float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
+                float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
 
-            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                    aspectRatio,
-                                                                    1, 10000);
-            PolygonEffect.Projection = Projection;
+                Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                        aspectRatio,
+                                                                        1, 10000);
+                PolygonEffect.Projection = Projection;
 
-            PolygonEffect.World = Matrix.Identity;
-            PolygonEffect.View = Matrix.Identity;
+                PolygonEffect.World = Matrix.Identity;
+                PolygonEffect.View = Matrix.Identity;
+            }
         }
 
         public override void DoLoad(BinaryReader BR)

@@ -1,14 +1,14 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Online;
 using Database.BattleMap;
-using ProjectEternity.GameScreens.BattleMapScreen.Online;
-using System.Reflection;
-using System.IO;
-using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
@@ -58,6 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             GameServer OnlineServer = new GameServer(Databse, DicOnlineScripts);
 
             DicOnlineScripts.Add(AskLoginScriptServer.ScriptName, new AskLoginScriptServer(OnlineServer));
+            DicOnlineScripts.Add(AskPlayerInventoryScriptServer.ScriptName, new AskPlayerInventoryScriptServer(OnlineServer));
             DicOnlineScripts.Add(BaseAskJoinRoomScriptServer.ScriptName, new AskJoinRoomScriptServer(OnlineServer));
             DicOnlineScripts.Add(AskRoomListScriptServer.ScriptName, new AskRoomListScriptServer(OnlineServer));
             DicOnlineScripts.Add(BaseCreateRoomScriptServer.ScriptName, new CreateRoomScriptServer(OnlineServer, BattleMapClientGroup.Template));

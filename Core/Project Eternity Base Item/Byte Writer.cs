@@ -65,6 +65,11 @@ namespace ProjectEternity.Core.Online
             Append4ByteArray((byte*)&NewEntry);
         }
 
+        public void AppendInt64(long NewEntry)
+        {
+            Append8ByteArray((byte*)&NewEntry);
+        }
+
         public void AppendUInt64(ulong NewEntry)
         {
             Append8ByteArray((byte*)&NewEntry);

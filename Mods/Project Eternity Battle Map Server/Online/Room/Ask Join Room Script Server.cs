@@ -33,6 +33,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
             Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetRoomScriptsServer(JoinedRoom, Owner);
 
+            DicNewScript.Add(AskChangeLoadoutScriptServer.ScriptName, new AskChangeLoadoutScriptServer(JoinedRoom));
             DicNewScript.Add(AskStartGameBattleScriptServer.ScriptName, new AskStartGameBattleScriptServer(JoinedRoom, (Online.BattleMapClientGroup)ActiveGroup, Owner));
             DicNewScript.Add(AskChangeRoomExtrasMissionScriptServer.ScriptName, new AskChangeRoomExtrasMissionScriptServer(JoinedRoom));
 

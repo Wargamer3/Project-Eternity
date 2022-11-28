@@ -60,6 +60,17 @@ namespace ProjectEternity.Core.Online
             }
         }
 
+        public long ReadInt64()
+        {
+            byte[] ArrayData = Read8Bytes();
+
+            fixed (byte* DataPointer = &ArrayData[0])
+            {
+                long* LongPointer = (long*)DataPointer;
+                return *LongPointer;
+            }
+        }
+
         public uint ReadUInt32()
         {
             byte[] ArrayData = Read4Bytes();

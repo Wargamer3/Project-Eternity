@@ -76,13 +76,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 OnlineGameClient = new BattleMapOnlineClient(DicOnlineGameClientScripts);
                 OnlineCommunicationClient = new CommunicationClient(DicOnlineCommunicationClientScripts);
 
-                DicOnlineGameClientScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
-                DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
-                DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
-                DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
-                DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
-                DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
-                DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
+                PopulateGameClientScripts(DicOnlineGameClientScripts);
 
                 DicOnlineCommunicationClientScripts.Add(ReceiveGlobalMessageScriptClient.ScriptName, new ReceiveGlobalMessageScriptClient(OnlineCommunicationClient));
                 DicOnlineCommunicationClientScripts.Add(ReceiveGroupMessageScriptClient.ScriptName, new ReceiveGroupMessageScriptClient(OnlineCommunicationClient));
@@ -105,7 +99,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerManager.DicManualSkillTarget = ManualSkillTarget.LoadAllTargetTypes();
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-            ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20), SendMessage);
+            ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
             sndBGM = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/Music/Channel.mp3");
             sndBGM.SetLoop(true);
@@ -150,6 +144,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             };
 
             InitPlayer();
+        }
+
+        protected virtual void PopulateGameClientScripts(Dictionary<string, OnlineScript> DicOnlineGameClientScripts)
+        {
+            DicOnlineGameClientScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
+            DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
+            DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
+            DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
+            DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
+            DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
+            DicOnlineGameClientScripts.Add(ServerIsReadyScriptClient.ScriptName, new ServerIsReadyScriptClient());
         }
 
         protected void InitPlayer()
@@ -261,6 +266,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 OnlineCommunicationClient.Host.Send(new AskForPlayersScriptClient());
             }
+        }
+
+        public void AskForPlayerInventory()
+        {
+            OnlineGameClient.Host.Send(new AskPlayerInventoryScriptClient(PlayerManager.OnlinePlayerID));
         }
 
         public override void Update(GameTime gameTime)
@@ -520,15 +530,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             DrawRooms(g);
-            if (OnlineCommunicationClient != null)
-            {
-                ChatHelper.DrawChat(g, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
-            }
             DrawPlayers(g);
 
             foreach (IUIElement ActiveElement in ArrayMenuButton)
             {
                 ActiveElement.Draw(g);
+            }
+            if (OnlineCommunicationClient != null)
+            {
+                ChatHelper.DrawChat(g, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
             }
         }
 

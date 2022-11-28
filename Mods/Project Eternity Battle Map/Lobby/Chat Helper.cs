@@ -43,8 +43,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public static void DrawChat(CustomSpriteBatch g, SpriteFont fntArial12, ChatManager Chat, TextInput ChatInput)
         {
-            ChatInput.Draw(g);
-
             int T = 0;
 
             GameScreen.DrawBox(g, new Vector2(5, 448), 550, 148, Color.White);
@@ -82,15 +80,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int LineSpacing = fntArial12.LineSpacing;
             int LastMessageIndex = Math.Max(0, Chat.ListActiveTabHistory.Count - Chat.ActiveTabScrollUpValue / LineSpacing);
-            int FirstMessageIndex = Math.Max(0, LastMessageIndex - 4);
+            int FirstMessageIndex = Math.Max(0, LastMessageIndex - 6);
 
             for (int M = FirstMessageIndex, i = 0; M < LastMessageIndex; ++M, ++i)
             {
                 ChatManager.ChatMessage ActiveMessage = Chat.ListActiveTabHistory[M];
-                float X = 30;
-                float Y = 430 + i * fntArial12.LineSpacing - Chat.ActiveTabScrollUpValue;
+                float X = 15;
+                float Y = 455 + i * fntArial12.LineSpacing - Chat.ActiveTabScrollUpValue;
                 g.DrawString(fntArial12, ActiveMessage.Message, new Vector2(X, Y), Color.White);
             }
+
+            ChatInput.Draw(g);
         }
     }
 }

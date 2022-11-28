@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace ProjectEternity.Core
 {
@@ -23,6 +24,17 @@ namespace ProjectEternity.Core
                 Rotation = Quaternion.CreateFromRotationMatrix(transform);
                 Translation = transform.Translation;
             }
+        }
+
+        public KeyFrame3D Clone()
+        {
+            KeyFrame3D NewKeyFrame3D = new KeyFrame3D();
+
+            NewKeyFrame3D.Time = Time;
+            NewKeyFrame3D.Rotation = Rotation;
+            NewKeyFrame3D.Translation = Translation;
+
+            return NewKeyFrame3D;
         }
     }
 }

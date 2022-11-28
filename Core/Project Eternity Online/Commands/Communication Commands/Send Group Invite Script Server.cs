@@ -31,7 +31,7 @@ namespace ProjectEternity.Core.Online
         protected internal override void Execute(IOnlineConnection Sender)
         {
             IOnlineConnection ClientToInvite;
-            if (OnlineServer.DicPlayerByID.TryGetValue(ClientToInviteID, out ClientToInvite))
+            if (OnlineServer.DicGlobalPlayerByID.TryGetValue(ClientToInviteID, out ClientToInvite))
             {
                 if (!OnlineServer.DicCommunicationGroup.ContainsKey(GroupID))
                 {

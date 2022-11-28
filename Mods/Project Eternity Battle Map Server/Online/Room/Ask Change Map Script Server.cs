@@ -1,5 +1,6 @@
-﻿using ProjectEternity.Core.Online;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
@@ -7,7 +8,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Ask Change Map";
 
-        private readonly BattleMapRoomInformations Owner;
+        private readonly RoomInformations Owner;
         private readonly GameServer OnlineServer;
 
         private string MapName;
@@ -15,8 +16,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private string MapPath;
         private byte MinNumberOfPlayer;
         private byte MaxNumberOfPlayer;
+        private List<string> ListMandatoryMutator;
 
-        public AskChangeMapScriptServer(BattleMapRoomInformations Owner, GameServer OnlineServer)
+        public AskChangeMapScriptServer(RoomInformations Owner, GameServer OnlineServer)
             : base(ScriptName)
         {
             this.Owner = Owner;
@@ -44,7 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             {
                 IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
 
-                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath, MinNumberOfPlayer, MaxNumberOfPlayer));
+                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath, MinNumberOfPlayer, MaxNumberOfPlayer, ListMandatoryMutator));
             }
         }
 
@@ -55,6 +57,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             MapPath = Sender.ReadString();
             MinNumberOfPlayer = Sender.ReadByte();
             MaxNumberOfPlayer = Sender.ReadByte();
+
+            int ListMandatoryMutatorCount = Sender.ReadInt32();
+            ListMandatoryMutator = new List<string>(ListMandatoryMutatorCount);
+            for (int M = 0; M < ListMandatoryMutator.Count; M++)
+            {
+                ListMandatoryMutator.Add(Sender.ReadString());
+            }
         }
     }
 }

@@ -85,7 +85,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             while (Room.ListRoomBot.Count < Room.MaxNumberOfBots)
             {
-                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Bot", OnlinePlayerBase.PlayerTypes.Online, false, 0, false, Color.Blue);
+                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Bot", OnlinePlayerBase.PlayerTypes.Player, false, 0, false, Color.Blue);
                 NewPlayer.InitFirstTimeInventory();
                 NewPlayer.FillLoadout(Room.MaxSquadsPerBot);
                 Room.ListRoomBot.Add(NewPlayer);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
@@ -12,8 +13,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private readonly string MapPath;
         private readonly byte MinNumberOfPlayer;
         private readonly byte MaxNumberOfPlayer;
+        private readonly List<string> ListMandatoryMutator;
 
-        public ChangeMapScriptServer(string MapName, string MapType, string MapPath, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
+        public ChangeMapScriptServer(string MapName, string MapType, string MapPath, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, List<string> ListMandatoryMutator)
             : base(ScriptName)
         {
             this.MapName = MapName;
@@ -21,6 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             this.MapPath = MapPath;
             this.MinNumberOfPlayer = MinNumberOfPlayer;
             this.MaxNumberOfPlayer = MaxNumberOfPlayer;
+            this.ListMandatoryMutator = ListMandatoryMutator;
         }
 
         public override OnlineScript Copy()
@@ -35,6 +38,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             WriteBuffer.AppendString(MapPath);
             WriteBuffer.AppendByte(MinNumberOfPlayer);
             WriteBuffer.AppendByte(MaxNumberOfPlayer);
+
+            WriteBuffer.AppendInt32(ListMandatoryMutator.Count);
+            for (int M = 0; M < ListMandatoryMutator.Count; M++)
+            {
+                WriteBuffer.AppendString(ListMandatoryMutator[M]);
+            }
         }
 
         protected override void Execute(IOnlineConnection Sender)

@@ -6,7 +6,7 @@ using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    class LoadingScreen : GameScreen
+    public class LoadingScreen : GameScreen
     {
         private BattleMap ScreenToLoad;
         private BattleMapOnlineClient Client;

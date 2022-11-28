@@ -39,6 +39,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             Owner.IdentifyToCommunicationServer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, PlayerInfo);
             Owner.AskForPlayerList();
+            Owner.AskForPlayerInventory();
         }
 
         private BattleMapPlayer InitPlayer()
@@ -58,7 +59,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             Squad NewSquad = new Squad("Squad", NewUnit);
             NewSquad.IsPlayerControlled = true;
 
-            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayerBase.PlayerTypes.Online, false, 0, true, Color.Blue);
+            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
 
             NewPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
 

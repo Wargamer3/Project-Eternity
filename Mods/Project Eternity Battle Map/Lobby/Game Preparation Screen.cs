@@ -95,7 +95,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
-            ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(68, 518), new Vector2(470, 20), SendMessage);
+            ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
             sprHostText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Host Text");
             sprReadyText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Ready Text");
@@ -384,8 +384,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (OnlineCommunicationClient != null && OnlineCommunicationClient.IsConnected)
             {
-                OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient(Room.RoomID));
+                OnlineCommunicationClient.Chat.OpenGlobalTab();
                 OnlineCommunicationClient.Chat.CloseTab(Room.RoomID);
+                OnlineCommunicationClient.Host.Send(new JoinCommunicationGroupScriptClient("Global"));
+                OnlineCommunicationClient.Host.Send(new LeaveCommunicationGroupScriptClient(Room.RoomID));
             }
 
             sndButtonClick.Play();
@@ -513,7 +515,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprMapImage, new Vector2(LeftSideWidth + (RightSideWidth - sprMapImage.Width) / 2, GameModeY), Color.White);
             GameModeY += 85;
             g.DrawString(fntText, "Map:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            if (Room.MapPath != null)
+            if (Room.MapName != null)
             {
                 g.DrawStringMiddleAligned(fntText, Room.MapName, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
             }

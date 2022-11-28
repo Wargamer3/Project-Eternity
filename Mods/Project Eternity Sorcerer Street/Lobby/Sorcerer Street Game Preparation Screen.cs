@@ -30,7 +30,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             base.Update(gameTime);
             foreach (Player ActivePlayer in Room.ListRoomPlayer)
             {
-                ActivePlayer.GamePiece.Unit3DModel.Update(gameTime);
+                if (ActivePlayer.GamePiece.Unit3DModel != null)
+                {
+                    ActivePlayer.GamePiece.Unit3DModel.Update(gameTime);
+                }
             }
         }
 
@@ -54,6 +57,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int P = 0; P < Room.ListRoomPlayer.Count; P++)
             {
                 Player ActivePlayer = (Player)Room.ListRoomPlayer[P];
+                if (ActivePlayer.GamePiece.Unit3DModel == null)
+                {
+                    continue;
+                }
 
                 float X = 5 + P * 125;
                 Matrix World = Matrix.CreateRotationX(MathHelper.ToRadians(180)) * Matrix.CreateScale(1f) * Matrix.CreateTranslation(X + 65, 210, 0);
