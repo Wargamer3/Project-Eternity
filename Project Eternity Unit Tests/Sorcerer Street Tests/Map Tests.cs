@@ -96,7 +96,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         [TestMethod]
         public void TestRollDicePhaseWithoutDirection()
         {
-            Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new Card[0]);
+            Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>());
             SorcererStreetMap DummyMap = CreateDummyMap();
             DummyMap.AddPlayer(DummyPlayer);
             ActionPanelRollDicePhase RollDicePhase = new ActionPanelRollDicePhase(DummyMap, 0);
@@ -139,7 +139,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         [TestMethod]
         public void TestDiscardCardPhase()
         {
-            Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new Card[0]);
+            Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>());
             SorcererStreetMap DummyMap = CreateDummyMap();
             DummyMap.AddPlayer(DummyPlayer);
             ActionPanelDiscardCardPhase DiscardCardPhase = new ActionPanelDiscardCardPhase(DummyMap, 0, 6);
@@ -233,7 +233,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 2].TerrainTypeIndex = 1;
             DummyMap.LayerManager.ListLayer[0].ArrayTerrain[0, 1].TerrainTypeIndex = 1;
 
-            Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new Card[] { new CreatureCard(20, 20), new CreatureCard(20, 20), new CreatureCard(20, 20) });
+            Player DummyPlayer = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { new CreatureCard(20, 20), new CreatureCard(20, 20), new CreatureCard(20, 20) });
             DummyMap.AddPlayer(DummyPlayer);
 
             DummyMap.Init();

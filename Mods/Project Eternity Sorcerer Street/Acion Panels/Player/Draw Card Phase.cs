@@ -5,6 +5,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -37,6 +38,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             AnimationPhase = AnimationPhases.IntroAnimation;
 
+            if (ActivePlayer.ListRemainingCardInDeck.Count == 0)
+            {
+                AddToPanelListAndSelect(new ActionPanelRefillDeckPhase(Map, ActivePlayerIndex));
+            }
+
             int RandomCardIndex = RandomHelper.Next(ActivePlayer.ListRemainingCardInDeck.Count);
 
             DrawnCard = ActivePlayer.ListRemainingCardInDeck[RandomCardIndex];
@@ -44,11 +50,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActivePlayer.ListCardInHand.Add(DrawnCard);
 
             ActivePlayer.ListRemainingCardInDeck.RemoveAt(RandomCardIndex);
-
-            if (ActivePlayer.ListRemainingCardInDeck.Count == 0)
-            {
-                AddToPanelListAndSelect(new ActionPanelRefillDeckPhase(Map, ActivePlayerIndex));
-            }
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -60,6 +61,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (RotationTimer > AnimationTime || InputHelper.InputConfirmPressed())
                 {
                     AnimationPhase = AnimationPhases.CardSummary;
+
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
                     if (ActivePlayer.ListCardInHand.Count > 6)
                     {
                         AddToPanelListAndSelect(new ActionPanelDiscardCardPhase(Map, ActivePlayerIndex, 6));
@@ -70,6 +74,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 RotationTimer = 0f;
                 AnimationPhase = AnimationPhases.Outro;
+                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
             }
             else if (AnimationPhase == AnimationPhases.Outro)
             {
@@ -79,6 +84,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     FinishPhase();
                 }
+            }
+        }
+
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            if (AnimationPhase == AnimationPhases.IntroAnimation)
+            {
+                RotationTimer += 0.1f;
+
+                if (RotationTimer > AnimationTime)
+                {
+                    AnimationPhase = AnimationPhases.CardSummary;
+                }
+            }
+            else if (AnimationPhase == AnimationPhases.Outro && RotationTimer < AnimationTime)
+            {
+                RotationTimer += 0.1f;
             }
         }
 
@@ -97,23 +119,58 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AnimationPhase = AnimationPhases.IntroAnimation;
 
             ActivePlayerIndex = BR.ReadInt32();
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
 
-            int ListCardInHandCount = BR.ReadInt32();
+            string DrawnCardType = BR.ReadString();
+            string DrawnCardPath = BR.ReadString();
+
+
             ActivePlayer.ListCardInHand.Clear();
-            for (int C = 0; C < ListCardInHandCount; ++C)
+
+            byte CardInHand = BR.ReadByte();
+            for (int C = 0; C < CardInHand; ++C)
             {
-                ActivePlayer.ListCardInHand.Add(Card.LoadCard(BR.ReadString(), Map.Content, Map.SorcererStreetParams.DicRequirement, Map.SorcererStreetParams.DicEffect, Map.SorcererStreetParams.DicAutomaticSkillTarget));
+                string CardType = BR.ReadString();
+                string CardPath = BR.ReadString();
+
+                foreach (Card ActiveCard in ActivePlayer.ListCardInDeck)
+                {
+                    if (ActiveCard.CardType == DrawnCardType && ActiveCard.Path == DrawnCardPath)
+                    {
+                        DrawnCard = ActiveCard;
+                    }
+                    if (ActiveCard.CardType == CardType && ActiveCard.Path == CardPath)
+                    {
+                        ActivePlayer.ListCardInHand.Add(ActiveCard);
+                        break;
+                    }
+                }
             }
+        }
+
+        public override void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+            AnimationPhase = (AnimationPhases)ArrayUpdateData[0];
         }
 
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
-            BW.AppendInt32(ActivePlayer.ListCardInHand.Count);
-            for (int C = 0; C < ActivePlayer.ListCardInHand.Count; ++C)
+
+            BW.AppendString(DrawnCard.CardType);
+            BW.AppendString(DrawnCard.Path);
+
+            BW.AppendByte((byte)ActivePlayer.ListCardInHand.Count);
+            foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
             {
-                BW.AppendString(ActivePlayer.ListCardInHand[C].Path);
+                BW.AppendString(ActiveCard.CardType);
+                BW.AppendString(ActiveCard.Path);
             }
+        }
+
+        public override byte[] DoWriteUpdate()
+        {
+            return new byte[] { (byte)AnimationPhase };
         }
 
         protected override ActionPanel Copy()

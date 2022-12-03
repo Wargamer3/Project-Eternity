@@ -29,18 +29,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            ActivePlayer.ListRemainingCardInDeck.AddRange(ActivePlayer.ArrayCardInDeck);
-
-            int RemainingCardToShuffleCount = ActivePlayer.ListRemainingCardInDeck.Count;
-
-            while (RemainingCardToShuffleCount-- > 1)
-            {
-                int ShuffleIndex = Random.Next(RemainingCardToShuffleCount + 1);
-                Card ActiveCard = ActivePlayer.ListRemainingCardInDeck[ShuffleIndex];
-
-                ActivePlayer.ListRemainingCardInDeck[ShuffleIndex] = ActivePlayer.ListRemainingCardInDeck[RemainingCardToShuffleCount];
-                ActivePlayer.ListRemainingCardInDeck[RemainingCardToShuffleCount] = ActiveCard;
-            }
+            ActivePlayer.Refill();
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -51,7 +40,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void FinishPhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelSpellCardSelectionPhase(Map, ActivePlayerIndex));
+            //AddToPanelListAndSelect(new ActionPanelSpellCardSelectionPhase(Map, ActivePlayerIndex));
         }
 
         protected override void OnCancelPanel()

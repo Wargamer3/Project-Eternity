@@ -178,7 +178,8 @@ namespace ProjectEternity
                         GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = (GameScreens.SorcererStreetScreen.SorcererStreetMap)BattleMap.DicBattmeMapType[GameScreens.SorcererStreetScreen.SorcererStreetMap.MapType].GetNewMap(string.Empty, string.Empty);
                         NewMapSS.BattleMapPath = "New Item";
                         NewMapSS.ListGameScreen = ListGameScreen;
-                        GameScreens.SorcererStreetScreen.Player NewPlayerSS = new GameScreens.SorcererStreetScreen.Player("", "", "", false, 0, true, Color.Blue, new GameScreens.SorcererStreetScreen.Card[0]);
+                        GameScreens.SorcererStreetScreen.Player NewPlayerSS = new GameScreens.SorcererStreetScreen.Player("", "", "", false, 0, true, Color.Blue, new List<GameScreens.SorcererStreetScreen.Card>());
+                        NewPlayerSS.LoadGamePieceModel();
                         NewMapSS.AddPlayer(NewPlayerSS);
                         NewMapSS.Load();
                         NewMapSS.Init();

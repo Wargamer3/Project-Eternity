@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         {
             BattleMap NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.RoomType, string.Empty);
 
-            NewMap.InitOnlineClient(Owner);
+            NewMap.InitOnlineClient(Owner, Room);
 
             NewMap.ListGameScreen = ListGameScreen;
             NewMap.PushScreen(new LoadingScreen(NewMap, Owner));
@@ -42,6 +42,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsClient(Owner);
 
             DicNewScript.Add(OpenMenuScriptClient.ScriptName, new OpenMenuScriptClient(Owner, NewMap.GetOnlineActionPanel()));
+            DicNewScript.Add(UpdateMenuScriptClient.ScriptName, new UpdateMenuScriptClient(Owner));
 
             Host.AddOrReplaceScripts(DicNewScript);
         }

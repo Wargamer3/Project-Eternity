@@ -24,8 +24,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
-            Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new Card[] { DummyInvaderCard });
-            Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new Card[] { DummyDefenderCard });
+            Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyInvaderCard });
+            Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyDefenderCard });
 
             SorcererStreetMap DummyMap = CreateDummyMap();
             DummyMap.AddPlayer(DummyPlayer1);
@@ -53,8 +53,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
         {
             CreatureCard DummyInvaderCard = new CreatureCard(40, 20);
             CreatureCard DummyDefenderCard = new CreatureCard(40, 20);
-            Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new Card[] { DummyInvaderCard });
-            Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new Card[] { DummyDefenderCard });
+            Player DummyPlayer1 = new Player("Player 1", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyInvaderCard });
+            Player DummyPlayer2 = new Player("Player 2", "Human", "Host", false, 0, true, Color.Blue, new List<Card>() { DummyDefenderCard });
 
             SorcererStreetMap DummyMap = CreateDummyMap();
             DummyMap.AddPlayer(DummyPlayer1);

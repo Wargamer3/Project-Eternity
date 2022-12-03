@@ -9,7 +9,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "CreatureCardSelection";
 
         public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map)
-            : base(PanelName, Map)
+            : base(PanelName, Map, CreatureCard.CreatureCardType)
         {
             DrawDrawInfo = true;
         }

@@ -29,6 +29,17 @@ namespace ProjectEternity.Core.Item
             ListActionPanel.AddRange(ArrayNewActionPanel);
         }
 
+        public void ExecuteUpdate(string PanelName, byte[] ArrayUpdateData)
+        {
+            foreach (ActionPanel ActivePanel in ListActionPanel)
+            {
+                if (ActivePanel.Name == PanelName)
+                {
+                    ActivePanel.ExecuteUpdate(ArrayUpdateData);
+                }
+            }
+        }
+
         public void Remove(ActionPanel NewActionPanel)
         {
             ListActionPanel.Remove(NewActionPanel);

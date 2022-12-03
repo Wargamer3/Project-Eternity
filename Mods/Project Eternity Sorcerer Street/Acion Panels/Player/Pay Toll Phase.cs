@@ -11,7 +11,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly TerrainSorcererStreet ActiveTerrain;
 
         public ActionPanelPayTollPhase(SorcererStreetMap Map)
-            : base(PanelName, Map)
+            : base(PanelName, Map, CreatureCard.CreatureCardType)
         {
         }
 

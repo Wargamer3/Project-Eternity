@@ -24,7 +24,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int CompletedLaps;
         public List<SorcererStreetMap.Checkpoints> ListPassedCheckpoint;
         public Dictionary<byte, byte> DicChainLevelByTerrainTypeIndex;
-        public readonly Card[] ArrayCardInDeck;
+        public readonly List<Card> ListCardInDeck;
         public readonly List<Card> ListCardInHand;
         public readonly List<Card> ListRemainingCardInDeck;
 
@@ -34,38 +34,45 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
-            GamePiece.Direction = Core.Units.UnitMapComponent.Directions.None;
-            ListRemainingCardInDeck = new List<Card>(ArrayCardInDeck);
+            GamePiece.Direction = UnitMapComponent.Directions.None;
+            ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
         }
 
-        public Player(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color, Card[] ArrayCardInDeck)
+        public Player(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color, List<Card> ListCardInDeck)
             : base(ID, Name, OnlinePlayerType, IsOnline, Team, IsPlayerControlled, Color)
         {
-            this.ArrayCardInDeck = ArrayCardInDeck;
+            this.ListCardInDeck = ListCardInDeck;
 
             Inventory = new SorcererStreetInventory();
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
             GamePiece.Direction = UnitMapComponent.Directions.None;
-            ListRemainingCardInDeck = new List<Card>(ArrayCardInDeck);
+            ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
+
+            CardBook NewCardBook = new CardBook();
+            foreach (Card ActiveCard in ListCardInDeck)
+            {
+                NewCardBook.AddCard(ActiveCard);
+            }
+
+            Inventory.UseBook(NewCardBook);
         }
 
         public Player(string ID, string Name, PlayerTypes OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
             : base(ID, Name, OnlinePlayerType, IsOnline, Team, IsPlayerControlled, Color)
         {
-            ArrayCardInDeck = new Card[0];
+            ListCardInDeck = new List<Card>();
             Inventory = new SorcererStreetInventory();
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
             GamePiece.Direction = UnitMapComponent.Directions.None;
-            ListRemainingCardInDeck = new List<Card>(ArrayCardInDeck);
+            ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
         }
-
 
         public Player(Player Clone)
             : base(Clone)
@@ -76,18 +83,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             Inventory = Clone.Inventory;
-            ArrayCardInDeck = new Card[Clone.Inventory.ActiveBook.ListCard.Count];
-            for (int C = 0; C < Clone.Inventory.ActiveBook.ListCard.Count; C++)
-            {
-                ArrayCardInDeck[C] = Clone.Inventory.ActiveBook.ListCard[C].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-            }
-
+            ListCardInDeck = new List<Card>(Clone.Inventory.ActiveBook.ListCard.Count);
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = Clone.GamePiece;
             GamePiece.Direction = UnitMapComponent.Directions.None;
-            ListRemainingCardInDeck = new List<Card>(ArrayCardInDeck);
+            ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
+            FillDeck();
+            Refill();
         }
 
         public void LoadGamePieceModel()
@@ -152,6 +156,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override void DoSaveLocally(BinaryWriter BW)
         {
             Inventory.Save(BW);
+        }
+
+        public void FillDeck()
+        {
+            ListCardInDeck.Clear();
+            for (int C = 0; C < Inventory.ActiveBook.ListCard.Count; C++)
+            {
+                for (int Q = 0; Q < Inventory.ActiveBook.ListCard[C].QuantityOwned; ++Q)
+                {
+                    ListCardInDeck.Add(Inventory.ActiveBook.ListCard[C].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget));
+                }
+            }
+        }
+
+        public void Refill()
+        {
+            ListRemainingCardInDeck.Clear();
+            ListRemainingCardInDeck.AddRange(ListCardInDeck);
+
+            int RemainingCardToShuffleCount = ListRemainingCardInDeck.Count;
+
+            while (RemainingCardToShuffleCount-- > 1)
+            {
+                int ShuffleIndex = RandomHelper.Next(RemainingCardToShuffleCount + 1);
+                Card ActiveCard = ListRemainingCardInDeck[ShuffleIndex];
+
+                ListRemainingCardInDeck[ShuffleIndex] = ListRemainingCardInDeck[RemainingCardToShuffleCount];
+                ListRemainingCardInDeck[RemainingCardToShuffleCount] = ActiveCard;
+            }
         }
 
         public void IncreaseChainLevels(byte TerrainTypeIndex)

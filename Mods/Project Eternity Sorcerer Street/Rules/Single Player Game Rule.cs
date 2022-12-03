@@ -20,7 +20,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (Owner.IsOfflineOrServer)
             {
-                int PlayerIndex = 0;
                 for (int P = 0; P < Owner.ListPlayer.Count; P++)
                 {
                     Player ActivePlayer = Owner.ListPlayer[P];
@@ -48,10 +47,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             Owner.SelectPlatform(Owner.GetPlatform(ActiveSpawn.Owner));
                         }
 
+                        for (int C = 0; C < 4 && ActivePlayer.ListRemainingCardInDeck.Count > 0; ++C)
+                        {
+                            int RandomCardIndex = RandomHelper.Next(ActivePlayer.ListRemainingCardInDeck.Count);
+                            Card DrawnCard = ActivePlayer.ListRemainingCardInDeck[RandomCardIndex];
+
+                            ActivePlayer.ListCardInHand.Add(DrawnCard);
+                            ActivePlayer.ListRemainingCardInDeck.RemoveAt(RandomCardIndex);
+                        }
                         break;
                     }
-
-                    ++PlayerIndex;
                 }
             }
         }
@@ -76,7 +81,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (!Owner.IsEditor)
             {
-                Owner.ListActionMenuChoice.Last().Update(gameTime);
+                if (!Owner.ListPlayer[Owner.ActivePlayerIndex].IsOnline)
+                {
+                    Owner.ListActionMenuChoice.Last().Update(gameTime);
+                }
+                else if (Owner.ListPlayer[Owner.ActivePlayerIndex].IsOnline)
+                {
+                    Owner.ListActionMenuChoice.Last().UpdatePassive(gameTime);
+                }
             }
         }
 

@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private double ItemAnimationTime;
 
         public ActionPanelBattleItemSelectionPhase(SorcererStreetMap Map)
-            : base(PanelName, Map)
+            : base(PanelName, Map, ItemCard.ItemCardType)
         {
             DrawDrawInfo = false;
         }

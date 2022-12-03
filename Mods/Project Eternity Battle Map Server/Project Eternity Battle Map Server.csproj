@@ -49,6 +49,7 @@
     <Compile Include="Online Helper.cs" />
     <Compile Include="Online\Create Game Script Server.cs" />
     <Compile Include="Online\Game\Ask Game Data Script Server.cs" />
+    <Compile Include="Online\Game\Update Menu Script Server.cs" />
     <Compile Include="Online\Game\Open Menu Script Server.cs" />
     <Compile Include="Online\Game\Receive Game Data Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Loadout Script Server.cs" />

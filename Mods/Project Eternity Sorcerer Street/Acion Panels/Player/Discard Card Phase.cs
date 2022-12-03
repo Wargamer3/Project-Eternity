@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int MaximumCardsAllowed;
 
         public ActionPanelDiscardCardPhase(SorcererStreetMap Map)
-            : base(PanelName, Map)
+            : base(PanelName, Map, null)
         {
             DrawDrawInfo = true;
         }

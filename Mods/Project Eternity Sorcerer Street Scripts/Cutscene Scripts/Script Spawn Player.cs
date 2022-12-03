@@ -5,6 +5,7 @@ using System.Drawing.Design;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using System.Collections.Generic;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -38,13 +39,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             public override void Update(GameTime gameTime)
             {
-                Card[] ArrayCardInDeck = new Card[_Deck.Length];
+                List<Card> ListCardInDeck = new List<Card>(_Deck.Length);
                 for (int C = 0; C < _Deck.Length; C++)
                 {
-                    ArrayCardInDeck[C] = Card.LoadCard(_Deck[C], Map.Content, Map.SorcererStreetParams.DicRequirement, Map.SorcererStreetParams.DicEffect, Map.SorcererStreetParams.DicAutomaticSkillTarget);
+                    ListCardInDeck.Add(Card.LoadCard(_Deck[C], Map.Content, Map.SorcererStreetParams.DicRequirement, Map.SorcererStreetParams.DicEffect, Map.SorcererStreetParams.DicAutomaticSkillTarget));
                 }
 
-                Player NewPlayer = new Player("", PlayerName, "", true, _PlayerTeam, true, Color.White, ArrayCardInDeck);
+                Player NewPlayer = new Player("", PlayerName, "", true, _PlayerTeam, true, Color.White, ListCardInDeck);
+
+                NewPlayer.LoadGamePieceModel();
 
                 if (_PlayerTeam == 0)
                 {
@@ -58,7 +61,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 for (int C = 0; C < 4; ++C)
                 {
-                    NewPlayer.ListCardInHand.Add(ArrayCardInDeck[RandomHelper.Next(ArrayCardInDeck.Length)]);
+                    NewPlayer.ListCardInHand.Add(ListCardInDeck[RandomHelper.Next(ListCardInDeck.Count)]);
                 }
 
                 IsEnded = true;

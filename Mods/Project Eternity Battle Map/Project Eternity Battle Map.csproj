@@ -166,6 +166,7 @@
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
     <Compile Include="Online\Game\Move Cursor Script Client.cs" />
+    <Compile Include="Online\Game\Update Menu Script Client.cs" />
     <Compile Include="Online\Game\Open Menu Script Client.cs" />
     <Compile Include="Online\Game\Receive Game Data Script Client.cs" />
     <Compile Include="Online\Login Success Script Client.cs" />

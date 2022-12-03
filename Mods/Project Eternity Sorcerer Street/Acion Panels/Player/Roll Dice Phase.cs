@@ -56,6 +56,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
+        }
+
         public void RollDice()
         {
             VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;

@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     for (int P = 0; P < NumberOfPlayers; ++P)
                     {
                         Player NewPlayer = new Player(BR.ReadString(), BR.ReadString(), BR.ReadString(), true, BR.ReadInt32(), BR.ReadBoolean(),
-                            Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255), new Card[0]);
+                            Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255), new List<Card>());
 
                         NewPlayer.Inventory.CharacterModelPath = BR.ReadString();
 
@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ListOnlinePlayer.Add(NewPlayer);
             ListUniqueOnlineConnection.Add(NewPlayer);
-            OnlinePlayerBase NewRoomPlayer = new Player(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue, new Card[0]);
+            OnlinePlayerBase NewRoomPlayer = new Player(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue, new List<Card>());
             NewRoomPlayer.OnlineClient = NewPlayer;
             NewRoomPlayer.GameplayType = GameplayTypes.None;
             ListRoomPlayer.Add(NewRoomPlayer);

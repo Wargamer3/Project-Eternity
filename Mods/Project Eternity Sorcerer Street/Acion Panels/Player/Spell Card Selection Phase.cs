@@ -11,10 +11,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "SpellCard";
 
-        private double AnimationTime;
+        private double ArrowAnimationTime;
 
         public ActionPanelSpellCardSelectionPhase(SorcererStreetMap Map)
-            : base(PanelName, Map)
+            : base(PanelName, Map, SpellCard.SpellCardType)
         {
             DrawDrawInfo = true;
         }
@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            AnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+            ArrowAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
 
             base.DoUpdate(gameTime);
 
@@ -40,6 +40,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 SwitchToTerritory();
             }
+        }
+
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            ArrowAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+            UpdateAnimationTimer();
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -57,8 +63,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DrawArrows(CustomSpriteBatch g)
         {
             float CardsHeight = Constants.Height - 100;
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, CardsHeight - 95 + (float)Math.Sin(AnimationTime * 10) * 3f), Color.White);
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - 20 - (float)Math.Sin(AnimationTime * 10) * 3f), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.FlipVertically, 0f);
+            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, CardsHeight - 95 + (float)Math.Sin(ArrowAnimationTime * 10) * 3f), Color.White);
+            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - 20 - (float)Math.Sin(ArrowAnimationTime * 10) * 3f), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.FlipVertically, 0f);
         }
 
         protected override ActionPanel Copy()

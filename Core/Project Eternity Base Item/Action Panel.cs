@@ -179,6 +179,12 @@ namespace ProjectEternity.Core.Item
 
         public abstract void DoRead(ByteReader BR);
 
+
+        public virtual void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+        }
+
+
         public void Write(ByteWriter BW)
         {
             BW.AppendString(Name);
@@ -191,6 +197,17 @@ namespace ProjectEternity.Core.Item
         }
 
         public abstract void DoWrite(ByteWriter BW);
+
+        public void WriteUpdate(ByteWriter BW)
+        {
+            BW.AppendString(Name);
+            BW.AppendByteArray(DoWriteUpdate());
+        }
+
+        public virtual byte[] DoWriteUpdate()
+        {
+            return new byte[0];
+        }
 
         protected abstract ActionPanel Copy();
 

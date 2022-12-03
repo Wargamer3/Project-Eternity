@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acion Panels\Action Menu.cs" />
+    <Compile Include="Acion Panels\Action Panel Holder Sorcerer Street.cs" />
     <Compile Include="Acion Panels\Battle\Phase 9 Defender Win.cs" />
     <Compile Include="Acion Panels\Battle\Phase 9 Defender Defeated.cs" />
     <Compile Include="Acion Panels\Battle\Phase 7 Attack.cs" />

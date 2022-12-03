@@ -67,7 +67,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
         }
-
         public void Save(BinaryWriter BW)
         {
             BW.Write(CharacterModelPath);
@@ -80,6 +79,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 ListBook[B].Save(BW);
             }
+        }
+
+        public void UseBook(CardBook NewCardBook)
+        {
+            if (!ListBook.Contains(NewCardBook))
+            {
+                ListBook.Add(NewCardBook);
+            }
+
+            ActiveBook = NewCardBook;
         }
     }
 }

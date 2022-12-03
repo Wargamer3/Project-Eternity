@@ -84,7 +84,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Params = SorcererStreetParams = Params;
 
             RequireDrawFocus = false;
-            ListActionMenuChoice = new ActionPanelHolder();
+            ListActionMenuChoice = new ActionPanelHolderSorcererStreet(this);
             Pathfinder = new MovementAlgorithmSorcererStreet(this);
             ListPlayer = new List<Player>();
             ListLocalPlayerInfo = new List<Player>();
@@ -231,6 +231,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 int PlayerTeam = BR.ReadInt32();
                 bool IsPlayerControlled = BR.ReadBoolean();
                 Color PlayerColor = Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255);
+                int PlayerMagic = BR.ReadInt32();
 
                 Player NewPlayer = null;
                 bool IsExistingPlayer = false;
@@ -251,13 +252,60 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (!IsExistingPlayer)
                 {
-                    NewPlayer = new Player(PlayerID, PlayerName, "Online", true, PlayerTeam, false, PlayerColor, new Card[0]);
-                    NewPlayer.LoadGamePieceModel();
-                    ListAllPlayer.Add(NewPlayer);
+                    foreach (Player ActivePlayer in Room.ListRoomPlayer)
+                    {
+                        if (ActivePlayer.ConnectionID == PlayerID)
+                        {
+                            NewPlayer = new Player(ActivePlayer);
+                            ListAllPlayer.Add(NewPlayer);
+                            break;
+                        }
+                    }
+                }
+
+                NewPlayer.Team = PlayerTeam;
+                NewPlayer.Color = PlayerColor;
+                NewPlayer.Magic = MagicAtStart;
+                NewPlayer.ListRemainingCardInDeck.Clear();
+                NewPlayer.ListCardInHand.Clear();
+
+                byte ListRemainingCardInDeckCount = BR.ReadByte();
+                for (int C = 0; C < ListRemainingCardInDeckCount; ++C)
+                {
+                    string CardType = BR.ReadString();
+                    string CardPath = BR.ReadString();
+
+                    foreach (Card ActiveCard in NewPlayer.ListCardInDeck)
+                    {
+                        if (ActiveCard.CardType == CardType && ActiveCard.Path == CardPath)
+                        {
+                            NewPlayer.ListRemainingCardInDeck.Add(ActiveCard);
+                            break;
+                        }
+                    }
+                }
+
+                byte CardInHand = BR.ReadByte();
+                for (int C = 0; C < CardInHand; ++C)
+                {
+                    string CardType = BR.ReadString();
+                    string CardPath = BR.ReadString();
+
+                    foreach (Card ActiveCard in NewPlayer.ListCardInDeck)
+                    {
+                        if (ActiveCard.CardType == CardType && ActiveCard.Path == CardPath)
+                        {
+                            NewPlayer.ListCardInHand.Add(ActiveCard);
+                            break;
+                        }
+                    }
                 }
 
                 NewPlayer.IsPlayerControlled = IsPlayerControlled;
             }
+
+
+            UpdatePlayersRank();
 
             BattleMapPath = BR.ReadString();
 
@@ -990,6 +1038,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 BW.AppendByte(ActivePlayer.Color.R);
                 BW.AppendByte(ActivePlayer.Color.G);
                 BW.AppendByte(ActivePlayer.Color.B);
+
+                BW.AppendInt32(ActivePlayer.Magic);
+
+                BW.AppendByte((byte)ActivePlayer.ListRemainingCardInDeck.Count);
+                foreach (Card ActiveCard in ActivePlayer.ListRemainingCardInDeck)
+                {
+                    BW.AppendString(ActiveCard.CardType);
+                    BW.AppendString(ActiveCard.Path);
+                }
+
+                BW.AppendByte((byte)ActivePlayer.ListCardInHand.Count);
+                foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
+                {
+                    BW.AppendString(ActiveCard.CardType);
+                    BW.AppendString(ActiveCard.Path);
+                }
             }
 
             BW.AppendString(BattleMapPath);
@@ -1010,6 +1074,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath("Mods/Project Eternity Sorcerer Street.dll"));
             Dictionary<string, BattleMapActionPanel> DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelSorcererStreet), this);
+            foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
+            {
+                DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+            }
+            DicActionPanelMap = BattleMapActionPanel.LoadFromAssembly(ActiveAssembly, typeof(ActionPanelCardSelectionPhase), this);
             foreach (KeyValuePair<string, BattleMapActionPanel> ActiveRequirement in DicActionPanelMap)
             {
                 DicActionPanel.Add(ActiveRequirement.Key, ActiveRequirement.Value);
