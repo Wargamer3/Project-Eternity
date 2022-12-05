@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -12,7 +13,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
-        private readonly CreatureCard ActiveCard;
+        private CreatureCard SelectedCard;
 
         private int CursorIndex;
 
@@ -21,11 +22,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public ActionPanelConfirmCreatureSummon(SorcererStreetMap Map, int ActivePlayerIndex, CreatureCard ActiveCard)
+        public ActionPanelConfirmCreatureSummon(SorcererStreetMap Map, int ActivePlayerIndex, CreatureCard SelectedCard)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
-            this.ActiveCard = ActiveCard;
+            this.SelectedCard = SelectedCard;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
@@ -40,7 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (CursorIndex == 0)
                 {
-                    FinishPhase();
+                    AddToPanelListAndSelect(new ActionPanelCreatureSummon(Map, ActivePlayerIndex, SelectedCard));
                 }
                 else if (CursorIndex == 1)
                 {
@@ -52,27 +53,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ++CursorIndex;
                 if (CursorIndex > 1)
                     CursorIndex = 0;
+
+                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
             }
             else if (InputHelper.InputDownPressed())
             {
                 --CursorIndex;
                 if (CursorIndex < 0)
                     CursorIndex = 1;
+
+                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
             }
-        }
-
-        public void FinishPhase()
-        {
-            TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
-
-            ActivePlayer.ListCardInHand.Remove(ActiveCard);
-            ActiveTerrain.DefendingCreature = ActiveCard;
-            ActiveTerrain.PlayerOwner = ActivePlayer;
-            ActivePlayer.Magic -= ActiveCard.MagicCost;
-
-            ActivePlayer.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-            Map.UpdateTolls(ActivePlayer);
-            Map.EndPlayerPhase();
         }
 
         protected override void OnCancelPanel()
@@ -83,11 +74,33 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            string CardType = BR.ReadString();
+            string CardPath = BR.ReadString();
+            foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
+            {
+                if (ActiveCard.CardType == CardType && ActiveCard.Path == CardPath)
+                {
+                    SelectedCard = (CreatureCard)ActiveCard;
+                    break;
+                }
+            }
+        }
+
+        public override void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+            CursorIndex = ArrayUpdateData[0];
         }
 
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendString(SelectedCard.CardType);
+            BW.AppendString(SelectedCard.Path);
+        }
+
+        public override byte[] DoWriteUpdate()
+        {
+            return new byte[] { (byte)CursorIndex };
         }
 
         protected override ActionPanel Copy()
@@ -105,8 +118,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            ActiveCard.DrawCard(g);
-            ActiveCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
+            SelectedCard.DrawCard(g);
+            SelectedCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
 
             GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 120), 200, 90, Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "Summon this creature?", new Vector2(Constants.Width / 2, Constants.Height - 110), Color.White);

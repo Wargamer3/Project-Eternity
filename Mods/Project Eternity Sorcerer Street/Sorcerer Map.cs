@@ -265,7 +265,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 NewPlayer.Team = PlayerTeam;
                 NewPlayer.Color = PlayerColor;
-                NewPlayer.Magic = MagicAtStart;
+                NewPlayer.TotalMagic = NewPlayer.Magic = PlayerMagic;
                 NewPlayer.ListRemainingCardInDeck.Clear();
                 NewPlayer.ListCardInHand.Clear();
 
@@ -303,7 +303,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 NewPlayer.IsPlayerControlled = IsPlayerControlled;
             }
-
 
             UpdatePlayersRank();
 
@@ -351,7 +350,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Init()
         {
-            base.Init();
             foreach (Player ActivePlayer in ListPlayer)
             {
                 if (ActivePlayer.Team >= 0 && ActivePlayer.Team < ListMultiplayerColor.Count)
@@ -364,8 +362,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (IsClient && ListPlayer.Count > 0)
             {
-                ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this, ActivePlayerIndex));
+                ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
             }
+
+            base.Init();
 
             OnNewTurn();
         }
@@ -420,7 +420,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ListPlayer.Add(NewPlayer);
             ListLocalPlayerInfo.Add(NewPlayer);
-            NewPlayer.TotalMagic = NewPlayer.Magic = MagicAtStart;
             UpdatePlayersRank();
         }
 
@@ -475,23 +474,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void EndPlayerPhase()
         {
             ListActionMenuChoice.RemoveAllActionPanels();
-            //Reset the cursor.
-            if (FMODSystem.sndActiveBGMName != sndBattleThemeName && !string.IsNullOrEmpty(sndBattleThemeName))
-            {
-                sndBattleTheme.Stop();
-                sndBattleTheme.SetLoop(true);
-                sndBattleTheme.PlayAsBGM();
-                FMODSystem.sndActiveBGMName = sndBattleThemeName;
-            }
-            
-            ActivePlayerIndex++;
 
-            if (ActivePlayerIndex >= ListPlayer.Count)
-            {
-                OnNewTurn();
-            }
+            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPlayerDefault(this));
+        }
 
-            ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this, ActivePlayerIndex));
+        public void OnNewTurn()
+        {
+            ActivePlayerIndex = 0;
+            GameTurn++;
+
+            UpdateMapEvent(EventTypeTurn, 0);
         }
 
         public void UpdateTolls(Player ActivePlayer)
@@ -521,14 +513,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 SortedList[P].Rank = P + 1;
             }
-        }
-
-        protected void OnNewTurn()
-        {
-            ActivePlayerIndex = 0;
-            GameTurn++;
-
-            UpdateMapEvent(EventTypeTurn, 0);
         }
 
         public override void TogglePreview(bool UsePreview)

@@ -25,11 +25,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private string EndCardText;//Card on the far right used to close the pannel.
         public bool DrawDrawInfo;
 
-        public ActionPanelCardSelectionPhase(string Name, SorcererStreetMap Map, string CardType)
+        public ActionPanelCardSelectionPhase(string Name, SorcererStreetMap Map, string CardType, string EndCardText = "")
             : base(Name, Map.ListActionMenuChoice, null, false)
         {
             this.Map = Map;
             this.CardType = CardType;
+            this.EndCardText = EndCardText;
 
             MaxAnimationScale = 1.1f;
         }

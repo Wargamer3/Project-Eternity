@@ -151,6 +151,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void ExecuteUpdate(byte[] ArrayUpdateData)
         {
             AnimationPhase = (AnimationPhases)ArrayUpdateData[0];
+            RotationTimer = 0f;
         }
 
         public override void DoWrite(ByteWriter BW)

@@ -7,15 +7,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public class ActionPanelCreatureCardSelectionPhase : ActionPanelCardSelectionPhase
     {
         private const string PanelName = "CreatureCardSelection";
+        private const string EndCardText = "End turn";
 
         public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map)
-            : base(PanelName, Map, CreatureCard.CreatureCardType)
+            : base(PanelName, Map, CreatureCard.CreatureCardType, EndCardText)
         {
             DrawDrawInfo = true;
         }
 
         public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map, int ActivePlayerIndex)
-            : base(PanelName, Map.ListActionMenuChoice, Map, ActivePlayerIndex, CreatureCard.CreatureCardType, "End turn")
+            : base(PanelName, Map.ListActionMenuChoice, Map, ActivePlayerIndex, CreatureCard.CreatureCardType, EndCardText)
         {
             DrawDrawInfo = true;
         }

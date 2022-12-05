@@ -237,7 +237,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyMap.AddPlayer(DummyPlayer);
 
             DummyMap.Init();
-            DummyMap.ListActionMenuChoice.Add(new ActionPanelPlayerDefault(DummyMap, 0));
+            DummyMap.ListActionMenuChoice.Add(new ActionPanelPlayerDefault(DummyMap));
 
             return DummyMap;
         }

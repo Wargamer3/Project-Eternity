@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
-        private readonly CreatureCard ActiveCard;
+        private CreatureCard SelectedCard;
 
         private int CursorIndex;
 
@@ -21,11 +21,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public ActionPanelConfirmCreatureSummonBattle(SorcererStreetMap Map, int ActivePlayerIndex, CreatureCard ActiveCard)
+        public ActionPanelConfirmCreatureSummonBattle(SorcererStreetMap Map, int ActivePlayerIndex, CreatureCard SelectedCard)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
-            this.ActiveCard = ActiveCard;
+            this.SelectedCard = SelectedCard;
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
         }
 
@@ -63,11 +63,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void FinishPhase()
         {
-            ActivePlayer.ListCardInHand.Remove(ActiveCard);
-            ActivePlayer.Magic -= ActiveCard.MagicCost;
+            ActivePlayer.ListCardInHand.Remove(SelectedCard);
+            ActivePlayer.Magic -= SelectedCard.MagicCost;
 
             RemoveAllActionPanels();
-            Map.PushScreen(new ActionPanelBattleStartPhase(Map, ActivePlayerIndex, ActiveCard));
+            Map.PushScreen(new ActionPanelBattleStartPhase(Map, ActivePlayerIndex, SelectedCard));
         }
 
         protected override void OnCancelPanel()
@@ -78,11 +78,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            string CardType = BR.ReadString();
+            string CardPath = BR.ReadString();
+            foreach (Card ActiveCard in ActivePlayer.ListCardInHand)
+            {
+                if (ActiveCard.CardType == CardType && ActiveCard.Path == CardPath)
+                {
+                    SelectedCard = (CreatureCard)ActiveCard;
+                    break;
+                }
+            }
+
+            FinishPhase();
         }
 
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendString(SelectedCard.CardType);
+            BW.AppendString(SelectedCard.Path);
         }
 
         protected override ActionPanel Copy()
@@ -100,8 +114,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            ActiveCard.DrawCard(g);
-            ActiveCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
+            SelectedCard.DrawCard(g);
+            SelectedCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
 
             GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 120), 200, 90, Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "Summon this creature?", new Vector2(Constants.Width / 2, Constants.Height - 110), Color.White);

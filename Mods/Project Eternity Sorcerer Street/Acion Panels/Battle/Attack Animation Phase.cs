@@ -29,6 +29,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Map = Map;
             this.AttackAnimationPath = AttackAnimationPath;
             this.LeftSideAttackRightSide = LeftSideAttackRightSide;
+
+            if (string.IsNullOrEmpty(AttackAnimationPath))
+            {
+                this.AttackAnimationPath = "Sorcerer Street/Default";
+            }
         }
 
         public override void OnSelect()

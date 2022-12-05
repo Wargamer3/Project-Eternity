@@ -25,6 +25,22 @@ namespace ProjectEternity.Core
             this.FilePath = FilePath;
         }
 
+        public AnimatedModel(AnimatedModel Clone)
+        {
+            FilePath = Clone.FilePath;
+            OriginalModel = Clone.OriginalModel;
+            AnimationInformation = ((ModelAnimationInfo)OriginalModel.Tag).Clone();
+
+            foreach (ModelBone ActiveBone in OriginalModel.Bones)
+            {
+                AnimationBone NewBone = new AnimationBone(ActiveBone.Name, ActiveBone.Transform, ActiveBone.Parent != null ? ListBone[ActiveBone.Parent.Index] : null);
+
+                ListBone.Add(NewBone);
+            }
+
+            ActiveAnimation = AnimationInformation.ListAnimation[0];
+        }
+
         public void LoadContent(ContentManager Content)
         {
             this.OriginalModel = Content.Load<Model>(FilePath);

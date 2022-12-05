@@ -61,6 +61,7 @@
     <Compile Include="Acion Panels\Battle\Start Phase.cs" />
     <Compile Include="Acion Panels\Battle\Attack Animation Phase.cs" />
     <Compile Include="Acion Panels\Player\Choose Direction.cs" />
+    <Compile Include="Acion Panels\Player\Creature Summon.cs" />
     <Compile Include="Acion Panels\Player\Confirm Creature Summon Battle.cs" />
     <Compile Include="Acion Panels\Player\Territory Phase.cs" />
     <Compile Include="Acion Panels\Player\Pay Toll Phase.cs" />

@@ -75,10 +75,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoRead(ByteReader BR)
         {
+            ActivePlayerIndex = BR.ReadInt32();
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            ActiveTerrain = Map.GetTerrain(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(ActiveTerrain.InternalPosition.X);
+            BW.AppendInt32(ActiveTerrain.InternalPosition.Y);
+            BW.AppendInt32(ActiveTerrain.LayerIndex);
         }
 
         protected override ActionPanel Copy()

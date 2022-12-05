@@ -11,21 +11,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "PlayerDefault";
 
-        private int ActivePlayerIndex;
+        int OriginalPlayerIndex;
 
         public ActionPanelPlayerDefault(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
-        }
-
-        public ActionPanelPlayerDefault(SorcererStreetMap Map, int ActivePlayerIndex)
-            : base(PanelName, Map, false)
-        {
-            this.ActivePlayerIndex = ActivePlayerIndex;
+            OriginalPlayerIndex = Map.ActivePlayerIndex;
         }
 
         public override void OnSelect()
         {
+            //Reset the cursor.
+            if (GameScreen.FMODSystem != null && GameScreen.FMODSystem.sndActiveBGMName != Map.sndBattleThemeName && !string.IsNullOrEmpty(Map.sndBattleThemeName))
+            {
+                 Map.sndBattleTheme.Stop();
+                 Map.sndBattleTheme.SetLoop(true);
+                Map.sndBattleTheme.PlayAsBGM();
+                GameScreen.FMODSystem.sndActiveBGMName = Map.sndBattleThemeName;
+            }
+            
+            Map.ActivePlayerIndex++;
+
+            if (Map.ActivePlayerIndex >= Map.ListPlayer.Count)
+            {
+                Map.OnNewTurn();
+            }
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -39,7 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void ConfirmStartOfTurn()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelDrawCardPhase(Map, ActivePlayerIndex));
+            AddToPanelListAndSelect(new ActionPanelDrawCardPhase(Map, Map.ActivePlayerIndex));
         }
 
         protected override void OnCancelPanel()
@@ -48,12 +58,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoRead(ByteReader BR)
         {
-            ActivePlayerIndex = BR.ReadInt32();
+            OriginalPlayerIndex = BR.ReadInt32();
+            int NextPlayerIndex = BR.ReadInt32();
+            Map.ActivePlayerIndex = OriginalPlayerIndex;
+
+            OnSelect();
+
+            Map.ActivePlayerIndex = NextPlayerIndex;
         }
 
         public override void DoWrite(ByteWriter BW)
         {
-            BW.AppendInt32(ActivePlayerIndex);
+            BW.AppendInt32(OriginalPlayerIndex);
+            BW.AppendInt32(Map.ActivePlayerIndex);
         }
 
         protected override ActionPanel Copy()

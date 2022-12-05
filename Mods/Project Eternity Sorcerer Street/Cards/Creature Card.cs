@@ -207,6 +207,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             sprCard = Clone.sprCard;
+            if (Clone.Map3DModel != null)
+            {
+                Map3DModel = new AnimatedModel(Clone.Map3DModel);
+            }
         }
 
         public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)

@@ -55,6 +55,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             ActivePlayer.ListCardInHand.Add(DrawnCard);
                             ActivePlayer.ListRemainingCardInDeck.RemoveAt(RandomCardIndex);
                         }
+
+                        ActivePlayer.TotalMagic = ActivePlayer.Magic = Owner.MagicAtStart;
                         break;
                     }
                 }
