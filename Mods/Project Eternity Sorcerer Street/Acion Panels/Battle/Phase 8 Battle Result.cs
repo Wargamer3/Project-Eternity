@@ -3,38 +3,34 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelBattleBattleResultPhase : BattleMapActionPanel
+    public class ActionPanelBattleBattleResultPhase : ActionPanelBattle
     {
-        private const string PanelName = "BattleBattleResultPhase";
-
         public static string RequirementName = "Sorcerer Street Battle Result Phase";
 
-        private readonly SorcererStreetMap Map;
+        private const string PanelName = "BattleBattleResultPhase";
 
         private double AnimationTime;
 
         public ActionPanelBattleBattleResultPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, null, false)
+            : base(Map, PanelName)
         {
             this.Map = Map;
         }
-
-        public ActionPanelBattleBattleResultPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base(PanelName, ListActionMenuChoice, null, false)
-        {
-            this.Map = Map;
-        }
-
+        
         public override void OnSelect()
         {
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!CanUpdate(gameTime))
+                return;
+
+            Map.GlobalSorcererStreetBattleContext.Background.Update(gameTime);
+
             if (AnimationTime < 1)
             {
                 AnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
@@ -53,6 +49,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 RemoveFromPanelList(this);
+                if (Map.GlobalSorcererStreetBattleContext.Defender.CurrentHP > 0)
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleDefenderWinPhase(Map));
+                }
+                else
+                {
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleDefenderDefeatedPhase(Map));
+                }
+            }
+        }
+
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            if (!CanUpdate(gameTime))
+                return;
+
+            Map.GlobalSorcererStreetBattleContext.Background.Update(gameTime);
+
+            if (AnimationTime < 1)
+            {
+                AnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else if (AnimationTime < 4.2f)
+            {
+                AnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+                Map.GlobalSorcererStreetBattleContext.InvaderCard = null;
+                Map.GlobalSorcererStreetBattleContext.DefenderCard = null;
+            }
+            else if (AnimationTime < 6)
+            {
+                AnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+                Map.GlobalSorcererStreetBattleContext.Background.MoveSpeed = new Vector3(0, 0, -1);
             }
         }
 
@@ -62,10 +90,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoRead(ByteReader BR)
         {
+            ReadPlayerInfo(BR, Map);
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            WritePlayerInfo(BW, Map);
         }
 
         protected override ActionPanel Copy()
@@ -75,6 +105,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            base.Draw(g);
+
             if (AnimationTime < 1)
             {
                 if (Map.GlobalSorcererStreetBattleContext.Defender.CurrentHP > 0)

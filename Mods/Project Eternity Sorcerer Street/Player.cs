@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCardInHand = new List<Card>();
         }
 
-        public Player(Player Clone)
+        public Player(Player Clone, SorcererStreetBattleParams Params)
             : base(Clone)
         {
             if (Clone == null)
@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GamePiece.Direction = UnitMapComponent.Directions.None;
             ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
-            FillDeck();
+            FillDeck(Params);
             Refill();
         }
 
@@ -158,14 +158,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Inventory.Save(BW);
         }
 
-        public void FillDeck()
+        public void FillDeck(SorcererStreetBattleParams Params)
         {
             ListCardInDeck.Clear();
             for (int C = 0; C < Inventory.ActiveBook.ListCard.Count; C++)
             {
                 for (int Q = 0; Q < Inventory.ActiveBook.ListCard[C].QuantityOwned; ++Q)
                 {
-                    ListCardInDeck.Add(Inventory.ActiveBook.ListCard[C].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget));
+                    ListCardInDeck.Add(Inventory.ActiveBook.ListCard[C].Copy(Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget));
                 }
             }
         }

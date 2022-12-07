@@ -175,7 +175,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             --Movement;
             NextTerrain.OnReached(Map, ActivePlayerIndex, Movement);
-            Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+            if (Map.OnlineClient != null)
+            {
+                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+            }
         }
 
         private void PrepareToMoveToNextTerrain(Vector3 PlayerPosition, int LayerIndex, bool AllowDirectionChange)

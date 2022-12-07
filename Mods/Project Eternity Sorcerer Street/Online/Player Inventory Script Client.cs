@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
 
             ByteReader BR = new ByteReader(PlayerInfo);
 
-            NewPlayer.Inventory.Load(BR, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+            NewPlayer.Inventory.Load(BR, GameScreen.ContentFallback, SorcererStreetBattleParams.DicParams[""].DicRequirement, SorcererStreetBattleParams.DicParams[""].DicEffect, SorcererStreetBattleParams.DicParams[""].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[""].DicManualSkillTarget);
 
             BR.Clear();
 

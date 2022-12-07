@@ -62,7 +62,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     AnimationPhase = AnimationPhases.CardSummary;
 
-                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                    if (Map.OnlineClient != null)
+                    {
+                        Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                    }
 
                     if (ActivePlayer.ListCardInHand.Count > 6)
                     {
@@ -74,7 +77,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 RotationTimer = 0f;
                 AnimationPhase = AnimationPhases.Outro;
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (AnimationPhase == AnimationPhases.Outro)
             {

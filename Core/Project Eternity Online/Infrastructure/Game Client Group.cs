@@ -6,6 +6,7 @@ namespace ProjectEternity.Core.Online
     {
         IOnlineGame CurrentGame { get; }
         IRoomInformations Room { get; }
+        bool IsGameReady { get; set; }
 
         bool IsRunningSlow();
 

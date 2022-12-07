@@ -36,6 +36,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Map.OnNewTurn();
             }
+
+            DeleteBattleInformation();
+        }
+
+        private void DeleteBattleInformation()
+        {
+            Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = null;
+
+            Map.GlobalSorcererStreetBattleContext.Invader = null;
+            Map.GlobalSorcererStreetBattleContext.Defender = null;
+
+            Map.GlobalSorcererStreetBattleContext.InvaderPlayer = null;
+            Map.GlobalSorcererStreetBattleContext.DefenderPlayer = null;
+            Map.GlobalSorcererStreetBattleContext.DefenderTerrain = null;
+
+            Map.GlobalSorcererStreetBattleContext.InvaderCard = null;
+            Map.GlobalSorcererStreetBattleContext.DefenderCard = null;
+
+            Map.GlobalSorcererStreetBattleContext.Background = null;
         }
 
         public override void DoUpdate(GameTime gameTime)

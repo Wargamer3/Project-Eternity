@@ -1,41 +1,26 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelBattleLandModifierPhase : BattleMapActionPanel
+    public class ActionPanelBattleLandModifierPhase : ActionPanelBattle
     {
         private const string PanelName = "BattleLandModifierPhase";
-
-        private readonly SorcererStreetMap Map;
-        private SorcererStreetUnit PlayerUnit;
-        private TerrainSorcererStreet ActiveTerrain;
 
         private bool HasTerrainBonus;
 
         public ActionPanelBattleLandModifierPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, null, false)
+            : base(Map, PanelName)
         {
-            this.Map = Map;
-        }
-
-        public ActionPanelBattleLandModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, SorcererStreetUnit PlayerUnit)
-            : base(PanelName, ListActionMenuChoice, null, false)
-        {
-            this.Map = Map;
-            this.PlayerUnit = PlayerUnit;
-            this.ActiveTerrain = Map.GetTerrain(PlayerUnit);
         }
 
         public override void OnSelect()
         {
             HasTerrainBonus = false;
 
-            switch (Map.ListTerrainType[ActiveTerrain.TerrainTypeIndex])
+            switch (Map.ListTerrainType[Map.GlobalSorcererStreetBattleContext.DefenderTerrain.TerrainTypeIndex])
             {
                 case "Multi-Element":
                     if (Map.GlobalSorcererStreetBattleContext.Defender.ArrayAffinity.Length != 1 || Map.GlobalSorcererStreetBattleContext.Defender.ArrayAffinity[0] != CreatureCard.ElementalAffinity.Neutral)
@@ -78,6 +63,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!CanUpdate(gameTime))
+                return;
+
             FinishPhase();
         }
 
@@ -85,7 +73,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             if (HasTerrainBonus)
             {
-                Map.GlobalSorcererStreetBattleContext.DefenderFinalHP += 10 * ActiveTerrain.LandLevel;
+                Map.GlobalSorcererStreetBattleContext.DefenderFinalHP += 10 *  Map.GlobalSorcererStreetBattleContext.DefenderTerrain.LandLevel;
             }
 
             ContinueBattlePhase();
@@ -94,7 +82,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void ContinueBattlePhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelBattleCreatureModifierPhase(ListActionMenuChoice, Map));
+            AddToPanelListAndSelect(new ActionPanelBattleCreatureModifierPhase(Map));
         }
 
         protected override void OnCancelPanel()
@@ -103,26 +91,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoRead(ByteReader BR)
         {
-            float X = BR.ReadFloat();
-            float Y = BR.ReadFloat();
-            int LayerIndex = BR.ReadInt32();
-            Map.GetTerrain((int)X, (int)Y, LayerIndex);
+            ReadPlayerInfo(BR, Map);
+
+            OnSelect();
         }
 
         public override void DoWrite(ByteWriter BW)
         {
-            BW.AppendFloat(PlayerUnit.X);
-            BW.AppendFloat(PlayerUnit.Y);
-            BW.AppendInt32((int)PlayerUnit.Z);
+            WritePlayerInfo(BW, Map);
         }
 
         protected override ActionPanel Copy()
         {
             return new ActionPanelBattleLandModifierPhase(Map);
-        }
-
-        public override void Draw(CustomSpriteBatch g)
-        {
         }
     }
 }

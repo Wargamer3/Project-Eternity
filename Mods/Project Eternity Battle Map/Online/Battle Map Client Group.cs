@@ -8,12 +8,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         public static readonly BattleMapClientGroup Template = new BattleMapClientGroup();
         public BattleMap _CurrentGame;
         public IRoomInformations _Room;
+        public bool _IsGameReady;
 
         public IOnlineGame CurrentGame => _CurrentGame;
 
         public IRoomInformations Room => _Room;
 
         public BattleMap BattleMapGame { get { return _CurrentGame; } }
+
+        public bool IsGameReady { get => _IsGameReady; set => _IsGameReady = value; }
 
         private BattleMapClientGroup()
         {

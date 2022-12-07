@@ -53,11 +53,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             IncreaseHPEffect NewEffect = new IncreaseHPEffect(Params);
 
+            NewEffect.HP = HP;
+
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            IncreaseHPEffect NewEffect = (IncreaseHPEffect)Copy;
+
+            HP = NewEffect.HP;
         }
 
         #region Properties

@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ListCardInDeck.Add(Card.LoadCard(_Deck[C], Map.Content, Map.SorcererStreetParams.DicRequirement, Map.SorcererStreetParams.DicEffect, Map.SorcererStreetParams.DicAutomaticSkillTarget));
                 }
 
-                Player NewPlayer = new Player("", PlayerName, "", true, _PlayerTeam, true, Color.White, ListCardInDeck);
+                Player NewPlayer = new Player("", PlayerName, "", false, _PlayerTeam, true, Color.White, ListCardInDeck);
 
                 NewPlayer.LoadGamePieceModel();
 
@@ -58,6 +58,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Map.AddPlayer(NewPlayer);
                 }
+                NewPlayer.TotalMagic = NewPlayer.Magic = Map.MagicAtStart;
 
                 for (int C = 0; C < 4; ++C)
                 {

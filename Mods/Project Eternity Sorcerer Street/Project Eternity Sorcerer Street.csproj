@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Acion Panels\Action Menu.cs" />
     <Compile Include="Acion Panels\Action Panel Holder Sorcerer Street.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 9 Defender Replace.cs" />
     <Compile Include="Acion Panels\Battle\Phase 9 Defender Win.cs" />
     <Compile Include="Acion Panels\Battle\Phase 9 Defender Defeated.cs" />
     <Compile Include="Acion Panels\Battle\Phase 7 Attack.cs" />
@@ -58,7 +59,8 @@
     <Compile Include="Acion Panels\Battle\Phase 5 Item Modifier.cs" />
     <Compile Include="Acion Panels\Battle\Phase 1 Item Selection.cs" />
     <Compile Include="Acion Panels\Battle\Phase 2 Land Modifier.cs" />
-    <Compile Include="Acion Panels\Battle\Start Phase.cs" />
+    <Compile Include="Acion Panels\Battle\Share Battle Panel.cs" />
+    <Compile Include="Acion Panels\Battle\Start Phase Panel.cs" />
     <Compile Include="Acion Panels\Battle\Attack Animation Phase.cs" />
     <Compile Include="Acion Panels\Player\Choose Direction.cs" />
     <Compile Include="Acion Panels\Player\Creature Summon.cs" />

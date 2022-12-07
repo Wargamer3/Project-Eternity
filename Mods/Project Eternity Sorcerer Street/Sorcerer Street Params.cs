@@ -15,9 +15,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public CreatureCard Invader;
         public CreatureCard Defender;
+        public TerrainSorcererStreet DefenderTerrain;
 
         public SimpleAnimation InvaderCard;
         public SimpleAnimation DefenderCard;
+
+        public int InvaderPlayerIndex;
+        public int DefenderPlayerIndex;
 
         public Player InvaderPlayer;
         public Player DefenderPlayer;

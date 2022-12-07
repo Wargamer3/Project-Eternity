@@ -12,14 +12,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public abstract class ActionPanelCardSelectionPhase : BattleMapActionPanel
     {
-        private enum AnimationPhases { IntroAnimation, CardSelection }
+        protected enum AnimationPhases { IntroAnimation, CardSelection }
 
         protected readonly SorcererStreetMap Map;
         protected int ActivePlayerIndex;
         protected Player ActivePlayer;
         private readonly string CardType;
-        private AnimationPhases AnimationPhase;
-        private int CardCursorIndex;
+        protected AnimationPhases AnimationPhase;
+        protected int CardCursorIndex;
         private float AnimationTimer;
         private float MaxAnimationScale;
         private string EndCardText;//Card on the far right used to close the pannel.
@@ -59,12 +59,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (AnimationPhase == AnimationPhases.IntroAnimation)
             {
                 AnimationPhase = AnimationPhases.CardSelection;
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (AnimationPhase == AnimationPhases.CardSelection)
             {
                 HandleCardSelection();
             }
+        }
+
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            UpdateAnimationTimer();
         }
 
         public void UpdateAnimationTimer()
@@ -88,7 +97,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     CardCursorIndex = ActivePlayer.ListCardInHand.Count - 1;
                 }
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (InputHelper.InputRightPressed() && ++CardCursorIndex >= ActivePlayer.ListCardInHand.Count)
             {
@@ -100,7 +113,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     CardCursorIndex = 0;
                 }
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (InputHelper.InputConfirmPressed())
             {

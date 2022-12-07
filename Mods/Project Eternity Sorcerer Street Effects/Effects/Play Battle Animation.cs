@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Params.GlobalContext.ListBattlePanelHolder, Params.Map, "", false));
+            Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Params.Map, "", false));
 
             return null;
         }

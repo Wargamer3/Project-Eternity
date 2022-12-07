@@ -3,11 +3,10 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelBattleItemModifierPhase : BattleMapActionPanel
+    public class ActionPanelBattleItemModifierPhase : ActionPanelBattle
     {
         private const string PanelName = "BattleItemModifierPhase";
 
@@ -17,18 +16,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private const float ItemCardScale = 0.2f;
 
-        private readonly SorcererStreetMap Map;
         private double ItemAnimationTime;
         private AnimationPhases AnimationPhase;
 
         public ActionPanelBattleItemModifierPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, null, false)
-        {
-            this.Map = Map;
-        }
-
-        public ActionPanelBattleItemModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base(PanelName, ListActionMenuChoice, null, false)
+            : base(Map, PanelName)
         {
             this.Map = Map;
         }
@@ -53,6 +45,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!CanUpdate(gameTime))
+                return;
+
             ItemAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
             if (AnimationPhase == AnimationPhases.InvaderIntro || AnimationPhase == AnimationPhases.DefenderIntro)
             {
@@ -101,7 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void ContinueBattlePhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelBattleBoostsModifierPhase(ListActionMenuChoice, Map));
+            AddToPanelListAndSelect(new ActionPanelBattleBoostsModifierPhase(Map));
         }
 
         protected override void OnCancelPanel()
@@ -110,10 +105,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoRead(ByteReader BR)
         {
+            ReadPlayerInfo(BR, Map);
+
+            Map.GlobalSorcererStreetBattleContext.ActivatedEffect = null;
+
+            if (Map.GlobalSorcererStreetBattleContext.InvaderItem != null && Map.GlobalSorcererStreetBattleContext.InvaderItem.CanActivateSkill(RequirementName))
+            {
+                AnimationPhase = AnimationPhases.InvaderIntro;
+            }
+            else if (Map.GlobalSorcererStreetBattleContext.DefenderItem != null && Map.GlobalSorcererStreetBattleContext.DefenderItem.CanActivateSkill(RequirementName))
+            {
+                AnimationPhase = AnimationPhases.DefenderIntro;
+            }
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            WritePlayerInfo(BW, Map);
         }
 
         protected override ActionPanel Copy()
@@ -123,6 +131,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            base.Draw(g);
+
             if (AnimationPhase == AnimationPhases.InvaderIntro || AnimationPhase == AnimationPhases.InvaderActivation)
             {
                 DrawInvaderCardActivation(g);

@@ -1,29 +1,18 @@
-﻿using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
+﻿using System;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelBattleCreatureModifierPhase : BattleMapActionPanel
+    public class ActionPanelBattleCreatureModifierPhase : ActionPanelBattle
     {
         private const string PanelName = "BattleCreatureModifierPhase";
 
         public static string RequirementName = "Sorcerer Street Creature Phase";
 
-        private readonly SorcererStreetMap Map;
-
         public ActionPanelBattleCreatureModifierPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, null, false)
+            : base(Map, PanelName)
         {
-            this.Map = Map;
-        }
-
-        public ActionPanelBattleCreatureModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base(PanelName, ListActionMenuChoice, null, false)
-        {
-            this.Map = Map;
         }
 
         public override void OnSelect()
@@ -37,17 +26,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, RequirementName);
             Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, RequirementName);
-
         }
 
-        public override void DoUpdate(GameTime gameTime)
-        {
-        }
-        
         private void ContinueBattlePhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelBattleEnchantModifierPhase(ListActionMenuChoice, Map));
+            AddToPanelListAndSelect(new ActionPanelBattleEnchantModifierPhase(Map));
         }
 
         protected override void OnCancelPanel()
@@ -56,20 +40,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoRead(ByteReader BR)
         {
+            ReadPlayerInfo(BR, Map);
             Init();
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            WritePlayerInfo(BW, Map);
         }
 
         protected override ActionPanel Copy()
         {
             return new ActionPanelBattleCreatureModifierPhase(Map);
-        }
-
-        public override void Draw(CustomSpriteBatch g)
-        {
         }
     }
 }

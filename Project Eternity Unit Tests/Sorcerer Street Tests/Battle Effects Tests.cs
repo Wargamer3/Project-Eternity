@@ -85,7 +85,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             DummyTerrain.PlayerOwner = DummyPlayer2;
 
             ActionPanelBattleStartPhase BattleStartPhase = new ActionPanelBattleStartPhase(DummyMap, 0, DummyInvaderCard);
-            BattleStartPhase.Load();
+            BattleStartPhase.OnSelect();
 
             BaseEffect SkillEffect = new IncreaseHPEffect(BattleParams);
             BaseSkillRequirement Requirement = new SorcererStreetCreaturePhaseRequirement(DummyMap.GlobalSorcererStreetBattleContext);
@@ -107,7 +107,7 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
 
             DummyInvaderCard.ListActiveSkill.Add(HPIncreaseSkill);
 
-            ActionPanelBattleCreatureModifierPhase CreaturePhase = new ActionPanelBattleCreatureModifierPhase(DummyMap.ListActionMenuChoice, DummyMap);
+            ActionPanelBattleCreatureModifierPhase CreaturePhase = new ActionPanelBattleCreatureModifierPhase(DummyMap);
             CreaturePhase.OnSelect();
 
             Assert.AreEqual(DummyInvaderCard.CurrentHP + 30, DummyMap.GlobalSorcererStreetBattleContext.InvaderFinalHP);

@@ -1,27 +1,17 @@
-﻿using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
+﻿using System;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelBattleEnchantModifierPhase : BattleMapActionPanel
+    public class ActionPanelBattleEnchantModifierPhase : ActionPanelBattle
     {
         private const string PanelName = "BattleEnchantModifierPhase";
 
         public static string RequirementName = "Sorcerer Street Enchant Phase";
         
-        private readonly SorcererStreetMap Map;
-
         public ActionPanelBattleEnchantModifierPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, null, false)
-        {
-            this.Map = Map;
-        }
-
-        public ActionPanelBattleEnchantModifierPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base(PanelName, ListActionMenuChoice, null, false)
+            : base(Map, PanelName)
         {
             this.Map = Map;
         }
@@ -29,10 +19,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void OnSelect()
         {
             ContinueBattlePhase();
-        }
-
-        public override void DoUpdate(GameTime gameTime)
-        {
         }
 
         public void FinishPhase()
@@ -43,7 +29,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void ContinueBattlePhase()
         {
             RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelBattleItemModifierPhase(ListActionMenuChoice, Map));
+            AddToPanelListAndSelect(new ActionPanelBattleItemModifierPhase(Map));
         }
 
         protected override void OnCancelPanel()
@@ -52,19 +38,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoRead(ByteReader BR)
         {
+            ReadPlayerInfo(BR, Map);
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            WritePlayerInfo(BW, Map);
         }
 
         protected override ActionPanel Copy()
         {
             return new ActionPanelBattleEnchantModifierPhase(Map);
-        }
-
-        public override void Draw(CustomSpriteBatch g)
-        {
         }
     }
 }

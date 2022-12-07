@@ -11,7 +11,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public SorcererStreetBattleEndRequirement(SorcererStreetBattleContext GlobalContext)
-            : base(ActionPanelBattleStartPhase.BattleEndRequirementName, GlobalContext)
+            : base(ActionPanelBattleDefenderDefeatedPhase.BattleEndRequirementName, GlobalContext)
         {
         }
 

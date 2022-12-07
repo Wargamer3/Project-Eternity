@@ -8,12 +8,16 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen.Online
         public static readonly TripleThunderClientGroup Template = new TripleThunderClientGroup();
         public FightingZone _CurrentGame;
         public IRoomInformations _Room;
+        public bool _IsGameReady;
 
         public IOnlineGame CurrentGame => _CurrentGame;
 
         public IRoomInformations Room => _Room;
 
         public FightingZone TripleThunderGame { get { return _CurrentGame; } }
+
+        public bool IsGameReady { get => _IsGameReady; set => _IsGameReady = value; }
+
 
         private TripleThunderClientGroup()
         {

@@ -7,7 +7,7 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelBattleAttackPhase : BattleMapActionPanel
+    public class ActionPanelBattleAttackPhase : ActionPanelBattle
     {
         private const string PanelName = "BattleAttackPhase";
 
@@ -15,8 +15,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public const string InvasionRequirement = "Sorcerer Street Invasion";
         public const string BeforeAttackRequirement = "Sorcerer Street Before Attack";
         public const string BeforeDefenseRequirement = "Sorcerer Street Before Defense";
-
-        private readonly SorcererStreetMap Map;
 
         public static bool PlayAnimations = true;
         private AttackSequences AttackSequence;
@@ -27,13 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public ItemCard SecondAttackerItem;
 
         public ActionPanelBattleAttackPhase(SorcererStreetMap Map)
-            : base(PanelName, Map.ListActionMenuChoice, null, false)
-        {
-            this.Map = Map;
-        }
-
-        public ActionPanelBattleAttackPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map)
-            : base(PanelName, ListActionMenuChoice, null, false)
+            : base(Map, PanelName)
         {
             this.Map = Map;
         }
@@ -46,6 +38,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!CanUpdate(gameTime))
+                return;
+
             if (AttackSequence == AttackSequences.FirstAttack)
             {
                 ExecuteFirstAttack();
@@ -58,13 +53,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 RemoveFromPanelList(this);
-                AddToPanelListAndSelect(new ActionPanelBattleBattleResultPhase(ListActionMenuChoice, Map));
+                AddToPanelListAndSelect(new ActionPanelBattleBattleResultPhase(Map));
             }
-        }
-
-        public void FinishPhase()
-        {
-            RemoveFromPanelList(this);
         }
 
         //Attacks First Invader, Attacks First Defender, Normal Attack Invader, Normal Attack Defender, Attacks Last Invader and Attacks Last Defender
@@ -160,11 +150,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (FirstAttackerItem == null)
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(ListActionMenuChoice, Map, FirstAttacker.AttackAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, FirstAttacker.AttackAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
                 }
                 else
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(ListActionMenuChoice, Map, FirstAttackerItem.ItemActivationAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, FirstAttackerItem.ItemActivationAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
                 }
             }
         }
@@ -200,11 +190,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (FirstAttackerItem == null)
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(ListActionMenuChoice, Map, SecondAttacker.AttackAnimationPath, SecondAttacker != Map.GlobalSorcererStreetBattleContext.Defender));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, SecondAttacker.AttackAnimationPath, SecondAttacker != Map.GlobalSorcererStreetBattleContext.Defender));
                 }
                 else
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(ListActionMenuChoice, Map, SecondAttacker.AttackAnimationPath, SecondAttacker != Map.GlobalSorcererStreetBattleContext.Defender));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, SecondAttacker.AttackAnimationPath, SecondAttacker != Map.GlobalSorcererStreetBattleContext.Defender));
                 }
             }
         }
@@ -215,21 +205,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoRead(ByteReader BR)
         {
+            ReadPlayerInfo(BR, Map);
             AttackSequence = AttackSequences.FirstAttack;
             DetermineAttackOrder(out FirstAttacker, out SecondAttacker);
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            WritePlayerInfo(BW, Map);
         }
 
         protected override ActionPanel Copy()
         {
             return new ActionPanelBattleAttackPhase(Map);
-        }
-
-        public override void Draw(CustomSpriteBatch g)
-        {
         }
     }
 }

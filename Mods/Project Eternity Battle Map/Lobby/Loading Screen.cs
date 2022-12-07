@@ -31,12 +31,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 RemoveScreen(this);
 
                 ScreenToLoad.Load();
-                ScreenToLoad.Init();
-                ScreenToLoad.TogglePreview(true);
 
                 ListGameScreen.Insert(0, ScreenToLoad);
             }
-            else if (Client != null && Client.IsConnected && Client.Host.IsGameReady)
+            else if (Client != null && Client.IsConnected)
             {
                 if (!HasAskedForInfo)
                 {
@@ -44,8 +42,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     Client.Host.Send(new AskGameDataScriptClient());
                     HasAskedForInfo = true;
                 }
-                else if (ScreenToLoad.IsInit)
+                else if (!ScreenToLoad.IsInit && Client.Host.IsGameReady)
                 {
+                    ScreenToLoad.Init();
+                    ScreenToLoad.TogglePreview(true);
                     RemoveScreen(this);
                     ListGameScreen.Insert(0, ScreenToLoad);
                 }

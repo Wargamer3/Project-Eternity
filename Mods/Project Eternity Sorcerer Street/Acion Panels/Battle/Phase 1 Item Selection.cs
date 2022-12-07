@@ -1,7 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -21,8 +24,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawDrawInfo = false;
         }
 
-        public ActionPanelBattleItemSelectionPhase(ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, int ActivePlayerIndex)
-            : base(PanelName, ListActionMenuChoice, Map, ActivePlayerIndex, ItemCard.ItemCardType, "End")
+        public ActionPanelBattleItemSelectionPhase(SorcererStreetMap Map, int ActivePlayerIndex)
+            : base(PanelName, Map.ListActionMenuChoice, Map, ActivePlayerIndex, ItemCard.ItemCardType, "End")
         {
             DrawDrawInfo = false;
         }
@@ -44,7 +47,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     else
                     {
                         RemoveFromPanelList(this);
-                        AddToPanelListAndSelect(new ActionPanelBattleItemSelectionPhase(ListActionMenuChoice, Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.DefenderPlayer)));
+                        AddToPanelListAndSelect(new ActionPanelBattleItemSelectionPhase(Map, Map.GlobalSorcererStreetBattleContext.DefenderPlayerIndex));
                     }
                 }
                 else
@@ -60,7 +63,36 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     else
                     {
                         RemoveFromPanelList(this);
-                        AddToPanelListAndSelect(new ActionPanelBattleLandModifierPhase(ListActionMenuChoice, Map, ActivePlayer.GamePiece));
+                        AddToPanelListAndSelect(new ActionPanelBattleLandModifierPhase(Map));
+                    }
+                }
+            }
+        }
+
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            if (!ItemSelected)
+            {
+                base.UpdatePassive(gameTime);
+            }
+            else
+            {
+                if (ActivePlayerIndex == Map.ActivePlayerIndex)
+                {
+                    if (ItemAnimationTime < 0.5f)
+                    {
+                        ItemAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                }
+                else
+                {
+                    if (ItemAnimationTime < 0.5f)
+                    {
+                        ItemAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else if (ItemAnimationTime < 1)//Reveal both cards
+                    {
+                        ItemAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
                     }
                 }
             }
@@ -68,8 +100,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnCardSelected(Card CardSelected)
         {
-            ActivePlayer.ListCardInHand.Remove(CardSelected);
-            ActivePlayer.Magic -= CardSelected.MagicCost;
             ItemSelected = true;
             if (ActivePlayerIndex == Map.ActivePlayerIndex)
             {
@@ -79,11 +109,44 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Map.GlobalSorcererStreetBattleContext.DefenderItem = CardSelected;
             }
+
+            if (Map.OnlineClient != null)
+            {
+                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+            }
         }
 
         public override void OnEndCardSelected()
         {
             ItemSelected = true;
+
+            if (Map.OnlineClient != null)
+            {
+                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+            }
+        }
+
+        public override void DoRead(ByteReader BR)
+        {
+            base.DoRead(BR);
+            ActionPanelBattle.ReadPlayerInfo(BR, Map);
+        }
+
+        public override void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+            base.ExecuteUpdate(ArrayUpdateData);
+            ItemSelected = ArrayUpdateData[2] == 1 ? true : false;
+        }
+
+        public override void DoWrite(ByteWriter BW)
+        {
+            base.DoWrite(BW);
+            ActionPanelBattle.WritePlayerInfo(BW, Map);
+        }
+
+        public override byte[] DoWriteUpdate()
+        {
+            return new byte[] { (byte)AnimationPhase, (byte)CardCursorIndex, (byte)(ItemSelected ? 1 : 0) };
         }
 
         protected override ActionPanel Copy()
@@ -93,6 +156,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
+            g.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1, 0);
+            Map.GlobalSorcererStreetBattleContext.Background.Draw(g, Constants.Width, Constants.Height);
+
+            Map.GlobalSorcererStreetBattleContext.InvaderCard.Draw(g);
+            Map.GlobalSorcererStreetBattleContext.DefenderCard.Draw(g);
+
             if (ItemAnimationTime == 0)
             {
                 base.Draw(g);

@@ -179,11 +179,9 @@ namespace ProjectEternity.Core.Item
 
         public abstract void DoRead(ByteReader BR);
 
-
         public virtual void ExecuteUpdate(byte[] ArrayUpdateData)
         {
         }
-
 
         public void Write(ByteWriter BW)
         {
@@ -210,6 +208,10 @@ namespace ProjectEternity.Core.Item
         }
 
         protected abstract ActionPanel Copy();
+
+        public virtual void BeginDraw(CustomSpriteBatch g)
+        {
+        }
 
         public abstract void Draw(CustomSpriteBatch g);
     }

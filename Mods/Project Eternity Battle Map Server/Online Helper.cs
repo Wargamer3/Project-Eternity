@@ -28,6 +28,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             DicNewScript.Add(OpenMenuScriptServer.ScriptName, new OpenMenuScriptServer(ActiveGroup, ActiveGroup.BattleMapGame.GetOnlineActionPanel()));
             DicNewScript.Add(UpdateMenuScriptServer.ScriptName, new UpdateMenuScriptServer(ActiveGroup));
             DicNewScript.Add(AskTripleThunderGameDataScriptServer.ScriptName, new AskTripleThunderGameDataScriptServer(ActiveGroup));
+            DicNewScript.Add(ClientIsReadyScriptServer.ScriptName, new ClientIsReadyScriptServer(ActiveGroup));
 
             return DicNewScript;
         }

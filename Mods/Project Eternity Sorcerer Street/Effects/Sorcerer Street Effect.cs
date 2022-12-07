@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public abstract class SorcererStreetEffect : BaseEffect
     {
-        protected readonly SorcererStreetBattleParams Params;
+        protected SorcererStreetBattleParams Params;
 
         // When an effect is copied to be activated, the global context is copied into the local context.
         // This context is local and can't be changed.
@@ -41,6 +41,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoQuickSave(BinaryWriter BW)
         {
+        }
+
+        protected override void DoReload(string ParamsID)
+        {
+            this.Params = SorcererStreetBattleParams.DicParams[ParamsID];
         }
 
         protected override void ReactivateEffect()

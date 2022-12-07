@@ -76,12 +76,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetMap()
             : this(new SorcererStreetBattleParams(new SorcererStreetBattleContext()))
         {
+            SorcererStreetBattleParams.DicParams.TryAdd(string.Empty, SorcererStreetParams);
         }
 
         public SorcererStreetMap(SorcererStreetBattleParams Params)
             : base()
         {
             this.Params = SorcererStreetParams = Params;
+
+            GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
 
             RequireDrawFocus = false;
             ListActionMenuChoice = new ActionPanelHolderSorcererStreet(this);
@@ -135,8 +138,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     GameRule = new SinglePlayerGameRule(this);
                     break;
             }
-
-            GlobalSorcererStreetBattleContext = SorcererStreetParams.GlobalContext;
         }
 
         public SorcererStreetMap(string BattleMapPath, string GameMode, SorcererStreetBattleParams Params)
@@ -239,7 +240,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (PlayerManager.OnlinePlayerID == PlayerID)
                     {
-                        NewPlayer = new Player(ActivePlayer);
+                        NewPlayer = new Player(ActivePlayer, SorcererStreetParams);
                         NewPlayer.Team = PlayerTeam;
                         NewPlayer.Color = PlayerColor;
                         AddLocalCharacter(NewPlayer);
@@ -256,7 +257,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         if (ActivePlayer.ConnectionID == PlayerID)
                         {
-                            NewPlayer = new Player(ActivePlayer);
+                            NewPlayer = new Player(ActivePlayer, SorcererStreetParams);
                             ListAllPlayer.Add(NewPlayer);
                             break;
                         }
@@ -309,8 +310,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BattleMapPath = BR.ReadString();
 
             Load();
-            Init();
-            TogglePreview(true);
+
+            OnlineClient.Host.Send(new ClientIsReadyScriptClient());
 
             BR.Clear();
         }
@@ -360,7 +361,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             GameRule.Init();
 
-            if (IsClient && ListPlayer.Count > 0)
+            if (IsOnlineClient)
+            {
+                if (ListAllPlayer[0].OnlinePlayerType == OnlinePlayerBase.PlayerTypeHost)
+                {
+                    ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
+                }
+            }
+            else if (IsClient && ListPlayer.Count > 0)
             {
                 ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
             }
@@ -411,7 +419,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoAddLocalPlayer(OnlinePlayerBase NewPlayer)
         {
-            Player NewDeahtmatchPlayer = new Player((Player)NewPlayer);
+            Player NewDeahtmatchPlayer = new Player((Player)NewPlayer, SorcererStreetParams);
 
             AddPlayer(NewDeahtmatchPlayer);
         }
@@ -606,10 +614,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     if (ListGameScreen.Count == 0)
                     {
-                        foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
-                        {
-                            ActivePlayer.Send(new ServerIsReadyScriptServer());
-                        }
                     }
                     else
                     {
@@ -626,14 +630,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     if (ListGameScreen.Count == 0)
                     {
-                        foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
-                        {
-                            ActivePlayer.Send(new ServerIsReadyScriptServer());
-                        }
-
                         IsInit = true;
                     }
                 }
+            }
+
+            if (!GameGroup.IsGameReady)
+            {
+                return;
             }
 
             if (!IsServer)
@@ -656,6 +660,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LayerManager.BeginDraw(g);
 
             g.End();
+
+            if (IsOnTop)
+            {
+                if (ListActionMenuChoice.HasMainPanel)
+                {
+                    ListActionMenuChoice.Last().BeginDraw(g);
+                }
+            }
 
             foreach (BattleMapPlatform ActivePlatform in ListPlatform)
             {

@@ -64,6 +64,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void RollDice()
         {
             VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
+            VisibleDiceValue = 3;
 
             RemoveFromPanelList(this);
             AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, VisibleDiceValue));

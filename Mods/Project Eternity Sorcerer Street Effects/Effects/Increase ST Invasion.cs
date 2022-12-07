@@ -47,6 +47,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             IncreaseInvaderSTEffect NewEffect = new IncreaseInvaderSTEffect(Params);
 
+            _STIncrease = NewEffect._STIncrease;
+
             return NewEffect;
         }
 

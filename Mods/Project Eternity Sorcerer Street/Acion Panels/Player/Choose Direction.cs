@@ -63,22 +63,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (InputHelper.InputUpPressed() && DicNextTerrain.ContainsKey(Directions.Up))
             {
                 ActivePlayer.GamePiece.Direction = Directions.Up;
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (InputHelper.InputDownPressed() && DicNextTerrain.ContainsKey(Directions.Down))
             {
                 ActivePlayer.GamePiece.Direction = Directions.Down;
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (InputHelper.InputLeftPressed() && DicNextTerrain.ContainsKey(Directions.Left))
             {
                 ActivePlayer.GamePiece.Direction = Directions.Left;
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (InputHelper.InputRightPressed() && DicNextTerrain.ContainsKey(Directions.Right))
             {
                 ActivePlayer.GamePiece.Direction = Directions.Right;
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (InputHelper.InputConfirmPressed() && ActivePlayer.GamePiece.Direction != Directions.None)
             {

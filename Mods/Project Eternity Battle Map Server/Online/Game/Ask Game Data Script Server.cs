@@ -27,7 +27,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void Execute(IOnlineConnection ActivePlayer)
         {
-            ActivePlayer.IsGameReady = true;
             ActivePlayer.Send(new ReceiveGameDataScriptServer(ActiveGroup, ActivePlayer));
         }
 
