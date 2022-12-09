@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -13,11 +13,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "Roll Dice";
 
         private int ActivePlayerIndex;
-        private Player ActivePlayer;
 
         private readonly Random Random;
         private readonly Vector2 DicePosition;
         private int VisibleDiceValue;
+        private float RotationValue;
 
         public ActionPanelRollDicePhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
@@ -30,10 +30,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
-            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
 
             Random = new Random();
-            DicePosition = new Vector2(Constants.Width / 2 - 20, Constants.Height / 2 - 25);
+            DicePosition = new Vector2(Constants.Width / 2, Constants.Height / 2);
         }
 
         public override void OnSelect()
@@ -43,6 +42,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            RotationValue += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
 
             if (InputHelper.InputConfirmPressed())
@@ -58,6 +59,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void UpdatePassive(GameTime gameTime)
         {
+            RotationValue += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
         }
 
@@ -78,7 +81,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             VisibleDiceValue = BR.ReadInt32();
-            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
 
         }
 
@@ -95,9 +97,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            GameScreen.DrawBox(g, new Vector2(DicePosition.X, DicePosition.Y), 40, 50, Color.White);
-            g.DrawStringMiddleAligned(Map.fntArial12, VisibleDiceValue.ToString(), new Vector2(DicePosition.X + 20, DicePosition.Y + 15), Color.White);
+            DrawDiceHolder(g, Map, DicePosition, VisibleDiceValue, RotationValue);
+
             g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - 20), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.FlipVertically, 0f);
+        }
+
+        public static void DrawDiceHolder(CustomSpriteBatch g, SorcererStreetMap Map, Vector2 DicePosition, int VisibleDiceValue, float RotationValue)
+        {
+            g.Draw(Map.sprDiceHolder, DicePosition, null, Color.White, 0f, new Vector2(Map.sprDiceHolder.Width / 2, Map.sprDiceHolder.Height / 2), 1f, SpriteEffects.None, 0f);
+            g.Draw(Map.sprDiceHolderEffect, DicePosition, null, Color.FromNonPremultiplied(255, 255, 255, 127), RotationValue, new Vector2(Map.sprDiceHolderEffect.Width / 2, Map.sprDiceHolderEffect.Height / 2), 1f, SpriteEffects.None, 0.1f);
+            g.Draw(Map.sprDiceHolderEffect, DicePosition, null, Color.FromNonPremultiplied(255, 255, 255, 127), -RotationValue, new Vector2(Map.sprDiceHolderEffect.Width / 2, Map.sprDiceHolderEffect.Height / 2), 1f, SpriteEffects.None, 0.1f);
+            g.DrawStringCentered(Map.fntArial12, VisibleDiceValue.ToString(), DicePosition, Color.White);
         }
     }
 }

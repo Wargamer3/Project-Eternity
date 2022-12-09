@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
@@ -8,20 +9,20 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelTerritoryMenuPhase : ActionPanelSorcererStreet
+    public class ActionPanelMainMenuPhase : ActionPanelSorcererStreet
     {
-        private const string PanelName = "TerritoryPhase";
+        private const string PanelName = "MainMenuPhase";
 
         private int ActivePlayerIndex;
 
         private double AnimationTime;
 
-        public ActionPanelTerritoryMenuPhase(SorcererStreetMap Map)
+        public ActionPanelMainMenuPhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
         }
 
-        public ActionPanelTerritoryMenuPhase(SorcererStreetMap Map, int ActivePlayerIndex)
+        public ActionPanelMainMenuPhase(SorcererStreetMap Map, int ActivePlayerIndex)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
@@ -29,12 +30,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AddChoiceToCurrentPanel(new ActionPanelChooseTerritory(Map, ActivePlayerIndex));
             AddChoiceToCurrentPanel(new ActionPanelViewMap(Map));
             AddChoiceToCurrentPanel(new ActionPanelInfo(Map, ActivePlayerIndex));
             AddChoiceToCurrentPanel(new ActionPanelOptions(Map));
             AddChoiceToCurrentPanel(new ActionPanelHelp(Map));
-            AddChoiceToCurrentPanel(new ActionPanelEndPlayerPhase(Map));
+            AddChoiceToCurrentPanel(new ActionPanelSuspend(Map));
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelTerritoryMenuPhase(Map);
+            return new ActionPanelMainMenuPhase(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -98,14 +98,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, CardsHeight - 95 + (float)Math.Sin(AnimationTime * 10) * 3f), Color.White);
 
+
             float X = DistanceBetweenCard;
             Color CardColor = Color.FromNonPremultiplied(255, 255, 255, 200);
-            DrawCardMiniature(g, Map.sprTerritory, CardColor, ActionMenuCursor == 0, X, Scale, (float)AnimationTime, 0.05f);
-            DrawCardMiniature(g, Map.sprMap, CardColor, ActionMenuCursor == 1, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
-            DrawCardMiniature(g, Map.sprInfo, CardColor, ActionMenuCursor == 2, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
-            DrawCardMiniature(g, Map.sprOptions, CardColor, ActionMenuCursor == 3, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
-            DrawCardMiniature(g, Map.sprHelp, CardColor, ActionMenuCursor == 4, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
-            DrawCardMiniature(g, Map.sprEndTurn, CardColor, ActionMenuCursor == 5, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
+            DrawCardMiniature(g, Map.sprMap, CardColor, ActionMenuCursor == 0, X, Scale, (float)AnimationTime, 0.05f);
+            DrawCardMiniature(g, Map.sprInfo, CardColor, ActionMenuCursor == 1, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
+            DrawCardMiniature(g, Map.sprOptions, CardColor, ActionMenuCursor == 2, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
+            DrawCardMiniature(g, Map.sprHelp, CardColor, ActionMenuCursor == 3, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
+            DrawCardMiniature(g, Map.sprSuspend, CardColor, ActionMenuCursor == 4, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
 
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = (int)(Constants.Height / 2);

@@ -139,12 +139,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AddToPanelListAndSelect(new ActionPanelRollDicePhase(Map, ActivePlayerIndex));
         }
 
-        public void SwitchToTerritory()
-        {
-            RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
-        }
-
         protected override void OnCancelPanel()
         {
         }
@@ -240,7 +234,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 //Display END at the right of the cards in the hand to end your turn
                 //Display Start at the right of the cards in the hand for a battle
 
-                float Scale = Constants.Width / 3764.70581f;
+                float Scale = 0.52f;
+                int DistanceBetweenCard = Constants.Width / 8;
                 for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
                 {
                     Color CardColor = Color.White;
@@ -249,7 +244,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                     }
 
-                    DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == CardCursorIndex, C * 80 + 80, Scale, AnimationTimer, 0.02f);
+                    DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == CardCursorIndex, C * DistanceBetweenCard + DistanceBetweenCard, Scale, AnimationTimer, 0.02f);
                 }
 
                 if (DrawDrawInfo && CardCursorIndex < ActivePlayer.ListCardInHand.Count)
@@ -259,7 +254,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (EndCardText != string.Empty)
                 {
-                    DrawCardMiniature(g, Map.sprEndTurn, Color.White, CardCursorIndex == ActivePlayer.ListCardInHand.Count, Constants.Width - 80, 0.30f, AnimationTimer, 0.05f);
+                    DrawCardMiniature(g, Map.sprEndTurn, Color.White, CardCursorIndex == ActivePlayer.ListCardInHand.Count, 6 * DistanceBetweenCard + DistanceBetweenCard, Scale, AnimationTimer, 0.05f);
                 }
             }
         }
@@ -275,12 +270,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             
             float FinalScale = (float)Math.Sin(RealRotationTimer) * MaxScale;
 
-            Card.DrawCardMiniature(g, sprCard, GameScreen.sprPixel, CardFrontColor, X, Y, FinalScale, MaxScale, RealRotationTimer);
+            Card.DrawCardMiniature(g, sprCard, GameScreen.sprPixel, CardFrontColor, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
         }
 
         private static void DrawCardMiniature(CustomSpriteBatch g, Texture2D sprCard, Color CardFrontColor, bool Selected, float X, float MaxScale, float AnimationTimer, float ExtraAnimationScale)
         {
-            float Y = Constants.Height - 100;
+            float Y = Constants.Height - Constants.Height / 6;
 
             float Scale = ExtraAnimationScale;
             if (Selected)
@@ -296,7 +291,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             float FinalScale = MaxScale + Scale;
-            Card.DrawCardMiniatureCentered(g, sprCard, GameScreen.sprPixel, CardFrontColor, X, Y, -FinalScale, FinalScale, MathHelper.Pi + MathHelper.PiOver2);
+            Card.DrawCardMiniatureCentered(g, sprCard, GameScreen.sprPixel, CardFrontColor, X, Y, -FinalScale, FinalScale, false);
         }
     }
 }

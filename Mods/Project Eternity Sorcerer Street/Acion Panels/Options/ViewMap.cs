@@ -46,5 +46,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GameScreen.DrawBox(g, new Vector2(5, Constants.Height - 300), 300, 300, Color.White);
             //Draw selected terrain information
         }
+
+        public override string ToString()
+        {
+            return "Look over the entire map.";
+        }
     }
 }

@@ -83,6 +83,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Z,
                 SpawnTerrain.LayerIndex * 32 + 0.1f,
                 new Point(ActiveVehicle.sprVehicle.Width, ActiveVehicle.sprVehicle.Height),
+                new Point(ActiveVehicle.sprVehicle.Width, ActiveVehicle.sprVehicle.Height),
                 new List<Texture2D>() { ActiveVehicle.sprVehicle }, Z, Z, Z, Z, 0)[0];
 
             ActiveVehicle.Position = new Vector3(SpawnTerrain.WorldPosition.X * Map.TileSize.X, SpawnTerrain.WorldPosition.Z * 32, SpawnTerrain.WorldPosition.Y * Map.TileSize.Y);

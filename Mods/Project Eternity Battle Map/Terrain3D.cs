@@ -82,7 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public List<Tile3D> CreateTile3D(int TilesetIndex, Point Origin, float X, float Y, float Z, float MinZ, Point TileSize, List<Texture2D> ListTileSet,
+        public List<Tile3D> CreateTile3D(int TilesetIndex, Point Origin, float X, float Y, float Z, float MinZ, Point TileSize, Point TextureSize, List<Texture2D> ListTileSet,
             float FrontZ, float BackZ, float LeftZ, float RightZ, float Offset)
         {
             Texture2D ActiveTileset = ListTileSet[TilesetIndex];
@@ -135,7 +135,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ArrayVertexPosition[2] = new Vector3(TopFrontLeftX, TopBackLeftZ, TopFrontLeftY);
             ArrayVertexPosition[3] = new Vector3(TopFrontRightX, TopBackRightZ, TopFrontRightY);
 
-            ListTile3D.Add(CreateTile3D(TilesetIndex, TileSize, ArrayVertexPosition, Origin, ActiveTileset.Width, ActiveTileset.Height, Offset));
+            ListTile3D.Add(CreateTile3D(TilesetIndex, TextureSize, ArrayVertexPosition, Origin, ActiveTileset.Width, ActiveTileset.Height, Offset));
 
             if (TopFrontRightZ > RightZ || TopBackRightZ > RightZ)
             {
@@ -145,7 +145,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ArrayVertexPositionRight[0] = new Vector3(TopFrontRightX, TopBackRightZ, TopFrontRightY);
                 ArrayVertexPositionRight[3] = new Vector3(BottomBackRightX, BottomFrontRightZ, BottomBackRightY);
                 ArrayVertexPositionRight[2] = new Vector3(BottomFrontRightX, BottomBackRightZ, BottomFrontRightY);
-                ListTile3D.Add(CreateTile3D(RightFace.TilesetIndex, TileSize, ArrayVertexPositionRight, RightFace.Origin.Location, ActiveTileset.Width, ActiveTileset.Height, Offset));
+                ListTile3D.Add(CreateTile3D(RightFace.TilesetIndex, TextureSize, ArrayVertexPositionRight, RightFace.Origin.Location, ActiveTileset.Width, ActiveTileset.Height, Offset));
             }
 
             if (TopFrontLeftZ > LeftZ || TopBackLeftZ > LeftZ)
@@ -156,7 +156,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ArrayVertexPositionRight[1] = new Vector3(TopFrontLeftX, TopBackLeftZ, TopFrontLeftY);
                 ArrayVertexPositionRight[2] = new Vector3(BottomBackLeftX, BottomFrontLeftZ, BottomBackLeftY);
                 ArrayVertexPositionRight[3] = new Vector3(BottomFrontLeftX, BottomBackLeftZ, BottomFrontLeftY);
-                ListTile3D.Add(CreateTile3D(LeftFace.TilesetIndex, TileSize, ArrayVertexPositionRight, LeftFace.Origin.Location, ActiveTileset.Width, ActiveTileset.Height, Offset));
+                ListTile3D.Add(CreateTile3D(LeftFace.TilesetIndex, TextureSize, ArrayVertexPositionRight, LeftFace.Origin.Location, ActiveTileset.Width, ActiveTileset.Height, Offset));
             }
 
             if (TopFrontLeftZ > FrontZ || TopBackRightZ > FrontZ)
@@ -167,7 +167,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ArrayVertexPositionDown[1] = new Vector3(TopFrontRightX, TopBackRightZ, TopFrontRightY);
                 ArrayVertexPositionDown[2] = new Vector3(BottomFrontLeftX, BottomBackLeftZ, BottomFrontLeftY);
                 ArrayVertexPositionDown[3] = new Vector3(BottomFrontRightX, BottomBackRightZ, BottomFrontRightY);
-                ListTile3D.Add(CreateTile3D(FrontFace.TilesetIndex, TileSize, ArrayVertexPositionDown, FrontFace.Origin.Location, ActiveTileset.Width, ActiveTileset.Height, Offset));
+                ListTile3D.Add(CreateTile3D(FrontFace.TilesetIndex, TextureSize, ArrayVertexPositionDown, FrontFace.Origin.Location, ActiveTileset.Width, ActiveTileset.Height, Offset));
             }
 
             if (TopBackLeftZ > BackZ || TopBackRightZ > BackZ)
@@ -178,7 +178,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ArrayVertexPositionDown[0] = new Vector3(TopBackRightX, TopFrontRightZ, TopBackRightY);
                 ArrayVertexPositionDown[3] = new Vector3(BottomBackLeftX, BottomFrontLeftZ, BottomBackLeftY);
                 ArrayVertexPositionDown[2] = new Vector3(BottomBackRightX, BottomFrontRightZ, BottomBackRightY);
-                ListTile3D.Add(CreateTile3D(BackFace.TilesetIndex, TileSize, ArrayVertexPositionDown, BackFace.Origin.Location, ActiveTileset.Width, ActiveTileset.Height, Offset));
+                ListTile3D.Add(CreateTile3D(BackFace.TilesetIndex, TextureSize, ArrayVertexPositionDown, BackFace.Origin.Location, ActiveTileset.Width, ActiveTileset.Height, Offset));
             }
 
             return ListTile3D;

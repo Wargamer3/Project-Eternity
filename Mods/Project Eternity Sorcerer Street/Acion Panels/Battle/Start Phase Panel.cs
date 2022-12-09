@@ -145,10 +145,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void IntroduceInvader(CustomSpriteBatch g)
         {
             //Spin card from the left
-            float MaxScale = 0.6f;
+            float MaxScale = 0.3f;
             if (AnimationTime < 1)
             {
-                MaxScale = 0.5f;
+                MaxScale = 0.25f;
             }
             float RealRotationTimer = (float)AnimationTime - 2;
             float FinalX = Constants.Width / 4;
@@ -165,16 +165,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 X = FinalX;
             }
 
-            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Invader.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer);
+            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Invader.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
         }
 
         public void IntroduceDefender(CustomSpriteBatch g)
         {
             //Spin card from the left
-            float MaxScale = 0.6f;
+            float MaxScale = 0.3f;
             if (AnimationTime < 1)
             {
-                MaxScale = 0.5f;
+                MaxScale = 0.25f;
             }
             float RealRotationTimer = (float)AnimationTime - 4;
             float FinalX = Constants.Width - Constants.Width / 4;
@@ -191,7 +191,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 X = FinalX;
             }
 
-            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Defender.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer);
+            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Defender.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
         }
 
         public override void DoRead(ByteReader BR)

@@ -128,5 +128,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
         }
+
+        public override string ToString()
+        {
+            return "You can level up your land you've passed through and change terrain. When you use this command, your turn will end.";
+        }
     }
 }

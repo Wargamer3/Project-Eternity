@@ -12,8 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "BattleItemSelection";
 
-        private const float ItemCardScale = 0.2f;
-        private const float FaceDownValue = 0;
+        private const float ItemCardScale = 0.1f;
 
         private bool ItemSelected;
         private double ItemAnimationTime;
@@ -168,8 +167,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (ActivePlayerIndex != Map.ActivePlayerIndex)
                 {
-                    float FaceDownValue = 0;
-                    Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, (float)Constants.Width / 12, (float)Constants.Height / 12, 0.2f, 0.2f, FaceDownValue);
+                    Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, (float)Constants.Width / 12, (float)Constants.Height / 12, 0.2f, ItemCardScale, true);
                 }
 
                 GameScreen.DrawBox(g, new Vector2(Constants.Width / 6, Constants.Height / 12), Constants.Width - Constants.Width / 3, 30, Color.White);
@@ -242,7 +240,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (ItemAnimationTime < 0.5f)
                     {
-                        Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, (float)Constants.Width / 12, (float)Constants.Height / 12, ItemCardScale, ItemCardScale, FaceDownValue);
+                        Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, (float)Constants.Width / 12, (float)Constants.Height / 12, ItemCardScale, ItemCardScale, true);
                         IntroduceDefenderItem(g);
                     }
                     else
@@ -302,7 +300,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScaleX -= (0.5f - RealRotationTimer) / 4;
             }
 
-            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, FaceDownValue);
+            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
         }
 
         private void IntroduceDefenderItem(CustomSpriteBatch g)
@@ -338,7 +336,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScaleX -= (0.5f - RealRotationTimer) / 4;
             }
 
-            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, FaceDownValue);
+            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
         }
 
         private void RevealInvaderItem(CustomSpriteBatch g)
@@ -377,11 +375,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ScaleX > 0)
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, FaceDownValue);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
             }
             else
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, MathHelper.Pi);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, false);
             }
         }
 
@@ -418,7 +416,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScaleX -= ((RealRotationTimer - 0.5f)) * 0.5f;
             }
 
-            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, FaceDownValue);
+            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
         }
 
         private void RevealDefenderItem(CustomSpriteBatch g)
@@ -457,11 +455,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ScaleX > 0)
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, FaceDownValue);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
             }
             else
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, MathHelper.Pi);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, false);
             }
         }
 
@@ -498,7 +496,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScaleX -= ((RealRotationTimer - 0.5f)) * 0.5f;
             }
 
-            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, FaceDownValue);
+            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
         }
     }
 }

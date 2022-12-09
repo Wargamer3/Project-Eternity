@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void UpdatePreview()
         {
-            TileViewer3D.ListTile3D = TileInfo.Terrain3DInfo.CreateTile3D(TileInfo.TilesetIndex, TileInfo.Origin.Location, 0, 0, 16, 0, Owner.TileSize, Owner.ListTileSet, 0, 0, 0, 0, 0);
+            TileViewer3D.ListTile3D = TileInfo.Terrain3DInfo.CreateTile3D(TileInfo.TilesetIndex, TileInfo.Origin.Location, 0, 0, 16, 0, Owner.TileSize, Owner.TileSize, Owner.ListTileSet, 0, 0, 0, 0, 0);
         }
 
         private void cbo3DStyle_SelectedIndexChanged(object sender, EventArgs e)

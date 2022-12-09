@@ -5,10 +5,10 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelOptions : ActionPanelSorcererStreet
+    public class ActionPanelSuspend : ActionPanelSorcererStreet
     {
-        public ActionPanelOptions(SorcererStreetMap Map)
-            : base("Options", Map, false)
+        public ActionPanelSuspend(SorcererStreetMap Map)
+            : base("Suspend", Map, false)
         {
         }
 
@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelOptions(Map);
+            return new ActionPanelSuspend(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -43,7 +43,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override string ToString()
         {
-            return "Change game settings.";
+            return "Save the current state and end the game. You can continue the game from this point next time.";
         }
     }
 }

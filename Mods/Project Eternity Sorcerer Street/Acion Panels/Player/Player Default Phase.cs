@@ -99,15 +99,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int BoxHeight = 70;
+            int BoxHeight = Constants.Height / 6;
 
-            int BoxPostion = Constants.Height / 20;
+            int BoxPostion = Constants.Height / 10;
             for (int P = 0; P < Map.ListPlayer.Count; ++P)
             {
                 if (Map.ListPlayer[P].Inventory == null)
                     continue;
 
-                DrawPlayerInformation(g, Map, Map.ListPlayer[P], 30, BoxPostion);
+                DrawPlayerInformation(g, Map, Map.ListPlayer[P], Constants.Width / 16, BoxPostion);
                 BoxPostion += BoxHeight;
             }
 
@@ -129,39 +129,71 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static void DrawPlayerInformation(CustomSpriteBatch g, SorcererStreetMap Map, Player ActivePlayer, float X, float Y)
         {
-            int BoxHeight = 70;
+            int BoxWidth = (int)(Constants.Width / 3);
+            int BoxHeight = (Constants.Height / 9);
+            int IconWidth = Constants.Width / 112;
+            int IconHeight = Constants.Width / 60;
+            int LineHeight = IconHeight + 5;
 
-            GameScreen.DrawBox(g, new Vector2(X, Y), 150, BoxHeight, Color.White);
+            MenuHelper.DrawBox(g, new Vector2(X, Y), BoxWidth, BoxHeight);
 
             X += 7;
             //Draw Player name
             g.DrawString(Map.fntArial12, ActivePlayer.Name, new Vector2(X, Y + 5), Color.White);
 
-            Y += 25;
+            Y += LineHeight;
             //Draw Player Magic
-            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)X, (int)Y, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)X, (int)Y, IconWidth, IconHeight), Color.White);
             g.DrawString(Map.fntArial12, ActivePlayer.Magic.ToString(), new Vector2(X + 20, Y), Color.White);
 
             //Draw Player Total Magic
-            g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 60, (int)Y, 18, 18), Color.White);
+            g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 60, (int)Y, IconWidth, IconHeight), Color.White);
             g.DrawString(Map.fntArial12, ActivePlayer.TotalMagic.ToString(), new Vector2(X + 80, Y), Color.White);
 
-            Y += 20;
+            Y += LineHeight;
             //Draw Player color and it's position
             //Position if based on the number of checkpoints and then player order
-            g.Draw(Map.sprPlayerBackground, new Rectangle((int)X, (int)Y, 18, 18), ActivePlayer.Color);
-            g.DrawStringCentered(Map.fntArial12, ActivePlayer.Rank.ToString(), new Vector2(X + 8, Y + 9), Color.White);
+            g.Draw(Map.sprPlayerBackground, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), ActivePlayer.Color);
+            g.DrawStringCentered(Map.fntArial12, ActivePlayer.Rank.ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
 
             for (int C = 0; C < Map.ListCheckpoint.Count; C++)
             {
                 SorcererStreetMap.Checkpoints ActiveCheckpoint = Map.ListCheckpoint[C];
                 if (ActivePlayer.ListPassedCheckpoint.Contains(ActiveCheckpoint))
                 {
-                    g.Draw(Map.sprDirectionSouthFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, 18, 18), Color.White);
+                    switch (ActiveCheckpoint)
+                    {
+                        case SorcererStreetMap.Checkpoints.North:
+                            g.Draw(Map.sprDirectionNorthFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            break;
+                        case SorcererStreetMap.Checkpoints.South:
+                            g.Draw(Map.sprDirectionSouthFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            break;
+                        case SorcererStreetMap.Checkpoints.East:
+                            g.Draw(Map.sprDirectionEastFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            break;
+                        case SorcererStreetMap.Checkpoints.West:
+                            g.Draw(Map.sprDirectionWestFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            break;
+                    }
                 }
                 else
                 {
-                    g.Draw(Map.sprDirectionSouth, new Rectangle((int)X + 60 + C * 20, (int)Y, 18, 18), Color.White);
+                    switch (ActiveCheckpoint)
+                    {
+                        case SorcererStreetMap.Checkpoints.North:
+                            g.Draw(Map.sprDirectionNorth, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            break;
+                        case SorcererStreetMap.Checkpoints.South:
+                            g.Draw(Map.sprDirectionSouth, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            break;
+                        case SorcererStreetMap.Checkpoints.East:
+                            g.Draw(Map.sprDirectionEast, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            break;
+                        case SorcererStreetMap.Checkpoints.West:
+                            g.Draw(Map.sprDirectionWest, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            break;
+                    }
                 }
             }
         }

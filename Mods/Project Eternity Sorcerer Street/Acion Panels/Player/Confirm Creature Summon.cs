@@ -54,7 +54,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (CursorIndex > 1)
                     CursorIndex = 0;
 
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (InputHelper.InputDownPressed())
             {
@@ -62,7 +65,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (CursorIndex < 0)
                     CursorIndex = 1;
 
-                Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -8,6 +9,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "CreatureCardSelection";
         private const string EndCardText = "End turn";
+
+        private double ArrowAnimationTime;
 
         public ActionPanelCreatureCardSelectionPhase(SorcererStreetMap Map)
             : base(PanelName, Map, CreatureCard.CreatureCardType, EndCardText)
@@ -21,9 +24,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawDrawInfo = true;
         }
 
+        public override void DoUpdate(GameTime gameTime)
+        {
+            ArrowAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
+
+            base.DoUpdate(gameTime);
+
+            if (InputHelper.InputUpPressed())
+            {
+                //Move menu downward and then open the dice menu
+                PrepareToRollDice();
+            }
+            else if (InputHelper.InputDownPressed())
+            {
+                SwitchToTerritoryMenu();
+            }
+        }
+
         public override void OnEndCardSelected()
         {
             Map.EndPlayerPhase();
+        }
+
+        public void SwitchToTerritoryMenu()
+        {
+            RemoveFromPanelList(this);
+            AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
         }
 
         protected override ActionPanel Copy()
@@ -33,11 +59,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int BoxHeight = 70;
             base.Draw(g);
-            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, 30, Constants.Height / 20);
-            GameScreen.DrawBox(g, new Vector2(30, Constants.Height / 20 + BoxHeight * 2), 200, 30, Color.White);
-            g.DrawStringCentered(Map.fntArial12, "Creature Selection", new Vector2(130, Constants.Height / 20 + BoxHeight * 2 + 15), Color.White);
+            int ActionInfoBoxX = Constants.Width / 16;
+            int ActionInfoBoxY = Constants.Height / 3;
+            int ActionInfoBoxWidth = Constants.Width / 5;
+            int ActionInfoBoxHeight = Constants.Height / 14;
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, Constants.Width / 16, Constants.Height / 10);
+            MenuHelper.DrawBorderlessBox(g, new Vector2(ActionInfoBoxX, ActionInfoBoxY), ActionInfoBoxWidth, ActionInfoBoxHeight);
+            g.DrawStringCentered(Map.fntArial12, "Creature Selection", new Vector2(ActionInfoBoxX + ActionInfoBoxWidth / 2, ActionInfoBoxY + ActionInfoBoxHeight / 2), Color.White);
         }
     }
 }

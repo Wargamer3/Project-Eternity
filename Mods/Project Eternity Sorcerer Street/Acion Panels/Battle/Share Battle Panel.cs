@@ -254,7 +254,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //Item Card
             if (Map.GlobalSorcererStreetBattleContext.InvaderItem != null)
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width / 12f, Constants.Height / 5.3f, -ItemCardScale, ItemCardScale, MathHelper.Pi);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width / 24f, Constants.Height / 10.6f, -ItemCardScale, ItemCardScale, false);
             }
 
             //ST Bar
@@ -286,7 +286,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //Item Card
             if (Map.GlobalSorcererStreetBattleContext.DefenderItem != null)
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width - Constants.Width / 12f, Constants.Height / 5.3f, -ItemCardScale, ItemCardScale, MathHelper.Pi);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width - Constants.Width / 24f, Constants.Height / 10.6f, -ItemCardScale, ItemCardScale, false);
             }
 
             //ST Bar

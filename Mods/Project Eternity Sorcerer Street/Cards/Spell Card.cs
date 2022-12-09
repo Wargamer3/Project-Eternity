@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 using System.Collections.Generic;
 
@@ -23,6 +24,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override List<Texture2D> GetIcons(CardSymbols Symbols)
         {
             throw new System.NotImplementedException();
         }

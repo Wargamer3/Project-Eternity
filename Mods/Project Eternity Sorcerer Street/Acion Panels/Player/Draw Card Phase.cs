@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DrawIntro(CustomSpriteBatch g)
         {
             //Spin card from the left
-            float MaxScale = 0.6f;
+            float MaxScale = 1f;
             float RealRotationTimer = RotationTimer % MathHelper.TwoPi;
             float FinalX = Constants.Width / 4;
             float StartX = -10;
@@ -198,13 +198,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Y = Constants.Height / 10;
             float FinalScale = (float)Math.Sin(RealRotationTimer) * MaxScale;
 
-            Card.DrawCardMiniature(g, DrawnCard.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer);
+            Card.DrawCardMiniature(g, DrawnCard.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
         }
 
         private void DrawOutro(CustomSpriteBatch g)
         {
-            float StartScale = 0.6f;
-            float EndScale = 0.26f;
+            float StartScale = 1;
+            float EndScale = 0.52f;
             float RealRotationTimer = RotationTimer % MathHelper.TwoPi;
             float StartX = Constants.Width / 4;
             float FinalX = ActivePlayer.ListCardInHand.Count * 80;
@@ -217,12 +217,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float ComputedScale = StartScale + (EndScale - StartScale) * (RotationTimer / AnimationTime);
             float FinalScale = (float)Math.Sin(RealRotationTimer) * ComputedScale;
 
-            Card.DrawCardMiniature(g, DrawnCard.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, ComputedScale, RealRotationTimer);
+            Card.DrawCardMiniature(g, DrawnCard.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, ComputedScale, RealRotationTimer < MathHelper.Pi);
         }
 
         public override void Draw(CustomSpriteBatch g)
         {
-            if (AnimationPhase == 0)
+            if (AnimationPhase == AnimationPhases.IntroAnimation)
             {
                 DrawIntro(g);
             }

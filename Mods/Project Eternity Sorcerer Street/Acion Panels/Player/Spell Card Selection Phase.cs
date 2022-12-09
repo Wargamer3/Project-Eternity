@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (InputHelper.InputDownPressed())
             {
-                SwitchToTerritory();
+                SwitchToMainMenu();
             }
         }
 
@@ -48,22 +48,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             UpdateAnimationTimer();
         }
 
+        public void SwitchToMainMenu()
+        {
+            RemoveFromPanelList(this);
+            AddToPanelListAndSelect(new ActionPanelMainMenuPhase(Map, ActivePlayerIndex));
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             base.Draw(g);
-            int BoxHeight = 70;
 
-            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, 30, Constants.Height / 20);
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, Constants.Width / 16, Constants.Height / 10);
 
-            GameScreen.DrawBox(g, new Vector2(30, Constants.Height / 20 + BoxHeight * 2), 200, 30, Color.White);
-            g.DrawStringCentered(Map.fntArial12, "Spell Selection", new Vector2(130, Constants.Height / 20 + BoxHeight * 2 + 15), Color.White);
-
+            int ActionInfoBoxX = Constants.Width / 16;
+            int ActionInfoBoxY = Constants.Height / 3;
+            int ActionInfoBoxWidth = Constants.Width / 5;
+            int ActionInfoBoxHeight = Constants.Height / 14;
+            MenuHelper.DrawBorderlessBox(g, new Vector2(ActionInfoBoxX, ActionInfoBoxY), ActionInfoBoxWidth, ActionInfoBoxHeight);
+            g.DrawStringCentered(Map.fntArial12, "Spell Selection", new Vector2(ActionInfoBoxX + ActionInfoBoxWidth / 2, ActionInfoBoxY + ActionInfoBoxHeight / 2), Color.White);
         }
 
         public override void DrawArrows(CustomSpriteBatch g)
         {
-            float CardsHeight = Constants.Height - 100;
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, CardsHeight - 95 + (float)Math.Sin(ArrowAnimationTime * 10) * 3f), Color.White);
+            float Y = Constants.Height - Constants.Height / 6;
+            float Scale = Constants.Width / 3764.70581f;
+
+            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Y - 340 * Scale + (float)Math.Sin(ArrowAnimationTime * 10) * 3f), Color.White);
             g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - 20 - (float)Math.Sin(ArrowAnimationTime * 10) * 3f), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.FlipVertically, 0f);
         }
 

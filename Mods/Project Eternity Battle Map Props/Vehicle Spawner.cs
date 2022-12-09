@@ -114,6 +114,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Z,
                 SpawnTerrain.LayerIndex * 32 + 0.1f,
                 new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
+                new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
                 new List<Texture2D>() { VehicleToSpawn.sprVehicle }, Z, Z, Z, Z, 0)[0];
         }
 
@@ -130,6 +131,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 0 * Map.TileSize.Y,
                 0,
                 SpawnTerrain.LayerIndex * 32 + 0.1f,
+                new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
                 new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
                 new List<Texture2D>() { VehicleToSpawn.sprVehicle }, Z, Z, Z, Z, 0)[0];
 

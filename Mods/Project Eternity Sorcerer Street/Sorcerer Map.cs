@@ -29,12 +29,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprPlayerBackground;
         public Texture2D sprArrowUp;
 
+        public Texture2D sprDiceHolder;
+        public Texture2D sprDiceHolderEffect;
+
         public Texture2D sprTerritory;
         public Texture2D sprMap;
         public Texture2D sprInfo;
         public Texture2D sprOptions;
         public Texture2D sprHelp;
         public Texture2D sprEndTurn;
+        public Texture2D sprReturn;
+        public Texture2D sprSuspend;
 
         public Texture2D sprMenuHand;
         public Texture2D sprMenuCursor;
@@ -48,6 +53,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprDirectionEastFilled;
         public Texture2D sprDirectionWestFilled;
         public Texture2D sprDirectionSouthFilled;
+
+        public Texture2D sprTileset;
 
         public CardSymbols Symbols;
 
@@ -178,9 +185,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (!IsServer)
             {
+                MenuHelper.Init(Content);
+
                 sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
 
                 sprArrowUp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Arrow Up");
+
+                sprDiceHolder = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Dice Holder");
+                sprDiceHolderEffect = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Dice Holder Effect");
 
                 sprTerritory = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Territory");
                 sprMap = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Map");
@@ -188,6 +200,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprOptions = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Options");
                 sprHelp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Help");
                 sprEndTurn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/End");
+                sprReturn = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Return");
+                sprSuspend = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Suspend");
 
                 sprPlayerBackground = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Background");
 
@@ -195,14 +209,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
                 sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
 
-                sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
-                sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West");
-                sprDirectionEast = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
-                sprDirectionSouth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
-                sprDirectionNorthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South");
-                sprDirectionWestFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West");
-                sprDirectionEastFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East");
-                sprDirectionSouthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Filled");
+                sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Black");
+                sprDirectionWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West Black");
+                sprDirectionEast = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East Black");
+                sprDirectionSouth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Black");
+                sprDirectionNorthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South White");
+                sprDirectionWestFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West White");
+                sprDirectionEastFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East White");
+                sprDirectionSouthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South White");
+
+                sprTileset = Content.Load<Texture2D>("Sorcerer Street/Ressources/Land/Tiles");
 
                 Symbols = CardSymbols.Load(Content);
 

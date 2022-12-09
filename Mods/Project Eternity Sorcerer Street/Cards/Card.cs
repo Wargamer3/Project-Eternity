@@ -49,23 +49,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             CardSymbols NewCardSymbols = new CardSymbols();
 
-            NewCardSymbols.sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Air");
-            NewCardSymbols.sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Earth");
-            NewCardSymbols.sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Fire");
-            NewCardSymbols.sprElementWater = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Water");
-            NewCardSymbols.sprElementMulti = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Multi");
-            NewCardSymbols.sprElementNeutral = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Neutral");
+            NewCardSymbols.sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Air");
+            NewCardSymbols.sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Earth");
+            NewCardSymbols.sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Fire");
+            NewCardSymbols.sprElementWater = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Water");
+            NewCardSymbols.sprElementNeutral = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Neutral");
+            NewCardSymbols.sprElementMulti = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Elements/Multi");
 
-            NewCardSymbols.sprMenuG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/G");
-            NewCardSymbols.sprMenuTG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/TG");
-            NewCardSymbols.sprMenuST = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/ST");
-            NewCardSymbols.sprMenuHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/HP");
-            NewCardSymbols.sprMenuMHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/MHP");
+            NewCardSymbols.sprMenuG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/G");
+            NewCardSymbols.sprMenuTG = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/TG");
+            NewCardSymbols.sprMenuST = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/ST");
+            NewCardSymbols.sprMenuHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/HP");
+            NewCardSymbols.sprMenuMHP = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Text/MHP");
 
-            NewCardSymbols.sprRarityE = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity E");
-            NewCardSymbols.sprRarityN = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity N");
-            NewCardSymbols.sprRarityR = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity R");
-            NewCardSymbols.sprRarityS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Rarity/Rarity S");
+            NewCardSymbols.sprRarityE = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Rare");
+            NewCardSymbols.sprRarityN = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Normal");
+            NewCardSymbols.sprRarityR = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Rare");
+            NewCardSymbols.sprRarityS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Rarity/Strange");
+
+            NewCardSymbols.sprItemsWeapon = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Weapon");
+            NewCardSymbols.sprItemsArmor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Armor");
+            NewCardSymbols.sprItemsTool = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Tool");
+            NewCardSymbols.sprItemsScroll = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Scroll");
+
+            NewCardSymbols.sprSpellsSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Spell single");
+            NewCardSymbols.sprSpellsMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Spell Multiple");
+
+            NewCardSymbols.sprEnchantSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Enchant Single");
+            NewCardSymbols.sprEnchantMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Icons/Enchant Multiple");
 
             return NewCardSymbols;
         }
@@ -200,8 +211,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             //Draw Card on left
             g.Draw(sprCard, new Vector2(Constants.Width / 4, Constants.Height / 10), new Rectangle(0, 0, sprCard.Width, sprCard.Height), Color.White,
-                0f, new Vector2(sprCard.Width / 2, 0), new Vector2(0.6f, 0.6f), SpriteEffects.None, 0f);
+                0f, new Vector2(sprCard.Width / 2, 0), new Vector2(1f, 1f), SpriteEffects.None, 0f);
         }
+
+        public abstract List<Texture2D> GetIcons(CardSymbols Symbols);
 
         public virtual void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)
         {
@@ -209,10 +222,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BoxHeight = (int)(Constants.Height / 2);
             float InfoBoxX = Constants.Width - Constants.Width / 12 - BoxWidth + OffsetX;
             float InfoBoxY = Constants.Height / 10 + OffsetY;
+            int IconWidth = Constants.Width / 112;
+            int IconHeight = Constants.Width / 60;
 
-            GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-            g.DrawString(fntCardInfo, CardType + " Card", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
-            GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
+            MenuHelper.DrawNamedBox(g, CardType, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight);
 
             float CurrentX = InfoBoxX + 10;
             float CurrentY = InfoBoxY - 10;
@@ -220,52 +233,75 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CurrentY += 20;
 
             g.DrawString(fntCardInfo, Name, new Vector2(CurrentX, CurrentY), Color.White);
-            g.Draw(Symbols.sprRarityE, new Vector2((int)InfoBoxX + BoxWidth - 30, (int)CurrentY), Color.White);
+            switch (Rarity)
+            {
+                case CardRarities.Normal:
+                    g.Draw(Symbols.sprRarityN, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38, (int)CurrentY), Color.White);
+                    break;
 
-            CurrentY += 20;
+                case CardRarities.Strange:
+                    g.Draw(Symbols.sprRarityS, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38, (int)CurrentY), Color.White);
+                    break;
+
+                case CardRarities.Rare:
+                    g.Draw(Symbols.sprRarityR, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38, (int)CurrentY), Color.White);
+                    break;
+
+                case CardRarities.Extra:
+                    g.Draw(Symbols.sprRarityE, new Vector2((int)InfoBoxX + BoxWidth - Constants.Width / 38, (int)CurrentY), Color.White);
+                    break;
+            }
+
+            CurrentY += Constants.Height / 24;
 
             g.DrawString(fntCardInfo, CardType, new Vector2(CurrentX, CurrentY), Color.White);
 
-            CurrentY += 20;
+            CurrentY += Constants.Height / 24;
 
             CurrentY += 24;
-
-            g.Draw(Symbols.sprMenuG, new Vector2((int)CurrentX - 5, (int)CurrentY), null, Color.White, 0f, Vector2.Zero, 0.6f, SpriteEffects.None, 0f);
+            
+            g.Draw(Symbols.sprMenuG, new Rectangle((int)CurrentX - 5, (int)CurrentY, IconWidth, IconHeight), Color.White);
             g.DrawString(fntCardInfo, MagicCost.ToString(), new Vector2(CurrentX + 15, CurrentY), Color.White);
 
-            CurrentY += 25;
+            CurrentY += Constants.Height / 24;
 
             List<string> ListLine = TextHelper.FitToWidth(fntCardInfo, Description, BoxWidth - 20);
             TextHelper.DrawTextMultiline(g, fntCardInfo, ListLine, TextHelper.TextAligns.Left, CurrentX + BoxWidth / 2, CurrentY, BoxWidth);
         }
 
         public static void DrawCardMiniature(CustomSpriteBatch g, Texture2D sprCardFront, Texture2D sprCardBack, Color CardFrontColor,
-            float X, float Y, float ScaleX, float ScaleY, float RealRotationTimer)
+            float X, float Y, float ScaleX, float ScaleY, bool IsFaceDown)
         {
-            if (RealRotationTimer < MathHelper.Pi)
+            int FinalCardWidth = (int)(Constants.Width / 4.70588255);
+            int FinalCardHeight = (int)(Constants.Height / 2.11764717);
+
+            if (IsFaceDown)
             {
-                g.Draw(sprCardBack, new Vector2(X, Y), new Rectangle(0, 0, sprCardBack.Width, sprCardBack.Height), Color.White,
-                    0f, new Vector2(sprCardBack.Width / 2, 0), new Vector2(ScaleX, ScaleY), SpriteEffects.None, 0f);
+                g.Draw(sprCardBack, new Rectangle((int)X, (int)Y, (int)(FinalCardWidth * ScaleX), (int)(FinalCardHeight * ScaleY)), new Rectangle(0, 0, sprCardBack.Width, sprCardBack.Height),
+                    CardFrontColor, 0, new Vector2(sprCardBack.Width / 2, 0), SpriteEffects.None, 0f);
             }
             else
             {
-                g.Draw(sprCardFront, new Vector2(X, Y), new Rectangle(0, 0, sprCardFront.Width, sprCardFront.Height), CardFrontColor,
-                    0f, new Vector2(sprCardFront.Width / 2, 0), new Vector2(-ScaleX, ScaleY), SpriteEffects.None, 0f);
+                g.Draw(sprCardFront, new Rectangle((int)X, (int)Y, (int)(FinalCardWidth * -ScaleX), (int)(FinalCardHeight * ScaleY)), new Rectangle(0, 0, sprCardFront.Width, sprCardFront.Height),
+                    CardFrontColor, 0, new Vector2(sprCardFront.Width / 2, 0), SpriteEffects.None, 0f);
             }
         }
 
         public static void DrawCardMiniatureCentered(CustomSpriteBatch g, Texture2D sprCardFront, Texture2D sprCardBack, Color CardFrontColor,
-            float X, float Y, float ScaleX, float ScaleY, float RealRotationTimer)
+            float X, float Y, float ScaleX, float ScaleY, bool IsFaceDown)
         {
-            if (RealRotationTimer < MathHelper.Pi)
+            int FinalCardWidth = (int)(Constants.Width / 4.70588255);
+            int FinalCardHeight = (int)(Constants.Height / 2.11764717);
+
+            if (IsFaceDown)
             {
-                g.Draw(sprCardBack, new Vector2(X, Y), new Rectangle(0, 0, sprCardBack.Width, sprCardBack.Height), Color.White,
-                    0f, new Vector2(sprCardBack.Width / 2, sprCardBack.Height / 2), new Vector2(ScaleX, ScaleY), SpriteEffects.None, 0f);
+                g.Draw(sprCardBack, new Rectangle((int)X, (int)Y, (int)(FinalCardWidth * ScaleX), (int)(FinalCardHeight * ScaleY)), new Rectangle(0, 0, sprCardBack.Width, sprCardBack.Height),
+                    CardFrontColor, 0, new Vector2(sprCardBack.Width / 2, sprCardBack.Height / 2), SpriteEffects.None, 0f);
             }
             else
             {
-                g.Draw(sprCardFront, new Vector2(X, Y), new Rectangle(0, 0, sprCardFront.Width, sprCardFront.Height), CardFrontColor,
-                    0f, new Vector2(sprCardFront.Width / 2, sprCardFront.Height / 2), new Vector2(-ScaleX, ScaleY), SpriteEffects.None, 0f);
+                g.Draw(sprCardFront, new Rectangle((int)X, (int)Y, (int)(FinalCardWidth * -ScaleX), (int)(FinalCardHeight * ScaleY)), new Rectangle(0, 0, sprCardFront.Width, sprCardFront.Height),
+                    CardFrontColor, 0, new Vector2(sprCardFront.Width / 2, sprCardFront.Height / 2), SpriteEffects.None, 0f);
             }
         }
 

@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             int BoxHeight = 70;
             base.Draw(g);
-            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, 30, Constants.Height / 20);
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, 30, Constants.Height / 10);
             GameScreen.DrawBox(g, new Vector2(30, Constants.Height / 20 + BoxHeight * 2), 200, 30, Color.White);
             g.DrawStringCentered(Map.fntArial12, "Creature Selection", new Vector2(130, Constants.Height / 20 + BoxHeight * 2 + 15), Color.White);
         }

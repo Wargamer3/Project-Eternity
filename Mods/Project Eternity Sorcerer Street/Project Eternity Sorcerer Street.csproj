@@ -62,9 +62,11 @@
     <Compile Include="Acion Panels\Battle\Share Battle Panel.cs" />
     <Compile Include="Acion Panels\Battle\Start Phase Panel.cs" />
     <Compile Include="Acion Panels\Battle\Attack Animation Phase.cs" />
+    <Compile Include="Acion Panels\Options\Suspend.cs" />
     <Compile Include="Acion Panels\Player\Choose Direction.cs" />
     <Compile Include="Acion Panels\Player\Creature Summon.cs" />
     <Compile Include="Acion Panels\Player\Confirm Creature Summon Battle.cs" />
+    <Compile Include="Acion Panels\Player\Main Menu Phase.cs" />
     <Compile Include="Acion Panels\Player\Territory Phase.cs" />
     <Compile Include="Acion Panels\Player\Pay Toll Phase.cs" />
     <Compile Include="Acion Panels\Player\Discard Card Phase.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="Acion Panels\Options\ViewMap.cs" />
     <Compile Include="Acion Panels\Options\End Player Phase.cs" />
     <Compile Include="Animation Screen.cs" />
+    <Compile Include="Menu Helper.cs" />
     <Compile Include="Camera 3D.cs" />
     <Compile Include="Cards\Card.cs" />
     <Compile Include="Cards\Creature Card.cs" />

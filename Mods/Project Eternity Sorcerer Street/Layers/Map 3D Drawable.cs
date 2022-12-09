@@ -37,10 +37,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Dictionary<Vector4, List<Tile3D>> DicDrawablePointPerColor;
         private List<Tile3D> ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
+        List<Texture2D> ListTileset;
 
-        public Map3DDrawable(SorcererStreetMap Map, LayerHolderSorcererStreet LayerManager, GraphicsDevice g)
+    public Map3DDrawable(SorcererStreetMap Map, LayerHolderSorcererStreet LayerManager, GraphicsDevice g)
         {
             this.Map = Map;
+            ListTileset = new List<Texture2D>() { Map.sprTileset };
+            for (int T = 1; T < Map.ListTileSet.Count; ++T)
+            {
+                ListTileset.Add(Map.ListTileSet[T]);
+            }
+
             sprCursor = Map.sprCursor;
             ListEditorCursorFace = new List<Tile3D>();
 
@@ -119,7 +126,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
                 Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    0, 0, Z, 0, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                    0, 0, Z, 0, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
             }
 
             if (Map.IsEditor)
@@ -208,15 +215,65 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         ZRight = Owner.ArrayTerrain[X + 1, Y].WorldPosition.Z * LayerHeight;
                     }
 
-                    List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, ActiveTerrain.Origin.Location,
+                    Point Location = ActiveTerrain.Origin.Location;
+                    Point TextureSize = Map.TileSize;
+
+                    if (ActiveTerrain.TilesetIndex == 0)
+                    {
+                        TextureSize = new Point(128, 128);
+
+                        switch (Map.ListTerrainType[Owner.ArrayTerrain[X, Y].TerrainTypeIndex])
+                        {
+                            case TerrainSorcererStreet.Castle:
+                                Location = new Point(128 * 4, 128);
+                                break;
+
+                            case TerrainSorcererStreet.FireElement:
+                                Location = new Point(0, 0);
+                                break;
+
+                            case TerrainSorcererStreet.WaterElement:
+                                Location = new Point(128 * 3, 0);
+                                break;
+
+                            case TerrainSorcererStreet.EarthElement:
+                                Location = new Point(128 * 1, 0);
+                                break;
+
+                            case TerrainSorcererStreet.AirElement:
+                                Location = new Point(128 * 2, 0);
+                                break;
+
+                            case TerrainSorcererStreet.NorthTower:
+                                Location = new Point(0, 128);
+                                break;
+
+                            case TerrainSorcererStreet.SouthTower:
+                                Location = new Point(128, 128);
+                                break;
+
+                            case TerrainSorcererStreet.EastTower:
+                                Location = new Point(128 * 2, 128);
+                                break;
+
+                            case TerrainSorcererStreet.WestTower:
+                                Location = new Point(128 * 3, 128);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                    }
+
+                    List<Tile3D> ListNew3DTile = ActiveTerrain3D.CreateTile3D(ActiveTerrain.TilesetIndex, Location,
                                             X * Map.TileSize.X, Y * Map.TileSize.Y, Z, MinZ,
-                                            Map.TileSize, Map.ListTileSet, ZFront, ZBack, ZLeft, ZRight, 0);
+                                            Map.TileSize, TextureSize, ListTileset, ZFront, ZBack, ZLeft, ZRight, 0);
 
                     Tile3D TopTile = ListNew3DTile[0];
                     if (TopTile.ArrayVertex.Length == 4)
                     {
-                        float TextureWidth = Map.TileSize.X / (float)Map.ListTileSet[TopTile.TilesetIndex].Width / 10;
-                        float TextureHeight = Map.TileSize.Y / (float)Map.ListTileSet[TopTile.TilesetIndex].Height / 10;
+                        float TextureWidth = Map.TileSize.X / (float)Map.sprTileset.Width / 10;
+                        float TextureHeight = Map.TileSize.Y / (float)Map.sprTileset.Height / 10;
 
                         TopTile.ArrayVertex[0] = new VertexPositionNormalTexture(TopTile.ArrayVertex[0].Position, TopTile.ArrayVertex[0].Normal, new Vector2(TopTile.ArrayVertex[0].TextureCoordinate.X - TextureWidth, TopTile.ArrayVertex[0].TextureCoordinate.Y - TextureHeight));
                         TopTile.ArrayVertex[1] = new VertexPositionNormalTexture(TopTile.ArrayVertex[1].Position, TopTile.ArrayVertex[1].Normal, new Vector2(TopTile.ArrayVertex[1].TextureCoordinate.X + TextureWidth, TopTile.ArrayVertex[1].TextureCoordinate.Y - TextureHeight));
@@ -230,12 +287,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             if (!DicHiddenTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
                             {
-                                DicHiddenTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex], 0.5f));
+                                DicHiddenTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, ListTileset[ActiveTile.TilesetIndex], 0.5f));
                             }
 
                             if (!DicTile3DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
                             {
-                                DicTile3DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
+                                DicTile3DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, ListTileset[ActiveTile.TilesetIndex]));
                             }
 
                             DicHiddenTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile);
@@ -248,12 +305,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             if (!DicTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
                             {
-                                DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
+                                DicTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, ListTileset[ActiveTile.TilesetIndex]));
                             }
 
                             if (!DicTile3DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
                             {
-                                DicTile3DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, Map.ListTileSet[ActiveTile.TilesetIndex]));
+                                DicTile3DByLayerByTileset[LayerIndex].Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, ListTileset[ActiveTile.TilesetIndex]));
                             }
 
                             DicTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile);
@@ -302,9 +359,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Cursor.RightFace.Origin = new Rectangle(0, 0, Map.TileSize.X, Map.TileSize.Y);
 
             ListEditorCursorFace = Cursor.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, ZTop, ZBottom, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0);
+                X * Map.TileSize.X, Y * Map.TileSize.Y, ZTop, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0);
             ListEditorCursorFace.Add(Cursor.CreateTile3D(0, Point.Zero,
-                X * Map.TileSize.X, Y * Map.TileSize.Y, ZBottom, ZBottom, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0)[0]);
+                X * Map.TileSize.X, Y * Map.TileSize.Y, ZBottom, ZBottom, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, ZBottom, ZBottom, ZBottom, ZBottom, 0)[0]);
         }
 
         public void Update(GameTime gameTime)
@@ -320,7 +377,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
                 Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                    X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
             }
 
             if (!Map.IsAPlatform && Map.ListPlayer.Count > 0)
@@ -503,7 +560,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                 ListDrawablePoint3D.Add(ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
+                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0]);
             }
 
             DicDrawablePointPerColor.Add(new Vector4(PointColor.R / 255f, PointColor.G / 255f, PointColor.B / 255f, PointColor.A / 255f), ListDrawablePoint3D);
@@ -529,7 +586,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                 ListDrawableArrowPerColor.Add(ActiveTerrain3D.CreateTile3D(0, GetCursorTextureOffset(Previous, ActivePoint, Next),
-                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
+                X * ActivePoint.Owner.TileSize.X, Y * ActivePoint.Owner.TileSize.Y, Z, MinZ, ActivePoint.Owner.TileSize, ActivePoint.Owner.TileSize, new List<Texture2D>() { Map.sprCursorPath }, Z, Z, Z, Z, 0)[0]);
             }
         }
 
@@ -882,7 +939,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
                             Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+                                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, new Point(Map.TileSize.X, Map.TileSize.Y), Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
 
                             Cursor.Draw(g.GraphicsDevice);
                         }

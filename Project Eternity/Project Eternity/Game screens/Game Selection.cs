@@ -175,6 +175,11 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.SorcererStreet:
+                        Constants.Width = 1920;
+                        Constants.Height = 1080;
+                        Constants.graphics.PreferredBackBufferWidth = Constants.Width;
+                        Constants.graphics.PreferredBackBufferHeight = Constants.Height;
+                        Constants.graphics.ApplyChanges();
                         GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = (GameScreens.SorcererStreetScreen.SorcererStreetMap)BattleMap.DicBattmeMapType[GameScreens.SorcererStreetScreen.SorcererStreetMap.MapType].GetNewMap(string.Empty, string.Empty);
                         NewMapSS.BattleMapPath = "New Item";
                         NewMapSS.ListGameScreen = ListGameScreen;

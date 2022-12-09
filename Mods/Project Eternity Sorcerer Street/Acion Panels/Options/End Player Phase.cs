@@ -42,5 +42,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
         }
+
+        public override string ToString()
+        {
+            return "Ends your turn.";
+        }
     }
 }
