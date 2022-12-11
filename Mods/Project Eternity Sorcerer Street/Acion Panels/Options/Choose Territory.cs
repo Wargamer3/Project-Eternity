@@ -31,6 +31,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
+            CursorPosition = new Vector3(ActivePlayer.GamePiece.Position.X * Map.TileSize.X, ActivePlayer.GamePiece.Position.Y * Map.TileSize.Y, ActivePlayer.GamePiece.Position.Z);
             Camera = new DefaultCamera(GameScreen.GraphicsDevice);
             Map.CameraOverride = Camera;
             HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
@@ -63,7 +64,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CursorPosition.X += (float)gameTime.ElapsedGameTime.TotalSeconds * 100f;
                 HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
             }
-            if (InputHelper.InputConfirmPressed() && HoverTerrain.TerrainTypeIndex != 0)
+            if (InputHelper.InputConfirmPressed() && HoverTerrain.TerrainTypeIndex != 0
+                && Map.ListPassedTerrein.Contains(HoverTerrain))
             {
                 AddToPanelListAndSelect(new ActionPanelTerritoryActions(Map, ActivePlayerIndex, HoverTerrain));
 
@@ -97,11 +99,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Vector3 Position = new Vector3(Visible3DPosition.X, Visible3DPosition.Y, Visible3DPosition.Z);
 
             Vector3 Position2D = g.GraphicsDevice.Viewport.Project(Position, Camera.Projection, Camera.View, Matrix.Identity);
-            g.Draw(Map.sprMenuCursor, new Rectangle((int)Position2D.X - 20, (int)Position2D.Y - 40, 40, 40), Color.White);
+            MenuHelper.DrawFingerIcon(g, new Vector2(Position2D.X - 85, Position2D.Y - 25));
 
             if (HoverTerrain.TerrainTypeIndex != 0)
             {
-                ActionPanelPlayerDefault.DrawLandInformation(g, Map, HoverTerrain);
+                ActionPanelPlayerDefault.DrawLandInformation(g, Map, HoverTerrain, Constants.Width / 12f, Constants.Height / 10f);
                 if (HoverTerrain.DefendingCreature != null)
                 {
                     HoverTerrain.DefendingCreature.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);

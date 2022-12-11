@@ -46,6 +46,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
 
                 Player NewPlayer = new Player("", PlayerName, "", false, _PlayerTeam, true, Color.White, ListCardInDeck);
+                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(_SpawnPosition.X, _SpawnPosition.Y, 0);
+                NewPlayer.GamePiece.SetPosition(new Vector3(ActiveTerrain.InternalPosition.X, ActiveTerrain.InternalPosition.Y, ActiveTerrain.LayerIndex));
 
                 NewPlayer.LoadGamePieceModel();
 
@@ -53,10 +55,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     Map.ListPlayer.Clear();
                     Map.AddPlayer(NewPlayer);
+                    NewPlayer.Color = Color.Red;
                 }
                 else
                 {
                     Map.AddPlayer(NewPlayer);
+                    NewPlayer.Color = Color.Blue;
                 }
                 NewPlayer.TotalMagic = NewPlayer.Magic = Map.MagicAtStart;
 

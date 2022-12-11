@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             NewScreen = new GamePreparationScreen(OnlineGameClient, OnlineCommunicationClient, MissionRoom);
 
-            DicNewGameServerScript.Add(CreateGameScriptClient.ScriptName, new CreateGameScriptClient(OnlineGameClient, ScreenOwner.ListGameScreen, MissionRoom));
+            DicNewGameServerScript.Add(CreateGameScriptClient.ScriptName, new CreateGameScriptClient(OnlineGameClient, OnlineCommunicationClient, ScreenOwner.ListGameScreen, MissionRoom));
             DicNewGameServerScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasMissionScriptClient(MissionRoom, NewScreen));
 
             if (HasGame)

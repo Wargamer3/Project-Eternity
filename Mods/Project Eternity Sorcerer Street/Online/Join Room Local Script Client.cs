@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
 
             NewPreparationScreen = new SorcererStreetGamePreparationScreen(OnlineGameClient, OnlineCommunicationClient, NewRoomInformation);
 
-            DicNewGameServerScript.Add(CreateGameScriptClient.ScriptName, new CreateGameScriptClient(OnlineGameClient, ScreenOwner.ListGameScreen, NewRoomInformation));
+            DicNewGameServerScript.Add(CreateGameScriptClient.ScriptName, new CreateGameScriptClient(OnlineGameClient, OnlineCommunicationClient, ScreenOwner.ListGameScreen, NewRoomInformation));
             DicNewGameServerScript.Add(ChangeRoomExtrasBattleScriptClient.ScriptName, new ChangeRoomExtrasBattleScriptClient(NewRoomInformation, NewPreparationScreen));
 
             if (HasGame)

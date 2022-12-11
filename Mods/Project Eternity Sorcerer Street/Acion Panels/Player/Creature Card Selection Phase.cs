@@ -32,24 +32,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (InputHelper.InputUpPressed())
             {
-                //Move menu downward and then open the dice menu
-                PrepareToRollDice();
+                RemoveFromPanelList(this);
+                AddToPanelListAndSelect(new ActionPanelLandInfoPhase(Map, ActivePlayerIndex));
             }
             else if (InputHelper.InputDownPressed())
             {
-                SwitchToTerritoryMenu();
+                RemoveFromPanelList(this);
+                AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
             }
         }
 
         public override void OnEndCardSelected()
         {
             Map.EndPlayerPhase();
-        }
-
-        public void SwitchToTerritoryMenu()
-        {
-            RemoveFromPanelList(this);
-            AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
         }
 
         protected override ActionPanel Copy()
@@ -67,6 +62,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, Constants.Width / 16, Constants.Height / 10);
             MenuHelper.DrawBorderlessBox(g, new Vector2(ActionInfoBoxX, ActionInfoBoxY), ActionInfoBoxWidth, ActionInfoBoxHeight);
             g.DrawStringCentered(Map.fntArial12, "Creature Selection", new Vector2(ActionInfoBoxX + ActionInfoBoxWidth / 2, ActionInfoBoxY + ActionInfoBoxHeight / 2), Color.White);
+            MenuHelper.DrawUpArrow(g);
+            MenuHelper.DrawDownArrow(g);
         }
     }
 }

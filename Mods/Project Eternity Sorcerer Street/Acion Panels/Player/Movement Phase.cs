@@ -167,14 +167,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            ActionPanelRollDicePhase.DrawDiceHolder(g, Map, new Vector2(Constants.Width / 8, Constants.Height / 4), Movement, RotationValue);
+            MenuHelper.DrawDiceHolder(g, new Vector2(Constants.Width / 8, Constants.Height / 4), Movement);
         }
 
         private void MoveToNextTerrain()
         {
-            Vector3 FinalPosition = NextTerrain.WorldPosition;
+            Vector3 FinalPosition = new Vector3(NextTerrain.InternalPosition.X, NextTerrain.InternalPosition.Y, NextTerrain.LayerIndex);
             Map.MovementAnimation.Add(ActivePlayer.GamePiece, ActivePlayer.GamePiece.Position, FinalPosition);
             ActivePlayer.GamePiece.SetPosition(FinalPosition);
+
+            if (NextTerrain.PlayerOwner == ActivePlayer)
+            {
+                Map.ListPassedTerrein.Add(NextTerrain);
+            }
 
             --Movement;
             NextTerrain.OnReached(Map, ActivePlayerIndex, Movement);

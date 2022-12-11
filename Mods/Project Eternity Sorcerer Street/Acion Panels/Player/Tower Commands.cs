@@ -38,12 +38,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AddChoiceToCurrentPanel(new ActionPanelChooseTerritory(Map, ActivePlayerIndex));
-            AddChoiceToCurrentPanel(new ActionPanelViewMap(Map));
-            AddChoiceToCurrentPanel(new ActionPanelInfo(Map));
-            AddChoiceToCurrentPanel(new ActionPanelOptions(Map));
-            AddChoiceToCurrentPanel(new ActionPanelHelp(Map));
-            AddChoiceToCurrentPanel(new ActionPanelEndPlayerPhase(Map));
+            switch (Map.ListTerrainType[TerrainTypeIndex])
+            {
+                case TerrainSorcererStreet.EastTower:
+                    ActivePlayer.ListPassedCheckpoint.Add(SorcererStreetMap.Checkpoints.East);
+                    break;
+                case TerrainSorcererStreet.WestTower:
+                    ActivePlayer.ListPassedCheckpoint.Add(SorcererStreetMap.Checkpoints.West);
+                    break;
+                case TerrainSorcererStreet.SouthTower:
+                    ActivePlayer.ListPassedCheckpoint.Add(SorcererStreetMap.Checkpoints.South);
+                    break;
+                case TerrainSorcererStreet.NorthTower:
+                    ActivePlayer.ListPassedCheckpoint.Add(SorcererStreetMap.Checkpoints.North);
+                    break;
+            }
             ActivePlayer.Magic += Map.TowerMagicGain;
             ActivePlayer.TotalMagic += Map.TowerMagicGain;
             Map.UpdatePlayersRank();
@@ -62,18 +71,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 RemoveFromPanelList(this);
+
                 if (MovementRemaining == 0)
                 {
-                    Map.EndPlayerPhase();
+                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
                 }
             }
 
             if (InputHelper.InputConfirmPressed())
             {
                 RemoveFromPanelList(this);
+
                 if (MovementRemaining == 0)
                 {
-                    Map.EndPlayerPhase();
+                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
                 }
             }
         }
@@ -100,55 +111,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            GameScreen.DrawBox(g, new Vector2(30, 30), 50, 50, Color.Black);
-            g.DrawString(Map.fntArial12, MovementRemaining.ToString(), new Vector2(37, 35), Color.White);
+            MenuHelper.DrawDiceHolder(g, new Vector2(Constants.Width / 8, Constants.Height / 4), MovementRemaining);
 
             if (ItemAnimationTime < 1)
             {
-                int Size = Constants.Width / 4;
-                int PosX = Constants.Width / 2 - Size / 2;
-                int PosY = Constants.Height / 2 - Size / 2;
-
-                switch (Map.ListTerrainType[TerrainTypeIndex])
-                {
-                    case TerrainSorcererStreet.EastTower:
-                        g.Draw(Map.sprDirectionEastFilled, new Rectangle(PosX, PosY + 5, Size, Size), Color.FromNonPremultiplied(255, 255, 255, (int)(ItemAnimationTime * 255)));
-                        break;
-                    case TerrainSorcererStreet.WestTower:
-                        g.Draw(Map.sprDirectionWestFilled, new Rectangle(PosX, PosY + 5, Size, Size), Color.FromNonPremultiplied(255, 255, 255, (int)(ItemAnimationTime * 255)));
-                        break;
-                    case TerrainSorcererStreet.SouthTower:
-                        g.Draw(Map.sprDirectionSouthFilled, new Rectangle(PosX, PosY + 5, Size, Size), Color.FromNonPremultiplied(255, 255, 255, (int)(Math.Sin(ItemAnimationTime * MathHelper.Pi) * 255)));
-                        break;
-                    case TerrainSorcererStreet.NorthTower:
-                        g.Draw(Map.sprDirectionNorthFilled, new Rectangle(PosX, PosY + 5, Size, Size), Color.FromNonPremultiplied(255, 255, 255, (int)(ItemAnimationTime * 255)));
-                        break;
-                }
+                DrawTowerSymbol(g);
             }
             else if (ItemAnimationTime < 5)
             {
+                ItemAnimationTime = 2f;
                 int BoxX = (int)(Constants.Width / 3.2);
                 int BoxY = Constants.Height - Constants.Height / 2;
-                GameScreen.DrawBox(g, new Vector2(BoxX, BoxY), Constants.Width - (int)(Constants.Width / 1.6), 50, Color.White);
-                g.DrawString(Map.fntArial12, "Passed checkpoint", new Vector2(BoxX + 15, BoxY + 5), Color.White);
+                int BoxWidth = Constants.Width - (int)(Constants.Width / 1.6);
+
+                MenuHelper.DrawBorderlessBox(g, new Vector2(BoxX, BoxY), BoxWidth, Constants.Height / 15);
+                g.DrawString(Map.fntArial12, "Passed checkpoint", new Vector2(BoxX + 35, BoxY + 5), Color.White);
                 switch (Map.ListTerrainType[TerrainTypeIndex])
                 {
                     case TerrainSorcererStreet.EastTower:
-                        g.Draw(Map.sprDirectionEastFilled, new Rectangle(BoxX + 155, BoxY + 5, 18, 18), Color.White);
+                        g.Draw(Map.sprDirectionEastFilled, new Rectangle(BoxX + 175, BoxY + 5, 18, 18), Color.White);
                         break;
                     case TerrainSorcererStreet.WestTower:
-                        g.Draw(Map.sprDirectionWestFilled, new Rectangle(BoxX + 155, BoxY + 5, 18, 18), Color.White);
+                        g.Draw(Map.sprDirectionWestFilled, new Rectangle(BoxX + 175, BoxY + 5, 18, 18), Color.White);
                         break;
                     case TerrainSorcererStreet.SouthTower:
-                        g.Draw(Map.sprDirectionSouthFilled, new Rectangle(BoxX + 155, BoxY + 5, 18, 18), Color.White);
+                        g.Draw(Map.sprDirectionSouthFilled, new Rectangle(BoxX + 175, BoxY + 5, 18, 18), Color.White);
                         break;
                     case TerrainSorcererStreet.NorthTower:
-                        g.Draw(Map.sprDirectionNorthFilled, new Rectangle(BoxX + 155, BoxY + 5, 18, 18), Color.White);
+                        g.Draw(Map.sprDirectionNorthFilled, new Rectangle(BoxX + 175, BoxY + 5, 18, 18), Color.White);
                         break;
                 }
 
-                g.DrawString(Map.fntArial12, "Earned fort bonus of " + 100 + "G", new Vector2(BoxX + 15, BoxY + 25), Color.White);
-                g.Draw(Map.sprMenuHand, new Vector2(Constants.Width / 2 + 100, BoxY + 15), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+                g.DrawString(Map.fntArial12, "Earned fort bonus of " + 100 + "G", new Vector2(BoxX + 35, BoxY + 25), Color.White);
+                MenuHelper.DrawConfirmIcon(g, new Vector2(BoxX + BoxWidth - 50, BoxY + 20));
             }
             else
             {
@@ -157,6 +152,57 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     g.Draw(GameScreen.sprPixel, new Rectangle(P * 80 + 10, Constants.Height - 150, 70, 100), Color.Green);
                 }
             }
+        }
+
+        private void DrawTowerSymbol(CustomSpriteBatch g)
+        {
+            int Size = Constants.Width / 4;
+            int RingSize = Constants.Width / 5;
+            int PosX = Constants.Width / 2;
+            int PosY = Constants.Height / 2;
+
+            g.End();
+            g.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+
+            Color FinalColor = Color.FromNonPremultiplied(255, 255, 255, (int)(Math.Sin(ItemAnimationTime * MathHelper.Pi) * 255));
+
+            g.Draw(Map.sprTowerPopupRing, new Rectangle(PosX, PosY, RingSize, RingSize), null, FinalColor,
+                0f, new Vector2(Map.sprTowerPopupRing.Width, Map.sprTowerPopupRing.Height), SpriteEffects.None, 0f);
+
+            g.Draw(Map.sprTowerPopupRing, new Rectangle(PosX, PosY, RingSize, RingSize), null, FinalColor,
+                0f, new Vector2(0, Map.sprTowerPopupRing.Height), SpriteEffects.FlipHorizontally, 0f);
+
+            g.Draw(Map.sprTowerPopupRing, new Rectangle(PosX, PosY, RingSize, RingSize), null, FinalColor,
+                0f, new Vector2(Map.sprTowerPopupRing.Width, 0), SpriteEffects.FlipVertically, 0f);
+
+            g.Draw(Map.sprTowerPopupRing, new Rectangle(PosX, PosY, RingSize, RingSize), null, FinalColor,
+                0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically, 0f);
+
+            g.Draw(Map.sprTowerPopupBackground, new Rectangle(PosX, PosY, Size, Size), null, FinalColor,
+                0f, new Vector2(Map.sprTowerPopupBackground.Width / 2, Map.sprTowerPopupBackground.Height / 2), SpriteEffects.None, 0f);
+
+            switch (Map.ListTerrainType[TerrainTypeIndex])
+            {
+                case TerrainSorcererStreet.EastTower:
+                    g.Draw(Map.sprTowerPopupEast, new Rectangle(PosX, PosY, Size, Size), null, FinalColor,
+                        0f, new Vector2(Map.sprTowerPopupEast.Width / 2, Map.sprTowerPopupEast.Height / 2), SpriteEffects.None, 0f);
+                    break;
+                case TerrainSorcererStreet.WestTower:
+                    g.Draw(Map.sprTowerPopupWest, new Rectangle(PosX, PosY, Size, Size), null, FinalColor,
+                        0f, new Vector2(Map.sprTowerPopupWest.Width / 2, Map.sprTowerPopupWest.Height / 2), SpriteEffects.None, 0f);
+                    break;
+                case TerrainSorcererStreet.SouthTower:
+                    g.Draw(Map.sprTowerPopupSouth, new Rectangle(PosX, PosY, Size, Size), null, FinalColor,
+                        0f, new Vector2(Map.sprTowerPopupSouth.Width / 2, Map.sprTowerPopupSouth.Height / 2), SpriteEffects.None, 0f);
+                    break;
+                case TerrainSorcererStreet.NorthTower:
+                    g.Draw(Map.sprTowerPopupNorth, new Rectangle(PosX, PosY, Size, Size), null, FinalColor,
+                        0f, new Vector2(Map.sprTowerPopupNorth.Width / 2, Map.sprTowerPopupNorth.Height / 2), SpriteEffects.None, 0f);
+                    break;
+            }
+
+            g.End();
+            g.Begin(SpriteSortMode.Deferred, BlendState.Additive);
         }
     }
 }

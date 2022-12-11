@@ -12,6 +12,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -26,11 +27,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public Texture2D sprCardBack;
 
+        public Texture2D sprActiveCreatureCursor;
         public Texture2D sprPlayerBackground;
-        public Texture2D sprArrowUp;
-
-        public Texture2D sprDiceHolder;
-        public Texture2D sprDiceHolderEffect;
+        public Texture2D sprPlayerBlue1;
+        public Texture2D sprPlayerBlue2;
+        public Texture2D sprPlayerRed1;
+        public Texture2D sprPlayerRed2;
 
         public Texture2D sprTerritory;
         public Texture2D sprMap;
@@ -41,8 +43,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprReturn;
         public Texture2D sprSuspend;
 
-        public Texture2D sprMenuHand;
-        public Texture2D sprMenuCursor;
         public Texture2D sprVS;
 
         public Texture2D sprDirectionNorth;
@@ -54,12 +54,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public Texture2D sprDirectionWestFilled;
         public Texture2D sprDirectionSouthFilled;
 
+        public Texture2D sprTowerPopupBackground;
+        public Texture2D sprTowerPopupRing;
+        public Texture2D sprTowerPopupEast;
+        public Texture2D sprTowerPopupWest;
+        public Texture2D sprTowerPopupSouth;
+        public Texture2D sprTowerPopupNorth;
+
         public Texture2D sprTileset;
 
         public CardSymbols Symbols;
 
         public Texture2D sprTileBorderEmpty;
-        public Texture2D sprTileBorderColor;
+        public Texture2D sprTileBorderRed;
+        public Texture2D sprTileBorderBlue;
 
         #endregion
 
@@ -68,6 +76,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public List<Player> ListPlayer;
         public List<Player> ListLocalPlayer { get { return ListLocalPlayerInfo; } }
         public List<Player> ListAllPlayer { get { return ListPlayer; } }
+        private TextInput ChatInput;
         public int MagicAtStart;
         public int MagicGainPerLap;
         public int TowerMagicGain;
@@ -79,6 +88,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly SorcererStreetBattleParams SorcererStreetParams;
         public readonly List<string> ListTerrainType = new List<string>();
         public LayerHolderSorcererStreet LayerManager;
+        public List<TerrainSorcererStreet> ListPassedTerrein = new List<TerrainSorcererStreet>();
 
         public SorcererStreetMap()
             : this(new SorcererStreetBattleParams(new SorcererStreetBattleContext()))
@@ -185,14 +195,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (!IsServer)
             {
+                ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
+
                 MenuHelper.Init(Content);
 
                 sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
 
-                sprArrowUp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Arrow Up");
-
-                sprDiceHolder = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Dice Holder");
-                sprDiceHolderEffect = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Dice Holder Effect");
+                sprActiveCreatureCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Active Creature Cursor");
 
                 sprTerritory = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Territory");
                 sprMap = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Map");
@@ -204,9 +213,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprSuspend = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cards/Suspend");
 
                 sprPlayerBackground = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Background");
+                sprPlayerBlue1 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Blue 1");
+                sprPlayerBlue2 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Blue 2");
+                sprPlayerRed1 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Red 1");
+                sprPlayerRed2 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Player Red 2");
 
-                sprMenuHand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Hand");
-                sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
                 sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
 
                 sprDirectionNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Black");
@@ -218,12 +229,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 sprDirectionEastFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East White");
                 sprDirectionSouthFilled = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South White");
 
+                sprTowerPopupBackground = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/Inner Ring");
+                sprTowerPopupRing = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/Quarter Ring");
+                sprTowerPopupEast = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/East Tower");
+                sprTowerPopupWest = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/West Tower");
+                sprTowerPopupSouth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/South Tower");
+                sprTowerPopupNorth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Checkpoints/North Tower");
+
                 sprTileset = Content.Load<Texture2D>("Sorcerer Street/Ressources/Land/Tiles");
 
                 Symbols = CardSymbols.Load(Content);
 
                 sprTileBorderEmpty = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Empty");
-                sprTileBorderColor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border");
+                sprTileBorderRed = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Red Tile");
+                sprTileBorderBlue = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Blue Tile");
             }
 
             LoadMap();
@@ -392,6 +411,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             base.Init();
 
             OnNewTurn();
+        }
+
+        private void SendMessage(string InputMessage)
+        {
+            ChatInput.SetText(string.Empty);
+            OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));
         }
 
         public override void RemoveUnit(int PlayerIndex, UnitMapComponent UnitToRemove)
@@ -570,8 +595,25 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SorcererStreetParams.Map = this;
 
+            if (OnlineCommunicationClient != null)
+            {
+                OnlineCommunicationClient.ExecuteDelayedScripts();
+
+                if (KeyboardHelper.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter))
+                {
+                    IsChatOpen = !IsChatOpen;
+
+                }
+                if (IsChatOpen)
+                {
+                    ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
+                }
+            }
+
             if (!IsFrozen)
             {
+                MenuHelper.UpdateAnimationTimer(gameTime);
+
                 if (ShowUnits)
                 {
                     MapEnvironment.Update(gameTime);
@@ -749,6 +791,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     ListActionMenuChoice.Last().Draw(g);
                 }
+            }
+
+            if (OnlineCommunicationClient != null && IsChatOpen)
+            {
+                ChatHelper.DrawChat(g, fntArial12, OnlineCommunicationClient.Chat, ChatInput);
             }
 
             #region Handle screen shaking.

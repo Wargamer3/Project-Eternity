@@ -19,9 +19,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected Player ActivePlayer;
         private readonly string CardType;
         protected AnimationPhases AnimationPhase;
-        protected int CardCursorIndex;
         private float AnimationTimer;
-        private float MaxAnimationScale;
         private string EndCardText;//Card on the far right used to close the pannel.
         public bool DrawDrawInfo;
 
@@ -31,8 +29,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Map = Map;
             this.CardType = CardType;
             this.EndCardText = EndCardText;
-
-            MaxAnimationScale = 1.1f;
         }
 
         public ActionPanelCardSelectionPhase(string Name, ActionPanelHolder ListActionMenuChoice, SorcererStreetMap Map, int ActivePlayerIndex, string CardType, string EndCardText = "")
@@ -44,13 +40,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.EndCardText = EndCardText;
 
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
-            MaxAnimationScale = 1.1f;
         }
 
         public override void OnSelect()
         {
             AnimationPhase = AnimationPhases.IntroAnimation;
-            CardCursorIndex = 0;
             AnimationTimer = 0;
         }
 
@@ -87,15 +81,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             UpdateAnimationTimer();
 
-            if (InputHelper.InputLeftPressed() && --CardCursorIndex < 0)
+            if (InputHelper.InputLeftPressed() && --ActionMenuCursor < 0)
             {
                 if (EndCardText != string.Empty)
                 {
-                    CardCursorIndex = ActivePlayer.ListCardInHand.Count;
+                    ActionMenuCursor = ActivePlayer.ListCardInHand.Count;
                 }
                 else
                 {
-                    CardCursorIndex = ActivePlayer.ListCardInHand.Count - 1;
+                    ActionMenuCursor = ActivePlayer.ListCardInHand.Count - 1;
                 }
 
                 if (Map.OnlineClient != null)
@@ -103,15 +97,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputRightPressed() && ++CardCursorIndex >= ActivePlayer.ListCardInHand.Count)
+            else if (InputHelper.InputRightPressed() && ++ActionMenuCursor >= ActivePlayer.ListCardInHand.Count)
             {
-                if (EndCardText != string.Empty && CardCursorIndex == ActivePlayer.ListCardInHand.Count)
+                if (EndCardText != string.Empty && ActionMenuCursor == ActivePlayer.ListCardInHand.Count)
                 {
-                    CardCursorIndex = ActivePlayer.ListCardInHand.Count;
+                    ActionMenuCursor = ActivePlayer.ListCardInHand.Count;
                 }
                 else
                 {
-                    CardCursorIndex = 0;
+                    ActionMenuCursor = 0;
                 }
 
                 if (Map.OnlineClient != null)
@@ -122,11 +116,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputConfirmPressed())
             {
                 if (CardType == null
-                    || (CardCursorIndex < ActivePlayer.ListCardInHand.Count && ActivePlayer.ListCardInHand[CardCursorIndex].CardType == CardType && ActivePlayer.Magic >= ActivePlayer.ListCardInHand[CardCursorIndex].MagicCost))
+                    || (ActionMenuCursor < ActivePlayer.ListCardInHand.Count && ActivePlayer.ListCardInHand[ActionMenuCursor].CardType == CardType && ActivePlayer.Magic >= ActivePlayer.ListCardInHand[ActionMenuCursor].MagicCost))
                 {
-                    OnCardSelected(ActivePlayer.ListCardInHand[CardCursorIndex]);
+                    OnCardSelected(ActivePlayer.ListCardInHand[ActionMenuCursor]);
                 }
-                else if (CardCursorIndex == ActivePlayer.ListCardInHand.Count)
+                else if (ActionMenuCursor == ActivePlayer.ListCardInHand.Count)
                 {
                     OnEndCardSelected();
                 }
@@ -169,7 +163,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void ExecuteUpdate(byte[] ArrayUpdateData)
         {
             AnimationPhase = (AnimationPhases)ArrayUpdateData[0];
-            CardCursorIndex = ArrayUpdateData[1];
+            ActionMenuCursor = ArrayUpdateData[1];
         }
 
         public override void DoWrite(ByteWriter BW)
@@ -179,7 +173,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override byte[] DoWriteUpdate()
         {
-            return new byte[] { (byte)AnimationPhase, (byte)CardCursorIndex };
+            return new byte[] { (byte)AnimationPhase, (byte)ActionMenuCursor };
         }
 
         public void DrawIntro(CustomSpriteBatch g)
@@ -244,18 +238,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                     }
 
-                    DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == CardCursorIndex, C * DistanceBetweenCard + DistanceBetweenCard, Scale, AnimationTimer, 0.02f);
+                    DrawCardMiniature(g, ActivePlayer.ListCardInHand[C].sprCard, CardColor, C == ActionMenuCursor, C * DistanceBetweenCard + DistanceBetweenCard, Scale, AnimationTimer, 0.02f);
                 }
 
-                if (DrawDrawInfo && CardCursorIndex < ActivePlayer.ListCardInHand.Count)
+                if (DrawDrawInfo && ActionMenuCursor < ActivePlayer.ListCardInHand.Count)
                 {
-                    ActivePlayer.ListCardInHand[CardCursorIndex].DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
+                    ActivePlayer.ListCardInHand[ActionMenuCursor].DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
                 }
 
                 if (EndCardText != string.Empty)
                 {
-                    DrawCardMiniature(g, Map.sprEndTurn, Color.White, CardCursorIndex == ActivePlayer.ListCardInHand.Count, 6 * DistanceBetweenCard + DistanceBetweenCard, Scale, AnimationTimer, 0.05f);
+                    DrawCardMiniature(g, Map.sprEndTurn, Color.White, ActionMenuCursor == ActivePlayer.ListCardInHand.Count, 6 * DistanceBetweenCard + DistanceBetweenCard, Scale, AnimationTimer, 0.05f);
                 }
+
+                MenuHelper.DrawFingerIcon(g, new Vector2(DistanceBetweenCard / 2 + DistanceBetweenCard * ActionMenuCursor, Constants.Height - Constants.Height / 6));
             }
         }
 

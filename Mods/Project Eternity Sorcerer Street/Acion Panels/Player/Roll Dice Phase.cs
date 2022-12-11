@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
@@ -17,7 +16,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly Random Random;
         private readonly Vector2 DicePosition;
         private int VisibleDiceValue;
-        private float RotationValue;
 
         public ActionPanelRollDicePhase(SorcererStreetMap Map)
             : base(PanelName, Map, false)
@@ -42,8 +40,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            RotationValue += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
 
             if (InputHelper.InputConfirmPressed())
@@ -59,15 +55,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void UpdatePassive(GameTime gameTime)
         {
-            RotationValue += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
         }
 
         public void RollDice()
         {
             VisibleDiceValue = Random.Next(0, Map.HighestDieRoll) + 1;
-            VisibleDiceValue = 3;
 
             RemoveFromPanelList(this);
             AddToPanelListAndSelect(new ActionPanelMovementPhase(Map, ActivePlayerIndex, VisibleDiceValue));
@@ -81,7 +74,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             VisibleDiceValue = BR.ReadInt32();
-
         }
 
         public override void DoWrite(ByteWriter BW)
@@ -97,17 +89,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawDiceHolder(g, Map, DicePosition, VisibleDiceValue, RotationValue);
+            MenuHelper.DrawDiceHolder(g, DicePosition, VisibleDiceValue);
 
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - 20), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.FlipVertically, 0f);
-        }
-
-        public static void DrawDiceHolder(CustomSpriteBatch g, SorcererStreetMap Map, Vector2 DicePosition, int VisibleDiceValue, float RotationValue)
-        {
-            g.Draw(Map.sprDiceHolder, DicePosition, null, Color.White, 0f, new Vector2(Map.sprDiceHolder.Width / 2, Map.sprDiceHolder.Height / 2), 1f, SpriteEffects.None, 0f);
-            g.Draw(Map.sprDiceHolderEffect, DicePosition, null, Color.FromNonPremultiplied(255, 255, 255, 127), RotationValue, new Vector2(Map.sprDiceHolderEffect.Width / 2, Map.sprDiceHolderEffect.Height / 2), 1f, SpriteEffects.None, 0.1f);
-            g.Draw(Map.sprDiceHolderEffect, DicePosition, null, Color.FromNonPremultiplied(255, 255, 255, 127), -RotationValue, new Vector2(Map.sprDiceHolderEffect.Width / 2, Map.sprDiceHolderEffect.Height / 2), 1f, SpriteEffects.None, 0.1f);
-            g.DrawStringCentered(Map.fntArial12, VisibleDiceValue.ToString(), DicePosition, Color.White);
+            MenuHelper.DrawDownArrow(g);
         }
     }
 }

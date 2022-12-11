@@ -70,11 +70,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DrawArrows(CustomSpriteBatch g)
         {
-            float Y = Constants.Height - Constants.Height / 6;
-            float Scale = Constants.Width / 3764.70581f;
-
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Y - 340 * Scale + (float)Math.Sin(ArrowAnimationTime * 10) * 3f), Color.White);
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Constants.Height - 20 - (float)Math.Sin(ArrowAnimationTime * 10) * 3f), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.FlipVertically, 0f);
+            MenuHelper.DrawUpArrow(g);
+            MenuHelper.DrawDownArrow(g);
         }
 
         protected override ActionPanel Copy()

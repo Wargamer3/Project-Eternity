@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
@@ -73,11 +72,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else
             {
                 RemoveFromPanelList(this);
+
+                if (MovementRemaining == 0)
+                {
+                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
+                }
             }
 
             if (InputHelper.InputConfirmPressed())
             {
                 RemoveFromPanelList(this);
+
+                if (MovementRemaining == 0)
+                {
+                    AddToPanelListAndSelect(new ActionPanelTerritoryMenuPhase(Map, ActivePlayerIndex));
+                }
             }
         }
 
@@ -103,8 +112,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            GameScreen.DrawBox(g, new Vector2(30, 30), 50, 50, Color.Black);
-            g.DrawString(Map.fntArial12, MovementRemaining.ToString(), new Vector2(37, 35), Color.White);
+            MenuHelper.DrawDiceHolder(g, new Vector2(Constants.Width / 8, Constants.Height / 4), MovementRemaining);
 
             if (ItemAnimationTime < 1)
             {
@@ -156,7 +164,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CurrentY += 20;
                 g.DrawString(Map.fntArial12, "recovered 20% of MHP.", new Vector2(CurrentX, CurrentY), Color.White);
 
-                g.Draw(Map.sprMenuHand, new Vector2(InfoBoxX + BoxWidth - 20, InfoBoxY + BoxHeight - 35), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+                MenuHelper.DrawConfirmIcon(g, new Vector2(InfoBoxX + BoxWidth - 20, InfoBoxY + BoxHeight - 35));
             }
         }
     }

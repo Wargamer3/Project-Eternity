@@ -80,7 +80,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            ActionPanelPlayerDefault.DrawLandInformation(g, Map, ActiveTerrain);
+            ActionPanelPlayerDefault.DrawLandInformation(g, Map, ActiveTerrain, Constants.Width / 12f, Constants.Height / 10f);
 
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = 137;

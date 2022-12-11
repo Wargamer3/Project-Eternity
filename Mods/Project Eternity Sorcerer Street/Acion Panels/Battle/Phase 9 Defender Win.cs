@@ -68,9 +68,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             int Y = Constants.Height - Constants.Height / 4;
-            GameScreen.DrawBox(g, new Vector2(Constants.Width / 4, Y), Constants.Width / 2, Constants.Height / 6, Color.White);
+            MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 4, Y), Constants.Width / 2, Constants.Height / 8);
             Y += 10;
             g.DrawStringMiddleAligned(Map.fntArial12, "Toll", new Vector2(Constants.Width / 2, Y), Color.White);
+            Y = Constants.Height - Constants.Height / 5;
             Y += 20;
             g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderPlayer.Name, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderPlayer.Name, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
@@ -78,8 +79,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringMiddleAligned(Map.fntArial12, "-20", new Vector2(Constants.Width / 2 - 80, Y), Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "+20", new Vector2(Constants.Width / 2 + 80, Y), Color.White);
             Y += 10;
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, Y), null, Color.White, MathHelper.ToRadians(90), new Vector2(Map.sprArrowUp.Width / 2, Map.sprArrowUp.Height / 2), 1f, SpriteEffects.None, 0f);
-            g.Draw(Map.sprMenuHand, new Vector2(Constants.Width / 2 + 140, Y - 15), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            MenuHelper.DrawRightArrow(g);
+            MenuHelper.DrawConfirmIcon(g, new Vector2(Constants.Width / 4 + Constants.Width / 2 - 40, Y - 20));
         }
     }
 }

@@ -5,11 +5,11 @@ using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class ActionPanelDefendeReplace : ActionPanelSorcererStreet
+    public class ActionPanelLandChainUpdate : ActionPanelSorcererStreet
     {
         private const string PanelName = "DefenderReplace";
 
-        public ActionPanelDefendeReplace(SorcererStreetMap Map)
+        public ActionPanelLandChainUpdate(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
             this.Map = Map;
@@ -17,21 +17,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-                TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(Map.GlobalSorcererStreetBattleContext.InvaderPlayer.GamePiece);
-
-                ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.Invader;
-                ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.InvaderPlayer;
-
-                Map.GlobalSorcererStreetBattleContext.InvaderPlayer.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-                Map.GlobalSorcererStreetBattleContext.DefenderPlayer.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-                Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.InvaderPlayer);
-                Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.DefenderPlayer);
-                RemoveFromPanelList(this);
-                Map.EndPlayerPhase();
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
+            RemoveFromPanelList(this);
+            Map.EndPlayerPhase();
         }
 
         protected override void OnCancelPanel()
@@ -51,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelDefendeReplace(Map);
+            return new ActionPanelLandChainUpdate(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

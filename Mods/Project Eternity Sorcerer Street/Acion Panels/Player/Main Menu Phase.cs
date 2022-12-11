@@ -96,8 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int DistanceBetweenCard = Constants.Width / 8;
             float CardsHeight = Constants.Height - 100;
 
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, CardsHeight - 95 + (float)Math.Sin(AnimationTime * 10) * 3f), Color.White);
-
+            MenuHelper.DrawUpArrow(g);
 
             float X = DistanceBetweenCard;
             Color CardColor = Color.FromNonPremultiplied(255, 255, 255, 200);
@@ -106,6 +105,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawCardMiniature(g, Map.sprOptions, CardColor, ActionMenuCursor == 2, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprHelp, CardColor, ActionMenuCursor == 3, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprSuspend, CardColor, ActionMenuCursor == 4, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
+
+            MenuHelper.DrawFingerIcon(g, new Vector2(DistanceBetweenCard / 2 + DistanceBetweenCard * ActionMenuCursor, Constants.Height - Constants.Height / 6));
 
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = (int)(Constants.Height / 2);

@@ -35,6 +35,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.DefenderPlayer.Magic -= Map.GlobalSorcererStreetBattleContext.DefenderItem.MagicCost;
                 Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, BattleEndRequirementName);
             }
+
+            TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(Map.GlobalSorcererStreetBattleContext.InvaderPlayer.GamePiece);
+
+            ActiveTerrain.DefendingCreature = Map.GlobalSorcererStreetBattleContext.Invader;
+            ActiveTerrain.PlayerOwner = Map.GlobalSorcererStreetBattleContext.InvaderPlayer;
+
+            Map.GlobalSorcererStreetBattleContext.InvaderPlayer.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            Map.GlobalSorcererStreetBattleContext.DefenderPlayer.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.InvaderPlayer);
+            Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.DefenderPlayer);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -42,7 +52,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (InputHelper.InputConfirmPressed())
             {
                 RemoveFromPanelList(this);
-                AddToPanelListAndSelect(new ActionPanelDefendeReplace(Map));
+                AddToPanelListAndSelect(new ActionPanelLandChainUpdate(Map));
             }
         }
 
@@ -69,7 +79,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             int Y = Constants.Height - Constants.Height / 4;
-            GameScreen.DrawBox(g, new Vector2(Constants.Width / 4, Y), Constants.Width / 2, Constants.Height / 6, Color.White);
+            MenuHelper.DrawBox(g, new Vector2(Constants.Width / 4, Y), Constants.Width / 2, Constants.Height / 6);
         }
     }
 }

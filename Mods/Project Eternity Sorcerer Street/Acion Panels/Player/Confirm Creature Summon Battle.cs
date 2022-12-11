@@ -119,11 +119,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SelectedCard.DrawCard(g);
             SelectedCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
 
-            GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 120), 200, 90, Color.White);
+            MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 2 - 150, Constants.Height - 120), 300, 90);
             g.DrawStringMiddleAligned(Map.fntArial12, "Summon this creature?", new Vector2(Constants.Width / 2, Constants.Height - 110), Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "Yes", new Vector2(Constants.Width / 2, Constants.Height - 85), Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "No", new Vector2(Constants.Width / 2, Constants.Height - 60), Color.White);
-            g.Draw(Map.sprMenuCursor, new Rectangle(Constants.Width / 2 - 60, Constants.Height - 85 + CursorIndex * 25, 40, 40), Color.White);
+            MenuHelper.DrawFingerIcon(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 95 + CursorIndex * 25));
         }
     }
 }

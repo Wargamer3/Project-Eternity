@@ -26,9 +26,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private BasicEffect PolygonEffect;
         private Camera3D Camera => Map.Camera;
         private Texture2D sprCursor;
-        private Tile3D Cursor;
         private List<Tile3D> ListEditorCursorFace;
 
+        private Tile3DHolder EmptyTileBorderHolder;
+        private Dictionary<int, Tile3DHolder> DicTileBorderPerPlayer;
         private Dictionary<int, Tile3DHolder> DicTile3DByTileset;
         private Dictionary<int, Dictionary<int, Tile3DHolder>> DicTile3DByLayerByTileset;
         private Dictionary<int, Tile3DHolder> DicHiddenTile3DByTileset = new Dictionary<int, Tile3DHolder>();
@@ -37,9 +38,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Dictionary<Vector4, List<Tile3D>> DicDrawablePointPerColor;
         private List<Tile3D> ListDrawableArrowPerColor;
         private Dictionary<string, Vector3> DicDamageNumberByPosition;
-        List<Texture2D> ListTileset;
+        private List<Texture2D> ListTileset;
 
-    public Map3DDrawable(SorcererStreetMap Map, LayerHolderSorcererStreet LayerManager, GraphicsDevice g)
+        public Map3DDrawable(SorcererStreetMap Map, LayerHolderSorcererStreet LayerManager, GraphicsDevice g)
         {
             this.Map = Map;
             ListTileset = new List<Texture2D>() { Map.sprTileset };
@@ -125,8 +126,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-                Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    0, 0, Z, 0, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
             }
 
             if (Map.IsEditor)
@@ -142,6 +141,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
             DicHiddenTile3DByTileset = new Dictionary<int, Tile3DHolder>();
             DicTile3DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile3DHolder>>();
+            EmptyTileBorderHolder = new Tile3DHolder(MapEffect, Map.sprTileBorderEmpty);
+            DicTileBorderPerPlayer = new Dictionary<int, Tile3DHolder>();
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {
@@ -164,6 +165,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
                 }
+            }
+
+            EmptyTileBorderHolder.Finish(GameScreen.GraphicsDevice);
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTileBorderPerPlayer)
+            {
+                ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
             }
         }
 
@@ -272,8 +279,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Tile3D TopTile = ListNew3DTile[0];
                     if (TopTile.ArrayVertex.Length == 4)
                     {
-                        float TextureWidth = Map.TileSize.X / (float)Map.sprTileset.Width / 10;
-                        float TextureHeight = Map.TileSize.Y / (float)Map.sprTileset.Height / 10;
+                        float TextureWidth = Map.TileSize.X / (float)Map.sprTileset.Width / 4;
+                        float TextureHeight = Map.TileSize.Y / (float)Map.sprTileset.Height / 4;
 
                         TopTile.ArrayVertex[0] = new VertexPositionNormalTexture(TopTile.ArrayVertex[0].Position, TopTile.ArrayVertex[0].Normal, new Vector2(TopTile.ArrayVertex[0].TextureCoordinate.X - TextureWidth, TopTile.ArrayVertex[0].TextureCoordinate.Y - TextureHeight));
                         TopTile.ArrayVertex[1] = new VertexPositionNormalTexture(TopTile.ArrayVertex[1].Position, TopTile.ArrayVertex[1].Normal, new Vector2(TopTile.ArrayVertex[1].TextureCoordinate.X + TextureWidth, TopTile.ArrayVertex[1].TextureCoordinate.Y - TextureHeight));
@@ -315,6 +322,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                             DicTile3DByTileset[ActiveTile.TilesetIndex].AddTile(ActiveTile);
                             DicTile3DByLayerByTileset[LayerIndex][ActiveTile.TilesetIndex].AddTile(ActiveTile);
+                        }
+
+                        Tile3D BorderTile = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                            X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.001f, new Point(Map.TileSize.X, Map.TileSize.Y), new Point(Map.sprTileBorderRed.Width, Map.sprTileBorderRed.Height), new List<Texture2D>() { Map.sprTileBorderRed }, Z, Z, Z, Z, 0)[0];
+
+                        int OwnerIndex = Map.ListPlayer.IndexOf(Owner.ArrayTerrain[X, Y].PlayerOwner);
+
+                        if (OwnerIndex >= 0)
+                        {
+                            if (!DicTileBorderPerPlayer.ContainsKey(OwnerIndex))
+                            {
+                                Color PlayerColor = Map.ListPlayer[OwnerIndex].Color;
+
+                                if (PlayerColor == Color.Red)
+                                {
+                                    DicTileBorderPerPlayer.Add(OwnerIndex, new Tile3DHolder(MapEffect, Map.sprTileBorderRed));
+                                }
+                                else if (PlayerColor == Color.Blue)
+                                {
+                                    DicTileBorderPerPlayer.Add(OwnerIndex, new Tile3DHolder(MapEffect, Map.sprTileBorderBlue));
+                                }
+                            }
+
+                            DicTileBorderPerPlayer[OwnerIndex].AddTile(BorderTile);
+                        }
+                        else
+                        {
+                            EmptyTileBorderHolder.AddTile(BorderTile);
                         }
                     }
                 }
@@ -376,8 +411,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
                 DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                 Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-                Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                    X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
             }
 
             if (!Map.IsAPlatform && Map.ListPlayer.Count > 0)
@@ -825,10 +858,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
                 }
-                else
-                {
-                    Cursor.Draw(g.GraphicsDevice);
-                }
             }
 
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -914,34 +943,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DrawItems(g, View, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
             }
 
+            EmptyTileBorderHolder.SetViewMatrix(WorldViewProjection, CameraPosition);
+            EmptyTileBorderHolder.Draw(g.GraphicsDevice);
+
+            foreach (Tile3DHolder ActivePlayerBorder in DicTileBorderPerPlayer.Values)
+            {
+                ActivePlayerBorder.SetViewMatrix(WorldViewProjection, CameraPosition);
+                ActivePlayerBorder.Draw(g.GraphicsDevice);
+            }
+
             g.GraphicsDevice.DepthStencilState = DepthStencilState.None;
             for (int L = 0; L < Map.LayerManager.ListLayer.Count; ++L)
             {
+                MapLayer ActiveLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z];
+
                 for (int X = 0; X < Map.MapSize.X; ++X)
                 {
                     for (int Y = 0; Y < Map.MapSize.Y; ++Y)
                     {
-                        float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].WorldPosition.Z * LayerHeight + 0.3f;
-                        Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
+                        float Z = ActiveLayer.ArrayTerrain[X, Y].WorldPosition.Z * LayerHeight + 0.3f;
+                        Map2D GroundLayer = ActiveLayer.LayerGrid;
                         DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
                         Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
 
                         if (ActiveTerrain3D.TerrainStyle != Terrain3D.TerrainStyles.Invisible)
                         {
-                            if (Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].DefendingCreature != null)
+                            if (Map.ListPassedTerrein.Contains(ActiveLayer.ArrayTerrain[X, Y]))
                             {
-                                PolygonEffect.Texture = Map.sprTileBorderColor;
-                            }
-                            else
-                            {
-                                PolygonEffect.Texture = Map.sprTileBorderEmpty;
-                            }
-                            PolygonEffect.CurrentTechnique.Passes[0].Apply();
+                                PolygonEffect.Texture = Map.sprActiveCreatureCursor;
+                                PolygonEffect.CurrentTechnique.Passes[0].Apply();
 
-                            Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                                X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, new Point(Map.TileSize.X, Map.TileSize.Y), Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
-
-                            Cursor.Draw(g.GraphicsDevice);
+                                Tile3D PassedCreatureTile = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                                    X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Z + 0.3f, Map.TileSize, Map.TileSize, new List<Texture2D>() { PolygonEffect.Texture }, Z, Z, Z, Z, 0)[0];
+                                PassedCreatureTile.Draw(g.GraphicsDevice);
+                            }
                         }
                     }
                 }

@@ -188,10 +188,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public OnlineConfiguration OnlinePlayers;
 
         //Server based online
+        //Client
         public BattleMapOnlineClient OnlineClient;
+        public CommunicationClient OnlineCommunicationClient;
         public RoomInformations Room;
+        public bool IsChatOpen;
+        //Server
         public GameServer OnlineServer;
         public BattleMapClientGroup GameGroup;
+
         public bool IsOfflineOrServer { get { return OnlineClient == null; } }
         public bool IsOnlineClient { get { return OnlineClient != null; } }
         public bool IsServer { get { return GameScreen.GraphicsDevice == null; } }
@@ -661,9 +666,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.GameGroup = GameGroup;
         }
 
-        public void InitOnlineClient(BattleMapOnlineClient OnlineClient, RoomInformations Room)
+        public void InitOnlineClient(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
         {
             this.OnlineClient = OnlineClient;
+            this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.Room = Room;
         }
 

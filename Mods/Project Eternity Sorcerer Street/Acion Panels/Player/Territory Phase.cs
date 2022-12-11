@@ -13,6 +13,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "TerritoryPhase";
 
         private int ActivePlayerIndex;
+        private Player ActivePlayer;
+        private TerrainSorcererStreet ActiveTerrain;
 
         private double AnimationTime;
 
@@ -25,6 +27,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
+
+            ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
+            ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
         }
 
         public override void OnSelect()
@@ -57,11 +62,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputUpPressed())
             {
                 RemoveFromPanelList(this);
-                AddToPanelListAndSelect(new ActionPanelSpellCardSelectionPhase(Map, ActivePlayerIndex));
+
+                switch (Map.ListTerrainType[ActiveTerrain.TerrainTypeIndex])
+                {
+                    case TerrainSorcererStreet.Castle:
+                    case TerrainSorcererStreet.NorthTower:
+                    case TerrainSorcererStreet.SouthTower:
+                    case TerrainSorcererStreet.EastTower:
+                    case TerrainSorcererStreet.WestTower:
+                        AddToPanelListAndSelect(new ActionPanelLandInfoPhase(Map, ActivePlayerIndex));
+                        break;
+
+                    default:
+                        AddToPanelListAndSelect(new ActionPanelCreatureCardSelectionPhase(Map, ActivePlayerIndex));
+                        break;
+                }
             }
             else if (InputHelper.InputConfirmPressed())
             {
-                AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
+                if (ActionMenuCursor > 0 || (ActionMenuCursor == 0 && Map.ListPassedTerrein.Count > 0))
+                {
+                    AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
+                }
             }
         }
 
@@ -96,16 +118,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int DistanceBetweenCard = Constants.Width / 8;
             float CardsHeight = Constants.Height - 100;
 
-            g.Draw(Map.sprArrowUp, new Vector2(Constants.Width / 2, CardsHeight - 95 + (float)Math.Sin(AnimationTime * 10) * 3f), Color.White);
+            MenuHelper.DrawUpArrow(g);
 
             float X = DistanceBetweenCard;
             Color CardColor = Color.FromNonPremultiplied(255, 255, 255, 200);
-            DrawCardMiniature(g, Map.sprTerritory, CardColor, ActionMenuCursor == 0, X, Scale, (float)AnimationTime, 0.05f);
+            Color UnavailableColor = Color.FromNonPremultiplied(127, 127, 127, 200);
+            if (Map.ListPassedTerrein.Count == 0)
+            {
+                DrawCardMiniature(g, Map.sprTerritory, UnavailableColor, ActionMenuCursor == 0, X, Scale, (float)AnimationTime, 0.05f);
+            }
+            else
+            {
+                DrawCardMiniature(g, Map.sprTerritory, CardColor, ActionMenuCursor == 0, X, Scale, (float)AnimationTime, 0.05f);
+            }
             DrawCardMiniature(g, Map.sprMap, CardColor, ActionMenuCursor == 1, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprInfo, CardColor, ActionMenuCursor == 2, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprOptions, CardColor, ActionMenuCursor == 3, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprHelp, CardColor, ActionMenuCursor == 4, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
             DrawCardMiniature(g, Map.sprEndTurn, CardColor, ActionMenuCursor == 5, X += DistanceBetweenCard, Scale, (float)AnimationTime, 0.05f);
+
+            MenuHelper.DrawFingerIcon(g, new Vector2(DistanceBetweenCard / 2 + DistanceBetweenCard * ActionMenuCursor, Constants.Height - Constants.Height / 6));
 
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = (int)(Constants.Height / 2);

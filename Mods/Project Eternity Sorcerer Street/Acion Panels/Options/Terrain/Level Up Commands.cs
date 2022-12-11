@@ -100,7 +100,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            ActionPanelPlayerDefault.DrawLandInformation(g, Map, ActiveTerrain);
+            ActionPanelPlayerDefault.DrawLandInformation(g, Map, ActiveTerrain, Constants.Width / 12f, Constants.Height / 10f);
 
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = 137;
@@ -164,7 +164,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CurrentY += 20;
             g.DrawString(Map.fntArial12, "Return", new Vector2(CurrentX + 10, CurrentY), Color.White);
 
-            g.Draw(Map.sprMenuCursor, new Rectangle((int)InfoBoxX - 20, (int)InfoBoxY + 30 + 20 * ActionMenuCursor, 40, 40), Color.White);
+            MenuHelper.DrawFingerIcon(g, new Vector2(InfoBoxX - 20, InfoBoxY + 30 + 20 * ActionMenuCursor));
         }
     }
 }

@@ -235,9 +235,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DrawnCard.DrawCard(g);
                 DrawnCard.DrawCardInfo(g, Map.Symbols, Map.fntArial12, 0, 0);
 
-                GameScreen.DrawBox(g, new Vector2(Constants.Width / 2 - 100, Constants.Height - 70), 200, 40, Color.White);
-                g.DrawStringMiddleAligned(Map.fntArial12, "Drew 1 card", new Vector2(Constants.Width / 2, Constants.Height - 59), Color.White);
-                g.Draw(Map.sprMenuHand, new Vector2(Constants.Width / 2 + 76, Constants.Height - 65), null, Color.White, 0f, Vector2.Zero, 0.7f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f);
+                int BoxY = Constants.Height - Constants.Height / 10;
+                int BoxHeight = Constants.Height / 20;
+
+                MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 2 - 100, BoxY), Constants.Width / 8, BoxHeight);
+                g.DrawStringCentered(Map.fntArial12, "Drew 1 card", new Vector2(Constants.Width / 2, BoxY + BoxHeight / 2), Color.White);
+                MenuHelper.DrawConfirmIcon(g, new Vector2(Constants.Width / 2 + 76, BoxY + 3));
             }
         }
     }

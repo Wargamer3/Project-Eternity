@@ -47,6 +47,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ActivePlayer.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
             Map.UpdateTolls(ActivePlayer);
+            Map.LayerManager.TogglePreview(true);
         }
 
         protected override void OnCancelPanel()

@@ -81,6 +81,11 @@
       <Name>Project Eternity Game Screen</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
+      <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
       <Project>{fa8993b3-6905-4fe1-9715-ceefb5ce9b3d}</Project>
       <Name>Project Eternity Base Editor</Name>

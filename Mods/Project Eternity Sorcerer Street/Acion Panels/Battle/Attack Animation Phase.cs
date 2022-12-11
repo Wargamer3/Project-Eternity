@@ -46,9 +46,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     AttackAnimation.UpdateKeyFrame(0);
                 }
                 Map.GlobalSorcererStreetBattleContext.DefenderCard = new SimpleAnimation("", "", AttackAnimation);
-                Map.GlobalSorcererStreetBattleContext.DefenderCard.Position.X = Constants.Width - 282;
-                Map.GlobalSorcererStreetBattleContext.DefenderCard.Position.Y = 48;
-                Map.GlobalSorcererStreetBattleContext.DefenderCard.Scale = new Vector2(0.6f);
+                Map.GlobalSorcererStreetBattleContext.DefenderCard.Position = new Vector2(Constants.Width - Map.GlobalSorcererStreetBattleContext.Defender.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                Map.GlobalSorcererStreetBattleContext.DefenderCard.Scale = new Vector2(1f);
             }
             else
             {
@@ -60,9 +59,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
 
                 Map.GlobalSorcererStreetBattleContext.InvaderCard = new SimpleAnimation("", "", AttackAnimation);
-                Map.GlobalSorcererStreetBattleContext.InvaderCard.Position.X = 37;
-                Map.GlobalSorcererStreetBattleContext.InvaderCard.Position.Y = 48;
-                Map.GlobalSorcererStreetBattleContext.InvaderCard.Scale = new Vector2(0.6f);
+                Map.GlobalSorcererStreetBattleContext.InvaderCard.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                Map.GlobalSorcererStreetBattleContext.InvaderCard.Scale = new Vector2(1f);
             }
         }
 

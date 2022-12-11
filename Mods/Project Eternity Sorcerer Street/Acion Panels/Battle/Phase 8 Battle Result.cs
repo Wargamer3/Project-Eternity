@@ -144,10 +144,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InvaderWinAndLeave(CustomSpriteBatch g)
         {
             //Spin card from the left
-            float MaxScale = 0.6f;
+            float MaxScale = 1f;
             float RealRotationTimer = (float)AnimationTime / 0.7f;
             float FinalX = Constants.Width + 200;
-            float StartX = 37;
+            float StartX = Constants.Width / 9;
             float DistanceX = FinalX - StartX;
             RealRotationTimer *= (float)Math.Sin(RealRotationTimer * MathHelper.PiOver4);
             float X = StartX + (RealRotationTimer) * DistanceX;
@@ -161,10 +161,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InvaderLoseAndLeave(CustomSpriteBatch g)
         {
             //Spin card from the left
-            float MaxScale = 0.6f;
+            float MaxScale = 1f;
             float RealRotationTimer = (float)AnimationTime / 0.7f;
             float FinalX = - 200;
-            float StartX = 37;
+            float StartX = Constants.Width / 9;
             float DistanceX = FinalX - StartX;
             RealRotationTimer *= (float)Math.Sin(RealRotationTimer * MathHelper.PiOver4);
             float X = StartX + (RealRotationTimer) * DistanceX;
@@ -178,10 +178,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DefenderReturnToTerrain(CustomSpriteBatch g)
         {
             //Spin card from the left
-            float MaxScale = 0.6f;
+            float MaxScale = 1f;
             float RealRotationTimer = (float)AnimationTime / 0.7f;
             float FinalX = Constants.Width + 200;
-            float StartX = Constants.Width - 282;
+            float StartX = Constants.Width - Map.GlobalSorcererStreetBattleContext.Defender.sprCard.Width - Constants.Width / 9;
             float DistanceX = FinalX - StartX;
             RealRotationTimer *= (float)Math.Sin(RealRotationTimer * MathHelper.PiOver4);
             float X = StartX + (RealRotationTimer) * DistanceX;
@@ -197,7 +197,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int Y = Constants.Height / 4 - 25;
             TextHelper.DrawTextMiddleAligned(g, "BATTLE", new Vector2(Constants.Width / 2, Y), Color.White);
             Y = Constants.Height / 4;
-            GameScreen.DrawBox(g, new Vector2(Constants.Width / 16, Y), Constants.Width - Constants.Width / 8, Constants.Height / 5, Color.White);
+            MenuHelper.DrawBox(g, new Vector2(Constants.Width / 16, Y), Constants.Width - Constants.Width / 8, Constants.Height / 5);
             Y = Constants.Height / 4 + 10;
             g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderPlayer.Name + "'s", new Vector2(Constants.Width / 4, Y), Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderPlayer.Name + "'s", new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);

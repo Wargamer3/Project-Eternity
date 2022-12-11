@@ -8,21 +8,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
     {
         public const string ScriptName = "Create Game";
 
-        private readonly BattleMapOnlineClient Owner;
+        private readonly BattleMapOnlineClient OnlineGameClient;
+        private readonly CommunicationClient OnlineCommunicationClient;
         private readonly List<GameScreen> ListGameScreen;
         private readonly RoomInformations Room;
 
-        public CreateGameScriptClient(BattleMapOnlineClient Owner, List<GameScreen> ListGameScreen, RoomInformations Room)
+        public CreateGameScriptClient(BattleMapOnlineClient OnlineGameClient, CommunicationClient OnlineCommunicationClient, List<GameScreen> ListGameScreen, RoomInformations Room)
             : base(ScriptName)
         {
-            this.Owner = Owner;
+            this.OnlineGameClient = OnlineGameClient;
+            this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.ListGameScreen = ListGameScreen;
             this.Room = Room;
         }
 
         public override OnlineScript Copy()
         {
-            return new CreateGameScriptClient(Owner, ListGameScreen, Room);
+            return new CreateGameScriptClient(OnlineGameClient, OnlineCommunicationClient, ListGameScreen, Room);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -34,15 +36,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         {
             BattleMap NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.RoomType, string.Empty);
 
-            NewMap.InitOnlineClient(Owner, Room);
+            NewMap.InitOnlineClient(OnlineGameClient, OnlineCommunicationClient, Room);
 
             NewMap.ListGameScreen = ListGameScreen;
-            NewMap.PushScreen(new LoadingScreen(NewMap, Owner));
+            NewMap.PushScreen(new LoadingScreen(NewMap, OnlineGameClient));
 
-            Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsClient(Owner);
+            Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsClient(OnlineGameClient);
 
-            DicNewScript.Add(OpenMenuScriptClient.ScriptName, new OpenMenuScriptClient(Owner, NewMap.GetOnlineActionPanel()));
-            DicNewScript.Add(UpdateMenuScriptClient.ScriptName, new UpdateMenuScriptClient(Owner));
+            DicNewScript.Add(OpenMenuScriptClient.ScriptName, new OpenMenuScriptClient(OnlineGameClient, NewMap.GetOnlineActionPanel()));
+            DicNewScript.Add(UpdateMenuScriptClient.ScriptName, new UpdateMenuScriptClient(OnlineGameClient));
 
             Host.AddOrReplaceScripts(DicNewScript);
         }

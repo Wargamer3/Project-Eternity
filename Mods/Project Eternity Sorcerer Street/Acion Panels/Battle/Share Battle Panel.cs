@@ -9,7 +9,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public abstract class ActionPanelBattle : ActionPanelSorcererStreet
     {
-        private const float ItemCardScale = 0.2f;
+        private const float ItemCardScale = 0.4f;
 
         protected static int InvaderHP;
         protected static int DefenderHP;
@@ -254,26 +254,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //Item Card
             if (Map.GlobalSorcererStreetBattleContext.InvaderItem != null)
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width / 24f, Constants.Height / 10.6f, -ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, -ItemCardScale, ItemCardScale, false);
             }
 
             //ST Bar
-            float CurrentY = 380;
-            GameScreen.DrawBox(g, new Vector2(20, CurrentY), 50, 30, Color.White);
-            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderFinalST.ToString(), new Vector2(35, CurrentY + 5), Color.Black);
-            GameScreen.DrawBox(g, new Vector2(70, CurrentY), 30, 30, Color.White);
-            g.DrawString(Map.fntArial12, "ST", new Vector2(75, CurrentY + 5), Color.Black);
-            GameScreen.DrawBox(g, new Vector2(100, CurrentY), 200, 30, Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(105, (int)CurrentY + 5, (int)Math.Min(190, 200f * InvaderST / 100f), 20), Color.Blue);
+            float CurrentY = Constants.Height - Constants.Height / 8;
+            int BarWeight = Constants.Width / 4;
+            int BarX = Constants.Width / 2  - BarWeight - Constants.Width / 10;
+            GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
+            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderFinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
+            g.DrawString(Map.fntArial12, "ST", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
+            GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
+            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * InvaderST / 100f), 20), Color.Blue);
 
             //HP Bar
-            CurrentY = 410;
-            GameScreen.DrawBox(g, new Vector2(20, CurrentY), 50, 30, Color.White);
-            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderFinalHP.ToString(), new Vector2(35, CurrentY + 5), Color.Black);
-            GameScreen.DrawBox(g, new Vector2(70, CurrentY), 30, 30, Color.White);
-            g.DrawString(Map.fntArial12, "HP", new Vector2(75, CurrentY + 5), Color.Black);
-            GameScreen.DrawBox(g, new Vector2(100, CurrentY), 200, 30, Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(105, (int)CurrentY + 5, (int)Math.Min(190, 200f * InvaderHP / 100f), 20), Color.Green);
+            CurrentY +=30;
+            GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
+            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderFinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
+            g.DrawString(Map.fntArial12, "HP", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
+            GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
+            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * InvaderHP / 100f), 20), Color.Green);
         }
 
         public static void DrawDefenderBattle(SorcererStreetMap Map, CustomSpriteBatch g)
@@ -286,26 +288,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             //Item Card
             if (Map.GlobalSorcererStreetBattleContext.DefenderItem != null)
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width - Constants.Width / 24f, Constants.Height / 10.6f, -ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, Constants.Height / 16, - ItemCardScale, ItemCardScale, false);
             }
 
             //ST Bar
-            float CurrentY = 380;
-            GameScreen.DrawBox(g, new Vector2(Constants.Width - 70, CurrentY), 50, 30, Color.White);
-            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderFinalST.ToString(), new Vector2(Constants.Width - 55, CurrentY + 5), Color.Black);
-            GameScreen.DrawBox(g, new Vector2(Constants.Width - 100, CurrentY), 30, 30, Color.White);
-            g.DrawString(Map.fntArial12, "ST", new Vector2(Constants.Width - 95, CurrentY + 5), Color.Black);
-            GameScreen.DrawBox(g, new Vector2(Constants.Width - 300, CurrentY), 200, 30, Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(Constants.Width - 295, (int)CurrentY + 5, (int)Math.Min(190, 200f * DefenderST / 100f), 20), Color.Blue);
+            float CurrentY = Constants.Height - Constants.Height / 8;
+            int BarWeight = Constants.Width / 4;
+            int BarX = Constants.Width / 2 + Constants.Width / 10;
+            GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
+            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderFinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
+            g.DrawString(Map.fntArial12, "ST", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
+            GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
+            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * DefenderST / 100f), 20), Color.Blue);
 
             //HP Bar
-            CurrentY = 410;
-            GameScreen.DrawBox(g, new Vector2(Constants.Width - 70, CurrentY), 50, 30, Color.White);
-            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderFinalHP.ToString(), new Vector2(Constants.Width - 55, CurrentY + 5), Color.Black);
-            GameScreen.DrawBox(g, new Vector2(Constants.Width - 100, CurrentY), 30, 30, Color.White);
-            g.DrawString(Map.fntArial12, "HP", new Vector2(Constants.Width - 95, CurrentY + 5), Color.Black);
-            GameScreen.DrawBox(g, new Vector2(Constants.Width - 300, CurrentY), 200, 30, Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(Constants.Width - 295, (int)CurrentY + 5, (int)Math.Min(190, 200f * DefenderHP / 100f), 20), Color.Green);
+            CurrentY += 30;
+            GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
+            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderFinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
+            g.DrawString(Map.fntArial12, "HP", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
+            GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
+            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * DefenderHP / 100f), 20), Color.Green);
         }
 
         public void DisplayVersusText(CustomSpriteBatch g)

@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "BattleItemSelection";
 
-        private const float ItemCardScale = 0.1f;
+        private const float ItemCardScale = 0.4f;
 
         private bool ItemSelected;
         private double ItemAnimationTime;
@@ -145,7 +145,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override byte[] DoWriteUpdate()
         {
-            return new byte[] { (byte)AnimationPhase, (byte)CardCursorIndex, (byte)(ItemSelected ? 1 : 0) };
+            return new byte[] { (byte)AnimationPhase, (byte)ActionMenuCursor, (byte)(ItemSelected ? 1 : 0) };
         }
 
         protected override ActionPanel Copy()
@@ -161,22 +161,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.GlobalSorcererStreetBattleContext.InvaderCard.Draw(g);
             Map.GlobalSorcererStreetBattleContext.DefenderCard.Draw(g);
 
-            if (ItemAnimationTime == 0)
+            if (!ItemSelected)
             {
                 base.Draw(g);
 
                 if (ActivePlayerIndex != Map.ActivePlayerIndex)
                 {
-                    Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, (float)Constants.Width / 12, (float)Constants.Height / 12, 0.2f, ItemCardScale, true);
+                    Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, ItemCardScale, ItemCardScale, true);
                 }
 
-                GameScreen.DrawBox(g, new Vector2(Constants.Width / 6, Constants.Height / 12), Constants.Width - Constants.Width / 3, 30, Color.White);
+                MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 6, Constants.Height / 12), Constants.Width - Constants.Width / 3, 30);
                 g.DrawStringMiddleAligned(Map.fntArial12, Map.ListPlayer[ActivePlayerIndex].Name + "'s item selection", new Vector2(Constants.Width - Constants.Width / 2, Constants.Height / 12 + 5), Color.White);
 
                 int Y = Constants.Height / 4 - 25;
                 TextHelper.DrawTextMiddleAligned(g, "BATTLE", new Vector2(Constants.Width / 2, Y), Color.White);
                 Y = Constants.Height / 4;
-                GameScreen.DrawBox(g, new Vector2(Constants.Width / 16, Y), Constants.Width - Constants.Width / 8, Constants.Height / 3, Color.White);
+                MenuHelper.DrawBox(g, new Vector2(Constants.Width / 10, Y), Constants.Width - Constants.Width / 8, Constants.Height / 3);
                 Y = Constants.Height / 4 + 10;
                 g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderPlayer.Name, new Vector2(Constants.Width / 4, Y), Color.White);
                 g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderPlayer.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
@@ -240,7 +240,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (ItemAnimationTime < 0.5f)
                     {
-                        Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, (float)Constants.Width / 12, (float)Constants.Height / 12, ItemCardScale, ItemCardScale, true);
+                        Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, ItemCardScale, ItemCardScale, true);
                         IntroduceDefenderItem(g);
                     }
                     else
@@ -270,9 +270,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void IntroduceInvaderItem(CustomSpriteBatch g)
         {
             float RealRotationTimer = (float)ItemAnimationTime * 2;
-            float FinalX = Constants.Width / 12;
+            float FinalX = Constants.Width / 8;
             float StartX = -50;
-            float FinalY = Constants.Height / 5.3f;
+            float FinalY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
             float StartY = Constants.Height / 2;
             float TransitionX = Constants.Width / 4;
             float TransitionY = Constants.Height / 4;
@@ -306,9 +306,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void IntroduceDefenderItem(CustomSpriteBatch g)
         {
             float RealRotationTimer = (float)ItemAnimationTime * 2;
-            float FinalX = Constants.Width - Constants.Width / 12;
+            float FinalX = Constants.Width - Constants.Width / 8;
             float StartX = Constants.Width + 50;
-            float FinalY = Constants.Height / 5.3f;
+            float FinalY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
             float StartY = Constants.Height / 2;
             float TransitionX = Constants.Width - Constants.Width / 4;
             float TransitionY = Constants.Height / 4;
@@ -342,14 +342,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void RevealInvaderItem(CustomSpriteBatch g)
         {
             float RealRotationTimer = (float)(ItemAnimationTime - 0.5f) * 2;
-            float FinalX = Constants.Width / 12;
-            float StartX = Constants.Width / 12;
-            float FinalY = Constants.Height / 5.3f;
-            float StartY = Constants.Height / 5.3f;
+            float FinalX = Constants.Width / 8;
+            float StartX = Constants.Width / 8;
+            float FinalY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
+            float StartY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
             float TransitionX = Constants.Width / 3;
             float TransitionY = -Constants.Height /24;
             float StartScaleY = ItemCardScale;
-            float TransitionScaleY = ItemCardScale * 3;
+            float TransitionScaleY = ItemCardScale * 1.5f;
             float FinalScaleY = ItemCardScale;
 
             float t = RealRotationTimer;
@@ -386,9 +386,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DiscardInvaderItem(CustomSpriteBatch g)
         {
             float RealRotationTimer = (float)(ItemAnimationTime - 0.5f) * 2;
-            float StartX = Constants.Width / 12;
+            float StartX = Constants.Width / 8;
             float FinalX = -10;
-            float StartY = Constants.Height / 5.3f;
+            float StartY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
             float FinalY = Constants.Height / 2;
             float TransitionX = Constants.Width / 4;
             float TransitionY = Constants.Height / 4;
@@ -422,14 +422,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void RevealDefenderItem(CustomSpriteBatch g)
         {
             float RealRotationTimer = (float)(ItemAnimationTime - 0.5f) * 2;
-            float FinalX = Constants.Width - Constants.Width / 12;
-            float StartX = Constants.Width - Constants.Width / 12;
-            float FinalY = Constants.Height / 5.3f;
-            float StartY = Constants.Height / 5.3f;
+            float FinalX = Constants.Width - Constants.Width / 8;
+            float StartX = Constants.Width - Constants.Width / 8;
+            float FinalY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
+            float StartY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
             float TransitionX = Constants.Width - Constants.Width / 3;
             float TransitionY = -Constants.Height / 24;
             float StartScaleY = ItemCardScale;
-            float TransitionScaleY = ItemCardScale * 3;
+            float TransitionScaleY = ItemCardScale * 1.5f;
             float FinalScaleY = ItemCardScale;
 
             float t = RealRotationTimer;
@@ -466,9 +466,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DiscardDefenderItem(CustomSpriteBatch g)
         {
             float RealRotationTimer = (float)(ItemAnimationTime - 0.5f) * 2;
-            float StartX = Constants.Width - Constants.Width / 12;
+            float StartX = Constants.Width - Constants.Width / 8;
             float FinalX = Constants.Width + 290;
-            float StartY = Constants.Height / 5.3f;
+            float StartY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
             float FinalY = Constants.Height / 2;
             float TransitionX = Constants.Width - Constants.Width / 4;
             float TransitionY = Constants.Height / 4;

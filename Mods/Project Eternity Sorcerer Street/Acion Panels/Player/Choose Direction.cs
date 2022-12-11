@@ -20,7 +20,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private int Movement;
-        private float RotationValue;
         private readonly Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain;
         private readonly List<List<MovementAlgorithmTile>> ListPath;
 
@@ -56,8 +55,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            RotationValue += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             foreach (List<MovementAlgorithmTile> ListArrow in ListPath)
             {
                 Map.LayerManager.AddDrawablePath(ListArrow);
@@ -112,8 +109,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void UpdatePassive(GameTime gameTime)
         {
-            RotationValue += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             foreach (List<MovementAlgorithmTile> ListArrow in ListPath)
             {
                 Map.LayerManager.AddDrawablePath(ListArrow);
@@ -187,7 +182,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            ActionPanelRollDicePhase.DrawDiceHolder(g, Map, new Vector2(Constants.Width / 8, Constants.Height / 4), Movement, RotationValue);
+            MenuHelper.DrawDiceHolder(g,new Vector2(Constants.Width / 8, Constants.Height / 4), Movement);
         }
     }
 }

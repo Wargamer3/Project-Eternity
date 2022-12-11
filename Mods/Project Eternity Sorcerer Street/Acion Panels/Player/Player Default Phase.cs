@@ -37,6 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.OnNewTurn();
             }
 
+            Map.ListPassedTerrein.Clear();
             DeleteBattleInformation();
         }
 
@@ -111,20 +112,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 BoxPostion += BoxHeight;
             }
 
-            int BoxWidth = 110;
-            BoxHeight = 55;
+            int BoxWidth = Constants.Width / 10;
+            BoxHeight = Constants.Height / 10;
             float X = (Constants.Width - BoxWidth) / 2;
             float Y = Constants.Height * 0.8f;
-            GameScreen.DrawBox(g, new Vector2(X, Y), BoxWidth, BoxHeight, Color.White);
-            g.Draw(Map.sprMenuHand, new Vector2((int)X + BoxWidth - 23, (int)Y - Map.sprMenuHand.Height + BoxHeight + 8), null, Color.White, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);
+            MenuHelper.DrawBorderlessBox(g, new Vector2(X, Y), BoxWidth, BoxHeight);
+            MenuHelper.DrawConfirmIcon(g, new Vector2(X + BoxWidth - 45, Y + BoxHeight - 50));
 
             X += 7;
             //Draw Round + round number
-            g.DrawString(Map.fntArial12, "Round " + Map.GameTurn, new Vector2(X, Y + 5), Color.White);
+            g.DrawString(Map.fntArial12, "Round " + Map.GameTurn, new Vector2(X + 30, Y + 15), Color.White);
 
             Y += 25;
             //Draw Player Name's turn
-            g.DrawString(Map.fntArial12, Map.ListPlayer[Map.ActivePlayerIndex].Name + "'s turn", new Vector2(X, Y + 5), Color.White);
+            g.DrawString(Map.fntArial12, Map.ListPlayer[Map.ActivePlayerIndex].Name + "'s turn", new Vector2(X + 30, Y + 15), Color.White);
         }
 
         public static void DrawPlayerInformation(CustomSpriteBatch g, SorcererStreetMap Map, Player ActivePlayer, float X, float Y)
@@ -153,8 +154,33 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y += LineHeight;
             //Draw Player color and it's position
             //Position if based on the number of checkpoints and then player order
-            g.Draw(Map.sprPlayerBackground, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), ActivePlayer.Color);
-            g.DrawStringCentered(Map.fntArial12, ActivePlayer.Rank.ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
+            if (ActivePlayer.Color == Color.Red)
+            {
+                if (ActivePlayer.Rank == 1)
+                {
+                    g.Draw(Map.sprPlayerRed1, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), Color.White);
+                }
+                else
+                {
+                    g.Draw(Map.sprPlayerRed2, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), Color.White);
+                }
+            }
+            else if (ActivePlayer.Color == Color.Blue)
+            {
+                if (ActivePlayer.Rank == 1)
+                {
+                    g.Draw(Map.sprPlayerBlue1, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), Color.White);
+                }
+                else
+                {
+                    g.Draw(Map.sprPlayerBlue2, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), Color.White);
+                }
+            }
+            else
+            {
+                g.Draw(Map.sprPlayerBackground, new Rectangle((int)X, (int)Y, IconHeight, IconHeight), ActivePlayer.Color);
+                g.DrawStringCentered(Map.fntArial12, ActivePlayer.Rank.ToString(), new Vector2(X + IconHeight / 2, Y + IconHeight / 2), Color.White);
+            }
 
             for (int C = 0; C < Map.ListCheckpoint.Count; C++)
             {
@@ -164,16 +190,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     switch (ActiveCheckpoint)
                     {
                         case SorcererStreetMap.Checkpoints.North:
-                            g.Draw(Map.sprDirectionNorthFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            g.Draw(Map.sprDirectionNorthFilled, new Rectangle((int)X + 60 + C * IconHeight, (int)Y, IconHeight, IconHeight), Color.White);
                             break;
                         case SorcererStreetMap.Checkpoints.South:
-                            g.Draw(Map.sprDirectionSouthFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            g.Draw(Map.sprDirectionSouthFilled, new Rectangle((int)X + 60 + C * IconHeight, (int)Y, IconHeight, IconHeight), Color.White);
                             break;
                         case SorcererStreetMap.Checkpoints.East:
-                            g.Draw(Map.sprDirectionEastFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            g.Draw(Map.sprDirectionEastFilled, new Rectangle((int)X + 60 + C * IconHeight, (int)Y, IconHeight, IconHeight), Color.White);
                             break;
                         case SorcererStreetMap.Checkpoints.West:
-                            g.Draw(Map.sprDirectionWestFilled, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            g.Draw(Map.sprDirectionWestFilled, new Rectangle((int)X + 60 + C * IconHeight, (int)Y, IconHeight, IconHeight), Color.White);
                             break;
                     }
                 }
@@ -182,59 +208,57 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     switch (ActiveCheckpoint)
                     {
                         case SorcererStreetMap.Checkpoints.North:
-                            g.Draw(Map.sprDirectionNorth, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            g.Draw(Map.sprDirectionNorth, new Rectangle((int)X + 60 + C * IconHeight, (int)Y, IconHeight, IconHeight), Color.White);
                             break;
                         case SorcererStreetMap.Checkpoints.South:
-                            g.Draw(Map.sprDirectionSouth, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            g.Draw(Map.sprDirectionSouth, new Rectangle((int)X + 60 + C * IconHeight, (int)Y, IconHeight, IconHeight), Color.White);
                             break;
                         case SorcererStreetMap.Checkpoints.East:
-                            g.Draw(Map.sprDirectionEast, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            g.Draw(Map.sprDirectionEast, new Rectangle((int)X + 60 + C * IconHeight, (int)Y, IconHeight, IconHeight), Color.White);
                             break;
                         case SorcererStreetMap.Checkpoints.West:
-                            g.Draw(Map.sprDirectionWest, new Rectangle((int)X + 60 + C * 20, (int)Y, IconHeight, IconHeight), Color.White);
+                            g.Draw(Map.sprDirectionWest, new Rectangle((int)X + 60 + C * IconHeight, (int)Y, IconHeight, IconHeight), Color.White);
                             break;
                     }
                 }
             }
         }
 
-        public static void DrawLandInformation(CustomSpriteBatch g, SorcererStreetMap Map, TerrainSorcererStreet HoverTerrain)
+        public static void DrawLandInformation(CustomSpriteBatch g, SorcererStreetMap Map, TerrainSorcererStreet HoverTerrain, float X, float Y)
         {
-            float InfoBoxX = Constants.Width / 12f;
-            float InfoBoxY = Constants.Height / 10;
             int BoxWidth = (int)(Constants.Width / 2.8);
             int BoxHeight = (int)(Constants.Height / 5);
 
-            GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY - 20), BoxWidth, 20, Color.White);
-            g.DrawString(Map.fntArial12, "Land Information", new Vector2(InfoBoxX + 10, InfoBoxY - 20), Color.White);
-            GameScreen.DrawBox(g, new Vector2(InfoBoxX, InfoBoxY), BoxWidth, BoxHeight, Color.White);
+            MenuHelper.DrawNamedBox(g, "Land Information", new Vector2(X, Y), BoxWidth, BoxHeight);
 
-            float CurrentX = InfoBoxX + 10;
-            float CurrentY = InfoBoxY - 10;
+            float CurrentX = X + 50;
+            float CurrentY = Y - 10;
+
+            float LineHight = Constants.Height / 30;
 
             CurrentY += 20;
 
             g.DrawString(Map.fntArial12, "Owner: " + "None", new Vector2(CurrentX, CurrentY), Color.White);
-            CurrentY += 20;
+            CurrentY += LineHight;
             g.DrawString(Map.fntArial12, "Value: " + HoverTerrain.CurrentValue, new Vector2(CurrentX, CurrentY), Color.White);
-            CurrentY += 20;
+            CurrentY += LineHight;
             g.DrawString(Map.fntArial12, "Toll: " + HoverTerrain.CurrentToll, new Vector2(CurrentX, CurrentY), Color.White);
-            CurrentY += 20;
+            CurrentY += LineHight;
             g.DrawString(Map.fntArial12, "Level: " + HoverTerrain.LandLevel, new Vector2(CurrentX, CurrentY), Color.White);
 
             switch (Map.ListTerrainType[HoverTerrain.TerrainTypeIndex])
             {
                 case TerrainSorcererStreet.FireElement:
-                    g.Draw(Map.Symbols.sprElementFire, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementFire, new Vector2((int)X + 110, (int)CurrentY), Color.White);
                     break;
                 case TerrainSorcererStreet.WaterElement:
-                    g.Draw(Map.Symbols.sprElementWater, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementWater, new Vector2((int)X + 110, (int)CurrentY), Color.White);
                     break;
                 case TerrainSorcererStreet.EarthElement:
-                    g.Draw(Map.Symbols.sprElementEarth, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementEarth, new Vector2((int)X + 110, (int)CurrentY), Color.White);
                     break;
                 case TerrainSorcererStreet.AirElement:
-                    g.Draw(Map.Symbols.sprElementAir, new Vector2((int)InfoBoxX + 70, (int)CurrentY), Color.White);
+                    g.Draw(Map.Symbols.sprElementAir, new Vector2((int)X + 110, (int)CurrentY), Color.White);
                     break;
             }
         }

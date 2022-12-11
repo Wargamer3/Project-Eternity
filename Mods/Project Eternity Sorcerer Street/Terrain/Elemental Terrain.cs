@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (DefendingCreature == null)
                 {
-                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelCreatureCardSelectionPhase(Map, ActivePlayerIndex));
+                    Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelLandInfoPhase(Map, ActivePlayerIndex));
                 }
                 else if (PlayerOwner.Team == Map.ListPlayer[ActivePlayerIndex].Team)
                 {

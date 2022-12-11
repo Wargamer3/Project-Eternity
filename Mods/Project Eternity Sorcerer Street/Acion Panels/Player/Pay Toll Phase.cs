@@ -35,11 +35,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int BoxHeight = 70;
             base.Draw(g);
-            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, 30, Constants.Height / 10);
-            GameScreen.DrawBox(g, new Vector2(30, Constants.Height / 20 + BoxHeight * 2), 200, 30, Color.White);
-            g.DrawStringCentered(Map.fntArial12, "Creature Selection", new Vector2(130, Constants.Height / 20 + BoxHeight * 2 + 15), Color.White);
+            int ActionInfoBoxX = Constants.Width / 16;
+            int ActionInfoBoxY = Constants.Height / 3;
+            int ActionInfoBoxWidth = Constants.Width / 5;
+            int ActionInfoBoxHeight = Constants.Height / 14;
+            ActionPanelPlayerDefault.DrawPlayerInformation(g, Map, ActivePlayer, Constants.Width / 16, Constants.Height / 10);
+            MenuHelper.DrawBorderlessBox(g, new Vector2(ActionInfoBoxX, ActionInfoBoxY), ActionInfoBoxWidth, ActionInfoBoxHeight);
+            g.DrawStringCentered(Map.fntArial12, "Creature Selection", new Vector2(ActionInfoBoxX + ActionInfoBoxWidth / 2, ActionInfoBoxY + ActionInfoBoxHeight / 2), Color.White);
         }
 
         protected override ActionPanel Copy()

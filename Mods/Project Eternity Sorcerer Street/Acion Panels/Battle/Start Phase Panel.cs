@@ -58,11 +58,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.DefenderFinalST = Map.GlobalSorcererStreetBattleContext.Defender.CurrentST;
 
                 Map.GlobalSorcererStreetBattleContext.InvaderCard = new SimpleAnimation("Invader", "Invader", Invader.sprCard);
-                Map.GlobalSorcererStreetBattleContext.InvaderCard.Position = new Vector2(37, 48);
-                Map.GlobalSorcererStreetBattleContext.InvaderCard.Scale = new Vector2(0.6f);
+                Map.GlobalSorcererStreetBattleContext.InvaderCard.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                Map.GlobalSorcererStreetBattleContext.InvaderCard.Scale = new Vector2(1);
                 Map.GlobalSorcererStreetBattleContext.DefenderCard = new SimpleAnimation("Defender", "Defender", ActiveTerrain.DefendingCreature.sprCard);
-                Map.GlobalSorcererStreetBattleContext.DefenderCard.Position = new Vector2(Constants.Width - 282, 48);
-                Map.GlobalSorcererStreetBattleContext.DefenderCard.Scale = new Vector2(0.6f);
+                Map.GlobalSorcererStreetBattleContext.DefenderCard.Position = new Vector2(Constants.Width - Map.GlobalSorcererStreetBattleContext.DefenderCard.StaticSprite.Width - Constants.Width / 9, Constants.Height / 12);
+                Map.GlobalSorcererStreetBattleContext.DefenderCard.Scale = new Vector2(1);
 
                 Map.GlobalSorcererStreetBattleContext.Background = AnimationBackground.LoadAnimationBackground("Backgrounds 3D/Grass", Map.Content, GameScreen.GraphicsDevice);
 
@@ -133,7 +133,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     IntroduceInvader(g);
                     IntroduceDefender(g);
                 }
-                else if (AnimationTime < 8)
+                else
                 {
                     IntroduceInvader(g);
                     IntroduceDefender(g);
@@ -145,17 +145,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void IntroduceInvader(CustomSpriteBatch g)
         {
             //Spin card from the left
-            float MaxScale = 0.3f;
-            if (AnimationTime < 1)
-            {
-                MaxScale = 0.25f;
-            }
+            float MaxScale = 1f;
+            
             float RealRotationTimer = (float)AnimationTime - 2;
-            float FinalX = Constants.Width / 4;
+            float FinalX = Constants.Width / 9 + Map.GlobalSorcererStreetBattleContext.Invader.sprCard.Width / 2;
             float StartX = -10;
             float DistanceX = FinalX - StartX;
             float X = StartX + (RealRotationTimer) * DistanceX;
-            float Y = Constants.Height / 10;
+            float Y = Constants.Height / 12;
             RealRotationTimer *= 5;
             float FinalScale = (float)Math.Sin(RealRotationTimer) * MaxScale;
             if (X > FinalX)
@@ -170,18 +167,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void IntroduceDefender(CustomSpriteBatch g)
         {
-            //Spin card from the left
-            float MaxScale = 0.3f;
-            if (AnimationTime < 1)
-            {
-                MaxScale = 0.25f;
-            }
+            //Spin card from the right
+            float MaxScale = 1f;
+
             float RealRotationTimer = (float)AnimationTime - 4;
-            float FinalX = Constants.Width - Constants.Width / 4;
+            float FinalX = Constants.Width - Constants.Width / 9 - Map.GlobalSorcererStreetBattleContext.Defender.sprCard.Width / 2;
             float StartX = Constants.Width + 10;
             float DistanceX = FinalX - StartX;
             float X = StartX + (RealRotationTimer) * DistanceX;
-            float Y = Constants.Height / 10;
+            float Y = Constants.Height / 12;
             RealRotationTimer *= 5;
             float FinalScale = (float)Math.Sin(RealRotationTimer) * MaxScale;
             if (X < FinalX)
