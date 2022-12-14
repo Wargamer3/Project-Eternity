@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;

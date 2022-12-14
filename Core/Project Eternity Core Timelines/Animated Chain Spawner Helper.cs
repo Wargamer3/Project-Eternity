@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ProjectEternity.Core.Editor;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.AnimationScreen
 {

@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Scripts;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen

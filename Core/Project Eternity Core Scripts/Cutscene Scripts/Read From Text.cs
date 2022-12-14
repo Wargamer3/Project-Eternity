@@ -4,6 +4,7 @@ using System.Globalization;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Collections.Generic;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Scripts
 {

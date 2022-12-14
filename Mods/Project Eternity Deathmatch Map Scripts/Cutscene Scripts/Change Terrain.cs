@@ -5,8 +5,8 @@ using System.Drawing.Design;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.TilesetOriginSelector;
 

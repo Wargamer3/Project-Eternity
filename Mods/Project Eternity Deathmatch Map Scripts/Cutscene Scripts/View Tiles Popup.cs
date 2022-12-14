@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Drawing.Design;
 using System.ComponentModel;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Scripts;
-using ProjectEternity.GameScreens.BattleMapScreen;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

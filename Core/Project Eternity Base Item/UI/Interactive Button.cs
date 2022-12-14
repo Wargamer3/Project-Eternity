@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Item
 {

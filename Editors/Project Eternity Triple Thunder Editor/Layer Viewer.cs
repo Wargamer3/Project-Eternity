@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Threading;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.TripleThunderScreen;
 

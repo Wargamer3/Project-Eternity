@@ -2,9 +2,9 @@
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Effects;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

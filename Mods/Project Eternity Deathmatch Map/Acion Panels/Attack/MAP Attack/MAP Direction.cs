@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
-using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

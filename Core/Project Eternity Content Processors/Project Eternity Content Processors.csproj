@@ -60,9 +60,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Project Eternity Base Item\Project Eternity Base Item.csproj">
-      <Project>{EA7A4390-EEBB-43F1-BE86-33177B215695}</Project>
-      <Name>Project Eternity Base Item</Name>
+    <ProjectReference Include="..\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
+      <Name>Project Eternity Graphics</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;

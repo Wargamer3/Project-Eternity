@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Magic
 {

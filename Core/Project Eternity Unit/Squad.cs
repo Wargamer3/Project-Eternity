@@ -7,6 +7,7 @@ using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Effects;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Core.Units

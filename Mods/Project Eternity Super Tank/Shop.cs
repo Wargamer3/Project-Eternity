@@ -1,10 +1,9 @@
 using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.GameScreens;
 
 namespace ProjectEternity.GameScreens.SuperTankScreen
 {

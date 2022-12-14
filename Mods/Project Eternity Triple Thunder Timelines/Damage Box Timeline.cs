@@ -2,10 +2,9 @@
 using System.IO;
 using System.ComponentModel;
 using System.Collections.Generic;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
-using ProjectEternity.GameScreens.AnimationScreen;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {

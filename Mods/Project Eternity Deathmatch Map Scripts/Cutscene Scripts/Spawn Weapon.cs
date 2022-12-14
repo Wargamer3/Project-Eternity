@@ -2,16 +2,15 @@
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Collections.Generic;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Scripts;
-using ProjectEternity.GameScreens.BattleMapScreen;
-using static ProjectEternity.Core.Scripts.Selectors;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.BattleMapScreen;
+using static ProjectEternity.Core.Scripts.Selectors;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

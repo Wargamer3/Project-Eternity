@@ -3,8 +3,8 @@ using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Collections.Generic;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.AnimationScreen;
 using static ProjectEternity.Core.Scripts.Selectors;
 

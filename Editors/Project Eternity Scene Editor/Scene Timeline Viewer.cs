@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Threading;
+using System.Windows.Forms;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Scene;
+using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Editors.SceneEditor
 {

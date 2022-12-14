@@ -3,8 +3,8 @@ using System.IO;
 using System.Drawing.Design;
 using System.ComponentModel;
 using FMOD;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

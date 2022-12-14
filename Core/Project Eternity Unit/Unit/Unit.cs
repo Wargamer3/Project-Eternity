@@ -10,6 +10,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Core.Units

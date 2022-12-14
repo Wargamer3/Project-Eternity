@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Drawing.Design;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core;
-using System.Drawing.Design;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.AnimationScreen
 {

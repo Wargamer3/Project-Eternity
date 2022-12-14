@@ -4,6 +4,7 @@ using System.Drawing.Design;
 using System.ComponentModel;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

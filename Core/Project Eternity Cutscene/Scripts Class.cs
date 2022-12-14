@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Drawing;
+using System.ComponentModel;
+using System.Collections.Generic;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Scripts
 {

@@ -2,8 +2,8 @@
 using System.IO;
 using System.Drawing.Design;
 using System.ComponentModel;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen

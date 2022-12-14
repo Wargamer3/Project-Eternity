@@ -4,9 +4,8 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.Core.AI;
-using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

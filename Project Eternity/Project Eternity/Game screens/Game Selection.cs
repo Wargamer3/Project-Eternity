@@ -1,15 +1,16 @@
 ﻿using System.IO;
+using System.Collections.Generic;
 using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens;
 using ProjectEternity.GameScreens.RacingScreen;
 using ProjectEternity.GameScreens.WorldMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
-using System.Collections.Generic;
 
 namespace ProjectEternity
 {

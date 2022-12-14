@@ -1,13 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Editor;
-using ProjectEternity.GameScreens.RacingScreen;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.RacingScreen;
 
 namespace ProjectEternity.Editors.RacingMapEditor
 {

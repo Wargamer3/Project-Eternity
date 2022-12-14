@@ -74,6 +74,11 @@
       <Name>Project Eternity Game Screen</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
+      <Name>Project Eternity Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

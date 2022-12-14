@@ -2,11 +2,11 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Editor;
-using ProjectEternity.GameScreens.AnimationScreen;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.Editors.AnimationBackgroundEditor
 {

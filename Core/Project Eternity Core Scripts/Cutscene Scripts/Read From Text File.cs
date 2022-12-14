@@ -2,6 +2,7 @@
 using System.IO;
 using System.ComponentModel;
 using System.Collections.Generic;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Scripts
 {

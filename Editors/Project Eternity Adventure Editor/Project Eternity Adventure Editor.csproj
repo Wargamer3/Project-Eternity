@@ -83,6 +83,11 @@
       <Name>Project Eternity Game Screen</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
+      <Name>Project Eternity Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mods\Project Eternity Adventure Map\Project Eternity Adventure Map.csproj">
       <Project>{5ffb04a9-36ba-4020-9fd9-de0d690c2925}</Project>
       <Name>Project Eternity Adventure Map</Name>

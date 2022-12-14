@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
-using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.AdventureScreen

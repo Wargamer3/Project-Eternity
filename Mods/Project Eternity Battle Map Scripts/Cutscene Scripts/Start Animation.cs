@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.Drawing.Design;
 using System.ComponentModel;
-using ProjectEternity.Core;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Scripts;
-using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

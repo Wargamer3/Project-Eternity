@@ -236,7 +236,7 @@ namespace ProjectEternity.Core.Editor
         /// is lost, or if we are running inside the Form designer), we must use
         /// regular System.Drawing method to display a status message.
         /// </summary>
-        protected virtual void PaintUsingSystemDrawing(Graphics graphics, string text)
+        protected virtual void PaintUsingSystemDrawing(System.Drawing.Graphics graphics, string text)
         {
             graphics.Clear(Color.CornflowerBlue);
 

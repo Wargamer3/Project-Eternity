@@ -4,9 +4,10 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core;
-using ProjectEternity.GameScreens.AnimationScreen;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

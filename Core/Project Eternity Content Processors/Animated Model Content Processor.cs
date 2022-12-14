@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
-using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.ContentProcessor
 {

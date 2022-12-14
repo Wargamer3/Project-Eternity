@@ -3,10 +3,10 @@ using System.IO;
 using System.Drawing.Design;
 using System.ComponentModel;
 using System.Collections.Generic;
-using ProjectEternity.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.AnimationScreen
 {

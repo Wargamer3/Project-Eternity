@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

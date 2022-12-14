@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Scene
 {

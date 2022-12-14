@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using System.IO;
-using System.Text;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.RacingScreen
 {

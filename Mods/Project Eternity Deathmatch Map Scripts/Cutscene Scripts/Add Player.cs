@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen

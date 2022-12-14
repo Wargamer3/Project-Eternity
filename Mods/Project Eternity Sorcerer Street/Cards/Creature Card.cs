@@ -2,11 +2,12 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {

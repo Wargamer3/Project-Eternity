@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using ProjectEternity.Core.Item;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Magic
 {

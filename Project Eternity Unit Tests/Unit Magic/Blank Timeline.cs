@@ -2,7 +2,7 @@
 using System.IO;
 using System.ComponentModel;
 using System.Collections.Generic;
-using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 

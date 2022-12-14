@@ -3,6 +3,7 @@ using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {

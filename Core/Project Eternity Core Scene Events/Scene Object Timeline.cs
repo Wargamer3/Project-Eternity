@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.Core.Scene

@@ -98,6 +98,12 @@
     <Compile Include="Deathmatch Tests\Deathmatch Requirement Unit Tests.cs" />
     <Compile Include="Deathmatch Tests\Core Requirement Unit Tests.cs" />
     <Compile Include="Deathmatch Tests\AI Tests.cs" />
+    <Compile Include="Dynamic Text Tests\Parts\Imageless Icon.cs" />
+    <Compile Include="Dynamic Text Tests\Processors\DefaultTextProcessor.cs" />
+    <Compile Include="Dynamic Text Tests\Dynamic Text Tests.cs" />
+    <Compile Include="Dynamic Text Tests\Parts\Fontless Text.cs" />
+    <Compile Include="Dynamic Text Tests\Processors\IconProcessor.cs" />
+    <Compile Include="Dynamic Text Tests\Processors\RegularTextProcessor.cs" />
     <Compile Include="Sorcerer Street Tests\Battle Effects Tests.cs" />
     <Compile Include="Sorcerer Street Tests\Battle Tests.cs" />
     <Compile Include="Sorcerer Street Tests\Map Tests.cs" />
@@ -163,6 +169,11 @@
     <ProjectReference Include="..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
       <Project>{DD46B019-61BA-4F24-A7E1-EF212C27CDCE}</Project>
       <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
+      <Name>Project Eternity Graphics</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Core\Project Eternity Magic\Project Eternity Magic.csproj">

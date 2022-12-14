@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using FMOD;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.Core.TextHelper;
 

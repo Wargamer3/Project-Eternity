@@ -2,9 +2,9 @@
 using System.IO;
 using System.ComponentModel;
 using System.Collections.Generic;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.VisualNovelScreen;

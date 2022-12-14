@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.LightningSystem;
 using FMOD;
 

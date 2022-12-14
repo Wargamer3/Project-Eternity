@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.Core.Magic

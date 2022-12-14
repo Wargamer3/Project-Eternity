@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using FMOD;
 using ProjectEternity.GameScreens;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Scripts
 {

@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using System.Text;
-using ProjectEternity.Core.Item;
 using System.Collections.Generic;
-using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {

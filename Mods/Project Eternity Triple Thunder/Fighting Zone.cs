@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,10 +12,10 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Magic;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.TripleThunderScreen.Online;
-using FMOD;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
 {

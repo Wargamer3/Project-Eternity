@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
-using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.ContentProcessor
 {

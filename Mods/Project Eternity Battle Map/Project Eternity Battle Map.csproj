@@ -266,6 +266,7 @@
     <ProjectReference Include="..\..\Core\Project Eternity AI\Project Eternity AI.csproj">
       <Project>{f5cd64c0-abde-44c7-8af8-0a47164d5f69}</Project>
       <Name>Project Eternity AI</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Animation Screen\Project Eternity Animation Screen.csproj">
       <Project>{7297b027-a204-417e-89a0-5ed5a7f525d8}</Project>
@@ -305,6 +306,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
       <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
       <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
+      <Name>Project Eternity Graphics</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Online\Project Eternity Online.csproj">

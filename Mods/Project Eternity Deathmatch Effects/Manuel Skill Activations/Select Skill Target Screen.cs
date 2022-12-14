@@ -2,6 +2,7 @@
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens;
 using ProjectEternity.Core.Effects;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 

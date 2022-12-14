@@ -2,12 +2,11 @@
 using System.IO;
 using System.Drawing.Design;
 using System.ComponentModel;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-
     public sealed partial class ExtraBattleMapCutsceneScriptHolder
     {
         public class ScriptSetNextMap : BattleMapScript

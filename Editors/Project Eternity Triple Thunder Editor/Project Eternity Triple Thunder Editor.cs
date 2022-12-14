@@ -4,13 +4,13 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Editor;
-using ProjectEternity.Core.Item;
-using ProjectEternity.GameScreens.AnimationScreen;
-using ProjectEternity.GameScreens.TripleThunderScreen;
-using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.Editors.BitmapAnimationEditor;
+using ProjectEternity.GameScreens.TripleThunderScreen;
 
 namespace ProjectEternity.Editors.TripleThunderEditor
 {

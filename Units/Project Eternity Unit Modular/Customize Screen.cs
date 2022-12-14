@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
 using ProjectEternity.GameScreens;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.Core.Units.Modular

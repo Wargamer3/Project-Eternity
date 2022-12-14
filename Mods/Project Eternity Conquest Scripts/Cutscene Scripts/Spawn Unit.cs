@@ -3,9 +3,9 @@ using System.IO;
 using System.Drawing.Design;
 using System.ComponentModel;
 using FMOD;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Units.Conquest;
 
 namespace ProjectEternity.GameScreens.ConquestMapScreen

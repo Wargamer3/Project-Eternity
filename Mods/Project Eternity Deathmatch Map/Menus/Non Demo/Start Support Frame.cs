@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
+using ProjectEternity.Core.Graphics;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.NonDemoScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen

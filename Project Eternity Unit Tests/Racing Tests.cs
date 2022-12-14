@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core.Item;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.RacingScreen;
 using static ProjectEternity.GameScreens.RacingScreen.Vehicule;
 

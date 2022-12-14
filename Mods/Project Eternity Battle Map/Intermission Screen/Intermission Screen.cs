@@ -6,12 +6,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Units.MultiForm;
-using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {

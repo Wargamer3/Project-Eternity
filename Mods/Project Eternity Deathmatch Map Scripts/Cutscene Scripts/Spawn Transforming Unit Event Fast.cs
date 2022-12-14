@@ -2,10 +2,9 @@
 using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Effects;
-using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Units.Transforming;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen

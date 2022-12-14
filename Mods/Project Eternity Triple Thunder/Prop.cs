@@ -6,9 +6,8 @@ using System.Collections.Generic;
 using System.Windows.Forms.Design;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen

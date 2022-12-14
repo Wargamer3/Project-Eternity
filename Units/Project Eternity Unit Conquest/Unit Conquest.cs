@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Core.Units.Conquest

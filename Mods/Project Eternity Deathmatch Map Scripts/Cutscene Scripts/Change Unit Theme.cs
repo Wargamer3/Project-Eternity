@@ -3,8 +3,8 @@ using System.IO;
 using System.ComponentModel;
 using System.Drawing.Design;
 using FMOD;
-using ProjectEternity.Core;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen

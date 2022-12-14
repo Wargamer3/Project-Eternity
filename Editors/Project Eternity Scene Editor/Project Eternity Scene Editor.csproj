@@ -92,6 +92,11 @@
       <Name>Project Eternity Game Screen</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
+      <Name>Project Eternity Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Scene\Project Eternity Scene.csproj">
       <Project>{b8b159e0-3c61-4fa9-8cf4-abc3cd6d9733}</Project>
       <Name>Project Eternity Scene</Name>

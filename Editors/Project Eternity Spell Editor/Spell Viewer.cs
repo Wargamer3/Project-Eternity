@@ -1,15 +1,16 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Magic;
+using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
-using System.Collections.Generic;
 
 namespace ProjectEternity.Editors.SpellEditor
 {

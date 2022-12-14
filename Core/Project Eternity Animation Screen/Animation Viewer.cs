@@ -4,9 +4,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.AnimationScreen
 {

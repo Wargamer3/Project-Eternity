@@ -2,8 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity
 {

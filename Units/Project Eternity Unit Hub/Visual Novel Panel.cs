@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.VisualNovelScreen;
 
 namespace ProjectEternity.Core.Units.Hub

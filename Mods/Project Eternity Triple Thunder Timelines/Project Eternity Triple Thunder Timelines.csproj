@@ -73,6 +73,11 @@
       <Name>Project Eternity Game Screen</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Graphics\Project Eternity Graphics.csproj">
+      <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
+      <Name>Project Eternity Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Project Eternity Triple Thunder\Project Eternity Triple Thunder.csproj">
       <Project>{d2aff601-4df2-466b-91eb-3aa010668360}</Project>
       <Name>Project Eternity Triple Thunder</Name>

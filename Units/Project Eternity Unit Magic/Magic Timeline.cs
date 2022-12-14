@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Magic;
-using ProjectEternity.GameScreens.AnimationScreen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using ProjectEternity.Core;
+using ProjectEternity.Core.Magic;
+using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.AnimationScreen;
 using static ProjectEternity.Core.Projectile2DParams;
 
 namespace ProjectEternity.Units.Magic

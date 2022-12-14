@@ -7,6 +7,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Effects;
 using ProjectEternity.Core.Attacks;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.AnimationScreen;
 using static ProjectEternity.GameScreens.BattleMapScreen.BattleMap;
 using static ProjectEternity.GameScreens.DeathmatchMapScreen.DeathmatchMap;

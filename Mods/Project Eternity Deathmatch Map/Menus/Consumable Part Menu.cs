@@ -6,7 +6,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Parts;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Characters;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen

@@ -4,9 +4,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using static ProjectEternity.Core.Projectile2DParams;
-using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.Core.Magic
 {

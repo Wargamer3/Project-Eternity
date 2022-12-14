@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.ControlHelper;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Item
 {

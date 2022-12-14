@@ -3,6 +3,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Magic;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Graphics;
 using static ProjectEternity.Core.Projectile2DParams;
 
 namespace ProjectEternity.Units.Magic

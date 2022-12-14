@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.GameScreens;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.Core.Scene
 {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.AnimationScreen
 {
@@ -366,7 +367,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             return cc;                                                      // Return current contour
         }
 
-        public static void DisplayContour(Core.CustomSpriteBatch g, Microsoft.Xna.Framework.Graphics.Texture2D sprPixel,
+        public static void DisplayContour(CustomSpriteBatch g, Microsoft.Xna.Framework.Graphics.Texture2D sprPixel,
                              Contour2D FirstContour)                       // Pointer to first contour
         {
             Vertex2D P;
@@ -493,7 +494,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             return HashShape;
         }
 
-        private static void DrawLine(Core.CustomSpriteBatch g, Microsoft.Xna.Framework.Graphics.Texture2D sprPixel, Microsoft.Xna.Framework.Vector2 StartPos, Microsoft.Xna.Framework.Vector2 EndPos, Microsoft.Xna.Framework.Color DrawColor)
+        private static void DrawLine(CustomSpriteBatch g, Microsoft.Xna.Framework.Graphics.Texture2D sprPixel, Microsoft.Xna.Framework.Vector2 StartPos, Microsoft.Xna.Framework.Vector2 EndPos, Microsoft.Xna.Framework.Color DrawColor)
         {
             Microsoft.Xna.Framework.Vector2 ScaleFactor = new Microsoft.Xna.Framework.Vector2(EndPos.X - StartPos.X, EndPos.Y - StartPos.Y);
             ScaleFactor.Normalize();

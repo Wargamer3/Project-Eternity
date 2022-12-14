@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.VisualNovelScreen;
 
 namespace ProjectEternity.Core.Scripts
