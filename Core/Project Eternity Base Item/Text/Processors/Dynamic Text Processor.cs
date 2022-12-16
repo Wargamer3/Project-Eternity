@@ -13,5 +13,7 @@ namespace ProjectEternity.Core.Item
         public abstract void Load(ContentManager Content);
 
         public abstract DynamicTextPart ParseText(string Text);
+
+        public abstract DynamicTextPart GetTextObject(string Prefix);
     }
 }

@@ -7,9 +7,12 @@ namespace ProjectEternity.Core.Item
 {
     public abstract class DynamicTextPart
     {
+        public string ID;
+        public DynamicTextPart Parent;
         public readonly DynamicText Owner;
-        public readonly string OriginalText;
+        public string OriginalText;
         public readonly Dictionary<string, string> DicSubTag;
+        public List<DynamicTextPart> ListSubTextSection;
 
         public Vector2 Position;
         public float MaxWidth;
@@ -19,10 +22,11 @@ namespace ProjectEternity.Core.Item
         {
             this.Owner = Owner;
             DicSubTag = new Dictionary<string, string>();
+            ListSubTextSection = new List<DynamicTextPart>();
 
             if (!string.IsNullOrEmpty(Prefix))
             {
-                this.OriginalText = ProcessSubTags(OriginalText.Substring(Prefix.Length, OriginalText.Length - Prefix.Length));
+                this.OriginalText = string.Empty;
             }
             else
             {
@@ -30,29 +34,113 @@ namespace ProjectEternity.Core.Item
             }
         }
 
-        public string ProcessSubTags(string Text)
+        public virtual void SetParent(DynamicTextPart Parent)
         {
-            while (Text[0] == '{')
+            this.Parent = Parent;
+        }
+
+        public virtual void OnTextRead(string TextRead)
+        {
+            DynamicTextPart NewTextPart = Owner.DefaultProcessor.ParseText(TextRead);
+            NewTextPart.SetParent(this);
+            ListSubTextSection.Add(NewTextPart);
+        }
+
+        public void ProcessInternalText(string TextToParse, ref int i)
+        {
+            while (TextToParse[i] == '{')
             {
-                int ReadIndex = 1;
-                while (ReadIndex < Text.Length)
+                int j = i + 1;
+                ++i;
+
+                while (i < TextToParse.Length)
                 {
-                    string SubTag = Text.Substring(ReadIndex, 1);
-                    ++ReadIndex;
+                    string SubTag = TextToParse.Substring(i, 1);
+                    ++i;
 
                     if (SubTag == "}")
                     {
-                        SubTag = Text.Substring(1, ReadIndex - 2);
+                        SubTag = TextToParse.Substring(j, i - j - 1);
                         string[] ArraySubTagPart = SubTag.Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-                        DicSubTag.Add(ArraySubTagPart[0], ArraySubTagPart[1]);
-
-                        Text = Text.Substring(ReadIndex, Text.Length - ReadIndex);
+                        if (ArraySubTagPart.Length > 1)
+                        {
+                            DicSubTag.Add(ArraySubTagPart[0], ArraySubTagPart[1]);
+                        }
+                        else
+                        {
+                            DicSubTag.Add(ArraySubTagPart[0], null);
+                        }
                         break;
                     }
                 }
             }
+        }
 
-            return Text;
+        public void ProcessText(string TextToParse, ref int i)
+        {
+            string WorkingText = string.Empty;
+
+            for (; i < TextToParse.Length; i++)
+            {
+                string ActiveText = TextToParse.Substring(i, 1);
+
+                if (ActiveText == "{")
+                {
+                    if (i + 1 < TextToParse.Length && TextToParse.Substring(i, 2) == "{{")
+                    {
+                        if (WorkingText.Length > 0)
+                        {
+                            OnTextRead(WorkingText);
+                            WorkingText = string.Empty;
+                        }
+
+                        char ActiveChar = ' ';
+                        int j = i;
+                        while (ActiveChar != ':')
+                        {
+                            ++j;
+                            ActiveChar = TextToParse.Substring(j, 1)[0];
+                        }
+
+                        string ActiveTag = TextToParse.Substring(i + 2, j - i - 1);
+                        i = j + 1;
+
+                        foreach (DynamicTextProcessor ActiveProcessor in Owner.ListProcessor)
+                        {
+                            DynamicTextPart AvailableTextPart = ActiveProcessor.GetTextObject(ActiveTag);
+
+                            if (AvailableTextPart != null)
+                            {
+                                AvailableTextPart.SetParent(this);
+                                AvailableTextPart.ProcessInternalText(TextToParse, ref i);
+                                AvailableTextPart.ProcessText(TextToParse, ref i);
+                                ListSubTextSection.Add(AvailableTextPart);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (i + 1 < TextToParse.Length && TextToParse.Substring(i, 2) == "}}")
+                {
+                    ++i;
+                    if (WorkingText.Length > 0)
+                    {
+                        OnTextRead(WorkingText);
+                        WorkingText = string.Empty;
+                        return;
+                    }
+                }
+                else
+                {
+                    WorkingText += ActiveText;
+                }
+            }
+
+            if (WorkingText.Length > 0)
+            {
+                OnTextRead(WorkingText);
+                WorkingText = string.Empty;
+            }
         }
 
         protected float GetStartingXPositionOnLine(Vector2 ActivePosition)

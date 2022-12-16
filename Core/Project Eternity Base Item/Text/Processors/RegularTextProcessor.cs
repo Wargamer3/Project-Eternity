@@ -17,6 +17,16 @@ namespace ProjectEternity.Core.Item
             Fonts = new FontsHolder(Content);
         }
 
+        public override DynamicTextPart GetTextObject(string Prefix)
+        {
+            if (Prefix.StartsWith("Text:"))
+            {
+                return new RegularText(Owner, Fonts, string.Empty, "Text:");
+            }
+
+            return null;
+        }
+
         public override DynamicTextPart ParseText(string Text)
         {
             if (Text.StartsWith("Text:"))

@@ -12,6 +12,11 @@ namespace ProjectEternity.Core.Item
             this.Owner = Owner;
         }
 
+        public override DynamicTextPart GetTextObject(string Prefix)
+        {
+            return new RegularText(Owner, string.Empty);
+        }
+
         public override void Load(ContentManager Content)
         {
             Fonts = new FontsHolder(Content);

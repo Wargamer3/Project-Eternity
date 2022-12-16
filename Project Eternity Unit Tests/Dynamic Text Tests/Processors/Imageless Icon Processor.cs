@@ -16,6 +16,16 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
         {
         }
 
+        public override DynamicTextPart GetTextObject(string Prefix)
+        {
+            if (Prefix.StartsWith("Icon:"))
+            {
+                return new ImagelessIconPart(Owner, string.Empty);
+            }
+
+            return null;
+        }
+
         public override DynamicTextPart ParseText(string Text)
         {
             if (Text.StartsWith("Icon:"))

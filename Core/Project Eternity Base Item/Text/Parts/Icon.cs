@@ -7,9 +7,20 @@ namespace ProjectEternity.Core.Item
     public class IconPart : DynamicTextPart
     {
         public Texture2D sprIcon;
+        private ImagesHolder Images;
+        public Vector2 ImagePosition;
 
         public IconPart(DynamicText Owner, ImagesHolder Images, string OriginalText)
              : base(Owner, OriginalText, "Icon:")
+        {
+            this.Images = Images;
+            if (Images != null)
+            {
+                sprIcon = Images.sprBoss;
+            }
+        }
+
+        public override void OnTextRead(string TextRead)
         {
             if (Images != null)
             {
@@ -19,12 +30,13 @@ namespace ProjectEternity.Core.Item
 
         public override Vector2 UpdatePosition()
         {
-            MaxWidth = Owner.TextMaxWidthInPixel;
+            ReadTags();
 
             Vector2 ActivePosition = Position;
 
             float ImageWidth = GetImageSize();
             ActivePosition.X = GetStartingXPositionOnLine(ActivePosition);
+            ImagePosition = ActivePosition;
             float RemainingSpaceOnLine = GetRemainingSpaceOnLine(ActivePosition);
 
             if (ImageWidth > Owner.TextMaxWidthInPixel)
@@ -37,10 +49,27 @@ namespace ProjectEternity.Core.Item
                 ActivePosition.Y += Owner.LineHeight;
                 ActivePosition.X = 0;
                 ActivePosition.X = GetStartingXPositionOnLine(ActivePosition);
+                ImagePosition = ActivePosition;
                 RemainingSpaceOnLine = GetRemainingSpaceOnLine(ActivePosition);
             }
 
             return new Vector2(ActivePosition.X + ImageWidth, ActivePosition.Y);
+        }
+
+        private void ReadTags()
+        {
+            if (DicSubTag.ContainsKey("MaxWidth"))
+            {
+                MaxWidth = float.Parse(DicSubTag["MaxWidth"]);
+            }
+            else if (Parent != null)
+            {
+                MaxWidth = Parent.MaxWidth;
+            }
+            else
+            {
+                MaxWidth = Owner.TextMaxWidthInPixel;
+            }
         }
 
         public virtual float GetImageSize()
@@ -54,7 +83,7 @@ namespace ProjectEternity.Core.Item
 
         public override void Draw(CustomSpriteBatch g, Vector2 Offset)
         {
-            g.Draw(sprIcon, Position, Color.White);
+            g.Draw(sprIcon, ImagePosition, Color.White);
         }
     }
 }

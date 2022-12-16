@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
+﻿using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.UnitTests.DynamicTextTests
 {
     public class ImagelessIconPart : IconPart
     {
+        public static float ImageSizeDefault = 30;
+
         public ImagelessIconPart(DynamicText Owner, string OriginalText)
             : base(Owner, null, OriginalText)
         {
@@ -13,7 +13,7 @@ namespace ProjectEternity.UnitTests.DynamicTextTests
 
         public override float GetImageSize()
         {
-            return 30;
+            return ImageSizeDefault;
         }
     }
 }
