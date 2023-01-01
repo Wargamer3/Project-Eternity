@@ -10,24 +10,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public class BattleMapPlayer : OnlinePlayerBase
     {
         public BattleMapPlayerInventory Inventory;
+        public BattleMapPlayerShopInventory ShopInventory;
+        public BattleMapPlayerUnlockInventory UnlockInventory;
 
         public override string SaveFileFolder => "Battle Map/";
 
         public BattleMapPlayer()
         {
             Inventory = new BattleMapPlayerInventory();
+            ShopInventory = new BattleMapPlayerShopInventory();
+            UnlockInventory = new BattleMapPlayerUnlockInventory();
+            UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
         }
 
         public BattleMapPlayer(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
             : base(ID, Name, OnlinePlayerType, IsOnline, Team, IsPlayerControlled, Color)
         {
             Inventory = new BattleMapPlayerInventory();
+            ShopInventory = new BattleMapPlayerShopInventory();
+            UnlockInventory = new BattleMapPlayerUnlockInventory();
+            UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
         }
 
         public BattleMapPlayer(string ID, string Name, PlayerTypes OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
             : base(ID, Name, OnlinePlayerType, IsOnline, Team, IsPlayerControlled, Color)
         {
             Inventory = new BattleMapPlayerInventory();
+            ShopInventory = new BattleMapPlayerShopInventory();
+            UnlockInventory = new BattleMapPlayerUnlockInventory();
+            UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
         }
 
         public BattleMapPlayer(BattleMapPlayer Clone)
@@ -39,11 +50,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             Inventory = Clone.Inventory;
+            ShopInventory = Clone.ShopInventory;
+            UnlockInventory = Clone.UnlockInventory;
+            UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
         }
 
         protected override void DoLoadLocally(ContentManager Content, BinaryReader BR)
         {
-            Inventory.Load(BR, Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+            Inventory.Load(BR, Content);
+            ShopInventory.PopulateUnlockedShopItems(Name);
+            UnlockInventory.PopulateUnlockedPlayerItems(Name);
         }
 
         public override void InitFirstTimeInventory()

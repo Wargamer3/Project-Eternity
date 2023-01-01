@@ -136,7 +136,12 @@
     <Compile Include="Lobby\Player\Multiplayer Record.cs" />
     <Compile Include="Lobby\Player\Player Records.cs" />
     <Compile Include="Lobby\Player\Unit Records.cs" />
-    <Compile Include="Lobby\Shop\Pending Unlock Screen.cs" />
+    <Compile Include="Lobby\Shop\Shop Item Character.cs" />
+    <Compile Include="Lobby\Shop\Shop Item Mission.cs" />
+    <Compile Include="Lobby\Shop\Shop Item Unit.cs" />
+    <Compile Include="Lobby\Unlocks\BattleMap Player Unlock Inventory.cs" />
+    <Compile Include="Lobby\Unlocks\Item Unlock Conditions.cs" />
+    <Compile Include="Lobby\Unlocks\Pending Unlock Screen.cs" />
     <Compile Include="Lobby\Shop\Shop Inventory.cs" />
     <Compile Include="Lobby\Game Options\Gametype Screen.cs" />
     <Compile Include="Lobby\Game Options\Mutators Screen.cs" />
@@ -162,6 +167,9 @@
     <Compile Include="Lobby\UI\Box Drop Down Button.cs" />
     <Compile Include="Lobby\Create Room Screen.cs" />
     <Compile Include="Lobby\Loading Screen.cs" />
+    <Compile Include="Lobby\Unlocks\Unlockable Character.cs" />
+    <Compile Include="Lobby\Unlocks\Unlockable Mission.cs" />
+    <Compile Include="Lobby\Unlocks\Unlockable Unit.cs" />
     <Compile Include="Mutators\Mutator.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />

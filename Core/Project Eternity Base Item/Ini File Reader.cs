@@ -17,7 +17,7 @@ namespace ProjectEternity.Core.Item
             InitSR = new StreamReader(IniFS);
         }
 
-        public Dictionary<string, string> ReadNextHeader()
+        public Dictionary<string, string> ReadAllHeaders()
         {
             Dictionary<string, string> DicFieldAndValue = new Dictionary<string, string>();
             string CurrentHeader = null;

@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            IniFile IniUnlocks = IniFile.ReadFromFile("Content/Battle Lobby Unlocks.ini");
+            IniFile IniUnlocks = IniFile.ReadFromFile("Content/Battle Lobby Player Unlocks.ini");
             foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Slots"))
             {
                 if (Owner.ActivePlayer.Level >= int.Parse(RequiredLevel))

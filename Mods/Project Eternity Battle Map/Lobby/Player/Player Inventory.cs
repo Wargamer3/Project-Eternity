@@ -8,11 +8,27 @@ using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
+    public struct MissionInfo
+    {
+        public string MapPath;
+        public int QuantityOwned;
+        public int SortOrder;
+
+        public MissionInfo(string MapPath, int QuantityOwned)
+        {
+            this.MapPath = MapPath;
+            this.QuantityOwned = QuantityOwned;
+
+            SortOrder = 0;
+        }
+    }
+
     public class BattleMapPlayerInventory
     {
-        public List<PlayerLoadout> ListSquadLoadout;
         public List<Squad> ListOwnedSquad;
         public List<Character> ListOwnedCharacter;
+        public List<MissionInfo> ListOwnedMission;
+        public List<PlayerLoadout> ListSquadLoadout;
 
         public PlayerLoadout ActiveLoadout;
 
@@ -21,14 +37,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListSquadLoadout = new List<PlayerLoadout>();
             ListOwnedSquad = new List<Squad>();
             ListOwnedCharacter = new List<Character>();
+            ListOwnedMission = new List<MissionInfo>();
 
             ActiveLoadout = new PlayerLoadout();
             ListSquadLoadout.Add(ActiveLoadout);
         }
 
-        public void Load(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, Unit> DicUnitType,
-            Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
-            Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
+        public void Load(BinaryReader BR, Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             int ListOwnedSquadCount = BR.ReadInt32();
             ListOwnedSquad = new List<Squad>(ListOwnedSquadCount);
@@ -37,10 +52,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string RelativePath = BR.ReadString();
                 string UnitTypeName = BR.ReadString();
 
-                Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
 
                 string CharacterFullName = BR.ReadString();
-                Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                Character LoadedCharacter = new Character(CharacterFullName, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                 LoadedCharacter.Level = 1;
 
                 LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
@@ -56,10 +71,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int C = 0; C < ListOwnedCharacterCount; ++C)
             {
                 string CharacterFullName = BR.ReadString();
-                Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                Character LoadedCharacter = new Character(CharacterFullName, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                 LoadedCharacter.Level = 1;
 
                 ListOwnedCharacter.Add(LoadedCharacter);
+            }
+
+            int ListOwnedMissionCount = BR.ReadInt32();
+            ListOwnedMission = new List<MissionInfo>(ListOwnedMission);
+            for (int C = 0; C < ListOwnedMissionCount; ++C)
+            {
+                string MissionPath = BR.ReadString();
+                int QuantityOwned = BR.ReadInt32();
+
+                MissionInfo LoadedMission = new MissionInfo(MissionPath, QuantityOwned);
+
+                ListOwnedMission.Add(LoadedMission);
             }
 
             int ListSquadLoadoutCount = BR.ReadInt32();
@@ -84,9 +111,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     string UnitTypeName = BR.ReadString();
                     string CharacterFullName = BR.ReadString();
 
-                    Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                    Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
 
-                    Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                    Character LoadedCharacter = new Character(CharacterFullName, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                     LoadedCharacter.Level = 1;
 
                     LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
@@ -115,6 +142,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int C = 0; C < ListOwnedCharacter.Count; ++C)
             {
                 BW.Write(ListOwnedCharacter[C].FullName);
+            }
+
+            BW.Write(ListOwnedMission.Count);
+            for (int M = 0; M < ListOwnedMission.Count; ++M)
+            {
+                BW.Write(ListOwnedMission[M].MapPath);
             }
 
             BW.Write(ListSquadLoadout.Count);

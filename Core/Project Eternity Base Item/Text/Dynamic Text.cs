@@ -32,16 +32,19 @@ namespace ProjectEternity.Core.Item
 
         public void Load(ContentManager Content)
         {
+            DefaultProcessor.Load(Content);
+
             foreach (DynamicTextProcessor ActiveProcessor in ListProcessor)
             {
                 ActiveProcessor.Load(Content);
             }
+
+            Root = DefaultProcessor.ParseText(string.Empty);
         }
 
         public void SetDefaultProcessor(DynamicTextProcessor DefaultProcessor)
         {
             this.DefaultProcessor = DefaultProcessor;
-            Root = DefaultProcessor.ParseText(string.Empty);
         }
 
         public void ParseText(string TextToParse)

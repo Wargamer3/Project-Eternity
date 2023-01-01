@@ -99,7 +99,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 new EditorInfo(new string[] { GUIRootPathUnitsNormal, GUIRootPathUnits }, "Units/Normal/", new string[] { ".peu", ".txt" }, typeof(UnitNormalEditor)),
                 new EditorInfo(new string[] { GUIRootPathUnitsNormalMapSprites }, "Units/Normal/Map Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
                 new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitSprites }, "Units/Normal/Unit Sprite/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false),
-                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitModels }, "Units/Normal/Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
+                new EditorInfo(new string[] { GUIRootPathUnitsNormalUnitModels }, "Units/Normal/Unit Models/", new string[] { ".xnb" }, typeof(ProjectEternityImageViewer), false, null, true),
             };
 
             return Info;

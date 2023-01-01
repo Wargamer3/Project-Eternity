@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             };
 
             InventorySquadScreen NewShopCharacterScreen = new InventorySquadScreen(this);
-            InventoryCharacterScreen NewShopEquipmentScreen = new InventoryCharacterScreen();
+            InventoryCharacterScreen NewShopEquipmentScreen = new InventoryCharacterScreen(this);
             InventoryEquipmentScreen NewShopWeaponsScreen = new InventoryEquipmentScreen();
             InventoryConsumableScreen NewShopItemsScreen = new InventoryConsumableScreen();
 

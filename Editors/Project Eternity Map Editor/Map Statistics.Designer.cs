@@ -73,6 +73,8 @@
             this.gbMandatoryMutators = new System.Windows.Forms.GroupBox();
             this.dgvMandatoryMutators = new System.Windows.Forms.DataGridView();
             this.clMutatorName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtOrderNumber = new System.Windows.Forms.NumericUpDown();
+            this.lblOrderNumber = new System.Windows.Forms.Label();
             this.gbCameraStartPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).BeginInit();
@@ -91,6 +93,7 @@
             this.gbTimeUsage.SuspendLayout();
             this.gbMandatoryMutators.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryMutators)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOrderNumber)).BeginInit();
             this.SuspendLayout();
             // 
             // lblMapWidth
@@ -105,7 +108,7 @@
             // lblMapHeight
             // 
             this.lblMapHeight.AutoSize = true;
-            this.lblMapHeight.Location = new System.Drawing.Point(115, 67);
+            this.lblMapHeight.Location = new System.Drawing.Point(112, 67);
             this.lblMapHeight.Name = "lblMapHeight";
             this.lblMapHeight.Size = new System.Drawing.Size(100, 13);
             this.lblMapHeight.TabIndex = 5;
@@ -114,7 +117,7 @@
             // lblTileHeight
             // 
             this.lblTileHeight.AutoSize = true;
-            this.lblTileHeight.Location = new System.Drawing.Point(80, 106);
+            this.lblTileHeight.Location = new System.Drawing.Point(77, 106);
             this.lblTileHeight.Name = "lblTileHeight";
             this.lblTileHeight.Size = new System.Drawing.Size(58, 13);
             this.lblTileHeight.TabIndex = 6;
@@ -123,7 +126,7 @@
             // lblTileWidth
             // 
             this.lblTileWidth.AutoSize = true;
-            this.lblTileWidth.Location = new System.Drawing.Point(12, 106);
+            this.lblTileWidth.Location = new System.Drawing.Point(9, 106);
             this.lblTileWidth.Name = "lblTileWidth";
             this.lblTileWidth.Size = new System.Drawing.Size(55, 13);
             this.lblTileWidth.TabIndex = 7;
@@ -133,7 +136,6 @@
             // 
             this.txtMapName.Location = new System.Drawing.Point(12, 34);
             this.txtMapName.Name = "txtMapName";
-            this.txtMapName.ReadOnly = true;
             this.txtMapName.Size = new System.Drawing.Size(259, 20);
             this.txtMapName.TabIndex = 8;
             this.txtMapName.Text = "New map";
@@ -589,11 +591,34 @@
             this.clMutatorName.HeaderText = "Name";
             this.clMutatorName.Name = "clMutatorName";
             // 
+            // txtOrderNumber
+            // 
+            this.txtOrderNumber.Location = new System.Drawing.Point(213, 83);
+            this.txtOrderNumber.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtOrderNumber.Name = "txtOrderNumber";
+            this.txtOrderNumber.Size = new System.Drawing.Size(58, 20);
+            this.txtOrderNumber.TabIndex = 25;
+            // 
+            // lblOrderNumber
+            // 
+            this.lblOrderNumber.AutoSize = true;
+            this.lblOrderNumber.Location = new System.Drawing.Point(210, 67);
+            this.lblOrderNumber.Name = "lblOrderNumber";
+            this.lblOrderNumber.Size = new System.Drawing.Size(43, 13);
+            this.lblOrderNumber.TabIndex = 24;
+            this.lblOrderNumber.Text = "Order #";
+            // 
             // MapStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(713, 332);
+            this.Controls.Add(this.txtOrderNumber);
+            this.Controls.Add(this.lblOrderNumber);
             this.Controls.Add(this.gbMandatoryMutators);
             this.Controls.Add(this.gbTimeUsage);
             this.Controls.Add(this.gbTimeLimits);
@@ -641,6 +666,7 @@
             this.gbTimeUsage.PerformLayout();
             this.gbMandatoryMutators.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryMutators)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOrderNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -651,7 +677,6 @@
         private System.Windows.Forms.Label lblMapHeight;
         private System.Windows.Forms.Label lblTileHeight;
         private System.Windows.Forms.Label lblTileWidth;
-        private System.Windows.Forms.TextBox txtMapName;
         private System.Windows.Forms.Label lblMapName;
         private System.Windows.Forms.Button btnAccept;
         private System.Windows.Forms.Button btnClose;
@@ -692,5 +717,8 @@
         private System.Windows.Forms.GroupBox gbMandatoryMutators;
         public System.Windows.Forms.DataGridView dgvMandatoryMutators;
         private System.Windows.Forms.DataGridViewTextBoxColumn clMutatorName;
+        public System.Windows.Forms.NumericUpDown txtOrderNumber;
+        private System.Windows.Forms.Label lblOrderNumber;
+        public System.Windows.Forms.TextBox txtMapName;
     }
 }

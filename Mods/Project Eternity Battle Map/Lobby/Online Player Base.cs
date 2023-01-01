@@ -36,6 +36,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string OnlinePlayerType;
         public IOnlineConnection OnlineClient;//Used by the server
 
+        public ItemUnlockConditionsEvaluator UnlocksEvaluator;
         public PlayerRecords Records;
 
         public abstract string SaveFileFolder { get; }

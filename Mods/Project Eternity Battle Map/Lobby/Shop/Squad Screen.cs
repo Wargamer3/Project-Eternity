@@ -17,6 +17,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private SpriteFont fntArial12;
 
         private readonly ShopScreen Owner;
+        private bool IsInit;
 
         private Squad DragAndDropEquipment;
 
@@ -24,17 +25,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         BattleMapPlayerShopInventory Inventory;
         List<ShopItemUnit> ListUnitToBuy;
 
-        public ShopUnitScreen(ShopScreen Owner)
+        public ShopUnitScreen(ShopScreen Owner, BattleMapPlayerShopInventory Inventory)
         {
             this.Owner = Owner;
+            this.Inventory = Inventory;
         }
 
         public override void Load()
         {
-            Inventory = new BattleMapPlayerShopInventory();
-            Inventory.PopulateUnlockedPlayerItems(Owner.ActivePlayer.Name);
-
-            Inventory.UpdateAvailableItems(Owner.ActivePlayer.Level);
             ListUnitToBuy = new List<ShopItemUnit>(Inventory.ListAvailableUnitToBuy);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
@@ -45,13 +43,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (Inventory.IsLoading)
+            if (BattleMapPlayerShopInventory.IsLoadingDatabase)
             {
-                Inventory.UpdateAvailableItems(Owner.ActivePlayer.Level);
-                ListUnitToBuy = new List<ShopItemUnit>(Inventory.ListAvailableUnitToBuy);
+                return;
             }
-            Inventory.UpdateAvailableItems(Owner.ActivePlayer.Level);
-            ListUnitToBuy = new List<ShopItemUnit>(Inventory.ListAvailableUnitToBuy);
+
+            if (!IsInit)
+            {
+                ListUnitToBuy = new List<ShopItemUnit>(Inventory.ListAvailableUnitToBuy);
+                IsInit = true;
+            }
+        }
+
+        private void BuyUnit()
+        {
+            Unit UnitToBuy = ListUnitToBuy[0].UnitToBuy;
         }
 
         public override void Draw(CustomSpriteBatch g)

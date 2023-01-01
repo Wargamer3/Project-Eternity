@@ -45,17 +45,17 @@ namespace ProjectEternity.Editors.UnitNormalEditor
                 switch (ItemSelectionChoice)
                 {
                     case ItemSelectionChoices.MapSprite:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(32);
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(32);
                         txtMapSprite.Text = Name;
                         break;
 
                     case ItemSelectionChoices.UnitSprite:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(33);
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(33);
                         txtUnitSprite.Text = Name;
                         break;
 
                     case ItemSelectionChoices.Model:
-                        Name = Items[I].Substring(0, Items[0].Length - 4).Substring(28);
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(33);
                         txt3DModel.Text = Name;
                         break;
                 }

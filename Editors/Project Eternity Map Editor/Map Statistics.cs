@@ -34,6 +34,7 @@ namespace ProjectEternity.Editors.MapEditor
             }
             txtCameraStartPositionX.Value = (int)Math.Max(0, ActiveMap.CameraPosition.X);
             txtCameraStartPositionY.Value = (int)Math.Max(0, ActiveMap.CameraPosition.Y);
+            txtOrderNumber.Value = ActiveMap.OrderNumber;
             txtPlayersMin.Value = ActiveMap.PlayersMin;
             txtPlayersMax.Value = ActiveMap.PlayersMax;
             txtDescription.Text = ActiveMap.Description;
@@ -76,38 +77,6 @@ namespace ProjectEternity.Editors.MapEditor
             DialogResult = DialogResult.OK;
         }
 
-        private void txtGridWidth_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtGridHeight_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtCaseWidth_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void txtCaseHeight_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
         private void btnClose_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Ignore;
@@ -124,6 +93,7 @@ namespace ProjectEternity.Editors.MapEditor
             ItemSelectionChoice = ItemSelectionChoices.Foregrounds;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll, "Select which foregrounds to use.", true));
         }
+
         protected void ListMenuItemsSelected(List<string> Items)
         {
             if (Items == null)

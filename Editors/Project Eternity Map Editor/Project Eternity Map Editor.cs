@@ -1371,8 +1371,10 @@ namespace ProjectEternity.Editors.MapEditor
                 ActiveMap.TileSize = new Point(TileSize.X, TileSize.Y);
             }
 
+            ActiveMap.MapName = MS.txtMapName.Text;
             ActiveMap.CameraType = MS.cbCameraType.Text;
             ActiveMap.CameraPosition = CameraPosition;
+            ActiveMap.OrderNumber = (uint)MS.txtOrderNumber.Value;
             ActiveMap.PlayersMin = (byte)MS.txtPlayersMin.Value;
             ActiveMap.PlayersMax = (byte)MS.txtPlayersMax.Value;
             ActiveMap.Description = MS.txtDescription.Text;

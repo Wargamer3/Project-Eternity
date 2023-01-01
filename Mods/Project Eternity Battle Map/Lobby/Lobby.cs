@@ -296,6 +296,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ActiveButton.Update(gameTime);
             }
+
+            PendingUnlockScreen.CheckForUnlocks(this);
         }
 
         private void UpdateRooms()

@@ -151,6 +151,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Vector3 CameraPosition;
         public Camera3D Camera;
         public Camera3D CameraOverride;//Used by vehicles.
+        public uint OrderNumber;
         public byte PlayersMin;
         public byte PlayersMax;
         public byte MaxSquadsPerPlayer;
