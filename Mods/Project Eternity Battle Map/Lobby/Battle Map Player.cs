@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected override void DoLoadLocally(ContentManager Content, BinaryReader BR)
         {
-            Inventory.Load(BR, Content);
+            Inventory.Load(BR, Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
             ShopInventory.PopulateUnlockedShopItems(Name);
             UnlockInventory.PopulateUnlockedPlayerItems(Name);
         }

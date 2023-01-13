@@ -135,10 +135,10 @@ namespace Database.SorcererStreet
                     { "Login", Login },
                     { "Name", Login },
                     { "Level", 1 },
+                    { "EXP", 0 },
                     { "Ranking", 1 },
                     { "License", 1 },
                     { "Guild", "" },
-                    { "CharacterType", "Jack" },
                     { "GameServerIP", "" },
                     { "GameServerPort", 0 },
                     { "CommunicationServerIP", "" },
@@ -149,7 +149,6 @@ namespace Database.SorcererStreet
                         new BsonDocument
                         {
                             { "Money", 0 },
-                            { "EXP", 0 },
                             { "CharacterModelPath", "" },
                             { "GlobalBook",
                                 new BsonDocument

@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 foreach (OnlinePlayerBase ActivePlayer in PlayerManager.ListLocalPlayer)
                 {
-                    ActivePlayer.OnlinePlayerType = OnlinePlayerBase.PlayerTypeHost;
+                    ActivePlayer.OnlinePlayerType = OnlinePlayerBase.PlayerTypePlayer;
                     Room.AddLocalPlayer(ActivePlayer);
                 }
             }
@@ -261,7 +261,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void AddPlayer(OnlinePlayerBase NewPlayer)
         {
             Room.ListRoomPlayer.Add(NewPlayer);
-            
+            Room.ListOnlinePlayer.Add(NewPlayer.OnlineClient);
+
             UpdateReadyOrHost();
         }
 
@@ -324,7 +325,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 foreach (OnlinePlayerBase ActivePlayer in Room.ListRoomPlayer)
                 {
-                    if (ActivePlayer.OnlinePlayerType != OnlinePlayerBase.PlayerTypeHost && ActivePlayer.OnlinePlayerType != OnlinePlayerBase.PlayerTypeReady)
+                    if (!ActivePlayer.IsHost() && !ActivePlayer.IsReady())
                     {
                         IsEveryoneReady = false;
                     }
@@ -452,14 +453,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ReadyButton.Disable();
 
-                if (Room.GetLocalPlayer().OnlinePlayerType == OnlinePlayerBase.PlayerTypePlayer)
-                {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(OnlinePlayerBase.PlayerTypeReady));
-                }
-                else
-                {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(OnlinePlayerBase.PlayerTypePlayer));
-                }
+                OnlineGameClient.Host.Send(new AskChangePlayerReadyScriptClient());
             }
         }
 
@@ -598,12 +592,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S][0].SpriteMap, new Rectangle(DrawX + 370 + S * 35, DrawY - 3, 32, 32), Color.White);
                 }
             }
-
-            if (PlayerToDraw.OnlinePlayerType == OnlinePlayerBase.PlayerTypeHost)
+            if (PlayerToDraw.IsHost())
             {
                 g.DrawString(fntText, "Host", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }
-            else if (PlayerToDraw.OnlinePlayerType == OnlinePlayerBase.PlayerTypeReady)
+            else if (PlayerToDraw.IsReady())
             {
                 g.DrawString(fntText, "Ready", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }

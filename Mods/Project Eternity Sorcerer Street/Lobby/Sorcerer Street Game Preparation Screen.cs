@@ -79,7 +79,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override OnlinePlayerBase GetNewPlayer()
         {
-            Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
+            Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, "Player " + (PlayerManager.ListLocalPlayer.Count + 1), OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
 
             if (!File.Exists("User data/Profiles/" + NewPlayer.SaveFileFolder + NewPlayer.Name + ".bin"))
             {

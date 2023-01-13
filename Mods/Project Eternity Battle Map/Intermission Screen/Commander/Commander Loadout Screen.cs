@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 if (ListSelectedCommander.Count == MaxCommander || ListSelectedCommander.Count == ListPresentCommander.Count || ListPresentCommander.Count == 0)
                 {
                     LoadoutScreen.LoadMap(ListGameScreen, Player, PlayerRoster);
-                    BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
+                    BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
                     Player1.Inventory.ActiveLoadout.ListSpawnCommander.AddRange(ListSelectedCommander);
                     LoadoutScreen.StartMap(this, gameTime, Player1);
                 }

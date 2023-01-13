@@ -16,7 +16,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public int Death;
 
         public Player(string Name, string PlayerType, bool IsPlayerControlled, bool IsOnline, int Team, Color Color)
-            : base("", Name, PlayerType, IsOnline, Team, IsPlayerControlled, Color)
+            : this("", Name, PlayerType, IsPlayerControlled, IsOnline, Team, Color)
+        {
+        }
+
+        public Player(string ID, string Name, string PlayerType, bool IsPlayerControlled, bool IsOnline, int Team, Color Color)
+            : base(ID, Name, PlayerType, IsOnline, Team, IsPlayerControlled, Color)
         {
             ListSquad = new List<Squad>();
             ListCommander = new List<Commander>();

@@ -40,13 +40,13 @@ namespace ProjectEternity.Core.Online
 
             if (Owner.DicTransferingRoom.TryGetValue(RoomID, out ActiveTransferingRoom) && ActiveTransferingRoom.Room.ListOnlinePlayer.Count < ActiveTransferingRoom.Room.CurrentPlayerCount)
             {
-                ActiveTransferingRoom.Room.AddOnlinePlayer(ActivePlayer, "Host");
+                ActiveTransferingRoom.Room.AddOnlinePlayerServer(ActivePlayer, "Player");
             }
             else if (Owner.DicAllRoom.ContainsKey(RoomID))
             {
                 GameClientGroup NewRoom = ClientGroupTemplate.CreateFromTemplate(Owner.TransferRoom(RoomID));
                 Owner.DicTransferingRoom.Add(RoomID, NewRoom);
-                NewRoom.Room.AddOnlinePlayer(ActivePlayer, "Host");
+                NewRoom.Room.AddOnlinePlayerServer(ActivePlayer, "Player");
                 ActivePlayer.Send(new AskGameDataFromClientScriptServer());
             }
         }

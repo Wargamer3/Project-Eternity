@@ -21,7 +21,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
         }
 
-        public override void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
+        public override void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType)
         {
             ListOnlinePlayer.Add(NewPlayer);
             ListUniqueOnlineConnection.Add(NewPlayer);

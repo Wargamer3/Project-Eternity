@@ -67,6 +67,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
         }
+
         public void Save(BinaryWriter BW)
         {
             BW.Write(CharacterModelPath);

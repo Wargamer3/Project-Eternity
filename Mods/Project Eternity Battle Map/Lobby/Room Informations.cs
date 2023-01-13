@@ -144,11 +144,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void AddLocalPlayer(OnlinePlayerBase NewPlayer)
         {
             ListRoomPlayer.Add(NewPlayer);
+            ListOnlinePlayer.Add(NewPlayer.OnlineClient);
             ListLocalPlayerID.Add(NewPlayer.ConnectionID);
             CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 
-        public abstract void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType);
+        public abstract void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType);
 
         public void RemovePlayer(IOnlineConnection OnlinePlayerToRemove)
         {
@@ -240,7 +241,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             foreach (OnlinePlayerBase ActiveOnlinePlayer in ListRoomPlayer)
             {
-                if (ActiveOnlinePlayer.OnlinePlayerType == OnlinePlayerBase.PlayerTypeHost)
+                if (ActiveOnlinePlayer.IsHost())
                 {
                     HasHost = true;
                 }
@@ -249,11 +250,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (!HasHost)
             {
                 int RandomNewHostIndex = RandomHelper.Next(ListRoomPlayer.Count);
-                ListRoomPlayer[RandomNewHostIndex].OnlinePlayerType = OnlinePlayerBase.PlayerTypeHost;
+                ListRoomPlayer[RandomNewHostIndex].OnlineClient.Roles.AddRole(RoleManager.Host);
+                ListRoomPlayer[RandomNewHostIndex].OnlineClient.Send(new SendRolesScriptServer(ListRoomPlayer[RandomNewHostIndex].OnlineClient.Roles.ListActiveRole));
 
                 for (int P = 0; P < ListUniqueOnlineConnection.Count; ++P)
                 {
-                    ListUniqueOnlineConnection[P].Send(new ChangePlayerTypeScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, OnlinePlayerBase.PlayerTypeHost));
+                    ListUniqueOnlineConnection[P].Send(new ChangePlayerRolesScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, ListRoomPlayer[RandomNewHostIndex].OnlineClient.Roles.ListActiveRole));
                 }
             }
         }

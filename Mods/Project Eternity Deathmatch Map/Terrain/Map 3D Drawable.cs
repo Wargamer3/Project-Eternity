@@ -1018,7 +1018,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         }
                         else
                         {
-                            ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Waving");
+                            ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Idle");
                             Matrix RotationMatrix = Matrix.Identity;
                             if (ActiveSquad.Direction == UnitMapComponent.Directions.Right)
                             {

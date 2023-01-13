@@ -49,6 +49,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         protected override void Execute(IOnlineConnection Host)
         {
             OnlineGameClient.RoomID = RoomID;
+            Host.Roles.IsRoomHost = false;
+            Host.Roles.IsRoomReady = false;
 
             Dictionary<string, OnlineScript> DicNewGameServerScript = new Dictionary<string, OnlineScript>();
             RoomInformations NewRoom;
@@ -80,7 +82,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             DicNewGameServerScript.Add(PlayerJoinedScriptClient.ScriptName, new PlayerJoinedScriptClient(NewScreen));
             DicNewGameServerScript.Add(PlayerLeftScriptClient.ScriptName, new PlayerLeftScriptClient(NewRoom, OnlineGameClient, NewScreen));
             DicNewGameServerScript.Add(ChangeLoadoutScriptClient.ScriptName, new ChangeLoadoutScriptClient(NewRoom, NewScreen));
-            DicNewGameServerScript.Add(ChangePlayerTypeScriptClient.ScriptName, new ChangePlayerTypeScriptClient(NewRoom, NewScreen));
+            DicNewGameServerScript.Add(ChangePlayerRolesScriptClient.ScriptName, new ChangePlayerRolesScriptClient(NewRoom, NewScreen));
             DicNewGameServerScript.Add(ChangeTeamScriptClient.ScriptName, new ChangeTeamScriptClient(NewRoom));
             DicNewGameServerScript.Add(ChangeMapScriptClient.ScriptName, new ChangeMapScriptClient(NewRoom, NewScreen));
             DicNewGameServerScript.Add(ChangeRoomSubtypeScriptClient.ScriptName, new ChangeRoomSubtypeScriptClient(NewScreen));

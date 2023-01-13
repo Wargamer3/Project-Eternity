@@ -68,6 +68,10 @@
   <ItemGroup>
     <Compile Include="Dialog.cs" />
     <Compile Include="Extra Menu.cs" />
+    <Compile Include="Online\Confirm Choice Visual Novel Script Server.cs" />
+    <Compile Include="Online\Proceed Visual Novel Choice Script Server.cs" />
+    <Compile Include="Online\Proceed Visual Novel Choice Script Client.cs" />
+    <Compile Include="Online\Confirm Choice Visual Novel Script Client.cs" />
     <Compile Include="Speaker Priority.cs" />
     <Compile Include="Visual Novel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -114,6 +118,11 @@
     <ProjectReference Include="..\Project Eternity Graphics\Project Eternity Graphics.csproj">
       <Project>{6f5b12c0-09a2-43f8-b564-8786ade58e59}</Project>
       <Name>Project Eternity Graphics</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Project Eternity Online\Project Eternity Online.csproj">
+      <Project>{b59faa7c-e4db-4e01-82fb-3c3cda7eebd7}</Project>
+      <Name>Project Eternity Online</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Unit\Project Eternity Unit.csproj">

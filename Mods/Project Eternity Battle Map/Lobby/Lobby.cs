@@ -150,6 +150,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected virtual void PopulateGameClientScripts(Dictionary<string, OnlineScript> DicOnlineGameClientScripts)
         {
             DicOnlineGameClientScripts.Add(ConnectionSuccessScriptClient.ScriptName, new ConnectionSuccessScriptClient());
+            DicOnlineGameClientScripts.Add(SendRolesScriptClient.ScriptName, new SendRolesScriptClient());
             DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
             DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
             DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
@@ -173,7 +174,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected virtual void InitOfflinePlayer()
         {
-            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
+            BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, null, OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
 
             PlayerManager.ListLocalPlayer.Add(NewPlayer);
             NewPlayer.LoadLocally(GameScreen.ContentFallback);

@@ -11,7 +11,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelAIMoveBehavior : ActionPanelDeathmatch
     {
-        private const string PanelName = "AI Attack Behavior";
+        private const string PanelName = "AI Move Behavior";
 
         private Squad ActiveSquad;
         private int ActivePlayerIndex;

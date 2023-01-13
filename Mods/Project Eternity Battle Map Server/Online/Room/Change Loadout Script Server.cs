@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendByte(ActivePlayer.LocalPlayerIndex);
+            WriteBuffer.AppendString(ActivePlayer.ConnectionID);
 
             WriteBuffer.AppendInt32(ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count);
             foreach (Squad ActiveSquad in ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad)

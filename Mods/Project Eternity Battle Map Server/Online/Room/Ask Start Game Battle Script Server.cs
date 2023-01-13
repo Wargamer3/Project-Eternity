@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using ProjectEternity.GameScreens.VisualNovelScreen.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
@@ -60,6 +61,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
                 //Add Game Specific scripts
                 Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsServer(CreatedGroup);
+                DicNewScript.Add(ProceedVisualNovelChoiceScriptServer.ScriptName, new ProceedVisualNovelChoiceScriptServer(NewMap, CreatedGroup));
+                DicNewScript.Add(ConfirmChoiceVisualNovelScriptServer.ScriptName, new ConfirmChoiceVisualNovelScriptServer(NewMap, CreatedGroup));
                 ActiveOnlinePlayer.AddOrReplaceScripts(DicNewScript);
             }
 

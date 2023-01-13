@@ -52,9 +52,9 @@ namespace ProjectEternity.GameScreens
 
         public static void DrawRectangle(CustomSpriteBatch g, Vector2 StartPos, Vector2 EndPos, Color ActiveColor, int Width = 1)
         {
-            DrawLine(g, StartPos, new Vector2(EndPos.X, StartPos.Y), ActiveColor, Width);
+            DrawLine(g, StartPos, new Vector2(EndPos.X - 1, StartPos.Y), ActiveColor, Width);
             DrawLine(g, StartPos, new Vector2(StartPos.X, EndPos.Y), ActiveColor, Width);
-            DrawLine(g, new Vector2(StartPos.X, EndPos.Y), EndPos, ActiveColor, Width);
+            DrawLine(g, new Vector2(StartPos.X, EndPos.Y), new Vector2(EndPos.X - 1, EndPos.Y), ActiveColor, Width);
             DrawLine(g, new Vector2(EndPos.X, StartPos.Y), EndPos, ActiveColor, Width);
         }
 

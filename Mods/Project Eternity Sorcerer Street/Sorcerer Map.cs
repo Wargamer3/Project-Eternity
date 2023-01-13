@@ -399,7 +399,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (IsOnlineClient)
             {
-                if (ListAllPlayer[0].OnlinePlayerType == OnlinePlayerBase.PlayerTypeHost)
+                if (ListAllPlayer[0].OnlinePlayerType == OnlinePlayerBase.PlayerTypePlayer)
                 {
                     ListActionMenuChoice.Add(new ActionPanelPlayerDefault(this));
                 }

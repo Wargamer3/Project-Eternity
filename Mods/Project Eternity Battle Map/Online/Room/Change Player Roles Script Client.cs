@@ -1,28 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 {
-    public class ChangePlayerTypeScriptClient : OnlineScript
+    public class ChangePlayerRolesScriptClient : OnlineScript
     {
-        public const string ScriptName = "Change Player Type";
+        public const string ScriptName = "Change Player Roles";
 
         private readonly RoomInformations Owner;
         private readonly GamePreparationScreen MissionSelectScreen;
 
         private string PlayerID;
-        private string PlayerType;
+        private readonly List<string> ListRole;
 
-        public ChangePlayerTypeScriptClient(RoomInformations Owner, GamePreparationScreen MissionSelectScreen)
+        public ChangePlayerRolesScriptClient(RoomInformations Owner, GamePreparationScreen MissionSelectScreen)
             : base(ScriptName)
         {
             this.Owner = Owner;
             this.MissionSelectScreen = MissionSelectScreen;
+            ListRole = new List<string>();
         }
 
         public override OnlineScript Copy()
         {
-            return new ChangePlayerTypeScriptClient(Owner, MissionSelectScreen);
+            return new ChangePlayerRolesScriptClient(Owner, MissionSelectScreen);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -36,7 +38,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             {
                 if (ActivePlayer.ConnectionID == PlayerID)
                 {
-                    ActivePlayer.OnlinePlayerType = PlayerType;
+                    ActivePlayer.OnlineClient.Roles.Reset();
+
+                    for (int R = 0; R < ListRole.Count; ++R)
+                    {
+                        ActivePlayer.OnlineClient.Roles.AddRole(ListRole[R]);
+                    }
                 }
             }
 
@@ -46,7 +53,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         protected override void Read(OnlineReader Sender)
         {
             PlayerID = Sender.ReadString();
-            PlayerType = Sender.ReadString();
+            int ListRoleCount = Sender.ReadByte();
+
+            for (int R = 0; R < ListRoleCount; ++R)
+            {
+                ListRole.Add(Sender.ReadString());
+            }
         }
     }
 }

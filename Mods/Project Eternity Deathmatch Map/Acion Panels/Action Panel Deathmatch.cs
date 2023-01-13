@@ -1,20 +1,32 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using ProjectEternity.Core;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-    /// <summary>
-    /// Used to make menus.
-    /// </summary>
     public abstract class ActionPanelDeathmatch : BattleMapActionPanel
     {
         protected DeathmatchMap Map;
 
         public ActionPanelDeathmatch(string Name, DeathmatchMap Map, bool CanCancel = true)
-            : this(Name, Map, Map.ListPlayer[Map.ActivePlayerIndex].InputManager, CanCancel)
+            : base(Name, Map.ListActionMenuChoice, null, CanCancel)
         {
+            this.Map = Map;
+
+            if (Map.ListPlayer.Count > 0)
+            {
+                ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
+            }
+
+            if (!Map.IsServer && Map.IsInit)
+            {
+                Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetVisiblePosition(Map.CursorPosition);
+
+                BaseMenuX = MenuPosition.X + Map.TileSize.X;
+                BaseMenuY = MenuPosition.Y;
+
+                UpdateFinalMenuPosition();
+            }
         }
 
         public ActionPanelDeathmatch(string Name, DeathmatchMap Map, PlayerInput ActiveInputManager, bool CanCancel = true)
@@ -22,12 +34,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.Map = Map;
 
-            Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetVisiblePosition(Map.CursorPosition);
+            if (!Map.IsServer && Map.IsInit)
+            {
+                Point MenuPosition = Map.LayerManager.LayerHolderDrawable.GetVisiblePosition(Map.CursorPosition);
 
-            BaseMenuX = MenuPosition.X + Map.TileSize.X;
-            BaseMenuY = MenuPosition.Y;
+                BaseMenuX = MenuPosition.X + Map.TileSize.X;
+                BaseMenuY = MenuPosition.Y;
 
-            UpdateFinalMenuPosition();
+                UpdateFinalMenuPosition();
+            }
         }
 
         protected override void OnCancelPanel()

@@ -2,14 +2,13 @@
 
 namespace ProjectEternity.Core.Online
 {
-    public class AskChangePlayerTypeScriptClient : OnlineScript
+    public class AskChangePlayerReadyScriptClient : OnlineScript
     {
         private readonly string PlayerType;
 
-        public AskChangePlayerTypeScriptClient(string PlayerType)
-            : base("Ask Change Player Type")
+        public AskChangePlayerReadyScriptClient()
+            : base("Ask Change Player Ready")
         {
-            this.PlayerType = PlayerType;
         }
 
         public override OnlineScript Copy()
@@ -19,7 +18,6 @@ namespace ProjectEternity.Core.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendString(PlayerType);
         }
 
         protected internal override void Execute(IOnlineConnection Host)

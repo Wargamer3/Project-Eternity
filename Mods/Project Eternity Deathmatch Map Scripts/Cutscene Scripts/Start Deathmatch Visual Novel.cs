@@ -11,7 +11,6 @@ using ProjectEternity.GameScreens.VisualNovelScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-
     public sealed partial class DeathmatchCutsceneScriptHolder
     {
         public class ScriptStartDeathmatchVisualNovel : DeathmatchMapScript
@@ -40,12 +39,25 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (scriptVisualNovel != null)
                         {
                             ActiveVisualNovel = scriptVisualNovel.ActiveVisualNovel = new VisualNovel(scriptVisualNovel.VisualNovelName, Map.DicCutsceneScript);
+
+                            ActiveVisualNovel.OnlinePlayers = Map.OnlinePlayers;
+
+                            ActiveVisualNovel.OnlineClient = Map.OnlineClient;
+                            ActiveVisualNovel.OnlineCommunicationClient = Map.OnlineCommunicationClient;
+                            ActiveVisualNovel.Room = Map.Room;
+
+                            ActiveVisualNovel.OnlineServer = Map.OnlineServer;
+                            ActiveVisualNovel.GameGroup = Map.GameGroup;
+
                             scriptVisualNovel.ActiveVisualNovel.OnVisualNovelFrameChanged = OnVisualNovelFrameChanged;
                             scriptVisualNovel.ActiveVisualNovel.OnVisualNovelPaused = OnVisualNovelPaused;
                             scriptVisualNovel.ActiveVisualNovel.OnVisualNovelResumed = OnVisualNovelResumed;
                             scriptVisualNovel.ActiveVisualNovel.OnVisualNovelEnded = OnVisualNovelEnded;
                             Owner.PushScreen(scriptVisualNovel.ActiveVisualNovel);
-                            CenterCameraOnSpeaker();
+                            if (!Map.IsServer)
+                            {
+                                CenterCameraOnSpeaker();
+                            }
                             break;
                         }
                         break;

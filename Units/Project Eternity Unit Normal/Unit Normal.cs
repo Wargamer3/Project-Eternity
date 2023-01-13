@@ -92,11 +92,11 @@ namespace ProjectEternity.Core.Units.Normal
                 {
                     string[] ArrayModelFolder = Model3DPath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     string ModelFolder = Model3DPath.Replace(ArrayModelFolder[ArrayModelFolder.Length - 1], "");
-                    Unit3DModel = new AnimatedModel("Units/Normal/Models/" + Model3DPath);
+                    Unit3DModel = new AnimatedModel("Units/Normal/Unit Models/" + Model3DPath);
                     Unit3DModel.LoadContent(Content);
 
-                    Unit3DModel.AddAnimation("Units/Normal/Models/" + ModelFolder + "Walking", "Walking", Content);
-                    Unit3DModel.AddAnimation("Units/Normal/Models/" + ModelFolder + "Waving", "Waving", Content);
+                    Unit3DModel.AddAnimation("Units/Normal/Unit Models/" + ModelFolder + "Walking", "Walking", Content);
+                    Unit3DModel.AddAnimation("Units/Normal/Unit Models/" + ModelFolder + "Idle", "Idle", Content);
                 }
             }
         }

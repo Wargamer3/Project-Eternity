@@ -186,7 +186,7 @@
     <Compile Include="Online\Room\Ask Change Room Extras Script Client.cs" />
     <Compile Include="Online\Room\Change Loadout Script Client.cs" />
     <Compile Include="Online\Room\Change Map Script Client.cs" />
-    <Compile Include="Online\Room\Change Player Type Script Client.cs" />
+    <Compile Include="Online\Room\Change Player Roles Script Client.cs" />
     <Compile Include="Online\Room\Change Room Extras Battle Script Client.cs" />
     <Compile Include="Online\Room\Change Room Extras Mission Script Client.cs" />
     <Compile Include="Online\Room\Change Room Subtype Script Client.cs" />
@@ -329,6 +329,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
       <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
       <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Visual Novel\Project Eternity Visual Novel.csproj">
+      <Project>{B6E9FDCE-3C8D-40E6-BB12-F3D0822FDC58}</Project>
+      <Name>Project Eternity Visual Novel</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">

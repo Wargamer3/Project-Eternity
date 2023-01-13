@@ -5,11 +5,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 {
     public class AskChangePlayerTypeScriptServer : OnlineScript
     {
-        public const string ScriptName = "Ask Change Player Type";
+        public const string ScriptName = "Ask Change Player Ready";
 
         private readonly RoomInformations Owner;
-
-        private string NewPlayerType;
 
         public AskChangePlayerTypeScriptServer(RoomInformations Owner)
             : base(ScriptName)
@@ -29,23 +27,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void Execute(IOnlineConnection Sender)
         {
-            foreach (OnlinePlayerBase ActivePlayer in Owner.ListRoomPlayer)
+            if (Sender.Roles.IsRoomReady)
             {
-                if (ActivePlayer.ConnectionID == Sender.ID)
-                {
-                    ActivePlayer.OnlinePlayerType = NewPlayerType;
-                }
+                Sender.Roles.RemoveRole(RoleManager.Ready);
+            }
+            else
+            {
+                Sender.Roles.AddRole(RoleManager.Ready);
             }
 
             for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
             {
-                Owner.ListOnlinePlayer[P].Send(new ChangePlayerTypeScriptServer(Sender.ID, NewPlayerType));
+                Owner.ListOnlinePlayer[P].Send(new ChangePlayerRolesScriptServer(Sender.ID, Sender.Roles.ListActiveRole));
             }
         }
 
         protected override void Read(OnlineReader Sender)
         {
-            NewPlayerType = Sender.ReadString();
         }
     }
 }

@@ -82,31 +82,47 @@ namespace ProjectEternity.Core.Attacks
 
             else if (Property == WeaponMAPProperties.Targeted)
             {
-                int DistanceX = Math.Abs(StartX - TargetX);
-                int DistanceY = Math.Abs(StartY - TargetY);
-                int FinalDistance = DistanceX + DistanceY;
-                //If a Unit is in range.
-                if (FinalDistance + Width >= MinDistance && FinalDistance <= MaxDistance + Width &&
-                    FinalDistance + Height >= MinDistance && FinalDistance <= MaxDistance + Height)
+                float PosX = StartPosition.X;
+                float PosY = StartPosition.Y;
+                float PosZ = StartPosition.Z;
+                int x = 0;
+                int y;
+
+                while (x <= MaxDistance)
                 {
-                    for (int X = ListChoice.Count - 1; X >= 0; --X)
-                    {
-                        for (int Y = ListChoice[X].Count - 1; Y >= 0; --Y)
-                        {
-                            //Not an active tile.
-                            if (!ListChoice[X][Y])
-                                continue;
+                    y = 0;
+                    //As long as not out of map or out of range.
+                    while (PosY + y >= 0 && (x + y) <= MaxDistance)
+                    {//If at least at the minimum range.
+                        if ((x + y) >= MinDistance)
+                        {//Add point of the position, up, down, left, right.
+                            Vector3 NewPoint = new Vector3(PosX - x, PosY - y, PosZ);
+                            if (NewPoint == TargetPosition)
+                            {
+                                return true;
+                            }
 
-                            int DistanceCenterX = X - Width;
-                            int DistanceCenterY = Y - Height;
+                            NewPoint = new Vector3(PosX - x, PosY + y, PosZ);
+                            if (NewPoint == TargetPosition)
+                            {
+                                return true;
+                            }
 
-                            if (FinalDistance >= MinDistance + DistanceCenterX && FinalDistance <= MaxDistance + DistanceCenterX &&
-                                FinalDistance >= MinDistance + DistanceCenterY && FinalDistance <= MaxDistance + DistanceCenterY)
+                            NewPoint = new Vector3(PosX + x, PosY - y, PosZ);
+                            if (NewPoint == TargetPosition)
+                            {
+                                return true;
+                            }
+
+                            NewPoint = new Vector3(PosX + x, PosY + y, PosZ);
+                            if (NewPoint == TargetPosition)
                             {
                                 return true;
                             }
                         }
+                        y++;//Proceed vertically.
                     }
+                    x++;//Proceed horizontally.
                 }
             }
 

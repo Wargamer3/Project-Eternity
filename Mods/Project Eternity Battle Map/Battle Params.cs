@@ -66,7 +66,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             LoadMutators();
         }
 
-        public void Reload(BattleParams Clone, string ParamsID)
+        public virtual void Reload(BattleParams Clone, string ParamsID)
         {
             foreach (KeyValuePair<string, Unit> ActiveUnit in Clone.DicUnitType)
             {

@@ -36,7 +36,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public string MAPAttackAccuracyB;
 
         public ActionPanelHumanDefend(DeathmatchMap Map)
-            : base(PanelName, Map, Map.ListPlayer[Map.TargetPlayerIndex].InputManager, false)
+            : base(PanelName, Map, false)
         {
         }
 

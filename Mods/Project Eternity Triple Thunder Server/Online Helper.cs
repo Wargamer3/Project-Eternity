@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 
             DicNewScript.Add(AskChangeCharacterScriptServer.ScriptName, new AskChangeCharacterScriptServer(NewRoom));
-            DicNewScript.Add(AskChangePlayerTypeScriptServer.ScriptName, new AskChangePlayerTypeScriptServer(NewRoom));
+            DicNewScript.Add(AskChangePlayerReadyScriptServer.ScriptName, new AskChangePlayerReadyScriptServer(NewRoom));
             DicNewScript.Add(AskChangeTeamScriptServer.ScriptName, new AskChangeTeamScriptServer(NewRoom));
             DicNewScript.Add(AskChangeMapScriptServer.ScriptName, new AskChangeMapScriptServer(NewRoom, Owner));
             DicNewScript.Add(AskChangeRoomSubtypeScriptServer.ScriptName, new AskChangeRoomSubtypeScriptServer(NewRoom));

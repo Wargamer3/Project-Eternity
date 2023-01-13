@@ -5,7 +5,6 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
-using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -23,17 +22,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private readonly Player ActivePlayer;
 
-        public ActionPanelCommanderMenu(DeathmatchMap Map, Player ActivePlayer)
+        public ActionPanelCommanderMenu(DeathmatchMap Map)
             : base(PanelName, Map, false)
         {
             this.fntFinlanderFont = Map.fntFinlanderFont;
         }
 
-        public ActionPanelCommanderMenu(DeathmatchMap Map, SpriteFont fntFinlanderFont)
+        public ActionPanelCommanderMenu(DeathmatchMap Map, Player ActivePlayer)
             : base(PanelName, Map, false)
         {
-            this.fntFinlanderFont = fntFinlanderFont;
-            Roster a =Map.PlayerRoster;
+            this.fntFinlanderFont = Map.fntFinlanderFont;
         }
 
         public override void OnSelect()
@@ -59,7 +57,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         protected override ActionPanel Copy()
         {
-            return new ActionPanelCommanderMenu(Map, ActivePlayer);
+            return new ActionPanelCommanderMenu(Map);
         }
 
         public override void Draw(CustomSpriteBatch g)

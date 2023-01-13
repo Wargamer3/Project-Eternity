@@ -73,7 +73,7 @@ namespace ProjectEternity
                         NewMap.ListGameScreen = ListGameScreen;
                         NewMap.PlayerRoster = new Roster();
                         NewMap.PlayerRoster.LoadRoster();
-                        BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
+                        BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
                         NewMap.AddLocalPlayer(Player1);
                         NewMap.Load();
                         NewMap.Init();
@@ -153,7 +153,7 @@ namespace ProjectEternity
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
                         Constants.graphics.ApplyChanges();
-                        PushScreen(new Lobby(true));
+                        PushScreen(new DeathmatchMapLobby(true));
                         break;
 
                     case MenuChoices.MultiplayerLobbyOffline:
@@ -164,7 +164,7 @@ namespace ProjectEternity
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
                         Constants.graphics.ApplyChanges();
-                        PushScreen(new Lobby(false));
+                        PushScreen(new DeathmatchMapLobby(false));
                         break;
 
                     case MenuChoices.WorldMap:

@@ -54,7 +54,7 @@
     <Compile Include="Online\Game\Receive Game Data Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Loadout Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Map Script Server.cs" />
-    <Compile Include="Online\Room\Ask Change Player Type Script Server.cs" />
+    <Compile Include="Online\Room\Ask Change Player Ready Script Server.cs" />
     <Compile Include="Online\Game\Move Cursor Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Battle Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Mission Script Server.cs" />
@@ -94,6 +94,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
       <Project>{43cf453b-8bd0-494f-b4a8-ccb6f0a2c469}</Project>
       <Name>Project Eternity Unit</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Visual Novel\Project Eternity Visual Novel.csproj">
+      <Project>{B6E9FDCE-3C8D-40E6-BB12-F3D0822FDC58}</Project>
+      <Name>Project Eternity Visual Novel</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\External\Battle Map Database\Battle Map Database.csproj">

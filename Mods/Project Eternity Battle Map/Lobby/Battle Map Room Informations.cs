@@ -46,6 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         NewPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
 
                         ListRoomPlayer.Add(NewPlayer);
+                        ListOnlinePlayer.Add(NewPlayer.OnlineClient);
                     }
                 }
             }
@@ -59,14 +60,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxGameLengthInMinutes = 10;
         }
 
-        public override void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
+        public override void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType)
         {
-            ListOnlinePlayer.Add(NewPlayer);
-            ListUniqueOnlineConnection.Add(NewPlayer);
             OnlinePlayerBase NewRoomPlayer = new BattleMapPlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue);
             NewRoomPlayer.OnlineClient = NewPlayer;
             NewRoomPlayer.GameplayType = GameplayTypes.None;
             ListRoomPlayer.Add(NewRoomPlayer);
+            ListOnlinePlayer.Add(NewPlayer);
+            ListUniqueOnlineConnection.Add(NewPlayer);
             CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 

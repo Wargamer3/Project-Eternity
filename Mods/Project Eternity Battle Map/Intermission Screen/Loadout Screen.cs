@@ -123,7 +123,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     if (ListSelectedSquad.Count == NewMap.PlayersMax || ListPresentSquad.Count == 0)
                     {
-                        BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
+                        BattleMapPlayer Player1 = new BattleMapPlayer("", "Player 1", OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
                         Player1.Inventory.ActiveLoadout.ListSpawnSquad.AddRange(ListSelectedSquad);
                         Player1.Inventory.ActiveLoadout.ListSpawnCommander.AddRange(ListSelectedCommander);
                         StartMap(this, gameTime, Player1);

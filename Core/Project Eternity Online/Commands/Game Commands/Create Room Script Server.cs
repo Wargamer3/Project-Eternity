@@ -34,7 +34,8 @@ namespace ProjectEternity.Core.Online
             IRoomInformations CreatedRoom = Owner.Database.GenerateNewRoom(RoomName, RoomType, RoomSubtype, "", Owner.IP, Owner.Port, MinNumberOfPlayer, MaxNumberOfPlayer);
 
             CreatedGroup = ClientGroupTemplate.CreateFromTemplate(CreatedRoom);
-            CreatedGroup.Room.AddOnlinePlayer(Sender, "Host");
+            CreatedGroup.Room.AddOnlinePlayerServer(Sender, "Player");
+            Sender.Roles.AddRole(RoleManager.Host);
 
             Owner.DicLocalRoom.Add(CreatedRoom.RoomID, CreatedGroup);
             Owner.DicAllRoom.Add(CreatedRoom.RoomID, CreatedRoom);
@@ -54,6 +55,7 @@ namespace ProjectEternity.Core.Online
             }
 
             Sender.Send(new SendRoomIDScriptServer(CreatedRoom.RoomID));
+            Sender.Send(new SendRolesScriptServer(Sender.Roles.ListActiveRole));
         }
 
         protected internal override void Read(OnlineReader Sender)

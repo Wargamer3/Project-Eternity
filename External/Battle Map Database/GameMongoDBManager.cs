@@ -134,20 +134,66 @@ namespace Database.BattleMap
                     { "Login", Login },
                     { "Name", Login },
                     { "Level", 1 },
+                    { "EXP", 0 },
                     { "Ranking", 1 },
                     { "License", 1 },
                     { "Guild", "" },
-                    { "CharacterType", "Jack" },
                     { "GameServerIP", "" },
                     { "GameServerPort", 0 },
                     { "CommunicationServerIP", "" },
                     { "CommunicationServerPort", 0 },
                     { "Password", Password },
                     { "NumberOfFailedConnection", 0 },
-                    { "Equipment",
-                        new BsonArray
+                    { "Inventory",
+                        new BsonDocument
                         {
-                            new BsonDocument { { "Money", 0 }, { "EXP", 0 } }
+                            { "Money", 0 },
+                            { "CharacterType", "Jack" },
+                            { "OwnedSquads",
+                                new BsonArray
+                                {
+                                    new BsonDocument
+                                    {
+                                        { "RelativePath", "Normal/Multiplayer/Voltaire" },
+                                        { "PilotFullName", "Multiplayer/Greg" },
+                                    },
+                                    new BsonDocument
+                                    {
+                                        { "RelativePath", "Normal/Multiplayer/Mazinger Z" },
+                                        { "PilotFullName", "Multiplayer/Kouji" },
+                                    },
+                                }
+                            },
+                            { "OwnedCharacters",
+                                new BsonArray
+                                {
+                                    "Multiplayer/Greg",
+                                    "Multiplayer/Kouji",
+                                }
+                            },
+                            { "OwnedMissions",
+                                new BsonArray
+                                {
+                                }
+                            },
+                            { "SquadLoadouts",
+                                new BsonArray
+                                {
+                                    new BsonArray
+                                    {
+                                        new BsonDocument
+                                        {
+                                            { "RelativePath", "Normal/Multiplayer/Voltaire" },
+                                            { "PilotFullName", "Multiplayer/Greg" },
+                                        },
+                                        new BsonDocument
+                                        {
+                                            { "RelativePath", "Normal/Multiplayer/Mazinger Z" },
+                                            { "PilotFullName", "Multiplayer/Kouji" },
+                                        },
+                                    }
+                                }
+                            },
                         }
                     },
                     { "Friends",
@@ -197,8 +243,7 @@ namespace Database.BattleMap
             FoundPlayer.Name = Name;
 
             ByteWriter BW = new ByteWriter();
-            BW.AppendString(Name);
-            BW.AppendInt32(FoundPlayerDocument.GetValue("Level").AsInt32);
+            GetInventoryBytes(BW, FoundPlayerDocument);
             FoundPlayer.Info = BW.GetBytes();
             BW.ClearWriteBuffer();
 
@@ -215,6 +260,53 @@ namespace Database.BattleMap
             FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
             UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("GameServerIP", GameServerIP).Set("GameServerPort", GameServerPort);
             PlayersCollection.UpdateOneAsync(filter, update);
+        }
+
+        private void GetInventoryBytes(ByteWriter BW, BsonDocument FoundPlayerDocument)
+        {
+            BsonDocument Inventory = FoundPlayerDocument.GetValue("Inventory").AsBsonDocument;
+
+            BsonArray OwnedSquadsArray = Inventory.GetValue("OwnedSquads").AsBsonArray;
+            BW.AppendInt32(OwnedSquadsArray.Count);
+
+            foreach (BsonValue ActiveSquad in OwnedSquadsArray)
+            {
+                BsonDocument ActiveUnitDocument = ActiveSquad.AsBsonDocument;
+                BW.AppendString(ActiveUnitDocument.GetValue("RelativePath").AsString);
+                BW.AppendString(ActiveUnitDocument.GetValue("PilotFullName").AsString);
+            }
+
+            BsonArray OwnedCharactersArray = Inventory.GetValue("OwnedCharacters").AsBsonArray;
+            BW.AppendInt32(OwnedCharactersArray.Count);
+
+            foreach (BsonValue ActiveCharacter in OwnedCharactersArray)
+            {
+                BW.AppendString(ActiveCharacter.AsString);
+            }
+
+            BsonArray OwnedMissionsArray = Inventory.GetValue("OwnedMissions").AsBsonArray;
+            BW.AppendInt32(OwnedMissionsArray.Count);
+
+            foreach (BsonValue ActiveMission in OwnedMissionsArray)
+            {
+                BW.AppendString(ActiveMission.AsString);
+            }
+
+            BsonArray SquadLoadoutsArray = Inventory.GetValue("SquadLoadouts").AsBsonArray;
+            BW.AppendInt32(SquadLoadoutsArray.Count);
+
+            foreach (BsonValue ActiveLoadout in SquadLoadoutsArray)
+            {
+                BsonArray ActiveSquadDocument = ActiveLoadout.AsBsonArray;
+                BW.AppendInt32(ActiveSquadDocument.Count);
+
+                foreach (BsonValue ActiveSquad in ActiveSquadDocument)
+                {
+                    BsonDocument ActiveUnitDocument = ActiveSquad.AsBsonDocument;
+                    BW.AppendString(ActiveUnitDocument.GetValue("RelativePath").AsString);
+                    BW.AppendString(ActiveUnitDocument.GetValue("PilotFullName").AsString);
+                }
+            }
         }
     }
 }

@@ -24,12 +24,15 @@ namespace ProjectEternity.Core.Online
 
         public List<OnlineScript> ListAsyncOnlineScript { get; set; }
 
+        public RoleManager Roles { get; set; }
+
         public OnlineConnection(TcpClient ActiveClient, NetworkStream ActiveStream, Dictionary<string, OnlineScript> DicOnlineScripts)
             : base(ActiveClient, ActiveStream, DicOnlineScripts)
         {
             WriteBuffer = new OnlineWriter();
             ListAsyncOnlineScript = new List<OnlineScript>();
             LastUpdate = DateTimeOffset.Now;
+            Roles = new RoleManager();
         }
 
         public OnlineConnection(TcpClient ActiveClient, NetworkStream ActiveStream, Dictionary<string, OnlineScript> DicOnlineScripts, OnlineWriter SharedWriteBuffer)
@@ -38,6 +41,7 @@ namespace ProjectEternity.Core.Online
             this.WriteBuffer = SharedWriteBuffer;
             ListAsyncOnlineScript = new List<OnlineScript>();
             LastUpdate = DateTimeOffset.Now;
+            Roles = new RoleManager();
         }
 
         public void AddOrReplaceScripts(Dictionary<string, OnlineScript> DicNewScript)

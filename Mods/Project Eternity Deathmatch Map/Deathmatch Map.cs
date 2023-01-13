@@ -371,9 +371,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     SpawnSquad(P, ActiveSquad, 0, new Vector2(ActiveSquad.Position.X, ActiveSquad.Position.Y), (int)ActiveSquad.Position.Z);
                 }
             }
-            Init();
-            TogglePreview(true);
 
+            OnlineClient.Host.Send(new ClientIsReadyScriptClient());
             BR.Clear();
         }
 
@@ -591,10 +590,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (ListGameScreen.Count == 0)
                     {
-                        foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
-                        {
-                            ActivePlayer.Send(new ServerIsReadyScriptServer());
-                        }
                     }
                     else
                     {
@@ -611,11 +606,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     if (ListGameScreen.Count == 0)
                     {
-                        foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
-                        {
-                            ActivePlayer.Send(new ServerIsReadyScriptServer());
-                        }
-
                         IsInit = true;
                     }
                 }

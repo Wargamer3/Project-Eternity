@@ -36,15 +36,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         {
             foreach (BattleMapPlayer JoiningPlayer in ListJoiningPlayer)
             {
-                Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", NewMissionSelectScreen.Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                Character NewCharacter = new Character("Original/Greg", NewMissionSelectScreen.Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                NewCharacter.Level = 1;
-                NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
-
-                Squad NewSquad = new Squad("Squad", NewUnit);
-
-                JoiningPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
-
                 NewMissionSelectScreen.AddPlayer(JoiningPlayer);
             }
         }

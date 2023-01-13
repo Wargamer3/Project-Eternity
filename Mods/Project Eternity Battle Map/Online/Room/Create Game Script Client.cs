@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
+using ProjectEternity.GameScreens.VisualNovelScreen.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 {
@@ -45,6 +46,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             DicNewScript.Add(OpenMenuScriptClient.ScriptName, new OpenMenuScriptClient(OnlineGameClient, NewMap.GetOnlineActionPanel()));
             DicNewScript.Add(UpdateMenuScriptClient.ScriptName, new UpdateMenuScriptClient(OnlineGameClient));
+            DicNewScript.Add(ProceedVisualNovelChoiceScriptClient.ScriptName, new ProceedVisualNovelChoiceScriptClient(NewMap));
+            DicNewScript.Add(ConfirmChoiceVisualNovelScriptClient.ScriptName, new ConfirmChoiceVisualNovelScriptClient(NewMap));
 
             Host.AddOrReplaceScripts(DicNewScript);
         }

@@ -170,6 +170,11 @@
       <Name>Project Eternity Graphics</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Online\Project Eternity Online.csproj">
+      <Project>{B59FAA7C-E4DB-4E01-82FB-3C3CDA7EEBD7}</Project>
+      <Name>Project Eternity Online</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
       <Project>{43CF453B-8BD0-494F-B4A8-CCB6F0A2C469}</Project>
       <Name>Project Eternity Unit</Name>

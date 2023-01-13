@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 
-        public void AddOnlinePlayer(IOnlineConnection NewPlayer, string PlayerType)
+        public void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType)
         {
             ListOnlinePlayer.Add(NewPlayer);
             Player NewRoomPlayer = new Player(NewPlayer.ID, NewPlayer.Name, PlayerType, 0);
@@ -226,7 +226,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 for (int P = 0; P < ListOnlinePlayer.Count; ++P)
                 {
-                    ListOnlinePlayer[P].Send(new ChangePlayerTypeScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, Player.PlayerTypeHost));
+                    ListOnlinePlayer[P].Send(new ChangePlayerRolesScriptServer(ListRoomPlayer[RandomNewHostIndex].ConnectionID, ListRoomPlayer[RandomNewHostIndex].OnlineClient.Roles.ListActiveRole));
                 }
             }
         }

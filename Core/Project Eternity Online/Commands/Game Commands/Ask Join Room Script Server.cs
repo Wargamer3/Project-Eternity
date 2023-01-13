@@ -43,7 +43,7 @@ namespace ProjectEternity.Core.Online
                 }
                 else if (Owner.DicLocalRoom.TryGetValue(RoomID, out LocalRoom) && LocalRoom.Room.ListOnlinePlayer.Count < LocalRoom.Room.MaxNumberOfPlayer)
                 {
-                    Owner.DicLocalRoom[RoomID].Room.AddOnlinePlayer(Sender, "Player");
+                    Owner.DicLocalRoom[RoomID].Room.AddOnlinePlayerServer(Sender, "Player");
                     Owner.Database.UpdatePlayerCountInRoom(RoomID, (byte)LocalRoom.Room.ListOnlinePlayer.Count);
                     Owner.ListPlayerToRemove.Add(Sender);
 

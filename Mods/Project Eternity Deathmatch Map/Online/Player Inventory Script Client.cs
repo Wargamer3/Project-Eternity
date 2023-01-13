@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
-namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
+namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
 {
     public class PlayerInventoryScriptClient : OnlineScript
     {
@@ -29,17 +29,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
-
+            Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayerBase.PlayerTypePlayer, true, false, 0, Color.Blue);
+            NewPlayer.OnlineClient = Host;
             ByteReader BR = new ByteReader(PlayerInfo);
 
-            NewPlayer.Inventory.Load(BR, GameScreen.ContentFallback, SorcererStreetBattleParams.DicParams[""].DicRequirement, SorcererStreetBattleParams.DicParams[""].DicEffect, SorcererStreetBattleParams.DicParams[""].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[""].DicManualSkillTarget);
+            NewPlayer.Inventory.Load(BR, GameScreen.ContentFallback, DeathmatchParams.DicParams[""].DicUnitType, DeathmatchParams.DicParams[""].DicRequirement, DeathmatchParams.DicParams[""].DicEffect, DeathmatchParams.DicParams[""].DicAutomaticSkillTarget, DeathmatchParams.DicParams[""].DicManualSkillTarget);
 
             BR.Clear();
 
             PlayerManager.ListLocalPlayer[0] = NewPlayer;
-
-            NewPlayer.LoadGamePieceModel();
         }
 
         protected override void Read(OnlineReader Sender)

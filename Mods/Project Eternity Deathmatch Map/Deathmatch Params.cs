@@ -33,6 +33,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
+        public override void Reload(BattleParams Clone, string ParamsID)
+        {
+            base.Reload(Clone, ParamsID);
+
+            GlobalSquadContext = new SquadPERContext();
+            SquadParams = new SquadPERParams(GlobalSquadContext);
+
+            GlobalAttackContext = new AttackPERContext();
+            AttackParams = new AttackPERParams(GlobalAttackContext);
+        }
+
         protected override void LoadUnits()
         {
             base.LoadUnits();

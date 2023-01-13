@@ -79,7 +79,7 @@
     <Compile Include="Commands\Force Server Change Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Character Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Room Subtype Script Server.cs" />
-    <Compile Include="Commands\Game Commands\Ask Change Player Type Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Ask Change Player Ready Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Room Subtype Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Change Team Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Game Data Script Client.cs" />
@@ -93,7 +93,7 @@
     <Compile Include="Commands\Game Commands\Ask Room List Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Character Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Room Subtype Script Server .cs" />
-    <Compile Include="Commands\Game Commands\Change Player Type Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Change Player Roles Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Team Script Server.cs" />
     <Compile Include="Commands\Game Commands\Connection Success Script Client.cs" />
     <Compile Include="Commands\Game Commands\Connection Success Script Server.cs" />
@@ -108,6 +108,8 @@
     <Compile Include="Commands\Game Commands\Create Room Script Server.cs" />
     <Compile Include="Commands\Game Commands\Join Room Remote Script Server.cs" />
     <Compile Include="Commands\Game Commands\Room List Script Server.cs" />
+    <Compile Include="Commands\Game Commands\Send Roles Script Client.cs" />
+    <Compile Include="Commands\Game Commands\Send Roles Script Server.cs" />
     <Compile Include="Commands\Game Commands\Send Room ID Script Server.cs" />
     <Compile Include="Commands\Game Commands\Client Is Ready Script Client.cs" />
     <Compile Include="Commands\Game Commands\Client Is Ready Script Server.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="IOnlineConnection.cs" />
     <Compile Include="IOnlineGame.cs" />
     <Compile Include="IRoomInformations.cs" />
+    <Compile Include="Online Connection Dummy.cs" />
     <Compile Include="Online Connection.cs" />
     <Compile Include="Online Reader.cs" />
     <Compile Include="Online Script Holder.cs" />

@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
             DicNewGameServerScript.Add(PlayerJoinedScriptClient.ScriptName, new PlayerJoinedScriptClient(NewPreparationScreen));
             DicNewGameServerScript.Add(PlayerLeftScriptClient.ScriptName, new PlayerLeftScriptClient(MissionRoom, OnlineGameClient, NewPreparationScreen));
             DicNewGameServerScript.Add(ChangeBookScriptClient.ScriptName, new ChangeBookScriptClient(MissionRoom, NewPreparationScreen));
-            DicNewGameServerScript.Add(ChangePlayerTypeScriptClient.ScriptName, new ChangePlayerTypeScriptClient(MissionRoom, NewPreparationScreen));
+            DicNewGameServerScript.Add(ChangePlayerRolesScriptClient.ScriptName, new ChangePlayerRolesScriptClient(MissionRoom, NewPreparationScreen));
             DicNewGameServerScript.Add(ChangeTeamScriptClient.ScriptName, new ChangeTeamScriptClient(MissionRoom));
             DicNewGameServerScript.Add(ChangeMapScriptClient.ScriptName, new ChangeMapScriptClient(MissionRoom, NewPreparationScreen));
             DicNewGameServerScript.Add(ChangeRoomSubtypeScriptClient.ScriptName, new ChangeRoomSubtypeScriptClient(NewPreparationScreen));

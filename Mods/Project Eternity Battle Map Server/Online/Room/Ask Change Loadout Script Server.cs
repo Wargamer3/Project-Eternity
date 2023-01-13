@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         private readonly RoomInformations Owner;
 
-        private byte LocalPlayerIndex;
+        private string ID;
         private SquadLoadout[] ArrayNewSquad;
 
         public AskChangeLoadoutScriptServer(RoomInformations Owner)
@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         {
             foreach (BattleMapPlayer ActivePlayer in Owner.ListRoomPlayer)
             {
-                if (ActivePlayer.ConnectionID == Sender.ID && ActivePlayer.LocalPlayerIndex == LocalPlayerIndex)
+                if (ActivePlayer.ConnectionID == ID)
                 {
                     ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Clear();
 
@@ -101,11 +101,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                         NewSquad.IsPlayerControlled = true;
                         ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
                     }
-                    
-                    for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
-                    {
-                        IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
 
+                    foreach (IOnlineConnection ActiveOnlinePlayer in Owner.ListUniqueOnlineConnection)
+                    {
                         ActiveOnlinePlayer.Send(new ChangeLoadoutScriptServer(ActivePlayer));
                     }
                 }
@@ -114,7 +112,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         protected override void Read(OnlineReader Sender)
         {
-            LocalPlayerIndex = Sender.ReadByte();
+            ID = Sender.ReadString();
 
             int ArraySquadLength = Sender.ReadInt32();
             ArrayNewSquad = new SquadLoadout[ArraySquadLength];
@@ -134,7 +132,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                         ArrayNewCharacter[C] = Sender.ReadString();
                     }
 
-                    ArrayNewUnit[S] = new UnitLoadout(UnitTypeName, RelativePath, ArrayNewCharacter);
+                    ArrayNewUnit[U] = new UnitLoadout(UnitTypeName, RelativePath, ArrayNewCharacter);
                 }
 
                 ArrayNewSquad[S] = new SquadLoadout(ArrayNewUnit);

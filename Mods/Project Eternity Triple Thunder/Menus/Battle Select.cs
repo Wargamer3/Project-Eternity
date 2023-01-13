@@ -532,14 +532,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             {
                 ReadyButton.Disable();
 
-                if (Room.GetLocalPlayer().PlayerType == Player.PlayerTypePlayer)
-                {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(Player.PlayerTypeReady));
-                }
-                else
-                {
-                    OnlineGameClient.Host.Send(new AskChangePlayerTypeScriptClient(Player.PlayerTypePlayer));
-                }
+                OnlineGameClient.Host.Send(new AskChangePlayerReadyScriptClient());
             }
         }
 

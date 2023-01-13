@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void InitOfflinePlayer()
         {
-            Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, null, OnlinePlayerBase.PlayerTypes.Host, false, 0, true, Color.Blue);
+            Player NewPlayer = new Player(PlayerManager.OnlinePlayerID, null, OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
 
             PlayerManager.ListLocalPlayer.Add(NewPlayer);
             NewPlayer.LoadLocally(GameScreen.ContentFallback);

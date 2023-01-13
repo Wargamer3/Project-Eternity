@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Online
 {
-    public class ChangePlayerTypeScriptServer : OnlineScript
+    public class ChangePlayerRolesScriptServer : OnlineScript
     {
-        public const string ScriptName = "Change Player Type";
+        public const string ScriptName = "Change Player Roles";
 
         private readonly string PlayerID;
-        private readonly string PlayerType;
+        private readonly List<string> ListRole;
 
-        public ChangePlayerTypeScriptServer(string PlayerID, string PlayerType)
+        public ChangePlayerRolesScriptServer(string PlayerID, List<string> ListRole)
             : base(ScriptName)
         {
             this.PlayerID = PlayerID;
-            this.PlayerType = PlayerType;
+            this.ListRole = ListRole;
         }
 
         public override OnlineScript Copy()
@@ -24,7 +25,12 @@ namespace ProjectEternity.Core.Online
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
             WriteBuffer.AppendString(PlayerID);
-            WriteBuffer.AppendString(PlayerType);
+            WriteBuffer.AppendByte((byte)ListRole.Count);
+
+            for (int R = 0; R < ListRole.Count; ++R)
+            {
+                WriteBuffer.AppendString(ListRole[R]);
+            }
         }
 
         protected internal override void Execute(IOnlineConnection Sender)

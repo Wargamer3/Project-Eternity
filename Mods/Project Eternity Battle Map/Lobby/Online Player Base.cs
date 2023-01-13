@@ -11,13 +11,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public abstract class OnlinePlayerBase
     {
         public const string PlayerTypeNA = "N/A";
-        public const string PlayerTypeOffline = "Offline";
-        public const string PlayerTypeHost = "Host";
         public const string PlayerTypePlayer = "Player";
-        public const string PlayerTypeReady = "Ready";
         public const string PlayerTypeSpectator = "Spectator";
 
-        public enum PlayerTypes { Offline, Host, Player, Ready, Spectator }
+        public enum PlayerTypes { Offline, Player, Spectator }
 
         public string ConnectionID;
         public string Name;
@@ -49,7 +46,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public OnlinePlayerBase(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
         {
-
             this.ConnectionID = ID;
             this.Name = Name;
             this.OnlinePlayerType = OnlinePlayerType;
@@ -63,6 +59,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
             InputManager = new KeyboardInput();
+            OnlineClient = new OnlineConnectionDummy();
         }
 
         public OnlinePlayerBase(string ID, string Name, PlayerTypes OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
@@ -77,21 +74,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Guild = string.Empty;
             Records = new PlayerRecords();
 
-            if (OnlinePlayerType == PlayerTypes.Offline)
-            {
-                this.OnlinePlayerType = PlayerTypeOffline;
-            }
-            else if (OnlinePlayerType == PlayerTypes.Host)
-            {
-                this.OnlinePlayerType = PlayerTypeHost;
-            }
-            else if (OnlinePlayerType == PlayerTypes.Player)
+            if (OnlinePlayerType == PlayerTypes.Player)
             {
                 this.OnlinePlayerType = PlayerTypePlayer;
-            }
-            else if (OnlinePlayerType == PlayerTypes.Ready)
-            {
-                this.OnlinePlayerType = PlayerTypeReady;
             }
             else
             {
@@ -100,6 +85,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             GameplayType = GameplayTypes.MouseAndKeyboard;
             InputManager = new KeyboardInput();
+            OnlineClient = new OnlineConnectionDummy();
         }
 
         public OnlinePlayerBase(OnlinePlayerBase Clone)
@@ -196,7 +182,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public bool IsHost()
         {
-            return OnlinePlayerType == PlayerTypeHost || OnlinePlayerType == PlayerTypeOffline;
+            return OnlineClient.Roles.IsRoomHost;
+        }
+
+        public bool IsReady()
+        {
+            return OnlineClient.Roles.IsRoomReady;
         }
     }
 }
