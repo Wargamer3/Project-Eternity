@@ -38,14 +38,14 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             {
                 //Add Game Specific scripts
                 Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetRoomScriptsServer(NewRoom, Owner);
-                if (NewRoom.RoomType == RoomInformations.RoomTypeMission)
+                if (NewRoom.GameMode == RoomInformations.RoomTypeMission)
                 {
                     MissionRoomInformations MissionRoom = (MissionRoomInformations)NewRoom;
 
                     DicNewScript.Add(AskStartGameMissionScriptServer.ScriptName, new AskStartGameMissionScriptServer(MissionRoom, (TripleThunderClientGroup)CreatedGroup, Owner));
                     DicNewScript.Add(AskChangeRoomExtrasMissionScriptServer.ScriptName, new AskChangeRoomExtrasMissionScriptServer(MissionRoom));
                 }
-                else if (NewRoom.RoomType == RoomInformations.RoomTypeBattle)
+                else if (NewRoom.GameMode == RoomInformations.RoomTypeBattle)
                 {
                     BattleRoomInformations BattleRoom = (BattleRoomInformations)NewRoom;
 

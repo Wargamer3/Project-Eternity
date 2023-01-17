@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.TripleThunderServer
             WriteBuffer.AppendString(RoomID);
             WriteBuffer.AppendString(ActiveGroup.Room.RoomName);
             WriteBuffer.AppendString(ActiveGroup.Room.MapPath);
-            WriteBuffer.AppendString(ActiveGroup.Room.RoomType);
+            WriteBuffer.AppendString(ActiveGroup.Room.GameMode);
             WriteBuffer.AppendString(ActiveGroup.Room.RoomSubtype);
             WriteBuffer.AppendString(CurrentDifficulty);
 

@@ -611,7 +611,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(TargetPlayerIndex);
             BW.AppendInt32(TargetSquadIndex);
             BW.AppendByte((byte)TargetSquad.CurrentLeader.BattleDefenseChoice);
-            BW.AppendString(TargetSquad.CurrentLeader.CurrentAttack.ItemName);
+            if (TargetSquad.CurrentLeader.CurrentAttack == null)
+            {
+                BW.AppendString(string.Empty);
+            }
+            else
+            {
+                BW.AppendString(TargetSquad.CurrentLeader.CurrentAttack.ItemName);
+            }
 
             BW.AppendByte((byte)Map.BattleMenuStage);
         }

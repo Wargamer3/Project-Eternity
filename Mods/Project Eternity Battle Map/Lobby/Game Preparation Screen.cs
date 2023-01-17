@@ -266,11 +266,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateReadyOrHost();
         }
 
-        public void UpdateSelectedMap(string MapName, string MapType, string MapPath, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, List<string> ListMandatoryMutator)
+        public void UpdateSelectedMap(string MapName, string MapType, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, List<string> ListMandatoryMutator)
         {
             Room.MapName = MapName;
             Room.MapType = MapType;
             Room.MapPath = MapPath;
+            Room.GameMode = GameMode;
             LoadMapInfo();
             Room.MinNumberOfPlayer = MinNumberOfPlayer;
             Room.MaxNumberOfPlayer = MaxNumberOfPlayer;
@@ -360,7 +361,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ReadyButton.Disable();
 
-                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.MapName, Room.MapType, Room.MapPath, Room.MinNumberOfPlayer, Room.MaxNumberOfPlayer, Room.ListMandatoryMutator));
+                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.MapName, Room.MapType, Room.MapPath, Room.GameMode, Room.MinNumberOfPlayer, Room.MaxNumberOfPlayer, Room.ListMandatoryMutator));
             }
         }
 
@@ -409,11 +410,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (Room.MapPath == "Random")
                 {
-                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.RoomType, string.Empty);
+                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.GameMode, string.Empty);
                 }
                 else
                 {
-                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.RoomType, string.Empty);
+                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.GameMode, string.Empty);
                 }
 
                 NewMap.BattleMapPath = Room.MapPath;

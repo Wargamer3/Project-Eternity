@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public string RoomID { get; }//Only contains a value for locally create Rooms, if the Room is on another server the ID should be null.
         public string RoomName { get; }
-        public string RoomType { get; set; }
+        public string GameMode { get; set; }
         public string RoomSubtype { get; set; }
         public string MapName { get; set; }
         public string MapType { get; set; }
@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
             RoomName = string.Empty;
-            RoomType = string.Empty;
+            GameMode = string.Empty;
             RoomSubtype = string.Empty;
             CurrentDifficulty = "Easy";
             UseTeams = true;
@@ -69,11 +69,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxSquadsPerBot = 1;
         }
 
-        public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, byte MinPlayer, byte MaxPlayer, byte CurrentClientCount)
+        public RoomInformations(string RoomID, string RoomName, string MapType, string RoomSubtype, bool IsPlaying, byte MinPlayer, byte MaxPlayer, byte CurrentClientCount)
         {
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.RoomType = RoomType;
+            this.MapType = MapType;
             this.RoomSubtype = RoomSubtype;
             this.MinNumberOfPlayer = MinPlayer;
             this.MaxNumberOfPlayer = MaxPlayer;
@@ -94,13 +94,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxSquadsPerBot = 1;
         }
 
-        public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID)
+        public RoomInformations(string RoomID, string RoomName, string MapType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID)
         {
             ListOnlinePlayer = new List<IOnlineConnection>();
             ListUniqueOnlineConnection = new List<IOnlineConnection>();
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.RoomType = RoomType;
+            this.MapType = MapType;
             this.RoomSubtype = RoomSubtype;
             this.CurrentDifficulty = CurrentDifficulty;
             this.MapPath = MapName;
@@ -113,12 +113,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxSquadsPerBot = 1;
         }
 
-        public RoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort,
+        public RoomInformations(string RoomID, string RoomName, string MapType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort,
             byte CurrentPlayerCount, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, bool IsDead)
         {
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.RoomType = RoomType;
+            this.MapType = MapType;
             this.RoomSubtype = RoomSubtype;
             this.IsPlaying = IsPlaying;
             this.Password = Password;

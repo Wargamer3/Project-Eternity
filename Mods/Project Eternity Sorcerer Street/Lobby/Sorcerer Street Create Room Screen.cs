@@ -9,8 +9,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetCreateRoomScreen : CreateRoomScreen
     {
-        public SorcererStreetCreateRoomScreen(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, string RoomType)
-            : base(OnlineClient, OnlineCommunicationClient, RoomType)
+        public SorcererStreetCreateRoomScreen(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient)
+            : base(OnlineClient, OnlineCommunicationClient, "Sorcerer Street")
         {
         }
 

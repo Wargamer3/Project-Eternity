@@ -6,7 +6,7 @@ namespace ProjectEternity.Core.Online
     {
         string RoomID { get; }//Only contains a value for locally create Rooms, if the Room is on another server the ID should be null.
         string RoomName { get; }
-        string RoomType { get; }
+        string GameMode { get; }
         string RoomSubtype { get; set; }
         string MapPath { get; set; }
         bool IsPlaying { get; set; }

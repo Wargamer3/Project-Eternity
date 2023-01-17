@@ -11,11 +11,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     public class ActionPanelPlayerPrePhaseAIStep : ActionPanelDeathmatch
     {
         List<Squad> ListAISquad;
+        List<int> ListAISquadIndex;
 
         public ActionPanelPlayerPrePhaseAIStep(DeathmatchMap Map)
             : base("ActionPanelPlayerPrePhaseAIStep", Map, false)
         {
             ListAISquad = new List<Squad>();
+            ListAISquadIndex = new List<int>();
 
             if (Map.ListPlayer.Count > 0)
             {
@@ -25,6 +27,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].CurrentLeader != null && Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].SquadAI != null && !Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U].IsPlayerControlled)
                     {
                         ListAISquad.Add(Map.ListPlayer[Map.ActivePlayerIndex].ListSquad[U]);
+                        ListAISquadIndex.Add(U);
                     }
                 }
             }
@@ -41,7 +44,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int S = 0; S < ListAISquad.Count; S++)
             {
                 Squad ActiveSquad = ListAISquad[S];
-                Map.ActiveSquadIndex = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.IndexOf(ActiveSquad);
+                Map.ActiveSquadIndex = ListAISquadIndex[S];
 
                 if (!ActiveSquad.CanMove || ActiveSquad.CurrentLeader == null)
                 {

@@ -38,7 +38,12 @@ namespace ProjectEternity.Units.Magic
 
         public override void DoUpdate(GameTime gameTime)
         {
-            NavigateThroughNextChoices(Map.sndSelection, Map.sndConfirm);
+            if (NavigateThroughNextChoices(Map.sndSelection))
+            {
+            }
+            else if (ConfirmNextChoices(Map.sndConfirm))
+            {
+            }
         }
 
         public override void DoRead(ByteReader BR)

@@ -55,7 +55,6 @@
     <Compile Include="Online\Room\Ask Change Loadout Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Map Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Player Ready Script Server.cs" />
-    <Compile Include="Online\Game\Move Cursor Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Battle Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Room Extras Mission Script Server.cs" />
     <Compile Include="Online\Room\Ask Change Team Script Server.cs" />

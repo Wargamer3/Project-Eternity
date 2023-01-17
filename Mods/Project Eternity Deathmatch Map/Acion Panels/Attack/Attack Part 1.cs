@@ -7,6 +7,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -68,6 +69,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.AttackPicker.SetCursorIndex(AttackIndex);
 
                 Map.sndSelection.Play();
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (ActiveInputManager.InputDownPressed())
             {
@@ -80,6 +86,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.AttackPicker.SetCursorIndex(AttackIndex);
 
                 Map.sndSelection.Play();
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             else if (ActiveInputManager.InputMovePressed())
             {
@@ -92,6 +103,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         Map.AttackPicker.SetCursorIndex(AttackIndex);
 
                         Map.sndSelection.Play();
+
+                        if (Map.OnlineClient != null)
+                        {
+                            Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                        }
                         break;
                     }
                 }
@@ -132,6 +148,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             ListAttack = ActiveSquad.CurrentLeader.ListAttack;
             AttackIndex = BR.ReadInt32();
+
+            if (Map.AttackPicker != null)
+            {
+                Map.AttackPicker.Reset(ActiveSquad.CurrentLeader, ListAttack);
+                Map.AttackPicker.SetCursorIndex(AttackIndex);
+            }
+        }
+
+        public override void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+            AttackIndex = ArrayUpdateData[0];
         }
 
         public override void DoWrite(ByteWriter BW)
@@ -139,6 +166,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendInt32(AttackIndex);
+        }
+
+        public override byte[] DoWriteUpdate()
+        {
+
+            return new byte[] { (byte)AttackIndex };
         }
 
         protected override ActionPanel Copy()

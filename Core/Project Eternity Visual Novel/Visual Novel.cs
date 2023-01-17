@@ -96,6 +96,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
         private SpriteFont fntFinlanderFont;
 
         public bool IsPaused = false;
+        public bool HasEnded = false;
         public bool UseLocalization = true;
         public Dictionary<string, int> DicMapVariables;
 
@@ -791,12 +792,12 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
             if (InputHelper.InputConfirmPressed() && !WaitingForOtherPlayers)
             {
-                if (HasControl() || (Room != null && !HasMultipleChoices() && OnlineClient.Host.Roles.IsRoomHost))
+                if (HasControl() || (Room != null && !HasMultipleChoices() && OnlineClient.Host.Roles.IsRoomHost) || Room.ListOnlinePlayer.Count == 1)
                 {
                     AdvanceDialog();
 
-                    if (Room != null && Room.ListOnlinePlayer.Count > 1)
-                    {//Wait for all players
+                    if (Room != null)
+                    {
                         OnlineClient.Host.Send(new ProceedVisualNovelChoiceScriptClient(VisualNovelPath, ListDialog.IndexOf(CurrentDialog), 0));
                         WaitingForOtherPlayers = true;
                     }
@@ -823,17 +824,27 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
             if (TimelineIndex < Timeline.Count)
             {
-                //If there is no dialog linked to the CurrentDialog.
-                if (HasMultipleChoices())
+                if (HasMultipleChoices() && !string.IsNullOrEmpty(ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].Text))
                 {
                     CurrentDialog = ListDialog[CurrentDialog.ListNextDialog[DialogChoice]];
                     OnNewFrame();
                 }
                 else
                 {
+                    if (HasMultipleChoices())
+                    {
+                        if (ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneBefore != null)
+                            PushScreen(ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneBefore);
+
+                        if (ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneAfter != null)
+                            PushScreen(ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].CutsceneAfter);
+                    }
+
                     IncrementTimeline();
                     if (TimelineIndex >= Timeline.Count)
                     {
+                        HasEnded = true;
+
                         if (OnVisualNovelEnded != null)
                             OnVisualNovelEnded();
 
@@ -842,13 +853,60 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 }
             }
 
-            if (CurrentDialog.CutsceneBefore != null)
+            if (!HasEnded && CurrentDialog.CutsceneBefore != null)
                 PushScreen(CurrentDialog.CutsceneBefore);
+        }
+
+        private void IncrementTimeline()
+        {
+            //Move the next Timeline entry.
+            TimelineIndex++;
+            //If there is a next entry, set the CurrentDialog to it.
+            if (TimelineIndex < Timeline.Count)
+            {
+                LastDialog = CurrentDialog;
+                CurrentDialog = Timeline[TimelineIndex];
+            }
+
+            OnNewFrame();
+        }
+
+        private void OnNewFrame()
+        {
+            if (Content != null)
+            {
+                UpdateTextChoices();
+            }
+
+            //Update the MaxTime.
+            if (TimelineIndex > TimelineIndexMax)
+            {
+                TimelineIndexMax = TimelineIndex;
+
+                //Make sure this is called only on the first time.
+                if (OnVisualNovelFrameChanged != null)
+                    OnVisualNovelFrameChanged();
+            }
+        }
+
+        public void UpdateTextChoices()
+        {
+            DialogChoice = 0;
+            DialogChoiceMinIndex = 0;
+
+            float TextEndY = Constants.Height - VNBoxHeight + 8 + fntFinlanderFont.MeasureString(CurrentDialog.Text).Y;
+            MaxDialogChoice = (Constants.Height - (int)TextEndY) / 25;
+
+            if (MaxDialogChoice >= CurrentDialog.ListNextDialog.Count)
+                MaxDialogChoice = CurrentDialog.ListNextDialog.Count;
+
+            ChoicesScrollbar.SetValue(0);
+            ChoicesScrollbar.ChangeMaxValue(Math.Max(1, CurrentDialog.ListNextDialog.Count - MaxDialogChoice));
         }
 
         private bool HasMultipleChoices()
         {
-            return CurrentDialog.ListNextDialog.Count > 0 && !string.IsNullOrEmpty(ListDialog[CurrentDialog.ListNextDialog[DialogChoice]].Text);
+            return CurrentDialog.ListNextDialog.Count > 0;
         }
 
         private void OnScrollbarChange(float ScrollbarValue)
@@ -1026,53 +1084,6 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                                                   Color.FromNonPremultiplied(0, 0, 0, 127), 0, Vector2.Zero, ActiveSpriteEffects, 0);
                 }
             }
-        }
-
-        private void IncrementTimeline()
-        {
-            //Move the next Timeline entry.
-            TimelineIndex++;
-            //If there is a next entry, set the CurrentDialog to it.
-            if (TimelineIndex < Timeline.Count)
-            {
-                LastDialog = CurrentDialog;
-                CurrentDialog = Timeline[TimelineIndex];
-            }
-
-            OnNewFrame();
-        }
-
-        private void OnNewFrame()
-        {
-            if (Content != null)
-            {
-                UpdateTextChoices();
-            }
-
-            //Update the MaxTime.
-            if (TimelineIndex > TimelineIndexMax)
-            {
-                TimelineIndexMax = TimelineIndex;
-
-                //Make sure this is called only on the first time.
-                if (OnVisualNovelFrameChanged != null)
-                    OnVisualNovelFrameChanged();
-            }
-        }
-
-        public void UpdateTextChoices()
-        {
-            DialogChoice = 0;
-            DialogChoiceMinIndex = 0;
-
-            float TextEndY = Constants.Height - VNBoxHeight + 8 + fntFinlanderFont.MeasureString(CurrentDialog.Text).Y;
-            MaxDialogChoice = (Constants.Height - (int)TextEndY) / 25;
-
-            if (MaxDialogChoice >= CurrentDialog.ListNextDialog.Count)
-                MaxDialogChoice = CurrentDialog.ListNextDialog.Count;
-
-            ChoicesScrollbar.SetValue(0);
-            ChoicesScrollbar.ChangeMaxValue(Math.Max(1, CurrentDialog.ListNextDialog.Count - MaxDialogChoice));
         }
     }
 }

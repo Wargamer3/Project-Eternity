@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void CreateARoom()
         {
-            PushScreen(new SorcererStreetCreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, "Sorcerer Street"));
+            PushScreen(new SorcererStreetCreateRoomScreen(OnlineGameClient, OnlineCommunicationClient));
             sndButtonClick.Play();
         }
 

@@ -70,8 +70,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             txtHeight.Value = (decimal)ActiveTerrain.Height;
 
             cboTerrainType.SelectedIndex = ActiveTerrain.TerrainTypeIndex;
-            cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex;
-            cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex;
+            if (ActiveTerrain.BattleBackgroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
+            {
+                cboBattleAnimationBackground.SelectedIndex = ActiveTerrain.BattleBackgroundAnimationIndex;
+            }
+            else
+            {
+                cboBattleAnimationBackground.SelectedIndex = 0;
+            }
+            if (ActiveTerrain.BattleForegroundAnimationIndex <= Map.ListBattleBackgroundAnimationPath.Count)
+            {
+                cboBattleAnimationForeground.SelectedIndex = ActiveTerrain.BattleForegroundAnimationIndex;
+            }
+            else
+            {
+                cboBattleAnimationForeground.SelectedIndex = 0;
+            }
 
             lstTerrainBonus.Items.Clear();
             //Load the lstTerrainBonus.

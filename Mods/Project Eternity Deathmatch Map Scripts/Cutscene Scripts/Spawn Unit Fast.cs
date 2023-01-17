@@ -35,6 +35,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     IsActive = true;
                 }
+
+                if (Map.IsServer)
+                {
+                    UnitSpawner.SpawnUnitServer();
+                    IsActive = false;
+                    IsEnded = true;
+                }
             }
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)

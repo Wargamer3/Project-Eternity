@@ -48,19 +48,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 FinalMenuY = Constants.Height - MenuHeight;
         }
 
-        protected void NavigateThroughNextChoices(FMOD.FMODSound sndSelection, FMOD.FMODSound sndConfirm)
+        protected bool NavigateThroughNextChoices(FMOD.FMODSound sndSelection)
         {
             if (ActiveInputManager.InputUpPressed())
             {
                 ActionMenuCursor -= (ActionMenuCursor > 0) ? 1 : 0;
 
                 sndSelection.Play();
+                return true;
             }
             else if (ActiveInputManager.InputDownPressed())
             {
                 ActionMenuCursor += (ActionMenuCursor < ListNextChoice.Count - 1) ? 1 : 0;
 
                 sndSelection.Play();
+                return true;
             }
             else if (ActiveInputManager.InputMovePressed())
             {
@@ -72,17 +74,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         {
                             ActionMenuCursor = C;
                             sndSelection.Play();
+                            return true;
                         }
                         break;
                     }
                 }
             }
-            else if (ActiveInputManager.InputConfirmPressed(FinalMenuX, FinalMenuY + 6 + ActionMenuCursor * PannelHeight,
+
+            return false;
+        }
+
+        protected bool ConfirmNextChoices(FMOD.FMODSound sndConfirm)
+        {
+            if (ActiveInputManager.InputConfirmPressed(FinalMenuX, FinalMenuY + 6 + ActionMenuCursor * PannelHeight,
                 FinalMenuX + ActionMenuWidth, FinalMenuY + 6 + (ActionMenuCursor + 1) * PannelHeight))
             {
                 AddToPanelListAndSelect(ListNextChoice[ActionMenuCursor]);
                 sndConfirm.Play();
+                return true;
             }
+
+            return false;
         }
 
         public void DrawNextChoice(CustomSpriteBatch g)

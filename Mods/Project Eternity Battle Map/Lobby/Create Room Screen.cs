@@ -63,7 +63,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.OnlineGameClient = OnlineClient;
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.RoomType = RoomType;
-            RoomSubtype = "Deathmatch";
             MinNumberOfPlayer = 1;
             MaxNumberOfPlayer = 8;
         }

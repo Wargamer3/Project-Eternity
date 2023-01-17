@@ -244,11 +244,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            if (!IsOfflineOrServer)
-            {
-                OnlineClient.Host.Send(new MoveCursorScriptClient(CursorPosition.X, CursorPosition.Y));
-            }
-
             return CursorMoved;
         }
     }

@@ -49,7 +49,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            NavigateThroughNextChoices(Map.sndSelection, Map.sndConfirm);
+            if (NavigateThroughNextChoices(Map.sndSelection))
+            {
+            }
+            else if (ConfirmNextChoices(Map.sndConfirm))
+            {
+            }
         }
 
         public override void DoRead(ByteReader BR)

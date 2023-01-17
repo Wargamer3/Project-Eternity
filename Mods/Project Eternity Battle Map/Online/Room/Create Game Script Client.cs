@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            BattleMap NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.RoomType, string.Empty);
+            BattleMap NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.GameMode, string.Empty);
 
             NewMap.InitOnlineClient(OnlineGameClient, OnlineCommunicationClient, Room);
 

@@ -282,7 +282,8 @@ namespace ProjectEternity.Core.Units
 
         public Attack PLAAttack { get { return _UnitStat.PLAAttack; } }
 
-        public Attack CurrentAttack { get { return _UnitStat.CurrentAttack; } set { _UnitStat.CurrentAttack = value; } }
+        public Attack CurrentAttack { get { return _UnitStat.CurrentAttack; }
+            set { _UnitStat.CurrentAttack = value; } }
 
         public string AttackAccuracy;
         public List<string> ListMAPAttackAccuracy;

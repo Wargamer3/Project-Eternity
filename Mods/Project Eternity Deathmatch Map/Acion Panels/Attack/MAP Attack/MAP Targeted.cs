@@ -222,6 +222,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             int AttackChoiceCount = BR.ReadInt32();
             ListAttackChoice = new List<Vector3>(AttackChoiceCount);
+            ListAttackTerrain = new List<MovementAlgorithmTile>(AttackChoiceCount);
             for (int A = 0; A < AttackChoiceCount; ++A)
             {
                 Vector3 NewTerrain = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadInt32());

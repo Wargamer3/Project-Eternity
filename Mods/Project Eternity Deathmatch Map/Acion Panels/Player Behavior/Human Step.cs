@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -28,6 +29,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (CursorMoved)
             {
                 BattlePreview = null;
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
             //Loop through the players to find a Unit to control.
             for (int P = 0; P < Map.ListPlayer.Count; P++)
@@ -91,6 +97,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public override void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+            ByteReader BR = new ByteReader(ArrayUpdateData);
+            Map.CursorPosition.X = BR.ReadFloat();
+            Map.CursorPosition.Y = BR.ReadFloat();
+            BR.Clear();
+        }
+
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendBoolean(BattlePreview != null);
@@ -99,6 +113,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 BW.AppendInt32(BattlePreview.PlayerIndex);
                 BW.AppendInt32(BattlePreview.SquadIndex);
             }
+        }
+
+        public override byte[] DoWriteUpdate()
+        {
+            ByteWriter BW = new ByteWriter();
+
+            BW.AppendFloat(Map.CursorPosition.X);
+            BW.AppendFloat(Map.CursorPosition.Y);
+
+            byte[] ArrayUpdateData = BW.GetBytes();
+            BW.ClearWriteBuffer();
+
+            return ArrayUpdateData;
         }
 
         protected override ActionPanel Copy()

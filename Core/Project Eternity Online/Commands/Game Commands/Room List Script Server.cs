@@ -33,7 +33,7 @@ namespace ProjectEternity.Core.Online
                 if (!ActiveRoom.IsDead)
                 {
                     WriteBuffer.AppendString(ActiveRoom.RoomName);
-                    WriteBuffer.AppendString(ActiveRoom.RoomType);
+                    WriteBuffer.AppendString(ActiveRoom.GameMode);
                     WriteBuffer.AppendString(ActiveRoom.RoomSubtype);
                     WriteBuffer.AppendBoolean(ActiveRoom.IsPlaying);
                     WriteBuffer.AppendByte(ActiveRoom.MinNumberOfPlayer);

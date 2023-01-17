@@ -111,7 +111,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     UnitSpawned = true;
                     SpawnSquad();
 
-                    if (File.Exists("Content/Animations/Bitmap Animations/" + AnimationPath + ".xnb"))
+                    if (File.Exists("Content/Animations/Bitmap Animations/" + AnimationPath + ".xnb") && Map.Content != null)
                     {
                         Owner.IsDrawn = true;
 
@@ -121,19 +121,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                                 (SpawnPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y + Map.TileSize.Y * 0.5f), AnimationSpeed);
                     }
                     else
+                    {
                         Owner.ExecuteEvent(Owner, 1);
+                    }
 
                     if (ActiveSound != null)
                     {
                         ActiveSound.Play();
                     }
-                    else if (File.Exists("Content/SFX/" + SFXPath + ".mp3"))
+                    else if (File.Exists("Content/SFX/" + SFXPath + ".mp3") && GameScreen.FMODSystem != null)
                     {
                         ActiveSound = new FMODSound(GameScreen.FMODSystem, "Content/SFX/" + SFXPath + ".mp3");
                         ActiveSound.Play();
                     }
                     else
+                    {
                         Owner.ExecuteEvent(Owner, 2);
+                    }
                 }
 
                 if (AnimationSprite != null && !AnimationEnded)
@@ -309,6 +313,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         NewSquad.ListParthDrop.Add(PartDropPath);
                     }
                 }
+            }
+
+            public void SpawnUnitServer()
+            {
+                UnitSpawned = true;
+                SpawnSquad();
+                Owner.ExecuteEvent(Owner, 0);
+                Owner.ExecuteEvent(Owner, 1);
+                Owner.ExecuteEvent(Owner, 2);
             }
         }
     }

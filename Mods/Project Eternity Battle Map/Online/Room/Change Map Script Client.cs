@@ -13,7 +13,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         private string MapName;
         private string MapType;
-        private string MissionPath;
+        private string MapPath;
+        private string GameMode;
         private byte MinNumberOfPlayer;
         private byte MaxNumberOfPlayer;
         private List<string> ListMandatoryMutator;
@@ -37,14 +38,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MissionPath, MinNumberOfPlayer, MaxNumberOfPlayer, ListMandatoryMutator);
+            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MapPath, GameMode, MinNumberOfPlayer, MaxNumberOfPlayer, ListMandatoryMutator);
         }
 
         protected override void Read(OnlineReader Sender)
         {
             MapName = Sender.ReadString();
             MapType = Sender.ReadString();
-            MissionPath = Sender.ReadString();
+            MapPath = Sender.ReadString();
+            GameMode = Sender.ReadString();
             MinNumberOfPlayer = Sender.ReadByte();
             MaxNumberOfPlayer = Sender.ReadByte();
 

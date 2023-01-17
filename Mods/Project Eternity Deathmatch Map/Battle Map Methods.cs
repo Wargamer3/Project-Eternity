@@ -462,6 +462,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (!DeathmatchParams.DicParams.TryGetValue(ParamsID, out Params))
             {
                 Params = new DeathmatchParams();
+                Params.ID = ParamsID;
                 DeathmatchParams.DicParams.TryAdd(ParamsID, Params);
                 Params.Reload(this.Params, ParamsID);
             }

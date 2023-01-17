@@ -6,6 +6,7 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Attacks;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -99,9 +100,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (CursorMoved)
                 {
                     BattlePreview = new BattlePreviewer(Map, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad.CurrentLeader.CurrentAttack);
+
+                    if (Map.OnlineClient != null)
+                    {
+                        Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                    }
                 }
                 BattlePreview.UpdateUnitDisplay();
             }
+        }
+
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            Map.LayerManager.AddDrawablePoints(ListAttackChoice, Color.FromNonPremultiplied(255, 0, 0, 190));
         }
 
         public override void DoRead(ByteReader BR)
@@ -139,6 +150,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPosition = new Vector3(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32());
         }
 
+        public override void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+            ByteReader BR = new ByteReader(ArrayUpdateData);
+            Map.CursorPosition.X = BR.ReadFloat();
+            Map.CursorPosition.Y = BR.ReadFloat();
+            BR.Clear();
+        }
+
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
@@ -148,8 +167,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             for (int A = 0; A < ListAttackChoice.Count; ++A)
             {
-                BW.AppendInt32((int)ListAttackChoice[A].InternalPosition.X);
-                BW.AppendInt32((int)ListAttackChoice[A].InternalPosition.Y);
+                BW.AppendInt32(ListAttackChoice[A].InternalPosition.X);
+                BW.AppendInt32(ListAttackChoice[A].InternalPosition.Y);
                 BW.AppendInt32(ListAttackChoice[A].LayerIndex);
             }
 
@@ -163,6 +182,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendInt32((int)Map.CursorPosition.X);
             BW.AppendInt32((int)Map.CursorPosition.Y);
             BW.AppendInt32((int)Map.CursorPosition.Z);
+        }
+
+        public override byte[] DoWriteUpdate()
+        {
+            ByteWriter BW = new ByteWriter();
+
+            BW.AppendFloat(Map.CursorPosition.X);
+            BW.AppendFloat(Map.CursorPosition.Y);
+
+            byte[] ArrayUpdateData = BW.GetBytes();
+            BW.ClearWriteBuffer();
+
+            return ArrayUpdateData;
         }
 
         protected override ActionPanel Copy()

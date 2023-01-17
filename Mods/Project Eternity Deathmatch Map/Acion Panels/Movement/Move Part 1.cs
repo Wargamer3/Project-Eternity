@@ -6,6 +6,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -25,6 +26,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private List<MovementAlgorithmTile> ListMVChoice;
         private List<MovementAlgorithmTile> ListMovedOverTerrain;
         private List<Vector3> ListMovedOverPoint;
+        private bool HasFocus;
 
         public ActionPanelMovePart1(DeathmatchMap Map)
             : base(PanelName, Map, false)
@@ -46,6 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
             ListMovedOverPoint = new List<Vector3>();
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            HasFocus = true;
         }
 
         public override void OnSelect()
@@ -68,6 +71,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            HasFocus = true;
+
             Map.LayerManager.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
             Map.LayerManager.AddDrawablePath(ListMovedOverTerrain);
 
@@ -83,12 +88,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         break;
                     }
                 }
+
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
 
             if (ActiveInputManager.InputConfirmPressed())
             {
                 if (CheckIfUnitCanMove())
                 {
+                    HasFocus = false;
                     ListNextChoice.Clear();
 
                     AddToPanelListAndSelect(new ActionPanelMovePart2(Map, ActivePlayerIndex, ActiveSquadIndex, IsPostAttack, ListMovedOverPoint));
@@ -125,6 +136,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 LastCusorMVPosition = LastPosition.Owner.CursorTerrain;
             }
+        }
+
+        public override void UpdatePassive(GameTime gameTime)
+        {
+            Map.LayerManager.AddDrawablePoints(ListMVChoice, Color.FromNonPremultiplied(0, 128, 0, 190));
+            Map.LayerManager.AddDrawablePath(ListMovedOverTerrain);
         }
 
         private void AddHoverChoice()
@@ -237,6 +254,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoRead(ByteReader BR)
         {
+            HasFocus = BR.ReadBoolean();
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
             LastPosition = Map.GetMovementTile(BR.ReadInt32(), BR.ReadInt32(), BR.ReadInt32());
@@ -244,11 +262,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LastCameraPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
 
-            OnSelect();
+            if (HasFocus)
+            {
+                OnSelect();
+            }
+        }
+
+        public override void ExecuteUpdate(byte[] ArrayUpdateData)
+        {
+            ByteReader BR = new ByteReader(ArrayUpdateData);
+            Map.CursorPosition.X = BR.ReadFloat();
+            Map.CursorPosition.Y = BR.ReadFloat();
+            BR.Clear();
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            BW.AppendBoolean(HasFocus);
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendInt32(LastPosition.InternalPosition.X);
@@ -258,6 +288,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.AppendFloat(LastCameraPosition.X);
             BW.AppendFloat(LastCameraPosition.Y);
             BW.AppendFloat(LastCameraPosition.Z);
+        }
+
+        public override byte[] DoWriteUpdate()
+        {
+            ByteWriter BW = new ByteWriter();
+
+            BW.AppendFloat(Map.CursorPosition.X);
+            BW.AppendFloat(Map.CursorPosition.Y);
+
+            byte[] ArrayUpdateData = BW.GetBytes();
+            BW.ClearWriteBuffer();
+
+            return ArrayUpdateData;
         }
 
         protected override ActionPanel Copy()

@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
         public string RoomID { get; }//Only contains a value for locally create Rooms, if the Room is on another server the ID should be null.
         public string RoomName { get; }
-        public string RoomType { get; }
+        public string GameMode { get; }
         public string RoomSubtype { get; set; }
         public string MapPath { get; set; }
         public bool IsPlaying { get; set; }
@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListRoomPlayer = new List<Player>();
             ListLocalPlayerID = new List<string>();
             RoomName = string.Empty;
-            RoomType = string.Empty;
+            GameMode = string.Empty;
             RoomSubtype = string.Empty;
             CurrentDifficulty = "Easy";
             UseTeams = true;
@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.RoomType = RoomType;
+            this.GameMode = RoomType;
             this.RoomSubtype = RoomSubtype;
             this.MinNumberOfPlayer = MinNumberOfPlayer;
             this.MaxNumberOfPlayer = MaxNumberOfPlayer;
@@ -76,7 +76,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             ListOnlinePlayer = new List<IOnlineConnection>();
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.RoomType = RoomType;
+            this.GameMode = RoomType;
             this.RoomSubtype = RoomSubtype;
             this.CurrentDifficulty = CurrentDifficulty;
             this.MapPath = MapName;
@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.RoomType = RoomType;
+            this.GameMode = RoomType;
             this.RoomSubtype = RoomSubtype;
             this.IsPlaying = IsPlaying;
             this.Password = Password;

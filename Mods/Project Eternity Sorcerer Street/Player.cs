@@ -99,10 +99,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             GamePiece.SpriteMap = GameScreen.ContentFallback.Load<Texture2D>("Units/Default");
             GamePiece.Unit3DSprite = new UnitMap3D(GameScreen.GraphicsDevice, GameScreen.ContentFallback.Load<Effect>("Shaders/Squad shader 3D"), GamePiece.SpriteMap, 1);
-            GamePiece.Unit3DModel = new AnimatedModel("Units/Normal/Models/Bomberman/Default");
+            GamePiece.Unit3DModel = new AnimatedModel("Units/Normal/Unit Models/Bomberman/Default");
             GamePiece.Unit3DModel.LoadContent(GameScreen.ContentFallback);
-            GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Waving", "Idle", GameScreen.ContentFallback);
-            GamePiece.Unit3DModel.AddAnimation("Units/Normal/Models/Bomberman/Walking", "Walking", GameScreen.ContentFallback);
+            GamePiece.Unit3DModel.AddAnimation("Units/Normal/Unit Models/Bomberman/Idle", "Idle", GameScreen.ContentFallback);
+            GamePiece.Unit3DModel.AddAnimation("Units/Normal/Unit Models/Bomberman/Walking", "Walking", GameScreen.ContentFallback);
             GamePiece.Unit3DModel.PlayAnimation("Walking");
         }
 

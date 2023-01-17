@@ -5,6 +5,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -17,7 +18,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Squad ActiveSquad;
         private bool IsPostAttack;
         private Vector3 CursorPosition;
-        private readonly List<Vector3> ListMVHoverPoint;
+        private List<Vector3> ListMVHoverPoint;
+        private bool HasFocus;
 
         public ActionPanelMovePart2(DeathmatchMap Map)
             : base(PanelName, Map, false)
@@ -35,6 +37,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             CursorPosition = Map.CursorPosition;
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+            HasFocus = true;
         }
 
         public override void OnSelect()
@@ -96,24 +99,23 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            NavigateThroughNextChoices(Map.sndSelection, Map.sndConfirm);
-
-            if (ActiveInputManager.InputUpPressed())
+            HasFocus = true;
+            if (NavigateThroughNextChoices(Map.sndSelection))
             {
-                ActionMenuCursor -= (ActionMenuCursor > 0) ? 1 : 0;
-
-                Map.sndSelection.Play();
+                if (Map.OnlineClient != null)
+                {
+                    Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
+                }
             }
-            else if (ActiveInputManager.InputDownPressed() && ActiveSquad.CurrentLeader.CanAttack)
+            else if (ConfirmNextChoices(Map.sndConfirm))
             {
-                ActionMenuCursor += (ActionMenuCursor < ListNextChoice.Count - 1) ? 1 : 0;
-
-                Map.sndSelection.Play();
+                HasFocus = false;
             }
         }
 
         public override void DoRead(ByteReader BR)
         {
+            HasFocus = BR.ReadBoolean();
             ActivePlayerIndex = BR.ReadInt32();
             ActiveSquadIndex = BR.ReadInt32();
             CursorPosition = new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat());
@@ -121,21 +123,40 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
 
-            Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoint);
+            int ListMVHoverPointCount = BR.ReadInt32();
+            ListMVHoverPoint = new List<Vector3>(ListMVHoverPointCount);
+            for (int M = 0; M < ListMVHoverPointCount; ++M)
+            {
+                ListMVHoverPoint.Add(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
+            }
 
-            ActiveSquad.SetPosition(Map.CursorPosition);
+            if (HasFocus)
+            {
+                Map.MovementAnimation.Skip();
+                Map.MovementAnimation.Add(ActiveSquad, ActiveSquad.Position, ListMVHoverPoint);
+                ActiveSquad.SetPosition(Map.CursorPosition);
 
-            Map.CursorPosition = ActiveSquad.Position;
-            Map.CursorPositionVisible = Map.CursorPosition;
+                Map.CursorPosition = ActiveSquad.Position;
+                Map.CursorPositionVisible = Map.CursorPosition;
+            }
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            BW.AppendBoolean(HasFocus);
             BW.AppendInt32(ActivePlayerIndex);
             BW.AppendInt32(ActiveSquadIndex);
             BW.AppendFloat(CursorPosition.X);
             BW.AppendFloat(CursorPosition.Y);
             BW.AppendFloat(CursorPosition.Z);
+
+            BW.AppendInt32(ListMVHoverPoint.Count);
+            for (int M = 0; M < ListMVHoverPoint.Count; ++M)
+            {
+                BW.AppendFloat(ListMVHoverPoint[M].X);
+                BW.AppendFloat(ListMVHoverPoint[M].Y);
+                BW.AppendFloat(ListMVHoverPoint[M].Z);
+            }
         }
 
         protected override ActionPanel Copy()

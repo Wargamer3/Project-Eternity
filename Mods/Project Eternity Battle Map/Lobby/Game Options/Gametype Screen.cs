@@ -143,7 +143,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         && InputHelper.InputConfirmPressed())
                     {
                         SelectedGametype = ActiveCategory.ArrayGametype[G];
-                        Room.RoomSubtype = SelectedGametype.Name;
+                        Room.GameMode = SelectedGametype.Name;
                         Owner.OnGametypeUpdate();
                         return true;
                     }

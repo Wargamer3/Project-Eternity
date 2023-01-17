@@ -98,16 +98,22 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen.Online
                                 }
                             }
 
-                            foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                            if (GameGroup.Room.ListOnlinePlayer.Count > 1)
                             {
-                                ActivePlayer.Send(new ProceedVisualNovelChoiceScriptServer(VisualNovelPath, DialogIndex, ListPossibibleChoice[RandomHelper.Next(ListPossibibleChoice.Count)]));
+                                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                                {
+                                    ActivePlayer.Send(new ProceedVisualNovelChoiceScriptServer(VisualNovelPath, DialogIndex, ListPossibibleChoice[RandomHelper.Next(ListPossibibleChoice.Count)]));
+                                }
                             }
                         }
                         else
                         {
-                            foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                            if (GameGroup.Room.ListOnlinePlayer.Count > 1)
                             {
-                                ActivePlayer.Send(new ProceedVisualNovelChoiceScriptServer(VisualNovelPath, DialogIndex, Highest));
+                                foreach (IOnlineConnection ActivePlayer in GameGroup.Room.ListOnlinePlayer)
+                                {
+                                    ActivePlayer.Send(new ProceedVisualNovelChoiceScriptServer(VisualNovelPath, DialogIndex, Highest));
+                                }
                             }
                         }
 

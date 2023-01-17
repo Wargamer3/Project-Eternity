@@ -14,6 +14,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private string MapName;
         private string MapType;
         private string MapPath;
+        private string GameMode;
         private byte MinNumberOfPlayer;
         private byte MaxNumberOfPlayer;
         private List<string> ListMandatoryMutator;
@@ -40,13 +41,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             Owner.MapName = MapName;
             Owner.MapType = MapType;
             Owner.MapPath = MapPath;
+            Owner.GameMode = GameMode;
             Owner.MinNumberOfPlayer = MinNumberOfPlayer;
             Owner.MaxNumberOfPlayer = MaxNumberOfPlayer;
             for (int P = 0; P < Owner.ListOnlinePlayer.Count; P++)
             {
                 IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
 
-                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath, MinNumberOfPlayer, MaxNumberOfPlayer, ListMandatoryMutator));
+                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath, GameMode, MinNumberOfPlayer, MaxNumberOfPlayer, ListMandatoryMutator));
             }
         }
 
@@ -55,6 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             MapName = Sender.ReadString();
             MapType = Sender.ReadString();
             MapPath = Sender.ReadString();
+            GameMode = Sender.ReadString();
             MinNumberOfPlayer = Sender.ReadByte();
             MaxNumberOfPlayer = Sender.ReadByte();
 

@@ -24,7 +24,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         {
             Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
 
-            DicNewScript.Add(MoveCursorScriptServer.ScriptName, new MoveCursorScriptServer(ActiveGroup));
             DicNewScript.Add(OpenMenuScriptServer.ScriptName, new OpenMenuScriptServer(ActiveGroup, ActiveGroup.BattleMapGame.GetOnlineActionPanel()));
             DicNewScript.Add(UpdateMenuScriptServer.ScriptName, new UpdateMenuScriptServer(ActiveGroup));
             DicNewScript.Add(AskTripleThunderGameDataScriptServer.ScriptName, new AskTripleThunderGameDataScriptServer(ActiveGroup));
