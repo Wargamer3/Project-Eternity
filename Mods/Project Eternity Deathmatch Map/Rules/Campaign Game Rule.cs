@@ -12,6 +12,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(Owner)
         {
             this.Owner = Owner;
+            UseTeamsForSpawns = false;
         }
     }
 }

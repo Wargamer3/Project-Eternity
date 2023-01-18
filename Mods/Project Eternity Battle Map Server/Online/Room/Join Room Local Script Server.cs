@@ -10,7 +10,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
         private readonly string RoomID;
         private readonly string CurrentDifficulty;
-        private readonly List<OnlinePlayerBase> ListJoiningPlayer;
+        private readonly List<OnlinePlayerBase> ListJoiningLocalPlayer;
         private readonly GameClientGroup ActiveGroup;
 
         public JoinRoomLocalScriptServer(string RoomID, string CurrentDifficulty, List<OnlinePlayerBase> ListJoiningPlayer, GameClientGroup ActiveGroup)
@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         {
             this.RoomID = RoomID;
             this.CurrentDifficulty = CurrentDifficulty;
-            this.ListJoiningPlayer = ListJoiningPlayer;
+            this.ListJoiningLocalPlayer = ListJoiningPlayer;
             this.ActiveGroup = ActiveGroup;
         }
 
@@ -36,10 +36,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             WriteBuffer.AppendString(ActiveGroup.Room.RoomSubtype);
             WriteBuffer.AppendString(CurrentDifficulty);
 
-            WriteBuffer.AppendInt32(ListJoiningPlayer.Count);
-            for (int P = 0; P < ListJoiningPlayer.Count; ++P)
+            WriteBuffer.AppendInt32(ListJoiningLocalPlayer.Count);
+            for (int P = 0; P < ListJoiningLocalPlayer.Count; ++P)
             {
-                WriteBuffer.AppendString(ListJoiningPlayer[P].ConnectionID);
+                WriteBuffer.AppendString(ListJoiningLocalPlayer[P].ConnectionID);
             }
 
             WriteBuffer.AppendByteArray(ActiveGroup.Room.GetRoomInfo());

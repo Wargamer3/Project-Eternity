@@ -273,6 +273,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         BW.Write(ListRoomPlayer[P].Name);
                         BW.Write(ListRoomPlayer[P].OnlinePlayerType);
                         BW.Write(ListRoomPlayer[P].Team);
+
+                        BW.Write(ListRoomPlayer[P].OnlineClient.Roles.ListActiveRole.Count);
+                        for (int R = 0; R < ListRoomPlayer[P].OnlineClient.Roles.ListActiveRole.Count; ++R)
+                        {
+                            BW.Write(ListRoomPlayer[P].OnlineClient.Roles.ListActiveRole[R]);
+                        }
                     }
 
                     return MS.ToArray();

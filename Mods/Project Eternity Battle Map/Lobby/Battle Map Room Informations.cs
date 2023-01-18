@@ -21,8 +21,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxGameLengthInMinutes = 10;
         }
 
-        public BattleMapRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListLocalPlayerID, ContentManager Content, byte[] RoomData)
-            : base(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapName, ListLocalPlayerID)
+        public BattleMapRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, string CurrentDifficulty, string MapName, List<string> ListJoiningLocalPlayer, ContentManager Content, byte[] RoomData)
+            : base(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapName, ListJoiningLocalPlayer)
         {
             using (MemoryStream MS = new MemoryStream(RoomData))
             {
@@ -44,6 +44,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         Squad NewSquad = new Squad("Squad", NewUnit);
 
                         NewPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
+
+                        int ListRoleCount = BR.ReadInt32();
+                        for (int R = 0; R < ListRoleCount; ++R)
+                        {
+                            NewPlayer.OnlineClient.Roles.AddRole(BR.ReadString());
+                        }
 
                         ListRoomPlayer.Add(NewPlayer);
                         ListOnlinePlayer.Add(NewPlayer.OnlineClient);
@@ -81,16 +87,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     BW.Write(MaxGameLengthInMinutes);
 
                     BW.Write(ListRoomPlayer.Count);
-                    for (int P = 0; P < ListRoomPlayer.Count; P++)
+                    foreach (OnlinePlayerBase ActivePlayer in ListRoomPlayer)
                     {
-                        BW.Write(ListRoomPlayer[P].ConnectionID);
-                        BW.Write(ListRoomPlayer[P].Name);
-                        BW.Write(ListRoomPlayer[P].OnlinePlayerType);
-                        BW.Write(ListRoomPlayer[P].Team);
-                        BW.Write(ListRoomPlayer[P].IsPlayerControlled);
-                        BW.Write(ListRoomPlayer[P].Color.R);
-                        BW.Write(ListRoomPlayer[P].Color.G);
-                        BW.Write(ListRoomPlayer[P].Color.B);
+                        BW.Write(ActivePlayer.ConnectionID);
+                        BW.Write(ActivePlayer.Name);
+                        BW.Write(ActivePlayer.OnlinePlayerType);
+                        BW.Write(ActivePlayer.Team);
+                        BW.Write(ActivePlayer.IsPlayerControlled);
+                        BW.Write(ActivePlayer.Color.R);
+                        BW.Write(ActivePlayer.Color.G);
+                        BW.Write(ActivePlayer.Color.B);
+
+                        BW.Write(ActivePlayer.OnlineClient.Roles.ListActiveRole.Count);
+                        for (int R = 0; R < ActivePlayer.OnlineClient.Roles.ListActiveRole.Count; ++R)
+                        {
+                            BW.Write(ActivePlayer.OnlineClient.Roles.ListActiveRole[R]);
+                        }
                     }
 
                     return MS.ToArray();

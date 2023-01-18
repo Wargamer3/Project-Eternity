@@ -51,6 +51,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             LoadedCard.QuantityOwned = BR.ReadInt32();
                             NewActiveBook.AddCard(LoadedCard);
                         }
+                        int ListRoleCount = BR.ReadInt32();
+                        for (int R = 0; R < ListRoleCount; ++R)
+                        {
+                            NewPlayer.OnlineClient.Roles.AddRole(BR.ReadString());
+                        }
+
                         ListRoomPlayer.Add(NewPlayer);
                         ListOnlinePlayer.Add(NewPlayer.OnlineClient);
                     }
@@ -109,6 +115,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             BW.Write(ActiveCard.CardType + "/" + ActiveCard.Path);
                             BW.Write(ActiveCard.QuantityOwned);
+                        }
+
+                        BW.Write(ActivePlayer.OnlineClient.Roles.ListActiveRole.Count);
+                        for (int R = 0; R < ActivePlayer.OnlineClient.Roles.ListActiveRole.Count; ++R)
+                        {
+                            BW.Write(ActivePlayer.OnlineClient.Roles.ListActiveRole[R]);
                         }
                     }
 

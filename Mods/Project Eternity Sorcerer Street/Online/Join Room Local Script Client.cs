@@ -58,11 +58,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
 
             if (HasGame)
             {
-               /* NewFightingZone = new FightingZone(OnlineGameClient);
-                NewFightingZone.ListGameScreen = ScreenOwner.ListGameScreen;
+                /* NewFightingZone = new FightingZone(OnlineGameClient);
+                 NewFightingZone.ListGameScreen = ScreenOwner.ListGameScreen;
 
-                DicNewGameServerScript = OnlineHelper.GetTripleThunderScriptsClient(OnlineGameClient);
-                Host.IsGameReady = true;*/
+                 DicNewGameServerScript = OnlineHelper.GetTripleThunderScriptsClient(OnlineGameClient);
+                 Host.IsGameReady = true;*/
             }
 
             SorcererStreetRoomInformations NewRoomInformation = new SorcererStreetRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapPath, ListJoiningPlayerID, ScreenOwner.Content, RoomData);

@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private string RoomID;
         private string RoomType;
         private string RoomSubtype;
-        private List<string> ListJoiningPlayerID;
+        private List<string> ListJoiningLocalPlayer;
         private string RoomName;
         private string CurrentDifficulty;
         private string MapPath;
@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             this.RemoveOwner = RemoveOwner;
 
             HasGame = false;
-            ListJoiningPlayerID = new List<string>();
+            ListJoiningLocalPlayer = new List<string>();
         }
 
         public override OnlineScript Copy()
@@ -58,14 +58,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             if (HasGame)
             {
-               /* NewFightingZone = new FightingZone(OnlineGameClient);
-                NewFightingZone.ListGameScreen = ScreenOwner.ListGameScreen;
+                /* NewFightingZone = new FightingZone(OnlineGameClient);
+                 NewFightingZone.ListGameScreen = ScreenOwner.ListGameScreen;
 
-                DicNewGameServerScript = OnlineHelper.GetTripleThunderScriptsClient(OnlineGameClient);
-                Host.IsGameReady = true;*/
+                 DicNewGameServerScript = OnlineHelper.GetTripleThunderScriptsClient(OnlineGameClient);
+                 Host.IsGameReady = true;*/
             }
 
-            BattleMapRoomInformations MissionRoom = new BattleMapRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapPath, ListJoiningPlayerID, ScreenOwner.Content, RoomData);
+            BattleMapRoomInformations MissionRoom = new BattleMapRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, CurrentDifficulty, MapPath, ListJoiningLocalPlayer, ScreenOwner.Content, RoomData);
 
             NewRoom = MissionRoom;
 
@@ -119,7 +119,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             int ListJoiningPlayerCount = Sender.ReadInt32();
             for (int P = 0; P < ListJoiningPlayerCount; ++P)
             {
-                ListJoiningPlayerID.Add(Sender.ReadString());
+                ListJoiningLocalPlayer.Add(Sender.ReadString());
             }
 
             RoomData = Sender.ReadByteArray();

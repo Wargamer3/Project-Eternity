@@ -19,13 +19,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Init()
         {
             base.Init();
-            foreach (Player ActivePlayer in ListPlayer)
-            {
-                if (ActivePlayer.Team >= 0 && ActivePlayer.Team < ListMultiplayerColor.Count)
-                {
-                    ActivePlayer.Color = ListMultiplayerColor[ActivePlayer.Team];
-                }
-            }
 
             GameRule.Init();
 

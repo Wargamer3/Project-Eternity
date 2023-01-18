@@ -29,6 +29,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private readonly DeathmatchMap Owner;
 
+        protected bool UseTeamsForSpawns;
         private bool ShowRoomSummary;
         public const int TurnsToRespawn = 1;
         private readonly List<DeathInfo> ListDeadSquadInfo;
@@ -41,6 +42,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.Owner = Owner;
 
+            UseTeamsForSpawns = true;
             GameLengthInSeconds = 0;
             ListDeadSquadInfo = new List<DeathInfo>();
         }
@@ -52,20 +54,40 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (Owner.IsOfflineOrServer)
             {
                 int PlayerIndex = 0;
+                Dictionary<int, int> DicSpawnSquadIndexPerTeam = new Dictionary<int, int>();
                 for (int P = 0; P < Owner.ListPlayer.Count; P++)
                 {
                     Player ActivePlayer = Owner.ListPlayer[P];
                     if (ActivePlayer.Inventory == null)
                         continue;
 
-                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(ActivePlayer.Team);
-                    int SpawnSquadIndex = 0;
+                    int SpawnTeam = ActivePlayer.Team;
+                    if (!UseTeamsForSpawns)
+                    {
+                        SpawnTeam = P;
+                    }
+
+                    if (ActivePlayer.Team >= 0 && SpawnTeam < Owner.ListMultiplayerColor.Count)
+                    {
+                        ActivePlayer.Color = Owner.ListMultiplayerColor[SpawnTeam];
+                    }
+
+                    if (!DicSpawnSquadIndexPerTeam.ContainsKey(SpawnTeam))
+                    {
+                        DicSpawnSquadIndexPerTeam.Add(SpawnTeam, 0);
+                    }
+
+                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(SpawnTeam);
+
+                    int SpawnSquadIndex = DicSpawnSquadIndexPerTeam[SpawnTeam];
+
                     foreach (MovementAlgorithmTile ActiveSpawn in ListPossibleSpawnPoint)
                     {
                         Squad NewSquad = ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex];
                         if (NewSquad == null)
                         {
                             ++SpawnSquadIndex;
+                            DicSpawnSquadIndexPerTeam[SpawnTeam] = SpawnSquadIndex;
                             continue;
                         }
 
@@ -79,6 +101,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         NewSquad.CurrentLeader.PilotSP = 0;
                         NewSquad.CurrentLeader.ConsumeEN(NewSquad.CurrentLeader.MaxEN);
                         ++SpawnSquadIndex;
+                        DicSpawnSquadIndexPerTeam[SpawnTeam] = SpawnSquadIndex;
 
                         if (!ActivePlayer.IsPlayerControlled || !NewSquad.IsPlayerControlled)
                         {
