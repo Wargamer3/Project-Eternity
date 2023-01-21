@@ -124,7 +124,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            return ListAllNode;
+            return new List<MovementAlgorithmTile>(ListAllNode);
         }
 
         public List<MovementAlgorithmTile> UpdatePath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, Vector3 EndPosition, bool IgnoreObstacles)

@@ -667,7 +667,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.GameGroup = GameGroup;
         }
 
-        public void InitOnlineClient(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
+        public virtual void InitOnlineClient(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
         {
             this.OnlineClient = OnlineClient;
             this.OnlineCommunicationClient = OnlineCommunicationClient;

@@ -51,6 +51,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListPlayer[PlayerIndex].IsAlive = true;
 
             NewSquad.Init(GlobalBattleParams.GlobalContext);
+            NewSquad.StartTurn();
             ActivateAutomaticSkills(NewSquad, string.Empty);
             NewSquad.ID = ID;
             NewSquad.SetPosition(new Vector3(Position.X, Position.Y, LayerIndex));

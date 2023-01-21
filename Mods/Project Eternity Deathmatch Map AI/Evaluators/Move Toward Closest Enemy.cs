@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.AI;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Server;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.AI.DeathmatchMapScreen
@@ -91,6 +92,14 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                 }
 
                 Info.Map.MovementAnimation.Add(Info.ActiveSquad, StartPosition, Info.ActiveSquad.Position);
+
+                if (Info.Map.IsServer)
+                {
+                    for (int P = 0; P < Info.Map.GameGroup.Room.ListOnlinePlayer.Count; P++)
+                    {
+                        Info.Map.GameGroup.Room.ListOnlinePlayer[P].Send(new MoveUnitScriptServer(StartPosition, Info.ActiveSquad.Position));
+                    }
+                }
 
                 Result = new List<object>();
                 IsCompleted = true;

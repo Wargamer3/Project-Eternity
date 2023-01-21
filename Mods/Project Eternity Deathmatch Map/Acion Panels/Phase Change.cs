@@ -17,20 +17,31 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     public class ActionPanelPhaseChange : ActionPanelDeathmatch
     {
         private int PhaseTime;
-        private bool HasBeenSelected;
+        public bool ActiveSelect;
         private int StartingPlayerIndex;
 
         public ActionPanelPhaseChange(DeathmatchMap Map)
             : base("PhaseEnd", Map, false)
         {
+            SendBackToSender = true;
             PhaseTime = 120;
-            HasBeenSelected = false;
+            ActiveSelect = false;
             StartingPlayerIndex = Map.ActivePlayerIndex;
         }
 
         public override void OnSelect()
         {
-            HasBeenSelected = true;
+            ActiveSelect = true;
+            if (Map.IsOnlineClient)
+            {
+                return;
+            }
+
+            ExecuteEndPhase();
+        }
+
+        private void ExecuteEndPhase()
+        {
             List<BattleMap> ListActiveSubMaps = ActionPanelMapSwitch.GetActiveSubMaps(Map);
             if (ListActiveSubMaps.Count <= 1)
             {
@@ -244,33 +255,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public static void FinishAIPlayerTurn(DeathmatchMap Map)
-        {
-            List<BattleMap> ListActiveSubMaps = ActionPanelMapSwitch.GetActiveSubMaps(Map);
-            if (ListActiveSubMaps.Count <= 1)
-            {
-                Map.ListActionMenuChoice.RemoveAllActionPanels();
-                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPhaseChange(Map));
-            }
-            else//Look for sub maps to update before ending turn.
-            {
-                foreach (BattleMap ActiveMap in ListActiveSubMaps)
-                {
-                    if (ActiveMap != Map && ActiveMap.ActivePlayerIndex == Map.ActivePlayerIndex)
-                    {
-                        ActionPanelPhaseChange.EndPlayerPhase(Map);
-                        Map.ListGameScreen.Remove(Map);
-                        Map.ListGameScreen.Insert(0, ActiveMap);
-                        return;
-                    }
-                }
-
-                Map.ListActionMenuChoice.RemoveAllActionPanels();
-                //No sub map to be updated, should never get up to this point.
-                Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelPhaseChange(Map));
-            }
-        }
-
         public override void DoUpdate(GameTime gameTime)
         {
             if (PhaseTime >= 0)
@@ -299,22 +283,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void DoRead(ByteReader BR)
         {
             PhaseTime = 120;
-            HasBeenSelected = BR.ReadBoolean();
+            ActiveSelect = BR.ReadBoolean();
             int NewActivePlayerIndex = BR.ReadInt32();
             if (Map.IsOnlineClient)
             {
                 Map.ActivePlayerIndex = NewActivePlayerIndex;
             }
 
-            if (HasBeenSelected)
+            if (ActiveSelect)
             {
-                OnSelect();
+                ExecuteEndPhase();
             }
         }
 
         public override void DoWrite(ByteWriter BW)
         {
-            BW.AppendBoolean(HasBeenSelected);
+            BW.AppendBoolean(ActiveSelect);
             BW.AppendInt32(StartingPlayerIndex);
         }
 

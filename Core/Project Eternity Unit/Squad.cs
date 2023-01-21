@@ -15,7 +15,7 @@ namespace ProjectEternity.Core.Units
     public class Squad : UnitMapComponent
     {
         private Unit[] ArrayUnit;
-        public Unit CurrentLeader { get { return ListUnitIndex[0] >= 0 ? ArrayUnit[ListUnitIndex[0]] : null; } }
+        public Unit CurrentLeader { get { return ListUnitIndex.Count > 0 && ListUnitIndex[0] >= 0 ? ArrayUnit[ListUnitIndex[0]] : null; } }
 
         private Unit CurrentWingmanA { get { return ListUnitIndex.Count > 1 && ListUnitIndex[1] >= 0 ? ArrayUnit[ListUnitIndex[1]] : null; } }
 

@@ -12,7 +12,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private readonly BattleMapOnlineClient Owner;
         private readonly Dictionary<string, ActionPanel> DicActionPanel;
         private ActionPanel[] ArrayActionPanel;
-        private ActionPanel ActivePanel;
 
         public OpenMenuScriptClient(BattleMapOnlineClient Owner, Dictionary<string, ActionPanel> DicActionPanel)
             : base(ScriptName)
@@ -24,7 +23,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         public OpenMenuScriptClient(ActionPanel ActivePanel)
             : base(ScriptName)
         {
-            this.ActivePanel = ActivePanel;
+            List<ActionPanel> ListActionPanel = ActivePanel.GetActionPanels();
+
+            ArrayActionPanel = new ActionPanel[ListActionPanel.Count];
+            for (int A = 0; A < ListActionPanel.Count; ++A)
+            {
+                ArrayActionPanel[A] = ListActionPanel[A];
+            }
         }
 
         public override OnlineScript Copy()
@@ -34,10 +39,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            List<ActionPanel> ListActionPanel = ActivePanel.GetActionPanels();
-
-            WriteBuffer.AppendInt32(ListActionPanel.Count);
-            foreach (ActionPanel ActiveActionPanel in ListActionPanel)
+            WriteBuffer.AppendInt32(ArrayActionPanel.Length);
+            foreach (ActionPanel ActiveActionPanel in ArrayActionPanel)
             {
                 ActiveActionPanel.Write(WriteBuffer);
             }

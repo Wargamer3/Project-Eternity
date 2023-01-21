@@ -173,6 +173,8 @@
     <Compile Include="Mutators\Mutator.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
+    <Compile Include="Online\Game\Move Unit Script Server.cs" />
+    <Compile Include="Online\Game\Open Menu Script Server.cs" />
     <Compile Include="Online\Game\Update Menu Script Client.cs" />
     <Compile Include="Online\Game\Open Menu Script Client.cs" />
     <Compile Include="Online\Game\Receive Game Data Script Client.cs" />

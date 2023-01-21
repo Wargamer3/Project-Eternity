@@ -1,18 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using ProjectEternity.GameScreens.BattleMapScreen.Server;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class ActionPanelPlayerAIStep : ActionPanelDeathmatch
     {
+        private int ActivePlayerIndex;
+
         public ActionPanelPlayerAIStep(DeathmatchMap Map)
             : base("PlayerAIStep", Map, false)
         {
+            ActivePlayerIndex = Map.ActivePlayerIndex;
         }
 
         public override void OnSelect()
@@ -21,6 +27,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (Map.IsOnlineClient)
+            {
+                return;
+            }
+
             int UnitsNotUpdatedCount = Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count;
 
             for (int S = 0; S < Map.ListPlayer[Map.ActivePlayerIndex].ListSquad.Count; S++)
@@ -55,16 +66,49 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (UnitsNotUpdatedCount == 0)
             {
-                ActionPanelPhaseChange.FinishAIPlayerTurn(Map);
+                FinishAIPlayerTurn(Map);
             }
+        }
+
+        public static void FinishAIPlayerTurn(DeathmatchMap Map)
+        {
+            List<BattleMap> ListActiveSubMaps = ActionPanelMapSwitch.GetActiveSubMaps(Map);
+
+            if (ListActiveSubMaps.Count > 1)//Look for sub maps to update before ending turn.
+            {
+                foreach (BattleMap ActiveMap in ListActiveSubMaps)
+                {
+                    if (ActiveMap != Map && ActiveMap.ActivePlayerIndex == Map.ActivePlayerIndex)
+                    {
+                        ActionPanelPhaseChange.EndPlayerPhase(Map);
+                        Map.ListGameScreen.Remove(Map);
+                        Map.ListGameScreen.Insert(0, ActiveMap);
+                        return;
+                    }
+                }
+            }
+
+            Map.ListActionMenuChoice.RemoveAllActionPanels();
+            ActionPanelPhaseChange EndPhase = new ActionPanelPhaseChange(Map);
+            if (Map.IsServer)
+            {
+                EndPhase.ActiveSelect = true;
+                foreach (IOnlineConnection ActiveOnlinePlayer in Map.GameGroup.Room.ListOnlinePlayer)
+                {
+                    ActiveOnlinePlayer.Send(new OpenMenuScriptServer(new ActionPanel[] { EndPhase } ));
+                }
+            }
+            Map.ListActionMenuChoice.AddToPanelListAndSelect(EndPhase);
         }
 
         public override void DoRead(ByteReader BR)
         {
+            ActivePlayerIndex = BR.ReadInt32();
         }
 
         public override void DoWrite(ByteWriter BW)
         {
+            BW.AppendInt32(ActivePlayerIndex);
         }
 
         protected override ActionPanel Copy()

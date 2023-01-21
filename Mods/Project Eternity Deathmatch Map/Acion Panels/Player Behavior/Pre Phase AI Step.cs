@@ -41,6 +41,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int UnitsNotUpdatedCount = ListAISquad.Count;
 
+            Map.MovementAnimation.Skip();
+
             for (int S = 0; S < ListAISquad.Count; S++)
             {
                 Squad ActiveSquad = ListAISquad[S];

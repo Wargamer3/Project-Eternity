@@ -63,6 +63,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                 Dictionary<string, OnlineScript> DicNewScript = OnlineHelper.GetBattleMapScriptsServer(CreatedGroup);
                 DicNewScript.Add(ProceedVisualNovelChoiceScriptServer.ScriptName, new ProceedVisualNovelChoiceScriptServer(NewMap, CreatedGroup));
                 DicNewScript.Add(ConfirmChoiceVisualNovelScriptServer.ScriptName, new ConfirmChoiceVisualNovelScriptServer(NewMap, CreatedGroup));
+                DicNewScript.Add(MoveUnitScriptServer.ScriptName, new MoveUnitScriptServer(CreatedGroup));
                 ActiveOnlinePlayer.AddOrReplaceScripts(DicNewScript);
             }
 

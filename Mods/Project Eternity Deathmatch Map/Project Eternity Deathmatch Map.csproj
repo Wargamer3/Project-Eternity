@@ -117,7 +117,7 @@
     <Compile Include="Acion Panels\Action Panel Deathmatch.cs" />
     <Compile Include="Acion Panels\Player Choices\Tile Status.cs" />
     <Compile Include="Acion Panels\Player Choices\Wait.cs" />
-    <Compile Include="Acion Panels\Phase Menu.cs" />
+    <Compile Include="Acion Panels\Phase Change.cs" />
     <Compile Include="Acion Panels\Attack\Attack Part 1.cs" />
     <Compile Include="Acion Panels\Movement\Move Part 2.cs" />
     <Compile Include="Acion Panels\Player Choices\Spirit.cs" />
@@ -144,6 +144,7 @@
     <Compile Include="Effects\Squad PER Params.cs" />
     <Compile Include="Effects\Squad Target Type.cs" />
     <Compile Include="Lobby Multiplayer\Deathmatch Lobby.cs" />
+    <Compile Include="Online\Move Unit Script Client.cs" />
     <Compile Include="Online\Player Inventory Script Client.cs" />
     <Compile Include="PER Attack.cs" />
     <Compile Include="Rules\Titan Game Rule.cs" />

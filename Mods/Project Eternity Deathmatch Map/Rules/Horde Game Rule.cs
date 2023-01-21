@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (HordePlayerAILost)
             {
-                ActionPanelPhaseChange.FinishAIPlayerTurn(Owner);
+                ActionPanelPlayerAIStep.FinishAIPlayerTurn(Owner);
             }
         }
     }

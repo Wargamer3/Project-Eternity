@@ -256,12 +256,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             
             private void SpawnSquad()
             {
-                if (Map.ListPlayer.Count > SpawnPlayer)
+                int PlayerIndex = SpawnPlayer - 1;
+
+                if (Map.ListPlayer.Count > PlayerIndex)
                 {
                     //Don't spawn the unit if there's already on with this ID.
-                    for (int U = 0; U < Map.ListPlayer[SpawnPlayer].ListSquad.Count; U++)
+                    for (int U = 0; U < Map.ListPlayer[PlayerIndex].ListSquad.Count; U++)
                     {
-                        if (Map.ListPlayer[SpawnPlayer].ListSquad[U].ID == LeaderToSpawnID)
+                        if (Map.ListPlayer[PlayerIndex].ListSquad[U].ID == LeaderToSpawnID)
                             return;
                     }
                 }
@@ -306,7 +308,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         NewSquad.SquadAI.Load(AIPath);
                     }
 
-                    Map.SpawnSquad(SpawnPlayer, NewSquad, LeaderToSpawnID, new Microsoft.Xna.Framework.Vector2(FinalPosition.X, FinalPosition.Y), (int)FinalPosition.Z);
+                    Map.SpawnSquad(PlayerIndex, NewSquad, LeaderToSpawnID, new Microsoft.Xna.Framework.Vector2(FinalPosition.X, FinalPosition.Y), (int)FinalPosition.Z);
 
                     if (!string.IsNullOrEmpty(PartDropPath))
                     {

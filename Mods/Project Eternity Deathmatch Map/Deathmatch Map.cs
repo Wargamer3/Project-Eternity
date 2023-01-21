@@ -13,6 +13,7 @@ using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.Characters;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
@@ -325,14 +326,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         string UnitTypeName = BR.ReadString();
                         string RelativePath = BR.ReadString();
 
-                        ArrayNewUnit[U] = PlayerManager.DicUnitType[UnitTypeName].FromFile(RelativePath, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                        ArrayNewUnit[U] = PlayerManager.DicUnitType[UnitTypeName].FromFile(RelativePath, ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
 
                         int ArrayCharacterLength = BR.ReadInt32();
                         ArrayNewUnit[U] .ArrayCharacterActive = new Character[UnitsInSquad];
                         for (int C = 0; C < ArrayCharacterLength; ++C)
                         {
                             string CharacterPath = BR.ReadString();
-                            ArrayNewUnit[U].ArrayCharacterActive[C] = new Character(CharacterPath, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                            ArrayNewUnit[U].ArrayCharacterActive[C] = new Character(CharacterPath, ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                             ArrayNewUnit[U].ArrayCharacterActive[C].Level = 1;
                         }
                     }
@@ -427,6 +428,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 ActiveProp.Value.Load(Content);
                 DicInteractiveProp.Add(ActiveProp.Value.PropName, ActiveProp.Value);
             }
+        }
+
+        public override void InitOnlineClient(BattleMapOnlineClient OnlineClient, CommunicationClient OnlineCommunicationClient, RoomInformations Room)
+        {
+            base.InitOnlineClient(OnlineClient, OnlineCommunicationClient, Room);
+
+            Dictionary<string, OnlineScript> DicNewScript = new Dictionary<string, OnlineScript>();
+            DicNewScript.Add(MoveUnitScriptClient.ScriptName, new MoveUnitScriptClient(OnlineClient));
+            OnlineClient.Host.AddOrReplaceScripts(DicNewScript);
         }
 
         public override void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal)

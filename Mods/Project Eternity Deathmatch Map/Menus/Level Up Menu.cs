@@ -170,7 +170,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Load()
         {
             fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
-            sprArrow = Content.Load<Texture2D>("Status Screen/Arrow");
+            sprArrow = Content.Load<Texture2D>("Menus/Status Screen/Arrow");
 
             ScrollTextOffsetMaxSkill = GetMaxOffsetSkills(SpiritTextMaxSize);
             ScrollTextOffsetSkill = 0;
