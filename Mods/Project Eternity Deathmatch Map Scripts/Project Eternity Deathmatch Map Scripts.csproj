@@ -61,6 +61,7 @@
     <Compile Include="Cutscene Scripts\Spawn Squad 4 Fast .cs" />
     <Compile Include="Cutscene Scripts\Spawn Weapon.cs" />
     <Compile Include="Cutscene Scripts\Spawn Health Crate.cs" />
+    <Compile Include="Cutscene Scripts\Start Hub 3D.cs" />
     <Compile Include="Cutscene Scripts\Victory Screen.cs" />
     <Compile Include="Cutscene Scripts\Selectors\Map Editor Selector.cs" />
     <Compile Include="Cutscene Scripts\Selectors\Map Editor.cs">

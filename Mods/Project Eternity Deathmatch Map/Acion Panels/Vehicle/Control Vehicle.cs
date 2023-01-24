@@ -15,8 +15,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         private const string PanelName = "ControlVehicle";
 
-        const float CameraHeight = 100;
-        const float CameraDistance = 200;
+        private const float CameraHeight = 100;
+        private const float CameraDistance = 200;
 
         private Camera3D Camera;
 

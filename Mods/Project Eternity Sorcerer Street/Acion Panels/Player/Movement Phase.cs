@@ -37,7 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, ActivePlayer.GamePiece.Direction == Directions.None);
+            PrepareToMoveToNextTerrain(ActivePlayer.GamePiece.Position, (int)ActivePlayer.GamePiece.Position.Z, ActivePlayer.GamePiece.Direction == DirectionNone);
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -96,7 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ActivePlayerIndex = BR.ReadInt32();
             ActivePlayer = Map.ListPlayer[ActivePlayerIndex];
-            ActivePlayer.GamePiece.Direction = (Directions)BR.ReadByte();
+            ActivePlayer.GamePiece.Direction = BR.ReadFloat();
             ActivePlayer.GamePiece.SetPosition(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
             NextTerrain = Map.GetTerrain(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
             Movement = BR.ReadInt32();
@@ -105,7 +105,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void ExecuteUpdate(byte[] ArrayUpdateData)
         {
             ByteReader BR = new ByteReader(ArrayUpdateData);
-            ActivePlayer.GamePiece.Direction = (Directions)BR.ReadByte();
+            ActivePlayer.GamePiece.Direction = BR.ReadFloat();
             ActivePlayer.GamePiece.SetPosition(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
             NextTerrain = Map.GetTerrain(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat()));
             Movement = BR.ReadInt32();
@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendInt32(ActivePlayerIndex);
-            BW.AppendByte((byte)ActivePlayer.GamePiece.Direction);
+            BW.AppendFloat(ActivePlayer.GamePiece.Direction);
             BW.AppendFloat(ActivePlayer.GamePiece.Position.X);
             BW.AppendFloat(ActivePlayer.GamePiece.Position.Y);
             BW.AppendFloat(ActivePlayer.GamePiece.Position.Z);
@@ -138,7 +138,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ByteWriter BW = new ByteWriter();
 
-            BW.AppendByte((byte)ActivePlayer.GamePiece.Direction);
+            BW.AppendFloat(ActivePlayer.GamePiece.Direction);
             BW.AppendFloat(ActivePlayer.GamePiece.Position.X);
             BW.AppendFloat(ActivePlayer.GamePiece.Position.Y);
             BW.AppendFloat(ActivePlayer.GamePiece.Position.Z);
@@ -194,11 +194,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void PrepareToMoveToNextTerrain(Vector3 PlayerPosition, int LayerIndex, bool AllowDirectionChange)
         {
-            Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, (int)PlayerPosition.X, (int)PlayerPosition.Y, LayerIndex, ActivePlayer.GamePiece.Direction);
+            Dictionary<float, TerrainSorcererStreet> DicNextTerrain = GetNextTerrains(Map, (int)PlayerPosition.X, (int)PlayerPosition.Y, LayerIndex, ActivePlayer.GamePiece.Direction);
 
             if (DicNextTerrain.Count == 1)
             {
-                KeyValuePair<Directions, TerrainSorcererStreet> NextTerrainHolder = DicNextTerrain.First();
+                KeyValuePair<float, TerrainSorcererStreet> NextTerrainHolder = DicNextTerrain.First();
                 ActivePlayer.GamePiece.Direction = NextTerrainHolder.Key;
                 NextTerrain = NextTerrainHolder.Value;
                 MoveToNextTerrain();
@@ -212,7 +212,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
                 else
                 {
-                    KeyValuePair<Directions, TerrainSorcererStreet> NextTerrainHolder = DicNextTerrain.First();
+                    KeyValuePair<float, TerrainSorcererStreet> NextTerrainHolder = DicNextTerrain.First();
                     ActivePlayer.GamePiece.Direction = NextTerrainHolder.Key;
                     NextTerrain = NextTerrainHolder.Value;
                     MoveToNextTerrain();
@@ -226,50 +226,50 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else
             {
-                KeyValuePair<Directions, TerrainSorcererStreet> NextTerrainHolder = DicNextTerrain.First();
+                KeyValuePair<float, TerrainSorcererStreet> NextTerrainHolder = DicNextTerrain.First();
                 ActivePlayer.GamePiece.Direction = NextTerrainHolder.Key;
                 NextTerrain = NextTerrainHolder.Value;
                 MoveToNextTerrain();
             }
         }
 
-        private static Dictionary<Directions, TerrainSorcererStreet> GetNextTerrains(SorcererStreetMap Map, int ActiveTerrainX, int ActiveTerrainY, int LayerIndex, Directions PlayerDirection)
+        private static Dictionary<float, TerrainSorcererStreet> GetNextTerrains(SorcererStreetMap Map, int ActiveTerrainX, int ActiveTerrainY, int LayerIndex, float PlayerDirection)
         {
-            Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain = new Dictionary<Directions, TerrainSorcererStreet>();
+            Dictionary<float, TerrainSorcererStreet> DicNextTerrain = new Dictionary<float, TerrainSorcererStreet>();
 
             if (ActiveTerrainY - 1 >= 0)
             {
-                DicNextTerrain.Add(Directions.Up, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY - 1, LayerIndex));
+                DicNextTerrain.Add(DirectionUp, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY - 1, LayerIndex));
             }
             if (ActiveTerrainY + 1 < Map.MapSize.Y)
             {
-                DicNextTerrain.Add(Directions.Down, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY + 1, LayerIndex));
+                DicNextTerrain.Add(DirectionDown, Map.GetTerrain(ActiveTerrainX, ActiveTerrainY + 1, LayerIndex));
             }
             if (ActiveTerrainX - 1 >= 0)
             {
-                DicNextTerrain.Add(Directions.Left, Map.GetTerrain(ActiveTerrainX - 1, ActiveTerrainY, LayerIndex));
+                DicNextTerrain.Add(DirectionLeft, Map.GetTerrain(ActiveTerrainX - 1, ActiveTerrainY, LayerIndex));
             }
             if (ActiveTerrainX + 1 < Map.MapSize.X)
             {
-                DicNextTerrain.Add(Directions.Right, Map.GetTerrain(ActiveTerrainX + 1, ActiveTerrainY, LayerIndex));
+                DicNextTerrain.Add(DirectionRight, Map.GetTerrain(ActiveTerrainX + 1, ActiveTerrainY, LayerIndex));
             }
 
-            Directions[] TerrainDirections = DicNextTerrain.Keys.ToArray();
-            foreach (Directions ActiveDirection in TerrainDirections)
+            float[] TerrainDirections = DicNextTerrain.Keys.ToArray();
+            foreach (float ActiveDirection in TerrainDirections)
             {
-                if (PlayerDirection == Directions.Left && ActiveDirection == Directions.Right)
+                if (PlayerDirection == DirectionLeft && ActiveDirection == DirectionRight)
                 {
                     DicNextTerrain.Remove(ActiveDirection);
                 }
-                else if (PlayerDirection == Directions.Right && ActiveDirection == Directions.Left)
+                else if (PlayerDirection == DirectionRight && ActiveDirection == DirectionLeft)
                 {
                     DicNextTerrain.Remove(ActiveDirection);
                 }
-                else if (PlayerDirection == Directions.Up && ActiveDirection == Directions.Down)
+                else if (PlayerDirection == DirectionUp && ActiveDirection == DirectionDown)
                 {
                     DicNextTerrain.Remove(ActiveDirection);
                 }
-                else if (PlayerDirection == Directions.Down && ActiveDirection == Directions.Up)
+                else if (PlayerDirection == DirectionDown && ActiveDirection == DirectionUp)
                 {
                     DicNextTerrain.Remove(ActiveDirection);
                 }

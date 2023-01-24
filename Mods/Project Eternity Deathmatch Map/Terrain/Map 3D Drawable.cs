@@ -958,19 +958,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         else
                         {
                             ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Walking");
-                            Matrix RotationMatrix = Matrix.Identity;
-                            if (ActiveSquad.Direction == UnitMapComponent.Directions.Right)
-                            {
-                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
-                            }
-                            else if (ActiveSquad.Direction == UnitMapComponent.Directions.Up)
-                            {
-                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
-                            }
-                            else if (ActiveSquad.Direction == UnitMapComponent.Directions.Left)
-                            {
-                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
-                            }
+                            Matrix RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(ActiveSquad.Direction));
 
                             ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
                                 * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
@@ -1019,21 +1007,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         else
                         {
                             ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Idle");
-                            Matrix RotationMatrix = Matrix.Identity;
-                            if (ActiveSquad.Direction == UnitMapComponent.Directions.Right)
-                            {
-                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
-                            }
-                            else if (ActiveSquad.Direction == UnitMapComponent.Directions.Up)
-                            {
-                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
-                            }
-                            else if (ActiveSquad.Direction == UnitMapComponent.Directions.Left)
-                            {
-                                RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
-                            }
+                            Matrix RotationMatrix = RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(ActiveSquad.Direction));
 
-                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
+                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, RotationMatrix
                                 * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
                         }
                     }

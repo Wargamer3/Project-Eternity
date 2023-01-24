@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 WingmanBToSpawnID = 0;
                 SpawnPosition = new Point();
                 SpawnLayer = 0;
-                SpawnPlayer = 0;
+                SpawnPlayer = 1;
                 IsEventSquad = false;
                 IsPlayerControlled = true;
 

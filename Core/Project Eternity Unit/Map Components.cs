@@ -7,7 +7,12 @@ namespace ProjectEternity.Core.Units
 {
     public abstract class UnitMapComponent
     {
-        public enum Directions : byte { None, Up, Down, Left, Right, }
+        public const float DirectionNone = -1;
+        public const float DirectionDown = 0;
+        public const float DirectionRight = 90;
+        public const float DirectionUp = 180;
+        public const float DirectionLeft = 270;
+
         public uint ID;
 
         public Point MapSize;//Size of the Unit on the map.
@@ -19,7 +24,10 @@ namespace ProjectEternity.Core.Units
         public bool IsPlayerControlled;
 
         protected Vector3 _Position;
-        public Directions Direction;
+        public Vector3 LastRealPosition;//Use to limit incline
+        public float Direction;
+        public float Pitch;
+        public bool IsOnGround;
         protected Vector3 _Speed;
         public Vector3 Position { get { return _Position; } }
         public Vector3 Speed { get { return _Speed; } set { _Speed = value; } }

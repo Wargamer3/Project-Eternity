@@ -367,9 +367,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListNextAnimationScreen.Clear();
             Map.NonDemoScreen.ListNonDemoBattleFrame.Clear();
 
-            AttackingResult = Map.CalculateFinalHP(FinalActiveSquad, FinalAttack, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
-                                                                Map.BattleMenuOffenseFormationChoice, FinalTargetSquad, FinalTargetSquadSupport.ActiveSquadSupport,
-                                                                FinalTargetPlayerIndex, FinalTargetSquadIndex, true, true);
+            if (!Map.IsOnlineClient)
+            {
+                AttackingResult = Map.CalculateFinalHP(FinalActiveSquad, FinalAttack, FinalActiveSquadSupport.ActiveSquadSupport, FinalActivePlayerIndex,
+                                                                    Map.BattleMenuOffenseFormationChoice, FinalTargetSquad, FinalTargetSquadSupport.ActiveSquadSupport,
+                                                                    FinalTargetPlayerIndex, FinalTargetSquadIndex, true, true);
+            }
 
             DefendingResult = new SquadBattleResult(new BattleResult[1] { new BattleResult() });
 
@@ -394,9 +397,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 //Counter.
                 if (FinalTargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack)
                 {
-                    DefendingResult = Map.CalculateFinalHP(FinalTargetSquad, FinalTargetSquad.CurrentLeader.CurrentAttack, null, FinalTargetPlayerIndex,
+                    if (!Map.IsOnlineClient)
+                    {
+                        DefendingResult = Map.CalculateFinalHP(FinalTargetSquad, FinalTargetSquad.CurrentLeader.CurrentAttack, null, FinalTargetPlayerIndex,
                                                     Map.BattleMenuDefenseFormationChoice, FinalActiveSquad, null,
                                                     FinalActivePlayerIndex, FinalActiveSquadIndex, true, true);
+                    }
 
                     if (ShowAnimation && !Map.IsServer)
                     {

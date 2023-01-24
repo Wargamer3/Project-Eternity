@@ -1081,15 +1081,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         ActivePlayer.GamePiece.Unit3DModel.PlayAnimation("Walking");
                         Matrix RotationMatrix = Matrix.Identity;
-                        if (ActivePlayer.GamePiece.Direction == UnitMapComponent.Directions.Right)
+                        if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionRight)
                         {
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
                         }
-                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.Directions.Up)
+                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionUp)
                         {
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
                         }
-                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.Directions.Left)
+                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionLeft)
                         {
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                         }
@@ -1142,15 +1142,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         ActivePlayer.GamePiece.Unit3DModel.PlayAnimation("Idle");
                         Matrix RotationMatrix = Matrix.Identity;
-                        if (ActivePlayer.GamePiece.Direction == UnitMapComponent.Directions.Right)
+                        if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionRight)
                         {
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(90));
                         }
-                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.Directions.Up)
+                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionUp)
                         {
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(180));
                         }
-                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.Directions.Left)
+                        else if (ActivePlayer.GamePiece.Direction == UnitMapComponent.DirectionLeft)
                         {
                             RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(270));
                         }

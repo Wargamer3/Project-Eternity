@@ -8,18 +8,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public sealed partial class DeathmatchCutsceneScriptHolder
     {
-        public class ScriptStartHub : DeathmatchMapScript
+        public class ScriptStartHub3D : DeathmatchMapScript
         {
             private uint _UnitToMoveID;
 
-            public ScriptStartHub()
+            public ScriptStartHub3D()
                 : this(null)
             {
                 _UnitToMoveID = 0;
             }
 
-            public ScriptStartHub(DeathmatchMap Map)
-                : base(Map, 100, 50, "Start Hub", new string[] { "Start" }, new string[0])
+            public ScriptStartHub3D(DeathmatchMap Map)
+                : base(Map, 100, 50, "Start Hub 3D", new string[] { "Start" }, new string[0])
             {
                 _UnitToMoveID = 0;
             }
@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         if (Map.ListPlayer[P].ListSquad[U].ID == _UnitToMoveID)
                         {
                             Map.ListActionMenuChoice.RemoveAllActionPanels();
-                            Map.ListActionMenuChoice.Add(new ActionPanelHubStep(Map, P, U));
+                            Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelHub3DStep(Map, P, U));
                             IsEnded = true;
                             return;
                         }
@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             protected override CutsceneScript DoCopyScript()
             {
-                return new ScriptStartHub(Map);
+                return new ScriptStartHub3D(Map);
             }
 
             #region Properties

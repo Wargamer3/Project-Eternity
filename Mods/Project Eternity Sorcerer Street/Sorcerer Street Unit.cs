@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public SorcererStreetUnit()
         {
-            Direction = Directions.Down;
+            Direction = DirectionDown;
         }
 
         public override void Draw2DOnMap(CustomSpriteBatch g, Vector3 Position, int SizeX, int SizeY, Color UnitColor)

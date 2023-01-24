@@ -16,22 +16,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "ChooseDirection";
 
-        public TerrainSorcererStreet ChosenTerrain { get { return ActivePlayer.GamePiece.Direction == Directions.None ? null : DicNextTerrain[ActivePlayer.GamePiece.Direction]; } }
+        public TerrainSorcererStreet ChosenTerrain { get { return ActivePlayer.GamePiece.Direction == DirectionNone ? null : DicNextTerrain[ActivePlayer.GamePiece.Direction]; } }
 
         private int ActivePlayerIndex;
         private Player ActivePlayer;
         private int Movement;
-        private readonly Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain;
+        private readonly Dictionary<float, TerrainSorcererStreet> DicNextTerrain;
         private readonly List<List<MovementAlgorithmTile>> ListPath;
 
         public ActionPanelChooseDirection(SorcererStreetMap Map)
             : base(PanelName, Map, false)
         {
-            DicNextTerrain = new Dictionary<Directions, TerrainSorcererStreet>();
+            DicNextTerrain = new Dictionary<float, TerrainSorcererStreet>();
             ListPath = new List<List<MovementAlgorithmTile>>();
         }
 
-        public ActionPanelChooseDirection(SorcererStreetMap Map, int ActivePlayerIndex, int Movement, Dictionary<Directions, TerrainSorcererStreet> DicNextTerrain)
+        public ActionPanelChooseDirection(SorcererStreetMap Map, int ActivePlayerIndex, int Movement, Dictionary<float, TerrainSorcererStreet> DicNextTerrain)
             : base(PanelName, Map, false)
         {
             this.ActivePlayerIndex = ActivePlayerIndex;
@@ -61,48 +61,48 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.LayerManager.AddDrawablePath(ListArrow);
             }
 
-            if (InputHelper.InputUpPressed() && DicNextTerrain.ContainsKey(Directions.Up))
+            if (InputHelper.InputUpPressed() && DicNextTerrain.ContainsKey(DirectionUp))
             {
-                ActivePlayer.GamePiece.Direction = Directions.Up;
+                ActivePlayer.GamePiece.Direction = DirectionUp;
 
                 if (Map.OnlineClient != null)
                 {
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputDownPressed() && DicNextTerrain.ContainsKey(Directions.Down))
+            else if (InputHelper.InputDownPressed() && DicNextTerrain.ContainsKey(DirectionDown))
             {
-                ActivePlayer.GamePiece.Direction = Directions.Down;
+                ActivePlayer.GamePiece.Direction = DirectionDown;
 
                 if (Map.OnlineClient != null)
                 {
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputLeftPressed() && DicNextTerrain.ContainsKey(Directions.Left))
+            else if (InputHelper.InputLeftPressed() && DicNextTerrain.ContainsKey(DirectionLeft))
             {
-                ActivePlayer.GamePiece.Direction = Directions.Left;
+                ActivePlayer.GamePiece.Direction = DirectionLeft;
 
                 if (Map.OnlineClient != null)
                 {
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputRightPressed() && DicNextTerrain.ContainsKey(Directions.Right))
+            else if (InputHelper.InputRightPressed() && DicNextTerrain.ContainsKey(DirectionRight))
             {
-                ActivePlayer.GamePiece.Direction = Directions.Right;
+                ActivePlayer.GamePiece.Direction = DirectionRight;
 
                 if (Map.OnlineClient != null)
                 {
                     Map.OnlineClient.Host.Send(new UpdateMenuScriptClient(this));
                 }
             }
-            else if (InputHelper.InputConfirmPressed() && ActivePlayer.GamePiece.Direction != Directions.None)
+            else if (InputHelper.InputConfirmPressed() && ActivePlayer.GamePiece.Direction != DirectionNone)
             {
                 FinalizeChoice();
             }
 
-            if (ActivePlayer.GamePiece.Direction != Directions.None)
+            if (ActivePlayer.GamePiece.Direction != DirectionNone)
             {
                 Map.LayerManager.AddDrawablePoints(new List<MovementAlgorithmTile>() { DicNextTerrain[ActivePlayer.GamePiece.Direction] }, Color.White);
             }
@@ -115,7 +115,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.LayerManager.AddDrawablePath(ListArrow);
             }
 
-            if (ActivePlayer.GamePiece.Direction != Directions.None)
+            if (ActivePlayer.GamePiece.Direction != DirectionNone)
             {
                 Map.LayerManager.AddDrawablePoints(new List<MovementAlgorithmTile>() { DicNextTerrain[ActivePlayer.GamePiece.Direction] }, Color.White);
             }
@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicNextTerrain.Clear();
             for (int T = 0; T < DicNextTerrainCount; ++T)
             {
-                DicNextTerrain.Add((Directions)BR.ReadByte(), Map.GetTerrain(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat())));
+                DicNextTerrain.Add(BR.ReadFloat(), Map.GetTerrain(new Vector3(BR.ReadFloat(), BR.ReadFloat(), BR.ReadFloat())));
             }
 
             ListPath.Clear();
@@ -148,7 +148,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void ExecuteUpdate(byte[] ArrayUpdateData)
         {
-            ActivePlayer.GamePiece.Direction = (Directions)ArrayUpdateData[0];
+            ByteReader BR = new ByteReader(ArrayUpdateData);
+            ActivePlayer.GamePiece.Direction = BR.ReadFloat();
+            BR.Clear();
         }
 
         public override void DoWrite(ByteWriter BW)
@@ -157,9 +159,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BW.AppendInt32(Movement);
 
             BW.AppendInt32(DicNextTerrain.Count);
-            foreach (KeyValuePair<Directions, TerrainSorcererStreet> NextTerrain in DicNextTerrain)
+            foreach (KeyValuePair<float, TerrainSorcererStreet> NextTerrain in DicNextTerrain)
             {
-                BW.AppendByte((byte)NextTerrain.Key);
+                BW.AppendFloat(NextTerrain.Key);
                 BW.AppendFloat(NextTerrain.Value.InternalPosition.X);
                 BW.AppendFloat(NextTerrain.Value.InternalPosition.Y);
                 BW.AppendFloat(NextTerrain.Value.LayerIndex);
@@ -168,7 +170,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override byte[] DoWriteUpdate()
         {
-            return new byte[] { (byte)ActivePlayer.GamePiece.Direction };
+            ByteWriter BW = new ByteWriter();
+
+            BW.AppendFloat(ActivePlayer.GamePiece.Direction);
+
+            byte[] ArrayUpdateData = BW.GetBytes();
+            BW.ClearWriteBuffer();
+
+            return ArrayUpdateData;
         }
 
         protected override ActionPanel Copy()

@@ -513,7 +513,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             switch (TerrainStyle)
             {
                 case TerrainStyles.SlopeFrontToBack:
-                    break;
+                    return Height * (PositionInTile.Y) - Height;
 
                 case TerrainStyles.SlopeBackToFront:
                     break;

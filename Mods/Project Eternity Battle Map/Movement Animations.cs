@@ -101,19 +101,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         NextPosition = ActiveUnitMap.Value[1];
                         if (UpdatedPosition.X < NextPosition.X)
                         {
-                            ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Right;
+                            ActiveUnitMap.Key.Direction = UnitMapComponent.DirectionRight;
                         }
                         else if (UpdatedPosition.X > NextPosition.X)
                         {
-                            ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Left;
+                            ActiveUnitMap.Key.Direction = UnitMapComponent.DirectionLeft;
                         }
                         else if (UpdatedPosition.Y < NextPosition.Y)
                         {
-                            ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Down;
+                            ActiveUnitMap.Key.Direction = UnitMapComponent.DirectionDown;
                         }
                         else if (UpdatedPosition.Y > NextPosition.Y)
                         {
-                            ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Up;
+                            ActiveUnitMap.Key.Direction = UnitMapComponent.DirectionUp;
                         }
                     }
 
@@ -159,19 +159,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (StartPosition.X < LastPosition.X)
                 {
-                    ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Right;
+                    ActiveUnitMap.Key.Direction = UnitMapComponent.DirectionRight;
                 }
                 else if (StartPosition.X > LastPosition.X)
                 {
-                    ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Left;
+                    ActiveUnitMap.Key.Direction = UnitMapComponent.DirectionLeft;
                 }
                 else if (StartPosition.Y < LastPosition.Y)
                 {
-                    ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Down;
+                    ActiveUnitMap.Key.Direction = UnitMapComponent.DirectionDown;
                 }
                 else if (StartPosition.Y > LastPosition.Y)
                 {
-                    ActiveUnitMap.Key.Direction = UnitMapComponent.Directions.Up;
+                    ActiveUnitMap.Key.Direction = UnitMapComponent.DirectionUp;
                 }
             }
 

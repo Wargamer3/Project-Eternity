@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
-            GamePiece.Direction = UnitMapComponent.Directions.None;
+            GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
         }
@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
-            GamePiece.Direction = UnitMapComponent.Directions.None;
+            GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
 
@@ -70,7 +70,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
-            GamePiece.Direction = UnitMapComponent.Directions.None;
+            GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
         }
@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = Clone.GamePiece;
-            GamePiece.Direction = UnitMapComponent.Directions.None;
+            GamePiece.Direction = UnitMapComponent.DirectionNone;
             ListRemainingCardInDeck = new List<Card>();
             ListCardInHand = new List<Card>();
             FillDeck(Params);
