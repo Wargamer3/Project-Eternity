@@ -95,6 +95,9 @@
             this.dgvTerrainRanks = new System.Windows.Forms.DataGridView();
             this.Movement = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnConfigureRotation = new System.Windows.Forms.Button();
+            this.ckUseRotation = new System.Windows.Forms.CheckBox();
             this.gbStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAmmoConsumption)).BeginInit();
             this.txtMinDamage.SuspendLayout();
@@ -117,6 +120,7 @@
             this.gbItemInformtion.SuspendLayout();
             this.gbTerrain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTerrainRanks)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbStats
@@ -902,11 +906,45 @@
             this.Column2.HeaderText = "Rank";
             this.Column2.Name = "Column2";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.ckUseRotation);
+            this.groupBox1.Controls.Add(this.btnConfigureRotation);
+            this.groupBox1.Location = new System.Drawing.Point(331, 312);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(178, 63);
+            this.groupBox1.TabIndex = 71;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Rotation";
+            // 
+            // btnConfigureRotation
+            // 
+            this.btnConfigureRotation.Enabled = false;
+            this.btnConfigureRotation.Location = new System.Drawing.Point(95, 19);
+            this.btnConfigureRotation.Name = "btnConfigureRotation";
+            this.btnConfigureRotation.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigureRotation.TabIndex = 5;
+            this.btnConfigureRotation.Text = "Configure";
+            this.btnConfigureRotation.UseVisualStyleBackColor = true;
+            this.btnConfigureRotation.Click += new System.EventHandler(this.btnConfigureRotation_Click);
+            // 
+            // ckUseRotation
+            // 
+            this.ckUseRotation.AutoSize = true;
+            this.ckUseRotation.Location = new System.Drawing.Point(6, 23);
+            this.ckUseRotation.Name = "ckUseRotation";
+            this.ckUseRotation.Size = new System.Drawing.Size(88, 17);
+            this.ckUseRotation.TabIndex = 6;
+            this.ckUseRotation.Text = "Use Rotation";
+            this.ckUseRotation.UseVisualStyleBackColor = true;
+            this.ckUseRotation.CheckedChanged += new System.EventHandler(this.ckUseRotation_CheckedChanged);
+            // 
             // ProjectEternityAttackEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(722, 382);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbTerrain);
             this.Controls.Add(this.gbItemInformtion);
             this.Controls.Add(this.menuStrip1);
@@ -945,6 +983,8 @@
             this.gbItemInformtion.PerformLayout();
             this.gbTerrain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTerrainRanks)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1019,6 +1059,9 @@
         private System.Windows.Forms.DataGridView dgvTerrainRanks;
         private System.Windows.Forms.DataGridViewComboBoxColumn Movement;
         private System.Windows.Forms.DataGridViewComboBoxColumn Column2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnConfigureRotation;
+        private System.Windows.Forms.CheckBox ckUseRotation;
     }
 }
 

@@ -59,6 +59,7 @@
     <Compile Include="Attack\Attack Animations.cs" />
     <Compile Include="Attack\Explosion Options.cs" />
     <Compile Include="Attack\Knockback Attack Attributes.cs" />
+    <Compile Include="Attack\Rotation Attack Attributes.cs" />
     <Compile Include="Attack\PER Attack Attributes.cs" />
     <Compile Include="Attack\MAP Attack Attributes.cs" />
     <Compile Include="Attack\Attack 3D.cs" />

@@ -71,6 +71,7 @@ namespace ProjectEternity.Core.Attacks
         public MAPAttackAttributes MAPAttributes;
         public PERAttackAttributes PERAttributes;
         public KnockbackAttackAttributes KnockbackAttributes;
+        public RotationAttackAttributes RotationAttributes;
         public byte ALLLevel;//Number of Units an ALL Attack can hit
         public byte DashMaxReach;
         public Attack Parent;
@@ -196,7 +197,14 @@ namespace ProjectEternity.Core.Attacks
             PostMovementLevel = BR.ReadByte();
             PostMovementAccuracyMalus = BR.ReadByte();
             PostMovementEvasionBonus = BR.ReadByte();
+            
+            bool UseRotation = BR.ReadBoolean();
 
+            if (UseRotation)
+            {
+                RotationAttributes = new RotationAttackAttributes();
+            }
+            
             byte AttackType = BR.ReadByte();
 
             if (AttackType == 0)

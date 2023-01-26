@@ -229,7 +229,9 @@ namespace ProjectEternity.Editors.AttackEditor
             BW.Write((byte)txtPostMovementAccuracyMalus.Value);
             BW.Write((byte)txtPostMovementEvasionBonus.Value);
 
-            BW.Write((byte)AttackType);
+            BW.Write(ckUseRotation.Checked);
+
+            BW.Write(AttackType);
 
             List<Tuple<byte, byte>> ListRankByMovement = new List<Tuple<byte, byte>>();
             foreach (DataGridViewRow ActiveRow in dgvTerrainRanks.Rows)
@@ -324,13 +326,13 @@ namespace ProjectEternity.Editors.AttackEditor
         {
             string Name = AttackPath.Substring(0, AttackPath.Length - 4).Substring(16);
 
-            Attack ActiveWeapon = new Attack(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
-            LoadAttack(ActiveWeapon);
+            Attack ActiveAttack = new Attack(Name, null, BaseSkillRequirement.DicDefaultRequirement, BaseEffect.DicDefaultEffect, AutomaticSkillTargetType.DicDefaultTarget);
+            LoadAttack(ActiveAttack);
         }
 
-        private void LoadAttack(Attack ActiveWeapon)
+        private void LoadAttack(Attack LoadedAttack)
         {
-            this.Text = ActiveWeapon.RelativePath + " - Project Eternity Attack Editor";
+            this.Text = LoadedAttack.RelativePath + " - Project Eternity Attack Editor";
             Editor = new QuoteEditor();
             AdvancedSettings = new AdvancedSettingsEditor();
             DashAttackEditor = new DashAttackEditor();
@@ -340,101 +342,102 @@ namespace ProjectEternity.Editors.AttackEditor
             PERAttackEditor = new PERAttackEditor();
 
             //Create the Part file.
-            string ItemName = ActiveWeapon.RelativePath;
-            string Description = ActiveWeapon.Description;
+            string ItemName = LoadedAttack.RelativePath;
+            string Description = LoadedAttack.Description;
 
-            int MoraleRequirement = ActiveWeapon.MoraleRequirement;
-            int MinimumRange = ActiveWeapon.RangeMinimum;
-            int MaximumRange = ActiveWeapon.RangeMaximum;
-            int Accuracy = ActiveWeapon.Accuracy;
-            int Critical = ActiveWeapon.Critical;
+            int MoraleRequirement = LoadedAttack.MoraleRequirement;
+            int MinimumRange = LoadedAttack.RangeMinimum;
+            int MaximumRange = LoadedAttack.RangeMaximum;
+            int Accuracy = LoadedAttack.Accuracy;
+            int Critical = LoadedAttack.Critical;
 
-            string AttackType = ActiveWeapon.AttackType;
+            string AttackType = LoadedAttack.AttackType;
 
-            Dictionary<byte, byte> DicTerrainAttribute = ActiveWeapon.DicRankByMovement;
+            Dictionary<byte, byte> DicTerrainAttribute = LoadedAttack.DicRankByMovement;
 
             txtName.Text = ItemName;
             txtDescription.Text = Description;
 
-            txtDamage.Text = ActiveWeapon.PowerFormula;
-            txtMinDamage.Text = ActiveWeapon.MinDamageFormula;
-            txtENCost.Value = ActiveWeapon.ENCost;
-            txtMaximumAmmo.Value = ActiveWeapon.MaxAmmo;
-            txtAmmoConsumption.Value = ActiveWeapon.AmmoConsumption;
+            txtDamage.Text = LoadedAttack.PowerFormula;
+            txtMinDamage.Text = LoadedAttack.MinDamageFormula;
+            txtENCost.Value = LoadedAttack.ENCost;
+            txtMaximumAmmo.Value = LoadedAttack.MaxAmmo;
+            txtAmmoConsumption.Value = LoadedAttack.AmmoConsumption;
             txtMoraleRequirement.Text = MoraleRequirement.ToString();
             txtMinimumRange.Text = MinimumRange.ToString();
             txtMaximumRange.Text = MaximumRange.ToString();
             txtAccuracy.Text = Accuracy.ToString();
             txtCritical.Text = Critical.ToString();
+            ckUseRotation.Checked = LoadedAttack.RotationAttributes != null;
 
-            KnockbackAttackEditor.txtEnemyKnockback.Value = (decimal)ActiveWeapon.KnockbackAttributes.EnemyKnockback;
-            KnockbackAttackEditor.txtSelfKnockback.Value = (decimal)ActiveWeapon.KnockbackAttributes.SelfKnockback;
+            KnockbackAttackEditor.txtEnemyKnockback.Value = (decimal)LoadedAttack.KnockbackAttributes.EnemyKnockback;
+            KnockbackAttackEditor.txtSelfKnockback.Value = (decimal)LoadedAttack.KnockbackAttributes.SelfKnockback;
 
             #region Primary
 
-            MAPAttackEditor.ckFriendlyFire.Checked = ActiveWeapon.MAPAttributes.FriendlyFire;
-            MAPAttackEditor.txtAttackDelay.Value = ActiveWeapon.MAPAttributes.Delay;
+            MAPAttackEditor.ckFriendlyFire.Checked = LoadedAttack.MAPAttributes.FriendlyFire;
+            MAPAttackEditor.txtAttackDelay.Value = LoadedAttack.MAPAttributes.Delay;
 
-            switch (ActiveWeapon.Pri)
+            switch (LoadedAttack.Pri)
             {
                 case WeaponPrimaryProperty.ALL:
                     rbALL.Checked = true;
-                    ALLAttackEditor.txtLevel.Value = ActiveWeapon.ALLLevel;
+                    ALLAttackEditor.txtLevel.Value = LoadedAttack.ALLLevel;
                     break;
                 case WeaponPrimaryProperty.Dash:
                     rbDASH.Checked = true;
-                    DashAttackEditor.txtMaxDashReach.Value = ActiveWeapon.DashMaxReach;
-                    DashAttackEditor.txtEnemyKnockback.Value = ActiveWeapon.KnockbackAttributes.EnemyKnockback;
-                    DashAttackEditor.txtSelfKnockback.Value = ActiveWeapon.KnockbackAttributes.SelfKnockback;
+                    DashAttackEditor.txtMaxDashReach.Value = LoadedAttack.DashMaxReach;
+                    DashAttackEditor.txtEnemyKnockback.Value = LoadedAttack.KnockbackAttributes.EnemyKnockback;
+                    DashAttackEditor.txtSelfKnockback.Value = LoadedAttack.KnockbackAttributes.SelfKnockback;
                     break;
 
                 case WeaponPrimaryProperty.MAP:
                     rbMAP.Checked = true;
-                    MAPAttackEditor.ListAttackchoice = ActiveWeapon.MAPAttributes.ListChoice;
-                    MAPAttackEditor.txtAttackWidth.Value = MAPAttackEditor.AttackWidth = ActiveWeapon.MAPAttributes.Width;
-                    MAPAttackEditor.txtAttackHeight.Value = MAPAttackEditor.AttackHeight = ActiveWeapon.MAPAttributes.Height;
+                    MAPAttackEditor.ListAttackchoice = LoadedAttack.MAPAttributes.ListChoice;
+                    MAPAttackEditor.txtAttackWidth.Value = MAPAttackEditor.AttackWidth = LoadedAttack.MAPAttributes.Width;
+                    MAPAttackEditor.txtAttackHeight.Value = MAPAttackEditor.AttackHeight = LoadedAttack.MAPAttributes.Height;
 
-                    if (ActiveWeapon.MAPAttributes.Property == WeaponMAPProperties.Spread)
+                    if (LoadedAttack.MAPAttributes.Property == WeaponMAPProperties.Spread)
                         MAPAttackEditor.rbSpread.Checked = true;
-                    else if (ActiveWeapon.MAPAttributes.Property == WeaponMAPProperties.Direction)
+                    else if (LoadedAttack.MAPAttributes.Property == WeaponMAPProperties.Direction)
                         MAPAttackEditor.rbDirection.Checked = true;
-                    else if (ActiveWeapon.MAPAttributes.Property == WeaponMAPProperties.Targeted)
+                    else if (LoadedAttack.MAPAttributes.Property == WeaponMAPProperties.Targeted)
                         MAPAttackEditor.rbTargeted.Checked = true;
 
-                    MAPAttackEditor.ckFriendlyFire.Checked = ActiveWeapon.MAPAttributes.FriendlyFire;
-                    MAPAttackEditor.txtAttackDelay.Value = ActiveWeapon.MAPAttributes.Delay;
+                    MAPAttackEditor.ckFriendlyFire.Checked = LoadedAttack.MAPAttributes.FriendlyFire;
+                    MAPAttackEditor.txtAttackDelay.Value = LoadedAttack.MAPAttributes.Delay;
                     break;
 
                 case WeaponPrimaryProperty.PER:
-                    PERAttackEditor.txtProjectileSpeed.Value = (decimal)ActiveWeapon.PERAttributes.ProjectileSpeed;
-                    PERAttackEditor.cbAffectedByGravity.Checked = ActiveWeapon.PERAttributes.AffectedByGravity;
-                    PERAttackEditor.cbCanBeShotDown.Checked = ActiveWeapon.PERAttributes.CanBeShotDown;
-                    PERAttackEditor.cbHoming.Checked = ActiveWeapon.PERAttributes.Homing;
-                    PERAttackEditor.txtMaxLifetime.Value = ActiveWeapon.PERAttributes.MaxLifetime;
-                    PERAttackEditor.cbAttackType.SelectedIndex = (int)ActiveWeapon.PERAttributes.AttackType;
+                    PERAttackEditor.txtProjectileSpeed.Value = (decimal)LoadedAttack.PERAttributes.ProjectileSpeed;
+                    PERAttackEditor.cbAffectedByGravity.Checked = LoadedAttack.PERAttributes.AffectedByGravity;
+                    PERAttackEditor.cbCanBeShotDown.Checked = LoadedAttack.PERAttributes.CanBeShotDown;
+                    PERAttackEditor.cbHoming.Checked = LoadedAttack.PERAttributes.Homing;
+                    PERAttackEditor.txtMaxLifetime.Value = LoadedAttack.PERAttributes.MaxLifetime;
+                    PERAttackEditor.cbAttackType.SelectedIndex = (int)LoadedAttack.PERAttributes.AttackType;
 
-                    PERAttackEditor.IsProjectileAnimated = ActiveWeapon.PERAttributes.ProjectileAnimation.IsAnimated;
-                    PERAttackEditor.txtProjectilePath.Text = ActiveWeapon.PERAttributes.ProjectileAnimation.Path;
-                    PERAttackEditor.txt3DModelPath.Text = ActiveWeapon.PERAttributes.Projectile3DModelPath;
+                    PERAttackEditor.IsProjectileAnimated = LoadedAttack.PERAttributes.ProjectileAnimation.IsAnimated;
+                    PERAttackEditor.txtProjectilePath.Text = LoadedAttack.PERAttributes.ProjectileAnimation.Path;
+                    PERAttackEditor.txt3DModelPath.Text = LoadedAttack.PERAttributes.Projectile3DModelPath;
 
-                    PERAttackEditor.txtNumberOfProjectiles.Value = ActiveWeapon.PERAttributes.NumberOfProjectiles;
-                    PERAttackEditor.txtLateralMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxLateralSpread;
-                    PERAttackEditor.txtForwardMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxForwardSpread;
-                    PERAttackEditor.txtUpwardMaxSpread.Value = (decimal)ActiveWeapon.PERAttributes.MaxUpwardSpread;
-                    PERAttackEditor.txtSkillChain.Text = ActiveWeapon.PERAttributes.SkillChainName;
+                    PERAttackEditor.txtNumberOfProjectiles.Value = LoadedAttack.PERAttributes.NumberOfProjectiles;
+                    PERAttackEditor.txtLateralMaxSpread.Value = (decimal)LoadedAttack.PERAttributes.MaxLateralSpread;
+                    PERAttackEditor.txtForwardMaxSpread.Value = (decimal)LoadedAttack.PERAttributes.MaxForwardSpread;
+                    PERAttackEditor.txtUpwardMaxSpread.Value = (decimal)LoadedAttack.PERAttributes.MaxUpwardSpread;
+                    PERAttackEditor.txtSkillChain.Text = LoadedAttack.PERAttributes.SkillChainName;
 
-                    if (ActiveWeapon.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.DestroySelf)
+                    if (LoadedAttack.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.DestroySelf)
                     {
                         PERAttackEditor.rbDestroySelf.Checked = true;
                     }
-                    else if (ActiveWeapon.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.Stop)
+                    else if (LoadedAttack.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.Stop)
                     {
                         PERAttackEditor.rbStop.Checked = true;
                     }
-                    else if (ActiveWeapon.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.Bounce)
+                    else if (LoadedAttack.PERAttributes.GroundCollision == PERAttackAttributes.GroundCollisions.Bounce)
                     {
                         PERAttackEditor.rbBounce.Checked = true;
-                        PERAttackEditor.txtBounceLimit.Value = ActiveWeapon.PERAttributes.BounceLimit;
+                        PERAttackEditor.txtBounceLimit.Value = LoadedAttack.PERAttributes.BounceLimit;
                     }
 
                     rbPER.Checked = true;
@@ -453,19 +456,19 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Secondary
 
-            if ((ActiveWeapon.Sec & WeaponSecondaryProperty.SwordCut) == WeaponSecondaryProperty.SwordCut)
+            if ((LoadedAttack.Sec & WeaponSecondaryProperty.SwordCut) == WeaponSecondaryProperty.SwordCut)
                 cbSwordCut.Checked = true;
 
-            if ((ActiveWeapon.Sec & WeaponSecondaryProperty.ShootDown) == WeaponSecondaryProperty.ShootDown)
+            if ((LoadedAttack.Sec & WeaponSecondaryProperty.ShootDown) == WeaponSecondaryProperty.ShootDown)
                 cbShootDown.Checked = true;
 
-            if ((ActiveWeapon.Sec & WeaponSecondaryProperty.Partial) == WeaponSecondaryProperty.Partial)
+            if ((LoadedAttack.Sec & WeaponSecondaryProperty.Partial) == WeaponSecondaryProperty.Partial)
                 cbPartialAttack.Checked = true;
 
-            txtReMoveLevel.Value = ActiveWeapon.ReMoveLevel;
-            txtPostMovementLevel.Value = ActiveWeapon.PostMovementLevel;
-            txtPostMovementAccuracyMalus.Value = ActiveWeapon.PostMovementAccuracyMalus;
-            txtPostMovementEvasionBonus.Value = ActiveWeapon.PostMovementEvasionBonus;
+            txtReMoveLevel.Value = LoadedAttack.ReMoveLevel;
+            txtPostMovementLevel.Value = LoadedAttack.PostMovementLevel;
+            txtPostMovementAccuracyMalus.Value = LoadedAttack.PostMovementAccuracyMalus;
+            txtPostMovementEvasionBonus.Value = LoadedAttack.PostMovementEvasionBonus;
 
             #endregion
 
@@ -529,9 +532,9 @@ namespace ProjectEternity.Editors.AttackEditor
 
                 MovementCell.Value = ActiveMovement.Name;
 
-                if (ActiveWeapon.DicRankByMovement.ContainsKey(M))
+                if (LoadedAttack.DicRankByMovement.ContainsKey(M))
                 {
-                    RankCell.Value = Unit.ListRank[ActiveWeapon.DicRankByMovement[M]].ToString();
+                    RankCell.Value = Unit.ListRank[LoadedAttack.DicRankByMovement[M]].ToString();
                 }
 
                 dgvTerrainRanks.Rows[NewRowIndex].Cells[0] = MovementCell;
@@ -542,7 +545,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Special Attacks
 
-            foreach (Attack ActiveAttack in ActiveWeapon.ListSecondaryAttack)
+            foreach (Attack ActiveAttack in LoadedAttack.ListSecondaryAttack)
             {
                 string AttackName = ActiveAttack.RelativePath;
                 string[] ArrayName = AttackName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
@@ -555,7 +558,7 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Charged Attacks
 
-            foreach (Attack ActiveAttack in ActiveWeapon.ListChargedAttack)
+            foreach (Attack ActiveAttack in LoadedAttack.ListChargedAttack)
             {
                 string AttackName = ActiveAttack.RelativePath;
                 string[] ArrayName = AttackName.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
@@ -568,41 +571,41 @@ namespace ProjectEternity.Editors.AttackEditor
 
             #region Explosion Attributes
 
-            AdvancedSettings.txtExplosionRadius.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionRadius;
-            AdvancedSettings.txtExplosionWindPowerAtCenter.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerAtCenter;
-            AdvancedSettings.txtExplosionWindPowerAtEdge.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerAtEdge;
-            AdvancedSettings.txtExplosionWindPowerToSelfMultiplier.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionWindPowerToSelfMultiplier;
-            AdvancedSettings.txtExplosionDamageAtCenter.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageAtCenter;
-            AdvancedSettings.txtExplosionDamageAtEdge.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageAtEdge;
-            AdvancedSettings.txtExplosionDamageToSelfMultiplier.Value = (decimal)ActiveWeapon.ExplosionOption.ExplosionDamageToSelfMultiplier;
+            AdvancedSettings.txtExplosionRadius.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionRadius;
+            AdvancedSettings.txtExplosionWindPowerAtCenter.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerAtCenter;
+            AdvancedSettings.txtExplosionWindPowerAtEdge.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerAtEdge;
+            AdvancedSettings.txtExplosionWindPowerToSelfMultiplier.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionWindPowerToSelfMultiplier;
+            AdvancedSettings.txtExplosionDamageAtCenter.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageAtCenter;
+            AdvancedSettings.txtExplosionDamageAtEdge.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageAtEdge;
+            AdvancedSettings.txtExplosionDamageToSelfMultiplier.Value = (decimal)LoadedAttack.ExplosionOption.ExplosionDamageToSelfMultiplier;
 
             #endregion
 
             #region Attack Attributes
 
-            if (ActiveWeapon.ArrayAttackAttributes.Length >= 1)
+            if (LoadedAttack.ArrayAttackAttributes.Length >= 1)
             {
-                AdvancedSettings.txtPilotSkill1.Text = ActiveWeapon.ArrayAttackAttributes[0].Name;
+                AdvancedSettings.txtPilotSkill1.Text = LoadedAttack.ArrayAttackAttributes[0].Name;
             }
-            if (ActiveWeapon.ArrayAttackAttributes.Length >= 2)
+            if (LoadedAttack.ArrayAttackAttributes.Length >= 2)
             {
-                AdvancedSettings.txtPilotSkill2.Text = ActiveWeapon.ArrayAttackAttributes[1].Name;
+                AdvancedSettings.txtPilotSkill2.Text = LoadedAttack.ArrayAttackAttributes[1].Name;
             }
-            if (ActiveWeapon.ArrayAttackAttributes.Length >= 3)
+            if (LoadedAttack.ArrayAttackAttributes.Length >= 3)
             {
-                AdvancedSettings.txtPilotSkill3.Text = ActiveWeapon.ArrayAttackAttributes[2].Name;
+                AdvancedSettings.txtPilotSkill3.Text = LoadedAttack.ArrayAttackAttributes[2].Name;
             }
-            if (ActiveWeapon.ArrayAttackAttributes.Length >= 4)
+            if (LoadedAttack.ArrayAttackAttributes.Length >= 4)
             {
-                AdvancedSettings.txtPilotSkill4.Text = ActiveWeapon.ArrayAttackAttributes[3].Name;
+                AdvancedSettings.txtPilotSkill4.Text = LoadedAttack.ArrayAttackAttributes[3].Name;
             }
 
             #endregion
 
             #region Quotes
 
-            for (int Q = 0; Q < ActiveWeapon.ListQuoteSet.Count; Q++)
-                Editor.dgvQuotes.Rows.Add(ActiveWeapon.ListQuoteSet[Q]);
+            for (int Q = 0; Q < LoadedAttack.ListQuoteSet.Count; Q++)
+                Editor.dgvQuotes.Rows.Add(LoadedAttack.ListQuoteSet[Q]);
 
             #endregion
         }
@@ -682,6 +685,16 @@ namespace ProjectEternity.Editors.AttackEditor
                 dgvTerrainRanks.Font,
                 GridBrush,
                 new PointF((float)e.RowBounds.Left + 2, (float)e.RowBounds.Top + 4));
+        }
+
+        private void ckUseRotation_CheckedChanged(object sender, EventArgs e)
+        {
+            btnConfigureRotation.Enabled = ckUseRotation.Checked;
+        }
+
+        private void btnConfigureRotation_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
