@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectEternity.Core.Online;
+using System;
 using System.IO;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -21,6 +22,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Name = Clone.Name;
             FirstCompletionDate = Clone.FirstCompletionDate;
             MaxScore = Clone.MaxScore;
+        }
+
+        public MultiplayerRecord(ByteReader BR)
+        {
+            Name = BR.ReadString();
+            FirstCompletionDate = new DateTimeOffset(BR.ReadInt64(), new TimeSpan(BR.ReadInt64()));
+            MaxScore = BR.ReadUInt32();
         }
 
         public void Save(BinaryWriter BW)

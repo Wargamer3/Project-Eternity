@@ -63,12 +63,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             DicOnlineScripts.Add(AskRoomListScriptServer.ScriptName, new AskRoomListScriptServer(OnlineServer));
             DicOnlineScripts.Add(BaseCreateRoomScriptServer.ScriptName, new CreateRoomScriptServer(OnlineServer, BattleMapClientGroup.Template));
             DicOnlineScripts.Add(TransferRoomScriptServer.ScriptName, new TransferRoomScriptServer(OnlineServer, BattleMapClientGroup.Template));
+            DicOnlineScripts.Add(CheckNewUnlocksScriptServer.ScriptName, new CheckNewUnlocksScriptServer());
 
             string PublicIP = ConnectionInfo.ReadField("Game Server Info", "Public IP");
             int PublicPort = int.Parse(ConnectionInfo.ReadField("Game Server Info", "Public Port"));
             Trace.Listeners.Add(new TextWriterTraceListener("Game Server Error.log", "myListener"));
 
+            BattleMapPlayerUnlockInventory.PopulateShopItemsServerTask();
+
             OnlineServer.StartListening(PublicIP, PublicPort);
+            Console.WriteLine("Server Started");
             Console.ReadKey();
             OnlineServer.StopListening();
         }

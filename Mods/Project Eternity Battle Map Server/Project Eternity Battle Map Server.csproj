@@ -47,6 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Online Helper.cs" />
+    <Compile Include="Online\Ask Shop Inventory Script Server.cs" />
+    <Compile Include="Online\New Unlocks Script Server.cs" />
+    <Compile Include="Online\Check New Unlocks Script Server.cs" />
+    <Compile Include="Online\Ask Player Inventory Script Server.cs" />
     <Compile Include="Online\Create Game Script Server.cs" />
     <Compile Include="Online\Game\Ask Game Data Script Server.cs" />
     <Compile Include="Online\Game\Update Menu Script Server.cs" />

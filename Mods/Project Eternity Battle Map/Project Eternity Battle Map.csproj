@@ -136,13 +136,9 @@
     <Compile Include="Lobby\Player\Multiplayer Record.cs" />
     <Compile Include="Lobby\Player\Player Records.cs" />
     <Compile Include="Lobby\Player\Unit Records.cs" />
-    <Compile Include="Lobby\Shop\Shop Item Character.cs" />
-    <Compile Include="Lobby\Shop\Shop Item Mission.cs" />
-    <Compile Include="Lobby\Shop\Shop Item Unit.cs" />
     <Compile Include="Lobby\Unlocks\BattleMap Player Unlock Inventory.cs" />
     <Compile Include="Lobby\Unlocks\Item Unlock Conditions.cs" />
     <Compile Include="Lobby\Unlocks\Pending Unlock Screen.cs" />
-    <Compile Include="Lobby\Shop\Shop Inventory.cs" />
     <Compile Include="Lobby\Game Options\Gametype Screen.cs" />
     <Compile Include="Lobby\Game Options\Mutators Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Rules Screen.cs" />
@@ -170,7 +166,9 @@
     <Compile Include="Lobby\Unlocks\Unlockable Character.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Mission.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Unit.cs" />
+    <Compile Include="Lobby\Unlocks\UnlockableItem.cs" />
     <Compile Include="Mutators\Mutator.cs" />
+    <Compile Include="Online\Check New Unlocks Script Client.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
     <Compile Include="Online\Communication\Player List Script Client.cs" />
     <Compile Include="Online\Game\Move Unit Script Server.cs" />
@@ -179,6 +177,7 @@
     <Compile Include="Online\Game\Open Menu Script Client.cs" />
     <Compile Include="Online\Game\Receive Game Data Script Client.cs" />
     <Compile Include="Online\Login Success Script Client.cs" />
+    <Compile Include="Online\New Unlocks Script Client.cs" />
     <Compile Include="Online\Online Helper.cs" />
     <Compile Include="Online\Player Left Script Client.cs" />
     <Compile Include="Lobby\Battle Map Room Informations.cs" />
@@ -198,7 +197,6 @@
     <Compile Include="Online\Room\Player Joined Script Client.cs" />
     <Compile Include="Online\Room\Room List Script Client.cs" />
     <Compile Include="Online\Room\Send Room ID Script Client.cs" />
-    <Compile Include="Lobby\Server Room Informations.cs" />
     <Compile Include="Map Layer.cs" />
     <Compile Include="Menus\Attacks Menu.cs" />
     <Compile Include="Lobby\Chat Helper.cs" />

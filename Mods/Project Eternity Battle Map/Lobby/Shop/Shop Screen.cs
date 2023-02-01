@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 UnitFilterButton, CharacterFilterButton, EquipmentFilterButton, ConsumableFilterButton,
             };
 
-            ShopUnitScreen NewShopCharacterScreen = new ShopUnitScreen(this, ActivePlayer.ShopInventory);
+            ShopUnitScreen NewShopCharacterScreen = new ShopUnitScreen(this, ActivePlayer.UnlockInventory);
             ShopCharacterScreen NewShopEquipmentScreen = new ShopCharacterScreen();
             ShopEquipmentScreen NewShopWeaponsScreen = new ShopEquipmentScreen();
             ShopConsumableScreen NewShopItemsScreen = new ShopConsumableScreen();
@@ -119,13 +119,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ActiveButton.Update(gameTime);
             }
-
-            if (BattleMapPlayerShopInventory.IsLoadingDatabase)
-            {
-                return;
-            }
-
-            PendingUnlockScreen.CheckForUnlocks(this);
 
             ActiveSubScreen.Update(gameTime);
         }

@@ -13,6 +13,8 @@ namespace ProjectEternity.Core.Online
 
         bool IsGameReady { get; set; }
 
+        object ExtraInformation { get; set; }
+
         RoleManager Roles { get; set; }
 
         List<OnlineScript> ListAsyncOnlineScript { get; }

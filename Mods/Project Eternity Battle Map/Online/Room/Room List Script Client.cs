@@ -46,7 +46,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
                 if (IsDead)
                 {
-                    ListRoomUpdates.Add(new ServerRoomInformations(RoomID, IsDead));
+                    ListRoomUpdates.Add(new BattleMapRoomInformations(RoomID, IsDead));
                 }
                 else
                 {
@@ -58,7 +58,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                     byte MaxPlayer = Sender.ReadByte();
                     byte CurrentClientCount = Sender.ReadByte();
 
-                    ListRoomUpdates.Add(new ServerRoomInformations(RoomID, Name, RoomType, RoomSubtype, IsPlaying, MinPlayer, MaxPlayer, CurrentClientCount));
+                    ListRoomUpdates.Add(new BattleMapRoomInformations(RoomID, Name, RoomType, RoomSubtype, IsPlaying, MinPlayer, MaxPlayer, CurrentClientCount));
                 }
             }
         }

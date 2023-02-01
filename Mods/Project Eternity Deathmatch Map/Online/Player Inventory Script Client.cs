@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
 {
@@ -33,11 +34,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
             NewPlayer.OnlineClient = Host;
             ByteReader BR = new ByteReader(PlayerInfo);
 
+            NewPlayer.InitRecords(BR);
             NewPlayer.Inventory.Load(BR, GameScreen.ContentFallback, DeathmatchParams.DicParams[""].DicUnitType, DeathmatchParams.DicParams[""].DicRequirement, DeathmatchParams.DicParams[""].DicEffect, DeathmatchParams.DicParams[""].DicAutomaticSkillTarget, DeathmatchParams.DicParams[""].DicManualSkillTarget);
 
             BR.Clear();
 
             PlayerManager.ListLocalPlayer[0] = NewPlayer;
+
+            Host.Send(new CheckNewUnlocksScriptClient());
         }
 
         protected override void Read(OnlineReader Sender)

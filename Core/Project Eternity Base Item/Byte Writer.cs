@@ -80,6 +80,11 @@ namespace ProjectEternity.Core.Online
             Append4ByteArray((byte*)&NewEntry);
         }
 
+        public void AppendDouble(double NewEntry)
+        {
+            Append8ByteArray((byte*)&NewEntry);
+        }
+
         public void AppendString(string NewEntry)
         {
             byte[] TextData;

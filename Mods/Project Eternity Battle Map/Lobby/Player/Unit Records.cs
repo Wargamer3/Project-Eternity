@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Collections.Generic;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -31,6 +32,65 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         public UnitRecords(BinaryReader BR)
+        {
+            int DicCharacterIDByNumberOfKillsCount = BR.ReadInt32();
+            DicCharacterIDByNumberOfKills = new Dictionary<string, uint>(DicCharacterIDByNumberOfKillsCount);
+            for (int i = 0; i < DicCharacterIDByNumberOfKillsCount; ++i)
+            {
+                DicCharacterIDByNumberOfKills.Add(BR.ReadString(), BR.ReadUInt32());
+            }
+
+            int DicCharacterIDByNumberOfUsesCount = BR.ReadInt32();
+            DicCharacterIDByNumberOfUses = new Dictionary<string, uint>(DicCharacterIDByNumberOfUsesCount);
+            for (int i = 0; i < DicCharacterIDByNumberOfUsesCount; ++i)
+            {
+                DicCharacterIDByNumberOfUses.Add(BR.ReadString(), BR.ReadUInt32());
+            }
+
+            int DicCharacterIDByTurnsOnFieldCount = BR.ReadInt32();
+            DicCharacterIDByTurnsOnField = new Dictionary<string, uint>(DicCharacterIDByTurnsOnFieldCount);
+            for (int i = 0; i < DicCharacterIDByTurnsOnFieldCount; ++i)
+            {
+                DicCharacterIDByTurnsOnField.Add(BR.ReadString(), BR.ReadUInt32());
+            }
+
+            int DicCharacterIDByNumberOfTilesTraveledCount = BR.ReadInt32();
+            DicCharacterIDByNumberOfTilesTraveled = new Dictionary<string, uint>(DicCharacterIDByNumberOfTilesTraveledCount);
+            for (int i = 0; i < DicCharacterIDByNumberOfTilesTraveledCount; ++i)
+            {
+                DicCharacterIDByNumberOfTilesTraveled.Add(BR.ReadString(), BR.ReadUInt32());
+            }
+
+            int DicUnitIDByNumberOfKillsCount = BR.ReadInt32();
+            DicUnitIDByNumberOfKills = new Dictionary<string, uint>(DicUnitIDByNumberOfKillsCount);
+            for (int i = 0; i < DicUnitIDByNumberOfKillsCount; ++i)
+            {
+                DicUnitIDByNumberOfKills.Add(BR.ReadString(), BR.ReadUInt32());
+            }
+
+            int DicUnitIDByNumberOfUsesCount = BR.ReadInt32();
+            DicUnitIDByNumberOfUses = new Dictionary<string, uint>(DicUnitIDByNumberOfUsesCount);
+            for (int i = 0; i < DicUnitIDByNumberOfUsesCount; ++i)
+            {
+                DicUnitIDByNumberOfUses.Add(BR.ReadString(), BR.ReadUInt32());
+            }
+
+            int DicUnitIDByTurnsOnFieldCount = BR.ReadInt32();
+            DicUnitIDByTurnsOnField = new Dictionary<string, uint>(DicUnitIDByTurnsOnFieldCount);
+            for (int i = 0; i < DicUnitIDByTurnsOnFieldCount; ++i)
+            {
+                DicUnitIDByTurnsOnField.Add(BR.ReadString(), BR.ReadUInt32());
+            }
+
+            int DicUnitNameByNumberOfTilesTraveledCount = BR.ReadInt32();
+            DicUnitNameByNumberOfTilesTraveled = new Dictionary<string, uint>(DicUnitNameByNumberOfTilesTraveledCount);
+            for (int i = 0; i < DicUnitNameByNumberOfTilesTraveledCount; ++i)
+            {
+                DicUnitNameByNumberOfTilesTraveled.Add(BR.ReadString(), BR.ReadUInt32());
+            }
+        }
+
+        public UnitRecords(ByteReader BR)
         {
             int DicCharacterIDByNumberOfKillsCount = BR.ReadInt32();
             DicCharacterIDByNumberOfKills = new Dictionary<string, uint>(DicCharacterIDByNumberOfKillsCount);

@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Collections.Generic;
+using ProjectEternity.Core.Online;
+using System;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -72,6 +74,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         public void Load(BinaryReader BR)
+        {
+            TotalSecondsPlayed = BR.ReadDouble();
+
+            TotalKills = BR.ReadUInt32();
+            TotalTurnPlayed = BR.ReadUInt32();
+            TotalTilesTraveled = BR.ReadUInt32();
+
+            _CurrentMoney = BR.ReadUInt32();
+            TotalMoney = BR.ReadUInt32();
+
+            _CurrentCoins = BR.ReadUInt32();
+            TotalCoins = BR.ReadUInt32();
+
+            PlayerUnitRecords = new UnitRecords(BR);
+            PlayerBattleRecords = new BattleRecords(BR);
+            PlayerBonusRecords = new BonusRecords(BR);
+
+            int ListCampaignLevelInformationCount = BR.ReadInt32();
+            ListCampaignLevelInformation = new List<MultiplayerRecord>(ListCampaignLevelInformationCount);
+            for (int i = 0; i < ListCampaignLevelInformationCount; ++i)
+            {
+                ListCampaignLevelInformation.Add(new MultiplayerRecord(BR));
+            }
+        }
+
+        internal void Load(ByteReader BR)
         {
             TotalSecondsPlayed = BR.ReadDouble();
 

@@ -16,7 +16,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public FMODSound UnlockSound;
         private DynamicText Text;
 
-        public BattleMapPlayerShopInventory ShopInventory;
         public BattleMapPlayerUnlockInventory UnlockInventory;
 
         public static List<PendingUnlockScreen> ListPendingUnlocks = new List<PendingUnlockScreen>();
@@ -48,14 +47,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     ListPendingUnlocks.AddRange(ActivePlayer.UnlocksEvaluator.Evaluate(Owner.Content));
                 }
+            }
+        }
 
-                LastUpdate = DateTime.UtcNow;
-
-                if (ListPendingUnlocks.Count > 0)
-                {
-                    Owner.PushScreen(ListPendingUnlocks[0]);
-                    ListPendingUnlocks.RemoveAt(0);
-                }
+        public static void UpdateUnlockScreens(GameScreen Owner)
+        {
+            if (ListPendingUnlocks.Count > 0)
+            {
+                Owner.PushScreen(ListPendingUnlocks[0]);
+                ListPendingUnlocks.RemoveAt(0);
             }
         }
 

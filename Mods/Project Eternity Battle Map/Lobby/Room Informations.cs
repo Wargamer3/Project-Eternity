@@ -149,7 +149,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 
-        public abstract void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType);
+        public void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType)
+        {
+            ListOnlinePlayer.Add(NewPlayer);
+            ListUniqueOnlineConnection.Add(NewPlayer);
+            BattleMapPlayer ExistingPlayer = (BattleMapPlayer)NewPlayer;
+            ListRoomPlayer.Add(ExistingPlayer);
+            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
+        }
 
         public void RemovePlayer(IOnlineConnection OnlinePlayerToRemove)
         {

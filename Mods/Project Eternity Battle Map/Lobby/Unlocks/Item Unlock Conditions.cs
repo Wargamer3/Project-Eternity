@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Characters;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -64,43 +63,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             List<PendingUnlockScreen> ListPendingUnlocks = new List<PendingUnlockScreen>();
 
-            if (BattleMapPlayerShopInventory.DatabaseLoaded && ConditionsOwner.ShopInventory.HasFinishedReadingPlayerShopItems)
-            {
-                if (!ConditionsOwner.ShopInventory.IsInit)
-                {
-                    ConditionsOwner.ShopInventory.UpdateAvailableItems();
-                }
-
-                for (int C = ConditionsOwner.ShopInventory.ListLockedCharacter.Count - 1; C >= 0; C--)
-                {
-                    ShopItemCharacter ActiveCharacter = ConditionsOwner.ShopInventory.ListLockedCharacter[C];
-                    if (IsValid(ActiveCharacter.UnlockConditions))
-                    {
-                        ActiveCharacter.UnlockConditions.IsUnlocked = true;
-                        ConditionsOwner.ShopInventory.ListLockedCharacter.Remove(ActiveCharacter);
-                        ConditionsOwner.ShopInventory.ListUnlockedCharacter.Add(ActiveCharacter);
-                        ListPendingUnlocks.Add(new PendingUnlockScreen(ActiveCharacter.CharacterToBuy.Name + " is now available in the shop!"));
-
-                        if (ActiveCharacter.UnlockQuantity > 0)
-                        {
-                            Character NewCharacter = new Character(ActiveCharacter.Path, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                            ConditionsOwner.Inventory.ListOwnedCharacter.Add(NewCharacter);
-                            ListPendingUnlocks.Add(new PendingUnlockScreen("You just received " + ActiveCharacter.UnlockQuantity + "x " + NewCharacter.Name + "!"));
-                        }
-                    }
-                }
-
-                for (int U = ConditionsOwner.ShopInventory.ListLockedUnit.Count - 1; U >= 0; U--)
-                {
-                    ShopItemUnit ActiveUnit = ConditionsOwner.ShopInventory.ListLockedUnit[U];
-                }
-
-                for (int M = ConditionsOwner.ShopInventory.ListLockedMission.Count - 1; M >= 0; M--)
-                {
-                    ShopItemMission ActiveMission = ConditionsOwner.ShopInventory.ListLockedMission[M];
-                }
-            }
-
             if (BattleMapPlayerUnlockInventory.DatabaseLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
             {
                 if (!ConditionsOwner.UnlockInventory.IsInit)
@@ -111,14 +73,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 for (int C = ConditionsOwner.UnlockInventory.ListLockedCharacter.Count - 1; C >= 0; C--)
                 {
                     UnlockableCharacter ActiveCharacter = ConditionsOwner.UnlockInventory.ListLockedCharacter[C];
-                    if (IsValid(ActiveCharacter.UnlockConditions))
+                    if (IsValid(ActiveCharacter.UnlockConditions, ConditionsOwner))
                     {
-                        ActiveCharacter.UnlockConditions.IsUnlocked = true;
-                        ConditionsOwner.UnlockInventory.ListLockedCharacter.Remove(ActiveCharacter);
-                        ConditionsOwner.UnlockInventory.ListUnlockedCharacter.Add(ActiveCharacter);
-                        Character NewCharacter = new Character(ActiveCharacter.Path, Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                        ConditionsOwner.Inventory.ListOwnedCharacter.Add(NewCharacter);
-                        ListPendingUnlocks.Add(new PendingUnlockScreen("You just received " + ActiveCharacter.UnlockQuantity + "x " + NewCharacter.Name + "!"));
+                        foreach (string UnlockMessage in ActiveCharacter.Unlock(ConditionsOwner))
+                        {
+                            ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                        }
                     }
                 }
 
@@ -136,7 +96,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return ListPendingUnlocks;
         }
 
-        private bool IsValid(ItemUnlockConditions ConditionsToCheck)
+        public static bool IsValid(ItemUnlockConditions ConditionsToCheck, BattleMapPlayer ConditionsOwner)
         {
             foreach (List<Tuple<string, string>> ActiveRootCondition in ConditionsToCheck.ListUnlockConditions)
             {
@@ -191,7 +151,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return true;
         }
 
-        private double GetSecondsFromTime(string Time)
+        private static double GetSecondsFromTime(string Time)
         {
             string[] ArrayTimeSection = Time.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 

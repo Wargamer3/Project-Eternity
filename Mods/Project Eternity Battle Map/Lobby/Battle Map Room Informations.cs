@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -14,8 +13,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int MaxKill;
         public int MaxGameLengthInMinutes;
 
+        public BattleMapRoomInformations(string RoomID, bool IsDead)
+            : base(RoomID, IsDead)
+        {
+            MaxKill = 20;
+            MaxGameLengthInMinutes = 10;
+        }
+
         public BattleMapRoomInformations(string RoomID, string RoomName, string RoomType, string RoomSubtype, byte MinNumberOfPlayer, byte MaxNumberOfPlayer)
             : base(RoomID, RoomName, RoomType, RoomSubtype, false, MinNumberOfPlayer, MaxNumberOfPlayer, 1)
+        {
+            MaxKill = 20;
+            MaxGameLengthInMinutes = 10;
+        }
+
+        public BattleMapRoomInformations(string RoomID, string RoomName, string MapType, string RoomSubtype, bool IsPlaying, byte MinPlayer, byte MaxPlayer, byte CurrentClientCount)
+            : base(RoomID, RoomName, MapType, RoomSubtype, IsPlaying, MinPlayer, MaxPlayer, CurrentClientCount)
         {
             MaxKill = 20;
             MaxGameLengthInMinutes = 10;
@@ -66,15 +79,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxGameLengthInMinutes = 10;
         }
 
-        public override void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType)
+        public BattleMapRoomInformations(string RoomID, string RoomName, string MapType, string RoomSubtype, bool IsPlaying, string Password, string OwnerServerIP, int OwnerServerPort, byte CurrentPlayerCount, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, bool IsDead)
+            : base(RoomID, RoomName, MapType, RoomSubtype, IsPlaying, Password, OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MinNumberOfPlayer, MaxNumberOfPlayer, IsDead)
         {
-            OnlinePlayerBase NewRoomPlayer = new BattleMapPlayer(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue);
-            NewRoomPlayer.OnlineClient = NewPlayer;
-            NewRoomPlayer.GameplayType = GameplayTypes.None;
-            ListRoomPlayer.Add(NewRoomPlayer);
-            ListOnlinePlayer.Add(NewPlayer);
-            ListUniqueOnlineConnection.Add(NewPlayer);
-            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }
 
         public override byte[] GetRoomInfo()

@@ -88,7 +88,6 @@
     <Compile Include="Commands\Game Commands\Ask Join Room Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Player Inventory Script Client.cs" />
     <Compile Include="Commands\Game Commands\Ask Login Script Client.cs" />
-    <Compile Include="Commands\Game Commands\Ask Player Inventory Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Login Script Server.cs" />
     <Compile Include="Commands\Game Commands\Ask Room List Script Server.cs" />
     <Compile Include="Commands\Game Commands\Change Character Script Server.cs" />

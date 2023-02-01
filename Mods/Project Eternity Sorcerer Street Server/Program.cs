@@ -9,7 +9,7 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
 
-namespace ProjectEternity.GameScreens.SorcererStreet.Server
+namespace ProjectEternity.GameScreens.SorcererStreetScreen.Server
 {
     class Program
     {
@@ -38,9 +38,9 @@ namespace ProjectEternity.GameScreens.SorcererStreet.Server
 
             DicOnlineScripts.Add(AskLoginScriptServer.ScriptName, new AskLoginScriptServer(OnlineServer));
             DicOnlineScripts.Add(AskPlayerInventoryScriptServer.ScriptName, new AskPlayerInventoryScriptServer(OnlineServer));
-            DicOnlineScripts.Add(BaseAskJoinRoomScriptServer.ScriptName, new SorcererStreetScreen.Server.AskJoinRoomScriptServer(OnlineServer));
+            DicOnlineScripts.Add(BaseAskJoinRoomScriptServer.ScriptName, new AskJoinRoomScriptServer(OnlineServer));
             DicOnlineScripts.Add(AskRoomListScriptServer.ScriptName, new AskRoomListScriptServer(OnlineServer));
-            DicOnlineScripts.Add(BaseCreateRoomScriptServer.ScriptName, new SorcererStreetScreen.Server.CreateRoomScriptServer(OnlineServer, BattleMapClientGroup.Template));
+            DicOnlineScripts.Add(BaseCreateRoomScriptServer.ScriptName, new CreateRoomScriptServer(OnlineServer, BattleMapClientGroup.Template));
             DicOnlineScripts.Add(TransferRoomScriptServer.ScriptName, new TransferRoomScriptServer(OnlineServer, BattleMapClientGroup.Template));
 
             string PublicIP = ConnectionInfo.ReadField("Game Server Info", "Public IP");

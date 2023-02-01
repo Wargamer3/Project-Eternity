@@ -705,7 +705,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             GameRule.Draw(g);
 
-            if (IsOnTop)
+            if (IsOnTop && !IsEditor)
             {
                 if (ListActionMenuChoice.HasMainPanel)
                 {

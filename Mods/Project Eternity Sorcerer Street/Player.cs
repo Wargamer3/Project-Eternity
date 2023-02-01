@@ -40,6 +40,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCardInHand = new List<Card>();
         }
 
+        public Player(string ID, string Name, bool IsOnline)
+            : base(ID, Name, IsOnline)
+        {
+            Inventory = new SorcererStreetInventory();
+            ListPassedCheckpoint = new List<SorcererStreetMap.Checkpoints>();
+            DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
+            GamePiece = new SorcererStreetUnit();
+            GamePiece.Direction = UnitMapComponent.DirectionNone;
+            ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
+            ListCardInHand = new List<Card>();
+        }
+
         public Player(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color, List<Card> ListCardInDeck)
             : base(ID, Name, OnlinePlayerType, IsOnline, Team, IsPlayerControlled, Color)
         {

@@ -56,7 +56,7 @@ namespace Database.SorcererStreet
                 byte MaxNumberOfPlayer = (byte)ActiveDocument.GetValue("MaxNumberOfPlayer").AsInt32;
                 bool IsDead = ActiveDocument.GetValue("IsDead").AsBoolean;
 
-                IRoomInformations NewRoom = new ServerRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, Password,
+                IRoomInformations NewRoom = new BattleMapRoomInformations(RoomID, RoomName, RoomType, RoomSubtype, IsPlaying, Password,
                     OwnerServerIP, OwnerServerPort, CurrentPlayerCount, MinNumberOfPlayer, MaxNumberOfPlayer, IsDead);
                 ListFoundRoom.Add(NewRoom);
             }

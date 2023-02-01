@@ -24,6 +24,8 @@ namespace ProjectEternity.Core.Online
 
         public List<OnlineScript> ListAsyncOnlineScript { get; set; }
 
+        public object ExtraInformation { get; set; }
+
         public RoleManager Roles { get; set; }
 
         public OnlineConnection(TcpClient ActiveClient, NetworkStream ActiveStream, Dictionary<string, OnlineScript> DicOnlineScripts)

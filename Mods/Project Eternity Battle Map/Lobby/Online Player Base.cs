@@ -44,6 +44,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             InputManager = new KeyboardInput();
         }
 
+        public OnlinePlayerBase(string ID, string Name, bool IsOnline)
+        {
+            this.ConnectionID = ID;
+            this.Name = Name;
+            this.IsOnline = IsOnline;
+
+            Guild = string.Empty;
+            Records = new PlayerRecords();
+
+            GameplayType = GameplayTypes.MouseAndKeyboard;
+            InputManager = new KeyboardInput();
+            OnlineClient = new OnlineConnectionDummy();
+        }
+
         public OnlinePlayerBase(string ID, string Name, string OnlinePlayerType, bool IsOnline, int Team, bool IsPlayerControlled, Color Color)
         {
             this.ConnectionID = ID;

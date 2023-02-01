@@ -104,6 +104,17 @@ namespace ProjectEternity.Core.Online
             }
         }
 
+        public double ReadDouble()
+        {
+            byte[] ArrayData = Read8Bytes();
+
+            fixed (byte* DataPointer = &ArrayData[0])
+            {
+                double* FloatPointer = (double*)DataPointer;
+                return *FloatPointer;
+            }
+        }
+
         private byte[] Read4Bytes()
         {
             byte[] ArrayData = new byte[4];

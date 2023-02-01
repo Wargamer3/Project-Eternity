@@ -22,19 +22,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Squad DragAndDropEquipment;
 
         protected bool IsDragDropActive { get { return DragAndDropEquipment != null; } }
-        BattleMapPlayerShopInventory Inventory;
-        List<ShopItemUnit> ListUnitToBuy;
+        BattleMapPlayerUnlockInventory UnlockInventory;
 
-        public ShopUnitScreen(ShopScreen Owner, BattleMapPlayerShopInventory Inventory)
+        public ShopUnitScreen(ShopScreen Owner, BattleMapPlayerUnlockInventory UnlockInventory)
         {
             this.Owner = Owner;
-            this.Inventory = Inventory;
+            this.UnlockInventory = UnlockInventory;
         }
 
         public override void Load()
         {
-            ListUnitToBuy = new List<ShopItemUnit>(Inventory.ListAvailableUnitToBuy);
-
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
@@ -43,21 +40,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            if (BattleMapPlayerShopInventory.IsLoadingDatabase)
-            {
-                return;
-            }
-
-            if (!IsInit)
-            {
-                ListUnitToBuy = new List<ShopItemUnit>(Inventory.ListAvailableUnitToBuy);
-                IsInit = true;
-            }
         }
 
         private void BuyUnit()
         {
-            Unit UnitToBuy = ListUnitToBuy[0].UnitToBuy;
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -66,32 +52,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntArial12, "Units", new Vector2(10, Owner.TopSectionHeight + 5), Color.White);
 
             int DrawY = Owner.MiddleSectionY + 5;
-            for (int i = 0; i < ListUnitToBuy.Count; ++i)
+            for (int i = 0; i < UnlockInventory.ListUnlockedUnit.Count; ++i)
             {
                 DrawBox(g, new Vector2(5, DrawY), Owner.LeftSideWidth - 95, 45, Color.White);
                 DrawBox(g, new Vector2(11, DrawY + 4), 38, 38, Color.White);
-                if (ListUnitToBuy[i].UnitToBuy != null)
+                if (UnlockInventory.ListUnlockedUnit[i].UnitToBuy != null)
                 {
-                    g.DrawString(fntArial12, ListUnitToBuy[i].UnitToBuy.ItemName, new Vector2(48, DrawY + 11), Color.White);
-                    g.Draw(ListUnitToBuy[i].UnitToBuy.SpriteMap, new Vector2(11 + 3, DrawY + 7), Color.White);
+                    g.DrawString(fntArial12, UnlockInventory.ListUnlockedUnit[i].UnitToBuy.ItemName, new Vector2(48, DrawY + 11), Color.White);
+                    g.Draw(UnlockInventory.ListUnlockedUnit[i].UnitToBuy.SpriteMap, new Vector2(11 + 3, DrawY + 7), Color.White);
                 }
 
                 DrawBox(g, new Vector2(Owner.LeftSideWidth - 90, DrawY), 85, 45, Color.White);
-                g.DrawStringRightAligned(fntArial12, ListUnitToBuy[i].Price + " cr", new Vector2(Owner.LeftSideWidth - 12, DrawY + 11), Color.White);
+                g.DrawStringRightAligned(fntArial12, UnlockInventory.ListUnlockedUnit[i].UnitToBuy.Price + " cr", new Vector2(Owner.LeftSideWidth - 12, DrawY + 11), Color.White);
                 DrawY += 50;
             }
-            for (int i = 0; i < Inventory.ListLockedUnit.Count; ++i)
+            for (int i = 0; i < UnlockInventory.ListLockedUnit.Count; ++i)
             {
                 DrawBox(g, new Vector2(5, DrawY), Owner.LeftSideWidth - 95, 45, Color.Gray);
                 DrawBox(g, new Vector2(11, DrawY + 4), 38, 38, Color.Gray);
-                if (Inventory.ListLockedUnit[i].UnitToBuy != null)
+                if (UnlockInventory.ListLockedUnit[i].UnitToBuy != null)
                 {
-                    g.DrawString(fntArial12, Inventory.ListLockedUnit[i].UnitToBuy.ItemName, new Vector2(48, DrawY + 11), Color.White);
-                    g.Draw(Inventory.ListLockedUnit[i].UnitToBuy.SpriteMap, new Vector2(11 + 3, DrawY + 7), Color.White);
+                    g.DrawString(fntArial12, UnlockInventory.ListLockedUnit[i].UnitToBuy.ItemName, new Vector2(48, DrawY + 11), Color.White);
+                    g.Draw(UnlockInventory.ListLockedUnit[i].UnitToBuy.SpriteMap, new Vector2(11 + 3, DrawY + 7), Color.White);
                 }
 
                 DrawBox(g, new Vector2(Owner.LeftSideWidth - 90, DrawY), 85, 45, Color.Gray);
-                g.DrawStringRightAligned(fntArial12, Inventory.ListLockedUnit[i].Price + " cr", new Vector2(Owner.LeftSideWidth - 12, DrawY + 11), Color.White);
+                g.DrawStringRightAligned(fntArial12, UnlockInventory.ListLockedUnit[i].UnitToBuy.Price + " cr", new Vector2(Owner.LeftSideWidth - 12, DrawY + 11), Color.White);
                 DrawY += 50;
             }
 

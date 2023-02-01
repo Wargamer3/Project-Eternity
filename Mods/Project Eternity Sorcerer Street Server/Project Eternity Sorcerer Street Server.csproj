@@ -49,6 +49,7 @@
     <Compile Include="Online\Ask Change Book Script Server.cs" />
     <Compile Include="Online\Ask Change Room Extras Battle Script Server.cs" />
     <Compile Include="Online\Ask Join Room Script Server.cs" />
+    <Compile Include="Online\Ask Player Inventory Script Server.cs" />
     <Compile Include="Online\Change Book Script Server.cs" />
     <Compile Include="Online\Change Room Extras Battle Script Server.cs" />
     <Compile Include="Online\Create Room Script Server.cs" />

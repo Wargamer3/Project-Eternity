@@ -72,18 +72,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MaxGameLengthInMinutes = 10;
         }
 
-        public override void AddOnlinePlayerServer(IOnlineConnection NewPlayer, string PlayerType)
-        {
-            OnlinePlayerBase NewRoomPlayer = new Player(NewPlayer.ID, NewPlayer.Name, PlayerType, true, 0, true, Color.Blue, new List<Card>());
-            NewRoomPlayer.OnlineClient = NewPlayer;
-            NewRoomPlayer.GameplayType = GameplayTypes.None;
-
-            ListRoomPlayer.Add(NewRoomPlayer);
-            ListOnlinePlayer.Add(NewPlayer);
-            ListUniqueOnlineConnection.Add(NewPlayer);
-            CurrentPlayerCount = (byte)ListRoomPlayer.Count;
-        }
-
         public override byte[] GetRoomInfo()
         {
             using (MemoryStream MS = new MemoryStream())

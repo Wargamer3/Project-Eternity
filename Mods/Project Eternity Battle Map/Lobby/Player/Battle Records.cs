@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using ProjectEternity.Core.Online;
+using System.IO;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -38,6 +39,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             TotalDamageGiven = Clone.TotalDamageGiven;
             TotalDamageReceived = Clone.TotalDamageReceived;
             TotalDamageRecovered = Clone.TotalDamageRecovered;
+        }
+
+        public BattleRecords(ByteReader BR)
+        {
+            NumberOfGamesPlayed = BR.ReadUInt32();
+            NumberOfGamesWon = BR.ReadUInt32();
+            NumberOfGamesLost = BR.ReadUInt32();
+            NumberOfKills = BR.ReadUInt32();
+            NumberOfUnitsLost = BR.ReadUInt32();
+
+            TotalDamageGiven = BR.ReadUInt32();
+            TotalDamageReceived = BR.ReadUInt32();
+            TotalDamageRecovered = BR.ReadUInt32();
         }
 
         public void Save(BinaryWriter BW)

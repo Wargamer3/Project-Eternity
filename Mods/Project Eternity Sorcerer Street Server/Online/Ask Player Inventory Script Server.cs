@@ -1,6 +1,7 @@
 ﻿using System;
+using ProjectEternity.Core.Online;
 
-namespace ProjectEternity.Core.Online
+namespace ProjectEternity.GameScreens.SorcererStreetScreen.Server
 {
     public class AskPlayerInventoryScriptServer : OnlineScript
     {
@@ -25,13 +26,18 @@ namespace ProjectEternity.Core.Online
             throw new NotImplementedException();
         }
 
-        protected internal override void Execute(IOnlineConnection ActivePlayer)
+        protected override void Execute(IOnlineConnection Sender)
         {
             PlayerPOCO PlayerInfo = Owner.Database.GetPlayerInventory(ID);
-            ActivePlayer.Send(new PlayerInventoryScriptServer(PlayerInfo));
+
+            Player NewRoomPlayer = new Player(PlayerInfo.ID, PlayerInfo.Name, true);
+            Sender.ExtraInformation = NewRoomPlayer;
+            NewRoomPlayer.OnlineClient = Sender;
+
+            Sender.Send(new PlayerInventoryScriptServer(PlayerInfo));
         }
 
-        protected internal override void Read(OnlineReader Sender)
+        protected override void Read(OnlineReader Sender)
         {
             ID = Sender.ReadString();
         }

@@ -1,7 +1,5 @@
 ﻿using System;
-using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
-using ProjectEternity.Core.Characters;
 using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Online
@@ -51,17 +49,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
             BR.Clear();
 
-            Unit NewUnit = Unit.FromFullName("Normal/Original/Voltaire", Owner.Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-            Character NewCharacter = new Character("Original/Greg", Owner.Content, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-            NewCharacter.Level = 1;
-            NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
-
-            Squad NewSquad = new Squad("Squad", NewUnit);
-            NewSquad.IsPlayerControlled = true;
-
             BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, PlayerManager.OnlinePlayerName, OnlinePlayerBase.PlayerTypes.Player, false, 0, true, Color.Blue);
-
-            NewPlayer.Inventory.ActiveLoadout.ListSpawnSquad.Add(NewSquad);
 
             return NewPlayer;
         }

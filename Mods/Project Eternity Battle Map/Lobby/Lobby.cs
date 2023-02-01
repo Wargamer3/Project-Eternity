@@ -153,6 +153,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicOnlineGameClientScripts.Add(SendRolesScriptClient.ScriptName, new SendRolesScriptClient());
             DicOnlineGameClientScripts.Add(RedirectScriptClient.ScriptName, new RedirectScriptClient(OnlineGameClient));
             DicOnlineGameClientScripts.Add(LoginSuccessScriptClient.ScriptName, new LoginSuccessScriptClient(this));
+            DicOnlineGameClientScripts.Add(NewUnlocksScriptClient.ScriptName, new NewUnlocksScriptClient(this));
             DicOnlineGameClientScripts.Add(RoomListScriptClient.ScriptName, new RoomListScriptClient(this));
             DicOnlineGameClientScripts.Add(JoinRoomLocalScriptClient.ScriptName, new JoinRoomLocalScriptClient(OnlineGameClient, OnlineCommunicationClient, this, false));
             DicOnlineGameClientScripts.Add(JoinRoomFailedScriptClient.ScriptName, new JoinRoomFailedScriptClient(OnlineGameClient, this));
@@ -284,6 +285,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
             }
+            else
+            {
+                PendingUnlockScreen.CheckForUnlocks(this);
+            }
+
+            PendingUnlockScreen.UpdateUnlockScreens(this);
 
             if (FMODSystem.sndActiveBGM != sndBGM)
             {
@@ -297,8 +304,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ActiveButton.Update(gameTime);
             }
-
-            PendingUnlockScreen.CheckForUnlocks(this);
         }
 
         private void UpdateRooms()

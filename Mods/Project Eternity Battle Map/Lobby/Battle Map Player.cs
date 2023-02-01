@@ -1,8 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -10,7 +14,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     public class BattleMapPlayer : OnlinePlayerBase
     {
         public BattleMapPlayerInventory Inventory;
-        public BattleMapPlayerShopInventory ShopInventory;
         public BattleMapPlayerUnlockInventory UnlockInventory;
 
         public override string SaveFileFolder => "Battle Map/";
@@ -18,7 +21,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleMapPlayer()
         {
             Inventory = new BattleMapPlayerInventory();
-            ShopInventory = new BattleMapPlayerShopInventory();
+            UnlockInventory = new BattleMapPlayerUnlockInventory();
+            UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
+        }
+
+        public BattleMapPlayer(string ID, string Name, bool IsOnline)
+            : base(ID, Name, IsOnline)
+        {
+            Inventory = new BattleMapPlayerInventory();
             UnlockInventory = new BattleMapPlayerUnlockInventory();
             UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
         }
@@ -27,7 +37,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             : base(ID, Name, OnlinePlayerType, IsOnline, Team, IsPlayerControlled, Color)
         {
             Inventory = new BattleMapPlayerInventory();
-            ShopInventory = new BattleMapPlayerShopInventory();
             UnlockInventory = new BattleMapPlayerUnlockInventory();
             UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
         }
@@ -36,7 +45,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             : base(ID, Name, OnlinePlayerType, IsOnline, Team, IsPlayerControlled, Color)
         {
             Inventory = new BattleMapPlayerInventory();
-            ShopInventory = new BattleMapPlayerShopInventory();
             UnlockInventory = new BattleMapPlayerUnlockInventory();
             UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
         }
@@ -50,16 +58,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             Inventory = Clone.Inventory;
-            ShopInventory = Clone.ShopInventory;
             UnlockInventory = Clone.UnlockInventory;
             UnlocksEvaluator = new BattleMapItemUnlockConditionsEvaluator(this);
+        }
+
+        public void InitRecords(ByteReader BR)
+        {
+            UnlockInventory.Load(BR);
+            Records.Load(BR);
         }
 
         protected override void DoLoadLocally(ContentManager Content, BinaryReader BR)
         {
             Inventory.Load(BR, Content, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-            ShopInventory.PopulateUnlockedShopItems(Name);
-            UnlockInventory.PopulateUnlockedPlayerItems(Name);
+            UnlockInventory.LoadPlayerUnlocks(Name);
         }
 
         public override void InitFirstTimeInventory()
