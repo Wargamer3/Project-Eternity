@@ -230,10 +230,16 @@ namespace ProjectEternity.Editors.VisualNovelEditor
                                 new Vector2(ActiveVisualNovel.ListDialog[ActiveDialog.ListNextDialog[D2]].Position.X - ScriptEditorOrigin.X - 7, ActiveVisualNovel.ListDialog[ActiveDialog.ListNextDialog[D2]].Position.Y - ScriptEditorOrigin.Y + 5), Color.Black);
                 }
 
-                if (ActiveDialog.CutsceneBefore != null && ActiveDialog.CutsceneBefore.ListCutsceneBehavior.Count > 0)
+                if (ActiveDialog.CutsceneBefore != null && ActiveDialog.CutsceneBefore.DicActionScript.Count > 0)
                 {
                     g.DrawStringRightAligned(fntFrameCount, ActiveDialog.CutsceneBefore.DicActionScript.Count.ToString(),
                         new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth - 25,
+                        ActiveDialog.Position.Y - ScriptEditorOrigin.Y), Color.Red);
+                }
+                if (ActiveDialog.CutsceneDuring != null && ActiveDialog.CutsceneDuring.DicActionScript.Count > 0)
+                {
+                    g.DrawStringRightAligned(fntFrameCount, ActiveDialog.CutsceneDuring.DicActionScript.Count.ToString(),
+                        new Vector2(ActiveDialog.Position.X - ScriptEditorOrigin.X + BoxWidth - 18,
                         ActiveDialog.Position.Y - ScriptEditorOrigin.Y), Color.Red);
                 }
                 if (ActiveDialog.CutsceneAfter != null && ActiveDialog.CutsceneAfter.DicActionScript.Count > 0)

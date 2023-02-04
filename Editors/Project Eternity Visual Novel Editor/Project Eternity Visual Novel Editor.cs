@@ -9,10 +9,10 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Editor;
 using ProjectEternity.Core.Scripts;
+using ProjectEternity.Core.Characters;
 using ProjectEternity.Editors.ImageViewer;
 using ProjectEternity.GameScreens.AnimationScreen;
 using ProjectEternity.GameScreens.VisualNovelScreen;
-using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Editors.VisualNovelEditor
 {
@@ -181,6 +181,11 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
                 PopulateDialog(ActiveTimelineDialog);
             }
+
+            if (lstDialogs.Items.Count > 0)
+            {
+                lstDialogs.SelectedIndex = 0;
+            }
         }
 
         private void PopulateDialog(Dialog StartingDialog)
@@ -325,7 +330,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
 
         private void lstDialogs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstDialogs.SelectedItem != null && LastTimelineIndex != lstDialogs.SelectedIndex)
+            if (lstDialogs.SelectedItem != null && LastTimelineIndex != VisualNovelViewer.ActiveVisualNovel.ListDialog.IndexOf((Dialog)lstDialogs.SelectedItem))
             {
                 //Update the combo box with the new Dialog data.
                 DialogSelected((Dialog)lstDialogs.SelectedItem);

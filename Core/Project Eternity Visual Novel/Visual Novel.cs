@@ -459,6 +459,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                         Timeline.Add(NewDialog);
 
                     NewDialog.CutsceneBefore = new Cutscene(null, BR, DicCutsceneScript);
+                    NewDialog.CutsceneDuring = new Cutscene(null, BR, DicCutsceneScript);
                     NewDialog.CutsceneAfter = new Cutscene(null, BR, DicCutsceneScript);
                 }
 
@@ -585,6 +586,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                     BW.Write(SavedDialog.ListNextDialog[L]);
 
                 SavedDialog.CutsceneBefore.Save(BW);
+                SavedDialog.CutsceneDuring.Save(BW);
                 SavedDialog.CutsceneAfter.Save(BW);
             }
 
@@ -752,6 +754,8 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
                 if (RightCharacter.IsAnimated)
                     RightCharacter.Update(gameTime);
             }
+
+            CurrentDialog.CutsceneDuring.Update(gameTime);
 
             //Skip the visual novel.
             if (HasControl() && InputHelper.InputSkipPressed())

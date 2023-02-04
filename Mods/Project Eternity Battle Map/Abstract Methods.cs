@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Online;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -50,6 +51,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public abstract BattleMap GetNewMap(string GameMode, string ParamsID);
 
         public abstract string GetMapType();
+
+        public virtual void Resize(int Width, int Height)
+        {
+            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Width, Height, 0, 0, -1f);
+            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+
+            Matrix projectionMatrix = HalfPixelOffset * Projection;
+
+            fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
+
+            MapRenderTarget = new RenderTarget2D(GraphicsDevice, Width, Height, false,
+                GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+        }
 
         public abstract void SetWorld(Matrix World);
 

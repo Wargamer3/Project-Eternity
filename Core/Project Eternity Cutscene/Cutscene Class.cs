@@ -327,6 +327,11 @@ namespace ProjectEternity.Core.Scripts
                     OnCutsceneEnded();
             }
 
+            for (int C = 0; C < ListCutsceneBehavior.Count; C++)
+            {
+                ExecuteUpdate(ListCutsceneBehavior[C], 1, gameTime);
+            }
+
             for (int S = 0; S < DicActionScript.Count; S++)
             {
                 if (DicActionScript[S].IsActive && !DicActionScript[S].IsEnded)
@@ -375,7 +380,6 @@ namespace ProjectEternity.Core.Scripts
 
             for (int C = 0; C < ListCutsceneBehavior.Count; C++)
             {
-                ListCutsceneBehavior[C].ExecuteEvent(ListCutsceneBehavior[C], 1);
                 if (CheckIfScriptIsActive(ListCutsceneBehavior[C]))
                     CutsceneIsActive = true;
             }
@@ -392,6 +396,14 @@ namespace ProjectEternity.Core.Scripts
             for (int E = 0; E < InputScript.ArrayEvents[Index].Count; E++)
             {
                 DicActionScript[InputScript.ArrayEvents[Index][E].LinkedScriptIndex].ExecuteTrigger(InputScript.ArrayEvents[Index][E].LinkedScriptTriggerIndex);
+            }
+        }
+
+        public void ExecuteUpdate(CutsceneActionScript InputScript, int Index, Microsoft.Xna.Framework.GameTime gameTime)
+        {
+            for (int E = 0; E < InputScript.ArrayEvents[Index].Count; E++)
+            {
+                DicActionScript[InputScript.ArrayEvents[Index][E].LinkedScriptIndex].ExecuteUpdate(gameTime, InputScript.ArrayEvents[Index][E].LinkedScriptTriggerIndex);
             }
         }
 

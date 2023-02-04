@@ -52,10 +52,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            Matrix RotationMatrix = Matrix.CreateFromYawPitchRoll(Yaw - MathHelper.PiOver2, Pitch, Roll);
-            Vector3 Forward = Vector3.Transform(Vector3.Forward, RotationMatrix);
-            Forward = new Vector3(Forward.X, Forward.Z, Forward.Y);
-
             Terrain StartTerrain = Map.GetTerrain(HubSquad.Position + new Vector3(0.5f, 0.5f, 0));
             Vector3 NextTerrainRealPosition = StartTerrain.GetRealPosition(HubSquad.Position + new Vector3(0.5f, 0.5f, 0));
             Vector3 Position = new Vector3(NextTerrainRealPosition.X * Map.TileSize.X,

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.cutsceneViewer = new ProjectEternity.Editors.CutsceneEditor.CutsceneViewer();
             this.ScriptingContainer = new System.Windows.Forms.SplitContainer();
@@ -37,6 +36,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.rbBeforeDialog = new System.Windows.Forms.RadioButton();
             this.rbAfterDialog = new System.Windows.Forms.RadioButton();
+            this.rbDuringDialog = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -136,7 +136,7 @@
             // rbAfterDialog
             // 
             this.rbAfterDialog.AutoSize = true;
-            this.rbAfterDialog.Location = new System.Drawing.Point(103, 3);
+            this.rbAfterDialog.Location = new System.Drawing.Point(202, 3);
             this.rbAfterDialog.Name = "rbAfterDialog";
             this.rbAfterDialog.Size = new System.Drawing.Size(80, 17);
             this.rbAfterDialog.TabIndex = 5;
@@ -145,11 +145,24 @@
             this.rbAfterDialog.UseVisualStyleBackColor = true;
             this.rbAfterDialog.CheckedChanged += new System.EventHandler(this.rbAfterDialog_CheckedChanged);
             // 
+            // rbDuringDialog
+            // 
+            this.rbDuringDialog.AutoSize = true;
+            this.rbDuringDialog.Location = new System.Drawing.Point(107, 3);
+            this.rbDuringDialog.Name = "rbDuringDialog";
+            this.rbDuringDialog.Size = new System.Drawing.Size(89, 17);
+            this.rbDuringDialog.TabIndex = 6;
+            this.rbDuringDialog.TabStop = true;
+            this.rbDuringDialog.Text = "During Dialog";
+            this.rbDuringDialog.UseVisualStyleBackColor = true;
+            this.rbDuringDialog.CheckedChanged += new System.EventHandler(this.rbDuringDialog_CheckedChanged);
+            // 
             // DialogEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 577);
+            this.Controls.Add(this.rbDuringDialog);
             this.Controls.Add(this.rbAfterDialog);
             this.Controls.Add(this.rbBeforeDialog);
             this.Controls.Add(this.splitContainer1);
@@ -179,5 +192,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.RadioButton rbBeforeDialog;
         private System.Windows.Forms.RadioButton rbAfterDialog;
+        private System.Windows.Forms.RadioButton rbDuringDialog;
     }
 }

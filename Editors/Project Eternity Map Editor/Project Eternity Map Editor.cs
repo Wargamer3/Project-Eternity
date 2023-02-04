@@ -627,7 +627,7 @@ namespace ProjectEternity.Editors.MapEditor
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
             for (int S = 0; S < TopLayer.ListMultiplayerSpawns.Count; S++)
             {//If it exist.
-                if (TopLayer.ListMultiplayerSpawns[S].Position.X == X && TopLayer.ListMultiplayerSpawns[S].Position.Y == Y && TopLayer.ListMultiplayerSpawns[S].Tag == Spawn.Tag)
+                if (TopLayer.ListMultiplayerSpawns[S].Position.X == X && TopLayer.ListMultiplayerSpawns[S].Position.Y == Y && (Spawn == null || TopLayer.ListMultiplayerSpawns[S].Tag == Spawn.Tag))
                 {
                     //Delete it.
                     TopLayer.ListMultiplayerSpawns.RemoveAt(S);
@@ -943,6 +943,7 @@ namespace ProjectEternity.Editors.MapEditor
                 int Index = lsLayers.SelectedIndex;
                 Helper.RemoveLayer(Index);
                 lsLayers.Items.RemoveAt(Index);
+                lsLayers.SelectedIndex = lsLayers.Items.Count - 1;
             }
         }
 

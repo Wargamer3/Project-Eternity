@@ -104,6 +104,13 @@ namespace ProjectEternity.Editors.VisualNovelEditor
             cutsceneViewer.Refresh();
         }
 
+        private void rbDuringDialog_CheckedChanged(object sender, EventArgs e)
+        {
+            ActiveCutscene = ActiveDialog.CutsceneDuring;
+            cutsceneViewer.InitCutscene(ActiveCutscene);
+            cutsceneViewer.Refresh();
+        }
+
         private void rbAfterDialog_CheckedChanged(object sender, EventArgs e)
         {
             ActiveCutscene = ActiveDialog.CutsceneAfter;

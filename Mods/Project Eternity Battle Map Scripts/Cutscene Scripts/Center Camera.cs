@@ -7,7 +7,6 @@ using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-
     public sealed partial class ExtraBattleMapCutsceneScriptHolder
     {
         public class ScriptCenterCamera : BattleMapScript

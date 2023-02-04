@@ -271,12 +271,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 return;
             }
 
-            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Width, Height, 0, 0, -1f);
-            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-            Matrix projectionMatrix = HalfPixelOffset * Projection;
-
-            ActiveMap.fxOutline.Parameters["Projection"].SetValue(projectionMatrix);
+            ActiveMap.Resize(Width, Height);
 
             RefreshScrollbars();
         }

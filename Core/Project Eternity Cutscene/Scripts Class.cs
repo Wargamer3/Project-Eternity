@@ -236,6 +236,10 @@ namespace ProjectEternity.Core.Scripts
 
         public abstract void ExecuteTrigger(int Index);
 
+        public virtual void ExecuteUpdate(Microsoft.Xna.Framework.GameTime gameTime, int Index)
+        {
+        }
+
         public abstract void Update(Microsoft.Xna.Framework.GameTime gameTime);
 
         public abstract void Draw(CustomSpriteBatch g);

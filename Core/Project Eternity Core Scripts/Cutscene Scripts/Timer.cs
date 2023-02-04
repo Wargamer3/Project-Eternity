@@ -12,6 +12,7 @@ namespace ProjectEternity.Core.Scripts
             public enum TimerTypes { Miliseconds, Seconds, Minutes };
 
             private int _EndingValue;
+            private bool _Loop;
             private TimeSpan TimerValue;
             private TimerTypes _TimerType;
 
@@ -77,7 +78,14 @@ namespace ProjectEternity.Core.Scripts
                     }
                     if (IsTimerEnded)
                     {
-                        IsEnded = true;
+                        if (_Loop)
+                        {
+                            TimerValue = new TimeSpan();
+                        }
+                        else
+                        {
+                            IsEnded = true;
+                        }
                         //Timer Ended Trigger.
                         ExecuteEvent(this, 1);
                     }
@@ -93,12 +101,14 @@ namespace ProjectEternity.Core.Scripts
             {
                 TimerType = (TimerTypes)BR.ReadInt32();
                 EndingValue = BR.ReadInt32();
+                _Loop = BR.ReadBoolean();
             }
 
             public override void Save(BinaryWriter BW)
             {
                 BW.Write((int)TimerType);
                 BW.Write(EndingValue);
+                BW.Write(_Loop);
             }
 
             protected override CutsceneScript DoCopyScript()
@@ -135,6 +145,21 @@ namespace ProjectEternity.Core.Scripts
                 set
                 {
                     _EndingValue = value;
+                }
+            }
+
+            [CategoryAttribute("Timer behavior"),
+            DescriptionAttribute("The time will reset after reaching its end instead of stoping."),
+            DefaultValueAttribute(1)]
+            public bool Loop
+            {
+                get
+                {
+                    return _Loop;
+                }
+                set
+                {
+                    _Loop = value;
                 }
             }
 

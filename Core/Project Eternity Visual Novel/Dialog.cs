@@ -25,6 +25,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
         public string TextPreview;
         public List<int> ListNextDialog;//List of index of the possible next dialogs, return to parent dialog if nothing is after.
         public Cutscene CutsceneBefore;
+        public Cutscene CutsceneDuring;
         public Cutscene CutsceneAfter;
         public bool OverrideCharacterPriority;
         public readonly List<SpeakerPriority> ListSpeakerPriority;
@@ -47,6 +48,10 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
             Text = Other.Text;
             TextPreview = Other.TextPreview;
             TextTop = Other.TextTop;
+
+            CutsceneBefore = new Cutscene(null, new Dictionary<string, CutsceneScript>());
+            CutsceneDuring = new Cutscene(null, new Dictionary<string, CutsceneScript>());
+            CutsceneAfter = new Cutscene(null, new Dictionary<string, CutsceneScript>());
         }
 
         public Dialog(SimpleAnimation LeftCharacter, SimpleAnimation RightCharacter, SimpleAnimation TopCharacter, SimpleAnimation BottomCharacter,
