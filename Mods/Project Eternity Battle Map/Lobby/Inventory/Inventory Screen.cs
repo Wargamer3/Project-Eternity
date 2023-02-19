@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ActivePlayer = (BattleMapPlayer)PlayerManager.ListLocalPlayer[0];
             ActivePlayer.Level = 50;
 
-            LeftSideWidth = (int)(Constants.Width * 0.5);
+            LeftSideWidth = (int)(Constants.Width * 0.5 + 20);
             TopSectionHeight = (int)(Constants.Height * 0.1);
             HeaderSectionY = TopSectionHeight;
             HeaderSectionHeight = (int)(Constants.Height * 0.05);
@@ -186,22 +186,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             DrawBox(g, new Vector2(), Constants.Width, Constants.Height, Color.White);
 
+            DrawBox(g, new Vector2(0, MiddleSectionY), LeftSideWidth, MiddleSectionHeight, Color.White);
+            DrawBox(g, new Vector2(LeftSideWidth, MiddleSectionY), Constants.Width - LeftSideWidth, MiddleSectionHeight, Color.White);
+
+            ActiveSubScreen.Draw(g);
+
+            //Left side
+            DrawBox(g, new Vector2(0, BottomSectionY), LeftSideWidth, Constants.Height - BottomSectionY, Color.White);
+
+            DrawBox(g, new Vector2(0, MiddleSectionY), LeftSideWidth, MiddleSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
+            DrawBox(g, new Vector2(LeftSideWidth, MiddleSectionY), Constants.Width - LeftSideWidth, MiddleSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
+
+            DrawBox(g, new Vector2(0, HeaderSectionY), LeftSideWidth, HeaderSectionHeight, Color.White);
             DrawBox(g, new Vector2(0, 0), (int)(Constants.Width * 0.7), TopSectionHeight, Color.White);
             g.DrawString(fntArial12, "INVENTORY", new Vector2(10, 20), Color.White);
 
-            //Left side
-            DrawBox(g, new Vector2(0, HeaderSectionY), LeftSideWidth, HeaderSectionHeight, Color.White);
-            DrawBox(g, new Vector2(0, MiddleSectionY), LeftSideWidth, MiddleSectionHeight, Color.White);
-            DrawBox(g, new Vector2(0, BottomSectionY), LeftSideWidth, Constants.Height - BottomSectionY, Color.White);
             DrawBox(g, new Vector2(LeftSideWidth, HeaderSectionY), LeftSideWidth, HeaderSectionHeight, Color.White);
-
-            DrawBox(g, new Vector2(LeftSideWidth, MiddleSectionY), LeftSideWidth, MiddleSectionHeight, Color.White);
-
-
             DrawBox(g, new Vector2(LeftSideWidth, BottomSectionY), LeftSideWidth, Constants.Height - BottomSectionY, Color.White);
             g.DrawStringRightAligned(fntArial12, "Money: 14360 cr", new Vector2(LeftSideWidth - 12, BottomSectionY + 11), Color.White);
-
-            ActiveSubScreen.Draw(g);
 
             foreach (IUIElement ActiveButton in ArrayUIElement)
             {

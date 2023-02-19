@@ -30,6 +30,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private Tile3D Cursor;
         private List<Tile3D> ListEditorCursorFace;
 
+        private Dictionary<int, Tile3DHolder> DicTileBorderPerPlayer;
         private Dictionary<int, Tile3DHolder> DicTile3DByTileset;
         private Dictionary<int, Dictionary<int, Tile3DHolder>> DicTile3DByLayerByTileset;
         private Dictionary<int, Tile3DHolder> DicHiddenTile3DByTileset = new Dictionary<int, Tile3DHolder>();
@@ -45,81 +46,84 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             sprCursor = Map.sprCursor;
             ListEditorCursorFace = new List<Tile3D>();
 
-            MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D 2");
-            ColorEffect = Map.Content.Load<Effect>("Shaders/Color Only");
-            ColorEffect.Parameters["t0"].SetValue(GameScreen.sprPixel);
+            if (!Map.IsServer)
+            {
+                MapEffect = Map.Content.Load<Effect>("Shaders/Default Shader 3D 2");
+                ColorEffect = Map.Content.Load<Effect>("Shaders/Color Only");
+                ColorEffect.Parameters["t0"].SetValue(GameScreen.sprPixel);
 
-            PolygonEffect = new BasicEffect(g);
+                PolygonEffect = new BasicEffect(g);
 
-            PolygonEffect.TextureEnabled = true;
-            PolygonEffect.EnableDefaultLighting();
+                PolygonEffect.TextureEnabled = true;
+                PolygonEffect.EnableDefaultLighting();
 
-            float aspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
+                float aspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
 
-            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                    aspectRatio,
-                                                                    1, 10000);
-            PolygonEffect.Projection = Projection;
+                Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                        aspectRatio,
+                                                                        1, 10000);
+                PolygonEffect.Projection = Projection;
 
-            PolygonEffect.World = Matrix.Identity;
-            PolygonEffect.View = Matrix.Identity;
+                PolygonEffect.World = Matrix.Identity;
+                PolygonEffect.View = Matrix.Identity;
 
-            MapEffect.Parameters["World"].SetValue(Matrix.Transpose(PolygonEffect.World));
+                MapEffect.Parameters["World"].SetValue(Matrix.Transpose(PolygonEffect.World));
 
-            Matrix worldInverse = Matrix.Invert(PolygonEffect.World);
+                Matrix worldInverse = Matrix.Invert(PolygonEffect.World);
 
-            MapEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
+                MapEffect.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
 
-            // Key light.
-            MapEffect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
-            MapEffect.Parameters["DirLight0DiffuseColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
-            MapEffect.Parameters["DirLight0SpecularColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
+                // Key light.
+                MapEffect.Parameters["DirLight0Direction"].SetValue(new Vector3(-0.5265408f, -0.5735765f, -0.6275069f));
+                MapEffect.Parameters["DirLight0DiffuseColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
+                MapEffect.Parameters["DirLight0SpecularColor"].SetValue(new Vector3(1, 0.9607844f, 0.8078432f));
 
-            // Fill light.
-            MapEffect.Parameters["DirLight1Direction"].SetValue(new Vector3(0.7198464f, 0.3420201f, 0.6040227f));
-            MapEffect.Parameters["DirLight1DiffuseColor"].SetValue(new Vector3(0.9647059f, 0.7607844f, 0.4078432f));
-            MapEffect.Parameters["DirLight1SpecularColor"].SetValue(Vector3.Zero);
+                // Fill light.
+                MapEffect.Parameters["DirLight1Direction"].SetValue(new Vector3(0.7198464f, 0.3420201f, 0.6040227f));
+                MapEffect.Parameters["DirLight1DiffuseColor"].SetValue(new Vector3(0.9647059f, 0.7607844f, 0.4078432f));
+                MapEffect.Parameters["DirLight1SpecularColor"].SetValue(Vector3.Zero);
 
-            // Back light.
-            MapEffect.Parameters["DirLight2Direction"].SetValue(new Vector3(0.4545195f, -0.7660444f, 0.4545195f));
-            MapEffect.Parameters["DirLight2DiffuseColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
-            MapEffect.Parameters["DirLight2SpecularColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
+                // Back light.
+                MapEffect.Parameters["DirLight2Direction"].SetValue(new Vector3(0.4545195f, -0.7660444f, 0.4545195f));
+                MapEffect.Parameters["DirLight2DiffuseColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
+                MapEffect.Parameters["DirLight2SpecularColor"].SetValue(new Vector3(0.3231373f, 0.3607844f, 0.3937255f));
 
-            Vector3 diffuseColor = Vector3.One;
-            Vector3 emissiveColor = Vector3.Zero;
-            Vector3 ambientLightColor = new Vector3(0.05333332f, 0.09882354f, 0.1819608f);
-            Vector4 diffuse = new Vector4();
-            Vector3 emissive = new Vector3();
-            float alpha = 1;
-            diffuse.X = diffuseColor.X * alpha;
-            diffuse.Y = diffuseColor.Y * alpha;
-            diffuse.Z = diffuseColor.Z * alpha;
-            diffuse.W = alpha;
+                Vector3 diffuseColor = Vector3.One;
+                Vector3 emissiveColor = Vector3.Zero;
+                Vector3 ambientLightColor = new Vector3(0.05333332f, 0.09882354f, 0.1819608f);
+                Vector4 diffuse = new Vector4();
+                Vector3 emissive = new Vector3();
+                float alpha = 1;
+                diffuse.X = diffuseColor.X * alpha;
+                diffuse.Y = diffuseColor.Y * alpha;
+                diffuse.Z = diffuseColor.Z * alpha;
+                diffuse.W = alpha;
 
-            emissive.X = (emissiveColor.X + ambientLightColor.X * diffuseColor.X) * alpha;
-            emissive.Y = (emissiveColor.Y + ambientLightColor.Y * diffuseColor.Y) * alpha;
-            emissive.Z = (emissiveColor.Z + ambientLightColor.Z * diffuseColor.Z) * alpha;
+                emissive.X = (emissiveColor.X + ambientLightColor.X * diffuseColor.X) * alpha;
+                emissive.Y = (emissiveColor.Y + ambientLightColor.Y * diffuseColor.Y) * alpha;
+                emissive.Z = (emissiveColor.Z + ambientLightColor.Z * diffuseColor.Z) * alpha;
 
-            MapEffect.Parameters["DiffuseColor"].SetValue(diffuse);
-            MapEffect.Parameters["EmissiveColor"].SetValue(emissive);
-            MapEffect.Parameters["SpecularColor"].SetValue(Vector3.One);
-            MapEffect.Parameters["SpecularPower"].SetValue(64);
+                MapEffect.Parameters["DiffuseColor"].SetValue(diffuse);
+                MapEffect.Parameters["EmissiveColor"].SetValue(emissive);
+                MapEffect.Parameters["SpecularColor"].SetValue(Vector3.One);
+                MapEffect.Parameters["SpecularPower"].SetValue(64);
 
-            MapEffect.Parameters["FogLimits"].SetValue(new Vector2(1200, 2000));
-            MapEffect.Parameters["FogColor"].SetValue(new Vector3(0.0f, 0.0f, 0.0f));
+                MapEffect.Parameters["FogLimits"].SetValue(new Vector2(1200, 2000));
+                MapEffect.Parameters["FogColor"].SetValue(new Vector3(0.0f, 0.0f, 0.0f));
+
+                CreateMap(Map, LayerManager);
+
+                float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].WorldPosition.Z;
+                Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
+                DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
+                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
+                Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                    0, 0, Z, 0, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
+            }
 
             DicDrawablePointPerColor = new Dictionary<Vector4, List<Tile3D>>();
             ListDrawableArrowPerColor = new List<Tile3D>();
             DicDamageNumberByPosition = new Dictionary<string, Vector3>();
-
-            CreateMap(Map, LayerManager);
-
-            float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].WorldPosition.Z;
-            Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
-            DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
-            Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
-            Cursor = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
-                0, 0, Z, 0, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
 
             if (Map.IsEditor)
             {
@@ -131,6 +135,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void CreateMap(DeathmatchMap Map, LayerHolderDeathmatch LayerManager)
         {
+            DicTileBorderPerPlayer = new Dictionary<int, Tile3DHolder>();
             DicTile3DByTileset = new Dictionary<int, Tile3DHolder>();
             DicHiddenTile3DByTileset = new Dictionary<int, Tile3DHolder>();
             DicTile3DByLayerByTileset = new Dictionary<int, Dictionary<int, Tile3DHolder>>();
@@ -155,6 +160,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in ActiveLayer.Value)
                 {
                     ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+                }
+            }
+
+            for (int P = 0; P < Map.ListPlayer.Count; P++)
+            {
+                if (Map.ListPlayer[P].ListSquad.Count > 0)
+                {
+                    CreateUnitBorder(P);
                 }
             }
         }
@@ -296,7 +309,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void Update(GameTime gameTime)
         {
-            if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive))
+            if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive) && !Map.IsServer)
             {
                 UpdateCamera();
 
@@ -310,7 +323,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     X * Map.TileSize.X, Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.3f, Map.TileSize, Map.TileSize, new List<Texture2D>() { sprCursor }, Z, Z, Z, Z, 0)[0];
             }
 
-            if (!Map.IsAPlatform)
+            if (!Map.IsAPlatform && !Map.IsServer)
             {
                 if (Map.ActivePlatform != null)
                 {
@@ -340,7 +353,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     //If it's dead, don't draw it unless it's an event unit.
                     if ((ActiveSquad.CurrentLeader == null && !ActiveSquad.IsEventSquad)
-                        || ActiveSquad.IsDead)
+                        || ActiveSquad.IsDead || ActiveSquad.CurrentLeader.Unit3DModel == null)
                         continue;
 
                     ActiveSquad.CurrentLeader.Unit3DModel.Update(gameTime);
@@ -351,7 +364,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void SetTarget(Vector3 Target)
         {
             Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, 300), Matrix.CreateRotationY(0.2f)) + Target;
-            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 400, 0f));
+            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 200, 0f));
             Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);
         }
 
@@ -636,6 +649,52 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             FilterTerrainObscuringUnits();
         }
 
+        public void UnitMoved(int PlayerIndex)
+        {
+            CreateUnitBorder(PlayerIndex);
+        }
+
+        public void UnitKilled(int PlayerIndex)
+        {
+            CreateUnitBorder(PlayerIndex);
+        }
+
+        private void CreateUnitBorder(int PlayerIndex)
+        {
+            if (!DicTileBorderPerPlayer.ContainsKey(PlayerIndex))
+            {
+                Color PlayerColor = Map.ListPlayer[PlayerIndex].Color;
+
+                if (PlayerColor == Color.Red)
+                {
+                    DicTileBorderPerPlayer.Add(PlayerIndex, new Tile3DHolder(MapEffect, Map.sprTileBorderRed, 0.5f));
+                }
+                else
+                {
+                    DicTileBorderPerPlayer.Add(PlayerIndex, new Tile3DHolder(MapEffect, Map.sprTileBorderBlue, 0.5f));
+                }
+            }
+
+            DicTileBorderPerPlayer[PlayerIndex].Clear();
+
+            foreach (Squad ActiveSquad in Map.ListPlayer[PlayerIndex].ListSquad)
+            {
+                Terrain ActiveTerrain = Map.GetTerrain(ActiveSquad);
+                Terrain3D ActiveTerrain3D = ActiveTerrain.DrawableTile.Terrain3DInfo;
+                float Z = ActiveTerrain.WorldPosition.Z * LayerHeight;
+
+                Tile3D BorderTile = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
+                    ActiveTerrain.WorldPosition.X * Map.TileSize.X, ActiveTerrain.WorldPosition.Y * Map.TileSize.Y, Z, Map.CursorPosition.Z * LayerHeight + 0.001f, new Point(Map.TileSize.X, Map.TileSize.Y), new Point(Map.sprTileBorderRed.Width, Map.sprTileBorderRed.Height), new List<Texture2D>() { Map.sprTileBorderRed }, Z, Z, Z, Z, 0)[0];
+
+                DicTileBorderPerPlayer[PlayerIndex].AddTile(BorderTile);
+            }
+
+            foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTileBorderPerPlayer)
+            {
+                ActiveTileSet.Value.Finish(GameScreen.GraphicsDevice);
+            }
+        }
+
         private void FilterTerrainObscuringUnits()
         {
             ListIgnoredTerrain.Clear();
@@ -783,6 +842,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawDelayedAttacks(g);
 
             DrawPERAttacks(g, View);
+
+            foreach (Tile3DHolder ActivePlayerBorder in DicTileBorderPerPlayer.Values)
+            {
+                ActivePlayerBorder.SetViewMatrix(WorldViewProjection, CameraPosition);
+                ActivePlayerBorder.Draw(g.GraphicsDevice);
+            }
 
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicHiddenTile3DByTileset)
             {
@@ -960,8 +1025,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Walking");
                             Matrix RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(ActiveSquad.Direction));
 
-                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.2f) * RotationMatrix
-                                * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
+                            Vector3 FinalPosition = new Vector3(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Y * Map.TileSize.Y, CurrentPosition.Z * LayerHeight);
+
+                            if (ActiveSquad.CurrentLeader.UnitStat.ArrayMapSize.GetLength(0) > 1)
+                            {
+                                FinalPosition.X += (Map.TileSize.X / 2f) * ActiveSquad.CurrentLeader.UnitStat.ArrayMapSize.GetLength(0) - Map.TileSize.X / 2;
+                                FinalPosition.Y += (Map.TileSize.Y / 2f) * ActiveSquad.CurrentLeader.UnitStat.ArrayMapSize.GetLength(1) - Map.TileSize.Y / 2;
+                            }
+
+                            ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, RotationMatrix
+                                * Matrix.CreateTranslation(FinalPosition.X, FinalPosition.Z, FinalPosition.Y));
                         }
                     }
                     else
@@ -1009,13 +1082,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ActiveSquad.CurrentLeader.Unit3DModel.PlayAnimation("Idle");
                             Matrix RotationMatrix = RotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(ActiveSquad.Direction));
 
+                            Vector3 FinalPosition = new Vector3(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Y * Map.TileSize.Y, CurrentPosition.Z * LayerHeight);
+
+                            if (ActiveSquad.CurrentLeader.UnitStat.ArrayMapSize.GetLength(0) > 1)
+                            {
+                                FinalPosition.X += (Map.TileSize.X / 2f) * ActiveSquad.CurrentLeader.UnitStat.ArrayMapSize.GetLength(0) - Map.TileSize.X / 2;
+                                FinalPosition.Y += (Map.TileSize.Y / 2f) * ActiveSquad.CurrentLeader.UnitStat.ArrayMapSize.GetLength(1) - Map.TileSize.Y / 2;
+                            }
+
                             ActiveSquad.CurrentLeader.Unit3DModel.Draw(View, PolygonEffect.Projection, RotationMatrix
-                                * Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
+                                * Matrix.CreateTranslation(FinalPosition.X, FinalPosition.Z, FinalPosition.Y));
                         }
                     }
                 }
             }
-
         }
 
         private void DrawDrawablePoints(CustomSpriteBatch g)
@@ -1045,21 +1125,27 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void DrawDelayedAttacks(CustomSpriteBatch g)
         {
-            /*int BorderX = (int)(TileSize.X * 0.1);
-            int BorderY = (int)(TileSize.Y * 0.1);
+            int BorderX = (int)(Map.TileSize.X * 0.1);
+            int BorderY = (int)(Map.TileSize.Y * 0.1);
+            Point BorderSize = new Point((int)(Map.TileSize.X * 0.8), (int)(Map.TileSize.Y * 0.8));
+
+            ColorEffect.Parameters["Color"].SetValue(Color.FromNonPremultiplied(139, 0, 0, 190).ToVector4());
+
+            ColorEffect.CurrentTechnique.Passes[0].Apply();
 
             foreach (DelayedAttack ActiveAttack in Map.ListDelayedAttack)
             {
-                foreach (Vector3 ActivePosition in ActiveAttack.ListAttackPosition)
+                foreach (MovementAlgorithmTile ActivePosition in ActiveAttack.ListAttackPosition)
                 {
-                    g.Draw(GameScreen.sprPixel,
-                        new Rectangle(
-                            (int)(ActivePosition.X - CameraPosition.X) * TileSize.X + BorderX,
-                            (int)(ActivePosition.Y - CameraPosition.Y) * TileSize.Y + BorderY,
-                            TileSize.X - BorderX * 2,
-                            TileSize.Y - BorderY * 2), Color.FromNonPremultiplied(139, 0, 0, 190));
+                    float X = ActivePosition.WorldPosition.X;
+                    float Y = ActivePosition.WorldPosition.Y;
+                    float Z = ActivePosition.WorldPosition.Z * LayerHeight + 0.3f;
+
+                    Tile3D PassedCreatureTile = ActivePosition.DrawableTile.Terrain3DInfo.CreateTile3D(0, Point.Zero,
+                        X * Map.TileSize.X + BorderX, Y * Map.TileSize.Y + BorderY, Z, Z + 0.3f, BorderSize, Map.TileSize, new List<Texture2D>() { PolygonEffect.Texture }, Z, Z, Z, Z, 0)[0];
+                    PassedCreatureTile.Draw(g.GraphicsDevice);
                 }
-            }*/
+            }
         }
 
         private void DrawPERAttacks(CustomSpriteBatch g, Matrix View)

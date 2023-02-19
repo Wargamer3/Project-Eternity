@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Online;
-using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -14,9 +13,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string RoomID { get; }//Only contains a value for locally create Rooms, if the Room is on another server the ID should be null.
         public string RoomName { get; }
         public string GameMode { get; set; }
+        public GameModeInfo GameInfo { get; set; }
         public string RoomSubtype { get; set; }
         public string MapName { get; set; }
-        public string MapType { get; set; }
+        public string MapModName { get; set; }
         public string MapPath { get; set; }
         public bool IsPlaying { get; set; }
         public string Password { get; set; }
@@ -69,11 +69,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             MaxSquadsPerBot = 1;
         }
 
-        public RoomInformations(string RoomID, string RoomName, string MapType, string RoomSubtype, bool IsPlaying, byte MinPlayer, byte MaxPlayer, byte CurrentClientCount)
+        public RoomInformations(string RoomID, string RoomName, string MapModName, string RoomSubtype, bool IsPlaying, byte MinPlayer, byte MaxPlayer, byte CurrentClientCount)
         {
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.MapType = MapType;
+            this.MapModName = MapModName;
             this.RoomSubtype = RoomSubtype;
             this.MinNumberOfPlayer = MinPlayer;
             this.MaxNumberOfPlayer = MaxPlayer;
@@ -100,7 +100,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListUniqueOnlineConnection = new List<IOnlineConnection>();
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.MapType = MapType;
+            this.MapModName = MapType;
             this.RoomSubtype = RoomSubtype;
             this.CurrentDifficulty = CurrentDifficulty;
             this.MapPath = MapName;
@@ -118,7 +118,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.RoomID = RoomID;
             this.RoomName = RoomName;
-            this.MapType = MapType;
+            this.MapModName = MapType;
             this.RoomSubtype = RoomSubtype;
             this.IsPlaying = IsPlaying;
             this.Password = Password;
@@ -153,7 +153,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             ListOnlinePlayer.Add(NewPlayer);
             ListUniqueOnlineConnection.Add(NewPlayer);
-            BattleMapPlayer ExistingPlayer = (BattleMapPlayer)NewPlayer;
+            BattleMapPlayer ExistingPlayer = (BattleMapPlayer)NewPlayer.ExtraInformation;
             ListRoomPlayer.Add(ExistingPlayer);
             CurrentPlayerCount = (byte)ListRoomPlayer.Count;
         }

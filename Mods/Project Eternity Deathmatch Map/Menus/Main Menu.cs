@@ -98,7 +98,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         int OldNumberOfGameScreen = ListGameScreen.Count;
                         StreamReader BR = new StreamReader("Content/Map path.ini");
-                        BattleMap NewMap = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(string.Empty, string.Empty);
+                        BattleMap NewMap = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(null, string.Empty);
                         NewMap.BattleMapPath = BR.ReadLine();
                         BR.Close();
                         NewMap.ListGameScreen = ListGameScreen;

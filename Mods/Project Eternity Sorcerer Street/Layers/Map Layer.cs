@@ -182,7 +182,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (BattleMap.DicBattmeMapType.Count > 0 && !string.IsNullOrEmpty(NewMapSwitchPoint.SwitchMapPath)
                     && Map.ListSubMap.Find(x => x.BattleMapPath == NewMapSwitchPoint.SwitchMapPath) == null)
                 {
-                    SorcererStreetMap NewMap = (SorcererStreetMap)BattleMap.DicBattmeMapType[SwitchMapType].GetNewMap(string.Empty, string.Empty);
+                    string ActiveGameModeName = BR.ReadString();
+                    GameModeInfo GameInfo = BattleMap.DicBattmeMapType[SwitchMapType].GetAvailableGameModes()[ActiveGameModeName];
+                    GameInfo.Load(BR);
+                    SorcererStreetMap NewMap = (SorcererStreetMap)BattleMap.DicBattmeMapType[SwitchMapType].GetNewMap(GameInfo, string.Empty);
                     NewMap.BattleMapPath = NewMapSwitchPoint.SwitchMapPath.Substring(SwitchMapType.Length + 1);
                     NewMap.ListGameScreen = Map.ListGameScreen;
                     NewMap.ListSubMap = Map.ListSubMap;

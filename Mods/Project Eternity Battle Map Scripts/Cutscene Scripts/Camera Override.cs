@@ -29,12 +29,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public ScriptCameraOverride(BattleMap Map)
                 : base(Map, 150, 100, "Camera Override", new string[] { "Create Camera", "Grab Existing Camera", "Reset Position", "Move", "Move towards End", "Stop Override" }, new string[0])
             {
-                Camera = new DefaultCamera(GameScreen.GraphicsDevice);
+                if (GameScreen.GraphicsDevice != null)
+                {
+                    Camera = new DefaultCamera(GameScreen.GraphicsDevice);
+                }
             }
 
             public override void ExecuteTrigger(int Index)
             {
-                if (Map == null)
+                if (Map == null || Map.IsServer)
                 {
                     return;
                 }
@@ -55,14 +58,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     case 2://Reset Position
                         Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * 32, _StartPosition.Y * Map.TileSize.Y);
+                        Map.CameraOverride = Camera;
                         break;
 
                     case 3://Move
                         Camera.CameraPosition3D += new Vector3(_Speed.X, -_Speed.Z, _Speed.Y);
+                        Map.CameraOverride = Camera;
                         break;
 
                     case 4://Move Towards End
                         Move(RealEndPosition);
+                        Map.CameraOverride = Camera;
                         break;
 
                     case 5://Stop Override
@@ -70,7 +76,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
                 }
 
-                Map.CameraOverride = Camera;
                 Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Camera.CameraPosition3D + Vector3.Transform(new Vector3(0, 0, 1), Matrix.CreateRotationX(MathHelper.ToRadians(170))), Vector3.Up);
             }
 
@@ -95,14 +100,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                     case 2://Reset Position
                         Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * 32, _StartPosition.Y * Map.TileSize.Y);
+                        Map.CameraOverride = Camera;
                         break;
 
                     case 3://Move
                         Camera.CameraPosition3D += new Vector3(_Speed.X, -_Speed.Z, _Speed.Y);
+                        Map.CameraOverride = Camera;
                         break;
 
                     case 4://Move Towards End
                         Move(RealEndPosition);
+                        Map.CameraOverride = Camera;
                         break;
 
                     case 5://Stop Override
@@ -110,7 +118,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
                 }
 
-                Map.CameraOverride = Camera;
                 Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Camera.CameraPosition3D + Vector3.Transform(new Vector3(0, 0, 1), Matrix.CreateRotationX(MathHelper.ToRadians(170))), Vector3.Up);
             }
 

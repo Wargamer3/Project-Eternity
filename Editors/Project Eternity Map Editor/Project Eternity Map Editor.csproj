@@ -63,6 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Default Game Modes Conditions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Default Game Modes Conditions.Designer.cs">
+      <DependentUpon>Default Game Modes Conditions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Map Statistics.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +88,9 @@
       <DependentUpon>Project Eternity Map Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Default Game Modes Conditions.resx">
+      <DependentUpon>Default Game Modes Conditions.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Map Statistics.resx">
       <DependentUpon>Map Statistics.cs</DependentUpon>
       <SubType>Designer</SubType>

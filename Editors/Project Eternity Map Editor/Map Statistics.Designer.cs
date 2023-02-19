@@ -46,11 +46,6 @@
             this.gbDescription = new System.Windows.Forms.GroupBox();
             this.btnOpenTranslationFile = new System.Windows.Forms.Button();
             this.txtDescription = new System.Windows.Forms.TextBox();
-            this.gbPlayers = new System.Windows.Forms.GroupBox();
-            this.lblPlayersMax = new System.Windows.Forms.Label();
-            this.txtPlayersMax = new System.Windows.Forms.NumericUpDown();
-            this.lblPlayersMin = new System.Windows.Forms.Label();
-            this.txtPlayersMin = new System.Windows.Forms.NumericUpDown();
             this.txtTileWidth = new System.Windows.Forms.NumericUpDown();
             this.txtTileHeight = new System.Windows.Forms.NumericUpDown();
             this.txtMapWidth = new System.Windows.Forms.NumericUpDown();
@@ -70,18 +65,13 @@
             this.lblTimeMultiplier = new System.Windows.Forms.Label();
             this.txtlblTimeMultiplier = new System.Windows.Forms.NumericUpDown();
             this.gbTimeUsage = new System.Windows.Forms.GroupBox();
-            this.gbMandatoryMutators = new System.Windows.Forms.GroupBox();
-            this.dgvMandatoryMutators = new System.Windows.Forms.DataGridView();
-            this.clMutatorName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtOrderNumber = new System.Windows.Forms.NumericUpDown();
             this.lblOrderNumber = new System.Windows.Forms.Label();
+            this.btnSetDefaultGameModesConditions = new System.Windows.Forms.Button();
             this.gbCameraStartPosition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).BeginInit();
             this.gbDescription.SuspendLayout();
-            this.gbPlayers.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPlayersMax)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPlayersMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapWidth)).BeginInit();
@@ -91,8 +81,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtTimeStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).BeginInit();
             this.gbTimeUsage.SuspendLayout();
-            this.gbMandatoryMutators.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryMutators)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtOrderNumber)).BeginInit();
             this.SuspendLayout();
             // 
@@ -152,7 +140,7 @@
             // btnAccept
             // 
             this.btnAccept.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAccept.Location = new System.Drawing.Point(545, 297);
+            this.btnAccept.Location = new System.Drawing.Point(545, 226);
             this.btnAccept.Name = "btnAccept";
             this.btnAccept.Size = new System.Drawing.Size(75, 23);
             this.btnAccept.TabIndex = 10;
@@ -163,7 +151,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClose.Location = new System.Drawing.Point(626, 297);
+            this.btnClose.Location = new System.Drawing.Point(626, 226);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 11;
@@ -255,7 +243,7 @@
             this.gbDescription.Controls.Add(this.txtDescription);
             this.gbDescription.Location = new System.Drawing.Point(478, 12);
             this.gbDescription.Name = "gbDescription";
-            this.gbDescription.Size = new System.Drawing.Size(223, 279);
+            this.gbDescription.Size = new System.Drawing.Size(223, 208);
             this.gbDescription.TabIndex = 15;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
@@ -263,7 +251,7 @@
             // btnOpenTranslationFile
             // 
             this.btnOpenTranslationFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 250);
+            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 179);
             this.btnOpenTranslationFile.Name = "btnOpenTranslationFile";
             this.btnOpenTranslationFile.Size = new System.Drawing.Size(145, 23);
             this.btnOpenTranslationFile.TabIndex = 11;
@@ -278,63 +266,8 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(211, 228);
+            this.txtDescription.Size = new System.Drawing.Size(211, 154);
             this.txtDescription.TabIndex = 0;
-            // 
-            // gbPlayers
-            // 
-            this.gbPlayers.Controls.Add(this.lblPlayersMax);
-            this.gbPlayers.Controls.Add(this.txtPlayersMax);
-            this.gbPlayers.Controls.Add(this.lblPlayersMin);
-            this.gbPlayers.Controls.Add(this.txtPlayersMin);
-            this.gbPlayers.Location = new System.Drawing.Point(12, 230);
-            this.gbPlayers.Name = "gbPlayers";
-            this.gbPlayers.Size = new System.Drawing.Size(259, 47);
-            this.gbPlayers.TabIndex = 16;
-            this.gbPlayers.TabStop = false;
-            this.gbPlayers.Text = "Players";
-            // 
-            // lblPlayersMax
-            // 
-            this.lblPlayersMax.AutoSize = true;
-            this.lblPlayersMax.Location = new System.Drawing.Point(137, 21);
-            this.lblPlayersMax.Name = "lblPlayersMax";
-            this.lblPlayersMax.Size = new System.Drawing.Size(30, 13);
-            this.lblPlayersMax.TabIndex = 5;
-            this.lblPlayersMax.Text = "Max:";
-            // 
-            // txtPlayersMax
-            // 
-            this.txtPlayersMax.Location = new System.Drawing.Point(170, 19);
-            this.txtPlayersMax.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.txtPlayersMax.Name = "txtPlayersMax";
-            this.txtPlayersMax.Size = new System.Drawing.Size(83, 20);
-            this.txtPlayersMax.TabIndex = 4;
-            // 
-            // lblPlayersMin
-            // 
-            this.lblPlayersMin.AutoSize = true;
-            this.lblPlayersMin.Location = new System.Drawing.Point(6, 21);
-            this.lblPlayersMin.Name = "lblPlayersMin";
-            this.lblPlayersMin.Size = new System.Drawing.Size(27, 13);
-            this.lblPlayersMin.TabIndex = 3;
-            this.lblPlayersMin.Text = "Min:";
-            // 
-            // txtPlayersMin
-            // 
-            this.txtPlayersMin.Location = new System.Drawing.Point(39, 19);
-            this.txtPlayersMin.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.txtPlayersMin.Name = "txtPlayersMin";
-            this.txtPlayersMin.Size = new System.Drawing.Size(83, 20);
-            this.txtPlayersMin.TabIndex = 2;
             // 
             // txtTileWidth
             // 
@@ -562,35 +495,6 @@
             this.gbTimeUsage.TabStop = false;
             this.gbTimeUsage.Text = "Time usage";
             // 
-            // gbMandatoryMutators
-            // 
-            this.gbMandatoryMutators.Controls.Add(this.dgvMandatoryMutators);
-            this.gbMandatoryMutators.Location = new System.Drawing.Point(277, 232);
-            this.gbMandatoryMutators.Name = "gbMandatoryMutators";
-            this.gbMandatoryMutators.Size = new System.Drawing.Size(200, 88);
-            this.gbMandatoryMutators.TabIndex = 23;
-            this.gbMandatoryMutators.TabStop = false;
-            this.gbMandatoryMutators.Text = "Mandatory Mutators";
-            // 
-            // dgvMandatoryMutators
-            // 
-            this.dgvMandatoryMutators.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMandatoryMutators.ColumnHeadersVisible = false;
-            this.dgvMandatoryMutators.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.clMutatorName});
-            this.dgvMandatoryMutators.Location = new System.Drawing.Point(6, 19);
-            this.dgvMandatoryMutators.MultiSelect = false;
-            this.dgvMandatoryMutators.Name = "dgvMandatoryMutators";
-            this.dgvMandatoryMutators.RowHeadersVisible = false;
-            this.dgvMandatoryMutators.Size = new System.Drawing.Size(188, 63);
-            this.dgvMandatoryMutators.TabIndex = 1;
-            // 
-            // clMutatorName
-            // 
-            this.clMutatorName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.clMutatorName.HeaderText = "Name";
-            this.clMutatorName.Name = "clMutatorName";
-            // 
             // txtOrderNumber
             // 
             this.txtOrderNumber.Location = new System.Drawing.Point(213, 83);
@@ -612,14 +516,24 @@
             this.lblOrderNumber.TabIndex = 24;
             this.lblOrderNumber.Text = "Order #";
             // 
+            // btnSetDefaultGameModesConditions
+            // 
+            this.btnSetDefaultGameModesConditions.Location = new System.Drawing.Point(68, 230);
+            this.btnSetDefaultGameModesConditions.Name = "btnSetDefaultGameModesConditions";
+            this.btnSetDefaultGameModesConditions.Size = new System.Drawing.Size(203, 23);
+            this.btnSetDefaultGameModesConditions.TabIndex = 27;
+            this.btnSetDefaultGameModesConditions.Text = "Set Default Game Modes Conditions";
+            this.btnSetDefaultGameModesConditions.UseVisualStyleBackColor = true;
+            this.btnSetDefaultGameModesConditions.Click += new System.EventHandler(this.btnSetDefaultGameModesConditions_Click);
+            // 
             // MapStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(713, 332);
+            this.ClientSize = new System.Drawing.Size(713, 261);
+            this.Controls.Add(this.btnSetDefaultGameModesConditions);
             this.Controls.Add(this.txtOrderNumber);
             this.Controls.Add(this.lblOrderNumber);
-            this.Controls.Add(this.gbMandatoryMutators);
             this.Controls.Add(this.gbTimeUsage);
             this.Controls.Add(this.gbTimeLimits);
             this.Controls.Add(this.lblCameraType);
@@ -628,7 +542,6 @@
             this.Controls.Add(this.txtMapWidth);
             this.Controls.Add(this.txtTileHeight);
             this.Controls.Add(this.txtTileWidth);
-            this.Controls.Add(this.gbPlayers);
             this.Controls.Add(this.gbDescription);
             this.Controls.Add(this.btnSetForegrounds);
             this.Controls.Add(this.btnSetBackgrounds);
@@ -649,10 +562,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCameraStartPositionX)).EndInit();
             this.gbDescription.ResumeLayout(false);
             this.gbDescription.PerformLayout();
-            this.gbPlayers.ResumeLayout(false);
-            this.gbPlayers.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPlayersMax)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPlayersMin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapWidth)).EndInit();
@@ -664,8 +573,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).EndInit();
             this.gbTimeUsage.ResumeLayout(false);
             this.gbTimeUsage.PerformLayout();
-            this.gbMandatoryMutators.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMandatoryMutators)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtOrderNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -687,12 +594,7 @@
         private System.Windows.Forms.Button btnSetForegrounds;
         private System.Windows.Forms.GroupBox gbDescription;
         private System.Windows.Forms.Button btnOpenTranslationFile;
-        private System.Windows.Forms.GroupBox gbPlayers;
-        private System.Windows.Forms.Label lblPlayersMax;
-        private System.Windows.Forms.Label lblPlayersMin;
         public System.Windows.Forms.TextBox txtDescription;
-        public System.Windows.Forms.NumericUpDown txtPlayersMax;
-        public System.Windows.Forms.NumericUpDown txtPlayersMin;
         public System.Windows.Forms.NumericUpDown txtTileWidth;
         public System.Windows.Forms.NumericUpDown txtTileHeight;
         public System.Windows.Forms.NumericUpDown txtMapWidth;
@@ -714,11 +616,9 @@
         public System.Windows.Forms.NumericUpDown txtHoursInDay;
         public System.Windows.Forms.NumericUpDown txtlblTimeMultiplier;
         public System.Windows.Forms.NumericUpDown txtTimeStart;
-        private System.Windows.Forms.GroupBox gbMandatoryMutators;
-        public System.Windows.Forms.DataGridView dgvMandatoryMutators;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clMutatorName;
         public System.Windows.Forms.NumericUpDown txtOrderNumber;
         private System.Windows.Forms.Label lblOrderNumber;
         public System.Windows.Forms.TextBox txtMapName;
+        private System.Windows.Forms.Button btnSetDefaultGameModesConditions;
     }
 }

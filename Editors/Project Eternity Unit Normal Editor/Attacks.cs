@@ -364,7 +364,12 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
                         if (Name != null)
                         {
-                            string AttackName = Name.Substring(UnitName.Length + 1);
+                            string AttackName = Name;
+
+                            if (UnitName.Contains(Name))
+                            {
+                                AttackName = Name.Substring(UnitName.Length + 1);
+                            }
 
                             if (lstAttack.Items.Contains(Name))
                             {

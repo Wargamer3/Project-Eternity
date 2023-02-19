@@ -29,6 +29,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListTile3D.Add(NewTile);
         }
 
+        public void Clear()
+        {
+            ListTile3D.Clear();
+        }
+
         public void SetViewMatrix(Matrix ViewProjection, Vector3 CameraPosition3D)
         {
             Effect3D.Parameters["WorldViewProj"].SetValue(ViewProjection);

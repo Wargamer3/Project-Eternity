@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
         {
         }
 
-        public ConquestMap(string GameMode)
+        public ConquestMap(GameModeInfo GameInfo)
         {
             RequireDrawFocus = false;
             ListActionMenuChoice = new ActionPanelHolder();
@@ -88,8 +88,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             this.ListPlayer = new List<Player>();
         }
 
-        public ConquestMap(string BattleMapPath, string GameMode)
-            : this(GameMode)
+        public ConquestMap(string BattleMapPath, GameModeInfo GameInfo)
+            : this(GameInfo)
         {
             this.BattleMapPath = BattleMapPath;
         }
@@ -974,7 +974,6 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ActiveSquad.SetPosition(new Vector3(NewPosition.WorldPosition.X, NewPosition.WorldPosition.Y, NewPosition.LayerIndex));*/
         }
 
-
         public override void SharePlayer(BattleMapPlayer SharedPlayer, bool IsLocal)
         {
             /*Player NewPlayer = new Player(SharedPlayer);
@@ -1376,14 +1375,21 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string GameMode, string ParamsID)
+        public override BattleMap GetNewMap(GameModeInfo GameInfo, string ParamsID)
         {
-            return new ConquestMap(GameMode);
+            return new ConquestMap(GameInfo);
         }
 
         public override string GetMapType()
         {
             return "Conquest";
+        }
+
+        public override Dictionary<string, GameModeInfo> GetAvailableGameModes()
+        {
+            Dictionary<string, GameModeInfo> DicGameType = new Dictionary<string, GameModeInfo>();
+
+            return DicGameType;
         }
 
         public void SpawnUnit(int PlayerIndex, UnitConquest NewUnit, Vector3 Position)

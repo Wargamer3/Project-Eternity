@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
@@ -7,13 +9,64 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
+    public class ClassicGameInfo : GameModeInfo
+    {
+        public const string ModeName = "Classic";
+
+        private int _MaximumResapwn;
+        private int MaximumUnitPriceAllowed;
+
+        public ClassicGameInfo()
+            : base(ModeName, null, CategoryPVP, true, null)
+        {
+        }
+
+        protected override void DoSave(BinaryWriter BW)
+        {
+        }
+
+        public override void Load(BinaryReader BR)
+        {
+        }
+
+        public override IGameRule GetRule(BattleMap Map)
+        {
+            return new ClassicMPGameRule((DeathmatchMap)Map, this);
+        }
+
+        public override GameModeInfo Copy()
+        {
+            return new ClassicGameInfo();
+        }
+
+        [DisplayNameAttribute("Maximum Resapwn"),
+        CategoryAttribute("Respawn"),
+        DescriptionAttribute("How many points are allowed to respawn."),
+        DefaultValueAttribute(3)]
+        public int MaximumResapwn
+        {
+            get
+            {
+                return _MaximumResapwn;
+            }
+            set
+            {
+                _MaximumResapwn = value;
+            }
+        }
+    }
+
     class ClassicMPGameRule : IGameRule
     {
         private readonly DeathmatchMap Owner;
+        private readonly ClassicGameInfo GameInfo;
 
-        public ClassicMPGameRule(DeathmatchMap Owner)
+        public string Name => GameInfo.Name;
+
+        public ClassicMPGameRule(DeathmatchMap Owner, ClassicGameInfo GameInfo)
         {
             this.Owner = Owner;
+            this.GameInfo = GameInfo;
         }
 
         public void Init()

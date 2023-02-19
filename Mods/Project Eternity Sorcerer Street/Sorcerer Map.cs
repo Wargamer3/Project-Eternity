@@ -147,10 +147,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.CameraPosition = Vector3.Zero;
         }
 
-        public SorcererStreetMap(string GameMode, SorcererStreetBattleParams Params)
+        public SorcererStreetMap(GameModeInfo GameInfo, SorcererStreetBattleParams Params)
             : this(Params)
         {
-            switch (GameMode)
+            switch (GameInfo.Name)
             {
                 default:
                     GameRule = new SinglePlayerGameRule(this);
@@ -158,8 +158,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public SorcererStreetMap(string BattleMapPath, string GameMode, SorcererStreetBattleParams Params)
-            : this(GameMode, Params)
+        public SorcererStreetMap(string BattleMapPath, GameModeInfo GameInfo, SorcererStreetBattleParams Params)
+            : this(GameInfo, Params)
         {
             this.BattleMapPath = BattleMapPath;
         }
@@ -1062,7 +1062,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string GameMode, string ParamsID)
+        public override BattleMap GetNewMap(GameModeInfo GameInfo, string ParamsID)
         {
             SorcererStreetBattleParams Params;
             SorcererStreetMap NewMap;
@@ -1074,7 +1074,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Params.Reload(this.Params, ParamsID);
             }
 
-            NewMap = new SorcererStreetMap(GameMode, Params);
+            NewMap = new SorcererStreetMap(GameInfo, Params);
             Params.Map = NewMap;
             return NewMap;
         }
@@ -1082,6 +1082,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override string GetMapType()
         {
             return "Sorcerer Street";
+        }
+
+        public override Dictionary<string, GameModeInfo> GetAvailableGameModes()
+        {
+            Dictionary<string, GameModeInfo> DicGameType = new Dictionary<string, GameModeInfo>();
+
+            return DicGameType;
         }
 
         public override byte[] GetSnapshotData()

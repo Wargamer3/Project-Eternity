@@ -59,6 +59,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 SpawnPositionX = BR.ReadInt32();
                 SpawnPositionY = BR.ReadInt32();
+                SpawnLayer = BR.ReadInt32();
 
                 SpawnPlayer = BR.ReadInt32();
                 IsEventSquad = BR.ReadBoolean();
@@ -86,6 +87,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 BW.Write(SpawnPositionX);
                 BW.Write(SpawnPositionY);
+                BW.Write(SpawnLayer);
 
                 BW.Write(SpawnPlayer);
                 BW.Write(IsEventSquad);
@@ -141,6 +143,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 set
                 {
                     UnitSpawner.SpawnPosition.Y = value;
+                }
+            }
+
+            [CategoryAttribute("Spawner Attributes"),
+            DescriptionAttribute(".")]
+            public int SpawnLayer
+            {
+                get
+                {
+                    return UnitSpawner.SpawnLayer;
+                }
+                set
+                {
+                    UnitSpawner.SpawnLayer = value;
                 }
             }
 

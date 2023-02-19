@@ -1,29 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 {
     public class AskChangeMapScriptClient : OnlineScript
     {
-        private readonly string MapName;
-        private readonly string MapType;
-        private readonly string MapPath;
-        private readonly string GameMode;
-        private readonly byte MinNumberOfPlayer;
-        private readonly byte MaxNumberOfPlayer;
-        private readonly List<string> ListMandatoryMutator;
+        private readonly RoomInformations Room;
 
-        public AskChangeMapScriptClient(string MapName, string MapType, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, List<string> ListMandatoryMutator)
+        public AskChangeMapScriptClient(RoomInformations Room)
             : base("Ask Change Map")
         {
-            this.MapName = MapName;
-            this.MapType = MapType;
-            this.MapPath = MapPath;
-            this.GameMode = GameMode;
-            this.MinNumberOfPlayer = MinNumberOfPlayer;
-            this.MaxNumberOfPlayer = MaxNumberOfPlayer;
-            this.ListMandatoryMutator = ListMandatoryMutator;
+            this.Room = Room;
         }
 
         public override OnlineScript Copy()
@@ -33,17 +20,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
-            WriteBuffer.AppendString(MapName);
-            WriteBuffer.AppendString(MapType);
-            WriteBuffer.AppendString(MapPath);
-            WriteBuffer.AppendString(GameMode);
-            WriteBuffer.AppendByte(MinNumberOfPlayer);
-            WriteBuffer.AppendByte(MaxNumberOfPlayer);
+            WriteBuffer.AppendString(Room.MapName);
+            WriteBuffer.AppendString(Room.MapModName);
+            WriteBuffer.AppendString(Room.MapPath);
+            WriteBuffer.AppendString(Room.GameMode);
+            WriteBuffer.AppendByte(Room.MinNumberOfPlayer);
+            WriteBuffer.AppendByte(Room.MaxNumberOfPlayer);
+            WriteBuffer.AppendByte(Room.MaxSquadPerPlayer);
 
-            WriteBuffer.AppendInt32(ListMandatoryMutator.Count);
-            for (int M = 0; M < ListMandatoryMutator.Count; M++)
+            Room.GameInfo.Write(WriteBuffer);
+
+            WriteBuffer.AppendInt32(Room.ListMandatoryMutator.Count);
+            for (int M = 0; M < Room.ListMandatoryMutator.Count; M++)
             {
-                WriteBuffer.AppendString(ListMandatoryMutator[M]);
+                WriteBuffer.AppendString(Room.ListMandatoryMutator[M]);
             }
         }
 

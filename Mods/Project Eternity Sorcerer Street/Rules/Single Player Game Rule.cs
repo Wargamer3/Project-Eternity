@@ -12,6 +12,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private readonly SorcererStreetMap Owner;
 
+        public string Name => "Single Player";
+
         public SinglePlayerGameRule(SorcererStreetMap Owner)
         {
             this.Owner = Owner;

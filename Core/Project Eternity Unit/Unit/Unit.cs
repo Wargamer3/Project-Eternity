@@ -45,6 +45,7 @@ namespace ProjectEternity.Core.Units
         public TagSystem TeamTags;//Used to make units unavailable
         public string UnitTags;//Used to categorize units
         public string ID;//Unique ID
+        public int SpawnCost;//Cost to spawn, also used to categorize Units by strength.
 
         public string SpriteMapPath;
         public Texture2D SpriteMap;
@@ -834,6 +835,11 @@ namespace ProjectEternity.Core.Units
         public void RefillSP(int Amount)
         {
             Pilot.SP = Math.Min(Pilot.SP + Amount, Pilot.MaxSP);
+        }
+
+        public void EmptySP()
+        {
+            Pilot.SP = 0;
         }
 
         public void RefillAmmo(byte Amount, float PercentAmount)

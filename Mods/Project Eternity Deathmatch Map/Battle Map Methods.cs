@@ -448,7 +448,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return new MultiplayerScreen();
         }
 
-        public override BattleMap GetNewMap(string GameMode, string ParamsID)
+        public override BattleMap GetNewMap(GameModeInfo GameInfo, string ParamsID)
         {
             DeathmatchParams Params;
             DeathmatchMap NewMap;
@@ -461,7 +461,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Params.Reload(this.Params, ParamsID);
             }
 
-            NewMap = new DeathmatchMap(GameMode, Params);
+            NewMap = new DeathmatchMap(GameInfo, Params);
             Params.Map = NewMap;
             return NewMap;
         }
@@ -469,6 +469,33 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override string GetMapType()
         {
             return MapType;
+        }
+
+        public override Dictionary<string, GameModeInfo> GetAvailableGameModes()
+        {
+            Dictionary<string, GameModeInfo> DicGameType = new Dictionary<string, GameModeInfo>();
+
+            DicGameType.Add(CampaignGameInfo.ModeName, new CampaignGameInfo(true, null));
+            DicGameType.Add(HordeGameInfo.ModeName, new HordeGameInfo(true, null));
+            GameModeInfo GametypeBaseDefense = new GameModeInfo("Base Defense", "Wave survival mode, respawn at the start of each wave. Must defend a base by building turrets.", GameModeInfo.CategoryPVE, false, null);
+
+            DicGameType.Add(DeathmatchGameInfo.ModeName, new DeathmatchGameInfo(true, null));
+            DicGameType.Add(CaptureTheFlagGameInfo.ModeName, new CaptureTheFlagGameInfo(true, null));
+            GameModeInfo GametypeObjective = new GameModeInfo("Objective", "One team must complete objectives while another prevent them.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeAssault = new GameModeInfo("Assault", "Team deathmatch with limited respawns.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeConquest = new GameModeInfo("Conquest", "Teams must fight to capture respawn bases that give them points. The starting base may or may not be capturable.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeOnslaught = new GameModeInfo("Onslaught", "Teams must fight to capture respawn bases that give them access to the enemy base's core. Last team with a core win.", GameModeInfo­.CategoryPVP, false, null);
+            DicGameType.Add(TitanGameInfo.ModeName, new TitanGameInfo(true, null));
+            GameModeInfo GametypeBaseAssault = new GameModeInfo("Base Assault", "Each team has 3 bases to attack and defend. After destroying the walls with artillery you can plant a bomb to completely destroy it.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeKingOfTheHill = new GameModeInfo("King Of The Hill", "Hold a position without enemies to win points.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeBunny = new GameModeInfo("Bunny", "Unit that holds the flag become the bunny and gets points for kills, everyone else try to kill the bunny.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeFreezeTag = new GameModeInfo("Freeze Tag", "Killing an enemy freeze him, when every enemies are frozen you win. Teamates can unfreeze allie by staying next to them for 2 turns.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeJailbreak = new GameModeInfo("Jailbreak", "Killing an enemy send him to your prison, capture everyone to win. Teamates can be freed by standing on a switch.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeMutant = new GameModeInfo("Mutant", "First kill transform you into the mutant, a unit with overpowered stats and attacks. Only the Mutant can kill or be killed.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeProtectThaPimp = new GameModeInfo("Protect Tha Pimp", "Try to kill the enemy Pimp before it can escape. The pimp move slower and only has a 1 HKO melee attack.", GameModeInfo­.CategoryPVP, false, null);
+            GameModeInfo GametypeKaiju = new GameModeInfo("Kaiju", "One player controls giant monsters while the other players use their units.", GameModeInfo­.CategoryPVP, false, null);
+
+            return DicGameType;
         }
 
         public override void AddPlatform(BattleMapPlatform NewPlatform)

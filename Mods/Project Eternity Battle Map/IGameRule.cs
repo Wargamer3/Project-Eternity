@@ -6,6 +6,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public interface IGameRule
     {
+        string Name { get; }
         void Init();
         void Update(GameTime gameTime);
         void OnNewTurn(int ActivePlayerIndex);

@@ -1,20 +1,75 @@
 ﻿using System;
+using System.IO;
+using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Graphics;
+using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
+    public class CaptureTheFlagGameInfo : GameModeInfo
+    {
+        public const string ModeName = "Capture The Flag";
+
+        private int _MaximumResapwn;
+        private int MaximumUnitPriceAllowed;
+
+        public CaptureTheFlagGameInfo(bool IsUnlocked, Texture2D sprPreview)
+            : base(ModeName, "Capture a flag in the enemy base and bring it back to your own flag to score a point.", CategoryPVP, IsUnlocked, sprPreview)
+        {
+        }
+
+        protected override void DoSave(BinaryWriter BW)
+        {
+        }
+
+        public override void Load(BinaryReader BR)
+        {
+        }
+
+        public override IGameRule GetRule(BattleMap Map)
+        {
+            return new CaptureTheFlagGameRule((DeathmatchMap)Map, this);
+        }
+
+        public override GameModeInfo Copy()
+        {
+            return new CaptureTheFlagGameInfo(IsUnlocked, sprPreview);
+        }
+
+        [DisplayNameAttribute("Maximum Resapwn"),
+        CategoryAttribute("Respawn"),
+        DescriptionAttribute("How many points are allowed to respawn."),
+        DefaultValueAttribute(3)]
+        public int MaximumResapwn
+        {
+            get
+            {
+                return _MaximumResapwn;
+            }
+            set
+            {
+                _MaximumResapwn = value;
+            }
+        }
+    }
+
     public class CaptureTheFlagGameRule : LobbyMPGameRule
     {
         private readonly DeathmatchMap Owner;
+        private readonly CaptureTheFlagGameInfo GameInfo;
         public Dictionary<int, int> DicPointsByTeam;
 
-        public CaptureTheFlagGameRule(DeathmatchMap Owner)
+        public override string Name => GameInfo.Name;
+
+        public CaptureTheFlagGameRule(DeathmatchMap Owner, CaptureTheFlagGameInfo GameInfo)
             : base(Owner)
         {
             this.Owner = Owner;
+            this.GameInfo = GameInfo;
 
             DicPointsByTeam = new Dictionary<int, int>();
         }

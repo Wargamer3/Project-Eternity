@@ -130,6 +130,7 @@
     <Compile Include="Intermission Screen\Records\Unit Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Player Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Records Screen.cs" />
+    <Compile Include="Lobby\Game Options\Game Mode Info.cs" />
     <Compile Include="Lobby\Online Player Base.cs" />
     <Compile Include="Lobby\Player\Battle Records.cs" />
     <Compile Include="Lobby\Player\Bonus Records.cs" />

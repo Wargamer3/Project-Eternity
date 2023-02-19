@@ -38,6 +38,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private double GameLengthInSeconds;
         private Player CurrentPlayer { get { return Owner.ListPlayer[Owner.ActivePlayerIndex]; } }
 
+        public abstract string Name { get; }
+
         public LobbyMPGameRule(DeathmatchMap Owner)
         {
             this.Owner = Owner;
@@ -240,6 +242,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Owner.CursorPositionVisible = Owner.CursorPosition;
 
             ActiveSquad.At(0).HealUnit(ActiveSquad.At(0).MaxHP);
+            ActiveSquad.At(0).EmptySP();
 
             ActiveSquad.UpdateSquad();
 

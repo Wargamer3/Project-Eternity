@@ -227,9 +227,9 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             throw new NotImplementedException();
         }
 
-        public override BattleMap GetNewMap(string GameMode, string ParamsID)
+        public override BattleMap GetNewMap(GameModeInfo GameInfo, string ParamsID)
         {
-            return new WorldMap(BattleMapPath, GameMode);
+            return new WorldMap(BattleMapPath, GameInfo);
         }
 
         public override GameScreen GetMultiplayerScreen()
@@ -240,6 +240,13 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         public override string GetMapType()
         {
             return "World Map";
+        }
+
+        public override Dictionary<string, GameModeInfo> GetAvailableGameModes()
+        {
+            Dictionary<string, GameModeInfo> DicGameType = new Dictionary<string, GameModeInfo>();
+
+            return DicGameType;
         }
 
         public override Dictionary<string, ActionPanel> GetOnlineActionPanel()

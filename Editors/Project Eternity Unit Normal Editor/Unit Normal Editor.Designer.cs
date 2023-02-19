@@ -33,7 +33,6 @@
             this.tsmExport = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.lblPrice = new System.Windows.Forms.Label();
-            this.txtPrice = new System.Windows.Forms.TextBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
             this.gbUnitBoosts = new System.Windows.Forms.GroupBox();
@@ -94,6 +93,9 @@
             this.btnEditAttack = new System.Windows.Forms.Button();
             this.gbUnitType = new System.Windows.Forms.GroupBox();
             this.cbUnitType = new System.Windows.Forms.ComboBox();
+            this.txtPrice = new System.Windows.Forms.NumericUpDown();
+            this.txtSpawnCost = new System.Windows.Forms.NumericUpDown();
+            this.lblCost = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.gbUnitBoosts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtReMoveLevel)).BeginInit();
@@ -117,6 +119,8 @@
             this.groupBox6.SuspendLayout();
             this.gbAttacks.SuspendLayout();
             this.gbUnitType.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtPrice)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSpawnCost)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -155,25 +159,18 @@
             // lblPrice
             // 
             this.lblPrice.AutoSize = true;
-            this.lblPrice.Location = new System.Drawing.Point(418, 22);
+            this.lblPrice.Location = new System.Drawing.Point(429, 70);
             this.lblPrice.Name = "lblPrice";
             this.lblPrice.Size = new System.Drawing.Size(34, 13);
             this.lblPrice.TabIndex = 24;
             this.lblPrice.Text = "Price:";
-            // 
-            // txtPrice
-            // 
-            this.txtPrice.Location = new System.Drawing.Point(458, 19);
-            this.txtPrice.Name = "txtPrice";
-            this.txtPrice.Size = new System.Drawing.Size(82, 20);
-            this.txtPrice.TabIndex = 25;
             // 
             // txtDescription
             // 
             this.txtDescription.Location = new System.Drawing.Point(9, 58);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(534, 82);
+            this.txtDescription.Size = new System.Drawing.Size(377, 82);
             this.txtDescription.TabIndex = 27;
             // 
             // lblDescription
@@ -602,6 +599,9 @@
             // 
             // gbItemInformation
             // 
+            this.gbItemInformation.Controls.Add(this.txtSpawnCost);
+            this.gbItemInformation.Controls.Add(this.lblCost);
+            this.gbItemInformation.Controls.Add(this.txtPrice);
             this.gbItemInformation.Controls.Add(this.txtEXP);
             this.gbItemInformation.Controls.Add(this.lblEXP);
             this.gbItemInformation.Controls.Add(this.txtName);
@@ -609,7 +609,6 @@
             this.gbItemInformation.Controls.Add(this.lblPrice);
             this.gbItemInformation.Controls.Add(this.txtDescription);
             this.gbItemInformation.Controls.Add(this.lblDescription);
-            this.gbItemInformation.Controls.Add(this.txtPrice);
             this.gbItemInformation.Location = new System.Drawing.Point(12, 27);
             this.gbItemInformation.Name = "gbItemInformation";
             this.gbItemInformation.Size = new System.Drawing.Size(548, 148);
@@ -619,7 +618,7 @@
             // 
             // txtEXP
             // 
-            this.txtEXP.Location = new System.Drawing.Point(340, 19);
+            this.txtEXP.Location = new System.Drawing.Point(469, 94);
             this.txtEXP.Maximum = new decimal(new int[] {
             50000,
             0,
@@ -632,17 +631,17 @@
             // lblEXP
             // 
             this.lblEXP.AutoSize = true;
-            this.lblEXP.Location = new System.Drawing.Point(303, 21);
+            this.lblEXP.Location = new System.Drawing.Point(399, 97);
             this.lblEXP.Name = "lblEXP";
-            this.lblEXP.Size = new System.Drawing.Size(31, 13);
+            this.lblEXP.Size = new System.Drawing.Size(64, 13);
             this.lblEXP.TabIndex = 30;
-            this.lblEXP.Text = "EXP:";
+            this.lblEXP.Text = "EXP On Kill:";
             // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(50, 19);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(247, 20);
+            this.txtName.Size = new System.Drawing.Size(492, 20);
             this.txtName.TabIndex = 29;
             // 
             // lblName
@@ -823,6 +822,39 @@
             this.cbUnitType.Size = new System.Drawing.Size(144, 21);
             this.cbUnitType.TabIndex = 7;
             // 
+            // txtPrice
+            // 
+            this.txtPrice.Location = new System.Drawing.Point(469, 68);
+            this.txtPrice.Maximum = new decimal(new int[] {
+            50000,
+            0,
+            0,
+            0});
+            this.txtPrice.Name = "txtPrice";
+            this.txtPrice.Size = new System.Drawing.Size(73, 20);
+            this.txtPrice.TabIndex = 32;
+            // 
+            // txtSpawnCost
+            // 
+            this.txtSpawnCost.Location = new System.Drawing.Point(469, 120);
+            this.txtSpawnCost.Maximum = new decimal(new int[] {
+            50000,
+            0,
+            0,
+            0});
+            this.txtSpawnCost.Name = "txtSpawnCost";
+            this.txtSpawnCost.Size = new System.Drawing.Size(73, 20);
+            this.txtSpawnCost.TabIndex = 34;
+            // 
+            // lblCost
+            // 
+            this.lblCost.AutoSize = true;
+            this.lblCost.Location = new System.Drawing.Point(396, 122);
+            this.lblCost.Name = "lblCost";
+            this.lblCost.Size = new System.Drawing.Size(67, 13);
+            this.lblCost.TabIndex = 33;
+            this.lblCost.Text = "Spawn Cost:";
+            // 
             // UnitNormalEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -868,6 +900,8 @@
             this.groupBox6.PerformLayout();
             this.gbAttacks.ResumeLayout(false);
             this.gbUnitType.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtPrice)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSpawnCost)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -877,7 +911,6 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Label lblPrice;
-        private System.Windows.Forms.TextBox txtPrice;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.GroupBox gbUnitBoosts;
@@ -941,5 +974,8 @@
         private System.Windows.Forms.ComboBox cbUnitType;
         private System.Windows.Forms.DataGridViewComboBoxColumn Movement;
         private System.Windows.Forms.DataGridViewComboBoxColumn Column2;
+        private System.Windows.Forms.NumericUpDown txtSpawnCost;
+        private System.Windows.Forms.Label lblCost;
+        private System.Windows.Forms.NumericUpDown txtPrice;
     }
 }

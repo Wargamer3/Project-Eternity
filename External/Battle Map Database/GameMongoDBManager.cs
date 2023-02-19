@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -17,6 +18,8 @@ namespace Database.BattleMap
         private IMongoCollection<BsonDocument> RoomsCollection;
         private IMongoCollection<BsonDocument> PlayersCollection;
 
+        List<Tuple<string, string>> ListDefaultUnit;
+
         public GameMongoDBManager()
         {
             LastTimeChecked = DateTime.MinValue;
@@ -31,6 +34,15 @@ namespace Database.BattleMap
             DatabaseUserInformation = DatabaseUserInformationClient.GetDatabase("UserInformation");
             RoomsCollection = DatabaseBattleMap.GetCollection<BsonDocument>("Rooms");
             PlayersCollection = DatabaseUserInformation.GetCollection<BsonDocument>("BattleMap");
+
+            ListDefaultUnit = new List<Tuple<string, string>>();
+            IniFile IniDefaultUnits = IniFile.ReadFromFile("Content/Battle Lobby Default Units.ini");
+            foreach (string ActiveKey in IniDefaultUnits.ReadAllKeys())
+            {
+                string UnitPath = IniDefaultUnits.ReadField(ActiveKey, "Path");
+                string PilotPath = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
+                ListDefaultUnit.Add(new Tuple<string, string>(UnitPath, PilotPath));
+            }
         }
 
         public List<IRoomInformations> GetAllRoomUpdatesSinceLastTimeChecked(string ServerVersion)
@@ -129,197 +141,9 @@ namespace Database.BattleMap
 
             if (FoundPlayerDocument == null && PlayersCollection.Find(Builders<BsonDocument>.Filter.Eq("Login", Login)).FirstOrDefault() == null)
             {
-                BsonDocument document = new BsonDocument
-                {
-                    { "Login", Login },
-                    { "Name", Login },
-                    { "Level", 1 },
-                    { "EXP", 0 },
-                    { "Ranking", 1 },
-                    { "License", 1 },
-                    { "Guild", "" },
-                    { "GameServerIP", "" },
-                    { "GameServerPort", 0 },
-                    { "CommunicationServerIP", "" },
-                    { "CommunicationServerPort", 0 },
-                    { "Password", Password },
-                    { "LastConnection", DateTime.UtcNow },
-                    { "NumberOfFailedConnection", 0 },
-                    { "Inventory",
-                        new BsonDocument
-                        {
-                            { "Money", 0 },
-                            { "OwnedSquads",
-                                new BsonArray
-                                {
-                                    new BsonDocument
-                                    {
-                                        { "RelativePath", "Normal/Multiplayer/Voltaire" },
-                                        { "PilotFullName", "Multiplayer/Greg" },
-                                    },
-                                    new BsonDocument
-                                    {
-                                        { "RelativePath", "Normal/Multiplayer/Mazinger Z" },
-                                        { "PilotFullName", "Multiplayer/Kouji" },
-                                    },
-                                }
-                            },
-                            { "OwnedCharacters",
-                                new BsonArray
-                                {
-                                    "Multiplayer/Greg",
-                                    "Multiplayer/Kouji",
-                                }
-                            },
-                            { "OwnedMissions",
-                                new BsonArray
-                                {
-                                }
-                            },
-                            { "SquadLoadouts",
-                                new BsonArray
-                                {
-                                    new BsonArray
-                                    {
-                                        new BsonDocument
-                                        {
-                                            { "RelativePath", "Normal/Multiplayer/Voltaire" },
-                                            { "PilotFullName", "Multiplayer/Greg" },
-                                        },
-                                        new BsonDocument
-                                        {
-                                            { "RelativePath", "Normal/Multiplayer/Mazinger Z" },
-                                            { "PilotFullName", "Multiplayer/Kouji" },
-                                        },
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    { "Unlocks",
-                        new BsonDocument
-                        {
-                            { "Characters",
-                                new BsonArray
-                                {
-                                }
-                            },
-                            { "Units",
-                                new BsonArray
-                                {
-                                }
-                            },
-                            { "Missions",
-                                new BsonArray
-                                {
-                                }
-                            },
-                        }
-                    },
-                    { "Records",
-                        new BsonDocument
-                        {
-                            { "TotalSecondsPlayed", 0d},
+                BsonDocument NewPlayer = InitNewPlayer(Login, Password);
 
-                            { "TotalKills", 0},
-                            { "TotalTurnPlayed", 0},
-                            { "TotalTilesTraveled", 0},
-
-                            { "CurrentMoney", 0},
-                            { "TotalMoney", 0},
-
-                            { "CurrentCoins", 0},
-                            { "TotalCoins", 0},
-
-                            { "UnitRecords",
-                                new BsonDocument
-                                {
-                                    { "CharacterIDByNumberOfKills",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                    { "CharacterIDByNumberOfUses",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                    { "CharacterIDByTurnsOnField",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                    { "CharacterIDByNumberOfTilesTraveled",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                    { "UnitIDByNumberOfKills",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                    { "UnitIDByNumberOfUses",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                    { "UnitIDByTurnsOnField",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                    { "UnitIDByNumberOfTilesTraveled",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                }
-                            },
-                            {"BattleRecords",
-                                new BsonDocument
-                                {
-                                    { "NumberOfGamesPlayed", 0},
-                                    { "NumberOfGamesWon", 0},
-                                    { "NumberOfGamesLost", 0},
-                                    { "NumberOfKills", 0},
-                                    { "NumberOfUnitsLost", 0},
-
-                                    { "TotalDamageGiven", 0},
-                                    { "TotalDamageReceived", 0},
-                                    { "TotalDamageRecovered", 0},
-                                }
-                            },
-                            {"BonusRecords",
-                                new BsonDocument
-                                {
-                                    { "NumberOfBonusObtainedByName",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                }
-                            },
-                            { "MultiplayerInformation",
-                                new BsonDocument
-                                {
-                                    { "CampaignLevelInformation",
-                                        new BsonArray
-                                        {
-                                        }
-                                    },
-                                }
-                            }
-                        }
-                    },
-                    { "Friends",
-                        new BsonArray
-                        {
-                        }
-                    }
-                };
-
-                PlayersCollection.InsertOne(document);
+                PlayersCollection.InsertOne(NewPlayer);
                 FoundPlayerDocument = PlayersCollection.Find(LastTimeCheckedFilter).FirstOrDefault();
             }
 
@@ -346,6 +170,201 @@ namespace Database.BattleMap
 
                 return FoundPlayer;
             }
+        }
+
+        private BsonDocument InitNewPlayer(string Login, string Password)
+        {
+            BsonDocument NewPlayer = new BsonDocument
+            {
+                { "Login", Login },
+                { "Name", Login },
+                { "Level", 1 },
+                { "EXP", 0 },
+                { "Ranking", 1 },
+                { "License", 1 },
+                { "Guild", "" },
+                { "GameServerIP", "" },
+                { "GameServerPort", 0 },
+                { "CommunicationServerIP", "" },
+                { "CommunicationServerPort", 0 },
+                { "Password", Password },
+                { "LastConnection", DateTime.UtcNow },
+                { "NumberOfFailedConnection", 0 },
+                { "Inventory",
+                    new BsonDocument
+                    {
+                        { "Money", 0 },
+                        { "OwnedSquads",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "OwnedCharacters",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "OwnedMissions",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "SquadLoadouts",
+                            new BsonArray
+                            {
+                            }
+                        }
+                    }
+                },
+                { "Unlocks",
+                    new BsonDocument
+                    {
+                        { "Characters",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "Units",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "Missions",
+                            new BsonArray
+                            {
+                            }
+                        },
+                    }
+                },
+                { "Records",
+                    new BsonDocument
+                    {
+                        { "TotalSecondsPlayed", 0d},
+
+                        { "TotalKills", 0},
+                        { "TotalTurnPlayed", 0},
+                        { "TotalTilesTraveled", 0},
+
+                        { "CurrentMoney", 0},
+                        { "TotalMoney", 0},
+
+                        { "CurrentCoins", 0},
+                        { "TotalCoins", 0},
+
+                        { "UnitRecords",
+                            new BsonDocument
+                            {
+                                { "CharacterIDByNumberOfKills",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "CharacterIDByNumberOfUses",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "CharacterIDByTurnsOnField",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "CharacterIDByNumberOfTilesTraveled",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByNumberOfKills",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByNumberOfUses",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByTurnsOnField",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByNumberOfTilesTraveled",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                            }
+                        },
+                        {"BattleRecords",
+                            new BsonDocument
+                            {
+                                { "NumberOfGamesPlayed", 0},
+                                { "NumberOfGamesWon", 0},
+                                { "NumberOfGamesLost", 0},
+                                { "NumberOfKills", 0},
+                                { "NumberOfUnitsLost", 0},
+
+                                { "TotalDamageGiven", 0},
+                                { "TotalDamageReceived", 0},
+                                { "TotalDamageRecovered", 0},
+                            }
+                        },
+                        {"BonusRecords",
+                            new BsonDocument
+                            {
+                                { "NumberOfBonusObtainedByName",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                            }
+                        },
+                        { "MultiplayerInformation",
+                            new BsonDocument
+                            {
+                                { "CampaignLevelInformation",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                            }
+                        }
+                    }
+                },
+                { "Friends",
+                    new BsonArray
+                    {
+                    }
+                }
+            };
+
+            BsonDocument Inventory = NewPlayer.GetValue("Inventory").AsBsonDocument;
+            BsonArray OwnedSquads = Inventory.GetValue("OwnedSquads").AsBsonArray;
+            BsonArray OwnedCharacters = Inventory.GetValue("OwnedCharacters").AsBsonArray;
+            BsonArray SquadLoadouts = Inventory.GetValue("SquadLoadouts").AsBsonArray;
+
+            foreach (Tuple<string, string> ActiveUnitAndPilot in ListDefaultUnit)
+            {
+                BsonDocument NewSquad = new BsonDocument();
+                NewSquad.Add("RelativePath", ActiveUnitAndPilot.Item1);
+                OwnedSquads.Add(NewSquad);
+
+                if (!string.IsNullOrEmpty(ActiveUnitAndPilot.Item2))
+                {
+                    OwnedCharacters.Add(ActiveUnitAndPilot.Item2);
+                }
+            }
+
+            BsonDocument NewSquadLoadout = new BsonDocument();
+            NewSquadLoadout.Add("RelativePath", ListDefaultUnit[0].Item1);
+            NewSquadLoadout.Add("PilotFullName", ListDefaultUnit[0].Item2);
+
+            BsonArray temp = new BsonArray();
+            temp.Add(NewSquadLoadout);
+            SquadLoadouts.Add(temp);
+
+            return NewPlayer;
         }
 
         public PlayerPOCO GetPlayerInventory(string ID)
@@ -391,7 +410,6 @@ namespace Database.BattleMap
             {
                 BsonDocument ActiveUnitDocument = ActiveSquad.AsBsonDocument;
                 BW.AppendString(ActiveUnitDocument.GetValue("RelativePath").AsString);
-                BW.AppendString(ActiveUnitDocument.GetValue("PilotFullName").AsString);
             }
 
             BsonArray OwnedCharactersArray = Inventory.GetValue("OwnedCharacters").AsBsonArray;

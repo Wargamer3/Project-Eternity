@@ -266,49 +266,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateReadyOrHost();
         }
 
-        public void UpdateSelectedMap(string MapName, string MapType, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, List<string> ListMandatoryMutator)
+        public void UpdateSelectedMap(string MapName, string MapModName, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, byte MaxSquadPerPlayer, GameModeInfo GameInfo, List<string> ListMandatoryMutator)
         {
             Room.MapName = MapName;
-            Room.MapType = MapType;
+            Room.MapModName = MapModName;
             Room.MapPath = MapPath;
             Room.GameMode = GameMode;
-            LoadMapInfo();
+            Room.GameInfo = GameInfo;
             Room.MinNumberOfPlayer = MinNumberOfPlayer;
             Room.MaxNumberOfPlayer = MaxNumberOfPlayer;
+            Room.MaxSquadPerPlayer = MaxSquadPerPlayer;
             Room.ListMandatoryMutator = ListMandatoryMutator;
-        }
-
-        private void LoadMapInfo()
-        {
-            FileStream FS = new FileStream("Content/Maps/" + Room.MapType + "/" + Room.MapPath + ".pem", FileMode.Open, FileAccess.Read);
-            BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
-            BR.BaseStream.Seek(0, SeekOrigin.Begin);
-
-            MapSize.X = BR.ReadInt32();
-            MapSize.Y = BR.ReadInt32();
-
-            Room.MinNumberOfPlayer = BR.ReadByte();
-            Room.MaxNumberOfPlayer = BR.ReadByte();
-            Room.MaxSquadPerPlayer = BR.ReadByte();
-
-            string Description = BR.ReadString();
-
-            Room.ListMandatoryMutator.Clear();
-            int ListMandatoryMutatorCount = BR.ReadInt32();
-            for (int M = 0; M < ListMandatoryMutatorCount; M++)
-            {
-                Room.ListMandatoryMutator.Add(BR.ReadString());
-            }
-
-            int NumberOfTeams = BR.ReadInt32();
-            ListMapTeam = new List<Color>(NumberOfTeams);
-            //Deathmatch colors
-            for (int D = 0; D < NumberOfTeams; D++)
-            {
-                ListMapTeam.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
-            }
-            FS.Close();
-            BR.Close();
         }
 
         private void OnButtonOver()
@@ -361,7 +329,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ReadyButton.Disable();
 
-                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room.MapName, Room.MapType, Room.MapPath, Room.GameMode, Room.MinNumberOfPlayer, Room.MaxNumberOfPlayer, Room.ListMandatoryMutator));
+                OnlineGameClient.Host.Send(new AskChangeMapScriptClient(Room));
             }
         }
 
@@ -410,11 +378,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (Room.MapPath == "Random")
                 {
-                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.GameMode, string.Empty);
+                    NewMap = BattleMap.DicBattmeMapType[Room.MapModName].GetNewMap(Room.GameInfo, string.Empty);
                 }
                 else
                 {
-                    NewMap = BattleMap.DicBattmeMapType[Room.MapType].GetNewMap(Room.GameMode, string.Empty);
+                    NewMap = BattleMap.DicBattmeMapType[Room.MapModName].GetNewMap(Room.GameInfo, string.Empty);
                 }
 
                 NewMap.BattleMapPath = Room.MapPath;

@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                     ActiveAnimation.DicTimeline.Add(Timeline.Key, Timeline.Value);
                 ActiveAnimation.Load();
             }
-            else
+            else if (Content != null)
             {
                 if (Path.Contains("strip"))
                 {

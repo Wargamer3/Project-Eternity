@@ -70,6 +70,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
+        public void UnitMoved(int PlayerIndex)
+        {
+        }
+
+        public void UnitKilled(int PlayerIndex)
+        {
+        }
+
         public void BeginDraw(CustomSpriteBatch g)
         {
             Map.MapEnvironment.BeginDraw(g);

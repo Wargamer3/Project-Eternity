@@ -122,11 +122,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 MapEffect.Parameters["FogColor"].SetValue(new Vector3(0.0f, 0.0f, 0.0f));
 
                 CreateMap(Map, LayerManager);
-
-                float Z = LayerManager.ListLayer[0].ArrayTerrain[0, 0].WorldPosition.Z;
-                Map2D GroundLayer = LayerManager.ListLayer[0].LayerGrid;
-                DrawableTile ActiveTerrain = GroundLayer.GetTile(0, 0);
-                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
             }
 
             if (Map.IsEditor)
@@ -405,13 +400,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive))
             {
                 UpdateCamera();
-
-                int X = (int)Map.CursorPositionVisible.X;
-                int Y = (int)Map.CursorPositionVisible.Y;
-                float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].WorldPosition.Z * LayerHeight + 0.3f;
-                Map2D GroundLayer = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].LayerGrid;
-                DrawableTile ActiveTerrain = GroundLayer.GetTile(X, Y);
-                Terrain3D ActiveTerrain3D = ActiveTerrain.Terrain3DInfo;
             }
 
             if (!Map.IsAPlatform && Map.ListPlayer.Count > 0)
@@ -725,6 +713,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void CursorMoved()
         {
             FilterTerrainObscuringUnits();
+        }
+
+        public void UnitMoved(int PlayerIndex)
+        {
+        }
+
+        public void UnitKilled(int PlayerIndex)
+        {
         }
 
         private void FilterTerrainObscuringUnits()
@@ -1213,45 +1209,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DrawDelayedAttacks(CustomSpriteBatch g)
         {
-            /*int BorderX = (int)(TileSize.X * 0.1);
-            int BorderY = (int)(TileSize.Y * 0.1);
-
-            foreach (DelayedAttack ActiveAttack in Map.ListDelayedAttack)
-            {
-                foreach (Vector3 ActivePosition in ActiveAttack.ListAttackPosition)
-                {
-                    g.Draw(GameScreen.sprPixel,
-                        new Rectangle(
-                            (int)(ActivePosition.X - CameraPosition.X) * TileSize.X + BorderX,
-                            (int)(ActivePosition.Y - CameraPosition.Y) * TileSize.Y + BorderY,
-                            TileSize.X - BorderX * 2,
-                            TileSize.Y - BorderY * 2), Color.FromNonPremultiplied(139, 0, 0, 190));
-                }
-            }*/
         }
 
         private void DrawPERAttacks(CustomSpriteBatch g, Matrix View)
         {
-            /*foreach (PERAttack ActiveAttack in Map.ListPERAttack)
-            {
-                Vector3 CurrentPosition = ActiveAttack.Position;
-
-                if (ActiveAttack.IsOnGround)
-                {
-                    CurrentPosition = Map.LayerManager.ListLayer[(int)CurrentPosition.Z].ArrayTerrain[(int)Math.Floor(CurrentPosition.X), (int)Math.Floor(CurrentPosition.Y)].GetRealPosition(CurrentPosition);
-                }
-
-                if (ActiveAttack.Map3DComponent != null)
-                {
-                    ActiveAttack.Map3DComponent.SetPosition(CurrentPosition.X * 32, CurrentPosition.Z * 32 + 16, CurrentPosition.Y * 32);
-                    ActiveAttack.Map3DComponent.SetViewMatrix(View);
-                    ActiveAttack.Map3DComponent.Draw(g.GraphicsDevice);
-                }
-                else if (ActiveAttack.Unit3DModel != null)
-                {
-                    ActiveAttack.Unit3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateTranslation(CurrentPosition.X * Map.TileSize.X, CurrentPosition.Z * LayerHeight, CurrentPosition.Y * Map.TileSize.Y));
-                }
-            }*/
         }
 
         private void DrawDamageNumbers(CustomSpriteBatch g, Matrix View)

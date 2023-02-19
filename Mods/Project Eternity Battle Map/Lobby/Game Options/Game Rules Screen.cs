@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -20,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BoxNumericUpDown MaxPlayerTextbox;
         private BoxNumericUpDown MaxSquadPerPlayerTextbox;
 
-        private IUIElement[] ArrayMenuButton;
+        private List<IUIElement> ListMenuButton;
 
         private readonly RoomInformations Room;
 
@@ -56,27 +59,69 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawY += 105;
             DrawY += 40;
 
-            GoalScoreTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
-            TimeLimitTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
-            DrawY += 30;
-            TurnLimitTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
-            DrawY += 30;
             MinPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
             MaxPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
             DrawY += 30;
             MaxSquadPerPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
+            DrawY += 30;
+            GoalScoreTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
+            TimeLimitTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
+            DrawY += 30;
+            TurnLimitTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
 
-            ArrayMenuButton = new IUIElement[]
+            ListMenuButton = new List<IUIElement>()
             {
-                MaxBotNumberTextbox, MaxSquadPerBotNumberTextbox, GoalScoreTextbox, TimeLimitTextbox, TurnLimitTextbox, MinPlayerTextbox, MaxPlayerTextbox, MaxSquadPerPlayerTextbox,
+                MaxBotNumberTextbox, MaxSquadPerBotNumberTextbox, MinPlayerTextbox, MaxPlayerTextbox, MaxSquadPerPlayerTextbox,// GoalScoreTextbox, TimeLimitTextbox, TurnLimitTextbox,
             };
         }
 
         public override void Update(GameTime gameTime)
         {
-            foreach (IUIElement ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveButton in ListMenuButton)
             {
                 ActiveButton.Update(gameTime);
+            }
+        }
+
+        public void UpdateGameParameters()
+        {
+            ListMenuButton.Clear();
+            ListMenuButton.Add(MaxBotNumberTextbox);
+            ListMenuButton.Add(MaxSquadPerBotNumberTextbox);
+            ListMenuButton.Add(MinPlayerTextbox);
+            ListMenuButton.Add(MaxPlayerTextbox);
+            ListMenuButton.Add(MaxSquadPerPlayerTextbox);
+
+            int DrawY = PanelY + 255;
+
+            Dictionary<string, List<GameModeInfo.GameModeParameter>> DicGameModeParametersByCategory = Room.GameInfo.GetDescriptionFromEnumValue();
+            foreach (KeyValuePair<string, List<GameModeInfo.GameModeParameter>> ActiveCategory in DicGameModeParametersByCategory)
+            {
+                int DrawX = RightColumnX - 145;
+                bool IsFirstColumn = true;
+                foreach (GameModeInfo.GameModeParameter ActiveParameter in ActiveCategory.Value)
+                {
+                    Type ObjectType = ActiveParameter.Value.GetType();
+                    if (typeof(int) == ObjectType)
+                    {
+                        ListMenuButton.Add(new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(DrawX, DrawY), new Vector2(140, 20), (InputMessage) => { UpdateValue(InputMessage, ActiveParameter); }));
+                    }
+                    else if (typeof(bool) == ObjectType)
+                    {
+                        ListMenuButton.Add(new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(DrawX, DrawY), new Vector2(140, 20), (InputMessage) => { UpdateValue(InputMessage, ActiveParameter); }));
+                    }
+
+                    if (IsFirstColumn)
+                    {
+                        ListMenuButton.Add(new UIText(Content, ActiveParameter.Name, new Vector2(PanelX + 10, DrawY), 200));
+                        DrawX = PanelWidth - 145;
+                    }
+                    else
+                    {
+                        ListMenuButton.Add(new UIText(Content, ActiveParameter.Name, new Vector2(RightColumnX + 10, DrawY), 200));
+                        DrawX = RightColumnX - 145;
+                    }
+                }
             }
         }
 
@@ -108,6 +153,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        private void UpdateValue(string InputMessage, GameModeInfo.GameModeParameter Sender)
+        {
+            Type ObjectType = Sender.Value.GetType();
+            if (typeof(int) == ObjectType)
+            {
+                Sender.Value = int.Parse(InputMessage);
+            }
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             int DrawX = PanelX;
@@ -127,17 +181,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Game", new Vector2(DrawX + 10, DrawY + 8), Color.White);
 
             DrawY += 40;
-            g.DrawString(fntText, "Goal Score", new Vector2(DrawX + 10, DrawY), Color.White);
-            g.DrawString(fntText, "Time Limit", new Vector2(RightColumnX + 10, DrawY), Color.White);
-            DrawY += 30;
-            g.DrawString(fntText, "Turn Limit", new Vector2(RightColumnX + 10, DrawY), Color.White);
-            DrawY += 30;
             g.DrawString(fntText, "Min Players", new Vector2(DrawX + 10, DrawY), Color.White);
             g.DrawString(fntText, "Max Players", new Vector2(RightColumnX + 10, DrawY), Color.White);
             DrawY += 30;
             g.DrawString(fntText, "Max Squad Per Player", new Vector2(DrawX + 10, DrawY), Color.White);
+            /*DrawY += 30;
+            g.DrawString(fntText, "Goal Score", new Vector2(DrawX + 10, DrawY), Color.White);
+            g.DrawString(fntText, "Time Limit", new Vector2(RightColumnX + 10, DrawY), Color.White);
+            DrawY += 30;
+            g.DrawString(fntText, "Turn Limit", new Vector2(RightColumnX + 10, DrawY), Color.White);*/
 
-            foreach (IUIElement ActiveButton in ArrayMenuButton)
+            foreach (IUIElement ActiveButton in ListMenuButton)
             {
                 ActiveButton.Draw(g);
             }

@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
-                BattleMap NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(string.Empty, string.Empty);
+                BattleMap NewMap = BattleMap.DicBattmeMapType[BattleMap.NextMapType].GetNewMap(Map.GetAvailableGameModes()[Map.GameRule.Name], string.Empty);
 
                 NewMap.BattleMapPath = BattleMap.NextMapPath;
                 NewMap.ListGameScreen = Owner.ListGameScreen;

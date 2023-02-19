@@ -20,6 +20,8 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             InitializeComponent();
 
             ListUnitSize = new List<List<bool>>(3);
+            ListUnitSize.Add(new List<bool>());
+            ListUnitSize[0].Add(true);
             OldWidth = 0;
             OldHeight = 0;
         }
@@ -34,7 +36,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             if (rbCustomSizeBox.Checked)
             {
                 for (int X = 0; X < txtWidth.Value; ++X)
-                    for (int Y = 0; Y < txtHeight.Value; ++Y)
+                    for (int Y = 0; Y < txtLength.Value; ++Y)
                         if (ListUnitSize[X][Y])
                             pbSizePreviewGraphicDevice.Graphics.FillRectangle(Brushes.Red, X * 32, Y * 32, 32, 32);
 
@@ -61,7 +63,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void pbUnitSize_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.X < 0 || e.Y < 0 ||
-                e.X >= pbUnitSize.Size.Width || e.Y >= pbUnitSize.Height)
+                e.X / 32 >= ListUnitSize.Count || e.Y / 32 >= ListUnitSize[0].Count)
                 return;
 
             if (e.Button == MouseButtons.Left)
@@ -83,7 +85,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void txtWidth_ValueChanged(object sender, EventArgs e)
         {
             int NewValue = (int)txtWidth.Value;
-            int CurrentHeight = (int)txtHeight.Value;
+            int CurrentHeight = (int)txtLength.Value;
 
             //List is getting bigger.
             if (OldWidth < NewValue)
@@ -119,9 +121,9 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             DrawUnitSize();
         }
 
-        private void txtHeight_ValueChanged(object sender, EventArgs e)
+        private void txtLength_ValueChanged(object sender, EventArgs e)
         {
-            int NewValue = (int)txtHeight.Value;
+            int NewValue = (int)txtLength.Value;
 
             //List is getting bigger.
             if (OldHeight < NewValue)
@@ -171,21 +173,21 @@ namespace ProjectEternity.Editors.UnitNormalEditor
         private void rbNone_CheckedChanged(object sender, EventArgs e)
         {
             txtWidth.Enabled = false;
-            txtHeight.Enabled = false;
+            txtLength.Enabled = false;
             DrawUnitSize();
         }
 
         private void rbSizeOnly_CheckedChanged(object sender, EventArgs e)
         {
             txtWidth.Enabled = true;
-            txtHeight.Enabled = true;
+            txtLength.Enabled = true;
             DrawUnitSize();
         }
 
         private void rbCustomSizeBox_CheckedChanged(object sender, EventArgs e)
         {
             txtWidth.Enabled = true;
-            txtHeight.Enabled = true;
+            txtLength.Enabled = true;
             DrawUnitSize();
         }
     }

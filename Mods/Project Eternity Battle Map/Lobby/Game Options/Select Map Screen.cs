@@ -13,38 +13,119 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     class GameOptionsSelectMapScreen : GameScreen
     {
-        private struct MapInfo
+        private class MapCache
         {
-            public readonly string MapName;
-            public readonly string MapType;
-            public readonly string MapPath;
-            public readonly Point NewMapSize;
-            public readonly byte PlayersMin;
-            public readonly byte PlayersMax;
-            public readonly string MapPlayers;
-            public readonly string MapDescription;
-            public readonly Texture2D MapImage;
-            public readonly List<string> ListMandatoryMutator;
+            public readonly string GameMode;
 
-            public MapInfo(string MapName, string MapType, string MapPath, Point NewMapSize, byte PlayersMin, byte PlayersMax, string MapDescription, List<string> ListMandatoryMutator, Texture2D MapImage)
+            public Dictionary<string, MapInfo> DicMapInfoByPath;
+
+            public MapCache(string GameMode)
             {
-                this.MapName = MapName;
-                this.MapType = MapType;
-                this.MapPath = MapPath;
-                this.NewMapSize = NewMapSize;
-                this.PlayersMin = PlayersMin;
-                this.PlayersMax = PlayersMax;
-                this.MapDescription = MapDescription;
-                this.ListMandatoryMutator = ListMandatoryMutator;
-                this.MapImage = MapImage;
+                this.GameMode = GameMode;
 
-                if (PlayersMin != PlayersMax)
+                DicMapInfoByPath = new Dictionary<string, MapInfo>();
+            }
+
+            public void PopulateMaps(string ContentRootDirectory, string ActiveModName)
+            {
+                DicMapInfoByPath.Clear();
+
+                string RootDirectory = ContentRootDirectory + "/Maps/";
+
+                IEnumerable<string> ListMapFolder;
+                if (!string.IsNullOrEmpty(ActiveModName))
                 {
-                    MapPlayers = PlayersMin + "-" + PlayersMax + " Players";
+                    ListMapFolder = Directory.EnumerateDirectories(ContentRootDirectory + "/Maps/" + ActiveModName + "/", "Multiplayer", SearchOption.AllDirectories);
                 }
                 else
                 {
-                    MapPlayers = PlayersMin + " Players";
+                    ListMapFolder = Directory.EnumerateDirectories(ContentRootDirectory + "/Maps/", "Multiplayer", SearchOption.AllDirectories);
+                }
+
+                foreach (string ActiveMultiplayerFolder in ListMapFolder)
+                {
+                    foreach (string ActiveCampaignFolder in Directory.EnumerateDirectories(ActiveMultiplayerFolder, GameMode, SearchOption.AllDirectories))
+                    {
+                        foreach (string ActiveFile in Directory.EnumerateFiles(ActiveCampaignFolder, "*.pem", SearchOption.AllDirectories))
+                        {
+                            string MapFolder = ActiveMultiplayerFolder.Substring(RootDirectory.Length);
+                            MapFolder = MapFolder.Substring(0, MapFolder.Length - "Multiplayer/".Length);
+                            string FilePath = ActiveFile.Substring(RootDirectory.Length + MapFolder.Length + 1);
+                            FilePath = FilePath.Substring(0, FilePath.Length - 4);
+                            string FileName = ActiveFile.Substring(ActiveCampaignFolder.Length + 1);
+                            FileName = FileName.Substring(0, FileName.Length - 4);
+
+                            DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapFolder, FilePath));
+                        }
+                    }
+                }
+            }
+        }
+
+        private class MapFolderCache
+        {
+            private Dictionary<string, MapCache> DicMapCacheByFolder;
+
+            public MapFolderCache()
+            {
+                DicMapCacheByFolder = new Dictionary<string, MapCache>();
+            }
+
+            public Dictionary<string, MapInfo> GetMaps(string ContentRootDirectory, string ActiveModName, string GameMode)
+            {
+                MapCache FoundMapCache;
+
+                if (!DicMapCacheByFolder.TryGetValue(GameMode, out FoundMapCache))
+                {
+                    FoundMapCache = new MapCache(GameMode);
+                    FoundMapCache.PopulateMaps(ContentRootDirectory, ActiveModName);
+                    DicMapCacheByFolder.Add(GameMode, FoundMapCache);
+                }
+
+                return FoundMapCache.DicMapInfoByPath;
+            }
+        }
+
+        private class MapInfo
+        {
+            public bool IsLoaded;
+            public readonly string MapName;
+            public readonly string MapModName;
+            public readonly string MapPath;
+            public Point MapSize;
+            public List<Color> ListMapTeam;
+            public byte MinNumberOfPlayer;
+            public byte MaxNumberOfPlayer;
+            public byte MaxSquadPerPlayer;
+            public string MapPlayers;
+            public string MapDescription;
+            public Texture2D MapImage;
+            public GameModeInfo GameInfo;
+            public List<string> ListMandatoryMutator;
+
+            public MapInfo(string MapName, string MapModName, string MapPath)
+            {
+                this.MapName = MapName;
+                this.MapModName = MapModName;
+                this.MapPath = MapPath;
+                MapSize = Point.Zero;
+                ListMapTeam = new List<Color>();
+                MinNumberOfPlayer = 0;
+                MaxNumberOfPlayer = 0;
+                MaxSquadPerPlayer = 0;
+                MapDescription = string.Empty;
+                ListMandatoryMutator = new List<string>();
+                GameInfo = null;
+                MapImage = null;
+                IsLoaded = false;
+
+                if (MinNumberOfPlayer != MaxNumberOfPlayer)
+                {
+                    MapPlayers = MinNumberOfPlayer + "-" + MaxNumberOfPlayer + " Players";
+                }
+                else
+                {
+                    MapPlayers = MinNumberOfPlayer + " Players";
                 }
             }
         }
@@ -55,6 +136,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private readonly RoomInformations Room;
         private readonly GameOptionsScreen OptionsScreen;
         private readonly GamePreparationScreen Owner;
+
+        private MapFolderCache DicCacheByFolderName;
 
         private Dictionary<string, MapInfo> DicMapInfoByPath;
         private MapInfo ActiveMapInfo;
@@ -71,6 +154,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Room = Room;
             this.OptionsScreen = OptionsScreen;
             this.Owner = Owner;
+
+            DicCacheByFolderName = new MapFolderCache();
 
             DicMapInfoByPath = new Dictionary<string, MapInfo>();
         }
@@ -114,69 +199,73 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void SelectMap(MapInfo MapInfoToSelect)
         {
             ActiveMapInfo = MapInfoToSelect;
-            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapType, ActiveMapInfo.MapPath, Room.GameMode, ActiveMapInfo.PlayersMin, ActiveMapInfo.PlayersMax, ActiveMapInfo.ListMandatoryMutator);
+            LoadMapInfo(MapInfoToSelect, Room.GameMode);
+            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapModName, ActiveMapInfo.MapPath, Room.GameMode, ActiveMapInfo.MinNumberOfPlayer, ActiveMapInfo.MaxNumberOfPlayer, ActiveMapInfo.MaxSquadPerPlayer, ActiveMapInfo.GameInfo, ActiveMapInfo.ListMandatoryMutator);
             OptionsScreen.OnMapUpdate();
+        }
+
+        private static void LoadMapInfo(MapInfo MapInfoToSelect, string GameMode)
+        {
+            if (MapInfoToSelect.IsLoaded)
+                return;
+
+            FileStream FS = new FileStream("Content/Maps/" + MapInfoToSelect.MapModName + "/" + MapInfoToSelect.MapPath + ".pem", FileMode.Open, FileAccess.Read);
+            BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
+            BR.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            MapInfoToSelect.MapSize.X = BR.ReadInt32();
+            MapInfoToSelect.MapSize.Y = BR.ReadInt32();
+
+            MapInfoToSelect.MinNumberOfPlayer = BR.ReadByte();
+            MapInfoToSelect.MaxNumberOfPlayer = BR.ReadByte();
+            MapInfoToSelect.MaxSquadPerPlayer = BR.ReadByte();
+
+            MapInfoToSelect.MapDescription = BR.ReadString();
+
+            MapInfoToSelect.ListMandatoryMutator.Clear();
+            int ListMandatoryMutatorCount = BR.ReadByte();
+            for (int M = 0; M < ListMandatoryMutatorCount; M++)
+            {
+                MapInfoToSelect.ListMandatoryMutator.Add(BR.ReadString());
+            }
+
+            int NumberOfTeams = BR.ReadByte();
+            MapInfoToSelect.ListMapTeam = new List<Color>(NumberOfTeams);
+            //Deathmatch colors
+            for (int D = 0; D < NumberOfTeams; D++)
+            {
+                MapInfoToSelect.ListMapTeam.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
+            }
+
+            Dictionary<string, GameModeInfo> DicAvailableGameType = BattleMap.DicBattmeMapType[MapInfoToSelect.MapModName].GetAvailableGameModes();
+
+            int ListGameTypeCount = BR.ReadByte();
+            for (int G = 0; G < ListGameTypeCount; G++)
+            {
+                string GameTypeName = BR.ReadString();
+                GameModeInfo LoadedGameInfo = DicAvailableGameType[GameTypeName].Copy();
+                LoadedGameInfo.Load(BR);
+                if (GameMode == GameTypeName)
+                {
+                    MapInfoToSelect.GameInfo = LoadedGameInfo;
+                    break;
+                }
+            }
+
+            if (MapInfoToSelect.GameInfo == null && DicAvailableGameType.ContainsKey(GameMode))
+            {
+                MapInfoToSelect.GameInfo = DicAvailableGameType[GameMode];
+            }
+
+            FS.Close();
+            BR.Close();
+
+            MapInfoToSelect.IsLoaded = true;
         }
 
         public void UpdateMaps()
         {
-            ActiveMapInfo = new MapInfo();
-            Room.MapPath = null;
-
-            DicMapInfoByPath.Clear();
-
-            string RootDirectory = Content.RootDirectory + "/Maps/";
-
-            IEnumerable<string> ListMapFolder;
-            if (!string.IsNullOrEmpty(Room.MapType))
-            {
-                ListMapFolder = Directory.EnumerateDirectories(Content.RootDirectory + "/Maps/" + Room.MapType + "/", "Multiplayer", SearchOption.AllDirectories);
-            }
-            else
-            {
-                ListMapFolder = Directory.EnumerateDirectories(Content.RootDirectory + "/Maps/", "Multiplayer", SearchOption.AllDirectories);
-            }
-
-            foreach (string ActiveMultiplayerFolder in ListMapFolder)
-            {
-                foreach (string ActiveCampaignFolder in Directory.EnumerateDirectories(ActiveMultiplayerFolder, Room.GameMode, SearchOption.AllDirectories))
-                {
-                    foreach (string ActiveFile in Directory.EnumerateFiles(ActiveCampaignFolder, "*.pem", SearchOption.AllDirectories))
-                    {
-                        string MapType = ActiveMultiplayerFolder.Substring(RootDirectory.Length);
-                        MapType = MapType.Substring(0, MapType.Length - "Multiplayer/".Length);
-                        string FilePath = ActiveFile.Substring(RootDirectory.Length + MapType.Length + 1);
-                        FilePath = FilePath.Substring(0, FilePath.Length - 4);
-                        string FileName = ActiveFile.Substring(ActiveCampaignFolder.Length + 1);
-                        FileName = FileName.Substring(0, FileName.Length - 4);
-
-                        FileStream FS = new FileStream(ActiveFile, FileMode.Open, FileAccess.Read);
-                        BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
-                        Point NewMapSize = Point.Zero;
-                        BR.BaseStream.Seek(0, SeekOrigin.Begin);
-                        NewMapSize.X = BR.ReadInt32();
-                        NewMapSize.Y = BR.ReadInt32();
-
-                        byte PlayersMin = BR.ReadByte();
-                        byte PlayersMax = BR.ReadByte();
-                        byte MaxSquadsPerPlayer = BR.ReadByte();
-
-                        string Description = BR.ReadString();
-
-                        int ListMandatoryMutatorCount = BR.ReadInt32();
-                        List<string> ListMandatoryMutator = new List<string>(ListMandatoryMutatorCount);
-                        for (int M = 0; M < ListMandatoryMutatorCount; M++)
-                        {
-                            ListMandatoryMutator.Add(BR.ReadString());
-                        }
-
-                        BR.Close();
-                        FS.Close();
-
-                        DicMapInfoByPath.Add(FilePath, new MapInfo(FileName, MapType, FilePath, NewMapSize, PlayersMin, PlayersMax, Description, ListMandatoryMutator, null));
-                    }
-                }
-            }
+            DicMapInfoByPath = DicCacheByFolderName.GetMaps(Content.RootDirectory, Room.MapModName, Room.GameMode);
         }
 
         public override void Draw(CustomSpriteBatch g)
@@ -225,12 +314,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawBox(g, new Vector2(RightPanelContentX, DescriptionBoxY), RightPanelContentWidth, DescriptionHeight, Color.White);
             DrawBox(g, new Vector2(DescriptionBoxNameX, DescriptionBoxY), DescriptionBoxNameWidth, 30, Color.White);
 
-            if (ActiveMapInfo.MapName != null)
+            if (ActiveMapInfo != null && ActiveMapInfo.MapName != null)
             {
                 g.DrawStringCentered(fntText, ActiveMapInfo.MapPlayers,
                     new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
                         PreviewBoxY + PreviewBoxHeight + DescriptionBoxNameHeight / 2), Color.White);
-                g.DrawStringCentered(fntText, "Size: " + ActiveMapInfo.NewMapSize.X + " x " + ActiveMapInfo.NewMapSize.Y,
+                g.DrawStringCentered(fntText, "Size: " + ActiveMapInfo.MapSize.X + " x " + ActiveMapInfo.MapSize.Y,
                     new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2,
                         PreviewBoxY + PreviewBoxHeight + 20 + DescriptionBoxNameHeight / 2), Color.White);
                 g.DrawStringCentered(fntText, ActiveMapInfo.MapName, new Vector2(DescriptionBoxNameX + DescriptionBoxNameWidth / 2, DescriptionBoxY + DescriptionBoxNameHeight / 2), Color.White);

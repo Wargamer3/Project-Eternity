@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     RemoveAllActionPanels();
                     ActionPanelPhaseChange EndPhase = new ActionPanelPhaseChange(Map);
                     EndPhase.ActiveSelect = true;
-                    ListActionMenuChoice.Add(EndPhase);
+                    ListActionMenuChoice.AddToPanelListAndSelect(EndPhase);
                 }
                 else if (ConfirmMenuChoice == 1)
                 {

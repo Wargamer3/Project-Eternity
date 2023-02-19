@@ -131,7 +131,7 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                DeathmatchMap NewMap = new DeathmatchMap(FilePath, string.Empty, ProjectEternityMapEditor.Params);
+                DeathmatchMap NewMap = new DeathmatchMap(FilePath, new GameModeInfo(), ProjectEternityMapEditor.Params);
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.LayerManager.ListLayer.Add(new MapLayer(NewMap, 0));
 
@@ -165,7 +165,7 @@ namespace ProjectEternity.Editors.MapEditor
             string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(24);
 
             BattleMapViewer.Preload();
-            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty, Params);
+            DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, new GameModeInfo(), Params);
             Helper = new DeathmatchMapHelper(NewMap);
             InitMap(NewMap);
 
@@ -1376,17 +1376,24 @@ namespace ProjectEternity.Editors.MapEditor
             ActiveMap.CameraType = MS.cbCameraType.Text;
             ActiveMap.CameraPosition = CameraPosition;
             ActiveMap.OrderNumber = (uint)MS.txtOrderNumber.Value;
-            ActiveMap.PlayersMin = (byte)MS.txtPlayersMin.Value;
-            ActiveMap.PlayersMax = (byte)MS.txtPlayersMax.Value;
+            ActiveMap.PlayersMin = (byte)MS.frmDefaultGameModesConditions.txtPlayersMin.Value;
+            ActiveMap.PlayersMax = (byte)MS.frmDefaultGameModesConditions.txtPlayersMax.Value;
+            ActiveMap.MaxSquadsPerPlayer = (byte)MS.frmDefaultGameModesConditions.txtMaxSquadsPerPlayer.Value;
             ActiveMap.Description = MS.txtDescription.Text;
 
             ActiveMap.ListMandatoryMutator.Clear();
-            foreach (DataGridViewRow ActiveRow in MS.dgvMandatoryMutators.Rows)
+            foreach (DataGridViewRow ActiveRow in MS.frmDefaultGameModesConditions.dgvMandatoryMutators.Rows)
             {
                 if (ActiveRow.Cells[0].Value != null)
                 {
                     ActiveMap.ListMandatoryMutator.Add((string)ActiveRow.Cells[0].Value);
                 }
+            }
+
+            ActiveMap.ListGameType.Clear();
+            foreach (GameModeInfo ActiveRow in MS.frmDefaultGameModesConditions.lstGameModes.Items)
+            {
+                ActiveMap.ListGameType.Add(ActiveRow);
             }
 
             ActiveMap.MapEnvironment.TimeStart = (float)MS.txtTimeStart.Value;
@@ -1416,10 +1423,13 @@ namespace ProjectEternity.Editors.MapEditor
             }
 
             Rectangle TilePos = TilesetViewer.TileBrushSize;
-            Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
-            DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+            if (cboTiles.SelectedIndex >= 0)
+            {
+                Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
+                DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
-            Helper.ResizeTerrain(MapSize.X, MapSize.Y, PresetTerrain, PresetTile);
+                Helper.ResizeTerrain(MapSize.X, MapSize.Y, PresetTerrain, PresetTile);
+            }
 
             BattleMapViewer.RefreshScrollbars();
 

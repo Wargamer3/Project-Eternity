@@ -79,7 +79,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
 
                     _SpawnUnit.ArrayCharacterActive = ListUnitCharacter.ToArray();
-                    _SpawnUnit.Pilot.Level = _SpawnCharacterLevel;
+                    if (_SpawnUnit.Pilot != null)
+                    {
+                        _SpawnUnit.Pilot.Level = _SpawnCharacterLevel;
+                    }
                     _SpawnUnit.UnitStat.HPUpgrades.Value = _SpawnUnitStatsUpgrade;
                     _SpawnUnit.UnitStat.ENUpgrades.Value = _SpawnUnitStatsUpgrade;
                     _SpawnUnit.UnitStat.ArmorUpgrades.Value = _SpawnUnitStatsUpgrade;

@@ -180,14 +180,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void UpdateMutators()
         {
-            ListAvailableMutators = BattleMap.DicBattmeMapType[Room.MapType].Params.DicMutator.Values.ToList();
+            ListAvailableMutators = BattleMap.DicBattmeMapType[Room.MapModName].Params.DicMutator.Values.ToList();
             Room.ListMutator.Clear();
 
             foreach (string ActiveMutatorName in Room.ListMandatoryMutator)
             {
                 Mutator FoundMutator;
 
-                if (BattleMap.DicBattmeMapType[Room.MapType].Params.DicMutator.TryGetValue(ActiveMutatorName, out FoundMutator))
+                if (BattleMap.DicBattmeMapType[Room.MapModName].Params.DicMutator.TryGetValue(ActiveMutatorName, out FoundMutator))
                 {
                     Room.ListMutator.Add(FoundMutator);
                     ListAvailableMutators.Remove(FoundMutator);

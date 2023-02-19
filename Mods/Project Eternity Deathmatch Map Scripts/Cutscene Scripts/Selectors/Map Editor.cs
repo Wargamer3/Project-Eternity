@@ -287,7 +287,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     case ItemSelectionChoices.Map:
                         string MapLogicName = Items[0].Substring(0, Items[0].Length - 4).Substring(24);
                         BattleMapViewer.Preload();
-                        DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, string.Empty, new DeathmatchParams(new BattleContext()));
+                        DeathmatchMap NewMap = new DeathmatchMap(MapLogicName, new GameModeInfo(), new DeathmatchParams(new BattleContext()));
                         Helper = new DeathmatchMapHelper(NewMap);
                         NewMap.ListGameScreen = new List<GameScreen>();
                         NewMap.Content = BattleMapViewer.content;

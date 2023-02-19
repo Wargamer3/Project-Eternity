@@ -14,9 +14,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private readonly string GameMode;
         private readonly byte MinNumberOfPlayer;
         private readonly byte MaxNumberOfPlayer;
+        private readonly byte MaxSquadPerPlayer;
+        private readonly GameModeInfo GameInfo;
         private readonly List<string> ListMandatoryMutator;
 
-        public ChangeMapScriptServer(string MapName, string MapType, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, List<string> ListMandatoryMutator)
+        public ChangeMapScriptServer(string MapName, string MapType, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, byte MaxSquadPerPlayer, GameModeInfo GameInfo, List<string> ListMandatoryMutator)
             : base(ScriptName)
         {
             this.MapName = MapName;
@@ -25,6 +27,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             this.GameMode = GameMode;
             this.MinNumberOfPlayer = MinNumberOfPlayer;
             this.MaxNumberOfPlayer = MaxNumberOfPlayer;
+            this.MaxSquadPerPlayer = MaxSquadPerPlayer;
+            this.GameInfo = GameInfo;
             this.ListMandatoryMutator = ListMandatoryMutator;
         }
 
@@ -41,6 +45,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             WriteBuffer.AppendString(GameMode);
             WriteBuffer.AppendByte(MinNumberOfPlayer);
             WriteBuffer.AppendByte(MaxNumberOfPlayer);
+            WriteBuffer.AppendByte(MaxSquadPerPlayer);
+
+            GameInfo.Write(WriteBuffer);
 
             WriteBuffer.AppendInt32(ListMandatoryMutator.Count);
             for (int M = 0; M < ListMandatoryMutator.Count; M++)

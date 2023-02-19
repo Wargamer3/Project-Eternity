@@ -50,6 +50,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     StartPlayerPhase(Map, Map.ListPlayer[Map.ActivePlayerIndex]);
                 }
+
+                if (Map.ListPlayer.Count > 0)
+                {
+                    ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
+                }
             }
             else
             {
@@ -67,6 +72,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
 
                 EndPlayerPhase(Map);
+
+                if (Map.ListPlayer.Count > 0)
+                {
+                    ActiveInputManager = Map.ListPlayer[Map.ActivePlayerIndex].InputManager;
+                }
 
                 //If the current Map has no other Players it will skip the other Players in other sub maps. If that happen switch to a Map with the proper player.
                 if (InitialPlayerIndex == Map.ActivePlayerIndex)
@@ -259,10 +269,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (PhaseTime >= 0)
             {
-                if (ActiveInputManager.InputConfirmPressed() || ActiveInputManager.InputCancelPressed() || ActiveInputManager.InputSkipPressed())
+                if (ActiveInputManager != null && (ActiveInputManager.InputConfirmPressed() || ActiveInputManager.InputCancelPressed() || ActiveInputManager.InputSkipPressed()))
+                {
                     PhaseTime = 0;
+                }
                 else
+                {
                     PhaseTime--;
+                }
 
                 if (PhaseTime > 0)
                 {

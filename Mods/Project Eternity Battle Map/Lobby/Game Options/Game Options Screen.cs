@@ -190,6 +190,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void OnMapUpdate()
         {
             GameRulesButton.Enable();
+            GameRuleScreen.UpdateGameParameters();
             MutatorsScreen.UpdateMutators();
         }
 

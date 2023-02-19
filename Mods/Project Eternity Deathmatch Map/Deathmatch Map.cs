@@ -44,11 +44,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
     public partial class DeathmatchMap : BattleMap, IProjectile3DSandbox
     {
-        #region Variables
-
         public static readonly string MapType = "Deathmatch";
         
         private SpriteFont fntArial16;
+        public Texture2D sprTileBorderRed;
+        public Texture2D sprTileBorderBlue;
+
+        #region Variables
 
         public override MovementAlgorithmTile CursorTerrain { get { return GetTerrain(CursorPosition); } }
 
@@ -157,7 +159,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             TerrainRestrictions.Load();
         }
 
-        public DeathmatchMap(string GameMode, DeathmatchParams Params)
+        public DeathmatchMap(GameModeInfo GameInfo, DeathmatchParams Params)
             : this(Params)
         {
             CursorPosition = new Vector3(9, 13, 0);
@@ -168,40 +170,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             CameraPosition = Vector3.Zero;
             ActiveSquadIndex = -1;
 
-            switch (GameMode)
+            if (GameInfo == null)
             {
-                case "":
+                GameRule = new SinglePlayerGameRule(this);
+            }
+            else
+            {
+                GameRule = GameInfo.GetRule(this);
+                if (GameRule == null)
+                {
                     GameRule = new SinglePlayerGameRule(this);
-                    break;
-
-                case "Classic":
-                    GameRule = new ClassicMPGameRule(this);
-                    break;
-
-                case "Campaign":
-                    GameRule = new CampaignGameRule(this);
-                    break;
-
-                case "Horde":
-                    GameRule = new HordeGameRule(this);
-                    break;
-
-                case "Deathmatch":
-                    GameRule = new DeathmatchGameRule(this);
-                    break;
-
-                case "Capture The Flag":
-                    GameRule = new CaptureTheFlagGameRule(this);
-                    break;
-
-                case "Titan":
-                    GameRule = new TitanGameRule(this);
-                    break;
+                }
             }
         }
 
-        public DeathmatchMap(string BattleMapPath, string GameMode, DeathmatchParams Params)
-            : this(GameMode, Params)
+        public DeathmatchMap(string BattleMapPath, GameModeInfo GameInfo, DeathmatchParams Params)
+            : this(GameInfo, Params)
         {
             this.BattleMapPath = BattleMapPath;
         }
@@ -274,6 +258,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
                 fntArial16 = Content.Load<SpriteFont>("Fonts/Arial16");
+                sprTileBorderRed = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Red Tile");
+                sprTileBorderBlue = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tile Border Blue Tile");
             }
         }
 
@@ -1120,7 +1106,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 float ZDiff = NextTerrainZ - CurrentZ;
 
-                if (TerrainRestrictions.ListTerrainType[NextTerrainType].ListRestriction.Count > 0 && ZDiff < MaxClearance)
+                if (TerrainRestrictions.ListTerrainType[NextTerrainType].ListRestriction.Count > 0 && ZDiff != 0 && ZDiff < MaxClearance)
                 {
                     return false;
                 }
@@ -1180,6 +1166,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ActivateAutomaticSkills(ActiveSquad, ActiveSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName, ActiveSquad, ActiveSquad.CurrentLeader);
             UpdateMapEvent(EventTypeUnitMoved, 0);
+            LayerManager.UnitMoved(ActivePlayerIndex);
         }
 
         public override byte[] GetSnapshotData()

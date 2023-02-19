@@ -594,12 +594,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             for (int U = AttackingSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
                 AttackingSquadFrame.ArrayStance[U] = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(AttackingSquad[U], AttackerSquadResult.ArrayResult[U]),
-                    AttackerPositionX + U > 0 ? 5 : 0, AttackerPositionY + U * 50, IsAttackerOnRight);
+                    AttackerPositionX + (U > 0 ? 5 : 0), AttackerPositionY + U * 50, IsAttackerOnRight);
             }
             for (int U = DefendingSquad.UnitsAliveInSquad - 1; U >= 0; --U)
             {
                 DefendingSquadFrame.ArrayStance[U] = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad[U], DefenderSquadResult.ArrayResult[U]),
-                    DefenderPositionX + U > 0 ? 5 : 0, DefenderPositionY + U * 50, IsAttackerOnRight);
+                    DefenderPositionX + (U > 0 ? 5 : 0), DefenderPositionY + U * 50, IsAttackerOnRight);
             }
 
             #region Support

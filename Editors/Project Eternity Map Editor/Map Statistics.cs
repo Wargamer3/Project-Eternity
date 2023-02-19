@@ -12,7 +12,9 @@ namespace ProjectEternity.Editors.MapEditor
         public List<string> ListForegroundsPath;
 
         private enum ItemSelectionChoices { Backgrounds, Foregrounds };
-        ItemSelectionChoices ItemSelectionChoice;
+        private ItemSelectionChoices ItemSelectionChoice;
+
+        public DefaultGameModesConditions frmDefaultGameModesConditions;
 
         public MapStatistics()
         {
@@ -35,8 +37,6 @@ namespace ProjectEternity.Editors.MapEditor
             txtCameraStartPositionX.Value = (int)Math.Max(0, ActiveMap.CameraPosition.X);
             txtCameraStartPositionY.Value = (int)Math.Max(0, ActiveMap.CameraPosition.Y);
             txtOrderNumber.Value = ActiveMap.OrderNumber;
-            txtPlayersMin.Value = ActiveMap.PlayersMin;
-            txtPlayersMax.Value = ActiveMap.PlayersMax;
             txtDescription.Text = ActiveMap.Description;
             ListBackgroundsPath = new List<string>();
             ListForegroundsPath = new List<string>();
@@ -66,10 +66,7 @@ namespace ProjectEternity.Editors.MapEditor
                 rbUseRealTime.Checked = true;
             }
 
-            foreach (string ActiveMutatorName in ActiveMap.ListMandatoryMutator)
-            {
-                dgvMandatoryMutators.Rows.Add(ActiveMutatorName);
-            }
+            frmDefaultGameModesConditions = new DefaultGameModesConditions(ActiveMap);
         }
 
         private void btnAccept_Click(object sender, EventArgs e)
@@ -92,6 +89,11 @@ namespace ProjectEternity.Editors.MapEditor
         {
             ItemSelectionChoice = ItemSelectionChoices.Foregrounds;
             ListMenuItemsSelected(BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathAnimationsBackgroundsAll, "Select which foregrounds to use.", true));
+        }
+
+        private void btnSetDefaultGameModesConditions_Click(object sender, EventArgs e)
+        {
+            frmDefaultGameModesConditions.ShowDialog();
         }
 
         protected void ListMenuItemsSelected(List<string> Items)

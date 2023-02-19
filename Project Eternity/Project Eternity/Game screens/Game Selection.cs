@@ -67,7 +67,7 @@ namespace ProjectEternity
                         BattleContext.LoadDefaultValues();
                         int OldNumberOfGameScreen = ListGameScreen.Count;
                         StreamReader BR = new StreamReader("Content/Map path.ini");
-                        BattleMap NewMap = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(string.Empty, string.Empty);
+                        BattleMap NewMap = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(null, string.Empty);
                         NewMap.BattleMapPath = BR.ReadLine();
                         BR.Close();
                         NewMap.ListGameScreen = ListGameScreen;
@@ -102,7 +102,7 @@ namespace ProjectEternity
 
                     case MenuChoices.SuperTreeWar:
                         int OldNumberOfGameScreenSTW = ListGameScreen.Count;
-                        BattleMap NewMapSTW = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(string.Empty, string.Empty);
+                        BattleMap NewMapSTW = BattleMap.DicBattmeMapType[DeathmatchMap.MapType].GetNewMap(null, string.Empty);
                         NewMapSTW.BattleMapPath = "Super Tree Wars/Holy Temple";
                         NewMapSTW.ListGameScreen = ListGameScreen;
                         NewMapSTW.PlayerRoster = new Roster();
@@ -168,11 +168,11 @@ namespace ProjectEternity
                         break;
 
                     case MenuChoices.WorldMap:
-                        PushScreen(new WorldMap("Test Map", string.Empty));
+                        PushScreen(new WorldMap("Test Map", new GameModeInfo()));
                         break;
 
                     case MenuChoices.Conquest:
-                        PushScreen(new GameScreens.ConquestMapScreen.ConquestMap("Conquest Test", string.Empty));
+                        PushScreen(new GameScreens.ConquestMapScreen.ConquestMap("Conquest Test", new GameModeInfo()));
                         break;
 
                     case MenuChoices.SorcererStreet:
@@ -181,7 +181,7 @@ namespace ProjectEternity
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
                         Constants.graphics.ApplyChanges();
-                        GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = (GameScreens.SorcererStreetScreen.SorcererStreetMap)BattleMap.DicBattmeMapType[GameScreens.SorcererStreetScreen.SorcererStreetMap.MapType].GetNewMap(string.Empty, string.Empty);
+                        GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = (GameScreens.SorcererStreetScreen.SorcererStreetMap)BattleMap.DicBattmeMapType[GameScreens.SorcererStreetScreen.SorcererStreetMap.MapType].GetNewMap(null, string.Empty);
                         NewMapSS.BattleMapPath = "New Item";
                         NewMapSS.ListGameScreen = ListGameScreen;
                         GameScreens.SorcererStreetScreen.Player NewPlayerSS = new GameScreens.SorcererStreetScreen.Player("", "", "", false, 0, true, Color.Blue, new List<GameScreens.SorcererStreetScreen.Card>());

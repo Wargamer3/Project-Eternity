@@ -84,15 +84,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string PilotPath = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
 
                 Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                Character NewCharacter = new Character(PilotPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-                NewCharacter.Level = 1;
-                NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
+                if (!string.IsNullOrEmpty(PilotPath))
+                {
+                    Character NewCharacter = new Character(PilotPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
+                    NewCharacter.Level = 1;
+                    NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
+                    Inventory.ListOwnedCharacter.Add(NewCharacter);
+                }
 
                 Squad NewSquad = new Squad("Squad", NewUnit);
                 NewSquad.IsPlayerControlled = true;
 
                 Inventory.ListOwnedSquad.Add(NewSquad);
-                Inventory.ListOwnedCharacter.Add(NewCharacter);
             }
 
             Inventory.ActiveLoadout.ListSpawnSquad.Add(Inventory.ListOwnedSquad[0]);

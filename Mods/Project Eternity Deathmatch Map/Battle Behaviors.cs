@@ -42,11 +42,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public Tuple<int, int> CheckForEnemies(int ActivePlayerIndex, Vector3 PositionToCheck, bool FriendlyFire)
+        {
+            for (int P = 0; P < ListPlayer.Count; P++)
+            {
+                int TargetIndex = CheckForSquadAtPosition(P, PositionToCheck, Vector3.Zero);
+
+                if (TargetIndex >= 0 && (FriendlyFire || ListPlayer[ActivePlayerIndex].Team != ListPlayer[P].Team))
+                {
+                    return new Tuple<int, int>(P, TargetIndex);
+                }
+            }
+
+            return null;
+        }
+
         public void ReadyNextMAPAttack(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, SupportSquadHolder ActiveSquadSupport, List<Vector3> ListMVHoverPoints,
             int TargetPlayerIndex, int TargetSquadIndex, SupportSquadHolder TargetSquadSupport)
         {
             Squad ActiveSquad = ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             Squad TargetSquad = ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
+
+            PushScreen(new CenterOnSquadCutscene(null, this, TargetSquad.Position));
 
             ActiveSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
 
@@ -66,23 +83,85 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, TargetPlayerIndex, TargetSquadIndex, TargetSquadSupport, false ));
         }
 
+        public void AttackWithExplosion(int ActivePlayerIndex, Squad Owner, Attack ActiveAttack, Vector3 Position)
+        {
+            int StartX = (int)(Position.X - ActiveAttack.ExplosionOption.ExplosionRadius);
+            int EndX = (int)(Position.X + ActiveAttack.ExplosionOption.ExplosionRadius);
+            int StartY = (int)(Position.Y - ActiveAttack.ExplosionOption.ExplosionRadius);
+            int EndY = (int)(Position.Y + ActiveAttack.ExplosionOption.ExplosionRadius);
+            int StartZ = (int)(Position.Z - ActiveAttack.ExplosionOption.ExplosionRadius);
+            int EndZ = (int)(Position.Z + ActiveAttack.ExplosionOption.ExplosionRadius);
+
+            Stack<Tuple<int, int>> ListAttackTarget = new Stack<Tuple<int, int>>();
+
+            for (int X = StartX; X < EndX; ++X)
+            {
+                for (int Y = StartY; Y < EndY; ++Y)
+                {
+                    for (int Z = StartZ; Z < EndZ; ++Z)
+                    {
+                        Tuple<int, int> ActiveTarget = CheckForEnemies(ActivePlayerIndex, new Vector3(X, Y, Z), true);
+
+                        if (ActiveTarget != null)
+                        {
+                            ListAttackTarget.Push(ActiveTarget);
+                        }
+                    }
+                }
+            }
+
+            if (ListAttackTarget.Count > 0)
+            {
+                AttackWithMAPAttack(ActivePlayerIndex, ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
+                foreach (Tuple<int, int> ActiveTarget in ListAttackTarget)
+                {
+                    Squad SquadToKill = ListPlayer[ActiveTarget.Item1].ListSquad[ActiveTarget.Item2];
+
+                    Terrain SquadTerrain = GetTerrain(SquadToKill);
+
+                    Vector3 FinalSpeed = new Vector3(Math.Abs(Position.X - SquadToKill.Position.X), Math.Abs(Position.Y - SquadToKill.Position.Y), Math.Abs(Position.Z - SquadTerrain.WorldPosition.Z));
+
+                    float DiffTotal = (FinalSpeed.X + FinalSpeed.Y + FinalSpeed.Z) / 3;
+
+                    if (DiffTotal < ActiveAttack.ExplosionOption.ExplosionRadius)
+                    {
+                        float WindForce = DiffTotal / ActiveAttack.ExplosionOption.ExplosionRadius;
+                        float WindValue = ActiveAttack.ExplosionOption.ExplosionWindPowerAtEdge + WindForce * (ActiveAttack.ExplosionOption.ExplosionWindPowerAtCenter - ActiveAttack.ExplosionOption.ExplosionWindPowerAtEdge);
+
+                        FinalSpeed.Normalize();
+
+                        FinalSpeed *= WindValue;
+                        SquadToKill.Speed = FinalSpeed;
+
+                        SquadToKill.SetPosition(SquadTerrain.WorldPosition);
+                    }
+                }
+            }
+        }
+
         public void AttackWithMAPAttack(int ActivePlayerIndex, int ActiveSquadIndex, Attack CurrentAttack, List<Vector3> ListMVHoverPoints, Stack<Tuple<int, int>> ListMAPAttackTarget)
         {
-            Squad ActiveSquad = ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
-            this.ListMAPAttackTarget = ListMAPAttackTarget;
-            Tuple<int, int> FirstEnemy = ListMAPAttackTarget.Pop();
-            ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2].CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
-            PrepareSquadsForBattle(ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, FirstEnemy.Item1, FirstEnemy.Item2);
+            if (ListMAPAttackTarget.Count > 0)
+            {
+                Squad ActiveSquad = ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
+                this.ListMAPAttackTarget = ListMAPAttackTarget;
+                Tuple<int, int> FirstEnemy = ListMAPAttackTarget.Pop();
 
-            SupportSquadHolder ActiveSquadSupport = new SupportSquadHolder();
-            ActiveSquadSupport.PrepareAttackSupport(this, ActivePlayerIndex, ActiveSquad, FirstEnemy.Item1, FirstEnemy.Item2);
+                CursorPosition = ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2].Position;
+                CursorPositionVisible = ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2].Position;
+                ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2].CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Defend;
+                PrepareSquadsForBattle(ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, FirstEnemy.Item1, FirstEnemy.Item2);
 
-            SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
-            TargetSquadSupport.PrepareDefenceSupport(this, FirstEnemy.Item1, ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2]);
+                SupportSquadHolder ActiveSquadSupport = new SupportSquadHolder();
+                ActiveSquadSupport.PrepareAttackSupport(this, ActivePlayerIndex, ActiveSquad, FirstEnemy.Item1, FirstEnemy.Item2);
 
-            ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, FirstEnemy.Item1, FirstEnemy.Item2, TargetSquadSupport, false));
+                SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
+                TargetSquadSupport.PrepareDefenceSupport(this, FirstEnemy.Item1, ListPlayer[FirstEnemy.Item1].ListSquad[FirstEnemy.Item2]);
 
-            ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
+                ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelStartBattle(this, ActivePlayerIndex, ActiveSquadIndex, CurrentAttack, ActiveSquadSupport, ListMVHoverPoints, FirstEnemy.Item1, FirstEnemy.Item2, TargetSquadSupport, false));
+
+                ActiveSquad.CurrentLeader.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
+            }
         }
 
         public void SelectMAPEnemies(int ActivePlayerIndex, int ActiveSquadIndex, List<Vector3> ListMVHoverPoints, List<MovementAlgorithmTile> AttackChoice)

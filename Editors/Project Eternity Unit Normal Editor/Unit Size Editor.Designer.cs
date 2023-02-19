@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.gbCustomisation = new System.Windows.Forms.GroupBox();
-            this.txtHeight = new System.Windows.Forms.NumericUpDown();
-            this.lblHeight = new System.Windows.Forms.Label();
+            this.txtLength = new System.Windows.Forms.NumericUpDown();
+            this.lblLength = new System.Windows.Forms.Label();
             this.txtWidth = new System.Windows.Forms.NumericUpDown();
             this.lblWidth = new System.Windows.Forms.Label();
             this.rbCustomSizeBox = new System.Windows.Forms.RadioButton();
@@ -39,12 +39,15 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pbUnitSize = new System.Windows.Forms.PictureBox();
+            this.txtHeight = new System.Windows.Forms.NumericUpDown();
+            this.lblHeight = new System.Windows.Forms.Label();
             this.gbCustomisation.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtWidth)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbUnitSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // gbCustomisation
@@ -53,6 +56,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbCustomisation.Controls.Add(this.txtHeight);
             this.gbCustomisation.Controls.Add(this.lblHeight);
+            this.gbCustomisation.Controls.Add(this.txtLength);
+            this.gbCustomisation.Controls.Add(this.lblLength);
             this.gbCustomisation.Controls.Add(this.txtWidth);
             this.gbCustomisation.Controls.Add(this.lblWidth);
             this.gbCustomisation.Controls.Add(this.rbCustomSizeBox);
@@ -65,32 +70,32 @@
             this.gbCustomisation.TabStop = false;
             this.gbCustomisation.Text = "Customisation";
             // 
-            // txtHeight
+            // txtLength
             // 
-            this.txtHeight.Location = new System.Drawing.Point(528, 16);
-            this.txtHeight.Minimum = new decimal(new int[] {
+            this.txtLength.Location = new System.Drawing.Point(528, 16);
+            this.txtLength.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.txtHeight.Name = "txtHeight";
-            this.txtHeight.Size = new System.Drawing.Size(56, 20);
-            this.txtHeight.TabIndex = 7;
-            this.txtHeight.Value = new decimal(new int[] {
+            this.txtLength.Name = "txtLength";
+            this.txtLength.Size = new System.Drawing.Size(56, 20);
+            this.txtLength.TabIndex = 7;
+            this.txtLength.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.txtHeight.ValueChanged += new System.EventHandler(this.txtHeight_ValueChanged);
+            this.txtLength.ValueChanged += new System.EventHandler(this.txtLength_ValueChanged);
             // 
-            // lblHeight
+            // lblLength
             // 
-            this.lblHeight.AutoSize = true;
-            this.lblHeight.Location = new System.Drawing.Point(481, 21);
-            this.lblHeight.Name = "lblHeight";
-            this.lblHeight.Size = new System.Drawing.Size(41, 13);
-            this.lblHeight.TabIndex = 6;
-            this.lblHeight.Text = "Height:";
+            this.lblLength.AutoSize = true;
+            this.lblLength.Location = new System.Drawing.Point(481, 21);
+            this.lblLength.Name = "lblLength";
+            this.lblLength.Size = new System.Drawing.Size(43, 13);
+            this.lblLength.TabIndex = 6;
+            this.lblLength.Text = "Length:";
             // 
             // txtWidth
             // 
@@ -190,6 +195,32 @@
             this.pbUnitSize.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbUnitSize_MouseMove);
             this.pbUnitSize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbUnitSize_MouseMove);
             // 
+            // txtHeight
+            // 
+            this.txtHeight.Location = new System.Drawing.Point(313, 16);
+            this.txtHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtHeight.Name = "txtHeight";
+            this.txtHeight.Size = new System.Drawing.Size(56, 20);
+            this.txtHeight.TabIndex = 9;
+            this.txtHeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblHeight
+            // 
+            this.lblHeight.AutoSize = true;
+            this.lblHeight.Location = new System.Drawing.Point(269, 21);
+            this.lblHeight.Name = "lblHeight";
+            this.lblHeight.Size = new System.Drawing.Size(41, 13);
+            this.lblHeight.TabIndex = 8;
+            this.lblHeight.Text = "Height:";
+            // 
             // UnitSizeEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -203,11 +234,12 @@
             this.Shown += new System.EventHandler(this.UnitSizeEditor_Shown);
             this.gbCustomisation.ResumeLayout(false);
             this.gbCustomisation.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtWidth)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbUnitSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtHeight)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -218,12 +250,14 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pbUnitSize;
-        private System.Windows.Forms.Label lblHeight;
+        private System.Windows.Forms.Label lblLength;
         private System.Windows.Forms.Label lblWidth;
         public System.Windows.Forms.RadioButton rbCustomSizeBox;
         public System.Windows.Forms.RadioButton rbSizeOnly;
         public System.Windows.Forms.RadioButton rbNone;
-        public System.Windows.Forms.NumericUpDown txtHeight;
+        public System.Windows.Forms.NumericUpDown txtLength;
         public System.Windows.Forms.NumericUpDown txtWidth;
+        public System.Windows.Forms.NumericUpDown txtHeight;
+        private System.Windows.Forms.Label lblHeight;
     }
 }

@@ -190,7 +190,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             {
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
-                ConquestMap NewMap = new ConquestMap(FilePath, string.Empty);
+                ConquestMap NewMap = new ConquestMap(FilePath, new GameModeInfo());
                 ActiveMap = BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap, 0));
 
@@ -215,7 +215,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
             string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(22);
 
             BattleMapViewer.Preload();
-            ConquestMap ActiveConquestMap = new ConquestMap(MapLogicName, string.Empty);
+            ConquestMap ActiveConquestMap = new ConquestMap(MapLogicName, new GameModeInfo());
             Helper = new ConquestMapHelper(ActiveConquestMap);
             InitMap(ActiveConquestMap);
 

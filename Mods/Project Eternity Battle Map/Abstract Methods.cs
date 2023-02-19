@@ -48,9 +48,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract BattleMap LoadTemporaryMap(BinaryReader BR);
 
-        public abstract BattleMap GetNewMap(string GameMode, string ParamsID);
+        public abstract BattleMap GetNewMap(GameModeInfo GameInfo, string ParamsID);
 
         public abstract string GetMapType();
+
+        public abstract Dictionary<string, GameModeInfo> GetAvailableGameModes();
 
         public virtual void Resize(int Width, int Height)
         {

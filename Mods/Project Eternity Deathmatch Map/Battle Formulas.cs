@@ -425,26 +425,30 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
                 ListBattleRecap.AddRange(FinalizeBattle(Attacker, CurrentAttack, AttackerPlayerIndex, Target, DefenderPlayerIndex, ResultAttack, ListDeadDefender));
 
-                //Counter attack
-                if (TargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack && TargetSquad.CurrentLeader.HP > 0)
+                if (CurrentAttack.Pri != WeaponPrimaryProperty.MAP && CurrentAttack.Pri != WeaponPrimaryProperty.PER)
                 {
-                    ListBattleRecap.AddRange(FinalizeBattle(TargetSquad, TargetSquad.CurrentLeader.CurrentAttack, DefenderPlayerIndex, Attacker, AttackerPlayerIndex, ResultDefend, new List<Unit>()));
-                }
-
-                //Support Attack
-                if (ActiveSquadSupport.ActiveSquadSupport != null && Attacker.CurrentLeader.HP > 0 && TargetSquad.CurrentLeader.HP > 0)
-                {
-                    //Remove 1 Support Defend.
-                    --ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifier;
-
-                    LevelUpMenu BattleRecap = FinalizeBattle(ActiveSquadSupport.ActiveSquadSupport.CurrentLeader, ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack, ActiveSquadSupport.ActiveSquadSupport, AttackerPlayerIndex,
-                        TargetSquad.CurrentLeader, TargetSquad, DefenderPlayerIndex, ResultAttack.ResultSupportAttack, ListDeadDefender);
-
-                    if (BattleRecap != null)
+                    //Counter attack
+                    if (TargetSquad.CurrentLeader.BattleDefenseChoice == Unit.BattleDefenseChoices.Attack && TargetSquad.CurrentLeader.HP > 0)
                     {
-                        ListBattleRecap.Add(BattleRecap);
+                        ListBattleRecap.AddRange(FinalizeBattle(TargetSquad, TargetSquad.CurrentLeader.CurrentAttack, DefenderPlayerIndex, Attacker, AttackerPlayerIndex, ResultDefend, new List<Unit>()));
+                    }
+
+                    //Support Attack
+                    if (ActiveSquadSupport.ActiveSquadSupport != null && Attacker.CurrentLeader.HP > 0 && TargetSquad.CurrentLeader.HP > 0)
+                    {
+                        //Remove 1 Support Defend.
+                        --ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.Boosts.SupportAttackModifier;
+
+                        LevelUpMenu BattleRecap = FinalizeBattle(ActiveSquadSupport.ActiveSquadSupport.CurrentLeader, ActiveSquadSupport.ActiveSquadSupport.CurrentLeader.CurrentAttack, ActiveSquadSupport.ActiveSquadSupport, AttackerPlayerIndex,
+                            TargetSquad.CurrentLeader, TargetSquad, DefenderPlayerIndex, ResultAttack.ResultSupportAttack, ListDeadDefender);
+
+                        if (BattleRecap != null)
+                        {
+                            ListBattleRecap.Add(BattleRecap);
+                        }
                     }
                 }
+
                 //Explosion of death cutscene
                 if (Attacker.CurrentLeader == null)
                     PushScreen(new ExplosionCutscene(CenterCamera, this, Attacker));
@@ -590,6 +594,8 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
 
                         FinalizeDeath(Attacker, AttackerSquad, AttackerPlayerIndex, Result.Target, DefenderSquad, DefenderPlayerIndex);
                     }
+
+                    LayerManager.UnitKilled(DefenderPlayerIndex);
                 }
                 else if (Result.AttackMissed)
                 {

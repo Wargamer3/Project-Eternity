@@ -107,6 +107,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public string MapName;
         public string BattleMapPath;
         public IGameRule GameRule;
+        public List<GameModeInfo> ListGameType;
         public bool IsFrozen;
         public static string NextMapType = string.Empty;
         public static string NextMapPath = string.Empty;
@@ -238,6 +239,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             IsEditor = false;
             IsFrozen = false;
             OnlinePlayers = new OnlineConfiguration();
+            ListGameType = new List<GameModeInfo>();
 
             GameTurn = 0;
             ListTileSet = new List<Texture2D>();
@@ -294,18 +296,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Write(Description);
 
-            BW.Write(ListMandatoryMutator.Count);
+            BW.Write((byte)ListMandatoryMutator.Count);
             for (int M = 0; M < ListMandatoryMutator.Count; M++)
             {
                 BW.Write(ListMandatoryMutator[M]);
             }
 
-            BW.Write(ListMultiplayerColor.Count);
+            BW.Write((byte)ListMultiplayerColor.Count);
             for (int D = 0; D < ListMultiplayerColor.Count; D++)
             {
                 BW.Write(ListMultiplayerColor[D].R);
                 BW.Write(ListMultiplayerColor[D].G);
                 BW.Write(ListMultiplayerColor[D].B);
+            }
+
+            BW.Write((byte)ListGameType.Count);
+            for (int G = 0; G < ListGameType.Count; G++)
+            {
+                ListGameType[G].Save(BW);
             }
 
             //The rest
@@ -459,18 +467,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Description = BR.ReadString();
 
-            int ListMandatoryMutatorCount = BR.ReadInt32();
+            int ListMandatoryMutatorCount = BR.ReadByte();
             for (int M = 0; M < ListMandatoryMutatorCount; M++)
             {
                 ListMandatoryMutator.Add(BR.ReadString());
             }
 
-            int ArrayMultiplayerColorLength = BR.ReadInt32();
+            int ArrayMultiplayerColorLength = BR.ReadByte();
             ListMultiplayerColor = new List<Color>(ArrayMultiplayerColorLength);
 
             for (int D = 0; D < ArrayMultiplayerColorLength; D++)
             {
                 ListMultiplayerColor.Add(Color.FromNonPremultiplied(BR.ReadByte(), BR.ReadByte(), BR.ReadByte(), 255));
+            }
+
+            Dictionary<string, GameModeInfo> DicAvailableGameType = GetAvailableGameModes();
+
+            int ListGameTypeCount = BR.ReadByte();
+            for (int G = 0; G < ListGameTypeCount; G++)
+            {
+                string GameTypeName = BR.ReadString();
+                GameModeInfo LoadedGameType = DicAvailableGameType[GameTypeName].Copy();
+                LoadedGameType.Load(BR);
+                ListGameType.Add(LoadedGameType);
             }
 
             TileSize.X = BR.ReadInt32();

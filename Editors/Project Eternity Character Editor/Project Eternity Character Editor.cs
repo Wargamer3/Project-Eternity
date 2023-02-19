@@ -8,6 +8,7 @@ using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Characters;
 using System.Windows.Forms;
 using ProjectEternity.Core.Units;
+using System.Drawing;
 
 namespace ProjectEternity.Editors.CharacterEditor
 {
@@ -16,6 +17,8 @@ namespace ProjectEternity.Editors.CharacterEditor
         private enum ItemSelectionChoices { Personality, SetBattleTheme, AceBonus, Slave, Skill1, Skill2, Skill3, Skill4, Skill5, Skill6, Spirit1, Spirit2, Spirit3, Spirit4, Spirit5, Spirit6 };
 
         private ItemSelectionChoices ItemSelectionChoice;
+
+        private SolidBrush GridBrush;
 
         private CharacterQuotesEditor QuoteEditor;
         private CharacterStatsEditor StatsEditor;
@@ -26,6 +29,8 @@ namespace ProjectEternity.Editors.CharacterEditor
         public ProjectEternityCharacterEditor()
         {
             InitializeComponent();
+
+            GridBrush = new SolidBrush(dgvTerrainRanks.RowHeadersDefaultCellStyle.ForeColor);
         }
 
         public ProjectEternityCharacterEditor(string FilePath, object[] Params)
@@ -392,14 +397,14 @@ namespace ProjectEternity.Editors.CharacterEditor
                 }
                 foreach (char ActiveRank in Character.ListGrade)
                 {
-                    RankCell.Items.Add(ActiveRank);
+                    RankCell.Items.Add(ActiveRank.ToString());
                 }
 
                 MovementCell.Value = ActiveMovement.Name;
 
                 if (NewCharacter.DicRankByMovement.ContainsKey(M))
                 {
-                    RankCell.Value = Character.ListGrade[NewCharacter.DicRankByMovement[M]];
+                    RankCell.Value = Character.ListGrade[NewCharacter.DicRankByMovement[M]].ToString();
                 }
 
                 dgvTerrainRanks.Rows[NewRowIndex].Cells[0] = MovementCell;
@@ -581,6 +586,35 @@ namespace ProjectEternity.Editors.CharacterEditor
         {
             ItemSelectionChoice = ItemSelectionChoices.Slave;
             ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathCharacters));
+        }
+
+        private void dgvTerrainRanks_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            bool validClick = (e.RowIndex != -1 && e.ColumnIndex != -1); //Make sure the clicked row/column is valid.
+            var datagridview = sender as DataGridView;
+
+            // Check to make sure the cell clicked is the cell containing the combobox 
+            if (datagridview.Rows[e.RowIndex].Cells[0] is DataGridViewComboBoxCell && validClick)
+            {
+                datagridview.BeginEdit(true);
+                ((ComboBox)datagridview.EditingControl).DroppedDown = true;
+            }
+        }
+
+        private void dgvTerrainRanks_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            dgvTerrainRanks.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+
+        private void dgvTerrainRanks_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            object o = dgvTerrainRanks.Rows[e.RowIndex].HeaderCell.Value;
+
+            e.Graphics.DrawString(
+                o != null ? o.ToString() : "",
+                dgvTerrainRanks.Font,
+                GridBrush,
+                new PointF((float)e.RowBounds.Left + 2, (float)e.RowBounds.Top + 4));
         }
 
         #region Skills

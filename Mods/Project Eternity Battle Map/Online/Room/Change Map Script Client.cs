@@ -17,6 +17,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
         private string GameMode;
         private byte MinNumberOfPlayer;
         private byte MaxNumberOfPlayer;
+        private byte MaxSquadPerPlayer;
+        private GameModeInfo GameInfo;
         private List<string> ListMandatoryMutator;
 
         public ChangeMapScriptClient(RoomInformations Owner, GamePreparationScreen MissionSelectScreen)
@@ -38,7 +40,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void Execute(IOnlineConnection Host)
         {
-            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MapPath, GameMode, MinNumberOfPlayer, MaxNumberOfPlayer, ListMandatoryMutator);
+            MissionSelectScreen.UpdateSelectedMap(MapName, MapType, MapPath, GameMode, MinNumberOfPlayer, MaxNumberOfPlayer, MaxSquadPerPlayer, GameInfo, ListMandatoryMutator);
         }
 
         protected override void Read(OnlineReader Sender)
@@ -49,6 +51,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             GameMode = Sender.ReadString();
             MinNumberOfPlayer = Sender.ReadByte();
             MaxNumberOfPlayer = Sender.ReadByte();
+            MaxSquadPerPlayer = Sender.ReadByte();
+
+            string GameInfoName = Sender.ReadString();
+            GameInfo = BattleMap.DicBattmeMapType[MapType].GetAvailableGameModes()[GameInfoName].Copy();
+            GameInfo.Read(Sender);
 
             int ListMandatoryMutatorCount = Sender.ReadInt32();
             ListMandatoryMutator = new List<string>(ListMandatoryMutatorCount);

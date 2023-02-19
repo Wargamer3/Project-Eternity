@@ -113,14 +113,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void LoadGameTypes()
         {
-            Gametype GametypeCampaign = new Gametype("Campaign", "Classic mission based mode, no respawn.", true, null);
+            GameModeInfo GametypeCampaign = new GameModeInfo("Campaign", "Classic mission based mode, no respawn.", GameModeInfo.CategoryPVE, true, null);
 
-            Gametype GametypeDeathmatch = new Gametype("Deathmatch", "Gain points for kills and assists, respawn on death.", true, null);
+            GameModeInfo GametypeDeathmatch = new GameModeInfo("Deathmatch", "Gain points for kills and assists, respawn on death.", GameModeInfo.CategoryPVP, true, null);
 
             SelectedGametype = GametypeCampaign;
             ArrayGametypeCategory = new GametypeCategory[2];
-            ArrayGametypeCategory[0] = new GametypeCategory("PVE", new Gametype[] { GametypeCampaign });
-            ArrayGametypeCategory[1] = new GametypeCategory("PVP", new Gametype[]
+            ArrayGametypeCategory[0] = new GametypeCategory("PVE", new GameModeInfo[] { GametypeCampaign });
+            ArrayGametypeCategory[1] = new GametypeCategory("PVP", new GameModeInfo[]
             {
                 GametypeDeathmatch, 
             });

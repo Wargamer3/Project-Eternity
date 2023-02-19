@@ -71,17 +71,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ActiveInputManager.InputConfirmPressed())
             {
-                if (ListAttackChoice.Contains(Map.CursorPosition))
+                if (ListAttackChoice.Contains(Map.CursorPosition) || CurrentAttack.MAPAttributes.Delay > 0  || CurrentAttack.ExplosionOption.ExplosionRadius > 0)
                 {
-                    ListAttackChoice.Clear();
+                    ListAttackTerrain.Clear();
+
                     for (int X = 0; X < CurrentAttack.MAPAttributes.ListChoice.Count; X++)
                     {
                         for (int Y = 0; Y < CurrentAttack.MAPAttributes.ListChoice[X].Count; Y++)
                         {
                             if (CurrentAttack.MAPAttributes.ListChoice[X][Y])
                             {
-                                ListAttackChoice.Add(new Vector3(Map.CursorPosition.X + X - CurrentAttack.MAPAttributes.Width,
-                                                       Map.CursorPosition.Y + Y - CurrentAttack.MAPAttributes.Height, Map.CursorPosition.Z));
+                                ListAttackTerrain.Add(Map.GetMovementTile((int)Map.CursorPosition.X + X - CurrentAttack.MAPAttributes.Width,
+                                                       (int)Map.CursorPosition.Y + Y - CurrentAttack.MAPAttributes.Height, (int)Map.CursorPosition.Z));
                             }
                         }
                     }

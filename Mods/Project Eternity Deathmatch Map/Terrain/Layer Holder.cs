@@ -53,6 +53,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LayerHolderDrawable.CursorMoved();
         }
 
+        public void UnitMoved(int PlayerIndex)
+        {
+            LayerHolderDrawable.UnitMoved(PlayerIndex);
+        }
+
+        public void UnitKilled(int PlayerIndex)
+        {
+            LayerHolderDrawable.UnitKilled(PlayerIndex);
+        }
+
         public override BaseMapLayer this[int i]
         {
             get

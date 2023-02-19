@@ -75,6 +75,7 @@ namespace ProjectEternity.Core.Units
         public Dictionary<string, UnitLinkTypes> DicUnitLink;//List which Units it can link to and how.
 
         public byte SizeIndex;
+        public byte Height;
         public bool[,] ArrayMapSize;//Custom mask for actual place a Unit is taking.
 
         public List<Attack> ListAttack;
@@ -180,8 +181,9 @@ namespace ProjectEternity.Core.Units
 
             SizeIndex = BR.ReadByte();
 
-            int SizeWidth = BR.ReadInt32();
-            int SizeHeight = BR.ReadInt32();
+            Height = BR.ReadByte();
+            int SizeWidth = BR.ReadByte();
+            int SizeHeight = BR.ReadByte();
             ArrayMapSize = new bool[SizeWidth, SizeHeight];
             for (int X = 0; X < SizeWidth; X++)
             {

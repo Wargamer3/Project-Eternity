@@ -19,6 +19,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         float SPRegenPerTurnPercent;
         float AmmoRegenPerTurnPercent;
 
+        public string Name => "Single Player";
+
         public SinglePlayerGameRule(DeathmatchMap Owner)
         {
             this.Owner = Owner;

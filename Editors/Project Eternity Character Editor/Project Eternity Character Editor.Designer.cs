@@ -1280,6 +1280,9 @@
             this.dgvTerrainRanks.ShowCellErrors = false;
             this.dgvTerrainRanks.Size = new System.Drawing.Size(181, 131);
             this.dgvTerrainRanks.TabIndex = 35;
+            this.dgvTerrainRanks.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTerrainRanks_CellClick);
+            this.dgvTerrainRanks.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvTerrainRanks_CurrentCellDirtyStateChanged);
+            this.dgvTerrainRanks.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvTerrainRanks_RowPostPaint);
             // 
             // Movement
             // 

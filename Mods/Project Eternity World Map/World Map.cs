@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         {
         }
 
-        public WorldMap(string GameMode)
+        public WorldMap(GameModeInfo GameInfo)
             : base()
         {
             RequireDrawFocus = false;
@@ -86,8 +86,8 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             this.ListPlayer = new List<Player>();
         }
 
-        public WorldMap(string BattleMapPath, string GameMode)
-            : this(GameMode)
+        public WorldMap(string BattleMapPath, GameModeInfo GameInfo)
+            : this(GameInfo)
         {
             this.BattleMapPath = BattleMapPath;
         }

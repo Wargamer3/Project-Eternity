@@ -141,9 +141,9 @@ namespace ProjectEternity.Core.Graphics
                         BaseEffect.Projection = Projection;
                         BaseEffect.EnableDefaultLighting();
                         BaseEffect.PreferPerPixelLighting = true;
-                        BaseEffect.DirectionalLight0.DiffuseColor = new Vector3(5.7f, 5.7f, 5.7f);
+                        BaseEffect.DirectionalLight0.DiffuseColor = new Vector3(2.1f, 2.1f, 2.1f);
                         BaseEffect.DirectionalLight0.Direction = new Vector3(0.2f, -0.4f, -0.8f);
-                        BaseEffect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0);
+                        BaseEffect.DirectionalLight0.SpecularColor = new Vector3(1, 1, 1);
                     }
                     else if (ActiveEffect is SkinnedEffect)
                     {
@@ -154,9 +154,9 @@ namespace ProjectEternity.Core.Graphics
                         SkinEffect.EnableDefaultLighting();
                         SkinEffect.PreferPerPixelLighting = true;
                         SkinEffect.SetBoneTransforms(ArrayBoneTransform);
-                        SkinEffect.DirectionalLight0.DiffuseColor = new Vector3(5.7f, 5.7f, 5.7f);
+                        SkinEffect.DirectionalLight0.DiffuseColor = new Vector3(2.1f, 2.1f, 2.1f);
                         SkinEffect.DirectionalLight0.Direction = new Vector3(0.2f, -0.4f, -0.8f);
-                        SkinEffect.DirectionalLight0.SpecularColor = new Vector3(0, 1, 0);
+                        SkinEffect.DirectionalLight0.SpecularColor = new Vector3(1, 1, 1);
                     }
                 }
 

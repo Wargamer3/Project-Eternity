@@ -116,7 +116,8 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Write(frmDetails.txt3DModel.Text);
             BW.Write(frmDetails.txtTags.Text);
             BW.Write(txtDescription.Text);
-            BW.Write(Convert.ToInt32(txtPrice.Text));
+            BW.Write(Convert.ToInt32(txtPrice.Value));
+            BW.Write(Convert.ToInt32(txtSpawnCost.Value));
 
             BW.Write((int)txtEXP.Value);
             BW.Write((int)txtBaseHP.Value);
@@ -166,17 +167,19 @@ namespace ProjectEternity.Editors.UnitNormalEditor
 
             if (frmUnitSizeEditor.rbNone.Checked)
             {
-                BW.Write(1);
-                BW.Write(1);
+                BW.Write((byte)frmUnitSizeEditor.txtHeight.Value);
+                BW.Write((byte)1);
+                BW.Write((byte)1);
                 BW.Write(true);
             }
             else if (frmUnitSizeEditor.rbSizeOnly.Checked)
             {
-                BW.Write((int)frmUnitSizeEditor.txtWidth.Value);
-                BW.Write((int)frmUnitSizeEditor.txtWidth.Value);
+                BW.Write((byte)frmUnitSizeEditor.txtHeight.Value);
+                BW.Write((byte)frmUnitSizeEditor.txtWidth.Value);
+                BW.Write((byte)frmUnitSizeEditor.txtLength.Value);
                 for (int X = 0; X < frmUnitSizeEditor.txtWidth.Value; X++)
                 {
-                    for (int Y = 0; Y < frmUnitSizeEditor.txtHeight.Value; Y++)
+                    for (int Y = 0; Y < frmUnitSizeEditor.txtLength.Value; Y++)
                     {
                         BW.Write(true);
                     }
@@ -184,11 +187,12 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             }
             else if (frmUnitSizeEditor.rbCustomSizeBox.Checked)
             {
-                BW.Write((int)frmUnitSizeEditor.txtWidth.Value);
-                BW.Write((int)frmUnitSizeEditor.txtWidth.Value);
+                BW.Write((byte)frmUnitSizeEditor.txtHeight.Value);
+                BW.Write((byte)frmUnitSizeEditor.txtWidth.Value);
+                BW.Write((byte)frmUnitSizeEditor.txtLength.Value);
                 for (int X = 0; X < frmUnitSizeEditor.txtWidth.Value; X++)
                 {
-                    for (int Y = 0; Y < frmUnitSizeEditor.txtHeight.Value; Y++)
+                    for (int Y = 0; Y < frmUnitSizeEditor.txtLength.Value; Y++)
                     {
                         BW.Write(frmUnitSizeEditor.ListUnitSize[X][Y]);
                     }
@@ -411,6 +415,8 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             else if (UnitStats.ListUnitSize[LoadedUnit.SizeIndex] == UnitStats.UnitSizeSS)
                 rbSizeSS.Checked = true;
 
+            frmUnitSizeEditor.txtHeight.Value = LoadedUnit.UnitStat.Height;
+
             if (LoadedUnit.UnitStat.ArrayMapSize.GetLength(0) == 1 && LoadedUnit.UnitStat.ArrayMapSize.GetLength(1) == 1)
             {
                 frmUnitSizeEditor.rbNone.Checked = true;
@@ -418,7 +424,7 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             else
             {
                 frmUnitSizeEditor.txtWidth.Value = LoadedUnit.UnitStat.ArrayMapSize.GetLength(0);
-                frmUnitSizeEditor.txtHeight.Value = LoadedUnit.UnitStat.ArrayMapSize.GetLength(1);
+                frmUnitSizeEditor.txtLength.Value = LoadedUnit.UnitStat.ArrayMapSize.GetLength(1);
                 bool AllTrue = true;
 
                 for (int X = 0; X < LoadedUnit.UnitStat.ArrayMapSize.GetLength(0); X++)
@@ -525,10 +531,10 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             else if (frmUnitSizeEditor.rbSizeOnly.Checked)
             {
                 ExportIniFile.AddValue("Unit Stats", "Size Mask Width", frmUnitSizeEditor.txtWidth.Value.ToString());
-                ExportIniFile.AddValue("Unit Stats", "Size Mask Height", frmUnitSizeEditor.txtHeight.Value.ToString());
+                ExportIniFile.AddValue("Unit Stats", "Size Mask Height", frmUnitSizeEditor.txtLength.Value.ToString());
                 for (int X = 0; X < frmUnitSizeEditor.txtWidth.Value; X++)
                 {
-                    for (int Y = 0; Y < frmUnitSizeEditor.txtHeight.Value; Y++)
+                    for (int Y = 0; Y < frmUnitSizeEditor.txtLength.Value; Y++)
                     {
                         ExportIniFile.AddValue("Size Mask", "Pos X" + X + "Y" + Y, "true");
                     }
@@ -537,10 +543,10 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             else if (frmUnitSizeEditor.rbCustomSizeBox.Checked)
             {
                 ExportIniFile.AddValue("Unit Stats", "Size Mask Width", frmUnitSizeEditor.txtWidth.Value.ToString());
-                ExportIniFile.AddValue("Unit Stats", "Size Mask Height", frmUnitSizeEditor.txtHeight.Value.ToString());
+                ExportIniFile.AddValue("Unit Stats", "Size Mask Height", frmUnitSizeEditor.txtLength.Value.ToString());
                 for (int X = 0; X < frmUnitSizeEditor.txtWidth.Value; X++)
                 {
-                    for (int Y = 0; Y < frmUnitSizeEditor.txtHeight.Value; Y++)
+                    for (int Y = 0; Y < frmUnitSizeEditor.txtLength.Value; Y++)
                     {
                         ExportIniFile.AddValue("Size Mask", "Pos X" + X + "Y" + Y, frmUnitSizeEditor.ListUnitSize[X][Y].ToString());
                     }

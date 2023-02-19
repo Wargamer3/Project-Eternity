@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             Stack<Tuple<int, int>> ListAttackTarget = new Stack<Tuple<int, int>>();
 
-            Tuple<int, int> ActiveTarget = CheckForEnemies(Map, PlayerIndex, new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex), true);
+            Tuple<int, int> ActiveTarget = Map.CheckForEnemies(PlayerIndex, new Vector3(ActiveTerrain.WorldPosition.X, ActiveTerrain.WorldPosition.Y, ActiveTerrain.LayerIndex), true);
 
             if (ActiveTarget != null)
             {
@@ -86,7 +86,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (ActiveAttack.ExplosionOption.ExplosionRadius > 0)
                 {
-                    HandleExplosion();
+                    Map.AttackWithExplosion(PlayerIndex, Owner, ActiveAttack, Position);
                 }
                 else
                 {
@@ -102,7 +102,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 if (ActiveAttack.ExplosionOption.ExplosionRadius > 0)
                 {
-                    HandleExplosion();
+                    Map.AttackWithExplosion(PlayerIndex, Owner, ActiveAttack, Position);
                 }
 
                 return true;
@@ -198,7 +198,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
                     }
 
-                    Tuple<int, int> ActiveCornerTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, NextCornerPosition, true);
+                    Tuple<int, int> ActiveCornerTarget = Map.CheckForEnemies(Map.ActivePlayerIndex, NextCornerPosition, true);
 
                     if (ActiveCornerTarget != null)
                     {
@@ -221,7 +221,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     break;
                 }
 
-                Tuple<int, int> ActiveTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, NextPosition, true);
+                Tuple<int, int> ActiveTarget = Map.CheckForEnemies(Map.ActivePlayerIndex, NextPosition, true);
 
                 if (ActiveTarget != null)
                 {
@@ -320,7 +320,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
                     }
 
-                    Tuple<int, int> ActiveCornerTarget = CheckForEnemies(Map, Map.ActivePlayerIndex, CornerNextPosition, true);
+                    Tuple<int, int> ActiveCornerTarget = Map.CheckForEnemies(Map.ActivePlayerIndex, CornerNextPosition, true);
 
                     if (ActiveCornerTarget != null)
                     {
@@ -355,84 +355,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return ListCrossedTerrain;
         }
 
-        public static Tuple<int, int> CheckForEnemies(DeathmatchMap Map, int ActivePlayerIndex, Vector3 PositionToCheck, bool FriendlyFire)
-        {
-            for (int P = 0; P < Map.ListPlayer.Count; P++)
-            {
-                //Find if a Unit is under the cursor.
-                int TargetIndex = Map.CheckForSquadAtPosition(P, PositionToCheck, Vector3.Zero);
-                //If one was found.
-                if (TargetIndex >= 0 && (FriendlyFire || Map.ListPlayer[ActivePlayerIndex].Team != Map.ListPlayer[P].Team))
-                {
-                    return new Tuple<int, int>(P, TargetIndex);
-                }
-            }
-
-            return null;
-        }
-
         public void DestroySelf()
         {
             Map.ListPERAttack.Remove(this);
-        }
-
-        public void HandleExplosion()
-        {
-            int StartX = (int)(Position.X - ActiveAttack.ExplosionOption.ExplosionRadius);
-            int EndX = (int)(Position.X + ActiveAttack.ExplosionOption.ExplosionRadius);
-            int StartY = (int)(Position.Y - ActiveAttack.ExplosionOption.ExplosionRadius);
-            int EndY = (int)(Position.Y + ActiveAttack.ExplosionOption.ExplosionRadius);
-            int StartZ = (int)(Position.Z - ActiveAttack.ExplosionOption.ExplosionRadius);
-            int EndZ = (int)(Position.Z + ActiveAttack.ExplosionOption.ExplosionRadius);
-
-            Stack<Tuple<int, int>> ListAttackTarget = new Stack<Tuple<int, int>>();
-
-            for (int X = StartX; X < EndX; ++X)
-            {
-                for (int Y = StartY; Y < EndY; ++Y)
-                {
-                    for (int Z = StartZ; Z < EndZ; ++Z)
-                    {
-                        Tuple<int, int> ActiveTarget = CheckForEnemies(Map, PlayerIndex, new Vector3(X, Y, Z), true);
-
-                        if (ActiveTarget != null)
-                        {
-                            ListAttackTarget.Push(ActiveTarget);
-                        }
-                    }
-                }
-            }
-
-            if (ListAttackTarget.Count > 0)
-            {
-                Map.AttackWithMAPAttack(PlayerIndex, Map.ListPlayer[PlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
-                foreach (Tuple<int, int> ActiveTarget in ListAttackTarget)
-                {
-                    Squad SquadToKill = Map.ListPlayer[ActiveTarget.Item1].ListSquad[ActiveTarget.Item2];
-
-                    Terrain SquadTerrain = Map.GetTerrain(SquadToKill);
-
-                    float DiffX = Math.Abs(Position.X - SquadToKill.Position.X);
-                    float DiffY = Math.Abs(Position.Y - SquadToKill.Position.Y);
-                    float DiffZ = Math.Abs(Position.Z - SquadTerrain.WorldPosition.Z);
-
-                    float DiffTotal = (DiffX + DiffY + DiffZ) / 3;
-
-                    if (DiffTotal < ActiveAttack.ExplosionOption.ExplosionRadius)
-                    {
-                        float WindForce = DiffTotal / ActiveAttack.ExplosionOption.ExplosionRadius;
-                        float WindValue = ActiveAttack.ExplosionOption.ExplosionWindPowerAtEdge + WindForce * (ActiveAttack.ExplosionOption.ExplosionWindPowerAtCenter - ActiveAttack.ExplosionOption.ExplosionWindPowerAtEdge);
-
-                        Vector3 FinalSpeed = SquadToKill.Position - Position;
-                        FinalSpeed.Normalize();
-
-                        FinalSpeed *= WindValue;
-                        SquadToKill.Speed = FinalSpeed;
-
-                        SquadToKill.SetPosition(SquadTerrain.WorldPosition);
-                    }
-                }
-            }
         }
 
         private void DamageTemporaryTerrain(Vector3 Position)

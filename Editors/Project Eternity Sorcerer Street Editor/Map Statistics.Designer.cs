@@ -39,8 +39,6 @@
             this.txtMagicPerLap = new System.Windows.Forms.NumericUpDown();
             this.lblMagicAtStart = new System.Windows.Forms.Label();
             this.txtMagicAtStart = new System.Windows.Forms.NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPlayersMax)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPlayersMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapWidth)).BeginInit();
@@ -220,8 +218,6 @@
             this.Controls.SetChildIndex(this.txtMapHeight, 0);
             this.Controls.SetChildIndex(this.cbCameraType, 0);
             this.Controls.SetChildIndex(this.groupBox1, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.txtPlayersMax)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtPlayersMin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTileHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMapWidth)).EndInit();
