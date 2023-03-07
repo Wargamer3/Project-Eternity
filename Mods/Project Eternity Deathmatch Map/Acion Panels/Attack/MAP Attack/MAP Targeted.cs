@@ -22,6 +22,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public List<Vector3> ListAttackChoice;
         public List<MovementAlgorithmTile> ListAttackTerrain;
         public List<MovementAlgorithmTile> ListCursorTarget;
+        public List<MovementAlgorithmTile> ListExplosionTerrain;
         private BattlePreviewer BattlePreview;
 
         Stack<Tuple<int, int>> ListMAPAttackTarget;
@@ -44,6 +45,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListAttackChoice = new List<Vector3>();
             ListMAPAttackTarget = new Stack<Tuple<int, int>>();
             ListCursorTarget = new List<MovementAlgorithmTile>();
+            ListExplosionTerrain = new List<MovementAlgorithmTile>();
 
             ActiveSquad = Map.ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             CurrentAttack = ActiveSquad.CurrentLeader.CurrentAttack;
@@ -68,6 +70,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListCursorTarget.Clear();
             ListCursorTarget.Add(Map.GetTerrain(Map.CursorPosition));
             Map.LayerManager.AddDrawablePoints(ListCursorTarget, Color.DarkRed);
+            Map.LayerManager.AddDrawablePoints(ListExplosionTerrain, Color.FromNonPremultiplied(109, 0, 0, 140));
 
             if (ActiveInputManager.InputConfirmPressed())
             {
@@ -133,6 +136,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.CursorPosition = TemptativeTargetSquad.Position;
                 Map.CursorPositionVisible = Map.CursorPosition;
+                UpdateExplosionPositions();
 
                 if (TemptativeTargetSquad.X < Map.CameraPosition.X || TemptativeTargetSquad.Y < Map.CameraPosition.Y ||
                     TemptativeTargetSquad.X >= Map.CameraPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.Y >= Map.CameraPosition.Y + Map.ScreenSize.Y)
@@ -177,6 +181,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 Map.CursorPosition = TemptativeTargetSquad.Position;
                 Map.CursorPositionVisible = Map.CursorPosition;
+                UpdateExplosionPositions();
 
                 if (TemptativeTargetSquad.X < Map.CameraPosition.X || TemptativeTargetSquad.Y < Map.CameraPosition.Y ||
                     TemptativeTargetSquad.X >= Map.CameraPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.Y >= Map.CameraPosition.Y + Map.ScreenSize.Y)
@@ -186,8 +191,34 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else
             {
-                Map.CursorControl(ActiveInputManager);//Move the cursor
+                if (Map.CursorControl(ActiveInputManager))
+                {
+                    UpdateExplosionPositions();
+                }
                 BattlePreview.UpdateUnitDisplay();
+            }
+        }
+
+        private void UpdateExplosionPositions()
+        {
+            if (CurrentAttack.ExplosionOption.ExplosionRadius > 0)
+            {
+                ListExplosionTerrain.Clear();
+                float X = Map.CursorPosition.X;
+                float Y = Map.CursorPosition.Y;
+                float Z = Map.CursorPosition.Z;
+
+                for (float OffsetX = -CurrentAttack.ExplosionOption.ExplosionRadius; OffsetX < CurrentAttack.ExplosionOption.ExplosionRadius; ++OffsetX)
+                {
+                    for (float OffsetY = -CurrentAttack.ExplosionOption.ExplosionRadius; OffsetY < CurrentAttack.ExplosionOption.ExplosionRadius; ++OffsetY)
+                    {
+                        if (Math.Abs(OffsetX) + Math.Abs(OffsetY) < CurrentAttack.ExplosionOption.ExplosionRadius
+                            && X + OffsetX < Map.MapSize.X && Y + OffsetY < Map.MapSize.Y && X + OffsetX > 0 && Y + OffsetY > 0)
+                        {
+                            ListExplosionTerrain.Add(Map.GetTerrain(new Vector3(X + OffsetX, Y + OffsetY, Z)));
+                        }
+                    }
+                }
             }
         }
 

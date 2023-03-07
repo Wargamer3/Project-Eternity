@@ -340,13 +340,17 @@ namespace ProjectEternity.Core.Attacks
                 }
                 else if (Pri == WeaponPrimaryProperty.MAP)
                 {
+                    if (MAPAttributes.Delay > 0)
+                    {
+                        return true;
+                    }
                     for (int X = 0; X < ArrayTargetMapSize.GetLength(0); X++)
                     {
                         for (int Y = 0; Y < ArrayTargetMapSize.GetLength(1); Y++)
                         {
                             if (ArrayTargetMapSize[X, Y])
                             {
-                                if (MAPAttributes.CanAttackTarget(StartPosition, new Vector3(TargetPosition.X + X, TargetPosition.Y + Y, TargetPosition.Z), MinDistance, MaxDistance))
+                                if (MAPAttributes.CanAttackTarget(StartPosition, new Vector3(TargetPosition.X + X, TargetPosition.Y + Y, TargetPosition.Z), (int)Math.Max(0, MinDistance + ExplosionOption.ExplosionRadius), MaxDistance + (int)ExplosionOption.ExplosionRadius))
                                 {
                                     return true;
                                 }

@@ -9,10 +9,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public class NonDemoBattleFrame
         {
-            public struct NonDemoBattleFrameSquad
+            public class NonDemoBattleFrameSquad
             {
                 public NonDemoBattleUnitFrame[] ArrayStance;
                 public NonDemoBattleUnitFrame SupportStance;
+
+                public NonDemoBattleFrameSquad()
+                {
+                    ArrayStance = new NonDemoBattleUnitFrame[0];
+                }
 
                 public void Update(GameTime gameTime)
                 {
@@ -57,10 +62,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     NonDemoBattleFrameSquad NewCopy = new NonDemoBattleFrameSquad();
 
-                    NewCopy.ArrayStance = ArrayStance;
+                    NewCopy.ArrayStance = new NonDemoBattleUnitFrame[ArrayStance.Length];
+                    for (int i = 0; i < ArrayStance.Length; ++i)
+                    {
+                        NewCopy.ArrayStance[i] = ArrayStance[i];
+                    }
                     NewCopy.SupportStance = SupportStance;
 
                     return NewCopy;
+                }
+
+                public override string ToString()
+                {
+                    return ArrayStance[0].ToString();
                 }
             }
 
@@ -97,6 +111,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 RightStance.Draw(g, NonDemoAnimationTimer);
                 LeftStance.Draw(g, NonDemoAnimationTimer);
+            }
+
+            public override string ToString()
+            {
+                return LeftStance.ToString() + " - " + RightStance.ToString();
             }
         }
     }

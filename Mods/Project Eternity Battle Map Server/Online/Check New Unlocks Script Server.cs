@@ -9,14 +9,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
     {
         public const string ScriptName = "Check New Unlocks";
 
-        public CheckNewUnlocksScriptServer()
+        private readonly GameServer Owner;
+        private string ID;
+
+        public CheckNewUnlocksScriptServer(GameServer Owner)
             : base(ScriptName)
         {
+            this.Owner = Owner;
         }
 
         public override OnlineScript Copy()
         {
-            return new CheckNewUnlocksScriptServer();
+            return new CheckNewUnlocksScriptServer(Owner);
         }
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
@@ -49,11 +53,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                 }
             }
 
+            if (ListUnlockedItem.Count > 0)
+            {
+                Owner.Database.SavePlayerInventory(ID, ConditionsOwner);
+            }
+
             Sender.Send(new NewUnlocksScriptServer(ListUnlockedItem));
         }
 
         protected override void Read(OnlineReader Sender)
         {
+            ID = Sender.ReadString();
         }
     }
 }

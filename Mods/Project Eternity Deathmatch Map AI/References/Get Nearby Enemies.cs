@@ -61,6 +61,7 @@ namespace ProjectEternity.AI.DeathmatchMapScreen
                             if (!Info.Map.TerrainRestrictions.CanMove(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, ActiveTerrain.TerrainTypeIndex))
                             {
                                 ListEnemy.RemoveAt(i);
+                                break;
                             }
                         }
                     }

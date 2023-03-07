@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace Database.BattleMap
@@ -239,17 +241,17 @@ namespace Database.BattleMap
                 { "Records",
                     new BsonDocument
                     {
-                        { "TotalSecondsPlayed", 0d},
+                        { "TotalSecondsPlayed", 0d },
 
-                        { "TotalKills", 0},
-                        { "TotalTurnPlayed", 0},
-                        { "TotalTilesTraveled", 0},
+                        { "TotalKills", 0L },
+                        { "TotalTurnPlayed", 0L },
+                        { "TotalTilesTraveled", 0L },
 
-                        { "CurrentMoney", 0},
-                        { "TotalMoney", 0},
+                        { "CurrentMoney", 0L },
+                        { "TotalMoney", 0L },
 
-                        { "CurrentCoins", 0},
-                        { "TotalCoins", 0},
+                        { "CurrentCoins", 0L },
+                        { "TotalCoins", 0L },
 
                         { "UnitRecords",
                             new BsonDocument
@@ -299,15 +301,15 @@ namespace Database.BattleMap
                         {"BattleRecords",
                             new BsonDocument
                             {
-                                { "NumberOfGamesPlayed", 0},
-                                { "NumberOfGamesWon", 0},
-                                { "NumberOfGamesLost", 0},
-                                { "NumberOfKills", 0},
-                                { "NumberOfUnitsLost", 0},
+                                { "NumberOfGamesPlayed", 0L },
+                                { "NumberOfGamesWon", 0L },
+                                { "NumberOfGamesLost", 0L },
+                                { "NumberOfKills", 0L },
+                                { "NumberOfUnitsLost", 0L },
 
-                                { "TotalDamageGiven", 0},
-                                { "TotalDamageReceived", 0},
-                                { "TotalDamageRecovered", 0},
+                                { "TotalDamageGiven", 0L },
+                                { "TotalDamageReceived", 0L },
+                                { "TotalDamageRecovered", 0L },
                             }
                         },
                         {"BonusRecords",
@@ -367,6 +369,18 @@ namespace Database.BattleMap
             return NewPlayer;
         }
 
+        private void UpdatePlayerIsLoggedIn(string ID, string GameServerIP, int GameServerPort)
+        {
+            if (ID == null)
+            {
+                return;
+            }
+
+            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
+            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("GameServerIP", GameServerIP).Set("GameServerPort", GameServerPort);
+            PlayersCollection.UpdateOneAsync(filter, update);
+        }
+
         public PlayerPOCO GetPlayerInventory(string ID)
         {
             FilterDefinition<BsonDocument> LastTimeCheckedFilter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
@@ -378,25 +392,13 @@ namespace Database.BattleMap
             FoundPlayer.Name = Name;
 
             ByteWriter BW = new ByteWriter();
-            GetUnlockesBytes(BW, FoundPlayerDocument);
+            GetUnlocksBytes(BW, FoundPlayerDocument);
             GetRecordsBytes(BW, FoundPlayerDocument);
             GetInventoryBytes(BW, FoundPlayerDocument);
             FoundPlayer.Info = BW.GetBytes();
             BW.ClearWriteBuffer();
 
             return FoundPlayer;
-        }
-
-        private void UpdatePlayerIsLoggedIn(string ID, string GameServerIP, int GameServerPort)
-        {
-            if (ID == null)
-            {
-                return;
-            }
-
-            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
-            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("GameServerIP", GameServerIP).Set("GameServerPort", GameServerPort);
-            PlayersCollection.UpdateOneAsync(filter, update);
         }
 
         private void GetInventoryBytes(ByteWriter BW, BsonDocument FoundPlayerDocument)
@@ -445,7 +447,7 @@ namespace Database.BattleMap
             }
         }
 
-        private void GetUnlockesBytes(ByteWriter BW, BsonDocument FoundPlayerDocument)
+        private void GetUnlocksBytes(ByteWriter BW, BsonDocument FoundPlayerDocument)
         {
             BsonDocument Inventory = FoundPlayerDocument.GetValue("Unlocks").AsBsonDocument;
 
@@ -479,15 +481,15 @@ namespace Database.BattleMap
 
             BW.AppendDouble(Records.GetValue("TotalSecondsPlayed").AsDouble);
 
-            BW.AppendUInt32((uint)Records.GetValue("TotalKills").AsInt32);
-            BW.AppendUInt32((uint)Records.GetValue("TotalTurnPlayed").AsInt32);
-            BW.AppendUInt32((uint)Records.GetValue("TotalTilesTraveled").AsInt32);
+            BW.AppendUInt32((uint)Records.GetValue("TotalKills").AsInt64);
+            BW.AppendUInt32((uint)Records.GetValue("TotalTurnPlayed").AsInt64);
+            BW.AppendUInt32((uint)Records.GetValue("TotalTilesTraveled").AsInt64);
 
-            BW.AppendUInt32((uint)Records.GetValue("CurrentMoney").AsInt32);
-            BW.AppendUInt32((uint)Records.GetValue("TotalMoney").AsInt32);
+            BW.AppendUInt32((uint)Records.GetValue("CurrentMoney").AsInt64);
+            BW.AppendUInt32((uint)Records.GetValue("TotalMoney").AsInt64);
 
-            BW.AppendUInt32((uint)Records.GetValue("CurrentCoins").AsInt32);
-            BW.AppendUInt32((uint)Records.GetValue("TotalCoins").AsInt32);
+            BW.AppendUInt32((uint)Records.GetValue("CurrentCoins").AsInt64);
+            BW.AppendUInt32((uint)Records.GetValue("TotalCoins").AsInt64);
 
             GetUnitRecordsBytes(BW, Records);
             GetBattleRecordsBytes(BW, Records);
@@ -569,15 +571,15 @@ namespace Database.BattleMap
         {
             BsonDocument UnitRecords = Records.GetValue("BattleRecords").AsBsonDocument;
 
-            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfGamesPlayed").AsInt32);
-            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfGamesWon").AsInt32);
-            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfGamesLost").AsInt32);
-            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfKills").AsInt32);
-            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfUnitsLost").AsInt32);
+            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfGamesPlayed").AsInt64);
+            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfGamesWon").AsInt64);
+            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfGamesLost").AsInt64);
+            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfKills").AsInt64);
+            BW.AppendUInt32((uint)UnitRecords.GetValue("NumberOfUnitsLost").AsInt64);
 
-            BW.AppendUInt32((uint)UnitRecords.GetValue("TotalDamageGiven").AsInt32);
-            BW.AppendUInt32((uint)UnitRecords.GetValue("TotalDamageReceived").AsInt32);
-            BW.AppendUInt32((uint)UnitRecords.GetValue("TotalDamageRecovered").AsInt32);
+            BW.AppendUInt32((uint)UnitRecords.GetValue("TotalDamageGiven").AsInt64);
+            BW.AppendUInt32((uint)UnitRecords.GetValue("TotalDamageReceived").AsInt64);
+            BW.AppendUInt32((uint)UnitRecords.GetValue("TotalDamageRecovered").AsInt64);
         }
 
         private void GetBonusRecordsBytes(ByteWriter BW, BsonDocument Records)
@@ -604,6 +606,412 @@ namespace Database.BattleMap
                 BW.AppendString(NumberOfBonusObtainedByName.GetValue("Name").AsString);
                 BW.AppendInt64(NumberOfBonusObtainedByName.GetValue("FirstCompletionDate").AsBsonDateTime.ToUniversalTime().Ticks);
                 BW.AppendUInt32((uint)NumberOfBonusObtainedByName.GetValue("MaxScore").AsInt32);
+            }
+        }
+
+        public void SavePlayerInventory(string ID, object PlayerToSave)
+        {
+            BattleMapPlayer Player = (BattleMapPlayer)PlayerToSave;
+            BsonDocument PlayerDocument = new BsonDocument
+            {
+                { "Name", Player.Name },
+                { "Level", Player.Level },
+                { "EXP", 0 },
+                { "Ranking", 1 },
+                { "License", 1 },
+                { "Guild", "" },
+                { "Inventory",
+                    new BsonDocument
+                    {
+                        { "Money", 0 },
+                        { "OwnedSquads",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "OwnedCharacters",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "OwnedMissions",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "SquadLoadouts",
+                            new BsonArray
+                            {
+                            }
+                        }
+                    }
+                },
+                { "Unlocks",
+                    new BsonDocument
+                    {
+                        { "Characters",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "Units",
+                            new BsonArray
+                            {
+                            }
+                        },
+                        { "Missions",
+                            new BsonArray
+                            {
+                            }
+                        },
+                    }
+                },
+                { "Records",
+                    new BsonDocument
+                    {
+                        { "TotalSecondsPlayed", Player.Records.TotalSecondsPlayed },
+
+                        { "TotalKills", Player.Records.TotalKills },
+                        { "TotalTurnPlayed", Player.Records.TotalTurnPlayed},
+                        { "TotalTilesTraveled", Player.Records.TotalTilesTraveled},
+
+                        { "CurrentMoney", Player.Records.CurrentMoney},
+                        { "TotalMoney", Player.Records.TotalMoney},
+
+                        { "CurrentCoins", Player.Records.CurrentCoins},
+                        { "TotalCoins", Player.Records.TotalCoins},
+
+                        { "UnitRecords",
+                            new BsonDocument
+                            {
+                                { "CharacterIDByNumberOfKills",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "CharacterIDByNumberOfUses",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "CharacterIDByTurnsOnField",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "CharacterIDByNumberOfTilesTraveled",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByNumberOfKills",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByNumberOfUses",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByTurnsOnField",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByNumberOfTilesTraveled",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                            }
+                        },
+                        {"BattleRecords",
+                            new BsonDocument
+                            {
+                                { "NumberOfGamesPlayed", Player.Records.PlayerBattleRecords.NumberOfGamesPlayed },
+                                { "NumberOfGamesWon", Player.Records.PlayerBattleRecords.NumberOfGamesWon },
+                                { "NumberOfGamesLost", Player.Records.PlayerBattleRecords.NumberOfGamesLost },
+                                { "NumberOfKills", Player.Records.PlayerBattleRecords.NumberOfKills },
+                                { "NumberOfUnitsLost", Player.Records.PlayerBattleRecords.NumberOfUnitsLost },
+
+                                { "TotalDamageGiven", Player.Records.PlayerBattleRecords.TotalDamageGiven },
+                                { "TotalDamageReceived", Player.Records.PlayerBattleRecords.TotalDamageReceived },
+                                { "TotalDamageRecovered", Player.Records.PlayerBattleRecords.TotalDamageRecovered },
+                            }
+                        },
+                        {"BonusRecords",
+                            new BsonDocument
+                            {
+                                { "NumberOfBonusObtainedByName",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                            }
+                        },
+                        { "MultiplayerInformation",
+                            new BsonDocument
+                            {
+                                { "CampaignLevelInformation",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                            }
+                        }
+                    }
+                },
+                { "Friends",
+                    new BsonArray
+                    {
+                    }
+                }
+            };
+
+            BsonDocument Inventory = PlayerDocument.GetValue("Inventory").AsBsonDocument;
+            BsonArray OwnedSquads = Inventory.GetValue("OwnedSquads").AsBsonArray;
+            BsonArray OwnedCharacters = Inventory.GetValue("OwnedCharacters").AsBsonArray;
+            BsonArray SquadLoadouts = Inventory.GetValue("SquadLoadouts").AsBsonArray;
+
+            foreach (Tuple<string, string> ActiveUnitAndPilot in ListDefaultUnit)
+            {
+                BsonDocument NewSquad = new BsonDocument();
+                NewSquad.Add("RelativePath", ActiveUnitAndPilot.Item1);
+                OwnedSquads.Add(NewSquad);
+
+                if (!string.IsNullOrEmpty(ActiveUnitAndPilot.Item2))
+                {
+                    OwnedCharacters.Add(ActiveUnitAndPilot.Item2);
+                }
+            }
+
+            BsonDocument NewSquadLoadout = new BsonDocument();
+            NewSquadLoadout.Add("RelativePath", ListDefaultUnit[0].Item1);
+            NewSquadLoadout.Add("PilotFullName", ListDefaultUnit[0].Item2);
+
+            BsonArray temp = new BsonArray();
+            temp.Add(NewSquadLoadout);
+            SquadLoadouts.Add(temp);
+
+            BsonDocument Unlocks = PlayerDocument.GetValue("Unlocks").AsBsonDocument;
+            BsonDocument Records = PlayerDocument.GetValue("Records").AsBsonDocument;
+            BsonArray Friends = PlayerDocument.GetValue("Friends").AsBsonArray;
+
+            SetInventoryInformation(PlayerDocument, Player);
+            SetUnlocksInformation(PlayerDocument, Player);
+            SetRecordsInformation(PlayerDocument, Player);
+
+            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(ID));
+            UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update
+                .Set("Name", Player.Name)
+                .Set("Level", Player.Level)
+                .Set("EXP", 0)
+                .Set("Ranking", 1)
+                .Set("License", 1)
+                .Set("Guild", "")
+                .Set("Inventory", Inventory)
+                .Set("Unlocks", Unlocks)
+                .Set("Records", Records)
+                .Set("Friends", Friends);
+            PlayersCollection.UpdateOneAsync(filter, update);
+        }
+
+        private void SetInventoryInformation(BsonDocument FoundPlayerDocument, BattleMapPlayer Player)
+        {
+            BsonDocument Inventory = FoundPlayerDocument.GetValue("Inventory").AsBsonDocument;
+
+            BsonArray OwnedSquadsArray = Inventory.GetValue("OwnedSquads").AsBsonArray;
+            
+            foreach (Squad ActiveSquad in Player.Inventory.ListOwnedSquad)
+            {
+                OwnedSquadsArray.Add(ActiveSquad.CurrentLeader.RelativePath);
+            }
+
+            BsonArray OwnedCharactersArray = Inventory.GetValue("OwnedCharacters").AsBsonArray;
+
+            foreach (Character ActiveCharacter in Player.Inventory.ListOwnedCharacter)
+            {
+                OwnedCharactersArray.Add(ActiveCharacter.FullName);
+            }
+
+            BsonArray OwnedMissionsArray = Inventory.GetValue("OwnedMissions").AsBsonArray;
+            foreach (MissionInfo ActiveMission in Player.Inventory.ListOwnedMission)
+            {
+                OwnedMissionsArray.Add(ActiveMission.MapPath);
+            }
+
+            BsonArray SquadLoadoutsArray = Inventory.GetValue("SquadLoadouts").AsBsonArray;
+            foreach (PlayerLoadout ActiveLoadout in Player.Inventory.ListSquadLoadout)
+            {
+                BsonArray LoadoutArray = new BsonArray();
+                foreach (Squad ActiveSquad in ActiveLoadout.ListSpawnSquad)
+                {
+                    BsonDocument NewSquadLoadout = new BsonDocument();
+                    NewSquadLoadout.Add("RelativePath", ActiveSquad.CurrentLeader.RelativePath);
+                    NewSquadLoadout.Add("PilotFullName", ActiveSquad.CurrentLeader.Pilot.FullName);
+                    LoadoutArray.Add(NewSquadLoadout);
+                }
+
+                SquadLoadoutsArray.Add(LoadoutArray);
+            }
+        }
+
+        private void SetUnlocksInformation(BsonDocument FoundPlayerDocument, BattleMapPlayer Player)
+        {
+            BsonDocument Inventory = FoundPlayerDocument.GetValue("Unlocks").AsBsonDocument;
+
+            BsonArray UnlockedCharactersArray = Inventory.GetValue("Characters").AsBsonArray;
+            BsonArray UnlockedUnitsArray = Inventory.GetValue("Units").AsBsonArray;
+            BsonArray UnlockedMissionsArray = Inventory.GetValue("Missions").AsBsonArray;
+
+            foreach (UnlockableCharacter ActiveCharacter in Player.UnlockInventory.ListUnlockedCharacter)
+            {
+                UnlockedCharactersArray.Add(ActiveCharacter.Path);
+            }
+
+            foreach (UnlockableUnit ActiveUnit in Player.UnlockInventory.ListUnlockedUnit)
+            {
+                UnlockedUnitsArray.Add(ActiveUnit.Path);
+            }
+
+            foreach (UnlockableMission ActiveMission in Player.UnlockInventory.ListUnlockedMission)
+            {
+                UnlockedMissionsArray.Add(ActiveMission.Path);
+            }
+        }
+
+        private void SetRecordsInformation( BsonDocument FoundPlayerDocument, BattleMapPlayer Player)
+        {
+            BsonDocument Records = FoundPlayerDocument.GetValue("Records").AsBsonDocument;
+
+            SetUnitRecordsInformation(Records, Player);
+            SetBonusRecordsInformation(Records, Player);
+
+            SetCampaignLevelInformationInformation(Records, Player);
+        }
+
+        private void SetUnitRecordsInformation(BsonDocument Records, BattleMapPlayer Player)
+        {
+            BsonDocument UnitRecords = Records.GetValue("UnitRecords").AsBsonDocument;
+
+            BsonArray CharacterIDByNumberOfKillsArray = UnitRecords.GetValue("CharacterIDByNumberOfKills").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> CharacterIDAndKills in Player.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills)
+            {
+                BsonDocument CharacterIDAndKillsDocuement = new BsonDocument();
+                CharacterIDAndKillsDocuement.Add("Path", CharacterIDAndKills.Key);
+                CharacterIDAndKillsDocuement.Add("Kills", CharacterIDAndKills.Value);
+
+                CharacterIDByNumberOfKillsArray.Add(CharacterIDAndKillsDocuement);
+            }
+
+            BsonArray CharacterIDByNumberOfUsesArray = UnitRecords.GetValue("CharacterIDByNumberOfUses").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> CharacterIDAndUses in Player.Records.PlayerUnitRecords.DicCharacterIDByNumberOfUses)
+            {
+                BsonDocument CharacterIDAndKillsDocuement = new BsonDocument();
+                CharacterIDAndKillsDocuement.Add("Path", CharacterIDAndUses.Key);
+                CharacterIDAndKillsDocuement.Add("Uses", CharacterIDAndUses.Value);
+
+                CharacterIDByNumberOfUsesArray.Add(CharacterIDAndKillsDocuement);
+            }
+
+            BsonArray CharacterIDByTurnsOnFieldArray = UnitRecords.GetValue("CharacterIDByTurnsOnField").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> CharacterIDAndTurns in Player.Records.PlayerUnitRecords.DicCharacterIDByTurnsOnField)
+            {
+                BsonDocument CharacterIDAndKillsDocuement = new BsonDocument();
+                CharacterIDAndKillsDocuement.Add("Path", CharacterIDAndTurns.Key);
+                CharacterIDAndKillsDocuement.Add("Turns", CharacterIDAndTurns.Value);
+
+                CharacterIDByTurnsOnFieldArray.Add(CharacterIDAndKillsDocuement);
+            }
+
+            BsonArray CharacterIDByNumberOfTilesTraveledArray = UnitRecords.GetValue("CharacterIDByNumberOfTilesTraveled").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> CharacterIDAndTurns in Player.Records.PlayerUnitRecords.DicCharacterIDByNumberOfTilesTraveled)
+            {
+                BsonDocument CharacterIDAndKillsDocuement = new BsonDocument();
+                CharacterIDAndKillsDocuement.Add("Path", CharacterIDAndTurns.Key);
+                CharacterIDAndKillsDocuement.Add("Tiles", CharacterIDAndTurns.Value);
+
+                CharacterIDByNumberOfTilesTraveledArray.Add(CharacterIDAndKillsDocuement);
+            }
+
+            BsonArray UnitIDByNumberOfKillsArray = UnitRecords.GetValue("UnitIDByNumberOfKills").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> UnitIDAndKills in Player.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills)
+            {
+                BsonDocument CharacterIDAndKillsDocuement = new BsonDocument();
+                CharacterIDAndKillsDocuement.Add("Path", UnitIDAndKills.Key);
+                CharacterIDAndKillsDocuement.Add("Kills", UnitIDAndKills.Value);
+
+                UnitIDByNumberOfKillsArray.Add(CharacterIDAndKillsDocuement);
+            }
+
+            BsonArray UnitIDByNumberOfUsesArray = UnitRecords.GetValue("UnitIDByNumberOfUses").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> UnitIDAndUses in Player.Records.PlayerUnitRecords.DicCharacterIDByNumberOfTilesTraveled)
+            {
+                BsonDocument CharacterIDAndKillsDocuement = new BsonDocument();
+                CharacterIDAndKillsDocuement.Add("Path", UnitIDAndUses.Key);
+                CharacterIDAndKillsDocuement.Add("Uses", UnitIDAndUses.Value);
+
+                UnitIDByNumberOfUsesArray.Add(CharacterIDAndKillsDocuement);
+            }
+
+            BsonArray UnitIDByTurnsOnFieldArray = UnitRecords.GetValue("UnitIDByTurnsOnField").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> UnitIDAndTurns in Player.Records.PlayerUnitRecords.DicCharacterIDByNumberOfTilesTraveled)
+            {
+                BsonDocument CharacterIDAndKillsDocuement = new BsonDocument();
+                CharacterIDAndKillsDocuement.Add("Path", UnitIDAndTurns.Key);
+                CharacterIDAndKillsDocuement.Add("Turns", UnitIDAndTurns.Value);
+
+                UnitIDByTurnsOnFieldArray.Add(CharacterIDAndKillsDocuement);
+            }
+
+            BsonArray UnitIDByNumberOfTilesTraveledArray = UnitRecords.GetValue("UnitIDByNumberOfTilesTraveled").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> UnitIDAndTiles in Player.Records.PlayerUnitRecords.DicCharacterIDByNumberOfTilesTraveled)
+            {
+                BsonDocument CharacterIDAndKillsDocuement = new BsonDocument();
+                CharacterIDAndKillsDocuement.Add("Path", UnitIDAndTiles.Key);
+                CharacterIDAndKillsDocuement.Add("Tiles", UnitIDAndTiles.Value);
+
+                UnitIDByNumberOfTilesTraveledArray.Add(CharacterIDAndKillsDocuement);
+            }
+        }
+
+        private void SetBonusRecordsInformation(BsonDocument Records, BattleMapPlayer Player)
+        {
+            BsonDocument BonusRecords = Records.GetValue("BonusRecords").AsBsonDocument;
+            BsonArray NumberOfBonusObtainedByNameArray = BonusRecords.GetValue("NumberOfBonusObtainedByName").AsBsonArray;
+
+            foreach (KeyValuePair<string, uint> NumberOfBonusObtainedByName in Player.Records.PlayerBonusRecords.DicNumberOfBonusObtainedByName)
+            {
+                BsonDocument NumberOfBonusObtainedByNameDocument = new BsonDocument();
+                NumberOfBonusObtainedByNameDocument.Add("Name", NumberOfBonusObtainedByName.Key);
+                NumberOfBonusObtainedByNameDocument.Add("Count", NumberOfBonusObtainedByName.Value);
+
+                NumberOfBonusObtainedByNameArray.Add(NumberOfBonusObtainedByNameDocument);
+            }
+        }
+
+        private void SetCampaignLevelInformationInformation(BsonDocument Records, BattleMapPlayer Player)
+        {
+            BsonDocument MultiplayerInformation = Records.GetValue("MultiplayerInformation").AsBsonDocument;
+            BsonArray CampaignLevelInformation = MultiplayerInformation.GetValue("CampaignLevelInformation").AsBsonArray;
+
+            foreach (MultiplayerRecord LevelInformation in Player.Records.ListCampaignLevelInformation)
+            {
+                BsonDocument NumberOfBonusObtainedByNameDocument = new BsonDocument();
+                NumberOfBonusObtainedByNameDocument.Add("Name", LevelInformation.Name);
+                NumberOfBonusObtainedByNameDocument.Add("FirstCompletionDate", LevelInformation.FirstCompletionDate.UtcDateTime);
+                NumberOfBonusObtainedByNameDocument.Add("MaxScore", LevelInformation.MaxScore);
+
+                CampaignLevelInformation.Add(NumberOfBonusObtainedByNameDocument);
             }
         }
     }

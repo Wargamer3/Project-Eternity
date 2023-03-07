@@ -12,6 +12,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int PlayerIndex;//Only decrement TurnsRemaining if the current player index correspond
         public int TurnsRemaining;
         public List<MovementAlgorithmTile> ListAttackPosition;
+        public Tile3DHolder DrawableAttackPosition3D;
+        public Tile3DHolder DrawableAttackExplosionPosition3D;
 
         public DelayedAttack(Attack ActiveAttack, Squad Owner, int PlayerIndex, List<MovementAlgorithmTile> ListAttackPosition)
         {

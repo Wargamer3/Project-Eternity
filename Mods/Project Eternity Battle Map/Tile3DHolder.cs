@@ -15,13 +15,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int PrimitivesCount => ListTile3D.Count * 2;
         private int VerticesCount => ListTile3D.Count * 4;
 
-        public Tile3DHolder(Effect UnitEffect3D, Texture2D Sprite, float TextureAlpha = 1)
+        public Tile3DHolder(Effect UnitEffect3D, Texture2D Sprite)
         {
             ListTile3D = new List<Tile3D>();
 
             Effect3D = UnitEffect3D.Clone();
             Effect3D.Parameters["t0"].SetValue(Sprite);
-            Effect3D.Parameters["TextureAlpha"].SetValue(TextureAlpha);
         }
 
         public void AddTile(Tile3D NewTile)
@@ -32,21 +31,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Clear()
         {
             ListTile3D.Clear();
-        }
-
-        public void SetViewMatrix(Matrix ViewProjection, Vector3 CameraPosition3D)
-        {
-            Effect3D.Parameters["WorldViewProj"].SetValue(ViewProjection);
-            Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition3D);
-        }
-
-        public void SetWorld(Matrix NewWorld)
-        {
-            Matrix worldInverse = Matrix.Invert(NewWorld);
-
-            Effect3D.Parameters["World"].SetValue(Matrix.Transpose(NewWorld));
-
-            Effect3D.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
         }
 
         public void Finish(GraphicsDevice g)

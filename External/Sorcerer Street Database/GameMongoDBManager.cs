@@ -309,5 +309,10 @@ namespace Database.SorcererStreet
                 BW.AppendInt32(ActiveCardDocument.GetValue("QuantityOwned").AsInt32);
             }
         }
+
+        public void SavePlayerInventory(string ID, object PlayerToSave)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

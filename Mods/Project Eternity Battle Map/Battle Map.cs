@@ -736,7 +736,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void GetEmptyPosition(Vector3 TargetPosition, out Vector3 FinalPosition)
         {
-            if (TargetPosition.X < 0 || TargetPosition.Y < 0
+            if (TargetPosition.X < 0 || TargetPosition.Y < 0 || TargetPosition.Z < 0
                 || TargetPosition.X >= MapSize.X || TargetPosition.Y >= MapSize.Y)
             {
                 FinalPosition = TargetPosition;
@@ -746,7 +746,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int MaxValue = 1;
             bool ObstacleFound = true;
             int X = 0, Y = 0;
-            FinalPosition = Vector3.Zero;
+            FinalPosition = new Vector3(0, 0, TargetPosition.Z);
             //Check if there isn'T a unit at spawn location and move the spawn point if needed.
             do
             {

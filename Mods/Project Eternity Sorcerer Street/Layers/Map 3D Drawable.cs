@@ -290,7 +290,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         {
                             if (!DicHiddenTile3DByTileset.ContainsKey(ActiveTile.TilesetIndex))
                             {
-                                DicHiddenTile3DByTileset.Add(ActiveTile.TilesetIndex, new Tile3DHolder(MapEffect, ListTileset[ActiveTile.TilesetIndex], 0.5f));
+                                Tile3DHolder NewTile3DHolder = new Tile3DHolder(MapEffect, ListTileset[ActiveTile.TilesetIndex]);
+                                NewTile3DHolder.Effect3D.Parameters["TextureAlpha"].SetValue(0.5f);
+
+                                DicHiddenTile3DByTileset.Add(ActiveTile.TilesetIndex, NewTile3DHolder);
                             }
 
                             if (!DicTile3DByLayerByTileset[LayerIndex].ContainsKey(ActiveTile.TilesetIndex))
@@ -520,14 +523,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
             {
+                Matrix World;
+
                 if (Map.CameraOverride != null)
                 {
-                    ActiveTileSet.Value.SetWorld(NewWorld * Map.CameraOverride.View);
+                    World = NewWorld * Map.CameraOverride.View;
                 }
                 else
                 {
-                    ActiveTileSet.Value.SetWorld(NewWorld * Map.Camera.View);
+                    World = NewWorld * Map.Camera.View;
                 }
+
+                worldInverse = Matrix.Invert(World);
+
+                ActiveTileSet.Value.Effect3D.Parameters["World"].SetValue(Matrix.Transpose(NewWorld));
+                ActiveTileSet.Value.Effect3D.Parameters["WorldInverseTranspose"].SetValue(worldInverse);
             }
         }
 
@@ -868,7 +878,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicHiddenTile3DByTileset)
             {
-                ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, CameraPosition);
+                ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(ViewProjection);
+                ActiveTileSet.Value.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
 
                 ActiveTileSet.Value.Draw(g.GraphicsDevice);
             }
@@ -897,7 +908,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
                     {
-                        ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, CameraPosition);
+                        ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
+                        ActiveTileSet.Value.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
 
                         ActiveTileSet.Value.Draw(g.GraphicsDevice);
                     }
@@ -919,7 +931,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[L])
                         {
-                            ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
+                            ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
+                            ActiveTileSet.Value.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
 
                             ActiveTileSet.Value.Draw(g.GraphicsDevice);
                         }
@@ -932,7 +945,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByLayerByTileset[Map.ShowLayerIndex])
                 {
-                    ActiveTileSet.Value.SetViewMatrix(WorldViewProjection, Camera.CameraPosition3D);
+                    ActiveTileSet.Value.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
+                    ActiveTileSet.Value.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
 
                     ActiveTileSet.Value.Draw(g.GraphicsDevice);
                 }
@@ -940,12 +954,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DrawItems(g, View, Map.LayerManager.ListLayer[Map.ShowLayerIndex], false);
             }
 
-            EmptyTileBorderHolder.SetViewMatrix(WorldViewProjection, CameraPosition);
+            EmptyTileBorderHolder.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
+            EmptyTileBorderHolder.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
             EmptyTileBorderHolder.Draw(g.GraphicsDevice);
 
             foreach (Tile3DHolder ActivePlayerBorder in DicTileBorderPerPlayer.Values)
             {
-                ActivePlayerBorder.SetViewMatrix(WorldViewProjection, CameraPosition);
+                ActivePlayerBorder.Effect3D.Parameters["WorldViewProj"].SetValue(WorldViewProjection);
+                ActivePlayerBorder.Effect3D.Parameters["CameraPosition"].SetValue(CameraPosition);
                 ActivePlayerBorder.Draw(g.GraphicsDevice);
             }
 

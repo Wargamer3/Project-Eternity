@@ -31,10 +31,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void OnSelect()
         {
-        }
-
-        public override void DoUpdate(GameTime gameTime)
-        {
             if (ActiveDelayedAttack.ActiveAttack.ExplosionOption.ExplosionRadius > 0)
             {
                 Map.AttackWithExplosion(ActivePlayerIndex, ActiveDelayedAttack.Owner, ActiveDelayedAttack.ActiveAttack, ActiveDelayedAttack.ListAttackPosition[0].WorldPosition);
@@ -45,6 +41,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.GetEnemies(ActiveSquad.CurrentLeader.CurrentAttack.MAPAttributes.FriendlyFire, ActiveDelayedAttack.ListAttackPosition));
 
             RemoveFromPanelList(this);
+        }
+
+        public override void DoUpdate(GameTime gameTime)
+        {
         }
 
         public override void DoRead(ByteReader BR)

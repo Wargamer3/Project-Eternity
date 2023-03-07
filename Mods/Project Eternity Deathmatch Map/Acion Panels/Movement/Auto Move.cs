@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (TimeElapsed < AnimationLengthInSeconds)
+            if (ListSquadAutoMovement.Count > 0)
             {
                 if (ListSquadAutoMovement.Count > 0)
                 {
@@ -96,6 +96,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         ListSquadAutoMovement[S].Owner.SetPosition(new Vector3((int)ListSquadAutoMovement[S].LastPosition.X,
                             (int)ListSquadAutoMovement[S].LastPosition.Y, (int)ListSquadAutoMovement[S].LastPosition.Z));
+                        Map.LayerManager.UnitKilled(ListSquadAutoMovement[S].PlayerIndex);
                         ListSquadAutoMovement.RemoveAt(S);
                         return;
                     }
@@ -122,10 +123,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         ListSquadAutoMovement[S].Owner.Speed = new Vector3(NewSpeedX, NewSpeedY, NewSpeedZ);
 
+                        ListSquadAutoMovement[S].Owner.IsOnGround = true;
                         if (NewSpeedX == 0 && NewSpeedY == 0 && NewSpeedZ == 0)
                         {
                             ListSquadAutoMovement[S].Owner.SetPosition(new Vector3((int)ListSquadAutoMovement[S].LastPosition.X,
                                 (int)ListSquadAutoMovement[S].LastPosition.Y, (int)ListSquadAutoMovement[S].LastPosition.Z));
+                            Map.LayerManager.UnitMoved(ListSquadAutoMovement[S].PlayerIndex);
                             ListSquadAutoMovement.RemoveAt(S);
                             return;
                         }
@@ -141,6 +144,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             ListSquadAutoMovement[S].Owner.Speed = new Vector3(ListSquadAutoMovement[S].Owner.Speed.X, ListSquadAutoMovement[S].Owner.Speed.Y, 0);
                             ListSquadAutoMovement[S].Owner.CurrentTerrainIndex = Map.GetTerrain(new Vector3(ListSquadAutoMovement[S].Owner.Position.X, (int)ListSquadAutoMovement[S].Owner.Position.Y, LandedLayer)).TerrainTypeIndex;
                             ListSquadAutoMovement[S].Owner.SetPosition(new Vector3(ListSquadAutoMovement[S].Owner.Position.X, ListSquadAutoMovement[S].Owner.Position.Y, LandedLayer));
+                            ListSquadAutoMovement[S].Owner.IsOnGround = true;
+                            Map.LayerManager.UnitMoved(ListSquadAutoMovement[S].PlayerIndex);
+                        }
+
+                        if (TimeElapsed < AnimationLengthInSeconds)
+                        {
+                            ListSquadAutoMovement.RemoveAt(S);
                         }
                     }
 
@@ -148,6 +158,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         ListSquadAutoMovement[S].Owner.SetPosition(new Vector3((int)ListSquadAutoMovement[S].LastPosition.X,
                             (int)ListSquadAutoMovement[S].LastPosition.Y, (int)ListSquadAutoMovement[S].LastPosition.Z));
+                        Map.LayerManager.UnitMoved(ListSquadAutoMovement[S].PlayerIndex);
+                        //TODO: bounche against walls
                         ListSquadAutoMovement.RemoveAt(S);
                         return;
                     }
@@ -155,6 +167,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     if (ListSquadAutoMovement[S].LastPosition != ListSquadAutoMovement[S].Owner.Position)
                     {
                         ListSquadAutoMovement[S].Owner.SetPosition(ListSquadAutoMovement[S].LastPosition);
+                        Map.LayerManager.UnitMoved(ListSquadAutoMovement[S].PlayerIndex);
                     }
                 }
 

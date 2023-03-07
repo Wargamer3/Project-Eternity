@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListMissionToPrioritiseLoadPath = new List<string>();
         }
 
-        internal void Load(ByteReader BR)
+        public void Load(ByteReader BR)
         {
             RemainingNumberOfCharactersToLoad = BR.ReadInt32();
             RemainingNumberOfUnitsToLoad = BR.ReadInt32();
@@ -72,27 +72,44 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             while (RemainingNumberOfCharactersToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockableCharacter FillerItem = new UnlockableCharacter(ItemPath);
+                UnlockableCharacter FillerItem;
 
-                DicCharacterDatabase.Add(ItemPath, FillerItem);
+                if (!DicCharacterDatabase.TryGetValue(ItemPath, out FillerItem))
+                {
+                    FillerItem = new UnlockableCharacter(ItemPath);
+                    DicCharacterDatabase.Add(ItemPath, FillerItem);
+                }
+
                 ListUnlockedCharacter.Add(FillerItem);
+
                 --RemainingNumberOfCharactersToLoad;
             }
             while (RemainingNumberOfUnitsToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockableUnit FillerItem = new UnlockableUnit(ItemPath);
+                UnlockableUnit FillerItem;
 
-                DicUnitDatabase.Add(ItemPath, FillerItem);
+                if (!DicUnitDatabase.TryGetValue(ItemPath, out FillerItem))
+                {
+                    FillerItem = new UnlockableUnit(ItemPath);
+                    DicUnitDatabase.Add(ItemPath, FillerItem);
+                }
+
                 ListUnlockedUnit.Add(FillerItem);
+
                 --RemainingNumberOfUnitsToLoad;
             }
             while (RemainingNumberOfMissionsToLoad > 0)
             {
                 string ItemPath = BR.ReadString();
-                UnlockableMission FillerItem = new UnlockableMission(ItemPath);
+                UnlockableMission FillerItem;
 
-                DicMissionDatabase.Add(ItemPath, FillerItem);
+                if (!DicMissionDatabase.TryGetValue(ItemPath, out FillerItem))
+                {
+                    FillerItem = new UnlockableMission(ItemPath);
+                    DicMissionDatabase.Add(ItemPath, FillerItem);
+                }
+
                 ListUnlockedMission.Add(FillerItem);
                 --RemainingNumberOfMissionsToLoad;
             }

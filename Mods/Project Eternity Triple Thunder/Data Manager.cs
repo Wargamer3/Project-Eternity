@@ -101,5 +101,10 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         {
             throw new NotImplementedException();
         }
+
+        public void SavePlayerInventory(string ID, object PlayerToSave)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

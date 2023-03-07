@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen.Online
 
             PlayerManager.ListLocalPlayer[0] = NewPlayer;
 
-            Host.Send(new CheckNewUnlocksScriptClient());
+            Host.Send(new CheckNewUnlocksScriptClient(PlayerID));
         }
 
         protected override void Read(OnlineReader Sender)

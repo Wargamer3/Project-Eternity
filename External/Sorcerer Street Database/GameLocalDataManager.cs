@@ -199,6 +199,11 @@ namespace Database.SorcererStreet
 
         }
 
+        public void SavePlayerInventory(string ID, object PlayerToSave)
+        {
+            throw new NotImplementedException();
+        }
+
         private class LocalPlayer : PlayerPOCO
         {
             public int NumberOfFailedConnection;

@@ -63,6 +63,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Squad ActiveSquad = ListPlayer[ActivePlayerIndex].ListSquad[ActiveSquadIndex];
             Squad TargetSquad = ListPlayer[TargetPlayerIndex].ListSquad[TargetSquadIndex];
 
+            if (ListGameScreen[0] is CenterOnSquadCutscene)
+            {
+                RemoveScreen(0);
+            }
+
             PushScreen(new CenterOnSquadCutscene(null, this, TargetSquad.Position));
 
             ActiveSquad.CurrentLeader.BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
@@ -85,26 +90,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void AttackWithExplosion(int ActivePlayerIndex, Squad Owner, Attack ActiveAttack, Vector3 Position)
         {
-            int StartX = (int)(Position.X - ActiveAttack.ExplosionOption.ExplosionRadius);
-            int EndX = (int)(Position.X + ActiveAttack.ExplosionOption.ExplosionRadius);
-            int StartY = (int)(Position.Y - ActiveAttack.ExplosionOption.ExplosionRadius);
-            int EndY = (int)(Position.Y + ActiveAttack.ExplosionOption.ExplosionRadius);
-            int StartZ = (int)(Position.Z - ActiveAttack.ExplosionOption.ExplosionRadius);
-            int EndZ = (int)(Position.Z + ActiveAttack.ExplosionOption.ExplosionRadius);
-
             Stack<Tuple<int, int>> ListAttackTarget = new Stack<Tuple<int, int>>();
 
-            for (int X = StartX; X < EndX; ++X)
+            for (float OffsetX = -ActiveAttack.ExplosionOption.ExplosionRadius; OffsetX < ActiveAttack.ExplosionOption.ExplosionRadius; ++OffsetX)
             {
-                for (int Y = StartY; Y < EndY; ++Y)
+                for (float OffsetY = -ActiveAttack.ExplosionOption.ExplosionRadius; OffsetY < ActiveAttack.ExplosionOption.ExplosionRadius; ++OffsetY)
                 {
-                    for (int Z = StartZ; Z < EndZ; ++Z)
+                    for (float OffsetZ = -ActiveAttack.ExplosionOption.ExplosionRadius; OffsetZ < ActiveAttack.ExplosionOption.ExplosionRadius; ++OffsetZ)
                     {
-                        Tuple<int, int> ActiveTarget = CheckForEnemies(ActivePlayerIndex, new Vector3(X, Y, Z), true);
-
-                        if (ActiveTarget != null)
+                        if (Math.Abs(OffsetX) + Math.Abs(OffsetY) + Math.Abs(OffsetZ) < ActiveAttack.ExplosionOption.ExplosionRadius)
                         {
-                            ListAttackTarget.Push(ActiveTarget);
+                            Tuple<int, int> ActiveTarget = CheckForEnemies(ActivePlayerIndex, new Vector3(Position.X + OffsetX, Position.Y + OffsetY, Position.Z + OffsetZ), true);
+
+                            if (ActiveTarget != null)
+                            {
+                                ListAttackTarget.Push(ActiveTarget);
+                            }
                         }
                     }
                 }
@@ -112,20 +113,19 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ListAttackTarget.Count > 0)
             {
-                AttackWithMAPAttack(ActivePlayerIndex, ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
                 foreach (Tuple<int, int> ActiveTarget in ListAttackTarget)
                 {
                     Squad SquadToKill = ListPlayer[ActiveTarget.Item1].ListSquad[ActiveTarget.Item2];
 
                     Terrain SquadTerrain = GetTerrain(SquadToKill);
 
-                    Vector3 FinalSpeed = new Vector3(Math.Abs(Position.X - SquadToKill.Position.X), Math.Abs(Position.Y - SquadToKill.Position.Y), Math.Abs(Position.Z - SquadTerrain.WorldPosition.Z));
+                    Vector3 FinalSpeed = new Vector3(SquadToKill.Position.X - Position.X, SquadToKill.Position.Y - Position.Y, SquadTerrain.WorldPosition.Z - Position.Z);
 
-                    float DiffTotal = (FinalSpeed.X + FinalSpeed.Y + FinalSpeed.Z) / 3;
+                    float DiffTotal = FinalSpeed.Length() / 3f;
 
                     if (DiffTotal < ActiveAttack.ExplosionOption.ExplosionRadius)
                     {
-                        float WindForce = DiffTotal / ActiveAttack.ExplosionOption.ExplosionRadius;
+                        float WindForce = 1 - (DiffTotal / ActiveAttack.ExplosionOption.ExplosionRadius);
                         float WindValue = ActiveAttack.ExplosionOption.ExplosionWindPowerAtEdge + WindForce * (ActiveAttack.ExplosionOption.ExplosionWindPowerAtCenter - ActiveAttack.ExplosionOption.ExplosionWindPowerAtEdge);
 
                         FinalSpeed.Normalize();
@@ -133,9 +133,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         FinalSpeed *= WindValue;
                         SquadToKill.Speed = FinalSpeed;
 
-                        SquadToKill.SetPosition(SquadTerrain.WorldPosition);
+                        if (SquadToKill.IsOnGround)
+                        {
+                            SquadToKill.SetPosition(SquadTerrain.WorldPosition + new Vector3(0.5f, 0.5f, 0f));
+                            if (FinalSpeed.Z < 0)
+                            {
+                                SquadToKill.IsOnGround = false;
+                            }
+                        }
                     }
                 }
+
+                AttackWithMAPAttack(ActivePlayerIndex, ListPlayer[ActivePlayerIndex].ListSquad.IndexOf(Owner), ActiveAttack, new List<Vector3>(), ListAttackTarget);
             }
         }
 

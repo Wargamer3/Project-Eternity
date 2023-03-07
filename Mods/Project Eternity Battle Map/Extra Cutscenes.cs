@@ -178,29 +178,50 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 IsActive = true;
             }
 
-            public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
+            public override void Update(GameTime gameTime)
             {
                 bool IsFinished = true;
                 if (Map.CursorPosition.X < _CursorPosition.X)
                 {
                     Map.CursorPosition.X++;
                     IsFinished = false;
+
+                    if (Map.CursorPosition.X > _CursorPosition.X)
+                    {
+                        Map.CursorPosition.X = _CursorPosition.X;
+                    }
                 }
                 else if (Map.CursorPosition.X > _CursorPosition.X)
                 {
                     Map.CursorPosition.X--;
                     IsFinished = false;
+
+                    if (Map.CursorPosition.X < _CursorPosition.X)
+                    {
+                        Map.CursorPosition.X = _CursorPosition.X;
+                    }
                 }
 
                 if (Map.CursorPosition.Y < _CursorPosition.Y)
                 {
                     Map.CursorPosition.Y++;
                     IsFinished = false;
+
+                    if (Map.CursorPosition.Y > _CursorPosition.Y)
+                    {
+                        Map.CursorPosition.Y = _CursorPosition.Y;
+                    }
                 }
                 else if (Map.CursorPosition.Y > _CursorPosition.Y)
                 {
                     Map.CursorPosition.Y--;
                     IsFinished = false;
+
+
+                    if (Map.CursorPosition.Y < _CursorPosition.Y)
+                    {
+                        Map.CursorPosition.Y = _CursorPosition.Y;
+                    }
                 }
 
                 //Update the camera if needed.
@@ -285,6 +306,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ScriptCutsceneBehavior CutsceneBehavior = new ScriptCutsceneBehavior();
             ScriptCenterCamera CenterCamera = new ScriptCenterCamera(Map);
 
+            Position.X = (float)Math.Truncate(Position.X);
+            Position.Y = (float)Math.Truncate(Position.Y);
+            Position.Z = (float)Math.Truncate(Position.Z);
             CenterCamera.ExecuteEvent = ExecuteEvent;
             CenterCamera.CursorPosition = Position;
 

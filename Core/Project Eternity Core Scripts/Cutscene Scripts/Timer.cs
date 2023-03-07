@@ -80,7 +80,20 @@ namespace ProjectEternity.Core.Scripts
                     {
                         if (_Loop)
                         {
-                            TimerValue = new TimeSpan();
+                            switch (_TimerType)
+                            {
+                                case TimerTypes.Miliseconds:
+                                    TimerValue -= new TimeSpan(0, 0, 0, 0, _EndingValue);
+                                    break;
+
+                                case TimerTypes.Seconds:
+                                    TimerValue -= new TimeSpan(0, 0, 0, _EndingValue, 0);
+                                    break;
+
+                                case TimerTypes.Minutes:
+                                    TimerValue -= new TimeSpan(0, 0, _EndingValue, 0, 0);
+                                    break;
+                            }
                         }
                         else
                         {

@@ -7,9 +7,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
     {
         public const string ScriptName = "Check New Unlocks";
 
-        public CheckNewUnlocksScriptClient()
+        private readonly string ID;
+
+        public CheckNewUnlocksScriptClient(string ID)
             : base(ScriptName)
         {
+            this.ID = ID;
         }
 
         public override OnlineScript Copy()
@@ -19,6 +22,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
 
         protected override void DoWrite(OnlineWriter WriteBuffer)
         {
+            WriteBuffer.AppendString(ID);
         }
 
         protected override void Execute(IOnlineConnection Sender)

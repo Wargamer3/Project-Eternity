@@ -62,7 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case 3://Move
-                        Camera.CameraPosition3D += new Vector3(_Speed.X, -_Speed.Z, _Speed.Y);
+                        Camera.CameraPosition3D += new Vector3(_Speed.X, _Speed.Z, _Speed.Y);
                         Map.CameraOverride = Camera;
                         break;
 
@@ -104,7 +104,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case 3://Move
-                        Camera.CameraPosition3D += new Vector3(_Speed.X, -_Speed.Z, _Speed.Y);
+                        Camera.CameraPosition3D += new Vector3(_Speed.X, _Speed.Z, _Speed.Y) * (float)gameTime.ElapsedGameTime.TotalSeconds;
                         Map.CameraOverride = Camera;
                         break;
 

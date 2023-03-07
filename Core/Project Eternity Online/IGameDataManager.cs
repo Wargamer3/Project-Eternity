@@ -12,6 +12,7 @@ namespace ProjectEternity.Core.Online
         void UpdatePlayerCountInRoom(string RoomID, byte CurrentPlayerCount);
         PlayerPOCO LogInPlayer(string Login, string Password, string GameServerIP, int GameServerPort);
         PlayerPOCO GetPlayerInventory(string ID);
+        void SavePlayerInventory(string ID, object PlayerToSave);
         void RemovePlayer(IOnlineConnection PlayerToRemove);
     }
 }

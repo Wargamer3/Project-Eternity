@@ -124,8 +124,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                if (DefenseChoice == Unit.BattleDefenseChoices.Defend)
+                if (CurrentAttack.Pri != WeaponPrimaryProperty.MAP && CurrentAttack.Pri != WeaponPrimaryProperty.PER && CurrentAttack.ExplosionOption.ExplosionRadius == 0 && DefenseChoice == Unit.BattleDefenseChoices.Defend)
+                {
                     Damage *= 0.5f;
+                }
 
                 Result.AttackDamage = (int)(Damage * DamageModifier) + Attacker.Boosts.FinalDamageModifier;
 

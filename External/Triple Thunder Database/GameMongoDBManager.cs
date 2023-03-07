@@ -211,5 +211,10 @@ namespace Database.TripleThunder
             UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("GameServerIP", GameServerIP).Set("GameServerPort", GameServerPort);
             PlayersCollection.UpdateOneAsync(filter, update);
         }
+
+        public void SavePlayerInventory(string ID, object PlayerToSave)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

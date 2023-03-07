@@ -100,6 +100,7 @@ namespace ProjectEternity.Core.Units
         public Squad(string SquadName, Unit Leader = null, Unit WingmanA = null, Unit WingmanB = null, Unit WingmanC = null)
         {
             IsDead = false;
+            IsOnGround = true;
             ListUnitIndex = new List<int>();
             StartTurn();
             this.SquadName = SquadName;

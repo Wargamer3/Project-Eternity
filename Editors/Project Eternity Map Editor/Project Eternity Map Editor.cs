@@ -577,7 +577,7 @@ namespace ProjectEternity.Editors.MapEditor
                 {
                     NewSpawnMultiplayer(X, Y, Spawn);
                 }
-                else
+                else if (btnSpawnPlayer.Checked || btnSpawnAlly.Checked || btnSpawnEnemy.Checked || btnSpawnNeutral.Checked)
                 {
                     NewSpawnSingleplayer(X, Y, Spawn);
                 }

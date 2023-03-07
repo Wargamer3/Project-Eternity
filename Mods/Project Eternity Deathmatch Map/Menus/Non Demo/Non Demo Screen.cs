@@ -165,7 +165,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-
         public void InitNonDemo(int DefenderPlayerIndex, int DefenderSquadIndex, int Damage)
         {
             this.DefenderPlayerIndex = DefenderPlayerIndex;
@@ -198,6 +197,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             ListNonDemoBattleFrame.Add(DefaultNonDemoBattleFrame);
 
             AttackingSquadFrame = new NonDemoBattleFrameSquad();
+            AttackingSquadFrame.ArrayStance = new NonDemoBattleUnitFrame[1];
             AttackingSquadFrame.ArrayStance[0] = new NonDemoIdleFrame(Map, new NonDemoSharedUnitStats(DefendingSquad.CurrentLeader, AttackerSquadResultSingle),
                 AttackerPositionX, AttackerPositionY, false);
 
