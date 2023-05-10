@@ -118,6 +118,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 LayerHolderDrawable = new Map3DDrawable(Map, this, GameScreen.GraphicsDevice);
             }
+
+            float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
+
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                    aspectRatio,
+                                                                    1, 10000);
+
+            foreach (MapLayer ActiveLayer in ListLayer)
+            {
+                foreach (InteractiveProp ActiveProp in ActiveLayer.ListProp)
+                {
+                    ActiveProp.Projection = Projection;
+                }
+            }
         }
 
         public override void AddDrawablePath(List<MovementAlgorithmTile> ListPoint)

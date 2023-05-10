@@ -130,11 +130,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
         }
 
-        public void OnManualVictory()
+        public void OnManualVictory(int EXP, uint Money)
         {
         }
 
-        public void OnManualDefeat()
+        public void OnManualDefeat(int EXP, uint Money)
         {
         }
 

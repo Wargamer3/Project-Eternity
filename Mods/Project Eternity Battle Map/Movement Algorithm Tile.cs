@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Vector3 WorldPosition;//Z = Height + Layer index + Platform height, affected by World Matrix and used for cross Map checks.
         public readonly Point InternalPosition;//Position not affected by World Matrix, will be the same as WorldPosition if not a platform.
         public readonly int LayerIndex;
-        public readonly float LayerDepth;
+        public float LayerDepth;//Drawn Depth
         public float Height;
         public bool PreventLeavingUpward;
         public bool PreventLeavingDownward;

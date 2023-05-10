@@ -62,6 +62,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<PendingUnlockScreen> Evaluate(ContentManager Content)
         {
             List<PendingUnlockScreen> ListPendingUnlocks = new List<PendingUnlockScreen>();
+            bool NewUnlocks = false;
 
             if (BattleMapPlayerUnlockInventory.DatabaseLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
             {
@@ -75,9 +76,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     UnlockableCharacter ActiveCharacter = ConditionsOwner.UnlockInventory.ListLockedCharacter[C];
                     if (IsValid(ActiveCharacter.UnlockConditions, ConditionsOwner))
                     {
+                        NewUnlocks = true;
+
                         foreach (string UnlockMessage in ActiveCharacter.Unlock(ConditionsOwner))
                         {
-                            ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                            if (ActiveCharacter.UnlockConditions.ListUnlockConditions.Count > 0)
+                            {
+                                ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                            }
                         }
                     }
                 }
@@ -85,12 +91,41 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 for (int U = ConditionsOwner.UnlockInventory.ListLockedUnit.Count - 1; U >= 0; U--)
                 {
                     UnlockableUnit ActiveUnit = ConditionsOwner.UnlockInventory.ListLockedUnit[U];
+                    if (IsValid(ActiveUnit.UnlockConditions, ConditionsOwner))
+                    {
+                        NewUnlocks = true;
+
+                        foreach (string UnlockMessage in ActiveUnit.Unlock(ConditionsOwner))
+                        {
+                            if (ActiveUnit.UnlockConditions.ListUnlockConditions.Count > 0)
+                            {
+                                ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                            }
+                        }
+                    }
                 }
 
                 for (int M = ConditionsOwner.UnlockInventory.ListLockedMission.Count - 1; M >= 0; M--)
                 {
                     UnlockableMission ActiveMission = ConditionsOwner.UnlockInventory.ListLockedMission[M];
+                    if (IsValid(ActiveMission.UnlockConditions, ConditionsOwner))
+                    {
+                        NewUnlocks = true;
+
+                        foreach (string UnlockMessage in ActiveMission.Unlock(ConditionsOwner))
+                        {
+                            if (ActiveMission.UnlockConditions.ListUnlockConditions.Count > 0)
+                            {
+                                ListPendingUnlocks.Add(new PendingUnlockScreen(UnlockMessage));
+                            }
+                        }
+                    }
                 }
+            }
+
+            if (NewUnlocks)
+            {
+                ConditionsOwner.SaveLocally();
             }
 
             return ListPendingUnlocks;
@@ -110,7 +145,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                             bool CampaignLevelFound = false;
 
-                            foreach (MultiplayerRecord ActiveMission in ConditionsOwner.Records.ListCampaignLevelInformation)
+                            foreach (CampaignRecord ActiveMission in ConditionsOwner.Records.ListCampaignLevelInformation)
                             {
                                 if (ActiveMission.Name == ActiveCondition.Item2)
                                 {
@@ -138,6 +173,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             break;
 
                         case "Player Level":
+                            if (ConditionsOwner.Level < int.Parse(ActiveCondition.Item2))
+                            {
+                                AllConditionsValid = false;
+                            }
+                            break;
+
+                        case "Total Kills":
+                            if (ConditionsOwner.Records.TotalKills < int.Parse(ActiveCondition.Item2))
+                            {
+                                AllConditionsValid = false;
+                            }
                             break;
                     }
                 }
@@ -148,7 +194,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            return true;
+            return ConditionsToCheck.ListUnlockConditions.Count == 0;
         }
 
         private static double GetSecondsFromTime(string Time)

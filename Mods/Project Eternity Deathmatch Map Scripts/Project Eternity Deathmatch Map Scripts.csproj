@@ -58,6 +58,8 @@
     <Compile Include="Cutscene Scripts\Damage Zone.cs" />
     <Compile Include="Cutscene Scripts\Edit Map.cs" />
     <Compile Include="Cutscene Scripts\Change Terrain.cs" />
+    <Compile Include="Cutscene Scripts\Helpers\ScriptUnit.cs" />
+    <Compile Include="Cutscene Scripts\Helpers\Spawn Squad Helper.cs" />
     <Compile Include="Cutscene Scripts\Spawn Squad 4 Fast .cs" />
     <Compile Include="Cutscene Scripts\Spawn Weapon.cs" />
     <Compile Include="Cutscene Scripts\Spawn Health Crate.cs" />
@@ -91,7 +93,6 @@
     <Compile Include="Cutscene Scripts\Spawn Transforming Unit Fast.cs" />
     <Compile Include="Cutscene Scripts\View Tiles Popup.cs" />
     <Compile Include="Deathmatch Cutscene Script Holder.cs" />
-    <Compile Include="Cutscene Scripts\Helpers\DefenseBattleBehaviorStringConverter.cs" />
     <Compile Include="Cutscene Scripts\Add Unit To Team.cs" />
     <Compile Include="Cutscene Scripts\Append Cutscene.cs" />
     <Compile Include="Cutscene Scripts\Change Unit Theme.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Cutscene Scripts\Regen Unit.cs" />
     <Compile Include="Cutscene Scripts\Spawn Squad.cs" />
     <Compile Include="Cutscene Scripts\Spawn Squad Fast.cs" />
-    <Compile Include="Cutscene Scripts\Helpers\Spawn Squad Helper.cs" />
     <Compile Include="Cutscene Scripts\Spawn Unit.cs" />
     <Compile Include="Cutscene Scripts\Spawn Unit Event.cs" />
     <Compile Include="Cutscene Scripts\Spawn Unit Fast.cs" />
@@ -111,7 +111,6 @@
     <Compile Include="Cutscene Scripts\Start Battle Sequence.cs" />
     <Compile Include="Cutscene Scripts\Start Deathmatch Visual Novel.cs" />
     <Compile Include="Cutscene Scripts\Start Hub.cs" />
-    <Compile Include="Cutscene Scripts\ScriptUnit.cs" />
     <Compile Include="Cutscene Scripts\Unit Deployment Screen.cs" />
     <Compile Include="Map Conditions\Active Team.cs" />
     <Compile Include="Map Conditions\VS Squad Name.cs" />

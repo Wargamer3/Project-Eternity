@@ -14,6 +14,7 @@ using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
+using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -145,6 +146,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ListTileSet = new List<Texture2D>();
             this.CameraPosition = Vector3.Zero;
+            TerrainRestrictions = new UnitAndTerrainValues();
+            for (int i = 0; i < ListTerrainType.Count; ++i)
+            {
+                TerrainRestrictions.ListTerrainType.Add(new TerrainType());
+            }
         }
 
         public SorcererStreetMap(GameModeInfo GameInfo, SorcererStreetBattleParams Params)
@@ -578,7 +584,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
+            if (!IsServer)
+            {
+                ListBackground.Clear();
+                ListForeground.Clear();
+
+                for (int B = 0; B < ListBackgroundsPath.Count; B++)
+                {
+                    ListBackground.Add(AnimationBackground.LoadAnimationBackground(ListBackgroundsPath[B], Content, GraphicsDevice));
+                }
+
+                for (int F = 0; F < ListForegroundsPath.Count; F++)
+                {
+                    ListForeground.Add(AnimationBackground.LoadAnimationBackground(ListForegroundsPath[F], Content, GraphicsDevice));
+                }
+            }
+
             LayerManager.TogglePreview(UsePreview);
+            MapEnvironment.Reset();
         }
 
         public void Reset()
@@ -977,6 +1000,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (ClosestLayerIndexDown != null)
             {
                 return ClosestLayerIndexDown;
+            }
+            else if (ListLayerPossibility.Count == 0)
+            {
+                return GetTerrainIncludingPlatforms(StartingPosition, OffsetX, OffsetY, (int)CurrentZ);
             }
             else
             {

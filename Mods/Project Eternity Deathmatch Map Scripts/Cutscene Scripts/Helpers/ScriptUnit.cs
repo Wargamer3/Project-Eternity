@@ -12,7 +12,6 @@ using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
-
     public sealed partial class DeathmatchCutsceneScriptHolder
     {
         public class ScriptUnit : DeathmatchMapDataContainer

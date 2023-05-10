@@ -101,6 +101,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     for (int L = 0; L < MaxLayerIndex; L++)
                     {
+                        MapLayer ActiveLayer = Map.LayerManager.ListLayer[L];
+                        if (!ActiveLayer.IsVisible)
+                        {
+                            continue;
+                        }
+
                         foreach (KeyValuePair<int, Tile2DHolder> ActiveTileSet in DicTile2DByLayerByTileset[L])
                         {
                             ActiveTileSet.Value.Draw(g);

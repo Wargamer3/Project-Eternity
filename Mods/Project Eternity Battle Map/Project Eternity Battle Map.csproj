@@ -134,7 +134,8 @@
     <Compile Include="Lobby\Online Player Base.cs" />
     <Compile Include="Lobby\Player\Battle Records.cs" />
     <Compile Include="Lobby\Player\Bonus Records.cs" />
-    <Compile Include="Lobby\Player\Multiplayer Record.cs" />
+    <Compile Include="Lobby\Player\Map Record.cs" />
+    <Compile Include="Lobby\Player\Campaign Record.cs" />
     <Compile Include="Lobby\Player\Player Records.cs" />
     <Compile Include="Lobby\Player\Unit Records.cs" />
     <Compile Include="Lobby\Unlocks\BattleMap Player Unlock Inventory.cs" />

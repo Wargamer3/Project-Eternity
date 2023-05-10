@@ -144,10 +144,13 @@
     <Compile Include="Effects\Squad PER Context.cs" />
     <Compile Include="Effects\Squad PER Params.cs" />
     <Compile Include="Effects\Squad Target Type.cs" />
+    <Compile Include="Helpers\DefenseBattleBehaviorStringConverter.cs" />
     <Compile Include="Lobby Multiplayer\Deathmatch Lobby.cs" />
     <Compile Include="Online\Move Unit Script Client.cs" />
     <Compile Include="Online\Player Inventory Script Client.cs" />
     <Compile Include="PER Attack.cs" />
+    <Compile Include="Rules\Lobby Draw Screen.cs" />
+    <Compile Include="Rules\Lobby Defeat Screen.cs" />
     <Compile Include="Rules\Titan Game Rule.cs" />
     <Compile Include="Rules\Classic MP Game Rule.cs" />
     <Compile Include="Rules\Campaign Game Rule.cs" />

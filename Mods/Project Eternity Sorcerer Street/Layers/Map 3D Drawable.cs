@@ -77,6 +77,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 PolygonEffect.World = Matrix.Identity;
                 PolygonEffect.View = Matrix.Identity;
 
+                MapEffect.Parameters["TextureAlpha"].SetValue(1f);
                 MapEffect.Parameters["World"].SetValue(Matrix.Transpose(PolygonEffect.World));
 
                 Matrix worldInverse = Matrix.Invert(PolygonEffect.World);
@@ -375,8 +376,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             int X = (int)Map.CursorPositionVisible.X;
             int Y = (int)Map.CursorPositionVisible.Y;
-            float ZTop = (Map.CursorPosition.Z + 1) * LayerHeight + 0.3f;
-            float ZBottom = Map.CursorPosition.Z * LayerHeight + 0.3f;
+            float ZTop = (Map.CursorTerrain.WorldPosition.Z + 1) * LayerHeight + 0.3f;
+            float ZBottom = Map.CursorTerrain.WorldPosition.Z * LayerHeight + 0.3f;
             Terrain3D Cursor = new Terrain3D();
             Cursor.TerrainStyle = Terrain3D.TerrainStyles.Cube;
             Cursor.FrontFace = new DrawableTile();
@@ -408,6 +409,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!Map.IsAPlatform && Map.ListPlayer.Count > 0)
             {
                 SetTarget(new Vector3(Map.TileSize.X * Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.X, Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Z * LayerHeight, Map.TileSize.Y * Map.ListPlayer[Map.ActivePlayerIndex].GamePiece.Y));
+
+                Camera.Update(gameTime);
+            }
+            else if (Map.IsEditor)
+            {
+                SetTarget(new Vector3(Map.TileSize.X * Map.CursorPosition.X, Map.CursorPosition.Z * LayerHeight, Map.TileSize.Y * Map.CursorPosition.Y));
 
                 Camera.Update(gameTime);
             }

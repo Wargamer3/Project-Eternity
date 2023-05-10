@@ -41,6 +41,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DicTile2DByLayerByTileset.Add(LayerIndex, new Dictionary<int, Tile2DHolder>());
             }
 
+            if (Map.ListTilesetPreset.Count <= 0)
+            {
+                return;
+            }
+
             for (int X = Map.MapSize.X - 1; X >= 0; --X)
 			{
 				for (int Y = Map.MapSize.Y - 1; Y >= 0; --Y)

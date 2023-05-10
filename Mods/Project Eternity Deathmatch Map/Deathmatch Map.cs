@@ -748,7 +748,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             #region Handle fade to black
 
-            if (FadeIsActive)
+            if (FadeIsActive && !IsEditor)
             {
                 g.Draw(sprPixel, new Rectangle(0, 0, Constants.Width, Constants.Height), Color.FromNonPremultiplied(0, 0, 0, (int)FadeAlpha));
             }
@@ -833,7 +833,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             int StartingMV = GetSquadMaxMovement(ActiveSquad);//Maximum distance you can reach.
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, StartingMV, false);
 
             List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
 
@@ -870,7 +870,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, RangeMaximum);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, RangeMaximum, true);
 
             List<MovementAlgorithmTile> MovementChoice = new List<MovementAlgorithmTile>();
 
@@ -901,7 +901,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, MaxMovement, Destination, IgnoreObstacles);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath(GetAllTerrain(ActiveSquad, ActiveMap), ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, Destination, IgnoreObstacles);
 
             MovementAlgorithmTile ActiveNode = ListAllNode[ListAllNode.Count - 1];
 

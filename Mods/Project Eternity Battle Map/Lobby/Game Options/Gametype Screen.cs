@@ -67,6 +67,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             GameModeInfo GametypeCampaign = new GameModeInfo("Campaign", "Classic mission based mode, no respawn.", GameModeInfo.CategoryPVE, true, null);
+            GameModeInfo GametypeArcade = new GameModeInfo("Arcade", "Campaign mission without cutscenes.", GameModeInfo.CategoryPVE, PlayerManager.ListLocalPlayer[0].Records.ListCampaignLevelInformation.Count > 0, null);
             GameModeInfo GametypeHorde = new GameModeInfo("Horde", "Wave survival mode, respawn at the start of each wave.", GameModeInfo.CategoryPVE, true, null);
             GameModeInfo GametypeBaseDefense = new GameModeInfo("Base Defense", "Wave survival mode, respawn at the start of each wave. Must defend a base by building turrets.", GameModeInfo.CategoryPVE, false, null);
 
@@ -88,7 +89,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             SelectedGametype = GametypeCampaign;
             ArrayGametypeCategory = new GametypeCategory[2];
-            ArrayGametypeCategory[0] = new GametypeCategory(GameModeInfo.CategoryPVE, new GameModeInfo[] { GametypeCampaign, GametypeHorde, GametypeBaseDefense });
+            ArrayGametypeCategory[0] = new GametypeCategory(GameModeInfo.CategoryPVE, new GameModeInfo[] { GametypeCampaign, GametypeArcade, GametypeHorde, GametypeBaseDefense });
             ArrayGametypeCategory[1] = new GametypeCategory(GameModeInfo.CategoryPVP, new GameModeInfo[]
             {
                 GametypeDeathmatch, GametypeCaptureTheFlag, GametypeObjective, GametypeAssault, GametypeConquest,
@@ -137,10 +138,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         Owner.OnGametypeUpdate();
                         return true;
                     }
-
-                    DrawY += 20;
                 }
 
+                DrawY += 20;
                 ++CurrentIndex;
             }
 
@@ -226,9 +226,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     {
                         g.DrawString(fntText, ActiveCategory.ArrayGametype[G].Name, new Vector2(LeftPanelX + 5, DrawY), Color.Gray);
                     }
-                    DrawY += 20;
                 }
 
+                DrawY += 20;
                 ++CurrentIndex;
             }
         }

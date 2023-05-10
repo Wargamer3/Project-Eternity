@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
 namespace ProjectEternity.GameScreens.DeathmatchMapScreen
@@ -24,11 +26,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public override void Load(BinaryReader BR)
         {
+            _MaximumResapwn = 1000;
         }
 
         public override IGameRule GetRule(BattleMap Map)
         {
             return new CampaignGameRule((DeathmatchMap)Map, this);
+        }
+
+        public override void OnBotChanged(RoomInformations Room)
+        {
+            Room.MaxNumberOfBots = 0;
         }
 
         public override GameModeInfo Copy()
@@ -66,6 +74,28 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             this.Owner = Owner;
             this.GameInfo = GameInfo;
             UseTeamsForSpawns = false;
+        }
+
+        public override void Init()
+        {
+            base.Init();
+
+            foreach (Player ActivePlayer in Owner.ListPlayer)
+            {
+                ListRemainingResapwn.Add(GameInfo.MaximumResapwn);
+            }
+        }
+
+        public override void Draw(CustomSpriteBatch g)
+        {
+            GameScreen.DrawBox(g, new Vector2(3, 3), 200, 24, Color.FromNonPremultiplied(0, 0, 0, 40));
+            g.DrawString(Owner.fntArial8, "Campaign", new Vector2(28, 7), Color.White);
+            g.DrawString(Owner.fntArial8, ListRemainingResapwn[0].ToString(), new Vector2(134, 9), Color.White);
+
+            if (ShowRoomSummary)
+            {
+                ShowSummary(g);
+            }
         }
     }
 }

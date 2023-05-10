@@ -119,7 +119,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             CreateARoomButton = new BoxButton(new  Rectangle(150, 70, 100, 45), fntArial12, "Create\n\ra Room", OnButtonOver, CreateARoom);
             WaitingRoomOnlyButton = new InteractiveButton(Content, "Triple Thunder/Menus/Channel/Waiting Room Only", new Vector2(447, 85), OnButtonOver, null);
 
-            InfoButton = new BoxButton(new Rectangle(572, 40, 100, 35), fntArial12, "Info", OnButtonOver, null);
+            InfoButton = new BoxButton(new Rectangle(572, 40, 100, 35), fntArial12, "Info", OnButtonOver, OpenInfo);
             RankingButton = new BoxButton(new Rectangle(682, 40, 100, 35), fntArial12, "Ranking", OnButtonOver, null);
             OptionsButton = new BoxButton(new Rectangle(572, 74, 100, 35), fntArial12, "Options", OnButtonOver, null);
             HelpButton = new BoxButton(new Rectangle(682, 74, 100, 35), fntArial12, "Help", OnButtonOver, null);
@@ -437,6 +437,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected virtual void CreateARoom()
         {
             PushScreen(new CreateRoomScreen(OnlineGameClient, OnlineCommunicationClient, ""));
+            sndButtonClick.Play();
+        }
+
+        protected virtual void OpenInfo()
+        {
+            PushScreen(new RecordsScreen((BattleMapPlayer)PlayerManager.ListLocalPlayer[0], null));
             sndButtonClick.Play();
         }
 

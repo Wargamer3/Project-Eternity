@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         {
                             string MapFolder = ActiveMultiplayerFolder.Substring(RootDirectory.Length);
                             MapFolder = MapFolder.Substring(0, MapFolder.Length - "Multiplayer/".Length);
-                            string FilePath = ActiveFile.Substring(RootDirectory.Length + MapFolder.Length + 1);
+                            string FilePath = ActiveFile.Substring(RootDirectory.Length + MapFolder.Length + 1).Replace('\\', '/');
                             FilePath = FilePath.Substring(0, FilePath.Length - 4);
                             string FileName = ActiveFile.Substring(ActiveCampaignFolder.Length + 1);
                             FileName = FileName.Substring(0, FileName.Length - 4);
@@ -69,6 +69,43 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public MapFolderCache()
             {
                 DicMapCacheByFolder = new Dictionary<string, MapCache>();
+            }
+
+            public Dictionary<string, MapInfo> GetCampaignMaps(string ContentRootDirectory, string ActiveModName, string GameMode, List<MissionInfo> ListUnlockedMission)
+            {
+                MapCache FoundMapCache;
+
+                if (!DicMapCacheByFolder.TryGetValue(GameMode, out FoundMapCache))
+                {
+                    FoundMapCache = new MapCache(GameMode);
+                    FoundMapCache.PopulateMaps(ContentRootDirectory, ActiveModName);
+                    DicMapCacheByFolder.Add(GameMode, FoundMapCache);
+
+                    List<string> ListLockedMission = new List<string>();
+
+                    foreach (string ActiveMission in FoundMapCache.DicMapInfoByPath.Keys)
+                    {
+                        bool MissionFound = false;
+                        foreach (MissionInfo UnlockedMission in ListUnlockedMission)
+                        {
+                            if (ActiveMission == UnlockedMission.MapPath)
+                            {
+                                MissionFound = true;
+                            }
+                        }
+                        if (!MissionFound)
+                        {
+                            ListLockedMission.Add(ActiveMission);
+                        }
+                    }
+
+                    foreach (string LockedMission in ListLockedMission)
+                    {
+                        FoundMapCache.DicMapInfoByPath.Remove(LockedMission);
+                    }
+                }
+
+                return FoundMapCache.DicMapInfoByPath;
             }
 
             public Dictionary<string, MapInfo> GetMaps(string ContentRootDirectory, string ActiveModName, string GameMode)
@@ -200,7 +237,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             ActiveMapInfo = MapInfoToSelect;
             LoadMapInfo(MapInfoToSelect, Room.GameMode);
-            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapModName, ActiveMapInfo.MapPath, Room.GameMode, ActiveMapInfo.MinNumberOfPlayer, ActiveMapInfo.MaxNumberOfPlayer, ActiveMapInfo.MaxSquadPerPlayer, ActiveMapInfo.GameInfo, ActiveMapInfo.ListMandatoryMutator);
+            Owner.UpdateSelectedMap(ActiveMapInfo.MapName, ActiveMapInfo.MapModName, ActiveMapInfo.MapPath, Room.GameMode,
+                ActiveMapInfo.MinNumberOfPlayer, ActiveMapInfo.MaxNumberOfPlayer, ActiveMapInfo.MaxSquadPerPlayer,
+                ActiveMapInfo.GameInfo, ActiveMapInfo.ListMandatoryMutator, ActiveMapInfo.ListMapTeam);
             OptionsScreen.OnMapUpdate();
         }
 
@@ -265,7 +304,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void UpdateMaps()
         {
-            DicMapInfoByPath = DicCacheByFolderName.GetMaps(Content.RootDirectory, Room.MapModName, Room.GameMode);
+            if (Room.GameMode == "Campaign" || Room.GameMode == "Arcade")
+            {
+                DicMapInfoByPath = DicCacheByFolderName.GetCampaignMaps(Content.RootDirectory, Room.MapModName, Room.GameMode, PlayerManager.ListLocalPlayer[0].GetUnlockedMissions());
+            }
+            else
+            {
+                DicMapInfoByPath = DicCacheByFolderName.GetMaps(Content.RootDirectory, Room.MapModName, Room.GameMode);
+            }
         }
 
         public override void Draw(CustomSpriteBatch g)

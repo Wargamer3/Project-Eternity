@@ -12,8 +12,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class UnitRecordsTab : GameScreen
     {
-        private List<Character> ListCharacterByKill;
-        private List<Unit> ListUnitByKill;
+        private Dictionary<string, uint> DicCharacterByKill;
+        private Dictionary<string, uint> DicUnitByKill;
 
         private BoxScrollbar Scrollbar;
 
@@ -38,11 +38,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             int TotalHeight = 0;
 
-            ListCharacterByKill = PlayerRoster.TeamCharacters.ListAll.OrderByDescending(C => ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[C.ID]).ToList();
-            ListUnitByKill = PlayerRoster.TeamUnits.ListAll.OrderByDescending(U => ActivePlayer.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills[U.ID]).ToList();
 
-            TotalHeight += ListCharacterByKill.Count * Interline;
-            TotalHeight += ListUnitByKill.Count * Interline;
+            if (PlayerRoster != null)
+            {
+                List<Character> ListCharacterByKill = PlayerRoster.TeamCharacters.ListAll.OrderByDescending(C => ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[C.ID]).ToList();
+                List<Unit> ListUnitByKill = PlayerRoster.TeamUnits.ListAll.OrderByDescending(U => ActivePlayer.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills[U.ID]).ToList();
+            }
+            else
+            {
+                DicCharacterByKill = ActivePlayer.Inventory.ListOwnedCharacter
+                                        .GroupBy(C => C.ID, C =>
+                                        {
+                                            uint KillCount = 0; ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills.TryGetValue(C.ID, out KillCount);
+                                            return KillCount;
+                                        })
+                                        .OrderByDescending(U => U.First())
+                                        .ToDictionary(C => C.Key, C => C.First());
+
+                DicUnitByKill = ActivePlayer.Inventory.ListOwnedSquad
+                                        .GroupBy(U => U.At(0).ItemName, U =>
+                                        {
+                                            uint KillCount = 0; ActivePlayer.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills.TryGetValue(U.At(0).ID, out KillCount);
+                                            return KillCount;
+                                        })
+                                        .OrderByDescending(U => U.First())
+                                        .ToDictionary(U => U.Key, U => U.First());
+            }
+
+            TotalHeight += DicCharacterByKill.Count * Interline;
+            TotalHeight += DicUnitByKill.Count * Interline;
 
             Scrollbar = new BoxScrollbar(new Vector2(Constants.Width - 20, StartY), Constants.Height - StartY, TotalHeight, OnScrollbarChange);
         }
@@ -68,24 +92,34 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             TextHelper.DrawText(g, "Character kills", new Vector2(10, LineY), Color.Yellow);
             LineY += Interline + 8;
 
-            for (int C = 0; C < 5 && C < ListCharacterByKill.Count; ++C)
+            int RemainingCharacter = 5;
+            foreach (KeyValuePair<string, uint> ActiveCharacterKill in DicCharacterByKill)
             {
-                TextHelper.DrawText(g, ListCharacterByKill[C].Name, new Vector2(10, LineY), Color.White);
-                TextHelper.DrawTextRightAligned(g, ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills[ListCharacterByKill[C].ID].ToString(), new Vector2(LineEndX + 5, LineY), Color.White);
+                TextHelper.DrawText(g, ActiveCharacterKill.Key, new Vector2(10, LineY), Color.White);
+                TextHelper.DrawTextRightAligned(g, ActiveCharacterKill.Value.ToString(), new Vector2(LineEndX + 5, LineY), Color.White);
                 g.DrawLine(sprPixel, new Vector2(LineStartX, LineY + Interline - 3), new Vector2(LineEndX, LineY + Interline - 3), Color.YellowGreen);
                 LineY += Interline;
+                if (--RemainingCharacter <= 0)
+                {
+                    break;
+                }
             }
 
             LineY += 8;
             TextHelper.DrawText(g, "Unit kills", new Vector2(10, LineY), Color.Yellow);
             LineY += Interline + 8;
 
-            for (int U = 0; U < 5 && U < ListUnitByKill.Count; ++U)
+            int RemainingUnit = 5;
+            foreach (KeyValuePair<string, uint> ActiveUnitKill in DicUnitByKill)
             {
-                TextHelper.DrawText(g, ListUnitByKill[U].ItemName, new Vector2(10, LineY), Color.White);
-                TextHelper.DrawTextRightAligned(g, ActivePlayer.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills[ListUnitByKill[U].ID].ToString(), new Vector2(LineEndX + 5, LineY), Color.White);
+                TextHelper.DrawText(g, ActiveUnitKill.Key, new Vector2(10, LineY), Color.White);
+                TextHelper.DrawTextRightAligned(g, ActiveUnitKill.Value.ToString(), new Vector2(LineEndX + 5, LineY), Color.White);
                 g.DrawLine(sprPixel, new Vector2(LineStartX, LineY + Interline - 3), new Vector2(LineEndX, LineY + Interline - 3), Color.YellowGreen);
                 LineY += Interline;
+                if (--RemainingUnit <= 0)
+                {
+                    break;
+                }
             }
         }
     }

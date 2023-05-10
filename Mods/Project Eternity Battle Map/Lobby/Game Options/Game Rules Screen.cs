@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -129,18 +127,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Room.MaxNumberOfBots = int.Parse(InputMessage);
 
-            while (Room.ListRoomBot.Count < Room.MaxNumberOfBots)
-            {
-                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Bot", OnlinePlayerBase.PlayerTypes.Player, false, 0, false, Color.Blue);
-                NewPlayer.InitFirstTimeInventory();
-                NewPlayer.FillLoadout(Room.MaxSquadsPerBot);
-                Room.ListRoomBot.Add(NewPlayer);
-            }
-
-            while (Room.ListRoomBot.Count > Room.MaxNumberOfBots)
-            {
-                Room.ListRoomBot.RemoveAt(Room.ListRoomBot.Count - 1);
-            }
+            Room.GameInfo.OnBotChanged(Room);
         }
 
         private void OnMaxSquadPerBotChanged(string InputMessage)
@@ -185,11 +172,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Max Players", new Vector2(RightColumnX + 10, DrawY), Color.White);
             DrawY += 30;
             g.DrawString(fntText, "Max Squad Per Player", new Vector2(DrawX + 10, DrawY), Color.White);
-            /*DrawY += 30;
-            g.DrawString(fntText, "Goal Score", new Vector2(DrawX + 10, DrawY), Color.White);
-            g.DrawString(fntText, "Time Limit", new Vector2(RightColumnX + 10, DrawY), Color.White);
-            DrawY += 30;
-            g.DrawString(fntText, "Turn Limit", new Vector2(RightColumnX + 10, DrawY), Color.White);*/
 
             foreach (IUIElement ActiveButton in ListMenuButton)
             {

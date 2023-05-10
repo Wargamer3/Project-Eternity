@@ -30,13 +30,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly DeathmatchMap Owner;
 
         protected bool UseTeamsForSpawns;
-        private bool ShowRoomSummary;
+        protected bool ShowRoomSummary;
         public const int TurnsToRespawn = 1;
         private readonly List<DeathInfo> ListDeadSquadInfo;
-        int MaxKill = 15;
-        int MaxGameLengthInMinutes = 10;
-        private double GameLengthInSeconds;
-        private Player CurrentPlayer { get { return Owner.ListPlayer[Owner.ActivePlayerIndex]; } }
+        protected int MaxKill = 15;
+        protected int MaxGameLengthInMinutes = 10;
+        protected double GameLengthInSeconds;
+        protected List<int> ListRemainingResapwn;
+        protected Player CurrentPlayer { get { return Owner.ListPlayer[Owner.ActivePlayerIndex]; } }
 
         public abstract string Name { get; }
 
@@ -47,6 +48,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             UseTeamsForSpawns = true;
             GameLengthInSeconds = 0;
             ListDeadSquadInfo = new List<DeathInfo>();
+            ListRemainingResapwn = new List<int>();
         }
 
         public virtual void Init()
@@ -85,6 +87,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                     foreach (MovementAlgorithmTile ActiveSpawn in ListPossibleSpawnPoint)
                     {
+                        if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
+                        {
+                            break;
+                        }
+
                         Squad NewSquad = ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex];
                         if (NewSquad == null)
                         {
@@ -107,8 +114,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         if (!ActivePlayer.IsPlayerControlled || !NewSquad.IsPlayerControlled)
                         {
-                            NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(Owner, NewSquad));
-                            NewSquad.SquadAI.Load("Multiplayer/Capture The Flag/Easy");
+                            InitBot(NewSquad);
                         }
 
                         if (Owner != ActiveSpawn.Owner)
@@ -137,6 +143,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ++PlayerIndex;
                 }
             }
+        }
+
+        protected virtual void InitBot(Squad NewSquad)
+        {
+            NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(Owner, NewSquad));
+            NewSquad.SquadAI.Load("Default AI");
         }
 
         public void OnNewTurn(int ActivePlayerIndex)
@@ -195,7 +207,24 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefeatedSquad.DropItem();
             }
 
-            ListDeadSquadInfo.Add(new DeathInfo(DefeatedSquad, DefeatedSquadPlayerIndex, TurnsToRespawn));
+            if (AttackerSquadPlayerIndex >= ListRemainingResapwn.Count || ListRemainingResapwn[AttackerSquadPlayerIndex] > 0)
+            {
+                ListDeadSquadInfo.Add(new DeathInfo(DefeatedSquad, DefeatedSquadPlayerIndex, TurnsToRespawn));
+
+                if (AttackerSquadPlayerIndex < ListRemainingResapwn.Count)
+                {
+                    ListRemainingResapwn[AttackerSquadPlayerIndex] -= DefeatedSquad.CurrentLeader.SpawnCost;
+                    if (ListRemainingResapwn[AttackerSquadPlayerIndex] < 0)
+                    {
+                        ListRemainingResapwn[AttackerSquadPlayerIndex] = 0;
+                    }
+                }
+            }
+
+            if ((ListRemainingResapwn.Count <= 0 || ListRemainingResapwn[AttackerSquadPlayerIndex] < 0) && Owner.IsOfflineOrServer)
+            {
+                CheckGameOver();
+            }
 
             TemporaryAttackPickup DroppedWeapon = DefeatedSquad.At(0).OnDeath();
             if (DroppedWeapon != null)
@@ -205,14 +234,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void OnManualVictory()
+        public void OnManualVictory(int EXP, uint Money)
         {
             List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
-            foreach (Player ActivePlayer in Owner.ListAllPlayer)
+            foreach (Player ActivePlayer in Owner.ListLocalPlayer)
             {
                 LobbyVictoryScreen.PlayerGains NewGains = new LobbyVictoryScreen.PlayerGains();
-                NewGains.Exp = 100;
-                NewGains.Money = 100;
+                NewGains.EXP = EXP;
+                NewGains.Money = Money;
 
                 ListGains.Add(NewGains);
             }
@@ -221,8 +250,137 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Owner.PushScreen(NewLobbyVictoryScreen);
         }
 
-        public void OnManualDefeat()
+        public void OnManualDefeat(int EXP, uint Money)
         {
+            List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
+            foreach (Player ActivePlayer in Owner.ListLocalPlayer)
+            {
+                LobbyVictoryScreen.PlayerGains NewGains = new LobbyVictoryScreen.PlayerGains();
+                NewGains.EXP = EXP;
+                NewGains.Money = Money;
+
+                ListGains.Add(NewGains);
+            }
+
+            LobbyDefeatScreen NewLobbyVictoryScreen = new LobbyDefeatScreen(Owner, ListGains);
+            Owner.PushScreen(NewLobbyVictoryScreen);
+        }
+
+        public void CheckGameOver()
+        {
+            HashSet<int> ListAliveTeam = new HashSet<int>();
+
+            for (int P = 0; P < Owner.ListAllPlayer.Count && P < 10; P++)
+            {
+                Player ActivePlayer = Owner.ListAllPlayer[P];
+
+                foreach (Squad ActiveSquad in ActivePlayer.ListSquad)
+                {
+                    if (!ActiveSquad.IsDead)
+                    {
+                        ListAliveTeam.Add(ActivePlayer.Team);
+                        break;
+                    }
+                }
+            }
+
+            if (ListAliveTeam.Count <= 1)
+            {
+                List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
+                foreach (Player ActivePlayer in Owner.ListAllPlayer)
+                {
+                    if (ActivePlayer.Team == -1)
+                    {
+                        continue;
+                    }
+
+                    LobbyVictoryScreen.PlayerGains NewGains = new LobbyVictoryScreen.PlayerGains();
+                    foreach (Player OtherPlayer in Owner.ListAllPlayer)
+                    {
+                        if (ActivePlayer.Team == OtherPlayer.Team || OtherPlayer.Team == -1)
+                        {
+                            continue;
+                        }
+
+                        if (ListAliveTeam.Contains(ActivePlayer.Team))
+                        {
+                            NewGains.EXP += GetVictoryEXP(ActivePlayer, OtherPlayer);
+                            NewGains.Money += GetVictoryMoney(ActivePlayer);
+                        }
+                        else
+                        {
+                            NewGains.EXP += GetDefeatEXP(ActivePlayer, OtherPlayer);
+                            NewGains.Money += GetDefeatMoney(ActivePlayer);
+                        }
+                    }
+
+                    ActivePlayer.EXP += NewGains.EXP;
+                    ActivePlayer.Records.CurrentMoney += NewGains.Money;
+
+                    if (ActivePlayer.IsPlayerControlled)
+                    {
+                        if (Owner.IsServer)
+                        {
+                            Owner.OnlineServer.Database.SavePlayerInventory(ActivePlayer.ConnectionID, ActivePlayer);
+                        }
+                        else
+                        {
+                            ActivePlayer.SaveLocally();
+                        }
+                    }
+
+                    ListGains.Add(NewGains);
+                }
+
+                if (Owner.IsServer)
+                {
+                }
+                else
+                {
+                    if (ListAliveTeam.Count == 0)
+                    {
+                        LobbyDrawScreen NewLobbyVictoryScreen = new LobbyDrawScreen(Owner, ListGains);
+                        Owner.PushScreen(NewLobbyVictoryScreen);
+                    }
+                    else if (ListAliveTeam.Contains(PlayerManager.ListLocalPlayer[0].Team))
+                    {
+                        LobbyVictoryScreen NewLobbyVictoryScreen = new LobbyVictoryScreen(Owner, ListGains);
+                        Owner.PushScreen(NewLobbyVictoryScreen);
+                    }
+                    else
+                    {
+                        LobbyDefeatScreen NewLobbyVictoryScreen = new LobbyDefeatScreen(Owner, ListGains);
+                        Owner.PushScreen(NewLobbyVictoryScreen);
+                    }
+                }
+            }
+        }
+
+        private int GetVictoryEXP(Player ActivePlayer, Player OtherPlayer)
+        {
+            return (int)Math.Ceiling(ActivePlayer.Level / 10d) * 10 + (ActivePlayer.Level - OtherPlayer.Level);
+        }
+
+        private int GetDefeatEXP(Player ActivePlayer, Player OtherPlayer)
+        {
+            if (OtherPlayer.Level > ActivePlayer.Level)
+            {
+                return (int)Math.Ceiling(ActivePlayer.Level / 10d) * 3 + (int)Math.Ceiling((ActivePlayer.Level - OtherPlayer.Level + 1) / 10d);
+            }
+            else
+            {
+                return Math.Max(0, (int)Math.Ceiling(ActivePlayer.Level / 10d) * 3 - ActivePlayer.Level - OtherPlayer.Level + 1);
+            }
+        }
+
+        private uint GetVictoryMoney(Player ActivePlayer)
+        {
+            return 100u + (uint)(ActivePlayer.Level - 1) * 10u;
+        }
+
+        private uint GetDefeatMoney(Player ActivePlayer)
+        {
+            return 50u + (uint)ActivePlayer.Level * 5u;
         }
 
         private void RespawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
@@ -293,47 +451,52 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             if (ShowRoomSummary)
             {
-                int Max = 0;
-                for (int P = 0; P < Owner.ListAllPlayer.Count; ++P)
-                {
-                    if (Owner.ListAllPlayer[P].Team == -1)
-                    {
-                        continue;
-                    }
-
-                    ++Max;
-                }
-
-                GameScreen.DrawBox(g, new Vector2(500, 150), 250, Max * 26 + 65, Color.FromNonPremultiplied(0, 0, 0, 40));
-                g.DrawString(Owner.fntArial8, "Kill", new Vector2(650, 150 + 6), Color.White);
-                g.DrawString(Owner.fntArial8, "Death", new Vector2(690, 150 + 6), Color.White);
-                
-                float PosY = 175;
-                for (int P = 0; P < Max; ++P)
-                {
-                    if (Owner.ListAllPlayer[P].Team == -1)
-                    {
-                        continue;
-                    }
-
-                    GameScreen.DrawBox(g, new Vector2(505, PosY), 20, 25, Color.FromNonPremultiplied(255, 0, 0, 200));
-                    GameScreen.DrawBox(g, new Vector2(505 + 20, PosY), 100, 25, Color.FromNonPremultiplied(255, 0, 0, 200));
-
-                    GameScreen.DrawBox(g, new Vector2(630, PosY), 50, 25, Color.FromNonPremultiplied(255, 0, 0, 200));
-                    GameScreen.DrawBox(g, new Vector2(680, PosY), 50, 25, Color.FromNonPremultiplied(255, 0, 0, 200));
-
-                    g.DrawString(Owner.fntArial8, Owner.ListAllPlayer[P].Name, new Vector2(540, PosY + 6), Color.White);
-                    g.DrawString(Owner.fntArial8, (P + 1).ToString(), new Vector2(515, PosY + 5), Color.White);
-                    g.DrawString(Owner.fntArial8, Owner.ListAllPlayer[P].Kills.ToString(), new Vector2(665, PosY + 5), Color.White);
-                    g.DrawString(Owner.fntArial8, Owner.ListAllPlayer[P].Death.ToString(), new Vector2(720, PosY + 5), Color.White);
-                    PosY += 26;
-                }
-
-                PosY -= 10;
-                g.DrawString(Owner.fntArial8, "To Win", new Vector2(520, PosY + Max * 26), Color.White);
-                g.DrawString(Owner.fntArial8, MaxGameLengthInMinutes + " MIN", new Vector2(620, PosY + Max * 26), Color.White);
-                g.DrawString(Owner.fntArial8, MaxKill + " KILL", new Vector2(670, PosY + Max * 26), Color.White);
+                ShowSummary(g);
             }
+        }
+
+        public void ShowSummary(CustomSpriteBatch g)
+        {
+            int Max = 0;
+            for (int P = 0; P < Owner.ListAllPlayer.Count; ++P)
+            {
+                if (Owner.ListAllPlayer[P].Team == -1)
+                {
+                    continue;
+                }
+
+                ++Max;
+            }
+
+            GameScreen.DrawBox(g, new Vector2(500, 150), 250, Max * 26 + 65, Color.FromNonPremultiplied(0, 0, 0, 40));
+            g.DrawString(Owner.fntArial8, "Kill", new Vector2(650, 150 + 6), Color.White);
+            g.DrawString(Owner.fntArial8, "Death", new Vector2(690, 150 + 6), Color.White);
+
+            float PosY = 175;
+            for (int P = 0; P < Max; ++P)
+            {
+                if (Owner.ListAllPlayer[P].Team == -1)
+                {
+                    continue;
+                }
+
+                GameScreen.DrawBox(g, new Vector2(505, PosY), 20, 25, Color.FromNonPremultiplied(255, 0, 0, 200));
+                GameScreen.DrawBox(g, new Vector2(505 + 20, PosY), 100, 25, Color.FromNonPremultiplied(255, 0, 0, 200));
+
+                GameScreen.DrawBox(g, new Vector2(630, PosY), 50, 25, Color.FromNonPremultiplied(255, 0, 0, 200));
+                GameScreen.DrawBox(g, new Vector2(680, PosY), 50, 25, Color.FromNonPremultiplied(255, 0, 0, 200));
+
+                g.DrawString(Owner.fntArial8, Owner.ListAllPlayer[P].Name, new Vector2(540, PosY + 6), Color.White);
+                g.DrawString(Owner.fntArial8, (P + 1).ToString(), new Vector2(515, PosY + 5), Color.White);
+                g.DrawString(Owner.fntArial8, Owner.ListAllPlayer[P].Kills.ToString(), new Vector2(665, PosY + 5), Color.White);
+                g.DrawString(Owner.fntArial8, Owner.ListAllPlayer[P].Death.ToString(), new Vector2(720, PosY + 5), Color.White);
+                PosY += 26;
+            }
+
+            PosY -= 10;
+            g.DrawString(Owner.fntArial8, "To Win", new Vector2(520, PosY + Max * 26), Color.White);
+            g.DrawString(Owner.fntArial8, MaxGameLengthInMinutes + " MIN", new Vector2(620, PosY + Max * 26), Color.White);
+            g.DrawString(Owner.fntArial8, MaxKill + " KILL", new Vector2(670, PosY + Max * 26), Color.White);
         }
     }
 }

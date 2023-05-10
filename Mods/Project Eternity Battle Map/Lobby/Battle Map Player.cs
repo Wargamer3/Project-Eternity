@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Characters;
 
@@ -84,10 +83,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string PilotPath = IniDefaultUnits.ReadField(ActiveKey, "Pilot");
 
                 Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                NewUnit.ID = NewUnit.ItemName;
                 if (!string.IsNullOrEmpty(PilotPath))
                 {
                     Character NewCharacter = new Character(PilotPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                     NewCharacter.Level = 1;
+                    NewCharacter.ID = NewCharacter.Name;
                     NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
                     Inventory.ListOwnedCharacter.Add(NewCharacter);
                 }
@@ -99,6 +100,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             Inventory.ActiveLoadout.ListSpawnSquad.Add(Inventory.ListOwnedSquad[0]);
+            UnlockInventory.LoadPlayerUnlocks(Name);
         }
 
         public void FillLoadout(int UnitsInLoadout)
@@ -112,8 +114,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             while (Inventory.ActiveLoadout.ListSpawnSquad.Count < UnitsInLoadout)
             {
                 Unit NewUnit = Unit.FromFullName(UnitPath, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                NewUnit.ID = NewUnit.ItemName;
                 Character NewCharacter = new Character(Pilot, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                 NewCharacter.Level = 1;
+                NewCharacter.ID = NewCharacter.Name;
                 NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
 
                 Squad NewSquad = new Squad("Squad", NewUnit);
@@ -131,6 +135,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected override void DoSaveLocally(BinaryWriter BW)
         {
             Inventory.Save(BW);
+            UnlockInventory.SaveLocally(Name);
+        }
+
+        public override List<MissionInfo> GetUnlockedMissions()
+        {
+            return Inventory.ListOwnedMission;
         }
     }
 }

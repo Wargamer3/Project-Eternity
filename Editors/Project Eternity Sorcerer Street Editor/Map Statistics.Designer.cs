@@ -48,6 +48,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtHoursInDay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTimeStart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOrderNumber)).BeginInit();
+            this.gbDescription.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtHighestDieRoll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMagicGoal)).BeginInit();
@@ -58,7 +60,23 @@
             // 
             // txtDescription
             // 
-            this.txtDescription.Size = new System.Drawing.Size(220, 300);
+            this.txtDescription.Size = new System.Drawing.Size(211, 240);
+            // 
+            // gbDescription
+            // 
+            this.gbDescription.Size = new System.Drawing.Size(223, 294);
+            // 
+            // btnAccept
+            // 
+            this.btnAccept.Location = new System.Drawing.Point(536, 312);
+            // 
+            // btnClose
+            // 
+            this.btnClose.Location = new System.Drawing.Point(626, 312);
+            // 
+            // btnOpenTranslationFile
+            // 
+            this.btnOpenTranslationFile.Location = new System.Drawing.Point(72, 265);
             // 
             // groupBox1
             // 
@@ -72,7 +90,7 @@
             this.groupBox1.Controls.Add(this.txtMagicPerLap);
             this.groupBox1.Controls.Add(this.lblMagicAtStart);
             this.groupBox1.Controls.Add(this.txtMagicAtStart);
-            this.groupBox1.Location = new System.Drawing.Point(12, 325);
+            this.groupBox1.Location = new System.Drawing.Point(12, 259);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(460, 76);
             this.groupBox1.TabIndex = 24;
@@ -208,10 +226,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(713, 407);
+            this.ClientSize = new System.Drawing.Size(713, 345);
             this.Controls.Add(this.groupBox1);
             this.Name = "SorcererStreetMapStatistics";
             this.Text = "Map statistics";
+            this.Controls.SetChildIndex(this.btnAccept, 0);
+            this.Controls.SetChildIndex(this.btnClose, 0);
+            this.Controls.SetChildIndex(this.gbDescription, 0);
+            this.Controls.SetChildIndex(this.txtMapName, 0);
+            this.Controls.SetChildIndex(this.txtOrderNumber, 0);
             this.Controls.SetChildIndex(this.txtTileWidth, 0);
             this.Controls.SetChildIndex(this.txtTileHeight, 0);
             this.Controls.SetChildIndex(this.txtMapWidth, 0);
@@ -227,6 +250,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtHoursInDay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtlblTimeMultiplier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTimeStart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtOrderNumber)).EndInit();
+            this.gbDescription.ResumeLayout(false);
+            this.gbDescription.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtHighestDieRoll)).EndInit();

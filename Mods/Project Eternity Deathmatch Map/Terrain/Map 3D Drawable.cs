@@ -58,10 +58,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 PolygonEffect.TextureEnabled = true;
                 PolygonEffect.EnableDefaultLighting();
 
-                float aspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
+                float AspectRatio = g.Viewport.Width / (float)g.Viewport.Height;
 
                 Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                        aspectRatio,
+                                                                        AspectRatio,
                                                                         1, 10000);
                 PolygonEffect.Projection = Projection;
 
@@ -461,7 +461,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Matrix World;
 
-                if (Map.CameraOverride != null)
+                if (Map.CameraOverride != null && !Map.IsEditor)
                 {
                     World = NewWorld * Map.CameraOverride.View;
                 }
@@ -865,7 +865,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Matrix World = PolygonEffect.World;
             Vector3 CameraPosition = Map.Camera.CameraPosition3D;
 
-            if (Map.CameraOverride != null)
+            if (Map.CameraOverride != null && !Map.IsEditor)
             {
                 View = Map.CameraOverride.View;
                 CameraPosition = Map.CameraOverride.CameraPosition3D;
@@ -875,7 +875,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Matrix WorldViewProjection = World * ViewProjection;
             ColorEffect.Parameters["ViewProjection"].SetValue(ViewProjection);
 
-            DrawMap(g, View, WorldViewProjection);
+            bool DrawUpperLayers = !IsCursorHiddenByWall();
+
+            DrawMap(g, View, WorldViewProjection, DrawUpperLayers);
 
             DrawVehicles(g, View);
 
@@ -903,7 +905,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            DrawSquads(g, View);
+            DrawSquads(g, View, DrawUpperLayers);
 
             DrawDelayedAttacks(g, ViewProjection);
 
@@ -939,18 +941,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             DrawDamageNumbers(g, View);
         }
 
-        private void DrawMap(CustomSpriteBatch g, Matrix View, Matrix WorldViewProjection)
+        private void DrawMap(CustomSpriteBatch g, Matrix View, Matrix WorldViewProjection, bool DrawUpperLayers)
         {
             Vector3 CameraPosition = Map.Camera.CameraPosition3D;
-            if (Map.CameraOverride != null)
+            if (Map.CameraOverride != null && !Map.IsEditor)
             {
                 CameraPosition = Map.CameraOverride.CameraPosition3D;
             }
 
             if (Map.ShowLayerIndex == -1)
             {
-                bool DrawUpperLayers = !IsCursorHiddenByWall();
-
                 if (DrawUpperLayers || Map.IsEditor)
                 {
                     foreach (KeyValuePair<int, Tile3DHolder> ActiveTileSet in DicTile3DByTileset)
@@ -1052,7 +1052,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        private void DrawSquads(CustomSpriteBatch g, Matrix View)
+        private void DrawSquads(CustomSpriteBatch g, Matrix View, bool DrawUpperLayers)
         {
             for (int P = 0; P < Map.ListPlayer.Count; P++)
             {
@@ -1061,7 +1061,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     //If it's dead, don't draw it unless it's an event unit.
                     if ((ActiveSquad.CurrentLeader == null && !ActiveSquad.IsEventSquad)
-                        || ActiveSquad.IsDead)
+                        || ActiveSquad.IsDead
+                        || (!DrawUpperLayers && ActiveSquad.Z > Map.CursorPosition.Z))
                         continue;
 
                     if (Map.MovementAnimation.Contains(ActiveSquad))

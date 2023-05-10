@@ -227,7 +227,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer)
+        public void Draw(CustomSpriteBatch g)
         {
             if (OverlayWeather != null)
             {

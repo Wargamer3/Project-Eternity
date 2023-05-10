@@ -116,10 +116,11 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             BW.Write(frmDetails.txt3DModel.Text);
             BW.Write(frmDetails.txtTags.Text);
             BW.Write(txtDescription.Text);
+
             BW.Write(Convert.ToInt32(txtPrice.Value));
             BW.Write(Convert.ToInt32(txtSpawnCost.Value));
-
             BW.Write((int)txtEXP.Value);
+
             BW.Write((int)txtBaseHP.Value);
             BW.Write((int)txtBaseEN.Value);
             BW.Write((int)txtBaseArmor.Value);
@@ -353,9 +354,11 @@ namespace ProjectEternity.Editors.UnitNormalEditor
             #region Load controls
 
             txtName.Text = LoadedUnit.ItemName;
-            txtPrice.Text = LoadedUnit.Price.ToString();
-            txtEXP.Value = LoadedUnit.UnitStat.EXPValue;
             txtDescription.Text = LoadedUnit.Description;
+
+            txtPrice.Text = LoadedUnit.Price.ToString();
+            txtSpawnCost.Value = LoadedUnit.SpawnCost;
+            txtEXP.Value = LoadedUnit.UnitStat.EXPValue;
 
             txtBaseHP.Value = LoadedUnit.MaxHP;
             txtBaseEN.Value = LoadedUnit.MaxEN;

@@ -1091,7 +1091,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             MaxMVCost += CurrentUnit.Boosts.MovementModifier;
 
             //Init A star.
-            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath( new List<MovementAlgorithmTile>() { GetTerrain((int)Position.X, (int)Position.Y, (int)Position.Z) }, CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost);
+            List<MovementAlgorithmTile> ListAllNode = Pathfinder.FindPath( new List<MovementAlgorithmTile>() { GetTerrain((int)Position.X, (int)Position.Y, (int)Position.Z) }, CurrentUnit.Components, CurrentUnit.UnitStat, MaxMVCost, false);
 
             List<MovementAlgorithmTile> ListMVChoice = new List<MovementAlgorithmTile>();
             for (int i = 0; i < ListAllNode.Count; i++)

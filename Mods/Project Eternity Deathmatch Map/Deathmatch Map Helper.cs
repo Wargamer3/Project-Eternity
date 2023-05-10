@@ -210,6 +210,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 NewMapLayer.ToggleDelayOn = (int)NewForm.txtAnimationToggleDelayOn.Value;
                 NewMapLayer.ToggleDelayOff = (int)NewForm.txtAnimationToggleDelayOff.Value;
                 NewMapLayer.Depth = (float)NewForm.txtDepth.Value;
+                for (int X = 0; X < ActiveMap.MapSize.X; ++X)
+                {
+                    for (int Y = 0; Y < ActiveMap.MapSize.Y; ++Y)
+                    {
+                        NewMapLayer.ArrayTerrain[X, Y].LayerDepth = NewMapLayer.Depth;
+                    }
+                }
+                ActiveMap.Reset();
             }
         }
 

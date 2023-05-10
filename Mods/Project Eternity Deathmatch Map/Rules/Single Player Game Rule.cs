@@ -9,6 +9,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     class SinglePlayerGameRule : IGameRule
     {
+        public const string SinglePlayerName = "Single Player";
+
         private readonly DeathmatchMap Owner;
         int HPRegenPerTurnFixed;
         int ENRegenPerTurnFixed;
@@ -166,7 +168,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
-        public void OnManualVictory()
+        public void OnManualVictory(int EXP, uint Money)
         {
             BattleMap.ClearedStages++;
             GameScreen.FMODSystem.sndActiveBGM.Stop();
@@ -175,7 +177,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Owner.PushScreen(NewIntermissionScreen);
         }
 
-        public void OnManualDefeat()
+        public void OnManualDefeat(int EXP, uint Money)
         {
         }
 

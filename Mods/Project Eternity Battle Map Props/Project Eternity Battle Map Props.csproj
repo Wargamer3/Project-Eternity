@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3D Model.cs" />
     <Compile Include="Vehicle Spawner.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Jump Pad.cs" />

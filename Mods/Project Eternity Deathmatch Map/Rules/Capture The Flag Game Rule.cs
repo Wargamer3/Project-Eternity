@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
 
@@ -88,6 +89,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     DicPointsByTeam.Add(ActivePlayer.Team, 0);
                 }
             }
+        }
+
+        protected override void InitBot(Squad NewSquad)
+        {
+            NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(Owner, NewSquad));
+            NewSquad.SquadAI.Load("Multiplayer/Capture The Flag/Easy");
         }
 
         public void GetPoint(int ActiveTeam)

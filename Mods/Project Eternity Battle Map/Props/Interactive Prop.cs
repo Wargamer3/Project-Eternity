@@ -25,6 +25,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public AnimatedModel Unit3DModel;
 
         public Matrix Projection;
+
         protected InteractiveProp(string PropName, PropCategories PropCategory, bool[,] ArrayMapSize, bool CanBlockPath)
         {
             this.PropName = PropName;
@@ -34,9 +35,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (GameScreen.GraphicsDevice != null)
             {
-                float aspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
+                float AspectRatio = GameScreen.GraphicsDevice.Viewport.Width / (float)GameScreen.GraphicsDevice.Viewport.Height;
                 Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                   aspectRatio,
+                                                                   AspectRatio,
                                                                    1, 10000);
             }
         }

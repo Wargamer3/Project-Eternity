@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
@@ -17,8 +18,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private readonly byte MaxSquadPerPlayer;
         private readonly GameModeInfo GameInfo;
         private readonly List<string> ListMandatoryMutator;
+        private readonly List<Color> ListMapTeam;
 
-        public ChangeMapScriptServer(string MapName, string MapType, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, byte MaxSquadPerPlayer, GameModeInfo GameInfo, List<string> ListMandatoryMutator)
+        public ChangeMapScriptServer(string MapName, string MapType, string MapPath, string GameMode, byte MinNumberOfPlayer, byte MaxNumberOfPlayer, byte MaxSquadPerPlayer, GameModeInfo GameInfo, List<string> ListMandatoryMutator, List<Color> ListMapTeam)
             : base(ScriptName)
         {
             this.MapName = MapName;
@@ -30,6 +32,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             this.MaxSquadPerPlayer = MaxSquadPerPlayer;
             this.GameInfo = GameInfo;
             this.ListMandatoryMutator = ListMandatoryMutator;
+            this.ListMapTeam = ListMapTeam;
         }
 
         public override OnlineScript Copy()
@@ -53,6 +56,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             for (int M = 0; M < ListMandatoryMutator.Count; M++)
             {
                 WriteBuffer.AppendString(ListMandatoryMutator[M]);
+            }
+
+            WriteBuffer.AppendInt32(ListMapTeam.Count);
+            for (int T = 0; T < ListMapTeam.Count; T++)
+            {
+                WriteBuffer.AppendByte(ListMapTeam[T].R);
+                WriteBuffer.AppendByte(ListMapTeam[T].G);
+                WriteBuffer.AppendByte(ListMapTeam[T].B);
             }
         }
 

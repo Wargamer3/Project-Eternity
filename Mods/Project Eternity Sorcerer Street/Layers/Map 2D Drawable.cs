@@ -83,38 +83,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.MapEnvironment.BeginDraw(g);
         }
 
-        public void Draw(CustomSpriteBatch g, MapLayer Owner, int LayerIndex, bool IsSubLayer)
+        public void Draw(CustomSpriteBatch g, MapLayer Owner)
         {
             if (!Owner.IsVisible)
             {
                 return;
             }
 
-            if (!IsSubLayer)
-            {
-                Map.MapEnvironment.Draw(g, LayerIndex, IsSubLayer);
-            }
-
             for (int P = 0; P < Owner.ListProp.Count; ++P)
             {
                 Owner.ListProp[P].Draw(g);
-            }
-
-            for (int L = 0; L < Owner.ListSubLayer.Count; L++)
-            {
-                Draw(g, Owner.ListSubLayer[L], LayerIndex, true);
-            }
-
-            if (!IsSubLayer)
-            {
-                Map.MapEnvironment.EndDraw(g);
-            }
-
-            if (Map.ShowUnits && !IsSubLayer)
-            {
-                DrawDrawablePoints(g);
-
-                DrawCursor(g);
             }
         }
 
@@ -221,18 +199,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void Draw(CustomSpriteBatch g)
         {
+            Map.MapEnvironment.Draw(g);
+
             if (Map.ShowLayerIndex == -1)
             {
                 for (int L = 0; L < 1; L++)
                 {
-                    Draw(g, Map.LayerManager.ListLayer[L], L, false);
+                    Draw(g, Map.LayerManager.ListLayer[L]);
                     DrawEditorOverlay(g, Map.LayerManager.ListLayer[L], L, false);
                 }
             }
             else
             {
-                Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], Map.ShowLayerIndex, false);
+                Draw(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex]);
                 DrawEditorOverlay(g, Map.LayerManager.ListLayer[Map.ShowLayerIndex], Map.ShowLayerIndex, false);
+            }
+
+            Map.MapEnvironment.EndDraw(g);
+
+            if (Map.ShowUnits)
+            {
+                DrawDrawablePoints(g);
+
+                DrawCursor(g);
             }
 
             DrawDelayedAttacks(g);

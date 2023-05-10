@@ -66,11 +66,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (CanUseEffect)
             {
-                g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, WetEffect);
+                g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, WetEffect);
             }
             else
             {
-                g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             }
 
             foreach (Terrain ActiveTile in ListTile2D)
@@ -95,11 +95,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (CanUseEffect)
             {
-                g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, WetEffect);
+                g.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, WetEffect);
             }
             else
             {
-                g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                g.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
             }
 
             foreach (Terrain ActiveTile in ListTile2D)

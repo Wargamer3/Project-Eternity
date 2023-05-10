@@ -167,11 +167,10 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 {
                     for (int Y = 0; Y < ActiveMap.MapSize.Y; Y++)
                     {
-                        TerrainSorcererStreet NewTerrain = new TerrainSorcererStreet(TerrainPreset, new Point(X, Y), ActiveMap.LayerManager.ListLayer.Count - 1);
+                        TerrainSorcererStreet NewTerrain = NewLayer.ArrayTerrain[X, Y];
                         DrawableTile NewTile = new DrawableTile(TilePreset);
                         NewTerrain.DrawableTile = NewTile;
-                        NewTerrain.Owner = ActiveMap;
-                        NewTerrain.WorldPosition = new Vector3(X, Y, ActiveMap.LayerManager.ListLayer.Count - 1);
+                        NewTerrain.WorldPosition = new Vector3(X, Y, TerrainPreset.Height + 1);
 
                         ArrayTerrain[X, Y] = NewTerrain;
                         ArrayTile2D[X, Y] = NewTile;
@@ -246,7 +245,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return new MapZoneSorcererStreet(ActiveMap, ZoneType);
             }
         }
-        
+
         private static SorcererStreetBattleParams Params;
 
         public ProjectEternitySorcererStreetEditor()
@@ -261,7 +260,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
         }
 
         public ProjectEternitySorcererStreetEditor(string FilePath, object[] Params)
-            :this()
+            : this()
         {
             this.FilePath = FilePath;
             if (!File.Exists(FilePath))
@@ -287,7 +286,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
 
             return Info;
         }
-                
+
         private void LoadMap(string Path)
         {
             string MapLogicName = FilePath.Substring(0, FilePath.Length - 4).Substring(29);
@@ -316,9 +315,15 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
             ActiveSorcererStreetMap.TowerMagicGain = (int)PropertiesEditor.txtMagicPerTower.Value;
             ActiveSorcererStreetMap.MagicGoal = (int)PropertiesEditor.txtMagicGoal.Value;
             ActiveSorcererStreetMap.HighestDieRoll = (int)PropertiesEditor.txtHighestDieRoll.Value;
-    }
-    protected override void btnTileAttributes_Click(object sender, EventArgs e)
+        }
+
+        protected override void btnTileAttributes_Click(object sender, EventArgs e)
         {
+            if (ActiveMap.ListTilesetPreset.Count <= 0)
+            {
+                return;
+            }
+
             Rectangle TilePos = TilesetViewer.TileBrushSize;
             Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 

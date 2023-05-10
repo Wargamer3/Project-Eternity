@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen.Server
@@ -20,6 +21,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
         private byte MaxSquadPerPlayer;
         private GameModeInfo GameInfo;
         private List<string> ListMandatoryMutator;
+        private List<Color> ListMapTeam;
 
         public AskChangeMapScriptServer(RoomInformations Owner, GameServer OnlineServer)
             : base(ScriptName)
@@ -54,7 +56,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             {
                 IOnlineConnection ActiveOnlinePlayer = Owner.ListOnlinePlayer[P];
 
-                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath, GameMode, MinNumberOfPlayer, MaxNumberOfPlayer, MaxSquadPerPlayer, GameInfo, ListMandatoryMutator));
+                ActiveOnlinePlayer.Send(new ChangeMapScriptServer(MapName, MapType, MapPath, GameMode, MinNumberOfPlayer, MaxNumberOfPlayer, MaxSquadPerPlayer, GameInfo, ListMandatoryMutator, ListMapTeam));
             }
         }
 
@@ -74,9 +76,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
             int ListMandatoryMutatorCount = Sender.ReadInt32();
             ListMandatoryMutator = new List<string>(ListMandatoryMutatorCount);
-            for (int M = 0; M < ListMandatoryMutator.Count; M++)
+            for (int M = 0; M < ListMandatoryMutatorCount; M++)
             {
                 ListMandatoryMutator.Add(Sender.ReadString());
+            }
+
+            int ListMapTeamCount = Sender.ReadInt32();
+            ListMapTeam = new List<Color>(ListMapTeamCount);
+            for (int M = 0; M < ListMapTeamCount; M++)
+            {
+                ListMapTeam.Add(Color.FromNonPremultiplied(Sender.ReadByte(), Sender.ReadByte(), Sender.ReadByte(), 255));
             }
         }
     }

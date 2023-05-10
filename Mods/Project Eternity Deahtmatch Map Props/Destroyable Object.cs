@@ -324,7 +324,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         [Editor(typeof(ModelSelector), typeof(UITypeEditor)),
         CategoryAttribute("Spawner"),
-        DescriptionAttribute("The sprite path."),
+        DescriptionAttribute("The model path."),
         DefaultValueAttribute(0)]
         public string ModelPath
         {

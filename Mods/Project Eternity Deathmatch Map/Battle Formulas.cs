@@ -557,6 +557,8 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             if (!ListDeadDefender.Contains(Result.Target))
             {
                 Result.Target.DamageUnit(Result.AttackDamage);
+                ListPlayer[AttackerPlayerIndex].Records.AddUnitDamageGiven(BattleMapPath, Attacker.ID, (uint)Result.AttackDamage);
+                ListPlayer[DefenderPlayerIndex].Records.AddUnitDamageReceived((uint)Result.AttackDamage);
 
                 //Remove Leader Ammo if needed.
                 if (CurrentAttack != null && CurrentAttack.MaxAmmo > 0)
@@ -581,7 +583,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 {
                     ListDeadDefender.Add(Result.Target);
 
-                    if (AttackerPlayerIndex == 0)
+                    if (AttackerPlayerIndex == 0 && GameRule.Name == SinglePlayerGameRule.SinglePlayerName)
                     {
                         int Money = 500;
                         ListPlayer[AttackerPlayerIndex].Records.CurrentMoney += (uint)(Money * Attacker.Boosts.MoneyMultiplier);
@@ -683,8 +685,10 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 }
             }
 
-            ListPlayer[AttackerPlayerIndex].Records.PlayerUnitRecords.AddUnitKill(Attacker.ID);
-            ListPlayer[AttackerPlayerIndex].Records.PlayerUnitRecords.AddCharacterKill(Attacker.Pilot.ID);
+            ListPlayer[AttackerPlayerIndex].Records.AddUnitKill(BattleMapPath, Attacker.ID);
+            ListPlayer[AttackerPlayerIndex].Records.AddCharacterKill(Attacker.Pilot.ID);
+            ListPlayer[AttackerPlayerIndex].Records.AddUnitDeath(DeadDefender.ID);
+            ListPlayer[AttackerPlayerIndex].Records.AddCharacterDeath(DeadDefender.Pilot.ID);
         }
 
         public SquadBattleResult CalculateFinalHP(Squad Attacker, Attack CurrentAttack, Squad SupportAttacker, int AttackerPlayerIndex, FormationChoices AttackerFormationChoice,

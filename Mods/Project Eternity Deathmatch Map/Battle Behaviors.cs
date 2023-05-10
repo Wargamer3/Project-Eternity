@@ -1011,22 +1011,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Terrain ActiveSquadTerrain = GetTerrain(AttackingSquad);
             Terrain TargetSquadTerrain = GetTerrain(EnemySquad);
 
-            if (ActiveSquadTerrain.BattleBackgroundAnimationIndex >= 0)
+            if (ActiveSquadTerrain.BattleBackgroundAnimationIndex >= 0 && ActiveSquadTerrain.BattleBackgroundAnimationIndex < ListBattleBackgroundAnimationPath.Count)
             {
                 ActiveSquadBackgroundPath = ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleBackgroundAnimationIndex];
             }
 
-            if (TargetSquadTerrain.BattleBackgroundAnimationIndex >= 0)
+            if (TargetSquadTerrain.BattleBackgroundAnimationIndex >= 0 && TargetSquadTerrain.BattleBackgroundAnimationIndex < ListBattleBackgroundAnimationPath.Count)
             {
                 TargetSquadBackgroundPath = ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleBackgroundAnimationIndex];
             }
 
-            if (ActiveSquadTerrain.BattleForegroundAnimationIndex >= 0)
+            if (ActiveSquadTerrain.BattleForegroundAnimationIndex >= 0 && ActiveSquadTerrain.BattleForegroundAnimationIndex < ListBattleBackgroundAnimationPath.Count)
             {
                 ActiveSquadForegroundPath = ListBattleBackgroundAnimationPath[ActiveSquadTerrain.BattleForegroundAnimationIndex];
             }
 
-            if (TargetSquadTerrain.BattleForegroundAnimationIndex >= 0)
+            if (TargetSquadTerrain.BattleForegroundAnimationIndex >= 0 && TargetSquadTerrain.BattleForegroundAnimationIndex < ListBattleBackgroundAnimationPath.Count)
             {
                 TargetSquadForegroundPath = ListBattleBackgroundAnimationPath[TargetSquadTerrain.BattleForegroundAnimationIndex];
             }

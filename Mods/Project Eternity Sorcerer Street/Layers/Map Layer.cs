@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     ArrayTerrain[X, Y] = new TerrainSorcererStreet(X, Y, LayerIndex, _Depth);
                     ArrayTerrain[X, Y].Owner = Map;
-                    ArrayTerrain[X, Y].WorldPosition.Z = ArrayTerrain[X, Y].Height + LayerIndex;
+                    ArrayTerrain[X, Y].WorldPosition.Z = LayerIndex;
                 }
             }
 

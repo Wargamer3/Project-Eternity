@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Online;
+using Microsoft.Xna.Framework;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -30,12 +31,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public int OwnerServerPort { get; }
         public bool IsDead { get; set; }//Used when the DataManager need to tell that a Room is deleted.
 
-        public bool UseTeams;
         public int MaxNumberOfBots;
         public int MaxSquadsPerBot;
 
         public List<string> ListMandatoryMutator;
         public List<Mutator> ListMutator;
+        public List<Color> ListMapTeam;
 
         public string CurrentDifficulty;
 
@@ -57,11 +58,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListLocalPlayerID = new List<string>();
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
+            ListMapTeam = new List<Color>();
             RoomName = string.Empty;
             GameMode = string.Empty;
             RoomSubtype = string.Empty;
             CurrentDifficulty = "Easy";
-            UseTeams = true;
             OwnerServerIP = null;
             OwnerServerPort = 0;
             CurrentPlayerCount = 0;
@@ -86,8 +87,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListLocalPlayerID = new List<string>();
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
+            ListMapTeam = new List<Color>();
             CurrentDifficulty = "Easy";
-            UseTeams = true;
             IsDead = false;
             OwnerServerIP = null;
             OwnerServerPort = 0;
@@ -109,7 +110,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ListLocalPlayerID = ListLocalPlayerID;
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
-            UseTeams = true;
+            ListMapTeam = new List<Color>();
             MaxSquadsPerBot = 1;
         }
 
@@ -136,8 +137,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListLocalPlayerID = new List<string>();
             ListMandatoryMutator = new List<string>();
             ListMutator = new List<Mutator>();
+            ListMapTeam = new List<Color>();
             CurrentDifficulty = "Easy";
-            UseTeams = true;
             MaxSquadsPerBot = 1;
         }
 

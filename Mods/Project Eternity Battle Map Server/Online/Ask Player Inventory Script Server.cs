@@ -32,6 +32,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
 
             BattleMapPlayer NewRoomPlayer = new BattleMapPlayer(PlayerInfo.ID, PlayerInfo.Name, true);
             ByteReader BR = new ByteReader(PlayerInfo.Info);
+            NewRoomPlayer.Level = BR.ReadInt32();
+            NewRoomPlayer.EXP = BR.ReadInt32();
             NewRoomPlayer.InitRecords(BR);
             BR.Clear();
             Sender.ExtraInformation = NewRoomPlayer;

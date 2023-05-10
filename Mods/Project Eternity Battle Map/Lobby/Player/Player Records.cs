@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using ProjectEternity.Core.Online;
-using System;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -14,7 +14,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public uint TotalTilesTraveled;
 
         private uint _CurrentMoney;
-        public uint CurrentMoney { get { return _CurrentMoney; } set { if (value > _CurrentMoney) TotalMoney += _CurrentMoney - value; _CurrentMoney = value; } }
+        public uint CurrentMoney { get { return _CurrentMoney; }
+            set { if (value > _CurrentMoney) TotalMoney += value -_CurrentMoney; _CurrentMoney = value; } }
         public uint TotalMoney;
 
         private uint _CurrentCoins;
@@ -25,7 +26,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleRecords PlayerBattleRecords;
         public BonusRecords PlayerBonusRecords;
 
-        public List<MultiplayerRecord> ListCampaignLevelInformation;
+        public List<CampaignRecord> ListCampaignLevelInformation;
+        public Dictionary<string, MapRecord> DicMapRecord;
 
         public PlayerRecords()
         {
@@ -45,7 +47,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBattleRecords = new BattleRecords();
             PlayerBonusRecords = new BonusRecords();
 
-            ListCampaignLevelInformation = new List<MultiplayerRecord>();
+            ListCampaignLevelInformation = new List<CampaignRecord>();
+            DicMapRecord = new Dictionary<string, MapRecord>();
         }
 
         public PlayerRecords(PlayerRecords Clone)
@@ -66,10 +69,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBattleRecords = new BattleRecords(Clone.PlayerBattleRecords);
             PlayerBonusRecords = new BonusRecords(Clone.PlayerBonusRecords);
 
-            ListCampaignLevelInformation = new List<MultiplayerRecord>(Clone.ListCampaignLevelInformation.Count);
-            foreach (MultiplayerRecord ActiveCloneRecord in Clone.ListCampaignLevelInformation)
+            ListCampaignLevelInformation = new List<CampaignRecord>(Clone.ListCampaignLevelInformation.Count);
+            foreach (CampaignRecord ActiveCloneRecord in Clone.ListCampaignLevelInformation)
             {
-                ListCampaignLevelInformation.Add(new MultiplayerRecord(ActiveCloneRecord));
+                ListCampaignLevelInformation.Add(new CampaignRecord(ActiveCloneRecord));
+            }
+
+            DicMapRecord = new Dictionary<string, MapRecord>(Clone.DicMapRecord.Count);
+            foreach (MapRecord ActiveCloneRecord in Clone.DicMapRecord.Values)
+            {
+                DicMapRecord.Add(ActiveCloneRecord.Name, new MapRecord(ActiveCloneRecord));
             }
         }
 
@@ -92,10 +101,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBonusRecords = new BonusRecords(BR);
 
             int ListCampaignLevelInformationCount = BR.ReadInt32();
-            ListCampaignLevelInformation = new List<MultiplayerRecord>(ListCampaignLevelInformationCount);
+            ListCampaignLevelInformation = new List<CampaignRecord>(ListCampaignLevelInformationCount);
             for (int i = 0; i < ListCampaignLevelInformationCount; ++i)
             {
-                ListCampaignLevelInformation.Add(new MultiplayerRecord(BR));
+                ListCampaignLevelInformation.Add(new CampaignRecord(BR));
+            }
+
+            int ListMapRecordCount = BR.ReadInt32();
+            DicMapRecord = new Dictionary<string, MapRecord>(ListMapRecordCount);
+            for (int i = 0; i < ListMapRecordCount; ++i)
+            {
+                MapRecord LoadMapRecord = new MapRecord(BR);
+                DicMapRecord.Add(LoadMapRecord.Name, LoadMapRecord);
             }
         }
 
@@ -118,10 +135,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBonusRecords = new BonusRecords(BR);
 
             int ListCampaignLevelInformationCount = BR.ReadInt32();
-            ListCampaignLevelInformation = new List<MultiplayerRecord>(ListCampaignLevelInformationCount);
+            ListCampaignLevelInformation = new List<CampaignRecord>(ListCampaignLevelInformationCount);
             for (int i = 0; i < ListCampaignLevelInformationCount; ++i)
             {
-                ListCampaignLevelInformation.Add(new MultiplayerRecord(BR));
+                ListCampaignLevelInformation.Add(new CampaignRecord(BR));
+            }
+
+            int ListMapRecordCount = BR.ReadInt32();
+            DicMapRecord = new Dictionary<string, MapRecord>(ListMapRecordCount);
+            for (int i = 0; i < ListMapRecordCount; ++i)
+            {
+                MapRecord LoadMapRecord = new MapRecord(BR);
+                DicMapRecord.Add(LoadMapRecord.Name, LoadMapRecord);
             }
         }
 
@@ -148,6 +173,66 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ListCampaignLevelInformation[i].Save(BW);
             }
+
+            BW.Write(DicMapRecord.Count);
+            foreach (MapRecord ActiveMapRecord in DicMapRecord.Values)
+            {
+                ActiveMapRecord.Save(BW);
+            }
+        }
+
+        public void AddCharacterKill(string ID)
+        {
+            PlayerUnitRecords.AddCharacterKill(ID);
+        }
+
+        public void AddCharacterDeath(string ID)
+        {
+            PlayerUnitRecords.AddCharacterDeath(ID);
+        }
+
+        public void AddUnitDamageGiven(string MapName, string ID, uint Damage)
+        {
+            PlayerUnitRecords.AddUnitDamageGiven(ID, Damage);
+
+            PlayerBattleRecords.TotalDamageGiven += Damage;
+
+            MapRecord FoundMapRecord = GetMapRecord(MapName);
+
+            FoundMapRecord.TotalDamageGiven += Damage;
+        }
+
+        public void AddUnitDamageReceived(uint Damage)
+        {
+            PlayerBattleRecords.TotalDamageReceived += Damage;
+        }
+
+        public void AddUnitKill(string MapName, string ID)
+        {
+            TotalKills++;
+            PlayerUnitRecords.AddUnitKill(ID);
+
+            MapRecord FoundMapRecord = GetMapRecord(MapName);
+
+            FoundMapRecord.TotalUnitsKilled++;
+        }
+
+        public void AddUnitDeath(string ID)
+        {
+            PlayerUnitRecords.AddUnitDeath(ID);
+        }
+
+        private MapRecord GetMapRecord(string MapName)
+        {
+            MapRecord FoundMapRecord;
+
+            if (!DicMapRecord.TryGetValue(MapName, out FoundMapRecord))
+            {
+                FoundMapRecord = new MapRecord(MapName);
+                DicMapRecord.Add(MapName, FoundMapRecord);
+            }
+
+            return FoundMapRecord;
         }
     }
 }

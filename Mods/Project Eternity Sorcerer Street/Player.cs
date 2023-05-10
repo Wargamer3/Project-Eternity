@@ -227,5 +227,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DicChainLevelByTerrainTypeIndex[TerrainTypeIndex] = (byte)(ChainValue - 1);
             }
         }
+
+        public override List<MissionInfo> GetUnlockedMissions()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

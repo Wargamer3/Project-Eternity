@@ -21,6 +21,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private CustomSpriteBatch g;
         private Texture2D sprPixel;
         public int ViewerIndex;
+        public Rectangle TileReplacementZone;
 
         private HScrollBar sclMapWidth;
         private VScrollBar sclMapHeight;
@@ -174,6 +175,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
             ActiveMap.EndDraw(g);
+
+            if (TileReplacementZone.Width > 0 && TileReplacementZone.Height > 0)
+            {
+                GameScreen.DrawRectangle(g, new Vector2(TileReplacementZone.X * ActiveMap.TileSize.X, TileReplacementZone.Y * ActiveMap.TileSize.Y), new Vector2(TileReplacementZone.Right * ActiveMap.TileSize.X, TileReplacementZone.Bottom * ActiveMap.TileSize.Y), Color.Red);
+            }
             g.End();
         }
                 

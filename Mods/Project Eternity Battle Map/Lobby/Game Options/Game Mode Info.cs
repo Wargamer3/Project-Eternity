@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
+using System.ComponentModel;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Online;
 
@@ -34,9 +35,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public List<string> ListMapFolder;
         public bool IsUnlocked;
         public Texture2D sprPreview;
+        public bool UseTeams;
 
         public GameModeInfo()
         {
+            UseTeams = true;
         }
 
         public GameModeInfo(string Name, string Description, string Category, bool IsUnlocked, Texture2D sprPreview)
@@ -46,6 +49,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Category = Category;
             this.IsUnlocked = IsUnlocked;
             this.sprPreview = sprPreview;
+            UseTeams = true;
             ListMapFolder = new List<string>();
             ListMapFolder.Add(Name);
         }
@@ -81,6 +85,27 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public virtual IGameRule GetRule(BattleMap Map)
         {
             return null;
+        }
+
+        public virtual void OnBotChanged(RoomInformations Room)
+        {
+            if (Room.MaxNumberOfBots > Room.MaxNumberOfPlayer)
+            {
+                Room.MaxNumberOfBots = Room.MaxNumberOfPlayer;
+            }
+
+            while (Room.ListRoomBot.Count < Room.MaxNumberOfBots)
+            {
+                BattleMapPlayer NewPlayer = new BattleMapPlayer(PlayerManager.OnlinePlayerID, "Bot", OnlinePlayerBase.PlayerTypes.Player, false, 0, false, Color.Blue);
+                NewPlayer.InitFirstTimeInventory();
+                NewPlayer.FillLoadout(Room.MaxSquadsPerBot);
+                Room.ListRoomBot.Add(NewPlayer);
+            }
+
+            while (Room.ListRoomBot.Count > Room.MaxNumberOfBots)
+            {
+                Room.ListRoomBot.RemoveAt(Room.ListRoomBot.Count - 1);
+            }
         }
 
         public virtual GameModeInfo Copy()

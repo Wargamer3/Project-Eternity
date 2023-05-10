@@ -72,6 +72,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Reset()
         {
+            CurrentHour = TimeStart;
+
             GlobalZone.Reset();
 
             foreach (MapZone ActiveZone in ListMapZone)
@@ -113,13 +115,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        public void Draw(CustomSpriteBatch g, int LayerIndex, bool IsSubLayer)
+        public void Draw(CustomSpriteBatch g)
         {
-            GlobalZone.Draw(g, LayerIndex, IsSubLayer);
+            GlobalZone.Draw(g);
 
             foreach (MapZone ActiveZone in ListMapZone)
             {
-                ActiveZone.Draw(g, LayerIndex, IsSubLayer);
+                ActiveZone.Draw(g);
             }
         }
 

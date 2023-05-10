@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
             {
-                Map.GameRule.OnManualVictory();
+                Map.GameRule.OnManualVictory(0, 0);
                 IsEnded = true;
             }
 

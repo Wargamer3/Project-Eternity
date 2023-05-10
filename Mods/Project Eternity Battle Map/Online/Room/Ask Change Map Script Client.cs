@@ -35,6 +35,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
             {
                 WriteBuffer.AppendString(Room.ListMandatoryMutator[M]);
             }
+
+            WriteBuffer.AppendInt32(Room.ListMapTeam.Count);
+            for (int T = 0; T < Room.ListMapTeam.Count; T++)
+            {
+                WriteBuffer.AppendByte(Room.ListMapTeam[T].R);
+                WriteBuffer.AppendByte(Room.ListMapTeam[T].G);
+                WriteBuffer.AppendByte(Room.ListMapTeam[T].B);
+            }
         }
 
         protected override void Execute(IOnlineConnection Host)

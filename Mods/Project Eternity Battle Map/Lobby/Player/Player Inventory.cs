@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
-using ProjectEternity.Core.Characters;
 using ProjectEternity.Core.Online;
+using ProjectEternity.Core.Characters;
 using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -56,6 +56,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string UnitTypeName = BR.ReadString();
 
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                LoadedUnit.ID = LoadedUnit.ItemName;
 
                 Squad NewSquad = new Squad("Squad", LoadedUnit);
                 NewSquad.IsPlayerControlled = true;
@@ -70,6 +71,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string CharacterFullName = BR.ReadString();
                 Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 LoadedCharacter.Level = 1;
+                LoadedCharacter.ID = LoadedCharacter.Name;
 
                 ListOwnedCharacter.Add(LoadedCharacter);
             }
@@ -109,11 +111,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     string CharacterFullName = BR.ReadString();
 
                     Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                    LoadedUnit.ID = LoadedUnit.ItemName;
 
                     if (!string.IsNullOrEmpty(CharacterFullName))
                     {
                         Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                         LoadedCharacter.Level = 1;
+                        LoadedCharacter.ID = LoadedCharacter.Name;
 
                         LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
                     }
@@ -225,6 +229,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int M = 0; M < ListOwnedMission.Count; ++M)
             {
                 BW.Write(ListOwnedMission[M].MapPath);
+                BW.Write(ListOwnedMission[M].QuantityOwned);
             }
 
             BW.Write(ListSquadLoadout.Count);

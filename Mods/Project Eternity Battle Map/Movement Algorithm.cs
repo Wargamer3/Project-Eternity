@@ -47,21 +47,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return ListSuccessors;
         }
 
-        public List<MovementAlgorithmTile> FindPath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement)
+        public List<MovementAlgorithmTile> FindPath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement, bool IgnoreObstacles)
         {
             ResetNodes();
 
-            return UpdatePath(ListAStartNode, MapComponent, UnitStat, MaxMovement);
+            return UpdatePath(ListAStartNode, MapComponent, UnitStat, MaxMovement, IgnoreObstacles);
         }
 
-        public List<MovementAlgorithmTile> FindPath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement, Vector3 EndPosition, bool IgnoreObstacles)
+        public List<MovementAlgorithmTile> FindPath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, Vector3 EndPosition, bool IgnoreObstacles)
         {
             ResetNodes();
 
             return UpdatePath(ListAStartNode, MapComponent, UnitStat, EndPosition, IgnoreObstacles);
         }
 
-        public List<MovementAlgorithmTile> UpdatePath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement)
+        public List<MovementAlgorithmTile> UpdatePath(List<MovementAlgorithmTile> ListAStartNode, UnitMapComponent MapComponent, UnitStats UnitStat, int MaxMovement, bool IgnoreObstacles)
         {
             MovementAlgorithmTile CurrentNode;
 
@@ -89,7 +89,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListCloseNode.Add(CurrentNode);
 
                 // Get successors to the current node
-                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, MapComponent, UnitStat, false);
+                List<MovementAlgorithmTile> ListSuccessors = GetSuccessors(CurrentNode, MaxMovement, MapComponent, UnitStat, IgnoreObstacles);
                 foreach (MovementAlgorithmTile Neighbor in ListSuccessors)
                 {
                     //Cost to move to this Neighbor

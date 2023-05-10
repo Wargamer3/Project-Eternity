@@ -40,7 +40,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ConditionsOwner.UnlockInventory.ListUnlockedMission.Add(this);
             ConditionsOwner.Inventory.ListOwnedMission.Add(new MissionInfo(Path, UnlockQuantity));
 
-            ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + Path + "!");
+            string[] ArrayMissionPath = Path.Split('/');
+            string MissionName = ArrayMissionPath[ArrayMissionPath.Length - 1];
+
+            if (UnlockQuantity > 0)
+            {
+                ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + MissionName + "!");
+            }
+            else
+            {
+                ListUnlockMessage.Add("You just received " + MissionName + "!");
+            }
 
             if (IsInShop)
             {

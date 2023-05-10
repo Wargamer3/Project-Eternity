@@ -23,6 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public byte Ranking;
         public bool IsOnline;
         public int Team;
+        public int EXP;
         public int Level;
         public bool IsPlayerControlled;
         public Color Color;
@@ -34,7 +35,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public IOnlineConnection OnlineClient;//Used by the server
 
         public ItemUnlockConditionsEvaluator UnlocksEvaluator;
-        public PlayerRecords Records;
+        public readonly PlayerRecords Records;
 
         public abstract string SaveFileFolder { get; }
 
@@ -50,6 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Name = Name;
             this.IsOnline = IsOnline;
 
+            Level = 1;
             Guild = string.Empty;
             Records = new PlayerRecords();
 
@@ -68,6 +70,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.IsPlayerControlled = IsPlayerControlled;
             this.Color = Color;
 
+            Level = 1;
             Guild = string.Empty;
             Records = new PlayerRecords();
 
@@ -85,6 +88,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.IsPlayerControlled = IsPlayerControlled;
             this.Color = Color;
 
+            Level = 1;
             Guild = string.Empty;
             Records = new PlayerRecords();
 
@@ -108,6 +112,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 Team = -1;
                 OnlinePlayerType = PlayerTypeNA;
+                Records = new PlayerRecords();
                 return;
             }
 
@@ -151,6 +156,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
             Enum.TryParse(BR.ReadString(), out GameplayType);
+            Level = BR.ReadInt32();
+            EXP = BR.ReadInt32();
 
             Records.Load(BR);
 
@@ -168,6 +175,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
             BW.Write(GameplayType.ToString());
+            BW.Write(Level);
+            BW.Write(EXP);
 
             Records.Save(BW);
 
@@ -178,6 +187,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         protected abstract void DoSaveLocally(BinaryWriter BW);
+
+        public abstract List<MissionInfo> GetUnlockedMissions();
 
         public List<string> GetProfileNames()
         {

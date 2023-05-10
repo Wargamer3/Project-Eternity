@@ -11,8 +11,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void Update(GameTime gameTime);
         void OnNewTurn(int ActivePlayerIndex);
         void OnSquadDefeated(int AttackerSquadPlayerIndex, Squad AttackerSquad, int DefeatedSquadPlayerIndex, Squad DefeatedSquad);
-        void OnManualVictory();
-        void OnManualDefeat();
+        void OnManualVictory(int EXP, uint Money);
+        void OnManualDefeat(int EXP, uint Money);
         void BeginDraw(CustomSpriteBatch g);
         void Draw(CustomSpriteBatch g);
     }

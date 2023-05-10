@@ -1,30 +1,30 @@
-﻿using ProjectEternity.Core.Online;
-using System;
+﻿using System;
 using System.IO;
+using ProjectEternity.Core.Online;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public struct MultiplayerRecord
+    public struct CampaignRecord
     {
         public string Name;
         public DateTimeOffset FirstCompletionDate;
         public uint MaxScore;
 
-        public MultiplayerRecord(BinaryReader BR)
+        public CampaignRecord(BinaryReader BR)
         {
             Name = BR.ReadString();
             FirstCompletionDate = new DateTimeOffset(BR.ReadInt64(), new TimeSpan(BR.ReadInt64()));
             MaxScore = BR.ReadUInt32();
         }
 
-        public MultiplayerRecord(MultiplayerRecord Clone)
+        public CampaignRecord(CampaignRecord Clone)
         {
             Name = Clone.Name;
             FirstCompletionDate = Clone.FirstCompletionDate;
             MaxScore = Clone.MaxScore;
         }
 
-        public MultiplayerRecord(ByteReader BR)
+        public CampaignRecord(ByteReader BR)
         {
             Name = BR.ReadString();
             FirstCompletionDate = new DateTimeOffset(BR.ReadInt64(), new TimeSpan(BR.ReadInt64()));
