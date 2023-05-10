@@ -222,9 +222,9 @@ namespace ProjectEternity.Editors.MapEditor
                 else
                 {
                     if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
-                        tslInformation.Text += " Multiple";
+                        tslInformation.Text += " Rectangle";
                     else
-                        tslInformation.Text += " Hold shift to place multiple tiles";
+                        tslInformation.Text += " Hold shift to place tiles in a rectangle";
                     tslInformation.Text += ", hold ctrl to change the selected tile attributes";
                 }
             }
@@ -233,10 +233,6 @@ namespace ProjectEternity.Editors.MapEditor
                 if (TilesetViewer.TileBrushSize != null)
                     tslInformation.Text += " Left click to place a new spawn point";
                 tslInformation.Text += " Right click to remove a spawn point";
-                if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
-                    tslInformation.Text += " Multiple";
-                else
-                    tslInformation.Text += " Hold shift to place multiple tiles";
             }
         }
 
@@ -333,6 +329,11 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btn3DTileAttributes_Click(object sender, EventArgs e)
         {
+            if (ActiveMap.ListTilesetPreset.Count <= 0)
+            {
+                return;
+            }
+
             Rectangle TilePos = TilesetViewer.TileBrushSize;
             TileAttributesEditor3D TileAttributesEditor = new TileAttributesEditor3D(
                 ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y],
@@ -411,6 +412,31 @@ namespace ProjectEternity.Editors.MapEditor
                 switch (tabToolBox.SelectedIndex)
                 {
                     case 0:
+                        Rectangle TileReplacementZone = BattleMapViewer.TileReplacementZone;
+
+                        if (TileReplacementZone.Width > 0 && BattleMapViewer.ActiveMap.TileSize.X != 0)
+                        {
+                            Vector3 MapPreviewStartingPos = new Vector3(
+                                BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
+                                BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
+                                BattleMapViewer.ActiveMap.CameraPosition.Z);
+
+                            for (int X = TileReplacementZone.X; X < TileReplacementZone.Right; ++X)
+                            {
+                                for (int Y = TileReplacementZone.Y; Y < TileReplacementZone.Bottom; ++Y)
+                                {
+                                    PlaceTile(X + (int)(MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, Y + (int)(MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y, lsLayers.SelectedIndex, true);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            pnMapPreview_MouseMove(sender, e);
+                        }
+
+                        BattleMapViewer.TileReplacementZone = new Rectangle();
+                        break;
+
                     case 1:
                     case 4:
                         pnMapPreview_MouseMove(sender, e);
@@ -432,8 +458,22 @@ namespace ProjectEternity.Editors.MapEditor
             switch (tabToolBox.SelectedIndex)
             {
                 case 0:
-                case 1:
 
+                    if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                    {
+                        Vector3 MapPreviewStartingPos = new Vector3(
+                            BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
+                            BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
+                            BattleMapViewer.ActiveMap.CameraPosition.Z);
+
+                        int MouseX = (int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X;
+                        int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y;
+
+                        BattleMapViewer.TileReplacementZone = new Rectangle(MouseX, MouseY, 1, 1);
+                    }
+                    break;
+
+                case 1:
                     break;
 
                 case 2:
@@ -466,9 +506,36 @@ namespace ProjectEternity.Editors.MapEditor
                 {//If there is at least one tile set.
                     if (cboTiles.Items.Count > 0)
                     {
-                        //If Control key is pressed.
-                        if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
-                        {//Get the Tile under the mouse base on the map starting pos.
+                        Rectangle TileReplacementZone = BattleMapViewer.TileReplacementZone;
+
+                        if (TileReplacementZone.Width > 0)
+                        {
+                            if (MouseX > TileReplacementZone.X)
+                            {
+                                TileReplacementZone.Width = MouseX - TileReplacementZone.X + 1;
+                            }
+                            else if (MouseX < TileReplacementZone.X)
+                            {
+                                int Right = TileReplacementZone.Right;
+                                TileReplacementZone.X = MouseX;
+                                TileReplacementZone.Width = Right - MouseX;
+                            }
+                            if (MouseY > TileReplacementZone.Y)
+                            {
+                                TileReplacementZone.Height = MouseY - TileReplacementZone.Y + 1;
+                            }
+                            else if (MouseY < TileReplacementZone.Y)
+                            {
+                                int Bottom = TileReplacementZone.Bottom;
+                                TileReplacementZone.Y = MouseY;
+                                TileReplacementZone.Height = Bottom - MouseY;
+                            }
+
+                            BattleMapViewer.TileReplacementZone = TileReplacementZone;
+                        }
+                        //Edit Tile
+                        else if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+                        {
                             Point TilePos = new Point(MouseX, MouseY);
                             Terrain SelectedTerrain = Helper.GetTerrain(TilePos.X, TilePos.Y, lsLayers.SelectedIndex);
 
@@ -541,6 +608,7 @@ namespace ProjectEternity.Editors.MapEditor
         private void PlaceTile(int X, int Y, int LayerIndex, bool ConsiderSubLayers)
         {
             Point TilePos = TilesetViewer.GetTileFromBrush(new Point(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y));
+
             if (TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
                 || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
             {
@@ -1437,6 +1505,8 @@ namespace ProjectEternity.Editors.MapEditor
             ActiveMap.ListBackgroundsPath.AddRange(MS.ListBackgroundsPath);
             ActiveMap.ListForegroundsPath.Clear();
             ActiveMap.ListForegroundsPath.AddRange(MS.ListForegroundsPath);
+
+            ActiveMap.TogglePreview(cbPreviewMap.Checked);
         }
 
         private void tsmMapProperties_Click(object sender, EventArgs e)

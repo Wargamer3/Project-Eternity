@@ -585,15 +585,11 @@
         private System.Windows.Forms.Label lblTileHeight;
         private System.Windows.Forms.Label lblTileWidth;
         private System.Windows.Forms.Label lblMapName;
-        private System.Windows.Forms.Button btnAccept;
-        private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.GroupBox gbCameraStartPosition;
         private System.Windows.Forms.Label lblCameraY;
         private System.Windows.Forms.Label lblCameraX;
         private System.Windows.Forms.Button btnSetBackgrounds;
         private System.Windows.Forms.Button btnSetForegrounds;
-        private System.Windows.Forms.GroupBox gbDescription;
-        private System.Windows.Forms.Button btnOpenTranslationFile;
         public System.Windows.Forms.TextBox txtDescription;
         public System.Windows.Forms.NumericUpDown txtTileWidth;
         public System.Windows.Forms.NumericUpDown txtTileHeight;
@@ -620,5 +616,9 @@
         private System.Windows.Forms.Label lblOrderNumber;
         public System.Windows.Forms.TextBox txtMapName;
         private System.Windows.Forms.Button btnSetDefaultGameModesConditions;
+        protected System.Windows.Forms.GroupBox gbDescription;
+        protected System.Windows.Forms.Button btnAccept;
+        protected System.Windows.Forms.Button btnClose;
+        protected System.Windows.Forms.Button btnOpenTranslationFile;
     }
 }

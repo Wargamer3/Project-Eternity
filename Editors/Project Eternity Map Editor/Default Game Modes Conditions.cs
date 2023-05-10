@@ -49,8 +49,11 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void lstGameModes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            pgGameModeAttributes.SelectedObject = lstGameModes.SelectedItem;
-            cbGameMode.SelectedText = lstGameModes.SelectedItem.ToString();
+            if (lstGameModes.SelectedIndex >= 0)
+            {
+                pgGameModeAttributes.SelectedObject = lstGameModes.SelectedItem;
+                cbGameMode.SelectedText = lstGameModes.SelectedItem.ToString();
+            }
         }
 
         private void cbGameMode_SelectedIndexChanged(object sender, EventArgs e)
