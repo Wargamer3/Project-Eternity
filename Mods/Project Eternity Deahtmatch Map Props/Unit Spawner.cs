@@ -161,12 +161,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             int X = SpawnTerrain.InternalPosition.X;
             int Y = SpawnTerrain.InternalPosition.Y;
-            float Z = SpawnTerrain.WorldPosition.Z * 32 + 0.1f;
+            float Z = SpawnTerrain.WorldPosition.Z * Map.LayerHeight + 0.1f;
             Preview3D = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
                 X * Map.TileSize.X,
                 Y * Map.TileSize.Y,
                 Z,
-                SpawnTerrain.LayerIndex * 32 + 0.1f,
+                SpawnTerrain.LayerIndex * Map.LayerHeight + 0.1f,
                 new Point(UnitToSpawn.SpriteMap.Width, UnitToSpawn.SpriteMap.Height),
                 new Point(UnitToSpawn.SpriteMap.Width, UnitToSpawn.SpriteMap.Height),
                 new List<Texture2D>() { UnitToSpawn.SpriteMap }, Z, Z, Z, Z, 0)[0];
@@ -178,7 +178,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             int X = SpawnTerrain.InternalPosition.X;
             int Y = SpawnTerrain.InternalPosition.Y;
-            float Z = SpawnTerrain.WorldPosition.Z * 32 + 0.1f;
+            float Z = SpawnTerrain.WorldPosition.Z * Map.LayerHeight + 0.1f;
 
             Squad NewSquad = new Squad("", UnitToSpawn, null, null, null);
             NewSquad.IsEventSquad = false;

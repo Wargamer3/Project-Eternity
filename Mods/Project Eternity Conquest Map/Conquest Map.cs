@@ -1018,7 +1018,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 {
                     for (int Y = 0; Y < MapSize.Y; ++Y)
                     {
-                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X * 32, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * 32, Y * 32);
+                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X * 32, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * Map.LayerHeight, Y * 32);
                     }
                 }
 

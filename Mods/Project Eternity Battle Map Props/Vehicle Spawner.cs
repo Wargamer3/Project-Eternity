@@ -107,12 +107,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int X = SpawnTerrain.InternalPosition.X;
             int Y = SpawnTerrain.InternalPosition.Y;
-            float Z = SpawnTerrain.WorldPosition.Z * 32 + 0.1f;
+            float Z = SpawnTerrain.WorldPosition.Z * Map.LayerHeight + 0.1f;
             Preview3D = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
                 X * Map.TileSize.X,
                 Y * Map.TileSize.Y,
                 Z,
-                SpawnTerrain.LayerIndex * 32 + 0.1f,
+                SpawnTerrain.LayerIndex * Map.LayerHeight + 0.1f,
                 new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
                 new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
                 new List<Texture2D>() { VehicleToSpawn.sprVehicle }, Z, Z, Z, Z, 0)[0];
@@ -125,19 +125,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int X = SpawnTerrain.InternalPosition.X;
             int Y = SpawnTerrain.InternalPosition.Y;
-            float Z = SpawnTerrain.WorldPosition.Z * 32 + 0.1f;
+            float Z = SpawnTerrain.WorldPosition.Z * Map.LayerHeight + 0.1f;
             Tile3D TerrainToSpawnOn = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
                 0 * Map.TileSize.X,
                 0 * Map.TileSize.Y,
                 0,
-                SpawnTerrain.LayerIndex * 32 + 0.1f,
+                SpawnTerrain.LayerIndex * Map.LayerHeight + 0.1f,
                 new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
                 new Point(VehicleToSpawn.sprVehicle.Width, VehicleToSpawn.sprVehicle.Height),
                 new List<Texture2D>() { VehicleToSpawn.sprVehicle }, Z, Z, Z, Z, 0)[0];
 
             LastVehicleSpawned = VehicleToSpawn.Copy();
 
-            LastVehicleSpawned.Position = new Vector3(SpawnTerrain.WorldPosition.X * Map.TileSize.X, SpawnTerrain.WorldPosition.Z * 32, SpawnTerrain.WorldPosition.Y * Map.TileSize.Y);
+            LastVehicleSpawned.Position = new Vector3(SpawnTerrain.WorldPosition.X * Map.TileSize.X, SpawnTerrain.WorldPosition.Z * Map.LayerHeight, SpawnTerrain.WorldPosition.Y * Map.TileSize.Y);
 
             LastVehicleSpawned.SetVertex(TerrainToSpawnOn.ArrayVertex, TerrainToSpawnOn.ArrayIndex);
 

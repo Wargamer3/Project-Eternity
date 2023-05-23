@@ -77,17 +77,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             int X = SpawnTerrain.InternalPosition.X;
             int Y = SpawnTerrain.InternalPosition.Y;
-            float Z = SpawnTerrain.WorldPosition.Z * 32 + 0.1f;
+            float Z = SpawnTerrain.WorldPosition.Z * Map.LayerHeight + 0.1f;
             Tile3D TerrainToSpawnOn = ActiveTerrain3D.CreateTile3D(0, Point.Zero,
                 X * Map.TileSize.X,
                 Y * Map.TileSize.Y,
                 Z,
-                SpawnTerrain.LayerIndex * 32 + 0.1f,
+                SpawnTerrain.LayerIndex * Map.LayerHeight + 0.1f,
                 new Point(ActiveVehicle.sprVehicle.Width, ActiveVehicle.sprVehicle.Height),
                 new Point(ActiveVehicle.sprVehicle.Width, ActiveVehicle.sprVehicle.Height),
                 new List<Texture2D>() { ActiveVehicle.sprVehicle }, Z, Z, Z, Z, 0)[0];
 
-            ActiveVehicle.Position = new Vector3(SpawnTerrain.WorldPosition.X * Map.TileSize.X, SpawnTerrain.WorldPosition.Z * 32, SpawnTerrain.WorldPosition.Y * Map.TileSize.Y);
+            ActiveVehicle.Position = new Vector3(SpawnTerrain.WorldPosition.X * Map.TileSize.X, SpawnTerrain.WorldPosition.Z * Map.LayerHeight, SpawnTerrain.WorldPosition.Y * Map.TileSize.Y);
 
             ActiveVehicle.SetVertex(TerrainToSpawnOn.ArrayVertex, TerrainToSpawnOn.ArrayIndex);
         }

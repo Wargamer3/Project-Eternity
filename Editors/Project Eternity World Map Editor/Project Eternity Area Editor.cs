@@ -212,7 +212,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
                 WorldMap NewMap = new WorldMap(MapLogicName, new GameModeInfo());
-                ActiveMap = BattleMapViewer.ActiveMap = NewMap;
+                BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap, 0));
 
                 SaveItem(FilePath, FilePath);

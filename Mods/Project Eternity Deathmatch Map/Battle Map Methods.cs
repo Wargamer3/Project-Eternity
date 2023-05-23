@@ -520,7 +520,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     for (int Y = 0; Y < MapSize.Y; ++Y)
                     {
-                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X * 32, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * 32, Y * 32);
+                        ArrayNewPosition[X + Y * MapSize.X] = new Vector3(X * TileSize.X, (LayerManager.ListLayer[Z].ArrayTerrain[X, Y].Height + Z) * LayerHeight, Y * TileSize.Y);
                     }
                 }
 
@@ -531,7 +531,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     for (int Y = 0; Y < MapSize.Y; ++Y)
                     {
                         LayerManager.ListLayer[Z].ArrayTerrain[X, Y].WorldPosition
-                            = new Vector3((float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].X / 32), (float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].Z / 32), ArrayNewPosition[X + Y * MapSize.X].Y / 32);
+                            = new Vector3((float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].X / TileSize.X), (float)Math.Round(ArrayNewPosition[X + Y * MapSize.X].Z / LayerHeight), ArrayNewPosition[X + Y * MapSize.X].Y / TileSize.Y);
                     }
                 }
             }

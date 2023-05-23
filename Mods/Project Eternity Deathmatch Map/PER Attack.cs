@@ -48,9 +48,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 Map3DComponent.SetPosition(
-                    Position.X * 32 + 16 + 0.5f,
-                    Position.Z * 32,
-                    Position.Y * 32 + 16 + 0.5f);
+                    Position.X * Map.TileSize.X + 16 + 0.5f,
+                    Position.Z * Map.LayerHeight,
+                    Position.Y * Map.TileSize.Y + 16 + 0.5f);
             }
 
             Unit3DModel = ActiveAttack.PERAttributes.Projectile3DModel;
@@ -63,9 +63,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (Map3DComponent != null)
             {
                 Map3DComponent.SetPosition(
-                    Position.X * 32 + 0.5f,
-                    Position.Z * 32,
-                    Position.Y * 32 + 0.5f);
+                    Position.X * Map.TileSize.X + 0.5f,
+                    Position.Z * Map.LayerHeight,
+                    Position.Y * Map.TileSize.Y + 0.5f);
             }
         }
 

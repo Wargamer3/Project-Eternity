@@ -191,7 +191,7 @@ namespace ProjectEternity.Editors.ConquestMapEditor
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
                 ConquestMap NewMap = new ConquestMap(FilePath, new GameModeInfo());
-                ActiveMap = BattleMapViewer.ActiveMap = NewMap;
+                BattleMapViewer.ActiveMap = NewMap;
                 NewMap.ListLayer.Add(new MapLayer(NewMap, 0));
 
                 SaveItem(FilePath, FilePath);

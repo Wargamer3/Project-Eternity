@@ -133,6 +133,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public bool IsInit = false;
         public Point TileSize;
+        public int LayerHeight = 32;
         public Point MapSize;
         public int ShowLayerIndex;
         public EnvironmentManager MapEnvironment;

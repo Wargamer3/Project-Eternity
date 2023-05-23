@@ -1193,7 +1193,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard DefendingCreature = ActiveTerrain.DefendingCreature;
                         if (DefendingCreature != null)
                         {
-                            DefendingCreature.Map3DModel.Draw(View, PolygonEffect.Projection,  Matrix.CreateTranslation((ActiveTerrain.WorldPosition.X + 0.9f) * Map.TileSize.X, ActiveTerrain.WorldPosition.Z * LayerHeight, (ActiveTerrain.WorldPosition.Y + 0.9f) * Map.TileSize.Y));
+                            DefendingCreature.Map3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateTranslation((ActiveTerrain.WorldPosition.X + 0.9f) * Map.TileSize.X, ActiveTerrain.WorldPosition.Z * LayerHeight, (ActiveTerrain.WorldPosition.Y + 0.9f) * Map.TileSize.Y));
 
                             Vector3 Visible3DPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.7f, ActiveTerrain.WorldPosition.Z * LayerHeight, ActiveTerrain.WorldPosition.Y + 0.9f);
                             Vector3 Position = new Vector3(Visible3DPosition.X * Map.TileSize.X, Visible3DPosition.Y, Visible3DPosition.Z * Map.TileSize.Y);
@@ -1202,7 +1202,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             g.DrawString(Map.fntNonDemoDamage, ActiveTerrain.CurrentToll.ToString(), new Vector2(Position2D.X, Position2D.Y), Color.White);
                         }
                     }
-                } }
+                }
+            }
         }
 
         private void DrawDrawablePoints(CustomSpriteBatch g)

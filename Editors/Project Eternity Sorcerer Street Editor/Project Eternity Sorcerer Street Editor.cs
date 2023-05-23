@@ -268,7 +268,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
                 SorcererStreetMap NewMap = new SorcererStreetMap(FilePath, new GameModeInfo(), ProjectEternitySorcererStreetEditor.Params);
-                ActiveMap = BattleMapViewer.ActiveMap = NewMap;
+                BattleMapViewer.ActiveMap = NewMap;
                 NewMap.LayerManager.ListLayer.Add(new MapLayer(NewMap, 0));
 
                 SaveItem(FilePath, FilePath);

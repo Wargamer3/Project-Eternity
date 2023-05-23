@@ -42,14 +42,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     return;
                 }
 
-                RealEndPosition = new Vector3(_EndPosition.X * Map.TileSize.X, _EndPosition.Z * 32, _EndPosition.Y * Map.TileSize.Y);
+                RealEndPosition = new Vector3(_EndPosition.X * Map.TileSize.X, _EndPosition.Z * Map.LayerHeight, _EndPosition.Y * Map.TileSize.Y);
 
                 switch (Index)
                 {
                     case 0://Create Camera
                         Camera = new DefaultCamera(GameScreen.GraphicsDevice);
                         Map.CameraOverride = Camera;
-                        Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * 32, _StartPosition.Y * Map.TileSize.Y);
+                        Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * Map.LayerHeight, _StartPosition.Y * Map.TileSize.Y);
                         break;
 
                     case 1://Grab Existing Camera
@@ -57,7 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case 2://Reset Position
-                        Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * 32, _StartPosition.Y * Map.TileSize.Y);
+                        Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * Map.LayerHeight, _StartPosition.Y * Map.TileSize.Y);
                         Map.CameraOverride = Camera;
                         break;
 
@@ -91,7 +91,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     case 0://Create Camera
                         Camera = new DefaultCamera(GameScreen.GraphicsDevice);
                         Map.CameraOverride = Camera;
-                        Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * 32, _StartPosition.Y * Map.TileSize.Y);
+                        Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * Map.LayerHeight, _StartPosition.Y * Map.TileSize.Y);
                         break;
 
                     case 1://Grab Existing Camera
@@ -99,7 +99,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         break;
 
                     case 2://Reset Position
-                        Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * 32, _StartPosition.Y * Map.TileSize.Y);
+                        Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * Map.LayerHeight, _StartPosition.Y * Map.TileSize.Y);
                         Map.CameraOverride = Camera;
                         break;
 

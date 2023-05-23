@@ -44,6 +44,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         Model ModelToDraw;
 
         private string _ModelPath;
+        private Vector3 _Offset;
+        private Vector3 _Scale;
+        private Vector3 _Rotation;
 
         public Model3DSpawner(BattleMap Map)
             : base("3D model", PropCategories.Visual, new bool[,] { { true } }, false)
@@ -61,15 +64,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             _ModelPath = BR.ReadString();
 
+            _Offset = new Vector3(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
+            _Scale = new Vector3(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
+            _Rotation = new Vector3(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
+
             if (!string.IsNullOrEmpty(_ModelPath))
             {
-                ModelToDraw = Map.Content.Load<Model>(_ModelPath);
+                ModelToDraw = Map.Content.Load<Model>("Maps/Models/" + _ModelPath);
             }
         }
 
         public override void DoSave(BinaryWriter BW)
         {
             BW.Write(_ModelPath);
+
+            BW.Write(_Offset.X);
+            BW.Write(_Offset.Y);
+            BW.Write(_Offset.Z);
+
+            BW.Write(_Scale.X);
+            BW.Write(_Scale.Y);
+            BW.Write(_Scale.Z);
+
+            BW.Write(_Rotation.X);
+            BW.Write(_Rotation.Y);
+            BW.Write(_Rotation.Z);
         }
 
         public override void Update(GameTime gameTime)
@@ -111,12 +130,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (ModelToDraw != null)
             {
-                DrawModel(ModelToDraw, View, Projection, Matrix.CreateRotationX(MathHelper.ToRadians(-90)) * Matrix.CreateScale(32) * Matrix.CreateTranslation((Position.X + 0.5f) * Map.TileSize.X, Position.Z * 32, (Position.Y + 0.5f) * Map.TileSize.Y));
+                DrawModel(ModelToDraw, View, Projection,
+                    Matrix.CreateRotationX(MathHelper.ToRadians(-90))
+                    * Matrix.CreateScale(Map.TileSize.X, 32, Map.TileSize.Y)
+                    * Matrix.CreateTranslation((Position.X + Offset.X) * Map.TileSize.X, (Position.Z + Offset.Z) * Map.LayerHeight, (Position.Y + Offset.Y) * Map.TileSize.Y));
             }
         }
 
         private void DrawModel(Model model, Matrix view, Matrix projection, Matrix world)
         {
+            Matrix[] transforms = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(transforms);
+
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -137,6 +162,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return NewProp;
         }
 
+        #region Properties
+
         [Editor(typeof(ModelSelector), typeof(UITypeEditor)),
         CategoryAttribute("Model"),
         DescriptionAttribute("The model path."),
@@ -153,5 +180,52 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ModelToDraw = Map.Content.Load<Model>("Maps/Models/" + _ModelPath);
             }
         }
+
+        [CategoryAttribute("Model"),
+        DescriptionAttribute("The offset."),
+        DefaultValueAttribute(0)]
+        public Vector3 Offset
+        {
+            get
+            {
+                return _Offset;
+            }
+            set
+            {
+                _Offset = value;
+            }
+        }
+
+        [CategoryAttribute("Model"),
+        DescriptionAttribute("The scale."),
+        DefaultValueAttribute(0)]
+        public Vector3 Scale
+        {
+            get
+            {
+                return _Scale;
+            }
+            set
+            {
+                _Scale = value;
+            }
+        }
+
+        [CategoryAttribute("Model"),
+        DescriptionAttribute("The rotation."),
+        DefaultValueAttribute(0)]
+        public Vector3 Rotation
+        {
+            get
+            {
+                return _Rotation;
+            }
+            set
+            {
+                _Rotation = value;
+            }
+        }
+
+        #endregion
     }
 }

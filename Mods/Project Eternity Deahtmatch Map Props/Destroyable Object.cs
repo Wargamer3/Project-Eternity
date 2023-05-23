@@ -182,7 +182,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             Unit3D.SetPosition(
                 (Position.X + 0.5f) * Map.TileSize.X,
-                TerrainZ * Map3DDrawable.LayerHeight,
+                TerrainZ * Map.LayerHeight,
                 (Position.Y + 0.5f) * Map.TileSize.Y);
         }
 
@@ -273,7 +273,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
             else if (Unit3DModel != null)
             {
-                Unit3DModel.Draw(View, Projection, Matrix.CreateTranslation((Position.X + 0.5f) * Map.TileSize.X, Position.Z * Map3DDrawable.LayerHeight, (Position.Y + 0.5f) * Map.TileSize.Y));
+                Unit3DModel.Draw(View, Projection, Matrix.CreateTranslation((Position.X + 0.5f) * Map.TileSize.X, Position.Z * Map.LayerHeight, (Position.Y + 0.5f) * Map.TileSize.Y));
             }
         }
 

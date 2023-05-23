@@ -10,6 +10,7 @@ using ProjectEternity.Editors.MusicPlayer;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.DeathmatchMapScreen;
 using ProjectEternity.Core.ControlHelper;
+using System.Runtime.InteropServices;
 
 namespace ProjectEternity.Editors.MapEditor
 {
@@ -25,7 +26,7 @@ namespace ProjectEternity.Editors.MapEditor
         private CheckBox cbShowTerrainType;
         private CheckBox cbShowTerrainHeight;
 
-        protected BattleMap ActiveMap;
+        protected BattleMap ActiveMap => BattleMapViewer.ActiveMap;
         protected IMapHelper Helper;
 
         //Spawn point related stuff.
@@ -34,10 +35,13 @@ namespace ProjectEternity.Editors.MapEditor
         protected ITileAttributes TileAttributesEditor;
 
         private static DeathmatchParams Params;
+        [DllImport("user32.dll")]
+        public static extern short GetAsyncKeyState(Keys key);
 
         public ProjectEternityMapEditor()
         {
             InitializeComponent();
+            KeyPreview = true;
             if (Params == null)
             {
                 Params = new DeathmatchParams(new BattleContext());
@@ -132,7 +136,7 @@ namespace ProjectEternity.Editors.MapEditor
                 FileStream fs = File.Create(FilePath);
                 fs.Close();
                 DeathmatchMap NewMap = new DeathmatchMap(FilePath, new GameModeInfo(), ProjectEternityMapEditor.Params);
-                ActiveMap = BattleMapViewer.ActiveMap = NewMap;
+                BattleMapViewer.ActiveMap = NewMap;
                 NewMap.LayerManager.ListLayer.Add(new MapLayer(NewMap, 0));
 
                 SaveItem(FilePath, FilePath);
@@ -155,7 +159,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         public override void SaveItem(string ItemPath, string ItemName, bool ForceOverwrite = false)
         {
-            BattleMapViewer.ActiveMap.MapName = ItemName;
+            ActiveMap.MapName = ItemName;
 
             ActiveMap.Save(ItemPath);
         }
@@ -169,14 +173,13 @@ namespace ProjectEternity.Editors.MapEditor
             Helper = new DeathmatchMapHelper(NewMap);
             InitMap(NewMap);
 
-            this.Text = BattleMapViewer.ActiveMap.MapName + " - Project Eternity Deathmatch Map Editor";
+            this.Text = ActiveMap.MapName + " - Project Eternity Deathmatch Map Editor";
         }
 
         protected void InitMap(BattleMap NewMap)
         {
-            ActiveMap = NewMap;
-            ActiveMap.IsEditor = true;
             BattleMapViewer.ActiveMap = NewMap;
+            ActiveMap.IsEditor = true;
             NewMap.ListGameScreen = new List<GameScreens.GameScreen>();
             NewMap.Content = BattleMapViewer.content;
             Helper.InitMap();
@@ -241,12 +244,12 @@ namespace ProjectEternity.Editors.MapEditor
         //Change the ActiveTile to the mouse position.
         private void TileViewer_Click(object sender, EventArgs e)
         {//If there is a map loaded(and so ActiveMap.TileSize.X is not 0).
-            if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+            if (ActiveMap.TileSize.X != 0)
             {
                 Point DrawOffset = TilesetViewer.DrawOffset;//Used to avoid warnings.
                 //Set the ActiveTile to the mouse position.
-                TilesetViewer.SelectTile(new Point(((((MouseEventArgs)e).X + DrawOffset.X) / BattleMapViewer.ActiveMap.TileSize.X) * BattleMapViewer.ActiveMap.TileSize.X,
-                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / BattleMapViewer.ActiveMap.TileSize.Y) * BattleMapViewer.ActiveMap.TileSize.Y),
+                TilesetViewer.SelectTile(new Point(((((MouseEventArgs)e).X + DrawOffset.X) / ActiveMap.TileSize.X) * ActiveMap.TileSize.X,
+                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / ActiveMap.TileSize.Y) * ActiveMap.TileSize.Y),
                                                      Control.ModifierKeys == Keys.Shift);
             }
         }
@@ -254,22 +257,22 @@ namespace ProjectEternity.Editors.MapEditor
         private void cboTiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Initialise the scroll bars.
-            if (BattleMapViewer.ActiveMap.ListTileSet[cboTiles.SelectedIndex].Width >= TilesetViewer.Width)
+            if (ActiveMap.ListTileSet[cboTiles.SelectedIndex].Width >= TilesetViewer.Width)
             {
-                sclTileWidth.Maximum = BattleMapViewer.ActiveMap.ListTileSet[cboTiles.SelectedIndex].Width - TilesetViewer.Width;
+                sclTileWidth.Maximum = ActiveMap.ListTileSet[cboTiles.SelectedIndex].Width - TilesetViewer.Width;
                 sclTileWidth.Visible = true;
             }
             else
                 sclTileWidth.Visible = false;
-            if (BattleMapViewer.ActiveMap.ListTileSet[cboTiles.SelectedIndex].Height >= TilesetViewer.Height)
+            if (ActiveMap.ListTileSet[cboTiles.SelectedIndex].Height >= TilesetViewer.Height)
             {
-                sclTileHeight.Maximum = BattleMapViewer.ActiveMap.ListTileSet[cboTiles.SelectedIndex].Height - TilesetViewer.Height;
+                sclTileHeight.Maximum = ActiveMap.ListTileSet[cboTiles.SelectedIndex].Height - TilesetViewer.Height;
                 sclTileHeight.Visible = true;
             }
             else
                 sclTileHeight.Visible = false;
 
-            TilesetViewer.InitTileset(BattleMapViewer.ActiveMap.ListTileSet[cboTiles.SelectedIndex], BattleMapViewer.ActiveMap.TileSize);
+            TilesetViewer.InitTileset(ActiveMap.ListTileSet[cboTiles.SelectedIndex], ActiveMap.TileSize);
         }
 
         private void btnAddTile_Click(object sender, EventArgs e)
@@ -280,7 +283,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void btnAddNewTileSetAsBackground_Click(object sender, EventArgs e)
         {//If there is a map loaded(and so ActiveMap.TileSize.X is not 0).
-            if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+            if (ActiveMap.TileSize.X != 0)
             {
                 ItemSelectionChoice = ItemSelectionChoices.TileAsBackground;
                 ListMenuItemsSelected(ShowContextMenuWithItem(GUIRootPathMapTilesetImages));
@@ -350,22 +353,76 @@ namespace ProjectEternity.Editors.MapEditor
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.X || KeyboardHelper.KeyHold(Microsoft.Xna.Framework.Input.Keys.X))
+            bool KeyProcessed = false;
+
+            if (keyData == Keys.Left)
             {
-                PlaceTile((int)BattleMapViewer.ActiveMap.CursorPosition.X, (int)BattleMapViewer.ActiveMap.CursorPosition.Y, (int)BattleMapViewer.ActiveMap.CursorPosition.Z, false);
+                ActiveMap.CursorPosition.X -= (ActiveMap.CursorPosition.X > 0) ? 1 : 0;
+                KeyProcessed = true;
             }
-            
-            return base.ProcessCmdKey(ref msg, keyData);
+            else if (keyData == Keys.Right)
+            {
+                ActiveMap.CursorPosition.X += (ActiveMap.CursorPosition.X < ActiveMap.MapSize.X - 1) ? 1 : 0;
+                KeyProcessed = true;
+            }
+
+            if (keyData == Keys.Up)
+            {
+                ActiveMap.CursorPosition.Y -= (ActiveMap.CursorPosition.Y > 0) ? 1 : 0;
+                KeyProcessed = true;
+            }
+            else if (keyData == Keys.Down)
+            {
+                ActiveMap.CursorPosition.Y += (ActiveMap.CursorPosition.Y < ActiveMap.MapSize.Y - 1) ? 1 : 0;
+                KeyProcessed = true;
+            }
+
+            if (keyData == Keys.Q)
+            {
+                float NextZ = ActiveMap.CursorPosition.Z + 1;
+
+                if (NextZ >= lsLayers.Items.Count)
+                {
+                    NextZ = lsLayers.Items.Count - 1;
+                }
+
+                ActiveMap.CursorPosition.Z = NextZ;
+                KeyProcessed = true;
+            }
+            else if (keyData == Keys.E)
+            {
+                float NextZ = ActiveMap.CursorPosition.Z - 1;
+
+                if (NextZ < 0)
+                {
+                    NextZ = 0;
+                }
+
+                ActiveMap.CursorPosition.Z = NextZ;
+                KeyProcessed = true;
+            }
+            if ((GetAsyncKeyState(Keys.X) & 0x8000) > 0)
+            {
+                PlaceTile((int)ActiveMap.CursorPosition.X, (int)ActiveMap.CursorPosition.Y, (int)ActiveMap.CursorPosition.Z, false);
+                KeyProcessed = true;
+            }
+
+            if (!KeyProcessed)
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
+
+            return true;
         }
 
         protected virtual void pnMapPreview_MouseMove(object sender, MouseEventArgs e)
         {
             Vector3 MapPreviewStartingPos = new Vector3(
-                BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
-                BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
-                BattleMapViewer.ActiveMap.CameraPosition.Z);
+                ActiveMap.CameraPosition.X * ActiveMap.TileSize.X,
+                ActiveMap.CameraPosition.Y * ActiveMap.TileSize.Y,
+                ActiveMap.CameraPosition.Z);
 
-            DrawInfo((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y);
+            DrawInfo((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y);
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
             {
                 switch (tabToolBox.SelectedIndex)
@@ -414,18 +471,18 @@ namespace ProjectEternity.Editors.MapEditor
                     case 0:
                         Rectangle TileReplacementZone = BattleMapViewer.TileReplacementZone;
 
-                        if (TileReplacementZone.Width > 0 && BattleMapViewer.ActiveMap.TileSize.X != 0)
+                        if (TileReplacementZone.Width > 0 && ActiveMap.TileSize.X != 0)
                         {
                             Vector3 MapPreviewStartingPos = new Vector3(
-                                BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
-                                BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
-                                BattleMapViewer.ActiveMap.CameraPosition.Z);
+                                ActiveMap.CameraPosition.X * ActiveMap.TileSize.X,
+                                ActiveMap.CameraPosition.Y * ActiveMap.TileSize.Y,
+                                ActiveMap.CameraPosition.Z);
 
                             for (int X = TileReplacementZone.X; X < TileReplacementZone.Right; ++X)
                             {
                                 for (int Y = TileReplacementZone.Y; Y < TileReplacementZone.Bottom; ++Y)
                                 {
-                                    PlaceTile(X + (int)(MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, Y + (int)(MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y, lsLayers.SelectedIndex, true);
+                                    PlaceTile(X + (int)(MapPreviewStartingPos.X) / ActiveMap.TileSize.X, Y + (int)(MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, lsLayers.SelectedIndex, true);
                                 }
                             }
                         }
@@ -462,12 +519,12 @@ namespace ProjectEternity.Editors.MapEditor
                     if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
                     {
                         Vector3 MapPreviewStartingPos = new Vector3(
-                            BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
-                            BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
-                            BattleMapViewer.ActiveMap.CameraPosition.Z);
+                            ActiveMap.CameraPosition.X * ActiveMap.TileSize.X,
+                            ActiveMap.CameraPosition.Y * ActiveMap.TileSize.Y,
+                            ActiveMap.CameraPosition.Z);
 
-                        int MouseX = (int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X;
-                        int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y;
+                        int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
+                        int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
 
                         BattleMapViewer.TileReplacementZone = new Rectangle(MouseX, MouseY, 1, 1);
                     }
@@ -489,12 +546,12 @@ namespace ProjectEternity.Editors.MapEditor
         private void Map_MouseMove(MouseEventArgs e)
         {
             Vector3 MapPreviewStartingPos = new Vector3(
-                BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
-                BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
-                BattleMapViewer.ActiveMap.CameraPosition.Z);
+                ActiveMap.CameraPosition.X * ActiveMap.TileSize.X,
+                ActiveMap.CameraPosition.Y * ActiveMap.TileSize.Y,
+                ActiveMap.CameraPosition.Z);
 
-            int MouseX = (int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X;
-            int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y;
+            int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
+            int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
 
             if (MouseX < 0 || MouseX >= ActiveMap.MapSize.X || MouseY < 0 || MouseY >= ActiveMap.MapSize.Y)
                 return;
@@ -547,9 +604,9 @@ namespace ProjectEternity.Editors.MapEditor
                             }
                         }
                         //Just create a new Tile.
-                        else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+                        else if (ActiveMap.TileSize.X != 0)
                         {
-                            PlaceTile((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y, lsLayers.SelectedIndex, true);
+                            PlaceTile((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y, lsLayers.SelectedIndex, true);
                         }
                     }
                 }
@@ -583,7 +640,7 @@ namespace ProjectEternity.Editors.MapEditor
                     }
                 }
                 //If there is a map loaded
-                else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+                else if (ActiveMap.TileSize.X != 0)
                 {
                     //Spawn tab
                     if (tabToolBox.SelectedIndex == 1)
@@ -607,10 +664,16 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void PlaceTile(int X, int Y, int LayerIndex, bool ConsiderSubLayers)
         {
+            if (X < 0 || X >= ActiveMap.MapSize.X
+                || Y < 0 || Y >= ActiveMap.MapSize.Y)
+            {
+                return;
+            }
+
             Point TilePos = TilesetViewer.GetTileFromBrush(new Point(X * ActiveMap.TileSize.X, Y * ActiveMap.TileSize.Y));
 
-            if (TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
-                || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
+            if (TilePos.X < 0 || TilePos.X >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(0) * ActiveMap.TileSize.X
+                || TilePos.Y < 0 || TilePos.Y >= ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain.GetLength(1) * ActiveMap.TileSize.Y)
             {
                 return;
             }
@@ -631,7 +694,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void HandleEventPoint(int X, int Y, EventPoint Spawn)
         {//If there is an active Spawn and a map loaded.
-            if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+            if (ActiveMap.TileSize.X != 0)
             {
                 if (btnTeleporters.Checked)
                 {
@@ -884,7 +947,7 @@ namespace ProjectEternity.Editors.MapEditor
                 {//Change the button color and the color in the list at the same time with the returned color.
                     btnSpawnDM.BackColor = CD.Color;
                     int MPColorIndex = Math.Max(0, cbDeadthmatch.SelectedIndex);
-                    BattleMapViewer.ActiveMap.ListMultiplayerColor[MPColorIndex] = Color.FromNonPremultiplied(CD.Color.R, CD.Color.G, CD.Color.B, 255);
+                    ActiveMap.ListMultiplayerColor[MPColorIndex] = Color.FromNonPremultiplied(CD.Color.R, CD.Color.G, CD.Color.B, 255);
                     if (btnSpawnDM.Checked)
                     {
                         ActiveSpawn.ColorRed = btnSpawnDM.BackColor.R;
@@ -912,9 +975,9 @@ namespace ProjectEternity.Editors.MapEditor
         private void cbDeadthmatch_SelectedIndexChanged(object sender, EventArgs e)
         {
             btnSpawnDM.Text = cbDeadthmatch.Text;//Give the button the selected text.
-            btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(BattleMapViewer.ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].R,
-                                                                 BattleMapViewer.ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].G,
-                                                                 BattleMapViewer.ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].B);//Give the button the selected color.
+            btnSpawnDM.BackColor = System.Drawing.Color.FromArgb(ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].R,
+                                                                 ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].G,
+                                                                 ActiveMap.ListMultiplayerColor[cbDeadthmatch.SelectedIndex].B);//Give the button the selected color.
             btnSpawnDM.Checked = true;//Press the button.
             //Update the ActiveSpawn.
             ActiveSpawn = new EventPoint(Vector3.Zero, btnSpawnDM.Text, btnSpawnDM.BackColor.R, btnSpawnDM.BackColor.G, btnSpawnDM.BackColor.B);
@@ -923,15 +986,15 @@ namespace ProjectEternity.Editors.MapEditor
         private void btnAddDeathmatchTeam_Click(object sender, EventArgs e)
         {
             Color[] ArrayColorChoices = new Color[] { Color.Turquoise, Color.White, Color.SteelBlue, Color.Silver, Color.SandyBrown, Color.Salmon, Color.Purple, Color.PaleGreen, Color.Orange, Color.Gold, Color.ForestGreen, Color.Firebrick, Color.Chartreuse, Color.Beige, Color.DeepPink, Color.DarkMagenta };
-            BattleMapViewer.ActiveMap.ListMultiplayerColor.Add(ArrayColorChoices[Math.Min(ArrayColorChoices.Length - 1, BattleMapViewer.ActiveMap.ListMultiplayerColor.Count)]);
-            cbDeadthmatch.Items.Add(BattleMapViewer.ActiveMap.ListMultiplayerColor.Count);
+            ActiveMap.ListMultiplayerColor.Add(ArrayColorChoices[Math.Min(ArrayColorChoices.Length - 1, ActiveMap.ListMultiplayerColor.Count)]);
+            cbDeadthmatch.Items.Add(ActiveMap.ListMultiplayerColor.Count);
         }
 
         private void btnRemoveDeathmatchTeam_Click(object sender, EventArgs e)
         {
             if (cbDeadthmatch.SelectedIndex >= 0)
             {
-                BattleMapViewer.ActiveMap.ListMultiplayerColor.RemoveAt(cbDeadthmatch.SelectedIndex);
+                ActiveMap.ListMultiplayerColor.RemoveAt(cbDeadthmatch.SelectedIndex);
                 cbDeadthmatch.Items.RemoveAt(cbDeadthmatch.SelectedIndex);
             }
         }
@@ -1074,7 +1137,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void HandleProps(int X, int Y)
         {
-            if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+            if (ActiveMap.TileSize.X != 0)
             {
                 int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
                 BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
@@ -1116,7 +1179,7 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void RemoveProps(int X, int Y)
         {
-            if (BattleMapViewer.ActiveMap.TileSize.X != 0)
+            if (ActiveMap.TileSize.X != 0)
             {
                 int TopLayerIndex = GetRealTopLayerIndex(lsLayers.SelectedIndex);
                 BaseMapLayer TopLayer = Helper.GetLayersAndSubLayers()[lsLayers.SelectedIndex];
@@ -1140,7 +1203,7 @@ namespace ProjectEternity.Editors.MapEditor
         private void btnAddZoneRectangle_Click(object sender, EventArgs e)
         {
             MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Rectangle);
-            BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
             lsZones.Items.Add("Zone");
             pgZoneProperties.SelectedObject = NewZone;
             lsZones.SelectedIndex = lsZones.Items.Count - 1;
@@ -1149,7 +1212,7 @@ namespace ProjectEternity.Editors.MapEditor
         private void btnAddZoneOval_Click(object sender, EventArgs e)
         {
             MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Oval);
-            BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
             lsZones.Items.Add("Zone");
             pgZoneProperties.SelectedObject = NewZone;
             lsZones.SelectedIndex = lsZones.Items.Count - 1;
@@ -1158,7 +1221,7 @@ namespace ProjectEternity.Editors.MapEditor
         private void btnAddZoneFullMap_Click(object sender, EventArgs e)
         {
             MapZone NewZone = Helper.CreateNewZone(ZoneShape.ZoneShapeTypes.Full);
-            BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
+            ActiveMap.MapEnvironment.ListMapZone.Add(NewZone);
             lsZones.Items.Add("Zone");
             pgZoneProperties.SelectedObject = NewZone;
             lsZones.SelectedIndex = lsZones.Items.Count - 1;
@@ -1168,7 +1231,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lsZones.SelectedIndex >= 0)
             {
-                BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone.RemoveAt(lsZones.SelectedIndex);
+                ActiveMap.MapEnvironment.ListMapZone.RemoveAt(lsZones.SelectedIndex);
                 lsZones.Items.RemoveAt(lsZones.SelectedIndex);
             }
         }
@@ -1177,7 +1240,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lsZones.SelectedIndex >= 0)
             {
-                new ZoneEditor(BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex]).ShowDialog();
+                new ZoneEditor(ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex]).ShowDialog();
             }
         }
 
@@ -1185,7 +1248,7 @@ namespace ProjectEternity.Editors.MapEditor
         {
             if (lsZones.SelectedIndex >= 0)
             {
-                pgZoneProperties.SelectedObject = BattleMapViewer.ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex];
+                pgZoneProperties.SelectedObject = ActiveMap.MapEnvironment.ListMapZone[lsZones.SelectedIndex];
             }
         }
 
@@ -1193,17 +1256,17 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void cbShowGrid_CheckedChanged(object sender, EventArgs e)
         {
-            BattleMapViewer.ActiveMap.ShowGrid = cbShowGrid.Checked;
+            ActiveMap.ShowGrid = cbShowGrid.Checked;
         }
 
         private void cbShowTerrainType_CheckedChanged(object sender, EventArgs e)
         {
-            BattleMapViewer.ActiveMap.ShowTerrainType = cbShowTerrainType.Checked;
+            ActiveMap.ShowTerrainType = cbShowTerrainType.Checked;
         }
 
         private void cbShowTerrainHeight_CheckedChanged(object sender, EventArgs e)
         {
-            BattleMapViewer.ActiveMap.ShowTerrainHeight = cbShowTerrainHeight.Checked;
+            ActiveMap.ShowTerrainHeight = cbShowTerrainHeight.Checked;
         }
 
         private void cbPreviewMap_CheckedChanged(object sender, EventArgs e)
@@ -1273,7 +1336,7 @@ namespace ProjectEternity.Editors.MapEditor
                                     continue;
                                 }
 
-                                Terrain.TilesetPreset NewTileset = Terrain.TilesetPreset.FromFile(Name, BattleMapViewer.ActiveMap.ListTilesetPreset.Count);
+                                Terrain.TilesetPreset NewTileset = Terrain.TilesetPreset.FromFile(Name, ActiveMap.ListTilesetPreset.Count);
                                 for (int BackgroundIndex = 0; BackgroundIndex < NewTileset.ListBattleBackgroundAnimationPath.Count; BackgroundIndex++)
                                 {
                                     string NewBattleBackgroundPath = NewTileset.ListBattleBackgroundAnimationPath[BackgroundIndex];
@@ -1319,8 +1382,8 @@ namespace ProjectEternity.Editors.MapEditor
                                     }
                                 }
 
-                                BattleMapViewer.ActiveMap.ListTilesetPreset.Add(NewTileset);
-                                BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName));
+                                ActiveMap.ListTilesetPreset.Add(NewTileset);
+                                ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + NewTileset.TilesetName));
 
                                 cboTiles.Items.Add(Name);
                             }
@@ -1334,23 +1397,23 @@ namespace ProjectEternity.Editors.MapEditor
                                 }
                                 Microsoft.Xna.Framework.Graphics.Texture2D Tile = TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + Name);
 
-                                BattleMapViewer.ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(Name, Tile.Width, Tile.Height, BattleMapViewer.ActiveMap.TileSize.X, BattleMapViewer.ActiveMap.TileSize.Y, BattleMapViewer.ActiveMap.ListTilesetPreset.Count));
-                                BattleMapViewer.ActiveMap.ListTileSet.Add(Tile);
+                                ActiveMap.ListTilesetPreset.Add(new Terrain.TilesetPreset(Name, Tile.Width, Tile.Height, ActiveMap.TileSize.X, ActiveMap.TileSize.Y, ActiveMap.ListTilesetPreset.Count));
+                                ActiveMap.ListTileSet.Add(Tile);
                                 //Add the file name to the tile combo box.
                                 cboTiles.Items.Add(Name);
                             }
 
-                            cboTiles.SelectedIndex = BattleMapViewer.ActiveMap.ListTilesetPreset.Count - 1;
+                            cboTiles.SelectedIndex = ActiveMap.ListTilesetPreset.Count - 1;
 
-                            if (BattleMapViewer.ActiveMap.ListTileSet.Count == 1)
+                            if (ActiveMap.ListTileSet.Count == 1)
                             {
                                 Terrain PresetTerrain = ActiveMap.ListTilesetPreset[0].ArrayTerrain[0, 0];
                                 DrawableTile PresetTile = ActiveMap.ListTilesetPreset[0].ArrayTiles[0, 0];
 
                                 //Asign a new tile at the every position, based on its atribtues.
-                                for (int X = BattleMapViewer.ActiveMap.MapSize.X - 1; X >= 0; --X)
+                                for (int X = ActiveMap.MapSize.X - 1; X >= 0; --X)
                                 {
-                                    for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
+                                    for (int Y = ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                     {
                                         Helper.ReplaceTerrain(X, Y, PresetTerrain, 0, true);
                                         Helper.ReplaceTile(X, Y, PresetTile, 0, true);
@@ -1371,31 +1434,31 @@ namespace ProjectEternity.Editors.MapEditor
                                 return;
                             }
 
-                            BattleMapViewer.ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + TileName));
+                            ActiveMap.ListTileSet.Add(TilesetViewer.content.Load<Microsoft.Xna.Framework.Graphics.Texture2D>("Maps/Tilesets/" + TileName));
                             //Add the file name to the tile combo box.
                             cboTiles.Items.Add(TileName);
-                            cboTiles.SelectedIndex = BattleMapViewer.ActiveMap.ListTileSet.Count - 1;
+                            cboTiles.SelectedIndex = ActiveMap.ListTileSet.Count - 1;
 
                             //Initialise the scroll bars.
-                            if (BattleMapViewer.ActiveMap.ListTileSet.Last().Width >= TilesetViewer.Width)
+                            if (ActiveMap.ListTileSet.Last().Width >= TilesetViewer.Width)
                             {
-                                sclTileWidth.Maximum = BattleMapViewer.ActiveMap.ListTileSet.Last().Width - TilesetViewer.Width - 1;
+                                sclTileWidth.Maximum = ActiveMap.ListTileSet.Last().Width - TilesetViewer.Width - 1;
                                 sclTileWidth.Visible = true;
                             }
                             else
                                 sclTileWidth.Visible = false;
-                            if (BattleMapViewer.ActiveMap.ListTileSet.Last().Height >= TilesetViewer.Height)
+                            if (ActiveMap.ListTileSet.Last().Height >= TilesetViewer.Height)
                             {
-                                sclTileHeight.Maximum = BattleMapViewer.ActiveMap.ListTileSet.Last().Height - TilesetViewer.Height - 1;
+                                sclTileHeight.Maximum = ActiveMap.ListTileSet.Last().Height - TilesetViewer.Height - 1;
                                 sclTileHeight.Visible = true;
                             }
                             else
                                 sclTileHeight.Visible = false;
 
                             //Asign a new tile at the every position, based on its atribtues.
-                            for (int X = BattleMapViewer.ActiveMap.MapSize.X - 1; X >= 0; --X)
+                            for (int X = ActiveMap.MapSize.X - 1; X >= 0; --X)
                             {
-                                for (int Y = BattleMapViewer.ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
+                                for (int Y = ActiveMap.MapSize.Y - 1; Y >= 0; --Y)
                                 {
                                     Helper.ReplaceTerrain(X, Y, new Terrain(X, Y, lsLayers.SelectedIndex, 0,
                                        0, new TerrainActivation[0], new TerrainBonus[0], new int[0]),
@@ -1526,11 +1589,11 @@ namespace ProjectEternity.Editors.MapEditor
 
         private void tsmGlobalEnvironment_Click(object sender, EventArgs e)
         {
-            ZoneEditor GlobalZoneEditor = new ZoneEditor(BattleMapViewer.ActiveMap.MapEnvironment.GlobalZone);
+            ZoneEditor GlobalZoneEditor = new ZoneEditor(ActiveMap.MapEnvironment.GlobalZone);
 
             if (GlobalZoneEditor.ShowDialog() == DialogResult.OK)
             {
-                BattleMapViewer.ActiveMap.MapEnvironment.GlobalZone = GlobalZoneEditor.ZoneToEdit;
+                ActiveMap.MapEnvironment.GlobalZone = GlobalZoneEditor.ZoneToEdit;
             }
         }
 
@@ -1544,9 +1607,9 @@ namespace ProjectEternity.Editors.MapEditor
             if (BattleMapViewer.ActiveMap == null)
                 return;
 
-            lstEvents.Items.AddRange(BattleMapViewer.ActiveMap.DicMapEvent.Values.ToArray());
-            lstConditions.Items.AddRange(BattleMapViewer.ActiveMap.DicMapCondition.Values.ToArray());
-            lstTriggers.Items.AddRange(BattleMapViewer.ActiveMap.DicMapTrigger.Values.ToArray());
+            lstEvents.Items.AddRange(ActiveMap.DicMapEvent.Values.ToArray());
+            lstConditions.Items.AddRange(ActiveMap.DicMapCondition.Values.ToArray());
+            lstTriggers.Items.AddRange(ActiveMap.DicMapTrigger.Values.ToArray());
             BattleMapViewer.RefreshScrollbars();
 
             Matrix Projection = Matrix.CreateOrthographicOffCenter(0, BattleMapViewer.Width, BattleMapViewer.Height, 0, 0, -1f);
@@ -1558,9 +1621,9 @@ namespace ProjectEternity.Editors.MapEditor
 
             #region Tiles
 
-            for (int T = 0; T < BattleMapViewer.ActiveMap.ListTilesetPreset.Count; T++)
+            for (int T = 0; T < ActiveMap.ListTilesetPreset.Count; T++)
             {
-                ItemInfo Item = GetItemByKey(GUIRootPathMapTilesetImages, BattleMapViewer.ActiveMap.ListTilesetPreset[T].TilesetName);
+                ItemInfo Item = GetItemByKey(GUIRootPathMapTilesetImages, ActiveMap.ListTilesetPreset[T].TilesetName);
 
                 if (Item.Path != null)
                 {
@@ -1575,23 +1638,23 @@ namespace ProjectEternity.Editors.MapEditor
                 }
                 else
                 {
-                    MessageBox.Show(BattleMapViewer.ActiveMap.ListTilesetPreset[T].TilesetName + " not found, loading default tileset instead.");
+                    MessageBox.Show(ActiveMap.ListTilesetPreset[T].TilesetName + " not found, loading default tileset instead.");
                     cboTiles.Items.Add("Default");
                 }
             }
 
-            if (BattleMapViewer.ActiveMap.ListTilesetPreset.Count > 0)
+            if (ActiveMap.ListTilesetPreset.Count > 0)
             {
                 cboTiles.SelectedIndex = 0;
             }
 
             if (cboTiles.SelectedIndex >= 0)
             {
-                TilesetViewer.InitTileset(BattleMapViewer.ActiveMap.ListTileSet[cboTiles.SelectedIndex], BattleMapViewer.ActiveMap.TileSize);
+                TilesetViewer.InitTileset(ActiveMap.ListTileSet[cboTiles.SelectedIndex], ActiveMap.TileSize);
             }
             else
             {
-                TilesetViewer.InitTileset(string.Empty, BattleMapViewer.ActiveMap.TileSize);
+                TilesetViewer.InitTileset(string.Empty, ActiveMap.TileSize);
             }
 
             TileAttributesEditor = Helper.GetTileEditor();
@@ -1615,7 +1678,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             #region Props
 
-            foreach (InteractiveProp Instance in BattleMapViewer.ActiveMap.DicInteractiveProp.Values)
+            foreach (InteractiveProp Instance in ActiveMap.DicInteractiveProp.Values)
             {
                 if (Instance.PropCategory == InteractiveProp.PropCategories.Interactive)
                 {

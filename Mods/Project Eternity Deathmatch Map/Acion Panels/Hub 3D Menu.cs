@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Terrain StartTerrain = Map.GetTerrain(HubSquad.Position + new Vector3(0.5f, 0.5f, 0));
             Vector3 NextTerrainRealPosition = StartTerrain.GetRealPosition(HubSquad.Position + new Vector3(0.5f, 0.5f, 0));
             Vector3 Position = new Vector3(NextTerrainRealPosition.X * Map.TileSize.X,
-                                (NextTerrainRealPosition.Z + 1f) * 32,
+                                (NextTerrainRealPosition.Z + 1f) * Map.LayerHeight,
                                 (NextTerrainRealPosition.Y) * Map.TileSize.Y);
 
             Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, CameraDistance), Matrix.CreateRotationY(Yaw - MathHelper.PiOver2))
