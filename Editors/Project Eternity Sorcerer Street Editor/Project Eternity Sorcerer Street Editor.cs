@@ -324,7 +324,7 @@ namespace ProjectEternity.Editors.SorcererStreetMapEditor
                 return;
             }
 
-            Rectangle TilePos = TilesetViewer.TileBrushSize;
+            Rectangle TilePos = TilesetViewer.ListTileBrush[0];
             Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
             TileAttributes TA = new TileAttributes(SelectedTerrain.TerrainTypeIndex, SelectedTerrain.Height);
