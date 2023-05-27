@@ -116,8 +116,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + AnimationPath,
                             new Microsoft.Xna.Framework.Vector2(
-                                (SpawnPosition.X - Map.CameraPosition.X) * Map.TileSize.X + Map.TileSize.X * 0.5f,
-                                (SpawnPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y + Map.TileSize.Y * 0.5f), AnimationSpeed);
+                                (SpawnPosition.X - Map.Camera2DPosition.X) * Map.TileSize.X + Map.TileSize.X * 0.5f,
+                                (SpawnPosition.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + Map.TileSize.Y * 0.5f), AnimationSpeed);
                     }
                     else
                     {

@@ -12,8 +12,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void TilesetViewer_MouseClick(object sender, MouseEventArgs e)
         {
-            Rectangle OldBrush = TilesetViewer.TileBrushSize;
-            TilesetViewer.TileBrushSize = new Rectangle(e.X, e.Y, OldBrush.Width, OldBrush.Height);
+            Rectangle OldBrush = TilesetViewer.ListTileBrush[0];
+            TilesetViewer.ListTileBrush[0] = new Rectangle(e.X, e.Y, OldBrush.Width, OldBrush.Height);
         }
     }
 }

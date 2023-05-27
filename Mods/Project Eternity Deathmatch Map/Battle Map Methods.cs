@@ -130,8 +130,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             BW.Write(CursorPosition.X);
             BW.Write(CursorPosition.Y);
 
-            BW.Write(CameraPosition.X);
-            BW.Write(CameraPosition.Y);
+            BW.Write(Camera2DPosition.X);
+            BW.Write(Camera2DPosition.Y);
 
             BW.Write(ActivePlayerIndex);
             BW.Write(GameTurn);
@@ -226,8 +226,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             CursorPosition.X = BR.ReadSingle();
             CursorPosition.Y = BR.ReadSingle();
             
-            CameraPosition.X = BR.ReadSingle();
-            CameraPosition.Y = BR.ReadSingle();
+            Camera2DPosition.X = BR.ReadSingle();
+            Camera2DPosition.Y = BR.ReadSingle();
 
             ActivePlayerIndex = BR.ReadInt32();
             GameTurn = BR.ReadInt32();

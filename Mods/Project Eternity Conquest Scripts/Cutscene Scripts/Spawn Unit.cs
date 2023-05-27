@@ -91,7 +91,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     {
                         IsDrawn = true;
 
-                        AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, new Microsoft.Xna.Framework.Vector2((_SpawnPosition.X - Map.CameraPosition.X) * Map.TileSize.X, (_SpawnPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y), _AnimationSpeed);
+                        AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, new Microsoft.Xna.Framework.Vector2((_SpawnPosition.X - Map.Camera2DPosition.X) * Map.TileSize.X, (_SpawnPosition.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y), _AnimationSpeed);
                     }
                     else
                         ExecuteEvent(this, 1);

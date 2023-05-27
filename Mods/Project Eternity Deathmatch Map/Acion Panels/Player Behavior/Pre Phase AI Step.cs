@@ -59,8 +59,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     ActiveSquad[U].BattleDefenseChoice = Unit.BattleDefenseChoices.Attack;
                 }
 
-                if (ActiveSquad.X < Map.CameraPosition.X || ActiveSquad.Y < Map.CameraPosition.Y ||
-                    ActiveSquad.X >= Map.CameraPosition.X + Map.ScreenSize.X || ActiveSquad.Y >= Map.CameraPosition.Y + Map.ScreenSize.Y)
+                if (ActiveSquad.X < Map.Camera2DPosition.X || ActiveSquad.Y < Map.Camera2DPosition.Y ||
+                    ActiveSquad.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || ActiveSquad.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
                 {
                     Map.PushScreen(new CenterOnSquadCutscene(Map.CenterCamera, Map, ActiveSquad.Position));
                 }

@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         public override void DrawExtraMenuInformation(CustomSpriteBatch g, WorldMap Map)
         {
             if (Waypoint.X != -1)
-                g.Draw(Map.sprWaypoint, new Vector2((Waypoint.X - Map.CameraPosition.X) * Map.TileSize.X, (Waypoint.Y - Map.CameraPosition.Y) * Map.TileSize.Y), Color.White);
+                g.Draw(Map.sprWaypoint, new Vector2((Waypoint.X - Map.Camera2DPosition.X) * Map.TileSize.X, (Waypoint.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y), Color.White);
         }
 
         public override ActionPanelWorldMap GetSelectionPanel(WorldMap Map, int InteractionIndex)

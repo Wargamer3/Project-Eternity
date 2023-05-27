@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected Point TileSize { get { return Map.TileSize; } }
 
-        protected Vector3 CameraPosition { get { return Map.CameraPosition; } }
+        protected Vector3 CameraPosition { get { return Map.Camera2DPosition; } }
 
         private readonly SorcererStreetMap Map;
 
@@ -38,8 +38,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Point BaseMenuPosition;
 
-            BaseMenuPosition.X = (int)((Position.X - Map.CameraPosition.X) * Map.TileSize.X);
-            BaseMenuPosition.Y = (int)((Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y);
+            BaseMenuPosition.X = (int)((Position.X - Map.Camera2DPosition.X) * Map.TileSize.X);
+            BaseMenuPosition.Y = (int)((Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y);
 
             return BaseMenuPosition;
         }
@@ -343,8 +343,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                     break;
                             }
                             TextHelper.DrawText(g, Owner.ArrayTerrain[X, Y].TerrainTypeIndex.ToString(),
-                                new Vector2((X - Map.CameraPosition.X) * Map.TileSize.X + XOffset,
-                                (Y - Map.CameraPosition.Y) * Map.TileSize.Y + YOffset), TextColor);
+                                new Vector2((X - Map.Camera2DPosition.X) * Map.TileSize.X + XOffset,
+                                (Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + YOffset), TextColor);
                         }
                     }
                 }
@@ -385,8 +385,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             }
 
                             TextHelper.DrawText(g, Owner.ArrayTerrain[X, Y].Height.ToString(),
-                                new Vector2((X - Map.CameraPosition.X) * Map.TileSize.X + XOffset,
-                                (Y - Map.CameraPosition.Y) * Map.TileSize.Y + YOffset), TextColor);
+                                new Vector2((X - Map.Camera2DPosition.X) * Map.TileSize.X + XOffset,
+                                (Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + YOffset), TextColor);
                         }
                     }
                 }
@@ -407,54 +407,54 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     for (int i = 0; i < Owner.ListSingleplayerSpawns.Count; i++)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListSingleplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                      (int)(Owner.ListSingleplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListSingleplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                      (int)(Owner.ListSingleplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y),
                                                       null,
                                         BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 
                         g.DrawString(Map.fntArial9, Owner.ListSingleplayerSpawns[i].Tag,
-                            new Vector2((Owner.ListSingleplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (Owner.ListSingleplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                            new Vector2((Owner.ListSingleplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X + 10,
+                                        (Owner.ListSingleplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.2f);
                     }
 
                     for (int i = 0; i < Owner.ListMultiplayerSpawns.Count; i++)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListMultiplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                      (int)(Owner.ListMultiplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListMultiplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                      (int)(Owner.ListMultiplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y), null,
                                         BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
 
                         g.DrawString(Map.fntArial9, Owner.ListMultiplayerSpawns[i].Tag,
-                            new Vector2((Owner.ListMultiplayerSpawns[i].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (Owner.ListMultiplayerSpawns[i].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                            new Vector2((Owner.ListMultiplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X + 10,
+                                        (Owner.ListMultiplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
 
                     for (int S = 0; S < Owner.ListMapSwitchPoint.Count; S++)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListMapSwitchPoint[S].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                       (int)(Owner.ListMapSwitchPoint[S].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListMapSwitchPoint[S].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                       (int)(Owner.ListMapSwitchPoint[S].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y), null,
                                         BrushMapSwitchEventPoint, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
 
                         g.DrawString(Map.fntArial9, Owner.ListMapSwitchPoint[S].Tag,
-                            new Vector2((Owner.ListMapSwitchPoint[S].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (Owner.ListMapSwitchPoint[S].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                            new Vector2((Owner.ListMapSwitchPoint[S].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X + 10,
+                                        (Owner.ListMapSwitchPoint[S].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
 
                     for (int T = 0; T < Owner.ListTeleportPoint.Count; T++)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListTeleportPoint[T].Position.X - Map.CameraPosition.X) * Map.TileSize.X,
-                                                       (int)(Owner.ListTeleportPoint[T].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y,
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListTeleportPoint[T].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                       (int)(Owner.ListTeleportPoint[T].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y), null,
                                         BrushTeleportPoint, 0f, Vector2.Zero, SpriteEffects.None, 0.001f);
 
                         g.DrawString(Map.fntArial9, Owner.ListTeleportPoint[T].Tag,
-                            new Vector2((Owner.ListTeleportPoint[T].Position.X - Map.CameraPosition.X) * Map.TileSize.X + 10,
-                                        (Owner.ListTeleportPoint[T].Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y + 10),
+                            new Vector2((Owner.ListTeleportPoint[T].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X + 10,
+                                        (Owner.ListTeleportPoint[T].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     }
                 }

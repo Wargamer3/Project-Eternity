@@ -141,8 +141,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 public override void Draw(CustomSpriteBatch g)
                 {
-                    float PosX = (Position.X - Map.CameraPosition.X) * Map.TileSize.X;
-                    float PosY = (Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+                    float PosX = (Position.X - Map.Camera2DPosition.X) * Map.TileSize.X;
+                    float PosY = (Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
 
                     g.Draw(sprCrate, new Vector2(PosX, PosY), Color.White);
                 }

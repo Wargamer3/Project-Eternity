@@ -39,7 +39,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void OnSelect()
         {
             Camera = new DefaultCamera(GameScreen.GraphicsDevice);
-            Map.CameraOverride = Camera;
+            Map.Camera3DOverride = Camera;
             MaxFuel = FuelRemaining = 120;
         }
 

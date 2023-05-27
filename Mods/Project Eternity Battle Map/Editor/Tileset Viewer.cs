@@ -1,9 +1,10 @@
 ﻿using System.Windows.Forms;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using ProjectEternity.Core.Editor;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectEternity.Core.Editor;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -16,7 +17,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private Point TileSize;
 
         public Point DrawOffset;
-        public Rectangle TileBrushSize;//X, Y position of the cursor in the TilePreview, used to select the origin for the next Tile.
+        public List<Rectangle> ListTileBrush;//X, Y position of the cursor in the TilePreview, used to select the origin for the next Tile.
+        public List<Color> ListTileBrushColor;
+
+        public TilesetViewerControl()
+        {
+            ListTileBrush = new List<Rectangle>();
+            ListTileBrushColor = new List<Color>();
+            ListTileBrush.Add(new Rectangle());
+            ListTileBrushColor.Add(Color.Red);
+            ListTileBrushColor.Add(Color.Yellow);
+            ListTileBrushColor.Add(Color.Green);
+            ListTileBrushColor.Add(Color.Blue);
+        }
 
         protected override void Initialize()
         {
@@ -40,8 +53,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.sprTileset = sprTileset;
             this.TileSize = TileSize;
-
-            TileBrushSize = new Rectangle(0, 0, TileSize.X, TileSize.Y);
         }
 
         public void InitTileset(string Tileset, Point TileSize)
@@ -53,8 +64,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.TileSize = TileSize;
         }
 
-        public void SelectTile(Point TileToSelect, bool ExpendSelection)
+        public void SelectTile(Point TileToSelect, bool ExpendSelection, int BrushIndex)
         {
+            while (BrushIndex >= ListTileBrush.Count)
+            {
+                ListTileBrush.Add(ListTileBrush[0]);
+            }
+            while (BrushIndex >= ListTileBrushColor.Count)
+            {
+                ListTileBrushColor.Add(Color.FromNonPremultiplied(Core.RandomHelper.Next(255), Core.RandomHelper.Next(255), Core.RandomHelper.Next(255), 255));
+            }
+
+            Rectangle TileBrushSize = ListTileBrush[BrushIndex];
+
             if (ExpendSelection)
             {
                 if (TileToSelect.X > TileBrushSize.X)
@@ -72,10 +94,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 TileBrushSize.Width = TileSize.X;
                 TileBrushSize.Height = TileSize.Y;
             }
+
+            ListTileBrush[BrushIndex] = TileBrushSize;
         }
 
-        public Point GetTileFromBrush(Point MapTileToPaint)
+        public Point GetTileFromBrush(Point MapTileToPaint, int BrushIndex)
         {
+            Rectangle TileBrushSize = ListTileBrush[BrushIndex];
+
             Point RealTile = new Point();
             RealTile.X = TileBrushSize.X + MapTileToPaint.X % TileBrushSize.Width;
             RealTile.Y = TileBrushSize.Y + MapTileToPaint.Y % TileBrushSize.Height;
@@ -97,10 +123,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (sprTileset != null)
             {
                 g.Draw(sprTileset, new Vector2(-DrawOffset.X, -DrawOffset.Y), Color.White);
-                g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y, TileBrushSize.Width, 1), Color.Red);
-                g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y, 1, TileBrushSize.Height), Color.Red);
-                g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y + TileBrushSize.Height, TileBrushSize.Width, 1), Color.Red);
-                g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X + TileBrushSize.Width, TileBrushSize.Y - DrawOffset.Y, 1, TileBrushSize.Height), Color.Red);
+                for (int B = 0; B < ListTileBrush.Count; B++)
+                {
+                    Rectangle TileBrushSize = ListTileBrush[B];
+                    Color DrawColor = ListTileBrushColor[B];
+                    g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y, TileBrushSize.Width, 1), DrawColor);
+                    g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y, 1, TileBrushSize.Height), DrawColor);
+                    g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X, TileBrushSize.Y - DrawOffset.Y + TileBrushSize.Height, TileBrushSize.Width, 1), DrawColor);
+                    g.Draw(sprPixel, new Rectangle(TileBrushSize.X - DrawOffset.X + TileBrushSize.Width, TileBrushSize.Y - DrawOffset.Y, 1, TileBrushSize.Height), DrawColor);
+                }
             }
 
             g.End();

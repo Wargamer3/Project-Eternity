@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private Effect MapEffect;
         private Effect ColorEffect;
         private BasicEffect PolygonEffect;
-        private Camera3D Camera => Map.Camera;
+        private Camera3D Camera => Map.Camera3D;
         private Texture2D sprCursor;
         private List<Tile3D> ListEditorCursorFace;
 
@@ -532,13 +532,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Matrix World;
 
-                if (Map.CameraOverride != null)
+                if (Map.Camera3DOverride != null)
                 {
-                    World = NewWorld * Map.CameraOverride.View;
+                    World = NewWorld * Map.Camera3DOverride.View;
                 }
                 else
                 {
-                    World = NewWorld * Map.Camera.View;
+                    World = NewWorld * Map.Camera3D.View;
                 }
 
                 worldInverse = Matrix.Invert(World);
@@ -837,14 +837,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            Matrix View = Map.Camera.View;
+            Matrix View = Map.Camera3D.View;
             Matrix World = PolygonEffect.World;
-            Vector3 CameraPosition = Map.Camera.CameraPosition3D;
+            Vector3 CameraPosition = Map.Camera3D.CameraPosition3D;
 
-            if (Map.CameraOverride != null)
+            if (Map.Camera3DOverride != null)
             {
-                View = Map.CameraOverride.View;
-                CameraPosition = Map.CameraOverride.CameraPosition3D;
+                View = Map.Camera3DOverride.View;
+                CameraPosition = Map.Camera3DOverride.CameraPosition3D;
             }
             PolygonEffect.View = View;
             Matrix ViewProjection = View * PolygonEffect.Projection;
@@ -901,10 +901,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DrawMap(CustomSpriteBatch g, Matrix View, Matrix WorldViewProjection)
         {
-            Vector3 CameraPosition = Map.Camera.CameraPosition3D;
-            if (Map.CameraOverride != null)
+            Vector3 CameraPosition = Map.Camera3D.CameraPosition3D;
+            if (Map.Camera3DOverride != null)
             {
-                CameraPosition = Map.CameraOverride.CameraPosition3D;
+                CameraPosition = Map.Camera3DOverride.CameraPosition3D;
             }
 
             if (Map.ShowLayerIndex == -1)

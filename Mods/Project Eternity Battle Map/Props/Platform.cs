@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             this.PlatformMap = Map;
             Map.IsAPlatform = true;
-            Map.Camera = Parent.Camera;
+            Map.Camera3D = Parent.Camera3D;
 
             OffsetX = PlatformMap.MapSize.X * PlatformMap.TileSize.X / 2;
             OffsetY = PlatformMap.MapSize.Y * PlatformMap.TileSize.Y / 2;

@@ -78,8 +78,8 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                     ActiveUnit.EndTurn();
                 }
 
-                if (ActiveUnit.X < Map.CameraPosition.X || ActiveUnit.Y < Map.CameraPosition.Y ||
-                    ActiveUnit.X >= Map.CameraPosition.X + Map.ScreenSize.X || ActiveUnit.Y >= Map.CameraPosition.Y + Map.ScreenSize.Y)
+                if (ActiveUnit.X < Map.Camera2DPosition.X || ActiveUnit.Y < Map.Camera2DPosition.Y ||
+                    ActiveUnit.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || ActiveUnit.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
                 {
                     Map.PushScreen(new CenterOnSquadCutscene(null, Map, ActiveUnit.Position));
                 }

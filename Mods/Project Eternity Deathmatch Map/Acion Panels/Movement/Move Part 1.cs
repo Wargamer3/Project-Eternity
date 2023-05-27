@@ -59,7 +59,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPositionVisible = Map.CursorPosition;
             LastCusorMVPosition = LastPosition;
 
-            Map.CameraPosition = LastCameraPosition;
+            Map.Camera2DPosition = LastCameraPosition;
 
             ListMVChoice = Map.GetMVChoice(ActiveSquad, LastPosition.Owner);
             ListMovedOverTerrain = new List<MovementAlgorithmTile>();
@@ -248,7 +248,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             Map.CursorPosition = new Vector3(LastPosition.InternalPosition.X, LastPosition.InternalPosition.Y, LastPosition.LayerIndex);
             Map.CursorPositionVisible = Map.CursorPosition;
 
-            Map.CameraPosition = LastCameraPosition;
+            Map.Camera2DPosition = LastCameraPosition;
             ListMVChoice.Clear();
         }
 

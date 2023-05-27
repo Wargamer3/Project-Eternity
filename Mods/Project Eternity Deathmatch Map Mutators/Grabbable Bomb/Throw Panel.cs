@@ -228,8 +228,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.Indices = BeamIndexBuffer;
             g.BlendState = BlendState.NonPremultiplied;
             g.RasterizerState = RasterizerState.CullNone;
-            BeamEffect.View = Map.Camera.View;
-            BeamEffect.Projection = Map.Camera.Projection;
+            BeamEffect.View = Map.Camera3D.View;
+            BeamEffect.Projection = Map.Camera3D.Projection;
 
             Vector3 BeamOrigin = new Vector3(ActiveSquad.Position.X + 0.5f, ActiveSquad.Position.Z + 0.5f, ActiveSquad.Position.Y + 0.5f) * 32;
 
@@ -242,7 +242,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Vector3 BeamDirection = BeamTarget - BeamOrigin;
                 BeamDirection.Normalize();
 
-                Vector3 BeamOriginToCamera = Map.Camera.CameraPosition3D - BeamOrigin;
+                Vector3 BeamOriginToCamera = Map.Camera3D.CameraPosition3D - BeamOrigin;
                 Vector3 BeamRight = Vector3.Cross(BeamDirection, BeamOriginToCamera);
                 BeamRight.Normalize();
 

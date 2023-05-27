@@ -191,8 +191,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 CursorPosition = ActiveSquad.Position;
                 CursorPositionVisible = CursorPosition;
 
-                if (ActiveSquad.X < CameraPosition.X || ActiveSquad.Y < CameraPosition.Y ||
-                    ActiveSquad.X >= CameraPosition.X + ScreenSize.X || ActiveSquad.Y >= CameraPosition.Y + ScreenSize.Y)
+                if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
+                    ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
                 {
                     PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
                 }
@@ -236,8 +236,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 CursorPosition = ActiveSquad.Position;
                 CursorPositionVisible = CursorPosition;
 
-                if (ActiveSquad.X < CameraPosition.X || ActiveSquad.Y < CameraPosition.Y ||
-                    ActiveSquad.X >= CameraPosition.X + ScreenSize.X || ActiveSquad.Y >= CameraPosition.Y + ScreenSize.Y)
+                if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
+                    ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
                 {
                     PushScreen(new CenterOnSquadCutscene(CenterCamera, this, ActiveSquad.Position));
                 }

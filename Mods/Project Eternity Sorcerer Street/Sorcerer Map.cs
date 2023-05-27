@@ -145,7 +145,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListTerrainType.Add("Gem Store");
 
             ListTileSet = new List<Texture2D>();
-            this.CameraPosition = Vector3.Zero;
+            this.Camera2DPosition = Vector3.Zero;
             TerrainRestrictions = new UnitAndTerrainValues();
             for (int i = 0; i < ListTerrainType.Count; ++i)
             {

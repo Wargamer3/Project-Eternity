@@ -121,8 +121,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            float PosX = (Position.X - Map.CameraPosition.X) * Map.TileSize.X;
-            float PosY = (Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+            float PosX = (Position.X - Map.Camera2DPosition.X) * Map.TileSize.X;
+            float PosY = (Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
             g.Draw(GameScreen.sprPixel, new Rectangle((int)PosX, (int)PosY, 32, 32), Color.Red);
         }
 
@@ -132,7 +132,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 DrawModel(ModelToDraw, View, Projection,
                     Matrix.CreateRotationX(MathHelper.ToRadians(-90))
-                    * Matrix.CreateScale(Map.TileSize.X, 32, Map.TileSize.Y)
+                    * Matrix.CreateScale(Map.TileSize.X, Map.LayerHeight, Map.TileSize.Y)
                     * Matrix.CreateTranslation((Position.X + Offset.X) * Map.TileSize.X, (Position.Z + Offset.Z) * Map.LayerHeight, (Position.Y + Offset.Y) * Map.TileSize.Y));
             }
         }

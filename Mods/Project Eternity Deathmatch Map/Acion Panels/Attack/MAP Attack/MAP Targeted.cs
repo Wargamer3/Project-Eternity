@@ -138,8 +138,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.CursorPositionVisible = Map.CursorPosition;
                 UpdateExplosionPositions();
 
-                if (TemptativeTargetSquad.X < Map.CameraPosition.X || TemptativeTargetSquad.Y < Map.CameraPosition.Y ||
-                    TemptativeTargetSquad.X >= Map.CameraPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.Y >= Map.CameraPosition.Y + Map.ScreenSize.Y)
+                if (TemptativeTargetSquad.X < Map.Camera2DPosition.X || TemptativeTargetSquad.Y < Map.Camera2DPosition.Y ||
+                    TemptativeTargetSquad.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
                 {
                     Map.PushScreen(new CenterOnSquadCutscene(Map.CenterCamera, Map, TemptativeTargetSquad.Position));
                 }
@@ -183,8 +183,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Map.CursorPositionVisible = Map.CursorPosition;
                 UpdateExplosionPositions();
 
-                if (TemptativeTargetSquad.X < Map.CameraPosition.X || TemptativeTargetSquad.Y < Map.CameraPosition.Y ||
-                    TemptativeTargetSquad.X >= Map.CameraPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.Y >= Map.CameraPosition.Y + Map.ScreenSize.Y)
+                if (TemptativeTargetSquad.X < Map.Camera2DPosition.X || TemptativeTargetSquad.Y < Map.Camera2DPosition.Y ||
+                    TemptativeTargetSquad.X >= Map.Camera2DPosition.X + Map.ScreenSize.X || TemptativeTargetSquad.Y >= Map.Camera2DPosition.Y + Map.ScreenSize.Y)
                 {
                     Map.PushScreen(new CenterOnSquadCutscene(Map.CenterCamera, Map, TemptativeTargetSquad.Position));
                 }

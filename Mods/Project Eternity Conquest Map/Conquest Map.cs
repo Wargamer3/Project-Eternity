@@ -83,7 +83,7 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             ListTerrainType.Add("Missile Silo");
 
             ListTileSet = new List<Texture2D>();
-            this.CameraPosition = Vector3.Zero;
+            this.Camera2DPosition = Vector3.Zero;
 
             this.ListPlayer = new List<Player>();
         }

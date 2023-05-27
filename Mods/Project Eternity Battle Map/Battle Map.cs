@@ -27,6 +27,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         /// Focused will make every Unit attack the leader. Spread will make each Unit attack to opposite Unit. ALL is only used to show the leader is using an ALL attack and can't be toggled.
         /// </summary>
         public enum FormationChoices { Focused = 0, Spread = 1, ALL = 2 };
+        public enum Camera3DAngles { Front, Right, Back, Left, Top };
         
         #endregion
 
@@ -150,9 +151,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public Point ScreenSize;//Size in tiles of the maximum amonth of tiles shown by the camera.
         public string CameraType;
-        public Vector3 CameraPosition;
-        public Camera3D Camera;
-        public Camera3D CameraOverride;//Used by vehicles.
+        public Vector3 Camera2DPosition;//Position in the grid
+        public Camera3D Camera3D;
+        public Camera3D Camera3DOverride;//Used by vehicles.
+        public float Camera3DDistance = 255;
+        public Camera3DAngles Camera3DAngle = Camera3DAngles.Front;
+
         public uint OrderNumber;
         public byte PlayersMin;
         public byte PlayersMax;
@@ -323,8 +327,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             BW.Write(CameraType);
 
-            BW.Write((int)Math.Max(0, CameraPosition.X));
-            BW.Write((int)Math.Max(0, CameraPosition.Y));
+            BW.Write((int)Math.Max(0, Camera2DPosition.X));
+            BW.Write((int)Math.Max(0, Camera2DPosition.Y));
 
             BW.Write(ListBackgroundsPath.Count);
             for (int B = 0; B < ListBackgroundsPath.Count; B++)
@@ -362,7 +366,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 MapRenderTarget = new RenderTarget2D(GraphicsDevice, Constants.Width, Constants.Height, false,
                     GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
-                Camera = new DefaultCamera(GraphicsDevice);
+                Camera3D = new DefaultCamera(GraphicsDevice);
                 AttackPicker = new AttacksMenu(ActiveParser);
 
                 sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
@@ -498,9 +502,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             CameraType = BR.ReadString();
 
-            CameraPosition.X = BR.ReadInt32();
-            CameraPosition.Y = BR.ReadInt32();
-            CursorPosition = CameraPosition;
+            Camera2DPosition.X = BR.ReadInt32();
+            Camera2DPosition.Y = BR.ReadInt32();
+            CursorPosition = Camera2DPosition;
             CursorPositionVisible = CursorPosition;
 
             int ListBackgroundsPathCount = BR.ReadInt32();
@@ -928,8 +932,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (IsMovingLeft && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.X - CameraPosition.X - 3 < 0 && CameraPosition.X > -3)
-                    --CameraPosition.X;
+                if (CursorPosition.X - Camera2DPosition.X - 3 < 0 && Camera2DPosition.X > -3)
+                    --Camera2DPosition.X;
 
                 Offset.X -= (CursorPosition.X > 0) ? 1 : 0;
                 CursorMoved = true;
@@ -937,8 +941,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else if (IsMovingRight && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.X - CameraPosition.X + 3 >= ScreenSize.X && CameraPosition.X + ScreenSize.X < MapSize.X + 3)
-                    ++CameraPosition.X;
+                if (CursorPosition.X - Camera2DPosition.X + 3 >= ScreenSize.X && Camera2DPosition.X + ScreenSize.X < MapSize.X + 3)
+                    ++Camera2DPosition.X;
 
                 Offset.X += (CursorPosition.X < MapSize.X - 1) ? 1 : 0;
                 CursorMoved = true;
@@ -947,8 +951,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (IsMovingUp && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - CameraPosition.Y - 3 < 0 && CameraPosition.Y > -3)
-                    --CameraPosition.Y;
+                if (CursorPosition.Y - Camera2DPosition.Y - 3 < 0 && Camera2DPosition.Y > -3)
+                    --Camera2DPosition.Y;
 
                 Offset.Y -= (CursorPosition.Y > 0) ? 1 : 0;
                 CursorMoved = true;
@@ -956,8 +960,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else if (IsMovingDown && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - CameraPosition.Y + 3 >= ScreenSize.Y && CameraPosition.Y + ScreenSize.Y < MapSize.Y + 3)
-                    ++CameraPosition.Y;
+                if (CursorPosition.Y - Camera2DPosition.Y + 3 >= ScreenSize.Y && Camera2DPosition.Y + ScreenSize.Y < MapSize.Y + 3)
+                    ++Camera2DPosition.Y;
 
                 Offset.Y += (CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
                 CursorMoved = true;

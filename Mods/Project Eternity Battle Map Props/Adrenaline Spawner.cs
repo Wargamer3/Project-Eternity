@@ -99,8 +99,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             if (!IsUsed)
             {
-                float PosX = (Position.X - Map.CameraPosition.X) * Map.TileSize.X;
-                float PosY = (Position.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+                float PosX = (Position.X - Map.Camera2DPosition.X) * Map.TileSize.X;
+                float PosY = (Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
 
                 g.Draw(sprAdrenaline, new Vector2(PosX, PosY), Color.White);
             }

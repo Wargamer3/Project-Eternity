@@ -179,8 +179,8 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             {
                 for (int Y = 0; Y < Map.ListPlayer[Map.ActivePlayerIndex].ListConstructionChoiceVisible[ConstructionMenuIndex].MapSize.Y; Y++)
                 {
-                    g.Draw(GameScreen.sprPixel, new Rectangle((int)(Map.CursorPosition.X + X - Map.CameraPosition.X) * Map.TileSize.X,
-                        (int)(Map.CursorPosition.Y + Y - Map.CameraPosition.Y) * Map.TileSize.Y, 32, 32),
+                    g.Draw(GameScreen.sprPixel, new Rectangle((int)(Map.CursorPosition.X + X - Map.Camera2DPosition.X) * Map.TileSize.X,
+                        (int)(Map.CursorPosition.Y + Y - Map.Camera2DPosition.Y) * Map.TileSize.Y, 32, 32),
                         ArrayConstructionZoneEmpty[X, Y] ? Color.FromNonPremultiplied(0, 128, 0, 190) : Color.FromNonPremultiplied(255, 0, 0, 190));
                 }
             }

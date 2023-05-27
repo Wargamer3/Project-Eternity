@@ -167,7 +167,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             ListTileSet = new List<Texture2D>();
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
-            CameraPosition = Vector3.Zero;
+            Camera2DPosition = Vector3.Zero;
             ActiveSquadIndex = -1;
 
             if (GameInfo == null)
@@ -789,8 +789,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (ActiveSquad == null)
                 return;
 
-            if (ActiveSquad.X < CameraPosition.X || ActiveSquad.Y < CameraPosition.Y ||
-                ActiveSquad.X >= CameraPosition.X + ScreenSize.X || ActiveSquad.Y >= CameraPosition.Y + ScreenSize.Y)
+            if (ActiveSquad.X < Camera2DPosition.X || ActiveSquad.Y < Camera2DPosition.Y ||
+                ActiveSquad.X >= Camera2DPosition.X + ScreenSize.X || ActiveSquad.Y >= Camera2DPosition.Y + ScreenSize.Y)
             {
                 PushScreen(new CenterOnSquadCutscene(null, this, ActiveSquad.Position));
             }

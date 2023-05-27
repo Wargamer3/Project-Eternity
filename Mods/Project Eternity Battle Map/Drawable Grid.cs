@@ -71,7 +71,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected Point TileSize { get { return Map.TileSize; } }
 
-        protected Vector3 CameraPosition { get { return Map.CameraPosition; } }
+        protected Vector3 CameraPosition { get { return Map.Camera2DPosition; } }
 
         public DrawableTile[,] ArrayTile;
 

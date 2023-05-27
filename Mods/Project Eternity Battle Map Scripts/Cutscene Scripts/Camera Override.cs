@@ -48,31 +48,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     case 0://Create Camera
                         Camera = new DefaultCamera(GameScreen.GraphicsDevice);
-                        Map.CameraOverride = Camera;
+                        Map.Camera3DOverride = Camera;
                         Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * Map.LayerHeight, _StartPosition.Y * Map.TileSize.Y);
                         break;
 
                     case 1://Grab Existing Camera
-                        Camera = Map.CameraOverride;
+                        Camera = Map.Camera3DOverride;
                         break;
 
                     case 2://Reset Position
                         Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * Map.LayerHeight, _StartPosition.Y * Map.TileSize.Y);
-                        Map.CameraOverride = Camera;
+                        Map.Camera3DOverride = Camera;
                         break;
 
                     case 3://Move
                         Camera.CameraPosition3D += new Vector3(_Speed.X, _Speed.Z, _Speed.Y);
-                        Map.CameraOverride = Camera;
+                        Map.Camera3DOverride = Camera;
                         break;
 
                     case 4://Move Towards End
                         Move(RealEndPosition);
-                        Map.CameraOverride = Camera;
+                        Map.Camera3DOverride = Camera;
                         break;
 
                     case 5://Stop Override
-                        Map.CameraOverride = null;
+                        Map.Camera3DOverride = null;
                         break;
                 }
 
@@ -90,31 +90,31 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 {
                     case 0://Create Camera
                         Camera = new DefaultCamera(GameScreen.GraphicsDevice);
-                        Map.CameraOverride = Camera;
+                        Map.Camera3DOverride = Camera;
                         Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * Map.LayerHeight, _StartPosition.Y * Map.TileSize.Y);
                         break;
 
                     case 1://Grab Existing Camera
-                        Camera = Map.CameraOverride;
+                        Camera = Map.Camera3DOverride;
                         break;
 
                     case 2://Reset Position
                         Camera.CameraPosition3D = new Vector3(_StartPosition.X * Map.TileSize.X, _StartPosition.Z * Map.LayerHeight, _StartPosition.Y * Map.TileSize.Y);
-                        Map.CameraOverride = Camera;
+                        Map.Camera3DOverride = Camera;
                         break;
 
                     case 3://Move
                         Camera.CameraPosition3D += new Vector3(_Speed.X, _Speed.Z, _Speed.Y) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        Map.CameraOverride = Camera;
+                        Map.Camera3DOverride = Camera;
                         break;
 
                     case 4://Move Towards End
                         Move(RealEndPosition);
-                        Map.CameraOverride = Camera;
+                        Map.Camera3DOverride = Camera;
                         break;
 
                     case 5://Stop Override
-                        Map.CameraOverride = null;
+                        Map.Camera3DOverride = null;
                         break;
                 }
 

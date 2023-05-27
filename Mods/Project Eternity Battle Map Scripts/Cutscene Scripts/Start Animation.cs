@@ -56,8 +56,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (AnimationSprite != null)
                 {
-                    float PosX = (_AnimationPosition.X - Map.CameraPosition.X) * Map.TileSize.X;
-                    float PosY = (_AnimationPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+                    float PosX = (_AnimationPosition.X - Map.Camera2DPosition.X) * Map.TileSize.X;
+                    float PosY = (_AnimationPosition.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
 
                     AnimationSprite.Draw(g, new Vector2(PosX, PosY), Color.White);
                 }

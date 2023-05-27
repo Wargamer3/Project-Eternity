@@ -78,13 +78,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Color FinalColor = Color.White;
                 float FinalHeight = ActiveTile.WorldPosition.Z - 1;
 
-                if (FinalHeight > ActiveTile.Owner.CameraPosition.Z && !ActiveTile.Owner.IsEditor)
+                if (FinalHeight > ActiveTile.Owner.Camera2DPosition.Z && !ActiveTile.Owner.IsEditor)
                 {
-                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.CameraPosition.Z) * 255);
+                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.Camera2DPosition.Z) * 255);
                 }
 
                 g.Draw(sprTileset,
-                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.CameraPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.CameraPosition.Y) * ActiveTile.Owner.TileSize.Y),
+                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.Camera2DPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.Camera2DPosition.Y) * ActiveTile.Owner.TileSize.Y),
                         ActiveTile.DrawableTile.Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ActiveTile.LayerDepth);
             }
 
@@ -107,13 +107,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Color FinalColor = Color.White;
                 float FinalHeight = ActiveTile.WorldPosition.Z;
 
-                if (FinalHeight > ActiveTile.Owner.CameraPosition.Z)
+                if (FinalHeight > ActiveTile.Owner.Camera2DPosition.Z)
                 {
-                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.CameraPosition.Z) * 255);
+                    FinalColor.A = (byte)Math.Min(255, 255 - (FinalHeight - ActiveTile.Owner.Camera2DPosition.Z) * 255);
                 }
 
                 g.Draw(sprTileset,
-                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.CameraPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.CameraPosition.Y) * ActiveTile.Owner.TileSize.Y) + Offset,
+                        new Vector2((ActiveTile.InternalPosition.X - ActiveTile.Owner.Camera2DPosition.X) * ActiveTile.Owner.TileSize.X, (ActiveTile.InternalPosition.Y - ActiveTile.Owner.Camera2DPosition.Y) * ActiveTile.Owner.TileSize.Y) + Offset,
                         ActiveTile.DrawableTile.Origin, FinalColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, ActiveTile.LayerDepth);
             }
 

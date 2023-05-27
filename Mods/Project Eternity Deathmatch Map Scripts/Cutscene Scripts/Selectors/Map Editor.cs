@@ -66,9 +66,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (BattleMapViewer.ActiveMap != null)
             {
                 Vector3 MapPreviewStartingPos = new Vector3(
-                    BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
-                    BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
-                    BattleMapViewer.ActiveMap.CameraPosition.Z);
+                    BattleMapViewer.ActiveMap.Camera2DPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
+                    BattleMapViewer.ActiveMap.Camera2DPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
+                    BattleMapViewer.ActiveMap.Camera2DPosition.Z);
 
                 int MouseX = (int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X;
                 int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y;
@@ -93,7 +93,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         //Just create a new Tile.
                         else if (BattleMapViewer.ActiveMap.TileSize.X != 0)
                         {
-                            Rectangle TilePos = TilesetViewer.TileBrushSize;
+                            Rectangle TilePos = TilesetViewer.ListTileBrush[0];
                             Terrain PresetTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
                             DrawableTile PresetTile = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTiles[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
@@ -135,9 +135,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (BattleMapViewer.ActiveMap != null)
             {
                 Vector3 MapPreviewStartingPos = new Vector3(
-                    BattleMapViewer.ActiveMap.CameraPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
-                    BattleMapViewer.ActiveMap.CameraPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
-                    BattleMapViewer.ActiveMap.CameraPosition.Z);
+                    BattleMapViewer.ActiveMap.Camera2DPosition.X * BattleMapViewer.ActiveMap.TileSize.X,
+                    BattleMapViewer.ActiveMap.Camera2DPosition.Y * BattleMapViewer.ActiveMap.TileSize.Y,
+                    BattleMapViewer.ActiveMap.Camera2DPosition.Z);
 
                 if (e.Button == MouseButtons.Left)
                 {
@@ -196,7 +196,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 Point DrawOffset = TilesetViewer.DrawOffset;//Used to avoid warnings.
                 //Set the ActiveTile to the mouse position.
                 TilesetViewer.SelectTile(new Point(((((MouseEventArgs)e).X + DrawOffset.X) / BattleMapViewer.ActiveMap.TileSize.X) * BattleMapViewer.ActiveMap.TileSize.X,
-                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / BattleMapViewer.ActiveMap.TileSize.Y) * BattleMapViewer.ActiveMap.TileSize.Y), false);
+                                                     ((((MouseEventArgs)e).Y + DrawOffset.Y) / BattleMapViewer.ActiveMap.TileSize.Y) * BattleMapViewer.ActiveMap.TileSize.Y), false, 0);
             }
         }
 
@@ -249,7 +249,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (cboTiles.SelectedIndex >= 0)
             {
-                Rectangle TilePos = TilesetViewer.TileBrushSize;
+                Rectangle TilePos = TilesetViewer.ListTileBrush[0];
                 Terrain SelectedTerrain = ActiveMap.ListTilesetPreset[cboTiles.SelectedIndex].ArrayTerrain[TilePos.X / ActiveMap.TileSize.X, TilePos.Y / ActiveMap.TileSize.Y];
 
                 TileAttributesEditor.Init(SelectedTerrain, ActiveMap);

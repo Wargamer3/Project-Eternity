@@ -88,8 +88,8 @@ namespace ProjectEternity.Core.Units.Transforming
             DrawNextChoice(g);
             UnitTransforming TempUnit = (UnitTransforming)ActiveSquad[SelectedUnitIndex];
 
-            X = (Map.CursorPosition.X + 1 - Map.CameraPosition.X) * Map.TileSize.X;
-            Y = (Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+            X = (Map.CursorPosition.X + 1 - Map.Camera2DPosition.X) * Map.TileSize.X;
+            Y = (Map.CursorPosition.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
 
             if (X + MinActionMenuWidth + MinActionMenuWidth >= Constants.Width)
                 X = Constants.Width - MinActionMenuWidth - MinActionMenuWidth;

@@ -246,7 +246,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 case 0:
                 case 1:
-                    ActiveMap.CameraPosition.X = e.NewValue;
+                    ActiveMap.Camera2DPosition.X = e.NewValue;
                     break;
 
                 case 2:
@@ -261,7 +261,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 case 0:
                 case 1:
-                    ActiveMap.CameraPosition.Y = e.NewValue;
+                    ActiveMap.Camera2DPosition.Y = e.NewValue;
                     break;
 
                 case 2:

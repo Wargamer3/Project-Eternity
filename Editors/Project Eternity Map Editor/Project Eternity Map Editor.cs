@@ -418,9 +418,9 @@ namespace ProjectEternity.Editors.MapEditor
         protected virtual void pnMapPreview_MouseMove(object sender, MouseEventArgs e)
         {
             Vector3 MapPreviewStartingPos = new Vector3(
-                ActiveMap.CameraPosition.X * ActiveMap.TileSize.X,
-                ActiveMap.CameraPosition.Y * ActiveMap.TileSize.Y,
-                ActiveMap.CameraPosition.Z);
+                ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
+                ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
+                ActiveMap.Camera2DPosition.Z);
 
             DrawInfo((int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y);
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
@@ -474,9 +474,9 @@ namespace ProjectEternity.Editors.MapEditor
                         if (TileReplacementZone.Width > 0 && ActiveMap.TileSize.X != 0)
                         {
                             Vector3 MapPreviewStartingPos = new Vector3(
-                                ActiveMap.CameraPosition.X * ActiveMap.TileSize.X,
-                                ActiveMap.CameraPosition.Y * ActiveMap.TileSize.Y,
-                                ActiveMap.CameraPosition.Z);
+                                ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
+                                ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
+                                ActiveMap.Camera2DPosition.Z);
 
                             for (int X = TileReplacementZone.X; X < TileReplacementZone.Right; ++X)
                             {
@@ -519,9 +519,9 @@ namespace ProjectEternity.Editors.MapEditor
                     if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
                     {
                         Vector3 MapPreviewStartingPos = new Vector3(
-                            ActiveMap.CameraPosition.X * ActiveMap.TileSize.X,
-                            ActiveMap.CameraPosition.Y * ActiveMap.TileSize.Y,
-                            ActiveMap.CameraPosition.Z);
+                            ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
+                            ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
+                            ActiveMap.Camera2DPosition.Z);
 
                         int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
                         int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
@@ -546,9 +546,9 @@ namespace ProjectEternity.Editors.MapEditor
         private void Map_MouseMove(MouseEventArgs e)
         {
             Vector3 MapPreviewStartingPos = new Vector3(
-                ActiveMap.CameraPosition.X * ActiveMap.TileSize.X,
-                ActiveMap.CameraPosition.Y * ActiveMap.TileSize.Y,
-                ActiveMap.CameraPosition.Z);
+                ActiveMap.Camera2DPosition.X * ActiveMap.TileSize.X,
+                ActiveMap.Camera2DPosition.Y * ActiveMap.TileSize.Y,
+                ActiveMap.Camera2DPosition.Z);
 
             int MouseX = (int)(e.X + MapPreviewStartingPos.X) / ActiveMap.TileSize.X;
             int MouseY = (int)(e.Y + MapPreviewStartingPos.Y) / ActiveMap.TileSize.Y;
@@ -1505,7 +1505,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             ActiveMap.MapName = MS.txtMapName.Text;
             ActiveMap.CameraType = MS.cbCameraType.Text;
-            ActiveMap.CameraPosition = CameraPosition;
+            ActiveMap.Camera2DPosition = CameraPosition;
             ActiveMap.OrderNumber = (uint)MS.txtOrderNumber.Value;
             ActiveMap.PlayersMin = (byte)MS.frmDefaultGameModesConditions.txtPlayersMin.Value;
             ActiveMap.PlayersMax = (byte)MS.frmDefaultGameModesConditions.txtPlayersMax.Value;

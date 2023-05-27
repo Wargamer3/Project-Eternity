@@ -142,7 +142,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlaySFX.ExecuteEvent = ExecuteEvent;
             PlaySFX.SFXPath = "Explosion";
             StartAnimation.ExecuteEvent = ExecuteEvent;
-            StartAnimation.AnimationPosition = new Vector2(SquadToDestroy.Position.X - Map.CameraPosition.X, SquadToDestroy.Position.Y - Map.CameraPosition.Y);
+            StartAnimation.AnimationPosition = new Vector2(SquadToDestroy.Position.X - Map.Camera2DPosition.X, SquadToDestroy.Position.Y - Map.Camera2DPosition.Y);
             StartAnimation.AnimationPath = "Explosion_strip12";
             StartAnimation.AnimationSpeed = 15f;
 
@@ -225,25 +225,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
 
                 //Update the camera if needed.
-                if (Map.CursorPosition.X - Map.CameraPosition.X - 3 < 0 && Map.CameraPosition.X >  -3)
+                if (Map.CursorPosition.X - Map.Camera2DPosition.X - 3 < 0 && Map.Camera2DPosition.X >  -3)
                 {
-                    --Map.CameraPosition.X;
+                    --Map.Camera2DPosition.X;
                     IsFinished = false;
                 }
-                else if (Map.CursorPosition.X - Map.CameraPosition.X >= Map.ScreenSize.X / 2 && Map.CameraPosition.X + Map.ScreenSize.X < Map.MapSize.X + 3)
+                else if (Map.CursorPosition.X - Map.Camera2DPosition.X >= Map.ScreenSize.X / 2 && Map.Camera2DPosition.X + Map.ScreenSize.X < Map.MapSize.X + 3)
                 {
-                    ++Map.CameraPosition.X;
+                    ++Map.Camera2DPosition.X;
                     IsFinished = false;
                 }
 
-                if (Map.CursorPosition.Y - Map.CameraPosition.Y - 3 < 0 && Map.CameraPosition.Y > -3)
+                if (Map.CursorPosition.Y - Map.Camera2DPosition.Y - 3 < 0 && Map.Camera2DPosition.Y > -3)
                 {
-                    --Map.CameraPosition.Y;
+                    --Map.Camera2DPosition.Y;
                     IsFinished = false;
                 }
-                else if (Map.CursorPosition.Y - Map.CameraPosition.Y >= Map.ScreenSize.Y / 2 && Map.CameraPosition.Y + Map.ScreenSize.Y < Map.MapSize.Y + 3)
+                else if (Map.CursorPosition.Y - Map.Camera2DPosition.Y >= Map.ScreenSize.Y / 2 && Map.Camera2DPosition.Y + Map.ScreenSize.Y < Map.MapSize.Y + 3)
                 {
-                    ++Map.CameraPosition.Y;
+                    ++Map.Camera2DPosition.Y;
                     IsFinished = false;
                 }
 

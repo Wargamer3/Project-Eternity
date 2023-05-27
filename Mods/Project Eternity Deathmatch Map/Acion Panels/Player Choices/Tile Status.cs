@@ -30,16 +30,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             Map.CursorPosition.X = BR.ReadFloat();
             Map.CursorPosition.Y = BR.ReadFloat();
-            Map.CameraPosition.X = BR.ReadFloat();
-            Map.CameraPosition.Y = BR.ReadFloat();
+            Map.Camera2DPosition.X = BR.ReadFloat();
+            Map.Camera2DPosition.Y = BR.ReadFloat();
         }
 
         public override void DoWrite(ByteWriter BW)
         {
             BW.AppendFloat(Map.CursorPosition.X);
             BW.AppendFloat(Map.CursorPosition.Y);
-            BW.AppendFloat(Map.CameraPosition.X);
-            BW.AppendFloat(Map.CameraPosition.Y);
+            BW.AppendFloat(Map.Camera2DPosition.X);
+            BW.AppendFloat(Map.Camera2DPosition.Y);
         }
 
         protected override ActionPanel Copy()

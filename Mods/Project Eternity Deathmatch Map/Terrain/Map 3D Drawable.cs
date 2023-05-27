@@ -16,15 +16,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         protected Point MapSize { get { return Map.MapSize; } }
 
-        const float CameraHeight = 700;
-        const float CameraDistance = 500;
+        const float CameraHeight = 200;
+        const float CameraDistance = 300;
+        const float CameraYaw = 0.2f;
+        const float RealDistance = 255;
 
         private DeathmatchMap Map;
 
         private Effect MapEffect;
         private Effect ColorEffect;
         private BasicEffect PolygonEffect;
-        private Camera3D Camera => Map.Camera;
+        private Camera3D Camera => Map.Camera3D;
         private Texture2D sprCursor;
         private Tile3D Cursor;
         private List<Tile3D> ListEditorCursorFace;
@@ -315,8 +317,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (Map.ActivePlatform == null && (!Map.IsAPlatform || Map.IsPlatformActive) && !Map.IsServer)
             {
-                UpdateCamera();
-
                 int X = (int)Map.CursorPositionVisible.X;
                 int Y = (int)Map.CursorPositionVisible.Y;
                 float Z = Map.LayerManager.ListLayer[(int)Map.CursorPosition.Z].ArrayTerrain[X, Y].WorldPosition.Z * Map.LayerHeight + 0.3f;
@@ -367,104 +367,30 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void SetTarget(Vector3 Target)
         {
-            Camera.CameraPosition3D = Vector3.Transform(new Vector3(0, 0, 300), Matrix.CreateRotationY(0.2f)) + Target;
-            Camera.CameraPosition3D = Vector3.Transform(Camera.CameraPosition3D, Matrix.CreateTranslation(0f, 200, 0f));
+            float YawRotation = 0.2f;
+            float PitchRotation = MathHelper.ToRadians(45);
+            if (Map.Camera3DAngle == BattleMap.Camera3DAngles.Right)
+            {
+                YawRotation += MathHelper.ToRadians(90);
+            }
+            else if (Map.Camera3DAngle == BattleMap.Camera3DAngles.Back)
+            {
+                YawRotation += MathHelper.ToRadians(180);
+            }
+            else if (Map.Camera3DAngle == BattleMap.Camera3DAngles.Left)
+            {
+                YawRotation += MathHelper.ToRadians(270);
+            }
+            else if (Map.Camera3DAngle == BattleMap.Camera3DAngles.Top)
+            {
+                YawRotation = 0;
+                PitchRotation = MathHelper.ToRadians(1);
+            }
+
+            Matrix FinalMatrix = Matrix.CreateTranslation(0, Map.Camera3DDistance, 0) * Matrix.CreateFromYawPitchRoll(YawRotation, PitchRotation, 0);
+            Camera.CameraPosition3D = FinalMatrix.Translation + Target;
+
             Camera.View = Matrix.CreateLookAt(Camera.CameraPosition3D, Target, Vector3.Up);
-        }
-
-        private void UpdateCamera()
-        {
-            return;
-            if (Map.IsEditor)
-            {
-                KeyboardHelper.UpdateKeyboardStatus();
-                bool IsMovingLeft = InputHelper.InputLeftHold();
-                bool IsMovingRight = InputHelper.InputRightHold();
-                bool IsMovingUp = InputHelper.InputUpHold();
-                bool IsMovingDown = InputHelper.InputDownHold();
-                if (IsMovingLeft)
-                {
-                    Map.CursorPosition.X -= (Map.CursorPosition.X > 0) ? 1 : 0;
-                }
-                else if (IsMovingRight)
-                {
-                    Map.CursorPosition.X += (Map.CursorPosition.X < MapSize.X - 1) ? 1 : 0;
-                }
-                if (IsMovingUp)
-                {
-                    Map.CursorPosition.Y -= (Map.CursorPosition.Y > 0) ? 1 : 0;
-                }
-                else if (IsMovingDown)
-                {
-                    Map.CursorPosition.Y += (Map.CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
-                }
-            }
-
-            if (KeyboardHelper.KeyPressed(Keys.Q))
-            {
-                float NextZ = Map.CursorPosition.Z;
-
-                if (KeyboardHelper.KeyHold(Keys.LeftAlt))
-                {
-                    NextZ += 1f;
-                }
-                else
-                {
-                    do
-                    {
-                        NextZ += 1f;
-                    }
-                    while (NextZ < Map.LayerManager.ListLayer.Count
-                        && Map.LayerManager.ListLayer[(int)NextZ].ArrayTerrain[(int)Map.CursorPosition.X, (int)Map.CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex);
-
-                    if (NextZ >= Map.LayerManager.ListLayer.Count)
-                    {
-                        NextZ = Map.CursorPosition.Z + 1f;
-                    }
-                }
-
-                if (NextZ >= Map.LayerManager.ListLayer.Count)
-                {
-                    NextZ = Map.LayerManager.ListLayer.Count - 1;
-                }
-
-                Map.CursorPosition.Z = NextZ;
-            }
-            else if (KeyboardHelper.KeyPressed(Keys.E))
-            {
-                float NextZ = Map.CursorPosition.Z;
-
-                if (KeyboardHelper.KeyHold(Keys.LeftAlt))
-                {
-                    NextZ -= 1f;
-                }
-                else
-                {
-                    do
-                    {
-                        NextZ -= 1f;
-                    }
-                    while (NextZ >= 0
-                        && Map.LayerManager.ListLayer[(int)NextZ].ArrayTerrain[(int)Map.CursorPosition.X, (int)Map.CursorPosition.Y].TerrainTypeIndex == UnitStats.TerrainVoidIndex);
-
-                    if (NextZ < 0)
-                    {
-                        NextZ = Map.CursorPosition.Z - 1f;
-                    }
-                }
-
-                if (NextZ < 0)
-                {
-                    NextZ = 0;
-                }
-
-                Map.CursorPosition.Z = NextZ;
-            }
-
-            if (Map.IsEditor)
-            {
-                KeyboardHelper.PlayerStateLast = Keyboard.GetState();
-            }
         }
 
         public void SetWorld(Matrix NewWorld)
@@ -481,13 +407,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Matrix World;
 
-                if (Map.CameraOverride != null && !Map.IsEditor)
+                if (Map.Camera3DOverride != null && !Map.IsEditor)
                 {
-                    World = NewWorld * Map.CameraOverride.View;
+                    World = NewWorld * Map.Camera3DOverride.View;
                 }
                 else
                 {
-                    World = NewWorld * Map.Camera.View;
+                    World = NewWorld * Map.Camera3D.View;
                 }
 
                 worldInverse = Matrix.Invert(World);
@@ -881,14 +807,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             g.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
             g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            Matrix View = Map.Camera.View;
+            Matrix View = Map.Camera3D.View;
             Matrix World = PolygonEffect.World;
-            Vector3 CameraPosition = Map.Camera.CameraPosition3D;
+            Vector3 CameraPosition = Map.Camera3D.CameraPosition3D;
 
-            if (Map.CameraOverride != null && !Map.IsEditor)
+            if (Map.Camera3DOverride != null && !Map.IsEditor)
             {
-                View = Map.CameraOverride.View;
-                CameraPosition = Map.CameraOverride.CameraPosition3D;
+                View = Map.Camera3DOverride.View;
+                CameraPosition = Map.Camera3DOverride.CameraPosition3D;
             }
             PolygonEffect.View = View;
             Matrix ViewProjection = View * PolygonEffect.Projection;
@@ -962,10 +888,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private void DrawMap(CustomSpriteBatch g, Matrix View, Matrix WorldViewProjection, bool DrawUpperLayers)
         {
-            Vector3 CameraPosition = Map.Camera.CameraPosition3D;
-            if (Map.CameraOverride != null && !Map.IsEditor)
+            Vector3 CameraPosition = Map.Camera3D.CameraPosition3D;
+            if (Map.Camera3DOverride != null && !Map.IsEditor)
             {
-                CameraPosition = Map.CameraOverride.CameraPosition3D;
+                CameraPosition = Map.Camera3DOverride.CameraPosition3D;
             }
 
             if (Map.ShowLayerIndex == -1)

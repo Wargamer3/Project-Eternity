@@ -26,8 +26,8 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
         public void DrawNextChoice(CustomSpriteBatch g)
         {
             //Draw the action panel.
-            float X = (Map.CursorPosition.X - Map.CameraPosition.X + 1) * Map.TileSize.X;
-            float Y = (Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+            float X = (Map.CursorPosition.X - Map.Camera2DPosition.X + 1) * Map.TileSize.X;
+            float Y = (Map.CursorPosition.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
 
             if (X + MinActionMenuWidth >= Constants.Width)
                 X = Constants.Width - MinActionMenuWidth;
@@ -48,7 +48,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
                 Y += PannelHeight;
             }
 
-            Y = (Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+            Y = (Map.CursorPosition.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
             if (Y + MenuHeight >= Constants.Height)
                 Y = Constants.Height - MenuHeight;
             //Draw the menu cursor.

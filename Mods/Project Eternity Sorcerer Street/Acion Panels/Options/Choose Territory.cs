@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             CursorPosition = new Vector3(ActivePlayer.GamePiece.Position.X * Map.TileSize.X, ActivePlayer.GamePiece.Position.Y * Map.TileSize.Y, ActivePlayer.GamePiece.Position.Z);
             Camera = new DefaultCamera(GameScreen.GraphicsDevice);
-            Map.CameraOverride = Camera;
+            Map.Camera3DOverride = Camera;
             HoverTerrain = Map.GetTerrain(new Vector3(CursorPosition.X / Map.TileSize.X, CursorPosition.Y / Map.TileSize.Y, CursorPosition.Z));
         }
 
@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputCancelPressed())
             {
                 RemoveFromPanelList(this);
-                Map.CameraOverride = null;
+                Map.Camera3DOverride = null;
             }
         }
 

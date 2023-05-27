@@ -247,7 +247,7 @@ namespace ProjectEternity.Editors.WorldMapEditor
         
         protected override void pnMapPreview_MouseUp(object sender, MouseEventArgs e)
         {
-            Vector3 MapPreviewStartingPos = BattleMapViewer.ActiveMap.CameraPosition;//Used to avoid warnings.
+            Vector3 MapPreviewStartingPos = BattleMapViewer.ActiveMap.Camera2DPosition;//Used to avoid warnings.
             Point MousePos = new Point((int)(e.X + MapPreviewStartingPos.X) / BattleMapViewer.ActiveMap.TileSize.X, (int)(e.Y + MapPreviewStartingPos.Y) / BattleMapViewer.ActiveMap.TileSize.Y);
 
             switch (tabToolBox.SelectedIndex)

@@ -81,7 +81,7 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             ListZone = new List<MapZoneInfo>();
             ListConsumable = new List<MapConsumable>();
             ListLayer = new List<MapLayer>();
-            this.CameraPosition = Vector3.Zero;
+            this.Camera2DPosition = Vector3.Zero;
 
             this.ListPlayer = new List<Player>();
         }
@@ -347,16 +347,16 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             if (InputHelper.InputLeftPressed())
             {
                 //Update the camera if needed.
-                if (CursorPosition.X - CameraPosition.X - 3 < 0 && CameraPosition.X > 0)
-                    --CameraPosition.X;
+                if (CursorPosition.X - Camera2DPosition.X - 3 < 0 && Camera2DPosition.X > 0)
+                    --Camera2DPosition.X;
 
                 CursorPosition.X -= (CursorPosition.X > 0) ? 1 : 0;
             }
             else if (InputHelper.InputRightPressed())
             {
                 //Update the camera if needed.
-                if (CursorPosition.X - CameraPosition.X + 3 >= ScreenSize.X && CameraPosition.X + ScreenSize.X < MapSize.X)
-                    ++CameraPosition.X;
+                if (CursorPosition.X - Camera2DPosition.X + 3 >= ScreenSize.X && Camera2DPosition.X + ScreenSize.X < MapSize.X)
+                    ++Camera2DPosition.X;
 
                 CursorPosition.X += (CursorPosition.X < MapSize.X - 1) ? 1 : 0;
             }
@@ -364,16 +364,16 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             if (InputHelper.InputUpPressed())
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - CameraPosition.Y - 3 < 0 && CameraPosition.Y > 0)
-                    --CameraPosition.Y;
+                if (CursorPosition.Y - Camera2DPosition.Y - 3 < 0 && Camera2DPosition.Y > 0)
+                    --Camera2DPosition.Y;
 
                 CursorPosition.Y -= (CursorPosition.Y > 0) ? 1 : 0;
             }
             else if (InputHelper.InputDownPressed())
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - CameraPosition.Y + 3 >= ScreenSize.Y && CameraPosition.Y + ScreenSize.Y < MapSize.Y)
-                    ++CameraPosition.Y;
+                if (CursorPosition.Y - Camera2DPosition.Y + 3 >= ScreenSize.Y && Camera2DPosition.Y + ScreenSize.Y < MapSize.Y)
+                    ++Camera2DPosition.Y;
 
                 CursorPosition.Y += (CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
             }

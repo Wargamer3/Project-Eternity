@@ -160,7 +160,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             int X, Y;
 
-            g.Draw(GameScreen.sprPixel, new Vector2((ActiveSquad.X - Map.CameraPosition.X) * Map.TileSize.X, (ActiveSquad.Y - Map.CameraPosition.Y) * Map.TileSize.Y), Color.FromNonPremultiplied(255, 255, 255, 200));
+            g.Draw(GameScreen.sprPixel, new Vector2((ActiveSquad.X - Map.Camera2DPosition.X) * Map.TileSize.X, (ActiveSquad.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y), Color.FromNonPremultiplied(255, 255, 255, 200));
 
             #region 3 Unit Squad
 

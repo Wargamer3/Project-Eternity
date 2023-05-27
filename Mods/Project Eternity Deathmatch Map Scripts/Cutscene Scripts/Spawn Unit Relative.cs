@@ -116,7 +116,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         IsDrawn = true;
 
-                        AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, new Microsoft.Xna.Framework.Vector2(AnimationPosition.X - Map.CameraPosition.X * Map.TileSize.X, AnimationPosition.Y - Map.CameraPosition.Y * Map.TileSize.Y), _AnimationSpeed);
+                        AnimationSprite = new AnimatedSprite(Map.Content, "Animations/Bitmap Animations/" + _AnimationPath, new Microsoft.Xna.Framework.Vector2(AnimationPosition.X - Map.Camera2DPosition.X * Map.TileSize.X, AnimationPosition.Y - Map.Camera2DPosition.Y * Map.TileSize.Y), _AnimationSpeed);
                     }
 
                     if (File.Exists("Content/SFX/" + _SFXPath + ".mp3"))

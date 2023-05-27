@@ -34,8 +34,8 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 cbCameraType.SelectedIndex = 1;
             }
-            txtCameraStartPositionX.Value = (int)Math.Max(0, ActiveMap.CameraPosition.X);
-            txtCameraStartPositionY.Value = (int)Math.Max(0, ActiveMap.CameraPosition.Y);
+            txtCameraStartPositionX.Value = (int)Math.Max(0, ActiveMap.Camera2DPosition.X);
+            txtCameraStartPositionY.Value = (int)Math.Max(0, ActiveMap.Camera2DPosition.Y);
             txtOrderNumber.Value = ActiveMap.OrderNumber;
             txtDescription.Text = ActiveMap.Description;
             ListBackgroundsPath = new List<string>();

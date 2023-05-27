@@ -27,21 +27,21 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
                 else if (NewY >= MapSize.Y)
                     NewY = ScreenSize.Y - 1;
 
-                NewX += (int)CameraPosition.X;
-                NewY += (int)CameraPosition.Y;
+                NewX += (int)Camera2DPosition.X;
+                NewY += (int)Camera2DPosition.Y;
 
                 if (NewX != CursorPosition.X || NewY != CursorPosition.Y)
                 {
                     //Update the camera if needed.
-                    if (CursorPosition.X - CameraPosition.X - 3 < 0 && CameraPosition.X > 0)
-                        --CameraPosition.X;
-                    else if (CursorPosition.X - CameraPosition.X + 3 >= ScreenSize.X && CameraPosition.X + ScreenSize.X < MapSize.X)
-                        ++CameraPosition.X;
+                    if (CursorPosition.X - Camera2DPosition.X - 3 < 0 && Camera2DPosition.X > 0)
+                        --Camera2DPosition.X;
+                    else if (CursorPosition.X - Camera2DPosition.X + 3 >= ScreenSize.X && Camera2DPosition.X + ScreenSize.X < MapSize.X)
+                        ++Camera2DPosition.X;
 
-                    if (CursorPosition.Y - CameraPosition.Y - 3 < 0 && CameraPosition.Y > 0)
-                        --CameraPosition.Y;
-                    else if (CursorPosition.Y - CameraPosition.Y + 3 >= ScreenSize.Y && CameraPosition.Y + ScreenSize.Y < MapSize.Y)
-                        ++CameraPosition.Y;
+                    if (CursorPosition.Y - Camera2DPosition.Y - 3 < 0 && Camera2DPosition.Y > 0)
+                        --Camera2DPosition.Y;
+                    else if (CursorPosition.Y - Camera2DPosition.Y + 3 >= ScreenSize.Y && Camera2DPosition.Y + ScreenSize.Y < MapSize.Y)
+                        ++Camera2DPosition.Y;
 
                     CursorPosition.X = NewX;
                     CursorPosition.Y = NewY;
@@ -68,16 +68,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             if (InputHelper.InputLeftHold() && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.X - CameraPosition.X - 3 < 0 && CameraPosition.X > 0)
-                    --CameraPosition.X;
+                if (CursorPosition.X - Camera2DPosition.X - 3 < 0 && Camera2DPosition.X > 0)
+                    --Camera2DPosition.X;
 
                 CursorPosition.X -= (CursorPosition.X > 0) ? 1 : 0;
             }
             else if (InputHelper.InputRightHold() && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.X - CameraPosition.X + 3 >= ScreenSize.X && CameraPosition.X + ScreenSize.X < MapSize.X)
-                    ++CameraPosition.X;
+                if (CursorPosition.X - Camera2DPosition.X + 3 >= ScreenSize.X && Camera2DPosition.X + ScreenSize.X < MapSize.X)
+                    ++Camera2DPosition.X;
 
                 CursorPosition.X += (CursorPosition.X < MapSize.X - 1) ? 1 : 0;
             }
@@ -85,16 +85,16 @@ namespace ProjectEternity.GameScreens.ConquestMapScreen
             if (InputHelper.InputUpHold() && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - CameraPosition.Y - 3 < 0 && CameraPosition.Y > 0)
-                    --CameraPosition.Y;
+                if (CursorPosition.Y - Camera2DPosition.Y - 3 < 0 && Camera2DPosition.Y > 0)
+                    --Camera2DPosition.Y;
 
                 CursorPosition.Y -= (CursorPosition.Y > 0) ? 1 : 0;
             }
             else if (InputHelper.InputDownHold() && CanKeyboardMove)
             {
                 //Update the camera if needed.
-                if (CursorPosition.Y - CameraPosition.Y + 3 >= ScreenSize.Y && CameraPosition.Y + ScreenSize.Y < MapSize.Y)
-                    ++CameraPosition.Y;
+                if (CursorPosition.Y - Camera2DPosition.Y + 3 >= ScreenSize.Y && Camera2DPosition.Y + ScreenSize.Y < MapSize.Y)
+                    ++Camera2DPosition.Y;
 
                 CursorPosition.Y += (CursorPosition.Y < MapSize.Y - 1) ? 1 : 0;
             }

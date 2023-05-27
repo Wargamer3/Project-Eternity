@@ -82,22 +82,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             //Update the camera if needed.
-            while (HubSquad.Position.X - Map.CameraPosition.X - 3 < 0 && Map.CameraPosition.X > 0)
+            while (HubSquad.Position.X - Map.Camera2DPosition.X - 3 < 0 && Map.Camera2DPosition.X > 0)
             {
-                Map.CameraPosition.X -= 0.1f;
+                Map.Camera2DPosition.X -= 0.1f;
             }
-            while (HubSquad.Position.X - Map.CameraPosition.X >= Map.ScreenSize.X / 2 && Map.CameraPosition.X + Map.ScreenSize.X < Map.MapSize.X)
+            while (HubSquad.Position.X - Map.Camera2DPosition.X >= Map.ScreenSize.X / 2 && Map.Camera2DPosition.X + Map.ScreenSize.X < Map.MapSize.X)
             {
-                Map.CameraPosition.X += 0.1f;
+                Map.Camera2DPosition.X += 0.1f;
             }
 
-            if (HubSquad.Position.Y - Map.CameraPosition.Y - 3 < 0 && Map.CameraPosition.Y > 0)
+            if (HubSquad.Position.Y - Map.Camera2DPosition.Y - 3 < 0 && Map.Camera2DPosition.Y > 0)
             {
-                Map.CameraPosition.Y -= 0.1f;
+                Map.Camera2DPosition.Y -= 0.1f;
             }
-            while (HubSquad.Position.Y - Map.CameraPosition.Y >= Map.ScreenSize.Y / 2 && Map.CameraPosition.Y + Map.ScreenSize.Y < Map.MapSize.Y)
+            while (HubSquad.Position.Y - Map.Camera2DPosition.Y >= Map.ScreenSize.Y / 2 && Map.Camera2DPosition.Y + Map.ScreenSize.Y < Map.MapSize.Y)
             {
-                Map.CameraPosition.Y += 0.1f;
+                Map.Camera2DPosition.Y += 0.1f;
             }
         }
 

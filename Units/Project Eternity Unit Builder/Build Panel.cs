@@ -71,8 +71,8 @@ namespace ProjectEternity.Core.Units.Builder
 
         public override void Draw(CustomSpriteBatch g)
         {
-            int X = (int)(Map.CursorPosition.X + 1 - Map.CameraPosition.X) * Map.TileSize.X;
-            int Y = (int)(Map.CursorPosition.Y - Map.CameraPosition.Y) * Map.TileSize.Y;
+            int X = (int)(Map.CursorPosition.X + 1 - Map.Camera2DPosition.X) * Map.TileSize.X;
+            int Y = (int)(Map.CursorPosition.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y;
 
             if (X + MinActionMenuWidth + MinActionMenuWidth >= Constants.Width)
                 X = Constants.Width - MinActionMenuWidth - MinActionMenuWidth;
