@@ -97,6 +97,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int MagicCost;
         public int QuantityOwned;
 
+        public string Tags;
+        public TagSystem TeamTags;
         public EffectHolder Effects;
         public string SkillChainName;
         public List<BaseAutomaticSkill> ListActiveSkill;
@@ -111,6 +113,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Path = Path;
             this.CardType = CardType;
             QuantityOwned = 1;
+            TeamTags = new TagSystem();
             Effects = new EffectHolder();
             ListActiveSkill = new List<BaseAutomaticSkill>();
         }
@@ -144,7 +147,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     return new ItemCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
 
                 case SpellCard.SpellCardType:
-                    return new SpellCard(Path, Content);
+                    return new SpellCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
             }
 
             throw new Exception("Unkown card type: " + CardType);

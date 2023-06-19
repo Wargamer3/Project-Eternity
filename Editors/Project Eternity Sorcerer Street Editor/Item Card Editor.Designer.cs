@@ -197,6 +197,11 @@
             // 
             // txtMagicCost
             // 
+            this.txtMagicCost.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.txtMagicCost.Location = new System.Drawing.Point(75, 45);
             this.txtMagicCost.Name = "txtMagicCost";
             this.txtMagicCost.Size = new System.Drawing.Size(123, 20);

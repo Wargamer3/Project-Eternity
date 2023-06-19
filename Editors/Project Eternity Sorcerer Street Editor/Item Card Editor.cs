@@ -80,7 +80,6 @@ namespace ProjectEternity.Editors.CardEditor
             txtSkill.Text = LoadedCard.SkillChainName;
             txtActivationAnimation.Text = LoadedCard.ItemActivationAnimationPath;
 
-
             txtMagicCost.Value = LoadedCard.MagicCost;
             cboRarity.SelectedIndex = (int)LoadedCard.Rarity;
             cboCategory.SelectedIndex = (int)LoadedCard.ItemType;
