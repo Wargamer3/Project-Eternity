@@ -12,10 +12,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const float ItemCardScale = 0.4f;
 
-        protected static int InvaderHP;
-        protected static int DefenderHP;
-        protected static int InvaderST;
-        protected static int DefenderST;
+        protected static int InvaderHPBar;
+        protected static int DefenderHPBar;
+        protected static int InvaderSTBar;
+        protected static int DefenderSTBar;
 
         public ActionPanelBattle(SorcererStreetMap Map, string PanelName)
             : base(PanelName, Map, false)
@@ -24,65 +24,64 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            CanUpdate(gameTime);
+            CanUpdate(gameTime, Map.GlobalSorcererStreetBattleContext);
         }
 
-        public bool CanUpdate(GameTime gameTime)
+        public static bool CanUpdate(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            if (InvaderHP > Map.GlobalSorcererStreetBattleContext.InvaderFinalHP)
+            if (InvaderHPBar > GlobalSorcererStreetBattleContext.InvaderFinalHP)
             {
-                --InvaderHP;
+                --InvaderHPBar;
                 return false;
             }
-            else if (InvaderST > Map.GlobalSorcererStreetBattleContext.InvaderFinalST)
+            else if (InvaderSTBar > GlobalSorcererStreetBattleContext.InvaderFinalST)
             {
-                --InvaderST;
+                --InvaderSTBar;
                 return false;
             }
-            else if (DefenderHP > Map.GlobalSorcererStreetBattleContext.DefenderFinalHP)
+            else if (DefenderHPBar > GlobalSorcererStreetBattleContext.DefenderFinalHP)
             {
-                --DefenderHP;
+                --DefenderHPBar;
                 return false;
             }
-            else if (DefenderST > Map.GlobalSorcererStreetBattleContext.DefenderFinalST)
+            else if (DefenderSTBar > GlobalSorcererStreetBattleContext.DefenderFinalST)
             {
-                --DefenderST;
-                return false;
-            }
-
-            if (InvaderHP < Map.GlobalSorcererStreetBattleContext.InvaderFinalHP)
-            {
-                ++InvaderHP;
-                return false;
-            }
-            else if (InvaderST < Map.GlobalSorcererStreetBattleContext.InvaderFinalST)
-            {
-                ++InvaderST;
-                return false;
-            }
-            else if (DefenderHP < Map.GlobalSorcererStreetBattleContext.DefenderFinalHP)
-            {
-                ++DefenderHP;
-                return false;
-            }
-            else if (DefenderST < Map.GlobalSorcererStreetBattleContext.DefenderFinalST)
-            {
-                ++DefenderST;
+                --DefenderSTBar;
                 return false;
             }
 
-            if (Map.GlobalSorcererStreetBattleContext.InvaderCard != null)
+            if (InvaderHPBar < GlobalSorcererStreetBattleContext.InvaderFinalHP)
             {
-                Map.GlobalSorcererStreetBattleContext.InvaderCard.Update(gameTime);
+                ++InvaderHPBar;
+                return false;
             }
-            if (Map.GlobalSorcererStreetBattleContext.DefenderCard != null)
+            else if (InvaderSTBar < GlobalSorcererStreetBattleContext.InvaderFinalST)
             {
-                Map.GlobalSorcererStreetBattleContext.DefenderCard.Update(gameTime);
+                ++InvaderSTBar;
+                return false;
+            }
+            else if (DefenderHPBar < GlobalSorcererStreetBattleContext.DefenderFinalHP)
+            {
+                ++DefenderHPBar;
+                return false;
+            }
+            else if (DefenderSTBar < GlobalSorcererStreetBattleContext.DefenderFinalST)
+            {
+                ++DefenderSTBar;
+                return false;
+            }
+
+            if (GlobalSorcererStreetBattleContext.InvaderCard != null)
+            {
+                GlobalSorcererStreetBattleContext.InvaderCard.Update(gameTime);
+            }
+            if (GlobalSorcererStreetBattleContext.DefenderCard != null)
+            {
+                GlobalSorcererStreetBattleContext.DefenderCard.Update(gameTime);
             }
 
             return true;
         }
-
 
         public static void ReadPlayerInfo(ByteReader BR, SorcererStreetMap Map)
         {
@@ -138,10 +137,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.GlobalSorcererStreetBattleContext.InvaderFinalST = Map.GlobalSorcererStreetBattleContext.Invader.CurrentST;
             Map.GlobalSorcererStreetBattleContext.DefenderFinalST = Map.GlobalSorcererStreetBattleContext.Defender.CurrentST;
 
-            InvaderHP = Map.GlobalSorcererStreetBattleContext.InvaderFinalHP;
-            InvaderST = Map.GlobalSorcererStreetBattleContext.InvaderFinalST;
-            DefenderHP = Map.GlobalSorcererStreetBattleContext.DefenderFinalHP;
-            DefenderST = Map.GlobalSorcererStreetBattleContext.DefenderFinalST;
+            InvaderHPBar = Map.GlobalSorcererStreetBattleContext.InvaderFinalHP;
+            InvaderSTBar = Map.GlobalSorcererStreetBattleContext.InvaderFinalST;
+            DefenderHPBar = Map.GlobalSorcererStreetBattleContext.DefenderFinalHP;
+            DefenderSTBar = Map.GlobalSorcererStreetBattleContext.DefenderFinalST;
 
             string InvaderItemCardType = BR.ReadString();
             if (!string.IsNullOrEmpty(InvaderItemCardType))
@@ -240,22 +239,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (Map.GlobalSorcererStreetBattleContext.Invader != null && Map.GlobalSorcererStreetBattleContext.DefenderCard != null)
             {
-                DrawInvaderBattle(Map, g);
-                DrawDefenderBattle(Map, g);
+                DrawInvaderBattle(Map.fntArial12, Map.GlobalSorcererStreetBattleContext, g);
+                DrawDefenderBattle(Map.fntArial12, Map.GlobalSorcererStreetBattleContext, g);
             }
         }
 
-        public static void DrawInvaderBattle(SorcererStreetMap Map, CustomSpriteBatch g)
+        public static void DrawInvaderBattle( SpriteFont fntArial12, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, CustomSpriteBatch g)
         {
             //Left Card
-            if (Map.GlobalSorcererStreetBattleContext.InvaderCard != null)
+            if (GlobalSorcererStreetBattleContext.InvaderCard != null)
             {
-                Map.GlobalSorcererStreetBattleContext.InvaderCard.Draw(g);
+                GlobalSorcererStreetBattleContext.InvaderCard.Draw(g);
             }
             //Item Card
-            if (Map.GlobalSorcererStreetBattleContext.InvaderItem != null)
+            if (GlobalSorcererStreetBattleContext.InvaderItem != null)
             {
-                Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, -ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.InvaderItem.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, -ItemCardScale, ItemCardScale, false);
             }
 
             //ST Bar
@@ -263,33 +262,33 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BarWeight = Constants.Width / 4;
             int BarX = Constants.Width / 2  - BarWeight - Constants.Width / 10;
             GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
-            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderFinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            g.DrawString(fntArial12, GlobalSorcererStreetBattleContext.InvaderFinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
-            g.DrawString(Map.fntArial12, "ST", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
+            g.DrawString(fntArial12, "ST", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * InvaderST / 100f), 20), Color.Blue);
+            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * InvaderSTBar / 100f), 20), Color.Blue);
 
             //HP Bar
             CurrentY +=30;
             GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
-            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderFinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            g.DrawString(fntArial12, GlobalSorcererStreetBattleContext.InvaderFinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
-            g.DrawString(Map.fntArial12, "HP", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
+            g.DrawString(fntArial12, "HP", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * InvaderHP / 100f), 20), Color.Green);
+            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * InvaderHPBar / 100f), 20), Color.Green);
         }
 
-        public static void DrawDefenderBattle(SorcererStreetMap Map, CustomSpriteBatch g)
+        public static void DrawDefenderBattle(SpriteFont fntArial12, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, CustomSpriteBatch g)
         {
             //Right Card
-            if (Map.GlobalSorcererStreetBattleContext.DefenderCard != null)
+            if (GlobalSorcererStreetBattleContext.DefenderCard != null)
             {
-                Map.GlobalSorcererStreetBattleContext.DefenderCard.Draw(g);
+                GlobalSorcererStreetBattleContext.DefenderCard.Draw(g);
             }
             //Item Card
-            if (Map.GlobalSorcererStreetBattleContext.DefenderItem != null)
+            if (GlobalSorcererStreetBattleContext.DefenderItem != null)
             {
-                Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, Constants.Height / 16, - ItemCardScale, ItemCardScale, false);
+                Card.DrawCardMiniature(g, GlobalSorcererStreetBattleContext.DefenderItem.sprCard, MenuHelper.sprCardBack, Color.White, Constants.Width - Constants.Width / 8, Constants.Height / 16, - ItemCardScale, ItemCardScale, false);
             }
 
             //ST Bar
@@ -297,20 +296,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int BarWeight = Constants.Width / 4;
             int BarX = Constants.Width / 2 + Constants.Width / 10;
             GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
-            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderFinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            g.DrawString(fntArial12, GlobalSorcererStreetBattleContext.DefenderFinalST.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
-            g.DrawString(Map.fntArial12, "ST", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
+            g.DrawString(fntArial12, "ST", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * DefenderST / 100f), 20), Color.Blue);
+            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * DefenderSTBar / 100f), 20), Color.Blue);
 
             //HP Bar
             CurrentY += 30;
             GameScreen.DrawBox(g, new Vector2(BarX, CurrentY), 50, 30, Color.White);
-            g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderFinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
+            g.DrawString(fntArial12, GlobalSorcererStreetBattleContext.DefenderFinalHP.ToString(), new Vector2(BarX + 15, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 50, CurrentY), 30, 30, Color.White);
-            g.DrawString(Map.fntArial12, "HP", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
+            g.DrawString(fntArial12, "HP", new Vector2(BarX + 55, CurrentY + 5), Color.Black);
             GameScreen.DrawBox(g, new Vector2(BarX + 80, CurrentY), BarWeight, 30, Color.White);
-            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * DefenderHP / 100f), 20), Color.Green);
+            g.Draw(GameScreen.sprPixel, new Rectangle(BarX + 85, (int)CurrentY + 5, (int)Math.Min(BarWeight - 10, (BarWeight - 10) * DefenderHPBar / 100f), 20), Color.Green);
         }
 
         public void DisplayVersusText(CustomSpriteBatch g)

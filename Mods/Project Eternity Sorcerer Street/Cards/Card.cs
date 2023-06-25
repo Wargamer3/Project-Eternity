@@ -146,6 +146,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "Item Cards":
                     return new ItemCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
 
+                case "Spell Cards":
                 case SpellCard.SpellCardType:
                     return new SpellCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
             }

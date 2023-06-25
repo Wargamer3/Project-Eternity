@@ -53,6 +53,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static Texture2D sprArrowUp;
 
+        public static Texture2D sprCardBack;
+
         private static float AnimationTimer;
 
         public static void Init(ContentManager Content)
@@ -99,6 +101,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprDice9 = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Dice/Dice 9");
 
             sprArrowUp = Content.Load<Texture2D>("Sorcerer Street/Ressources/Arrow Up");
+
+            sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
         }
 
         public static void UpdateAnimationTimer(GameTime gameTime)

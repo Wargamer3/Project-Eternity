@@ -95,6 +95,7 @@
     <Compile Include="Acion Panels\Options\ViewMap.cs" />
     <Compile Include="Acion Panels\Options\End Player Phase.cs" />
     <Compile Include="Animation Screen.cs" />
+    <Compile Include="Lobby\Battle Tester.cs" />
     <Compile Include="Menu Helper.cs" />
     <Compile Include="Camera 3D.cs" />
     <Compile Include="Cards\Card.cs" />

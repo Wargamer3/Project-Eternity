@@ -12,11 +12,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class EditBookCardListFilterScreen : GameScreen
     {
+        public enum Filters { Creatures, Neutral, Fire, Water, Earth, Air, Dual, Item, Spells }
+
         #region Ressources
 
         private SpriteFont fntArial12;
-
-        public Texture2D sprMenuCursor;
 
         #endregion
 
@@ -29,27 +29,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private readonly Player ActivePlayer;
         private readonly CardBook ActiveBook;
+        private readonly CardBook GlobalBook;
         private readonly List<Card> ListFilteredCard;
 
         private int CursorIndex;
         private int ScrollbarIndex;
+        int CardsPerLine = 7;
 
-        public EditBookCardListFilterScreen(Player ActivePlayer, CardBook ActiveBook, string Filter)
+        public List<Card> ListSelectedCard;
+
+        public EditBookCardListFilterScreen(Player ActivePlayer, CardBook ActiveBook, Filters Filter)
         {
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = ActiveBook;
+            GlobalBook = ActivePlayer.Inventory.GlobalBook;
             ListFilteredCard = new List<Card>();
             FillCardList(Filter);
         }
 
-        private void FillCardList(string Filter)
+        public EditBookCardListFilterScreen(CardBook GlobalBook, Filters Filter, bool MultipleSelection)
+        {
+            this.GlobalBook = ActiveBook = GlobalBook;
+            ListFilteredCard = new List<Card>();
+            ListSelectedCard = new List<Card>();
+            FillCardList(Filter);
+        }
+
+        private void FillCardList(Filters Filter)
         {
             switch (Filter)
             {
                 #region Creatures
 
-                case "creatures":
-                    foreach (Card ActiveCard in ActivePlayer.Inventory.GlobalBook.ListCard)
+                case Filters.Creatures:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -59,8 +72,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
-                case "neutral":
-                    foreach (Card ActiveCard in ActivePlayer.Inventory.GlobalBook.ListCard)
+                case Filters.Neutral:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -73,8 +86,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
-                case "fire":
-                    foreach (Card ActiveCard in ActivePlayer.Inventory.GlobalBook.ListCard)
+                case Filters.Fire:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -87,8 +100,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
-                case "water":
-                    foreach (Card ActiveCard in ActivePlayer.Inventory.GlobalBook.ListCard)
+                case Filters.Water:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -101,8 +114,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
-                case "earth":
-                    foreach (Card ActiveCard in ActivePlayer.Inventory.GlobalBook.ListCard)
+                case Filters.Earth:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -115,8 +128,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
-                case "air":
-                    foreach (Card ActiveCard in ActivePlayer.Inventory.GlobalBook.ListCard)
+                case Filters.Air:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -129,8 +142,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
-                case "multi":
-                    foreach (Card ActiveCard in ActivePlayer.Inventory.GlobalBook.ListCard)
+                case Filters.Dual:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
                     {
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
@@ -143,18 +156,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
+                case Filters.Item:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    {
+                        ItemCard ActiveItemCard = ActiveCard as ItemCard;
+                        if (ActiveItemCard != null)
+                        {
+                            ListFilteredCard.Add(ActiveItemCard);
+                        }
+                    }
+                    break;
+
+                case Filters.Spells:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    {
+                        SpellCard ActiveSpellCard = ActiveCard as SpellCard;
+                        if (ActiveSpellCard != null)
+                        {
+                            ListFilteredCard.Add(ActiveSpellCard);
+                        }
+                    }
+                    break;
+
                     #endregion
             }
         }
 
         public override void Load()
         {
-            float MaxY = Constants.Height / 6 + 130 * 2 + (CardHeight + 20) * ((ActiveBook.ListCard.Count - 14) / 7);
+            float MaxY = Constants.Height / 6 + 130 * 2 + (CardHeight + 20) * ((ActiveBook.ListCard.Count - 14) / CardsPerLine);
             MissionScrollbar = new BoxScrollbar(new Vector2(Constants.Width - 20, Constants.Height / 6), Constants.Height - Constants.Height / 3, MaxY, OnMissionScrollbarChange);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-
-            sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
         }
 
         private void OnMissionScrollbarChange(float ScrollbarValue)
@@ -168,15 +201,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (InputHelper.InputConfirmPressed())
             {
-                Card SelectedCard = ListFilteredCard[CursorIndex];
-                if (!ActiveBook.DicCardsByType.ContainsKey(SelectedCard.CardType) || !ActiveBook.DicCardsByType[SelectedCard.CardType].ContainsKey(SelectedCard.Path))
+                if (ActivePlayer == null)
                 {
-                    Card CopyCard = ActivePlayer.Inventory.GlobalBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-                    CopyCard.QuantityOwned = 0;
-                    ActiveBook.AddCard(CopyCard);
-                }
+                    Card SelectedCard = ListFilteredCard[CursorIndex];
+                    Card CopyCard = ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                    ListSelectedCard.Add(CopyCard);
 
-                PushScreen(new EditBookCardScreen(ActivePlayer, ActiveBook, ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path]));
+                    RemoveScreen(this);
+                }
+                else
+                {
+                    Card SelectedCard = ListFilteredCard[CursorIndex];
+                    if (!ActiveBook.DicCardsByType.ContainsKey(SelectedCard.CardType) || !ActiveBook.DicCardsByType[SelectedCard.CardType].ContainsKey(SelectedCard.Path))
+                    {
+                        Card CopyCard = GlobalBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                        CopyCard.QuantityOwned = 0;
+                        ActiveBook.AddCard(CopyCard);
+                    }
+
+                    PushScreen(new EditBookCardScreen(ActivePlayer, ActiveBook, ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path]));
+                }
             }
             else if (InputHelper.InputCancelPressed())
             {
@@ -187,7 +231,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CursorIndex += 1;
                 if (CursorIndex >= ListFilteredCard.Count)
                 {
-                    CursorIndex -= CursorIndex % 7;
+                    CursorIndex -= CursorIndex % CardsPerLine;
                 }
             }
             else if (InputHelper.InputLeftPressed())
@@ -197,69 +241,69 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     CursorIndex = 6;
                 }
-                else if (CursorIndex % 7 == 6)
+                else if (CursorIndex % CardsPerLine == 6)
                 {
-                    if (CursorIndex + 7 >= ListFilteredCard.Count)
+                    if (CursorIndex + CardsPerLine >= ListFilteredCard.Count)
                     {
                         CursorIndex = ListFilteredCard.Count - 1;
                     }
                     else
                     {
-                        CursorIndex += 7;
+                        CursorIndex += CardsPerLine;
                     }
                 }
             }
             else if (InputHelper.InputDownPressed())
             {
-                if (CursorIndex + 7 >= ListFilteredCard.Count)
+                if (CursorIndex + CardsPerLine >= ListFilteredCard.Count)
                 {
-                    CursorIndex = CursorIndex % 7;
+                    CursorIndex = CursorIndex % CardsPerLine;
                 }
                 else
                 {
-                    CursorIndex += 7;
+                    CursorIndex += CardsPerLine;
 
                     if (CursorIndex > ListFilteredCard.Count)
                     {
-                        CursorIndex -= 7;
+                        CursorIndex -= CardsPerLine;
                     }
                 }
 
-                int CursorY = (CardHeight + 20) * (CursorIndex / 7);
+                int CursorY = (CardHeight + 20) * (CursorIndex / CardsPerLine);
 
                 if (CursorY < ScrollbarIndex)
                 {
-                    ScrollbarIndex = (CardHeight + 20) * (CursorIndex / 7);
+                    ScrollbarIndex = (CardHeight + 20) * (CursorIndex / CardsPerLine);
                 }
                 else if (CursorY > ScrollbarIndex + (CardHeight + 20) * 2)
                 {
-                    ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / 7) - 2);
+                    ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / CardsPerLine) - 2);
                 }
             }
             else if (InputHelper.InputUpPressed())
             {
-                CursorIndex -= 7;
+                CursorIndex -= CardsPerLine;
                 if (CursorIndex < 0)
                 {
-                    if ((CursorIndex + 7) % 7 >= ListFilteredCard.Count % 7)
+                    if ((CursorIndex + CardsPerLine) % CardsPerLine >= ListFilteredCard.Count % CardsPerLine)
                     {
-                        CursorIndex = (ListFilteredCard.Count / 7 - 1) * 7 + (CursorIndex + 7) % 7;
+                        CursorIndex = (ListFilteredCard.Count / CardsPerLine - 1) * CardsPerLine + (CursorIndex + CardsPerLine) % CardsPerLine;
                     }
                     else
                     {
-                        CursorIndex = (ListFilteredCard.Count / 7) * 7 + (CursorIndex + 7) % 7;
+                        CursorIndex = (ListFilteredCard.Count / CardsPerLine) * CardsPerLine + (CursorIndex + CardsPerLine) % CardsPerLine;
                     }
                 }
 
-                int CursorY = (CardHeight + 20) * (CursorIndex / 7);
+                int CursorY = (CardHeight + 20) * (CursorIndex / CardsPerLine);
 
                 if (CursorY < ScrollbarIndex)
                 {
-                    ScrollbarIndex = (CardHeight + 20) * (CursorIndex / 7);
+                    ScrollbarIndex = (CardHeight + 20) * (CursorIndex / CardsPerLine);
                 }
                 else if (CursorY > ScrollbarIndex + (CardHeight + 20) * 2)
                 {
-                    ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / 7) - 2);
+                    ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / CardsPerLine) - 2);
                 }
             }
         }
@@ -277,14 +321,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             X = Constants.Width / 20;
             Y += HeaderHeight / 2 - fntArial12.LineSpacing / 2;
             g.DrawString(fntArial12, "Book Edit", new Vector2(X, Y), Color.White);
-            g.DrawStringMiddleAligned(fntArial12, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
+            if (ActivePlayer != null)
+            {
+                g.DrawStringMiddleAligned(fntArial12, ActivePlayer.Name + "/" + ActiveBook.BookName, new Vector2(Constants.Width / 2, Y), Color.White);
+            }
             X = Constants.Width - Constants.Width / 8;
             g.DrawStringRightAligned(fntArial12, ActiveBook.TotalCards + " card(s)", new Vector2(X, Y), Color.White);
             g.DrawString(fntArial12, "OK", new Vector2(X + 20, Y), Color.White);
 
-            int CursorX = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (CursorIndex % 7);
+            int CursorX = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (CursorIndex % 7) - 50;
             int CursorY = Constants.Height / 6 + CardHeight/ 2 + (CardHeight + 20) * (CursorIndex / 7);
-            g.Draw(sprMenuCursor, new Rectangle(CursorX, CursorY - ScrollbarIndex, 40, 40), Color.White);
+            MenuHelper.DrawFingerIcon(g, new Vector2(CursorX, CursorY - ScrollbarIndex));
 
             X = -10;
             Y = Constants.Height - Constants.Height / 20 - HeaderHeight;
@@ -302,8 +349,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             for (int C = 0; C < ListFilteredCard.Count; ++C)
             {
-                float X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (C % 7);
-                float Y = StartY + (CardHeight + 20) * (C / 7);
+                float X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (C % CardsPerLine);
+                float Y = StartY + (CardHeight + 20) * (C / CardsPerLine);
 
                 g.Draw(ListFilteredCard[C].sprCard, new Rectangle((int)X, (int)Y, CardWidth, CardHeight), new Rectangle(0, 0, ListFilteredCard[C].sprCard.Width, ListFilteredCard[C].sprCard.Height), Color.White);
                 DrawBox(g, new Vector2(X + CardWidth / 2 - CardNumberBoxWidth / 2, Y + CardHeight - CardNumberBoxWidth / 2), CardNumberBoxWidth, CardNumberBoxWidth, Color.White);

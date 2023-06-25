@@ -67,10 +67,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 Map.GlobalSorcererStreetBattleContext.Background = AnimationBackground.LoadAnimationBackground("Backgrounds 3D/Grass", Map.Content, GameScreen.GraphicsDevice);
 
-                InvaderHP = Map.GlobalSorcererStreetBattleContext.InvaderFinalHP;
-                InvaderST = Map.GlobalSorcererStreetBattleContext.InvaderFinalST;
-                DefenderHP = Map.GlobalSorcererStreetBattleContext.DefenderFinalHP;
-                DefenderST = Map.GlobalSorcererStreetBattleContext.DefenderFinalST;
+                InvaderHPBar = Map.GlobalSorcererStreetBattleContext.InvaderFinalHP;
+                InvaderSTBar = Map.GlobalSorcererStreetBattleContext.InvaderFinalST;
+                DefenderHPBar = Map.GlobalSorcererStreetBattleContext.DefenderFinalHP;
+                DefenderSTBar = Map.GlobalSorcererStreetBattleContext.DefenderFinalST;
             }
         }
 
@@ -163,7 +163,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 X = FinalX;
             }
 
-            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Invader.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
+            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Invader.sprCard, MenuHelper.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
         }
 
         public void IntroduceDefender(CustomSpriteBatch g)
@@ -186,7 +186,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 X = FinalX;
             }
 
-            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Defender.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
+            Card.DrawCardMiniature(g, Map.GlobalSorcererStreetBattleContext.Defender.sprCard, MenuHelper.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
         }
 
         public override void DoRead(ByteReader BR)

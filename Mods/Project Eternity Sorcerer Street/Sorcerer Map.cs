@@ -27,8 +27,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #region Ressources
 
-        public Texture2D sprCardBack;
-
         public Texture2D sprActiveCreatureCursor;
         public Texture2D sprPlayerBackground;
         public Texture2D sprPlayerBlue1;
@@ -203,10 +201,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!IsServer)
             {
                 ChatInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
-
-                MenuHelper.Init(Content);
-
-                sprCardBack = Content.Load<Texture2D>("Sorcerer Street/Ressources/Card Back");
 
                 sprActiveCreatureCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Active Creature Cursor");
 

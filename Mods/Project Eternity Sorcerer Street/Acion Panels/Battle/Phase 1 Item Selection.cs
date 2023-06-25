@@ -168,7 +168,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (ActivePlayerIndex != Map.ActivePlayerIndex)
                 {
-                    Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, ItemCardScale, ItemCardScale, true);
+                    Card.DrawCardMiniature(g, null, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, ItemCardScale, ItemCardScale, true);
                 }
 
                 MenuHelper.DrawBorderlessBox(g, new Vector2(Constants.Width / 6, Constants.Height / 12), Constants.Width - Constants.Width / 3, 30);
@@ -241,7 +241,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (ItemAnimationTime < 0.5f)
                     {
-                        Card.DrawCardMiniature(g, null, Map.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, ItemCardScale, ItemCardScale, true);
+                        Card.DrawCardMiniature(g, null, MenuHelper.sprCardBack, Color.White, Constants.Width / 8, Constants.Height / 16, ItemCardScale, ItemCardScale, true);
                         IntroduceDefenderItem(g);
                     }
                     else
@@ -273,7 +273,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float RealRotationTimer = (float)ItemAnimationTime * 2;
             float FinalX = Constants.Width / 8;
             float StartX = -50;
-            float FinalY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
+            float FinalY = Constants.Height / 16 + (MenuHelper.sprCardBack.Height / 2) * ItemCardScale;
             float StartY = Constants.Height / 2;
             float TransitionX = Constants.Width / 4;
             float TransitionY = Constants.Height / 4;
@@ -301,7 +301,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScaleX -= (0.5f - RealRotationTimer) / 4;
             }
 
-            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
+            Card.DrawCardMiniatureCentered(g, null, MenuHelper.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
         }
 
         private void IntroduceDefenderItem(CustomSpriteBatch g)
@@ -309,7 +309,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float RealRotationTimer = (float)ItemAnimationTime * 2;
             float FinalX = Constants.Width - Constants.Width / 8;
             float StartX = Constants.Width + 50;
-            float FinalY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
+            float FinalY = Constants.Height / 16 + (MenuHelper.sprCardBack.Height / 2) * ItemCardScale;
             float StartY = Constants.Height / 2;
             float TransitionX = Constants.Width - Constants.Width / 4;
             float TransitionY = Constants.Height / 4;
@@ -337,7 +337,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScaleX -= (0.5f - RealRotationTimer) / 4;
             }
 
-            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
+            Card.DrawCardMiniatureCentered(g, null, MenuHelper.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
         }
 
         private void RevealInvaderItem(CustomSpriteBatch g)
@@ -345,8 +345,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float RealRotationTimer = (float)(ItemAnimationTime - 0.5f) * 2;
             float FinalX = Constants.Width / 8;
             float StartX = Constants.Width / 8;
-            float FinalY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
-            float StartY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
+            float FinalY = Constants.Height / 16 + (MenuHelper.sprCardBack.Height / 2) * ItemCardScale;
+            float StartY = Constants.Height / 16 + (MenuHelper.sprCardBack.Height / 2) * ItemCardScale;
             float TransitionX = Constants.Width / 3;
             float TransitionY = -Constants.Height /24;
             float StartScaleY = ItemCardScale;
@@ -376,11 +376,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ScaleX > 0)
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, MenuHelper.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
             }
             else
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, false);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.InvaderItem.sprCard, MenuHelper.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, false);
             }
         }
 
@@ -389,7 +389,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float RealRotationTimer = (float)(ItemAnimationTime - 0.5f) * 2;
             float StartX = Constants.Width / 8;
             float FinalX = -10;
-            float StartY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
+            float StartY = Constants.Height / 16 + (MenuHelper.sprCardBack.Height / 2) * ItemCardScale;
             float FinalY = Constants.Height / 2;
             float TransitionX = Constants.Width / 4;
             float TransitionY = Constants.Height / 4;
@@ -417,7 +417,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScaleX -= ((RealRotationTimer - 0.5f)) * 0.5f;
             }
 
-            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
+            Card.DrawCardMiniatureCentered(g, null, MenuHelper.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
         }
 
         private void RevealDefenderItem(CustomSpriteBatch g)
@@ -425,8 +425,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float RealRotationTimer = (float)(ItemAnimationTime - 0.5f) * 2;
             float FinalX = Constants.Width - Constants.Width / 8;
             float StartX = Constants.Width - Constants.Width / 8;
-            float FinalY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
-            float StartY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
+            float FinalY = Constants.Height / 16 + (MenuHelper.sprCardBack.Height / 2) * ItemCardScale;
+            float StartY = Constants.Height / 16 + (MenuHelper.sprCardBack.Height / 2) * ItemCardScale;
             float TransitionX = Constants.Width - Constants.Width / 3;
             float TransitionY = -Constants.Height / 24;
             float StartScaleY = ItemCardScale;
@@ -456,11 +456,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (ScaleX > 0)
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, MenuHelper.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
             }
             else
             {
-                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, false);
+                Card.DrawCardMiniatureCentered(g, Map.GlobalSorcererStreetBattleContext.DefenderItem.sprCard, MenuHelper.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, false);
             }
         }
 
@@ -469,7 +469,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float RealRotationTimer = (float)(ItemAnimationTime - 0.5f) * 2;
             float StartX = Constants.Width - Constants.Width / 8;
             float FinalX = Constants.Width + 290;
-            float StartY = Constants.Height / 16 + (Map.sprCardBack.Height / 2) * ItemCardScale;
+            float StartY = Constants.Height / 16 + (MenuHelper.sprCardBack.Height / 2) * ItemCardScale;
             float FinalY = Constants.Height / 2;
             float TransitionX = Constants.Width - Constants.Width / 4;
             float TransitionY = Constants.Height / 4;
@@ -497,7 +497,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ScaleX -= ((RealRotationTimer - 0.5f)) * 0.5f;
             }
 
-            Card.DrawCardMiniatureCentered(g, null, Map.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
+            Card.DrawCardMiniatureCentered(g, null, MenuHelper.sprCardBack, Color.White, (float)ResultX, (float)ResultY, ScaleX, ScaleY, true);
         }
     }
 }

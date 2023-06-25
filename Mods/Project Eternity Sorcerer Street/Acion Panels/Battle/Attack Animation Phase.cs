@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (!CanUpdate(gameTime))
+            if (!CanUpdate(gameTime, Map.GlobalSorcererStreetBattleContext))
                 return;
 
             if (Map.GlobalSorcererStreetBattleContext.DefenderFinalHP > Map.GlobalSorcererStreetBattleContext.Defender.CurrentHP)

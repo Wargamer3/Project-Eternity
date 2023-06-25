@@ -198,7 +198,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float Y = Constants.Height / 10;
             float FinalScale = (float)Math.Sin(RealRotationTimer) * MaxScale;
 
-            Card.DrawCardMiniature(g, DrawnCard.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
+            Card.DrawCardMiniature(g, DrawnCard.sprCard, MenuHelper.sprCardBack, Color.White, X, Y, FinalScale, MaxScale, RealRotationTimer < MathHelper.Pi);
         }
 
         private void DrawOutro(CustomSpriteBatch g)
@@ -217,7 +217,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             float ComputedScale = StartScale + (EndScale - StartScale) * (RotationTimer / AnimationTime);
             float FinalScale = (float)Math.Sin(RealRotationTimer) * ComputedScale;
 
-            Card.DrawCardMiniature(g, DrawnCard.sprCard, Map.sprCardBack, Color.White, X, Y, FinalScale, ComputedScale, RealRotationTimer < MathHelper.Pi);
+            Card.DrawCardMiniature(g, DrawnCard.sprCard, MenuHelper.sprCardBack, Color.White, X, Y, FinalScale, ComputedScale, RealRotationTimer < MathHelper.Pi);
         }
 
         public override void Draw(CustomSpriteBatch g)

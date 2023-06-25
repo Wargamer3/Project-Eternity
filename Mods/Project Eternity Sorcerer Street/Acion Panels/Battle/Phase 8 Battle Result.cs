@@ -27,7 +27,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (!CanUpdate(gameTime))
+            if (!CanUpdate(gameTime, Map.GlobalSorcererStreetBattleContext))
                 return;
 
             Map.GlobalSorcererStreetBattleContext.Background.Update(gameTime);
@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void UpdatePassive(GameTime gameTime)
         {
-            if (!CanUpdate(gameTime))
+            if (!CanUpdate(gameTime, Map.GlobalSorcererStreetBattleContext))
                 return;
 
             Map.GlobalSorcererStreetBattleContext.Background.Update(gameTime);

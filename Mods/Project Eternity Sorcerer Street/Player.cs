@@ -36,6 +36,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
             GamePiece.Direction = UnitMapComponent.DirectionNone;
+            ListCardInDeck = new List<Card>();
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
         }
@@ -48,6 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicChainLevelByTerrainTypeIndex = new Dictionary<byte, byte>();
             GamePiece = new SorcererStreetUnit();
             GamePiece.Direction = UnitMapComponent.DirectionNone;
+            ListCardInDeck = new List<Card>();
             ListRemainingCardInDeck = new List<Card>(ListCardInDeck);
             ListCardInHand = new List<Card>();
         }

@@ -11,27 +11,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         #region Ressources
 
+        private CardSymbols Symbols;
+
         private SpriteFont fntArial12;
-
-        public Texture2D sprMenuCursor;
-
-        public Texture2D sprElementAir;
-        public Texture2D sprElementEarth;
-        public Texture2D sprElementFire;
-        public Texture2D sprElementWater;
-        public Texture2D sprElementNeutral;
-        public Texture2D sprElementMulti;
-
-        public Texture2D sprItemsWeapon;
-        public Texture2D sprItemsArmor;
-        public Texture2D sprItemsTool;
-        public Texture2D sprItemsScroll;
-
-        public Texture2D sprSpellsSingle;
-        public Texture2D sprSpellsMultiple;
-
-        public Texture2D sprEnchantSingle;
-        public Texture2D sprEnchantMultiple;
 
         #endregion
 
@@ -40,35 +22,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private int CursorIndex;
 
-        public ChooseBookScreen(Player ActivePlayer)
+        public ChooseBookScreen(CardSymbols Symbols, Player ActivePlayer)
         {
+            this.Symbols = Symbols;
             this.ActivePlayer = ActivePlayer;
+
             ActiveBook = ActivePlayer.Inventory.ActiveBook;
         }
 
         public override void Load()
         {
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-
-            sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
-
-            sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Air");
-            sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Earth");
-            sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Fire");
-            sprElementWater = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Water");
-            sprElementMulti = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Multi");
-            sprElementNeutral = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Neutral");
-
-            sprItemsWeapon = Content.Load<Texture2D>("Sorcerer Street/Ressources/Weapon");
-            sprItemsArmor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Armor");
-            sprItemsTool = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tool");
-            sprItemsScroll = Content.Load<Texture2D>("Sorcerer Street/Ressources/Scroll");
-
-            sprSpellsSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Single Instant");
-            sprSpellsMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Multiple Instant");
-
-            sprEnchantSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Single Enchant");
-            sprEnchantMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Multiple Enchant");
         }
 
         public override void Update(GameTime gameTime)
@@ -77,7 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 if (CursorIndex < ActivePlayer.Inventory.ListBook.Count)
                 {
-                    PushScreen(new EditBookScreen(ActivePlayer, ActivePlayer.Inventory.ListBook[CursorIndex]));
+                    PushScreen(new EditBookScreen(Symbols, ActivePlayer, ActivePlayer.Inventory.ListBook[CursorIndex]));
                 }
                 else if (CursorIndex == ActivePlayer.Inventory.ListBook.Count)
                 {
@@ -142,10 +106,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawBox(g, new Vector2(X, Y), Constants.Width / 2, EntryHeight, Color.White);
             g.DrawString(fntArial12, "Return", new Vector2(X + 150, Y + EntryHeight / 2 - fntArial12.LineSpacing / 2), Color.White);
 
-            g.Draw(sprMenuCursor, new Rectangle(95, Constants.Height / 7 + EntryHeight / 3 + CursorIndex * (EntryHeight + 10), 40, 40), Color.White);
-            SorcererStreetInventoryScreen.DrawBookInformation(g, fntArial12, "Book Information", sprElementNeutral, sprElementFire, sprElementWater, sprElementEarth, sprElementAir, sprElementMulti,
-                sprItemsWeapon, sprItemsArmor, sprItemsTool, sprItemsScroll, sprSpellsSingle, sprSpellsMultiple, sprEnchantSingle, sprEnchantMultiple,
-                ActivePlayer.Inventory.GlobalBook);
+            MenuHelper.DrawFingerIcon(g, new Vector2(95, Constants.Height / 7 + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
+            SorcererStreetInventoryScreen.DrawBookInformation(g, fntArial12, "Book Information", Symbols, ActivePlayer.Inventory.GlobalBook);
 
             X = -10;
             Y = Constants.Height - 100;

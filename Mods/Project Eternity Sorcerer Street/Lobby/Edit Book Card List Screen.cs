@@ -12,27 +12,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         #region Ressources
 
+        private CardSymbols Symbols;
+
         private SpriteFont fntArial12;
-
-        public Texture2D sprMenuCursor;
-
-        public Texture2D sprElementAir;
-        public Texture2D sprElementEarth;
-        public Texture2D sprElementFire;
-        public Texture2D sprElementWater;
-        public Texture2D sprElementNeutral;
-        public Texture2D sprElementMulti;
-
-        public Texture2D sprItemsWeapon;
-        public Texture2D sprItemsArmor;
-        public Texture2D sprItemsTool;
-        public Texture2D sprItemsScroll;
-
-        public Texture2D sprSpellsSingle;
-        public Texture2D sprSpellsMultiple;
-
-        public Texture2D sprEnchantSingle;
-        public Texture2D sprEnchantMultiple;
 
         #endregion
 
@@ -50,8 +32,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int CursorIndex;
         private int ScrollbarIndex;
 
-        public EditBookCardListScreen(Player ActivePlayer, CardBook ActiveBook)
+        public EditBookCardListScreen(CardSymbols Symbols, Player ActivePlayer, CardBook ActiveBook)
         {
+            this.Symbols = Symbols;
             this.ActivePlayer = ActivePlayer;
             this.ActiveBook = ActiveBook;
         }
@@ -62,26 +45,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MissionScrollbar = new BoxScrollbar(new Vector2(Constants.Width - 20, Constants.Height / 6), Constants.Height - Constants.Height / 3, MaxY, OnMissionScrollbarChange);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-
-            sprMenuCursor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Cursor");
-
-            sprElementAir = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Air");
-            sprElementEarth = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Earth");
-            sprElementFire = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Fire");
-            sprElementWater = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Water");
-            sprElementMulti = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Multi");
-            sprElementNeutral = Content.Load<Texture2D>("Sorcerer Street/Ressources/Elements/Neutral");
-
-            sprItemsWeapon = Content.Load<Texture2D>("Sorcerer Street/Ressources/Weapon");
-            sprItemsArmor = Content.Load<Texture2D>("Sorcerer Street/Ressources/Armor");
-            sprItemsTool = Content.Load<Texture2D>("Sorcerer Street/Ressources/Tool");
-            sprItemsScroll = Content.Load<Texture2D>("Sorcerer Street/Ressources/Scroll");
-
-            sprSpellsSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Single Instant");
-            sprSpellsMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Multiple Instant");
-
-            sprEnchantSingle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Single Enchant");
-            sprEnchantMultiple = Content.Load<Texture2D>("Sorcerer Street/Ressources/Multiple Enchant");
         }
 
         private void OnMissionScrollbarChange(float ScrollbarValue)
@@ -98,31 +61,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (CursorIndex)
                 {
                     case 0:
-                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "creatures"));
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, EditBookCardListFilterScreen.Filters.Creatures));
                         break;
 
                     case 1:
-                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "neutral"));
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, EditBookCardListFilterScreen.Filters.Neutral));
                         break;
 
                     case 2:
-                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "fire"));
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, EditBookCardListFilterScreen.Filters.Fire));
                         break;
 
                     case 3:
-                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "water"));
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, EditBookCardListFilterScreen.Filters.Water));
                         break;
 
                     case 4:
-                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "earth"));
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, EditBookCardListFilterScreen.Filters.Earth));
                         break;
 
                     case 5:
-                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "air"));
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, EditBookCardListFilterScreen.Filters.Air));
                         break;
 
                     case 6:
-                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, "multi"));
+                        PushScreen(new EditBookCardListFilterScreen(ActivePlayer, ActiveBook, EditBookCardListFilterScreen.Filters.Dual));
                         break;
                 }
                 if (CursorIndex > NumberOfFilterCard)
@@ -267,7 +230,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             int CursorX = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3 + (CardWidth + CardSpacing) * (CursorIndex % 7);
             int CursorY = Constants.Height / 6 + CardHeight/ 2 + (CardHeight + 20) * (CursorIndex / 7);
-            g.Draw(sprMenuCursor, new Rectangle(CursorX, CursorY - ScrollbarIndex, 40, 40), Color.White);
+            MenuHelper.DrawFingerIcon(g, new Vector2(CursorX, CursorY - ScrollbarIndex));
 
             X = -10;
             Y = Constants.Height - Constants.Height / 20 - HeaderHeight;
@@ -286,41 +249,41 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprElementNeutral, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
-            g.Draw(sprElementEarth, new Vector2(X - 10 + CardWidth / 2 - 8, Y - 10 + CardHeight / 1.8f), Color.White);
-            g.Draw(sprElementFire, new Vector2(X + 14 + CardWidth / 2 - 8, Y - 10 + CardHeight / 1.8f), Color.White);
-            g.Draw(sprElementWater, new Vector2(X - 10 + CardWidth / 2 - 8, Y + 10 + CardHeight / 1.8f), Color.White);
-            g.Draw(sprElementAir, new Vector2(X + 14 + CardWidth / 2 - 8, Y + 10 + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementNeutral, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementEarth, new Vector2(X - 10 + CardWidth / 2 - 8, Y - 10 + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementFire, new Vector2(X + 14 + CardWidth / 2 - 8, Y - 10 + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementWater, new Vector2(X - 10 + CardWidth / 2 - 8, Y + 10 + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementAir, new Vector2(X + 14 + CardWidth / 2 - 8, Y + 10 + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprElementNeutral, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementNeutral, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprElementFire, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementFire, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprElementWater, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementWater, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprElementEarth, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementEarth, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprElementAir, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementAir, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Creature", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprElementMulti, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprElementMulti, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             X = Constants.Width / 2 - CardWidth / 2 - (CardWidth + CardSpacing) * 3;
@@ -328,12 +291,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Item", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprItemsWeapon, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprItemsWeapon, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);
             TextHelper.DrawTextMiddleAligned(g, "Spell", new Vector2(X + CardWidth / 2, Y + 20), Color.White);
-            g.Draw(sprSpellsMultiple, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
+            g.Draw(Symbols.sprSpellsMultiple, new Vector2(X + CardWidth / 2 - 8, Y + CardHeight / 1.8f), Color.White);
             X += CardWidth + CardSpacing;
 
             DrawBox(g, new Vector2(X, Y), CardWidth, CardHeight, Color.White);

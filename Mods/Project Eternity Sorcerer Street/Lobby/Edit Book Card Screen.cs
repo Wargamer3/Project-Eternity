@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private SpriteFont fntArial12;
         private SpriteFont fntArial26;
 
-        CardSymbols Symbols;
+        private CardSymbols Symbols;
 
         #endregion
 
