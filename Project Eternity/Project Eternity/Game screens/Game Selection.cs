@@ -147,8 +147,8 @@ namespace ProjectEternity
 
                     case MenuChoices.MultiplayerLobby:
                         BattleContext.LoadDefaultValues();
-                        Constants.Width = 800;
-                        Constants.Height = 600;
+                        Constants.Width = 1920;
+                        Constants.Height = 1080;
                         Constants.ScreenSize = 0;
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
@@ -158,8 +158,8 @@ namespace ProjectEternity
 
                     case MenuChoices.MultiplayerLobbyOffline:
                         BattleContext.LoadDefaultValues();
-                        Constants.Width = 800;
-                        Constants.Height = 600;
+                        Constants.Width = 1920;
+                        Constants.Height = 1080;
                         Constants.ScreenSize = 0;
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
@@ -196,8 +196,8 @@ namespace ProjectEternity
 
                     case MenuChoices.SorcererStreetLobby:
                         BattleContext.LoadDefaultValues();
-                        Constants.Width = 800;
-                        Constants.Height = 600;
+                        Constants.Width = 1920;
+                        Constants.Height = 1080;
                         Constants.ScreenSize = 0;
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
