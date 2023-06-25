@@ -283,12 +283,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                             if (ActiveBarrierEffect != null)
                             {
-                                int ENCost = int.Parse(ActiveParser.Evaluate(ActiveBarrierEffect.ENCost), CultureInfo.InvariantCulture);
+                                int ENCost = int.Parse(Params.ActiveParser.Evaluate(ActiveBarrierEffect.ENCost), CultureInfo.InvariantCulture);
 
                                 if (Result.AttackAttackerFinalEN > ENCost)
                                 {
                                     Result.AttackAttackerFinalEN -= ENCost;
-                                    int BreakingDamage = int.Parse(ActiveParser.Evaluate(ActiveBarrierEffect.BreakingDamage), CultureInfo.InvariantCulture);
+                                    int BreakingDamage = int.Parse(Params.ActiveParser.Evaluate(ActiveBarrierEffect.BreakingDamage), CultureInfo.InvariantCulture);
                                     //Look for weapon breaker or damage breaker or if the Barrier can protect against that Attack.
                                     if ((ActiveBarrierEffect.EffectiveAttacks.Count > 0 && !ActiveBarrierEffect.EffectiveAttacks.Contains(CurrentAttack.RelativePath)) ||
                                         ActiveBarrierEffect.BreakingAttacks.Contains(CurrentAttack.RelativePath) ||
@@ -330,7 +330,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                             }
                                             else if (ActiveBarrierEffect.BarrierType == BarrierEffect.BarrierTypes.Defend)
                                             {
-                                                float DamageReduction = float.Parse(ActiveParser.Evaluate(ActiveBarrierEffect.DamageReduction), CultureInfo.InvariantCulture);
+                                                float DamageReduction = float.Parse(Params.ActiveParser.Evaluate(ActiveBarrierEffect.DamageReduction), CultureInfo.InvariantCulture);
                                                 if (ActiveBarrierEffect.NumberType == Operators.NumberTypes.Absolute)
                                                     Result.AttackDamage = Math.Max(0, Result.AttackDamage - (int)DamageReduction);
                                                 else if (ActiveBarrierEffect.NumberType == Operators.NumberTypes.Relative)

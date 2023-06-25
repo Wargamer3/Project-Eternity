@@ -25,13 +25,13 @@ namespace ProjectEternity.UnitTests
             Test.Info = new GameScreens.DeathmatchMapScreen.DeathmatchAIInfo(DummyMap, DummySquad);
             List<object> ListAttack = (List<object>)Test.GetContent();
             Assert.AreEqual(2, ListAttack.Count);
-            Assert.AreEqual(10000, ((Attack)ListAttack[0]).GetPower(DummySquad.CurrentLeader, DummyMap.ActiveParser));
+            Assert.AreEqual(10000, ((Attack)ListAttack[0]).GetPower(DummySquad.CurrentLeader, DummyMap.Params.ActiveParser));
 
             DummySquad.CurrentLeader.ListAttack[0].PowerFormula = "1000";
             Test.Info = new GameScreens.DeathmatchMapScreen.DeathmatchAIInfo(DummyMap, DummySquad);
             ListAttack = (List<object>)Test.GetContent();
             Assert.AreEqual(2, ListAttack.Count);
-            Assert.AreEqual(8000, ((Attack)ListAttack[0]).GetPower(DummySquad.CurrentLeader, DummyMap.ActiveParser));
+            Assert.AreEqual(8000, ((Attack)ListAttack[0]).GetPower(DummySquad.CurrentLeader, DummyMap.Params.ActiveParser));
         }
 
         [TestMethod]

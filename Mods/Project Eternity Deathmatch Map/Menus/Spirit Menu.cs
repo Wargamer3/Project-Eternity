@@ -132,7 +132,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 for (int C = 0; C < ActiveSquad[U].ArrayCharacterActive.Length; C++)
                 {
-                    Map.Params.GlobalContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null, Map.ActiveParser);
+                    Map.Params.GlobalContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null, Map.Params.ActiveParser);
 
                     PilotSpiritActivation[U][C] = new List<ManualSkill>();
 
@@ -144,7 +144,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 }
             }
 
-            Map.Params.GlobalContext.SetContext(null, null, null, null, null, null, Map.ActiveParser);
+            Map.Params.GlobalContext.SetContext(null, null, null, null, null, null, Map.Params.ActiveParser);
         }
 
         public override void Update(GameTime gameTime)
@@ -222,7 +222,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     {
                         for (int S = 0; S < PilotSpiritActivation[U][C].Count; ++S)
                         {
-                            Map.Params.GlobalContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null, Map.ActiveParser);
+                            Map.Params.GlobalContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null, Map.Params.ActiveParser);
 
                             ManualSkill SpiritToActivate = PilotSpiritActivation[U][C][S];
 
@@ -248,7 +248,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
 
-                Map.Params.GlobalContext.SetContext(null, null, null, null, null, null, Map.ActiveParser);
+                Map.Params.GlobalContext.SetContext(null, null, null, null, null, null, Map.Params.ActiveParser);
 
                 Map.sndConfirm.Play();
             }

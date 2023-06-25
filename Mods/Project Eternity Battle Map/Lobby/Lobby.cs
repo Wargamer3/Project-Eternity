@@ -551,6 +551,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 ActiveElement.Draw(g);
             }
+
             if (OnlineCommunicationClient != null)
             {
                 ChatHelper.DrawChat(g, fntArial12, OnlineCommunicationClient.Chat, ChatInput);

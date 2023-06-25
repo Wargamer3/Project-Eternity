@@ -412,7 +412,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             for (int C = 0; C < ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive.Length; C++)
                             {
                                 Character ActiveCharacter = ListPlayer[P].ListSquad[S].At(U).ArrayCharacterActive[C];
-                                ActiveCharacter.Effects.QuickLoad(BR, ActiveParser, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget);
+                                ActiveCharacter.Effects.QuickLoad(BR, Params.ActiveParser, GlobalBattleParams.DicRequirement, GlobalBattleParams.DicEffect, GlobalBattleParams.DicAutomaticSkillTarget);
                             }
                         }
                     }

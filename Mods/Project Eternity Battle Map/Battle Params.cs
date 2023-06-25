@@ -7,6 +7,7 @@ using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Effects;
 using Roslyn;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -23,6 +24,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public readonly UnitQuickLoadEffectContext GlobalQuickLoadContext;
 
         public BattleMap Map;
+        public FormulaParser ActiveParser;
 
         public Dictionary<string, Unit> DicUnitType;
         public Dictionary<string, BaseEffect> DicEffect;

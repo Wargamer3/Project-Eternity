@@ -120,7 +120,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public static Dictionary<string, string> DicGlobalVariables;
         public static Dictionary<string, int> DicRouteChoices;
         public static Dictionary<string, BattleMap> DicBattmeMapType = new Dictionary<string, BattleMap>();
-        public FormulaParser ActiveParser;
 
         public Vector3 CursorPosition;//Z is layer index
         public Vector3 CursorPositionVisible;
@@ -367,7 +366,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
 
                 Camera3D = new DefaultCamera(GraphicsDevice);
-                AttackPicker = new AttacksMenu(ActiveParser);
+                AttackPicker = new AttacksMenu(Params.ActiveParser);
 
                 sndConfirm = new FMODSound(FMODSystem, "Content/SFX/Confirm.mp3");
                 sndDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");

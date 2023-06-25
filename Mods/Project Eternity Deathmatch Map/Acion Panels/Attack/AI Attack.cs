@@ -169,7 +169,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void SelectTargetAndAttack()
         {
             Map.UpdateAllAttacks(ActiveSquad.CurrentLeader, ActiveSquad.Position, Map.ListPlayer[ActivePlayerIndex].Team, false);
-            IEnumerable<Attack> ListAttackOrderedByPower = ActiveSquad.CurrentLeader.ListAttack.OrderByDescending(Attack => Attack.GetPower(ActiveSquad.CurrentLeader, Map.ActiveParser));
+            IEnumerable<Attack> ListAttackOrderedByPower = ActiveSquad.CurrentLeader.ListAttack.OrderByDescending(Attack => Attack.GetPower(ActiveSquad.CurrentLeader, Map.Params.ActiveParser));
             foreach (Attack ActiveAttack in ListAttackOrderedByPower)
             {
                 ActiveSquad.CurrentLeader.CurrentAttack = ActiveAttack;

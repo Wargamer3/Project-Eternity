@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = Params.Map.ActiveParser.Evaluate(_HPIncrease);
+            string EvaluationResult = Params.ActiveParser.Evaluate(_HPIncrease);
 
             Params.IncreaseSelfHP(int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
 

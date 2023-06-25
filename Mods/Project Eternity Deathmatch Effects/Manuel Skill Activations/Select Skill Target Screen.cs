@@ -63,7 +63,7 @@ namespace ProjectEternity.Core.Skill
                     if (SquadIndex >= 0)
                     {
                         Params.GlobalContext.SetContext(SkillSquad, SkillUnit, SkillPilot,
-                            Params.Map.ListPlayer[P].ListSquad[SquadIndex], Params.Map.ListPlayer[P].ListSquad[SquadIndex].CurrentLeader, Params.Map.ListPlayer[P].ListSquad[SquadIndex].CurrentLeader.Pilot, Params.Map.ActiveParser);
+                            Params.Map.ListPlayer[P].ListSquad[SquadIndex], Params.Map.ListPlayer[P].ListSquad[SquadIndex].CurrentLeader, Params.Map.ListPlayer[P].ListSquad[SquadIndex].CurrentLeader.Pilot, Params.ActiveParser);
 
                         Params.GlobalContext.EffectTargetUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
                         if (ActiveSkill.CanActivateEffectsOnTarget(Params.GlobalContext.EffectTargetCharacter.Effects))
@@ -77,7 +77,7 @@ namespace ProjectEternity.Core.Skill
                     return;
 
                 Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter,
-                    TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Params.Map.ActiveParser);
+                    TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Params.ActiveParser);
 
                 Owner.AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectTargetCharacter.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
                 Params.GlobalContext.EffectTargetUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);

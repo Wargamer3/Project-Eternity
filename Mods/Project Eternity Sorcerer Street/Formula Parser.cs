@@ -2,18 +2,16 @@
 using System.Linq;
 using System.Collections.Generic;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetFormulaParser : FormulaParser
     {
-        private SorcererStreetMap Map;
+        private SorcererStreetBattleParams Params;
 
-        public SorcererStreetFormulaParser(SorcererStreetMap Map)
+        public SorcererStreetFormulaParser(SorcererStreetBattleParams Params)
         {
-            this.Map = Map;
+            this.Params = Params;
         }
 
         protected override string ValueFromVariable(string Input)
@@ -32,14 +30,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (Expression[0] == "player")
                 {
                     int PlayerIndex = Convert.ToInt32(Expression[1]) - 1;
-                    if (PlayerIndex < Map.ListPlayer.Count)
-                        ListPlayer.Add(Map.ListPlayer[PlayerIndex]);
+                    if (PlayerIndex < Params.Map.ListPlayer.Count)
+                        ListPlayer.Add(Params.Map.ListPlayer[PlayerIndex]);
 
                     Expression = Expression.Skip(2).ToArray();
                 }
                 else
                 {
-                    foreach (Player ActivePlayer in Map.ListPlayer)
+                    foreach (Player ActivePlayer in Params.Map.ListPlayer)
                     {
                         ListPlayer.Add(ActivePlayer);
                     }
@@ -71,43 +69,43 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             case "mapturn":
                             case "turnmap":
                             case "playerturn":
-                                return Map.GameTurn.ToString();
+                                return Params.Map.GameTurn.ToString();
 
                             case "phase":
                             case "currentphase":
                             case "activeplayer":
                             case "currentplayer":
-                                return Map.ActivePlayerIndex.ToString();
+                                return Params.Map.ActivePlayerIndex.ToString();
 
                             default:
-                                return Map.DicMapVariables[Expression[1]].ToString();
+                                return Params.Map.DicMapVariables[Expression[1]].ToString();
                         }
 
                     case "atk":
                     case "invader":
-                        if (Map.Params.GlobalContext.EffectOwnerSquad == null)
+                        if (Params.GlobalContext.Invader == null)
                             throw new Exception(Input + " is invalid");
-                        return UnitStatFromUnit(Map.SorcererStreetParams.GlobalContext.InvaderPlayer, Map.SorcererStreetParams.GlobalContext.Invader, Expression[1]);
+                        return UnitStatFromUnit(Params.GlobalContext.InvaderPlayer, Params.GlobalContext.Invader, Expression[1]);
 
                     case "def":
                     case "defender":
-                        if (Map.Params.GlobalContext.EffectTargetSquad == null)
+                        if (Params.GlobalContext.Defender == null)
                             throw new Exception(Input + " is invalid");
-                        return UnitStatFromUnit(Map.SorcererStreetParams.GlobalContext.DefenderPlayer, Map.SorcererStreetParams.GlobalContext.Defender,  Expression[1]);
+                        return UnitStatFromUnit(Params.GlobalContext.DefenderPlayer, Params.GlobalContext.Defender,  Expression[1]);
 
                     case "owner":
                     case "ownercreature":
-                        return UnitStatFromUnit(Map.SorcererStreetParams.GlobalContext.UserPlayer, Map.SorcererStreetParams.GlobalContext.UserCreature, Expression[1]);
+                        return UnitStatFromUnit(Params.GlobalContext.UserPlayer, Params.GlobalContext.UserCreature, Expression[1]);
 
                     case "opponent":
                     case "opponentcreature":
-                        return UnitStatFromUnit(Map.SorcererStreetParams.GlobalContext.OpponentPlayer, Map.SorcererStreetParams.GlobalContext.OpponentCreature, Expression[1]);
+                        return UnitStatFromUnit(Params.GlobalContext.OpponentPlayer, Params.GlobalContext.OpponentCreature, Expression[1]);
 
                     case "ownerplayer":
-                        return PlayerStatsFromPlayer(Map.SorcererStreetParams.GlobalContext.UserPlayer, Expression[1]);
+                        return PlayerStatsFromPlayer(Params.GlobalContext.UserPlayer, Expression[1]);
 
                     case "opponentplayer":
-                        return PlayerStatsFromPlayer(Map.SorcererStreetParams.GlobalContext.OpponentPlayer, Expression[1]);
+                        return PlayerStatsFromPlayer(Params.GlobalContext.OpponentPlayer, Expression[1]);
 
                     default:
                         if (Expression[0].Contains("player"))
@@ -116,9 +114,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             if (ArrayPlayerValue.Length == 1)
                             {
                                 int PlayerIndex = Convert.ToInt32(ArrayPlayerValue[0]) - 1;
-                                if (Map.ListPlayer.Count <= PlayerIndex)
+                                if (Params.Map.ListPlayer.Count <= PlayerIndex)
                                     return "0";
-                                Player ActivePlayer = Map.ListPlayer[PlayerIndex];
+                                Player ActivePlayer = Params.Map.ListPlayer[PlayerIndex];
                                 switch (Expression[1])
                                 {
                                     case "exist":
@@ -137,11 +135,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                     case "creature count":
                                     case "creature count alive":
                                         int CreatureCountAlive = 0;
-                                        for (int X = 0; X < Map.MapSize.X; ++X)
+                                        for (int X = 0; X < Params.Map.MapSize.X; ++X)
                                         {
-                                            for (int Y = 0; Y < Map.MapSize.Y; ++Y)
+                                            for (int Y = 0; Y < Params.Map.MapSize.Y; ++Y)
                                             {
-                                                CreatureCard DefendingCreature = Map.GetTerrain(new Microsoft.Xna.Framework.Vector3(X, Y, 0)).DefendingCreature;
+                                                CreatureCard DefendingCreature = Params.Map.GetTerrain(new Microsoft.Xna.Framework.Vector3(X, Y, 0)).DefendingCreature;
 
                                                 if (DefendingCreature != null && DefendingCreature.Name.ToLower().Replace(" ", "") == Expression[2])
                                                 {
@@ -177,11 +175,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 case "name":
                     ReturnExpression = "0";
-                    for (int X = 0; X < Map.MapSize.X; ++X)
+                    for (int X = 0; X < Params.Map.MapSize.X; ++X)
                     {
-                        for (int Y = 0; Y < Map.MapSize.Y; ++Y)
+                        for (int Y = 0; Y < Params.Map.MapSize.Y; ++Y)
                         {
-                            CreatureCard DefendingCreature = Map.GetTerrain(new Microsoft.Xna.Framework.Vector3(X, Y, 0)).DefendingCreature;
+                            CreatureCard DefendingCreature = Params.Map.GetTerrain(new Microsoft.Xna.Framework.Vector3(X, Y, 0)).DefendingCreature;
 
                             if (DefendingCreature != null && DefendingCreature.Name.ToLower().Replace(" ", "") == Expression[2])
                             {
@@ -214,7 +212,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return ReturnExpression;
         }
 
-        private string UnitStatFromUnit(Player ActivePlayer, CreatureCard ActiveUnit, string Expression)
+        private string UnitStatFromUnit(Player ActivePlayer, CreatureCard ActiveCreature, string Expression)
         {
             string ReturnExpression = null;
 
@@ -223,13 +221,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "name":
                 case "leadername":
                 case "currentleadername":
-                    ReturnExpression = ActiveUnit.Name.ToLower().Replace(" ", "");
+                    ReturnExpression = ActiveCreature.Name.ToLower().Replace(" ", "");
                     break;
 
                 case "hp":
                 case "hitpoint":
                 case "hitpoints":
-                    ReturnExpression = ActiveUnit.CurrentHP.ToString();
+                    ReturnExpression = ActiveCreature.CurrentHP.ToString();
                     break;
 
                 case "mhp":
@@ -239,18 +237,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "maxhitpoints":
                 case "hitpointmax":
                 case "hitpointsmax":
-                    ReturnExpression = ActiveUnit.MaxHP.ToString();
+                    ReturnExpression = ActiveCreature.MaxHP.ToString();
                     break;
 
                 case "st":
                 case "strengt":
-                    ReturnExpression = ActiveUnit.CurrentST.ToString();
+                    ReturnExpression = ActiveCreature.CurrentST.ToString();
                     break;
 
                 case "mst":
                 case "maxst":
                 case "stmax":
-                    ReturnExpression = ActiveUnit.MaxST.ToString();
+                    ReturnExpression = ActiveCreature.MaxST.ToString();
                     break;
             }
 

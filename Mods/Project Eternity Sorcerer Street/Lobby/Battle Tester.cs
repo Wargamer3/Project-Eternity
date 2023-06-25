@@ -109,12 +109,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ActiveBook = ActivePlayer.Inventory.ActiveBook;
             ActiveBook = AllCardsBook;
-            Context = new SorcererStreetBattleContext();
         }
 
         public override void Load()
         {
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
+            Context = SorcererStreetBattleParams.DicParams[string.Empty].GlobalContext;
+            SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
 
             ButtonHeight = fntArial12.LineSpacing + 2;
 
@@ -223,7 +224,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         foreach (string ActiveFile in Directory.EnumerateFiles(ActiveCampaignFolder, "*.pec", SearchOption.AllDirectories))
                         {
-                            Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                            Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback,
+                                SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement, SorcererStreetBattleParams.DicParams[string.Empty].DicEffect, SorcererStreetBattleParams.DicParams[string.Empty].DicAutomaticSkillTarget);
                             LoadedCard.QuantityOwned = 1;
 
                             ActiveBook.AddCard(LoadedCard);
@@ -425,7 +427,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             Context.DefenderFinalHP = int.Parse(InvaderMaxHPInput.Text);
             Context.DefenderFinalST = int.Parse(InvaderSTInput.Text);
-            Context.DefenderFinalHP += 10 * int.Parse(DefenderTerrainHPBonusInput.Text);
+            Context.DefenderFinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
+
+            Context.InvaderFinalHP = int.Parse(InvaderMaxHPInput.Text);
+            Context.InvaderFinalST = int.Parse(InvaderSTInput.Text);
+            Context.InvaderFinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
+
             sndButtonClick.Play();
         }
 
@@ -441,11 +448,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void EnchantModifierPhaseSelection()
         {
+            CreatureModifierPhaseSelection();
             sndButtonClick.Play();
         }
 
         private void ItemModifierPhaseSelection()
         {
+            EnchantModifierPhaseSelection();
             if (ActionPanelBattleItemModifierPhase.InitAnimations(Context))
             {
                 PhasesChoice = PhasesChoices.ItemModifierPhase;
@@ -487,6 +496,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             foreach (IUIElement ActiveElement in ArrayMenuButton)
             {
                 ActiveElement.Draw(g);
+            }
+
+            switch (PhasesChoice)
+            {
+                case PhasesChoices.ItemModifierPhase:
+                    ActionPanelBattleItemModifierPhase.DrawItemActivation(g, fntArial12, Context);
+                    break;
+
+                default:
+                    break;
             }
         }
 

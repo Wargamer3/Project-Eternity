@@ -35,7 +35,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
         {
             int WeaponTerrain = CurrentAttack.TerrainAttribute(AttackerTerrainType);
             
-            return AttackFormula(Attacker, CurrentAttack, WeaponTerrain, ActiveParser);
+            return AttackFormula(Attacker, CurrentAttack, WeaponTerrain, Params.ActiveParser);
         }
 
         public static int DefenseFormula(int Armor, int PilotMorale, int DefenderPilotDEF, int DefenderTerrain)
@@ -493,12 +493,12 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
             {
                 if (Attacker != null)
                 {
-                    Params.GlobalContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, ActiveParser);
+                    Params.GlobalContext.SetContext(Attacker, Attacker.CurrentLeader, Attacker.CurrentLeader.Pilot, TargetSquad, TargetSquad.CurrentLeader, TargetSquad.CurrentLeader.Pilot, Params.ActiveParser);
                 }
 
                 UpdateMapEvent(EventTypeOnBattle, 1);
 
-                Params.GlobalContext.SetContext(null, null, null, null, null, null, ActiveParser);
+                Params.GlobalContext.SetContext(null, null, null, null, null, null, Params.ActiveParser);
 
                 //Don't update the leader until after the events are processed. (If a battle map event try to read the leader of a dead unit it will crash on a null pointer as dead units have no leader)
 

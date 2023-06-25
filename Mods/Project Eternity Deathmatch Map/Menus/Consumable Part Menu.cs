@@ -66,7 +66,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     for (int C = 0; C < ActiveSquad[U].ArrayCharacterActive.Length; C++)
                     {
-                        Map.Params.GlobalContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null, Map.ActiveParser);
+                        Map.Params.GlobalContext.SetContext(ActiveSquad, ActiveSquad[U], ActiveSquad[U].ArrayCharacterActive[C], null, null, null, Map.Params.ActiveParser);
 
                         ManualSkill SpiritToActivate = ActiveSpirit;
 
@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     }
                 }
 
-                Map.Params.GlobalContext.SetContext(null, null, null, null, null, null, Map.ActiveParser);
+                Map.Params.GlobalContext.SetContext(null, null, null, null, null, null, Map.Params.ActiveParser);
 
                 Map.sndConfirm.Play();
             }

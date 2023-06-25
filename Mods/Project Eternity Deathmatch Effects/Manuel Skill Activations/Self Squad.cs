@@ -28,7 +28,7 @@ namespace ProjectEternity.Core.Skill
 
                 Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter,
                     Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerSquad[U].Pilot,
-                    Params.Map.ActiveParser);
+                    Params.ActiveParser);
                 
                 if (ActiveSkill.CanActivateEffectsOnTarget(Params.GlobalContext.EffectOwnerSquad[U].Pilot.Effects))
                     return true;
@@ -43,7 +43,7 @@ namespace ProjectEternity.Core.Skill
             {
                 Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter,
                     Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerSquad[U].Pilot,
-                    Params.Map.ActiveParser);
+                    Params.ActiveParser);
 
                 AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectOwnerSquad[U].Pilot.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
                 Params.GlobalContext.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;

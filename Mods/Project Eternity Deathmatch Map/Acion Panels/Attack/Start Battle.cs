@@ -363,7 +363,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             bool ShowAnimation = Constants.ShowAnimation && FinalAttack.Pri != WeaponPrimaryProperty.MAP && FinalAttack.Pri != WeaponPrimaryProperty.PER
-                && FinalAttack.GetAttackAnimations(Map.ActiveParser).Start.AnimationName != null;
+                && FinalAttack.GetAttackAnimations(Map.Params.ActiveParser).Start.AnimationName != null;
             ListNextAnimationScreen.Clear();
             Map.NonDemoScreen.ListNonDemoBattleFrame.Clear();
 

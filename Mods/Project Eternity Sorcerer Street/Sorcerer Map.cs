@@ -112,7 +112,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListTilesetPreset = new List<Terrain.TilesetPreset>();
             LayerManager = new LayerHolderSorcererStreet(this);
             MapEnvironment = new EnvironmentManagerSorcererStreet(this);
-            ActiveParser = new SorcererStreetFormulaParser(this);
+            Params.ActiveParser = new SorcererStreetFormulaParser(Params);
             ListCheckpoint = new List<Checkpoints>();
 
             CursorPosition = new Vector3(0, 0, 0);

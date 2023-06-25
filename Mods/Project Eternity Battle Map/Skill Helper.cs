@@ -1,6 +1,6 @@
-﻿using ProjectEternity.Core.Characters;
-using ProjectEternity.Core.Item;
+﻿using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
+using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -22,12 +22,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else
                 TargetPilot = null;
 
-            Params.GlobalContext.SetContext(ActiveSquad, ActiveUnit, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
+            Params.GlobalContext.SetContext(ActiveSquad, ActiveUnit, null, TargetSquad, TargetUnit, TargetPilot, Params.ActiveParser);
             
             // Character Skills
             for (int C = 0; C < ActiveUnit.ArrayCharacterActive.Length; C++)
             {
-                Params.GlobalContext.SetContext(ActiveSquad, ActiveUnit, ActiveUnit.ArrayCharacterActive[C], TargetSquad, TargetUnit, TargetPilot, ActiveParser);
+                Params.GlobalContext.SetContext(ActiveSquad, ActiveUnit, ActiveUnit.ArrayCharacterActive[C], TargetSquad, TargetUnit, TargetPilot, Params.ActiveParser);
 
                 for (int S = 0; S < ActiveUnit.ArrayCharacterActive[C].ArrayPilotSkill.Length; S++)
                 {
@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
 
-            Params.GlobalContext.SetContext(ActiveSquad, ActiveUnit, ActiveUnit.Pilot, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
+            Params.GlobalContext.SetContext(ActiveSquad, ActiveUnit, ActiveUnit.Pilot, TargetSquad, TargetUnit, TargetPilot, Params.ActiveParser);
             
             // Unit Abilities
             for (int S = 0; S < ActiveUnit.ArrayUnitAbility.Length; S++)
@@ -64,7 +64,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //Reset active effects in case an effect was removed.
             ActiveUnit.ReactivateEffects();
 
-            Params.GlobalContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
+            Params.GlobalContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, Params.ActiveParser);
         }
 
         public void ActivateAutomaticSkills(BaseAutomaticSkill SkillToActivate, Squad TargetSquad, Unit TargetUnit)
@@ -75,11 +75,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else
                 TargetPilot = null;
 
-            Params.GlobalContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
+            Params.GlobalContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, Params.ActiveParser);
 
             SkillToActivate.AddSkillEffectsToTarget(string.Empty);
 
-            Params.GlobalContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, ActiveParser);
+            Params.GlobalContext.SetContext(null, null, null, TargetSquad, TargetUnit, TargetPilot, Params.ActiveParser);
         }
     }
 }

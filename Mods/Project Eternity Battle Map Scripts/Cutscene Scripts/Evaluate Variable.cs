@@ -1,12 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
+using System.ComponentModel;
 using ProjectEternity.Core.Scripts;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-
     public sealed partial class ExtraBattleMapCutsceneScriptHolder
     {
         public class ScriptEvaluateVariable : BattleMapScript
@@ -25,7 +24,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             public override void ExecuteTrigger(int Index)
             {
-                string ExpressionFinal = Map.ActiveParser.Evaluate(Expression);
+                string ExpressionFinal = Map.Params.ActiveParser.Evaluate(Expression);
                 if (ExpressionFinal == "1")
                     ExecuteEvent(this, 0);
                 else

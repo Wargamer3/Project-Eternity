@@ -156,13 +156,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             base.Draw(g);
 
+            DrawItemActivation(g, Map.fntArial12, Map.GlobalSorcererStreetBattleContext);
+        }
+
+        public static void DrawItemActivation(CustomSpriteBatch g, SpriteFont fntArial12, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
+        {
             if (AnimationPhase == AnimationPhases.InvaderIntro || AnimationPhase == AnimationPhases.InvaderActivation)
             {
-                DrawInvaderCardActivation(g, Map.fntArial12, Map.GlobalSorcererStreetBattleContext);
+                DrawInvaderCardActivation(g, fntArial12, GlobalSorcererStreetBattleContext);
             }
             else if (AnimationPhase == AnimationPhases.DefenderIntro || AnimationPhase == AnimationPhases.DefenderActivation)
             {
-                DrawDenderCardActivation(g, Map.fntArial12, Map.GlobalSorcererStreetBattleContext);
+                DrawDenderCardActivation(g, fntArial12, GlobalSorcererStreetBattleContext);
             }
         }
 

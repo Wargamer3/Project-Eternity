@@ -41,7 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = Params.Map.ActiveParser.Evaluate(_STIncrease);
+            string EvaluationResult = Params.ActiveParser.Evaluate(_STIncrease);
 
             Params.IncreaseSelfST(int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
 

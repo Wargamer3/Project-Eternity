@@ -22,14 +22,14 @@ namespace ProjectEternity.Core.Skill
             if (Params.GlobalContext.EffectOwnerSquad.CurrentLeader == null || Params.GlobalContext.EffectOwnerSquad.CurrentLeader.Pilot == null || Params.GlobalContext.EffectOwnerSquad.IsDead)
                 return false;
 
-            Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.Map.ActiveParser);
+            Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.ActiveParser);
             
             return ActiveSkill.CanActivateEffectsOnTarget(Params.GlobalContext.EffectOwnerCharacter.Effects);
         }
 
         public override void ActivateSkillFromMenu(ManualSkill ActiveSkill)
         {
-            Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.Map.ActiveParser);
+            Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.ActiveParser);
 
             AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectOwnerCharacter.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
             Params.GlobalContext.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;

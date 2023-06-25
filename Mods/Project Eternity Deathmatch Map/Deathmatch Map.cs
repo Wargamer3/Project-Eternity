@@ -143,7 +143,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             LayerManager = new LayerHolderDeathmatch(this);
             MapEnvironment = new EnvironmentManagerDeathmatch(this);
             ListActionMenuChoice = new ActionPanelHolderDeathmatch(this);
-            ActiveParser = new DeathmatchFormulaParser(this);
+            Params.ActiveParser = new DeathmatchFormulaParser(this);
             ActivePlayerIndex = 0;
             ListPlayer = new List<Player>();
             ListLocalPlayerInfo = new List<Player>();
