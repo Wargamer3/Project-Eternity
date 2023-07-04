@@ -562,7 +562,7 @@ namespace ProjectEternity.Core
             }
             else
             {
-                Right = ValueFromVariable(Right);
+                Right = GenericValueFromVariable(Right);
 
                 if (char.IsNumber(Right[0]) || Right[0] == '-')
                 {
@@ -579,7 +579,7 @@ namespace ProjectEternity.Core
             }
             else
             {
-                Left = ValueFromVariable(Left);
+                Left = GenericValueFromVariable(Left);
 
                 if (char.IsNumber(Left[0]) || Left[0] == '-')
                 {
@@ -591,21 +591,42 @@ namespace ProjectEternity.Core
             }
         }
 
-        protected string ComputeValue(string Right)
+        protected string ComputeValue(string Input)
         {
-            string RightNumber = Right.Replace(" ", "");
+            string RightNumber = Input.Replace(" ", "");
             //Just remove space from numbers. Need to remove space so IsNumber work.
             if (char.IsNumber(RightNumber[0]))
             {
-                Right = RightNumber;
+                Input = RightNumber;
             }
 
-            if (!char.IsNumber(Right[0]) && Right[0] != '-')
+            if (!char.IsNumber(Input[0]) && Input[0] != '-')
             {
-                return ValueFromVariable(Right);
+                return GenericValueFromVariable(Input);
             }
 
-            return Right;
+            return Input;
+        }
+
+        private string GenericValueFromVariable(string Input)
+        {
+            if (Input.StartsWith("random."))
+            {
+                return GetRandomValue(Input.Substring(7));
+            }
+
+            return ValueFromVariable(Input);
+        }
+
+        private string GetRandomValue(string Input)
+        {
+            if (char.IsNumber(Input[0]))
+            {
+                int Value = Convert.ToInt32(Input, System.Globalization.CultureInfo.InvariantCulture);
+                return RandomHelper.Next(Value).ToString();
+            }
+
+            return Input;
         }
 
         protected abstract string ValueFromVariable(string Input);
