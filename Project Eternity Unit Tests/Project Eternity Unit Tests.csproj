@@ -104,6 +104,7 @@
     <Compile Include="Dynamic Text Tests\Parts\Fontless Text.cs" />
     <Compile Include="Dynamic Text Tests\Processors\Imageless Icon Processor.cs" />
     <Compile Include="Dynamic Text Tests\Processors\Fontless Regular Text Processor.cs" />
+    <Compile Include="FormulaParser Tests.cs" />
     <Compile Include="Sorcerer Street Tests\Battle Effects Tests.cs" />
     <Compile Include="Sorcerer Street Tests\Battle Tests.cs" />
     <Compile Include="Sorcerer Street Tests\Map Tests.cs" />

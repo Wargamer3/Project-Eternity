@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (Expression[0])
                 {
                     case "unit":
-                        ReturnExpression = UnitValueFromVariable(ListPlayer, Expression);
+                        ReturnExpression = CreatureValueFromVariable(ListPlayer, Expression);
                         break;
                 }
                 if (ReturnExpression != null)
@@ -85,27 +85,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case "invader":
                         if (Params.GlobalContext.Invader == null)
                             throw new Exception(Input + " is invalid");
-                        return UnitStatFromUnit(Params.GlobalContext.InvaderPlayer, Params.GlobalContext.Invader, Expression[1]);
+                        return StatsFromCreature(Params.GlobalContext.Invader, Expression[1]);
 
                     case "def":
                     case "defender":
                         if (Params.GlobalContext.Defender == null)
                             throw new Exception(Input + " is invalid");
-                        return UnitStatFromUnit(Params.GlobalContext.DefenderPlayer, Params.GlobalContext.Defender,  Expression[1]);
+                        return StatsFromCreature(Params.GlobalContext.Defender,  Expression[1]);
 
+                    case "self":
                     case "owner":
                     case "ownercreature":
-                        return UnitStatFromUnit(Params.GlobalContext.UserPlayer, Params.GlobalContext.UserCreature, Expression[1]);
+                        return StatsFromCreature(Params.GlobalContext.SelfCreature, Expression[1]);
 
                     case "opponent":
                     case "opponentcreature":
-                        return UnitStatFromUnit(Params.GlobalContext.OpponentPlayer, Params.GlobalContext.OpponentCreature, Expression[1]);
+                        return StatsFromCreature( Params.GlobalContext.OpponentCreature, Expression[1]);
 
                     case "ownerplayer":
-                        return PlayerStatsFromPlayer(Params.GlobalContext.UserPlayer, Expression[1]);
+                        return PlayerStatsFromPlayer(Params.GlobalContext.SelfCreature.Owner, Expression[1]);
 
                     case "opponentplayer":
-                        return PlayerStatsFromPlayer(Params.GlobalContext.OpponentPlayer, Expression[1]);
+                        return PlayerStatsFromPlayer(Params.GlobalContext.OpponentCreature.Owner, Expression[1]);
 
                     default:
                         if (Expression[0].Contains("player"))
@@ -162,11 +163,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 throw new Exception(Input + " is invalid");
         }
 
-        public string UnitValueFromVariable(List<Player> ListPlayer, string[] Expression)
+        public string CreatureValueFromVariable(List<Player> ListPlayer, string[] Expression)
         {
             string ReturnExpression = null;
             Player ActivePlayer = null;
-            CreatureCard ActiveUnit = null;
+            CreatureCard ActiveCreature = null;
 
             int UnitNumber = 0;
             bool UnitCount = false;
@@ -187,7 +188,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                     ++UnitNumber;
                                 else
                                 {
-                                    ActiveUnit = DefendingCreature;
+                                    ActiveCreature = DefendingCreature;
                                     ReturnExpression = "1";
                                 }
                             }
@@ -201,18 +202,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
             }
-            if (ActiveUnit == null)
+            if (ActiveCreature == null)
                 return ReturnExpression;
 
             if (Expression.Length >= 4)
             {
-                ReturnExpression = UnitStatFromUnit(ActivePlayer, ActiveUnit, Expression[3]);
+                ReturnExpression = StatsFromCreature(new SorcererStreetBattleContext.BattleCreatureInfo(ActiveCreature, ActivePlayer), Expression[3]);
             }
 
             return ReturnExpression;
         }
 
-        private string UnitStatFromUnit(Player ActivePlayer, CreatureCard ActiveCreature, string Expression)
+        private string StatsFromCreature(SorcererStreetBattleContext.BattleCreatureInfo ActiveCreature, string Expression)
         {
             string ReturnExpression = null;
 
@@ -221,13 +222,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "name":
                 case "leadername":
                 case "currentleadername":
-                    ReturnExpression = ActiveCreature.Name.ToLower().Replace(" ", "");
+                    ReturnExpression = ActiveCreature.Creature.Name.ToLower().Replace(" ", "");
                     break;
 
                 case "hp":
                 case "hitpoint":
                 case "hitpoints":
-                    ReturnExpression = ActiveCreature.CurrentHP.ToString();
+                    ReturnExpression = ActiveCreature.Creature.CurrentHP.ToString();
                     break;
 
                 case "mhp":
@@ -237,18 +238,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "maxhitpoints":
                 case "hitpointmax":
                 case "hitpointsmax":
-                    ReturnExpression = ActiveCreature.MaxHP.ToString();
+                    ReturnExpression = ActiveCreature.Creature.MaxHP.ToString();
                     break;
 
                 case "st":
                 case "strengt":
-                    ReturnExpression = ActiveCreature.CurrentST.ToString();
+                    ReturnExpression = ActiveCreature.Creature.CurrentST.ToString();
                     break;
 
                 case "mst":
                 case "maxst":
                 case "stmax":
-                    ReturnExpression = ActiveCreature.MaxST.ToString();
+                    ReturnExpression = ActiveCreature.Creature.MaxST.ToString();
+                    break;
+
+                case "damagereceived":
+                    ReturnExpression = ActiveCreature.DamageReceived.ToString();
                     break;
             }
 

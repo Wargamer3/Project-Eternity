@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public SorcererStreetTerriotryRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Territory", GlobalContext)
+            : base("Sorcerer Street Territory", GlobalContext)
         {
         }
 

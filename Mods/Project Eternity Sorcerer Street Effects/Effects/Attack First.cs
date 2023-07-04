@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.UserCreature.BonusAttackFirst = true;
+            Params.GlobalContext.SelfCreature.Creature.BonusAbilities.AttackFirst = true;
             return null;
         }
 

@@ -4,32 +4,26 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class TransformOpponentEffect : SorcererStreetEffect
+    public sealed class StealItemEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Transform Opponent";
+        public static string Name = "Sorcerer Street Steal Item";
 
-        private string _CreatureName;
-
-        public TransformOpponentEffect()
+        public StealItemEffect()
             : base(Name, false)
         {
-            _CreatureName = string.Empty;
         }
 
-        public TransformOpponentEffect(SorcererStreetBattleParams Params)
+        public StealItemEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
-            _CreatureName = string.Empty;
         }
         
         protected override void Load(BinaryReader BR)
         {
-            _CreatureName = BR.ReadString();
         }
 
         protected override void Save(BinaryWriter BW)
         {
-            BW.Write(_CreatureName);
         }
 
         public override bool CanActivate()
@@ -44,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override BaseEffect DoCopy()
         {
-            TransformOpponentEffect NewEffect = new TransformOpponentEffect(Params);
+            StealItemEffect NewEffect = new StealItemEffect(Params);
 
             return NewEffect;
         }

@@ -1,37 +1,35 @@
 ﻿using System;
 using System.IO;
-using System.Globalization;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class IncreaseSTEffect : SorcererStreetEffect
+    public sealed class ChangeTerrainLevelEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Increase ST";
+        public static string Name = "Sorcerer Street Change Terrain Level";
 
-        private string _STIncrease;
+        private int _LevelIncrease;
 
-        public IncreaseSTEffect()
+        public ChangeTerrainLevelEffect()
             : base(Name, false)
         {
-            _STIncrease = string.Empty;
+            _LevelIncrease = 1;
         }
 
-        public IncreaseSTEffect(SorcererStreetBattleParams Params)
+        public ChangeTerrainLevelEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
-            _STIncrease = string.Empty;
         }
         
         protected override void Load(BinaryReader BR)
         {
-            _STIncrease = BR.ReadString();
+            _LevelIncrease = BR.ReadByte();
         }
 
         protected override void Save(BinaryWriter BW)
         {
-            BW.Write(_STIncrease);
+            BW.Write((byte)_LevelIncrease);
         }
 
         public override bool CanActivate()
@@ -41,27 +39,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = Params.ActiveParser.Evaluate(_STIncrease);
-
-            Params.IncreaseSelfST(int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
-
-            return "ST+" + EvaluationResult;
+            return "Terrain Level changed " + string.Join(",", _LevelIncrease);
         }
 
         protected override BaseEffect DoCopy()
         {
-            IncreaseSTEffect NewEffect = new IncreaseSTEffect(Params);
+            ChangeTerrainLevelEffect NewEffect = new ChangeTerrainLevelEffect(Params);
 
-            NewEffect._STIncrease = _STIncrease;
+            NewEffect._LevelIncrease = _LevelIncrease;
 
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
-            IncreaseSTEffect NewEffect = (IncreaseSTEffect)Copy;
-
-            _STIncrease = NewEffect._STIncrease;
         }
 
         #region Properties
@@ -69,15 +60,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public string ST
+        public int LevelIncrease
         {
             get
             {
-                return _STIncrease;
+                return _LevelIncrease;
             }
             set
             {
-                _STIncrease = value;
+                _LevelIncrease = Math.Max(0, Math.Min(100, value));
             }
         }
 

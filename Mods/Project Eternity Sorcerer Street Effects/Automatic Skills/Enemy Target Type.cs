@@ -24,16 +24,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void ExecuteAndAddEffectToTarget(BaseEffect ActiveSkillEffect, string SkillName)
         {
-            if (GlobalContext.UserCreature == GlobalContext.Invader)
+            if (GlobalContext.SelfCreature == GlobalContext.Invader)
             {
                 GlobalContext.OpponentCreature = GlobalContext.Invader;
             }
-            else if (GlobalContext.UserCreature == GlobalContext.Defender)
+            else if (GlobalContext.SelfCreature == GlobalContext.Defender)
             {
                 GlobalContext.OpponentCreature = GlobalContext.Defender;
             }
 
-            GlobalContext.OpponentCreature.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName);
+            GlobalContext.OpponentCreature.Creature.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName);
         }
 
         public override AutomaticSkillTargetType Copy()

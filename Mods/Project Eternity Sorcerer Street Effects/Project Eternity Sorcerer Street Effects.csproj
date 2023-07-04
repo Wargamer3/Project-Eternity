@@ -35,8 +35,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,17 +52,47 @@
   <ItemGroup>
     <Compile Include="Automatic Skills\Enemy Target Type.cs" />
     <Compile Include="Automatic Skills\Self Target Type.cs" />
+    <Compile Include="Effects\Move Opponent.cs" />
+    <Compile Include="Effects\Attack Last.cs" />
+    <Compile Include="Effects\Attack Twice.cs" />
+    <Compile Include="Effects\Effect Immunity.cs" />
+    <Compile Include="Effects\Change Symbols Value.cs" />
+    <Compile Include="Effects\Destroy Opponent Item.cs" />
+    <Compile Include="Effects\Change Terrain Level.cs" />
+    <Compile Include="Effects\Critical Hit.cs" />
+    <Compile Include="Effects\Change Element.cs" />
+    <Compile Include="Effects\Sleep.cs" />
+    <Compile Include="Effects\Scroll Critical Hit.cs" />
+    <Compile Include="Effects\Scroll Attack.cs" />
+    <Compile Include="Effects\Recycle.cs" />
+    <Compile Include="Effects\Steal Item.cs" />
+    <Compile Include="Effects\Neutralize Damage.cs" />
+    <Compile Include="Effects\Reflect Damage.cs" />
+    <Compile Include="Effects\Gain Symbol.cs" />
+    <Compile Include="Effects\Draw Cards.cs" />
     <Compile Include="Effects\Immediate.cs" />
+    <Compile Include="Effects\Deal Damage.cs" />
+    <Compile Include="Effects\Destroy Creature.cs" />
+    <Compile Include="Effects\Instant Death.cs" />
     <Compile Include="Effects\Penetrate.cs" />
-    <Compile Include="Effects\Transform Self.cs" />
-    <Compile Include="Effects\Transform Opponent.cs" />
-    <Compile Include="Effects\Destroy Random Card.cs" />
+    <Compile Include="Effects\Transform Creature.cs" />
+    <Compile Include="Effects\Destroy Cards.cs" />
     <Compile Include="Effects\Attack First.cs" />
     <Compile Include="Effects\Increase ST Invasion.cs" />
     <Compile Include="Effects\Play Battle Animation.cs" />
-    <Compile Include="Effects\Increase ST.cs" />
+    <Compile Include="Effects\Change Stats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Effects\Increase HP.cs" />
+    <Compile Include="Requirements\Ability Used Requirement.cs" />
+    <Compile Include="Requirements\Activation Chance Requirement.cs" />
+    <Compile Include="Requirements\Battle Start Requirement.cs" />
+    <Compile Include="Requirements\Element Requirement.cs" />
+    <Compile Include="Requirements\ST Requirement.cs" />
+    <Compile Include="Requirements\HP Left Requirement.cs" />
+    <Compile Include="Requirements\Attack Bonus Requirement.cs" />
+    <Compile Include="Requirements\Against Defensive Requirement.cs" />
+    <Compile Include="Requirements\Uppon Defeat Requirement.cs" />
+    <Compile Include="Requirements\After Enemy Survived Requirement.cs" />
+    <Compile Include="Requirements\Upon Victory Requirement.cs" />
     <Compile Include="Requirements\Creature Summon Requirement.cs" />
     <Compile Include="Requirements\Territory Requirement.cs" />
     <Compile Include="Requirements\Invasion Requirement.cs" />
@@ -74,6 +109,16 @@
     <ProjectReference Include="..\..\Core\Project Eternity Base Item\Project Eternity Base Item.csproj">
       <Project>{ea7a4390-eebb-43f1-be86-33177b215695}</Project>
       <Name>Project Eternity Base Item</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
+      <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
+      <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">
+      <Project>{FA8993B3-6905-4FE1-9715-CEEFB5CE9B3D}</Project>
+      <Name>Project Eternity Base Editor</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Project Eternity Battle Map\Project Eternity Battle Map.csproj">

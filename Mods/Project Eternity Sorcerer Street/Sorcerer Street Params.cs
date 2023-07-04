@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Roslyn;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -12,39 +14,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetBattleContext
     {
-        public CreatureCard Invader;
-        public CreatureCard Defender;
+        public BattleCreatureInfo Invader;
+        public BattleCreatureInfo Defender;
         public TerrainSorcererStreet DefenderTerrain;
-
-        public SimpleAnimation InvaderCard;
-        public SimpleAnimation DefenderCard;
-
-        public int InvaderPlayerIndex;
-        public int DefenderPlayerIndex;
-
-        public Player InvaderPlayer;
-        public Player DefenderPlayer;
-
-        public int InvaderFinalHP;
-        public int DefenderFinalHP;
-
-        public int InvaderFinalST;
-        public int DefenderFinalST;
-
-        public Card InvaderItem;
-        public Card DefenderItem;
 
         public BaseEffect ActivatedEffect;
 
-        public CreatureCard UserCreature;
-        public CreatureCard OpponentCreature;
-
-        public Player UserPlayer;
-        public Player OpponentPlayer;
+        public BattleCreatureInfo SelfCreature;
+        public BattleCreatureInfo OpponentCreature;
 
         public ActionPanelHolder ListBattlePanelHolder;
 
         public AnimationBackground Background;
+
+        public FormulaParser ActiveParser;
+
+        public class BattleCreatureInfo
+        {
+            public CreatureCard Creature;
+            public SimpleAnimation Animation;
+            public int PlayerIndex;
+            public Player Owner;
+            public Card Item;
+            public int FinalHP;
+            public int FinalST;
+            public int DamageReceived;
+
+            public BattleCreatureInfo(CreatureCard Creature, Player Owner)
+            {
+                this.Creature = Creature;
+                this.Owner = Owner;
+            }
+        }
 
         public SorcererStreetBattleContext()
         {
@@ -56,12 +57,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void ActiveSkill(CreatureCard UserCreature, CreatureCard OpponentCreature, Player UserPlayer, Player OpponentPlayer, string RequirementName)
         {
-            this.UserCreature = UserCreature;
-            this.OpponentCreature = OpponentCreature;
-            this.UserPlayer = UserPlayer;
-            this.OpponentPlayer = OpponentPlayer;
+            this.SelfCreature = new BattleCreatureInfo(UserCreature, UserPlayer);
+            this.OpponentCreature = new BattleCreatureInfo(OpponentCreature, OpponentPlayer);
 
             UserCreature.ActivateSkill(RequirementName);
+        }
+
+        internal void ActiveSkill(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
+        {
+            SelfCreature = Invader;
+            OpponentCreature = Defender;
+
+            SelfCreature.Creature.ActivateSkill(RequirementName);
         }
     }
 
@@ -97,51 +104,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             LoadMutators();
         }
 
-        public void IncreaseSelfHP(int Value)
+        public void ReplaceSelfCreature(CreatureCard TransformationCreature)
         {
-            if (GlobalContext.UserCreature == GlobalContext.Invader)
+            if (GlobalContext.SelfCreature == GlobalContext.Invader)
             {
-                GlobalContext.InvaderFinalHP += Value;
-            }
-            else if (GlobalContext.UserCreature == GlobalContext.Defender)
-            {
-                GlobalContext.DefenderFinalHP += Value;
-            }
-        }
-
-        public void IncreaseOtherHP(int Value)
-        {
-            if (GlobalContext.UserCreature == GlobalContext.Invader)
-            {
-                GlobalContext.DefenderFinalHP += Value;
-            }
-            else if (GlobalContext.UserCreature == GlobalContext.Defender)
-            {
-                GlobalContext.InvaderFinalHP += Value;
-            }
-        }
-
-        public void IncreaseSelfST(int Value)
-        {
-            if (GlobalContext.UserCreature == GlobalContext.Invader)
-            {
-                GlobalContext.InvaderFinalST += Value;
+                GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Invader.FinalST = TransformationCreature.CurrentST;
+                GlobalContext.Invader.FinalHP = TransformationCreature.MaxHP;
             }
             else
             {
-                GlobalContext.DefenderFinalST += Value;
+                GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Defender.FinalST = TransformationCreature.CurrentST;
+                GlobalContext.Defender.FinalHP = TransformationCreature.MaxHP;
             }
         }
 
-        public void IncreaseOtherST(int Value)
+        public void ReplaceOtherCreature(CreatureCard TransformationCreature)
         {
-            if (GlobalContext.OpponentCreature == GlobalContext.Invader)
+            if (GlobalContext.SelfCreature == GlobalContext.Invader)
             {
-                GlobalContext.DefenderFinalST += Value;
+                GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Defender.FinalST = TransformationCreature.CurrentST;
+                GlobalContext.Defender.FinalHP = TransformationCreature.MaxHP;
             }
-            else if (GlobalContext.OpponentCreature == GlobalContext.Defender)
+            else
             {
-                GlobalContext.InvaderFinalST += Value;
+                GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Invader.FinalST = TransformationCreature.CurrentST;
+                GlobalContext.Invader.FinalHP = TransformationCreature.MaxHP;
             }
         }
 

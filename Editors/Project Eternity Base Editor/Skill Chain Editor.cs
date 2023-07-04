@@ -47,15 +47,24 @@ namespace ProjectEternity.Editors.SkillChainEditor
             else
             {
                 BaseAutomaticSkill ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
+                int Depth = 0;
                 while (ActiveSkill == null)
                 {
                     SelectedNode = SelectedNode.Parent;
                     ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
+                    ++Depth;
                 }
 
                 SelectSkill(ActiveSkill);
 
-                lstEffects.SelectedIndex = e.Node.Parent.Nodes.IndexOf(e.Node);
+                if (Depth < lstRequirements.Items.Count)
+                {
+                    lstRequirements.SelectedIndex = Depth;
+                }
+                if (SelectedNode.Nodes.Count == 0)
+                {
+                    lstEffects.SelectedIndex = e.Node.Parent.Nodes.IndexOf(e.Node);
+                }
             }
 
             AllowEvent = true;
@@ -65,10 +74,21 @@ namespace ProjectEternity.Editors.SkillChainEditor
         {
             gbRequirements.Enabled = true;
             gbEffects.Enabled = true;
+            lstRequirements.Items.Clear();
             lstEffects.Items.Clear();
 
             cboRequirementType.Text = ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[0].SkillRequirementName;
             pgRequirement.SelectedObject = ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[0];
+
+            for (int R = 0; R < ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement.Count; R++)
+            {
+                lstRequirements.Items.Add(ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[R].ToString());
+            }
+
+            if (lstRequirements.Items.Count > 0)
+            {
+                lstRequirements.SelectedIndex = 0;
+            }
 
             for (int E = 0; E < ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Count; E++)
             {
@@ -83,9 +103,20 @@ namespace ProjectEternity.Editors.SkillChainEditor
 
         protected void CreateTree(BaseAutomaticSkill ActiveSkill, TreeNodeCollection Nodes)
         {
-            TreeNode NewNode = new TreeNode(ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[0].SkillRequirementName);
-            NewNode.Tag = ActiveSkill;
-            Nodes.Add(NewNode);
+            TreeNode NewNode = null;
+            for (int R = 0; R < ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement.Count; ++R)
+            {
+                if (NewNode != null)
+                {
+                    Nodes = NewNode.Nodes;
+                }
+                NewNode = new TreeNode(ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[R].SkillRequirementName);
+                if (R == 0)
+                {
+                    NewNode.Tag = ActiveSkill;
+                }
+                Nodes.Add(NewNode);
+            }
 
             foreach (BaseEffect ActiveEffect in ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect)
             {
@@ -101,26 +132,30 @@ namespace ProjectEternity.Editors.SkillChainEditor
 
         private void tsmNewEffect_Click(object sender, EventArgs e)
         {
-            TreeNode SelectedNode = tvSkills.SelectedNode;
-            if (SelectedNode != null)
+            TreeNode RootNode = tvSkills.SelectedNode;
+
+            if (RootNode != null)
             {
-                TreeNode ParentNode = null;
-                if (SelectedNode.Tag is BaseAutomaticSkill)
+                TreeNode RequirementNode = tvSkills.SelectedNode;
+                BaseAutomaticSkill RootSkill = RootNode.Tag as BaseAutomaticSkill;
+                while (RootSkill == null)
                 {
-                    ParentNode = SelectedNode;
+                    RootNode = RootNode.Parent;
+                    RootSkill = RootNode.Tag as BaseAutomaticSkill;
                 }
-                else
+                while (RequirementNode.Nodes.Count > 0)
                 {
-                    ParentNode = SelectedNode.Parent;
+                    RequirementNode = RequirementNode.Nodes[0];
                 }
+
+                RequirementNode = RequirementNode.Parent;
 
                 BaseEffect NewEffect = ((BaseEffect)cboEffectType.Items[0]).Copy();
-                BaseAutomaticSkill ActiveSkill = (BaseAutomaticSkill)ParentNode.Tag;
-                ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Add(NewEffect);
-                ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffectTarget.Add(new List<string>());
+                RootSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Add(NewEffect);
+                RootSkill.ListSkillLevel[0].ListActivation[0].ListEffectTarget.Add(new List<string>());
 
                 TreeNode EffectNode = new TreeNode(NewEffect.EffectTypeName);
-                ParentNode.Nodes.Insert(ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Count - 1, EffectNode);
+                RequirementNode.Nodes.Insert(RootSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Count - 1, EffectNode);
             }
         }
 
@@ -140,7 +175,7 @@ namespace ProjectEternity.Editors.SkillChainEditor
 
             TreeNode SelectedNode = tvSkills.SelectedNode;
             TreeNode EffectNode = null;
-            if (SelectedNode != null)
+            if (SelectedNode != null && SelectedNode.Parent != null)
             {
                 BaseAutomaticSkill ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
                 if (ActiveSkill != null)
@@ -175,10 +210,39 @@ namespace ProjectEternity.Editors.SkillChainEditor
             }
         }
 
-        private void lstEffects_SelectedIndexChanged(object sender, EventArgs e)
+        #region Requirements
+
+        private void cboRequirementType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TreeNode RootNode = tvSkills.SelectedNode;
+            if (RootNode != null && AllowEvent)
+            {
+                TreeNode RequirementNode = tvSkills.SelectedNode;
+                BaseAutomaticSkill RootSkill = RootNode.Tag as BaseAutomaticSkill;
+                while (RootSkill == null)
+                {
+                    RootNode = RootNode.Parent;
+                    RootSkill = RootNode.Tag as BaseAutomaticSkill;
+                }
+                while (RequirementNode.Nodes.Count > 0)
+                {
+                    RequirementNode = RequirementNode.Nodes[0];
+                }
+
+                RequirementNode = RequirementNode.Parent;
+
+                BaseSkillRequirement NewSkillRequirement = ((BaseSkillRequirement)cboRequirementType.SelectedItem).Copy();
+                pgRequirement.SelectedObject = NewSkillRequirement;
+
+                RootSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[lstRequirements.SelectedIndex] = NewSkillRequirement;
+                RequirementNode.Text = RootSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[lstRequirements.SelectedIndex].SkillRequirementName;
+            }
+        }
+
+        private void lstRequirements_SelectedIndexChanged(object sender, EventArgs e)
         {
             TreeNode SelectedNode = tvSkills.SelectedNode;
-            if (lstEffects.SelectedIndex >= 0 && SelectedNode != null)
+            if (SelectedNode != null && AllowEvent)
             {
                 BaseAutomaticSkill ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
                 while (ActiveSkill == null)
@@ -186,14 +250,17 @@ namespace ProjectEternity.Editors.SkillChainEditor
                     SelectedNode = SelectedNode.Parent;
                     ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
                 }
-                BaseEffect ActiveEffect = ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect[lstEffects.SelectedIndex];
 
-                cboEffectType.Text = ActiveEffect.ToString();
-                pgEffect.SelectedObject = ActiveEffect;
+                BaseSkillRequirement ActiveRequirement = ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[lstRequirements.SelectedIndex];
+
+                AllowEvent = false;
+                cboRequirementType.Text = ActiveRequirement.ToString();
+                pgRequirement.SelectedObject = ActiveRequirement;
+                AllowEvent = true;
             }
         }
 
-        private void cboRequirementType_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnAddRequirement_Click(object sender, EventArgs e)
         {
             TreeNode SelectedNode = tvSkills.SelectedNode;
             if (SelectedNode != null && AllowEvent)
@@ -206,33 +273,121 @@ namespace ProjectEternity.Editors.SkillChainEditor
                 }
 
                 BaseSkillRequirement NewSkillRequirement = ((BaseSkillRequirement)cboRequirementType.SelectedItem).Copy();
-                pgRequirement.SelectedObject = NewSkillRequirement;
 
-                ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[0] = NewSkillRequirement;
-                SelectedNode.Text = ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[0].SkillRequirementName;
+                ActiveSkill.ListSkillLevel[0].ListActivation[0].ListRequirement.Add(NewSkillRequirement);
+                pgRequirement.SelectedObject = NewSkillRequirement;
+                lstRequirements.Items.Add(NewSkillRequirement.ToString());
+                TreeNode EffectNode = new TreeNode(NewSkillRequirement.ToString());
+                List<TreeNode> ListNodeToMove = new List<TreeNode>();
+
+                foreach (TreeNode ActiveNode in SelectedNode.Nodes)
+                {
+                    ListNodeToMove.Add(ActiveNode);
+                }
+
+                SelectedNode.Nodes.Clear();
+
+                foreach (TreeNode ActiveNode in ListNodeToMove)
+                {
+                    EffectNode.Nodes.Add(ActiveNode);
+                }
+
+                SelectedNode.Nodes.Add(EffectNode);
             }
+        }
+
+        private void btnRemoveRequirement_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        private void lstEffects_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TreeNode RootNode = tvSkills.SelectedNode;
+            if (lstEffects.SelectedIndex >= 0 && RootNode != null)
+            {
+                BaseAutomaticSkill RootSkill = RootNode.Tag as BaseAutomaticSkill;
+                while (RootSkill == null)
+                {
+                    RootNode = RootNode.Parent;
+                    RootSkill = RootNode.Tag as BaseAutomaticSkill;
+                }
+
+                BaseEffect ActiveEffect = RootSkill.ListSkillLevel[0].ListActivation[0].ListEffect[lstEffects.SelectedIndex];
+
+                AllowEvent = false;
+                cboEffectType.Text = ActiveEffect.ToString();
+                pgEffect.SelectedObject = ActiveEffect;
+                AllowEvent = true;
+            }
+        }
+
+        private void btnAddEffects_Click(object sender, EventArgs e)
+        {
+            TreeNode RootNode = tvSkills.SelectedNode;
+
+            if (RootNode != null)
+            {
+                TreeNode RequirementNode = tvSkills.SelectedNode;
+                BaseAutomaticSkill RootSkill = RootNode.Tag as BaseAutomaticSkill;
+                while (RootSkill == null)
+                {
+                    RootNode = RootNode.Parent;
+                    RootSkill = RootNode.Tag as BaseAutomaticSkill;
+                }
+                while (RequirementNode.Nodes.Count > 0)
+                {
+                    RequirementNode = RequirementNode.Nodes[0];
+                }
+
+                RequirementNode = RequirementNode.Parent;
+
+                BaseEffect NewEffect = ((BaseEffect)cboEffectType.Items[0]).Copy();
+                RootSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Add(NewEffect);
+                RootSkill.ListSkillLevel[0].ListActivation[0].ListEffectTarget.Add(new List<string>());
+
+                pgRequirement.SelectedObject = NewEffect;
+                lstEffects.Items.Add(NewEffect.ToString());
+
+                TreeNode EffectNode = new TreeNode(NewEffect.EffectTypeName);
+                RequirementNode.Nodes.Insert(RootSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Count - 1, EffectNode);
+            }
+        }
+
+        private void btnRemoveEffect_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void cboEffectType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TreeNode SelectedNode = tvSkills.SelectedNode;
-            if (SelectedNode != null && AllowEvent)
+            TreeNode RootNode = tvSkills.SelectedNode;
+            if (RootNode != null && AllowEvent)
             {
-                BaseAutomaticSkill ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
-                while (ActiveSkill == null)
+                TreeNode RequirementNode = tvSkills.SelectedNode;
+                BaseAutomaticSkill RootSkill = RootNode.Tag as BaseAutomaticSkill;
+                while (RootSkill == null)
                 {
-                    SelectedNode = SelectedNode.Parent;
-                    ActiveSkill = SelectedNode.Tag as BaseAutomaticSkill;
+                    RootNode = RootNode.Parent;
+                    RootSkill = RootNode.Tag as BaseAutomaticSkill;
                 }
+                while (RequirementNode.Nodes.Count > 0)
+                {
+                    RequirementNode = RequirementNode.Nodes[0];
+                }
+
+                RequirementNode = RequirementNode.Parent;
 
                 if (lstEffects.SelectedItems.Count > 0)
                 {
                     BaseEffect NewSkillEffect = ((BaseEffect)cboEffectType.SelectedItem).Copy();
                     pgEffect.SelectedObject = NewSkillEffect;
 
-                    ActiveSkill.ListSkillLevel[0].ListActivation[0].ListEffect[lstEffects.SelectedIndex] = NewSkillEffect;
+                    RootSkill.ListSkillLevel[0].ListActivation[0].ListEffect[lstEffects.SelectedIndex] = NewSkillEffect;
                     lstEffects.Items[lstEffects.SelectedIndex] = NewSkillEffect.ToString();
-                    SelectedNode.Nodes[lstEffects.SelectedIndex].Text = NewSkillEffect.EffectTypeName;
+                    RequirementNode.Nodes[lstEffects.SelectedIndex].Text = NewSkillEffect.EffectTypeName;
                 }
             }
         }
@@ -250,10 +405,6 @@ namespace ProjectEternity.Editors.SkillChainEditor
         private void tsmCollapseAll_Click(object sender, EventArgs e)
         {
             tvSkills.CollapseAll();
-        }
-
-        private void ComboEditor_Shown(object sender, EventArgs e)
-        {
         }
     }
 }

@@ -22,17 +22,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            if (Map.GlobalSorcererStreetBattleContext.InvaderItem != null)
+            if (Map.GlobalSorcererStreetBattleContext.Invader.Item != null)
             {
-                Map.GlobalSorcererStreetBattleContext.InvaderPlayer.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.InvaderItem);
-                Map.GlobalSorcererStreetBattleContext.InvaderPlayer.Magic -= Map.GlobalSorcererStreetBattleContext.InvaderItem.MagicCost;
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, BattleEndRequirementName);
+                Map.GlobalSorcererStreetBattleContext.Invader.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Invader.Item);
+                Map.GlobalSorcererStreetBattleContext.Invader.Owner.Magic -= Map.GlobalSorcererStreetBattleContext.Invader.Item.MagicCost;
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, BattleEndRequirementName);
             }
-            if (Map.GlobalSorcererStreetBattleContext.DefenderItem != null)
+            if (Map.GlobalSorcererStreetBattleContext.Defender.Item != null)
             {
-                Map.GlobalSorcererStreetBattleContext.DefenderPlayer.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.DefenderItem);
-                Map.GlobalSorcererStreetBattleContext.DefenderPlayer.Magic -= Map.GlobalSorcererStreetBattleContext.DefenderItem.MagicCost;
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.DefenderPlayer, Map.GlobalSorcererStreetBattleContext.InvaderPlayer, BattleEndRequirementName);
+                Map.GlobalSorcererStreetBattleContext.Defender.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Defender.Item);
+                Map.GlobalSorcererStreetBattleContext.Defender.Owner.Magic -= Map.GlobalSorcererStreetBattleContext.Defender.Item.MagicCost;
+                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, BattleEndRequirementName);
             }
         }
 
@@ -73,8 +73,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringMiddleAligned(Map.fntArial12, "Toll", new Vector2(Constants.Width / 2, Y), Color.White);
             Y = Constants.Height - Constants.Height / 5;
             Y += 20;
-            g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.InvaderPlayer.Name, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
-            g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.DefenderPlayer.Name, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Owner.Name, new Vector2(Constants.Width / 2 - 80, Y), Color.White);
+            g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Owner.Name, new Vector2(Constants.Width / 2 + 80, Y), Color.White);
             Y += 20;
             g.DrawStringMiddleAligned(Map.fntArial12, "-20", new Vector2(Constants.Width / 2 - 80, Y), Color.White);
             g.DrawStringMiddleAligned(Map.fntArial12, "+20", new Vector2(Constants.Width / 2 + 80, Y), Color.White);

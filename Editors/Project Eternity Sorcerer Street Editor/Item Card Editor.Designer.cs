@@ -31,6 +31,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.gbCardInformation = new System.Windows.Forms.GroupBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.cboCategory = new System.Windows.Forms.ComboBox();
             this.lblCategory = new System.Windows.Forms.Label();
             this.txtActivationAnimation = new System.Windows.Forms.TextBox();
@@ -72,6 +74,8 @@
             // 
             // gbCardInformation
             // 
+            this.gbCardInformation.Controls.Add(this.comboBox1);
+            this.gbCardInformation.Controls.Add(this.label1);
             this.gbCardInformation.Controls.Add(this.cboCategory);
             this.gbCardInformation.Controls.Add(this.lblCategory);
             this.gbCardInformation.Controls.Add(this.txtActivationAnimation);
@@ -88,10 +92,32 @@
             this.gbCardInformation.Controls.Add(this.lblName);
             this.gbCardInformation.Location = new System.Drawing.Point(12, 27);
             this.gbCardInformation.Name = "gbCardInformation";
-            this.gbCardInformation.Size = new System.Drawing.Size(204, 239);
+            this.gbCardInformation.Size = new System.Drawing.Size(204, 269);
             this.gbCardInformation.TabIndex = 28;
             this.gbCardInformation.TabStop = false;
             this.gbCardInformation.Text = "Card Information";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "None",
+            "Replace",
+            "Add"});
+            this.comboBox1.Location = new System.Drawing.Point(75, 213);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(123, 21);
+            this.comboBox1.TabIndex = 50;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 216);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(34, 13);
+            this.label1.TabIndex = 51;
+            this.label1.Text = "Type:";
             // 
             // cboCategory
             // 
@@ -118,7 +144,7 @@
             // 
             // txtActivationAnimation
             // 
-            this.txtActivationAnimation.Location = new System.Drawing.Point(6, 212);
+            this.txtActivationAnimation.Location = new System.Drawing.Point(6, 242);
             this.txtActivationAnimation.Name = "txtActivationAnimation";
             this.txtActivationAnimation.Size = new System.Drawing.Size(148, 20);
             this.txtActivationAnimation.TabIndex = 48;
@@ -135,7 +161,7 @@
             // 
             // btnSetActivationAnimation
             // 
-            this.btnSetActivationAnimation.Location = new System.Drawing.Point(160, 210);
+            this.btnSetActivationAnimation.Location = new System.Drawing.Point(160, 240);
             this.btnSetActivationAnimation.Name = "btnSetActivationAnimation";
             this.btnSetActivationAnimation.Size = new System.Drawing.Size(38, 23);
             this.btnSetActivationAnimation.TabIndex = 46;
@@ -256,7 +282,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 278);
+            this.ClientSize = new System.Drawing.Size(434, 308);
             this.Controls.Add(this.gbDescription);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.gbCardInformation);
@@ -296,5 +322,7 @@
         private System.Windows.Forms.GroupBox gbDescription;
         private System.Windows.Forms.ComboBox cboCategory;
         private System.Windows.Forms.Label lblCategory;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -13,6 +13,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public bool AttackFirst;
         public bool AttackLast;
+        public bool AttackTwice;
+        public bool IsDefensive;//Can't move
+        public bool SupportCreature;//Can use other creatures as items
+        public bool ItemCreature;//Can be used as an item
+        public bool Immediate;//Allow all territory command after taking a land (either vacant or after a battle)
+        public bool Regenerate;//Regain max HP after battle
     }
 
     public class CardSymbols

@@ -28,9 +28,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public Dictionary<ElementalAffinity, int> DicTerrainRequiement;//Number of owned terrain of a certain type
 
-        public bool SupportCreature;
-        public bool ItemCreature;
-        public bool Immediate;//Allow all territory command after taking a land (either vacant or after a battle)
         public int DiscardCost;
         public float TollMultiplier = 1;
 
@@ -40,9 +37,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int CurrentHP;
         public int CurrentST;
 
-        public bool BonusAttackFirst;//Overrides natural ability
-        public bool BonusAttackLast;//Overrides natural ability
-
+        public CardAbilities BonusAbilities;
         public CardAbilities Abilities;
 
         public CreatureCard(string Path)
@@ -221,8 +216,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void ResetBonuses()
         {
-            BonusAttackFirst = false;
-            BonusAttackLast = false;
+            BonusAbilities.AttackFirst = false;
+            BonusAbilities.AttackLast = false;
+            BonusAbilities.Immediate = false;
+            BonusAbilities.IsDefensive = false;
+            BonusAbilities.ItemCreature = false;
+            BonusAbilities.SupportCreature = false;
         }
 
         public override List<Texture2D> GetIcons(CardSymbols Symbols)

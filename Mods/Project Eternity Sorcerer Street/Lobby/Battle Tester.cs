@@ -291,37 +291,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (SetupChoice)
             {
                 case SetupChoices.DefenderCreature:
-                    Context.Defender = (CreatureCard)CardSelectionScreen.ListSelectedCard[0];
-                    Context.DefenderCard = new SimpleAnimation("Defender", "Defender", Context.Defender.sprCard);
-                    Context.DefenderCard.Position = new Vector2(Constants.Width - Context.Defender.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-                    Context.DefenderCard.Scale = new Vector2(1f);
-                    Context.DefenderFinalHP = Context.Defender.MaxHP;
-                    Context.DefenderFinalST = Context.Defender.MaxST;
-                    DefenderHPInput.SetText(Context.Defender.MaxHP.ToString());
-                    DefenderMaxHPInput.SetText(Context.Defender.MaxHP.ToString());
-                    DefenderSTInput.SetText(Context.Defender.MaxST.ToString());
-                    Context.DefenderPlayer = new Player("Defender Player", "Defender Player", false);
+                    Context.Defender.Owner = new Player("Defender Player", "Defender Player", false);
+                    Context.Defender.Creature = (CreatureCard)CardSelectionScreen.ListSelectedCard[0];
+                    Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
+                    Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                    Context.Defender.Animation.Scale = new Vector2(1f);
+                    Context.Defender.FinalHP = Context.Defender.Creature.MaxHP;
+                    Context.Defender.FinalST = Context.Defender.Creature.MaxST;
+                    DefenderHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
+                    DefenderMaxHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
+                    DefenderSTInput.SetText(Context.Defender.Creature.MaxST.ToString());
                     break;
 
                 case SetupChoices.InvaderCreature:
-                    Context.Invader = (CreatureCard)CardSelectionScreen.ListSelectedCard[0];
-                    Context.InvaderCard = new SimpleAnimation("Invader", "Invader", Context.Invader.sprCard);
-                    Context.InvaderCard.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-                    Context.InvaderCard.Scale = new Vector2(1f);
-                    Context.InvaderFinalHP = Context.Defender.MaxHP;
-                    Context.InvaderFinalST = Context.Defender.MaxST;
-                    InvaderHPInput.SetText(Context.Defender.MaxHP.ToString());
-                    InvaderMaxHPInput.SetText(Context.Defender.MaxHP.ToString());
-                    InvaderSTInput.SetText(Context.Defender.MaxST.ToString());
-                    Context.InvaderPlayer = new Player("Defender Player", "Defender Player", false);
+                    Context.Invader.Owner = new Player("Defender Player", "Defender Player", false);
+                    Context.Invader.Creature = (CreatureCard)CardSelectionScreen.ListSelectedCard[0];
+                    Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
+                    Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                    Context.Invader.Animation.Scale = new Vector2(1f);
+                    Context.Invader.FinalHP = Context.Defender.Creature.MaxHP;
+                    Context.Invader.FinalST = Context.Defender.Creature.MaxST;
+                    InvaderHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
+                    InvaderMaxHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
+                    InvaderSTInput.SetText(Context.Defender.Creature.MaxST.ToString());
                     break;
 
                 case SetupChoices.DefenderItem:
-                    Context.DefenderItem = CardSelectionScreen.ListSelectedCard[0];
+                    Context.Defender.Item = CardSelectionScreen.ListSelectedCard[0];
                     break;
 
                 case SetupChoices.InvaderItem:
-                    Context.InvaderItem = CardSelectionScreen.ListSelectedCard[0];
+                    Context.Invader.Item = CardSelectionScreen.ListSelectedCard[0];
                     break;
             }
             SetupChoice = SetupChoices.Nothing;
@@ -425,13 +425,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void LandModifierPhaseSelection()
         {
-            Context.DefenderFinalHP = int.Parse(InvaderMaxHPInput.Text);
-            Context.DefenderFinalST = int.Parse(InvaderSTInput.Text);
-            Context.DefenderFinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
+            Context.Defender.FinalHP = int.Parse(InvaderMaxHPInput.Text);
+            Context.Defender.FinalST = int.Parse(InvaderSTInput.Text);
+            Context.Defender.FinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
 
-            Context.InvaderFinalHP = int.Parse(InvaderMaxHPInput.Text);
-            Context.InvaderFinalST = int.Parse(InvaderSTInput.Text);
-            Context.InvaderFinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
+            Context.Invader.FinalHP = int.Parse(InvaderMaxHPInput.Text);
+            Context.Invader.FinalST = int.Parse(InvaderSTInput.Text);
+            Context.Invader.FinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
 
             sndButtonClick.Play();
         }
@@ -440,8 +440,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             LandModifierPhaseSelection();
 
-            Context.ActiveSkill(Context.Invader, Context.Defender,Context.InvaderPlayer, Context.DefenderPlayer, ActionPanelBattleCreatureModifierPhase.RequirementName);
-            Context.ActiveSkill(Context.Defender, Context.Invader, Context.DefenderPlayer, Context.InvaderPlayer, ActionPanelBattleCreatureModifierPhase.RequirementName);
+            Context.ActiveSkill(Context.Invader, Context.Defender, ActionPanelBattleCreatureModifierPhase.RequirementName);
+            Context.ActiveSkill(Context.Defender, Context.Invader, ActionPanelBattleCreatureModifierPhase.RequirementName);
 
             sndButtonClick.Play();
         }

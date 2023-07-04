@@ -41,11 +41,11 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             Assert.AreEqual(DummyInvaderCard, DummyMap.GlobalSorcererStreetBattleContext.Invader);
             Assert.AreEqual(DummyDefenderCard, DummyMap.GlobalSorcererStreetBattleContext.Defender);
 
-            Assert.AreEqual(DummyInvaderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.InvaderFinalHP);
-            Assert.AreEqual(DummyDefenderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.DefenderFinalHP);
+            Assert.AreEqual(DummyInvaderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.Invader.FinalHP);
+            Assert.AreEqual(DummyDefenderCard.CurrentHP, DummyMap.GlobalSorcererStreetBattleContext.Defender.FinalHP);
 
-            Assert.AreEqual(DummyInvaderCard.CurrentST, DummyMap.GlobalSorcererStreetBattleContext.InvaderFinalST);
-            Assert.AreEqual(DummyDefenderCard.CurrentST, DummyMap.GlobalSorcererStreetBattleContext.DefenderFinalST);
+            Assert.AreEqual(DummyInvaderCard.CurrentST, DummyMap.GlobalSorcererStreetBattleContext.Invader.FinalST);
+            Assert.AreEqual(DummyDefenderCard.CurrentST, DummyMap.GlobalSorcererStreetBattleContext.Defender.FinalST);
         }
 
         [TestMethod]

@@ -48,12 +48,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.GlobalSorcererStreetBattleContext.Invader = null;
             Map.GlobalSorcererStreetBattleContext.Defender = null;
 
-            Map.GlobalSorcererStreetBattleContext.InvaderPlayer = null;
-            Map.GlobalSorcererStreetBattleContext.DefenderPlayer = null;
+            Map.GlobalSorcererStreetBattleContext.Invader.Owner = null;
+            Map.GlobalSorcererStreetBattleContext.Defender.Owner = null;
             Map.GlobalSorcererStreetBattleContext.DefenderTerrain = null;
 
-            Map.GlobalSorcererStreetBattleContext.InvaderCard = null;
-            Map.GlobalSorcererStreetBattleContext.DefenderCard = null;
+            Map.GlobalSorcererStreetBattleContext.Invader.Animation = null;
+            Map.GlobalSorcererStreetBattleContext.Defender.Animation = null;
 
             Map.GlobalSorcererStreetBattleContext.Background = null;
         }

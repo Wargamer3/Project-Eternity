@@ -1,39 +1,39 @@
 ﻿using System;
 using System.IO;
-using System.Globalization;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class IncreaseHPEffect : SorcererStreetEffect
+    /// <summary>
+    /// Need to do at least 1 damage to trigger
+    /// </summary>
+    public sealed class InstantDeathEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Increase HP";
+        public static string Name = "Sorcerer Street Instant Death";
 
-        private string _HPIncrease;
+        private int _ActivationChance;
 
-        public IncreaseHPEffect()
+        public InstantDeathEffect()
             : base(Name, false)
         {
-            _HPIncrease = string.Empty;
+            _ActivationChance = 100;
         }
 
-        public IncreaseHPEffect(SorcererStreetBattleParams Params)
+        public InstantDeathEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
-            _HPIncrease = string.Empty;
         }
-
+        
         protected override void Load(BinaryReader BR)
         {
-            _HPIncrease = BR.ReadString();
+            _ActivationChance = BR.ReadByte();
         }
 
         protected override void Save(BinaryWriter BW)
         {
-            BW.Write(_HPIncrease);
+            BW.Write((byte)_ActivationChance);
         }
-
 
         public override bool CanActivate()
         {
@@ -42,27 +42,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = Params.ActiveParser.Evaluate(_HPIncrease);
-
-            Params.IncreaseSelfHP(int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
-
-            return "HP" + _HPIncrease;
+            return "Instant Death " + string.Join(",", _ActivationChance);
         }
 
         protected override BaseEffect DoCopy()
         {
-            IncreaseHPEffect NewEffect = new IncreaseHPEffect(Params);
+            InstantDeathEffect NewEffect = new InstantDeathEffect(Params);
 
-            NewEffect.HP = HP;
+            NewEffect._ActivationChance = _ActivationChance;
 
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
-            IncreaseHPEffect NewEffect = (IncreaseHPEffect)Copy;
-
-            HP = NewEffect.HP;
         }
 
         #region Properties
@@ -70,15 +63,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public string HP
+        public int ActivationChance
         {
             get
             {
-                return _HPIncrease;
+                return _ActivationChance;
             }
             set
             {
-                _HPIncrease = value;
+                _ActivationChance = Math.Max(0, Math.Min(100, value));
             }
         }
 

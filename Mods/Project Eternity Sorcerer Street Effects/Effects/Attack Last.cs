@@ -4,32 +4,26 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class TransformSelfEffect : SorcererStreetEffect
+    public sealed class AttackLastEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Transform Self";
+        public static string Name = "Sorcerer Street Attack Last";
 
-        private string _CreatureName;
-
-        public TransformSelfEffect()
+        public AttackLastEffect()
             : base(Name, false)
         {
-            _CreatureName = string.Empty;
         }
 
-        public TransformSelfEffect(SorcererStreetBattleParams Params)
+        public AttackLastEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
-            _CreatureName = string.Empty;
         }
         
         protected override void Load(BinaryReader BR)
         {
-            _CreatureName = BR.ReadString();
         }
 
         protected override void Save(BinaryWriter BW)
         {
-            BW.Write(_CreatureName);
         }
 
         public override bool CanActivate()
@@ -39,12 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.GlobalContext.SelfCreature.Creature.BonusAbilities.AttackLast = true;
             return null;
         }
 
         protected override BaseEffect DoCopy()
         {
-            TransformSelfEffect NewEffect = new TransformSelfEffect(Params);
+            AttackLastEffect NewEffect = new AttackLastEffect(Params);
 
             return NewEffect;
         }

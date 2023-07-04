@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
-            Map.GlobalSorcererStreetBattleContext.Invader = SelectedCard;
+            Map.GlobalSorcererStreetBattleContext.Invader.Creature = SelectedCard;
             ActivePlayer.ListCardInHand.Remove(SelectedCard);
             ActivePlayer.Magic -= SelectedCard.MagicCost;
         }

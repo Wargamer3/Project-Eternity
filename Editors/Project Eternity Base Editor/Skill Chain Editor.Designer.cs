@@ -45,6 +45,9 @@
             this.cboEffectType = new System.Windows.Forms.ComboBox();
             this.pgEffect = new System.Windows.Forms.PropertyGrid();
             this.gbRequirements = new System.Windows.Forms.GroupBox();
+            this.lstRequirements = new System.Windows.Forms.ListBox();
+            this.btnRemoveRequirement = new System.Windows.Forms.Button();
+            this.btnAddRequirement = new System.Windows.Forms.Button();
             this.cboRequirementType = new System.Windows.Forms.ComboBox();
             this.pgRequirement = new System.Windows.Forms.PropertyGrid();
             this.gbSkillChain.SuspendLayout();
@@ -171,6 +174,7 @@
             this.btnRemoveEffect.TabIndex = 10;
             this.btnRemoveEffect.Text = "Remove";
             this.btnRemoveEffect.UseVisualStyleBackColor = true;
+            this.btnRemoveEffect.Click += new System.EventHandler(this.btnRemoveEffect_Click);
             // 
             // btnAddEffects
             // 
@@ -180,6 +184,7 @@
             this.btnAddEffects.TabIndex = 9;
             this.btnAddEffects.Text = "Add";
             this.btnAddEffects.UseVisualStyleBackColor = true;
+            this.btnAddEffects.Click += new System.EventHandler(this.btnAddEffects_Click);
             // 
             // cboEffectType
             // 
@@ -209,6 +214,9 @@
             // 
             this.gbRequirements.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbRequirements.Controls.Add(this.lstRequirements);
+            this.gbRequirements.Controls.Add(this.btnRemoveRequirement);
+            this.gbRequirements.Controls.Add(this.btnAddRequirement);
             this.gbRequirements.Controls.Add(this.cboRequirementType);
             this.gbRequirements.Controls.Add(this.pgRequirement);
             this.gbRequirements.Enabled = false;
@@ -219,11 +227,43 @@
             this.gbRequirements.TabStop = false;
             this.gbRequirements.Text = "Skill Requirement";
             // 
+            // lstRequirements
+            // 
+            this.lstRequirements.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstRequirements.FormattingEnabled = true;
+            this.lstRequirements.Location = new System.Drawing.Point(6, 19);
+            this.lstRequirements.Name = "lstRequirements";
+            this.lstRequirements.Size = new System.Drawing.Size(169, 95);
+            this.lstRequirements.TabIndex = 14;
+            this.lstRequirements.SelectedIndexChanged += new System.EventHandler(this.lstRequirements_SelectedIndexChanged);
+            // 
+            // btnRemoveRequirement
+            // 
+            this.btnRemoveRequirement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRemoveRequirement.Location = new System.Drawing.Point(100, 122);
+            this.btnRemoveRequirement.Name = "btnRemoveRequirement";
+            this.btnRemoveRequirement.Size = new System.Drawing.Size(75, 23);
+            this.btnRemoveRequirement.TabIndex = 13;
+            this.btnRemoveRequirement.Text = "Remove";
+            this.btnRemoveRequirement.UseVisualStyleBackColor = true;
+            this.btnRemoveRequirement.Click += new System.EventHandler(this.btnRemoveRequirement_Click);
+            // 
+            // btnAddRequirement
+            // 
+            this.btnAddRequirement.Location = new System.Drawing.Point(6, 122);
+            this.btnAddRequirement.Name = "btnAddRequirement";
+            this.btnAddRequirement.Size = new System.Drawing.Size(75, 23);
+            this.btnAddRequirement.TabIndex = 12;
+            this.btnAddRequirement.Text = "Add";
+            this.btnAddRequirement.UseVisualStyleBackColor = true;
+            this.btnAddRequirement.Click += new System.EventHandler(this.btnAddRequirement_Click);
+            // 
             // cboRequirementType
             // 
             this.cboRequirementType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRequirementType.FormattingEnabled = true;
-            this.cboRequirementType.Location = new System.Drawing.Point(6, 19);
+            this.cboRequirementType.Location = new System.Drawing.Point(6, 151);
             this.cboRequirementType.Name = "cboRequirementType";
             this.cboRequirementType.Size = new System.Drawing.Size(169, 21);
             this.cboRequirementType.TabIndex = 3;
@@ -235,9 +275,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pgRequirement.LineColor = System.Drawing.SystemColors.ControlDark;
-            this.pgRequirement.Location = new System.Drawing.Point(6, 46);
+            this.pgRequirement.Location = new System.Drawing.Point(6, 178);
             this.pgRequirement.Name = "pgRequirement";
-            this.pgRequirement.Size = new System.Drawing.Size(169, 288);
+            this.pgRequirement.Size = new System.Drawing.Size(169, 156);
             this.pgRequirement.TabIndex = 2;
             this.pgRequirement.ToolbarVisible = false;
             // 
@@ -253,7 +293,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "SkillChainEditor";
             this.Text = "Skill Chain Editor";
-            this.Shown += new System.EventHandler(this.ComboEditor_Shown);
             this.gbSkillChain.ResumeLayout(false);
             this.cmsSkillChain.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
@@ -284,5 +323,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmNewRequirement;
         private System.Windows.Forms.ToolStripMenuItem tsmExpendAll;
         private System.Windows.Forms.ToolStripMenuItem tsmCollapseAll;
+        private System.Windows.Forms.ListBox lstRequirements;
+        private System.Windows.Forms.Button btnRemoveRequirement;
+        private System.Windows.Forms.Button btnAddRequirement;
     }
 }

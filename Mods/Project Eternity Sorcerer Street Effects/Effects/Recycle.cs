@@ -4,16 +4,16 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class DestroyRandomCardEffect : SorcererStreetEffect
+    public sealed class RecycleEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Destroy Random Card";
+        public static string Name = "Sorcerer Street Recycle";
 
-        public DestroyRandomCardEffect()
+        public RecycleEffect()
             : base(Name, false)
         {
         }
 
-        public DestroyRandomCardEffect(SorcererStreetBattleParams Params)
+        public RecycleEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override BaseEffect DoCopy()
         {
-            DestroyRandomCardEffect NewEffect = new DestroyRandomCardEffect(Params);
+            RecycleEffect NewEffect = new RecycleEffect(Params);
 
             return NewEffect;
         }

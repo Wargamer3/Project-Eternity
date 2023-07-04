@@ -39,13 +39,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             GlobalContext.OpponentCreature = GlobalContext.Invader;
             if (ActiveSkillEffect.CanActivate())
             {
-                GlobalContext.OpponentCreature.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName);
+                GlobalContext.OpponentCreature.Creature.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName);
             }
 
             GlobalContext.OpponentCreature = GlobalContext.Defender;
             if (ActiveSkillEffect.CanActivate())
             {
-                GlobalContext.OpponentCreature.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName);
+                GlobalContext.OpponentCreature.Creature.Effects.AddAndExecuteEffect(ActiveSkillEffect, SkillName);
             }
         }
 
