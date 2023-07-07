@@ -50,8 +50,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.Defender.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
                 Map.GlobalSorcererStreetBattleContext.DefenderTerrain = ActiveTerrain;
 
-                Map.GlobalSorcererStreetBattleContext.Invader.Creature.ResetBonuses();
-                Map.GlobalSorcererStreetBattleContext.Defender.Creature.ResetBonuses();
+                Map.GlobalSorcererStreetBattleContext.Invader.Creature.InitBattleBonuses();
+                Map.GlobalSorcererStreetBattleContext.Defender.Creature.InitBattleBonuses();
 
                 Map.GlobalSorcererStreetBattleContext.Invader.FinalHP = Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP;
                 Map.GlobalSorcererStreetBattleContext.Defender.FinalHP = Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP;

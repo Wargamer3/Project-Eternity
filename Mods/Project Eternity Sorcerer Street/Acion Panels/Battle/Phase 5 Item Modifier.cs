@@ -42,12 +42,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ItemAnimationTime = 0;
             GlobalSorcererStreetBattleContext.ActivatedEffect = null;
 
-            if (GlobalSorcererStreetBattleContext.Invader.Item != null && GlobalSorcererStreetBattleContext.Invader.Item.CanActivateSkill(RequirementName))
+            if (GlobalSorcererStreetBattleContext.Invader.Item != null && GlobalSorcererStreetBattleContext.CanActivateSkillItem(GlobalSorcererStreetBattleContext.Invader, GlobalSorcererStreetBattleContext.Defender, RequirementName))
             {
                 AnimationPhase = AnimationPhases.InvaderIntro;
                 return true;
             }
-            else if (GlobalSorcererStreetBattleContext.Defender.Item != null && GlobalSorcererStreetBattleContext.Defender.Item.CanActivateSkill(RequirementName))
+            else if (GlobalSorcererStreetBattleContext.Defender.Item != null && GlobalSorcererStreetBattleContext.CanActivateSkillItem(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, RequirementName))
             {
                 AnimationPhase = AnimationPhases.DefenderIntro;
                 return true;
@@ -76,14 +76,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (AnimationPhase == AnimationPhases.InvaderIntro)
                     {
-                        GlobalSorcererStreetBattleContext.ActiveSkill(GlobalSorcererStreetBattleContext.Invader, GlobalSorcererStreetBattleContext.Defender, RequirementName);
+                        GlobalSorcererStreetBattleContext.ActivateSkill(GlobalSorcererStreetBattleContext.Invader, GlobalSorcererStreetBattleContext.Defender, RequirementName);
 
                         GlobalSorcererStreetBattleContext.Invader.Item.ActivateSkill(RequirementName);
                         AnimationPhase = AnimationPhases.InvaderActivation;
                     }
                     else if (AnimationPhase == AnimationPhases.DefenderIntro)
                     {
-                        GlobalSorcererStreetBattleContext.ActiveSkill(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, RequirementName);
+                        GlobalSorcererStreetBattleContext.ActivateSkill(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, RequirementName);
 
                         GlobalSorcererStreetBattleContext.Defender.Item.ActivateSkill(RequirementName);
                         AnimationPhase = AnimationPhases.DefenderActivation;

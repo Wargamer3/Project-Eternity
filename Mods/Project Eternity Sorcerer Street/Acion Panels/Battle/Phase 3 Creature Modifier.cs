@@ -24,8 +24,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void Init()
         {
-            Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, RequirementName);
-            Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, RequirementName);
+            Map.GlobalSorcererStreetBattleContext.ActivateSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, RequirementName);
+            Map.GlobalSorcererStreetBattleContext.ActivateSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, RequirementName);
         }
 
         private void ContinueBattlePhase()

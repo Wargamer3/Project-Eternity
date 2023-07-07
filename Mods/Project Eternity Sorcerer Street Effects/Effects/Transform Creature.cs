@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _CreatureName = BR.ReadString();
             _Target = (Targets)BR.ReadByte();
             _IsTemporary = BR.ReadBoolean();
-            if (Params != null)
+            if (Params != null && _CreatureName != "Random")
             {
                 TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
             }

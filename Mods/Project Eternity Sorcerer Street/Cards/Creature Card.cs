@@ -17,8 +17,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public const string CreatureCardType = "Creature";
 
-        public readonly int MaxHP;
-        public readonly int MaxST;
+        public readonly int OriginalMaxHP;
+        public readonly int OriginalST;
+
+        public int MaxHP;
+        public int CurrentHP;
+        public int CurrentST;
         public string Subtype;
         public readonly byte DiscardCardRequired;
 
@@ -34,10 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public string AttackAnimationPath;
         public AnimatedModel Map3DModel;
 
-        public int CurrentHP;
-        public int CurrentST;
-
-        public CardAbilities BonusAbilities;
+        public CardAbilities BattleAbilities;
         public CardAbilities Abilities;
 
         public CreatureCard(string Path)
@@ -64,8 +65,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             AttackAnimationPath = BR.ReadString();
 
-            CurrentHP = MaxHP = BR.ReadInt32();
-            CurrentST = MaxST = BR.ReadInt32();
+            OriginalMaxHP = CurrentHP = MaxHP = BR.ReadInt32();
+            OriginalST = CurrentST = BR.ReadInt32();
             Subtype = BR.ReadString();
             SkillChainName = BR.ReadString();
 
@@ -136,8 +137,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public CreatureCard(int MaxHP, int MaxST)
             : this("")
         {
-            this.MaxHP = MaxHP;
-            this.MaxST = MaxST;
+            this.OriginalMaxHP = this.MaxHP = MaxHP;
+            this.OriginalST = MaxST;
 
             CurrentHP = MaxHP;
             CurrentST = MaxST;
@@ -156,8 +157,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Name = Clone.Name;
             Description = Clone.Description;
 
-            CurrentHP = MaxHP = Clone.MaxHP;
-            CurrentST = MaxST = Clone.MaxST;
+            CurrentHP = OriginalMaxHP =  MaxHP = Clone.OriginalMaxHP;
+            CurrentST = OriginalST = Clone.OriginalMaxHP;
             DiscardCardRequired = Clone.DiscardCardRequired;
 
             AttackAnimationPath = Clone.AttackAnimationPath;
@@ -214,14 +215,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return new CreatureCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget);
         }
 
-        public void ResetBonuses()
+        public void InitBattleBonuses()
         {
-            BonusAbilities.AttackFirst = false;
-            BonusAbilities.AttackLast = false;
-            BonusAbilities.Immediate = false;
-            BonusAbilities.IsDefensive = false;
-            BonusAbilities.ItemCreature = false;
-            BonusAbilities.SupportCreature = false;
+            BattleAbilities = new CardAbilities(Abilities);
         }
 
         public override List<Texture2D> GetIcons(CardSymbols Symbols)
@@ -302,7 +298,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CurrentY += Constants.Height / 24;
 
             g.Draw(Symbols.sprMenuST, new Rectangle((int)CurrentX - 5, (int)CurrentY, IconWidth, IconHeight), Color.White);
-            g.DrawString(fntCardInfo, MaxST.ToString(), new Vector2(CurrentX + 15, CurrentY), Color.White);
+            g.DrawString(fntCardInfo, CurrentST.ToString(), new Vector2(CurrentX + 15, CurrentY), Color.White);
 
             g.Draw(Symbols.sprMenuHP, new Rectangle((int)CurrentX + 45, (int)CurrentY, IconWidth, IconHeight), Color.White);
             g.DrawString(fntCardInfo, CurrentHP.ToString(), new Vector2(CurrentX + 65, CurrentY), Color.White);

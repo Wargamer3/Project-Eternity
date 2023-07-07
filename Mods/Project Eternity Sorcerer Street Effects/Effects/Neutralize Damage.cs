@@ -3,6 +3,7 @@ using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
 using static ProjectEternity.Core.Operators;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.ActionPanelBattleAttackPhase;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -10,16 +11,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static string Name = "Sorcerer Street Neutralize Damage";
 
-        public enum NeutralizeTypes { NonScrolls, Scrolls, Penetrate, All, Neutral, Fire, Water, Earth, Air }
-
-        public NeutralizeTypes[] ArrayNeutralizeType;
+        public AttackTypes[] ArrayNeutralizeType;
         private NumberTypes _SignOperator;
         private string _Value;
 
         public NeutralizeDamageEffect()
             : base(Name, false)
         {
-            ArrayNeutralizeType = new NeutralizeTypes[0];
+            ArrayNeutralizeType = new AttackTypes[0];
             _SignOperator = NumberTypes.Relative;
             _Value = "100";
         }
@@ -27,7 +26,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public NeutralizeDamageEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
-            ArrayNeutralizeType = new NeutralizeTypes[0];
+            ArrayNeutralizeType = new AttackTypes[0];
             _SignOperator = NumberTypes.Relative;
             _Value = "100";
         }
@@ -35,10 +34,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override void Load(BinaryReader BR)
         {
             int ArrayAffinityLength = BR.ReadByte();
-            ArrayNeutralizeType = new NeutralizeTypes[ArrayAffinityLength];
+            ArrayNeutralizeType = new AttackTypes[ArrayAffinityLength];
             for (int A = 0; A < ArrayAffinityLength; ++A)
             {
-                ArrayNeutralizeType[A] = (NeutralizeTypes)BR.ReadByte();
+                ArrayNeutralizeType[A] = (AttackTypes)BR.ReadByte();
             }
             _SignOperator = (NumberTypes)BR.ReadByte();
             _Value = BR.ReadString();
@@ -62,7 +61,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            Params.GlobalContext.Invader.Creature.BattleAbilities.ArrayNeutralizeType = ArrayNeutralizeType;
+            Params.GlobalContext.Invader.Creature.BattleAbilities.NeutralizeSignOperator = _SignOperator;
+            Params.GlobalContext.Invader.Creature.BattleAbilities.NeutralizeValue = _Value;
+
+            return "Neutralize " + _Value + "% Damage";
         }
 
         protected override BaseEffect DoCopy()
@@ -79,7 +82,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public NeutralizeTypes[] Lands
+        public AttackTypes[] Lands
         {
             get
             {

@@ -75,13 +75,13 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
 
             BattleAttackPhase.ExecuteFirstAttack();
 
-            Assert.AreEqual(40, BattleAttackPhase.FirstAttacker.CurrentHP);
-            Assert.AreEqual(20, BattleAttackPhase.SecondAttacker.CurrentHP);
+            Assert.AreEqual(40, BattleAttackPhase.FirstAttacker.Creature.CurrentHP);
+            Assert.AreEqual(20, BattleAttackPhase.SecondAttacker.Creature.CurrentHP);
 
             BattleAttackPhase.ExecuteSecondAttack();
 
-            Assert.AreEqual(20, BattleAttackPhase.FirstAttacker.CurrentHP);
-            Assert.AreEqual(20, BattleAttackPhase.SecondAttacker.CurrentHP);
+            Assert.AreEqual(20, BattleAttackPhase.FirstAttacker.Creature.CurrentHP);
+            Assert.AreEqual(20, BattleAttackPhase.SecondAttacker.Creature.CurrentHP);
         }
 
         private static SorcererStreetMap CreateDummyMap()

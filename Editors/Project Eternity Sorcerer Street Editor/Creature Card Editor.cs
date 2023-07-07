@@ -194,7 +194,7 @@ namespace ProjectEternity.Editors.CardEditor
             txtAttackAnimation.Text = LoadedCard.AttackAnimationPath;
 
             txtMaxHP.Value = LoadedCard.MaxHP;
-            txtMaxST.Value = LoadedCard.MaxST;
+            txtMaxST.Value = LoadedCard.CurrentST;
             cboSubtype.SelectedIndex = 0;
             txtSkill.Text = LoadedCard.SkillChainName;
 

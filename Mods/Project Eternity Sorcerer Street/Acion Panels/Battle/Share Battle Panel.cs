@@ -108,8 +108,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.Defender.PlayerIndex = Map.ListPlayer.IndexOf(ActiveTerrain.PlayerOwner);
                 Map.GlobalSorcererStreetBattleContext.DefenderTerrain = ActiveTerrain;
 
-                Map.GlobalSorcererStreetBattleContext.Invader.Creature.ResetBonuses();
-                Map.GlobalSorcererStreetBattleContext.Defender.Creature.ResetBonuses();
+                Map.GlobalSorcererStreetBattleContext.Invader.Creature.InitBattleBonuses();
+                Map.GlobalSorcererStreetBattleContext.Defender.Creature.InitBattleBonuses();
 
                 Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = Map.ListActionMenuChoice;
 
@@ -244,7 +244,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public static void DrawInvaderBattle( SpriteFont fntArial12, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, CustomSpriteBatch g)
+        public static void DrawInvaderBattle(SpriteFont fntArial12, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, CustomSpriteBatch g)
         {
             //Left Card
             if (GlobalSorcererStreetBattleContext.Invader.Animation != null)

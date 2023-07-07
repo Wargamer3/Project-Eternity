@@ -28,13 +28,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Map.GlobalSorcererStreetBattleContext.Invader.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Invader.Item);
                 Map.GlobalSorcererStreetBattleContext.Invader.Owner.Magic -= Map.GlobalSorcererStreetBattleContext.Invader.Item.MagicCost;
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, BattleEndRequirementName);
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, BattleEndRequirementName);
             }
             if (Map.GlobalSorcererStreetBattleContext.Defender.Item != null)
             {
                 Map.GlobalSorcererStreetBattleContext.Defender.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Defender.Item);
                 Map.GlobalSorcererStreetBattleContext.Defender.Owner.Magic -= Map.GlobalSorcererStreetBattleContext.Defender.Item.MagicCost;
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, BattleEndRequirementName);
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, BattleEndRequirementName);
             }
 
             TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(Map.GlobalSorcererStreetBattleContext.Invader.Owner.GamePiece);

@@ -31,8 +31,8 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             GlobalSorcererStreetBattleContext.Invader.Creature = DummyInvaderCard;
             GlobalSorcererStreetBattleContext.Defender.Creature = DummyDefenderCard;
 
-            GlobalSorcererStreetBattleContext.Invader.Creature.ResetBonuses();
-            GlobalSorcererStreetBattleContext.Defender.Creature.ResetBonuses();
+            GlobalSorcererStreetBattleContext.Invader.Creature.InitBattleBonuses();
+            GlobalSorcererStreetBattleContext.Defender.Creature.InitBattleBonuses();
 
             GlobalSorcererStreetBattleContext.Invader.FinalHP = GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP;
             GlobalSorcererStreetBattleContext.Defender.FinalHP = GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP;

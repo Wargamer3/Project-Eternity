@@ -246,12 +246,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ReturnExpression = ActiveCreature.Creature.CurrentST.ToString();
                     break;
 
-                case "mst":
-                case "maxst":
-                case "stmax":
-                    ReturnExpression = ActiveCreature.Creature.MaxST.ToString();
-                    break;
-
                 case "damagereceived":
                     ReturnExpression = ActiveCreature.DamageReceived.ToString();
                     break;

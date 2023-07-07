@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetBattleContext;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -10,6 +11,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private const string PanelName = "BattleAttackPhase";
 
         private enum AttackSequences { FirstAttack, SecondAttack, End };
+        public enum AttackTypes { NonScrolls, Scrolls, Penetrate, All, Neutral, Fire, Water, Earth, Air }
 
         /*
          * Battle End = you have to survive the battle
@@ -35,12 +37,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static bool PlayAnimations = true;
         private AttackSequences AttackSequence;
 
-        public CreatureCard FirstAttacker;
-        public ItemCard FirstAttackerItem;
-        public Player FirstAttackerPlayer;
-        public CreatureCard SecondAttacker;
-        public ItemCard SecondAttackerItem;
-        public Player SecondAttackerPlayer;
+        public BattleCreatureInfo FirstAttacker;
+        public BattleCreatureInfo SecondAttacker;
 
         public ActionPanelBattleAttackPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
@@ -76,47 +74,47 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         //Attacks First Invader, Attacks First Defender, Normal Attack Invader, Normal Attack Defender, Attacks Last Invader and Attacks Last Defender
-        public static void DetermineAttackOrder(SorcererStreetBattleContext GlobalSorcererStreetBattleContext, out CreatureCard FirstAttacker, out CreatureCard SecondAttacker)
+        public static void DetermineAttackOrder(SorcererStreetBattleContext GlobalSorcererStreetBattleContext, out BattleCreatureInfo FirstAttacker, out BattleCreatureInfo SecondAttacker)
         {
             bool InvaderFirst = true;
             bool InvaderDecided = false;
 
-            if (!GlobalSorcererStreetBattleContext.Invader.Creature.BonusAbilities.AttackLast && (GlobalSorcererStreetBattleContext.Invader.Creature.Abilities.AttackFirst || GlobalSorcererStreetBattleContext.Invader.Creature.BonusAbilities.AttackFirst))
+            if (!GlobalSorcererStreetBattleContext.Invader.Creature.BattleAbilities.AttackLast && GlobalSorcererStreetBattleContext.Invader.Creature.BattleAbilities.AttackFirst)
             {
                 InvaderFirst = true;
                 InvaderDecided = true;
             }
-            else if (!GlobalSorcererStreetBattleContext.Defender.Creature.BonusAbilities.AttackLast && (GlobalSorcererStreetBattleContext.Defender.Creature.Abilities.AttackFirst || GlobalSorcererStreetBattleContext.Defender.Creature.BonusAbilities.AttackFirst))
+            else if (!GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.AttackLast && GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.AttackFirst)
             {
                 InvaderFirst = false;
                 InvaderDecided = true;
             }
 
-            if (!InvaderDecided && (GlobalSorcererStreetBattleContext.Defender.Creature.BonusAbilities.AttackLast || GlobalSorcererStreetBattleContext.Defender.Creature.Abilities.AttackLast))
+            if (!InvaderDecided && GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.AttackLast)
             {
                 InvaderFirst = true;
             }
-            else if (!InvaderDecided && (GlobalSorcererStreetBattleContext.Invader.Creature.BonusAbilities.AttackLast || GlobalSorcererStreetBattleContext.Invader.Creature.Abilities.AttackLast))
+            else if (!InvaderDecided && GlobalSorcererStreetBattleContext.Invader.Creature.BattleAbilities.AttackLast)
             {
                 InvaderFirst = true;
             }
 
             if (InvaderFirst)
             {
-                FirstAttacker = GlobalSorcererStreetBattleContext.Invader.Creature;
-                SecondAttacker = GlobalSorcererStreetBattleContext.Defender.Creature;
+                FirstAttacker = GlobalSorcererStreetBattleContext.Invader;
+                SecondAttacker = GlobalSorcererStreetBattleContext.Defender;
             }
             else
             {
-                FirstAttacker = GlobalSorcererStreetBattleContext.Defender.Creature;
-                SecondAttacker = GlobalSorcererStreetBattleContext.Invader.Creature;
+                FirstAttacker = GlobalSorcererStreetBattleContext.Defender;
+                SecondAttacker = GlobalSorcererStreetBattleContext.Invader;
             }
         }
 
-        private void ExecutePreAttack(CreatureCard Attacker, CreatureCard Defender)
+        private void ExecutePreAttack(BattleCreatureInfo Attacker, BattleCreatureInfo Defender)
         {
-            ActionPanelSorcererStreet AttackerActivationScreen = Attacker.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Invader.Owner));
-            ActionPanelSorcererStreet DefenderActivationScreen = Defender.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Defender.Owner));
+            ActionPanelSorcererStreet AttackerActivationScreen = Attacker.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Invader.Owner));
+            ActionPanelSorcererStreet DefenderActivationScreen = Defender.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Defender.Owner));
 
             if (PlayAnimations && DefenderActivationScreen != null)
             {
@@ -128,61 +126,76 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public void ExecuteFirstAttack()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="GlobalSorcererStreetBattleContext"></param>
+        /// <param name="FirstAttacker"></param>
+        /// <param name="SecondAttacker"></param>
+        /// <returns>True if defender dies</returns>
+        public static bool ExecutetAttack(SorcererStreetBattleContext GlobalSorcererStreetBattleContext, BattleCreatureInfo FirstAttacker, BattleCreatureInfo SecondAttacker)
         {
-            ExecutePreAttack(FirstAttacker, SecondAttacker);
-
             int FinalST;
             int FinalHP;
 
-            if (SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender.Creature)
+            if (SecondAttacker == GlobalSorcererStreetBattleContext.Defender)
             {
-                FinalST = Map.GlobalSorcererStreetBattleContext.Invader.FinalST;
-                FinalHP = Map.GlobalSorcererStreetBattleContext.Defender.FinalHP;
+                FinalST = GlobalSorcererStreetBattleContext.Invader.FinalST;
+                FinalHP = GlobalSorcererStreetBattleContext.Defender.FinalHP;
 
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, BeforeAttackRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, BeforeAttackRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, BeforeAttackRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BeforeAttackRequirement);
             }
             else
             {
-                FinalST = Map.GlobalSorcererStreetBattleContext.Defender.FinalST;
-                FinalHP = Map.GlobalSorcererStreetBattleContext.Invader.FinalHP;
+                FinalST = GlobalSorcererStreetBattleContext.Defender.FinalST;
+                FinalHP = GlobalSorcererStreetBattleContext.Invader.FinalHP;
 
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, BeforeDefenseRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, BeforeDefenseRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, BeforeDefenseRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BeforeDefenseRequirement);
             }
 
             if (FinalST > 0)
             {
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, AttackBonusRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, AttackBonusRequirement);
             }
 
             FinalHP = Math.Max(0, FinalHP - FinalST);
-            SecondAttacker.CurrentHP = Math.Min(SecondAttacker.CurrentHP, FinalHP);
+            SecondAttacker.FinalHP = SecondAttacker.Creature.CurrentHP = Math.Min(SecondAttacker.FinalHP, FinalHP);
 
-            if (SecondAttacker.CurrentHP > 0)
+            if (SecondAttacker.Creature.CurrentHP > 0)
             {
-                AttackSequence = AttackSequences.SecondAttack;
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, AfterEnemySurvivedRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, BattleEndRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, AfterEnemySurvivedRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BattleEndRequirement);
+                return false;
             }
             else
             {
-                AttackSequence = AttackSequences.End;
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, UponVictoryRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, UponDefeatRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, UponVictoryRequirement);
+                GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, UponDefeatRequirement);
+                return true;
 
+            }
+        }
+
+        public void ExecuteFirstAttack()
+        {
+            ExecutePreAttack(FirstAttacker, SecondAttacker);
+
+            if (ExecutetAttack(Map.GlobalSorcererStreetBattleContext, FirstAttacker, SecondAttacker))
+            {
+                AttackSequence = AttackSequences.End;
+            }
+            else
+            {
+                AttackSequence = AttackSequences.SecondAttack;
             }
 
             if (PlayAnimations)
             {
-                if (FirstAttackerItem == null)
+                foreach (string ActiveAnimationPath in FirstAttacker.GetAttackAnimationPaths())
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, FirstAttacker.AttackAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender.Creature));
-                }
-                else
-                {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, FirstAttackerItem.ItemActivationAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender.Creature));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, ActiveAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
                 }
             }
         }
@@ -191,54 +204,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ExecutePreAttack(SecondAttacker, FirstAttacker);
 
-            int FinalST;
-            int FinalHP;
-
-            if (SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender.Creature)
-            {
-                FinalST = Map.GlobalSorcererStreetBattleContext.Defender.FinalST;
-                FinalHP = Map.GlobalSorcererStreetBattleContext.Invader.FinalHP;
-
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, BeforeAttackRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, BeforeAttackRequirement);
-            }
-            else
-            {
-                FinalST = Map.GlobalSorcererStreetBattleContext.Invader.FinalST;
-                FinalHP = Map.GlobalSorcererStreetBattleContext.Defender.FinalHP;
-
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, BeforeDefenseRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, BeforeDefenseRequirement);
-            }
-
-            if (FinalST > 0)
-            {
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, AttackBonusRequirement);
-            }
-
-            FinalHP = Math.Max(0, FinalHP - FinalST);
-            FirstAttacker.CurrentHP = Math.Min(FirstAttacker.CurrentHP, FinalHP);
-
-            if (SecondAttacker.CurrentHP > 0)
-            {
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, AfterEnemySurvivedRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, BattleEndRequirement);
-            }
-            else
-            {
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(SecondAttacker, FirstAttacker, SecondAttackerPlayer, FirstAttackerPlayer, UponVictoryRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActiveSkill(FirstAttacker, SecondAttacker, FirstAttackerPlayer, SecondAttackerPlayer, UponDefeatRequirement);
-            }
+            ExecutetAttack(Map.GlobalSorcererStreetBattleContext, SecondAttacker, FirstAttacker);
 
             if (PlayAnimations)
             {
-                if (FirstAttackerItem == null)
+                foreach (string ActiveAnimationPath in SecondAttacker.GetAttackAnimationPaths())
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, SecondAttacker.AttackAnimationPath, SecondAttacker != Map.GlobalSorcererStreetBattleContext.Defender.Creature));
-                }
-                else
-                {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, SecondAttacker.AttackAnimationPath, SecondAttacker != Map.GlobalSorcererStreetBattleContext.Defender.Creature));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, ActiveAnimationPath, SecondAttacker != Map.GlobalSorcererStreetBattleContext.Defender));
                 }
             }
         }

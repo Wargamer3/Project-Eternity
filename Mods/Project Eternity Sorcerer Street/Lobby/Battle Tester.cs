@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FMOD;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
-using FMOD;
 using ProjectEternity.GameScreens.AnimationScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -86,9 +87,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #endregion
 
+        int ButtonsWidth = 100;
         int HeaderHeight = 30;
         int SetupMenuWidth = 240;
-        int SetupMenuItems = 29;
+        int SetupMenuItemsDefender = 15;
+        int SetupMenuItemsInvader = 14;
         int PhasesMenuWidth = 150;
         int ButtonHeight;
 
@@ -101,6 +104,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private PhasesChoices PhasesChoice;
         private EditBookCardListFilterScreen CardSelectionScreen;
         private SorcererStreetBattleContext Context;
+
+        private AnimationScreen AttackAnimation;
 
         public BattleTesterScreen(CardSymbols Symbols, Player ActivePlayer)
         {
@@ -115,81 +120,84 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
             Context = SorcererStreetBattleParams.DicParams[string.Empty].GlobalContext;
-            SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
+            Context.ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
 
             ButtonHeight = fntArial12.LineSpacing + 2;
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            int MenuHeight = ButtonHeight * SetupMenuItems;
-            int ButtonsWidth = 100;
+            int MenuHeight = ButtonHeight * SetupMenuItemsInvader;
 
             int X = SetupMenuWidth;
             int Y = (Constants.Height - MenuHeight - HeaderHeight) / 2 + HeaderHeight;
 
             #region Setup UI
 
+            InvaderCreatureButton = new BoxButton(new Rectangle(X, Y, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderCreatureSelection);
+            InvaderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderItemSelection);
+            InvaderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderEnchantSelection);
+            InvaderCepterEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderCepterEnchantSelection);
+
+            InvaderCepterCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderCepterCardsInHand, true);
+            InvaderCepterCardsInHandInput.SetText("6");
+            InvaderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderHPInput, true);
+            InvaderHPInput.SetText("30");
+            InvaderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderMaxHPInput, true);
+            InvaderMaxHPInput.SetText("30");
+            InvaderSTInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderSTInput, true);
+            InvaderSTInput.SetText("30");
+            InvaderSupportSTBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderSupportSTBonusInput, true);
+            InvaderSupportSTBonusInput.SetText("10");
+            InvaderAirLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderAirLandsInput, true);
+            InvaderAirLandsInput.SetText("1");
+            InvaderEarthLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderEarthLandsInput, true);
+            InvaderEarthLandsInput.SetText("1");
+            InvaderFireLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderFireLandsInput, true);
+            InvaderFireLandsInput.SetText("1");
+            InvaderWaterLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderWaterLandsInput, true);
+            InvaderWaterLandsInput.SetText("1");
+
+            InvaderMapCreaturesButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderMapCreaturesSelection);
+
+            MenuHeight = ButtonHeight * SetupMenuItemsDefender;
+            X = Constants.Width - ButtonsWidth;
+            Y = (Constants.Height - MenuHeight - HeaderHeight) / 2 + HeaderHeight;
+
             DefenderCreatureButton = new BoxButton(new Rectangle(X, Y, ButtonsWidth, fntArial12.LineSpacing), fntArial12, "Select", OnButtonOver, DefenderCreatureSelection);
             DefenderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderItemSelection);
             DefenderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderEnchantSelection);
             DefenderCepterEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderCepterEnchantSelection);
 
-            DefenderCepterCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderCepterCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
             DefenderCepterCardsInHandInput.SetText("6");
-            DefenderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderHPInput, true);
             DefenderHPInput.SetText("30");
-            DefenderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderMaxHPInput, true);
             DefenderMaxHPInput.SetText("30");
-            DefenderSTInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderSTInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderSTInput, true);
             DefenderSTInput.SetText("30");
-            DefenderTerrainHPBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderTerrainHPBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderTerrainHPBonusInput, true);
             DefenderTerrainHPBonusInput.SetText("10");
-            DefenderSupportSTBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderSupportSTBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderSupportSTBonusInput, true);
             DefenderSupportSTBonusInput.SetText("10");
-            DefenderAirLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderAirLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderAirLandsInput, true);
             DefenderAirLandsInput.SetText("1");
-            DefenderEarthLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderEarthLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderEarthLandsInput, true);
             DefenderEarthLandsInput.SetText("1");
-            DefenderFireLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderFireLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderFireLandsInput, true);
             DefenderFireLandsInput.SetText("1");
-            DefenderWaterLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
+            DefenderWaterLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderWaterLandsInput, true);
             DefenderWaterLandsInput.SetText("1");
 
             DefenderMapCreaturesButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderMapCreaturesSelection);
-
-            InvaderCreatureButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderCreatureSelection);
-            InvaderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderItemSelection);
-            InvaderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderEnchantSelection);
-            InvaderCepterEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderCepterEnchantSelection);
-
-            InvaderCepterCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderCepterCardsInHandInput.SetText("6");
-            InvaderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderHPInput.SetText("30");
-            InvaderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderMaxHPInput.SetText("30");
-            InvaderSTInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderSTInput.SetText("30");
-            InvaderSupportSTBonusInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderSupportSTBonusInput.SetText("10");
-            InvaderAirLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderAirLandsInput.SetText("1");
-            InvaderEarthLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderEarthLandsInput.SetText("1");
-            InvaderFireLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderFireLandsInput.SetText("1");
-            InvaderWaterLandsInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            InvaderWaterLandsInput.SetText("1");
-
-            InvaderMapCreaturesButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderMapCreaturesSelection);
 
             #endregion
 
             #region Phases UI
 
             MenuHeight = fntArial12.LineSpacing * 9;
-            X = Constants.Width - PhasesMenuWidth;
+            X = (Constants.Width - PhasesMenuWidth) / 2;
             Y = (Constants.Height - MenuHeight - HeaderHeight) / 2 + HeaderHeight;
 
             LandModifierPhaseButton = new BoxButton(new Rectangle(X, Y, PhasesMenuWidth, fntArial12.LineSpacing), fntArial12, "Land Modifier", OnButtonOver, LandModifierPhaseSelection);
@@ -218,32 +226,68 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (AllCardsBook == null)
             {
                 ActiveBook = AllCardsBook = new CardBook();
-                foreach (string ActiveMultiplayerFolder in Directory.EnumerateDirectories(GameScreen.ContentFallback.RootDirectory + "/Sorcerer Street/", "* Cards"))
+                foreach (string ActiveCardsFolder in Directory.EnumerateDirectories(GameScreen.ContentFallback.RootDirectory + "/Sorcerer Street/", "* Cards"))
                 {
-                    foreach (string ActiveCampaignFolder in Directory.EnumerateDirectories(ActiveMultiplayerFolder, "*", SearchOption.AllDirectories))
+                    foreach (string ActiveRootFolder in Directory.EnumerateDirectories(ActiveCardsFolder, "*", SearchOption.AllDirectories))
                     {
-                        foreach (string ActiveFile in Directory.EnumerateFiles(ActiveCampaignFolder, "*.pec", SearchOption.AllDirectories))
+                        foreach (string ActiveGameFolder in Directory.EnumerateDirectories(ActiveRootFolder, "*", SearchOption.AllDirectories))
                         {
-                            Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback,
-                                SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement, SorcererStreetBattleParams.DicParams[string.Empty].DicEffect, SorcererStreetBattleParams.DicParams[string.Empty].DicAutomaticSkillTarget);
-                            LoadedCard.QuantityOwned = 1;
+                            foreach (string ActiveFile in Directory.EnumerateFiles(ActiveGameFolder, "*.pec", SearchOption.AllDirectories))
+                            {
+                                Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback,
+                                    SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement, SorcererStreetBattleParams.DicParams[string.Empty].DicEffect, SorcererStreetBattleParams.DicParams[string.Empty].DicAutomaticSkillTarget);
+                                LoadedCard.QuantityOwned = 1;
 
-                            ActiveBook.AddCard(LoadedCard);
+                                ActiveBook.AddCard(LoadedCard);
+                            }
                         }
                     }
                 }
             }
+
+            Card CopyCard = ActiveBook.DicCardsByType[CreatureCard.CreatureCardType].First().Value;
+
+            Context.Defender.Owner = new Player("Defender Player", "Defender Player", false);
+            Context.Defender.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+            Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
+            Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+            Context.Defender.Animation.Scale = new Vector2(1f);
+            Context.Defender.FinalHP = Context.Defender.Creature.OriginalMaxHP;
+            Context.Defender.FinalST = Context.Defender.Creature.OriginalST;
+            DefenderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
+            DefenderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
+            DefenderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
+
+            Context.Invader.Owner = new Player("Defender Player", "Defender Player", false);
+            Context.Invader.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+            Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
+            Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+            Context.Invader.Animation.Scale = new Vector2(1f);
+            Context.Invader.FinalHP = Context.Defender.Creature.OriginalMaxHP;
+            Context.Invader.FinalST = Context.Defender.Creature.OriginalST;
+            InvaderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
+            InvaderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
+            InvaderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
         }
 
         public override void Update(GameTime gameTime)
         {
-            ActionPanelBattle.CanUpdate(gameTime, Context);
             switch (PhasesChoice)
             {
                 case PhasesChoices.ItemModifierPhase:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
-                        PhasesChoice = PhasesChoices.AttackPhase;
+                        PhasesChoice = PhasesChoices.LandModifierPhase;
+                    }
+                    break;
+
+                case PhasesChoices.AttackPhase:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        if (!ActionPanelBattleAttackAnimationPhase.UpdateAnimations(gameTime, Context, AttackAnimation))
+                        {
+                            PhasesChoice = PhasesChoices.LandModifierPhase;
+                        }
                     }
                     break;
 
@@ -296,11 +340,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
                     Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
                     Context.Defender.Animation.Scale = new Vector2(1f);
-                    Context.Defender.FinalHP = Context.Defender.Creature.MaxHP;
-                    Context.Defender.FinalST = Context.Defender.Creature.MaxST;
-                    DefenderHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
-                    DefenderMaxHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
-                    DefenderSTInput.SetText(Context.Defender.Creature.MaxST.ToString());
+                    Context.Defender.FinalHP = Context.Defender.Creature.OriginalMaxHP;
+                    Context.Defender.FinalST = Context.Defender.Creature.OriginalST;
+                    DefenderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
+                    DefenderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
+                    DefenderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
                     break;
 
                 case SetupChoices.InvaderCreature:
@@ -309,11 +353,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
                     Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
                     Context.Invader.Animation.Scale = new Vector2(1f);
-                    Context.Invader.FinalHP = Context.Defender.Creature.MaxHP;
-                    Context.Invader.FinalST = Context.Defender.Creature.MaxST;
-                    InvaderHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
-                    InvaderMaxHPInput.SetText(Context.Defender.Creature.MaxHP.ToString());
-                    InvaderSTInput.SetText(Context.Defender.Creature.MaxST.ToString());
+                    Context.Invader.FinalHP = Context.Defender.Creature.OriginalMaxHP;
+                    Context.Invader.FinalST = Context.Defender.Creature.OriginalST;
+                    InvaderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
+                    InvaderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
+                    InvaderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
                     break;
 
                 case SetupChoices.DefenderItem:
@@ -375,6 +419,51 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonClick.Play();
         }
 
+        private void SetDefenderCepterCardsInHand(string InputValue)
+        {
+        }
+
+        private void SetDefenderHPInput(string InputValue)
+        {
+            int.TryParse(InputValue, out Context.Defender.FinalHP);
+            Context.Defender.Creature.CurrentHP = Context.Defender.FinalHP;
+        }
+
+        private void SetDefenderMaxHPInput(string InputValue)
+        {
+            int.TryParse(InputValue, out Context.Defender.Creature.MaxHP);
+        }
+
+        private void SetDefenderSTInput(string InputValue)
+        {
+            int.TryParse(InputValue, out Context.Defender.Creature.CurrentST);
+            Context.Defender.FinalST = Context.Defender.Creature.CurrentST;
+        }
+
+        private void SetDefenderTerrainHPBonusInput(string InputValue)
+        {
+        }
+
+        private void SetDefenderSupportSTBonusInput(string InputValue)
+        {
+        }
+
+        private void SetDefenderAirLandsInput(string InputValue)
+        {
+        }
+
+        private void SetDefenderEarthLandsInput(string InputValue)
+        {
+        }
+
+        private void SetDefenderFireLandsInput(string InputValue)
+        {
+        }
+
+        private void SetDefenderWaterLandsInput(string InputValue)
+        {
+        }
+
         private void InvaderCreatureSelection()
         {
             SetupChoice = SetupChoices.InvaderCreature;
@@ -415,7 +504,44 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonClick.Play();
         }
 
-        private void SetDefenderCepterCardsInHand(string InputValue)
+        private void SetInvaderCepterCardsInHand(string InputValue)
+        {
+        }
+
+        private void SetInvaderHPInput(string InputValue)
+        {
+            int.TryParse(InputValue, out Context.Invader.FinalHP);
+            Context.Invader.Creature.CurrentHP = Context.Invader.FinalHP;
+        }
+
+        private void SetInvaderMaxHPInput(string InputValue)
+        {
+            int.TryParse(InputValue, out Context.Invader.Creature.MaxHP);
+        }
+
+        private void SetInvaderSTInput(string InputValue)
+        {
+            int.TryParse(InputValue, out Context.Invader.Creature.CurrentST);
+            Context.Invader.FinalST = Context.Invader.Creature.CurrentST;
+        }
+
+        private void SetInvaderSupportSTBonusInput(string InputValue)
+        {
+        }
+
+        private void SetInvaderAirLandsInput(string InputValue)
+        {
+        }
+
+        private void SetInvaderEarthLandsInput(string InputValue)
+        {
+        }
+
+        private void SetInvaderFireLandsInput(string InputValue)
+        {
+        }
+
+        private void SetInvaderWaterLandsInput(string InputValue)
         {
         }
 
@@ -425,8 +551,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void LandModifierPhaseSelection()
         {
-            Context.Defender.FinalHP = int.Parse(InvaderMaxHPInput.Text);
-            Context.Defender.FinalST = int.Parse(InvaderSTInput.Text);
+            Context.Invader.Creature.InitBattleBonuses();
+            Context.Defender.Creature.InitBattleBonuses();
+
+            Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
+            Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+            Context.Invader.Animation.Scale = new Vector2(1f);
+            Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
+            Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+            Context.Defender.Animation.Scale = new Vector2(1f);
+
+            Context.Defender.FinalHP = int.Parse(DefenderHPInput.Text);
+            Context.Defender.FinalST = int.Parse(DefenderSTInput.Text);
             Context.Defender.FinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
 
             Context.Invader.FinalHP = int.Parse(InvaderMaxHPInput.Text);
@@ -440,8 +576,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             LandModifierPhaseSelection();
 
-            Context.ActiveSkill(Context.Invader, Context.Defender, ActionPanelBattleCreatureModifierPhase.RequirementName);
-            Context.ActiveSkill(Context.Defender, Context.Invader, ActionPanelBattleCreatureModifierPhase.RequirementName);
+            Context.ActivateSkill(Context.Invader, Context.Defender, ActionPanelBattleCreatureModifierPhase.RequirementName);
+            Context.ActivateSkill(Context.Defender, Context.Invader, ActionPanelBattleCreatureModifierPhase.RequirementName);
 
             sndButtonClick.Play();
         }
@@ -464,16 +600,46 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void BoostModifierPhaseSelection()
         {
+            ItemModifierPhaseSelection();
+            ActionPanelBattleBoostsModifierPhase.Init(Context);
             sndButtonClick.Play();
         }
 
         private void AttackPhaseSelection()
         {
+            BoostModifierPhaseSelection();
+
+
+            SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
+            SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
+            ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
+            ActionPanelBattleAttackPhase.ExecutetAttack(Context, FirstAttacker, SecondAttacker);
+            foreach (string ActiveAnimationPath in FirstAttacker.GetAttackAnimationPaths())
+            {
+
+                if (string.IsNullOrEmpty(ActiveAnimationPath))
+                {
+                    AttackAnimation = ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, "Sorcerer Street/Default", Context, Content);
+                }
+                else
+                {
+                    AttackAnimation = ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, ActiveAnimationPath, Context, Content);
+                }
+            }
             sndButtonClick.Play();
         }
 
         private void CounterPhaseSelection()
         {
+            BoostModifierPhaseSelection();
+
+            SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
+            SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
+            ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
+            if (!ActionPanelBattleAttackPhase.ExecutetAttack(Context, FirstAttacker, SecondAttacker))
+            {
+                ActionPanelBattleAttackPhase.ExecutetAttack(Context, SecondAttacker, FirstAttacker);
+            }
             sndButtonClick.Play();
         }
 
@@ -484,9 +650,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #endregion
 
+        public override void BeginDraw(CustomSpriteBatch g)
+        {
+            g.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            g.GraphicsDevice.Clear(Color.Black);
+
+            if (Context.Invader.Animation != null)
+            {
+                Context.Invader.Animation.BeginDraw(g);
+            }
+            if (Context.Defender.Animation != null)
+            {
+                Context.Defender.Animation.BeginDraw(g);
+            }
+
+            g.End();
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
             g.GraphicsDevice.Clear(ClearOptions.Target, Color.Black, 1, 0);
+
             ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
             ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
 
@@ -511,7 +695,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void DrawSetupMenu(CustomSpriteBatch g)
         {
-            int MenuHeight = ButtonHeight * SetupMenuItems;
+            int MenuHeight = ButtonHeight * SetupMenuItemsInvader;
 
             int X = 0;
             int Y = (Constants.Height - MenuHeight - HeaderHeight) / 2;
@@ -519,7 +703,53 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawStringCentered(fntArial12, "Setup", new Vector2(X + SetupMenuWidth / 2, Y + HeaderHeight / 2), Color.White);
 
             Y += HeaderHeight;
-            DrawBox(g, new Vector2(X, Y), SetupMenuWidth, MenuHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Creature", new Vector2(X + 5, Y + 1), Color.White);
+
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Item", new Vector2(X + 5, Y + 1), Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Enchant", new Vector2(X + 5, Y + 1), Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Cepter Enchant", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Cepter Cards in hand", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader HP", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Max HP", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader ST", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Support ST Bonus", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Air Lands", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Earth Lands", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Fire Lands", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Water Lands", new Vector2(X + 5, Y), Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
+            g.DrawString(fntArial12, "Invader Map Creatures", new Vector2(X + 5, Y), Color.White);
+
+            MenuHeight = ButtonHeight * SetupMenuItemsDefender;
+            X = Constants.Width - SetupMenuWidth - ButtonsWidth;
+            Y = (Constants.Height - MenuHeight - HeaderHeight) / 2;
+
+            DrawBox(g, new Vector2(X, Y), SetupMenuWidth, HeaderHeight, Color.Black);
+            g.DrawStringCentered(fntArial12, "Setup", new Vector2(X + SetupMenuWidth / 2, Y + HeaderHeight / 2), Color.White);
+
+            Y += HeaderHeight;
             DrawBox(g, new Vector2(X, Y), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Creature", new Vector2(X + 5, Y + 1), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
@@ -530,81 +760,43 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             g.DrawString(fntArial12, "Defender Cepter Enchant", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Cepter Cards in hand", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender HP", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Max HP", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender ST", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Terrain HP Bonus", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Support ST Bonus", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Air Lands", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Earth Lands", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Fire Lands", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Water Lands", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
+            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Map Creatures", new Vector2(X + 5, Y), Color.White);
-
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Creature", new Vector2(X + 5, Y + 1), Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Item", new Vector2(X + 5, Y + 1), Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Enchant", new Vector2(X + 5, Y + 1), Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Cepter Enchant", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Cepter Cards in hand", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader HP", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Max HP", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader ST", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Support ST Bonus", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Air Lands", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Earth Lands", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Fire Lands", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Water Lands", new Vector2(X + 5, Y), Color.White);
-            DrawBox(g, new Vector2(X + SetupMenuWidth, Y), 100, ButtonHeight, Color.White);
-            DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Map Creatures", new Vector2(X + 5, Y), Color.White);
         }
 
         public void DrawPhaseSelectionMenu(CustomSpriteBatch g)
         {
             int MenuHeight = fntArial12.LineSpacing * 9;
 
-            int X = Constants.Width - PhasesMenuWidth;
+            int X = (Constants.Width - PhasesMenuWidth) / 2;
             int Y = (Constants.Height - MenuHeight - HeaderHeight) / 2;
 
             DrawBox(g, new Vector2(X, Y), PhasesMenuWidth, HeaderHeight, Color.Black);

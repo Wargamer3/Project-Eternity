@@ -3,6 +3,7 @@ using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
 using static ProjectEternity.Core.Operators;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.ActionPanelBattleAttackPhase;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -10,9 +11,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static string Name = "Sorcerer Street Reflect Damage";
 
-        public enum ReflectTypes { NonScrolls, Scrolls }
-
-        private ReflectTypes _ReflectType;
+        private AttackTypes _ReflectType;
         private NumberTypes _SignOperator;
         private string _Value;
 
@@ -32,7 +31,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         
         protected override void Load(BinaryReader BR)
         {
-            _ReflectType = (ReflectTypes)BR.ReadByte();
+            _ReflectType = (AttackTypes)BR.ReadByte();
             _SignOperator = (NumberTypes)BR.ReadByte();
             _Value = BR.ReadString();
         }
@@ -51,7 +50,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            Params.GlobalContext.Invader.Creature.BattleAbilities.ReflectType = _ReflectType;
+            Params.GlobalContext.Invader.Creature.BattleAbilities.ReflectSignOperator = _SignOperator;
+            Params.GlobalContext.Invader.Creature.BattleAbilities.ReflectValue = _Value;
+
+            return "Neutralize " + _Value + "% Damage";
         }
 
         protected override BaseEffect DoCopy()
@@ -68,7 +71,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public ReflectTypes NumberType
+        public AttackTypes NumberType
         {
             get
             {

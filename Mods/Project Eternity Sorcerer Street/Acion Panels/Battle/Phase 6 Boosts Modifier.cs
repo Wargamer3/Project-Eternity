@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 
@@ -18,13 +19,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            Init();
+            Init(Map.GlobalSorcererStreetBattleContext);
 
             ContinueBattlePhase();
         }
 
-        private void Init()
+        public static void Init(SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
+            foreach (TerrainSorcererStreet ActiveBoostCreature in GlobalSorcererStreetBattleContext.ListBoostCreature)
+            {
+                GlobalSorcererStreetBattleContext.ActivateSkill(new SorcererStreetBattleContext.BattleCreatureInfo(ActiveBoostCreature.DefendingCreature, ActiveBoostCreature.PlayerOwner), GlobalSorcererStreetBattleContext.Defender, RequirementName);
+                GlobalSorcererStreetBattleContext.ActivateSkill(new SorcererStreetBattleContext.BattleCreatureInfo(ActiveBoostCreature.DefendingCreature, ActiveBoostCreature.PlayerOwner), GlobalSorcererStreetBattleContext.Invader, RequirementName);
+            }
+        }
+
+        public static List<TerrainSorcererStreet> GetListBoostCreatures(SorcererStreetMap Map)
+        {
+            List<TerrainSorcererStreet> ListBoostCreature = new List<TerrainSorcererStreet>();
+
             for (int X = 0; X < Map.MapSize.X; ++X)
             {
                 for (int Y = 0; Y < Map.MapSize.Y; ++Y)
@@ -40,13 +52,38 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                         if (ActiveTerrain.DefendingCreature != null)
                         {
-                            Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, RequirementName);
-                            Map.GlobalSorcererStreetBattleContext.ActiveSkill(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, RequirementName);
+                            bool BoostSkillFound = false;
+                            foreach (BaseAutomaticSkill ActiveSkill in ActiveTerrain.DefendingCreature.ListActiveSkill)
+                            {
+                                if (BoostSkillFound)
+                                {
+                                    break;
+                                }
 
+                                foreach (BaseSkillActivation ActiveActivation in ActiveSkill.CurrentSkillLevel.ListActivation)
+                                {
+                                    if (BoostSkillFound)
+                                    {
+                                        break;
+                                    }
+
+                                    foreach (BaseSkillRequirement ActiveRequirement in ActiveActivation.ListRequirement)
+                                    {
+                                        if (ActiveRequirement.SkillRequirementName == RequirementName)
+                                        {
+                                            ListBoostCreature.Add(ActiveTerrain);
+                                            BoostSkillFound = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
+
+            return ListBoostCreature;
         }
 
         public void FinishPhase()
@@ -67,7 +104,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoRead(ByteReader BR)
         {
             ReadPlayerInfo(BR, Map);
-            Init();
+            Init(Map.GlobalSorcererStreetBattleContext);
         }
 
         public override void DoWrite(ByteWriter BW)

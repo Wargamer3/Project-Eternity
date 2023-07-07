@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.BonusAbilities.AttackLast = true;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.AttackLast = true;
             return null;
         }
 

@@ -191,7 +191,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 int X = Constants.Width / 4;
                 Y += 30;
                 g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Creature.MaxST.ToString(), new Vector2(X - 20, Y), Color.White);
+                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentST.ToString(), new Vector2(X - 20, Y), Color.White);
                 g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Invader.Creature.MaxHP.ToString(), new Vector2(X + 45, Y), Color.White);
                 g.DrawStringMiddleAligned(Map.fntArial12, "Ability Values", new Vector2(Constants.Width / 2, Y), Color.White);
@@ -215,7 +215,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 g.DrawStringMiddleAligned(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Animation.Name, new Vector2(Constants.Width - Constants.Width / 4, Y), Color.White);
                 Y += 30;
                 g.Draw(Map.Symbols.sprMenuST, new Rectangle(X - 50, Y, 20, 20), Color.White);
-                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Creature.MaxST.ToString(), new Vector2(X - 20, Y), Color.White);
+                g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST.ToString(), new Vector2(X - 20, Y), Color.White);
                 g.Draw(Map.Symbols.sprMenuHP, new Rectangle(X + 10, Y, 20, 20), Color.White);
                 g.DrawString(Map.fntArial12, Map.GlobalSorcererStreetBattleContext.Defender.Creature.MaxHP.ToString(), new Vector2(X + 45, Y), Color.White);
 

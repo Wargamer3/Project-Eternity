@@ -14,21 +14,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetBattleContext
     {
-        public BattleCreatureInfo Invader;
-        public BattleCreatureInfo Defender;
-        public TerrainSorcererStreet DefenderTerrain;
-
-        public BaseEffect ActivatedEffect;
-
-        public BattleCreatureInfo SelfCreature;
-        public BattleCreatureInfo OpponentCreature;
-
-        public ActionPanelHolder ListBattlePanelHolder;
-
-        public AnimationBackground Background;
-
-        public FormulaParser ActiveParser;
-
         public class BattleCreatureInfo
         {
             public CreatureCard Creature;
@@ -40,35 +25,87 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             public int FinalST;
             public int DamageReceived;
 
+            public BattleCreatureInfo()
+            {
+            }
+
             public BattleCreatureInfo(CreatureCard Creature, Player Owner)
             {
                 this.Creature = Creature;
                 this.Owner = Owner;
             }
+
+            public List<string> GetAttackAnimationPaths()
+            {
+                List<string> ListAttackAnimationPath = new List<string>();
+                if (Item == null)
+                {
+                    ListAttackAnimationPath.Add(Creature.AttackAnimationPath);
+                }
+                else if (Item is CreatureCard)
+                {
+                    ListAttackAnimationPath.Add(((CreatureCard)Item).AttackAnimationPath);
+                }
+                else
+                {
+                    ListAttackAnimationPath.Add(((ItemCard)Item).ItemActivationAnimationPath);
+                }
+
+                return ListAttackAnimationPath;
+            }
         }
+
+        public BattleCreatureInfo Invader;
+        public BattleCreatureInfo Defender;
+        public TerrainSorcererStreet DefenderTerrain;
+
+        public BaseEffect ActivatedEffect;
+
+        public BattleCreatureInfo SelfCreature;
+        public BattleCreatureInfo OpponentCreature;
+
+        public List<TerrainSorcererStreet> ListBoostCreature;
+
+        public ActionPanelHolder ListBattlePanelHolder;
+
+        public AnimationBackground Background;
+
+        public FormulaParser ActiveParser;
 
         public SorcererStreetBattleContext()
         {
+            Invader = new BattleCreatureInfo();
+            Defender = new BattleCreatureInfo();
+            ListBoostCreature = new List<TerrainSorcererStreet>();
         }
 
         public SorcererStreetBattleContext(SorcererStreetBattleContext GlobalContext)
+            :this()
         {
         }
 
-        public void ActiveSkill(CreatureCard UserCreature, CreatureCard OpponentCreature, Player UserPlayer, Player OpponentPlayer, string RequirementName)
-        {
-            this.SelfCreature = new BattleCreatureInfo(UserCreature, UserPlayer);
-            this.OpponentCreature = new BattleCreatureInfo(OpponentCreature, OpponentPlayer);
-
-            UserCreature.ActivateSkill(RequirementName);
-        }
-
-        internal void ActiveSkill(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
+        internal void ActivateSkill(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
         {
             SelfCreature = Invader;
             OpponentCreature = Defender;
 
             SelfCreature.Creature.ActivateSkill(RequirementName);
+        }
+
+        public bool CanActivateSkillCreature(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
+        {
+            SelfCreature = Invader;
+            OpponentCreature = Defender;
+
+            return Invader.Creature.CanActivateSkill(RequirementName);
+        }
+
+        public bool CanActivateSkillItem(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
+        {
+            SelfCreature = Invader;
+            OpponentCreature = Defender;
+
+            return Invader.Item.CanActivateSkill(RequirementName);
         }
     }
 
