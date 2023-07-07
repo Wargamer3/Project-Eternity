@@ -5,48 +5,49 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens.AnimationScreen;
+using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
-namespace ProjectEternity.GameScreens.DeathmatchMapScreen
+namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public class DeathmatchDamageTimeline : DamageTimeline
+    public class SorcererStreetDamageTimeline : DamageTimeline
     {
-        private const string TimelineType = "Deathmatch Damage";
+        private const string TimelineType = "Sorcerer Street Damage";
 
-        protected override bool IsFlipped { get { return Owner != null && Owner.IsLeftAttacking; } }
+        protected override bool IsFlipped { get { return Owner != null && Owner.HorizontalMirror; } }
 
         private AnimationScreen Owner;
 
-        public DeathmatchDamageTimeline()
+        public SorcererStreetDamageTimeline()
             : this(null, "New Damage", null)
         {
         }
 
-        private DeathmatchDamageTimeline(AnimationScreen Owner, string Name, SpriteFont fntDamage)
+        private SorcererStreetDamageTimeline(AnimationScreen Owner, string Name, SpriteFont fntDamage)
             : base(TimelineType, Name, fntDamage)
         {
             this.Owner = Owner;
         }
 
-        public DeathmatchDamageTimeline(AnimationScreen Owner, ContentManager Content)
+        public SorcererStreetDamageTimeline(AnimationScreen Owner, ContentManager Content)
             : this(Owner, "New Damage", Content.Load<SpriteFont>("Fonts/Battle Damage"))
         {
         }
 
-        private DeathmatchDamageTimeline(BinaryReader BR, ContentManager Content)
+        private SorcererStreetDamageTimeline(BinaryReader BR, ContentManager Content)
             : base(TimelineType, BR, Content)
         {
         }
 
         protected override VisibleTimeline DoLoadCopy(BinaryReader BR, ContentManager Content, AnimationClass.AnimationLayer ActiveLayer)
         {
-            DeathmatchDamageTimeline Copy = new DeathmatchDamageTimeline(BR, Content);
+            SorcererStreetDamageTimeline Copy = new SorcererStreetDamageTimeline(BR, Content);
             Copy.Owner = Owner;
             return Copy;
         }
 
         public override Timeline Copy(AnimationClass.AnimationLayer ActiveLayer)
         {
-            DeathmatchDamageTimeline NewDamageTimeline = new DeathmatchDamageTimeline(Owner, Name, fntDamage);
+            SorcererStreetDamageTimeline NewDamageTimeline = new SorcererStreetDamageTimeline(Owner, Name, fntDamage);
 
             NewDamageTimeline.UpdateFrom(this, ActiveLayer);
 
@@ -57,7 +58,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             List<VisibleTimeline> ReturnValue = new List<VisibleTimeline>();
 
-            DeathmatchDamageTimeline NewDamageTimeline = new DeathmatchDamageTimeline(Owner, ActiveAnimation.Content);
+            SorcererStreetDamageTimeline NewDamageTimeline = new SorcererStreetDamageTimeline(Owner, ActiveAnimation.Content);
             NewDamageTimeline.Position = new Vector2(535, 170);
             NewDamageTimeline.SpawnFrame = KeyFrame;
             NewDamageTimeline.DeathFrame = KeyFrame + 10;
@@ -75,7 +76,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             if (Owner != null)
             {
-                Owner.DamageEnemyUnit(Damage);
+                Owner.DamageEnemyCreature(Damage);
             }
         }
 
@@ -88,17 +89,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 switch (Text.ToLower())
                 {
-                    case "leader":
                     case "damage":
-                        return Owner.BattleResult.ArrayResult[0].AttackDamage;
-
-                    case "wingman a":
-                    case "wingman 1":
-                        return Owner.BattleResult.ArrayResult[1].AttackDamage;
-
-                    case "wingman b":
-                    case "wingman 2":
-                        return Owner.BattleResult.ArrayResult[2].AttackDamage;
+                        return 222;
                 }
             }
 

@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Damage Timeline.cs" />
     <Compile Include="Lightning Spawner Helper.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -733,11 +733,30 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             return DicTimelineByType;
         }
 
+        protected static Dictionary<string, Timeline> LoadTimelines(string RootPath, params object[] Args)
+        {
+            Dictionary<string, Timeline> DicTimelineByType = new Dictionary<string, Timeline>();
+
+            string[] Files = Directory.GetFiles("Timelines/" + RootPath, "*.dll");
+            for (int F = 0; F < Files.Length; F++)
+            {
+                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));
+                List<Timeline> ListTimeline = ReflectionHelper.GetObjectsFromBaseTypes<Timeline>(typeof(Timeline), ActiveAssembly.GetTypes(), Args);
+
+                foreach (Timeline Instance in ListTimeline)
+                {
+                    DicTimelineByType.Add(Instance.TimelineEventType, Instance);
+                }
+            }
+
+            return DicTimelineByType;
+        }
+
         public static Dictionary<string, Timeline> LoadAllTimelines()
         {
             Dictionary<string, Timeline> DicTimelineByType = new Dictionary<string, Timeline>();
 
-            string[] Files = Directory.GetFiles("Timelines", "*.dll");
+            string[] Files = Directory.GetFiles("Timelines", "*.dll", SearchOption.AllDirectories);
             for (int F = 0; F < Files.Length; F++)
             {
                 Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(Files[F]));

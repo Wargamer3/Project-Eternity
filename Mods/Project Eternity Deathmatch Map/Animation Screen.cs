@@ -249,7 +249,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DicTimeline.Add(Timeline.Key, Timeline.Value);
             }
 
-            foreach (KeyValuePair<string, Timeline> Timeline in LoadTimelines(typeof(DeathmatchMapTimeline), this, Content))
+            foreach (KeyValuePair<string, Timeline> Timeline in LoadTimelines("Deathmatch Map", this, Content))
             {
                 DicTimeline.Add(Timeline.Key, Timeline.Value);
             }

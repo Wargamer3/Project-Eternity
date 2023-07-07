@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Timelines\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Debug\Timelines\Deathmatch Map\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -23,7 +23,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Timelines\</OutputPath>
+    <OutputPath>..\..\Project Eternity\Project Eternity\bin\Release\Timelines\Deathmatch Map\</OutputPath>
     <Optimize>true</Optimize>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -66,6 +66,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Constants\Project Eternity Constants.csproj">
       <Project>{9db4a4b2-4975-415a-9050-8ec3ec5056a7}</Project>
       <Name>Project Eternity Constants</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Core Timelines\Project Eternity Core Timelines.csproj">
+      <Project>{247d5be1-7562-4e11-9308-7c69d19276bc}</Project>
+      <Name>Project Eternity Core Timelines</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">

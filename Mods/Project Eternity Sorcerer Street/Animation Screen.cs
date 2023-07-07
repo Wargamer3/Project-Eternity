@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public enum QuoteTypes { BattleStart, Dodge, Damaged, Destroyed, SupportAttack, SupportDefend };
 
-        private bool HorizontalMirror;
+        public bool HorizontalMirror;
         private SpriteFont fntFinlanderFont;
         private Texture2D sprEnemyCard;
 
@@ -39,6 +39,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (Timeline.Value is AnimationOriginTimeline)
                     continue;
 
+                DicTimeline.Add(Timeline.Key, Timeline.Value);
+            }
+
+            foreach (KeyValuePair<string, Timeline> Timeline in LoadTimelines("Sorcerer Street", this, Content))
+            {
                 DicTimeline.Add(Timeline.Key, Timeline.Value);
             }
 
@@ -80,7 +85,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 #endregion
             }
         }
-        
+
+        public void DamageEnemyCreature(int Damage)
+        {
+        }
+
         public override void BeginDraw(CustomSpriteBatch g)
         {
             for (int L = 0; L < ListAnimationLayer.Count; L++)
