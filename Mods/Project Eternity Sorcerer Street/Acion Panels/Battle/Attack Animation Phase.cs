@@ -4,6 +4,7 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.GameScreens.AnimationScreen;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetBattleContext;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -11,6 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "BattleAttackAnimationPhase";
 
+        private BattleCreatureInfo Defender;
         private string AttackAnimationPath;
         private bool LeftSideAttackRightSide;
 
@@ -22,10 +24,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.Map = Map;
         }
 
-        public ActionPanelBattleAttackAnimationPhase(SorcererStreetMap Map, string AttackAnimationPath, bool LeftSideAttackRightSide)
+        public ActionPanelBattleAttackAnimationPhase(SorcererStreetMap Map, BattleCreatureInfo Defender, string AttackAnimationPath, bool LeftSideAttackRightSide)
             : base(Map, PanelName)
         {
             this.Map = Map;
+            this.Defender = Defender;
             this.AttackAnimationPath = AttackAnimationPath;
             this.LeftSideAttackRightSide = LeftSideAttackRightSide;
 
@@ -37,37 +40,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AttackAnimation = InitAnimation(LeftSideAttackRightSide, AttackAnimationPath, Map.GlobalSorcererStreetBattleContext, Map.Content);
+            AttackAnimation = InitAnimation(LeftSideAttackRightSide, AttackAnimationPath, Defender, Map.Content);
         }
 
-        public static AnimationScreen InitAnimation(bool LeftSideAttackRightSide, string AttackAnimationPath, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, ContentManager Content)
+        public static AnimationScreen InitAnimation(bool DefenderOnTheRight, string AttackAnimationPath, BattleCreatureInfo Defender, ContentManager Content)
         {
             AnimationScreen AttackAnimation;
 
-            if (LeftSideAttackRightSide)
+            AttackAnimation = new AnimationScreen(AttackAnimationPath, Defender, false);
+            if (Content != null)
             {
-                AttackAnimation = new AnimationScreen(AttackAnimationPath, GlobalSorcererStreetBattleContext.Defender.Creature.sprCard, false);
-                if (Content != null)
-                {
-                    AttackAnimation.Load();
-                    AttackAnimation.UpdateKeyFrame(0);
-                }
-                GlobalSorcererStreetBattleContext.Defender.Animation = new SimpleAnimation("", "", AttackAnimation);
-                GlobalSorcererStreetBattleContext.Defender.Animation.Position = new Vector2(Constants.Width - GlobalSorcererStreetBattleContext.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-                GlobalSorcererStreetBattleContext.Defender.Animation.Scale = new Vector2(1f);
+                AttackAnimation.Load();
+                AttackAnimation.UpdateKeyFrame(0);
+            }
+
+            Defender.Animation = new SimpleAnimation("", "", AttackAnimation);
+            Defender.Animation.Scale = new Vector2(1f);
+
+            if (DefenderOnTheRight)
+            {
+                Defender.Animation.Position = new Vector2(Constants.Width - Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
             }
             else
             {
-                AttackAnimation = new AnimationScreen(AttackAnimationPath, GlobalSorcererStreetBattleContext.Invader.Creature.sprCard, false);
-                if (Content != null)
-                {
-                    AttackAnimation.Load();
-                    AttackAnimation.UpdateKeyFrame(0);
-                }
-
-                GlobalSorcererStreetBattleContext.Invader.Animation = new SimpleAnimation("", "", AttackAnimation);
-                GlobalSorcererStreetBattleContext.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-                GlobalSorcererStreetBattleContext.Invader.Animation.Scale = new Vector2(1f);
+                Defender.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
             }
 
             return AttackAnimation;
@@ -75,32 +71,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (!UpdateAnimations(gameTime, Map.GlobalSorcererStreetBattleContext, AttackAnimation))
-            {
-                FinishPhase();
-            }
-        }
-
-        public static bool UpdateAnimations(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext, AnimationScreen AttackAnimation)
-        {
-            if (!CanUpdate(gameTime, GlobalSorcererStreetBattleContext))
-                return true;
-
-            if (GlobalSorcererStreetBattleContext.Defender.FinalHP > GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP)
-            {
-                --GlobalSorcererStreetBattleContext.Defender.FinalHP;
-            }
-            if (GlobalSorcererStreetBattleContext.Invader.FinalHP > GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP)
-            {
-                --GlobalSorcererStreetBattleContext.Invader.FinalHP;
-            }
+            if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
+                return;
 
             if (AttackAnimation.HasLooped)
             {
-                return false;
-            }
+                if (Defender.FinalHP < Defender.Creature.CurrentHP)
+                {
+                    Defender.Creature.CurrentHP = Defender.FinalHP;
+                }
 
-            return true;
+                FinishPhase();
+            }
         }
 
         public void FinishPhase()

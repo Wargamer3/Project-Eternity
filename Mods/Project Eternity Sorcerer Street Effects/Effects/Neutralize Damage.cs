@@ -61,9 +61,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.Invader.Creature.BattleAbilities.ArrayNeutralizeType = ArrayNeutralizeType;
-            Params.GlobalContext.Invader.Creature.BattleAbilities.NeutralizeSignOperator = _SignOperator;
-            Params.GlobalContext.Invader.Creature.BattleAbilities.NeutralizeValue = _Value;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ArrayNeutralizeType = ArrayNeutralizeType;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.NeutralizeSignOperator = _SignOperator;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.NeutralizeValue = Params.ActiveParser.Evaluate(_Value);
 
             return "Neutralize " + _Value + "% Damage";
         }
@@ -72,11 +72,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             NeutralizeDamageEffect NewEffect = new NeutralizeDamageEffect(Params);
 
+            NewEffect.ArrayNeutralizeType = ArrayNeutralizeType;
+            NewEffect._SignOperator = _SignOperator;
+            NewEffect._Value = _Value;
+
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            NeutralizeDamageEffect NewEffect = (NeutralizeDamageEffect)Copy;
+
+            ArrayNeutralizeType = NewEffect.ArrayNeutralizeType;
+            _SignOperator = NewEffect._SignOperator;
+            _Value = NewEffect._Value;
         }
 
         [CategoryAttribute("Effects"),

@@ -90,7 +90,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (Text.ToLower())
                 {
                     case "damage":
-                        return 222;
+                        return Owner.Defender.DamageReceived;
                 }
             }
 

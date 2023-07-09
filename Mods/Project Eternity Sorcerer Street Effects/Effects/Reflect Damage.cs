@@ -50,9 +50,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.Invader.Creature.BattleAbilities.ReflectType = _ReflectType;
-            Params.GlobalContext.Invader.Creature.BattleAbilities.ReflectSignOperator = _SignOperator;
-            Params.GlobalContext.Invader.Creature.BattleAbilities.ReflectValue = _Value;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ReflectType = _ReflectType;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ReflectSignOperator = _SignOperator;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ReflectValue = _Value;
 
             return "Neutralize " + _Value + "% Damage";
         }
@@ -61,11 +61,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ReflectDamageEffect NewEffect = new ReflectDamageEffect(Params);
 
+            NewEffect._ReflectType = _ReflectType;
+            NewEffect._SignOperator = _SignOperator;
+            NewEffect._Value = _Value;
+
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            ReflectDamageEffect NewEffect = (ReflectDamageEffect)Copy;
+
+            _ReflectType = NewEffect._ReflectType;
+            _SignOperator = NewEffect._SignOperator;
+            _Value = NewEffect._Value;
         }
 
         [CategoryAttribute("Effects"),

@@ -14,7 +14,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static string RequirementName = "Sorcerer Street Item Phase";
 
-        private enum AnimationPhases { InvaderIntro, InvaderActivation, DefenderIntro, DefenderActivation }
+        private enum AnimationPhases { InvaderIntro, InvaderActivation, DefenderIntro, DefenderActivation, Finished }
 
         private const float ItemCardScale = 0.4f;
 
@@ -31,6 +31,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
+            AnimationPhase = AnimationPhases.Finished;
+            ItemAnimationTime = 9999;
+
             if (!InitAnimations(Map.GlobalSorcererStreetBattleContext))
             {
                 ContinueBattlePhase();
@@ -39,16 +42,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static bool InitAnimations(SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            ItemAnimationTime = 0;
+            AnimationPhase = AnimationPhases.Finished;
+            ItemAnimationTime = 9999;
+
             GlobalSorcererStreetBattleContext.ActivatedEffect = null;
 
             if (GlobalSorcererStreetBattleContext.Invader.Item != null && GlobalSorcererStreetBattleContext.CanActivateSkillItem(GlobalSorcererStreetBattleContext.Invader, GlobalSorcererStreetBattleContext.Defender, RequirementName))
             {
+                ItemAnimationTime = 0;
                 AnimationPhase = AnimationPhases.InvaderIntro;
                 return true;
             }
             else if (GlobalSorcererStreetBattleContext.Defender.Item != null && GlobalSorcererStreetBattleContext.CanActivateSkillItem(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, RequirementName))
             {
+                ItemAnimationTime = 0;
                 AnimationPhase = AnimationPhases.DefenderIntro;
                 return true;
             }
@@ -58,6 +65,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
+            if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
+                return;
+
             if (!UpdateAnimations(gameTime, Map.GlobalSorcererStreetBattleContext))
             {
                 ContinueBattlePhase();
@@ -66,9 +76,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public static bool UpdateAnimations(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
-            if (!CanUpdate(gameTime, GlobalSorcererStreetBattleContext))
-                return true;
-
             ItemAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
             if (AnimationPhase == AnimationPhases.InvaderIntro || AnimationPhase == AnimationPhases.DefenderIntro)
             {
@@ -111,6 +118,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     return false;
                 }
+            }
+            else if (AnimationPhase == AnimationPhases.Finished)
+            {
+                return false;
             }
 
             return true;

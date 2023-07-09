@@ -24,10 +24,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void DoUpdate(GameTime gameTime)
         {
-            CanUpdate(gameTime, Map.GlobalSorcererStreetBattleContext);
+            HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext);
         }
 
-        public static bool CanUpdate(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
+        public static bool HasFinishedUpdatingBars(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
         {
             if (InvaderHPBar > GlobalSorcererStreetBattleContext.Invader.FinalHP)
             {
@@ -71,6 +71,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 return false;
             }
 
+            return true;
+        }
+
+        public static void UpdateCards(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
+        {
             if (GlobalSorcererStreetBattleContext.Invader.Animation != null)
             {
                 GlobalSorcererStreetBattleContext.Invader.Animation.Update(gameTime);
@@ -79,8 +84,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 GlobalSorcererStreetBattleContext.Defender.Animation.Update(gameTime);
             }
-
-            return true;
         }
 
         public static void ReadPlayerInfo(ByteReader BR, SorcererStreetMap Map)

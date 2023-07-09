@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
@@ -10,7 +11,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "BattleAttackPhase";
 
-        private enum AttackSequences { FirstAttack, SecondAttack, End };
+        private enum AttackSequences { ProcessFirstAttack, ExecuteFirstAttack, ExecuteFirstReflect, ProcessSecondAttack, ExecuteSecondAttack, End };
         public enum AttackTypes { NonScrolls, Scrolls, Penetrate, All, Neutral, Fire, Water, Earth, Air }
 
         /*
@@ -38,6 +39,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private AttackSequences AttackSequence;
 
         public BattleCreatureInfo FirstAttacker;
+        public int FirstAttackDamage;
+        public int FirstReflectDamage;
         public BattleCreatureInfo SecondAttacker;
 
         public ActionPanelBattleAttackPhase(SorcererStreetMap Map)
@@ -48,22 +51,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AttackSequence = AttackSequences.FirstAttack;
+            AttackSequence = AttackSequences.ProcessFirstAttack;
             DetermineAttackOrder(Map.GlobalSorcererStreetBattleContext, out FirstAttacker, out SecondAttacker);
         }
 
         public override void DoUpdate(GameTime gameTime)
         {
-            if (!CanUpdate(gameTime, Map.GlobalSorcererStreetBattleContext))
+            if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
                 return;
 
-            if (AttackSequence == AttackSequences.FirstAttack)
+            if (AttackSequence == AttackSequences.ProcessFirstAttack)
             {
-                ExecuteFirstAttack();
+                ProcessFirstAttack();
             }
-            else if (AttackSequence == AttackSequences.SecondAttack)
+            else if (AttackSequence == AttackSequences.ExecuteFirstAttack)
             {
-                ExecuteSecondAttack();
+                ExecuteFirstAttack(FirstAttackDamage);
+            }
+            else if (AttackSequence == AttackSequences.ExecuteFirstReflect)
+            {
+                ExecuteFirstAttack(FirstAttackDamage);
+            }
+            else if (AttackSequence == AttackSequences.ProcessSecondAttack)
+            {
+                ProcessSecondAttack();
                 AttackSequence = AttackSequences.End;
             }
             else
@@ -130,87 +141,149 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         /// 
         /// </summary>
         /// <param name="GlobalSorcererStreetBattleContext"></param>
-        /// <param name="FirstAttacker"></param>
-        /// <param name="SecondAttacker"></param>
+        /// <param name="Attacker"></param>
+        /// <param name="Defender"></param>
         /// <returns>True if defender dies</returns>
-        public static bool ExecutetAttack(SorcererStreetBattleContext GlobalSorcererStreetBattleContext, BattleCreatureInfo FirstAttacker, BattleCreatureInfo SecondAttacker)
+        public static int ProcessAttack(SorcererStreetBattleContext GlobalSorcererStreetBattleContext, BattleCreatureInfo Attacker, BattleCreatureInfo Defender, out int ReflectedDamage)
         {
-            int FinalST;
-            int FinalHP;
+            ReflectedDamage = 0;
+            int FinalDamage = GlobalSorcererStreetBattleContext.SelfCreature.FinalST;
 
-            if (SecondAttacker == GlobalSorcererStreetBattleContext.Defender)
+            GlobalSorcererStreetBattleContext.ActivateSkill(Attacker, Defender, BeforeAttackRequirement);
+            GlobalSorcererStreetBattleContext.ActivateSkill(Defender, Attacker, BeforeDefenseRequirement);
+
+            if (Defender.Creature.BattleAbilities.NeutralizeValue != null)
             {
-                FinalST = GlobalSorcererStreetBattleContext.Invader.FinalST;
-                FinalHP = GlobalSorcererStreetBattleContext.Defender.FinalHP;
+                bool CanNeutralize = false;
+                foreach (AttackTypes ActiveType in Defender.Creature.BattleAbilities.ArrayNeutralizeType)
+                {
+                    if (ActiveType == AttackTypes.All
+                        || (ActiveType == AttackTypes.Air && Attacker.Creature.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                        || (ActiveType == AttackTypes.Fire && Attacker.Creature.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                        || (ActiveType == AttackTypes.Earth && Attacker.Creature.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                        || (ActiveType == AttackTypes.Water && Attacker.Creature.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Water)))
+                    {
+                        CanNeutralize = true;
+                    }
+                }
 
-                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, BeforeAttackRequirement);
-                GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BeforeAttackRequirement);
+                if (CanNeutralize)
+                {
+                    if (Defender.Creature.BattleAbilities.NeutralizeSignOperator == Core.Operators.NumberTypes.Relative)
+                    {
+                        FinalDamage -= (int)(FinalDamage * (double.Parse(Defender.Creature.BattleAbilities.NeutralizeValue) / 100d));
+                    }
+                }
             }
-            else
+
+            if (Defender.Creature.BattleAbilities.ReflectValue != null)
             {
-                FinalST = GlobalSorcererStreetBattleContext.Defender.FinalST;
-                FinalHP = GlobalSorcererStreetBattleContext.Invader.FinalHP;
+                bool CanReflect = false;
+                AttackTypes ActiveType = Defender.Creature.BattleAbilities.ReflectType;
+                {
+                    if (ActiveType == AttackTypes.All
+                        || (ActiveType == AttackTypes.Air && Attacker.Creature.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                        || (ActiveType == AttackTypes.Fire && Attacker.Creature.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                        || (ActiveType == AttackTypes.Earth && Attacker.Creature.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                        || (ActiveType == AttackTypes.Water && Attacker.Creature.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Water)))
+                    {
+                        CanReflect = true;
+                    }
+                }
 
-                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, BeforeDefenseRequirement);
-                GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BeforeDefenseRequirement);
+                if (CanReflect)
+                {
+                    if (Defender.Creature.BattleAbilities.ReflectSignOperator == Core.Operators.NumberTypes.Relative)
+                    {
+                        ReflectedDamage = FinalDamage;
+                        FinalDamage = (int)(FinalDamage * (double.Parse(Defender.Creature.BattleAbilities.ReflectValue) / 100d));
+                        ReflectedDamage -= FinalDamage;
+                    }
+                }
             }
 
-            if (FinalST > 0)
+            if (FinalDamage > 0)
             {
-                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, AttackBonusRequirement);
+                Attacker.DamageReceived = ReflectedDamage;
+                Defender.DamageReceived = FinalDamage;
+                GlobalSorcererStreetBattleContext.ActivateSkill(Attacker, Defender, AttackBonusRequirement);
             }
 
-            FinalHP = Math.Max(0, FinalHP - FinalST);
-            SecondAttacker.FinalHP = SecondAttacker.Creature.CurrentHP = Math.Min(SecondAttacker.FinalHP, FinalHP);
-
-            if (SecondAttacker.Creature.CurrentHP > 0)
-            {
-                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, AfterEnemySurvivedRequirement);
-                GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BattleEndRequirement);
-                return false;
-            }
-            else
-            {
-                GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, UponVictoryRequirement);
-                GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, UponDefeatRequirement);
-                return true;
-
-            }
+            return FinalDamage;
         }
 
-        public void ExecuteFirstAttack()
+        public void ProcessFirstAttack()
         {
             ExecutePreAttack(FirstAttacker, SecondAttacker);
 
-            if (ExecutetAttack(Map.GlobalSorcererStreetBattleContext, FirstAttacker, SecondAttacker))
+            FirstAttackDamage = ProcessAttack(Map.GlobalSorcererStreetBattleContext, FirstAttacker, SecondAttacker, out FirstReflectDamage);
+            if (FirstAttackDamage < 0)
             {
+                FirstAttackDamage = -FirstAttackDamage;
+                AttackSequence = AttackSequences.ExecuteFirstReflect;
+            }
+            else
+            {
+                AttackSequence = AttackSequences.ExecuteFirstAttack;
+            }
+        }
+
+        public void ExecuteFirstAttack(int Damage)
+        {
+            SecondAttacker.FinalHP = SecondAttacker.Creature.CurrentHP = Math.Max(0, SecondAttacker.FinalHP - Damage);
+
+            if (SecondAttacker.Creature.CurrentHP > 0)
+            {
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, AfterEnemySurvivedRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BattleEndRequirement);
                 AttackSequence = AttackSequences.End;
             }
             else
             {
-                AttackSequence = AttackSequences.SecondAttack;
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, UponVictoryRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, UponDefeatRequirement);
+                AttackSequence = AttackSequences.ProcessSecondAttack;
             }
 
             if (PlayAnimations)
             {
                 foreach (string ActiveAnimationPath in FirstAttacker.GetAttackAnimationPaths())
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, ActiveAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, SecondAttacker, ActiveAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
                 }
             }
         }
 
-        public void ExecuteSecondAttack()
+        public void ProcessSecondAttack()
         {
             ExecutePreAttack(SecondAttacker, FirstAttacker);
 
-            ExecutetAttack(Map.GlobalSorcererStreetBattleContext, SecondAttacker, FirstAttacker);
+            FirstAttackDamage = ProcessAttack(Map.GlobalSorcererStreetBattleContext, SecondAttacker, FirstAttacker, out FirstReflectDamage);
+            AttackSequence = AttackSequences.ExecuteFirstAttack;
+        }
+
+        public void ExecuteSecondAttack(int Damage)
+        {
+            FirstAttacker.FinalHP = FirstAttacker.Creature.CurrentHP = Math.Max(0, FirstAttacker.FinalHP - Damage);
+
+            if (FirstAttacker.Creature.CurrentHP > 0)
+            {
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, AfterEnemySurvivedRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, BattleEndRequirement);
+            }
+            else
+            {
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, UponVictoryRequirement);
+                Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, UponDefeatRequirement);
+            }
+
+            AttackSequence = AttackSequences.End;
 
             if (PlayAnimations)
             {
                 foreach (string ActiveAnimationPath in SecondAttacker.GetAttackAnimationPaths())
                 {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, ActiveAnimationPath, SecondAttacker != Map.GlobalSorcererStreetBattleContext.Defender));
+                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, FirstAttacker, ActiveAnimationPath, FirstAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
                 }
             }
         }
@@ -222,7 +295,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void DoRead(ByteReader BR)
         {
             ReadPlayerInfo(BR, Map);
-            AttackSequence = AttackSequences.FirstAttack;
+            AttackSequence = AttackSequences.ProcessFirstAttack;
             DetermineAttackOrder(Map.GlobalSorcererStreetBattleContext, out FirstAttacker, out SecondAttacker);
         }
 

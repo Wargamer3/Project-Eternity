@@ -5,35 +5,31 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.AnimationScreen;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetBattleContext;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class AnimationScreen : AnimationLooped
     {
-        public enum QuoteTypes { BattleStart, Dodge, Damaged, Destroyed, SupportAttack, SupportDefend };
-
         public bool HorizontalMirror;
-        private SpriteFont fntFinlanderFont;
-        private Texture2D sprEnemyCard;
+        public BattleCreatureInfo Defender;
+        public int OriginalHP;
 
-        public AnimationScreen(string AnimationPath, Texture2D sprEnemyCard, bool HorizontalMirror)
+        public AnimationScreen(string AnimationPath, BattleCreatureInfo Defender, bool HorizontalMirror)
             : base(AnimationPath)
         {
             RequireFocus = true;
             RequireDrawFocus = true;
             IsOnTop = false;
 
-            this.sprEnemyCard = sprEnemyCard;
+            this.Defender = Defender;
             this.HorizontalMirror = HorizontalMirror;
+
+            OriginalHP = Defender.FinalHP;
         }
 
         public override void Load()
         {
-            if (Content != null)
-            {
-                fntFinlanderFont = Content.Load<SpriteFont>("Fonts/Finlander Font");
-            }
-
             foreach (KeyValuePair<string, Timeline> Timeline in LoadTimelines(typeof(CoreTimeline)))
             {
                 if (Timeline.Value is AnimationOriginTimeline)
@@ -66,10 +62,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         switch (ActiveMarkerEvent.MarkerType)
                         {
                             case "Card":
-                                ActiveMarkerEvent.Sprite = sprEnemyCard;
+                                ActiveMarkerEvent.Sprite = Defender.Creature.sprCard;
                                 break;
                         }
-                        ActiveMarkerEvent.Sprite = sprEnemyCard;
+                        ActiveMarkerEvent.Sprite = Defender.Creature.sprCard;
                     }
                 }
 
@@ -88,6 +84,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void DamageEnemyCreature(int Damage)
         {
+            Defender.FinalHP -= Damage;
         }
 
         public override void BeginDraw(CustomSpriteBatch g)

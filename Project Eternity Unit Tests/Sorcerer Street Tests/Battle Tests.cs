@@ -73,12 +73,12 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             Assert.AreEqual(DummyInvaderCard, BattleAttackPhase.FirstAttacker);
             Assert.AreEqual(DummyDefenderCard, BattleAttackPhase.SecondAttacker);
 
-            BattleAttackPhase.ExecuteFirstAttack();
+            BattleAttackPhase.ProcessFirstAttack();
 
             Assert.AreEqual(40, BattleAttackPhase.FirstAttacker.Creature.CurrentHP);
             Assert.AreEqual(20, BattleAttackPhase.SecondAttacker.Creature.CurrentHP);
 
-            BattleAttackPhase.ExecuteSecondAttack();
+            BattleAttackPhase.ProcessSecondAttack();
 
             Assert.AreEqual(20, BattleAttackPhase.FirstAttacker.Creature.CurrentHP);
             Assert.AreEqual(20, BattleAttackPhase.SecondAttacker.Creature.CurrentHP);
