@@ -13,5 +13,10 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             : base(BR, TimelineType)
         {
         }
+
+        public CoreTimeline(CoreTimeline Clone)
+            : base(Clone)
+        {
+        }
     }
 }

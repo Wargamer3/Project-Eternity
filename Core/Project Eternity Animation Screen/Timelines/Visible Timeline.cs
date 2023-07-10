@@ -42,6 +42,17 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             GroupIndex = -1;
         }
 
+        public VisibleTimeline(VisibleTimeline Clone)
+            : this(Clone._TimelineEventType, Clone._TimelineEventType)
+        {
+            _SpawnFrame = Clone._SpawnFrame;
+            _DeathFrame = Clone._DeathFrame;
+
+            DicAnimationKeyFrame = Clone.DicAnimationKeyFrame;
+            CanDelete = Clone.CanDelete;
+            GroupIndex = Clone.GroupIndex;
+        }
+
         public VisibleTimeline(BinaryReader BR, string TimelineEventType)
             : base(BR, TimelineEventType)
         {

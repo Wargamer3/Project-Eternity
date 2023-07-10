@@ -128,6 +128,7 @@
     <Compile Include="Battle Behaviors.cs" />
     <Compile Include="Battle Formulas.cs" />
     <Compile Include="Battle Previewer.cs" />
+    <Compile Include="Animation Damage Timeline.cs" />
     <Compile Include="Deathmatch Mutator.cs" />
     <Compile Include="Effects\Attack PER Context.cs" />
     <Compile Include="Effects\Attack PER Params.cs" />

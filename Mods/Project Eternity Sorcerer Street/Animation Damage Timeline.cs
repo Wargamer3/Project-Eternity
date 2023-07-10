@@ -5,14 +5,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.GameScreens.AnimationScreen;
-using ProjectEternity.GameScreens.DeathmatchMapScreen;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetDamageTimeline : DamageTimeline
     {
-        private const string TimelineType = "Sorcerer Street Damage";
-
         protected override bool IsFlipped { get { return Owner != null && Owner.HorizontalMirror; } }
 
         private AnimationScreen Owner;
@@ -23,7 +20,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         private SorcererStreetDamageTimeline(AnimationScreen Owner, string Name, SpriteFont fntDamage)
-            : base(TimelineType, Name, fntDamage)
+            : base(Name, fntDamage)
         {
             this.Owner = Owner;
         }
@@ -34,7 +31,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         private SorcererStreetDamageTimeline(BinaryReader BR, ContentManager Content)
-            : base(TimelineType, BR, Content)
+            : base(BR, Content)
         {
         }
 

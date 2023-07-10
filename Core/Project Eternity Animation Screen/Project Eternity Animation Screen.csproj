@@ -114,6 +114,7 @@
     <Compile Include="Selectors.cs" />
     <Compile Include="Timelines\Animation Origin Timeline.cs" />
     <Compile Include="Timelines\Core Timeline.cs" />
+    <Compile Include="Timelines\Damage Timeline.cs" />
     <Compile Include="Timelines\Group Timeline.cs" />
     <Compile Include="Timelines\Marker Timeline.cs" />
     <Compile Include="Timelines\Polygon Cutter Timeline.cs" />

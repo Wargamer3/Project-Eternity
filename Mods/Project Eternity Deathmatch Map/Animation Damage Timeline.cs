@@ -10,8 +10,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 {
     public class DeathmatchDamageTimeline : DamageTimeline
     {
-        private const string TimelineType = "Deathmatch Damage";
-
         protected override bool IsFlipped { get { return Owner != null && Owner.IsLeftAttacking; } }
 
         private AnimationScreen Owner;
@@ -22,7 +20,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         private DeathmatchDamageTimeline(AnimationScreen Owner, string Name, SpriteFont fntDamage)
-            : base(TimelineType, Name, fntDamage)
+            : base(Name, fntDamage)
         {
             this.Owner = Owner;
         }
@@ -33,7 +31,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         }
 
         private DeathmatchDamageTimeline(BinaryReader BR, ContentManager Content)
-            : base(TimelineType, BR, Content)
+            : base(BR, Content)
         {
         }
 

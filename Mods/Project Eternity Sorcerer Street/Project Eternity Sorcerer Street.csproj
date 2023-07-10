@@ -44,6 +44,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acion Panels\Action Menu.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Acion Panels\Options\ViewMap.cs" />
     <Compile Include="Acion Panels\Options\End Player Phase.cs" />
     <Compile Include="Animation Screen.cs" />
+    <Compile Include="Animation Damage Timeline.cs" />
     <Compile Include="Lobby\Battle Tester.cs" />
     <Compile Include="Menu Helper.cs" />
     <Compile Include="Camera 3D.cs" />

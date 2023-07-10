@@ -38,10 +38,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 DicTimeline.Add(Timeline.Key, Timeline.Value);
             }
 
-            foreach (KeyValuePair<string, Timeline> Timeline in LoadTimelines("Sorcerer Street", this, Content))
+            DicTimeline.Add("Damage", new SorcererStreetDamageTimeline(this, Content));
+
+            /*foreach (KeyValuePair<string, Timeline> Timeline in LoadTimelines("Sorcerer Street", this, Content))
             {
                 DicTimeline.Add(Timeline.Key, Timeline.Value);
-            }
+            }*/
 
             base.Load();
 
@@ -51,21 +53,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 #region Markers
 
-                foreach (List<Timeline> ListActiveEvent in ListAnimationLayer[L].DicTimelineEvent.Values)
+                foreach (List<Timeline> ListActiveTimeline in ListAnimationLayer[L].DicTimelineEvent.Values)
                 {
-                    foreach (Timeline ActiveTimeline in ListActiveEvent)
+                    for (int T = 0; T < ListActiveTimeline.Count; T++)
                     {
+                        Timeline ActiveTimeline = ListActiveTimeline[T];
                         MarkerTimeline ActiveMarkerEvent = ActiveTimeline as MarkerTimeline;
-                        if (ActiveMarkerEvent == null)
-                            continue;
-                        
-                        switch (ActiveMarkerEvent.MarkerType)
+
+                        if (ActiveMarkerEvent != null)
                         {
-                            case "Card":
-                                ActiveMarkerEvent.Sprite = Defender.Creature.sprCard;
-                                break;
+                            switch (ActiveMarkerEvent.MarkerType)
+                            {
+                                case "Card":
+                                    ActiveMarkerEvent.Sprite = Defender.Creature.sprCard;
+                                    break;
+                            }
+                            ActiveMarkerEvent.Sprite = Defender.Creature.sprCard;
                         }
-                        ActiveMarkerEvent.Sprite = Defender.Creature.sprCard;
                     }
                 }
 

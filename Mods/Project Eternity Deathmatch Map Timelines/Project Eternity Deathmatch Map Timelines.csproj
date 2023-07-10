@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="UI Timeline.cs" />
     <Compile Include="EN Timeline.cs" />
-    <Compile Include="Damage Timeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

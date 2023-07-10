@@ -254,6 +254,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DicTimeline.Add(Timeline.Key, Timeline.Value);
             }
 
+            DicTimeline.Add("Damage", new DeathmatchDamageTimeline(this, Content));
+
             base.Load();
 
             InitRessources();

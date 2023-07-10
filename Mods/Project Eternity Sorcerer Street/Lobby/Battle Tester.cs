@@ -607,7 +607,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         #region Phases UI
 
-        private void LandModifierPhaseSelection()
+        private void IntroPhaseSelection()
         {
             Context.Invader.Creature.InitBattleBonuses();
             Context.Defender.Creature.InitBattleBonuses();
@@ -622,11 +622,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.Defender.FinalHP = int.Parse(DefenderHPInput.Text);
             Context.Defender.Creature.CurrentHP = Context.Defender.FinalHP;
             Context.Defender.FinalST = int.Parse(DefenderSTInput.Text);
-            Context.Defender.FinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
 
             Context.Invader.FinalHP = int.Parse(InvaderMaxHPInput.Text);
             Context.Invader.Creature.CurrentHP = Context.Invader.FinalHP;
             Context.Invader.FinalST = int.Parse(InvaderSTInput.Text);
+
+            sndButtonClick.Play();
+        }
+
+        private void LandModifierPhaseSelection()
+        {
+            IntroPhaseSelection();
+
+            Context.Defender.FinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
+
             Context.Invader.FinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
 
             sndButtonClick.Play();
