@@ -141,7 +141,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
 
                 if (ActiveComboRotationTypes == ComboRotationTypes.RotateAroundWeaponSlot)
                 {
-                    CurrentAnimation.TransformationMatrix =
+                    CurrentAnimation.TransformationMatrix2D =
                         Matrix.CreateTranslation(-TranslationX, -TranslationY, 0)
                         * Matrix.CreateRotationZ(Angle)
                         * Matrix.CreateTranslation(WeaponSlotTimeline.Position.X,
@@ -159,7 +159,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                     Vector2 RealGunNozzlePosition = Owner.AnimationOrigin.Position
                         + new Vector2((float)(LenghtDirX), (float)(LenghtDirY));
 
-                    CurrentAnimation.TransformationMatrix =
+                    CurrentAnimation.TransformationMatrix2D =
                         Matrix.CreateTranslation(-TranslationX, -TranslationY, 0)
                         * Matrix.CreateRotationZ(Angle)
                         * Matrix.CreateTranslation(RealGunNozzlePosition.X,
@@ -167,7 +167,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
                 }
                 else
                 {
-                    CurrentAnimation.TransformationMatrix =
+                    CurrentAnimation.TransformationMatrix2D =
                         Matrix.CreateTranslation(-TranslationX, -TranslationY, 0)
                         * Matrix.CreateRotationZ(Angle)
                         * Matrix.CreateTranslation(WeaponSlotTimeline.Position.X,
@@ -176,7 +176,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
             else
             {
-                CurrentAnimation.TransformationMatrix =
+                CurrentAnimation.TransformationMatrix2D =
                     Matrix.CreateScale(0f);
             }
         }

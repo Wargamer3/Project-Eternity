@@ -338,7 +338,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public override void BeginDraw(CustomSpriteBatch g)
         {
             g.End();
-            Matrix OriginalMatrix = TransformationMatrix;
+            Matrix OriginalMatrix = TransformationMatrix2D;
 
             while (ListRenderTarget.Count < ListAnimationLayer.BasicLayerCount)
             {
@@ -366,7 +366,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                 for (int A = 0; A < ListActivePartialAnimation.Count; A++)
                 {
-                    TransformationMatrix = ListActivePartialAnimation[A].TransformationMatrix;
+                    TransformationMatrix2D = ListActivePartialAnimation[A].TransformationMatrix2D;
                     
                     if (L < ListActivePartialAnimation[A].ListAnimationLayer.BasicLayerCount)
                     {
@@ -377,7 +377,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             for (int A = 0; A < ListActivePartialAnimation.Count; A++)
             {
-                TransformationMatrix = ListActivePartialAnimation[A].TransformationMatrix;
+                TransformationMatrix2D = ListActivePartialAnimation[A].TransformationMatrix2D;
 
                 for (int L = ListAnimationLayer.BasicLayerCount; L < ListActivePartialAnimation[A].ListAnimationLayer.BasicLayerCount; L++)
                 {
@@ -385,7 +385,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 }
             }
 
-            TransformationMatrix = OriginalMatrix;
+            TransformationMatrix2D = OriginalMatrix;
 
             g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
         }

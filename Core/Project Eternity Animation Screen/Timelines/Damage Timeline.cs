@@ -84,19 +84,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             Origin = new Point(0, 0);
         }
 
-        protected DamageTimeline(DamageTimeline Clone)
-            : base(Clone)
-        {
-            fntDamage = Clone.fntDamage;
-            renderTarget = Clone.renderTarget;
-            DamageOld = Clone.DamageOld;
-            DamageNext = Clone.DamageNext;
-            DamageCurrent = Clone.DamageCurrent;
-            DamageChangeValue = Clone.DamageChangeValue;
-            RoundTrip = Clone.RoundTrip;
-            TextSize = Clone.TextSize;
-        }
-
         private DamageTimeline(ContentManager Content)
             : this("New Damage", Content.Load<SpriteFont>("Fonts/Battle Damage"))
         {

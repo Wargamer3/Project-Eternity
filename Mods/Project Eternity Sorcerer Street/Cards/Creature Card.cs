@@ -36,6 +36,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public float TollMultiplier = 1;
 
         public string AttackAnimationPath;
+        public string IdleAnimationPath = "Default";
+        public string MoveInAnimationPath = "Move In";
+        public string AttackStartAnimationPath = "Start";
+        public string AttackEndAnimationPath = "End Hit";
+        public bool UseCardAnimation = true;
         public AnimatedModel Map3DModel;
 
         public CardAbilities BattleAbilities;

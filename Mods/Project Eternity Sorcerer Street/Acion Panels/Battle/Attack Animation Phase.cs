@@ -16,7 +16,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private string AttackAnimationPath;
         private bool LeftSideAttackRightSide;
 
-        private AnimationScreen AttackAnimation;
+        private SimpleAnimation AttackAnimation;
 
         public ActionPanelBattleAttackAnimationPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
@@ -40,33 +40,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnSelect()
         {
-            AttackAnimation = InitAnimation(LeftSideAttackRightSide, AttackAnimationPath, Defender, Map.Content);
+            AttackAnimation = InitAnimation(LeftSideAttackRightSide, AttackAnimationPath, Defender, Map.Content != null);
         }
 
-        public static AnimationScreen InitAnimation(bool DefenderOnTheRight, string AttackAnimationPath, BattleCreatureInfo Defender, ContentManager Content)
+        public static SimpleAnimation InitAnimation(bool AnimationOnRight, string AttackAnimationPath, BattleCreatureInfo User, bool PreloadAnimation)
         {
             AnimationScreen AttackAnimation;
 
-            AttackAnimation = new AnimationScreen(AttackAnimationPath, Defender, false);
-            if (Content != null)
+            AttackAnimation = new AnimationScreen(AttackAnimationPath, User, false);
+            if (!User.Creature.UseCardAnimation)
+            {
+                AttackAnimation.HorizontalMirror = AnimationOnRight;
+            }
+            if (PreloadAnimation)
             {
                 AttackAnimation.Load();
                 AttackAnimation.UpdateKeyFrame(0);
             }
+            SimpleAnimation NewAnimation = new SimpleAnimation("", "", AttackAnimation);
+            User.Animation = NewAnimation;
+            User.Animation.Scale = new Vector2(1f);
 
-            Defender.Animation = new SimpleAnimation("", "", AttackAnimation);
-            Defender.Animation.Scale = new Vector2(1f);
-
-            if (DefenderOnTheRight)
+            if (AnimationOnRight)
             {
-                Defender.Animation.Position = new Vector2(Constants.Width - Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                User.Animation.Position = new Vector2(Constants.Width - User.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
             }
             else
             {
-                Defender.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                User.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
             }
 
-            return AttackAnimation;
+            return NewAnimation;
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -74,7 +78,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
                 return;
 
-            if (AttackAnimation.HasLooped)
+            if (AttackAnimation.HasEnded)
             {
                 if (Defender.FinalHP < Defender.Creature.CurrentHP)
                 {

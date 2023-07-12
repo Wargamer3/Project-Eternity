@@ -231,7 +231,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             if (IsAnimated)
             {
-                ActiveAnimation.TransformationMatrix = Matrix.CreateTranslation(-ActiveAnimation.AnimationOrigin.Position.X, -ActiveAnimation.AnimationOrigin.Position.Y, 0)
+                ActiveAnimation.TransformationMatrix2D = Matrix.CreateTranslation(-ActiveAnimation.AnimationOrigin.Position.X, -ActiveAnimation.AnimationOrigin.Position.Y, 0)
                                                         * Matrix.CreateRotationZ(Angle)
                                                         * Matrix.CreateScale(Scale.X, Scale.Y, 1f)
                                                         * Matrix.CreateTranslation(Position.X,
@@ -249,7 +249,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             if (IsAnimated)
             {
-                ActiveAnimation.TransformationMatrix = Matrix.CreateTranslation(-ActiveAnimation.AnimationOrigin.Position.X, -ActiveAnimation.AnimationOrigin.Position.Y, 0)
+                ActiveAnimation.TransformationMatrix2D = Matrix.CreateTranslation(-ActiveAnimation.AnimationOrigin.Position.X, -ActiveAnimation.AnimationOrigin.Position.Y, 0)
                                                         * Matrix.CreateRotationZ(Angle)
                                                         * Matrix.CreateScale(Scale.X, Scale.Y, 1f)
                                                         * Matrix.CreateTranslation(Position.X,
@@ -455,7 +455,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         {
             if (IsAnimated)
             {
-                ActiveAnimation.TransformationMatrix = Matrix.CreateTranslation(-ActiveAnimation.AnimationOrigin.Position.X, -ActiveAnimation.AnimationOrigin.Position.Y, 0)
+                ActiveAnimation.TransformationMatrix2D = Matrix.CreateTranslation(-ActiveAnimation.AnimationOrigin.Position.X, -ActiveAnimation.AnimationOrigin.Position.Y, 0)
                                                         * Matrix.CreateRotationZ(Angle)
                                                         * Matrix.CreateScale(Scale.X, Scale.Y, 1f)
                                                         * Matrix.CreateTranslation(Position.X,

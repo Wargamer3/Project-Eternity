@@ -598,7 +598,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         protected AlphaTestEffect AlphaEffect;
         public AnimationBackground ActiveAnimationBackground;
         public AnimationBackground ActiveAnimationForeground;
-        public Matrix TransformationMatrix;
+        public Matrix TransformationMatrix2D;
+        public Matrix TransformationMatrix3D;
 
         public static readonly BlendState NegativeBlendState = new BlendState()
         {
@@ -633,7 +634,8 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             : base()
         {
             ListActiveSFX = new List<SFX>();
-            TransformationMatrix = Matrix.Identity;
+            TransformationMatrix2D = Matrix.Identity;
+            TransformationMatrix3D = Matrix.Identity;
             DicTimeline = new Dictionary<string, Timeline>();
         }
 
@@ -968,11 +970,11 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                 //TODO: Don't use Begin to use the transformationMatrix as it force the rendering making it impossible to properly use the drawing depth.
                 if (ActiveLayer.LayerBlendState == AnimationLayer.LayerBlendStates.Add)
                 {
-                    g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, ActiveLayer.SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix);
+                    g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, ActiveLayer.SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix2D);
                 }
                 else if (ActiveLayer.LayerBlendState == AnimationLayer.LayerBlendStates.Substract)
                 {
-                    g.Begin(SpriteSortMode.BackToFront, NegativeBlendState, ActiveLayer.SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix);
+                    g.Begin(SpriteSortMode.BackToFront, NegativeBlendState, ActiveLayer.SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix2D);
                 }
                 else
                 {
@@ -991,6 +993,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
             for (int A = 0; A < ActiveLayer.ListVisibleObject.Count; A++)
             {
                 ActiveLayer.ListVisibleObject[A].Draw(g, false);
+                ActiveLayer.ListVisibleObject[A].Draw3D(g, false, TransformationMatrix2D, TransformationMatrix3D);
             }
 
             if (DrawNestedMarkers)

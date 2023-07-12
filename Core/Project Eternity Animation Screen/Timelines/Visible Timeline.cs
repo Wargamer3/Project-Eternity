@@ -108,6 +108,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public abstract void BeginDraw(CustomSpriteBatch g);
 
         public abstract void Draw(CustomSpriteBatch g, bool IsInEditMode);
+        public virtual void Draw3D(CustomSpriteBatch g, bool IsInEditMode, Matrix TransformationMatrix2D, Matrix WorldViewProjection)
+        {
+        }
 
         public abstract void UpdateAnimationObject(int KeyFrame);
 

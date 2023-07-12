@@ -125,16 +125,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GraphicsDevice.Clear(Color.Transparent);
 
                 if (ListAnimationLayer[L].LayerBlendState == AnimationLayer.LayerBlendStates.Add)
-                    g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, ListAnimationLayer[L].SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix);
+                    g.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, ListAnimationLayer[L].SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix2D);
                 else if (ListAnimationLayer[L].LayerBlendState == AnimationLayer.LayerBlendStates.Substract)
-                    g.Begin(SpriteSortMode.BackToFront, NegativeBlendState, ListAnimationLayer[L].SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix);
+                    g.Begin(SpriteSortMode.BackToFront, NegativeBlendState, ListAnimationLayer[L].SamplerState, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, TransformationMatrix2D);
 
                 for (int M = 0; M < ListAnimationLayer[L].ListActiveMarker.Count; M++)
                 {
                     if (ListAnimationLayer[L].ListActiveMarker[M].Sprite != null)
                     {
-                        g.Draw(ListAnimationLayer[L].ListActiveMarker[M].Sprite, new Vector2(ListAnimationLayer[L].ListActiveMarker[M].Position.X, ListAnimationLayer[L].ListActiveMarker[M].Position.Y),
-                            null, Color.White, 0, Vector2.Zero, ListAnimationLayer[L].ListActiveMarker[M].ScaleFactor, SpriteEffects.None, 1);
+                        if (ListAnimationLayer[L].ListActiveMarker[M].ScaleFactor.X < 0)
+                        {
+                            g.Draw(ListAnimationLayer[L].ListActiveMarker[M].Sprite, new Vector2(ListAnimationLayer[L].ListActiveMarker[M].Position.X, ListAnimationLayer[L].ListActiveMarker[M].Position.Y),
+                                null, Color.White, 0, Vector2.Zero, new Vector2(-ListAnimationLayer[L].ListActiveMarker[M].ScaleFactor.X, ListAnimationLayer[L].ListActiveMarker[M].ScaleFactor.Y), SpriteEffects.FlipHorizontally, 1);
+                        }
+                        else
+                        {
+                            g.Draw(ListAnimationLayer[L].ListActiveMarker[M].Sprite, new Vector2(ListAnimationLayer[L].ListActiveMarker[M].Position.X, ListAnimationLayer[L].ListActiveMarker[M].Position.Y),
+                                null, Color.White, 0, Vector2.Zero, ListAnimationLayer[L].ListActiveMarker[M].ScaleFactor, SpriteEffects.None, 1);
+                        }
                     }
                 }
 
