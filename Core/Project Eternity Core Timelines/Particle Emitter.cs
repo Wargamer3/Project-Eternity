@@ -16,6 +16,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public enum ParticleBlendStates { AlphaBlend, Additive };
 
         public Core.ParticleSystem.ParticleSystem2D ParticleSystem;
+        Matrix Projection;
 
         private readonly Random Random = new Random();
 
@@ -299,23 +300,28 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override void BeginDraw(CustomSpriteBatch g)
         {
+            if (g.GraphicsDevice.PresentationParameters.BackBufferWidth != RenderWidth
+                  || g.GraphicsDevice.PresentationParameters.BackBufferHeight != RenderHeight)
+            {
+                RenderWidth = g.GraphicsDevice.PresentationParameters.BackBufferWidth;
+                RenderHeight = g.GraphicsDevice.PresentationParameters.BackBufferHeight;
+
+                Matrix view = Matrix.Identity;
+
+                Projection = Matrix.CreateOrthographicOffCenter(0, RenderWidth, RenderHeight, 0, 0, 1);
+                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+
+                Projection = view * (HalfPixelOffset * Projection);
+            }
         }
 
         public override void Draw(CustomSpriteBatch g, bool IsInEditMode)
         {
-            if (g.GraphicsDevice.PresentationParameters.BackBufferWidth != RenderWidth
-                || g.GraphicsDevice.PresentationParameters.BackBufferHeight != RenderHeight)
-            {
-                RenderWidth = g.GraphicsDevice.PresentationParameters.BackBufferWidth;
-                RenderHeight = g.GraphicsDevice.PresentationParameters.BackBufferHeight;
-                Matrix view = Matrix.Identity;
+        }
 
-                Matrix Projection = Matrix.CreateOrthographicOffCenter(0, RenderWidth, RenderHeight, 0, 0, 1);
-                Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
-
-                Projection = view * (HalfPixelOffset * Projection);
-                ParticleSystem.parameters["ViewProjection"].SetValue(Projection);
-            }
+        public override void Draw3D(CustomSpriteBatch g, bool IsInEditMode, Matrix TransformationMatrix2D, Matrix WorldViewProjection)
+        {
+            ParticleSystem.parameters["ViewProjection"].SetValue(TransformationMatrix2D * Projection);
             ParticleSystem.Draw(GameScreen.GraphicsDevice, new Vector2());
         }
 
