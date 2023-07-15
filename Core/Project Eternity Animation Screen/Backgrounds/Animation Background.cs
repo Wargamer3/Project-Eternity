@@ -56,5 +56,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         }
 
         public abstract void Draw(CustomSpriteBatch g, int ScreenWidth, int ScreenHeight);
+        public abstract void Draw3D(Camera3D Camera, Matrix World);
     }
 }

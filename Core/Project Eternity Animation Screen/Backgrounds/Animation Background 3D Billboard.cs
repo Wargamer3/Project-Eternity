@@ -273,6 +273,10 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override void Draw(CustomSpriteBatch g, Matrix View, Matrix Projection, int ScreenWidth, int ScreenHeight)
         {
+        }
+
+        public override void Draw3D(Camera3D Camera, Matrix World)
+        {
             int MaxRepeatX = 0;
             if (ActiveBillboardSystem.RepeatX)
                 MaxRepeatX = MaxRepeat;
@@ -291,9 +295,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                     for (int Z = -MaxRepeatZ; Z <= MaxRepeatZ; Z++)
                     {
-                        Matrix World = Matrix.CreateTranslation(X * ActiveBillboardSystem.RepeatOffset.X, Y * ActiveBillboardSystem.RepeatOffset.Y, Z * ActiveBillboardSystem.RepeatOffset.Z);
+                        World = World * Matrix.CreateTranslation(X * ActiveBillboardSystem.RepeatOffset.X, Y * ActiveBillboardSystem.RepeatOffset.Y, Z * ActiveBillboardSystem.RepeatOffset.Z);
 
-                        ActiveBillboardSystem.SetViewProjection(World * View, Projection);
+                        ActiveBillboardSystem.SetViewProjection(World * Camera.View, Camera.Projection);
 
                         ActiveBillboardSystem.Draw(GameScreen.GraphicsDevice);
                     }

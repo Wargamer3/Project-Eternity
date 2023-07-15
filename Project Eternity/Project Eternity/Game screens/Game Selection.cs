@@ -181,7 +181,8 @@ namespace ProjectEternity
                         Constants.graphics.PreferredBackBufferWidth = Constants.Width;
                         Constants.graphics.PreferredBackBufferHeight = Constants.Height;
                         Constants.graphics.ApplyChanges();
-                        GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = (GameScreens.SorcererStreetScreen.SorcererStreetMap)BattleMap.DicBattmeMapType[GameScreens.SorcererStreetScreen.SorcererStreetMap.MapType].GetNewMap(null, string.Empty);
+                        GameScreens.SorcererStreetScreen.MenuHelper.Init(Content);
+                        GameScreens.SorcererStreetScreen.SorcererStreetMap NewMapSS = (GameScreens.SorcererStreetScreen.SorcererStreetMap)BattleMap.DicBattmeMapType[GameScreens.SorcererStreetScreen.SorcererStreetMap.MapType].GetNewMap(new GameModeInfo(), string.Empty);
                         NewMapSS.BattleMapPath = "New Item";
                         NewMapSS.ListGameScreen = ListGameScreen;
                         GameScreens.SorcererStreetScreen.Player NewPlayerSS = new GameScreens.SorcererStreetScreen.Player("", "", "", false, 0, true, Color.Blue, new List<GameScreens.SorcererStreetScreen.Card>());

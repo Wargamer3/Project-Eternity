@@ -22,6 +22,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private readonly CardBook ActiveBook;
         private readonly Card ActiveCard;
         private readonly Card GlobalBookActiveCard;
+        private readonly AnimatedModel Map3DModel;
 
         int OriginalCardQuantityOwned;
         int OriginalTotalCardQuantityOwned;
@@ -35,6 +36,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             OriginalCardQuantityOwned = ActiveCard.QuantityOwned;
             OriginalTotalCardQuantityOwned = ActiveBook.TotalCards;
+
+            if (ActiveCard is CreatureCard)
+            {
+                Map3DModel = ((CreatureCard)ActiveCard).Map3DModel;
+            }
         }
 
         public override void Load()
@@ -101,6 +107,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 + " [Q] Toggle Info"
                 + " [X] Confirm Card Count"
                 + " [Z] Return", new Vector2(X, Y), Color.White);
+
+            DrawModel(Map3DModel, Matrix.CreateRotationX(MathHelper.ToRadians(180))
+                * Matrix.CreateScale(0.2f) * Matrix.CreateTranslation(Constants.Width / 2, Constants.Height / 2, 0), Matrix.Identity);
+        }
+
+        private void DrawModel(AnimatedModel Model, Matrix World, Matrix View)
+        {
+            Matrix Projection = Matrix.CreateOrthographicOffCenter(0, Constants.Width, Constants.Height, 0, 300, -300);
+            Matrix HalfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+            Projection = HalfPixelOffset * Projection;
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+            GameScreen.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GameScreen.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GameScreen.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.White, 1f, 0);
+
+            Model.Draw(View, Projection, World);
         }
     }
 }

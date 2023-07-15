@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 sprCard = Content.Load<Texture2D>("Sorcerer Street/Creature Cards/" + Path);
 
-                Map3DModel = new AnimatedModel("Sorcerer Street/Models/Bad Guy");
+                Map3DModel = new AnimatedModel("Sorcerer Street/Models/Creatures/" + Path + "/" + Name);
                 Map3DModel.LoadContent(Content);
             }
         }

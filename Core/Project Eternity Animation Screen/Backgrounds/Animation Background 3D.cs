@@ -542,9 +542,6 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public override void Draw(CustomSpriteBatch g, int ScreenWidth, int ScreenHeight)
         {
             CameraRotation.Forward.Normalize();
-            g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
             CameraRotation.Up.Normalize();
             CameraRotation.Right.Normalize();
@@ -564,9 +561,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
                                                                     aspectRatio,
                                                                     1, 10000);
 
-            foreach (AnimationBackground3DBase ActiveBillboardSystem in ListBackground)
+            foreach (AnimationBackground3DBase ActiveBackground in ListBackground)
             {
-                ActiveBillboardSystem.Draw(g, View, Projection, ScreenWidth, ScreenHeight);
+                ActiveBackground.Draw(g, View, Projection, ScreenWidth, ScreenHeight);
             }
 
             if (IsEditor)
@@ -590,6 +587,14 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
                     Bounds.Draw(g);
                 }
+            }
+        }
+
+        public override void Draw3D(Camera3D Camera, Matrix World)
+        {
+            foreach (AnimationBackground3DBase ActiveBackground in ListBackground)
+            {
+                ActiveBackground.Draw3D(Camera, World);
             }
         }
     }

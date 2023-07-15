@@ -55,5 +55,7 @@ namespace ProjectEternity.GameScreens.AnimationScreen
         public abstract object GetEditableObject(int Index);
 
         public abstract void Draw(CustomSpriteBatch g, Matrix View, Matrix Projection, int ScreenWidth, int ScreenHeight);
+
+        public abstract void Draw3D(Camera3D Camera, Matrix World);
     }
 }

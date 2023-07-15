@@ -568,6 +568,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void TogglePreview(bool UsePreview)
         {
             ShowUnits = UsePreview;
+            if (MenuHelper.sprArrowUp == null)
+            {
+                MenuHelper.Init(Content);
+            }
 
             if (!UsePreview)
             {
@@ -780,14 +784,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (ListBackground.Count > 0)
             {
                 g.End();
+                g.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                g.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+                g.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
                 for (int B = 0; B < ListBackground.Count; B++)
                 {
                     ListBackground[B].Draw(g, Constants.Width, Constants.Height);
+                    ListBackground[B].Draw3D(Camera3D, Matrix.Identity);
                 }
                 g.Begin();
             }
-
-            g.GraphicsDevice.Clear(ClearOptions.DepthBuffer, Color.Black, 1, 0);
 
             LayerManager.Draw(g);
 

@@ -1183,6 +1183,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void DrawCreatures(CustomSpriteBatch g, Matrix View)
         {
+            g.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+            g.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             for (int Z = 0; Z < Map.LayerManager.ListLayer.Count; ++Z)
             {
                 for (int X = MapSize.X - 1; X >= 0; --X)
@@ -1193,7 +1195,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard DefendingCreature = ActiveTerrain.DefendingCreature;
                         if (DefendingCreature != null)
                         {
-                            DefendingCreature.Map3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateTranslation((ActiveTerrain.WorldPosition.X + 0.9f) * Map.TileSize.X, ActiveTerrain.WorldPosition.Z * LayerHeight, (ActiveTerrain.WorldPosition.Y + 0.9f) * Map.TileSize.Y));
+                            DefendingCreature.Map3DModel.Draw(View, PolygonEffect.Projection, Matrix.CreateScale(0.02f) * Matrix.CreateTranslation((ActiveTerrain.WorldPosition.X + 0.9f) * Map.TileSize.X, ActiveTerrain.WorldPosition.Z * LayerHeight, (ActiveTerrain.WorldPosition.Y + 0.9f) * Map.TileSize.Y));
 
                             Vector3 Visible3DPosition = new Vector3(ActiveTerrain.WorldPosition.X + 0.7f, ActiveTerrain.WorldPosition.Z * LayerHeight, ActiveTerrain.WorldPosition.Y + 0.9f);
                             Vector3 Position = new Vector3(Visible3DPosition.X * Map.TileSize.X, Visible3DPosition.Y, Visible3DPosition.Z * Map.TileSize.Y);

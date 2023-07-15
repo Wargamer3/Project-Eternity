@@ -70,5 +70,9 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
             g.End();
         }
+
+        public override void Draw3D(Camera3D Camera, Matrix World)
+        {
+        }
     }
 }

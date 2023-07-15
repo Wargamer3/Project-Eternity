@@ -113,16 +113,28 @@ namespace ProjectEternity.GameScreens.AnimationScreen
 
         public override object GetEditableObject(int Index)
         {
+            if (Index < 0)
+            {
+                return null;
+            }
+
             return new AnimationBackground3D.TemporaryBackgroundModelObject(ListBackgroundModel[Index]);
         }
 
         public override void Draw(CustomSpriteBatch g, Matrix View, Matrix Projection, int ScreenWidth, int ScreenHeight)
         {
+        }
+
+        public override void Draw3D(Camera3D Camera, Matrix World)
+        {
             foreach (AnimationBackground3DObject ActiveModel in ListBackgroundModel)
             {
-                ActiveModel.Model.Draw(View, Projection, Matrix.CreateScale(ActiveModel.Size.X, ActiveModel.Size.Y, ActiveModel.Size.Z)
-                    * Matrix.CreateRotationX(ActiveModel.Rotation.X) * Matrix.CreateRotationY(ActiveModel.Rotation.Y) * Matrix.CreateRotationZ(ActiveModel.Rotation.Z)
-                    * Matrix.CreateTranslation(ActiveModel.Position));
+                ActiveModel.Model.Draw(Camera.View, Camera.Projection, Matrix.CreateScale(ActiveModel.Size.X, ActiveModel.Size.Y, ActiveModel.Size.Z) * Matrix.CreateScale(0.4f)
+                    * Matrix.CreateRotationX(ActiveModel.Rotation.X)
+                    * Matrix.CreateRotationY(ActiveModel.Rotation.Y) * Matrix.CreateRotationY(MathHelper.ToRadians(270))
+                    * Matrix.CreateRotationZ(ActiveModel.Rotation.Z) * Matrix.CreateRotationZ(MathHelper.ToRadians(180))
+                    * Matrix.CreateTranslation(ActiveModel.Position)
+                    * Matrix.CreateTranslation(new Vector3(75, -31.2f, 60)));
             }
         }
 
