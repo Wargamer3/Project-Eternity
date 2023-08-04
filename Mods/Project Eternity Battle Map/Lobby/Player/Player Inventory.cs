@@ -25,6 +25,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
     }
 
+    public struct SquadContainer
+    {
+        public List<SquadContainer> ListFolder;
+        public List<Squad> ListOwnedSquad;
+
+        public string Name;
+
+        public SquadContainer(List<Squad> ListOwnedSquad)
+        {
+            this.ListOwnedSquad = new List<Squad>(ListOwnedSquad);
+            ListFolder = new List<SquadContainer>();
+            Name = string.Empty;
+        }
+
+        public SquadContainer(string Name)
+        {
+            this.Name = Name;
+
+            ListFolder = new List<SquadContainer>();
+            ListOwnedSquad = new List<Squad>();
+        }
+    }
+
     public class BattleMapPlayerInventory
     {
         public List<Squad> ListOwnedSquad;

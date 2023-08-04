@@ -131,6 +131,12 @@
     <Compile Include="Intermission Screen\Records\Player Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Records Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Mode Info.cs" />
+    <Compile Include="Lobby\Inventory\Squad Screen 2.cs" />
+    <Compile Include="Lobby\Inventory\Tunnel Behvaior Rotation Manager.cs" />
+    <Compile Include="Lobby\Inventory\Tunnel Behvaior Color Manager.cs" />
+    <Compile Include="Lobby\Inventory\Tunnel Behvaior Direction Manager.cs" />
+    <Compile Include="Lobby\Inventory\Tunnel Behvaior Speed Manager.cs" />
+    <Compile Include="Lobby\Inventory\Tunnel Behvaior Size Manager.cs" />
     <Compile Include="Lobby\Online Player Base.cs" />
     <Compile Include="Lobby\Player\Battle Records.cs" />
     <Compile Include="Lobby\Player\Bonus Records.cs" />
@@ -168,7 +174,7 @@
     <Compile Include="Lobby\Unlocks\Unlockable Character.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Mission.cs" />
     <Compile Include="Lobby\Unlocks\Unlockable Unit.cs" />
-    <Compile Include="Lobby\Unlocks\UnlockableItem.cs" />
+    <Compile Include="Lobby\Unlocks\Unlockable Item.cs" />
     <Compile Include="Mutators\Mutator.cs" />
     <Compile Include="Online\Check New Unlocks Script Client.cs" />
     <Compile Include="Online\Communication\Friend List Script Client.cs" />
