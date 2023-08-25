@@ -59,15 +59,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Online
                 switch (Sender.ReadString())
                 {
                     case UnlockableCharacter.CharacterType:
-                        ListUnlockedItem.Add(new UnlockableCharacter(Sender.ReadString(), Sender.ReadInt32(), Sender.ReadBoolean()));
+                        ListUnlockedItem.Add(new UnlockableCharacter(Sender.ReadString(), Sender.ReadByte(), Sender.ReadBoolean()));
                         break;
 
                     case UnlockableUnit.UnitType:
-                        ListUnlockedItem.Add(new UnlockableUnit(Sender.ReadString(), Sender.ReadInt32(), Sender.ReadBoolean()));
+                        ListUnlockedItem.Add(new UnlockableUnit(Sender.ReadString(), Sender.ReadByte(), Sender.ReadBoolean()));
                         break;
 
                     case UnlockableMission.MissionType:
-                        ListUnlockedItem.Add(new UnlockableMission(Sender.ReadString(), Sender.ReadInt32(), Sender.ReadBoolean()));
+                        ListUnlockedItem.Add(new UnlockableMission(Sender.ReadString(), Sender.ReadByte(), Sender.ReadBoolean()));
                         break;
                 }
             }

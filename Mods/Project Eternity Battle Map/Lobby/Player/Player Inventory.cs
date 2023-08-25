@@ -10,13 +10,37 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
+    public class UnitInfo
+    {
+        public Unit Leader;
+        public byte QuantityOwned;
+
+        public UnitInfo(Unit Leader, byte QuantityOwned)
+        {
+            this.Leader = Leader;
+            this.QuantityOwned = QuantityOwned;
+        }
+    }
+
+    public class CharacterInfo
+    {
+        public Character Pilot;
+        public byte QuantityOwned;
+
+        public CharacterInfo(Character Pilot, byte QuantityOwned)
+        {
+            this.Pilot = Pilot;
+            this.QuantityOwned = QuantityOwned;
+        }
+    }
+
     public struct MissionInfo
     {
         public string MapPath;
-        public int QuantityOwned;
+        public byte QuantityOwned;
         public int SortOrder;
 
-        public MissionInfo(string MapPath, int QuantityOwned)
+        public MissionInfo(string MapPath, byte QuantityOwned)
         {
             this.MapPath = MapPath;
             this.QuantityOwned = QuantityOwned;
@@ -25,34 +49,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
     }
 
-    public struct SquadContainer
-    {
-        public List<SquadContainer> ListFolder;
-        public List<Squad> ListOwnedSquad;
-
-        public string Name;
-
-        public SquadContainer(List<Squad> ListOwnedSquad)
-        {
-            this.ListOwnedSquad = new List<Squad>(ListOwnedSquad);
-            ListFolder = new List<SquadContainer>();
-            Name = string.Empty;
-        }
-
-        public SquadContainer(string Name)
-        {
-            this.Name = Name;
-
-            ListFolder = new List<SquadContainer>();
-            ListOwnedSquad = new List<Squad>();
-        }
-    }
-
     public class BattleMapPlayerInventory
     {
-        public List<Squad> ListOwnedSquad;
-        public List<Character> ListOwnedCharacter;
-        public List<MissionInfo> ListOwnedMission;
+        public Dictionary<string, UnitInfo> DicOwnedSquad;
+        public Dictionary<string, CharacterInfo> DicOwnedCharacter;
+        public Dictionary<string, MissionInfo> DicOwnedMission;
         public List<PlayerLoadout> ListSquadLoadout;
 
         public PlayerLoadout ActiveLoadout;
@@ -60,9 +61,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleMapPlayerInventory()
         {
             ListSquadLoadout = new List<PlayerLoadout>();
-            ListOwnedSquad = new List<Squad>();
-            ListOwnedCharacter = new List<Character>();
-            ListOwnedMission = new List<MissionInfo>();
+            DicOwnedSquad = new Dictionary<string, UnitInfo>();
+            DicOwnedCharacter = new Dictionary<string, CharacterInfo>();
+            DicOwnedMission = new Dictionary<string, MissionInfo>();
 
             ActiveLoadout = new PlayerLoadout();
             ListSquadLoadout.Add(ActiveLoadout);
@@ -72,43 +73,43 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             int ListOwnedSquadCount = BR.ReadInt32();
-            ListOwnedSquad = new List<Squad>(ListOwnedSquadCount);
+            DicOwnedSquad = new Dictionary<string, UnitInfo>(ListOwnedSquadCount);
             for (int S = 0; S < ListOwnedSquadCount; ++S)
             {
                 string RelativePath = BR.ReadString();
                 string UnitTypeName = BR.ReadString();
+                byte QuantityOwned = BR.ReadByte();
 
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 LoadedUnit.ID = LoadedUnit.ItemName;
 
-                Squad NewSquad = new Squad("Squad", LoadedUnit);
-                NewSquad.IsPlayerControlled = true;
-
-                ListOwnedSquad.Add(NewSquad);
+                DicOwnedSquad.Add(RelativePath, new UnitInfo(LoadedUnit, QuantityOwned));
             }
 
             int ListOwnedCharacterCount = BR.ReadInt32();
-            ListOwnedCharacter = new List<Character>(ListOwnedCharacterCount);
+            DicOwnedCharacter = new Dictionary<string, CharacterInfo>(ListOwnedCharacterCount);
             for (int C = 0; C < ListOwnedCharacterCount; ++C)
             {
                 string CharacterFullName = BR.ReadString();
+                byte QuantityOwned = BR.ReadByte();
+
                 Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 LoadedCharacter.Level = 1;
                 LoadedCharacter.ID = LoadedCharacter.Name;
 
-                ListOwnedCharacter.Add(LoadedCharacter);
+                DicOwnedCharacter.Add(CharacterFullName, new CharacterInfo(LoadedCharacter, QuantityOwned));
             }
 
             int ListOwnedMissionCount = BR.ReadInt32();
-            ListOwnedMission = new List<MissionInfo>(ListOwnedMission);
+            DicOwnedMission = new Dictionary<string, MissionInfo>();
             for (int C = 0; C < ListOwnedMissionCount; ++C)
             {
                 string MissionPath = BR.ReadString();
-                int QuantityOwned = BR.ReadInt32();
+                byte QuantityOwned = BR.ReadByte();
 
                 MissionInfo LoadedMission = new MissionInfo(MissionPath, QuantityOwned);
 
-                ListOwnedMission.Add(LoadedMission);
+                DicOwnedMission.Add(MissionPath, LoadedMission);
             }
 
             int ListSquadLoadoutCount = BR.ReadInt32();
@@ -159,40 +160,43 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             int ListOwnedSquadCount = BR.ReadInt32();
-            ListOwnedSquad = new List<Squad>(ListOwnedSquadCount);
+            DicOwnedSquad = new Dictionary<string, UnitInfo>(ListOwnedSquadCount);
             for (int S = 0; S < ListOwnedSquadCount; ++S)
             {
                 string RelativePath = BR.ReadString();
+                string UnitTypeName = BR.ReadString();
+                byte QuantityOwned = BR.ReadByte();
 
-                Unit LoadedUnit = Unit.FromFullName(RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                LoadedUnit.ID = LoadedUnit.ItemName;
 
-                Squad NewSquad = new Squad("Squad", LoadedUnit);
-                NewSquad.IsPlayerControlled = true;
-
-                ListOwnedSquad.Add(NewSquad);
+                DicOwnedSquad.Add(RelativePath, new UnitInfo(LoadedUnit, QuantityOwned));
             }
 
             int ListOwnedCharacterCount = BR.ReadInt32();
-            ListOwnedCharacter = new List<Character>(ListOwnedCharacterCount);
+            DicOwnedCharacter = new Dictionary<string, CharacterInfo>(ListOwnedCharacterCount);
             for (int C = 0; C < ListOwnedCharacterCount; ++C)
             {
                 string CharacterFullName = BR.ReadString();
+                byte QuantityOwned = BR.ReadByte();
+
                 Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 LoadedCharacter.Level = 1;
+                LoadedCharacter.ID = LoadedCharacter.Name;
 
-                ListOwnedCharacter.Add(LoadedCharacter);
+                DicOwnedCharacter.Add(CharacterFullName, new CharacterInfo(LoadedCharacter, QuantityOwned));
             }
 
             int ListOwnedMissionCount = BR.ReadInt32();
-            ListOwnedMission = new List<MissionInfo>(ListOwnedMission);
+            DicOwnedMission = new Dictionary<string, MissionInfo>();
             for (int C = 0; C < ListOwnedMissionCount; ++C)
             {
                 string MissionPath = BR.ReadString();
-                int QuantityOwned = BR.ReadInt32();
+                byte QuantityOwned = BR.ReadByte();
 
                 MissionInfo LoadedMission = new MissionInfo(MissionPath, QuantityOwned);
 
-                ListOwnedMission.Add(LoadedMission);
+                DicOwnedMission.Add(MissionPath, LoadedMission);
             }
 
             int ListSquadLoadoutCount = BR.ReadInt32();
@@ -214,14 +218,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         continue;
                     }
 
+                    string UnitTypeName = BR.ReadString();
                     string CharacterFullName = BR.ReadString();
 
-                    Unit LoadedUnit = Unit.FromFullName(RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                    Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                    LoadedUnit.ID = LoadedUnit.ItemName;
 
-                    Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                    LoadedCharacter.Level = 1;
+                    if (!string.IsNullOrEmpty(CharacterFullName))
+                    {
+                        Character LoadedCharacter = new Character(CharacterFullName, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
+                        LoadedCharacter.Level = 1;
+                        LoadedCharacter.ID = LoadedCharacter.Name;
 
-                    LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
+                        LoadedUnit.ArrayCharacterActive[0] = LoadedCharacter;
+                    }
 
                     Squad NewSquad = new Squad("Squad", LoadedUnit);
                     NewSquad.IsPlayerControlled = true;
@@ -235,24 +245,26 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Save(BinaryWriter BW)
         {
-            BW.Write(ListOwnedSquad.Count);
-            for (int S = 0; S < ListOwnedSquad.Count; ++S)
+            BW.Write(DicOwnedSquad.Count);
+            foreach (UnitInfo ActiveSquad in DicOwnedSquad.Values)
             {
-                BW.Write(ListOwnedSquad[S].CurrentLeader.RelativePath);
-                BW.Write(ListOwnedSquad[S].CurrentLeader.UnitTypeName);
+                BW.Write(ActiveSquad.Leader.RelativePath);
+                BW.Write(ActiveSquad.Leader.UnitTypeName);
+                BW.Write(ActiveSquad.QuantityOwned);
             }
 
-            BW.Write(ListOwnedCharacter.Count);
-            for (int C = 0; C < ListOwnedCharacter.Count; ++C)
+            BW.Write(DicOwnedCharacter.Count);
+            foreach (CharacterInfo ActiveCharacter in DicOwnedCharacter.Values)
             {
-                BW.Write(ListOwnedCharacter[C].FullName);
+                BW.Write(ActiveCharacter.Pilot.FullName);
+                BW.Write(ActiveCharacter.QuantityOwned);
             }
 
-            BW.Write(ListOwnedMission.Count);
-            for (int M = 0; M < ListOwnedMission.Count; ++M)
+            BW.Write(DicOwnedMission.Count);
+            foreach (MissionInfo ActiveMission in DicOwnedMission.Values)
             {
-                BW.Write(ListOwnedMission[M].MapPath);
-                BW.Write(ListOwnedMission[M].QuantityOwned);
+                BW.Write(ActiveMission.MapPath);
+                BW.Write(ActiveMission.QuantityOwned);
             }
 
             BW.Write(ListSquadLoadout.Count);

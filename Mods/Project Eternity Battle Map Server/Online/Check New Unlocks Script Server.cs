@@ -44,12 +44,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
                     ConditionsOwner.UnlockInventory.ListUnlockedCharacter.Add(ActiveCharacter);
                     ListUnlockedItem.Add(ActiveCharacter);
 
-                    for (int Q = 0; Q < ActiveCharacter.UnlockQuantity; ++Q)
-                    {
-                        Character NewCharacter = new Character();
-                        NewCharacter.FullName = ActiveCharacter.Path;
-                        ConditionsOwner.Inventory.ListOwnedCharacter.Add(NewCharacter);
-                    }
+                    Character NewCharacter = new Character();
+                    NewCharacter.FullName = ActiveCharacter.Path;
+                    ConditionsOwner.Inventory.DicOwnedCharacter.Add(ActiveCharacter.Path, new CharacterInfo(NewCharacter, ActiveCharacter.UnlockQuantity));
                 }
             }
 

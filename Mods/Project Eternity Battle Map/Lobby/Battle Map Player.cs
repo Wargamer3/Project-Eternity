@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void InitRecords(ByteReader BR)
         {
-            UnlockInventory.Load(BR);
+            UnlockInventory.LoadOnlineData(BR);
             Records.Load(BR);
         }
 
@@ -77,6 +77,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             IniFile IniDefaultUnits = IniFile.ReadFromFile("Content/Battle Lobby Default Units.ini");
 
+            Squad FirstSquad = null;
             foreach (string ActiveKey in IniDefaultUnits.ReadAllKeys())
             {
                 string UnitPath = IniDefaultUnits.ReadField(ActiveKey, "Path");
@@ -90,16 +91,21 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     NewCharacter.Level = 1;
                     NewCharacter.ID = NewCharacter.Name;
                     NewUnit.ArrayCharacterActive = new Character[] { NewCharacter };
-                    Inventory.ListOwnedCharacter.Add(NewCharacter);
+                    Inventory.DicOwnedCharacter.Add(PilotPath, new CharacterInfo(NewCharacter, 1));
                 }
 
-                Squad NewSquad = new Squad("Squad", NewUnit);
-                NewSquad.IsPlayerControlled = true;
+                Inventory.DicOwnedSquad.Add(UnitPath, new UnitInfo(NewUnit, 1));
 
-                Inventory.ListOwnedSquad.Add(NewSquad);
+                if (FirstSquad == null)
+                {
+                    Squad NewSquad = new Squad("Squad", NewUnit);
+                    NewSquad.IsPlayerControlled = true;
+
+                    FirstSquad = NewSquad;
+                }
             }
 
-            Inventory.ActiveLoadout.ListSpawnSquad.Add(Inventory.ListOwnedSquad[0]);
+            Inventory.ActiveLoadout.ListSpawnSquad.Add(FirstSquad);
             UnlockInventory.LoadPlayerUnlocks(Name);
         }
 
@@ -140,7 +146,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override List<MissionInfo> GetUnlockedMissions()
         {
-            return Inventory.ListOwnedMission;
+            return new List<MissionInfo>(Inventory.DicOwnedMission.Values);
         }
     }
 }

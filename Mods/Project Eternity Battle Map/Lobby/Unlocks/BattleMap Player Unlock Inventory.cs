@@ -13,6 +13,35 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class BattleMapPlayerUnlockInventory
     {
+        public struct UnitUnlockContainer
+        {
+            public Dictionary<string, UnitUnlockContainer> DicFolder;
+            public List<UnitUnlockContainer> ListFolder;//Share the same folders as the dictionnary
+            public List<UnlockableUnit> ListUnlockedUnit;
+            public List<UnlockableUnit> ListLockedUnit;
+
+            public string Name;
+
+            public UnitUnlockContainer(IEnumerable<UnlockableUnit> ListLockedUnit)
+            {
+                this.ListLockedUnit = new List<UnlockableUnit>(ListLockedUnit);
+                ListUnlockedUnit = new List<UnlockableUnit>();
+                DicFolder = new Dictionary<string, UnitUnlockContainer>();
+                ListFolder = new List<UnitUnlockContainer>();
+                Name = string.Empty;
+            }
+
+            public UnitUnlockContainer(string Name)
+            {
+                this.Name = Name;
+
+                DicFolder = new Dictionary<string, UnitUnlockContainer>();
+                ListFolder = new List<UnitUnlockContainer>();
+                ListUnlockedUnit = new List<UnlockableUnit>();
+                ListLockedUnit = new List<UnlockableUnit>();
+            }
+        }
+
         public static Dictionary<string, UnlockableCharacter> DicCharacterDatabase = new Dictionary<string, UnlockableCharacter>();
         public static Dictionary<string, UnlockableUnit> DicUnitDatabase = new Dictionary<string, UnlockableUnit>();
         public static Dictionary<string, UnlockableMission> DicMissionDatabase = new Dictionary<string, UnlockableMission>();
@@ -32,11 +61,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private static List<string> ListMissionToPrioritiseLoadPath;//Path of missions to load in background;
 
         public List<UnlockableCharacter> ListUnlockedCharacter;
-        public List<UnlockableUnit> ListUnlockedUnit;
+        public UnitUnlockContainer RootUnitContainer;
         public List<UnlockableMission> ListUnlockedMission;
 
         public List<UnlockableCharacter> ListLockedCharacter;
-        public List<UnlockableUnit> ListLockedUnit;
         public List<UnlockableMission> ListLockedMission;
 
         private FileStream PlayerUnlocksFS;
@@ -46,16 +74,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int RemainingNumberOfMissionsToLoad;
         public bool HasFinishedReadingPlayerShopItems;
 
-        public bool IsInit;
-
         public BattleMapPlayerUnlockInventory()
         {
             ListUnlockedCharacter = new List<UnlockableCharacter>();
-            ListUnlockedUnit = new List<UnlockableUnit>();
+            RootUnitContainer = new UnitUnlockContainer("ALL");
             ListUnlockedMission = new List<UnlockableMission>();
 
             ListLockedCharacter = new List<UnlockableCharacter>();
-            ListLockedUnit = new List<UnlockableUnit>();
             ListLockedMission = new List<UnlockableMission>();
 
             ListCharacterToPrioritiseLoadPath = new List<string>();
@@ -63,7 +88,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ListMissionToPrioritiseLoadPath = new List<string>();
         }
 
-        public void Load(ByteReader BR)
+        public void LoadOnlineData(ByteReader BR)
         {
             RemainingNumberOfCharactersToLoad = BR.ReadInt32();
             RemainingNumberOfUnitsToLoad = BR.ReadInt32();
@@ -95,7 +120,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     DicUnitDatabase.Add(ItemPath, FillerItem);
                 }
 
-                ListUnlockedUnit.Add(FillerItem);
+                RootUnitContainer.ListUnlockedUnit.Add(FillerItem);
 
                 --RemainingNumberOfUnitsToLoad;
             }
@@ -113,8 +138,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ListUnlockedMission.Add(FillerItem);
                 --RemainingNumberOfMissionsToLoad;
             }
-
-            UpdateAvailableItems();
         }
 
         public void SaveLocally(string PlayerName)
@@ -123,7 +146,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BinaryWriter BW = new BinaryWriter(FS, Encoding.UTF8);
 
             BW.Write(ListUnlockedCharacter.Count);
-            BW.Write(ListUnlockedUnit.Count);
+            BW.Write(RootUnitContainer.ListUnlockedUnit.Count);
             BW.Write(ListUnlockedMission.Count);
 
             foreach (UnlockableCharacter ActiveCharacter in ListUnlockedCharacter)
@@ -131,7 +154,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BW.Write(ActiveCharacter.Path);
             }
 
-            foreach (UnlockableUnit ActiveUnit in ListUnlockedUnit)
+            foreach (UnlockableUnit ActiveUnit in RootUnitContainer.ListUnlockedUnit)
             {
                 BW.Write(ActiveUnit.Path);
             }
@@ -145,30 +168,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FS.Close();
         }
 
-        public void UpdateAvailableItems()
-        {
-            ListLockedCharacter = new List<UnlockableCharacter>(DicCharacterDatabase.Values);
-            ListLockedUnit = new List<UnlockableUnit>(DicUnitDatabase.Values);
-            ListLockedMission = new List<UnlockableMission>(DicMissionDatabase.Values);
-
-            foreach (UnlockableCharacter ActiveCharacter in ListUnlockedCharacter)
-            {
-                ListLockedCharacter.Remove(ActiveCharacter);
-            }
-
-            foreach (UnlockableUnit ActiveUnit in ListUnlockedUnit)
-            {
-                ListLockedUnit.Remove(ActiveUnit);
-            }
-
-            foreach (UnlockableMission ActiveMission in ListUnlockedMission)
-            {
-                ListLockedMission.Remove(ActiveMission);
-            }
-
-            IsInit = true;
-        }
-
         public static void PopulateShopItemsServerTask()
         {
             GlobalUnlockIniAsync = new IniFileReader("Content/Battle Lobby Unlocks.ini");
@@ -177,8 +176,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 PopulateUnlockItems();
             }
-
-            DatabaseLoaded = true;
         }
 
         public void LoadShopCharacter(int StartIndex, int EndIndex, List<UnlockableCharacter> ListShopPlayerCharacter)
@@ -231,7 +228,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerUnlocksBR.Close();
             PlayerUnlocksFS.Close();
 
-
             lock (LockObject)
             {
                 if (LoadTask == null)
@@ -257,8 +253,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 string ItemPath = PlayerUnlocksBR.ReadString();
                 UnlockableUnit FillerItem = new UnlockableUnit(ItemPath);
 
-                DicUnitDatabase.Add(ItemPath, FillerItem);
-                ListUnlockedUnit.Add(FillerItem);
+                if (!DicUnitDatabase.ContainsKey(ItemPath))
+                {
+                    DicUnitDatabase.Add(ItemPath, FillerItem);
+                    RootUnitContainer.ListUnlockedUnit.Add(FillerItem);
+                }
                 --RemainingNumberOfUnitsToLoad;
             }
             else if (RemainingNumberOfMissionsToLoad > 0)
@@ -285,9 +284,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 PopulateUnlockItems();
             }
 
-            DatabaseLoaded = true;
+            DicCharacterDatabaseEnumeretor = DicCharacterDatabase.GetEnumerator();
+            DicUnitDatabaseEnumerator = DicUnitDatabase.GetEnumerator();
+            DicMissionDatabaseEnumerator = DicMissionDatabase.GetEnumerator();
 
-            Task.Run(() => { LoadUnlocksContentAsyncTask(); });
+            while (!DatabaseLoaded)
+            {
+                LoadUnlocksContentAsyncTask();
+            }
         }
 
         private static void PopulateUnlockItems()
@@ -306,6 +310,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             UnlockableCharacter NewCharacterUnlock = new UnlockableCharacter(ItemPath, ActiveHeaderValues);
                             DicCharacterDatabase.Add(ItemPath, NewCharacterUnlock);
                         }
+                        else
+                        {
+                            DicCharacterDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
+                        }
                         break;
 
                     case "Unit":
@@ -314,6 +322,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             UnlockableUnit NewUnitUnlock = new UnlockableUnit(ItemPath, ActiveHeaderValues);
                             DicUnitDatabase.Add(ItemPath, NewUnitUnlock);
                         }
+                        else
+                        {
+                            DicUnitDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
+                        }
                         break;
 
                     case "Mission":
@@ -321,6 +333,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         {
                             UnlockableMission NewMissionUnlock = new UnlockableMission(ItemPath, ActiveHeaderValues);
                             DicMissionDatabase.Add(ItemPath, NewMissionUnlock);
+                        }
+                        else
+                        {
+                            DicMissionDatabase[ItemPath].ReadHeaders(ActiveHeaderValues);
                         }
                         break;
 
@@ -331,15 +347,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         private static void LoadUnlocksContentAsyncTask()
-        {
-            DicCharacterDatabaseEnumeretor = DicCharacterDatabase.GetEnumerator();
-            DicUnitDatabaseEnumerator = DicUnitDatabase.GetEnumerator();
-            DicMissionDatabaseEnumerator = DicMissionDatabase.GetEnumerator();
-
-            LoadNextShopItemContent();
-        }
-
-        private static void LoadNextShopItemContent()
         {
             UnlockableCharacter CharacterToLoadInfo = null;
             UnlockableUnit UnitToLoadInfo = null;
@@ -386,12 +393,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             else if (UnitToLoadInfo != null)
             {
                 Unit NewUnit = Unit.FromFullName(UnitToLoadInfo.Path, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
-
                 UnitToLoadInfo.UnitToBuy = NewUnit;
             }
             else if (MissionToLoadInfo != null)
             {
-                MissionToLoadInfo.MissionToBuy = new MissionInfo(MissionToLoadInfo.Path, -1);
+                MissionToLoadInfo.MissionToBuy = new MissionInfo(MissionToLoadInfo.Path, 0);
+            }
+            else
+            {
+                DatabaseLoaded = true;
             }
         }
     }

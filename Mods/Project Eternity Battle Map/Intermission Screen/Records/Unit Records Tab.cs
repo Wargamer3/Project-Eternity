@@ -46,19 +46,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
             else
             {
-                DicCharacterByKill = ActivePlayer.Inventory.ListOwnedCharacter
-                                        .GroupBy(C => C.ID, C =>
+                DicCharacterByKill = ActivePlayer.Inventory.DicOwnedCharacter
+                                        .GroupBy(C => C.Value.Pilot.ID, C =>
                                         {
-                                            uint KillCount = 0; ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills.TryGetValue(C.ID, out KillCount);
+                                            uint KillCount = 0; ActivePlayer.Records.PlayerUnitRecords.DicCharacterIDByNumberOfKills.TryGetValue(C.Value.Pilot.ID, out KillCount);
                                             return KillCount;
                                         })
                                         .OrderByDescending(U => U.First())
                                         .ToDictionary(C => C.Key, C => C.First());
 
-                DicUnitByKill = ActivePlayer.Inventory.ListOwnedSquad
-                                        .GroupBy(U => U.At(0).ItemName, U =>
+                DicUnitByKill = ActivePlayer.Inventory.DicOwnedSquad
+                                        .GroupBy(U => U.Value.Leader.ItemName, U =>
                                         {
-                                            uint KillCount = 0; ActivePlayer.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills.TryGetValue(U.At(0).ID, out KillCount);
+                                            uint KillCount = 0; ActivePlayer.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills.TryGetValue(U.Value.Leader.ID, out KillCount);
                                             return KillCount;
                                         })
                                         .OrderByDescending(U => U.First())

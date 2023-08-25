@@ -144,6 +144,9 @@
     <Compile Include="Lobby\Player\Campaign Record.cs" />
     <Compile Include="Lobby\Player\Player Records.cs" />
     <Compile Include="Lobby\Player\Unit Records.cs" />
+    <Compile Include="Lobby\Shop\Confirm Unit Buy.cs" />
+    <Compile Include="Lobby\UI\Empty Box Drop Down Button.cs" />
+    <Compile Include="Lobby\UI\Empty Box Button.cs" />
     <Compile Include="Lobby\Unlocks\BattleMap Player Unlock Inventory.cs" />
     <Compile Include="Lobby\Unlocks\Item Unlock Conditions.cs" />
     <Compile Include="Lobby\Unlocks\Pending Unlock Screen.cs" />
@@ -158,11 +161,10 @@
     <Compile Include="Lobby\Shop\Consumable Screen.cs" />
     <Compile Include="Lobby\Shop\Equipment Screen.cs" />
     <Compile Include="Lobby\Shop\Shop Screen.cs" />
-    <Compile Include="Lobby\Shop\Squad Screen.cs" />
+    <Compile Include="Lobby\Shop\Shop Unit Screen.cs" />
     <Compile Include="Lobby\Inventory\Equipment Screen.cs" />
     <Compile Include="Lobby\Inventory\Consumable Screen.cs" />
     <Compile Include="Lobby\Inventory\Character Screen.cs" />
-    <Compile Include="Lobby\Inventory\Squad Screen.cs" />
     <Compile Include="Lobby\Local Player Profile Selection Screen.cs" />
     <Compile Include="Lobby\Local Player Selection Screen.cs" />
     <Compile Include="Lobby\Inventory\Inventory Screen.cs" />

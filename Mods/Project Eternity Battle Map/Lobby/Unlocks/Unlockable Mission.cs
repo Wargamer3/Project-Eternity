@@ -22,7 +22,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Load(ActiveHeaderValues);
         }
 
-        public UnlockableMission(string Path, int UnlockQuantity, bool IsInShop)
+        public UnlockableMission(string Path, byte UnlockQuantity, bool IsInShop)
             : base(Path, UnlockQuantity, IsInShop)
         {
         }
@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             ConditionsOwner.UnlockInventory.ListLockedMission.Remove(this);
             ConditionsOwner.UnlockInventory.ListUnlockedMission.Add(this);
-            ConditionsOwner.Inventory.ListOwnedMission.Add(new MissionInfo(Path, UnlockQuantity));
+            ConditionsOwner.Inventory.DicOwnedMission.Add(Path, new MissionInfo(Path, UnlockQuantity));
 
             string[] ArrayMissionPath = Path.Split('/');
             string MissionName = ArrayMissionPath[ArrayMissionPath.Length - 1];

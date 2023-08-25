@@ -43,27 +43,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BasicEffect IndexedLinesEffect;
         private IndexedLines BackgroundGrid;
 
+        public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+
         public Vector3 BackgroundEmiterPosition;
         public Vector3[] ArrayNextPosition;
         public int CurrentPositionIndex;
         public int OldLineIndex;
         public int CurrentLineIndex;
-        int CylinderParts = 10;
-        int SegmentIncrement = 10;
-        int Segments;
-        TunnelBehaviorSpeedManager TunnelBehaviorSpeed;
-        TunnelBehaviorColorManager TunnelBehaviorColor;
-        TunnelBehaviorSizeManager TunnelBehaviorSize;
-        TunnelBehaviorRotationManager TunnelBehaviorRotation;
-        TunnelBehaviorDirectionManager TunnelBehaviorDirection;
+        private int CylinderParts = 10;
+        private int SegmentIncrement = 10;
+        private int Segments;
+        private TunnelBehaviorSpeedManager TunnelBehaviorSpeed;
+        private TunnelBehaviorColorManager TunnelBehaviorColor;
+        private TunnelBehaviorSizeManager TunnelBehaviorSize;
+        private TunnelBehaviorRotationManager TunnelBehaviorRotation;
+        private TunnelBehaviorDirectionManager TunnelBehaviorDirection;
 
-        private BoxButton ReturnToLobbyButton;
+        private IUIElement ReturnToLobbyButton;
 
-        private BoxButton UnitFilterButton;
-        private BoxButton CharacterFilterButton;
-        private BoxButton EquipmentFilterButton;
-        private BoxButton ConsumableFilterButton;
-        private DropDownButton CurrentLocalPlayerButton;
+        private EmptyBoxButton UnitFilterButton;
+        private EmptyBoxButton CharacterFilterButton;
+        private EmptyBoxButton EquipmentFilterButton;
+        private EmptyBoxButton ConsumableFilterButton;
+        private EmptyDropDownButton CurrentLocalPlayerButton;
 
         private IUIElement[] ArrayUIElement;
 
@@ -136,14 +138,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            ReturnToLobbyButton = new BoxButton(new Rectangle((int)(Constants.Width * 0.7f), 0, (int)(Constants.Width * 0.3), TopSectionHeight), fntArial12, "Back To Lobby", OnButtonOver, SelectBackToLobbyButton);
+            ReturnToLobbyButton = new EmptyBoxButton(new Rectangle((int)(Constants.Width * 0.7f), 0, (int)(Constants.Width * 0.3), TopSectionHeight - 30), fntArial12, "Back To Lobby", OnButtonOver, SelectBackToLobbyButton);
 
-            UnitFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 4, HeaderSectionY + 4, 60, HeaderSectionHeight - 8), fntArial12, "Units", OnButtonOver, SelectUnitFilterButton);
-            CharacterFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 64, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Characters", OnButtonOver, SelectCharacterFilterButton);
-            EquipmentFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 154, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Equipment", OnButtonOver, SelectEquipmentFilterButton);
-            ConsumableFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 244, HeaderSectionY + 4, 100, HeaderSectionHeight - 8), fntArial12, "Consumable", OnButtonOver, SelectConsumableFilterButton);
+            UnitFilterButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 4, HeaderSectionY + 4, 58, HeaderSectionHeight - 8), fntArial12, "Units", OnButtonOver, SelectUnitFilterButton);
+            CharacterFilterButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 64, HeaderSectionY + 4, 88, HeaderSectionHeight - 8), fntArial12, "Characters", OnButtonOver, SelectCharacterFilterButton);
+            EquipmentFilterButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 154, HeaderSectionY + 4, 88, HeaderSectionHeight - 8), fntArial12, "Equipment", OnButtonOver, SelectEquipmentFilterButton);
+            ConsumableFilterButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 244, HeaderSectionY + 4, 98, HeaderSectionHeight - 8), fntArial12, "Consumable", OnButtonOver, SelectConsumableFilterButton);
 
-            CurrentLocalPlayerButton = new DropDownButton(new Rectangle(400, 8, 120, 45), fntArial12, "M&K",
+            CurrentLocalPlayerButton = new EmptyDropDownButton(new Rectangle(400, 8, 120, 45), fntArial12, "M&K",
                 new string[] { "M&K", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4" }, OnButtonOver, null);
 
             UnitFilterButton.CanBeChecked = true;
@@ -159,8 +161,50 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 UnitFilterButton, CharacterFilterButton, EquipmentFilterButton, ConsumableFilterButton,
             };
 
-            InventorySquadScreen2 NewShopCharacterScreen = new InventorySquadScreen2(this);
-            InventoryCharacterScreen NewShopEquipmentScreen = new InventoryCharacterScreen(this);
+            int MaxLoadouts = 0;
+            int LoadoutSize = 0;
+
+            IniFile IniUnlocks = IniFile.ReadFromFile("Content/Battle Lobby Player Unlocks.ini");
+            foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Slots"))
+            {
+                if (ActivePlayer.Level >= int.Parse(RequiredLevel))
+                {
+                    ++MaxLoadouts;
+                }
+            }
+
+            foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Sizes"))
+            {
+                if (ActivePlayer.Level >= int.Parse(RequiredLevel))
+                {
+                    ++LoadoutSize;
+                }
+            }
+
+            for (int L = 0; L < MaxLoadouts; ++L)
+            {
+                PlayerLoadout ActiveLoadout;
+                if (L >= ActivePlayer.Inventory.ListSquadLoadout.Count)
+                {
+                    ActiveLoadout = new PlayerLoadout();
+                    ActivePlayer.Inventory.ListSquadLoadout.Add(ActiveLoadout);
+                }
+                else
+                {
+                    ActiveLoadout = ActivePlayer.Inventory.ListSquadLoadout[L];
+                }
+
+                for (int S = 0; S < LoadoutSize; S++)
+                {
+                    if (S >= ActiveLoadout.ListSpawnSquad.Count)
+                    {
+                        ActiveLoadout.ListSpawnSquad.Add(null);
+                    }
+                }
+            }
+
+            InventorySquadScreen2 NewShopCharacterScreen = new InventorySquadScreen2(this, MaxLoadouts, LoadoutSize);
+            InventoryCharacterScreen NewShopEquipmentScreen = new InventoryCharacterScreen(this, MaxLoadouts, LoadoutSize);
             InventoryEquipmentScreen NewShopWeaponsScreen = new InventoryEquipmentScreen();
             InventoryConsumableScreen NewShopItemsScreen = new InventoryConsumableScreen();
 
@@ -343,8 +387,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int X = 0; X < 360; X += SegmentIncrement)
             {
                 Vector3 OldPosition = BackgroundGrid.ArrayVertex[OldIndex + 1].Position;
-                Vector3 CurrentRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(X))) * CylinderSize;
-                Vector3 NextRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(X + SegmentIncrement))) * CylinderSize;
+                Vector3 CurrentRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(X + 2))) * CylinderSize;
+                Vector3 NextRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(X + SegmentIncrement + 2))) * CylinderSize;
 
                 float CurrentX = BackgroundEmiterPosition.X;
                 float CurrentY = BackgroundEmiterPosition.Y;
@@ -459,11 +503,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(BackgroundColor);
 
             float aspectRatio = Constants.Width / Constants.Height;
 
-            int DrawOffset = 400;
+            int DrawOffset = 700;
             int DrawLineIndex = CurrentPositionIndex - DrawOffset % ArrayNextPosition.Length;
             if (DrawLineIndex < 0)
             {
@@ -500,24 +544,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.End();
             g.Begin();
 
-            DrawBox(g, new Vector2(), Constants.Width, Constants.Height, Color.FromNonPremultiplied(255, 255, 255, 0));
-
-            DrawBox(g, new Vector2(0, MiddleSectionY), LeftSideWidth, MiddleSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
-            DrawBox(g, new Vector2(LeftSideWidth, MiddleSectionY), Constants.Width - LeftSideWidth, MiddleSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
-
             ActiveSubScreen.Draw(g);
 
+            g.Draw(sprPixel, new Rectangle((int)(Constants.Width * 0.05), TopSectionHeight - 5, (int)(Constants.Width * 0.9), 1), Color.White);
+
             //Left side
-            DrawBox(g, new Vector2(0, BottomSectionY), LeftSideWidth, Constants.Height - BottomSectionY, Color.FromNonPremultiplied(255, 255, 255, 0));
+            g.Draw(sprPixel, new Rectangle((int)(Constants.Width * 0.05), BottomSectionY + 5, (int)(Constants.Width * 0.9), 1), Color.White);
 
-            DrawBox(g, new Vector2(0, MiddleSectionY), LeftSideWidth, MiddleSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
-            DrawBox(g, new Vector2(LeftSideWidth, MiddleSectionY), Constants.Width - LeftSideWidth, MiddleSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
-
-            DrawBox(g, new Vector2(0, HeaderSectionY), LeftSideWidth, HeaderSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
-            DrawBox(g, new Vector2(0, 0), (int)(Constants.Width * 0.7), TopSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
             g.DrawString(fntArial12, "INVENTORY", new Vector2(10, 20), Color.White);
 
-            DrawBox(g, new Vector2(LeftSideWidth, HeaderSectionY), LeftSideWidth, HeaderSectionHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
             g.DrawStringRightAligned(fntArial12, "Money: 14360 cr", new Vector2(LeftSideWidth - 12, BottomSectionY + 11), Color.FromNonPremultiplied(255, 255, 255, 0));
 
             foreach (IUIElement ActiveButton in ArrayUIElement)

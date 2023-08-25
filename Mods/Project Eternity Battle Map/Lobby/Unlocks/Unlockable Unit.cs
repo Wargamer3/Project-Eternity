@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Load(ActiveHeaderValues);
         }
 
-        public UnlockableUnit(string Path, int UnlockQuantity, bool IsInShop)
+        public UnlockableUnit(string Path, byte UnlockQuantity, bool IsInShop)
             : base(Path, UnlockQuantity, IsInShop)
         {
         }
@@ -37,20 +37,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 UnlockConditions.IsUnlocked = true;
             }
 
-            ConditionsOwner.UnlockInventory.ListLockedUnit.Remove(this);
-            ConditionsOwner.UnlockInventory.ListUnlockedUnit.Add(this);
-            Unit NewUnit = null;
-            //ConditionsOwner.Inventory.ListOwnedSquad.Add(NewUnit);
-            for (int Q = 1; Q < UnlockQuantity; ++Q)
-            {
-                //ConditionsOwner.Inventory.ListOwnedSquad.Add();
-            }
+            ConditionsOwner.UnlockInventory.RootUnitContainer.ListLockedUnit.Remove(this);
+            ConditionsOwner.UnlockInventory.RootUnitContainer.ListUnlockedUnit.Add(this);
+            Unit NewUnit = Unit.FromFullName(Path, GameScreen.ContentFallback, PlayerManager.DicUnitType, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+            NewUnit.ID = NewUnit.ItemName;
 
-            //ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + NewUnit.Name + "!");
+            if (UnlockQuantity > 0)
+            {
+                ConditionsOwner.Inventory.DicOwnedSquad.Add(Path, new UnitInfo(NewUnit, UnlockQuantity));
+                ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + NewUnit.ItemName + "!");
+            }
 
             if (IsInShop)
             {
-                //ListUnlockMessage.Add(NewUnit.Name + " is now available in the shop!");
+                ListUnlockMessage.Add(NewUnit.ItemName + " is now available in the shop!");
             }
 
             return ListUnlockMessage;

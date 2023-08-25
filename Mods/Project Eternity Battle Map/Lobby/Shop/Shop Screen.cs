@@ -15,17 +15,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private SpriteFont fntArial12;
 
-        private BoxButton ReturnToLobbyButton;
+        private EmptyBoxButton ReturnToLobbyButton;
 
-        private BoxButton UnitFilterButton;
-        private BoxButton CharacterFilterButton;
-        private BoxButton EquipmentFilterButton;
-        private BoxButton ConsumableFilterButton;
+        private EmptyBoxButton UnitFilterButton;
+        private EmptyBoxButton CharacterFilterButton;
+        private EmptyBoxButton EquipmentFilterButton;
+        private EmptyBoxButton ConsumableFilterButton;
 
-        private DropDownButton CurrentLocalPlayerButton;
+        private EmptyDropDownButton CurrentLocalPlayerButton;
 
         private IUIElement[] ArrayUIElement;
 
+        public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+
+        private BasicEffect IndexedLinesEffect;
+        private IndexedLines BackgroundGrid;
+
+        public readonly int LeftSideX;
         public readonly int LeftSideWidth;
         public readonly int TopSectionHeight;
         public readonly int HeaderSectionY;
@@ -47,6 +53,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             ActivePlayer = (BattleMapPlayer)PlayerManager.ListLocalPlayer[0];
 
+            LeftSideX = 10;
             LeftSideWidth = (int)(Constants.Width * 0.5);
             TopSectionHeight = (int)(Constants.Height * 0.1);
             HeaderSectionY = TopSectionHeight;
@@ -66,14 +73,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            ReturnToLobbyButton = new BoxButton(new Rectangle((int)(Constants.Width * 0.7f), 0, (int)(Constants.Width * 0.3), TopSectionHeight), fntArial12, "Back To Lobby", OnButtonOver, SelectBackToLobbyButton);
+            ReturnToLobbyButton = new EmptyBoxButton(new Rectangle((int)(Constants.Width * 0.7f), 0, (int)(Constants.Width * 0.3), TopSectionHeight), fntArial12, "Back To Lobby", OnButtonOver, SelectBackToLobbyButton);
 
-            UnitFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 4, HeaderSectionY + 4, 60, HeaderSectionHeight - 8), fntArial12, "Units", OnButtonOver, SelectUnitFilterButton);
-            CharacterFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 64, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Characters", OnButtonOver, SelectCharacterFilterButton);
-            EquipmentFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 154, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Equipment", OnButtonOver, SelectEquipmentFilterButton);
-            ConsumableFilterButton = new BoxButton(new Rectangle(LeftSideWidth + 244, HeaderSectionY + 4, 100, HeaderSectionHeight - 8), fntArial12, "Consumable", OnButtonOver, SelectConsumableFilterButton);
+            UnitFilterButton = new EmptyBoxButton(new Rectangle(LeftSideX + 4, HeaderSectionY + 4, 60, HeaderSectionHeight - 8), fntArial12, "Units", OnButtonOver, SelectUnitFilterButton);
+            CharacterFilterButton = new EmptyBoxButton(new Rectangle(LeftSideX + 64, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Characters", OnButtonOver, SelectCharacterFilterButton);
+            EquipmentFilterButton = new EmptyBoxButton(new Rectangle(LeftSideX + 154, HeaderSectionY + 4, 90, HeaderSectionHeight - 8), fntArial12, "Equipment", OnButtonOver, SelectEquipmentFilterButton);
+            ConsumableFilterButton = new EmptyBoxButton(new Rectangle(LeftSideX + 244, HeaderSectionY + 4, 100, HeaderSectionHeight - 8), fntArial12, "Consumable", OnButtonOver, SelectConsumableFilterButton);
 
-            CurrentLocalPlayerButton = new DropDownButton(new Rectangle(400, 8, 120, 45), fntArial12, "M&K",
+            CurrentLocalPlayerButton = new EmptyDropDownButton(new Rectangle(400, 8, 120, 45), fntArial12, "M&K",
                 new string[] { "M&K", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4" }, OnButtonOver, null);
 
             UnitFilterButton.CanBeChecked = true;
@@ -89,12 +96,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 UnitFilterButton, CharacterFilterButton, EquipmentFilterButton, ConsumableFilterButton,
             };
 
-            ShopUnitScreen NewShopCharacterScreen = new ShopUnitScreen(this, ActivePlayer.UnlockInventory);
+            ShopUnitScreen NewShopUnitScreen = new ShopUnitScreen(this, ActivePlayer.UnlockInventory, ActivePlayer.Inventory);
             ShopCharacterScreen NewShopEquipmentScreen = new ShopCharacterScreen();
             ShopEquipmentScreen NewShopWeaponsScreen = new ShopEquipmentScreen();
             ShopConsumableScreen NewShopItemsScreen = new ShopConsumableScreen();
 
-            ArraySubScreen = new GameScreen[] { NewShopCharacterScreen, NewShopEquipmentScreen, NewShopWeaponsScreen, NewShopItemsScreen };
+            ArraySubScreen = new GameScreen[] { NewShopUnitScreen, NewShopEquipmentScreen, NewShopWeaponsScreen, NewShopItemsScreen };
 
             foreach (GameScreen ActiveScreen in ArraySubScreen)
             {
@@ -103,7 +110,50 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ActiveScreen.Load();
             }
 
-            ActiveSubScreen = NewShopCharacterScreen;
+            ActiveSubScreen = NewShopUnitScreen;
+
+            IndexedLinesEffect = new BasicEffect(GraphicsDevice);
+            IndexedLinesEffect.VertexColorEnabled = true;
+            IndexedLinesEffect.DiffuseColor = new Vector3(1, 1, 1);
+
+            VertexPositionColor[] ArrayVertex = new VertexPositionColor[24];
+
+            short[] ArrayBackgroundGridIndices = new short[(ArrayVertex.Length * 2) - 2];
+            for (int i = 0; i < ArrayBackgroundGridIndices.Length; ++i)
+            {
+                ArrayBackgroundGridIndices[i] = (short)(i);
+            }
+
+            Color LineColor = Color.White;
+
+            ArrayVertex[0] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, -0.5f), LineColor);
+            ArrayVertex[1] = new VertexPositionColor(new Vector3(0.5f, 0.5f, -0.5f), LineColor);
+            ArrayVertex[2] = new VertexPositionColor(new Vector3(0.5f, 0.5f, -0.5f), LineColor);
+            ArrayVertex[3] = new VertexPositionColor(new Vector3(0.5f, -0.5f, -0.5f), LineColor);
+            ArrayVertex[4] = new VertexPositionColor(new Vector3(0.5f, -0.5f, -0.5f), LineColor);
+            ArrayVertex[5] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, -0.5f), LineColor);
+            ArrayVertex[6] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, -0.5f), LineColor);
+            ArrayVertex[7] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, -0.5f), LineColor);
+
+            ArrayVertex[8] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, -0.5f), LineColor);
+            ArrayVertex[9] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, 0.5f), LineColor);
+            ArrayVertex[10] = new VertexPositionColor(new Vector3(0.5f, 0.5f, -0.5f), LineColor);
+            ArrayVertex[11] = new VertexPositionColor(new Vector3(0.5f, 0.5f, 0.5f), LineColor);
+            ArrayVertex[12] = new VertexPositionColor(new Vector3(0.5f, -0.5f, -0.5f), LineColor);
+            ArrayVertex[13] = new VertexPositionColor(new Vector3(0.5f, -0.5f, 0.5f), LineColor);
+            ArrayVertex[14] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, -0.5f), LineColor);
+            ArrayVertex[15] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, 0.5f), LineColor);
+
+            ArrayVertex[16] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, 0.5f), LineColor);
+            ArrayVertex[17] = new VertexPositionColor(new Vector3(0.5f, 0.5f, 0.5f), LineColor);
+            ArrayVertex[18] = new VertexPositionColor(new Vector3(0.5f, 0.5f, 0.5f), LineColor);
+            ArrayVertex[19] = new VertexPositionColor(new Vector3(0.5f, -0.5f, 0.5f), LineColor);
+            ArrayVertex[20] = new VertexPositionColor(new Vector3(0.5f, -0.5f, 0.5f), LineColor);
+            ArrayVertex[21] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, 0.5f), LineColor);
+            ArrayVertex[22] = new VertexPositionColor(new Vector3(-0.5f, -0.5f, 0.5f), LineColor);
+            ArrayVertex[23] = new VertexPositionColor(new Vector3(-0.5f, 0.5f, 0.5f), LineColor);
+
+            BackgroundGrid = new IndexedLines(ArrayVertex, ArrayBackgroundGridIndices);
         }
 
         public override void Unload()
@@ -179,22 +229,45 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawBox(g, new Vector2(), Constants.Width, Constants.Height, Color.White);
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(BackgroundColor);
 
-            DrawBox(g, new Vector2(0, 0), (int)(Constants.Width * 0.7), TopSectionHeight, Color.White);
+            float aspectRatio = Constants.Width / Constants.Height;
+
+            Vector3 position = new Vector3(0, 0, 6);
+
+            Vector3 target = new Vector3(0, 0, 3);
+
+            Vector3 up = Vector3.Up;
+            Matrix View = Matrix.CreateLookAt(position, target, up);
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                    aspectRatio,
+                                                                    0.1f, 1000);
+
+            IndexedLinesEffect.View = View;
+            IndexedLinesEffect.Projection = Projection;
+            IndexedLinesEffect.World = Matrix.CreateRotationX(1) * Matrix.CreateRotationY(1);
+
+            foreach (EffectPass pass in IndexedLinesEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+                BackgroundGrid.Draw(g);
+            }
+
+            g.End();
+            g.Begin();
+
             g.DrawString(fntArial12, "SHOP", new Vector2(10, 20), Color.White);
 
             //Left side
-            DrawBox(g, new Vector2(0, HeaderSectionY), LeftSideWidth, HeaderSectionHeight, Color.White);
-            DrawBox(g, new Vector2(0, MiddleSectionY), LeftSideWidth, MiddleSectionHeight, Color.White);
-            DrawBox(g, new Vector2(0, BottomSectionY), LeftSideWidth, Constants.Height - BottomSectionY, Color.White);
-            DrawBox(g, new Vector2(LeftSideWidth, HeaderSectionY), LeftSideWidth, HeaderSectionHeight, Color.White);
+            int DrawY = BottomSectionY;
 
-            DrawBox(g, new Vector2(LeftSideWidth, MiddleSectionY), LeftSideWidth, MiddleSectionHeight, Color.White);
+            DrawY += BottomSectionHeight - 45;
+            DrawEmptyBox(g, new Vector2(5, DrawY), LeftSideWidth - 210, 40);
 
-
-            DrawBox(g, new Vector2(LeftSideWidth, BottomSectionY), LeftSideWidth, Constants.Height - BottomSectionY, Color.White);
-            g.DrawStringRightAligned(fntArial12, "Money: 14360 cr", new Vector2(LeftSideWidth - 12, BottomSectionY + 11), Color.White);
+            DrawEmptyBox(g, new Vector2(LeftSideWidth - 200, DrawY), 155, 40);
+            g.DrawStringRightAligned(fntArial12, "Money: 14360 cr", new Vector2(LeftSideWidth - 55, DrawY + 10), Color.White);
 
             ActiveSubScreen.Draw(g);
 

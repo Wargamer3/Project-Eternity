@@ -95,6 +95,190 @@ namespace ProjectEternity.GameScreens
             g.Draw(sprBox, new Vector2(Position.X + Width - CornerSize, Position.Y + Height - CornerSize), new Rectangle(sprBox.Width - CornerSize, sprBox.Height - CornerSize, CornerSize, CornerSize), Color.White);
         }
 
+        public static void DrawEmptyBox(CustomSpriteBatch g, Vector2 Position, int Width, int Height)
+        {
+            int CornerSize = 7;
+            int HorizontalLineSize = Math.Min(Width, CornerSize * 4);
+            int VerticalLineSize = Math.Min(Height, CornerSize);
+
+            g.Draw(sprPixel, new Rectangle((int)Position.X + 1, (int)Position.Y, HorizontalLineSize, 1), Color.White);
+            g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y + 1, 1, VerticalLineSize), Color.White);
+
+            g.Draw(sprPixel, new Rectangle((int)Position.X + Width - HorizontalLineSize, (int)Position.Y + Height, HorizontalLineSize, 1), Color.White);
+            g.Draw(sprPixel, new Rectangle((int)Position.X + Width, (int)Position.Y + Height - VerticalLineSize, 1, VerticalLineSize), Color.White);
+        }
+
+        public static void DrawEmptyBox(CustomSpriteBatch g, Vector2 Position, int Width, int Height, int NumberOfLines, double AnimationProgress)
+        {
+            int PixelProgress = (int)(AnimationProgress * 50);
+            int CornerSize = 7;
+            int FullLineSize = CornerSize * 5;
+            int MaxSize = Width * 2 + Height * 2;
+
+            int OffsetBetweenLines = MaxSize / NumberOfLines;
+            int StartPostion = (OffsetBetweenLines - CornerSize + PixelProgress) % OffsetBetweenLines;
+
+            int TopSideLimit = Width;
+            int RightSideLimit = Width + Height;
+            int BottomSideLimit = Width + Width + Height;
+            int LeftSideLimit = MaxSize;
+
+            for (int i = StartPostion; i < MaxSize; i += OffsetBetweenLines)
+            {
+                int HorizontalLineSize;
+                int VerticalLineSize;
+                if (i < TopSideLimit)//Top
+                {
+                    if (i + FullLineSize - TopSideLimit < 0)
+                    {
+                        HorizontalLineSize = FullLineSize;
+                        VerticalLineSize = 0;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + i, (int)Position.Y, HorizontalLineSize, 1), Color.White);
+                    }
+                    else//Top Right Corner
+                    {
+                        HorizontalLineSize = TopSideLimit - i;
+                        VerticalLineSize = i + FullLineSize - TopSideLimit;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + i, (int)Position.Y, HorizontalLineSize, 1), Color.White);
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width, (int)Position.Y, 1, VerticalLineSize), Color.White);
+                    }
+                }
+                else if (i < RightSideLimit)//Right
+                {
+                    if (i + FullLineSize - RightSideLimit < 0)
+                    {
+                        HorizontalLineSize = 0;
+                        VerticalLineSize = FullLineSize;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width, (int)Position.Y + (i - TopSideLimit), 1, VerticalLineSize), Color.White);
+                    }
+                    else//Bottom Right Corner
+                    {
+                        VerticalLineSize = RightSideLimit - i;
+                        HorizontalLineSize = i + FullLineSize - RightSideLimit;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width, (int)Position.Y + Height - VerticalLineSize, 1, VerticalLineSize), Color.White);
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width - HorizontalLineSize, (int)Position.Y + Height, HorizontalLineSize, 1), Color.White);
+                    }
+                }
+                else if (i < BottomSideLimit)//Bottom
+                {
+                    if (i + FullLineSize - BottomSideLimit < 0)
+                    {
+                        HorizontalLineSize = FullLineSize;
+                        VerticalLineSize = 0;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width - (i - RightSideLimit) - HorizontalLineSize, (int)Position.Y + Height, HorizontalLineSize, 1), Color.White);
+                    }
+                    else//Bottom Left Corner
+                    {
+                        HorizontalLineSize = BottomSideLimit - i;
+                        VerticalLineSize = i + FullLineSize - BottomSideLimit;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y + Height, HorizontalLineSize, 1), Color.White);
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y + Height - VerticalLineSize, 1, VerticalLineSize), Color.White);
+                    }
+                }
+                else//Left
+                {
+                    if (i + FullLineSize - LeftSideLimit < 0)
+                    {
+                        HorizontalLineSize = 0;
+                        VerticalLineSize = FullLineSize;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y + Height - (i - BottomSideLimit) - VerticalLineSize, 1, VerticalLineSize), Color.White);
+                    }
+                    else//Top Left Corner
+                    {
+                        VerticalLineSize = LeftSideLimit - i;
+                        HorizontalLineSize = i + FullLineSize - LeftSideLimit;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y, 1, VerticalLineSize), Color.White);
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y, HorizontalLineSize, 1), Color.White);
+                    }
+                }
+            }
+        }
+
+        public static void DrawEmptyBox(CustomSpriteBatch g, Vector2 Position, int Width, int Height, int NumberOfLines, int CornerSize, double AnimationProgress)
+        {
+            int PixelProgress = (int)(AnimationProgress * 50);
+            int FullLineSize = CornerSize * 5;
+            int MaxSize = Width * 2 + Height * 2;
+
+            int OffsetBetweenLines = MaxSize / NumberOfLines;
+            int StartPostion = (OffsetBetweenLines - CornerSize + PixelProgress) % OffsetBetweenLines;
+
+            int TopSideLimit = Width;
+            int RightSideLimit = Width + Height;
+            int BottomSideLimit = Width + Width + Height;
+            int LeftSideLimit = MaxSize;
+
+            for (int i = StartPostion; i < MaxSize; i += OffsetBetweenLines)
+            {
+                int HorizontalLineSize;
+                int VerticalLineSize;
+                if (i < TopSideLimit)//Top
+                {
+                    if (i + FullLineSize - TopSideLimit < 0)
+                    {
+                        HorizontalLineSize = FullLineSize;
+                        VerticalLineSize = 0;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + i, (int)Position.Y, HorizontalLineSize, 1), Color.White);
+                    }
+                    else//Top Right Corner
+                    {
+                        HorizontalLineSize = TopSideLimit - i;
+                        VerticalLineSize = i + FullLineSize - TopSideLimit;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + i, (int)Position.Y, HorizontalLineSize, 1), Color.White);
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width, (int)Position.Y, 1, VerticalLineSize), Color.White);
+                    }
+                }
+                else if (i < RightSideLimit)//Right
+                {
+                    if (i + FullLineSize - RightSideLimit < 0)
+                    {
+                        HorizontalLineSize = 0;
+                        VerticalLineSize = FullLineSize;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width, (int)Position.Y + (i - TopSideLimit), 1, VerticalLineSize), Color.White);
+                    }
+                    else//Bottom Right Corner
+                    {
+                        VerticalLineSize = RightSideLimit - i;
+                        HorizontalLineSize = i + FullLineSize - RightSideLimit;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width, (int)Position.Y + Height - VerticalLineSize, 1, VerticalLineSize), Color.White);
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width - HorizontalLineSize, (int)Position.Y + Height, HorizontalLineSize, 1), Color.White);
+                    }
+                }
+                else if (i < BottomSideLimit)//Bottom
+                {
+                    if (i + FullLineSize - BottomSideLimit < 0)
+                    {
+                        HorizontalLineSize = FullLineSize;
+                        VerticalLineSize = 0;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X + Width - (i - RightSideLimit) - HorizontalLineSize, (int)Position.Y + Height, HorizontalLineSize, 1), Color.White);
+                    }
+                    else//Bottom Left Corner
+                    {
+                        HorizontalLineSize = BottomSideLimit - i;
+                        VerticalLineSize = i + FullLineSize - BottomSideLimit;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y + Height, HorizontalLineSize, 1), Color.White);
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y + Height - VerticalLineSize, 1, VerticalLineSize), Color.White);
+                    }
+                }
+                else//Left
+                {
+                    if (i + FullLineSize - LeftSideLimit < 0)
+                    {
+                        HorizontalLineSize = 0;
+                        VerticalLineSize = FullLineSize;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y + Height - (i - BottomSideLimit) - VerticalLineSize, 1, VerticalLineSize), Color.White);
+                    }
+                    else//Top Left Corner
+                    {
+                        VerticalLineSize = LeftSideLimit - i;
+                        HorizontalLineSize = i + FullLineSize - LeftSideLimit;
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y, 1, VerticalLineSize), Color.White);
+                        g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y, HorizontalLineSize, 1), Color.White);
+                    }
+                }
+            }
+        }
+
         public static void DrawBar(CustomSpriteBatch g, Texture2D sprBackground, Texture2D sprBar, Vector2 Position, int Value, float ValueMax)
         {
             g.Draw(sprBackground, new Vector2(Position.X, Position.Y), Color.White);

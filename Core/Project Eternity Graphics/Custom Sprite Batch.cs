@@ -114,10 +114,24 @@ namespace ProjectEternity.Core.Graphics
             DrawString(spriteFont, Text, Position, TextColor, 0, new Vector2((int)TextSize.X / 2, (int)TextSize.Y / 2), 1, SpriteEffects.None, 0);
         }
 
+        public void DrawStringCenteredBackground(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor, Texture2D sprPixel, Color BackgroundColor)
+        {
+            Vector2 TextSize = spriteFont.MeasureString(Text);
+            g.Draw(sprPixel, new Rectangle((int)(Position.X - TextSize.X / 2), (int)(Position.Y - TextSize.Y / 2), (int)TextSize.X, (int)TextSize.Y), BackgroundColor);
+            DrawString(spriteFont, Text, Position, TextColor, 0, new Vector2((int)TextSize.X / 2, (int)TextSize.Y / 2), 1, SpriteEffects.None, 0);
+        }
+
         public void DrawStringRightAligned(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor)
         {
             int TextWidth = (int)spriteFont.MeasureString(Text).X;
             DrawString(spriteFont, Text, Position, TextColor, 0, new Vector2(TextWidth, 0), 1, SpriteEffects.None, 0);
+        }
+
+        public void DrawStringRightAlignedBackground(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor, Texture2D sprPixel, Color BackgroundColor)
+        {
+            Vector2 TextSize = spriteFont.MeasureString(Text);
+            g.Draw(sprPixel, new Rectangle((int)(Position.X - TextSize.X), (int)Position.Y, (int)TextSize.X, (int)TextSize.Y), BackgroundColor);
+            DrawString(spriteFont, Text, Position, TextColor, 0, new Vector2(TextSize.X, 0), 1, SpriteEffects.None, 0);
         }
 
         public void DrawLine(Texture2D sprPixel, Vector2 StartPos, Vector2 EndPos, Color ActiveColor, int width = 1)

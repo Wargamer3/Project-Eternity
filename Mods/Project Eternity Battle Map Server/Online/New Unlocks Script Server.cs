@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen.Server
             {
                 WriteBuffer.AppendString(ListUnlockedItem[I].ItemType);
                 WriteBuffer.AppendString(ListUnlockedItem[I].Path);
-                WriteBuffer.AppendInt32(ListUnlockedItem[I].UnlockQuantity);
+                WriteBuffer.AppendByte(ListUnlockedItem[I].UnlockQuantity);
                 WriteBuffer.AppendBoolean(ListUnlockedItem[I].IsInShop);
             }
         }

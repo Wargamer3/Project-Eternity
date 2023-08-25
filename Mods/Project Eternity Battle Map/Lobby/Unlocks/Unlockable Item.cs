@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         public string ItemType;
         public string Path;
-        public int UnlockQuantity;
+        public byte UnlockQuantity;
         public bool IsInShop;
         public int ShopOrder;
         public bool HiddenUntilUnlocked;//Not visible in the shop until unlocked
@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.ItemType = ItemType;
         }
 
-        public UnlockableItem(string Path, int UnlockQuantity, bool IsInShop)
+        public UnlockableItem(string Path, byte UnlockQuantity, bool IsInShop)
         {
             this.Path = Path;
             this.UnlockQuantity = UnlockQuantity;
@@ -37,9 +37,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             string UnlockQuantityValue;
             if (ActiveHeaderValues.TryGetValue("UnlockQuantity", out UnlockQuantityValue))
             {
-                UnlockQuantity = int.Parse(UnlockQuantityValue);
+                UnlockQuantity = byte.Parse(UnlockQuantityValue);
             }
 
+            ReadHeaders(ActiveHeaderValues);
+        }
+
+        public void ReadHeaders(Dictionary<string, string> ActiveHeaderValues)
+        {
             UnlockConditions = new ItemUnlockConditions(ActiveHeaderValues);
 
             if (UnlockConditions.ListUnlockConditions.Count > 0)
@@ -51,6 +56,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
         }
+
         public abstract List<string> Unlock(BattleMapPlayer ConditionsOwner);
     }
 }

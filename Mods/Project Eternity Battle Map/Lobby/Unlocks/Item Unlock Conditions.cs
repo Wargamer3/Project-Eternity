@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -54,6 +55,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private BattleMapPlayer ConditionsOwner;
 
+        public bool IsInit;
+        public Task PopulatePlayerItemsTask;
+        private object PopulatePlayerItemsTaskLockObject = new object();
+
         public BattleMapItemUnlockConditionsEvaluator(BattleMapPlayer ConditionsOwner)
         {
             this.ConditionsOwner = ConditionsOwner;
@@ -66,9 +71,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (BattleMapPlayerUnlockInventory.DatabaseLoaded && ConditionsOwner.UnlockInventory.HasFinishedReadingPlayerShopItems)
             {
-                if (!ConditionsOwner.UnlockInventory.IsInit)
+                if (!UpdateAvailableItemsIfNeeded())
                 {
-                    ConditionsOwner.UnlockInventory.UpdateAvailableItems();
+                    return ListPendingUnlocks;
                 }
 
                 for (int C = ConditionsOwner.UnlockInventory.ListLockedCharacter.Count - 1; C >= 0; C--)
@@ -88,9 +93,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                for (int U = ConditionsOwner.UnlockInventory.ListLockedUnit.Count - 1; U >= 0; U--)
+                for (int U = ConditionsOwner.UnlockInventory.RootUnitContainer.ListLockedUnit.Count - 1; U >= 0; U--)
                 {
-                    UnlockableUnit ActiveUnit = ConditionsOwner.UnlockInventory.ListLockedUnit[U];
+                    UnlockableUnit ActiveUnit = ConditionsOwner.UnlockInventory.RootUnitContainer.ListLockedUnit[U];
                     if (IsValid(ActiveUnit.UnlockConditions, ConditionsOwner))
                     {
                         NewUnlocks = true;
@@ -129,6 +134,113 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             return ListPendingUnlocks;
+        }
+
+        public bool UpdateAvailableItemsIfNeeded()
+        {
+            bool IsFinished = false;
+            lock (PopulatePlayerItemsTaskLockObject)
+            {
+                if (PopulatePlayerItemsTask == null)
+                {
+                    PopulatePlayerItemsTask = Task.Run(() => { UpdateAvailableItemsTask(); });
+                }
+
+                IsFinished = IsInit;
+            }
+
+            return IsFinished;
+        }
+
+        private void UpdateAvailableItemsTask()
+        {
+            ConditionsOwner.UnlockInventory.RootUnitContainer.ListLockedUnit = new List<UnlockableUnit>(BattleMapPlayerUnlockInventory.DicUnitDatabase.Values);
+
+            foreach (UnlockableUnit NewUnit in BattleMapPlayerUnlockInventory.DicUnitDatabase.Values)
+            {
+                BattleMapPlayerUnlockInventory.UnitUnlockContainer CurrentUnitContainer = ConditionsOwner.UnlockInventory.RootUnitContainer;
+                bool IsUnitValid = IsValid(NewUnit.UnlockConditions, ConditionsOwner);
+
+                if (IsUnitValid)
+                {
+                    if (!CurrentUnitContainer.ListUnlockedUnit.Contains(NewUnit))
+                    {
+                        CurrentUnitContainer.ListUnlockedUnit.Add(NewUnit);
+                    }
+
+                    CurrentUnitContainer.ListLockedUnit.Remove(NewUnit);
+                }
+                else
+                {
+                    if (!CurrentUnitContainer.ListLockedUnit.Contains(NewUnit))
+                    {
+                        CurrentUnitContainer.ListLockedUnit.Add(NewUnit);
+                    }
+
+                    CurrentUnitContainer.ListUnlockedUnit.Remove(NewUnit);
+                }
+
+                string[] Tags = NewUnit.UnitToBuy.UnitTags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string ActiveTag in Tags)
+                {
+                    CurrentUnitContainer = ConditionsOwner.UnlockInventory.RootUnitContainer;
+
+                    if (IsUnitValid)
+                    {
+                        if (!CurrentUnitContainer.ListUnlockedUnit.Contains(NewUnit))
+                        {
+                            CurrentUnitContainer.ListUnlockedUnit.Add(NewUnit);
+                        }
+
+                        CurrentUnitContainer.ListLockedUnit.Remove(NewUnit);
+                    }
+                    else
+                    {
+                        if (!CurrentUnitContainer.ListLockedUnit.Contains(NewUnit))
+                        {
+                            CurrentUnitContainer.ListLockedUnit.Add(NewUnit);
+                        }
+
+                        CurrentUnitContainer.ListUnlockedUnit.Remove(NewUnit);
+                    }
+
+                    string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string ActiveFolder in SubFolders)
+                    {
+                        BattleMapPlayerUnlockInventory.UnitUnlockContainer NewContainer;
+                        if (!CurrentUnitContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
+                        {
+                            NewContainer = new BattleMapPlayerUnlockInventory.UnitUnlockContainer(ActiveFolder);
+                            CurrentUnitContainer.DicFolder.Add(ActiveFolder, NewContainer);
+                            CurrentUnitContainer.ListFolder.Add(NewContainer);
+                        }
+
+                        CurrentUnitContainer = NewContainer;
+
+                        if (IsUnitValid)
+                        {
+                            if (!CurrentUnitContainer.ListUnlockedUnit.Contains(NewUnit))
+                            {
+                                CurrentUnitContainer.ListUnlockedUnit.Add(NewUnit);
+                                CurrentUnitContainer.ListLockedUnit.Remove(NewUnit);
+                            }
+                        }
+                        else
+                        {
+                            if (!CurrentUnitContainer.ListLockedUnit.Contains(NewUnit))
+                            {
+                                CurrentUnitContainer.ListLockedUnit.Add(NewUnit);
+                                CurrentUnitContainer.ListUnlockedUnit.Remove(NewUnit);
+                            }
+                        }
+                    }
+                }
+            }
+
+            lock (PopulatePlayerItemsTaskLockObject)
+            {
+                IsInit = true;
+            }
         }
 
         public static bool IsValid(ItemUnlockConditions ConditionsToCheck, BattleMapPlayer ConditionsOwner)

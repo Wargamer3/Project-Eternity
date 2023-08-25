@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,13 +14,38 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class InventorySquadScreen2 : GameScreen
     {
-        private BoxScrollbar SquadListScrollbar;
-        private BoxScrollbar InventoryScrollbar;
+        public struct SquadContainer
+        {
+            public List<SquadContainer> ListFolder;
+            public List<UnitInfo> ListOwnedSquad;
+
+            public string Name;
+
+            public SquadContainer(IEnumerable<UnitInfo> ListOwnedSquad)
+            {
+                this.ListOwnedSquad = new List<UnitInfo>(ListOwnedSquad);
+                ListFolder = new List<SquadContainer>();
+                Name = string.Empty;
+            }
+
+            public SquadContainer(string Name)
+            {
+                this.Name = Name;
+
+                ListFolder = new List<SquadContainer>();
+                ListOwnedSquad = new List<UnitInfo>();
+            }
+        }
+
+        private EmptyBoxScrollbar SquadListScrollbar;
+        private EmptyBoxScrollbar InventoryScrollbar;
 
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
 
         private SpriteFont fntArial12;
+
+        private Texture2D sprCircle;
 
         private const int SquadHeight = 100;
         private const int BoxHeight = 50;
@@ -38,12 +64,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected bool IsDragDropActive { get { return DragAndDropEquipment != null; } }
 
-        public InventorySquadScreen2(BattleMapInventoryScreen Owner)
+        public InventorySquadScreen2(BattleMapInventoryScreen Owner, int MaxLoadouts, int LoadoutSize)
         {
             this.Owner = Owner;
-            MaxLoadouts = 0;
-            LoadoutSize = 0;
-            CurrentContainer = RootContainer = new SquadContainer(Owner.ActivePlayer.Inventory.ListOwnedSquad);
+            this.MaxLoadouts = MaxLoadouts;
+            this.LoadoutSize = LoadoutSize;
+            CurrentContainer = RootContainer = new SquadContainer(Owner.ActivePlayer.Inventory.DicOwnedSquad.Values);
             RootContainer.ListFolder.Add(new SquadContainer("ALL"));
             RootContainer.ListFolder[0].ListOwnedSquad.AddRange(CurrentContainer.ListOwnedSquad);
             RootContainer.ListFolder.Add(new SquadContainer("Getter"));
@@ -51,52 +77,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            SquadListScrollbar = new BoxScrollbar(new Vector2(BattleMapInventoryScreen.LeftSideWidth - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnSquadScrollbarChange);
-            InventoryScrollbar = new BoxScrollbar(new Vector2(Constants.Width - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnInventoryScrollbarChange);
+            SquadListScrollbar = new EmptyBoxScrollbar(new Vector2(BattleMapInventoryScreen.LeftSideWidth - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnSquadScrollbarChange);
+            InventoryScrollbar = new EmptyBoxScrollbar(new Vector2(Constants.Width - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnInventoryScrollbarChange);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
 
+            sprCircle = Content.Load<Texture2D>("Circle");
+
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
-
-            IniFile IniUnlocks = IniFile.ReadFromFile("Content/Battle Lobby Player Unlocks.ini");
-            foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Slots"))
-            {
-                if (Owner.ActivePlayer.Level >= int.Parse(RequiredLevel))
-                {
-                    ++MaxLoadouts;
-                }
-            }
-
-            foreach (string RequiredLevel in IniUnlocks.ReadAllValues("Loadout Sizes"))
-            {
-                if (Owner.ActivePlayer.Level >= int.Parse(RequiredLevel))
-                {
-                    ++LoadoutSize;
-                }
-            }
-
-            for (int L = 0; L < MaxLoadouts; ++L)
-            {
-                PlayerLoadout ActiveLoadout;
-                if (L >= Owner.ActivePlayer.Inventory.ListSquadLoadout.Count)
-                {
-                    ActiveLoadout = new PlayerLoadout();
-                    Owner.ActivePlayer.Inventory.ListSquadLoadout.Add(ActiveLoadout);
-                }
-                else
-                {
-                    ActiveLoadout = Owner.ActivePlayer.Inventory.ListSquadLoadout[L];
-                }
-
-                for (int S = 0; S < LoadoutSize; S++)
-                {
-                    if (S >= ActiveLoadout.ListSpawnSquad.Count)
-                    {
-                        ActiveLoadout.ListSpawnSquad.Add(null);
-                    }
-                }
-            }
 
             SquadListScrollbar.ChangeMaxValue(Owner.ActivePlayer.Inventory.ListSquadLoadout.Count * SquadHeight - BattleMapInventoryScreen.MiddleSectionHeight);
             InventoryScrollbar.ChangeMaxValue(CurrentContainer.ListOwnedSquad.Count * BoxHeight - BattleMapInventoryScreen.MiddleSectionHeight);
@@ -186,8 +175,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int DrawY = BattleMapInventoryScreen.MiddleSectionY + 5 - SquadScrollbarValue % SquadHeight;
             for (int L = (int)Math.Floor(SquadScrollbarValue / (double)SquadHeight); L < Owner.ActivePlayer.Inventory.ListSquadLoadout.Count; ++L)
             {
-                DrawBox(g, new Vector2(5, DrawY), BattleMapInventoryScreen.LeftSideWidth - 30, 90, Color.FromNonPremultiplied(255, 255, 255, 0));
-                DrawBox(g, new Vector2(BattleMapInventoryScreen.LeftSideWidth - 115, DrawY + 5), 85, 35, Color.FromNonPremultiplied(255, 255, 255, 0));
+                DrawEmptyBox(g, new Vector2(5, DrawY), BattleMapInventoryScreen.LeftSideWidth - 30, 90);
+                DrawEmptyBox(g, new Vector2(BattleMapInventoryScreen.LeftSideWidth - 115, DrawY + 5), 85, 35);
                 g.DrawString(fntArial12, "Rename", new Vector2(BattleMapInventoryScreen.LeftSideWidth - 108, DrawY + 11), Color.White);
                 g.DrawString(fntArial12, "Loadout " + (L + 1), new Vector2(11, DrawY + 11), Color.White);
 
@@ -251,13 +240,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     int FinalX = X + XPos * BoxWidth;
                     int CurrentIndex = XPos + YPos;
 
-                    DrawBox(g, new Vector2(FinalX, DrawY), BoxWidth, BoxHeight, Color.FromNonPremultiplied(255, 255, 255, 0));
+                    DrawEmptyBox(g, new Vector2(FinalX, DrawY), BoxWidth, BoxHeight);
 
                     if (CurrentIndex < CurrentContainer.ListFolder.Count)
                     {
                         DrawBox(g, new Vector2(FinalX + 8, DrawY + 12), BoxWidth - 16, BoxHeight - 24, Color.FromNonPremultiplied(255, 255, 255, 0));
-                        g.DrawStringCentered(fntArial12, CurrentContainer.ListFolder[CurrentIndex].Name,
-                            new Vector2(FinalX + BoxWidth / 2, DrawY + BoxHeight / 2), Color.White);
+                        g.Draw(GameScreen.sprPixel, new Rectangle(FinalX + 8, DrawY + 12, BoxWidth - 16, BoxHeight - 24), BattleMapInventoryScreen.BackgroundColor);
+                        g.DrawStringCenteredBackground(fntArial12, CurrentContainer.ListFolder[CurrentIndex].Name,
+                            new Vector2(FinalX + BoxWidth / 2, DrawY + BoxHeight / 2), Color.White, sprPixel, BattleMapInventoryScreen.BackgroundColor);
                     }
                     else
                     {
@@ -269,9 +259,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             DrawBox(g, new Vector2(FinalX + 6, DrawY + BoxHeight - 20), 15, 15, Color.White);
                         }
 
-                        g.Draw(CurrentContainer.ListOwnedSquad[CurrentIndex].CurrentLeader.SpriteMap, new Vector2(FinalX + SpriteOffset + 3, DrawY + 7), Color.White);
+                        g.Draw(CurrentContainer.ListOwnedSquad[CurrentIndex].Leader.SpriteMap, new Vector2(FinalX + SpriteOffset + 3, DrawY + 7), Color.White);
 
-                        g.DrawString(fntArial12, "x1",
+                        g.DrawString(fntArial12, "x" + CurrentContainer.ListOwnedSquad[CurrentIndex].QuantityOwned,
                             new Vector2(FinalX + BoxWidth - 25, DrawY + BoxHeight - 20), Color.White);
 
                         if (MouseHelper.MouseStateCurrent.X >= FinalX + SpriteOffset && MouseHelper.MouseStateCurrent.X < FinalX + SpriteOffset + 38
@@ -281,7 +271,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                             DrawBox(g, new Vector2(FinalX - 15, DrawY + BoxHeight), BoxWidth + 30, 25, Color.FromNonPremultiplied(255, 255, 255, 0));
                             g.DrawStringMiddleAligned(fntArial12,
-                                CurrentContainer.ListOwnedSquad[CurrentIndex].CurrentLeader.ItemName,
+                                CurrentContainer.ListOwnedSquad[CurrentIndex].Leader.ItemName,
                                 new Vector2(FinalX + BoxWidth / 2, DrawY + BoxHeight), Color.White);
                         }
                     }
@@ -289,11 +279,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 DrawY += LineHeight;
             }
 
-            DrawBox(g, new Vector2(BattleMapInventoryScreen.LeftSideWidth, BattleMapInventoryScreen.BottomSectionY), BattleMapInventoryScreen.LeftSideWidth, Constants.Height - BattleMapInventoryScreen.BottomSectionY, Color.FromNonPremultiplied(255, 255, 255, 0));
-            g.DrawStringRightAligned(fntArial12, CurrentContainer.ListOwnedSquad[0].CurrentLeader.ItemName,
+            g.DrawStringRightAligned(fntArial12, CurrentContainer.ListOwnedSquad[0].Leader.ItemName,
                 new Vector2(X + 70, BattleMapInventoryScreen.BottomSectionY + 11), Color.White);
 
-            g.DrawString(fntArial12, "HP: " + CurrentContainer.ListOwnedSquad[0].CurrentLeader.MaxHP,
+            g.DrawString(fntArial12, "HP: " + CurrentContainer.ListOwnedSquad[0].Leader.MaxHP,
                 new Vector2(X + 70, BattleMapInventoryScreen.BottomSectionY + 31), Color.White);
         }
     }

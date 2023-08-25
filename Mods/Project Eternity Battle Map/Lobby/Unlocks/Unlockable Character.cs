@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Load(ActiveHeaderValues);
         }
 
-        public UnlockableCharacter(string Path, int UnlockQuantity, bool IsInShop)
+        public UnlockableCharacter(string Path, byte UnlockQuantity, bool IsInShop)
             : base(Path, UnlockQuantity, IsInShop)
         {
         }
@@ -40,13 +40,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             ConditionsOwner.UnlockInventory.ListLockedCharacter.Remove(this);
             ConditionsOwner.UnlockInventory.ListUnlockedCharacter.Add(this);
             Character NewCharacter = new Character(Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
-            ConditionsOwner.Inventory.ListOwnedCharacter.Add(NewCharacter);
-            for (int Q = 1; Q < UnlockQuantity; ++Q)
-            {
-                ConditionsOwner.Inventory.ListOwnedCharacter.Add(new Character(Path, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget));
-            }
 
-            ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + NewCharacter.Name + "!");
+            if (UnlockQuantity > 0)
+            {
+                ConditionsOwner.Inventory.DicOwnedCharacter.Add(Path, new CharacterInfo(NewCharacter, UnlockQuantity));
+                ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + NewCharacter.Name + "!");
+            }
 
             if (IsInShop)
             {

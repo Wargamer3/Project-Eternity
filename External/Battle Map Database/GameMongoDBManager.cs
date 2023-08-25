@@ -196,7 +196,7 @@ namespace Database.BattleMap
                     new BsonDocument
                     {
                         { "Money", 0 },
-                        { "OwnedSquads",
+                        { "OwnedUnits",
                             new BsonArray
                             {
                             }
@@ -347,7 +347,7 @@ namespace Database.BattleMap
             };
 
             BsonDocument Inventory = NewPlayer.GetValue("Inventory").AsBsonDocument;
-            BsonArray OwnedSquads = Inventory.GetValue("OwnedSquads").AsBsonArray;
+            BsonArray OwnedUnits = Inventory.GetValue("OwnedUnits").AsBsonArray;
             BsonArray OwnedCharacters = Inventory.GetValue("OwnedCharacters").AsBsonArray;
             BsonArray SquadLoadouts = Inventory.GetValue("SquadLoadouts").AsBsonArray;
 
@@ -355,7 +355,7 @@ namespace Database.BattleMap
             {
                 BsonDocument NewSquad = new BsonDocument();
                 NewSquad.Add("RelativePath", ActiveUnitAndPilot.Item1);
-                OwnedSquads.Add(NewSquad);
+                OwnedUnits.Add(NewSquad);
 
                 if (!string.IsNullOrEmpty(ActiveUnitAndPilot.Item2))
                 {
@@ -412,10 +412,10 @@ namespace Database.BattleMap
         {
             BsonDocument Inventory = FoundPlayerDocument.GetValue("Inventory").AsBsonDocument;
 
-            BsonArray OwnedSquadsArray = Inventory.GetValue("OwnedSquads").AsBsonArray;
-            BW.AppendInt32(OwnedSquadsArray.Count);
+            BsonArray OwnedUnitsArray = Inventory.GetValue("OwnedUnits").AsBsonArray;
+            BW.AppendInt32(OwnedUnitsArray.Count);
 
-            foreach (BsonValue ActiveSquad in OwnedSquadsArray)
+            foreach (BsonValue ActiveSquad in OwnedUnitsArray)
             {
                 BsonDocument ActiveUnitDocument = ActiveSquad.AsBsonDocument;
                 BW.AppendString(ActiveUnitDocument.GetValue("RelativePath").AsString);
@@ -665,7 +665,7 @@ namespace Database.BattleMap
                     new BsonDocument
                     {
                         { "Money", 0 },
-                        { "OwnedSquads",
+                        { "OwnedUnits",
                             new BsonArray
                             {
                             }
@@ -811,7 +811,7 @@ namespace Database.BattleMap
             };
 
             BsonDocument Inventory = PlayerDocument.GetValue("Inventory").AsBsonDocument;
-            BsonArray OwnedSquads = Inventory.GetValue("OwnedSquads").AsBsonArray;
+            BsonArray OwnedUnits = Inventory.GetValue("OwnedUnits").AsBsonArray;
             BsonArray OwnedCharacters = Inventory.GetValue("OwnedCharacters").AsBsonArray;
             BsonArray SquadLoadouts = Inventory.GetValue("SquadLoadouts").AsBsonArray;
 
@@ -819,7 +819,7 @@ namespace Database.BattleMap
             {
                 BsonDocument NewSquad = new BsonDocument();
                 NewSquad.Add("RelativePath", ActiveUnitAndPilot.Item1);
-                OwnedSquads.Add(NewSquad);
+                OwnedUnits.Add(NewSquad);
 
                 if (!string.IsNullOrEmpty(ActiveUnitAndPilot.Item2))
                 {
@@ -862,24 +862,27 @@ namespace Database.BattleMap
         {
             BsonDocument Inventory = FoundPlayerDocument.GetValue("Inventory").AsBsonDocument;
 
-            BsonArray OwnedSquadsArray = Inventory.GetValue("OwnedSquads").AsBsonArray;
+            BsonArray OwnedUnitsArray = Inventory.GetValue("OwnedUnits").AsBsonArray;
             
-            foreach (Squad ActiveSquad in Player.Inventory.ListOwnedSquad)
+            foreach (UnitInfo ActiveSquad in Player.Inventory.DicOwnedSquad.Values)
             {
-                OwnedSquadsArray.Add(ActiveSquad.CurrentLeader.RelativePath);
+                OwnedUnitsArray.Add(ActiveSquad.Leader.RelativePath);
+                OwnedUnitsArray.Add(ActiveSquad.QuantityOwned);
             }
 
             BsonArray OwnedCharactersArray = Inventory.GetValue("OwnedCharacters").AsBsonArray;
 
-            foreach (Character ActiveCharacter in Player.Inventory.ListOwnedCharacter)
+            foreach (CharacterInfo ActiveCharacter in Player.Inventory.DicOwnedCharacter.Values)
             {
-                OwnedCharactersArray.Add(ActiveCharacter.FullName);
+                OwnedCharactersArray.Add(ActiveCharacter.Pilot.FullName);
+                OwnedCharactersArray.Add(ActiveCharacter.QuantityOwned);
             }
 
             BsonArray OwnedMissionsArray = Inventory.GetValue("OwnedMissions").AsBsonArray;
-            foreach (MissionInfo ActiveMission in Player.Inventory.ListOwnedMission)
+            foreach (MissionInfo ActiveMission in Player.Inventory.DicOwnedMission.Values)
             {
                 OwnedMissionsArray.Add(ActiveMission.MapPath);
+                OwnedMissionsArray.Add(ActiveMission.QuantityOwned);
             }
 
             BsonArray SquadLoadoutsArray = Inventory.GetValue("SquadLoadouts").AsBsonArray;
@@ -911,7 +914,7 @@ namespace Database.BattleMap
                 UnlockedCharactersArray.Add(ActiveCharacter.Path);
             }
 
-            foreach (UnlockableUnit ActiveUnit in Player.UnlockInventory.ListUnlockedUnit)
+            foreach (UnlockableUnit ActiveUnit in Player.UnlockInventory.RootUnitContainer.ListUnlockedUnit)
             {
                 UnlockedUnitsArray.Add(ActiveUnit.Path);
             }
