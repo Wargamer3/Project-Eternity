@@ -40,10 +40,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private SpriteFont fntArial12;
 
+        public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+
         private BasicEffect IndexedLinesEffect;
         private IndexedLines BackgroundGrid;
-
-        public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
         public Vector3 BackgroundEmiterPosition;
         public Vector3[] ArrayNextPosition;
@@ -90,8 +90,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             ActivePlayer = (BattleMapPlayer)PlayerManager.ListLocalPlayer[0];
 
-            Segments = 360 / SegmentIncrement * 4;
-
             LeftSideWidth = (int)(Constants.Width * 0.5 + 20);
             TopSectionHeight = (int)(Constants.Height * 0.1);
             HeaderSectionY = TopSectionHeight;
@@ -102,6 +100,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             MiddleSectionY = (HeaderSectionY + HeaderSectionHeight);
             MiddleSectionHeight = BottomSectionY - MiddleSectionY;
+
+            Segments = 360 / SegmentIncrement * 4;
 
             TunnelBehaviorSpeed = new TunnelBehaviorSpeedManager();
             TunnelBehaviorColor = new TunnelBehaviorColorManager();
@@ -246,91 +246,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             CreateSimpleBackground(gameTime);
             ActiveSubScreen.Update(gameTime);
-        }
-
-        private void CreateAnimatedBackground(GameTime gameTime)
-        {
-            Vector3 Up = Vector3.Up;
-
-            int Parts = CylinderParts * Segments;
-            int ArrayLength = Parts;
-
-            float CylinderSize = TunnelBehaviorSize.TunnelSizeFinal;
-
-            if (ArrayNextPosition == null || ArrayNextPosition.Length != ArrayLength)
-            {
-                ArrayNextPosition = new Vector3[ArrayLength];
-                VertexPositionColor[] ArrayBackgroundGridVertex = new VertexPositionColor[ArrayLength];
-                // Initialize an array of indices of type short.
-                short[] ArrayBackgroundGridIndices = new short[(ArrayBackgroundGridVertex.Length * 2) - 2];
-                for (int i = 0; i < ArrayBackgroundGridVertex.Length; ++i)
-                {
-                    ArrayBackgroundGridVertex[i] = new VertexPositionColor(
-                        new Vector3(), Color.White);
-
-                    ArrayBackgroundGridIndices[i] = (short)(i);
-                }
-
-                BackgroundGrid = new IndexedLines(ArrayBackgroundGridVertex, ArrayBackgroundGridIndices);
-            }
-
-            float Speed = 5;
-            float SpeedX = (float)(Math.Cos(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * gameTime.ElapsedGameTime.TotalSeconds);
-            float SpeedY = (float)(Math.Sin(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * gameTime.ElapsedGameTime.TotalSeconds);
-            BackgroundEmiterPosition += new Vector3(SpeedX, SpeedY, (float)(Speed * 0.01f));
-
-            ++CurrentPositionIndex;
-
-            if (CurrentPositionIndex >= ArrayLength)
-            {
-                CurrentPositionIndex = 0;
-            }
-
-            ArrayNextPosition[CurrentPositionIndex] = BackgroundEmiterPosition;
-
-            int NextLineIndex = (int)Math.Floor(CurrentPositionIndex / (float)Segments) * Segments;
-            if (CurrentLineIndex != NextLineIndex)
-            {
-                OldLineIndex = CurrentLineIndex;
-                TunnelBehaviorDirection.ActiveDirection = TunnelBehaviorDirection.TunnelDirectionFinal;
-                TunnelBehaviorSpeed.ActiveSpeed = TunnelBehaviorSpeed.TunnelSpeedFinal;
-            }
-
-            CurrentLineIndex = NextLineIndex;
-
-            int OldIndex = OldLineIndex;
-            int Index = CurrentLineIndex;
-
-            Color LineColor = ColorFromHSV(TunnelBehaviorColor.TunnelHueFinal, 1, 1);
-
-            for (int X = 0; X < 360; X += SegmentIncrement)
-            {
-                float FinalRotation = X + TunnelBehaviorRotation.TunnelRotationFinal;
-                Vector3 OldPosition = BackgroundGrid.ArrayVertex[OldIndex + 1].Position;
-                Vector3 CurrentRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(FinalRotation))) * CylinderSize;
-                Vector3 NextRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(FinalRotation + SegmentIncrement))) * CylinderSize;
-
-                float CurrentX = BackgroundEmiterPosition.X;
-                float CurrentY = BackgroundEmiterPosition.Y;
-                float CurrentZ = BackgroundEmiterPosition.Z/* + X / 60f*/;
-
-                //Draw cylinder lines
-                BackgroundGrid.ArrayVertex[Index] = new VertexPositionColor(
-                    OldPosition, LineColor);
-
-                BackgroundGrid.ArrayVertex[Index + 1] = new VertexPositionColor(
-                    new Vector3(CurrentX, CurrentY, CurrentZ) + CurrentRightDistance, LineColor);
-
-                //Draw ring lines
-                BackgroundGrid.ArrayVertex[Index + 2] = new VertexPositionColor(
-                    new Vector3(CurrentX, CurrentY, CurrentZ) + CurrentRightDistance, LineColor);
-
-                BackgroundGrid.ArrayVertex[Index + 3] = new VertexPositionColor(
-                    new Vector3(CurrentX, CurrentY, CurrentZ) + NextRightDistance, LineColor);
-
-                OldIndex += 4;
-                Index += 4;
-            }
         }
 
         private void CreateSimpleBackground(GameTime gameTime)

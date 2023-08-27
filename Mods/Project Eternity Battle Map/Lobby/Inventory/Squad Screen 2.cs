@@ -4,7 +4,6 @@ using FMOD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
-using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.UI;
@@ -45,8 +44,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private SpriteFont fntArial12;
 
-        private Texture2D sprCircle;
-
         private const int SquadHeight = 100;
         private const int BoxHeight = 50;
         private bool ShowCheckbox;
@@ -81,8 +78,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             InventoryScrollbar = new EmptyBoxScrollbar(new Vector2(Constants.Width - 23, BattleMapInventoryScreen.MiddleSectionY + 3), BattleMapInventoryScreen.MiddleSectionHeight - 5, 10, OnInventoryScrollbarChange);
 
             fntArial12 = Content.Load<SpriteFont>("Fonts/Arial12");
-
-            sprCircle = Content.Load<Texture2D>("Circle");
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");

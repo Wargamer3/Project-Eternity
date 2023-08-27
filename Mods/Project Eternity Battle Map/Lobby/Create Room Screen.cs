@@ -37,14 +37,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private SpriteFont fntArial12;
 
-        protected BoxButton CancelButton;
-        protected BoxButton OKButton;
+        protected EmptyBoxButton CancelButton;
+        protected EmptyBoxButton OKButton;
 
         protected TextInput RoomNameInput;
         protected TextInput PasswordInput;
 
-        private DropDownButton RoomTypeButton;
-        private DropDownButton RoomSubtypeButton;
+        private EmptyDropDownButton RoomTypeButton;
+        private EmptyDropDownButton RoomSubtypeButton;
 
         private IUIElement[] ArrayMenuButton;
 
@@ -90,8 +90,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int ModeHeight = (int)(BoxHeigth * 0.28);
             int ModeBoxWith = (int)(BoxWidth * 0.37);
             int ModeBoxSeparation = (int)(BoxWidth * 0.01);
-            RoomTypeButton = new DropDownButton(new Rectangle(ModeX + 64, ModeY + 15, ModeBoxWith, 30), fntArial12, "PVE", new string[] { "PVE", "PVP" }, null, null);
-            RoomSubtypeButton = new DropDownButton(new Rectangle(ModeX + 64 + ModeBoxWith + ModeBoxSeparation + 10, ModeY + 15, ModeBoxWith, 30), fntArial12,
+            RoomTypeButton = new EmptyDropDownButton(new Rectangle(ModeX + 64, ModeY + 15, ModeBoxWith, 30), fntArial12, "PVE", new string[] { "PVE", "PVP" }, null, null);
+            RoomSubtypeButton = new EmptyDropDownButton(new Rectangle(ModeX + 64 + ModeBoxWith + ModeBoxSeparation + 10, ModeY + 15, ModeBoxWith, 30), fntArial12,
                 "Campaign", new string[] { "Campaign", "Horde" }, null, null);
 
             int PlayerX = InnerBoxX;
@@ -104,8 +104,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int ButtonCancelX = ButtonOKX - ButtonsWidth - 5;
             int ButtonsY = BoxY + (int)(BoxHeigth * 0.90);
 
-            CancelButton = new BoxButton(new Rectangle(ButtonCancelX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "Cancel", OnButtonOver, Cancel);
-            OKButton = new BoxButton(new Rectangle(ButtonOKX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "OK", OnButtonOver, CreateRoom);
+            CancelButton = new EmptyBoxButton(new Rectangle(ButtonCancelX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "Cancel", OnButtonOver, Cancel);
+            OKButton = new EmptyBoxButton(new Rectangle(ButtonOKX, ButtonsY, ButtonsWidth, ButtonsHeight), fntArial12, "OK", OnButtonOver, CreateRoom);
 
             RoomNameInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(RoomInfoX + 74, RoomInfoY + 20), new Vector2(314, 20));
             PasswordInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(BoxX + 280, BoxY + 90), new Vector2(84, 20), null, true);
@@ -190,17 +190,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int RoomInfoX = InnerBoxX;
             int RoomInfoY = BoxY + (int)(BoxHeigth * 0.1);
             int RoomInfoHeight = (int)(BoxHeigth * 0.2);
-            DrawBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeigth, Color.White);
+
+            g.Draw(sprPixel, new Rectangle(BoxX, BoxY, BoxWidth, BoxHeigth),
+                Color.FromNonPremultiplied(
+                    (int)(Lobby.BackgroundColor.R * 0.9),
+                    (int)(Lobby.BackgroundColor.G * 0.9),
+                    (int)(Lobby.BackgroundColor.B * 0.9), 240));
+
+            DrawEmptyBox(g, new Vector2(BoxX, BoxY), BoxWidth, BoxHeigth, 2, BoxX / 21, 0);
+
             g.DrawString(fntArial12, "Create a Room", new Vector2(BoxX + 20, BoxY + 15), Color.White);
             DrawBox(g, new Vector2(RoomInfoX, RoomInfoY), InnerBoxWidth, RoomInfoHeight, Color.White);
             g.DrawString(fntArial12, "Name", new Vector2(BoxX + 25, RoomInfoY + 18), Color.White);
             DrawBox(g, new Vector2(RoomInfoX + 64, RoomInfoY + 15), (int)(BoxWidth * 0.75), 30, Color.White);
             g.DrawString(fntArial12, "Make a locked room", new Vector2(BoxX + 25, RoomInfoY + 53), Color.White);
-            DrawBox(g, new Vector2(BoxX + 175, BoxY + 95), (int)(BoxWidth * 0.05), 22, Color.White);
+            DrawBox(g, new Vector2(BoxX + 175, RoomInfoY + 53 + 5), 22, 22, Color.White);
             g.DrawString(fntArial12, "Password", new Vector2(BoxX + 200, RoomInfoY + 53), Color.White);
-            DrawBox(g, new Vector2(BoxX + 272, BoxY + 90), (int)(BoxWidth * 0.32), 30, Color.White);
+            DrawBox(g, new Vector2(BoxX + 272, RoomInfoY + 53), (int)(BoxWidth * 0.32), 30, Color.White);
             g.DrawString(fntArial12, "4 digit", new Vector2(BoxX + 360, RoomInfoY + 53), Color.White);
-            DrawBox(g, new Vector2(BoxX + 280, BoxY + 90), (int)(BoxWidth * 0.17), 30, Color.White);
+            DrawBox(g, new Vector2(BoxX + 280, RoomInfoY + 53), (int)(BoxWidth * 0.17), 30, Color.White);
 
             int ModeX = InnerBoxX;
             int ModeY = RoomInfoY + RoomInfoHeight;
@@ -210,7 +218,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DrawBox(g, new Vector2(ModeX, ModeY), InnerBoxWidth, ModeHeight, Color.White);
             g.DrawString(fntArial12, "Mode", new Vector2(ModeX + 15, ModeY + 18), Color.White);
 
-            DrawBox(g, new Vector2(ModeX + 10, ModeY + 48), InnerBoxWidth - 20, 60, Color.White);
             g.DrawString(fntArial12, "Campaign", new Vector2(ModeX + 18, ModeY + 53), Color.White);
             g.DrawString(fntArial12, "Progress through multiple missions to save the world", new Vector2(ModeX + 18, ModeY + 71), Color.White);
 
