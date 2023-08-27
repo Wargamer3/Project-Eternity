@@ -41,18 +41,37 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private TextInput ChatInput;
 
-        private BoxButton RoomSettingButton;
-        private BoxButton PlayerSettingsButton;
+        private EmptyBoxButton RoomSettingButton;
+        private EmptyBoxButton PlayerSettingsButton;
 
-        private BoxButton ReadyButton;
-        private BoxButton StartButton;
-        private BoxButton BackToLobbyButton;
+        private EmptyBoxButton ReadyButton;
+        private EmptyBoxButton StartButton;
+        private EmptyBoxButton BackToLobbyButton;
 
         private AnimatedSprite sprTabChat;
 
         private IUIElement[] ArrayMenuButton;
 
         #endregion
+
+        private BasicEffect IndexedLinesEffect;
+        private IndexedLines BackgroundGrid;
+
+        public Vector3 BackgroundEmiterPosition;
+        public Vector3[] ArrayNextPosition;
+        public int CurrentPositionIndex;
+        public int OldLineIndex;
+        public int CurrentLineIndex;
+        private int CylinderParts = 10;
+        private int SegmentIncrement = 10;
+        private int Segments;
+        private TunnelBehaviorSpeedManager TunnelBehaviorSpeed;
+        private TunnelBehaviorColorManager TunnelBehaviorColor;
+        private TunnelBehaviorSizeManager TunnelBehaviorSize;
+        private TunnelBehaviorRotationManager TunnelBehaviorRotation;
+        private TunnelBehaviorDirectionManager TunnelBehaviorDirection;
+
+        public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
         protected readonly RoomInformations Room;
         private Point MapSize;
@@ -72,6 +91,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Room = Room;
             SelectingTeam = -1;
 
+            Segments = 360 / SegmentIncrement * 4;
+
+            TunnelBehaviorSpeed = new TunnelBehaviorSpeedManager();
+            TunnelBehaviorColor = new TunnelBehaviorColorManager();
+            TunnelBehaviorSize = new TunnelBehaviorSizeManager();
+            TunnelBehaviorRotation = new TunnelBehaviorRotationManager();
+            TunnelBehaviorDirection = new TunnelBehaviorDirectionManager();
+
             if (Room.ListRoomPlayer.Count == 0)
             {
                 foreach (OnlinePlayerBase ActivePlayer in PlayerManager.ListLocalPlayer)
@@ -84,6 +111,28 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
+            IndexedLinesEffect = new BasicEffect(GraphicsDevice);
+            IndexedLinesEffect.VertexColorEnabled = true;
+            IndexedLinesEffect.DiffuseColor = new Vector3(1, 1, 1);
+
+            int SegmentIncrement = 10;
+            int Segments = 360 / SegmentIncrement;
+            int Parts = 1 * Segments;
+            int ArrayLength = (int)(Parts * 4);
+            ArrayNextPosition = new Vector3[ArrayLength];
+            VertexPositionColor[] ArrayBackgroundGridVertex = new VertexPositionColor[ArrayLength];
+            // Initialize an array of indices of type short.
+            short[] ArrayBackgroundGridIndices = new short[(ArrayBackgroundGridVertex.Length * 2) - 2];
+            for (int Index = 0; Index < ArrayBackgroundGridVertex.Length; ++Index)
+            {
+                ArrayBackgroundGridVertex[Index] = new VertexPositionColor(
+                    new Vector3(), Color.White);
+
+                ArrayBackgroundGridIndices[Index] = (short)(Index);
+            }
+
+            BackgroundGrid = new IndexedLines(ArrayBackgroundGridVertex, ArrayBackgroundGridIndices);
+
             #region Ressources
 
             sndBGM = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/Music/Wait Room.mp3");
@@ -99,23 +148,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sprHostText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Host Text");
             sprReadyText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Ready Text");
 
-            int LeftSideWidth = (int)(Constants.Width * 0.7);
-            int RoomNameHeight = (int)(Constants.Height * 0.05);
+            int LeftSideWidth = (Constants.Width - 300);
+            int RoomNameHeight = 36;
             int PlayerZoneY = RoomNameHeight;
             int PlayerZoneHeight = (int)(Constants.Height * 0.65);
             int ChatZoneY = PlayerZoneY + PlayerZoneHeight;
             int ChatZoneHeight = Constants.Height - ChatZoneY;
             int RightSideWidth = Constants.Width - LeftSideWidth;
             int MapDetailTextY = (int)(Constants.Height * 0.3);
-            int MapDetailTextHeight = (int)(Constants.Height * 0.3);
             int RoomOptionWidth = (int)((RightSideWidth - 15) * 0.5);
-            int RoomOptionHeight = (int)(Constants.Height * 0.08);
-            RoomSettingButton = new BoxButton(new Rectangle(LeftSideWidth + 5, MapDetailTextY + 5, RoomOptionWidth, RoomOptionHeight), fntText, "Room Settings", OnButtonOver, OpenRoomSettingsScreen);
-            PlayerSettingsButton = new BoxButton(new Rectangle(LeftSideWidth + 5 + RoomOptionWidth + 5, MapDetailTextY + 5, RoomOptionWidth, RoomOptionHeight), fntText, "Player Settings", OnButtonOver, PlayerSettingsScreen);
+            int RoomOptionHeight = 57;
+            RoomSettingButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5, MapDetailTextY + 5, RoomOptionWidth, RoomOptionHeight), fntText, "Room Settings", OnButtonOver, OpenRoomSettingsScreen);
+            PlayerSettingsButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5 + RoomOptionWidth + 5, MapDetailTextY + 5, RoomOptionWidth, RoomOptionHeight), fntText, "Player Settings", OnButtonOver, PlayerSettingsScreen);
 
-            ReadyButton = new BoxButton(new Rectangle(LeftSideWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Ready", OnButtonOver, Ready);
-            StartButton = new BoxButton(new Rectangle(LeftSideWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Start", OnButtonOver, StartGame);
-            BackToLobbyButton = new BoxButton(new Rectangle(LeftSideWidth + 5 + RoomOptionWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Leave", OnButtonOver, ReturnToLobby);
+            ReadyButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Ready", OnButtonOver, Ready);
+            StartButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Start", OnButtonOver, StartGame);
+            BackToLobbyButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5 + RoomOptionWidth + 5, Constants.Height - RoomOptionHeight - 5, RoomOptionWidth, RoomOptionHeight), fntText, "Leave", OnButtonOver, ReturnToLobby);
 
             sprTabChat = new AnimatedSprite(Content, "Triple Thunder/Menus/Channel/Tab Chat", new Vector2(0, 0), 0, 1, 4);
 
@@ -143,6 +191,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            TunnelBehaviorSpeed.Update(gameTime);
+            TunnelBehaviorColor.Update(gameTime);
+            TunnelBehaviorSize.Update(gameTime);
+            TunnelBehaviorRotation.Update(gameTime);
+            TunnelBehaviorDirection.Update(gameTime);
+
+            CreateAnimatedBackground(gameTime);
+
             if (OnlineGameClient != null)
             {
                 OnlineGameClient.ExecuteDelayedScripts();
@@ -169,6 +225,123 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             HandleTeamSelection();
+        }
+
+        private void CreateAnimatedBackground(GameTime gameTime)
+        {
+            Vector3 Up = Vector3.Up;
+
+            int Parts = CylinderParts * Segments;
+            int ArrayLength = Parts;
+
+            float CylinderSize = TunnelBehaviorSize.TunnelSizeFinal;
+
+            if (ArrayNextPosition == null || ArrayNextPosition.Length != ArrayLength)
+            {
+                ArrayNextPosition = new Vector3[ArrayLength];
+                VertexPositionColor[] ArrayBackgroundGridVertex = new VertexPositionColor[ArrayLength];
+                // Initialize an array of indices of type short.
+                short[] ArrayBackgroundGridIndices = new short[(ArrayBackgroundGridVertex.Length * 2) - 2];
+                for (int i = 0; i < ArrayBackgroundGridVertex.Length; ++i)
+                {
+                    ArrayBackgroundGridVertex[i] = new VertexPositionColor(
+                        new Vector3(), Color.White);
+
+                    ArrayBackgroundGridIndices[i] = (short)(i);
+                }
+
+                BackgroundGrid = new IndexedLines(ArrayBackgroundGridVertex, ArrayBackgroundGridIndices);
+            }
+
+            float Speed = 5;
+            float SpeedX = (float)(Math.Cos(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+            float SpeedY = (float)(Math.Sin(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * gameTime.ElapsedGameTime.TotalSeconds);
+            BackgroundEmiterPosition += new Vector3(SpeedX, SpeedY, (float)(Speed * 0.01f));
+
+            ++CurrentPositionIndex;
+
+            if (CurrentPositionIndex >= ArrayLength)
+            {
+                CurrentPositionIndex = 0;
+            }
+
+            ArrayNextPosition[CurrentPositionIndex] = BackgroundEmiterPosition;
+
+            int NextLineIndex = (int)Math.Floor(CurrentPositionIndex / (float)Segments) * Segments;
+            if (CurrentLineIndex != NextLineIndex)
+            {
+                OldLineIndex = CurrentLineIndex;
+                TunnelBehaviorDirection.ActiveDirection = TunnelBehaviorDirection.TunnelDirectionFinal;
+                TunnelBehaviorSpeed.ActiveSpeed = TunnelBehaviorSpeed.TunnelSpeedFinal;
+            }
+
+            CurrentLineIndex = NextLineIndex;
+
+            int OldIndex = OldLineIndex;
+            int Index = CurrentLineIndex;
+
+            Color LineColor = ColorFromHSV(TunnelBehaviorColor.TunnelHueFinal, 1, 1);
+
+            for (int X = 0; X < 360; X += SegmentIncrement)
+            {
+                float FinalRotation = X + TunnelBehaviorRotation.TunnelRotationFinal;
+                Vector3 OldPosition = BackgroundGrid.ArrayVertex[OldIndex + 1].Position;
+                Vector3 CurrentRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(FinalRotation))) * CylinderSize;
+                Vector3 NextRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(FinalRotation + SegmentIncrement))) * CylinderSize;
+
+                float CurrentX = BackgroundEmiterPosition.X;
+                float CurrentY = BackgroundEmiterPosition.Y;
+                float CurrentZ = BackgroundEmiterPosition.Z/* + X / 60f*/;
+
+                //Draw cylinder lines
+                BackgroundGrid.ArrayVertex[Index] = new VertexPositionColor(
+                    OldPosition, LineColor);
+
+                BackgroundGrid.ArrayVertex[Index + 1] = new VertexPositionColor(
+                    new Vector3(CurrentX, CurrentY, CurrentZ) + CurrentRightDistance, LineColor);
+
+                //Draw ring lines
+                BackgroundGrid.ArrayVertex[Index + 2] = new VertexPositionColor(
+                    new Vector3(CurrentX, CurrentY, CurrentZ) + CurrentRightDistance, LineColor);
+
+                BackgroundGrid.ArrayVertex[Index + 3] = new VertexPositionColor(
+                    new Vector3(CurrentX, CurrentY, CurrentZ) + NextRightDistance, LineColor);
+
+                OldIndex += 4;
+                Index += 4;
+            }
+        }
+
+        private Color ColorFromHSV(float Hue, float Value, float Saturation)
+        {
+            double hh, p, q, t, ff;
+            long i;
+            hh = Hue;
+            if (hh >= 360.0) hh = 0.0;
+            hh /= 60.0;
+            i = (long)hh;
+            ff = hh - i;
+            p = Value * (1.0 - Saturation) * 255;
+            q = Value * (1.0 - (Saturation * ff)) * 255;
+            t = Value * (1.0 - (Saturation * (1.0 - ff))) * 255;
+            Value *= 255;
+
+            switch (i)
+            {
+                case 0:
+                    return Color.FromNonPremultiplied((int)Value, (int)t, (int)p, 255);
+                case 1:
+                    return Color.FromNonPremultiplied((int)q, (int)Value, (int)p, 255);
+                case 2:
+                    return Color.FromNonPremultiplied((int)p, (int)Value, (int)t, 255);
+                case 3:
+                    return Color.FromNonPremultiplied((int)p, (int)q, (int)Value, 255);
+                case 4:
+                    return Color.FromNonPremultiplied((int)t, (int)p, (int)Value, 255);
+                default:
+                    return Color.FromNonPremultiplied((int)Value, (int)p, (int)q, 255);
+
+            }
         }
 
         private void HandleTeamSelection()
@@ -426,21 +599,60 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            g.End();
-            g.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(BackgroundColor);
 
-            int LeftSideWidth = (int)(Constants.Width * 0.7);
-            int RoomNameHeight = (int)(Constants.Height * 0.05);
+            float aspectRatio = Constants.Width / Constants.Height;
+
+            int DrawOffset = 700;
+            int DrawLineIndex = CurrentPositionIndex - DrawOffset % ArrayNextPosition.Length;
+            if (DrawLineIndex < 0)
+            {
+                DrawLineIndex += ArrayNextPosition.Length;
+            }
+
+            int DrawTargetLineIndex = (DrawLineIndex + 80) % ArrayNextPosition.Length;
+
+            Vector3 position = new Vector3(ArrayNextPosition[DrawLineIndex].X,
+                                            ArrayNextPosition[DrawLineIndex].Y,
+                                            ArrayNextPosition[DrawLineIndex].Z);
+
+            Vector3 target = new Vector3(ArrayNextPosition[DrawTargetLineIndex].X,
+                                            ArrayNextPosition[DrawTargetLineIndex].Y,
+                                            ArrayNextPosition[DrawTargetLineIndex].Z);
+
+            Vector3 up = Vector3.Up;
+            Matrix View = Matrix.CreateLookAt(position, target, up);
+            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                                                                    aspectRatio,
+                                                                    0.1f, 1000);
+
+            IndexedLinesEffect.View = View;
+            IndexedLinesEffect.Projection = Projection;
+            IndexedLinesEffect.World = Matrix.Identity;
+
+            foreach (EffectPass pass in IndexedLinesEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+                BackgroundGrid.Draw(g);
+            }
+
+            g.End();
+            g.Begin();
+
+            int LeftSideWidth = Constants.Width - 300;
+            int RoomNameHeight = 36;
             int PlayerZoneY = RoomNameHeight;
             int PlayerZoneHeight = (int)(Constants.Height * 0.65);
             int ChatZoneY = PlayerZoneY + PlayerZoneHeight;
             int ChatZoneHeight = Constants.Height - ChatZoneY;
 
-            DrawBox(g, new Vector2(0, 0), LeftSideWidth, RoomNameHeight, Color.White);
-            g.DrawString(fntText, "Room Name:", new Vector2(5, 7), Color.White);
+            DrawEmptyBox(g, new Vector2(5, 5), LeftSideWidth - 10, RoomNameHeight - 10);
+            g.DrawString(fntText, "Room Name:", new Vector2(10, 7), Color.White);
             g.DrawString(fntText, Room.RoomName, new Vector2(95, 7), Color.White);
-            DrawBox(g, new Vector2(0, PlayerZoneY), LeftSideWidth, PlayerZoneHeight, Color.White);
-            DrawBox(g, new Vector2(0, ChatZoneY), LeftSideWidth, ChatZoneHeight, Color.White);
+            DrawEmptyBox(g, new Vector2(0, PlayerZoneY), LeftSideWidth, PlayerZoneHeight);
+            DrawEmptyBox(g, new Vector2(5, ChatZoneY + 5), LeftSideWidth - 10, ChatZoneHeight - 10);
             g.DrawString(fntText, "Chat", new Vector2(10, ChatZoneY + 10), Color.White);
 
 
@@ -449,11 +661,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int MapDetailTextHeight = (int)(Constants.Height * 0.3);
             int RoomOptionHeight = (int)(Constants.Height * 0.08);
 
-            DrawBox(g, new Vector2(LeftSideWidth, 0), RightSideWidth, Constants.Height, Color.White);
+            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, 5), RightSideWidth - 10, MapDetailTextY - 10);
             g.DrawString(fntText, "Player Info", new Vector2(LeftSideWidth + 10, 7), Color.White);
-            DrawBox(g, new Vector2(LeftSideWidth, MapDetailTextY), RightSideWidth, MapDetailTextHeight, Color.White);
 
             int GameModeY = MapDetailTextY + RoomOptionHeight;
+
+            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, GameModeY + 5), RightSideWidth - 10, 60);
 
             g.DrawString(fntText, "Game Mode:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
             g.DrawStringMiddleAligned(fntText, "Campaign", new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
@@ -470,9 +683,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             GameModeY += 15;
             g.DrawString(fntText, "Map Size:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
             g.DrawStringMiddleAligned(fntText, MapSize.X + " x " + MapSize.Y, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
-            GameModeY += 110;
+            GameModeY += 90;
             g.Draw(sprMapImage, new Vector2(LeftSideWidth + (RightSideWidth - sprMapImage.Width) / 2, GameModeY), Color.White);
             GameModeY += 85;
+
+            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, GameModeY + 5), RightSideWidth - 10, 70);
+
             g.DrawString(fntText, "Map:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
             if (Room.MapName != null)
             {
@@ -520,27 +736,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
             {
                 int DrawX = 10;
-                int DrawY = 45 + P * 45;
+                int DrawY = 55 + P * 45;
 
-                DrawBox(g, new Vector2(DrawX - 5, DrawY - 10), LeftSideWidth - 10, 45, Color.White);
-                DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomPlayer[P]);
+                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
+                DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
+                DrawPlayerBox(g, DrawX + 5, DrawY + 10, (BattleMapPlayer)Room.ListRoomPlayer[P]);
             }
 
             for (int P = 0; P < Room.ListRoomBot.Count && P < Room.MaxNumberOfBots - Room.ListRoomPlayer.Count; ++P)
             {
                 int DrawX = 10;
-                int DrawY = 45 + Room.ListRoomPlayer.Count * 45 + P * 45;
+                int DrawY = 55 + Room.ListRoomPlayer.Count * 45 + P * 45;
 
-                DrawBox(g, new Vector2(DrawX - 5, DrawY - 10), LeftSideWidth - 10, 45, Color.White);
+                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
+                DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
                 DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomBot[P]);
             }
         }
 
         private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, BattleMapPlayer PlayerToDraw)
         {
-            DrawBox(g, new Vector2(DrawX, DrawY), 50, 25, Color.White);
-            DrawBox(g, new Vector2(DrawX + 50, DrawY), 50, 25, Color.White);
-            DrawBox(g, new Vector2(DrawX + 100, DrawY), 180, 25, Color.White);
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 50, 25);
+            DrawEmptyBox(g, new Vector2(DrawX + 50, DrawY), 50, 25);
+            DrawEmptyBox(g, new Vector2(DrawX + 100, DrawY), 180, 25);
             if (Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0)
             {
                 DrawBox(g, new Vector2(DrawX + 280, DrawY), 85, 25, Color.White);

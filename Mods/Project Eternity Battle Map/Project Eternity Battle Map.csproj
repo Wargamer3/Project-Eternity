@@ -131,7 +131,7 @@
     <Compile Include="Intermission Screen\Records\Player Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Records Screen.cs" />
     <Compile Include="Lobby\Game Options\Game Mode Info.cs" />
-    <Compile Include="Lobby\Inventory\Squad Screen 2.cs" />
+    <Compile Include="Lobby\Inventory\Squad Screen.cs" />
     <Compile Include="Lobby\Inventory\Tunnel Behvaior Rotation Manager.cs" />
     <Compile Include="Lobby\Inventory\Tunnel Behvaior Color Manager.cs" />
     <Compile Include="Lobby\Inventory\Tunnel Behvaior Direction Manager.cs" />
