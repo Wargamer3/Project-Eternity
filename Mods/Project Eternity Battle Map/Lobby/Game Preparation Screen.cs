@@ -73,6 +73,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
 
+        int LeftSideWidth;
+        int RoomNameHeight;
+        int PlayerZoneY;
+        int PlayerZoneHeight;
+        int ChatZoneY;
+        int ChatZoneHeight;
+        int RightSideWidth;
+        int MapDetailTextY;
+        int MapDetailTextHeight;
+        int RoomOptionWidth;
+        int RoomOptionHeight;
+
         protected readonly RoomInformations Room;
         private Point MapSize;
         private List<TeamInfo> ListAllTeamInfo;
@@ -142,22 +154,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
 
-            fntText = Content.Load<SpriteFont>("Fonts/Arial10");
+            fntText = Content.Load<SpriteFont>("Fonts/Arial16");
             ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
 
             sprHostText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Host Text");
             sprReadyText = Content.Load<Texture2D>("Triple Thunder/Menus/Wait Room/Player Ready Text");
 
-            int LeftSideWidth = (Constants.Width - 300);
-            int RoomNameHeight = 36;
-            int PlayerZoneY = RoomNameHeight;
-            int PlayerZoneHeight = (int)(Constants.Height * 0.65);
-            int ChatZoneY = PlayerZoneY + PlayerZoneHeight;
-            int ChatZoneHeight = Constants.Height - ChatZoneY;
-            int RightSideWidth = Constants.Width - LeftSideWidth;
-            int MapDetailTextY = (int)(Constants.Height * 0.3);
-            int RoomOptionWidth = (int)((RightSideWidth - 15) * 0.5);
-            int RoomOptionHeight = 57;
+            LeftSideWidth = (int)(Constants.Width * 0.7);
+            RoomNameHeight = (int)(Constants.Height * 0.05);
+            PlayerZoneY = RoomNameHeight;
+            PlayerZoneHeight = (int)(Constants.Height * 0.65);
+            ChatZoneY = PlayerZoneY + PlayerZoneHeight;
+            ChatZoneHeight = Constants.Height - ChatZoneY;
+            RightSideWidth = Constants.Width - LeftSideWidth;
+            MapDetailTextY = (int)(Constants.Height * 0.3);
+            MapDetailTextHeight = (int)(Constants.Height * 0.3);
+            RoomOptionWidth = (int)((RightSideWidth - 15) * 0.5);
+            RoomOptionHeight = (int)(Constants.Height * 0.08);
+
             RoomSettingButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5, MapDetailTextY + 5, RoomOptionWidth, RoomOptionHeight), fntText, "Room Settings", OnButtonOver, OpenRoomSettingsScreen);
             PlayerSettingsButton = new EmptyBoxButton(new Rectangle(LeftSideWidth + 5 + RoomOptionWidth + 5, MapDetailTextY + 5, RoomOptionWidth, RoomOptionHeight), fntText, "Player Settings", OnButtonOver, PlayerSettingsScreen);
 
@@ -641,36 +655,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.End();
             g.Begin();
 
-            int LeftSideWidth = Constants.Width - 300;
-            int RoomNameHeight = 36;
-            int PlayerZoneY = RoomNameHeight;
-            int PlayerZoneHeight = (int)(Constants.Height * 0.65);
-            int ChatZoneY = PlayerZoneY + PlayerZoneHeight;
-            int ChatZoneHeight = Constants.Height - ChatZoneY;
-
             DrawEmptyBox(g, new Vector2(5, 5), LeftSideWidth - 10, RoomNameHeight - 10);
-            g.DrawString(fntText, "Room Name:", new Vector2(10, 7), Color.White);
-            g.DrawString(fntText, Room.RoomName, new Vector2(95, 7), Color.White);
+            g.DrawString(fntText, "Room Name: " + Room.RoomName, new Vector2(10, 7), Color.White);
             DrawEmptyBox(g, new Vector2(0, PlayerZoneY), LeftSideWidth, PlayerZoneHeight);
             DrawEmptyBox(g, new Vector2(5, ChatZoneY + 5), LeftSideWidth - 10, ChatZoneHeight - 10);
             g.DrawString(fntText, "Chat", new Vector2(10, ChatZoneY + 10), Color.White);
-
-
-            int RightSideWidth = Constants.Width - LeftSideWidth;
-            int MapDetailTextY = (int)(Constants.Height * 0.3);
-            int MapDetailTextHeight = (int)(Constants.Height * 0.3);
-            int RoomOptionHeight = (int)(Constants.Height * 0.08);
 
             DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, 5), RightSideWidth - 10, MapDetailTextY - 10);
             g.DrawString(fntText, "Player Info", new Vector2(LeftSideWidth + 10, 7), Color.White);
 
             int GameModeY = MapDetailTextY + RoomOptionHeight;
 
-            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, GameModeY + 5), RightSideWidth - 10, 60);
+            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, GameModeY + 5), RightSideWidth - 10, fntText.LineSpacing * 3);
 
             g.DrawString(fntText, "Game Mode:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
             g.DrawStringMiddleAligned(fntText, "Campaign", new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
-            GameModeY += 15;
+            GameModeY += fntText.LineSpacing;
             g.DrawString(fntText, "Players:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
             if (Room.MinNumberOfPlayer != Room.MaxNumberOfPlayer)
             {
@@ -680,23 +680,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 g.DrawStringMiddleAligned(fntText, Room.MinNumberOfPlayer.ToString(), new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
             }
-            GameModeY += 15;
+            GameModeY += fntText.LineSpacing;
             g.DrawString(fntText, "Map Size:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
             g.DrawStringMiddleAligned(fntText, MapSize.X + " x " + MapSize.Y, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
             GameModeY += 90;
             g.Draw(sprMapImage, new Vector2(LeftSideWidth + (RightSideWidth - sprMapImage.Width) / 2, GameModeY), Color.White);
             GameModeY += 85;
 
-            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, GameModeY + 5), RightSideWidth - 10, 70);
+            DrawEmptyBox(g, new Vector2(LeftSideWidth + 5, GameModeY + 5), RightSideWidth - 10, fntText.LineSpacing * 4);
 
             g.DrawString(fntText, "Map:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
             if (Room.MapName != null)
             {
                 g.DrawStringMiddleAligned(fntText, Room.MapName, new Vector2(LeftSideWidth + RightSideWidth - 45, GameModeY + 10), Color.White);
             }
-            GameModeY += 15;
+            GameModeY += fntText.LineSpacing;
             g.DrawString(fntText, "Details:", new Vector2(LeftSideWidth + 10, GameModeY + 10), Color.White);
-            GameModeY += 15;
+            GameModeY += fntText.LineSpacing;
             g.DrawString(fntText, "Tutorial map aimed to introduce the basics of the\r\ncampaign mode", new Vector2(LeftSideWidth + 15, GameModeY + 10), Color.White);
 
 
@@ -733,40 +733,52 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             int LeftSideWidth = (int)(Constants.Width * 0.7);
 
+            int DrawY = 65;
+
             for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
             {
                 int DrawX = 10;
-                int DrawY = 55 + P * 45;
 
                 g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
                 DrawPlayerBox(g, DrawX + 5, DrawY + 10, (BattleMapPlayer)Room.ListRoomPlayer[P]);
+
+                DrawY += 55;
             }
 
             for (int P = 0; P < Room.ListRoomBot.Count && P < Room.MaxNumberOfBots - Room.ListRoomPlayer.Count; ++P)
             {
                 int DrawX = 10;
-                int DrawY = 55 + Room.ListRoomPlayer.Count * 45 + P * 45;
 
                 g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
                 DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomBot[P]);
+
+                DrawY += 55;
+            }
+
+            while (DrawY < ChatZoneY)
+            {
+                int DrawX = 10;
+                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
+
+                DrawY += 55;
             }
         }
 
         private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, BattleMapPlayer PlayerToDraw)
         {
-            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 50, 25);
-            DrawEmptyBox(g, new Vector2(DrawX + 50, DrawY), 50, 25);
-            DrawEmptyBox(g, new Vector2(DrawX + 100, DrawY), 180, 25);
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 60, 25);
+            DrawEmptyBox(g, new Vector2(DrawX + 65, DrawY), 70, 25);
+            DrawEmptyBox(g, new Vector2(DrawX + 140, DrawY), 200, 25);
             if (Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0)
             {
                 DrawBox(g, new Vector2(DrawX + 280, DrawY), 85, 25, Color.White);
                 g.DrawStringMiddleAligned(fntText, ListAllTeamInfo[PlayerToDraw.Team].TeamName, new Vector2(DrawX + 322, DrawY + 5), Color.White);
             }
 
-            g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 57, DrawY + 5), Color.White);
-            g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 110, DrawY + 5), Color.White);
+            g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 72, DrawY + 5), Color.White);
+            g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 145, DrawY + 5), Color.White);
 
             for (int S = 0; S < PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad.Count; S++)
             {
