@@ -144,7 +144,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private void DrawSelectedUnitStats(CustomSpriteBatch g, int DrawX, int DrawY, Unit ActiveUnit)
         {
             int BottomHeight = 182;
-            DrawEmptyBox(g, new Vector2(5, DrawY - 5), 240, BottomHeight);
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY - 5), 240, BottomHeight);
 
             int DistanceBetweenText = 16;
             int MenuOffset = (int)(DistanceBetweenText * 0.5);
