@@ -88,7 +88,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void DamageEnemyCreature(int Damage)
         {
-            Defender.FinalHP -= Damage;
+            Defender.ReceiveDamage(Damage);
         }
 
         public override void BeginDraw(CustomSpriteBatch g)

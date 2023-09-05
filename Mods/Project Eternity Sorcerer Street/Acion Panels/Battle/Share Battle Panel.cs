@@ -135,10 +135,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP = BR.ReadInt32();
             Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST = BR.ReadInt32();
 
-            Map.GlobalSorcererStreetBattleContext.Invader.FinalHP = Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP;
-            Map.GlobalSorcererStreetBattleContext.Defender.FinalHP = Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP;
-            Map.GlobalSorcererStreetBattleContext.Invader.FinalST = Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentST;
-            Map.GlobalSorcererStreetBattleContext.Defender.FinalST = Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST;
+            Map.GlobalSorcererStreetBattleContext.Invader.BonusHP = 0;
+            Map.GlobalSorcererStreetBattleContext.Defender.BonusHP = 0;
+            Map.GlobalSorcererStreetBattleContext.Invader.BonusST = 0;
+            Map.GlobalSorcererStreetBattleContext.Defender.BonusST = 0;
 
             InvaderHPBar = Map.GlobalSorcererStreetBattleContext.Invader.FinalHP;
             InvaderSTBar = Map.GlobalSorcererStreetBattleContext.Invader.FinalST;

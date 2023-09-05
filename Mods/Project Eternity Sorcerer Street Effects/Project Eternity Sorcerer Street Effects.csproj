@@ -61,6 +61,7 @@
     <Compile Include="Effects\Change Terrain Level.cs" />
     <Compile Include="Effects\Critical Hit.cs" />
     <Compile Include="Effects\Change Element.cs" />
+    <Compile Include="Effects\Senility.cs" />
     <Compile Include="Effects\Sleep.cs" />
     <Compile Include="Effects\Scroll Critical Hit.cs" />
     <Compile Include="Effects\Scroll Attack.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requirements\Ability Used Requirement.cs" />
     <Compile Include="Requirements\Activation Chance Requirement.cs" />
+    <Compile Include="Requirements\Before Battle Start Requirement.cs" />
     <Compile Include="Requirements\Battle Start Requirement.cs" />
     <Compile Include="Requirements\Element Requirement.cs" />
     <Compile Include="Requirements\ST Requirement.cs" />

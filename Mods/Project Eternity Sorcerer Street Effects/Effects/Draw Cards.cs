@@ -2,6 +2,7 @@
 using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -42,7 +43,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            SorcererStreetBattleContext.BattleCreatureInfo RealTarget = Params.GlobalContext.SelfCreature;
+            if (_Target == Targets.Opponent)
+            {
+                RealTarget = Params.GlobalContext.OpponentCreature;
+            }
+
+            if (RealTarget.Owner.ListCardInDeck.Count == 0)//Check empty deck for battle tester
+            {
+                while (RealTarget.Owner.ListCardInHand.Count < _NumberOfCards)
+                {
+                    Params.GlobalContext.Defender.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
+                }
+            }
+            else
+            {
+                while (RealTarget.Owner.ListCardInHand.Count < _NumberOfCards)
+                {
+                    if (RealTarget.Owner.ListRemainingCardInDeck.Count == 0)
+                    {
+                        Params.Map.ListActionMenuChoice.AddToPanelListAndSelect(new ActionPanelRefillDeckPhase(Params.Map, Params.Map.ListPlayer.IndexOf(RealTarget.Owner)));
+                    }
+
+                    int RandomCardIndex = RandomHelper.Next(RealTarget.Owner.ListRemainingCardInDeck.Count);
+
+                    Card DrawnCard = RealTarget.Owner.ListRemainingCardInDeck[RandomCardIndex];
+
+                    RealTarget.Owner.ListCardInHand.Add(DrawnCard);
+
+                    RealTarget.Owner.ListRemainingCardInDeck.RemoveAt(RandomCardIndex);
+                }
+            }
+
+            return "Draw Cards";
         }
 
         protected override BaseEffect DoCopy()

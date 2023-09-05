@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             string EvaluationResult = Params.ActiveParser.Evaluate(_DamageToDeal);
 
-            Params.GlobalContext.SelfCreature.FinalHP -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+            Params.GlobalContext.OpponentCreature.ReceiveDamage(int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
 
             return "Damage dealt" + _DamageToDeal;
         }

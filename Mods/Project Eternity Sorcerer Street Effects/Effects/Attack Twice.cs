@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             Params.GlobalContext.SelfCreature.Creature.BattleAbilities.AttackTwice = true;
-            return null;
+            return "Attack Twice";
         }
 
         protected override BaseEffect DoCopy()

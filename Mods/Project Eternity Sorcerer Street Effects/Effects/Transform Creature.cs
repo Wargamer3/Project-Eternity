@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Windows.Forms.Design;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -80,13 +81,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            if (_CreatureName == "Random")
+            {
+                string CreatureFolder = "Content/Sorcerer Street/Creature Cards/";
+                string[] ArrayCreatureFile = Directory.GetFiles(CreatureFolder, "*.pec", SearchOption.AllDirectories);
+                string SelectedCreature = ArrayCreatureFile[RandomHelper.Next(ArrayCreatureFile.Length)];
+                SelectedCreature = SelectedCreature.Remove(SelectedCreature.Length - 4, 4).Remove(0, CreatureFolder.Length);
+                TransformationCreature = new CreatureCard(SelectedCreature, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+            }
+
             if (_Target == Targets.Self)
             {
-                Params.ReplaceSelfCreature(TransformationCreature);
+                Params.ReplaceSelfCreature(TransformationCreature, _IsTemporary);
             }
             else
             {
-                Params.ReplaceOtherCreature(TransformationCreature);
+                Params.ReplaceOtherCreature(TransformationCreature, _IsTemporary);
             }
 
             return "Transformed into " + TransformationCreature.Name;
@@ -96,11 +106,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             TransformCreatureEffect NewEffect = new TransformCreatureEffect(Params);
 
+            NewEffect._CreatureName = _CreatureName;
+            NewEffect._Target = _Target;
+            NewEffect._IsTemporary = _IsTemporary;
+
+            NewEffect.TransformationCreature = TransformationCreature;
+
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            TransformCreatureEffect NewEffect = (TransformCreatureEffect)Copy;
+
+            _CreatureName = NewEffect._CreatureName;
+            _Target = NewEffect._Target;
+            _IsTemporary = NewEffect._IsTemporary;
+
+            TransformationCreature = NewEffect.TransformationCreature;
         }
 
         [Editor(typeof(CreatureSelector), typeof(UITypeEditor)),

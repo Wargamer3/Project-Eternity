@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.Invader.FinalST += _STIncrease;
+            Params.GlobalContext.Invader.BonusST += _STIncrease;
 
             return null;
         }

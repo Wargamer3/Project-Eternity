@@ -24,7 +24,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private enum PhasesChoices
         {
-            Idle, IntroPhase, LandModifierPhase, CreatureModifierPhase, EnchantModifierPhase, ItemModifierPhase, BoostModifierPhase, PrepareAttackPhase, AttackPhase, CounterPhase, ResultPhase,
+            Idle, IntroPhase, LandModifierPhase, CreatureModifierPhase, EnchantModifierPhase, ItemModifierPhase, BoostModifierPhase, InvaderBeforeBattle, DefenderBeforeBattle,
+            InvaderBattleStartAnimation, DefenderBattleStartAnimation, PrepareAttackPhase, AttackBonusAnimation, AttackPhase1, AttackPhase2, CounterPhase, ResultPhase,
         }
 
         #region Ressources
@@ -111,6 +112,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private List<SimpleAnimation> ListAttackAnimation;
 
+        private Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
+
         public BattleTesterScreen(CardSymbols Symbols, Player ActivePlayer)
         {
             this.ActivePlayer = ActivePlayer;
@@ -120,6 +123,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActiveBook = AllCardsBook;
 
             ListAttackAnimation = new List<SimpleAnimation>();
+            DicCreatureCountByElementType = new Dictionary<CreatureCard.ElementalAffinity, byte>();
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Air, 1);
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Earth, 1);
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Fire, 1);
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Water, 1);
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Neutral, 1);
         }
 
         public override void Load()
@@ -128,6 +137,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprVS = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/VS");
             Context = SorcererStreetBattleParams.DicParams[string.Empty].GlobalContext;
             Context.ActiveParser = SorcererStreetBattleParams.DicParams[string.Empty].ActiveParser = new SorcererStreetFormulaParser(SorcererStreetBattleParams.DicParams[string.Empty]);
+            Context.DicCreatureCountByElementType = DicCreatureCountByElementType;
+            Context.DefenderTerrain = new TerrainSorcererStreet(0, 0, 0, 0);
+            Context.DefenderTerrain.LandLevel = 1;
 
             ButtonHeight = fntArial12.LineSpacing + 2;
 
@@ -147,7 +159,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             InvaderCepterEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderCepterEnchantSelection);
 
             InvaderCepterCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderCepterCardsInHand, true);
-            InvaderCepterCardsInHandInput.SetText("6");
+            InvaderCepterCardsInHandInput.SetText("1");
             InvaderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderHPInput, true);
             InvaderHPInput.SetText("30");
             InvaderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderMaxHPInput, true);
@@ -177,7 +189,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DefenderCepterEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderCepterEnchantSelection);
 
             DefenderCepterCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            DefenderCepterCardsInHandInput.SetText("6");
+            DefenderCepterCardsInHandInput.SetText("1");
             DefenderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderHPInput, true);
             DefenderHPInput.SetText("30");
             DefenderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderMaxHPInput, true);
@@ -256,26 +268,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Card CopyCard = ActiveBook.DicCardsByType[CreatureCard.CreatureCardType].First().Value;
 
             Context.Defender.Owner = new Player("Defender Player", "Defender Player", false);
+            Context.Defender.Owner.ListCardInHand.Add(new CreatureCard(""));
             Context.Defender.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
             Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
             Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
             Context.Defender.Animation.Scale = new Vector2(1f);
-            Context.Defender.FinalHP = Context.Defender.Creature.OriginalMaxHP;
-            Context.Defender.FinalST = Context.Defender.Creature.OriginalST;
             DefenderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
             DefenderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
             DefenderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
 
             Context.Invader.Owner = new Player("Defender Player", "Defender Player", false);
+            Context.Invader.Owner.ListCardInHand.Add(new CreatureCard(""));
             Context.Invader.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
             Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
             Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
             Context.Invader.Animation.Scale = new Vector2(1f);
-            Context.Invader.FinalHP = Context.Defender.Creature.OriginalMaxHP;
-            Context.Invader.FinalST = Context.Defender.Creature.OriginalST;
             InvaderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
             InvaderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
             InvaderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
+
+
+            if (Context.ListActivatedEffect.Count > 0)
+            {
+                Context.ListActivatedEffect.Clear();
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -307,60 +323,83 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
-                case PhasesChoices.PrepareAttackPhase:
+                case PhasesChoices.InvaderBeforeBattle:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
-                        ListAttackAnimation.Clear();
-                        PhasesChoice = PhasesChoices.AttackPhase;
-                        SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
-                        SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
-                        ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
-                        int ReflectedDamage;
-                        int Damage = ActionPanelBattleAttackPhase.ProcessAttack(Context, FirstAttacker, SecondAttacker, out ReflectedDamage);
+                        Context.ListActivatedEffect.Clear();
 
-                        if (ReflectedDamage > 0)
+                        if (Context.CanActivateSkillCreature(Context.Defender, Context.Invader, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement)
+                            || Context.CanActivateSkillItem(Context.Defender, Context.Invader, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement))
                         {
-                            ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, "Sorcerer Street/Default", FirstAttacker, true));
+                            ActionPanelBattleItemModifierPhase.StartAnimation(false, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement);
                         }
 
-                        if (Damage > 0)
-                        {
-                            if (FirstAttacker.Creature.UseCardAnimation)
-                            {
-                                foreach (string ActiveAnimationPath in FirstAttacker.GetAttackAnimationPaths())
-                                {
-                                    if (string.IsNullOrEmpty(ActiveAnimationPath))
-                                    {
-                                        ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, "Sorcerer Street/Default", SecondAttacker, true));
-                                    }
-                                    else
-                                    {
-                                        ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, ActiveAnimationPath, SecondAttacker, true));
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, FirstAttacker.Creature.AttackStartAnimationPath, FirstAttacker, true));
-                                FirstAttacker.Animation.Position = new Vector2(1750, 190);
-                                ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, FirstAttacker.Creature.AttackEndAnimationPath, SecondAttacker, true));
-                                SecondAttacker.Animation.Position = new Vector2(573, 90);
-
-                                FirstAttacker.Animation = null;
-                                SecondAttacker.Animation = null;
-                                SecondAttacker.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
-                                SecondAttacker.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-                                SecondAttacker.Animation.Scale = new Vector2(1f);
-                            }
-                        }
-                        else
-                        {
-                            ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, "Sorcerer Street/Neutralize", SecondAttacker, true));
-                        }
+                        PhasesChoice = PhasesChoices.DefenderBeforeBattle;
                     }
                     break;
 
-                case PhasesChoices.AttackPhase:
+                case PhasesChoices.DefenderBeforeBattle:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        Context.ListActivatedEffect.Clear();
+
+                        if (Context.CanActivateSkillCreature(Context.Invader, Context.Defender, ActionPanelBattleAttackPhase.BattleStartRequirement)
+                            || Context.CanActivateSkillItem(Context.Invader, Context.Defender, ActionPanelBattleAttackPhase.BattleStartRequirement))
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimation(true, ActionPanelBattleAttackPhase.BattleStartRequirement);
+                        }
+
+                        PhasesChoice = PhasesChoices.InvaderBattleStartAnimation;
+                    }
+                    break;
+
+                case PhasesChoices.InvaderBattleStartAnimation:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        Context.ListActivatedEffect.Clear();
+
+                        if (Context.CanActivateSkillCreature(Context.Defender, Context.Invader, ActionPanelBattleAttackPhase.BattleStartRequirement)
+                            || Context.CanActivateSkillItem(Context.Defender, Context.Invader, ActionPanelBattleAttackPhase.BattleStartRequirement))
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimation(false, ActionPanelBattleAttackPhase.BattleStartRequirement);
+                        }
+
+                        PhasesChoice = PhasesChoices.DefenderBattleStartAnimation;
+                    }
+                    break;
+
+                case PhasesChoices.DefenderBattleStartAnimation:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        Context.ListActivatedEffect.Clear();
+
+                        BoostModifierPhaseSelection();
+                        PhasesChoice = PhasesChoices.PrepareAttackPhase;
+                    }
+                    break;
+
+                case PhasesChoices.PrepareAttackPhase:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        PhasesChoice = PhasesChoices.AttackBonusAnimation;
+                        SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
+                        SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
+                        ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
+
+                        ActionPanelBattleAttackPhase.ProcessAttack(Context, FirstAttacker, SecondAttacker, out _);
+                    }
+                    break;
+
+                case PhasesChoices.AttackBonusAnimation:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        ExecuteAttack();
+                        PhasesChoice = PhasesChoices.AttackPhase1;
+                    }
+                    break;
+
+                case PhasesChoices.AttackPhase1:
+                case PhasesChoices.AttackPhase2:
                     ActionPanelBattle.UpdateCards(gameTime, Context);
 
                     ListAttackAnimation[0].Update(gameTime);
@@ -376,6 +415,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                         if (ListAttackAnimation.Count == 0)
                         {
+                            SorcererStreetBattleContext.BattleCreatureInfo Attacker = Context.Invader;
+                            if (Attacker == ActiveAnimation.Defender)
+                            {
+                                Attacker = Context.Defender;
+                            }
+
+                            Context.ActivateSkill(Attacker, ActiveAnimation.Defender, ActionPanelBattleAttackPhase.BattleEndRequirement);
+                            Context.ActivateSkill(ActiveAnimation.Defender, Attacker, ActionPanelBattleAttackPhase.BattleEndRequirement);
+
+                            if (ActiveAnimation.Defender.FinalHP > 0)
+                            {
+                                Context.ActivateSkill(Attacker, ActiveAnimation.Defender, ActionPanelBattleAttackPhase.AfterEnemySurvivedRequirement);
+                                Context.ActivateSkill(ActiveAnimation.Defender, Attacker, ActionPanelBattleAttackPhase.AfterEnemySurvivedRequirement);
+                                if (PhasesChoice == PhasesChoices.AttackPhase1 && Attacker.Creature.BattleAbilities.AttackTwice)
+                                {
+                                    ExecuteAttack();
+                                    PhasesChoice = PhasesChoices.AttackPhase2;
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                Context.ActivateSkill(Attacker, ActiveAnimation.Defender, ActionPanelBattleAttackPhase.UponVictoryRequirement);
+                                Context.ActivateSkill(ActiveAnimation.Defender, Attacker, ActionPanelBattleAttackPhase.UponDefeatRequirement);
+                            }
+
                             PhasesChoice = PhasesChoices.Idle;
 
                             Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
@@ -436,8 +501,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
                     Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
                     Context.Defender.Animation.Scale = new Vector2(1f);
-                    Context.Defender.FinalHP = Context.Defender.Creature.OriginalMaxHP;
-                    Context.Defender.FinalST = Context.Defender.Creature.OriginalST;
                     DefenderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
                     DefenderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
                     DefenderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
@@ -449,11 +512,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
                     Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
                     Context.Invader.Animation.Scale = new Vector2(1f);
-                    Context.Invader.FinalHP = Context.Defender.Creature.OriginalMaxHP;
-                    Context.Invader.FinalST = Context.Defender.Creature.OriginalST;
-                    InvaderHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
-                    InvaderMaxHPInput.SetText(Context.Defender.Creature.OriginalMaxHP.ToString());
-                    InvaderSTInput.SetText(Context.Defender.Creature.OriginalST.ToString());
+                    InvaderHPInput.SetText(Context.Invader.Creature.OriginalMaxHP.ToString());
+                    InvaderMaxHPInput.SetText(Context.Invader.Creature.OriginalMaxHP.ToString());
+                    InvaderSTInput.SetText(Context.Invader.Creature.OriginalST.ToString());
                     break;
 
                 case SetupChoices.DefenderItem:
@@ -471,6 +532,56 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void OnButtonOver()
         {
             sndButtonOver.Play();
+        }
+
+        private void ExecuteAttack()
+        {
+            SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
+            SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
+            ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
+
+            int ReflectedDamage = FirstAttacker.DamageReceived;
+            int Damage = SecondAttacker.DamageReceived;
+
+            if (ReflectedDamage > 0)
+            {
+                ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker != Context.Defender, "Sorcerer Street/Default", FirstAttacker, true));
+            }
+
+            if (Damage > 0)
+            {
+                if (FirstAttacker.Creature.UseCardAnimation)
+                {
+                    foreach (string ActiveAnimationPath in FirstAttacker.GetAttackAnimationPaths())
+                    {
+                        if (string.IsNullOrEmpty(ActiveAnimationPath))
+                        {
+                            ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, "Sorcerer Street/Default", SecondAttacker, true));
+                        }
+                        else
+                        {
+                            ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, ActiveAnimationPath, SecondAttacker, true));
+                        }
+                    }
+                }
+                else
+                {
+                    ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, FirstAttacker.Creature.AttackStartAnimationPath, FirstAttacker, true));
+                    FirstAttacker.Animation.Position = new Vector2(1750, 190);
+                    ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, FirstAttacker.Creature.AttackEndAnimationPath, SecondAttacker, true));
+                    SecondAttacker.Animation.Position = new Vector2(573, 90);
+
+                    FirstAttacker.Animation = null;
+                    SecondAttacker.Animation = null;
+                    SecondAttacker.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
+                    SecondAttacker.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                    SecondAttacker.Animation.Scale = new Vector2(1f);
+                }
+            }
+            else
+            {
+                ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, "Sorcerer Street/Neutralize", SecondAttacker, true));
+            }
         }
 
         #region Setup UI
@@ -517,12 +628,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void SetDefenderCepterCardsInHand(string InputValue)
         {
+            int CardsInHand;
+            int.TryParse(InputValue, out CardsInHand);
+            while (Context.Defender.Owner.ListCardInHand.Count < CardsInHand)
+            {
+                Context.Defender.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
+            }
+            while (Context.Defender.Owner.ListCardInHand.Count > CardsInHand)
+            {
+                Context.Defender.Owner.ListCardInHand.RemoveAt(0);
+            }
         }
 
         private void SetDefenderHPInput(string InputValue)
         {
-            int.TryParse(InputValue, out Context.Defender.FinalHP);
-            Context.Defender.Creature.CurrentHP = Context.Defender.FinalHP;
+            int.TryParse(InputValue, out Context.Defender.Creature.CurrentHP);
         }
 
         private void SetDefenderMaxHPInput(string InputValue)
@@ -533,7 +653,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void SetDefenderSTInput(string InputValue)
         {
             int.TryParse(InputValue, out Context.Defender.Creature.CurrentST);
-            Context.Defender.FinalST = Context.Defender.Creature.CurrentST;
         }
 
         private void SetDefenderTerrainHPBonusInput(string InputValue)
@@ -546,18 +665,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void SetDefenderAirLandsInput(string InputValue)
         {
+            byte FinalValue;
+            byte.TryParse(InputValue, out FinalValue);
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = FinalValue;
         }
 
         private void SetDefenderEarthLandsInput(string InputValue)
         {
+            byte FinalValue;
+            byte.TryParse(InputValue, out FinalValue);
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = FinalValue;
         }
 
         private void SetDefenderFireLandsInput(string InputValue)
         {
+            byte FinalValue;
+            byte.TryParse(InputValue, out FinalValue);
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = FinalValue;
         }
 
         private void SetDefenderWaterLandsInput(string InputValue)
         {
+            byte FinalValue;
+            byte.TryParse(InputValue, out FinalValue);
+            DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = FinalValue;
         }
 
         private void InvaderCreatureSelection()
@@ -602,12 +733,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void SetInvaderCepterCardsInHand(string InputValue)
         {
+            int CardsInHand;
+            int.TryParse(InputValue, out CardsInHand);
+            while (Context.Invader.Owner.ListCardInHand.Count < CardsInHand)
+            {
+                Context.Invader.Owner.ListCardInHand.Add(new CreatureCard("Dummy"));
+            }
+            while (Context.Invader.Owner.ListCardInHand.Count > CardsInHand)
+            {
+                Context.Invader.Owner.ListCardInHand.RemoveAt(0);
+            }
         }
 
         private void SetInvaderHPInput(string InputValue)
         {
-            int.TryParse(InputValue, out Context.Invader.FinalHP);
-            Context.Invader.Creature.CurrentHP = Context.Invader.FinalHP;
+            int.TryParse(InputValue, out Context.Invader.Creature.CurrentHP);
         }
 
         private void SetInvaderMaxHPInput(string InputValue)
@@ -618,7 +758,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void SetInvaderSTInput(string InputValue)
         {
             int.TryParse(InputValue, out Context.Invader.Creature.CurrentST);
-            Context.Invader.FinalST = Context.Invader.Creature.CurrentST;
         }
 
         private void SetInvaderSupportSTBonusInput(string InputValue)
@@ -659,13 +798,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
             Context.Defender.Animation.Scale = new Vector2(1f);
 
-            Context.Defender.FinalHP = int.Parse(DefenderHPInput.Text);
-            Context.Defender.Creature.CurrentHP = Context.Defender.FinalHP;
-            Context.Defender.FinalST = int.Parse(DefenderSTInput.Text);
+            Context.Defender.Creature.CurrentHP = int.Parse(DefenderHPInput.Text);
+            Context.Defender.Creature.CurrentST = int.Parse(DefenderSTInput.Text);
+            Context.Defender.BonusHP = 0;
+            Context.Defender.BonusST = 0;
+            Context.Defender.LandHP = 0;
 
-            Context.Invader.FinalHP = int.Parse(InvaderMaxHPInput.Text);
-            Context.Invader.Creature.CurrentHP = Context.Invader.FinalHP;
-            Context.Invader.FinalST = int.Parse(InvaderSTInput.Text);
+            Context.Invader.Creature.CurrentHP = int.Parse(InvaderHPInput.Text);
+            Context.Invader.Creature.CurrentST = int.Parse(InvaderSTInput.Text);
+            Context.Invader.BonusHP = 0;
+            Context.Invader.BonusST = 0;
+            Context.Invader.LandHP = 0;
+
+            DefenderTerrainHPBonusInput.SetText((Context.DefenderTerrain.LandLevel * 10).ToString());
 
             ActionPanelBattleStartPhase.InitIntroAnimation(Context);
 
@@ -678,9 +823,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             PhasesChoice = PhasesChoices.LandModifierPhase;
 
-            Context.Defender.FinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
+            Context.Defender.LandHP = int.Parse(DefenderTerrainHPBonusInput.Text);
+            Context.Defender.BonusST = int.Parse(DefenderSupportSTBonusInput.Text);
 
-            Context.Invader.FinalHP += int.Parse(DefenderTerrainHPBonusInput.Text);
+            Context.Invader.BonusST = int.Parse(InvaderSupportSTBonusInput.Text);
 
             sndButtonClick.Play();
         }
@@ -728,13 +874,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private void AttackPhaseSelection()
         {
-            BoostModifierPhaseSelection();
+            IntroPhaseSelection();
+            ListAttackAnimation.Clear();
+            Context.ListActivatedEffect.Clear();
+            PhasesChoice = PhasesChoices.InvaderBeforeBattle;
+
+            if (Context.CanActivateSkillCreature(Context.Invader, Context.Defender, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement)
+                || Context.CanActivateSkillItem(Context.Invader, Context.Defender, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement))
+            {
+                ActionPanelBattleItemModifierPhase.StartAnimation(true, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement);
+            }
+
             if (!Context.Invader.Creature.UseCardAnimation)
             {
                 ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.Invader.Creature.IdleAnimationPath, Context.Invader, true);
                 Context.Invader.Animation.Position = new Vector2(1750, 190);
             }
-            PhasesChoice = PhasesChoices.PrepareAttackPhase;
+
             sndButtonClick.Play();
         }
 
@@ -747,7 +903,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
             int ReflectedDamage;
             int Damage = ActionPanelBattleAttackPhase.ProcessAttack(Context, FirstAttacker, SecondAttacker, out ReflectedDamage);
-            SecondAttacker.FinalHP = SecondAttacker.Creature.CurrentHP = Math.Max(0, SecondAttacker.FinalHP - Damage);
+            SecondAttacker.ReceiveDamage(Damage);
             if (SecondAttacker.Creature.CurrentHP > 0)
             {
                 Damage = ActionPanelBattleAttackPhase.ProcessAttack(Context, SecondAttacker, FirstAttacker, out ReflectedDamage);
@@ -789,7 +945,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             switch (PhasesChoice)
             {
-                case PhasesChoices.AttackPhase:
+                case PhasesChoices.AttackPhase1:
                     ListAttackAnimation[0].BeginDraw(g);
                     break;
             }
@@ -800,14 +956,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public override void Draw(CustomSpriteBatch g)
         {
             g.GraphicsDevice.Clear(ClearOptions.Target, Color.Black, 1, 0);
-
-            DrawSetupMenu(g);
-            DrawPhaseSelectionMenu(g);
-
-            foreach (IUIElement ActiveElement in ArrayMenuButton)
-            {
-                ActiveElement.Draw(g);
-            }
 
             switch (PhasesChoice)
             {
@@ -826,13 +974,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActionPanelBattleItemModifierPhase.DrawItemActivation(g, fntArial12, Context);
                     break;
 
+                case PhasesChoices.InvaderBeforeBattle:
+                case PhasesChoices.DefenderBeforeBattle:
+                case PhasesChoices.AttackBonusAnimation:
+                case PhasesChoices.InvaderBattleStartAnimation:
+                case PhasesChoices.DefenderBattleStartAnimation:
                 case PhasesChoices.PrepareAttackPhase:
                     ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
                     ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
                     ActionPanelBattleItemModifierPhase.DrawItemActivation(g, fntArial12, Context);
                     break;
 
-                case PhasesChoices.AttackPhase:
+                case PhasesChoices.AttackPhase1:
                     ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
                     ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
                     break;
@@ -841,6 +994,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
                     ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
                     break;
+            }
+
+            DrawSetupMenu(g);
+            DrawPhaseSelectionMenu(g);
+
+            foreach (IUIElement ActiveElement in ArrayMenuButton)
+            {
+                ActiveElement.Draw(g);
             }
         }
 

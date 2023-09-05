@@ -39,7 +39,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return "Terrain Level changed " + string.Join(",", _LevelIncrease);
+            Params.GlobalContext.DefenderTerrain.LandLevel += _LevelIncrease;
+            Params.GlobalContext.DefenderTerrain.LandLevel = Math.Min(5, Params.GlobalContext.DefenderTerrain.LandLevel);
+            return "Terrain Level increase by " + string.Join(",", _LevelIncrease);
         }
 
         protected override BaseEffect DoCopy()
@@ -53,6 +55,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            ChangeTerrainLevelEffect NewEffect = (ChangeTerrainLevelEffect)Copy;
+
+            _LevelIncrease = NewEffect._LevelIncrease;
         }
 
         #region Properties

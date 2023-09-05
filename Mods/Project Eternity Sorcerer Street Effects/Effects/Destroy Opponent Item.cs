@@ -39,6 +39,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            if (Params.GlobalContext.OpponentCreature.Creature.BattleAbilities.ItemProtection)
+            {
+                return null;
+            }
+
+            ItemCard OppnentCard = Params.GlobalContext.OpponentCreature.Item as ItemCard;
+
+            if (OppnentCard != null)
+            {
+                if ((CardDestroyType == CardDestroyTypes.Armor && OppnentCard.ItemType == ItemCard.ItemTypes.Armor)
+                    || (CardDestroyType == CardDestroyTypes.Scroll && OppnentCard.ItemType == ItemCard.ItemTypes.Scrolls)
+                    || (CardDestroyType == CardDestroyTypes.Tool && OppnentCard.ItemType == ItemCard.ItemTypes.Tools)
+                    || (CardDestroyType == CardDestroyTypes.Weapon && OppnentCard.ItemType == ItemCard.ItemTypes.Weapon))
+                {
+                    Params.GlobalContext.OpponentCreature.Item = null;
+                }
+            }
+            else if (CardDestroyType == CardDestroyTypes.Creature && Params.GlobalContext.OpponentCreature.Item is CreatureCard)
+            {
+                Params.GlobalContext.OpponentCreature.Item = null;
+            }
+
             return null;
         }
 
@@ -46,11 +68,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             DestroyOpponentItemEffect NewEffect = new DestroyOpponentItemEffect(Params);
 
+            NewEffect._CardDestroyType = _CardDestroyType;
+
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            DestroyOpponentItemEffect CopyRequirement = (DestroyOpponentItemEffect)Copy;
+
+            _CardDestroyType = CopyRequirement._CardDestroyType;
         }
 
         [CategoryAttribute(""),

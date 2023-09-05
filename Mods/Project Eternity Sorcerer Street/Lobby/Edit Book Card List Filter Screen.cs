@@ -78,7 +78,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.ArrayAffinity.Length == 1 && ActiveCreatureCard.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
+                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
                             {
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
@@ -92,7 +92,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.ArrayAffinity.Length == 1 && ActiveCreatureCard.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Fire)
+                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Fire)
                             {
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
@@ -106,7 +106,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.ArrayAffinity.Length == 1 && ActiveCreatureCard.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Water)
+                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Water)
                             {
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
@@ -120,7 +120,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.ArrayAffinity.Length == 1 && ActiveCreatureCard.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Earth)
+                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Earth)
                             {
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.ArrayAffinity.Length == 1 && ActiveCreatureCard.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Air)
+                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Air)
                             {
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
@@ -148,7 +148,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.ArrayAffinity.Length > 1)
+                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length > 1)
                             {
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }

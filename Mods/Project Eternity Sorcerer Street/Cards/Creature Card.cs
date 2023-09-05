@@ -26,7 +26,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public string Subtype;
         public readonly byte DiscardCardRequired;
 
-        public ElementalAffinity[] ArrayAffinity;
         public ElementalAffinity[] ArrayLandLimit;
         public ItemCard.ItemTypes[] ArrayItemLimit;
 
@@ -76,10 +75,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SkillChainName = BR.ReadString();
 
             int ArrayAffinityLength = BR.ReadInt32();
-            ArrayAffinity = new ElementalAffinity[ArrayAffinityLength];
+            Abilities.ArrayAffinity = new ElementalAffinity[ArrayAffinityLength];
             for (int A = 0; A < ArrayAffinityLength; ++A)
             {
-                ArrayAffinity[A] = (ElementalAffinity)BR.ReadByte();
+                Abilities.ArrayAffinity[A] = (ElementalAffinity)BR.ReadByte();
             }
 
             int ArrayLandLimitLength = BR.ReadInt32();
@@ -149,7 +148,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CurrentST = MaxST;
 
             DicTerrainRequiement = new Dictionary<ElementalAffinity, int>();
-            ArrayAffinity = new ElementalAffinity[0];
             ArrayLandLimit = new ElementalAffinity[0];
             ArrayItemLimit = new ItemCard.ItemTypes[0];
             Abilities = new CardAbilities();
@@ -170,10 +168,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             SkillChainName = Clone.SkillChainName;
 
-            ArrayAffinity = new ElementalAffinity[Clone.ArrayAffinity.Length];
-            for (int A = 0; A < Clone.ArrayAffinity.Length; ++A)
+            Abilities.ArrayAffinity = new ElementalAffinity[Clone.Abilities.ArrayAffinity.Length];
+            for (int A = 0; A < Clone.Abilities.ArrayAffinity.Length; ++A)
             {
-                ArrayAffinity[A] = Clone.ArrayAffinity[A];
+                Abilities.ArrayAffinity[A] = Clone.Abilities.ArrayAffinity[A];
             }
 
             ArrayLandLimit = new ElementalAffinity[Clone.ArrayLandLimit.Length];
@@ -229,7 +227,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             List<Texture2D> ListIcon = new List<Texture2D>();
 
-            foreach (ElementalAffinity ActiveAffinity in ArrayAffinity)
+            foreach (ElementalAffinity ActiveAffinity in Abilities.ArrayAffinity)
             {
                 switch (ActiveAffinity)
                 {
@@ -277,9 +275,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             base.DrawCardInfo(g, Symbols, fntCardInfo, OffsetX, OffsetY);
 
-            for (int A = 0; A < ArrayAffinity.Length; A++)
+            for (int A = 0; A < Abilities.ArrayAffinity.Length; A++)
             {
-                ElementalAffinity ActiveAffinity = ArrayAffinity[A];
+                ElementalAffinity ActiveAffinity = Abilities.ArrayAffinity[A];
                 switch (ActiveAffinity)
                 {
                     case ElementalAffinity.Neutral:

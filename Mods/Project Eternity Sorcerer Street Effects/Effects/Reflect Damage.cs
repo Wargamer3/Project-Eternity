@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ReflectSignOperator = _SignOperator;
             Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ReflectValue = _Value;
 
-            return "Neutralize " + _Value + "% Damage";
+            return "Reflect " + _Value + "% Damage";
         }
 
         protected override BaseEffect DoCopy()

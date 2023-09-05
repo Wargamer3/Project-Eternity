@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ArrayNeutralizeType = ArrayNeutralizeType;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ListNeutralizeType.AddRange(ArrayNeutralizeType);
             Params.GlobalContext.SelfCreature.Creature.BattleAbilities.NeutralizeSignOperator = _SignOperator;
             Params.GlobalContext.SelfCreature.Creature.BattleAbilities.NeutralizeValue = Params.ActiveParser.Evaluate(_Value);
 

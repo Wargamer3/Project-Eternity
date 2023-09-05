@@ -2,6 +2,7 @@
 using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -52,18 +53,56 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            SorcererStreetBattleContext.BattleCreatureInfo RealTarget = Params.GlobalContext.SelfCreature;
+            if (_Target == Targets.Opponent)
+            {
+                RealTarget = Params.GlobalContext.OpponentCreature;
+            }
+
+            if (_CardDestroyType == CardDestroyTypes.All)
+            {
+                while (RealTarget.Owner.ListCardInHand.Count > 0)
+                {
+                    RealTarget.Owner.ListCardInHand.RemoveAt(0);
+                }
+                return "Destroy All Cards";
+            }
+            else if (_CardDestroyType == CardDestroyTypes.Random)
+            {
+                for (int C = 0; C < _NumberOfCards; ++C)
+                {
+                    RealTarget.Owner.ListCardInHand.RemoveAt(RandomHelper.Next(RealTarget.Owner.ListCardInHand.Count));
+                }
+            }
+            else
+            {
+                for (int C = 0; C < _NumberOfCards; ++C)
+                {
+                    RealTarget.Owner.ListCardInHand.RemoveAt(0);
+                }
+            }
+
+            return "Destroy " + _NumberOfCards + " Cards";
         }
 
         protected override BaseEffect DoCopy()
         {
             DestroyCardsEffect NewEffect = new DestroyCardsEffect(Params);
 
+            NewEffect._Target = _Target;
+            NewEffect._CardDestroyType = _CardDestroyType;
+            NewEffect._NumberOfCards = _NumberOfCards;
+
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            DestroyCardsEffect NewEffect = (DestroyCardsEffect)Copy;
+
+            _Target = NewEffect._Target;
+            _CardDestroyType = NewEffect._CardDestroyType;
+            _NumberOfCards = NewEffect._NumberOfCards;
         }
 
         [CategoryAttribute(""),

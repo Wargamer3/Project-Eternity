@@ -44,6 +44,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Map.GlobalSorcererStreetBattleContext.Invader.Owner.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
             Map.GlobalSorcererStreetBattleContext.Defender.Owner.DecreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            foreach (CreatureCard.ElementalAffinity ActiveAffinity in Map.GlobalSorcererStreetBattleContext.Invader.Creature.Abilities.ArrayAffinity)
+            {
+                Map.IncreaseChainLevels(ActiveAffinity);
+            }
+            foreach (CreatureCard.ElementalAffinity ActiveAffinity in Map.GlobalSorcererStreetBattleContext.Defender.Creature.Abilities.ArrayAffinity)
+            {
+                Map.DecreaseChainLevels(ActiveAffinity);
+            }
             Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.Invader.Owner);
             Map.UpdateTolls(Map.GlobalSorcererStreetBattleContext.Defender.Owner);
         }

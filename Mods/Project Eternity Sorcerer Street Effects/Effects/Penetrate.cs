@@ -49,7 +49,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return "Penetrate " + string.Join(",", ArrayAffinity);
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ArrayPenetrateAffinity = ArrayAffinity;
+
+            return "Penetrate " + string.Join(", ", ArrayAffinity);
         }
 
         protected override BaseEffect DoCopy()
@@ -63,6 +65,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            PenetrateEffect NewEffect = (PenetrateEffect)Copy;
+
+            ArrayAffinity = NewEffect.ArrayAffinity;
         }
 
         #region Properties

@@ -195,32 +195,32 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CreatureCard CreatureCardToAdd = CardToAdd as CreatureCard;
             if (CreatureCardToAdd != null)
             {
-                if (CreatureCardToAdd.ArrayAffinity.Length > 1)
+                if (CreatureCardToAdd.Abilities.ArrayAffinity.Length > 1)
                 {
                     ++UniqueCreaturesMulti;
                     TotalCreaturesMulti += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
+                else if (CreatureCardToAdd.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
                 {
                     ++UniqueCreaturesNeutral;
                     TotalCreaturesNeutral += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Fire)
+                else if (CreatureCardToAdd.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Fire)
                 {
                     ++UniqueCreaturesFire;
                     TotalCreaturesFire += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Water)
+                else if (CreatureCardToAdd.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Water)
                 {
                     ++UniqueCreaturesWater;
                     TotalCreaturesWater += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Earth)
+                else if (CreatureCardToAdd.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Earth)
                 {
                     ++UniqueCreaturesEarth;
                     TotalCreaturesEarth += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Air)
+                else if (CreatureCardToAdd.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Air)
                 {
                     ++UniqueCreaturesAir;
                     TotalCreaturesAir += CardToAdd.QuantityOwned;

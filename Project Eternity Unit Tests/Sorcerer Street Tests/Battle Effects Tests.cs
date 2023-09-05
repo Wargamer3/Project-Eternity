@@ -34,10 +34,10 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             GlobalSorcererStreetBattleContext.Invader.Creature.InitBattleBonuses();
             GlobalSorcererStreetBattleContext.Defender.Creature.InitBattleBonuses();
 
-            GlobalSorcererStreetBattleContext.Invader.FinalHP = GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP;
-            GlobalSorcererStreetBattleContext.Defender.FinalHP = GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP;
-            GlobalSorcererStreetBattleContext.Invader.FinalST = GlobalSorcererStreetBattleContext.Invader.Creature.CurrentST;
-            GlobalSorcererStreetBattleContext.Defender.FinalST = GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST;
+            GlobalSorcererStreetBattleContext.Invader.BonusHP = 0;
+            GlobalSorcererStreetBattleContext.Defender.BonusHP = 0;
+            GlobalSorcererStreetBattleContext.Invader.BonusST = 0;
+            GlobalSorcererStreetBattleContext.Defender.BonusST = 0;
 
             GlobalSorcererStreetBattleContext.SelfCreature = GlobalSorcererStreetBattleContext.Invader;
             GlobalSorcererStreetBattleContext.OpponentCreature = GlobalSorcererStreetBattleContext.Defender;

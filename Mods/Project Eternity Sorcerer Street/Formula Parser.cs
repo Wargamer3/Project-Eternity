@@ -100,7 +100,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     case "opponent":
                     case "opponentcreature":
-                        return StatsFromCreature( Params.GlobalContext.OpponentCreature, Expression[1]);
+                        return StatsFromCreature(Params.GlobalContext.OpponentCreature, Expression[1]);
+
+                    case "creatures":
+                        return StatsFromCreatures(Expression[1]);
 
                     case "ownerplayer":
                         return PlayerStatsFromPlayer(Params.GlobalContext.SelfCreature.Owner, Expression[1]);
@@ -234,6 +237,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "mhp":
                 case "maxhp":
                 case "hpmax":
+                case "basehp":
                 case "maxhitpoint":
                 case "maxhitpoints":
                 case "hitpointmax":
@@ -248,6 +252,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 case "damagereceived":
                     ReturnExpression = ActiveCreature.DamageReceived.ToString();
+                    break;
+
+                case "terrainlevel":
+                    ReturnExpression = Params.GlobalContext.DefenderTerrain.LandLevel.ToString();
+                    break;
+
+                case "cardsinhand":
+                    ReturnExpression = ActiveCreature.Owner.ListCardInHand.Count.ToString();
+                    break;
+            }
+
+            return ReturnExpression;
+        }
+
+        private string StatsFromCreatures(string Expression)
+        {
+            string ReturnExpression = null;
+
+            switch (Expression)
+            {
+                case "air":
+                    ReturnExpression = Params.GlobalContext.DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air].ToString();
+                    break;
+
+                case "earth":
+                    ReturnExpression = Params.GlobalContext.DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth].ToString();
+                    break;
+
+                case "fire":
+                    ReturnExpression = Params.GlobalContext.DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire].ToString();
+                    break;
+
+                case "water":
+                    ReturnExpression = Params.GlobalContext.DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water].ToString();
                     break;
             }
 

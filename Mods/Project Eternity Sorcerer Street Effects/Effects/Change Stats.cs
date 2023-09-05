@@ -12,12 +12,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static string Name = "Sorcerer Street Change Stats";
 
         public enum Targets { Self, Opponent }
-        public enum Stats { FinalST, BaseST, FinalHP, BaseHP, MaxHP, }
+        public enum Stats { FinalST, BaseST, FinalHP, BaseHP, MaxHP, }//Final = battle only, Base = Modify the card stats
 
         private Targets _Target;
         private Stats _Stat;
         private SignOperators _SignOperator;
-        private string _STValue;
+        private string _Value;
 
         public ChangeStatsEffect()
             : base(Name, false)
@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _Target = Targets.Self;
             _Stat = Stats.FinalST;
             _SignOperator = SignOperators.PlusEqual;
-            _STValue = string.Empty;
+            _Value = string.Empty;
         }
 
         public ChangeStatsEffect(SorcererStreetBattleParams Params)
@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _Target = Targets.Self;
             _Stat = Stats.FinalST;
             _SignOperator = SignOperators.PlusEqual;
-            _STValue = string.Empty;
+            _Value = string.Empty;
         }
         
         protected override void Load(BinaryReader BR)
@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _Target = (Targets)BR.ReadByte();
             _Stat = (Stats)BR.ReadByte();
             _SignOperator = (SignOperators)BR.ReadByte();
-            _STValue = BR.ReadString();
+            _Value = BR.ReadString();
         }
 
         protected override void Save(BinaryWriter BW)
@@ -50,7 +50,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             BW.Write((byte)_Target);
             BW.Write((byte)_Stat);
             BW.Write((byte)_SignOperator);
-            BW.Write(_STValue);
+            BW.Write(_Value);
         }
 
         public override bool CanActivate()
@@ -60,36 +60,171 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            string EvaluationResult = Params.ActiveParser.Evaluate(_STValue);
+            string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
+
+            SorcererStreetBattleContext.BattleCreatureInfo RealTarget = Params.GlobalContext.SelfCreature;
+            if (_Target == Targets.Opponent)
+            {
+                RealTarget = Params.GlobalContext.OpponentCreature;
+            }
 
             if (_Stat == Stats.FinalST)
             {
                 switch (_SignOperator)
                 {
                     case SignOperators.Equal:
-                        Params.GlobalContext.SelfCreature.FinalST = int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
-                        break;
+                        RealTarget.BonusST = int.Parse(EvaluationResult, CultureInfo.InvariantCulture) - RealTarget.Creature.CurrentST;
+                        return "ST=" + EvaluationResult;
 
                     case SignOperators.PlusEqual:
-                        Params.GlobalContext.SelfCreature.FinalST += int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        RealTarget.BonusST += int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         break;
 
                     case SignOperators.DividedEqual:
-                        Params.GlobalContext.SelfCreature.FinalST /= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        RealTarget.BonusST -= RealTarget.Creature.CurrentST - RealTarget.Creature.CurrentST / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
                         break;
 
                     case SignOperators.MinusEqual:
-                        Params.GlobalContext.SelfCreature.FinalST /= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        RealTarget.BonusST -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         break;
 
                     case SignOperators.MultiplicatedEqual:
-                        Params.GlobalContext.SelfCreature.FinalST *= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        RealTarget.BonusST += RealTarget.Creature.CurrentST * (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
                         break;
 
                     case SignOperators.ModuloEqual:
-                        Params.GlobalContext.SelfCreature.FinalST %= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        RealTarget.BonusST += RealTarget.Creature.CurrentST % int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         break;
                 }
+
+                return "ST+" + EvaluationResult;
+            }
+            else if (_Stat == Stats.BaseST)
+            {
+                switch (_SignOperator)
+                {
+                    case SignOperators.Equal:
+                        RealTarget.Creature.CurrentST = int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        return "ST=" + EvaluationResult;
+
+                    case SignOperators.PlusEqual:
+                        RealTarget.Creature.CurrentST += int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+
+                    case SignOperators.DividedEqual:
+                        RealTarget.Creature.CurrentST -= RealTarget.Creature.CurrentST - RealTarget.Creature.CurrentST / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        break;
+
+                    case SignOperators.MinusEqual:
+                        RealTarget.Creature.CurrentST -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        RealTarget.Creature.CurrentST = Math.Max(0, RealTarget.Creature.CurrentST);
+                        break;
+
+                    case SignOperators.MultiplicatedEqual:
+                        RealTarget.Creature.CurrentST += RealTarget.Creature.CurrentST * (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        break;
+
+                    case SignOperators.ModuloEqual:
+                        RealTarget.Creature.CurrentST += RealTarget.Creature.CurrentST % int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+                }
+
+                return "ST+" + EvaluationResult;
+            }
+            else if (_Stat == Stats.FinalHP)
+            {
+                switch (_SignOperator)
+                {
+                    case SignOperators.Equal:
+                        RealTarget.BonusHP = int.Parse(EvaluationResult, CultureInfo.InvariantCulture) - RealTarget.Creature.CurrentHP;
+                        return "HP=" + EvaluationResult;
+
+                    case SignOperators.PlusEqual:
+                        RealTarget.BonusHP += int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+
+                    case SignOperators.DividedEqual:
+                        RealTarget.BonusHP -= RealTarget.Creature.CurrentHP - RealTarget.Creature.CurrentHP / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        break;
+
+                    case SignOperators.MinusEqual:
+                        RealTarget.BonusHP -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+
+                    case SignOperators.MultiplicatedEqual:
+                        RealTarget.BonusHP += RealTarget.Creature.CurrentHP * (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        break;
+
+                    case SignOperators.ModuloEqual:
+                        RealTarget.BonusHP += RealTarget.Creature.CurrentHP % int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+                }
+
+                return "HP+" + EvaluationResult;
+            }
+            else if (_Stat == Stats.BaseHP)
+            {
+                switch (_SignOperator)
+                {
+                    case SignOperators.Equal:
+                        RealTarget.Creature.CurrentHP = int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        return "HP=" + EvaluationResult;
+
+                    case SignOperators.PlusEqual:
+                        RealTarget.Creature.CurrentHP += int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+
+                    case SignOperators.DividedEqual:
+                        RealTarget.Creature.CurrentHP -= RealTarget.Creature.CurrentHP - RealTarget.Creature.CurrentHP / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        break;
+
+                    case SignOperators.MinusEqual:
+                        RealTarget.Creature.CurrentHP -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        RealTarget.Creature.CurrentHP = Math.Max(0, RealTarget.Creature.CurrentHP);
+                        break;
+
+                    case SignOperators.MultiplicatedEqual:
+                        RealTarget.Creature.CurrentHP += RealTarget.Creature.CurrentHP * (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        break;
+
+                    case SignOperators.ModuloEqual:
+                        RealTarget.Creature.CurrentHP += RealTarget.Creature.CurrentHP % int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+                }
+
+                return "HP+" + EvaluationResult;
+            }
+            else if (_Stat == Stats.MaxHP)
+            {
+                switch (_SignOperator)
+                {
+                    case SignOperators.Equal:
+                        RealTarget.Creature.MaxHP = int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        return "Max HP=" + EvaluationResult;
+
+                    case SignOperators.PlusEqual:
+                        RealTarget.Creature.MaxHP += int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+
+                    case SignOperators.DividedEqual:
+                        RealTarget.Creature.MaxHP -= RealTarget.Creature.MaxHP - RealTarget.Creature.MaxHP / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        break;
+
+                    case SignOperators.MinusEqual:
+                        RealTarget.Creature.MaxHP -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        RealTarget.Creature.MaxHP = Math.Max(0, RealTarget.Creature.MaxHP);
+                        break;
+
+                    case SignOperators.MultiplicatedEqual:
+                        RealTarget.Creature.MaxHP += RealTarget.Creature.MaxHP * (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
+                        break;
+
+                    case SignOperators.ModuloEqual:
+                        RealTarget.Creature.MaxHP += RealTarget.Creature.MaxHP % int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                        break;
+                }
+
+                return "Max HP+" + EvaluationResult;
             }
 
             return "ST+" + EvaluationResult;
@@ -102,7 +237,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             NewEffect._Target = _Target;
             NewEffect._Stat = _Stat;
             NewEffect._SignOperator = _SignOperator;
-            NewEffect._STValue = _STValue;
+            NewEffect._Value = _Value;
 
             return NewEffect;
         }
@@ -114,7 +249,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _Target = NewEffect._Target;
             _Stat = NewEffect._Stat;
             _SignOperator = NewEffect._SignOperator;
-            _STValue = NewEffect._STValue;
+            _Value = NewEffect._Value;
         }
 
         #region Properties
@@ -167,15 +302,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public string ST
+        public string Value
         {
             get
             {
-                return _STValue;
+                return _Value;
             }
             set
             {
-                _STValue = value;
+                _Value = value;
             }
         }
 

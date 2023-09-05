@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
@@ -49,16 +50,70 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
+            CreatureCard TargetCreature;
+
+            if (_Target == Targets.Self)
+            {
+                TargetCreature = GlobalContext.SelfCreature.Creature;
+            }
+            else
+            {
+                TargetCreature = GlobalContext.OpponentCreature.Creature;
+            }
+
+            foreach (ElementChoices ActiveElement in ArrayElement)
+            {
+                if ((ActiveElement == ElementChoices.Air && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                    || (ActiveElement == ElementChoices.Fire && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                    || (ActiveElement == ElementChoices.Earth && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                    || (ActiveElement == ElementChoices.Water && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Water))
+                    || (ActiveElement == ElementChoices.Neutral && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
+                {
+                    return true;
+                }
+
+                if (ActiveElement == ElementChoices.DifferentFromOpponent)
+                {
+                    CreatureCard OtherCreature;
+
+                    if (_Target == Targets.Self)
+                    {
+                        OtherCreature = GlobalContext.OpponentCreature.Creature;
+                    }
+                    else
+                    {
+                        OtherCreature = GlobalContext.SelfCreature.Creature;
+                    }
+
+                    foreach (CreatureCard.ElementalAffinity ActiveAffinity in TargetCreature.BattleAbilities.ArrayAffinity)
+                    {
+                        if (!OtherCreature.BattleAbilities.ArrayAffinity.Contains(ActiveAffinity))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
             return false;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetElementRequirement(GlobalContext);
+            SorcererStreetElementRequirement NewRequirement = new SorcererStreetElementRequirement(GlobalContext);
+
+            NewRequirement.ArrayElement = ArrayElement;
+            NewRequirement._Target = _Target;
+
+            return NewRequirement;
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
+            SorcererStreetElementRequirement CopyRequirement = (SorcererStreetElementRequirement)Copy;
+
+            ArrayElement = CopyRequirement.ArrayElement;
+            _Target = CopyRequirement._Target;
         }
 
         #region Properties

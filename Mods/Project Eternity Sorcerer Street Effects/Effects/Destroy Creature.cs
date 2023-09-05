@@ -39,6 +39,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            if (_Target == Targets.Self)
+            {
+                Params.GlobalContext.SelfCreature.Creature.CurrentHP = 0;
+                Params.GlobalContext.SelfCreature.BonusHP = 0;
+                Params.GlobalContext.SelfCreature.LandHP = 0;
+            }
+            else
+            {
+                Params.GlobalContext.OpponentCreature.Creature.CurrentHP = 0;
+                Params.GlobalContext.OpponentCreature.BonusHP = 0;
+                Params.GlobalContext.OpponentCreature.LandHP = 0;
+            }
             return "Destroy Creature " + string.Join(",", _Target);
         }
 

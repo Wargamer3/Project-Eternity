@@ -8,6 +8,7 @@ using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using static ProjectEternity.Core.Operators;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.ActionPanelBattleAttackPhase;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.CreatureCard;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -16,13 +17,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool AttackFirst;
         public bool AttackLast;
         public bool AttackTwice;
+        public bool CriticalHit;
         public bool IsDefensive;//Can't move
         public bool SupportCreature;//Can use other creatures as items
         public bool ItemCreature;//Can be used as an item
         public bool Immediate;//Allow all territory command after taking a land (either vacant or after a battle)
         public bool Regenerate;//Regain max HP after battle
+        public bool ItemProtection;//Immune to Destroy Item and Steal Item effects.
+        public bool Recycle;
 
-        public AttackTypes[] ArrayNeutralizeType;
+        public ElementalAffinity[] ArrayAffinity;
+
+        public ElementalAffinity[] ArrayPenetrateAffinity;//HP from Land Bonus is negated, attack with creature ST
+
+        public bool ScrollAttack;//HP from Land Bonus is negated, attack with scroll, can't be reflected or negated
+        public string ScrollValue;
+
+        public List<AttackTypes> ListNeutralizeType;
         public NumberTypes NeutralizeSignOperator;
         public string NeutralizeValue;
 
@@ -35,13 +46,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AttackFirst = Other.AttackFirst;
             AttackLast = Other.AttackLast;
             AttackTwice = Other.AttackTwice;
+            CriticalHit = Other.CriticalHit;
             IsDefensive = Other.IsDefensive;
             SupportCreature = Other.SupportCreature;
             ItemCreature = Other.ItemCreature;
             Immediate = Other.Immediate;
             Regenerate = Other.Regenerate;
+            ItemProtection = Other.ItemProtection;
+            Recycle = Other.Recycle;
 
-            ArrayNeutralizeType = null;
+            ArrayPenetrateAffinity = Other.ArrayPenetrateAffinity;
+
+            ArrayAffinity = Other.ArrayAffinity;
+
+            ScrollAttack = Other.ScrollAttack;
+            ScrollValue = null;
+
+            ListNeutralizeType = new List<AttackTypes>();
             NeutralizeSignOperator = NumberTypes.Relative;
             NeutralizeValue = null;
 

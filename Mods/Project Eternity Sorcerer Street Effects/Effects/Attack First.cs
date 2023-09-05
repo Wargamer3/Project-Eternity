@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             Params.GlobalContext.SelfCreature.Creature.BattleAbilities.AttackFirst = true;
-            return null;
+            return "Attack First";
         }
 
         protected override BaseEffect DoCopy()

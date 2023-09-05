@@ -3,15 +3,15 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetAgainstDefensiveRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetBeforeBattleStartRequirement : SorcererStreetRequirement
     {
-        public SorcererStreetAgainstDefensiveRequirement()
+        public SorcererStreetBeforeBattleStartRequirement()
             : this(null)
         {
         }
 
-        public SorcererStreetAgainstDefensiveRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Sorcerer Street Against Defensive", GlobalContext)
+        public SorcererStreetBeforeBattleStartRequirement(SorcererStreetBattleContext GlobalContext)
+            : base(ActionPanelBattleAttackPhase.BeforeBattleStartRequirement, GlobalContext)
         {
         }
 
@@ -25,12 +25,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.OpponentCreature.Creature.BattleAbilities.IsDefensive;
+            return false;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetAgainstDefensiveRequirement(GlobalContext);
+            return new SorcererStreetBeforeBattleStartRequirement(GlobalContext);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

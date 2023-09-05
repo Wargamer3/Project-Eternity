@@ -83,6 +83,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int MagicGoal;
         public int HighestDieRoll;
         public List<Checkpoints> ListCheckpoint;
+        public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public readonly MovementAlgorithm Pathfinder;
         public readonly SorcererStreetBattleContext GlobalSorcererStreetBattleContext;
         public readonly SorcererStreetBattleParams SorcererStreetParams;
@@ -114,6 +115,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MapEnvironment = new EnvironmentManagerSorcererStreet(this);
             Params.ActiveParser = new SorcererStreetFormulaParser(Params);
             ListCheckpoint = new List<Checkpoints>();
+            DicCreatureCountByElementType = new Dictionary<CreatureCard.ElementalAffinity, byte>();
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Air, 0);
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Earth, 0);
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Fire, 0);
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Water, 0);
+            DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Neutral, 0);
 
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;
@@ -539,6 +546,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void UpdateTolls(Player ActivePlayer)
         {
             ActivePlayer.TotalMagic = ActivePlayer.Magic;
+
             for (int X = MapSize.X - 1; X >= 0; --X)
             {
                 for (int Y = MapSize.Y - 1; Y >= 0; --Y)
@@ -562,6 +570,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int P = 0; P < SortedList.Count; ++P)
             {
                 SortedList[P].Rank = P + 1;
+            }
+        }
+
+        public void IncreaseChainLevels(CreatureCard.ElementalAffinity TerrainTypeIndex)
+        {
+            byte ChainValue;
+
+            if (!DicCreatureCountByElementType.TryGetValue(TerrainTypeIndex, out ChainValue))
+            {
+                DicCreatureCountByElementType.Add(TerrainTypeIndex, 1);
+            }
+            else
+            {
+                DicCreatureCountByElementType[TerrainTypeIndex] = (byte)(ChainValue + 1);
+            }
+        }
+
+        public void DecreaseChainLevels(CreatureCard.ElementalAffinity TerrainTypeIndex)
+        {
+            byte ChainValue;
+
+            if (!DicCreatureCountByElementType.TryGetValue(TerrainTypeIndex, out ChainValue))
+            {
+                DicCreatureCountByElementType.Add(TerrainTypeIndex, 0);
+            }
+            else
+            {
+                DicCreatureCountByElementType[TerrainTypeIndex] = (byte)(ChainValue - 1);
             }
         }
 

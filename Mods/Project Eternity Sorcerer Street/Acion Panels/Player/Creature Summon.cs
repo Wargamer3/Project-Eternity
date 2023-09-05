@@ -46,6 +46,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActivePlayer.Magic -= SelectedCard.MagicCost;
 
             ActivePlayer.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
+            foreach (CreatureCard.ElementalAffinity ActiveAffinity in SelectedCard.Abilities.ArrayAffinity)
+            {
+                Map.IncreaseChainLevels(ActiveAffinity);
+            }
             Map.UpdateTolls(ActivePlayer);
             Map.LayerManager.TogglePreview(true);
         }

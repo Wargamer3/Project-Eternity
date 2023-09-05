@@ -47,6 +47,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ArrayAffinity = new ElementalAffinity[1] { _Element };
+
             return "Change Element " + _Element;
         }
 
@@ -62,6 +64,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            ChangeElementEffect NewEffect = (ChangeElementEffect)Copy;
+
+            _Target = NewEffect._Target;
+            Element = NewEffect.Element;
         }
 
         #region Properties

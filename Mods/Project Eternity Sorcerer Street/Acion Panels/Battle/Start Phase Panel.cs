@@ -40,6 +40,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = ListActionMenuChoice;
 
+                Map.GlobalSorcererStreetBattleContext.DicCreatureCountByElementType = Map.DicCreatureCountByElementType;
+
                 TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
 
                 Map.GlobalSorcererStreetBattleContext.Invader.Creature = Invader;
@@ -54,10 +56,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.Invader.Creature.InitBattleBonuses();
                 Map.GlobalSorcererStreetBattleContext.Defender.Creature.InitBattleBonuses();
 
-                Map.GlobalSorcererStreetBattleContext.Invader.FinalHP = Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentHP;
-                Map.GlobalSorcererStreetBattleContext.Defender.FinalHP = Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentHP;
-                Map.GlobalSorcererStreetBattleContext.Invader.FinalST = Map.GlobalSorcererStreetBattleContext.Invader.Creature.CurrentST;
-                Map.GlobalSorcererStreetBattleContext.Defender.FinalST = Map.GlobalSorcererStreetBattleContext.Defender.Creature.CurrentST;
+                Map.GlobalSorcererStreetBattleContext.Invader.BonusHP = 0;
+                Map.GlobalSorcererStreetBattleContext.Defender.BonusHP = 0;
+                Map.GlobalSorcererStreetBattleContext.Invader.BonusST = 0;
+                Map.GlobalSorcererStreetBattleContext.Defender.BonusST = 0;
 
                 Map.GlobalSorcererStreetBattleContext.Invader.Animation = new SimpleAnimation("Invader", "Invader", Invader.sprCard);
                 Map.GlobalSorcererStreetBattleContext.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
