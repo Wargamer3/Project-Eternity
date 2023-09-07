@@ -156,6 +156,33 @@ namespace ProjectEternity.Core.Item
             return false;
         }
 
+        public List<BaseSkillActivation> GetAvailableActivation(string SkillRequirementToActivate)
+        {
+            if (CurrentSkillLevel.ActivationsCount == 0)
+            {
+                return null;
+            }
+
+            List<BaseSkillActivation> ListSkillActivation = new List<BaseSkillActivation>();
+            for (int A = 0; A < CurrentSkillLevel.ListActivation.Count; A++)
+            {
+                if (CurrentSkillLevel.ListActivation[A].CanActivate(SkillRequirementToActivate, Name))
+                {
+                    if (CurrentSkillLevel.ListActivation[A].Weight == -1)
+                    {
+                        ListSkillActivation.Add(CurrentSkillLevel.ListActivation[A]);
+                    }
+                    else if (ListSkillActivation.Count == 0 || CurrentSkillLevel.ListActivation[A].Weight > ListSkillActivation[0].Weight)
+                    {
+                        ListSkillActivation.Clear();
+                        ListSkillActivation.Add(CurrentSkillLevel.ListActivation[A]);
+                    }
+                }
+            }
+
+            return ListSkillActivation;
+        }
+
         public void AddSkillEffectsToTarget(string SkillRequirementToActivate)
         {
             //No activations remaining.

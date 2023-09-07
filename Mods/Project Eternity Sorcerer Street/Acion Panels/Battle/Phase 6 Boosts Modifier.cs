@@ -28,8 +28,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             foreach (TerrainSorcererStreet ActiveBoostCreature in GlobalSorcererStreetBattleContext.ListBoostCreature)
             {
-                GlobalSorcererStreetBattleContext.ActivateSkill(new SorcererStreetBattleContext.BattleCreatureInfo(ActiveBoostCreature.DefendingCreature, ActiveBoostCreature.PlayerOwner), GlobalSorcererStreetBattleContext.Defender, RequirementName);
-                GlobalSorcererStreetBattleContext.ActivateSkill(new SorcererStreetBattleContext.BattleCreatureInfo(ActiveBoostCreature.DefendingCreature, ActiveBoostCreature.PlayerOwner), GlobalSorcererStreetBattleContext.Invader, RequirementName);
             }
         }
 

@@ -49,10 +49,13 @@
   <ItemGroup>
     <Compile Include="Acion Panels\Action Menu.cs" />
     <Compile Include="Acion Panels\Action Panel Holder Sorcerer Street.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 7.3 Second Counter Attack.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 7.2 First Counter Attack.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 7.1 Second Attack.cs" />
     <Compile Include="Acion Panels\Battle\Phase 9 Land Chain Update.cs" />
     <Compile Include="Acion Panels\Battle\Phase 9 Defender Win.cs" />
     <Compile Include="Acion Panels\Battle\Phase 9 Defender Defeated.cs" />
-    <Compile Include="Acion Panels\Battle\Phase 7 Attack.cs" />
+    <Compile Include="Acion Panels\Battle\Phase 7 First Attack.cs" />
     <Compile Include="Acion Panels\Battle\Phase 8 Battle Result.cs" />
     <Compile Include="Acion Panels\Battle\Phase 6 Boosts Modifier.cs" />
     <Compile Include="Acion Panels\Battle\Phase 3 Creature Modifier.cs" />

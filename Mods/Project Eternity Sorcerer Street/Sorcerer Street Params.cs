@@ -49,6 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (Damage < BonusHP)
                 {
                     BonusHP -= Damage;
+                    return;
                 }
                 else
                 {
@@ -59,6 +60,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (Damage < LandHP)
                 {
                     LandHP -= Damage;
+                    return;
                 }
                 else
                 {
@@ -132,36 +134,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
-        public void ActivateSkill(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
+        public void ActivateSkill(BattleCreatureInfo Invader, BattleCreatureInfo Defender, Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
         {
             SelfCreature = Invader;
             OpponentCreature = Defender;
 
-            SelfCreature.Creature.ActivateSkill(RequirementName);
-            if (SelfCreature.Item != null)
+            foreach (KeyValuePair<BaseAutomaticSkill, List<BaseSkillActivation>> ActiveSkill in DicSkillActivation)
             {
-                SelfCreature.Item.ActivateSkill(RequirementName);
+                foreach (BaseSkillActivation SkillActivation in ActiveSkill.Value)
+                {
+                    SkillActivation.Activate(ActiveSkill.Key.Name);
+                }
             }
         }
 
-        public bool CanActivateSkillCreature(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
+        public Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> GetAvailableActivation(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
         {
             SelfCreature = Invader;
             OpponentCreature = Defender;
 
-            return Invader.Creature.CanActivateSkill(RequirementName);
-        }
-
-        public bool CanActivateSkillItem(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
-        {
-            if (Invader.Item == null)
+            Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = Invader.Creature.GetAvailableActivation(RequirementName);
+            if (Invader.Item != null)
             {
-                return false;
-            }
-            SelfCreature = Invader;
-            OpponentCreature = Defender;
+                Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicItemSkillActivation = Invader.Item.GetAvailableActivation(RequirementName);
 
-            return Invader.Item.CanActivateSkill(RequirementName);
+                foreach (KeyValuePair<BaseAutomaticSkill, List<BaseSkillActivation>> ActiveSkill in DicItemSkillActivation)
+                {
+                    DicSkillActivation.Add(ActiveSkill.Key, ActiveSkill.Value);
+                }
+            }
+
+            return DicSkillActivation;
         }
     }
 

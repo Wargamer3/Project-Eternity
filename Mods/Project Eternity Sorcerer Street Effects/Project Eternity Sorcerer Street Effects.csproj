@@ -88,6 +88,7 @@
     <Compile Include="Requirements\Before Battle Start Requirement.cs" />
     <Compile Include="Requirements\Battle Start Requirement.cs" />
     <Compile Include="Requirements\Element Requirement.cs" />
+    <Compile Include="Requirements\Max HP Requirement.cs" />
     <Compile Include="Requirements\ST Requirement.cs" />
     <Compile Include="Requirements\HP Left Requirement.cs" />
     <Compile Include="Requirements\Attack Bonus Requirement.cs" />

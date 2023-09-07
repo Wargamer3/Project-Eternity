@@ -24,8 +24,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private enum PhasesChoices
         {
-            Idle, IntroPhase, LandModifierPhase, CreatureModifierPhase, EnchantModifierPhase, ItemModifierPhase, BoostModifierPhase, InvaderBeforeBattle, DefenderBeforeBattle,
-            InvaderBattleStartAnimation, DefenderBattleStartAnimation, PrepareAttackPhase, AttackBonusAnimation, AttackPhase1, AttackPhase2, CounterPhase, ResultPhase,
+            Idle, IntroPhase, LandModifierPhase, CreatureModifierPhase, EnchantModifierPhase, ItemModifierPhase, BoostModifierPhase, BeforeBattle,
+            BattleStartAnimation, PrepareAttackPhase, InvaderAttackBonusAnimation, InvaderAttackPhase1, InvaderAttackPhase2, CounterAttackBonusAnimation, CounterPhase1, CounterPhase2,
+            InvaderBattleEnd, DefenderBattleEnd, UponVictory, UponDefeat, ResultPhase,
         }
 
         #region Ressources
@@ -107,6 +108,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private int CursorIndex;
         private SetupChoices SetupChoice;
         private PhasesChoices PhasesChoice;
+        private PhasesChoices PhasesEnd;
         private EditBookCardListFilterScreen CardSelectionScreen;
         private SorcererStreetBattleContext Context;
 
@@ -316,64 +318,84 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
+                case PhasesChoices.LandModifierPhase:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        if (PhasesEnd == PhasesChoices.LandModifierPhase)
+                        {
+                            PhasesChoice = PhasesChoices.Idle;
+                        }
+                        else
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleCreatureModifierPhase.RequirementName);
+                            PhasesChoice = PhasesChoices.CreatureModifierPhase;
+                        }
+                    }
+                    break;
+
+                case PhasesChoices.CreatureModifierPhase:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        if (PhasesEnd == PhasesChoices.CreatureModifierPhase)
+                        {
+                            PhasesChoice = PhasesChoices.Idle;
+                        }
+                        else
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleItemModifierPhase.RequirementName);
+                            PhasesChoice = PhasesChoices.ItemModifierPhase;
+                        }
+                    }
+                    break;
+
                 case PhasesChoices.ItemModifierPhase:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
-                        PhasesChoice = PhasesChoices.Idle;
+                        if (PhasesEnd == PhasesChoices.ItemModifierPhase)
+                        {
+                            PhasesChoice = PhasesChoices.Idle;
+                        }
+                        else
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleBoostsModifierPhase.RequirementName);
+                            PhasesChoice = PhasesChoices.BoostModifierPhase;
+                        }
                     }
                     break;
 
-                case PhasesChoices.InvaderBeforeBattle:
+                case PhasesChoices.BoostModifierPhase:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
                         Context.ListActivatedEffect.Clear();
 
-                        if (Context.CanActivateSkillCreature(Context.Defender, Context.Invader, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement)
-                            || Context.CanActivateSkillItem(Context.Defender, Context.Invader, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement))
+                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement);
+
+                        if (!Context.Invader.Creature.UseCardAnimation)
                         {
-                            ActionPanelBattleItemModifierPhase.StartAnimation(false, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement);
+                            ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.Invader.Creature.IdleAnimationPath, Context.Invader, true);
+                            Context.Invader.Animation.Position = new Vector2(1750, 190);
                         }
 
-                        PhasesChoice = PhasesChoices.DefenderBeforeBattle;
+                        PhasesChoice = PhasesChoices.BeforeBattle;
                     }
                     break;
 
-                case PhasesChoices.DefenderBeforeBattle:
+                case PhasesChoices.BeforeBattle:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
                         Context.ListActivatedEffect.Clear();
 
-                        if (Context.CanActivateSkillCreature(Context.Invader, Context.Defender, ActionPanelBattleAttackPhase.BattleStartRequirement)
-                            || Context.CanActivateSkillItem(Context.Invader, Context.Defender, ActionPanelBattleAttackPhase.BattleStartRequirement))
-                        {
-                            ActionPanelBattleItemModifierPhase.StartAnimation(true, ActionPanelBattleAttackPhase.BattleStartRequirement);
-                        }
+                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.BattleStartRequirement);
 
-                        PhasesChoice = PhasesChoices.InvaderBattleStartAnimation;
+                        PhasesChoice = PhasesChoices.BattleStartAnimation;
                     }
                     break;
 
-                case PhasesChoices.InvaderBattleStartAnimation:
+                case PhasesChoices.BattleStartAnimation:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
                         Context.ListActivatedEffect.Clear();
 
-                        if (Context.CanActivateSkillCreature(Context.Defender, Context.Invader, ActionPanelBattleAttackPhase.BattleStartRequirement)
-                            || Context.CanActivateSkillItem(Context.Defender, Context.Invader, ActionPanelBattleAttackPhase.BattleStartRequirement))
-                        {
-                            ActionPanelBattleItemModifierPhase.StartAnimation(false, ActionPanelBattleAttackPhase.BattleStartRequirement);
-                        }
-
-                        PhasesChoice = PhasesChoices.DefenderBattleStartAnimation;
-                    }
-                    break;
-
-                case PhasesChoices.DefenderBattleStartAnimation:
-                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
-                    {
-                        Context.ListActivatedEffect.Clear();
-
-                        BoostModifierPhaseSelection();
                         PhasesChoice = PhasesChoices.PrepareAttackPhase;
                     }
                     break;
@@ -381,25 +403,51 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case PhasesChoices.PrepareAttackPhase:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
-                        PhasesChoice = PhasesChoices.AttackBonusAnimation;
+                        if (Context.Invader.Creature.CurrentHP <= 0)
+                        {
+                            PhasesChoice = PhasesChoices.Idle;
+                            return;
+                        }
+
+                        PhasesChoice = PhasesChoices.InvaderAttackBonusAnimation;
                         SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
                         SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
                         ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
 
-                        ActionPanelBattleAttackPhase.ProcessAttack(Context, FirstAttacker, SecondAttacker, out _);
+                        ActionPanelBattleAttackPhase.ProcessAttack(FirstAttacker, SecondAttacker);
+                        if (SecondAttacker.DamageReceived > 0)
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, FirstAttacker == Context.Invader, ActionPanelBattleAttackPhase.AttackBonusRequirement);
+                        }
                     }
                     break;
 
-                case PhasesChoices.AttackBonusAnimation:
+                case PhasesChoices.InvaderAttackBonusAnimation:
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
-                        ExecuteAttack();
-                        PhasesChoice = PhasesChoices.AttackPhase1;
+                        SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
+                        SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
+                        ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
+                        StartAttackAnimation(FirstAttacker, SecondAttacker);
+                        PhasesChoice = PhasesChoices.InvaderAttackPhase1;
                     }
                     break;
 
-                case PhasesChoices.AttackPhase1:
-                case PhasesChoices.AttackPhase2:
+                case PhasesChoices.CounterAttackBonusAnimation:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
+                        SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
+                        ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
+                        StartAttackAnimation(SecondAttacker, FirstAttacker);
+                        PhasesChoice = PhasesChoices.CounterPhase1;
+                    }
+                    break;
+
+                case PhasesChoices.InvaderAttackPhase1:
+                case PhasesChoices.InvaderAttackPhase2://Attack Twice
+                case PhasesChoices.CounterPhase1:
+                case PhasesChoices.CounterPhase2://Attack Twice
                     ActionPanelBattle.UpdateCards(gameTime, Context);
 
                     ListAttackAnimation[0].Update(gameTime);
@@ -415,41 +463,109 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                         if (ListAttackAnimation.Count == 0)
                         {
-                            SorcererStreetBattleContext.BattleCreatureInfo Attacker = Context.Invader;
-                            if (Attacker == ActiveAnimation.Defender)
-                            {
-                                Attacker = Context.Defender;
-                            }
-
-                            Context.ActivateSkill(Attacker, ActiveAnimation.Defender, ActionPanelBattleAttackPhase.BattleEndRequirement);
-                            Context.ActivateSkill(ActiveAnimation.Defender, Attacker, ActionPanelBattleAttackPhase.BattleEndRequirement);
+                            SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
+                            SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
+                            ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
 
                             if (ActiveAnimation.Defender.FinalHP > 0)
                             {
-                                Context.ActivateSkill(Attacker, ActiveAnimation.Defender, ActionPanelBattleAttackPhase.AfterEnemySurvivedRequirement);
-                                Context.ActivateSkill(ActiveAnimation.Defender, Attacker, ActionPanelBattleAttackPhase.AfterEnemySurvivedRequirement);
-                                if (PhasesChoice == PhasesChoices.AttackPhase1 && Attacker.Creature.BattleAbilities.AttackTwice)
+                                if (PhasesChoice == PhasesChoices.InvaderAttackPhase1)
                                 {
-                                    ExecuteAttack();
-                                    PhasesChoice = PhasesChoices.AttackPhase2;
-                                    return;
+                                    if (FirstAttacker.Creature.BattleAbilities.AttackTwice)
+                                    {
+                                        StartAttackAnimation(FirstAttacker, SecondAttacker);
+                                        PhasesChoice = PhasesChoices.InvaderAttackPhase2;
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        ActionPanelBattleAttackPhase.ProcessAttack(SecondAttacker, FirstAttacker);
+                                        if (FirstAttacker.DamageReceived > 0)
+                                        {
+                                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, SecondAttacker == Context.Invader, ActionPanelBattleAttackPhase.AttackBonusRequirement);
+                                        }
+                                        PhasesChoice = PhasesChoices.CounterAttackBonusAnimation;
+                                    }
+                                }
+                                else if (PhasesChoice == PhasesChoices.InvaderAttackPhase2)
+                                {
+                                    ActionPanelBattleAttackPhase.ProcessAttack(SecondAttacker, FirstAttacker);
+                                    PhasesChoice = PhasesChoices.CounterPhase1;
+                                }
+                                else if (PhasesChoice == PhasesChoices.CounterPhase1)
+                                {
+                                    if (SecondAttacker.Creature.BattleAbilities.AttackTwice)
+                                    {
+                                        StartAttackAnimation(SecondAttacker, FirstAttacker);
+                                        PhasesChoice = PhasesChoices.InvaderAttackPhase2;
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.BattleEndRequirement);
+                                        PhasesChoice = PhasesChoices.InvaderBattleEnd;
+                                    }
+                                }
+                                else if (PhasesChoice == PhasesChoices.CounterPhase2)
+                                {
+                                    ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.BattleEndRequirement);
+                                    PhasesChoice = PhasesChoices.InvaderBattleEnd;
                                 }
                             }
                             else
                             {
-                                Context.ActivateSkill(Attacker, ActiveAnimation.Defender, ActionPanelBattleAttackPhase.UponVictoryRequirement);
-                                Context.ActivateSkill(ActiveAnimation.Defender, Attacker, ActionPanelBattleAttackPhase.UponDefeatRequirement);
+                                if (Context.Invader.Creature.CurrentHP <= 0)
+                                {
+                                    ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, false, ActionPanelBattleAttackPhase.UponVictoryRequirement);
+                                }
+                                else
+                                {
+                                    ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.UponVictoryRequirement);
+                                }
+
+                                PhasesChoice = PhasesChoices.UponVictory;
                             }
-
-                            PhasesChoice = PhasesChoices.Idle;
-
-                            Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
-                            Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
-                            Context.Invader.Animation.Scale = new Vector2(1f);
-                            Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
-                            Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
-                            Context.Defender.Animation.Scale = new Vector2(1f);
                         }
+                    }
+                    break;
+
+                case PhasesChoices.InvaderBattleEnd:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, false, ActionPanelBattleAttackPhase.BattleEndRequirement);
+
+                        PhasesChoice = PhasesChoices.DefenderBattleEnd;
+                    }
+                    break;
+
+                case PhasesChoices.UponVictory:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        if (Context.Invader.Creature.CurrentHP <= 0)
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.UponDefeatRequirement);
+                        }
+                        else
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, false, ActionPanelBattleAttackPhase.UponDefeatRequirement);
+                        }
+
+                        PhasesChoice = PhasesChoices.UponDefeat;
+                    }
+                    break;
+
+                case PhasesChoices.UponDefeat:
+                case PhasesChoices.DefenderBattleEnd:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        PhasesChoice = PhasesChoices.Idle;
+
+                        Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
+                        Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                        Context.Invader.Animation.Scale = new Vector2(1f);
+                        Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
+                        Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                        Context.Defender.Animation.Scale = new Vector2(1f);
                     }
                     break;
 
@@ -534,12 +650,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonOver.Play();
         }
 
-        private void ExecuteAttack()
+        private void StartAttackAnimation(SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker, SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker)
         {
-            SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
-            SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
-            ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
-
             int ReflectedDamage = FirstAttacker.DamageReceived;
             int Damage = SecondAttacker.DamageReceived;
 
@@ -822,6 +934,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             IntroPhaseSelection();
 
             PhasesChoice = PhasesChoices.LandModifierPhase;
+            PhasesEnd = PhasesChoices.LandModifierPhase;
 
             Context.Defender.LandHP = int.Parse(DefenderTerrainHPBonusInput.Text);
             Context.Defender.BonusST = int.Parse(DefenderSupportSTBonusInput.Text);
@@ -835,10 +948,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             LandModifierPhaseSelection();
 
-            PhasesChoice = PhasesChoices.CreatureModifierPhase;
-
-            Context.ActivateSkill(Context.Invader, Context.Defender, ActionPanelBattleCreatureModifierPhase.RequirementName);
-            Context.ActivateSkill(Context.Defender, Context.Invader, ActionPanelBattleCreatureModifierPhase.RequirementName);
+            PhasesEnd = PhasesChoices.CreatureModifierPhase;
 
             sndButtonClick.Play();
         }
@@ -847,7 +957,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             CreatureModifierPhaseSelection();
 
-            PhasesChoice = PhasesChoices.EnchantModifierPhase;
+            PhasesEnd = PhasesChoices.EnchantModifierPhase;
 
             sndButtonClick.Play();
         }
@@ -855,41 +965,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void ItemModifierPhaseSelection()
         {
             EnchantModifierPhaseSelection();
-            if (ActionPanelBattleItemModifierPhase.InitAnimations(Context))
-            {
-                PhasesChoice = PhasesChoices.ItemModifierPhase;
-                sndButtonClick.Play();
-            }
+
+            PhasesEnd = PhasesChoices.ItemModifierPhase;
+            sndButtonClick.Play();
         }
 
         private void BoostModifierPhaseSelection()
         {
             ItemModifierPhaseSelection();
-            ActionPanelBattleBoostsModifierPhase.Init(Context);
 
-            PhasesChoice = PhasesChoices.BoostModifierPhase;
+            PhasesEnd = PhasesChoices.BoostModifierPhase;
 
             sndButtonClick.Play();
         }
 
         private void AttackPhaseSelection()
         {
-            IntroPhaseSelection();
+            BoostModifierPhaseSelection();
             ListAttackAnimation.Clear();
             Context.ListActivatedEffect.Clear();
-            PhasesChoice = PhasesChoices.InvaderBeforeBattle;
 
-            if (Context.CanActivateSkillCreature(Context.Invader, Context.Defender, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement)
-                || Context.CanActivateSkillItem(Context.Invader, Context.Defender, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement))
-            {
-                ActionPanelBattleItemModifierPhase.StartAnimation(true, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement);
-            }
-
-            if (!Context.Invader.Creature.UseCardAnimation)
-            {
-                ActionPanelBattleAttackAnimationPhase.InitAnimation(true, Context.Invader.Creature.IdleAnimationPath, Context.Invader, true);
-                Context.Invader.Animation.Position = new Vector2(1750, 190);
-            }
+            PhasesEnd = PhasesChoices.InvaderAttackPhase2;
 
             sndButtonClick.Play();
         }
@@ -898,27 +994,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             BoostModifierPhaseSelection();
 
-            SorcererStreetBattleContext.BattleCreatureInfo FirstAttacker;
-            SorcererStreetBattleContext.BattleCreatureInfo SecondAttacker;
-            ActionPanelBattleAttackPhase.DetermineAttackOrder(Context, out FirstAttacker, out SecondAttacker);
-            int ReflectedDamage;
-            int Damage = ActionPanelBattleAttackPhase.ProcessAttack(Context, FirstAttacker, SecondAttacker, out ReflectedDamage);
-            SecondAttacker.ReceiveDamage(Damage);
-            if (SecondAttacker.Creature.CurrentHP > 0)
-            {
-                Damage = ActionPanelBattleAttackPhase.ProcessAttack(Context, SecondAttacker, FirstAttacker, out ReflectedDamage);
-                foreach (string ActiveAnimationPath in FirstAttacker.GetAttackAnimationPaths())
-                {
-                    if (string.IsNullOrEmpty(ActiveAnimationPath))
-                    {
-                        ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, "Sorcerer Street/Default", FirstAttacker, true));
-                    }
-                    else
-                    {
-                        ListAttackAnimation.Add(ActionPanelBattleAttackAnimationPhase.InitAnimation(SecondAttacker == Context.Defender, ActiveAnimationPath, FirstAttacker, true));
-                    }
-                }
-            }
             sndButtonClick.Play();
         }
 
@@ -945,7 +1020,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             switch (PhasesChoice)
             {
-                case PhasesChoices.AttackPhase1:
+                case PhasesChoices.InvaderAttackPhase1:
                     ListAttackAnimation[0].BeginDraw(g);
                     break;
             }
@@ -969,23 +1044,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case PhasesChoices.ItemModifierPhase:
-                    ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
-                    ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
-                    ActionPanelBattleItemModifierPhase.DrawItemActivation(g, fntArial12, Context);
-                    break;
-
-                case PhasesChoices.InvaderBeforeBattle:
-                case PhasesChoices.DefenderBeforeBattle:
-                case PhasesChoices.AttackBonusAnimation:
-                case PhasesChoices.InvaderBattleStartAnimation:
-                case PhasesChoices.DefenderBattleStartAnimation:
+                case PhasesChoices.BeforeBattle:
+                case PhasesChoices.InvaderAttackBonusAnimation:
+                case PhasesChoices.BattleStartAnimation:
                 case PhasesChoices.PrepareAttackPhase:
                     ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
                     ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
                     ActionPanelBattleItemModifierPhase.DrawItemActivation(g, fntArial12, Context);
                     break;
 
-                case PhasesChoices.AttackPhase1:
+                case PhasesChoices.InvaderAttackPhase1:
+                case PhasesChoices.InvaderAttackPhase2:
+                case PhasesChoices.CounterPhase1:
+                case PhasesChoices.CounterPhase2:
                     ActionPanelBattle.DrawInvaderBattle(fntArial12, Context, g);
                     ActionPanelBattle.DrawDefenderBattle(fntArial12, Context, g);
                     break;

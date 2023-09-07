@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
@@ -11,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "BattleAttackPhase";
 
-        private enum AttackSequences { ProcessFirstAttack, ExecuteFirstAttack, ExecuteFirstReflect, ProcessSecondAttack, ExecuteSecondAttack, End };
+        private enum AttackSequences { ProcessFirstAttack, ExecuteFirstAttack, End };
         public enum AttackTypes { NonScrolls, Scrolls, Penetrate, All, Neutral, Fire, Water, Earth, Air }
 
         /*
@@ -40,8 +41,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private AttackSequences AttackSequence;
 
         public BattleCreatureInfo FirstAttacker;
-        public int FirstAttackDamage;
-        public int FirstReflectDamage;
         public BattleCreatureInfo SecondAttacker;
 
         public ActionPanelBattleAttackPhase(SorcererStreetMap Map)
@@ -61,22 +60,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!HasFinishedUpdatingBars(gameTime, Map.GlobalSorcererStreetBattleContext))
                 return;
 
+            if (ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Map.GlobalSorcererStreetBattleContext))
+                return;
+
             if (AttackSequence == AttackSequences.ProcessFirstAttack)
             {
-                ProcessFirstAttack();
+                ProcessAttack();
+                AttackSequence = AttackSequences.ExecuteFirstAttack;
             }
             else if (AttackSequence == AttackSequences.ExecuteFirstAttack)
             {
-                ExecuteFirstAttack(FirstAttackDamage);
-            }
-            else if (AttackSequence == AttackSequences.ExecuteFirstReflect)
-            {
-                ExecuteFirstAttack(FirstAttackDamage);
-            }
-            else if (AttackSequence == AttackSequences.ProcessSecondAttack)
-            {
-                ProcessSecondAttack();
-                AttackSequence = AttackSequences.End;
+                ExecuteFirstAttack();
             }
             else
             {
@@ -123,21 +117,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private void ExecutePreAttack(BattleCreatureInfo Attacker, BattleCreatureInfo Defender)
-        {
-            ActionPanelSorcererStreet AttackerActivationScreen = Attacker.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Invader.Owner));
-            ActionPanelSorcererStreet DefenderActivationScreen = Defender.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Defender.Owner));
-
-            if (PlayAnimations && DefenderActivationScreen != null)
-            {
-                AddToPanelListAndSelect(DefenderActivationScreen);
-            }
-            if (PlayAnimations && AttackerActivationScreen != null)
-            {
-                AddToPanelListAndSelect(AttackerActivationScreen);
-            }
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -145,18 +124,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         /// <param name="Attacker"></param>
         /// <param name="Defender"></param>
         /// <returns>True if defender dies</returns>
-        public static int ProcessAttack(SorcererStreetBattleContext GlobalSorcererStreetBattleContext, BattleCreatureInfo Attacker, BattleCreatureInfo Defender, out int ReflectedDamage)
+        public static void ProcessAttack(BattleCreatureInfo Attacker, BattleCreatureInfo Defender)
         {
-            ReflectedDamage = 0;
+            int ReflectedDamage = 0;
             int FinalDamage = Attacker.FinalST;
 
             if (Attacker.Creature.BattleAbilities.CriticalHit)
             {
                 FinalDamage += FinalDamage / 2;
             }
-
-            GlobalSorcererStreetBattleContext.ActivateSkill(Attacker, Defender, BeforeAttackRequirement);
-            GlobalSorcererStreetBattleContext.ActivateSkill(Defender, Attacker, BeforeDefenseRequirement);
 
             if (!Attacker.Creature.BattleAbilities.ScrollAttack && Defender.Creature.BattleAbilities.NeutralizeValue != null)
             {
@@ -249,7 +225,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Attacker.DamageReceived = 0;
                 Defender.DamageReceived = 0;
                 Defender.DamageReceivedIgnoreLandBonus = false;
-                return 0;
             }
 
             if (Attacker.Creature.BattleAbilities.ScrollAttack)
@@ -260,48 +235,43 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Attacker.DamageReceived = ReflectedDamage;
             Defender.DamageReceived = FinalDamage;
             Defender.DamageReceivedIgnoreLandBonus = IsScrollAttack || IsPenetratingAttack;
-
-            if (FinalDamage > 0 && (GlobalSorcererStreetBattleContext.CanActivateSkillCreature(Attacker, Defender, AttackBonusRequirement) || GlobalSorcererStreetBattleContext.CanActivateSkillItem(Attacker, Defender, AttackBonusRequirement)))
-            {
-                ActionPanelBattleItemModifierPhase.StartAnimation(Attacker == GlobalSorcererStreetBattleContext.Invader, AttackBonusRequirement);
-            }
-
-            return FinalDamage;
         }
 
-        public void ProcessFirstAttack()
+        public void ProcessAttack()
         {
-            ExecutePreAttack(FirstAttacker, SecondAttacker);
-            Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, BattleStartRequirement);
-            Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BattleStartRequirement);
+            ActionPanelSorcererStreet AttackerActivationScreen = FirstAttacker.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Invader.Owner));
+            ActionPanelSorcererStreet DefenderActivationScreen = SecondAttacker.Creature.ActivateInBattle(Map, Map.ListPlayer.IndexOf(Map.GlobalSorcererStreetBattleContext.Defender.Owner));
 
-            FirstAttackDamage = ProcessAttack(Map.GlobalSorcererStreetBattleContext, FirstAttacker, SecondAttacker, out FirstReflectDamage);
-            if (FirstAttackDamage < 0)
+            if (PlayAnimations && DefenderActivationScreen != null)
             {
-                FirstAttackDamage = -FirstAttackDamage;
-                AttackSequence = AttackSequences.ExecuteFirstReflect;
+                AddToPanelListAndSelect(DefenderActivationScreen);
             }
-            else
+            if (PlayAnimations && AttackerActivationScreen != null)
             {
-                AttackSequence = AttackSequences.ExecuteFirstAttack;
+                AddToPanelListAndSelect(AttackerActivationScreen);
+            }
+
+            ProcessAttack(FirstAttacker, SecondAttacker);
+
+            if (SecondAttacker.DamageReceived > 0)
+            {
+                Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = Map.GlobalSorcererStreetBattleContext.GetAvailableActivation(FirstAttacker, SecondAttacker, AttackBonusRequirement);
+
+                if (DicSkillActivation.Count > 0)
+                {
+                    ActionPanelBattleItemModifierPhase.StartAnimation(true, DicSkillActivation);
+                }
             }
         }
 
-        public void ExecuteFirstAttack(int Damage)
+        public void ExecuteFirstAttack()
         {
-            SecondAttacker.ReceiveDamage(Damage);
-
             if (SecondAttacker.Creature.CurrentHP > 0)
             {
-                Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, AfterEnemySurvivedRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, BattleEndRequirement);
-                AttackSequence = AttackSequences.End;
+                AddToPanelListAndSelect(new ActionPanelFirstCounterAttackPhase(Map));
             }
             else
             {
-                Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, UponVictoryRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, UponDefeatRequirement);
-                AttackSequence = AttackSequences.ProcessSecondAttack;
             }
 
             if (PlayAnimations)
@@ -309,40 +279,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 foreach (string ActiveAnimationPath in FirstAttacker.GetAttackAnimationPaths())
                 {
                     AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, SecondAttacker, ActiveAnimationPath, SecondAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
-                }
-            }
-        }
-
-        public void ProcessSecondAttack()
-        {
-            ExecutePreAttack(SecondAttacker, FirstAttacker);
-
-            FirstAttackDamage = ProcessAttack(Map.GlobalSorcererStreetBattleContext, SecondAttacker, FirstAttacker, out FirstReflectDamage);
-            AttackSequence = AttackSequences.ExecuteFirstAttack;
-        }
-
-        public void ExecuteSecondAttack(int Damage)
-        {
-            FirstAttacker.ReceiveDamage(Damage);
-
-            if (FirstAttacker.Creature.CurrentHP > 0)
-            {
-                Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, AfterEnemySurvivedRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, BattleEndRequirement);
-            }
-            else
-            {
-                Map.GlobalSorcererStreetBattleContext.ActivateSkill(SecondAttacker, FirstAttacker, UponVictoryRequirement);
-                Map.GlobalSorcererStreetBattleContext.ActivateSkill(FirstAttacker, SecondAttacker, UponDefeatRequirement);
-            }
-
-            AttackSequence = AttackSequences.End;
-
-            if (PlayAnimations)
-            {
-                foreach (string ActiveAnimationPath in SecondAttacker.GetAttackAnimationPaths())
-                {
-                    AddToPanelListAndSelect(new ActionPanelBattleAttackAnimationPhase(Map, FirstAttacker, ActiveAnimationPath, FirstAttacker == Map.GlobalSorcererStreetBattleContext.Defender));
                 }
             }
         }

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -6,6 +8,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     //Used from placed on a free land
     public sealed class SorcererStreetTerriotryRequirement : SorcererStreetRequirement
     {
+        private string _Price;
+
         public SorcererStreetTerriotryRequirement()
             : this(null)
         {
@@ -18,12 +22,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoSave(BinaryWriter BW)
         {
+            BW.Write(_Price);
         }
 
         protected override void Load(BinaryReader BR)
         {
+            _Price = BR.ReadString();
         }
-        
+
         public override bool CanActivatePassive()
         {
             return false;
@@ -31,11 +37,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetTerriotryRequirement(GlobalContext);
+            SorcererStreetTerriotryRequirement NewRequirement = new SorcererStreetTerriotryRequirement(GlobalContext);
+
+            NewRequirement._Price = _Price;
+
+            return NewRequirement;
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
+            SorcererStreetTerriotryRequirement CopyRequirement = (SorcererStreetTerriotryRequirement)Copy;
+
+            _Price = CopyRequirement._Price;
         }
+
+        #region Properties
+
+        [CategoryAttribute("Effects"),
+        DescriptionAttribute(""),
+        DefaultValueAttribute("")]
+        public string Price
+        {
+            get
+            {
+                return _Price;
+            }
+            set
+            {
+                _Price = value;
+            }
+        }
+
+        #endregion
     }
 }

@@ -248,25 +248,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public abstract Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget);
 
-        public bool CanActivateSkill(string RequirementName)
+        public Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> GetAvailableActivation(string RequirementName)
         {
-            for (int E = 0; E < ListActiveSkill.Count; ++E)
+            Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = new Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>>();
+
+            foreach (BaseAutomaticSkill ActiveSkill in ListActiveSkill)
             {
-                if (ListActiveSkill[E].CanAddSkillEffectsToTarget(RequirementName))
+                List<BaseSkillActivation> ListAvailableActivation = ActiveSkill.GetAvailableActivation(RequirementName);
+                if (ListAvailableActivation != null && ListAvailableActivation.Count > 0)
                 {
-                    return true;
+                    DicSkillActivation.Add(ActiveSkill, ListAvailableActivation);
                 }
             }
 
-            return false;
-        }
-
-        public void ActivateSkill(string RequirementName)
-        {
-            for (int E = 0; E < ListActiveSkill.Count; ++E)
-            {
-                ListActiveSkill[E].AddSkillEffectsToTarget(RequirementName);
-            }
+            return DicSkillActivation;
         }
 
         public void DrawCard(CustomSpriteBatch g)

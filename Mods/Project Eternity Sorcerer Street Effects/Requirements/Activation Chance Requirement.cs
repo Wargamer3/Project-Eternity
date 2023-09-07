@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -31,16 +32,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return true;
+            return RandomHelper.Next(100) < _ActivationChance;
         }
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetAgainstActivationChanceRequirement(GlobalContext);
+            SorcererStreetAgainstActivationChanceRequirement NewRequirement = new SorcererStreetAgainstActivationChanceRequirement(GlobalContext);
+
+            NewRequirement._ActivationChance = _ActivationChance;
+
+            return NewRequirement;
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
+            SorcererStreetAgainstActivationChanceRequirement CopyRequirement = (SorcererStreetAgainstActivationChanceRequirement)Copy;
+
+            _ActivationChance = CopyRequirement._ActivationChance;
         }
 
         [CategoryAttribute("Effects"),

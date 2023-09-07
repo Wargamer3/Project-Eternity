@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.SorcererStreetBattleContext;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -12,7 +14,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private const string PanelName = "BattleItemModifierPhase";
 
-        public static string RequirementName = "Sorcerer Street Item Phase";
+        public const string RequirementName = "Sorcerer Street Item Phase";
 
         private enum AnimationPhases { Finished, InvaderIntro, InvaderActivation, DefenderIntro, DefenderActivation }
 
@@ -20,7 +22,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         private static double ItemAnimationTime;
         private static AnimationPhases AnimationPhase;
-        public static string NextAnimationRequirementName;
+        public static string ActivePhase;
+        public static Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation;
 
         public ActionPanelBattleItemModifierPhase(SorcererStreetMap Map)
             : base(Map, PanelName)
@@ -46,41 +49,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AnimationPhase = AnimationPhases.Finished;
             ItemAnimationTime = 9999;
 
-            if (GlobalSorcererStreetBattleContext.Invader.Item != null && GlobalSorcererStreetBattleContext.CanActivateSkillItem(GlobalSorcererStreetBattleContext.Invader, GlobalSorcererStreetBattleContext.Defender, RequirementName))
+            if (GlobalSorcererStreetBattleContext.Invader.Item != null)
             {
-                NextAnimationRequirementName = RequirementName;
-                ItemAnimationTime = 0;
-                AnimationPhase = AnimationPhases.InvaderIntro;
-                return true;
+                DicSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(GlobalSorcererStreetBattleContext.Invader, GlobalSorcererStreetBattleContext.Defender, RequirementName);
+                if (DicSkillActivation.Count > 0)
+                {
+                    ItemAnimationTime = 0;
+                    AnimationPhase = AnimationPhases.InvaderIntro;
+                    ActivePhase = RequirementName;
+                    return true;
+                }
             }
-            else if (GlobalSorcererStreetBattleContext.Defender.Item != null && GlobalSorcererStreetBattleContext.CanActivateSkillItem(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, RequirementName))
+            else if (GlobalSorcererStreetBattleContext.Defender.Item != null)
             {
-                NextAnimationRequirementName = RequirementName;
-                ItemAnimationTime = 0;
-                AnimationPhase = AnimationPhases.DefenderIntro;
-                return true;
+                DicSkillActivation = GlobalSorcererStreetBattleContext.GetAvailableActivation(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, RequirementName);
+                if (DicSkillActivation.Count > 0)
+                {
+                    ItemAnimationTime = 0;
+                    AnimationPhase = AnimationPhases.DefenderIntro;
+                    ActivePhase = RequirementName;
+                    return true;
+                }
             }
 
             return false;
         }
 
-        public static void StartAnimation(bool InvaderSide)
+        public static void StartAnimation(bool InvaderSide, Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
         {
-            if (InvaderSide)
-            {
-                ItemAnimationTime = 0;
-                AnimationPhase = AnimationPhases.InvaderActivation;
-            }
-            else
-            {
-                ItemAnimationTime = 0;
-                AnimationPhase = AnimationPhases.DefenderActivation;
-            }
-        }
-
-        public static void StartAnimation(bool InvaderSide, string NextAnimationRequirementName)
-        {
-            ActionPanelBattleItemModifierPhase.NextAnimationRequirementName = NextAnimationRequirementName;
+            ActionPanelBattleItemModifierPhase.DicSkillActivation = DicSkillActivation;
 
             if (InvaderSide)
             {
@@ -92,6 +89,27 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ItemAnimationTime = 0;
                 AnimationPhase = AnimationPhases.DefenderIntro;
             }
+        }
+
+        public static void StartAnimationIfAvailable(SorcererStreetBattleContext Context, bool InvaderSide, string RequirementName)
+        {
+            ActionPanelBattleItemModifierPhase.ActivePhase = RequirementName;
+
+            Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation;
+            if (InvaderSide)
+            {
+                DicSkillActivation = Context.GetAvailableActivation(Context.Invader, Context.Defender, RequirementName);
+            }
+            else
+            {
+                DicSkillActivation = Context.GetAvailableActivation(Context.Defender, Context.Invader, RequirementName);
+            }
+
+            if (DicSkillActivation.Count > 0)
+            {
+                StartAnimation(InvaderSide, DicSkillActivation);
+            }
+
         }
 
         public override void DoUpdate(GameTime gameTime)
@@ -105,7 +123,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public static bool UpdateAnimations(GameTime gameTime, SorcererStreetBattleContext GlobalSorcererStreetBattleContext)
+        public static bool UpdateAnimations(GameTime gameTime, SorcererStreetBattleContext Context)
         {
             ItemAnimationTime += gameTime.ElapsedGameTime.TotalSeconds;
             if (AnimationPhase == AnimationPhases.InvaderIntro || AnimationPhase == AnimationPhases.DefenderIntro)
@@ -114,17 +132,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (AnimationPhase == AnimationPhases.InvaderIntro)
                     {
-                        GlobalSorcererStreetBattleContext.ListActivatedEffect.Clear();
+                        Context.ListActivatedEffect.Clear();
 
-                        GlobalSorcererStreetBattleContext.ActivateSkill(GlobalSorcererStreetBattleContext.Invader, GlobalSorcererStreetBattleContext.Defender, NextAnimationRequirementName);
+                        Context.ActivateSkill(Context.Invader, Context.Defender, DicSkillActivation);
 
                         AnimationPhase = AnimationPhases.InvaderActivation;
                     }
                     else if (AnimationPhase == AnimationPhases.DefenderIntro)
                     {
-                        GlobalSorcererStreetBattleContext.ListActivatedEffect.Clear();
+                        Context.ListActivatedEffect.Clear();
 
-                        GlobalSorcererStreetBattleContext.ActivateSkill(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, NextAnimationRequirementName);
+                        Context.ActivateSkill(Context.Defender, Context.Invader, DicSkillActivation);
 
                         AnimationPhase = AnimationPhases.DefenderActivation;
                     }
@@ -132,17 +150,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (AnimationPhase == AnimationPhases.InvaderActivation)
             {
-                if (ItemAnimationTime > 2.5 + GlobalSorcererStreetBattleContext.ListActivatedEffect.Count)
+                if (ItemAnimationTime > 2.5 + Context.ListActivatedEffect.Count)
                 {
                     ItemAnimationTime = 0;
-                    if (GlobalSorcererStreetBattleContext.Defender.Item != null && GlobalSorcererStreetBattleContext.CanActivateSkillItem(GlobalSorcererStreetBattleContext.Defender, GlobalSorcererStreetBattleContext.Invader, NextAnimationRequirementName))
+                    if (Context.Defender.Item != null)
                     {
-                        AnimationPhase = AnimationPhases.DefenderIntro;
+                        DicSkillActivation = Context.GetAvailableActivation(Context.Defender, Context.Invader, ActivePhase);
+                        if (DicSkillActivation.Count > 0)
+                        {
+                            ItemAnimationTime = 0;
+                            AnimationPhase = AnimationPhases.DefenderIntro;
+                            return true;
+                        }
+                        else
+                        {
+                            ItemAnimationTime = 2.5 + Context.ListActivatedEffect.Count;
+                            Context.ListActivatedEffect.Clear();
+                            AnimationPhase = AnimationPhases.Finished;
+                            return false;
+                        }
                     }
                     else
                     {
-                        ItemAnimationTime = 2.5 + GlobalSorcererStreetBattleContext.ListActivatedEffect.Count;
-                        GlobalSorcererStreetBattleContext.ListActivatedEffect.Clear();
+                        ItemAnimationTime = 2.5 + Context.ListActivatedEffect.Count;
+                        Context.ListActivatedEffect.Clear();
                         AnimationPhase = AnimationPhases.Finished;
                         return false;
                     }
@@ -150,17 +181,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (AnimationPhase == AnimationPhases.DefenderActivation)
             {
-                if (ItemAnimationTime > 2.5 + GlobalSorcererStreetBattleContext.ListActivatedEffect.Count)
+                if (ItemAnimationTime > 2.5 + Context.ListActivatedEffect.Count)
                 {
-                    ItemAnimationTime = 2.5 + GlobalSorcererStreetBattleContext.ListActivatedEffect.Count;
-                    GlobalSorcererStreetBattleContext.ListActivatedEffect.Clear();
+                    ItemAnimationTime = 2.5 + Context.ListActivatedEffect.Count;
+                    Context.ListActivatedEffect.Clear();
                     AnimationPhase = AnimationPhases.Finished;
                     return false;
                 }
             }
             else if (AnimationPhase == AnimationPhases.Finished)
             {
-                GlobalSorcererStreetBattleContext.ListActivatedEffect.Clear();
+                Context.ListActivatedEffect.Clear();
                 return false;
             }
 
@@ -183,13 +214,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Map.GlobalSorcererStreetBattleContext.ListActivatedEffect.Clear();
 
-            if (Map.GlobalSorcererStreetBattleContext.Invader.Item != null && Map.GlobalSorcererStreetBattleContext.Invader.Item.CanActivateSkill(RequirementName))
+            if (Map.GlobalSorcererStreetBattleContext.Invader.Item != null)
             {
-                AnimationPhase = AnimationPhases.InvaderIntro;
+                DicSkillActivation = Map.GlobalSorcererStreetBattleContext.GetAvailableActivation(Map.GlobalSorcererStreetBattleContext.Invader, Map.GlobalSorcererStreetBattleContext.Defender, RequirementName);
+                if (DicSkillActivation.Count > 0)
+                {
+                    ItemAnimationTime = 0;
+                    AnimationPhase = AnimationPhases.InvaderIntro;
+                }
             }
-            else if (Map.GlobalSorcererStreetBattleContext.Defender.Item != null && Map.GlobalSorcererStreetBattleContext.Defender.Item.CanActivateSkill(RequirementName))
+            else if (Map.GlobalSorcererStreetBattleContext.Defender.Item != null)
             {
-                AnimationPhase = AnimationPhases.DefenderIntro;
+                DicSkillActivation = Map.GlobalSorcererStreetBattleContext.GetAvailableActivation(Map.GlobalSorcererStreetBattleContext.Defender, Map.GlobalSorcererStreetBattleContext.Invader, RequirementName);
+                if (DicSkillActivation.Count > 0)
+                {
+                    ItemAnimationTime = 0;
+                    AnimationPhase = AnimationPhases.DefenderIntro;
+                }
             }
         }
 
