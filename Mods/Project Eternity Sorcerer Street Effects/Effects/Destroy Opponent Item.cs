@@ -7,7 +7,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public sealed class DestroyOpponentItemEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Opponent Item";
+        public static string Name = "Sorcerer Street Destroy Opponent Item";
         public enum CardDestroyTypes { Weapon, Scroll, Tool, Armor, Creature }
 
         private CardDestroyTypes _CardDestroyType;
@@ -80,6 +80,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _CardDestroyType = CopyRequirement._CardDestroyType;
         }
 
+        #region Properties
+
         [CategoryAttribute(""),
         DescriptionAttribute("How to destroy cards."),
         DefaultValueAttribute(0)]
@@ -94,5 +96,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 _CardDestroyType = value;
             }
         }
+
+        #endregion
     }
 }

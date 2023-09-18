@@ -7,6 +7,7 @@ using Roslyn;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
+using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.AnimationScreen;
 
@@ -23,6 +24,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             public Card Item;
             public bool DamageReceivedIgnoreLandBonus;
             public int DamageReceived;
+            public int DamageNeutralized;
+            public int DamageReflected;
             public int LandHP;
             public int BonusHP;
             public int BonusST;
@@ -112,8 +115,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public BattleCreatureInfo SelfCreature;
         public BattleCreatureInfo OpponentCreature;
 
+        public bool CanUseEffectsOrAbilities;
+        public UnitAndTerrainValues TerrainRestrictions;
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public List<TerrainSorcererStreet> ListBoostCreature;
+        public int TotalCreaturesDestroyed;
 
         public ActionPanelHolder ListBattlePanelHolder;
 
@@ -123,6 +129,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public SorcererStreetBattleContext()
         {
+            CanUseEffectsOrAbilities = true;
+
             Invader = new BattleCreatureInfo();
             Defender = new BattleCreatureInfo();
             ListBoostCreature = new List<TerrainSorcererStreet>();
@@ -168,15 +176,34 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
     }
 
+    public class SorcererStreetPlayerMovementContext
+    {
+        public FormulaParser ActiveParser;
+
+        public SorcererStreetPlayerMovementContext()
+        {
+        }
+
+        public SorcererStreetPlayerMovementContext(SorcererStreetBattleContext GlobalContext)
+            : this()
+        {
+        }
+
+        public void StopPlayer()
+        {
+        }
+    }
+
     /// <summary>
     /// Local parameters used by Effects.
     /// </summary>
     public class SorcererStreetBattleParams : BattleParams
     {
-        // This class is shared through every RobotEffects used to temporary pass variables to effects.
+        // This class is shared through every Effects and Requirements used to temporary pass variables to effects.
         // Because it is shared through all effect, its variables will constantly change and must be kept as a member after being activated.
         // There should never be more than one instance of the global context.
         public readonly new SorcererStreetBattleContext GlobalContext;
+        public readonly SorcererStreetPlayerMovementContext GlobalPlayerMovementContext;
 
         public new SorcererStreetMap Map;//The map is shared and changed as needed.
 
@@ -186,12 +213,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base()
         {
             GlobalContext = new SorcererStreetBattleContext();
+            GlobalPlayerMovementContext = new SorcererStreetPlayerMovementContext();
         }
 
         public SorcererStreetBattleParams(SorcererStreetBattleContext GlobalContext)
             : base()
         {
             this.GlobalContext = GlobalContext;
+            GlobalPlayerMovementContext = new SorcererStreetPlayerMovementContext();
 
             LoadEffects();
             LoadSkillRequirements();

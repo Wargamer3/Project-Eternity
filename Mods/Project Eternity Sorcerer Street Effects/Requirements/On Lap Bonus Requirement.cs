@@ -3,15 +3,15 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetInvasionRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetOnLapBonusRequirement : SorcererStreetRequirement
     {
-        public SorcererStreetInvasionRequirement()
+        public SorcererStreetOnLapBonusRequirement()
             : this(null)
         {
         }
 
-        public SorcererStreetInvasionRequirement(SorcererStreetBattleContext GlobalContext)
-            : base(ActionPanelBattleAttackPhase.InvasionRequirement, GlobalContext)
+        public SorcererStreetOnLapBonusRequirement(SorcererStreetBattleContext GlobalContext)
+            : base("Sorcerer Street On Lap Bonus", GlobalContext)
         {
         }
 
@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetInvasionRequirement(GlobalContext);
+            return new SorcererStreetOnLapBonusRequirement(GlobalContext);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

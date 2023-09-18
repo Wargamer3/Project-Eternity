@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Collections.Generic;
 using System.Windows.Forms.Design;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Editor;
-using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -61,7 +61,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _CreatureName = BR.ReadString();
             _Target = (Targets)BR.ReadByte();
             _IsTemporary = BR.ReadBoolean();
-            if (Params != null && _CreatureName != "Random")
+            if (Params != null && _CreatureName != "Random" && _CreatureName != "Opponent")
             {
                 TransformationCreature = new CreatureCard(_CreatureName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
             }
@@ -126,6 +126,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             TransformationCreature = NewEffect.TransformationCreature;
         }
 
+        #region Properties
+
         [Editor(typeof(CreatureSelector), typeof(UITypeEditor)),
         CategoryAttribute(""),
         DescriptionAttribute("The creature card path."),
@@ -171,5 +173,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 _IsTemporary = value;
             }
         }
+
+        #endregion
     }
 }

@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             Params.GlobalContext.DefenderTerrain.LandLevel += _LevelIncrease;
-            Params.GlobalContext.DefenderTerrain.LandLevel = Math.Min(5, Params.GlobalContext.DefenderTerrain.LandLevel);
+            Params.GlobalContext.DefenderTerrain.LandLevel = Math.Max(0, Math.Min(5, Params.GlobalContext.DefenderTerrain.LandLevel));
             return "Terrain Level increase by " + string.Join(",", _LevelIncrease);
         }
 
@@ -73,7 +73,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             set
             {
-                _LevelIncrease = Math.Max(0, Math.Min(100, value));
+                _LevelIncrease = value;
             }
         }
 

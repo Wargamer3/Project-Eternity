@@ -5,7 +5,6 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    //Used from placed on a free land
     public sealed class SorcererStreetTerriotryRequirement : SorcererStreetRequirement
     {
         private string _Price;
@@ -18,6 +17,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetTerriotryRequirement(SorcererStreetBattleContext GlobalContext)
             : base("Sorcerer Street Territory", GlobalContext)
         {
+            _Price = string.Empty;
         }
 
         protected override void DoSave(BinaryWriter BW)

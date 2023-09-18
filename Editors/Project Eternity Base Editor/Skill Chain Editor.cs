@@ -231,11 +231,14 @@ namespace ProjectEternity.Editors.SkillChainEditor
 
                 RequirementNode = RequirementNode.Parent;
 
+                AllowEvent = false;
                 BaseSkillRequirement NewSkillRequirement = ((BaseSkillRequirement)cboRequirementType.SelectedItem).Copy();
                 pgRequirement.SelectedObject = NewSkillRequirement;
 
                 RootSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[lstRequirements.SelectedIndex] = NewSkillRequirement;
                 RequirementNode.Text = RootSkill.ListSkillLevel[0].ListActivation[0].ListRequirement[lstRequirements.SelectedIndex].SkillRequirementName;
+                lstRequirements.Items[lstRequirements.SelectedIndex] = NewSkillRequirement.ToString();
+                AllowEvent = true;
             }
         }
 
@@ -348,7 +351,7 @@ namespace ProjectEternity.Editors.SkillChainEditor
                 RootSkill.ListSkillLevel[0].ListActivation[0].ListEffect.Add(NewEffect);
                 RootSkill.ListSkillLevel[0].ListActivation[0].ListEffectTarget.Add(new List<string>());
 
-                pgRequirement.SelectedObject = NewEffect;
+                pgEffect.SelectedObject = NewEffect;
                 lstEffects.Items.Add(NewEffect.ToString());
 
                 TreeNode EffectNode = new TreeNode(NewEffect.EffectTypeName);

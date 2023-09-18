@@ -4,16 +4,16 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SleepEffect : SorcererStreetEffect
+    public sealed class DisableLapRegenerationEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Sleep";
+        public static string Name = "Sorcerer Street Disable Lap Regeneration";
 
-        public SleepEffect()
+        public DisableLapRegenerationEffect()
             : base(Name, false)
         {
         }
 
-        public SleepEffect(SorcererStreetBattleParams Params)
+        public DisableLapRegenerationEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override BaseEffect DoCopy()
         {
-            SleepEffect NewEffect = new SleepEffect(Params);
+            DisableLapRegenerationEffect NewEffect = new DisableLapRegenerationEffect(Params);
 
             return NewEffect;
         }

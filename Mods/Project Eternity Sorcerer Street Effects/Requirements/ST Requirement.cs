@@ -75,11 +75,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
-            SorcererStreetSTRequirement NewRequirement = (SorcererStreetSTRequirement)Copy;
+            SorcererStreetSTRequirement CopyRequirement = (SorcererStreetSTRequirement)Copy;
 
-            _Target = NewRequirement._Target;
-            _LogicOperator = NewRequirement._LogicOperator;
-            _ST = NewRequirement._ST;
+            _Target = CopyRequirement._Target;
+            _LogicOperator = CopyRequirement._LogicOperator;
+            _ST = CopyRequirement._ST;
         }
 
         #region Properties

@@ -54,6 +54,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
         }
 
+        #region Properties
+
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
@@ -68,5 +70,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 _ST = value;
             }
         }
+
+        #endregion
     }
 }

@@ -8,7 +8,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public sealed class SorcererStreetElementRequirement : SorcererStreetRequirement
     {
-        public enum Targets { Self, Opponent }
+        public enum Targets { Self, Opponent, Land }
         public enum ElementChoices { DifferentFromOpponent, Neutral, Fire, Water, Earth, Air }
 
         private Targets _Target;
@@ -18,13 +18,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetElementRequirement()
             : this(null)
         {
-            _Target = Targets.Self;
         }
 
         public SorcererStreetElementRequirement(SorcererStreetBattleContext GlobalContext)
             : base("Sorcerer Street Element", GlobalContext)
         {
             _Target = Targets.Self;
+            ArrayElement = new ElementChoices[0];
         }
 
         protected override void DoSave(BinaryWriter BW)
@@ -52,7 +52,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             CreatureCard TargetCreature;
 
-            if (_Target == Targets.Self)
+            if (_Target == Targets.Land)
+            {
+                foreach (ElementChoices ActiveElement in ArrayElement)
+                {
+                    if ((ActiveElement == ElementChoices.Air && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement)
+                        || (ActiveElement == ElementChoices.Fire && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement)
+                        || (ActiveElement == ElementChoices.Earth && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement)
+                        || (ActiveElement == ElementChoices.Water && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement)
+                        || (ActiveElement == ElementChoices.Neutral && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            else if (_Target == Targets.Self)
             {
                 TargetCreature = GlobalContext.SelfCreature.Creature;
             }

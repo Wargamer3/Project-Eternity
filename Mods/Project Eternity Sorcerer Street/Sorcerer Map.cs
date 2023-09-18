@@ -84,6 +84,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int HighestDieRoll;
         public List<Checkpoints> ListCheckpoint;
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
+        public int TotalCreaturesDestroyed;
         public readonly MovementAlgorithm Pathfinder;
         public readonly SorcererStreetBattleContext GlobalSorcererStreetBattleContext;
         public readonly SorcererStreetBattleParams SorcererStreetParams;
@@ -124,7 +125,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             CursorPosition = new Vector3(0, 0, 0);
             CursorPositionVisible = CursorPosition;
-            ListTerrainType = new List<string>();
 
             ListTerrainType.Add("Not Assigned");
             ListTerrainType.Add(TerrainSorcererStreet.Castle);
@@ -154,7 +154,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             TerrainRestrictions = new UnitAndTerrainValues();
             for (int i = 0; i < ListTerrainType.Count; ++i)
             {
-                TerrainRestrictions.ListTerrainType.Add(new TerrainType());
+                TerrainRestrictions.ListTerrainType.Add(new TerrainType(ListTerrainType[i]));
             }
         }
 
@@ -599,6 +599,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 DicCreatureCountByElementType[TerrainTypeIndex] = (byte)(ChainValue - 1);
             }
+        }
+
+        public int CountCreaturesByName(string CreatureName)
+        {
+            int CreatureCount = 0;
+
+            foreach (MapLayer ActiveLayer in LayerManager.ListLayer)
+            {
+                foreach (TerrainSorcererStreet ActiveTerrain in ActiveLayer.ArrayTerrain)
+                {
+                    if (ActiveTerrain.DefendingCreature != null && ActiveTerrain.DefendingCreature.Name.ToLower() == CreatureName)
+                    {
+                        CreatureCount++;
+                    }
+                }
+            }
+
+            return CreatureCount;
         }
 
         public override void TogglePreview(bool UsePreview)

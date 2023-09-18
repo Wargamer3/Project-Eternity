@@ -41,6 +41,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 Map.GlobalSorcererStreetBattleContext.ListBattlePanelHolder = ListActionMenuChoice;
 
                 Map.GlobalSorcererStreetBattleContext.DicCreatureCountByElementType = Map.DicCreatureCountByElementType;
+                Map.GlobalSorcererStreetBattleContext.TotalCreaturesDestroyed = Map.TotalCreaturesDestroyed;
 
                 TerrainSorcererStreet ActiveTerrain = Map.GetTerrain(ActivePlayer.GamePiece);
 

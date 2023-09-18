@@ -6,39 +6,37 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class GainSymbolsEffect : SorcererStreetEffect
+    public sealed class GainGoldEffect : SorcererStreetEffect
     {
         public enum Targets { Self, Opponent }
-        public enum SymbolTypeTypes { Terrain, Random, Specific }
 
-        public static string Name = "Sorcerer Street Gain Symbols";
+        public static string Name = "Sorcerer Street Gain Gold";
 
         private Targets _Target;
-        private SymbolTypeTypes _SymbolTypeType;
-        private byte _NumberOfSymbols;
+        private string _Value;
 
-        public GainSymbolsEffect()
+        public GainGoldEffect()
             : base(Name, false)
         {
+            _Value = string.Empty;
         }
 
-        public GainSymbolsEffect(SorcererStreetBattleParams Params)
+        public GainGoldEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
+            _Value = string.Empty;
         }
         
         protected override void Load(BinaryReader BR)
         {
             _Target = (Targets)BR.ReadByte();
-            _SymbolTypeType = (SymbolTypeTypes)BR.ReadByte();
-            _NumberOfSymbols = BR.ReadByte();
+            _Value = BR.ReadString();
         }
 
         protected override void Save(BinaryWriter BW)
         {
             BW.Write((byte)_Target);
-            BW.Write((byte)_SymbolTypeType);
-            BW.Write(_NumberOfSymbols);
+            BW.Write(_Value);
         }
 
         public override bool CanActivate()
@@ -53,14 +51,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override BaseEffect DoCopy()
         {
-            GainSymbolsEffect NewEffect = new GainSymbolsEffect(Params);
+            GainGoldEffect NewEffect = new GainGoldEffect(Params);
+
+            NewEffect._Target = _Target;
+            NewEffect._Value = _Value;
 
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            GainGoldEffect NewEffect = (GainGoldEffect)Copy;
+
+            _Target = NewEffect._Target;
+            _Value = NewEffect._Value;
         }
+
+        #region Properties
 
         [CategoryAttribute(""),
         DescriptionAttribute("The Target."),
@@ -78,33 +85,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         [CategoryAttribute(""),
-        DescriptionAttribute("How to destroy cards."),
+        DescriptionAttribute("Number of symbols to gain."),
         DefaultValueAttribute(0)]
-        public SymbolTypeTypes SymbolTypeType
+        public string Value
         {
             get
             {
-                return _SymbolTypeType;
+                return _Value;
             }
             set
             {
-                _SymbolTypeType = value;
+                _Value = value;
             }
         }
 
-        [CategoryAttribute(""),
-        DescriptionAttribute("Number of symbols to gain."),
-        DefaultValueAttribute(0)]
-        public byte NumberOfSymbols
-        {
-            get
-            {
-                return _NumberOfSymbols;
-            }
-            set
-            {
-                _NumberOfSymbols = value;
-            }
-        }
+        #endregion
     }
 }

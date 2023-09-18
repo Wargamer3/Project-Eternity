@@ -15,8 +15,16 @@ namespace ProjectEternity.Core.Units
         public List<ITerrainRestriction> ListRestriction;
 
         public TerrainType()
+            : this("New Terrain")
         {
-            Name = "New Terrain";
+            ActivationName = string.Empty;
+            AnnulatioName = string.Empty;
+            ListRestriction = new List<ITerrainRestriction>();
+        }
+
+        public TerrainType(string Name)
+        {
+            this.Name = Name;
             ActivationName = string.Empty;
             AnnulatioName = string.Empty;
             ListRestriction = new List<ITerrainRestriction>();

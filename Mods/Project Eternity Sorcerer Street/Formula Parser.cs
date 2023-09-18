@@ -47,6 +47,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case "unit":
                         ReturnExpression = CreatureValueFromVariable(ListPlayer, Expression);
                         break;
+
+                    case "self":
+                        switch (Expression[1])
+                        {
+                            case "Item":
+                                switch (Expression[2])
+                                {
+                                    case "MHP":
+                                        if (Params.GlobalContext.SelfCreature.Item != null && Params.GlobalContext.SelfCreature.Item is CreatureCard)
+                                        {
+                                            return ((CreatureCard)Params.GlobalContext.SelfCreature.Item).MaxHP.ToString();
+                                        }
+                                        else
+                                        {
+                                            return "0";
+                                        }
+                                }
+                                break;
+                        }
+                        break;
                 }
                 if (ReturnExpression != null)
                     return ReturnExpression;
@@ -62,7 +82,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         switch (Expression[1])
                         {
                             case "turn":
+                            case "turns":
                             case "gameturn":
+                            case "gameturns":
                             case "turngame":
                             case "battleturn":
                             case "turnbattle":
@@ -80,6 +102,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             default:
                                 return Params.Map.DicMapVariables[Expression[1]].ToString();
                         }
+
+                    case "creatures":
+                        return StatsFromCreatures(Expression[1]);
+
+                    case "terrainlevel":
+                        return Params.GlobalContext.DefenderTerrain.LandLevel.ToString();
 
                     case "atk":
                     case "invader":
@@ -101,9 +129,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case "opponent":
                     case "opponentcreature":
                         return StatsFromCreature(Params.GlobalContext.OpponentCreature, Expression[1]);
-
-                    case "creatures":
-                        return StatsFromCreatures(Expression[1]);
 
                     case "ownerplayer":
                         return PlayerStatsFromPlayer(Params.GlobalContext.SelfCreature.Owner, Expression[1]);
@@ -250,8 +275,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ReturnExpression = ActiveCreature.Creature.CurrentST.ToString();
                     break;
 
+                case "damageneutralized":
+                    ReturnExpression = ActiveCreature.DamageNeutralized.ToString();
+                    break;
+
+                case "damagereflected":
+                    ReturnExpression = ActiveCreature.DamageReflected.ToString();
+                    break;
+
                 case "damagereceived":
-                    ReturnExpression = ActiveCreature.DamageReceived.ToString();
+                    SorcererStreetBattleContext.BattleCreatureInfo Opponent = Params.GlobalContext.Defender;
+                    if (ActiveCreature == Opponent)
+                    {
+                        Opponent = Params.GlobalContext.Invader;
+                    }
+                    if (Opponent.Creature.BattleAbilities.ScrollAttack)//Ignore scroll attacks
+                    {
+                        ReturnExpression = "0";
+                    }
+                    else
+                    {
+                        ReturnExpression = ActiveCreature.DamageReceived.ToString();
+                    }
                     break;
 
                 case "terrainlevel":
@@ -259,6 +304,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case "cardsinhand":
+                    ReturnExpression = ActiveCreature.Owner.ListCardInHand.Count.ToString();
+                    break;
+
+                case "spellanditemcardsinhand":
                     ReturnExpression = ActiveCreature.Owner.ListCardInHand.Count.ToString();
                     break;
             }
@@ -287,6 +336,14 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "water":
                     ReturnExpression = Params.GlobalContext.DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water].ToString();
                     break;
+
+                case "destroyed":
+                    ReturnExpression = Params.Map.TotalCreaturesDestroyed.ToString();
+                    break;
+
+                default://Count By Name
+                    ReturnExpression = Params.Map.CountCreaturesByName(Expression).ToString();
+                    break;
             }
 
             return ReturnExpression;
@@ -302,6 +359,35 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 case "currentstanding":
                 case "currentleadername":
                     ReturnExpression = ActivePlayer.Rank.ToString();
+                    break;
+
+                case "territories":
+                    break;
+
+                case "fireterritories":
+                    break;
+
+                case "waterterritories":
+                    break;
+
+                case "magic":
+                case "gold":
+                    ReturnExpression = ActivePlayer.Magic.ToString();
+                    break;
+
+                case "lap":
+                    ReturnExpression = ActivePlayer.CompletedLaps.ToString();
+                    break;
+
+                case "hand":
+                    ReturnExpression = ActivePlayer.ListCardInHand.Count.ToString();
+                    break;
+
+                case "deck":
+                    ReturnExpression = ActivePlayer.ListCardInDeck.Count.ToString();
+                    break;
+
+                case "watersymbols":
                     break;
             }
 

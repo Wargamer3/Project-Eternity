@@ -7,8 +7,8 @@ using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Graphics;
 using static ProjectEternity.Core.Operators;
-using static ProjectEternity.GameScreens.SorcererStreetScreen.ActionPanelBattleAttackPhase;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.CreatureCard;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.ActionPanelBattleAttackPhase;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -24,6 +24,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool Immediate;//Allow all territory command after taking a land (either vacant or after a battle)
         public bool Regenerate;//Regain max HP after battle
         public bool ItemProtection;//Immune to Destroy Item and Steal Item effects.
+        public bool TargetProtection;//Cannot be targeted by spells or territory abilities.
+        public bool HPProtection;//HP & MHP cannot be altered by spells or territory abilities.
         public bool Recycle;
 
         public ElementalAffinity[] ArrayAffinity;
@@ -37,7 +39,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public NumberTypes NeutralizeSignOperator;
         public string NeutralizeValue;
 
-        public AttackTypes ReflectType;
+        public List<AttackTypes> ListReflectType;
         public NumberTypes ReflectSignOperator;
         public string ReflectValue;
 
@@ -53,6 +55,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Immediate = Other.Immediate;
             Regenerate = Other.Regenerate;
             ItemProtection = Other.ItemProtection;
+            TargetProtection = Other.TargetProtection;
+            HPProtection = Other.HPProtection;
             Recycle = Other.Recycle;
 
             ArrayPenetrateAffinity = Other.ArrayPenetrateAffinity;
@@ -66,7 +70,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             NeutralizeSignOperator = NumberTypes.Relative;
             NeutralizeValue = null;
 
-            ReflectType = AttackTypes.NonScrolls;
+            ListReflectType = new List<AttackTypes>();
             ReflectSignOperator = NumberTypes.Relative;
             ReflectValue = null;
         }

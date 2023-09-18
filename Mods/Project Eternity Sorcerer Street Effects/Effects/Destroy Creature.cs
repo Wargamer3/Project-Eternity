@@ -65,6 +65,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            DestroyCreatureEffect CopyRequirement = (DestroyCreatureEffect)Copy;
+
+            _Target = CopyRequirement._Target;
         }
 
         #region Properties

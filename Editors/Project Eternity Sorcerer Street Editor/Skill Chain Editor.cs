@@ -17,8 +17,8 @@ namespace ProjectEternity.Editors.SorcererStreetSkillChainEditor
             List<string> ListAllowedEffect = new List<string>() { "SorcererStreetEffect" };
 
             tvSkills.NodeMouseClick += (sender, args) => tvSkills.SelectedNode = args.Node;
-            cboRequirementType.Items.AddRange(BaseSkillRequirement.DicDefaultRequirement.Values.Where(E => ListAllowedRequirements.Contains(E.GetType().BaseType.Name)).ToArray());
-            cboEffectType.Items.AddRange(BaseEffect.DicDefaultEffect.Values.Where(E => ListAllowedEffect.Contains(E.GetType().BaseType.Name)).ToArray());
+            cboRequirementType.Items.AddRange(BaseSkillRequirement.DicDefaultRequirement.Values.Where(E => ListAllowedRequirements.Contains(E.GetType().BaseType.Name)).OrderBy(E => E.ToString()).ToArray());
+            cboEffectType.Items.AddRange(BaseEffect.DicDefaultEffect.Values.Where(E => ListAllowedEffect.Contains(E.GetType().BaseType.Name)).OrderBy(E => E.ToString()).ToArray());
         }
 
         public SorcererStreetSkillChainEditor(string FilePath, object[] Params)

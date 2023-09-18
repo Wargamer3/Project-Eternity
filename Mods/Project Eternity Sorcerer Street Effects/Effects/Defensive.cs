@@ -4,16 +4,16 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SenilityEffect : SorcererStreetEffect
+    public sealed class DefensiveEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Senility";
+        public static string Name = "Sorcerer Street Defensive";
 
-        public SenilityEffect()
+        public DefensiveEffect()
             : base(Name, false)
         {
         }
 
-        public SenilityEffect(SorcererStreetBattleParams Params)
+        public DefensiveEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.IsDefensive = true;
+            return "Defensive";
         }
 
         protected override BaseEffect DoCopy()
         {
-            SenilityEffect NewEffect = new SenilityEffect(Params);
+            DefensiveEffect NewEffect = new DefensiveEffect(Params);
 
             return NewEffect;
         }

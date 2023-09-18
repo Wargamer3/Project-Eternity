@@ -52,6 +52,51 @@
   <ItemGroup>
     <Compile Include="Automatic Skills\Enemy Target Type.cs" />
     <Compile Include="Automatic Skills\Self Target Type.cs" />
+    <Compile Include="Effects\Add Card.cs" />
+    <Compile Include="Effects\Change Creature Movement.cs" />
+    <Compile Include="Effects\Disable Toll.cs" />
+    <Compile Include="Effects\Disable Lap Regeneration.cs" />
+    <Compile Include="Effects\Disable Effects.cs" />
+    <Compile Include="Effects\Enchant Mimicry.cs" />
+    <Compile Include="Effects\Global Ability Ability Damage Reduced.cs" />
+    <Compile Include="Effects\Chose Movement Direction.cs" />
+    <Compile Include="Effects\Global Ability Disable Summoning Restrictions.cs" />
+    <Compile Include="Effects\Global Ability Disable Flash Spells.cs" />
+    <Compile Include="Effects\Global Ability Disable Copy Summon.cs" />
+    <Compile Include="Effects\Global Ability Defender Attack First.cs" />
+    <Compile Include="Effects\Global Ability Disable Territory Abilities.cs" />
+    <Compile Include="Effects\Global Ability Disable Move Command.cs" />
+    <Compile Include="Effects\Global Ability Battle Regeneration.cs" />
+    <Compile Include="Effects\Global Ability Territory Protection.cs" />
+    <Compile Include="Effects\Global Ability Increase Summon Cost.cs" />
+    <Compile Include="Effects\Global Ability Limit Dice Roll.cs" />
+    <Compile Include="Effects\Global Ability Draw 2 Cards.cs" />
+    <Compile Include="Effects\Global Ability Disable End Battle Abilities.cs" />
+    <Compile Include="Effects\Enchant Land Protection.cs" />
+    <Compile Include="Effects\Enchant Greed.cs" />
+    <Compile Include="Effects\Enchant Spirit Walk.cs" />
+    <Compile Include="Effects\Disable Land Bonus Restrictions.cs" />
+    <Compile Include="Effects\Item Creature.cs" />
+    <Compile Include="Effects\Swap HP and ST.cs" />
+    <Compile Include="Effects\Stop Player.cs" />
+    <Compile Include="Effects\Target Enchant Protection.cs" />
+    <Compile Include="Requirements\Creature Name.cs" />
+    <Compile Include="Requirements\Creature In Play Requirement.cs" />
+    <Compile Include="Requirements\Element Anti Requirement.cs" />
+    <Compile Include="Requirements\Gold Possessed Requirement.cs" />
+    <Compile Include="Requirements\Cards Remaining Requirement.cs" />
+    <Compile Include="Effects\Change Toll.cs" />
+    <Compile Include="Effects\Enchant Fog.cs" />
+    <Compile Include="Effects\Enchant Paralysis.cs" />
+    <Compile Include="Effects\Enchant Confusion.cs" />
+    <Compile Include="Effects\Enchant Poison.cs" />
+    <Compile Include="Effects\Enchant Phantasm.cs" />
+    <Compile Include="Effects\Activate Spell.cs" />
+    <Compile Include="Effects\Gain Gold.cs" />
+    <Compile Include="Effects\Change Damage.cs" />
+    <Compile Include="Effects\Support.cs" />
+    <Compile Include="Effects\Land Level Lock.cs" />
+    <Compile Include="Effects\Move Targetted.cs" />
     <Compile Include="Effects\Move Opponent.cs" />
     <Compile Include="Effects\Attack Last.cs" />
     <Compile Include="Effects\Attack Twice.cs" />
@@ -61,15 +106,24 @@
     <Compile Include="Effects\Change Terrain Level.cs" />
     <Compile Include="Effects\Critical Hit.cs" />
     <Compile Include="Effects\Change Element.cs" />
-    <Compile Include="Effects\Senility.cs" />
-    <Compile Include="Effects\Sleep.cs" />
+    <Compile Include="Effects\Enchant Quicksand.cs" />
+    <Compile Include="Effects\Defensive.cs" />
+    <Compile Include="Effects\Steal Gold.cs" />
+    <Compile Include="Effects\Summon Creature.cs" />
+    <Compile Include="Effects\HP Protection.cs" />
+    <Compile Include="Effects\Target Protection.cs" />
+    <Compile Include="Effects\Regenerate.cs" />
+    <Compile Include="Effects\Return To Hand.cs" />
+    <Compile Include="Effects\Enchant Senility.cs" />
+    <Compile Include="Effects\Enchant Sleep.cs" />
     <Compile Include="Effects\Scroll Critical Hit.cs" />
     <Compile Include="Effects\Scroll Attack.cs" />
     <Compile Include="Effects\Recycle.cs" />
+    <Compile Include="Effects\Replace Item.cs" />
     <Compile Include="Effects\Steal Item.cs" />
     <Compile Include="Effects\Neutralize Damage.cs" />
     <Compile Include="Effects\Reflect Damage.cs" />
-    <Compile Include="Effects\Gain Symbol.cs" />
+    <Compile Include="Effects\Change Symbol.cs" />
     <Compile Include="Effects\Draw Cards.cs" />
     <Compile Include="Effects\Immediate.cs" />
     <Compile Include="Effects\Deal Damage.cs" />
@@ -87,19 +141,35 @@
     <Compile Include="Requirements\Activation Chance Requirement.cs" />
     <Compile Include="Requirements\Before Battle Start Requirement.cs" />
     <Compile Include="Requirements\Battle Start Requirement.cs" />
+    <Compile Include="Requirements\Destroyed By Spell Requirement.cs" />
+    <Compile Include="Requirements\Has No Enchant Requirement.cs" />
+    <Compile Include="Requirements\Has Support Requirement.cs" />
+    <Compile Include="Requirements\Has Enchant Requirement.cs" />
+    <Compile Include="Requirements\Is Invdading Requirement.cs" />
+    <Compile Include="Requirements\Item Used Requirement.cs" />
+    <Compile Include="Requirements\Damage Dealt Requirement.cs" />
+    <Compile Include="Requirements\On Lap Bonus Requirement.cs" />
+    <Compile Include="Requirements\Global Ability Requirement.cs" />
+    <Compile Include="Requirements\On Summoned Requirement.cs" />
+    <Compile Include="Requirements\On Walked Over Requirement.cs" />
+    <Compile Include="Requirements\Round Requirement.cs" />
+    <Compile Include="Requirements\Item Not Equiped Requirement.cs" />
+    <Compile Include="Requirements\Item Equiped Requirement.cs" />
+    <Compile Include="Requirements\On Move Requirement.cs" />
     <Compile Include="Requirements\Element Requirement.cs" />
     <Compile Include="Requirements\Max HP Requirement.cs" />
     <Compile Include="Requirements\ST Requirement.cs" />
     <Compile Include="Requirements\HP Left Requirement.cs" />
     <Compile Include="Requirements\Attack Bonus Requirement.cs" />
     <Compile Include="Requirements\Against Defensive Requirement.cs" />
+    <Compile Include="Requirements\Is Defending Requirement.cs" />
+    <Compile Include="Requirements\Territory Owned Requirement.cs" />
     <Compile Include="Requirements\Uppon Defeat Requirement.cs" />
     <Compile Include="Requirements\After Enemy Survived Requirement.cs" />
     <Compile Include="Requirements\Upon Victory Requirement.cs" />
-    <Compile Include="Requirements\Creature Summon Requirement.cs" />
+    <Compile Include="Requirements\On Load Requirement.cs" />
     <Compile Include="Requirements\Territory Requirement.cs" />
-    <Compile Include="Requirements\Invasion Requirement.cs" />
-    <Compile Include="Requirements\Creature Phase Requirement.cs" />
+    <Compile Include="Requirements\Creatures Phase Requirement.cs" />
     <Compile Include="Automatic Skills\All Target Type.cs" />
     <Compile Include="Requirements\Before Attack Requirement.cs" />
     <Compile Include="Requirements\Before Defense Requirement.cs" />
@@ -117,6 +187,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Game Screen\Project Eternity Game Screen.csproj">
       <Project>{dd46b019-61ba-4f24-a7e1-ef212c27cdce}</Project>
       <Name>Project Eternity Game Screen</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Unit\Project Eternity Unit.csproj">
+      <Project>{43CF453B-8BD0-494F-B4A8-CCB6F0A2C469}</Project>
+      <Name>Project Eternity Unit</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Editors\Project Eternity Base Editor\Project Eternity Base Editor.csproj">

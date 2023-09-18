@@ -25,6 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int CurrentST;
         public string Subtype;
         public readonly byte DiscardCardRequired;
+        public bool LandLevelLock;
 
         public ElementalAffinity[] ArrayLandLimit;
         public ItemCard.ItemTypes[] ArrayItemLimit;

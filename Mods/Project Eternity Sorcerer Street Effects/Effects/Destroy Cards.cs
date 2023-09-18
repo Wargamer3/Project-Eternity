@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
-using ProjectEternity.Core.Item;
 using ProjectEternity.Core;
+using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -10,7 +10,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         public static string Name = "Sorcerer Street Destroy Cards";
         public enum Targets { Self, Opponent }
-        public enum CardDestroyTypes { All, Random, Specific }
+        public enum CardDestroyTypes { All, Random, Specific, SameAsDefeated }
 
         private Targets _Target;
         private CardDestroyTypes _CardDestroyType;
@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             _Target = (Targets)BR.ReadByte();
             _CardDestroyType = (CardDestroyTypes)BR.ReadByte();
-            if (_CardDestroyType != CardDestroyTypes.All)
+            if (_CardDestroyType != CardDestroyTypes.All && _CardDestroyType != CardDestroyTypes.SameAsDefeated)
             {
                 _NumberOfCards = BR.ReadByte();
             }
@@ -40,7 +40,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             BW.Write((byte)_Target);
             BW.Write((byte)_CardDestroyType);
-            if (_CardDestroyType != CardDestroyTypes.All)
+            if (_CardDestroyType != CardDestroyTypes.All && _CardDestroyType != CardDestroyTypes.SameAsDefeated)
             {
                 BW.Write(_NumberOfCards);
             }
@@ -74,12 +74,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     RealTarget.Owner.ListCardInHand.RemoveAt(RandomHelper.Next(RealTarget.Owner.ListCardInHand.Count));
                 }
             }
-            else
-            {
-                for (int C = 0; C < _NumberOfCards; ++C)
-                {
-                    RealTarget.Owner.ListCardInHand.RemoveAt(0);
-                }
+            else if (_CardDestroyType == CardDestroyTypes.Specific)
+            {//User chooses a card from target Cepter's hand and destroys it.
             }
 
             return "Destroy " + _NumberOfCards + " Cards";
@@ -104,6 +100,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _CardDestroyType = NewEffect._CardDestroyType;
             _NumberOfCards = NewEffect._NumberOfCards;
         }
+
+        #region Properties
 
         [CategoryAttribute(""),
         DescriptionAttribute("The Target."),
@@ -149,5 +147,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 _NumberOfCards = value;
             }
         }
+
+        #endregion
     }
 }

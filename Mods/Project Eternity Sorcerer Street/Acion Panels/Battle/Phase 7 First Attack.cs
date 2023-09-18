@@ -127,6 +127,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public static void ProcessAttack(BattleCreatureInfo Attacker, BattleCreatureInfo Defender)
         {
             int ReflectedDamage = 0;
+            int NeutralizedDamage = 0;
             int FinalDamage = Attacker.FinalST;
 
             if (Attacker.Creature.BattleAbilities.CriticalHit)
@@ -160,7 +161,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 {
                     if (Defender.Creature.BattleAbilities.NeutralizeSignOperator == Core.Operators.NumberTypes.Relative)
                     {
-                        FinalDamage -= (int)(FinalDamage * (double.Parse(Defender.Creature.BattleAbilities.NeutralizeValue) / 100d));
+                        NeutralizedDamage = (int)(FinalDamage * (double.Parse(Defender.Creature.BattleAbilities.NeutralizeValue) / 100d));
+                        FinalDamage -= NeutralizedDamage;
                     }
                 }
             }
@@ -168,19 +170,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (!Attacker.Creature.BattleAbilities.ScrollAttack && Defender.Creature.BattleAbilities.ReflectValue != null)
             {
                 bool CanReflect = false;
-                AttackTypes ActiveType = Defender.Creature.BattleAbilities.ReflectType;
-
-                if (ActiveType == AttackTypes.All
+                foreach (AttackTypes ActiveType in Defender.Creature.BattleAbilities.ListReflectType)
+                {
+                    if (ActiveType == AttackTypes.All
                     || (ActiveType == AttackTypes.Air && Attacker.Creature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Air))
                     || (ActiveType == AttackTypes.Fire && Attacker.Creature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
                     || (ActiveType == AttackTypes.Earth && Attacker.Creature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
                     || (ActiveType == AttackTypes.Water && Attacker.Creature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Water)))
-                {
-                    CanReflect = true;
-                }
-                else if (ActiveType == AttackTypes.NonScrolls && !Attacker.Creature.BattleAbilities.ScrollAttack)
-                {
-                    CanReflect = true;
+                    {
+                        CanReflect = true;
+                    }
+                    else if (ActiveType == AttackTypes.NonScrolls && !Attacker.Creature.BattleAbilities.ScrollAttack)
+                    {
+                        CanReflect = true;
+                    }
                 }
 
                 if (CanReflect)
@@ -232,6 +235,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 FinalDamage = int.Parse(Attacker.Creature.BattleAbilities.ScrollValue);
             }
 
+            Attacker.DamageReflected = ReflectedDamage;
+            Attacker.DamageNeutralized = NeutralizedDamage;
             Attacker.DamageReceived = ReflectedDamage;
             Defender.DamageReceived = FinalDamage;
             Defender.DamageReceivedIgnoreLandBonus = IsScrollAttack || IsPenetratingAttack;

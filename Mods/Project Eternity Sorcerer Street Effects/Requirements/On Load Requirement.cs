@@ -3,15 +3,15 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetCreatureSummonRequirement : SorcererStreetRequirement
+    public sealed class SorcererStreetOnLoadRequirement : SorcererStreetRequirement
     {
-        public SorcererStreetCreatureSummonRequirement()
+        public SorcererStreetOnLoadRequirement()
             : this(null)
         {
         }
 
-        public SorcererStreetCreatureSummonRequirement(SorcererStreetBattleContext GlobalContext)
-            : base("Creature Summon", GlobalContext)
+        public SorcererStreetOnLoadRequirement(SorcererStreetBattleContext GlobalContext)
+            : base("Sorcerer Street On Load", GlobalContext)
         {
         }
 
@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetCreatureSummonRequirement(GlobalContext);
+            return new SorcererStreetOnLoadRequirement(GlobalContext);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)
