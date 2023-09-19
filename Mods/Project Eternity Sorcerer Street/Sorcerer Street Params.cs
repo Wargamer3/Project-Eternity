@@ -156,23 +156,41 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> GetAvailableActivation(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
+        public List<SkillActivationContext> GetAvailableActivation(BattleCreatureInfo Invader, BattleCreatureInfo Defender, string RequirementName)
         {
             SelfCreature = Invader;
             OpponentCreature = Defender;
 
+            List<SkillActivationContext> ListSkillActivation = new List<SkillActivationContext>();
+
             Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = Invader.Creature.GetAvailableActivation(RequirementName);
+
+            if (DicSkillActivation.Count > 0)
+            {
+                ListSkillActivation.Add(new SkillActivationContext(false, DicSkillActivation));
+            }
             if (Invader.Item != null)
             {
                 Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicItemSkillActivation = Invader.Item.GetAvailableActivation(RequirementName);
-
-                foreach (KeyValuePair<BaseAutomaticSkill, List<BaseSkillActivation>> ActiveSkill in DicItemSkillActivation)
+                if (DicItemSkillActivation.Count > 0)
                 {
-                    DicSkillActivation.Add(ActiveSkill.Key, ActiveSkill.Value);
+                    ListSkillActivation.Add(new SkillActivationContext(true, DicItemSkillActivation));
                 }
             }
 
-            return DicSkillActivation;
+            return ListSkillActivation;
+        }
+    }
+
+    public class SkillActivationContext
+    {
+        public bool ActivatedByItem;
+        public Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation;
+
+        public SkillActivationContext(bool ActivatedByItem, Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation)
+        {
+            this.ActivatedByItem = ActivatedByItem;
+            this.DicSkillActivation = DicSkillActivation;
         }
     }
 

@@ -260,11 +260,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (SecondAttacker.DamageReceived > 0)
             {
-                Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = Map.GlobalSorcererStreetBattleContext.GetAvailableActivation(FirstAttacker, SecondAttacker, AttackBonusRequirement);
+                List<SkillActivationContext> ListSkillActivation = Map.GlobalSorcererStreetBattleContext.GetAvailableActivation(FirstAttacker, SecondAttacker, AttackBonusRequirement);
 
-                if (DicSkillActivation.Count > 0)
+                if (ListSkillActivation.Count > 0 && ListSkillActivation[0].DicSkillActivation.Count > 0)
                 {
-                    ActionPanelBattleItemModifierPhase.StartAnimation(true, DicSkillActivation);
+                    ActionPanelBattleItemModifierPhase.StartAnimation(true, ListSkillActivation);
                 }
             }
         }

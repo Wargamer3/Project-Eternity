@@ -327,7 +327,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         }
                         else
                         {
-                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleCreatureModifierPhase.RequirementName);
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, ActionPanelBattleCreatureModifierPhase.RequirementName);
                             PhasesChoice = PhasesChoices.CreatureModifierPhase;
                         }
                     }
@@ -342,7 +342,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         }
                         else
                         {
-                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleItemModifierPhase.RequirementName);
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, ActionPanelBattleItemModifierPhase.RequirementName);
                             PhasesChoice = PhasesChoices.ItemModifierPhase;
                         }
                     }
@@ -357,7 +357,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         }
                         else
                         {
-                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleBoostsModifierPhase.RequirementName);
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, ActionPanelBattleBoostsModifierPhase.RequirementName);
                             PhasesChoice = PhasesChoices.BoostModifierPhase;
                         }
                     }
@@ -368,7 +368,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         Context.ListActivatedEffect.Clear();
 
-                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.BeforeBattleStartRequirement);
+                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context,ActionPanelBattleAttackPhase.BeforeBattleStartRequirement);
 
                         if (!Context.Invader.Creature.UseCardAnimation)
                         {
@@ -385,7 +385,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         Context.ListActivatedEffect.Clear();
 
-                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.BattleStartRequirement);
+                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, ActionPanelBattleAttackPhase.BattleStartRequirement);
 
                         PhasesChoice = PhasesChoices.BattleStartAnimation;
                     }
@@ -502,13 +502,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                     }
                                     else
                                     {
-                                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.BattleEndRequirement);
+                                        ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, ActionPanelBattleAttackPhase.BattleEndRequirement);
                                         PhasesChoice = PhasesChoices.InvaderBattleEnd;
                                     }
                                 }
                                 else if (PhasesChoice == PhasesChoices.CounterPhase2)
                                 {
-                                    ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, true, ActionPanelBattleAttackPhase.BattleEndRequirement);
+                                    ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, ActionPanelBattleAttackPhase.BattleEndRequirement);
                                     PhasesChoice = PhasesChoices.InvaderBattleEnd;
                                 }
                             }
@@ -566,6 +566,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
                         Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
                         Context.Defender.Animation.Scale = new Vector2(1f);
+                        DefenderTerrainHPBonusInput.SetText((Context.DefenderTerrain.LandLevel * 10).ToString());
                     }
                     break;
 
@@ -701,6 +702,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DefenderCreatureSelection()
         {
             SetupChoice = SetupChoices.DefenderCreature;
+            PhasesChoice = PhasesChoices.Idle;
             CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
@@ -709,6 +711,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DefenderItemSelection()
         {
             SetupChoice = SetupChoices.DefenderItem;
+            PhasesChoice = PhasesChoices.Idle;
             CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
@@ -806,6 +809,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InvaderCreatureSelection()
         {
             SetupChoice = SetupChoices.InvaderCreature;
+            PhasesChoice = PhasesChoices.Idle;
             CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Creatures, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
@@ -814,6 +818,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InvaderItemSelection()
         {
             SetupChoice = SetupChoices.InvaderItem;
+            PhasesChoice = PhasesChoices.Idle;
             CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Item, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
@@ -921,8 +926,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.Invader.BonusHP = 0;
             Context.Invader.BonusST = 0;
             Context.Invader.LandHP = 0;
-
-            DefenderTerrainHPBonusInput.SetText((Context.DefenderTerrain.LandLevel * 10).ToString());
 
             ActionPanelBattleStartPhase.InitIntroAnimation(Context);
 
@@ -1043,6 +1046,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActionPanelBattleStartPhase.DrawAnimation(g, Context, fntArial12, sprVS);
                     break;
 
+                case PhasesChoices.CreatureModifierPhase:
                 case PhasesChoices.ItemModifierPhase:
                 case PhasesChoices.BeforeBattle:
                 case PhasesChoices.InvaderAttackBonusAnimation:
