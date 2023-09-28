@@ -58,16 +58,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 AttackAnimation.UpdateKeyFrame(0);
             }
             SimpleAnimation NewAnimation = new SimpleAnimation("", "", AttackAnimation);
-            User.Animation = NewAnimation;
-            User.Animation.Scale = new Vector2(1f);
+            NewAnimation.Scale = new Vector2(1f);
 
             if (AnimationOnRight)
             {
-                User.Animation.Position = new Vector2(Constants.Width - User.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
+                NewAnimation.Position = new Vector2(Constants.Width - User.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
             }
             else
             {
-                User.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
+                NewAnimation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
             }
 
             return NewAnimation;

@@ -81,6 +81,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            Params.RememberEffects = false;
+
             if (_CreatureName == "Random")
             {
                 string CreatureFolder = "Content/Sorcerer Street/Creature Cards/";
@@ -88,6 +90,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 string SelectedCreature = ArrayCreatureFile[RandomHelper.Next(ArrayCreatureFile.Length)];
                 SelectedCreature = SelectedCreature.Remove(SelectedCreature.Length - 4, 4).Remove(0, CreatureFolder.Length);
                 TransformationCreature = new CreatureCard(SelectedCreature, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+            }
+            else if (_CreatureName == "Opponent")
+            {
+                TransformationCreature = Params.GlobalContext.OpponentCreature.Creature;
             }
 
             if (_Target == Targets.Self)
@@ -98,6 +104,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 Params.ReplaceOtherCreature(TransformationCreature, _IsTemporary);
             }
+
+            Params.RememberEffects = true;
 
             return "Transformed into " + TransformationCreature.Name;
         }

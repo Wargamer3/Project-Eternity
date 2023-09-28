@@ -555,7 +555,7 @@ namespace ProjectEternity.Core
             RightValue = 0;
             LeftValue = 0;
 
-            if (char.IsNumber(Right[0]) || Right[0] == '-')
+            if (char.IsNumber(Right[0]) || (Right[0] == '-' && char.IsNumber(Right[1])))
             {
                 RightValue = Convert.ToDouble(Right, System.Globalization.CultureInfo.InvariantCulture);
                 RightIsNumber = true;
@@ -564,7 +564,7 @@ namespace ProjectEternity.Core
             {
                 Right = GenericValueFromVariable(Right);
 
-                if (char.IsNumber(Right[0]) || Right[0] == '-')
+                if (char.IsNumber(Right[0]) || (Right[0] == '-' && char.IsNumber(Right[1])))
                 {
                     RightValue = Convert.ToDouble(Right, System.Globalization.CultureInfo.InvariantCulture);
                     RightIsNumber = true;
@@ -572,7 +572,7 @@ namespace ProjectEternity.Core
                 else
                     RightIsNumber = false;
             }
-            if (char.IsNumber(Left[0]) || Left[0] == '-')
+            if (char.IsNumber(Left[0]) || (Left[0] == '-' && char.IsNumber(Left[1])))
             {
                 LeftValue = Convert.ToDouble(Left, System.Globalization.CultureInfo.InvariantCulture);
                 LeftIsNumber = true;
@@ -581,7 +581,7 @@ namespace ProjectEternity.Core
             {
                 Left = GenericValueFromVariable(Left);
 
-                if (char.IsNumber(Left[0]) || Left[0] == '-')
+                if (char.IsNumber(Left[0]) || (Left[0] == '-' && char.IsNumber(Left[1])))
                 {
                     LeftValue = Convert.ToDouble(Left, System.Globalization.CultureInfo.InvariantCulture);
                     LeftIsNumber = true;
@@ -615,7 +615,14 @@ namespace ProjectEternity.Core
                 return GetRandomValue(Input.Substring(7));
             }
 
-            return ValueFromVariable(Input);
+            if (Input.Length > 1 && Input[0] == '-')
+            {
+                return "-" + ValueFromVariable(Input.Substring(1));
+            }
+            else
+            {
+                return ValueFromVariable(Input);
+            }
         }
 
         private string GetRandomValue(string Input)

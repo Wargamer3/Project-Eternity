@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Globalization;
 using System.ComponentModel;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
@@ -9,37 +10,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     public sealed class SorcererStreetRoundRequirement : SorcererStreetRequirement
     {
         private Operators.LogicOperators _LogicOperator;
-        private string _HPLeft;
+        private string _RoundLeft;
 
         public SorcererStreetRoundRequirement()
             : this(null)
         {
             _LogicOperator = Operators.LogicOperators.LowerOrEqual;
-            _HPLeft = string.Empty;
+            _RoundLeft = string.Empty;
         }
 
         public SorcererStreetRoundRequirement(SorcererStreetBattleContext GlobalContext)
             : base("Sorcerer Street Round Reached", GlobalContext)
         {
             _LogicOperator = Operators.LogicOperators.LowerOrEqual;
-            _HPLeft = string.Empty;
+            _RoundLeft = string.Empty;
         }
 
         protected override void DoSave(BinaryWriter BW)
         {
             BW.Write((byte)_LogicOperator);
-            BW.Write(_HPLeft);
+            BW.Write(_RoundLeft);
         }
 
         protected override void Load(BinaryReader BR)
         {
             _LogicOperator = (Operators.LogicOperators)BR.ReadByte();
-            _HPLeft = BR.ReadString();
+            _RoundLeft = BR.ReadString();
         }
 
         public override bool CanActivatePassive()
         {
-            return false;
+            int RoundLeftFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(_RoundLeft), CultureInfo.InvariantCulture);
+
+            return Operators.CompareValue(_LogicOperator, GlobalContext.CurrentTurn, RoundLeftFinal);
         }
 
         public override BaseSkillRequirement Copy()
@@ -47,7 +50,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SorcererStreetRoundRequirement NewRequirement = new SorcererStreetRoundRequirement(GlobalContext);
 
             NewRequirement._LogicOperator = _LogicOperator;
-            NewRequirement._HPLeft = _HPLeft;
+            NewRequirement._RoundLeft = _RoundLeft;
 
             return NewRequirement;
         }
@@ -57,7 +60,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SorcererStreetRoundRequirement CopyRequirement = (SorcererStreetRoundRequirement)Copy;
 
             _LogicOperator = CopyRequirement._LogicOperator;
-            _HPLeft = CopyRequirement._HPLeft;
+            _RoundLeft = CopyRequirement._RoundLeft;
         }
 
         #region Properties
@@ -80,15 +83,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public string HPLeft
+        public string RoundLeft
         {
             get
             {
-                return _HPLeft;
+                return _RoundLeft;
             }
             set
             {
-                _HPLeft = value;
+                _RoundLeft = value;
             }
         }
 

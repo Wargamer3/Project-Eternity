@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int ActivePlayerY = MenuY + 75 + P * 40;
 
                 ArrayPlayerControlDropDown[P] = new DropDownButton(new Rectangle(MenuX + 150, ActivePlayerY, 95, 30), fntArial12, "M&K",
-                    new string[] { "M&K", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4" }, OnButtonOver, () => { OnPlayerControlChange(LocalPlayerIndex); });
+                    new string[] { "M&K", "Gamepad 1", "Gamepad 2", "Gamepad 3", "Gamepad 4" }, OnButtonOver, (SelectedItem) => { OnPlayerControlChange(LocalPlayerIndex, SelectedItem); });
 
                 ArrayPlayerLoadProfileButton[P] = new BoxButton(new Rectangle(MenuX + MenuWidth - 70, ActivePlayerY, 60, 30), fntArial12, "Load", OnButtonOver, () => { OnLoadProfilePressed(LocalPlayerIndex); });
             }
@@ -166,7 +166,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             UpdateUIElements();
         }
 
-        private void OnPlayerControlChange(int Index)
+        private void OnPlayerControlChange(int Index, string SelectedItem)
         {
             sndButtonClick.Play();
         }

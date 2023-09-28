@@ -56,10 +56,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (ActionMenuCursor < 5 && ActionMenuCursor + 2 > ActiveTerrain.LandLevel)
                 {
                     int UpgradePrice = GetUpgradePrice(ActionMenuCursor + 2 - ActiveTerrain.LandLevel);
-                    if (UpgradePrice <= ActivePlayer.Magic)
+                    if (UpgradePrice <= ActivePlayer.Gold)
                     {
-                        ActivePlayer.Magic -= UpgradePrice;
-                        ActiveTerrain.UpdateValue(ActivePlayer.DicChainLevelByTerrainTypeIndex[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+                        ActivePlayer.Gold -= UpgradePrice;
+                        ActiveTerrain.UpdateValue(ActivePlayer.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
                         Map.EndPlayerPhase();
                     }
                 }
@@ -121,7 +121,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CurrentY += 20;
             Color TextColor = Color.White;
             int UpgradePrice = GetUpgradePrice(2 - ActiveTerrain.LandLevel);
-            if (ActivePlayer.Magic < UpgradePrice)
+            if (ActivePlayer.Gold < UpgradePrice)
             {
                 TextColor = Color.Gray;
             }
@@ -131,7 +131,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             CurrentY += 20;
             UpgradePrice = GetUpgradePrice(3 - ActiveTerrain.LandLevel);
-            if (ActivePlayer.Magic < UpgradePrice)
+            if (ActivePlayer.Gold < UpgradePrice)
             {
                 TextColor = Color.Gray;
             }
@@ -142,7 +142,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             CurrentY += 20;
             UpgradePrice = GetUpgradePrice(4 - ActiveTerrain.LandLevel);
-            if (ActivePlayer.Magic < UpgradePrice)
+            if (ActivePlayer.Gold < UpgradePrice)
             {
                 TextColor = Color.Gray;
             }
@@ -153,7 +153,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             CurrentY += 20;
             UpgradePrice = GetUpgradePrice(5 - ActiveTerrain.LandLevel);
-            if (ActivePlayer.Magic < UpgradePrice)
+            if (ActivePlayer.Gold < UpgradePrice)
             {
                 TextColor = Color.Gray;
             }

@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ActivePlayer.ListPassedCheckpoint.Add(SorcererStreetMap.Checkpoints.North);
                     break;
             }
-            ActivePlayer.Magic += Map.TowerMagicGain;
+            ActivePlayer.Gold += Map.TowerMagicGain;
             ActivePlayer.TotalMagic += Map.TowerMagicGain;
             Map.UpdatePlayersRank();
         }

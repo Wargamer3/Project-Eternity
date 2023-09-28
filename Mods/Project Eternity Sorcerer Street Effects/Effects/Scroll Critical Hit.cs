@@ -33,7 +33,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return "Scroll";
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ScrollCriticalHit = true;
+            return "Scroll Critical Hit";
         }
 
         protected override BaseEffect DoCopy()

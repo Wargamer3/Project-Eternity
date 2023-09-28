@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override void OnEndCardSelected()
         {
-            ActivePlayer.Magic -= ActiveTerrain.CurrentToll;
+            ActivePlayer.Gold -= ActiveTerrain.CurrentToll;
             Map.UpdateTolls(ActivePlayer);
             Map.EndPlayerPhase();
         }

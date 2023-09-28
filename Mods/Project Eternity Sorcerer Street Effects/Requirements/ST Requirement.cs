@@ -51,10 +51,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             switch (_Target)
             {
                 case Targets.Self:
-                    CreatureST = GlobalContext.SelfCreature.FinalST;
+                    CreatureST = GlobalContext.SelfCreature.Creature.CurrentST;
                     break;
                 case Targets.Opponent:
-                    CreatureST = GlobalContext.OpponentCreature.FinalST;
+                    CreatureST = GlobalContext.OpponentCreature.Creature.CurrentST;
                     break;
             }
 

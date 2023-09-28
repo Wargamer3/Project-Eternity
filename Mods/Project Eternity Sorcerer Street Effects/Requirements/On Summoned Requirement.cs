@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override BaseSkillRequirement Copy()
         {
-            return new SorcererStreetOnMoveRequirement(GlobalContext);
+            return new SorcererStreetOnSummonedRequirement(GlobalContext);
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)

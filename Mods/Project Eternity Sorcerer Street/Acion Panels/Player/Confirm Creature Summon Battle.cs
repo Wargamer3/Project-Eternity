@@ -65,7 +65,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void FinishPhase()
         {
             ActivePlayer.ListCardInHand.Remove(SelectedCard);
-            ActivePlayer.Magic -= SelectedCard.MagicCost;
+            ActivePlayer.Gold -= SelectedCard.MagicCost;
 
             RemoveAllActionPanels();
             AddToPanelListAndSelect(new ActionPanelBattleStartPhase(Map, ActivePlayerIndex, SelectedCard));
@@ -92,7 +92,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Map.GlobalSorcererStreetBattleContext.Invader.Creature = SelectedCard;
             ActivePlayer.ListCardInHand.Remove(SelectedCard);
-            ActivePlayer.Magic -= SelectedCard.MagicCost;
+            ActivePlayer.Gold -= SelectedCard.MagicCost;
         }
 
         public override void DoWrite(ByteWriter BW)

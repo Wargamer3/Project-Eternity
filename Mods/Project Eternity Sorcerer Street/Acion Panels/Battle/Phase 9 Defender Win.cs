@@ -25,12 +25,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             if (Map.GlobalSorcererStreetBattleContext.Invader.Item != null)
             {
                 Map.GlobalSorcererStreetBattleContext.Invader.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Invader.Item);
-                Map.GlobalSorcererStreetBattleContext.Invader.Owner.Magic -= Map.GlobalSorcererStreetBattleContext.Invader.Item.MagicCost;
+                Map.GlobalSorcererStreetBattleContext.Invader.Owner.Gold -= Map.GlobalSorcererStreetBattleContext.Invader.Item.MagicCost;
             }
             if (Map.GlobalSorcererStreetBattleContext.Defender.Item != null)
             {
                 Map.GlobalSorcererStreetBattleContext.Defender.Owner.ListCardInHand.Remove(Map.GlobalSorcererStreetBattleContext.Defender.Item);
-                Map.GlobalSorcererStreetBattleContext.Defender.Owner.Magic -= Map.GlobalSorcererStreetBattleContext.Defender.Item.MagicCost;
+                Map.GlobalSorcererStreetBattleContext.Defender.Owner.Gold -= Map.GlobalSorcererStreetBattleContext.Defender.Item.MagicCost;
             }
         }
 

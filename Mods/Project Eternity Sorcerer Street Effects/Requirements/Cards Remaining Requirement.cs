@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Globalization;
 using System.ComponentModel;
+using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 using static ProjectEternity.Core.Operators;
 
@@ -47,6 +49,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
+            string EvaluationResult = GlobalContext.ActiveParser.Evaluate(_Value);
+
             int CurrentCards = 0;
 
             if (_Target == Targets.SelfHand)
@@ -66,7 +70,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 CurrentCards = GlobalContext.OpponentCreature.Owner.ListCardInDeck.Count;
             }
 
-            return false;
+            if (_SignOperator == NumberTypes.Absolute)
+            {
+                return Operators.CompareValue(_LogicOperator, CurrentCards, int.Parse(EvaluationResult, CultureInfo.InvariantCulture));
+            }
+            else
+            {
+                float FinalResult = CurrentCards * float.Parse(EvaluationResult, CultureInfo.InvariantCulture);
+                return Operators.CompareValue(_LogicOperator, CurrentCards, (int)FinalResult);
+            }
         }
 
         public override BaseSkillRequirement Copy()

@@ -24,12 +24,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         
         protected override void Load(BinaryReader BR)
         {
-            _LevelIncrease = BR.ReadByte();
+            _LevelIncrease = BR.ReadInt32();
         }
 
         protected override void Save(BinaryWriter BW)
         {
-            BW.Write((byte)_LevelIncrease);
+            BW.Write(_LevelIncrease);
         }
 
         public override bool CanActivate()

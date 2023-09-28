@@ -35,13 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     Expression = Expression.Skip(2).ToArray();
                 }
-                else
-                {
-                    foreach (Player ActivePlayer in Params.Map.ListPlayer)
-                    {
-                        ListPlayer.Add(ActivePlayer);
-                    }
-                }
+
                 switch (Expression[0])
                 {
                     case "unit":
@@ -51,10 +45,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case "self":
                         switch (Expression[1])
                         {
-                            case "Item":
+                            case "item":
                                 switch (Expression[2])
                                 {
-                                    case "MHP":
+                                    case "mhp":
                                         if (Params.GlobalContext.SelfCreature.Item != null && Params.GlobalContext.SelfCreature.Item is CreatureCard)
                                         {
                                             return ((CreatureCard)Params.GlobalContext.SelfCreature.Item).MaxHP.ToString();
@@ -91,13 +85,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             case "mapturn":
                             case "turnmap":
                             case "playerturn":
-                                return Params.Map.GameTurn.ToString();
-
-                            case "phase":
-                            case "currentphase":
-                            case "activeplayer":
-                            case "currentplayer":
-                                return Params.Map.ActivePlayerIndex.ToString();
+                                return Params.GlobalContext.CurrentTurn.ToString();
 
                             default:
                                 return Params.Map.DicMapVariables[Expression[1]].ToString();
@@ -105,9 +93,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                     case "creatures":
                         return StatsFromCreatures(Expression[1]);
-
-                    case "terrainlevel":
-                        return Params.GlobalContext.DefenderTerrain.LandLevel.ToString();
 
                     case "atk":
                     case "invader":
@@ -130,6 +115,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     case "opponentcreature":
                         return StatsFromCreature(Params.GlobalContext.OpponentCreature, Expression[1]);
 
+                    case "selfplayer":
                     case "ownerplayer":
                         return PlayerStatsFromPlayer(Params.GlobalContext.SelfCreature.Owner, Expression[1]);
 
@@ -185,6 +171,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (Expression.Length == 1)
             {
+                switch (Expression[0])
+                {
+                    case "terrainlevel":
+                        return Params.GlobalContext.DefenderTerrain.LandLevel.ToString();
+
+                    case "creaturesdestroyed":
+                        return Params.GlobalContext.TotalCreaturesDestroyed.ToString();
+                }
+
                 return Expression[0];
             }
             else
@@ -276,11 +271,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case "damageneutralized":
-                    ReturnExpression = ActiveCreature.DamageNeutralized.ToString();
+                case "damageneutralizedbyopponent":
+                    ReturnExpression = ActiveCreature.DamageNeutralizedByOpponent.ToString();
                     break;
 
                 case "damagereflected":
-                    ReturnExpression = ActiveCreature.DamageReflected.ToString();
+                    ReturnExpression = ActiveCreature.DamageReflectedByOpponent.ToString();
                     break;
 
                 case "damagereceived":
@@ -337,12 +333,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ReturnExpression = Params.GlobalContext.DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water].ToString();
                     break;
 
-                case "destroyed":
-                    ReturnExpression = Params.Map.TotalCreaturesDestroyed.ToString();
+                case "neutral":
+                    ReturnExpression = Params.GlobalContext.DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Neutral].ToString();
                     break;
 
                 default://Count By Name
-                    ReturnExpression = Params.Map.CountCreaturesByName(Expression).ToString();
+                    ReturnExpression = Params.GlobalContext.CountCreaturesByName(Expression).ToString();
                     break;
             }
 
@@ -362,17 +358,37 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case "territories":
+                    int TerritoryCount = 0;
+                    foreach (byte ActiveElement in ActivePlayer.DicCreatureCountByElementType.Values)
+                    {
+                        TerritoryCount += ActiveElement;
+                    }
+                    ReturnExpression = TerritoryCount.ToString();
+                    break;
+
+                case "airterritories":
+                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air].ToString();
+                    break;
+
+                case "earthterritories":
+                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth].ToString();
                     break;
 
                 case "fireterritories":
+                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire].ToString();
                     break;
 
                 case "waterterritories":
+                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water].ToString();
+                    break;
+
+                case "neutralterritories":
+                    ReturnExpression = ActivePlayer.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Neutral].ToString();
                     break;
 
                 case "magic":
                 case "gold":
-                    ReturnExpression = ActivePlayer.Magic.ToString();
+                    ReturnExpression = ActivePlayer.Gold.ToString();
                     break;
 
                 case "lap":
@@ -380,6 +396,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case "hand":
+                case "cardsinhand":
                     ReturnExpression = ActivePlayer.ListCardInHand.Count.ToString();
                     break;
 
@@ -387,7 +404,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ReturnExpression = ActivePlayer.ListCardInDeck.Count.ToString();
                     break;
 
+                case "airsymbols":
+                    ReturnExpression = ActivePlayer.DicOwnedSymbols[CreatureCard.ElementalAffinity.Air].ToString();
+                    break;
+
+                case "earthsymbols":
+                    ReturnExpression = ActivePlayer.DicOwnedSymbols[CreatureCard.ElementalAffinity.Earth].ToString();
+                    break;
+
+                case "firesymbols":
+                    ReturnExpression = ActivePlayer.DicOwnedSymbols[CreatureCard.ElementalAffinity.Fire].ToString();
+                    break;
+
                 case "watersymbols":
+                    ReturnExpression = ActivePlayer.DicOwnedSymbols[CreatureCard.ElementalAffinity.Water].ToString();
+                    break;
+
+                case "neutralsymbols":
+                    ReturnExpression = ActivePlayer.DicOwnedSymbols[CreatureCard.ElementalAffinity.Neutral].ToString();
                     break;
             }
 

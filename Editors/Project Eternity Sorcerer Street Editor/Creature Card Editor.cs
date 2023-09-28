@@ -200,23 +200,23 @@ namespace ProjectEternity.Editors.CardEditor
 
             #region Affinities
 
-            if (LoadedCard.Abilities.ArrayAffinity.Contains(ElementalAffinity.Neutral))
+            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Neutral))
             {
                 cbAffinityNeutral.Checked = true;
             }
-            if (LoadedCard.Abilities.ArrayAffinity.Contains(ElementalAffinity.Fire))
+            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Fire))
             {
                 cbAffinityFire.Checked = true;
             }
-            if (LoadedCard.Abilities.ArrayAffinity.Contains(ElementalAffinity.Water))
+            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Water))
             {
                 cbAffinityWater.Checked = true;
             }
-            if (LoadedCard.Abilities.ArrayAffinity.Contains(ElementalAffinity.Earth))
+            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Earth))
             {
                 cbAffinityEarth.Checked = true;
             }
-            if (LoadedCard.Abilities.ArrayAffinity.Contains(ElementalAffinity.Air))
+            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Air))
             {
                 cbAffinityAir.Checked = true;
             }

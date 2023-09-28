@@ -46,7 +46,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
+            int FinalResult = int.Parse(EvaluationResult);
+            Params.GlobalContext.SelfCreature.Owner.Gold += FinalResult;
+            if (FinalResult < 0)
+            {
+                return "Lost " + (-FinalResult) + " Gold";
+            }
+            else
+            {
+                return "Gained " + EvaluationResult + " Gold";
+            }
         }
 
         protected override BaseEffect DoCopy()

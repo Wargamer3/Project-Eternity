@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Globalization;
 using System.ComponentModel;
+using System.Collections.Generic;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
 
@@ -43,7 +45,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return false;
+            Player Owner;
+            if (_Target == Targets.Self)
+            {
+                Owner = GlobalContext.SelfCreature.Owner;
+            }
+            else
+            {
+                Owner = GlobalContext.OpponentCreature.Owner;
+            }
+
+            int TerriotryOwnedFinal = int.Parse(GlobalContext.ActiveParser.Evaluate(_TerriotryOwned), CultureInfo.InvariantCulture);
+            int OwnedTerritories = 0;
+            foreach (byte ActiveElement in Owner.DicCreatureCountByElementType.Values)
+            {
+                OwnedTerritories += ActiveElement;
+            }
+
+            return Operators.CompareValue(LogicOperator, OwnedTerritories, TerriotryOwnedFinal);
         }
 
         public override BaseSkillRequirement Copy()

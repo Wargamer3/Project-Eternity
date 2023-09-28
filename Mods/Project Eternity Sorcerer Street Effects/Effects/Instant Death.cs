@@ -2,6 +2,7 @@
 using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -37,12 +38,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivate()
         {
-            return true;
+            return RandomHelper.Next(100) < _ActivationChance;
         }
 
         protected override string DoExecuteEffect()
         {
-            return "Instant Death " + string.Join(",", _ActivationChance);
+            Params.GlobalContext.OpponentCreature.InstantKill();
+            return "Instant Death";
         }
 
         protected override BaseEffect DoCopy()

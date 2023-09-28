@@ -45,7 +45,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ++ActivePlayer.CompletedLaps;
             BasicBonus = Map.MagicGainPerLap + Map.MagicGainPerLap / 10 * ActivePlayer.CompletedLaps;
             int NumberOfLandPossessed = 0;
-            foreach (byte NumberOfLand in ActivePlayer.DicChainLevelByTerrainTypeIndex.Values)
+            foreach (byte NumberOfLand in ActivePlayer.DicCreatureCountByElementType.Values)
             {
                 NumberOfLandPossessed += NumberOfLand;
             }
@@ -53,7 +53,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SymbolBonus = 0;
             Fluctuation = 0;
             Total = BasicBonus + TerritoryBonus + SymbolBonus + Fluctuation;
-            ActivePlayer.Magic += Total;
+            ActivePlayer.Gold += Total;
             ActivePlayer.TotalMagic += Total;
             Map.UpdatePlayersRank();
             /*Symbol Bonus = Value of symbols owned / 10G

@@ -83,6 +83,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int MagicGoal;
         public int HighestDieRoll;
         public List<Checkpoints> ListCheckpoint;
+        public List<CreatureCard> ListSummonedCreature;
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public int TotalCreaturesDestroyed;
         public readonly MovementAlgorithm Pathfinder;
@@ -116,6 +117,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             MapEnvironment = new EnvironmentManagerSorcererStreet(this);
             Params.ActiveParser = new SorcererStreetFormulaParser(Params);
             ListCheckpoint = new List<Checkpoints>();
+            ListSummonedCreature = new List<CreatureCard>();
             DicCreatureCountByElementType = new Dictionary<CreatureCard.ElementalAffinity, byte>();
             DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Air, 0);
             DicCreatureCountByElementType.Add(CreatureCard.ElementalAffinity.Earth, 0);
@@ -156,6 +158,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 TerrainRestrictions.ListTerrainType.Add(new TerrainType(ListTerrainType[i]));
             }
+
+            Params.GlobalContext.TerrainRestrictions = TerrainRestrictions;
         }
 
         public SorcererStreetMap(GameModeInfo GameInfo, SorcererStreetBattleParams Params)
@@ -309,7 +313,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 NewPlayer.Team = PlayerTeam;
                 NewPlayer.Color = PlayerColor;
-                NewPlayer.TotalMagic = NewPlayer.Magic = PlayerMagic;
+                NewPlayer.TotalMagic = NewPlayer.Gold = PlayerMagic;
                 NewPlayer.ListRemainingCardInDeck.Clear();
                 NewPlayer.ListCardInHand.Clear();
 
@@ -545,7 +549,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public void UpdateTolls(Player ActivePlayer)
         {
-            ActivePlayer.TotalMagic = ActivePlayer.Magic;
+            ActivePlayer.TotalMagic = ActivePlayer.Gold;
 
             for (int X = MapSize.X - 1; X >= 0; --X)
             {
@@ -554,7 +558,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     TerrainSorcererStreet ActiveTerrain = GetTerrain(X, Y, 0);
                     if (ActiveTerrain.PlayerOwner == ActivePlayer && ActiveTerrain.DefendingCreature != null)
                     {
-                        ActiveTerrain.UpdateValue(ActivePlayer.DicChainLevelByTerrainTypeIndex[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
+                        ActiveTerrain.UpdateValue(ActivePlayer.DicCreatureCountByElementType[ActiveTerrain.TerrainTypeIndex], ActiveTerrain.DefendingCreature);
                         ActivePlayer.TotalMagic += ActiveTerrain.CurrentValue;
                     }
                 }
@@ -573,50 +577,42 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public void IncreaseChainLevels(CreatureCard.ElementalAffinity TerrainTypeIndex)
+        public void SummonCreature(CreatureCard SummonedCreature)
         {
-            byte ChainValue;
+            ListSummonedCreature.Add(SummonedCreature);
 
-            if (!DicCreatureCountByElementType.TryGetValue(TerrainTypeIndex, out ChainValue))
+            foreach (CreatureCard.ElementalAffinity ActiveElement in SummonedCreature.Abilities.ArrayElementAffinity)
             {
-                DicCreatureCountByElementType.Add(TerrainTypeIndex, 1);
-            }
-            else
-            {
-                DicCreatureCountByElementType[TerrainTypeIndex] = (byte)(ChainValue + 1);
-            }
-        }
+                byte ChainValue;
 
-        public void DecreaseChainLevels(CreatureCard.ElementalAffinity TerrainTypeIndex)
-        {
-            byte ChainValue;
-
-            if (!DicCreatureCountByElementType.TryGetValue(TerrainTypeIndex, out ChainValue))
-            {
-                DicCreatureCountByElementType.Add(TerrainTypeIndex, 0);
-            }
-            else
-            {
-                DicCreatureCountByElementType[TerrainTypeIndex] = (byte)(ChainValue - 1);
-            }
-        }
-
-        public int CountCreaturesByName(string CreatureName)
-        {
-            int CreatureCount = 0;
-
-            foreach (MapLayer ActiveLayer in LayerManager.ListLayer)
-            {
-                foreach (TerrainSorcererStreet ActiveTerrain in ActiveLayer.ArrayTerrain)
+                if (!DicCreatureCountByElementType.TryGetValue(ActiveElement, out ChainValue))
                 {
-                    if (ActiveTerrain.DefendingCreature != null && ActiveTerrain.DefendingCreature.Name.ToLower() == CreatureName)
-                    {
-                        CreatureCount++;
-                    }
+                    DicCreatureCountByElementType.Add(ActiveElement, 1);
+                }
+                else
+                {
+                    DicCreatureCountByElementType[ActiveElement] = (byte)(ChainValue + 1);
                 }
             }
+        }
 
-            return CreatureCount;
+        public void RemoveCreature(CreatureCard KilledCreature)
+        {
+            ListSummonedCreature.Remove(KilledCreature);
+
+            foreach (CreatureCard.ElementalAffinity ActiveElement in KilledCreature.Abilities.ArrayElementAffinity)
+            {
+                byte ChainValue;
+
+                if (!DicCreatureCountByElementType.TryGetValue(ActiveElement, out ChainValue))
+                {
+                    DicCreatureCountByElementType.Add(ActiveElement, 0);
+                }
+                else
+                {
+                    DicCreatureCountByElementType[ActiveElement] = (byte)(ChainValue - 1);
+                }
+            }
         }
 
         public override void TogglePreview(bool UsePreview)
@@ -1188,7 +1184,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 BW.AppendByte(ActivePlayer.Color.G);
                 BW.AppendByte(ActivePlayer.Color.B);
 
-                BW.AppendInt32(ActivePlayer.Magic);
+                BW.AppendInt32(ActivePlayer.Gold);
 
                 BW.AppendByte((byte)ActivePlayer.ListRemainingCardInDeck.Count);
                 foreach (Card ActiveCard in ActivePlayer.ListRemainingCardInDeck)

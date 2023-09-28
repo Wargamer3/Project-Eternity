@@ -174,7 +174,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     ListSkillActivation.RemoveAt(0);
                     if (ListSkillActivation.Count == 0)
                     {
-                        if (Context.Defender.Item != null)
+                        if (Context.Defender.FinalHP > 0)
                         {
                             ListSkillActivation = Context.GetAvailableActivation(Context.Defender, Context.Invader, ActivePhase);
                             if (ListSkillActivation.Count > 0)

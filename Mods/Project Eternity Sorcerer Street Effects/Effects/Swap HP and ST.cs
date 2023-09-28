@@ -42,7 +42,24 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            CreatureCard FinalTarget;
+            if (_Target == Targets.Self)
+            {
+                FinalTarget = Params.GlobalContext.SelfCreature.Creature;
+            }
+            else
+            {
+                FinalTarget = Params.GlobalContext.OpponentCreature.Creature;
+            }
+
+            int OriginalST = FinalTarget.CurrentST;
+            int OriginalHP = FinalTarget.CurrentHP;
+
+            FinalTarget.CurrentST = OriginalHP;
+            FinalTarget.CurrentHP = OriginalST;
+            FinalTarget.MaxHP = OriginalST;
+
+            return "Swapped HP and ST";
         }
 
         protected override BaseEffect DoCopy()

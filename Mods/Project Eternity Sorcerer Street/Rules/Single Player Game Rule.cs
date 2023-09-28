@@ -60,7 +60,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         }
 
                         ActivePlayer.Team = P;
-                        ActivePlayer.TotalMagic = ActivePlayer.Magic = Owner.MagicAtStart;
+                        ActivePlayer.TotalMagic = ActivePlayer.Gold = Owner.MagicAtStart;
                         break;
                     }
                 }

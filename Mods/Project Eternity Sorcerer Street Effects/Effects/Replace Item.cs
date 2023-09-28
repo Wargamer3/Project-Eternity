@@ -28,12 +28,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivate()
         {
-            return true;
+            return Params.GlobalContext.SelfCreature.Item != null;
         }
 
         protected override string DoExecuteEffect()
         {
-            if (Params.GlobalContext.SelfCreature.Item != null && Params.GlobalContext.OpponentCreature.Item != null)
+            if (Params.GlobalContext.SelfCreature.Item != null)
             {
                 Params.GlobalContext.OpponentCreature.Item = Params.GlobalContext.SelfCreature.Item;
                 Params.GlobalContext.SelfCreature.Item = null;

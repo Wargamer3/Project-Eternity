@@ -34,14 +34,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivate()
         {
-            return true;
-        }
-
-        protected override string DoExecuteEffect()
-        {
             if (Params.GlobalContext.OpponentCreature.Creature.BattleAbilities.ItemProtection)
             {
-                return null;
+                return false;
             }
 
             ItemCard OppnentCard = Params.GlobalContext.OpponentCreature.Item as ItemCard;
@@ -53,15 +48,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     || (CardDestroyType == CardDestroyTypes.Tool && OppnentCard.ItemType == ItemCard.ItemTypes.Tools)
                     || (CardDestroyType == CardDestroyTypes.Weapon && OppnentCard.ItemType == ItemCard.ItemTypes.Weapon))
                 {
-                    Params.GlobalContext.OpponentCreature.Item = null;
+                    return true;
                 }
             }
             else if (CardDestroyType == CardDestroyTypes.Creature && Params.GlobalContext.OpponentCreature.Item is CreatureCard)
             {
-                Params.GlobalContext.OpponentCreature.Item = null;
+                return true;
             }
 
-            return null;
+            return false;
+        }
+
+        protected override string DoExecuteEffect()
+        {
+            Params.GlobalContext.OpponentCreature.Item = null;
+
+            return "Destroys opponent's item.";
         }
 
         protected override BaseEffect DoCopy()

@@ -151,7 +151,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Y += LineHeight;
             //Draw Player Magic
             g.Draw(Map.Symbols.sprMenuG, new Rectangle((int)X, (int)Y, IconWidth, IconHeight), Color.White);
-            g.DrawString(Map.fntArial12, ActivePlayer.Magic.ToString(), new Vector2(X + 20, Y), Color.White);
+            g.DrawString(Map.fntArial12, ActivePlayer.Gold.ToString(), new Vector2(X + 20, Y), Color.White);
 
             //Draw Player Total Magic
             g.Draw(Map.Symbols.sprMenuTG, new Rectangle((int)X + 60, (int)Y, IconWidth, IconHeight), Color.White);

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Globalization;
 using System.IO;
+using System.Globalization;
+using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -42,10 +42,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             int GoldToSteal = int.Parse(Params.ActiveParser.Evaluate(_Value), CultureInfo.InvariantCulture);
-            GoldToSteal = Math.Min(Params.GlobalContext.OpponentCreature.Owner.Magic, GoldToSteal);
+            GoldToSteal = Math.Min(Params.GlobalContext.OpponentCreature.Owner.Gold, GoldToSteal);
 
-            Params.GlobalContext.OpponentCreature.Owner.Magic -= GoldToSteal;
-            Params.GlobalContext.SelfCreature.Owner.Magic += GoldToSteal;
+            Params.GlobalContext.OpponentCreature.Owner.Gold -= GoldToSteal;
+            Params.GlobalContext.SelfCreature.Owner.Gold += GoldToSteal;
 
             return "Stole " + GoldToSteal;
         }

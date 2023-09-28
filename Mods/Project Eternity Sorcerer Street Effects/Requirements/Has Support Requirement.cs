@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return false;
+            return GlobalContext.SelfCreature.BonusST > 0;
         }
 
         public override BaseSkillRequirement Copy()

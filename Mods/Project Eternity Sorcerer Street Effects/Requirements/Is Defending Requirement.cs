@@ -1,16 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.ComponentModel;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public sealed class SorcererStreetIsDefendingRequirement : SorcererStreetRequirement
     {
-        public enum Targets { Self, Opponent, Land }
-
-        private Targets _Target;
-
         public SorcererStreetIsDefendingRequirement()
             : this(null)
         {
@@ -23,12 +18,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void DoSave(BinaryWriter BW)
         {
-            BW.Write((byte)_Target);
         }
 
         protected override void Load(BinaryReader BR)
         {
-            _Target = (Targets)BR.ReadByte();
         }
 
         public override bool CanActivatePassive()
@@ -40,34 +33,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             SorcererStreetIsDefendingRequirement NewRequirement = new SorcererStreetIsDefendingRequirement(GlobalContext);
 
-            NewRequirement._Target = _Target;
-
             return NewRequirement;
         }
 
         public override void CopyMembers(BaseSkillRequirement Copy)
         {
-            SorcererStreetIsDefendingRequirement CopyRequirement = (SorcererStreetIsDefendingRequirement)Copy;
-            _Target = CopyRequirement._Target;
         }
-
-        #region Properties
-
-        [CategoryAttribute("Effects"),
-        DescriptionAttribute(""),
-        DefaultValueAttribute("")]
-        public Targets Target
-        {
-            get
-            {
-                return _Target;
-            }
-            set
-            {
-                _Target = value;
-            }
-        }
-
-        #endregion
     }
 }

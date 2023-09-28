@@ -115,7 +115,21 @@ namespace ProjectEternity.Core.Item
                 }
             }
 
-            return CanActivate;
+            if (CanActivate)
+            {
+                for (int E = 0; E < ListEffect.Count; E++)
+                {
+                    foreach (AutomaticSkillTargetType ActiveActivation in ListEffectTargetReal[E])
+                    {
+                        if (ActiveActivation.CanExecuteEffectOnTarget(ListEffect[E]))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         public void Activate(string SkillName)
@@ -128,6 +142,17 @@ namespace ProjectEternity.Core.Item
                     {
                         ActiveActivation.ExecuteAndAddEffectToTarget(ListEffect[E], SkillName);
                     }
+                }
+            }
+        }
+
+        public void ForceActivate(string SkillName)
+        {
+            for (int E = 0; E < ListEffect.Count; E++)
+            {
+                foreach (AutomaticSkillTargetType ActiveActivation in ListEffectTargetReal[E])
+                {
+                    ActiveActivation.ExecuteAndAddEffectToTarget(ListEffect[E], SkillName);
                 }
             }
         }

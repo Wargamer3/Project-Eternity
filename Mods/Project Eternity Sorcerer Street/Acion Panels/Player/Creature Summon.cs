@@ -43,13 +43,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ActivePlayer.ListCardInHand.Remove(SelectedCard);
             ActiveTerrain.DefendingCreature = SelectedCard;
             ActiveTerrain.PlayerOwner = ActivePlayer;
-            ActivePlayer.Magic -= SelectedCard.MagicCost;
+            ActivePlayer.Gold -= SelectedCard.MagicCost;
 
             ActivePlayer.IncreaseChainLevels(ActiveTerrain.TerrainTypeIndex);
-            foreach (CreatureCard.ElementalAffinity ActiveAffinity in SelectedCard.Abilities.ArrayAffinity)
-            {
-                Map.IncreaseChainLevels(ActiveAffinity);
-            }
+            Map.SummonCreature(SelectedCard);
+
             Map.UpdateTolls(ActivePlayer);
             Map.LayerManager.TogglePreview(true);
         }

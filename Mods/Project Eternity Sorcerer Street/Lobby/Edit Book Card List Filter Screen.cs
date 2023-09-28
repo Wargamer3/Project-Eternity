@@ -44,18 +44,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             this.ActiveBook = ActiveBook;
             GlobalBook = ActivePlayer.Inventory.GlobalBook;
             ListFilteredCard = new List<Card>();
-            FillCardList(Filter);
+            FillCardList(Filter, null);
         }
 
-        public EditBookCardListFilterScreen(CardBook GlobalBook, Filters Filter, bool MultipleSelection)
+        public EditBookCardListFilterScreen(CardBook GlobalBook, Filters Filter, Card LastCard, bool MultipleSelection)
         {
             this.GlobalBook = ActiveBook = GlobalBook;
             ListFilteredCard = new List<Card>();
             ListSelectedCard = new List<Card>();
-            FillCardList(Filter);
+            FillCardList(Filter, LastCard);
+
+            int CursorY = (CardHeight + 20) * (CursorIndex / CardsPerLine);
+
+            if (CursorY < ScrollbarIndex)
+            {
+                ScrollbarIndex = (CardHeight + 20) * (CursorIndex / CardsPerLine);
+            }
+            else if (CursorY > ScrollbarIndex + (CardHeight + 20) * 2)
+            {
+                ScrollbarIndex = (CardHeight + 20) * ((CursorIndex / CardsPerLine) - 2);
+            }
         }
 
-        private void FillCardList(Filters Filter)
+        private void FillCardList(Filters Filter, Card LastCard)
         {
             switch (Filter)
             {
@@ -67,6 +78,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
+                            if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                            {
+                                CursorIndex = ListFilteredCard.Count;
+                            }
+
                             ListFilteredCard.Add(ActiveCreatureCard);
                         }
                     }
@@ -78,8 +94,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
+                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
                             {
+                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                {
+                                    CursorIndex = ListFilteredCard.Count;
+                                }
+
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
                         }
@@ -92,8 +113,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Fire)
+                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Fire)
                             {
+                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                {
+                                    CursorIndex = ListFilteredCard.Count;
+                                }
+
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
                         }
@@ -106,8 +132,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Water)
+                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Water)
                             {
+                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                {
+                                    CursorIndex = ListFilteredCard.Count;
+                                }
+
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
                         }
@@ -120,8 +151,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Earth)
+                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Earth)
                             {
+                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                {
+                                    CursorIndex = ListFilteredCard.Count;
+                                }
+
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
                         }
@@ -134,8 +170,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayAffinity[0] == CreatureCard.ElementalAffinity.Air)
+                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Air)
                             {
+                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                {
+                                    CursorIndex = ListFilteredCard.Count;
+                                }
+
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
                         }
@@ -148,8 +189,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayAffinity.Length > 1)
+                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length > 1)
                             {
+                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                {
+                                    CursorIndex = ListFilteredCard.Count;
+                                }
+
                                 ListFilteredCard.Add(ActiveCreatureCard);
                             }
                         }
@@ -162,6 +208,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         ItemCard ActiveItemCard = ActiveCard as ItemCard;
                         if (ActiveItemCard != null)
                         {
+                            if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                            {
+                                CursorIndex = ListFilteredCard.Count;
+                            }
+
                             ListFilteredCard.Add(ActiveItemCard);
                         }
                     }
@@ -173,6 +224,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         SpellCard ActiveSpellCard = ActiveCard as SpellCard;
                         if (ActiveSpellCard != null)
                         {
+                            if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                            {
+                                CursorIndex = ListFilteredCard.Count;
+                            }
+
                             ListFilteredCard.Add(ActiveSpellCard);
                         }
                     }
@@ -199,7 +255,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             MissionScrollbar.Update(gameTime);
 
-            if (InputHelper.InputConfirmPressed())
+            if (InputHelper.InputConfirmPressed() && ListFilteredCard.Count > 0)
             {
                 if (ActivePlayer == null)
                 {

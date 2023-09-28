@@ -31,7 +31,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 this.Params = Params;
                 LocalContext = new SorcererStreetBattleContext(Params.GlobalContext);
-                Params.GlobalContext.ListActivatedEffect.Add(this);
+                if (Params.RememberEffects)
+                {
+                    Params.GlobalContext.ListActivatedEffect.Add(this);
+                }
             }
         }
 

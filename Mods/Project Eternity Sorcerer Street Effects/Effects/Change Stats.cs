@@ -173,32 +173,39 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 switch (_SignOperator)
                 {
                     case SignOperators.Equal:
+                        RealTarget.Creature.MaxHP = int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         RealTarget.Creature.CurrentHP = int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         return "HP=" + EvaluationResult;
 
                     case SignOperators.PlusEqual:
+                        RealTarget.Creature.MaxHP += int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         RealTarget.Creature.CurrentHP += int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         break;
 
                     case SignOperators.DividedEqual:
+                        RealTarget.Creature.MaxHP -= RealTarget.Creature.CurrentHP - RealTarget.Creature.CurrentHP / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
                         RealTarget.Creature.CurrentHP -= RealTarget.Creature.CurrentHP - RealTarget.Creature.CurrentHP / (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
                         break;
 
                     case SignOperators.MinusEqual:
+                        RealTarget.Creature.MaxHP -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         RealTarget.Creature.CurrentHP -= int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
-                        if (RealTarget.FinalHP < 0)
+                        if (RealTarget.FinalHP < 0 || RealTarget.Creature.CurrentHP < 0 || RealTarget.Creature.MaxHP < 0)
                         {
                             RealTarget.LandHP = 0;
                             RealTarget.BonusHP = 0;
                             RealTarget.Creature.CurrentHP = 0;
+                            RealTarget.Creature.MaxHP = 0;
                         }
                         return "HP-" + EvaluationResult;
 
                     case SignOperators.MultiplicatedEqual:
+                        RealTarget.Creature.MaxHP += RealTarget.Creature.CurrentHP * (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
                         RealTarget.Creature.CurrentHP += RealTarget.Creature.CurrentHP * (int.Parse(EvaluationResult, CultureInfo.InvariantCulture)) - 1;
                         break;
 
                     case SignOperators.ModuloEqual:
+                        RealTarget.Creature.MaxHP += RealTarget.Creature.CurrentHP % int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         RealTarget.Creature.CurrentHP += RealTarget.Creature.CurrentHP % int.Parse(EvaluationResult, CultureInfo.InvariantCulture);
                         break;
                 }

@@ -18,6 +18,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool AttackLast;
         public bool AttackTwice;
         public bool CriticalHit;
+        public float DamageMultiplier;
+        public int DamageModifier;
         public bool IsDefensive;//Can't move
         public bool SupportCreature;//Can use other creatures as items
         public bool ItemCreature;//Can be used as an item
@@ -28,12 +30,13 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool HPProtection;//HP & MHP cannot be altered by spells or territory abilities.
         public bool Recycle;
 
-        public ElementalAffinity[] ArrayAffinity;
+        public ElementalAffinity[] ArrayElementAffinity;
 
         public ElementalAffinity[] ArrayPenetrateAffinity;//HP from Land Bonus is negated, attack with creature ST
 
         public bool ScrollAttack;//HP from Land Bonus is negated, attack with scroll, can't be reflected or negated
-        public string ScrollValue;
+        public bool ScrollCriticalHit;
+        public byte ScrollValue;
 
         public List<AttackTypes> ListNeutralizeType;
         public NumberTypes NeutralizeSignOperator;
@@ -49,6 +52,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             AttackLast = Other.AttackLast;
             AttackTwice = Other.AttackTwice;
             CriticalHit = Other.CriticalHit;
+            DamageMultiplier = Other.DamageMultiplier;
+            DamageModifier = Other.DamageModifier;
             IsDefensive = Other.IsDefensive;
             SupportCreature = Other.SupportCreature;
             ItemCreature = Other.ItemCreature;
@@ -61,10 +66,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ArrayPenetrateAffinity = Other.ArrayPenetrateAffinity;
 
-            ArrayAffinity = Other.ArrayAffinity;
+            ArrayElementAffinity = Other.ArrayElementAffinity;
 
             ScrollAttack = Other.ScrollAttack;
-            ScrollValue = null;
+            ScrollCriticalHit = Other.ScrollCriticalHit;
+            ScrollValue = Other.ScrollValue;
 
             ListNeutralizeType = new List<AttackTypes>();
             NeutralizeSignOperator = NumberTypes.Relative;

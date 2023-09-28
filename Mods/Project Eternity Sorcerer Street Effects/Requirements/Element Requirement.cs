@@ -57,10 +57,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 foreach (ElementChoices ActiveElement in ArrayElement)
                 {
                     if ((ActiveElement == ElementChoices.Air && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement)
-                        || (ActiveElement == ElementChoices.Fire && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement)
-                        || (ActiveElement == ElementChoices.Earth && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement)
-                        || (ActiveElement == ElementChoices.Water && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement)
-                        || (ActiveElement == ElementChoices.Neutral && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.AirElement))
+                        || (ActiveElement == ElementChoices.Fire && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.FireElement)
+                        || (ActiveElement == ElementChoices.Earth && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.EarthElement)
+                        || (ActiveElement == ElementChoices.Water && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.WaterElement)
+                        || (ActiveElement == ElementChoices.Neutral && GlobalContext.TerrainRestrictions.ListTerrainType[GlobalContext.DefenderTerrain.TerrainTypeIndex].Name == TerrainSorcererStreet.NeutralElement))
                     {
                         return true;
                     }
@@ -79,11 +79,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (ElementChoices ActiveElement in ArrayElement)
             {
-                if ((ActiveElement == ElementChoices.Air && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Air))
-                    || (ActiveElement == ElementChoices.Fire && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
-                    || (ActiveElement == ElementChoices.Earth && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
-                    || (ActiveElement == ElementChoices.Water && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Water))
-                    || (ActiveElement == ElementChoices.Neutral && TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
+                if ((ActiveElement == ElementChoices.Air && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                    || (ActiveElement == ElementChoices.Fire && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                    || (ActiveElement == ElementChoices.Earth && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                    || (ActiveElement == ElementChoices.Water && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
+                    || (ActiveElement == ElementChoices.Neutral && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
                 {
                     return true;
                 }
@@ -101,9 +101,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         OtherCreature = GlobalContext.SelfCreature.Creature;
                     }
 
-                    foreach (CreatureCard.ElementalAffinity ActiveAffinity in TargetCreature.BattleAbilities.ArrayAffinity)
+                    foreach (CreatureCard.ElementalAffinity ActiveAffinity in TargetCreature.BattleAbilities.ArrayElementAffinity)
                     {
-                        if (!OtherCreature.BattleAbilities.ArrayAffinity.Contains(ActiveAffinity))
+                        if (!OtherCreature.BattleAbilities.ArrayElementAffinity.Contains(ActiveAffinity))
                         {
                             return true;
                         }

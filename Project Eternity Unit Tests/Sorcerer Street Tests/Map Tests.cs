@@ -33,9 +33,9 @@ namespace ProjectEternity.UnitTests.SorcererStreetTests
             Player DummyPlayer = DummyMap.ListAllPlayer[0];
             ActionPanelCastlePhase GainPhase = new ActionPanelCastlePhase(DummyMap, 0, 1);
 
-            Assert.AreEqual(0, DummyPlayer.Magic);
+            Assert.AreEqual(0, DummyPlayer.Gold);
             GainPhase.OnSelect();
-            Assert.AreEqual(20, DummyPlayer.Magic);
+            Assert.AreEqual(20, DummyPlayer.Gold);
         }
 
         [TestMethod]

@@ -117,7 +117,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             else if (InputHelper.InputConfirmPressed())
             {
                 if (CardType == null
-                    || (ActionMenuCursor < ActivePlayer.ListCardInHand.Count && ActivePlayer.ListCardInHand[ActionMenuCursor].CardType == CardType && ActivePlayer.Magic >= ActivePlayer.ListCardInHand[ActionMenuCursor].MagicCost))
+                    || (ActionMenuCursor < ActivePlayer.ListCardInHand.Count && ActivePlayer.ListCardInHand[ActionMenuCursor].CardType == CardType && ActivePlayer.Gold >= ActivePlayer.ListCardInHand[ActionMenuCursor].MagicCost))
                 {
                     OnCardSelected(ActivePlayer.ListCardInHand[ActionMenuCursor]);
                 }
@@ -183,7 +183,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
             {
                 Color CardColor = Color.White;
-                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Magic < ActivePlayer.ListCardInHand[C].MagicCost))
+                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Gold < ActivePlayer.ListCardInHand[C].MagicCost))
                 {
                     CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                 }
@@ -203,7 +203,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
             {
                 Color CardColor = Color.White;
-                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Magic < ActivePlayer.ListCardInHand[C].MagicCost))
+                if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Gold < ActivePlayer.ListCardInHand[C].MagicCost))
                 {
                     CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                 }
@@ -234,7 +234,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 for (int C = 0; C < ActivePlayer.ListCardInHand.Count; C++)
                 {
                     Color CardColor = Color.White;
-                    if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Magic < ActivePlayer.ListCardInHand[C].MagicCost))
+                    if (CardType != null && (ActivePlayer.ListCardInHand[C].CardType != CardType || ActivePlayer.Gold < ActivePlayer.ListCardInHand[C].MagicCost))
                     {
                         CardColor = Color.FromNonPremultiplied(100, 100, 100, 255);
                     }

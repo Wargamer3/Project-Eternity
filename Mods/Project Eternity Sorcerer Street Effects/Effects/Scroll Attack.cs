@@ -39,6 +39,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         protected override string DoExecuteEffect()
         {
             Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ScrollAttack = true;
+            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ScrollValue = _ST;
+            if (_ST > 0)
+            {
+                return "Scroll Attack ST=" + _ST;
+            }
 
             return "Scroll";
         }
@@ -47,11 +52,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ScrollAttackEffect NewEffect = new ScrollAttackEffect(Params);
 
+            NewEffect._ST = _ST;
+
             return NewEffect;
         }
 
         protected override void DoCopyMembers(BaseEffect Copy)
         {
+            ScrollAttackEffect NewEffect = (ScrollAttackEffect)Copy;
+
+            _ST = NewEffect._ST;
         }
 
         #region Properties

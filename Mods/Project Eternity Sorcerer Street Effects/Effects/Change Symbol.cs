@@ -3,13 +3,14 @@ using System.IO;
 using System.ComponentModel;
 using ProjectEternity.Core.Item;
 using static ProjectEternity.Core.Operators;
+using static ProjectEternity.GameScreens.SorcererStreetScreen.CreatureCard;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public sealed class ChangeSymbolsEffect : SorcererStreetEffect
     {
         public enum Targets { Self, Opponent }
-        public enum SymbolTypeTypes { Terrain, Random, Specific, TargetMostNumerous }
+        public enum SymbolTypeTypes { Terrain, Random, TargetMostNumerous, Neutral, Fire, Water, Earth, Air }
 
         public static string Name = "Sorcerer Street Change Symbols";
 
@@ -23,7 +24,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(Name, false)
         {
             _SignOperator = SignOperators.PlusEqual;
-            _NumberType = NumberTypes.Absolute;
             _Value = string.Empty;
         }
 
@@ -31,7 +31,6 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             : base(Name, false, Params)
         {
             _SignOperator = SignOperators.PlusEqual;
-            _NumberType = NumberTypes.Absolute;
             _Value = string.Empty;
         }
         
@@ -60,7 +59,94 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
+
+            Player Owner;
+
+            if (_Target == Targets.Self)
+            {
+                Owner = Params.GlobalContext.SelfCreature.Owner;
+            }
+            else
+            {
+                Owner = Params.GlobalContext.OpponentCreature.Owner;
+            }
+
+            ElementalAffinity ElementToChange = ElementalAffinity.Neutral;
+
+            if (_SymbolTypeType == SymbolTypeTypes.TargetMostNumerous)
+            {
+                int MostNumerousSymbolValue = 0;
+                foreach (System.Collections.Generic.KeyValuePair<ElementalAffinity, int> ActiveSymbol in Owner.DicOwnedSymbols)
+                {
+                    if (ActiveSymbol.Value > MostNumerousSymbolValue)
+                    {
+                        ElementToChange = ActiveSymbol.Key;
+                        MostNumerousSymbolValue = ActiveSymbol.Value;
+                    }
+                }
+            }
+
+            int FinalValue;
+            if (_NumberType == NumberTypes.Absolute)
+            {
+                FinalValue = int.Parse(EvaluationResult);
+            }
+            else
+            {
+                FinalValue = Owner.DicOwnedSymbols[ElementToChange] * int.Parse(EvaluationResult);
+            }
+
+            switch (_SignOperator)
+            {
+                case SignOperators.Equal:
+                    Owner.DicOwnedSymbols[ElementToChange] = FinalValue;
+
+                    if (_Target == Targets.Opponent)
+                    {
+                        return "Opponent Own " + FinalValue + " " + ElementToChange + " symbols";
+                    }
+                    else
+                    {
+                        return "Own " + FinalValue + " " + ElementToChange + " symbols";
+                    }
+
+                case SignOperators.PlusEqual:
+                    Owner.DicOwnedSymbols[ElementToChange] += FinalValue;
+                    if (_Target == Targets.Opponent)
+                    {
+                        return "Opponent gained " + FinalValue + " " + ElementToChange + " symbols";
+                    }
+                    else
+                    {
+                        return "Gained " + FinalValue + " " + ElementToChange + " symbols";
+                    }
+
+                case SignOperators.MinusEqual:
+                    Owner.DicOwnedSymbols[ElementToChange] -= FinalValue;
+                    if (_Target == Targets.Opponent)
+                    {
+                        return "Opponent lost " + FinalValue + " " + ElementToChange + " symbols";
+                    }
+                    else
+                    {
+                        return "Lost " + FinalValue + " " + ElementToChange + " symbols";
+                    }
+
+                case SignOperators.MultiplicatedEqual:
+                    Owner.DicOwnedSymbols[ElementToChange] *= FinalValue;
+                    break;
+
+                case SignOperators.DividedEqual:
+                    Owner.DicOwnedSymbols[ElementToChange] /= FinalValue;
+                    break;
+
+                case SignOperators.ModuloEqual:
+                    Owner.DicOwnedSymbols[ElementToChange] %= FinalValue;
+                    break;
+            }
+
+            return "Own " + Owner.DicOwnedSymbols[ElementToChange] + " " + ElementToChange + " symbols";
         }
 
         protected override BaseEffect DoCopy()
@@ -137,7 +223,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
         DefaultValueAttribute("")]
-        public NumberTypes NumberType
+        public NumberTypes Element
         {
             get
             {

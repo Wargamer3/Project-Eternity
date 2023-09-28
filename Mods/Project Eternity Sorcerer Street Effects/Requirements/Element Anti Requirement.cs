@@ -79,11 +79,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (ElementChoices ActiveElement in ArrayElement)
             {
-                if ((ActiveElement == ElementChoices.Air && !TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Air))
-                    || (ActiveElement == ElementChoices.Fire && !TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
-                    || (ActiveElement == ElementChoices.Earth && !TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
-                    || (ActiveElement == ElementChoices.Water && !TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Water))
-                    || (ActiveElement == ElementChoices.Neutral && !TargetCreature.BattleAbilities.ArrayAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
+                if ((ActiveElement == ElementChoices.Air && !TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                    || (ActiveElement == ElementChoices.Fire && !TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                    || (ActiveElement == ElementChoices.Earth && !TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                    || (ActiveElement == ElementChoices.Water && !TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
+                    || (ActiveElement == ElementChoices.Neutral && !TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
                 {
                     return true;
                 }

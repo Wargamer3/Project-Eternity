@@ -24,8 +24,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             public Card Item;
             public bool DamageReceivedIgnoreLandBonus;
             public int DamageReceived;
-            public int DamageNeutralized;
-            public int DamageReflected;
+            public int DamageNeutralizedByOpponent;
+            public int DamageReflectedByOpponent;
             public int LandHP;
             public int BonusHP;
             public int BonusST;
@@ -81,6 +81,16 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
+            public void InstantKill()
+            {
+                DamageReceivedIgnoreLandBonus = true;
+                DamageNeutralizedByOpponent = 0;
+                DamageReflectedByOpponent = 0;
+                BonusHP = 0;
+                LandHP = 0;
+                Creature.CurrentHP = 0;
+            }
+
             public List<string> GetAttackAnimationPaths()
             {
                 List<string> ListAttackAnimationPath = new List<string>();
@@ -117,9 +127,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public bool CanUseEffectsOrAbilities;
         public UnitAndTerrainValues TerrainRestrictions;
+        public List<CreatureCard> ListSummonedCreature;
         public Dictionary<CreatureCard.ElementalAffinity, byte> DicCreatureCountByElementType;
         public List<TerrainSorcererStreet> ListBoostCreature;
         public int TotalCreaturesDestroyed;
+        public int CurrentTurn;
 
         public ActionPanelHolder ListBattlePanelHolder;
 
@@ -151,7 +163,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 foreach (BaseSkillActivation SkillActivation in ActiveSkill.Value)
                 {
-                    SkillActivation.Activate(ActiveSkill.Key.Name);
+                    SkillActivation.ForceActivate(ActiveSkill.Key.Name);
                 }
             }
         }
@@ -179,6 +191,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             return ListSkillActivation;
+        }
+
+        public int CountCreaturesByName(string CreatureName)
+        {
+            int CreatureCount = 0;
+
+            foreach (CreatureCard ActiveCreature in ListSummonedCreature)
+            {
+                if (ActiveCreature.Name.ToLower() == CreatureName)
+                {
+                    CreatureCount++;
+                }
+            }
+
+            return CreatureCount;
         }
     }
 
@@ -223,6 +250,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public readonly new SorcererStreetBattleContext GlobalContext;
         public readonly SorcererStreetPlayerMovementContext GlobalPlayerMovementContext;
 
+        public bool RememberEffects;
         public new SorcererStreetMap Map;//The map is shared and changed as needed.
 
         public static readonly ConcurrentDictionary<string, SorcererStreetBattleParams> DicParams = new ConcurrentDictionary<string, SorcererStreetBattleParams>();
@@ -230,6 +258,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetBattleParams()
             : base()
         {
+            RememberEffects = true;
             GlobalContext = new SorcererStreetBattleContext();
             GlobalPlayerMovementContext = new SorcererStreetPlayerMovementContext();
         }
@@ -237,6 +266,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public SorcererStreetBattleParams(SorcererStreetBattleContext GlobalContext)
             : base()
         {
+            RememberEffects = true;
             this.GlobalContext = GlobalContext;
             GlobalPlayerMovementContext = new SorcererStreetPlayerMovementContext();
 
@@ -255,6 +285,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GlobalContext.OriginalInvaderCreature = GlobalContext.Invader.Creature;
 
                 GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Invader.Creature.InitBattleBonuses();
             }
             else
             {
@@ -262,6 +293,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GlobalContext.OriginalDefenderCreature = GlobalContext.Defender.Creature;
 
                 GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Defender.Creature.InitBattleBonuses();
             }
         }
 
@@ -273,6 +305,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GlobalContext.OriginalDefenderCreature = GlobalContext.Defender.Creature;
 
                 GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Defender.Creature.InitBattleBonuses();
             }
             else
             {
@@ -280,6 +313,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GlobalContext.OriginalInvaderCreature = GlobalContext.Invader.Creature;
 
                 GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Invader.Creature.InitBattleBonuses();
             }
         }
 

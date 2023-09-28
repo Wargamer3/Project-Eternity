@@ -13,7 +13,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public delegate void OnOver();
         private readonly OnOver OnOverDelegate;
 
-        public delegate void OnClick();
+        public delegate void OnClick(string SelectedItem);
         private readonly OnClick OnClickDelegate;
 
         private readonly Rectangle ButtonCollsionBox;
@@ -66,7 +66,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             Select();
                             if (OnClickDelegate != null)
                             {
-                                OnClickDelegate();
+                                OnClickDelegate(null);
                             }
                         }
                     }
@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             SelectedItem = Choices[(MouseHelper.MouseStateCurrent.Y - ButtonCollsionBox.Y - ButtonCollsionBox.Height) / ButtonCollsionBox.Height];
                             if (OnClickDelegate != null)
                             {
-                                OnClickDelegate();
+                                OnClickDelegate(SelectedItem);
                             }
                         }
 

@@ -52,8 +52,28 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
+            string EvaluationResult = Params.ActiveParser.Evaluate(_Value);
 
-            return null;
+            CreatureCard FinalTarget;
+            if (_Target == Targets.Self)
+            {
+                FinalTarget = Params.GlobalContext.SelfCreature.Creature;
+            }
+            else
+            {
+                FinalTarget = Params.GlobalContext.OpponentCreature.Creature;
+            }
+
+            if (_SignOperator == NumberTypes.Relative)
+            {
+                FinalTarget.BattleAbilities.DamageMultiplier = float.Parse(EvaluationResult) / 100f;
+                return "Damage changed by " + EvaluationResult + "%";
+            }
+            else
+            {
+                FinalTarget.BattleAbilities.DamageModifier = int.Parse(EvaluationResult);
+                return "Damage is " + EvaluationResult;
+            }
         }
 
         protected override BaseEffect DoCopy()

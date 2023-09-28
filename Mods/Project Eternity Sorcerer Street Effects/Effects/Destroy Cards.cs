@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
             else if (_CardDestroyType == CardDestroyTypes.Random)
             {
-                for (int C = 0; C < _NumberOfCards; ++C)
+                for (int C = 0; C < _NumberOfCards && RealTarget.Owner.ListCardInHand.Count > 0; ++C)
                 {
                     RealTarget.Owner.ListCardInHand.RemoveAt(RandomHelper.Next(RealTarget.Owner.ListCardInHand.Count));
                 }
