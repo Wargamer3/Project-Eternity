@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivate()
         {
-            if (Params.GlobalContext.OpponentCreature.Creature.BattleAbilities.ItemProtection)
+            if (Params.GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ItemProtection)
             {
                 return false;
             }

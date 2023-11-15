@@ -56,7 +56,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _CardName = BR.ReadString();
             if (Params != null && !string.IsNullOrEmpty(_CardName))
             {
-                CardToAdd = Card.LoadCard(_CardName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+                CardToAdd = Card.LoadCard(_CardName, GameScreen.ContentFallback, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget);
             }
         }
 

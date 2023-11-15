@@ -816,7 +816,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         {
                             g.DrawString(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].Name, new Vector2(X, Y + S * 30), Color.White);
                         }
-                        g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].SPCost.ToString(), new Vector2(X + 160, Y + S * 30), Color.White);
+                        g.DrawStringRightAligned(fntFinlanderFont, ActiveSquad.CurrentLeader.Pilot.ArrayPilotSpirit[S].ActivationCost.ToString(), new Vector2(X + 160, Y + S * 30), Color.White);
                     }
                     else
                         g.DrawString(fntFinlanderFont, "---", new Vector2(X, Y + S * 30), Color.White);

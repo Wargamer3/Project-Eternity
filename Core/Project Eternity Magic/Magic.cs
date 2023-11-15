@@ -10,31 +10,6 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.Core.Magic
 {
-    public class EffectActivationExecuteOnly : AutomaticSkillTargetType
-    {
-        public static string Name = "Execute Only";
-
-        public EffectActivationExecuteOnly()
-            : base(Name)
-        {
-        }
-
-        public override bool CanExecuteEffectOnTarget(BaseEffect ActiveSkillEffect)
-        {
-            return true;
-        }
-
-        public override void ExecuteAndAddEffectToTarget(BaseEffect ActiveSkillEffect, string SkillName)
-        {
-            ActiveSkillEffect.ExecuteEffect();
-        }
-
-        public override AutomaticSkillTargetType Copy()
-        {
-            return new EffectActivationExecuteOnly();
-        }
-    }
-
     public class EffectActivationSelf : AutomaticSkillTargetType
     {
         public static string Name = "Self";

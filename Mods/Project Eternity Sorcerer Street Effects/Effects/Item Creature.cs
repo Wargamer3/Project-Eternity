@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.Abilities.ItemCreature = true;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ItemCreature = true;
             return null;
         }
 

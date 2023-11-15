@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         int ListCardCount = BR.ReadInt32();
                         for (int C = 0; C < ListCardCount; ++C)
                         {
-                            Card LoadedCard = Card.LoadCard(BR.ReadString(), GameScreen.ContentFallback, SorcererStreetBattleParams.DicParams[""].DicRequirement, SorcererStreetBattleParams.DicParams[""].DicEffect, SorcererStreetBattleParams.DicParams[""].DicAutomaticSkillTarget);
+                            Card LoadedCard = Card.LoadCard(BR.ReadString(), GameScreen.ContentFallback, SorcererStreetBattleParams.DicParams[""].DicRequirement, SorcererStreetBattleParams.DicParams[""].DicEffect, SorcererStreetBattleParams.DicParams[""].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[""].DicManualSkillTarget);
                             LoadedCard.QuantityOwned = BR.ReadInt32();
                             NewActiveBook.AddCard(LoadedCard);
                         }

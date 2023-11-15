@@ -15,6 +15,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class Player : OnlinePlayerBase
     {
+        public class PlayerAbilities
+        {
+            public bool Backward;
+            public bool Blackout;
+
+            public PlayerAbilities(PlayerAbilities Other)
+            {
+                Backward = Other.Backward;
+                Blackout = Other.Blackout;
+            }
+        }
+
         public override string SaveFileFolder => "Sorcerer Street/";
 
         public SorcererStreetInventory Inventory;
@@ -24,9 +36,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public int Gold;
         public int TotalMagic;
         public int CompletedLaps;
+
+        private PlayerAbilities Abilities;
+        private PlayerAbilities EnchantAbilities;//Based on Abilities
+
+        private PlayerAbilities BattleAbilities;//Based on EnchantAbilities
+
+        public BaseAutomaticSkill Enchant;
+
         public List<SorcererStreetMap.Checkpoints> ListPassedCheckpoint;
         public Dictionary<byte, byte> DicCreatureCountByElementType;
         public Dictionary<ElementalAffinity, int> DicOwnedSymbols;
+
         public readonly List<Card> ListCardInDeck;
         public readonly List<Card> ListCardInHand;
         public readonly List<Card> ListRemainingCardInDeck;
@@ -169,7 +190,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 string CardPath = IniDefaultCards.ReadField(ActiveKey, "Path");
                 string CardQuantity = IniDefaultCards.ReadField(ActiveKey, "Quantity");
-                Card LoadedCard = Card.LoadCard(CardPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                Card LoadedCard = Card.LoadCard(CardPath, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                 LoadedCard.QuantityOwned = int.Parse(CardQuantity);
 
                 Inventory.GlobalBook.AddCard(LoadedCard);
@@ -197,7 +218,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 for (int Q = 0; Q < Inventory.ActiveBook.ListCard[C].QuantityOwned; ++Q)
                 {
-                    ListCardInDeck.Add(Inventory.ActiveBook.ListCard[C].Copy(Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget));
+                    ListCardInDeck.Add(Inventory.ActiveBook.ListCard[C].Copy(Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget, Params.DicManualSkillTarget));
                 }
             }
         }
@@ -245,6 +266,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             {
                 DicCreatureCountByElementType[TerrainTypeIndex] = (byte)(ChainValue - 1);
             }
+        }
+
+        public PlayerAbilities GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases EffectActivationPhase)
+        {
+            if (EffectActivationPhase == SorcererStreetBattleContext.EffectActivationPhases.Enchant)
+            {
+                return EnchantAbilities;
+            }
+            else if (EffectActivationPhase == SorcererStreetBattleContext.EffectActivationPhases.Battle)
+            {
+                return EnchantAbilities;
+            }
+
+            return Abilities;
         }
 
         public override List<MissionInfo> GetUnlockedMissions()

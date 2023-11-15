@@ -100,7 +100,10 @@
     <Compile Include="Acion Panels\Options\End Player Phase.cs" />
     <Compile Include="Animation Screen.cs" />
     <Compile Include="Animation Damage Timeline.cs" />
+    <Compile Include="Effects\Enchant.cs" />
+    <Compile Include="Effects\Sorceret Street Manual Skill Target.cs" />
     <Compile Include="Lobby\Battle Tester.cs" />
+    <Compile Include="Lobby\NewFolder1\Player Selection Screen.cs" />
     <Compile Include="Menu Helper.cs" />
     <Compile Include="Camera 3D.cs" />
     <Compile Include="Cards\Card.cs" />

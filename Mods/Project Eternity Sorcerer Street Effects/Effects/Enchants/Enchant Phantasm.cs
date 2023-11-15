@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{//All Cepters cannot be targeted by Flash spells or Flash territory abilities (except those that dispel Enchantment effects).
-    public sealed class GlobalAbilityDisableFlashSpellsEffect : SorcererStreetEffect
+{//Target creature's HP and MHP cannot be altered by spells or territory abilities.
+    public sealed class EnchantPhantasmEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Global Ability Disable Flash Spells";
+        public static string Name = "Sorcerer Street Enchant Phantasm";
 
-        public GlobalAbilityDisableFlashSpellsEffect()
+        public EnchantPhantasmEffect()
             : base(Name, false)
         {
         }
 
-        public GlobalAbilityDisableFlashSpellsEffect(SorcererStreetBattleParams Params)
+        public EnchantPhantasmEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            return "Phantasm";
         }
 
         protected override BaseEffect DoCopy()
         {
-            GlobalAbilityDisableFlashSpellsEffect NewEffect = new GlobalAbilityDisableFlashSpellsEffect(Params);
+            EnchantPhantasmEffect NewEffect = new EnchantPhantasmEffect(Params);
 
             return NewEffect;
         }

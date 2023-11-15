@@ -61,9 +61,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ListReflectType.AddRange(_ArrayReflectType);
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ReflectSignOperator = _SignOperator;
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ReflectValue = _Value;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ListReflectType.AddRange(_ArrayReflectType);
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ReflectSignOperator = _SignOperator;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ReflectValue = _Value;
 
             return "Reflect " + _Value + "% Damage";
         }

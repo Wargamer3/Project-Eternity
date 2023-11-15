@@ -85,22 +85,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             bool InvaderFirst = true;
             bool InvaderDecided = false;
 
-            if (!GlobalSorcererStreetBattleContext.Invader.Creature.BattleAbilities.AttackLast && GlobalSorcererStreetBattleContext.Invader.Creature.BattleAbilities.AttackFirst)
+            if (!GlobalSorcererStreetBattleContext.Invader.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast && GlobalSorcererStreetBattleContext.Invader.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackFirst)
             {
                 InvaderFirst = true;
                 InvaderDecided = true;
             }
-            else if (!GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.AttackLast && GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.AttackFirst)
+            else if (!GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast && GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackFirst)
             {
                 InvaderFirst = false;
                 InvaderDecided = true;
             }
 
-            if (!InvaderDecided && GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.AttackLast)
+            if (!InvaderDecided && GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast)
             {
                 InvaderFirst = true;
             }
-            else if (!InvaderDecided && GlobalSorcererStreetBattleContext.Invader.Creature.BattleAbilities.AttackLast)
+            else if (!InvaderDecided && GlobalSorcererStreetBattleContext.Invader.Creature.GetCurrentAbilities(GlobalSorcererStreetBattleContext.EffectActivationPhase).AttackLast)
             {
                 InvaderFirst = false;
             }
@@ -130,53 +130,55 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             int NeutralizedDamage = 0;
             int FinalDamage = Attacker.FinalST;
 
-            if (Attacker.Creature.BattleAbilities.DamageModifier > 0)
+            CardAbilities AttackerAbilities = Attacker.Creature.GetCurrentAbilities(EffectActivationPhases.None);
+            CardAbilities DefenderAbilities = Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None);
+            if (AttackerAbilities.DamageModifier > 0)
             {
-                FinalDamage = Attacker.Creature.BattleAbilities.DamageModifier;
+                FinalDamage = AttackerAbilities.DamageModifier;
             }
 
-            FinalDamage = (int)(FinalDamage * Attacker.Creature.BattleAbilities.DamageMultiplier);
+            FinalDamage = (int)(FinalDamage * AttackerAbilities.DamageMultiplier);
 
-            bool IsScrollAttack = Attacker.Creature.BattleAbilities.ScrollAttack;
-            bool IsPenetratingAttack = Attacker.Creature.BattleAbilities.ScrollAttack;
+            bool IsScrollAttack = AttackerAbilities.ScrollAttack;
+            bool IsPenetratingAttack = AttackerAbilities.ScrollAttack;
 
-            if (Attacker.Creature.BattleAbilities.CriticalHit && !IsScrollAttack)
+            if (AttackerAbilities.CriticalHit && !IsScrollAttack)
             {
                 FinalDamage += FinalDamage / 2;
             }
             else if (IsScrollAttack)
             {
-                if (Attacker.Creature.BattleAbilities.ScrollValue == 0)
+                if (AttackerAbilities.ScrollValue == 0)
                 {
                 }
                 else
                 {
-                    FinalDamage = Attacker.Creature.BattleAbilities.ScrollValue;
+                    FinalDamage = AttackerAbilities.ScrollValue;
                 }
 
-                if (Attacker.Creature.BattleAbilities.ScrollCriticalHit)
+                if (AttackerAbilities.ScrollCriticalHit)
                 {
                     FinalDamage += FinalDamage / 2;
                 }
             }
 
-            if (!Attacker.Creature.BattleAbilities.ScrollAttack && Defender.Creature.BattleAbilities.NeutralizeValue != null)
+            if (!AttackerAbilities.ScrollAttack && Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).NeutralizeValue != null)
             {
-                bool CanNeutralize = Defender.Creature.BattleAbilities.ListNeutralizeType.Count == 0;
+                bool CanNeutralize = Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ListNeutralizeType.Count == 0;
 
-                foreach (AttackTypes ActiveType in Defender.Creature.BattleAbilities.ListNeutralizeType)
+                foreach (AttackTypes ActiveType in Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ListNeutralizeType)
                 {
                     if (ActiveType == AttackTypes.All
-                        || (ActiveType == AttackTypes.Air && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
-                        || (ActiveType == AttackTypes.Fire && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
-                        || (ActiveType == AttackTypes.Earth && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
-                        || (ActiveType == AttackTypes.Water && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
-                        || (ActiveType == AttackTypes.Neutral && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
+                        || (ActiveType == AttackTypes.Air && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                        || (ActiveType == AttackTypes.Fire && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                        || (ActiveType == AttackTypes.Earth && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                        || (ActiveType == AttackTypes.Water && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
+                        || (ActiveType == AttackTypes.Neutral && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
                     {
                         CanNeutralize = true;
                         break;
                     }
-                    else if (ActiveType == AttackTypes.NonScrolls && !Attacker.Creature.BattleAbilities.ScrollAttack)
+                    else if (ActiveType == AttackTypes.NonScrolls && !AttackerAbilities.ScrollAttack)
                     {
                         CanNeutralize = true;
                         break;
@@ -185,30 +187,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (CanNeutralize)
                 {
-                    if (Defender.Creature.BattleAbilities.NeutralizeSignOperator == Core.Operators.NumberTypes.Relative)
+                    if (Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).NeutralizeSignOperator == Core.Operators.NumberTypes.Relative)
                     {
-                        NeutralizedDamage = (int)(FinalDamage * (double.Parse(Defender.Creature.BattleAbilities.NeutralizeValue) / 100d));
+                        NeutralizedDamage = (int)(FinalDamage * (double.Parse(Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).NeutralizeValue) / 100d));
                         FinalDamage -= NeutralizedDamage;
                     }
                 }
             }
 
-            if (!Attacker.Creature.BattleAbilities.ScrollAttack && Defender.Creature.BattleAbilities.ReflectValue != null)
+            if (!AttackerAbilities.ScrollAttack && Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ReflectValue != null)
             {
-                bool CanReflect = Defender.Creature.BattleAbilities.ListReflectType.Count == 0;
+                bool CanReflect = Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ListReflectType.Count == 0;
 
-                foreach (AttackTypes ActiveType in Defender.Creature.BattleAbilities.ListReflectType)
+                foreach (AttackTypes ActiveType in Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ListReflectType)
                 {
                     if (ActiveType == AttackTypes.All
-                    || (ActiveType == AttackTypes.Air && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
-                    || (ActiveType == AttackTypes.Fire && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
-                    || (ActiveType == AttackTypes.Earth && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
-                    || (ActiveType == AttackTypes.Water && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
-                    || (ActiveType == AttackTypes.Neutral && Attacker.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
+                    || (ActiveType == AttackTypes.Air && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                    || (ActiveType == AttackTypes.Fire && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                    || (ActiveType == AttackTypes.Earth && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                    || (ActiveType == AttackTypes.Water && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
+                    || (ActiveType == AttackTypes.Neutral && AttackerAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
                     {
                         CanReflect = true;
                     }
-                    else if (ActiveType == AttackTypes.NonScrolls && !Attacker.Creature.BattleAbilities.ScrollAttack)
+                    else if (ActiveType == AttackTypes.NonScrolls && !AttackerAbilities.ScrollAttack)
                     {
                         CanReflect = true;
                     }
@@ -216,29 +218,29 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 if (CanReflect)
                 {
-                    if (Defender.Creature.BattleAbilities.ReflectSignOperator == Core.Operators.NumberTypes.Relative)
+                    if (Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ReflectSignOperator == Core.Operators.NumberTypes.Relative)
                     {
-                        ReflectedDamage = (int)(FinalDamage * (double.Parse(Defender.Creature.BattleAbilities.ReflectValue) / 100d));
+                        ReflectedDamage = (int)(FinalDamage * (double.Parse(Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ReflectValue) / 100d));
                         FinalDamage -= ReflectedDamage;
                     }
                 }
             }
 
-            if (!IsScrollAttack && Attacker.Creature.BattleAbilities.ArrayPenetrateAffinity != null)
+            if (!IsScrollAttack && AttackerAbilities.ArrayPenetrateAffinity != null)
             {
-                if (Attacker.Creature.BattleAbilities.ArrayPenetrateAffinity.Length == 0)
+                if (Attacker.Creature.GetCurrentAbilities(EffectActivationPhases.None).ArrayPenetrateAffinity.Length == 0)
                 {
                     IsPenetratingAttack = true;
                 }
                 else
                 {
-                    foreach (CreatureCard.ElementalAffinity ActiveAffinity in Attacker.Creature.BattleAbilities.ArrayPenetrateAffinity)
+                    foreach (CreatureCard.ElementalAffinity ActiveAffinity in Attacker.Creature.GetCurrentAbilities(EffectActivationPhases.None).ArrayPenetrateAffinity)
                     {
-                        if ((ActiveAffinity == CreatureCard.ElementalAffinity.Air && Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
-                            || (ActiveAffinity == CreatureCard.ElementalAffinity.Fire && Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
-                            || (ActiveAffinity == CreatureCard.ElementalAffinity.Earth && Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
-                            || (ActiveAffinity == CreatureCard.ElementalAffinity.Water && Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
-                            || (ActiveAffinity == CreatureCard.ElementalAffinity.Neutral && Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
+                        if ((ActiveAffinity == CreatureCard.ElementalAffinity.Air && DefenderAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                            || (ActiveAffinity == CreatureCard.ElementalAffinity.Fire && DefenderAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                            || (ActiveAffinity == CreatureCard.ElementalAffinity.Earth && DefenderAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                            || (ActiveAffinity == CreatureCard.ElementalAffinity.Water && DefenderAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
+                            || (ActiveAffinity == CreatureCard.ElementalAffinity.Neutral && DefenderAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
                         {
                             IsPenetratingAttack = true;
                         }
@@ -246,8 +248,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
 
-            if ((IsScrollAttack && Defender.Creature.BattleAbilities.ListNeutralizeType.Contains(AttackTypes.Scrolls))
-                || IsPenetratingAttack && Defender.Creature.BattleAbilities.ListNeutralizeType.Contains(AttackTypes.Penetrate))
+            if ((IsScrollAttack && Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ListNeutralizeType.Contains(AttackTypes.Scrolls))
+                || IsPenetratingAttack && Defender.Creature.GetCurrentAbilities(EffectActivationPhases.None).ListNeutralizeType.Contains(AttackTypes.Penetrate))
             {
                 Attacker.DamageReceived = 0;
                 Defender.DamageReceived = 0;

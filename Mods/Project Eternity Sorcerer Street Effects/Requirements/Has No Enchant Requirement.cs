@@ -34,7 +34,18 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return false;
+            if (_Target == Targets.Self)
+            {
+                return GlobalContext.SelfCreature.Creature.Enchant == null;
+            }
+            else if (_Target == Targets.Opponent)
+            {
+                return GlobalContext.OpponentCreature.Creature.Enchant == null;
+            }
+            else
+            {
+                return GlobalContext.Defender.Creature.Enchant == null;
+            }
         }
 
         public override BaseSkillRequirement Copy()

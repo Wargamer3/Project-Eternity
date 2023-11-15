@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
-    public sealed class EnchantGreedEffect : SorcererStreetEffect
+{//For two rounds caster gains the other Players' castle bonus.
+    public sealed class EnchantTrespassEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Enchant Greed";
+        public static string Name = "Sorcerer Street Enchant Trespass";
 
-        public EnchantGreedEffect()
+        public EnchantTrespassEffect()
             : base(Name, false)
         {
         }
 
-        public EnchantGreedEffect(SorcererStreetBattleParams Params)
+        public EnchantTrespassEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            return "Trespass";
         }
 
         protected override BaseEffect DoCopy()
         {
-            EnchantGreedEffect NewEffect = new EnchantGreedEffect(Params);
+            EnchantTrespassEffect NewEffect = new EnchantTrespassEffect(Params);
 
             return NewEffect;
         }

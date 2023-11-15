@@ -285,7 +285,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     {
                         Opponent = Params.GlobalContext.Invader;
                     }
-                    if (Opponent.Creature.BattleAbilities.ScrollAttack)//Ignore scroll attacks
+                    if (Opponent.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ScrollAttack)//Ignore scroll attacks
                     {
                         ReturnExpression = "0";
                     }

@@ -84,7 +84,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             g.DrawString(Map.fntArial12, "Information Menu", new Vector2(MenuBoxX + 20, MenuBoxY + 10), Color.White);
             g.DrawString(Map.fntArial12, "Hand Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight), CursorIndex == 0 ? Color.Orange : Color.White);
-            g.DrawString(Map.fntArial12, "Cepter Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 2), CursorIndex == 1 ? Color.Orange : Color.White);
+            g.DrawString(Map.fntArial12, "Player Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 2), CursorIndex == 1 ? Color.Orange : Color.White);
             g.DrawString(Map.fntArial12, "Symbol Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 3), CursorIndex == 2 ? Color.Orange : Color.White);
             g.DrawString(Map.fntArial12, "Land Info", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 4), CursorIndex == 3 ? Color.Orange : Color.White);
             g.DrawString(Map.fntArial12, "Return", new Vector2(MenuBoxX + 40, MenuBoxY + 10 + LineHeight * 5), CursorIndex == 4 ? Color.Orange : Color.White);
@@ -103,7 +103,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case 1:
-                    DrawCepterInfo(g, InformationBoxX, InformationBoxY, InformationBoxWidth);
+                    DrawPlayerInfo(g, InformationBoxX, InformationBoxY, InformationBoxWidth);
                     break;
             }
 
@@ -143,7 +143,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private void DrawCepterInfo(CustomSpriteBatch g, float X, float Y, int Width)
+        private void DrawPlayerInfo(CustomSpriteBatch g, float X, float Y, int Width)
         {
             int LineHeight = Constants.Height / 30;
             int IconWidth = Constants.Width / 112;
@@ -221,7 +221,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override string ToString()
         {
-            return "Allows you to view a variety of data, such as your objective value, your current status, the areas, and the Cepters.";
+            return "Allows you to view a variety of data, such as your objective value, your current status, the areas, and the players.";
         }
     }
 }

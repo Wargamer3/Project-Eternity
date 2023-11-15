@@ -66,12 +66,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             if (_SignOperator == NumberTypes.Relative)
             {
-                FinalTarget.BattleAbilities.DamageMultiplier = float.Parse(EvaluationResult) / 100f;
+                FinalTarget.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).DamageMultiplier = float.Parse(EvaluationResult) / 100f;
                 return "Damage changed by " + EvaluationResult + "%";
             }
             else
             {
-                FinalTarget.BattleAbilities.DamageModifier = int.Parse(EvaluationResult);
+                FinalTarget.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).DamageModifier = int.Parse(EvaluationResult);
                 return "Damage is " + EvaluationResult;
             }
         }

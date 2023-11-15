@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
-    public sealed class EnchantLandProtectionEffect : SorcererStreetEffect
+{//Target Player's territories with Enchantments cannot be targeted by Enchantment spells or Enchantment territory abilities for 8 rounds.
+    public sealed class EnchantHoldCurseEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Enchant Land Protection";
+        public static string Name = "Sorcerer Street Enchant Hold Curse";
 
-        public EnchantLandProtectionEffect()
+        public EnchantHoldCurseEffect()
             : base(Name, false)
         {
         }
 
-        public EnchantLandProtectionEffect(SorcererStreetBattleParams Params)
+        public EnchantHoldCurseEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            return "Hold Curse";
         }
 
         protected override BaseEffect DoCopy()
         {
-            EnchantSleepEffect NewEffect = new EnchantSleepEffect(Params);
+            EnchantHoldCurseEffect NewEffect = new EnchantHoldCurseEffect(Params);
 
             return NewEffect;
         }

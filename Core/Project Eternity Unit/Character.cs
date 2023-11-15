@@ -285,7 +285,7 @@ namespace ProjectEternity.Core.Characters
             for (int S = 0; S < SpiritListCount; ++S)
             {
                 ArrayPilotSpirit[S] = new ManualSkill("Content/Characters/Spirits/" + BR.ReadString() + ".pecs", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
-                ArrayPilotSpirit[S].SPCost = BR.ReadInt32();
+                ArrayPilotSpirit[S].ActivationCost = BR.ReadInt32();
                 ArrayPilotSpirit[S].LevelRequirement = BR.ReadInt32();
             }
 

@@ -49,7 +49,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ArrayPenetrateAffinity = ArrayAffinity;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ArrayPenetrateAffinity = ArrayAffinity;
 
             return "Penetrate " + string.Join(", ", ArrayAffinity);
         }

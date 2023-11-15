@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.Abilities.Immediate = true;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).Immediate = true;
             return null;
         }
 

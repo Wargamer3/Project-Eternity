@@ -5,17 +5,17 @@ namespace ProjectEternity.Core.Item
 {
     public class EffectHolder
     {
-        private Dictionary<string, List<BaseEffect>> DicActiveEffect;
+        private Dictionary<string, List<BaseEffect>> DicActiveEffectsBySkillName;
 
         public EffectHolder()
         {
-            DicActiveEffect = new Dictionary<string, List<BaseEffect>>();
+            DicActiveEffectsBySkillName = new Dictionary<string, List<BaseEffect>>();
         }
 
         public void QuickSave(BinaryWriter BW)
         {
-            BW.Write(DicActiveEffect.Count);
-            foreach (KeyValuePair<string, List<BaseEffect>> ListActiveEffect in DicActiveEffect)
+            BW.Write(DicActiveEffectsBySkillName.Count);
+            foreach (KeyValuePair<string, List<BaseEffect>> ListActiveEffect in DicActiveEffectsBySkillName)
             {
                 BW.Write(ListActiveEffect.Key);
 
@@ -29,7 +29,7 @@ namespace ProjectEternity.Core.Item
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
             int DicActivePilotEffectCount = BR.ReadInt32();
-            DicActiveEffect = new Dictionary<string, List<BaseEffect>>(DicActivePilotEffectCount);
+            DicActiveEffectsBySkillName = new Dictionary<string, List<BaseEffect>>(DicActivePilotEffectCount);
             for (int i = 0; i < DicActivePilotEffectCount; ++i)
             {
                 string Key = BR.ReadString();
@@ -41,7 +41,7 @@ namespace ProjectEternity.Core.Item
                     ListEffect.Add(BaseEffect.FromQuickSaveFile(BR, ActiveParser, DicRequirement, DicEffect, DicAutomaticSkillTarget));
                 }
 
-                DicActiveEffect.Add(Key, ListEffect);
+                DicActiveEffectsBySkillName.Add(Key, ListEffect);
             }
         }
 
@@ -62,7 +62,7 @@ namespace ProjectEternity.Core.Item
                 }
 
                 ActiveSkillEffect.Lifetime = ActiveSkillEffect.LifetimeTypeValue;
-                DicActiveEffect[ActiveSkillName].Add(ActiveSkillEffect);
+                DicActiveEffectsBySkillName[ActiveSkillName].Add(ActiveSkillEffect);
                 ActiveSkillEffect.ExecuteEffect();
             }
         }
@@ -77,7 +77,7 @@ namespace ProjectEternity.Core.Item
             if (CanAddEffect(ActiveSkillEffect, ActiveSkillName))
             {
                 ActiveSkillEffect.Lifetime = ActiveSkillEffect.LifetimeTypeValue;
-                DicActiveEffect[ActiveSkillName].Add(ActiveSkillEffect);
+                DicActiveEffectsBySkillName[ActiveSkillName].Add(ActiveSkillEffect);
                 ActiveSkillEffect.ExecuteEffect();
             }
         }
@@ -85,14 +85,14 @@ namespace ProjectEternity.Core.Item
         public bool CanAddEffect(BaseEffect ActiveSkillEffect, string ActiveSkillName)
         {
             //Add the SkillEffect to the DicActiveEffect to activate them later.
-            if (!DicActiveEffect.ContainsKey(ActiveSkillName))
-                DicActiveEffect.Add(ActiveSkillName, new List<BaseEffect>());
+            if (!DicActiveEffectsBySkillName.ContainsKey(ActiveSkillName))
+                DicActiveEffectsBySkillName.Add(ActiveSkillName, new List<BaseEffect>());
 
             int EffectCount = 0;
 
-            for (int i = DicActiveEffect[ActiveSkillName].Count - 1; i >= 0; --i)
+            for (int i = DicActiveEffectsBySkillName[ActiveSkillName].Count - 1; i >= 0; --i)
             {
-                if (DicActiveEffect[ActiveSkillName][i].Equals(ActiveSkillEffect))
+                if (DicActiveEffectsBySkillName[ActiveSkillName][i].Equals(ActiveSkillEffect))
                     ++EffectCount;
             }
 
@@ -107,7 +107,7 @@ namespace ProjectEternity.Core.Item
 
         public void ReactivateEffects(List<string> ListIgnoreSkill = null)
         {
-            foreach (KeyValuePair<string, List<BaseEffect>> ActiveListEffect in DicActiveEffect)
+            foreach (KeyValuePair<string, List<BaseEffect>> ActiveListEffect in DicActiveEffectsBySkillName)
             {
                 if (ListIgnoreSkill != null && ListIgnoreSkill.Contains(ActiveListEffect.Key))
                     continue;
@@ -123,12 +123,12 @@ namespace ProjectEternity.Core.Item
 
         public void RemoveEffects()
         {
-            DicActiveEffect.Clear();
+            DicActiveEffectsBySkillName.Clear();
         }
 
         public void UpdateAllEffectsLifetime(string LifetimeType)
         {
-            foreach (KeyValuePair<string, List<BaseEffect>> ActiveListEffect in DicActiveEffect)
+            foreach (KeyValuePair<string, List<BaseEffect>> ActiveListEffect in DicActiveEffectsBySkillName)
             {
                 for (int E = ActiveListEffect.Value.Count - 1; E >= 0; --E)
                 {
@@ -156,7 +156,7 @@ namespace ProjectEternity.Core.Item
         public List<BaseEffect> GetActiveEffects(string SkillName)
         {
             List<BaseEffect> ListActiveEffect;
-            if (DicActiveEffect.TryGetValue(SkillName, out ListActiveEffect))
+            if (DicActiveEffectsBySkillName.TryGetValue(SkillName, out ListActiveEffect))
                 return ListActiveEffect;
             else
                 return new List<BaseEffect>();
@@ -164,7 +164,7 @@ namespace ProjectEternity.Core.Item
 
         public Dictionary<string, List<BaseEffect>> GetEffects()
         {
-            return DicActiveEffect;
+            return DicActiveEffectsBySkillName;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class SorcererStreetSelfTargetType : SorcererStreetBattleTargetType
+    public sealed class SorcererStreetSelfTargetType : SorcererStreetAutomaticTargetType
     {
         public static string Name = "Sorcerer Street Self";
 

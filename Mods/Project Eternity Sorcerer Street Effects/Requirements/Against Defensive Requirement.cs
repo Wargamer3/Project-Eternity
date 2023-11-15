@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.OpponentCreature.Creature.BattleAbilities.IsDefensive;
+            return GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(GlobalContext.EffectActivationPhase).IsDefensive;
         }
 
         public override BaseSkillRequirement Copy()

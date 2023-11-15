@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
-    public sealed class EnchantSpiritWalkEffect : SorcererStreetEffect
+{//Target Player's die roll yields a 5 for 2 rounds.
+    public sealed class EnchantFloatEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Enchant Spirit Walk";
+        public static string Name = "Sorcerer Street Enchant Float";
 
-        public EnchantSpiritWalkEffect()
+        public EnchantFloatEffect()
             : base(Name, false)
         {
         }
 
-        public EnchantSpiritWalkEffect(SorcererStreetBattleParams Params)
+        public EnchantFloatEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            return "Float";
         }
 
         protected override BaseEffect DoCopy()
         {
-            EnchantSpiritWalkEffect NewEffect = new EnchantSpiritWalkEffect(Params);
+            EnchantFloatEffect NewEffect = new EnchantFloatEffect(Params);
 
             return NewEffect;
         }

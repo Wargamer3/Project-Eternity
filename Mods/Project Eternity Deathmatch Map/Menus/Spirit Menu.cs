@@ -166,7 +166,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         Map.sndSelection.Play();
                     }
-                    else if (GetPilotRemainingSP() - ActiveSpirit.SPCost >= 0)//Activate Skill
+                    else if (GetPilotRemainingSP() - ActiveSpirit.ActivationCost >= 0)//Activate Skill
                     {
                         if (ListSelectedSpirit.Count == 0 || (!ActiveSpirit.Target.MustBeUsedAlone && !ListSelectedSpirit.Last().Target.MustBeUsedAlone))
                         {
@@ -196,7 +196,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 if (ListSelectedSpirit.Count == 0)
                 {
-                    if (ActiveSpirit.CanActivate && GetPilotRemainingSP() - ActiveSpirit.SPCost >= 0)
+                    if (ActiveSpirit.CanActivate && GetPilotRemainingSP() - ActiveSpirit.ActivationCost >= 0)
                     {
                         ListSelectedSpirit.Add(ActiveSpirit);
                         PilotSpiritActivation[ActiveUnitIndex][PilotIndex].Add(ActiveSpirit);
@@ -324,7 +324,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
             foreach (ManualSkill ActiveSpirit in PilotSpiritActivation[ActiveUnitIndex][PilotIndex])
             {
-                CurrentPilotSP -= ActiveSpirit.SPCost;
+                CurrentPilotSP -= ActiveSpirit.ActivationCost;
             }
 
             return CurrentPilotSP;
@@ -427,18 +427,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 if (ActiveCharacter.ArrayPilotSpirit[S].IsUnlocked)
                 {
                     if (ActiveCharacter.ArrayPilotSpirit[S].CanActivate && !PilotSpiritActivation[DisplayedUnitIndex][PilotIndex].Contains(ActiveCharacter.ArrayPilotSpirit[S])
-                        && GetPilotRemainingSP() - ActiveCharacter.ArrayPilotSpirit[S].SPCost >= 0)
+                        && GetPilotRemainingSP() - ActiveCharacter.ArrayPilotSpirit[S].ActivationCost >= 0)
                     {
                         TextHelper.DrawText(g, ActiveCharacter.ArrayPilotSpirit[S].Name,
                             new Vector2(StartX + 20, Y + 123 + S * 18), Color.White);
-                        TextHelper.DrawTextRightAligned(g, ActiveCharacter.ArrayPilotSpirit[S].SPCost.ToString(),
+                        TextHelper.DrawTextRightAligned(g, ActiveCharacter.ArrayPilotSpirit[S].ActivationCost.ToString(),
                             new Vector2(StartX + 183, Y + 123 + S * 18), Color.White);
                     }
                     else
                     {
                         TextHelper.DrawText(g, ActiveCharacter.ArrayPilotSpirit[S].Name,
                             new Vector2(StartX + 20, Y + 123 + S * 18), Color.Gray);
-                        TextHelper.DrawTextRightAligned(g, ActiveCharacter.ArrayPilotSpirit[S].SPCost.ToString(),
+                        TextHelper.DrawTextRightAligned(g, ActiveCharacter.ArrayPilotSpirit[S].ActivationCost.ToString(),
                             new Vector2(StartX + 183, Y + 123 + S * 18), Color.Gray);
                     }
                 }

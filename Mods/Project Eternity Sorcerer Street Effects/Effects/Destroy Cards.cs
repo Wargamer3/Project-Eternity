@@ -75,7 +75,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 }
             }
             else if (_CardDestroyType == CardDestroyTypes.Specific)
-            {//User chooses a card from target Cepter's hand and destroys it.
+            {//User chooses a card from target Player's hand and destroys it.
             }
 
             return "Destroy " + _NumberOfCards + " Cards";

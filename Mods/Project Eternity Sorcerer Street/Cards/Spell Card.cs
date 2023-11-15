@@ -6,35 +6,34 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SpellCard : Card
     {
-        public enum SpellTypes {
+        public enum SpellTypes
+        {
             SingleFlash,//Offsensive attack for a single target
             MultiFlash,
-            SingleEnchant,//Enchant a creature or a cepter
+            SingleEnchant,//Enchant a creature or a Player
             MultiEnchant,
             World,//??
             Secret//??
-        }
-        public enum SpellTargets
-        {
-            Cepter, Self, Creature, Area,
         }
 
         public const string SpellCardType = "Spell";
 
         public SpellTypes SpellType;
-        public SpellTargets SpellTarget;
+        public ManualSkill Spell;
 
+        public bool Doublecast;
         public int DiscardCost;
         public string SpellActivationAnimationPath;
 
         public SpellCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
-            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
             : base(Path, SpellCardType)
         {
             FileStream FS = new FileStream("Content/Sorcerer Street/Spell Cards/" + Path + ".pec", FileMode.Open, FileAccess.Read);
@@ -43,40 +42,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Name = BR.ReadString();
             Description = BR.ReadString();
             Tags = BR.ReadString();
+            Doublecast = BR.ReadBoolean();
 
             MagicCost = BR.ReadInt32();
             DiscardCost = BR.ReadByte();
             Rarity = (CardRarities)BR.ReadByte();
             SpellType = (SpellTypes)BR.ReadByte();
-            SpellTarget = (SpellTargets)BR.ReadByte();
 
             SkillChainName = BR.ReadString();
             SpellActivationAnimationPath = BR.ReadString();
 
-            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
+            if (!string.IsNullOrEmpty(SkillChainName))
             {
-                FileStream FSSkillChain = new FileStream("Content/Sorcerer Street/Skill Chains/" + SkillChainName + ".pesc", FileMode.Open, FileAccess.Read);
-                BinaryReader BRSkillChain = new BinaryReader(FSSkillChain, Encoding.UTF8);
-                BRSkillChain.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                int tvSkillsNodesCount = BRSkillChain.ReadInt32();
-                ListActiveSkill = new List<BaseAutomaticSkill>(tvSkillsNodesCount);
-                for (int N = 0; N < tvSkillsNodesCount; ++N)
-                {
-                    BaseAutomaticSkill ActiveSkill = new BaseAutomaticSkill(BRSkillChain, DicRequirement, DicEffects, DicAutomaticSkillTarget);
-
-                    InitSkillChainTarget(ActiveSkill, DicAutomaticSkillTarget);
-
-                    ListActiveSkill.Add(ActiveSkill);
-                }
-
-                BRSkillChain.Close();
-                FSSkillChain.Close();
+                Spell = new ManualSkill("Content/Sorcerer Street/Spells/" + SkillChainName + ".pes", DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
-            else
-            {
-                ListActiveSkill = new List<BaseAutomaticSkill>();
-            }
+
+            ListActiveSkill = new List<BaseAutomaticSkill>();
 
             BR.Close();
             FS.Close();
@@ -88,36 +69,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         }
 
         public SpellCard(SpellCard Clone, Dictionary<string, BaseSkillRequirement> DicRequirement,
-            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
             : base(Clone.Path, SpellCardType)
         {
             Name = Clone.Name;
             Description = Clone.Description;
             SpellType = Clone.SpellType;
-            SpellTarget = Clone.SpellTarget;
 
             SkillChainName = Clone.SkillChainName;
-
-            if (!string.IsNullOrWhiteSpace(SkillChainName) && DicRequirement != null)
+            
+            if (!string.IsNullOrEmpty(SkillChainName))
             {
-                ListActiveSkill = new List<BaseAutomaticSkill>(Clone.ListActiveSkill.Count);
-
-                for (int N = 0; N < Clone.ListActiveSkill.Count; ++N)
-                {
-                    ListActiveSkill.Add(new BaseAutomaticSkill(Clone.ListActiveSkill[N]));
-                }
-            }
-            else
-            {
-                ListActiveSkill = new List<BaseAutomaticSkill>();
+                Spell = new ManualSkill(Clone.Spell);
             }
 
             sprCard = Clone.sprCard;
         }
 
-        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            return new SpellCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+            return new SpellCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
         }
 
         public override void DrawCardInfo(CustomSpriteBatch g, CardSymbols Symbols, SpriteFont fntCardInfo, float OffsetX, float OffsetY)

@@ -61,9 +61,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ListNeutralizeType.AddRange(ArrayNeutralizeType);
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.NeutralizeSignOperator = _SignOperator;
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.NeutralizeValue = Params.ActiveParser.Evaluate(_Value);
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ListNeutralizeType.AddRange(ArrayNeutralizeType);
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).NeutralizeSignOperator = _SignOperator;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).NeutralizeValue = Params.ActiveParser.Evaluate(_Value);
 
             return "Neutralize " + _Value + "% Damage";
         }
@@ -87,6 +87,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             _SignOperator = NewEffect._SignOperator;
             _Value = NewEffect._Value;
         }
+
+        #region Properties
 
         [CategoryAttribute("Effects"),
         DescriptionAttribute(""),
@@ -132,5 +134,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 _Value = value;
             }
         }
+
+        #endregion
     }
 }

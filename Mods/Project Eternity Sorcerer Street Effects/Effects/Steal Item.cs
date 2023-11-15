@@ -33,7 +33,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            if (Params.GlobalContext.OpponentCreature.Creature.BattleAbilities.ItemProtection)
+            if (Params.GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ItemProtection)
             {
                 return "Cannot Steal Item";
             }

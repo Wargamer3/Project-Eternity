@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ArrayElementAffinity = new ElementalAffinity[1] { _Element };
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ArrayElementAffinity = new ElementalAffinity[1] { _Element };
 
             return "Change Element " + _Element;
         }

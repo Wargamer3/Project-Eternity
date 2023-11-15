@@ -95,6 +95,7 @@ namespace ProjectEternity.Core.Editor
         public const string GUIRootPathSorcererStreetCardsItems = "SorcererStreet/Cards/Items";
         public const string GUIRootPathSorcererStreetCardsSpells = "SorcererStreet/Cards/Spells";
         public const string GUIRootPathSorcererStreetSkillChains = "SorcererStreet/Skill Chains";
+        public const string GUIRootPathSorcererStreetSpells = "SorcererStreet/Spells";
 
         public BaseEditor()
         {

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Editor;
@@ -78,6 +77,8 @@ namespace ProjectEternity.Editors.CharacterSpiritEditor
             #endregion
 
             BW.Write(txtDescription.Text);
+
+            BW.Write(0);//Requirements
 
             BW.Write(lvEffects.Items.Count);
             for (int i = 0; i < lvEffects.Items.Count; i++)

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -43,8 +44,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool UseCardAnimation = true;
         public AnimatedModel Map3DModel;
 
-        public CardAbilities BattleAbilities;
-        public CardAbilities Abilities;
+        private CardAbilities Abilities;
+        private CardAbilities EnchantAbilities;//Based on Abilities
+
+        private CardAbilities BattleAbilities;//Based on EnchantAbilities
+
+        public BaseAutomaticSkill Enchant;
 
         public CreatureCard(string Path)
             : base(Path, CreatureCardType)
@@ -61,7 +66,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             FileStream FS = new FileStream("Content/Sorcerer Street/Creature Cards/" + Path + ".pec", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
 
-            Abilities.DamageMultiplier = 1;
+            Abilities = new CardAbilities();
+            EnchantAbilities = new CardAbilities();
+            BattleAbilities = new CardAbilities();
 
             Name = BR.ReadString();
             Description = BR.ReadString();
@@ -154,7 +161,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ArrayLandLimit = new ElementalAffinity[0];
             ArrayItemLimit = new ItemCard.ItemTypes[0];
             Abilities = new CardAbilities();
-            Abilities.DamageMultiplier = 1;
+            EnchantAbilities = new CardAbilities();
+            BattleAbilities = new CardAbilities();
         }
 
         public CreatureCard(CreatureCard Clone, Dictionary<string, BaseSkillRequirement> DicRequirement,
@@ -173,6 +181,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             SkillChainName = Clone.SkillChainName;
 
             Abilities = Clone.Abilities;
+            EnchantAbilities = Clone.EnchantAbilities;
+            BattleAbilities = Clone.BattleAbilities;
 
             ArrayLandLimit = new ElementalAffinity[Clone.ArrayLandLimit.Length];
             for (int L = 0; L < Clone.ArrayLandLimit.Length; ++L)
@@ -213,7 +223,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             return new CreatureCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget);
         }
@@ -221,6 +231,20 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public void InitBattleBonuses()
         {
             BattleAbilities = new CardAbilities(Abilities);
+        }
+
+        public CardAbilities GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases EffectActivationPhase)
+        {
+            if (EffectActivationPhase == SorcererStreetBattleContext.EffectActivationPhases.Enchant)
+            {
+                return EnchantAbilities;
+            }
+            else if (EffectActivationPhase == SorcererStreetBattleContext.EffectActivationPhases.Battle)
+            {
+                return EnchantAbilities;
+            }
+
+            return Abilities;
         }
 
         public override List<Texture2D> GetIcons(CardSymbols Symbols)

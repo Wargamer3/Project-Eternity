@@ -81,14 +81,14 @@ namespace ProjectEternity.Core.Skill
 
                 Owner.AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectTargetCharacter.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
                 Params.GlobalContext.EffectTargetUnit.UpdateSkillsLifetime(SkillEffect.LifetimeTypeOnAction);
-                SkillPilot.SP -= ActiveSkill.SPCost;
+                SkillPilot.SP -= ActiveSkill.ActivationCost;
 
                 Map.CursorPosition = SkillSquad.Position;
                 Map.CursorPositionVisible = Map.CursorPosition;
 
                 BattlePreview = null;
 
-                if (SkillPilot.SP < ActiveSkill.SPCost)
+                if (SkillPilot.SP < ActiveSkill.ActivationCost)
                 {
                     Map.Update(gameTime);//Remove the drawable points if needed
                     Map.RemoveScreen(this);

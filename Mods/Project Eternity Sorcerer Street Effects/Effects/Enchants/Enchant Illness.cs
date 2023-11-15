@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
-    public sealed class EnchantPhantasmEffect : SorcererStreetEffect
+{//In battle, ST & HP-20 to target creature.
+    public sealed class EnchantIllnessEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Enchant Phantasm";
+        public static string Name = "Sorcerer Street Enchant Illness";
 
-        public EnchantPhantasmEffect()
+        public EnchantIllnessEffect()
             : base(Name, false)
         {
         }
 
-        public EnchantPhantasmEffect(SorcererStreetBattleParams Params)
+        public EnchantIllnessEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return "Phantasm";
+            return "Illness";
         }
 
         protected override BaseEffect DoCopy()
         {
-            EnchantPhantasmEffect NewEffect = new EnchantPhantasmEffect(Params);
+            EnchantIllnessEffect NewEffect = new EnchantIllnessEffect(Params);
 
             return NewEffect;
         }

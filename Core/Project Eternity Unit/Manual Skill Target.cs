@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Effects;
+using Roslyn;
 
 namespace ProjectEternity.Core.Skill
 {
@@ -40,11 +42,28 @@ namespace ProjectEternity.Core.Skill
             }
         }
 
+        public void Save(BinaryWriter BW)
+        {
+            BW.Write(TargetType);
+
+            DoSave(BW);
+        }
+
+        protected virtual void DoSave(BinaryWriter BW)
+        {
+        }
+
+        protected virtual void Load(BinaryReader BR)
+        {
+        }
+
         public static ManualSkillTarget LoadCopy(BinaryReader BR, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             string TargetType = BR.ReadString();
 
             ManualSkillTarget NewManualSkillTarget = DicManualSkillTarget[TargetType].Copy();
+
+            NewManualSkillTarget.Load(BR);
 
             return NewManualSkillTarget;
         }
@@ -63,7 +82,16 @@ namespace ProjectEternity.Core.Skill
 
         public static Dictionary<string, ManualSkillTarget> LoadAllTargetTypes()
         {
-            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = LoadFromAssemblyFiles(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories));
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = LoadFromAssemblyFilesFromBaseType(Directory.GetFiles("Effects", "*.dll", SearchOption.AllDirectories), typeof(ManualSkillTarget));
+
+            List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects", "*.csx", SearchOption.AllDirectories);
+            foreach (Assembly ActiveAssembly in ListAssembly)
+            {
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveTarget in LoadFromAssemblyFilesFromBaseType(ActiveAssembly, typeof(ManualSkillTarget)))
+                {
+                    DicManualSkillTarget.Add(ActiveTarget.Key, ActiveTarget.Value);
+                }
+            }
 
             return DicManualSkillTarget;
         }
@@ -89,13 +117,47 @@ namespace ProjectEternity.Core.Skill
             for (int F = 0; F < ArrayFilePath.Length; F++)
             {
                 Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
-                foreach (KeyValuePair<string, ManualSkillTarget> ActiveRequirement in LoadFromAssembly(ActiveAssembly, Args))
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveTarget in LoadFromAssembly(ActiveAssembly, Args))
                 {
-                    DicManualSkillTarget.Add(ActiveRequirement.Key, ActiveRequirement.Value);
+                    DicManualSkillTarget.Add(ActiveTarget.Key, ActiveTarget.Value);
                 }
             }
 
             return DicManualSkillTarget;
+        }
+
+        public static Dictionary<string, ManualSkillTarget> LoadFromAssemblyFilesFromBaseType(Assembly ActiveAssembly, Type TypeOfRequirement, params object[] Args)
+        {
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
+            List<ManualSkillTarget> ListTarget = ReflectionHelper.GetObjectsFromBaseTypes<ManualSkillTarget>(TypeOfRequirement, ActiveAssembly.GetTypes(), Args);
+
+            foreach (ManualSkillTarget Instance in ListTarget)
+            {
+                DicManualSkillTarget.Add(Instance.TargetType, Instance);
+            }
+
+            return DicManualSkillTarget;
+        }
+
+        public static Dictionary<string, ManualSkillTarget> LoadFromAssemblyFilesFromBaseType(string[] ArrayFilePath, Type TypeOfRequirement, params object[] Args)
+        {
+            Dictionary<string, ManualSkillTarget> DicManualSkillTarget = new Dictionary<string, ManualSkillTarget>();
+
+            for (int F = 0; F < ArrayFilePath.Length; F++)
+            {
+                Assembly ActiveAssembly = Assembly.LoadFile(Path.GetFullPath(ArrayFilePath[F]));
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveTarget in LoadFromAssemblyFilesFromBaseType(ActiveAssembly, TypeOfRequirement, Args))
+                {
+                    DicManualSkillTarget.Add(ActiveTarget.Key, ActiveTarget.Value);
+                }
+            }
+
+            return DicManualSkillTarget;
+        }
+
+        public override string ToString()
+        {
+            return TargetType;
         }
     }
 }

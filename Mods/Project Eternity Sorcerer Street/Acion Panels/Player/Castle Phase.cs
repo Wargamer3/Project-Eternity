@@ -10,6 +10,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class ActionPanelCastlePhase : ActionPanelSorcererStreet
     {
+        public const string CastleReached = "Castle Reached";
         private const string PanelName = "CastlePhase";
 
         private enum Commands { Territory, Map, Info, Options, Help, End }

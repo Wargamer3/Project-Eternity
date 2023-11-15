@@ -78,6 +78,8 @@ namespace ProjectEternity.Editors.PartsEditor
 
             BW.Write(txtDescription.Text);
 
+            BW.Write(0);//Requirements
+
             BW.Write(lvEffects.Items.Count);
             for (int i = 0; i < lvEffects.Items.Count; i++)
                 ((SkillEffect)lvEffects.Items[i].Tag).WriteEffect(BW);

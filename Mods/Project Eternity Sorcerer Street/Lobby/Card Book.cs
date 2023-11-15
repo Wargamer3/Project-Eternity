@@ -87,7 +87,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCard = new List<Card>(ListCardCount);
             for (int C = 0; C < ListCardCount; ++C)
             {
-                Card LoadedCard = Card.FromType(BR.ReadString(), BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                Card LoadedCard = Card.FromType(BR.ReadString(), BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 LoadedCard.QuantityOwned = BR.ReadInt32();
                 AddCard(LoadedCard);
             }
@@ -112,7 +112,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 string CardType = BR.ReadString();
                 string CardPath = BR.ReadString();
                 int QuantityOwned = BR.ReadInt32();
-                Card CopyCard = GlobalBook.DicCardsByType[CardType][CardPath].Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                Card CopyCard = GlobalBook.DicCardsByType[CardType][CardPath].Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 CopyCard.QuantityOwned = QuantityOwned;
                 AddCard(CopyCard);
             }
@@ -134,7 +134,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             ListCard = new List<Card>(ListCardCount);
             for (int C = 0; C < ListCardCount; ++C)
             {
-                Card LoadedCard = Card.FromType(BR.ReadString(), BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                Card LoadedCard = Card.FromType(BR.ReadString(), BR.ReadString(), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 LoadedCard.QuantityOwned = BR.ReadInt32();
                 AddCard(LoadedCard);
             }
@@ -159,7 +159,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 string CardType = BR.ReadString();
                 string CardPath = BR.ReadString();
                 int QuantityOwned = BR.ReadInt32();
-                Card CopyCard = GlobalBook.DicCardsByType[CardType][CardPath].Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                Card CopyCard = GlobalBook.DicCardsByType[CardType][CardPath].Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 CopyCard.QuantityOwned = QuantityOwned;
                 AddCard(CopyCard);
             }
@@ -195,32 +195,33 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             CreatureCard CreatureCardToAdd = CardToAdd as CreatureCard;
             if (CreatureCardToAdd != null)
             {
-                if (CreatureCardToAdd.Abilities.ArrayElementAffinity.Length > 1)
+                CardAbilities Abilities = CreatureCardToAdd.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None);
+                if (Abilities.ArrayElementAffinity.Length > 1)
                 {
                     ++UniqueCreaturesMulti;
                     TotalCreaturesMulti += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
+                else if (Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
                 {
                     ++UniqueCreaturesNeutral;
                     TotalCreaturesNeutral += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Fire)
+                else if (Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Fire)
                 {
                     ++UniqueCreaturesFire;
                     TotalCreaturesFire += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Water)
+                else if (Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Water)
                 {
                     ++UniqueCreaturesWater;
                     TotalCreaturesWater += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Earth)
+                else if (Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Earth)
                 {
                     ++UniqueCreaturesEarth;
                     TotalCreaturesEarth += CardToAdd.QuantityOwned;
                 }
-                else if (CreatureCardToAdd.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Air)
+                else if (Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Air)
                 {
                     ++UniqueCreaturesAir;
                     TotalCreaturesAir += CardToAdd.QuantityOwned;

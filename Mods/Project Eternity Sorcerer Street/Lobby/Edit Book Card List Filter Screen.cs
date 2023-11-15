@@ -12,7 +12,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class EditBookCardListFilterScreen : GameScreen
     {
-        public enum Filters { Creatures, Neutral, Fire, Water, Earth, Air, Dual, Item, Spells }
+        public enum Filters { Creatures, Neutral, Fire, Water, Earth, Air, Dual, Item, EnchantPlayer, EnchantCreature, }
 
         #region Ressources
 
@@ -94,7 +94,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
+                            if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Neutral)
                             {
                                 if (LastCard != null && ActiveCard.Name == LastCard.Name)
                                 {
@@ -113,7 +113,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Fire)
+                            if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Fire)
                             {
                                 if (LastCard != null && ActiveCard.Name == LastCard.Name)
                                 {
@@ -132,7 +132,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Water)
+                            if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Water)
                             {
                                 if (LastCard != null && ActiveCard.Name == LastCard.Name)
                                 {
@@ -151,7 +151,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Earth)
+                            if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Earth)
                             {
                                 if (LastCard != null && ActiveCard.Name == LastCard.Name)
                                 {
@@ -170,7 +170,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length == 1 && ActiveCreatureCard.Abilities.ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Air)
+                            if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length == 1 && ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity[0] == CreatureCard.ElementalAffinity.Air)
                             {
                                 if (LastCard != null && ActiveCard.Name == LastCard.Name)
                                 {
@@ -189,7 +189,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         CreatureCard ActiveCreatureCard = ActiveCard as CreatureCard;
                         if (ActiveCreatureCard != null)
                         {
-                            if (ActiveCreatureCard.Abilities.ArrayElementAffinity.Length > 1)
+                            if (ActiveCreatureCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Length > 1)
                             {
                                 if (LastCard != null && ActiveCard.Name == LastCard.Name)
                                 {
@@ -218,23 +218,45 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                     break;
 
-                case Filters.Spells:
+                #endregion
+
+                case Filters.EnchantPlayer:
                     foreach (Card ActiveCard in GlobalBook.ListCard)
                     {
                         SpellCard ActiveSpellCard = ActiveCard as SpellCard;
                         if (ActiveSpellCard != null)
                         {
-                            if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                            if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.PlayerTargetType)
                             {
-                                CursorIndex = ListFilteredCard.Count;
-                            }
+                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                {
+                                    CursorIndex = ListFilteredCard.Count;
+                                }
 
-                            ListFilteredCard.Add(ActiveSpellCard);
+                                ListFilteredCard.Add(ActiveSpellCard);
+                            }
                         }
                     }
                     break;
 
-                    #endregion
+                case Filters.EnchantCreature:
+                    foreach (Card ActiveCard in GlobalBook.ListCard)
+                    {
+                        SpellCard ActiveSpellCard = ActiveCard as SpellCard;
+                        if (ActiveSpellCard != null)
+                        {
+                            //if (ActiveSpellCard.SpellTarget == SpellCard.SpellTargets.NoTarget || ActiveSpellCard.SpellTarget == SpellCard.SpellTargets.Creature || ActiveSpellCard.SpellTarget == SpellCard.SpellTargets.Area)
+                            {
+                                if (LastCard != null && ActiveCard.Name == LastCard.Name)
+                                {
+                                    CursorIndex = ListFilteredCard.Count;
+                                }
+
+                                ListFilteredCard.Add(ActiveSpellCard);
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
@@ -260,7 +282,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 if (ActivePlayer == null)
                 {
                     Card SelectedCard = ListFilteredCard[CursorIndex];
-                    Card CopyCard = ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                    Card CopyCard = ActiveBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                     ListSelectedCard.Add(CopyCard);
 
                     RemoveScreen(this);
@@ -270,7 +292,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     Card SelectedCard = ListFilteredCard[CursorIndex];
                     if (!ActiveBook.DicCardsByType.ContainsKey(SelectedCard.CardType) || !ActiveBook.DicCardsByType[SelectedCard.CardType].ContainsKey(SelectedCard.Path))
                     {
-                        Card CopyCard = GlobalBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                        Card CopyCard = GlobalBook.DicCardsByType[SelectedCard.CardType][SelectedCard.Path].Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                         CopyCard.QuantityOwned = 0;
                         ActiveBook.AddCard(CopyCard);
                     }

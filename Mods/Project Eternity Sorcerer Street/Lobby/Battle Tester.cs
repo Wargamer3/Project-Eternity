@@ -7,11 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 using FMOD;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen;
 using ProjectEternity.GameScreens.AnimationScreen;
-using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
@@ -19,8 +19,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
     {
         private enum SetupChoices
         {
-            Nothing, DefenderCreature, DefenderItem, DefenderEnchant, DefenderCepterEnchant, DefenderMapCreatures,
-            InvaderCreature, InvaderItem, InvaderEnchant, InvaderCepterEnchant, InvaderMapCreatures,
+            Nothing, DefenderCreature, DefenderItem, DefenderEnchant, DefenderPlayerEnchant, DefenderMapCreatures,
+            InvaderCreature, InvaderItem, InvaderEnchant, InvaderPlayerEnchant, InvaderMapCreatures,
         }
 
         private enum PhasesChoices
@@ -45,9 +45,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private BoxButton DefenderCreatureButton;
         private BoxButton DefenderItemButton;
         private BoxButton DefenderEnchantButton;
-        private BoxButton DefenderCepterEnchantButton;
-        private TextInput DefenderCepterCardsInHandInput;
-        private TextInput DefenderCepterCardsInDeckInput;
+        private BoxButton DefenderPlayerEnchantButton;
+        private TextInput DefenderPlayerCardsInHandInput;
+        private TextInput DefenderPlayerCardsInDeckInput;
         private TextInput DefenderHPInput;
         private TextInput DefenderMaxHPInput;
         private TextInput DefenderSTInput;
@@ -67,9 +67,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private BoxButton InvaderCreatureButton;
         private BoxButton InvaderItemButton;
         private BoxButton InvaderEnchantButton;
-        private BoxButton InvaderCepterEnchantButton;
-        private TextInput InvaderCepterCardsInHandInput;
-        private TextInput InvaderCepterCardsInDeckInput;
+        private BoxButton InvaderPlayerEnchantButton;
+        private TextInput InvaderPlayerCardsInHandInput;
+        private TextInput InvaderPlayerCardsInDeckInput;
         private TextInput InvaderHPInput;
         private TextInput InvaderMaxHPInput;
         private TextInput InvaderSTInput;
@@ -155,6 +155,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.DefenderTerrain = new TerrainSorcererStreet(0, 0, 0, 0);
             Context.DefenderTerrain.LandLevel = 1;
             Context.DefenderTerrain.TerrainTypeIndex = 2;
+            Context.EffectActivationPhase = SorcererStreetBattleContext.EffectActivationPhases.Battle;
 
             ButtonHeight = fntArial12.LineSpacing + 2;
 
@@ -171,12 +172,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             InvaderCreatureButton = new BoxButton(new Rectangle(X, Y, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderCreatureSelection);
             InvaderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderItemSelection);
             InvaderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderEnchantSelection);
-            InvaderCepterEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderCepterEnchantSelection);
+            InvaderPlayerEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, InvaderPlayerEnchantSelection);
 
-            InvaderCepterCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderCepterCardsInHand, true);
-            InvaderCepterCardsInHandInput.SetText("1");
-            InvaderCepterCardsInDeckInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderCepterCardsInDeck, true);
-            InvaderCepterCardsInDeckInput.SetText("1");
+            InvaderPlayerCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderPlayerCardsInHand, true);
+            InvaderPlayerCardsInHandInput.SetText("1");
+            InvaderPlayerCardsInDeckInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderPlayerCardsInDeck, true);
+            InvaderPlayerCardsInDeckInput.SetText("1");
             InvaderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderHPInput, true);
             InvaderHPInput.SetText("30");
             InvaderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetInvaderMaxHPInput, true);
@@ -209,12 +210,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DefenderCreatureButton = new BoxButton(new Rectangle(X, Y, ButtonsWidth, fntArial12.LineSpacing), fntArial12, "Select", OnButtonOver, DefenderCreatureSelection);
             DefenderItemButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderItemSelection);
             DefenderEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderEnchantSelection);
-            DefenderCepterEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderCepterEnchantSelection);
+            DefenderPlayerEnchantButton = new BoxButton(new Rectangle(X, Y += ButtonHeight, ButtonsWidth, ButtonHeight), fntArial12, "Select", OnButtonOver, DefenderPlayerEnchantSelection);
 
-            DefenderCepterCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInHand, true);
-            DefenderCepterCardsInHandInput.SetText("1");
-            DefenderCepterCardsInDeckInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderCepterCardsInDeck, true);
-            DefenderCepterCardsInDeckInput.SetText("1");
+            DefenderPlayerCardsInHandInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderPlayerCardsInHand, true);
+            DefenderPlayerCardsInHandInput.SetText("1");
+            DefenderPlayerCardsInDeckInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderPlayerCardsInDeck, true);
+            DefenderPlayerCardsInDeckInput.SetText("1");
             DefenderHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderHPInput, true);
             DefenderHPInput.SetText("30");
             DefenderMaxHPInput = new TextInput(fntArial12, sprPixel, sprPixel, new Vector2(X + 10, Y += ButtonHeight), new Vector2(ButtonsWidth, ButtonHeight), SetDefenderMaxHPInput, true);
@@ -270,11 +271,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             ArrayMenuButton = new IUIElement[]
             {
-                DefenderCreatureButton, DefenderItemButton, DefenderEnchantButton, DefenderCepterEnchantButton,
-                DefenderCepterCardsInHandInput, DefenderCepterCardsInDeckInput, DefenderHPInput, DefenderMaxHPInput, DefenderSTInput, DefenderTerrainHPBonusInput, DefenderSupportSTBonusInput,
+                DefenderCreatureButton, DefenderItemButton, DefenderEnchantButton, DefenderPlayerEnchantButton,
+                DefenderPlayerCardsInHandInput, DefenderPlayerCardsInDeckInput, DefenderHPInput, DefenderMaxHPInput, DefenderSTInput, DefenderTerrainHPBonusInput, DefenderSupportSTBonusInput,
                 DefenderAirLandsInput, DefenderEarthLandsInput, DefenderFireLandsInput, DefenderWaterLandsInput, DefenderRankInput, DefenderGoldInput, DefenderMapCreaturesButton, DefenderLapInput, DefenderRoundInput, DefenderTerrainType,
-                InvaderCreatureButton, InvaderItemButton, InvaderEnchantButton, InvaderCepterEnchantButton,
-                InvaderCepterCardsInHandInput, InvaderCepterCardsInDeckInput, InvaderHPInput, InvaderMaxHPInput, InvaderSTInput, InvaderSupportSTBonusInput,
+                InvaderCreatureButton, InvaderItemButton, InvaderEnchantButton, InvaderPlayerEnchantButton,
+                InvaderPlayerCardsInHandInput, InvaderPlayerCardsInDeckInput, InvaderHPInput, InvaderMaxHPInput, InvaderSTInput, InvaderSupportSTBonusInput,
                 InvaderAirLandsInput, InvaderEarthLandsInput, InvaderFireLandsInput, InvaderWaterLandsInput, InvaderRankInput, InvaderGoldInput, InvaderLapInput, InvaderMapCreaturesButton,
                 IntroPhaseButton, LandModifierPhaseButton, CreatureModifierPhaseButton, EnchantModifierPhaseButton, ItemModifierPhaseButton,
                 BoostModifierPhaseButton, AttackPhaseButton, CounterPhaseButton, ResultPhaseButton,
@@ -292,7 +293,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             foreach (string ActiveFile in Directory.EnumerateFiles(ActiveGameFolder, "*.pec", SearchOption.AllDirectories))
                             {
                                 Card LoadedCard = Card.LoadCard(ActiveFile.Remove(ActiveFile.Length - 4, 4).Remove(0, 24), GameScreen.ContentFallback,
-                                    SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement, SorcererStreetBattleParams.DicParams[string.Empty].DicEffect, SorcererStreetBattleParams.DicParams[string.Empty].DicAutomaticSkillTarget);
+                                    SorcererStreetBattleParams.DicParams[string.Empty].DicRequirement, SorcererStreetBattleParams.DicParams[string.Empty].DicEffect, SorcererStreetBattleParams.DicParams[string.Empty].DicAutomaticSkillTarget, SorcererStreetBattleParams.DicParams[string.Empty].DicManualSkillTarget);
                                 LoadedCard.QuantityOwned = 1;
 
                                 ActiveBook.AddCard(LoadedCard);
@@ -313,7 +314,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.Defender.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
             Context.Defender.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
             Context.Defender.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
-            Context.Defender.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+            Context.Defender.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
             Context.Defender.Animation = new SimpleAnimation("Defender", "Defender", Context.Defender.Creature.sprCard);
             Context.Defender.Animation.Position = new Vector2(Constants.Width - Context.Defender.Creature.sprCard.Width - Constants.Width / 9, Constants.Height / 12);
             Context.Defender.Animation.Scale = new Vector2(1f);
@@ -330,7 +331,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             Context.Invader.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Fire, 1);
             Context.Invader.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Water, 1);
             Context.Invader.Owner.DicCreatureCountByElementType.Add((byte)CreatureCard.ElementalAffinity.Neutral, 1);
-            Context.Invader.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+            Context.Invader.Creature = (CreatureCard)CopyCard.Copy(PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
             Context.Invader.Animation = new SimpleAnimation("Invader", "Invader", Context.Invader.Creature.sprCard);
             Context.Invader.Animation.Position = new Vector2(Constants.Width / 9, Constants.Height / 12);
             Context.Invader.Animation.Scale = new Vector2(1f);
@@ -431,6 +432,21 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
                     {
                         if (PhasesEnd == PhasesChoices.CreatureModifierPhase)
+                        {
+                            PhasesChoice = PhasesChoices.Idle;
+                        }
+                        else
+                        {
+                            ActionPanelBattleItemModifierPhase.StartAnimationIfAvailable(Context, ActionPanelBattleEnchantModifierPhase.RequirementName);
+                            PhasesChoice = PhasesChoices.EnchantModifierPhase;
+                        }
+                    }
+                    break;
+
+                case PhasesChoices.EnchantModifierPhase:
+                    if (!ActionPanelBattleItemModifierPhase.UpdateAnimations(gameTime, Context))
+                    {
+                        if (PhasesEnd == PhasesChoices.EnchantModifierPhase)
                         {
                             PhasesChoice = PhasesChoices.Idle;
                         }
@@ -560,7 +576,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                             {
                                 if (PhasesChoice == PhasesChoices.InvaderAttackPhase1)
                                 {
-                                    if (FirstAttacker.Creature.BattleAbilities.AttackTwice)
+                                    if (FirstAttacker.Creature.GetCurrentAbilities(Context.EffectActivationPhase).AttackTwice)
                                     {
                                         StartAttackAnimation(FirstAttacker, SecondAttacker);
                                         PhasesChoice = PhasesChoices.InvaderAttackPhase2;
@@ -587,7 +603,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                                 }
                                 else if (PhasesChoice == PhasesChoices.CounterPhase1)
                                 {
-                                    if (SecondAttacker.Creature.BattleAbilities.AttackTwice)
+                                    if (SecondAttacker.Creature.GetCurrentAbilities(Context.EffectActivationPhase).AttackTwice)
                                     {
                                         StartAttackAnimation(SecondAttacker, FirstAttacker);
                                         PhasesChoice = PhasesChoices.CounterPhase2;
@@ -712,6 +728,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 return;
             }
 
+            SpellCard ActiveSpellCard;
+
             switch (SetupChoice)
             {
                 case SetupChoices.DefenderCreature:
@@ -740,6 +758,30 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 case SetupChoices.InvaderItem:
                     Context.Invader.Item = CardSelectionScreen.ListSelectedCard[0];
+                    break;
+
+                case SetupChoices.DefenderEnchant:
+                    ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
+                    if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.PlayerTargetType)
+                    {
+                        ActiveSpellCard.GetAvailableActivation(null);
+                    }
+                    break;
+
+                case SetupChoices.InvaderPlayerEnchant:
+                    ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
+                    if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.PlayerTargetType)
+                    {
+                        PushScreen(new PlayerSelectionScreen(Context, Context.Invader, Context.Defender, ActiveSpellCard));
+                    }
+                    break;
+
+                case SetupChoices.DefenderPlayerEnchant:
+                    ActiveSpellCard = (SpellCard)CardSelectionScreen.ListSelectedCard[0];
+                    if (ActiveSpellCard.Spell.Target.TargetType == ManualSkillActivationSorcererStreet.PlayerTargetType)
+                    {
+                        PushScreen(new PlayerSelectionScreen(Context, Context.Defender, Context.Invader, ActiveSpellCard));
+                    }
                     break;
             }
             SetupChoice = SetupChoices.Nothing;
@@ -823,15 +865,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void DefenderEnchantSelection()
         {
             SetupChoice = SetupChoices.DefenderEnchant;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Spells, null, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantCreature, null, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
 
-        private void DefenderCepterEnchantSelection()
+        private void DefenderPlayerEnchantSelection()
         {
-            SetupChoice = SetupChoices.DefenderCepterEnchant;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Spells, null, false);
+            SetupChoice = SetupChoices.DefenderPlayerEnchant;
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantPlayer, null, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -844,7 +886,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonClick.Play();
         }
 
-        private void SetDefenderCepterCardsInHand(string InputValue)
+        private void SetDefenderPlayerCardsInHand(string InputValue)
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
@@ -858,7 +900,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private void SetDefenderCepterCardsInDeck(string InputValue)
+        private void SetDefenderPlayerCardsInDeck(string InputValue)
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
@@ -993,15 +1035,15 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private void InvaderEnchantSelection()
         {
             SetupChoice = SetupChoices.InvaderEnchant;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Spells, null, false);
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantCreature, null, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
 
-        private void InvaderCepterEnchantSelection()
+        private void InvaderPlayerEnchantSelection()
         {
-            SetupChoice = SetupChoices.InvaderCepterEnchant;
-            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.Spells, null, false);
+            SetupChoice = SetupChoices.InvaderPlayerEnchant;
+            CardSelectionScreen = new EditBookCardListFilterScreen(ActiveBook, EditBookCardListFilterScreen.Filters.EnchantPlayer, null, false);
             PushScreen(CardSelectionScreen);
             sndButtonClick.Play();
         }
@@ -1014,7 +1056,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonClick.Play();
         }
 
-        private void SetInvaderCepterCardsInHand(string InputValue)
+        private void SetInvaderPlayerCardsInHand(string InputValue)
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
@@ -1028,7 +1070,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private void SetInvaderCepterCardsInDeck(string InputValue)
+        private void SetInvaderPlayerCardsInDeck(string InputValue)
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
@@ -1268,6 +1310,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     break;
 
                 case PhasesChoices.CreatureModifierPhase:
+                case PhasesChoices.EnchantModifierPhase:
                 case PhasesChoices.ItemModifierPhase:
                 case PhasesChoices.BeforeBattle:
                 case PhasesChoices.InvaderAttackBonusAnimation:
@@ -1323,12 +1366,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Invader Enchant", new Vector2(X + 5, Y + 1), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Cepter Enchant", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntArial12, "Invader Player Enchant", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Cepter Cards in hand", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntArial12, "Invader Player Cards in hand", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Invader Cepter Cards in deck", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntArial12, "Invader Player Cards in deck", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Invader HP", new Vector2(X + 5, Y), Color.White);
@@ -1381,12 +1424,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender Enchant", new Vector2(X + 5, Y + 1), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Cepter Enchant", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntArial12, "Defender Player Enchant", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Cepter Cards in hand", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntArial12, "Defender Player Cards in hand", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
-            g.DrawString(fntArial12, "Defender Cepter Cards in deck", new Vector2(X + 5, Y), Color.White);
+            g.DrawString(fntArial12, "Defender Player Cards in deck", new Vector2(X + 5, Y), Color.White);
             DrawBox(g, new Vector2(X + SetupMenuWidth, Y), ButtonsWidth, ButtonHeight, Color.White);
             DrawBox(g, new Vector2(X, Y += ButtonHeight), SetupMenuWidth, ButtonHeight, Color.White);
             g.DrawString(fntArial12, "Defender HP", new Vector2(X + 5, Y), Color.White);

@@ -20,38 +20,40 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             HasTerrainBonus = false;
 
+            CardAbilities Abilities = Map.GlobalSorcererStreetBattleContext.Defender.Creature.GetCurrentAbilities(Map.GlobalSorcererStreetBattleContext.EffectActivationPhase);
+
             switch (Map.ListTerrainType[Map.GlobalSorcererStreetBattleContext.DefenderTerrain.TerrainTypeIndex])
             {
                 case "Multi-Element":
-                    if (Map.GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.ArrayElementAffinity.Length != 1 || Map.GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.ArrayElementAffinity[0] != CreatureCard.ElementalAffinity.Neutral)
+                    if (Abilities.ArrayElementAffinity.Length != 1 || Abilities.ArrayElementAffinity[0] != CreatureCard.ElementalAffinity.Neutral)
                     {
                         HasTerrainBonus = true;
                     }
                     break;
 
                 case "Fire":
-                    if (Map.GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                    if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
                     {
                         HasTerrainBonus = true;
                     }
                     break;
 
                 case "Water":
-                    if (Map.GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
+                    if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
                     {
                         HasTerrainBonus = true;
                     }
                     break;
 
                 case "Earth":
-                    if (Map.GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                    if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
                     {
                         HasTerrainBonus = true;
                     }
                     break;
 
                 case "Air":
-                    if (Map.GlobalSorcererStreetBattleContext.Defender.Creature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                    if (Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
                     {
                         HasTerrainBonus = true;
                     }

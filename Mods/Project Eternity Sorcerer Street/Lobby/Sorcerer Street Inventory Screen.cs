@@ -107,7 +107,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             MenuHelper.DrawFingerIcon(g, new Vector2(95, Constants.Height / 7 + EntryHeight / 3 + CursorIndex * (EntryHeight + 10)));
 
-            DrawBookInformation(g, fntArial12, "Cepter Information", Symbols,
+            DrawBookInformation(g, fntArial12, "Player Information", Symbols,
                 ActivePlayer.Inventory.GlobalBook);
 
             X = -10;

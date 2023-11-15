@@ -4,16 +4,16 @@ using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public sealed class EnchantFogEffect : SorcererStreetEffect
+    public sealed class EnchantHolyWord8Effect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Enchant Fog";
+        public static string Name = "Sorcerer Street Enchant Holy Word 8";
 
-        public EnchantFogEffect()
+        public EnchantHolyWord8Effect()
             : base(Name, false)
         {
         }
 
-        public EnchantFogEffect(SorcererStreetBattleParams Params)
+        public EnchantHolyWord8Effect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return "Fog";
+            return "Holy Word 8";
         }
 
         protected override BaseEffect DoCopy()
         {
-            EnchantFogEffect NewEffect = new EnchantFogEffect(Params);
+            EnchantHolyWord8Effect NewEffect = new EnchantHolyWord8Effect(Params);
 
             return NewEffect;
         }

@@ -33,8 +33,6 @@
             this.gbCardInformation = new System.Windows.Forms.GroupBox();
             this.txtCardSacrificed = new System.Windows.Forms.NumericUpDown();
             this.lblCardSacrificed = new System.Windows.Forms.Label();
-            this.cboTarget = new System.Windows.Forms.ComboBox();
-            this.lblTarget = new System.Windows.Forms.Label();
             this.cboType = new System.Windows.Forms.ComboBox();
             this.lblType = new System.Windows.Forms.Label();
             this.txtActivationAnimation = new System.Windows.Forms.TextBox();
@@ -53,6 +51,7 @@
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.gbTags = new System.Windows.Forms.GroupBox();
             this.txtTags = new System.Windows.Forms.TextBox();
+            this.cbDoublecast = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.gbCardInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCardSacrificed)).BeginInit();
@@ -82,10 +81,9 @@
             // 
             this.gbCardInformation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.gbCardInformation.Controls.Add(this.cbDoublecast);
             this.gbCardInformation.Controls.Add(this.txtCardSacrificed);
             this.gbCardInformation.Controls.Add(this.lblCardSacrificed);
-            this.gbCardInformation.Controls.Add(this.cboTarget);
-            this.gbCardInformation.Controls.Add(this.lblTarget);
             this.gbCardInformation.Controls.Add(this.cboType);
             this.gbCardInformation.Controls.Add(this.lblType);
             this.gbCardInformation.Controls.Add(this.txtActivationAnimation);
@@ -102,7 +100,7 @@
             this.gbCardInformation.Controls.Add(this.lblName);
             this.gbCardInformation.Location = new System.Drawing.Point(12, 27);
             this.gbCardInformation.Name = "gbCardInformation";
-            this.gbCardInformation.Size = new System.Drawing.Size(204, 291);
+            this.gbCardInformation.Size = new System.Drawing.Size(204, 300);
             this.gbCardInformation.TabIndex = 29;
             this.gbCardInformation.TabStop = false;
             this.gbCardInformation.Text = "Card Information";
@@ -123,29 +121,6 @@
             this.lblCardSacrificed.Size = new System.Drawing.Size(82, 13);
             this.lblCardSacrificed.TabIndex = 55;
             this.lblCardSacrificed.Text = "Card Sacrificed:";
-            // 
-            // cboTarget
-            // 
-            this.cboTarget.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboTarget.FormattingEnabled = true;
-            this.cboTarget.Items.AddRange(new object[] {
-            "Cepter",
-            "Self",
-            "Creature",
-            "Area"});
-            this.cboTarget.Location = new System.Drawing.Point(75, 151);
-            this.cboTarget.Name = "cboTarget";
-            this.cboTarget.Size = new System.Drawing.Size(123, 21);
-            this.cboTarget.TabIndex = 50;
-            // 
-            // lblTarget
-            // 
-            this.lblTarget.AutoSize = true;
-            this.lblTarget.Location = new System.Drawing.Point(6, 154);
-            this.lblTarget.Name = "lblTarget";
-            this.lblTarget.Size = new System.Drawing.Size(41, 13);
-            this.lblTarget.TabIndex = 51;
-            this.lblTarget.Text = "Target:";
             // 
             // cboType
             // 
@@ -172,7 +147,7 @@
             // 
             // txtActivationAnimation
             // 
-            this.txtActivationAnimation.Location = new System.Drawing.Point(6, 263);
+            this.txtActivationAnimation.Location = new System.Drawing.Point(6, 273);
             this.txtActivationAnimation.Name = "txtActivationAnimation";
             this.txtActivationAnimation.Size = new System.Drawing.Size(148, 20);
             this.txtActivationAnimation.TabIndex = 48;
@@ -181,7 +156,7 @@
             // lblActivationAnimation
             // 
             this.lblActivationAnimation.AutoSize = true;
-            this.lblActivationAnimation.Location = new System.Drawing.Point(6, 247);
+            this.lblActivationAnimation.Location = new System.Drawing.Point(6, 257);
             this.lblActivationAnimation.Name = "lblActivationAnimation";
             this.lblActivationAnimation.Size = new System.Drawing.Size(106, 13);
             this.lblActivationAnimation.TabIndex = 47;
@@ -189,7 +164,7 @@
             // 
             // btnSetActivationAnimation
             // 
-            this.btnSetActivationAnimation.Location = new System.Drawing.Point(160, 261);
+            this.btnSetActivationAnimation.Location = new System.Drawing.Point(160, 271);
             this.btnSetActivationAnimation.Name = "btnSetActivationAnimation";
             this.btnSetActivationAnimation.Size = new System.Drawing.Size(38, 23);
             this.btnSetActivationAnimation.TabIndex = 46;
@@ -201,7 +176,7 @@
             // lblSkill
             // 
             this.lblSkill.AutoSize = true;
-            this.lblSkill.Location = new System.Drawing.Point(6, 179);
+            this.lblSkill.Location = new System.Drawing.Point(6, 189);
             this.lblSkill.Name = "lblSkill";
             this.lblSkill.Size = new System.Drawing.Size(29, 13);
             this.lblSkill.TabIndex = 45;
@@ -209,7 +184,7 @@
             // 
             // txtSkill
             // 
-            this.txtSkill.Location = new System.Drawing.Point(6, 195);
+            this.txtSkill.Location = new System.Drawing.Point(6, 205);
             this.txtSkill.Name = "txtSkill";
             this.txtSkill.Size = new System.Drawing.Size(192, 20);
             this.txtSkill.TabIndex = 44;
@@ -217,7 +192,7 @@
             // 
             // btnSetSkill
             // 
-            this.btnSetSkill.Location = new System.Drawing.Point(6, 221);
+            this.btnSetSkill.Location = new System.Drawing.Point(6, 231);
             this.btnSetSkill.Name = "btnSetSkill";
             this.btnSetSkill.Size = new System.Drawing.Size(130, 23);
             this.btnSetSkill.TabIndex = 43;
@@ -296,7 +271,7 @@
             this.gbDescription.Controls.Add(this.txtDescription);
             this.gbDescription.Location = new System.Drawing.Point(222, 27);
             this.gbDescription.Name = "gbDescription";
-            this.gbDescription.Size = new System.Drawing.Size(200, 169);
+            this.gbDescription.Size = new System.Drawing.Size(200, 154);
             this.gbDescription.TabIndex = 33;
             this.gbDescription.TabStop = false;
             this.gbDescription.Text = "Description";
@@ -308,7 +283,7 @@
             this.txtDescription.Location = new System.Drawing.Point(6, 19);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(192, 144);
+            this.txtDescription.Size = new System.Drawing.Size(192, 129);
             this.txtDescription.TabIndex = 4;
             // 
             // gbTags
@@ -317,9 +292,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbTags.Controls.Add(this.txtTags);
-            this.gbTags.Location = new System.Drawing.Point(222, 202);
+            this.gbTags.Location = new System.Drawing.Point(222, 187);
             this.gbTags.Name = "gbTags";
-            this.gbTags.Size = new System.Drawing.Size(200, 119);
+            this.gbTags.Size = new System.Drawing.Size(200, 140);
             this.gbTags.TabIndex = 34;
             this.gbTags.TabStop = false;
             this.gbTags.Text = "Tags";
@@ -330,14 +305,25 @@
             this.txtTags.Location = new System.Drawing.Point(3, 16);
             this.txtTags.Multiline = true;
             this.txtTags.Name = "txtTags";
-            this.txtTags.Size = new System.Drawing.Size(194, 100);
+            this.txtTags.Size = new System.Drawing.Size(194, 121);
             this.txtTags.TabIndex = 0;
+            // 
+            // cbDoublecast
+            // 
+            this.cbDoublecast.AutoSize = true;
+            this.cbDoublecast.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbDoublecast.Location = new System.Drawing.Point(8, 151);
+            this.cbDoublecast.Name = "cbDoublecast";
+            this.cbDoublecast.Size = new System.Drawing.Size(80, 17);
+            this.cbDoublecast.TabIndex = 56;
+            this.cbDoublecast.Text = "Doublecast";
+            this.cbDoublecast.UseVisualStyleBackColor = true;
             // 
             // SpellCardEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 333);
+            this.ClientSize = new System.Drawing.Size(434, 339);
             this.Controls.Add(this.gbTags);
             this.Controls.Add(this.gbDescription);
             this.Controls.Add(this.gbCardInformation);
@@ -381,11 +367,10 @@
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.GroupBox gbDescription;
         private System.Windows.Forms.TextBox txtDescription;
-        private System.Windows.Forms.ComboBox cboTarget;
-        private System.Windows.Forms.Label lblTarget;
         private System.Windows.Forms.GroupBox gbTags;
         public System.Windows.Forms.TextBox txtTags;
         private System.Windows.Forms.NumericUpDown txtCardSacrificed;
         private System.Windows.Forms.Label lblCardSacrificed;
+        private System.Windows.Forms.CheckBox cbDoublecast;
     }
 }

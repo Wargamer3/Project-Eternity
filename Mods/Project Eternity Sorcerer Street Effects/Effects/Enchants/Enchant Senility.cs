@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
-    public sealed class EnchantMimicryEffect : SorcererStreetEffect
+{//Target creature is destroyed at Battle End.
+    public sealed class EnchantSenilityEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Enchant Mimicry";
+        public static string Name = "Sorcerer Street Enchant Senility";
 
-        public EnchantMimicryEffect()
+        public EnchantSenilityEffect()
             : base(Name, false)
         {
         }
 
-        public EnchantMimicryEffect(SorcererStreetBattleParams Params)
+        public EnchantSenilityEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override BaseEffect DoCopy()
         {
-            EnchantMimicryEffect NewEffect = new EnchantMimicryEffect(Params);
+            EnchantSenilityEffect NewEffect = new EnchantSenilityEffect(Params);
 
             return NewEffect;
         }

@@ -32,7 +32,7 @@ namespace ProjectEternity.Core.Skill
             Params.GlobalContext.SetContext(Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.GlobalContext.EffectOwnerSquad, Params.GlobalContext.EffectOwnerUnit, Params.GlobalContext.EffectOwnerCharacter, Params.ActiveParser);
 
             AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectOwnerCharacter.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
-            Params.GlobalContext.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;
+            Params.GlobalContext.EffectOwnerCharacter.SP -= ActiveSkill.ActivationCost;
         }
 
         public override ManualSkillTarget Copy()

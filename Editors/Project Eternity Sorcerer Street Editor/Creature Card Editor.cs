@@ -200,23 +200,23 @@ namespace ProjectEternity.Editors.CardEditor
 
             #region Affinities
 
-            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Neutral))
+            if (LoadedCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Contains(ElementalAffinity.Neutral))
             {
                 cbAffinityNeutral.Checked = true;
             }
-            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Fire))
+            if (LoadedCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Contains(ElementalAffinity.Fire))
             {
                 cbAffinityFire.Checked = true;
             }
-            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Water))
+            if (LoadedCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Contains(ElementalAffinity.Water))
             {
                 cbAffinityWater.Checked = true;
             }
-            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Earth))
+            if (LoadedCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Contains(ElementalAffinity.Earth))
             {
                 cbAffinityEarth.Checked = true;
             }
-            if (LoadedCard.Abilities.ArrayElementAffinity.Contains(ElementalAffinity.Air))
+            if (LoadedCard.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity.Contains(ElementalAffinity.Air))
             {
                 cbAffinityAir.Checked = true;
             }

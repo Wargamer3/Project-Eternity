@@ -25,7 +25,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         public override bool CanActivatePassive()
         {
-            return GlobalContext.OpponentCreature.Creature.Abilities.Regenerate;
+            return GlobalContext.OpponentCreature.Creature.GetCurrentAbilities(GlobalContext.EffectActivationPhase).Regenerate;
         }
 
         public override BaseSkillRequirement Copy()

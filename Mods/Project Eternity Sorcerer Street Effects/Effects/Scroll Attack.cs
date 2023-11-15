@@ -38,8 +38,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ScrollAttack = true;
-            Params.GlobalContext.SelfCreature.Creature.BattleAbilities.ScrollValue = _ST;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ScrollAttack = true;
+            Params.GlobalContext.SelfCreature.Creature.GetCurrentAbilities(Params.GlobalContext.EffectActivationPhase).ScrollValue = _ST;
             if (_ST > 0)
             {
                 return "Scroll Attack ST=" + _ST;

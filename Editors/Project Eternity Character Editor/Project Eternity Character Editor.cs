@@ -421,37 +421,37 @@ namespace ProjectEternity.Editors.CharacterEditor
                 {
                     case 0:
                         txtPilotSpirit1.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit1SP.Text = NewCharacter.ArrayPilotSpirit[S].SPCost.ToString();
+                        txtPilotSpirit1SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
                         txtPilotSpirit1LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 1:
                         txtPilotSpirit2.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit2SP.Text = NewCharacter.ArrayPilotSpirit[S].SPCost.ToString();
+                        txtPilotSpirit2SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
                         txtPilotSpirit2LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 2:
                         txtPilotSpirit3.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit3SP.Text = NewCharacter.ArrayPilotSpirit[S].SPCost.ToString();
+                        txtPilotSpirit3SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
                         txtPilotSpirit3LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 3:
                         txtPilotSpirit4.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit4SP.Text = NewCharacter.ArrayPilotSpirit[S].SPCost.ToString();
+                        txtPilotSpirit4SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
                         txtPilotSpirit4LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 4:
                         txtPilotSpirit5.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit5SP.Text = NewCharacter.ArrayPilotSpirit[S].SPCost.ToString();
+                        txtPilotSpirit5SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
                         txtPilotSpirit5LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
 
                     case 5:
                         txtPilotSpirit6.Text = NewCharacter.ArrayPilotSpirit[S].FullName;
-                        txtPilotSpirit6SP.Text = NewCharacter.ArrayPilotSpirit[S].SPCost.ToString();
+                        txtPilotSpirit6SP.Text = NewCharacter.ArrayPilotSpirit[S].ActivationCost.ToString();
                         txtPilotSpirit6LevelRequired.Text = NewCharacter.ArrayPilotSpirit[S].LevelRequirement.ToString();
                         break;
                 }

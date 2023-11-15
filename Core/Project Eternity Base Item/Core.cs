@@ -106,7 +106,7 @@ namespace ProjectEternity.Core
             List<T> ListObject = new List<T>();
             foreach (Type ActiveType in ArrayTypes)
             {
-                if (ActiveType.IsAbstract)
+                if (ActiveType.IsAbstract || !ActiveType.IsPublic)
                 {
                     continue;
                 }

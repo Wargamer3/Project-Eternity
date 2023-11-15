@@ -79,11 +79,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             foreach (ElementChoices ActiveElement in ArrayElement)
             {
-                if ((ActiveElement == ElementChoices.Air && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
-                    || (ActiveElement == ElementChoices.Fire && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
-                    || (ActiveElement == ElementChoices.Earth && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
-                    || (ActiveElement == ElementChoices.Water && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
-                    || (ActiveElement == ElementChoices.Neutral && TargetCreature.BattleAbilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
+                CardAbilities Abilities = TargetCreature.GetCurrentAbilities(GlobalContext.EffectActivationPhase);
+                if ((ActiveElement == ElementChoices.Air && Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Air))
+                    || (ActiveElement == ElementChoices.Fire && Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Fire))
+                    || (ActiveElement == ElementChoices.Earth && Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Earth))
+                    || (ActiveElement == ElementChoices.Water && Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Water))
+                    || (ActiveElement == ElementChoices.Neutral && Abilities.ArrayElementAffinity.Contains(CreatureCard.ElementalAffinity.Neutral)))
                 {
                     return true;
                 }
@@ -101,9 +102,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                         OtherCreature = GlobalContext.SelfCreature.Creature;
                     }
 
-                    foreach (CreatureCard.ElementalAffinity ActiveAffinity in TargetCreature.BattleAbilities.ArrayElementAffinity)
+                    foreach (CreatureCard.ElementalAffinity ActiveAffinity in Abilities.ArrayElementAffinity)
                     {
-                        if (!OtherCreature.BattleAbilities.ArrayElementAffinity.Contains(ActiveAffinity))
+                        if (!OtherCreature.GetCurrentAbilities(GlobalContext.EffectActivationPhase).ArrayElementAffinity.Contains(ActiveAffinity))
                         {
                             return true;
                         }

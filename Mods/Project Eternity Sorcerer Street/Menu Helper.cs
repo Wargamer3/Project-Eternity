@@ -20,7 +20,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         private static Texture2D sprBottomMiddle;
         private static Texture2D sprBottomRight;
 
-        private static Texture2D sprCepterInformation;
+        private static Texture2D sprPlayerInformation;
         private static Texture2D sprCommand;
         private static Texture2D sprCreatureCard;
         private static Texture2D sprInformation;
@@ -69,7 +69,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprBottomMiddle = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Bottom Middle");
             sprBottomRight = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Bottom Right");
 
-            sprCepterInformation = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Cepter Information");
+            sprPlayerInformation = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Player Information");
             sprCommand = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Command");
             sprCreatureCard = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Creature Card");
             sprInformation = Content.Load<Texture2D>("Sorcerer Street/Ressources/Menus/Info/Information");
@@ -138,9 +138,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             switch (Name)
             {
-                case "Cepter Information":
-                    g.Draw(sprCepterInformation, new Rectangle((int)Position.X + 1, (int)Position.Y - sprCepterInformation.Height, sprCepterInformation.Width, sprCepterInformation.Height), Color.White);
-                    TopLeftWidth = sprCepterInformation.Width;
+                case "Player Information":
+                    g.Draw(sprPlayerInformation, new Rectangle((int)Position.X + 1, (int)Position.Y - sprPlayerInformation.Height, sprPlayerInformation.Width, sprPlayerInformation.Height), Color.White);
+                    TopLeftWidth = sprPlayerInformation.Width;
                     break;
 
                 case "Command":

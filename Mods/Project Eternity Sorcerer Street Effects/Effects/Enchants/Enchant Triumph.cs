@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{
-    public sealed class EnchantQuicksandEffect : SorcererStreetEffect
+{//User's next lap bonus is increased to 1.5x. Effect ends when user reaches the castle.
+    public sealed class EnchantTriumphEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Enchant Quicksand";
+        public static string Name = "Sorcerer Street Enchant Triumph";
 
-        public EnchantQuicksandEffect()
+        public EnchantTriumphEffect()
             : base(Name, false)
         {
         }
 
-        public EnchantQuicksandEffect(SorcererStreetBattleParams Params)
+        public EnchantTriumphEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            return "Triumph";
         }
 
         protected override BaseEffect DoCopy()
         {
-            EnchantQuicksandEffect NewEffect = new EnchantQuicksandEffect(Params);
+            EnchantTriumphEffect NewEffect = new EnchantTriumphEffect(Params);
 
             return NewEffect;
         }

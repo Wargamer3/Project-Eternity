@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen.Online
                     ActivePlayer.Inventory.ActiveBook = NewActiveBook;
                     for (int C = 0; C < ListCard.Count; ++C)
                     {
-                        Card LoadedCard = Card.LoadCard(ListCard[C].Item1, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget);
+                        Card LoadedCard = Card.LoadCard(ListCard[C].Item1, GameScreen.ContentFallback, PlayerManager.DicRequirement, PlayerManager.DicEffect, PlayerManager.DicAutomaticSkillTarget, PlayerManager.DicManualSkillTarget);
                         LoadedCard.QuantityOwned = ListCard[C].Item2;
                         NewActiveBook.AddCard(LoadedCard);
                     }

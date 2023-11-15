@@ -79,4 +79,29 @@ namespace ProjectEternity.Core.Item
             return DicTargetType;
         }
     }
+
+    public class EffectActivationExecuteOnly : AutomaticSkillTargetType
+    {
+        public static string Name = "Execute Only";
+
+        public EffectActivationExecuteOnly()
+            : base(Name)
+        {
+        }
+
+        public override bool CanExecuteEffectOnTarget(BaseEffect ActiveSkillEffect)
+        {
+            return true;
+        }
+
+        public override void ExecuteAndAddEffectToTarget(BaseEffect ActiveSkillEffect, string SkillName)
+        {
+            ActiveSkillEffect.Copy().ExecuteEffect();
+        }
+
+        public override AutomaticSkillTargetType Copy()
+        {
+            return new EffectActivationExecuteOnly();
+        }
+    }
 }

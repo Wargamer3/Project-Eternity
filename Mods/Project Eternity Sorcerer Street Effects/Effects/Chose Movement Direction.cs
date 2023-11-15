@@ -3,7 +3,7 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{//Target Cepter can choose movement direction next turn.
+{//Target Player can choose movement direction next turn.
     public sealed class ChoseMovementDirectionEffect : SorcererStreetEffect
     {
         public static string Name = "Sorcerer Street Global Ability Chose Movement Direction";

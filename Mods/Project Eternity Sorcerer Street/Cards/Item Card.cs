@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
@@ -99,7 +100,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sprCard = Clone.sprCard;
         }
 
-        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        public override Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             return new ItemCard(this, DicRequirement, DicEffects, DicAutomaticSkillTarget);
         }

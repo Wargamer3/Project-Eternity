@@ -2,19 +2,18 @@
 using System.Text;
 using System.Collections.Generic;
 using ProjectEternity.Core.Item;
-using ProjectEternity.Core.Units;
-using ProjectEternity.Core.Characters;
 
 namespace ProjectEternity.Core.Skill
 {
     public class ManualSkill
     {
         public int Range;// Limit the area of effect of the Skill, or -1 for infinite.
-        public int SPCost;
+        public int ActivationCost;
         public int LevelRequirement;
         public readonly string Name;
         public readonly string FullName;
         public ManualSkillTarget Target;//Tells who to use the Skill on.
+        public List<BaseSkillRequirement> ListRequirement;//List of every requirement criterias needed to active the Skill.
         public readonly string Description;
         private bool _CanActivate;
         public bool CanActivate { get { return _CanActivate; } }
@@ -44,15 +43,50 @@ namespace ProjectEternity.Core.Skill
 
             Description = BR.ReadString();
 
+            int ListRequirementCount = BR.ReadInt32();
+            ListRequirement = new List<BaseSkillRequirement>(ListRequirementCount);
+            for (int R = 0; R < ListRequirementCount; R++)
+            {
+                ListRequirement.Add(BaseSkillRequirement.LoadCopy(BR, DicRequirement));
+            }
+
             int ListEffectCount = BR.ReadInt32();
             ListEffect = new List<BaseEffect>(ListEffectCount);
-            for (int i = 0; i < ListEffectCount; i++)
+            for (int E = 0; E < ListEffectCount; E++)
+            {
                 ListEffect.Add(BaseEffect.FromFile(BR, DicRequirement, DicEffect, DicAutomaticSkillTarget));
+            }
 
             FS.Close();
             BR.Close();
         }
-        
+
+        public ManualSkill(ManualSkill Clone)
+        {
+            _CanActivate = false;
+            IsUnlocked = false;
+
+            FullName = Clone.FullName;
+            Name = Clone.Name;
+
+            Range = Clone.Range;
+            Target = Clone.Target;
+
+            Description = Clone.Description;
+
+            ListRequirement = new List<BaseSkillRequirement>(Clone.ListRequirement.Count);
+            for (int R = 0; R < Clone.ListRequirement.Count; R++)
+            {
+                ListRequirement.Add(Clone.ListRequirement[R].Copy());
+            }
+
+            ListEffect = new List<BaseEffect>(Clone.ListEffect.Count);
+            for (int E = 0; E < Clone.ListEffect.Count; E++)
+            {
+                ListEffect.Add(Clone.ListEffect[E].Copy());
+            }
+        }
+
         public void ActiveSkillFromMenu()
         {
             Target.ActivateSkillFromMenu(this);
@@ -67,6 +101,13 @@ namespace ProjectEternity.Core.Skill
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             Target = DicManualSkillTarget[Target.TargetType].Copy();
+
+            for (int R = 0; R < ListRequirement.Count; R++)
+            {
+                BaseSkillRequirement NewRequirement = DicRequirement[ListRequirement[R].SkillRequirementName].Copy();
+                NewRequirement.CopyMembers(ListRequirement[R]);
+                ListRequirement[R] = NewRequirement;
+            }
 
             for (int E = 0; E < ListEffect.Count; E++)
             {

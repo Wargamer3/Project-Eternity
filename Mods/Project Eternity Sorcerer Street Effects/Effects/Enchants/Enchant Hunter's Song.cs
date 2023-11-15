@@ -3,17 +3,17 @@ using System.IO;
 using ProjectEternity.Core.Item;
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
-{//All Cepters draw two cards when drawing instead of one.
-    public sealed class GlobalAbilityDraw2CardsEffect : SorcererStreetEffect
+{//Protection: Target Player gains 200G magic for every creature they destroy in battle for 4 rounds.
+    public sealed class EnchantHuntersSongEffect : SorcererStreetEffect
     {
-        public static string Name = "Sorcerer Street Global Ability Draw 2 Cards";
+        public static string Name = "Sorcerer Street Enchant Hunter's Song";
 
-        public GlobalAbilityDraw2CardsEffect()
+        public EnchantHuntersSongEffect()
             : base(Name, false)
         {
         }
 
-        public GlobalAbilityDraw2CardsEffect(SorcererStreetBattleParams Params)
+        public EnchantHuntersSongEffect(SorcererStreetBattleParams Params)
             : base(Name, false, Params)
         {
         }
@@ -33,12 +33,12 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override string DoExecuteEffect()
         {
-            return null;
+            return "Hunter's Song";
         }
 
         protected override BaseEffect DoCopy()
         {
-            GlobalAbilityDraw2CardsEffect NewEffect = new GlobalAbilityDraw2CardsEffect(Params);
+            EnchantHuntersSongEffect NewEffect = new EnchantHuntersSongEffect(Params);
 
             return NewEffect;
         }

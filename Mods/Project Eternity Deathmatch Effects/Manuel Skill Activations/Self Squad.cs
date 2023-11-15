@@ -46,7 +46,7 @@ namespace ProjectEternity.Core.Skill
                     Params.ActiveParser);
 
                 AddAndExecuteEffect(ActiveSkill, Params.GlobalContext.EffectOwnerSquad[U].Pilot.Effects, SkillEffect.LifetimeTypeTurns + Params.Map.ActivePlayerIndex);
-                Params.GlobalContext.EffectOwnerCharacter.SP -= ActiveSkill.SPCost;
+                Params.GlobalContext.EffectOwnerCharacter.SP -= ActiveSkill.ActivationCost;
             }
         }
 

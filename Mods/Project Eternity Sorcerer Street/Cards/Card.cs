@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
 using ProjectEternity.Core.Item;
+using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Graphics;
 using static ProjectEternity.Core.Operators;
 using static ProjectEternity.GameScreens.SorcererStreetScreen.CreatureCard;
@@ -12,7 +13,7 @@ using static ProjectEternity.GameScreens.SorcererStreetScreen.ActionPanelBattleA
 
 namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
-    public struct CardAbilities
+    public class CardAbilities
     {
         public bool AttackFirst;
         public bool AttackLast;
@@ -30,6 +31,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public bool HPProtection;//HP & MHP cannot be altered by spells or territory abilities.
         public bool Recycle;
 
+        public bool LandEffectLimit;//Target creature cannot receive land effect.
+
         public ElementalAffinity[] ArrayElementAffinity;
 
         public ElementalAffinity[] ArrayPenetrateAffinity;//HP from Land Bonus is negated, attack with creature ST
@@ -45,6 +48,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public List<AttackTypes> ListReflectType;
         public NumberTypes ReflectSignOperator;
         public string ReflectValue;
+
+        public CardAbilities()
+        {
+            DamageMultiplier = 1f;
+        }
 
         public CardAbilities(CardAbilities Other)
         {
@@ -63,6 +71,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             TargetProtection = Other.TargetProtection;
             HPProtection = Other.HPProtection;
             Recycle = Other.Recycle;
+
+            LandEffectLimit = Other.LandEffectLimit;
 
             ArrayPenetrateAffinity = Other.ArrayPenetrateAffinity;
 
@@ -189,19 +199,19 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             string[] UnitInfo = Path.Split(new[] { "/", "\\" }, StringSplitOptions.None);
 
-            return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), null, null, null, null);
+            return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), null, null, null, null, null);
         }
 
         public static Card LoadCard(string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
-            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            Dictionary<string, BaseEffect> DicEffect, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             string[] UnitInfo = Path.Split(new[] { "/", "\\" }, StringSplitOptions.None);
 
-            return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            return FromType(UnitInfo[0], Path.Remove(0, UnitInfo[0].Length + 1), Content, DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
         }
 
         public static Card FromType(string CardType, string Path, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement,
-            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+            Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             switch(CardType)
             {
@@ -215,7 +225,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
                 case "Spell Cards":
                 case SpellCard.SpellCardType:
-                    return new SpellCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget);
+                    return new SpellCard(Path, Content, DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
             }
 
             throw new Exception("Unkown card type: " + CardType);
@@ -244,9 +254,9 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        public Card Copy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
+        public Card Copy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            Card NewCopy = DoCopy(DicRequirement, DicEffects, DicAutomaticSkillTarget);
+            Card NewCopy = DoCopy(DicRequirement, DicEffects, DicAutomaticSkillTarget, DicManualSkillTarget);
 
             NewCopy.Description = Description;
             NewCopy.Rarity = Rarity;
@@ -256,7 +266,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             return NewCopy;
         }
 
-        public abstract Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget);
+        public abstract Card DoCopy(Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffects, Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget);
 
         public Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> GetAvailableActivation(string RequirementName)
         {

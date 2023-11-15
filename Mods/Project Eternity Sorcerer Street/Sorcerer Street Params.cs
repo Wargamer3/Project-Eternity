@@ -15,6 +15,8 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 {
     public class SorcererStreetBattleContext
     {
+        public enum EffectActivationPhases { None, Enchant, Battle }
+
         public class BattleCreatureInfo
         {
             public CreatureCard Creature;
@@ -120,6 +122,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         public BattleCreatureInfo Defender;
         public TerrainSorcererStreet DefenderTerrain;
 
+        public EffectActivationPhases EffectActivationPhase;
         public List<BaseEffect> ListActivatedEffect;
 
         public BattleCreatureInfo SelfCreature;
@@ -177,10 +180,23 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
             Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicSkillActivation = Invader.Creature.GetAvailableActivation(RequirementName);
 
+            if (Invader.Owner.Enchant != null)
+            {
+                List<BaseSkillActivation> ListEnchantActivation = Invader.Owner.Enchant.GetAvailableActivation(RequirementName);
+                if (ListEnchantActivation.Count > 0)
+                {
+                    if (ListEnchantActivation != null && ListEnchantActivation.Count > 0)
+                    {
+                        DicSkillActivation.Add(Invader.Owner.Enchant, ListEnchantActivation);
+                    }
+                }
+            }
+
             if (DicSkillActivation.Count > 0)
             {
                 ListSkillActivation.Add(new SkillActivationContext(false, DicSkillActivation));
             }
+
             if (Invader.Item != null)
             {
                 Dictionary<BaseAutomaticSkill, List<BaseSkillActivation>> DicItemSkillActivation = Invader.Item.GetAvailableActivation(RequirementName);
@@ -284,7 +300,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GlobalContext.InvaderCreatureTemporaryTransformation = IsTemporary;
                 GlobalContext.OriginalInvaderCreature = GlobalContext.Invader.Creature;
 
-                GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 GlobalContext.Invader.Creature.InitBattleBonuses();
             }
             else
@@ -292,7 +308,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GlobalContext.DefenderCreatureTemporaryTransformation = IsTemporary;
                 GlobalContext.OriginalDefenderCreature = GlobalContext.Defender.Creature;
 
-                GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 GlobalContext.Defender.Creature.InitBattleBonuses();
             }
         }
@@ -304,7 +320,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GlobalContext.DefenderCreatureTemporaryTransformation = IsTemporary;
                 GlobalContext.OriginalDefenderCreature = GlobalContext.Defender.Creature;
 
-                GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Defender.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 GlobalContext.Defender.Creature.InitBattleBonuses();
             }
             else
@@ -312,7 +328,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 GlobalContext.InvaderCreatureTemporaryTransformation = IsTemporary;
                 GlobalContext.OriginalInvaderCreature = GlobalContext.Invader.Creature;
 
-                GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget);
+                GlobalContext.Invader.Creature = (CreatureCard)TransformationCreature.Copy(DicRequirement, DicEffect, DicAutomaticSkillTarget, DicManualSkillTarget);
                 GlobalContext.Invader.Creature.InitBattleBonuses();
             }
         }
@@ -355,7 +371,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void LoadAutomaticSkillActivation()
         {
-            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetBattleTargetType), GlobalContext))
+            foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), typeof(SorcererStreetAutomaticTargetType), GlobalContext))
             {
                 DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
             }
@@ -363,7 +379,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Sorcerer Street", " *.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetBattleTargetType), GlobalContext))
+                foreach (KeyValuePair<string, AutomaticSkillTargetType> ActiveAutomaticSkill in AutomaticSkillTargetType.LoadFromAssembly(ActiveAssembly, typeof(SorcererStreetAutomaticTargetType), GlobalContext))
                 {
                     DicAutomaticSkillTarget.Add(ActiveAutomaticSkill.Key, ActiveAutomaticSkill.Value);
                 }
@@ -372,7 +388,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
 
         protected override void LoadManualSkillActivation()
         {
-            foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), GlobalContext))
+            foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssemblyFiles(Directory.GetFiles("Effects/Sorcerer Street", "*.dll"), this))
             {
                 DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
             }
@@ -380,7 +396,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             List<Assembly> ListAssembly = RoslynWrapper.GetCompiledAssembliesFromFolder("Effects/Sorcerer Street", " *.csx", SearchOption.TopDirectoryOnly);
             foreach (Assembly ActiveAssembly in ListAssembly)
             {
-                foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssembly(ActiveAssembly, GlobalContext))
+                foreach (KeyValuePair<string, ManualSkillTarget> ActiveManualSkill in ManualSkillTarget.LoadFromAssembly(ActiveAssembly, this))
                 {
                     DicManualSkillTarget.Add(ActiveManualSkill.Key, ActiveManualSkill.Value);
                 }

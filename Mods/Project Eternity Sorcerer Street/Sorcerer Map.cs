@@ -581,7 +581,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ListSummonedCreature.Add(SummonedCreature);
 
-            foreach (CreatureCard.ElementalAffinity ActiveElement in SummonedCreature.Abilities.ArrayElementAffinity)
+            foreach (CreatureCard.ElementalAffinity ActiveElement in SummonedCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity)
             {
                 byte ChainValue;
 
@@ -600,7 +600,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             ListSummonedCreature.Remove(KilledCreature);
 
-            foreach (CreatureCard.ElementalAffinity ActiveElement in KilledCreature.Abilities.ArrayElementAffinity)
+            foreach (CreatureCard.ElementalAffinity ActiveElement in KilledCreature.GetCurrentAbilities(SorcererStreetBattleContext.EffectActivationPhases.None).ArrayElementAffinity)
             {
                 byte ChainValue;
 
