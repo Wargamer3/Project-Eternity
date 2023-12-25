@@ -524,7 +524,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
 
-        private void SendMessage(string InputMessage)
+        private void SendMessage(TextInput SenderInput, string InputMessage)
         {
             ChatInput.SetText(string.Empty);
             OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));

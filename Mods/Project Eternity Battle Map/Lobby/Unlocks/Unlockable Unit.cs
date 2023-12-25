@@ -44,7 +44,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             if (UnlockQuantity > 0)
             {
-                ConditionsOwner.Inventory.DicOwnedSquad.Add(Path, new UnitInfo(NewUnit, UnlockQuantity));
+                ConditionsOwner.Inventory.DicOwnedUnit.Add(Path, new UnitInfo(NewUnit, UnlockQuantity));
                 ListUnlockMessage.Add("You just received " + UnlockQuantity + "x " + NewUnit.ItemName + "!");
             }
 

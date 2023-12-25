@@ -10,7 +10,7 @@ namespace ProjectEternity.Core.Item
 {
     public class TextInput : IUIElement
     {
-        public delegate void OnConfirmDelegate(string InputMessage);
+        public delegate void OnConfirmDelegate(TextInput Sender, string InputMessage);
 
         private Texture2D sprPixel;
         private Texture2D sprCursor;
@@ -181,7 +181,7 @@ namespace ProjectEternity.Core.Item
 
                         case Keys.Enter:
                             if (!string.IsNullOrEmpty(Text))
-                                OnConfirm(Text);
+                                OnConfirm(this, Text);
                             break;
 
                         case Keys.Right:
@@ -381,7 +381,7 @@ namespace ProjectEternity.Core.Item
             return MessageCursorPosition;
         }
 
-        private void EreaseText(string InputMessage)
+        private void EreaseText(TextInput Sender, string InputMessage)
         {
             Text = "";
             TextVisible = Text;
@@ -427,10 +427,10 @@ namespace ProjectEternity.Core.Item
 
             if (IsActive && IsCursorVisible)
             {
-                g.Draw(sprCursor, new Rectangle((int)(TextInputPosition.X + MessageCursorPosition), (int)TextInputPosition.Y + 1, 1, (int)TextInputSize.Y - 2), Color.Black);
+                g.Draw(sprCursor, new Rectangle((int)(TextInputPosition.X + MessageCursorPosition), (int)TextInputPosition.Y + 1, 1, (int)TextInputSize.Y - 2), Color.White);
             }
 
-            g.DrawString(fntText, TextVisible, new Vector2(TextInputPosition.X, TextInputPosition.Y), Color.Black);
+            g.DrawString(fntText, TextVisible, new Vector2(TextInputPosition.X, TextInputPosition.Y), Color.White);
         }
     }
 }

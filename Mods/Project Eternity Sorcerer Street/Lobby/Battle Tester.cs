@@ -886,7 +886,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonClick.Play();
         }
 
-        private void SetDefenderPlayerCardsInHand(string InputValue)
+        private void SetDefenderPlayerCardsInHand(TextInput Sender, string InputValue)
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
@@ -900,7 +900,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private void SetDefenderPlayerCardsInDeck(string InputValue)
+        private void SetDefenderPlayerCardsInDeck(TextInput Sender, string InputValue)
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
@@ -914,31 +914,31 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private void SetDefenderHPInput(string InputValue)
+        private void SetDefenderHPInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Defender.Creature.CurrentHP);
         }
 
-        private void SetDefenderMaxHPInput(string InputValue)
+        private void SetDefenderMaxHPInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Defender.Creature.MaxHP);
         }
 
-        private void SetDefenderSTInput(string InputValue)
+        private void SetDefenderSTInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Defender.Creature.CurrentST);
         }
 
-        private void SetDefenderTerrainHPBonusInput(string InputValue)
+        private void SetDefenderTerrainHPBonusInput(TextInput Sender, string InputValue)
         {
             int.TryParse(DefenderTerrainHPBonusInput.Text, out Context.DefenderTerrain.LandLevel);
         }
 
-        private void SetDefenderSupportSTBonusInput(string InputValue)
+        private void SetDefenderSupportSTBonusInput(TextInput Sender, string InputValue)
         {
         }
 
-        private void SetDefenderAirLandsInput(string InputValue)
+        private void SetDefenderAirLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
@@ -946,7 +946,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
         }
 
-        private void SetDefenderEarthLandsInput(string InputValue)
+        private void SetDefenderEarthLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
@@ -954,7 +954,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
         }
 
-        private void SetDefenderFireLandsInput(string InputValue)
+        private void SetDefenderFireLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
@@ -962,7 +962,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
         }
 
-        private void SetDefenderWaterLandsInput(string InputValue)
+        private void SetDefenderWaterLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
@@ -970,22 +970,22 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
         }
 
-        private void SetDefenderRankInput(string InputValue)
+        private void SetDefenderRankInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Defender.Owner.Rank);
         }
 
-        private void SetDefenderGoldInput(string InputValue)
+        private void SetDefenderGoldInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Defender.Owner.Gold);
         }
 
-        private void SetDefenderLapInput(string InputValue)
+        private void SetDefenderLapInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Defender.Owner.CompletedLaps);
         }
         
-        private void SetRoundInput(string InputValue)
+        private void SetRoundInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.CurrentTurn);
         }
@@ -1056,7 +1056,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             sndButtonClick.Play();
         }
 
-        private void SetInvaderPlayerCardsInHand(string InputValue)
+        private void SetInvaderPlayerCardsInHand(TextInput Sender, string InputValue)
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
@@ -1070,7 +1070,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private void SetInvaderPlayerCardsInDeck(string InputValue)
+        private void SetInvaderPlayerCardsInDeck(TextInput Sender, string InputValue)
         {
             int CardsInHand;
             int.TryParse(InputValue, out CardsInHand);
@@ -1084,26 +1084,26 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
         }
 
-        private void SetInvaderHPInput(string InputValue)
+        private void SetInvaderHPInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Invader.Creature.CurrentHP);
         }
 
-        private void SetInvaderMaxHPInput(string InputValue)
+        private void SetInvaderMaxHPInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Invader.Creature.MaxHP);
         }
 
-        private void SetInvaderSTInput(string InputValue)
+        private void SetInvaderSTInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Invader.Creature.CurrentST);
         }
 
-        private void SetInvaderSupportSTBonusInput(string InputValue)
+        private void SetInvaderSupportSTBonusInput(TextInput Sender, string InputValue)
         {
         }
 
-        private void SetInvaderAirLandsInput(string InputValue)
+        private void SetInvaderAirLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
@@ -1111,7 +1111,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Air] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Air]);
         }
 
-        private void SetInvaderEarthLandsInput(string InputValue)
+        private void SetInvaderEarthLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
@@ -1119,7 +1119,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Earth] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Earth]);
         }
 
-        private void SetInvaderFireLandsInput(string InputValue)
+        private void SetInvaderFireLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
@@ -1127,7 +1127,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Fire] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Fire]);
         }
 
-        private void SetInvaderWaterLandsInput(string InputValue)
+        private void SetInvaderWaterLandsInput(TextInput Sender, string InputValue)
         {
             byte FinalValue;
             byte.TryParse(InputValue, out FinalValue);
@@ -1135,17 +1135,17 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             DicCreatureCountByElementType[CreatureCard.ElementalAffinity.Water] = (byte)(Context.Invader.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water] + Context.Defender.Owner.DicCreatureCountByElementType[(byte)CreatureCard.ElementalAffinity.Water]);
         }
 
-        private void SetInvaderRankInput(string InputValue)
+        private void SetInvaderRankInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Invader.Owner.Rank);
         }
 
-        private void SetInvaderGoldInput(string InputValue)
+        private void SetInvaderGoldInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Invader.Owner.Gold);
         }
 
-        private void SetInvaderLapInput(string InputValue)
+        private void SetInvaderLapInput(TextInput Sender, string InputValue)
         {
             int.TryParse(InputValue, out Context.Invader.Owner.CompletedLaps);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -80,6 +81,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             base.Draw(g);
+        }
+
+        public override List<GameRuleError> Validate(RoomInformations Room)
+        {
+            return new List<GameRuleError>();
         }
     }
 }

@@ -27,7 +27,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public CampaignRecord(ByteReader BR)
         {
             Name = BR.ReadString();
-            FirstCompletionDate = new DateTimeOffset(BR.ReadInt64(), new TimeSpan(BR.ReadInt64()));
+            long Ticks = BR.ReadInt64();
+            long Ticks2 = BR.ReadInt64();
+            FirstCompletionDate = new DateTimeOffset(Ticks, new TimeSpan(Ticks2));
             MaxScore = BR.ReadUInt32();
         }
 

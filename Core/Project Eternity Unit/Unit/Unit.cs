@@ -298,8 +298,8 @@ namespace ProjectEternity.Core.Units
         {
         }
 
-        protected Unit(string Name)
-            : base(Name)
+        protected Unit(string RelativePath)
+            : base(RelativePath)
         {
             _ListAttack = new List<Attack>();
             ListAttackTemporary = new List<TemporaryAttackPickup>();
@@ -376,14 +376,14 @@ namespace ProjectEternity.Core.Units
             return FromType(UnitInfo[0], Name.Remove(0, UnitInfo[0].Length + 1), Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
-        public static Unit FromType(string UnitType, string Name, Microsoft.Xna.Framework.Content.ContentManager Content,
+        public static Unit FromType(string UnitType, string RelativePath, Microsoft.Xna.Framework.Content.ContentManager Content,
             Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return DicUnitType[UnitType].FromFile(Name, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            return DicUnitType[UnitType].FromFile(RelativePath, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
-        public abstract Unit FromFile(string Name, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public abstract Unit FromFile(string RelativePath, Microsoft.Xna.Framework.Content.ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget);
 
         public void QuickSave(BinaryWriter BW)
@@ -914,6 +914,41 @@ namespace ProjectEternity.Core.Units
             }
         }
 
+
+        public string QualityRank
+        {
+            get
+            {
+                if (SpawnCost >= 1000)
+                {
+                    return "S";
+                }
+                else if (SpawnCost >= 700)
+                {
+                    return "A";
+                }
+                else if (SpawnCost >= 550)
+                {
+                    return "B";
+                }
+                else if (SpawnCost >= 400)
+                {
+                    return "C";
+                }
+                else if (SpawnCost >= 200)
+                {
+                    return "D";
+                }
+                else if (SpawnCost >= 150)
+                {
+                    return "E";
+                }
+                else
+                {
+                    return "F";
+                }
+            }
+        }
         public void ReactivateEffects()
         {
             ResetBoosts();

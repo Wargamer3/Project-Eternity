@@ -6,7 +6,7 @@ using ProjectEternity.Core.ControlHelper;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
-    public class BoxNumericUpDown : TextInput
+    public class EmptyNumericUpDown : TextInput
     {
         private float ButtonX => TextInputPosition.X + TextInputSize.X - 15;
         private float TopButtonY => TextInputPosition.Y - 5;
@@ -14,13 +14,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private int ButtonWidth => 20;
         private int ButtonHeight => (int)TextInputSize.Y / 2 + 5;
 
-        public BoxNumericUpDown(SpriteFont fntText, Texture2D sprPixel, Texture2D sprCursor, Vector2 TextInputPosition, Vector2 TextInputSize, OnConfirmDelegate OnConfirm = null)
+        public EmptyNumericUpDown(SpriteFont fntText, Texture2D sprPixel, Texture2D sprCursor, Vector2 TextInputPosition, Vector2 TextInputSize, OnConfirmDelegate OnConfirm = null)
             : base(fntText, sprPixel, sprCursor, TextInputPosition, TextInputSize, OnConfirm, true)
         {
             SetText("0");
         }
 
-        public BoxNumericUpDown(SpriteFont fntText, Texture2D sprPixel, Texture2D sprCursor, Vector2 TextInputPosition, Vector2 TextInputSize, OnConfirmDelegate OnConfirm, string DefaultText)
+        public EmptyNumericUpDown(SpriteFont fntText, Texture2D sprPixel, Texture2D sprCursor, Vector2 TextInputPosition, Vector2 TextInputSize, OnConfirmDelegate OnConfirm, string DefaultText)
             : base(fntText, sprPixel, sprCursor, TextInputPosition, TextInputSize, OnConfirm, true)
         {
             SetText(DefaultText);
@@ -51,7 +51,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            GameScreen.DrawBox(g, new Vector2(TextInputPosition.X - 5, TextInputPosition.Y - 5), (int)TextInputSize.X + 10, (int)TextInputSize.Y + 10, Color.White);
+            GameScreen.DrawEmptyBox(g, new Vector2(TextInputPosition.X - 5, TextInputPosition.Y - 5), (int)TextInputSize.X + 10, (int)TextInputSize.Y + 10);
             GameScreen.DrawBox(g, new Vector2(ButtonX, TopButtonY), ButtonWidth, ButtonHeight, Color.White);
             GameScreen.DrawBox(g, new Vector2(ButtonX, BottomButtonY), ButtonWidth, ButtonHeight, Color.White);
 

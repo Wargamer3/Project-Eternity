@@ -10,6 +10,72 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
+    public struct UnitInventoryContainer
+    {
+        public Dictionary<string, UnitInventoryContainer> DicFolder;
+        public List<UnitInventoryContainer> ListFolder;//Share the same folders as the dictionnary
+        public List<UnitInfo> ListUnit;
+        public UnitInfo IconUnit;
+
+        public string Name;
+
+        public UnitInventoryContainer(string Name)
+        {
+            this.Name = Name;
+
+            DicFolder = new Dictionary<string, UnitInventoryContainer>();
+            ListFolder = new List<UnitInventoryContainer>();
+            ListUnit = new List<UnitInfo>();
+            IconUnit = null;
+        }
+
+        public void AddUnit(UnitInfo UnitToAdd)
+        {
+            if (ListUnit.Count == 0)
+            {
+                IconUnit = UnitToAdd;
+            }
+
+            if (!ListUnit.Contains(UnitToAdd))
+            {
+                ListUnit.Add(UnitToAdd);
+            }
+        }
+    }
+
+    public struct CharacterInventoryContainer
+    {
+        public Dictionary<string, CharacterInventoryContainer> DicFolder;
+        public List<CharacterInventoryContainer> ListFolder;//Share the same folders as the dictionnary
+        public List<CharacterInfo> ListCharacter;
+        public CharacterInfo IconUnit;
+
+        public string Name;
+
+        public CharacterInventoryContainer(string Name)
+        {
+            this.Name = Name;
+
+            DicFolder = new Dictionary<string, CharacterInventoryContainer>();
+            ListFolder = new List<CharacterInventoryContainer>();
+            ListCharacter = new List<CharacterInfo>();
+            IconUnit = null;
+        }
+
+        public void AddCharacter(CharacterInfo UnitToAdd)
+        {
+            if (ListCharacter.Count == 0)
+            {
+                IconUnit = UnitToAdd;
+            }
+
+            if (!ListCharacter.Contains(UnitToAdd))
+            {
+                ListCharacter.Add(UnitToAdd);
+            }
+        }
+    }
+
     public class UnitInfo
     {
         public Unit Leader;
@@ -51,7 +117,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
     public class BattleMapPlayerInventory
     {
-        public Dictionary<string, UnitInfo> DicOwnedSquad;
+        public UnitInventoryContainer RootUnitContainer;
+        public CharacterInventoryContainer RootCharacterContainer;
+
+        public Dictionary<string, UnitInfo> DicOwnedUnit;
         public Dictionary<string, CharacterInfo> DicOwnedCharacter;
         public Dictionary<string, MissionInfo> DicOwnedMission;
         public List<PlayerLoadout> ListSquadLoadout;
@@ -60,8 +129,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public BattleMapPlayerInventory()
         {
+            RootUnitContainer = new UnitInventoryContainer("ALL");
+            RootCharacterContainer = new CharacterInventoryContainer("ALL");
+
             ListSquadLoadout = new List<PlayerLoadout>();
-            DicOwnedSquad = new Dictionary<string, UnitInfo>();
+            DicOwnedUnit = new Dictionary<string, UnitInfo>();
             DicOwnedCharacter = new Dictionary<string, CharacterInfo>();
             DicOwnedMission = new Dictionary<string, MissionInfo>();
 
@@ -72,9 +144,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void Load(BinaryReader BR, ContentManager Content, Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
-            int ListOwnedSquadCount = BR.ReadInt32();
-            DicOwnedSquad = new Dictionary<string, UnitInfo>(ListOwnedSquadCount);
-            for (int S = 0; S < ListOwnedSquadCount; ++S)
+            int ListOwnedUnitCount = BR.ReadInt32();
+            DicOwnedUnit = new Dictionary<string, UnitInfo>(ListOwnedUnitCount);
+            for (int S = 0; S < ListOwnedUnitCount; ++S)
             {
                 string RelativePath = BR.ReadString();
                 string UnitTypeName = BR.ReadString();
@@ -82,8 +154,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 LoadedUnit.ID = LoadedUnit.ItemName;
+                UnitInfo LoadedUnitInfo = new UnitInfo(LoadedUnit, QuantityOwned);
 
-                DicOwnedSquad.Add(RelativePath, new UnitInfo(LoadedUnit, QuantityOwned));
+                DicOwnedUnit.Add(RelativePath, LoadedUnitInfo);
+                AddUnit(LoadedUnitInfo);
             }
 
             int ListOwnedCharacterCount = BR.ReadInt32();
@@ -97,7 +171,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 LoadedCharacter.Level = 1;
                 LoadedCharacter.ID = LoadedCharacter.Name;
 
-                DicOwnedCharacter.Add(CharacterFullName, new CharacterInfo(LoadedCharacter, QuantityOwned));
+                CharacterInfo LoadedCharacterInfo = new CharacterInfo(LoadedCharacter, QuantityOwned);
+
+                DicOwnedCharacter.Add(CharacterFullName, LoadedCharacterInfo);
+                AddCharacter(LoadedCharacterInfo);
             }
 
             int ListOwnedMissionCount = BR.ReadInt32();
@@ -118,6 +195,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 PlayerLoadout NewSquadLoadout = new PlayerLoadout();
                 ListSquadLoadout.Add(NewSquadLoadout);
+
+                NewSquadLoadout.Name = BR.ReadString();
 
                 int NewSquadLoadoutSquadCount = BR.ReadInt32();
                 NewSquadLoadout.ListSpawnSquad = new List<Squad>(NewSquadLoadoutSquadCount);
@@ -160,7 +239,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget, Dictionary<string, ManualSkillTarget> DicManualSkillTarget)
         {
             int ListOwnedSquadCount = BR.ReadInt32();
-            DicOwnedSquad = new Dictionary<string, UnitInfo>(ListOwnedSquadCount);
+            DicOwnedUnit = new Dictionary<string, UnitInfo>(ListOwnedSquadCount);
             for (int S = 0; S < ListOwnedSquadCount; ++S)
             {
                 string RelativePath = BR.ReadString();
@@ -170,7 +249,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 Unit LoadedUnit = Unit.FromType(UnitTypeName, RelativePath, Content, DicUnitType, DicRequirement, DicEffect, DicAutomaticSkillTarget);
                 LoadedUnit.ID = LoadedUnit.ItemName;
 
-                DicOwnedSquad.Add(RelativePath, new UnitInfo(LoadedUnit, QuantityOwned));
+                DicOwnedUnit.Add(RelativePath, new UnitInfo(LoadedUnit, QuantityOwned));
             }
 
             int ListOwnedCharacterCount = BR.ReadInt32();
@@ -205,6 +284,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 PlayerLoadout NewSquadLoadout = new PlayerLoadout();
                 ListSquadLoadout.Add(NewSquadLoadout);
+
+                NewSquadLoadout.Name = BR.ReadString();
 
                 int NewSquadLoadoutSquadCount = BR.ReadInt32();
                 NewSquadLoadout.ListSpawnSquad = new List<Squad>(NewSquadLoadoutSquadCount);
@@ -245,8 +326,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void Save(BinaryWriter BW)
         {
-            BW.Write(DicOwnedSquad.Count);
-            foreach (UnitInfo ActiveSquad in DicOwnedSquad.Values)
+            BW.Write(DicOwnedUnit.Count);
+            foreach (UnitInfo ActiveSquad in DicOwnedUnit.Values)
             {
                 BW.Write(ActiveSquad.Leader.RelativePath);
                 BW.Write(ActiveSquad.Leader.UnitTypeName);
@@ -270,6 +351,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             BW.Write(ListSquadLoadout.Count);
             for (int L = 0; L < ListSquadLoadout.Count; ++L)
             {
+                BW.Write(ListSquadLoadout[L].Name);
+
                 BW.Write(ListSquadLoadout[L].ListSpawnSquad.Count);
                 for (int S = 0; S < ListSquadLoadout[L].ListSpawnSquad.Count; ++S)
                 {
@@ -293,15 +376,79 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 }
             }
         }
+
+        public void AddUnit(UnitInfo UnitToAdd)
+        {
+            UnitInventoryContainer CurrentUnitContainer = RootUnitContainer;
+
+            CurrentUnitContainer.AddUnit(UnitToAdd);
+
+            string[] Tags = UnitToAdd.Leader.UnitTags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string ActiveTag in Tags)
+            {
+                CurrentUnitContainer = RootUnitContainer;
+
+                CurrentUnitContainer.AddUnit(UnitToAdd);
+
+                string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string ActiveFolder in SubFolders)
+                {
+                    UnitInventoryContainer NewContainer;
+                    if (!CurrentUnitContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
+                    {
+                        NewContainer = new UnitInventoryContainer(ActiveFolder);
+                        CurrentUnitContainer.DicFolder.Add(ActiveFolder, NewContainer);
+                        CurrentUnitContainer.ListFolder.Add(NewContainer);
+                    }
+
+                    CurrentUnitContainer = NewContainer;
+
+                    CurrentUnitContainer.AddUnit(UnitToAdd);
+                }
+            }
+        }
+
+        public void AddCharacter(CharacterInfo CharacterToAdd)
+        {
+            CharacterInventoryContainer CurrentCharacterContainer = RootCharacterContainer;
+
+            CurrentCharacterContainer.AddCharacter(CharacterToAdd);
+
+            string[] Tags = CharacterToAdd.Pilot.Tags.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string ActiveTag in Tags)
+            {
+                CurrentCharacterContainer = RootCharacterContainer;
+
+                CurrentCharacterContainer.AddCharacter(CharacterToAdd);
+
+                string[] SubFolders = ActiveTag.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string ActiveFolder in SubFolders)
+                {
+                    CharacterInventoryContainer NewContainer;
+                    if (!CurrentCharacterContainer.DicFolder.TryGetValue(ActiveFolder, out NewContainer))
+                    {
+                        NewContainer = new CharacterInventoryContainer(ActiveFolder);
+                        CurrentCharacterContainer.DicFolder.Add(ActiveFolder, NewContainer);
+                        CurrentCharacterContainer.ListFolder.Add(NewContainer);
+                    }
+
+                    CurrentCharacterContainer = NewContainer;
+
+                    CurrentCharacterContainer.AddCharacter(CharacterToAdd);
+                }
+            }
+        }
     }
 
     public class PlayerLoadout
     {
+        public string Name;
         public List<Squad> ListSpawnSquad;
         public List<Commander> ListSpawnCommander;
 
         public PlayerLoadout()
         {
+            Name = "Loadout";
             ListSpawnSquad = new List<Squad>();
             ListSpawnCommander = new List<Commander>();
         }

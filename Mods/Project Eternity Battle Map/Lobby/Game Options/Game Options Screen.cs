@@ -14,13 +14,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public FMODSound sndButtonOver;
         public FMODSound sndButtonClick;
 
-        private BoxButton GametypeButton;
-        private BoxButton SelectMapButton;
-        private BoxButton GameRulesButton;
-        private BoxButton MutatorsButton;
-        private BoxButton BotsConfigButton;
+        private TunnelManager TunnelBackground;
 
-        private BoxButton CloseButton;
+        private EmptyBoxButton GametypeButton;
+        private EmptyBoxButton SelectMapButton;
+        private EmptyBoxButton GameRulesButton;
+        private EmptyBoxButton MutatorsButton;
+        private EmptyBoxButton BotsConfigButton;
+
+        private EmptyBoxButton CloseButton;
 
         private IUIElement[] ArrayUIElement;
 
@@ -42,6 +44,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
+            TunnelBackground = new TunnelManager();
+            TunnelBackground.Load(GraphicsDevice);
+
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
@@ -68,22 +73,22 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int TabOffset = (int)(Constants.Height * 0.05);
 
             int X = 10 + 0 * (TabWidth + TabOffset);
-            GametypeButton = new BoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[0].ToString(), OnButtonOver, OnGametypePressed);
+            GametypeButton = new EmptyBoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[0].ToString(), OnButtonOver, OnGametypePressed);
             X = 10 + 1 * (TabWidth + TabOffset);
-            SelectMapButton = new BoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[1].ToString(), OnButtonOver, OnSelectMapPressed);
+            SelectMapButton = new EmptyBoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[1].ToString(), OnButtonOver, OnSelectMapPressed);
             X = 10 + 2 * (TabWidth + TabOffset);
-            GameRulesButton = new BoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[2].ToString(), OnButtonOver, OnGameRulePressed);
+            GameRulesButton = new EmptyBoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[2].ToString(), OnButtonOver, OnGameRulePressed);
             X = 10 + 3 * (TabWidth + TabOffset);
-            MutatorsButton = new BoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[3].ToString(), OnButtonOver, OnMutatorPressed);
+            MutatorsButton = new EmptyBoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[3].ToString(), OnButtonOver, OnMutatorPressed);
             X = 10 + 4 * (TabWidth + TabOffset);
-            BotsConfigButton = new BoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[4].ToString(), OnButtonOver, OnBotsConfigPressed);
+            BotsConfigButton = new EmptyBoxButton(new Rectangle(X, TabY, TabWidth, TabHeight), fntText, ArrayOptionTab[4].ToString(), OnButtonOver, OnBotsConfigPressed);
 
             int CloseButtonX = (int)(Constants.Width * 0.86);
             int CloseButtonY = (int)(Constants.Height * 0.92);
             int CloseButtonWidth = (int)(Constants.Width * 0.12);
             int CloseButtonHeight = (int)(Constants.Height * 0.06);
 
-            CloseButton = new BoxButton(new Rectangle(CloseButtonX, CloseButtonY, CloseButtonWidth, CloseButtonHeight), fntText, "Close", OnButtonOver, OnClosePressed);
+            CloseButton = new EmptyBoxButton(new Rectangle(CloseButtonX, CloseButtonY, CloseButtonWidth, CloseButtonHeight), fntText, "Close", OnButtonOver, OnClosePressed);
 
             GametypeButton.CanBeChecked = true;
             SelectMapButton.CanBeChecked = true;
@@ -116,6 +121,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
+            TunnelBackground.Update(gameTime);
+
             ActiveTab.Update(gameTime);
 
             foreach (IUIElement ActiveElement in ArrayUIElement)
@@ -196,13 +203,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawBox(g, new Vector2(), Constants.Width, Constants.Height, Color.White);
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Lobby.BackgroundColor);
+
+            TunnelBackground.Draw(g);
+
+            g.End();
+            g.Begin();
+
             int HeaderHeight = (int)(Constants.Height * 0.05);
             int TabSectionY = HeaderHeight;
             int TabSectionHeight = (int)(Constants.Height * 0.06);
-            DrawBox(g, new Vector2(), Constants.Width, Constants.Height, Color.White);
-            DrawBox(g, new Vector2(), Constants.Width, HeaderHeight, Color.White);
-            DrawBox(g, new Vector2(0, TabSectionY), Constants.Width, TabSectionHeight, Color.White);
+            DrawEmptyBox(g, new Vector2(), Constants.Width, HeaderHeight);
+            DrawEmptyBox(g, new Vector2(0, TabSectionY), Constants.Width, TabSectionHeight);
 
             ActiveTab.Draw(g);
 

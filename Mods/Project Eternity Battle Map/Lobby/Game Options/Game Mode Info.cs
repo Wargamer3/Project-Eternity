@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -10,19 +11,34 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 {
     public class GameModeInfo
     {
+        public class EditableInGameAttribute : Attribute
+        {
+            public bool IsEditableInGame;
+
+            public EditableInGameAttribute(bool IsEditableInGame)
+            {
+                this.IsEditableInGame = IsEditableInGame;
+            }
+        }
+
         public struct GameModeParameter
         {
+            public GameModeInfo Owner;
             public string Name;
             public string Description;
             public string Category;
-            public object Value;
+            public PropertyInfo Value;
+            public bool IsVisible;
 
-            public GameModeParameter(string Name, string Description, string Category, object Value)
+            public GameModeParameter(GameModeInfo Owner, PropertyInfo ActiveProperty, string Category)
             {
-                this.Name = Name;
-                this.Description = Description;
+                this.Owner = Owner;
+                this.Value = ActiveProperty;
                 this.Category = Category;
-                this.Value = Value;
+
+                Name = ((DisplayNameAttribute)ActiveProperty.GetCustomAttributes(typeof(DisplayNameAttribute), false)[0]).DisplayName;
+                Description = ((DescriptionAttribute)ActiveProperty.GetCustomAttributes(typeof(DescriptionAttribute), false)[0]).Description;
+                IsVisible = ((EditableInGameAttribute)ActiveProperty.GetCustomAttributes(typeof(EditableInGameAttribute), false)[0]).IsEditableInGame;
             }
         }
 
@@ -117,19 +133,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             Dictionary<string, List<GameModeParameter>> DicGameModeParametersByCategory = new Dictionary<string, List<GameModeParameter>>();
 
-            foreach (System.Reflection.PropertyInfo ActiveProperty in this.GetType().GetProperties())
+            foreach (PropertyInfo ActiveProperty in this.GetType().GetProperties())
             {
-                DisplayNameAttribute ActiveName = (DisplayNameAttribute)ActiveProperty.GetCustomAttributes(typeof(DisplayNameAttribute), false)[0];
                 CategoryAttribute ActiveCategory = (CategoryAttribute)ActiveProperty.GetCustomAttributes(typeof(CategoryAttribute), false)[0];
-                DescriptionAttribute ActiveDescription = (DescriptionAttribute)ActiveProperty.GetCustomAttributes(typeof(DescriptionAttribute), false)[0];
-                object PropertyValue = ActiveProperty.GetValue(this);
 
                 if (!DicGameModeParametersByCategory.ContainsKey(ActiveCategory.Category))
                 {
                     DicGameModeParametersByCategory.Add(ActiveCategory.Category, new List<GameModeParameter>());
                 }
 
-                GameModeParameter NewGameOption = new GameModeParameter(ActiveName.DisplayName, ActiveCategory.Category, ActiveDescription.Description, PropertyValue);
+                GameModeParameter NewGameOption = new GameModeParameter(this, ActiveProperty, ActiveCategory.Category);
                 DicGameModeParametersByCategory[ActiveCategory.Category].Add(NewGameOption);
             }
 

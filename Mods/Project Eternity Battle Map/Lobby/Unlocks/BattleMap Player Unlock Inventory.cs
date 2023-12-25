@@ -19,6 +19,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public List<UnitUnlockContainer> ListFolder;//Share the same folders as the dictionnary
             public List<UnlockableUnit> ListUnlockedUnit;
             public List<UnlockableUnit> ListLockedUnit;
+            public UnlockableUnit IconUnit { get { if (ListUnlockedUnit.Count > 0) return ListUnlockedUnit[0]; else return ListLockedUnit[0]; } }
 
             public string Name;
 

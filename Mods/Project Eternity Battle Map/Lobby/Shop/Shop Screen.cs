@@ -258,17 +258,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.End();
             g.Begin();
 
-            g.DrawString(fntArial12, "SHOP", new Vector2(10, 20), Color.White);
-
-            //Left side
-            int DrawY = BottomSectionY;
-
-            DrawY += BottomSectionHeight - 45;
-            DrawEmptyBox(g, new Vector2(5, DrawY), LeftSideWidth - 210, 40);
-
-            DrawEmptyBox(g, new Vector2(LeftSideWidth - 200, DrawY), 155, 40);
-            g.DrawStringRightAligned(fntArial12, "Money: 14360 cr", new Vector2(LeftSideWidth - 55, DrawY + 10), Color.White);
-
             ActiveSubScreen.Draw(g);
 
             foreach (IUIElement ActiveButton in ArrayUIElement)

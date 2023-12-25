@@ -32,6 +32,11 @@ namespace ProjectEternity.Editors.MapEditor
             {
                 cbGameMode.Items.Add(ActiveGameType);
             }
+
+            if (lstGameModes.Items.Count > 0)
+            {
+                lstGameModes.SelectedIndex = 0;
+            }
         }
 
         private void btnAddGameMode_Click(object sender, EventArgs e)

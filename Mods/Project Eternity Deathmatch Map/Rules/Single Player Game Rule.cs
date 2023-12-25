@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Units;
@@ -197,6 +198,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public void Draw(CustomSpriteBatch g)
         {
 
+        }
+
+
+
+        public List<GameRuleError> Validate(RoomInformations Room)
+        {
+            return new List<GameRuleError>();
         }
     }
 }

@@ -107,5 +107,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
 
         }
+
+        public List<GameRuleError> Validate(RoomInformations Room)
+        {
+            return new List<GameRuleError>();
+        }
     }
 }

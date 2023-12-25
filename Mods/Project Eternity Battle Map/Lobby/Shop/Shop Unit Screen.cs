@@ -38,7 +38,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         int FolderHeight = 70;
 
         int UnitX = 25;
-        int UnitWidth = 250 + 105 + 105 + 90 + 80 + 95 + 70 - 25;
+        int UnitWidth = 250 + 125 + 105 + 105 + 90 + 80 + 95 + 70 - 25;
         int UnitHeight = 50;
 
         private int SquadScrollbarValue;
@@ -46,7 +46,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         private BattleMapPlayerUnlockInventory UnlockInventory;
         private BattleMapPlayerInventory Inventory;
 
-        private readonly BattleMapPlayerUnlockInventory.UnitUnlockContainer RootContainer;
         private BattleMapPlayerUnlockInventory.UnitUnlockContainer CurrentContainer;
         private List<BattleMapPlayerUnlockInventory.UnitUnlockContainer> ListLastContainer;
 
@@ -55,13 +54,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.Owner = Owner;
             this.UnlockInventory = UnlockInventory;
             this.Inventory = Inventory;
-            CurrentContainer = RootContainer = UnlockInventory.RootUnitContainer;
+            CurrentContainer = UnlockInventory.RootUnitContainer;
             ListLastContainer = new List<BattleMapPlayerUnlockInventory.UnitUnlockContainer>();
         }
 
         public override void Load()
         {
-            SquadListScrollbar = new EmptyBoxScrollbar(new Vector2(Owner.LeftSideWidth - 23, Owner.MiddleSectionY + 3), Owner.MiddleSectionHeight - 5, 10, OnSquadScrollbarChange);
+            SquadListScrollbar = new EmptyBoxScrollbar(new Vector2(Owner.LeftSideWidth, Owner.MiddleSectionY + 3), Owner.MiddleSectionHeight - 5, 10, OnSquadScrollbarChange);
 
             SquadListScrollbar.ChangeMaxValue(300);
 
@@ -221,7 +220,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            UnitWidth = 250 + 105 + 105 + 90 + 80 + 95 + 70;
+            UnitWidth = 250 + 125 + 105 + 105 + 90 + 80 + 95 + 70;
             SquadListScrollbar.Draw(g);
 
             int DrawY = GetFolderY();
@@ -245,36 +244,41 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 int DrawX = UnitX;
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), 240, 45);
                 DrawBox(g, new Vector2(DrawX + 6, DrawY + 4), 38, 38, Color.FromNonPremultiplied(255, 255, 255, 0));
-                if (CurrentContainer.ListUnlockedUnit[i].UnitToBuy != null)
+                UnlockableUnit ActiveUnit = CurrentContainer.ListUnlockedUnit[i];
+                if (ActiveUnit.UnitToBuy != null)
                 {
-                    g.Draw(CurrentContainer.ListUnlockedUnit[i].UnitToBuy.SpriteMap, new Rectangle(DrawX + 9, DrawY + 7, 32, 32), Color.White);
-                    g.DrawString(fntArial12, CurrentContainer.ListUnlockedUnit[i].UnitToBuy.ItemName, new Vector2(DrawX + 46, DrawY + 11), Color.White);
+                    g.Draw(ActiveUnit.UnitToBuy.SpriteMap, new Rectangle(DrawX + 9, DrawY + 7, 32, 32), Color.White);
+                    g.DrawString(fntArial12, ActiveUnit.UnitToBuy.ItemName, new Vector2(DrawX + 46, DrawY + 11), Color.White);
 
                     DrawX += 250;
+                    DrawEmptyBox(g, new Vector2(DrawX, DrawY), 120, 45);
+                    g.DrawStringRightAlignedBackground(fntArial12, "Rank: " + ActiveUnit.UnitToBuy.QualityRank + " (" + ActiveUnit.UnitToBuy.SpawnCost + ")", new Vector2(DrawX + 115, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+
+                    DrawX += 125;
                     DrawEmptyBox(g, new Vector2(DrawX, DrawY), 100, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "HP: " + CurrentContainer.ListUnlockedUnit[i].UnitToBuy.MaxHP.ToString(), new Vector2(DrawX + 95, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                    g.DrawStringRightAlignedBackground(fntArial12, "HP: " + ActiveUnit.UnitToBuy.MaxHP.ToString(), new Vector2(DrawX + 95, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
 
                     DrawX += 105;
                     DrawEmptyBox(g, new Vector2(DrawX, DrawY), 95, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "EN: " + CurrentContainer.ListUnlockedUnit[i].UnitToBuy.MaxEN.ToString(), new Vector2(DrawX + 90, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                    g.DrawStringRightAlignedBackground(fntArial12, "EN: " + ActiveUnit.UnitToBuy.MaxEN.ToString(), new Vector2(DrawX + 90, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
                    
                     DrawX += 105;
                     DrawEmptyBox(g, new Vector2(DrawX, DrawY), 80, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "MV: " + CurrentContainer.ListUnlockedUnit[i].UnitToBuy.MaxMovement, new Vector2(DrawX + 75, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                    g.DrawStringRightAlignedBackground(fntArial12, "MV: " + ActiveUnit.UnitToBuy.MaxMovement, new Vector2(DrawX + 75, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
 
                     DrawX += 90;
                     DrawEmptyBox(g, new Vector2(DrawX, DrawY), 70, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, "SPD: " + CurrentContainer.ListUnlockedUnit[i].UnitToBuy.Mobility, new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                    g.DrawStringRightAlignedBackground(fntArial12, "SPD: " + ActiveUnit.UnitToBuy.Mobility, new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
 
                     DrawX += 80;
                     DrawEmptyBox(g, new Vector2(DrawX, DrawY), 85, 45);
-                    g.DrawStringRightAlignedBackground(fntArial12, CurrentContainer.ListUnlockedUnit[i].UnitToBuy.Price + " cr", new Vector2(DrawX + 75, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                    g.DrawStringRightAlignedBackground(fntArial12, ActiveUnit.UnitToBuy.Price + " cr", new Vector2(DrawX + 75, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
 
                     DrawX += 95;
-                    if (Inventory.DicOwnedSquad.ContainsKey(CurrentContainer.ListUnlockedUnit[i].UnitToBuy.RelativePath))
+                    if (Inventory.DicOwnedUnit.ContainsKey(ActiveUnit.UnitToBuy.RelativePath))
                     {
                         DrawEmptyBox(g, new Vector2(DrawX, DrawY), 70, 45);
-                        g.DrawStringRightAlignedBackground(fntArial12, Inventory.DicOwnedSquad[CurrentContainer.ListUnlockedUnit[i].UnitToBuy.RelativePath].QuantityOwned + " Owned", new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
+                        g.DrawStringRightAlignedBackground(fntArial12, Inventory.DicOwnedUnit[ActiveUnit.UnitToBuy.RelativePath].QuantityOwned + " Owned", new Vector2(DrawX + 65, DrawY + 11), Color.White, sprPixel, ShopScreen.BackgroundColor);
                     }
                 }
 
@@ -292,7 +296,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     g.Draw(CurrentContainer.ListLockedUnit[i].UnitToBuy.SpriteMap, new Vector2(DrawX + 9, DrawY + 7), Color.White);
                 }
 
-                DrawX += 250 + 105 + 105 + 90 + 80;
+                DrawX += 250 + 125 + 105 + 105 + 90 + 80;
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), 85, 45);
                 if (CurrentContainer.ListLockedUnit[i].UnitToBuy != null)
                 {
@@ -306,13 +310,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.Draw(sprPixel, new Rectangle(0, DrawY, UnitWidth - 70 + UnitX, Constants.Height - DrawY), ShopScreen.BackgroundColor);
             int BottomHeight = 182;
             DrawEmptyBox(g, new Vector2(5, DrawY), 240, BottomHeight);
-
             DrawEmptyBox(g, new Vector2(275, DrawY), 206, BottomHeight);
             DrawEmptyBox(g, new Vector2(509, DrawY), 106, BottomHeight);
+            DrawEmptyBox(g, new Vector2(643, DrawY), 130, BottomHeight);
 
             DrawY = Owner.BottomSectionY;
             DrawY += Owner.BottomSectionHeight - 45;
-            g.DrawString(fntArial12, "Select a Unit to buy", new Vector2(11, DrawY + 11), Color.White);
 
             if (MenuSelection == MenuSelections.Unit && SelectionIndex < CurrentContainer.ListUnlockedUnit.Count)
             {
@@ -332,6 +335,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntArial12, "Sort By", new Vector2(248, DrawY + 11), Color.White);
             DrawBox(g, new Vector2(348, DrawY + 4), 100, 38, Color.White);
 
+            g.DrawString(fntArial12, "SHOP", new Vector2(10, 20), Color.White);
+
+            //Left side
+            DrawY = Owner.BottomSectionY;
+
+            DrawY += Owner.BottomSectionHeight - 45;
+            DrawEmptyBox(g, new Vector2(5, DrawY), Owner.LeftSideWidth - 210, 40);
+            g.DrawString(fntArial12, "Select a Unit to buy", new Vector2(11, DrawY + 11), Color.White);
+
+            DrawEmptyBox(g, new Vector2(Owner.LeftSideWidth - 200, DrawY), 155, 40);
+            g.DrawStringRightAligned(fntArial12, "Money: 14360 cr", new Vector2(Owner.LeftSideWidth - 55, DrawY + 10), Color.White);
         }
 
         private void DrawFolders(CustomSpriteBatch g, int DrawY)
@@ -355,7 +369,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 g.Draw(sprPixel, new Rectangle(FolderX, DrawY, FolderWidth, FolderHeight), Color.FromNonPremultiplied(0, 0, 0, 50));
                 DrawEmptyBox(g, new Vector2(FolderX, DrawY), FolderWidth, FolderHeight);
-                g.Draw(ListLastContainer[ListLastContainer.Count - 1].ListUnlockedUnit[0].UnitToBuy.SpriteMap,
+                g.Draw(ListLastContainer[ListLastContainer.Count - 1].IconUnit.UnitToBuy.SpriteMap,
                     new Rectangle(FolderX + FolderWidth / 2 - 16, DrawY + 7, 32, 32), Color.White);
 
                 g.DrawStringMiddleAligned(fntArial12, "Last Folder", new Vector2(FolderX + FolderWidth / 2, DrawY + FolderHeight - 25), Color.White);
@@ -366,7 +380,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 g.Draw(sprPixel, new Rectangle(FolderX, DrawY, FolderWidth, FolderHeight), Color.FromNonPremultiplied(0, 0, 0, 50));
                 DrawEmptyBox(g, new Vector2(FolderX, DrawY), FolderWidth, FolderHeight);
-                g.Draw(CurrentContainer.DicFolder[ActiveFolder].ListUnlockedUnit[0].UnitToBuy.SpriteMap,
+                g.Draw(CurrentContainer.DicFolder[ActiveFolder].IconUnit.UnitToBuy.SpriteMap,
                     new Rectangle(FolderX + FolderWidth / 2 - 16, DrawY + 7, 32, 32), Color.White);
 
                 g.DrawStringMiddleAligned(fntArial12, ActiveFolder, new Vector2(FolderX + FolderWidth / 2, DrawY + FolderHeight - 25), Color.White);
@@ -390,28 +404,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             DrawY += 5;
 
+            int DrawX = 15;
+
             int DistanceBetweenText = 16;
             int MenuOffset = (int)(DistanceBetweenText * 0.5);
-            g.DrawString(fntFinlanderFont, "HP", new Vector2(15, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
 
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.MaxHP.ToString(), new Vector2(222, DrawY - MenuOffset + 6 + DistanceBetweenText), Color.White);
+            #region Stats 
+            g.DrawString(fntFinlanderFont, "HP", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.MaxHP.ToString(), new Vector2(DrawX + 207, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.White);
 
-            g.DrawString(fntFinlanderFont, "EN", new Vector2(15, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.Yellow);
+            g.DrawString(fntFinlanderFont, "EN", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.MaxEN.ToString(), new Vector2(DrawX + 207, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.White);
 
-            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.MaxEN.ToString(), new Vector2(222, DrawY - MenuOffset + 6 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.White);
+            g.DrawString(fntFinlanderFont, "Armor", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 3 + fntFinlanderFont.LineSpacing * 2), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.Armor.ToString(), new Vector2(DrawX + 207, DrawY - MenuOffset + 10 + DistanceBetweenText * 3 + fntFinlanderFont.LineSpacing * 2), Color.White);
+            g.DrawString(fntFinlanderFont, "Mobility", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 4 + fntFinlanderFont.LineSpacing * 3), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.Mobility.ToString(), new Vector2(DrawX + 207, DrawY - MenuOffset + 10 + DistanceBetweenText * 4 + fntFinlanderFont.LineSpacing * 3), Color.White);
 
-            g.DrawString(fntFinlanderFont, "Armor", new Vector2(15, DrawY - MenuOffset + 10 + DistanceBetweenText * 3 + fntFinlanderFont.LineSpacing * 2), Color.Yellow);
-            g.DrawString(fntFinlanderFont, ActiveUnit.Armor.ToString(), new Vector2(95, DrawY - MenuOffset + 10 + DistanceBetweenText * 3 + fntFinlanderFont.LineSpacing * 2), Color.White);
-            g.DrawString(fntFinlanderFont, "Mobility", new Vector2(15, DrawY - MenuOffset + 10 + DistanceBetweenText * 4 + fntFinlanderFont.LineSpacing * 3), Color.Yellow);
-            g.DrawString(fntFinlanderFont, ActiveUnit.Mobility.ToString(), new Vector2(115, DrawY - MenuOffset + 10 + DistanceBetweenText * 4 + fntFinlanderFont.LineSpacing * 3), Color.White);
+            DrawX += 260 + 10;
 
-            int DrawX = 275;
-            DrawX += 10;
             g.DrawString(fntFinlanderFont, "MV", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
             g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.MaxMovement.ToString(), new Vector2(DrawX + 90, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.White);
             g.DrawString(fntFinlanderFont, "Size", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.Yellow);
             g.DrawStringRightAligned(fntFinlanderFont, UnitStats.ListUnitSize[ActiveUnit.SizeIndex], new Vector2(DrawX + 90, DrawY - MenuOffset + 10 + DistanceBetweenText * 2 + fntFinlanderFont.LineSpacing), Color.White);
             g.DrawString(fntFinlanderFont, "Move Type", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 3 + fntFinlanderFont.LineSpacing * 2), Color.Yellow);
+
+            #endregion
 
             if (ActiveUnit.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
             {
@@ -437,8 +455,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int MiddlePosX = 520;
 
             int CurrentY = Owner.BottomSectionY - 150 + 52;
+            DrawY = Owner.BottomSectionY - 155 + 5;
 
-            g.DrawString(fntFinlanderFont, "Terrain", new Vector2(523, CurrentY - 48), Color.Yellow);
+            #region Terrain
+
+            g.DrawString(fntFinlanderFont, "Terrain", new Vector2(MiddlePosX + 3, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
 
             g.Draw(sprSky, new Vector2(MiddlePosX + 10, CurrentY + 2), Color.White);
             if (ActiveUnit.UnitStat.DicRankByMovement.ContainsKey(UnitStats.TerrainAirIndex))
@@ -482,6 +503,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 g.DrawString(fntFinlanderFont, "-", new Vector2(MiddlePosX + 34, CurrentY), Color.White);
             }
+
+            #endregion
+
+            DrawY = Owner.BottomSectionY - 155 + 5;
+            DrawX = 643 + 10;
+
+            g.DrawString(fntFinlanderFont, "Rank", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.QualityRank, new Vector2(DrawX + 120, DrawY - MenuOffset + 10 + DistanceBetweenText), Color.White);
+            g.DrawString(fntFinlanderFont, "Spawn", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 3), Color.Yellow);
+            g.DrawString(fntFinlanderFont, "Cost", new Vector2(DrawX, DrawY - MenuOffset + 10 + DistanceBetweenText * 4), Color.Yellow);
+            g.DrawStringRightAligned(fntFinlanderFont, ActiveUnit.SpawnCost.ToString(), new Vector2(DrawX + 120, DrawY - MenuOffset + 10 + DistanceBetweenText * 4), Color.White);
         }
     }
 }

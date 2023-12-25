@@ -28,11 +28,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
+        private enum ActiveDropdownTypes { None, Loadout, Team }
+
         #region Ressources
 
         private FMODSound sndBGM;
         private FMODSound sndButtonOver;
         private FMODSound sndButtonClick;
+        private FMODSound sndButtonDeny;
 
         protected SpriteFont fntText;
 
@@ -54,24 +57,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         #endregion
 
-        private BasicEffect IndexedLinesEffect;
-        private IndexedLines BackgroundGrid;
-
-        public Vector3 BackgroundEmiterPosition;
-        public Vector3[] ArrayNextPosition;
-        public int CurrentPositionIndex;
-        public int OldLineIndex;
-        public int CurrentLineIndex;
-        private int CylinderParts = 10;
-        private int SegmentIncrement = 10;
-        private int Segments;
-        private TunnelBehaviorSpeedManager TunnelBehaviorSpeed;
-        private TunnelBehaviorColorManager TunnelBehaviorColor;
-        private TunnelBehaviorSizeManager TunnelBehaviorSize;
-        private TunnelBehaviorRotationManager TunnelBehaviorRotation;
-        private TunnelBehaviorDirectionManager TunnelBehaviorDirection;
-
-        public static Color BackgroundColor = Color.FromNonPremultiplied(65, 70, 65, 255);
+        private TunnelManager TunnelBackground;
 
         int LeftSideWidth;
         int RoomNameHeight;
@@ -88,8 +74,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected readonly RoomInformations Room;
         private Point MapSize;
         private List<TeamInfo> ListAllTeamInfo;
-        private int SelectingTeam;
         public Texture2D sprMapImage;
+        private List<GameRuleError> ListGameRuleError;
+
+        private ActiveDropdownTypes ActiveDropdownType;
+        private BattleMapPlayer ActivePlayer;
+        private int ActivePlayerIndex;
 
         private readonly BattleMapOnlineClient OnlineGameClient;
         private readonly CommunicationClient OnlineCommunicationClient;
@@ -101,15 +91,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             this.OnlineGameClient = OnlineGameClient;
             this.OnlineCommunicationClient = OnlineCommunicationClient;
             this.Room = Room;
-            SelectingTeam = -1;
 
-            Segments = 360 / SegmentIncrement * 4;
+            ActiveDropdownType = ActiveDropdownTypes.None;
 
-            TunnelBehaviorSpeed = new TunnelBehaviorSpeedManager();
-            TunnelBehaviorColor = new TunnelBehaviorColorManager();
-            TunnelBehaviorSize = new TunnelBehaviorSizeManager();
-            TunnelBehaviorRotation = new TunnelBehaviorRotationManager();
-            TunnelBehaviorDirection = new TunnelBehaviorDirectionManager();
+            ListGameRuleError = new List<GameRuleError>();
 
             if (Room.ListRoomPlayer.Count == 0)
             {
@@ -123,27 +108,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Load()
         {
-            IndexedLinesEffect = new BasicEffect(GraphicsDevice);
-            IndexedLinesEffect.VertexColorEnabled = true;
-            IndexedLinesEffect.DiffuseColor = new Vector3(1, 1, 1);
-
-            int SegmentIncrement = 10;
-            int Segments = 360 / SegmentIncrement;
-            int Parts = 1 * Segments;
-            int ArrayLength = (int)(Parts * 4);
-            ArrayNextPosition = new Vector3[ArrayLength];
-            VertexPositionColor[] ArrayBackgroundGridVertex = new VertexPositionColor[ArrayLength];
-            // Initialize an array of indices of type short.
-            short[] ArrayBackgroundGridIndices = new short[(ArrayBackgroundGridVertex.Length * 2) - 2];
-            for (int Index = 0; Index < ArrayBackgroundGridVertex.Length; ++Index)
-            {
-                ArrayBackgroundGridVertex[Index] = new VertexPositionColor(
-                    new Vector3(), Color.White);
-
-                ArrayBackgroundGridIndices[Index] = (short)(Index);
-            }
-
-            BackgroundGrid = new IndexedLines(ArrayBackgroundGridVertex, ArrayBackgroundGridIndices);
+            TunnelBackground = new TunnelManager();
+            TunnelBackground.Load(GraphicsDevice);
 
             #region Ressources
 
@@ -153,6 +119,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             sndButtonOver = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Over.wav");
             sndButtonClick = new FMODSound(FMODSystem, "Content/Triple Thunder/Menus/SFX/Button Click.wav");
+            sndButtonDeny = new FMODSound(FMODSystem, "Content/SFX/Deny.mp3");
 
             fntText = Content.Load<SpriteFont>("Fonts/Arial16");
             ChatInput = new TextInput(fntText, sprPixel, sprPixel, new Vector2(15, Constants.Height - 26), new Vector2(470, 20), SendMessage);
@@ -205,13 +172,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Update(GameTime gameTime)
         {
-            TunnelBehaviorSpeed.Update(gameTime);
-            TunnelBehaviorColor.Update(gameTime);
-            TunnelBehaviorSize.Update(gameTime);
-            TunnelBehaviorRotation.Update(gameTime);
-            TunnelBehaviorDirection.Update(gameTime);
-
-            CreateAnimatedBackground(gameTime);
+            TunnelBackground.UpdateColored(gameTime);
 
             if (OnlineGameClient != null)
             {
@@ -238,139 +199,25 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 ChatHelper.UpdateChat(gameTime, OnlineCommunicationClient.Chat, ChatInput);
             }
 
+            HandleLoadoutSelection();
             HandleTeamSelection();
         }
 
-        private void CreateAnimatedBackground(GameTime gameTime)
+        private void HandleLoadoutSelection()
         {
-            Vector3 Up = Vector3.Up;
-
-            int Parts = CylinderParts * Segments;
-            int ArrayLength = Parts;
-
-            float CylinderSize = TunnelBehaviorSize.TunnelSizeFinal;
-
-            if (ArrayNextPosition == null || ArrayNextPosition.Length != ArrayLength)
+            if (ActiveDropdownType ==  ActiveDropdownTypes.None && MouseHelper.InputLeftButtonPressed())
             {
-                ArrayNextPosition = new Vector3[ArrayLength];
-                VertexPositionColor[] ArrayBackgroundGridVertex = new VertexPositionColor[ArrayLength];
-                // Initialize an array of indices of type short.
-                short[] ArrayBackgroundGridIndices = new short[(ArrayBackgroundGridVertex.Length * 2) - 2];
-                for (int i = 0; i < ArrayBackgroundGridVertex.Length; ++i)
-                {
-                    ArrayBackgroundGridVertex[i] = new VertexPositionColor(
-                        new Vector3(), Color.White);
-
-                    ArrayBackgroundGridIndices[i] = (short)(i);
-                }
-
-                BackgroundGrid = new IndexedLines(ArrayBackgroundGridVertex, ArrayBackgroundGridIndices);
-            }
-
-            float Speed = 5;
-            float SpeedX = (float)(Math.Cos(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * gameTime.ElapsedGameTime.TotalSeconds);
-            float SpeedY = (float)(Math.Sin(TunnelBehaviorDirection.ActiveDirection) * TunnelBehaviorSpeed.ActiveSpeed * gameTime.ElapsedGameTime.TotalSeconds);
-            BackgroundEmiterPosition += new Vector3(SpeedX, SpeedY, (float)(Speed * 0.01f));
-
-            ++CurrentPositionIndex;
-
-            if (CurrentPositionIndex >= ArrayLength)
-            {
-                CurrentPositionIndex = 0;
-            }
-
-            ArrayNextPosition[CurrentPositionIndex] = BackgroundEmiterPosition;
-
-            int NextLineIndex = (int)Math.Floor(CurrentPositionIndex / (float)Segments) * Segments;
-            if (CurrentLineIndex != NextLineIndex)
-            {
-                OldLineIndex = CurrentLineIndex;
-                TunnelBehaviorDirection.ActiveDirection = TunnelBehaviorDirection.TunnelDirectionFinal;
-                TunnelBehaviorSpeed.ActiveSpeed = TunnelBehaviorSpeed.TunnelSpeedFinal;
-            }
-
-            CurrentLineIndex = NextLineIndex;
-
-            int OldIndex = OldLineIndex;
-            int Index = CurrentLineIndex;
-
-            Color LineColor = ColorFromHSV(TunnelBehaviorColor.TunnelHueFinal, 1, 1);
-
-            for (int X = 0; X < 360; X += SegmentIncrement)
-            {
-                float FinalRotation = X + TunnelBehaviorRotation.TunnelRotationFinal;
-                Vector3 OldPosition = BackgroundGrid.ArrayVertex[OldIndex + 1].Position;
-                Vector3 CurrentRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(FinalRotation))) * CylinderSize;
-                Vector3 NextRightDistance = Vector3.Transform(Up, Matrix.CreateFromYawPitchRoll(0, 0, MathHelper.ToRadians(FinalRotation + SegmentIncrement))) * CylinderSize;
-
-                float CurrentX = BackgroundEmiterPosition.X;
-                float CurrentY = BackgroundEmiterPosition.Y;
-                float CurrentZ = BackgroundEmiterPosition.Z/* + X / 60f*/;
-
-                //Draw cylinder lines
-                BackgroundGrid.ArrayVertex[Index] = new VertexPositionColor(
-                    OldPosition, LineColor);
-
-                BackgroundGrid.ArrayVertex[Index + 1] = new VertexPositionColor(
-                    new Vector3(CurrentX, CurrentY, CurrentZ) + CurrentRightDistance, LineColor);
-
-                //Draw ring lines
-                BackgroundGrid.ArrayVertex[Index + 2] = new VertexPositionColor(
-                    new Vector3(CurrentX, CurrentY, CurrentZ) + CurrentRightDistance, LineColor);
-
-                BackgroundGrid.ArrayVertex[Index + 3] = new VertexPositionColor(
-                    new Vector3(CurrentX, CurrentY, CurrentZ) + NextRightDistance, LineColor);
-
-                OldIndex += 4;
-                Index += 4;
-            }
-        }
-
-        private Color ColorFromHSV(float Hue, float Value, float Saturation)
-        {
-            double hh, p, q, t, ff;
-            long i;
-            hh = Hue;
-            if (hh >= 360.0) hh = 0.0;
-            hh /= 60.0;
-            i = (long)hh;
-            ff = hh - i;
-            p = Value * (1.0 - Saturation) * 255;
-            q = Value * (1.0 - (Saturation * ff)) * 255;
-            t = Value * (1.0 - (Saturation * (1.0 - ff))) * 255;
-            Value *= 255;
-
-            switch (i)
-            {
-                case 0:
-                    return Color.FromNonPremultiplied((int)Value, (int)t, (int)p, 255);
-                case 1:
-                    return Color.FromNonPremultiplied((int)q, (int)Value, (int)p, 255);
-                case 2:
-                    return Color.FromNonPremultiplied((int)p, (int)Value, (int)t, 255);
-                case 3:
-                    return Color.FromNonPremultiplied((int)p, (int)q, (int)Value, 255);
-                case 4:
-                    return Color.FromNonPremultiplied((int)t, (int)p, (int)Value, 255);
-                default:
-                    return Color.FromNonPremultiplied((int)Value, (int)p, (int)q, 255);
-
-            }
-        }
-
-        private void HandleTeamSelection()
-        {
-            if (SelectingTeam == -1 && Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0 && MouseHelper.InputLeftButtonPressed())
-            {
-                int DrawX = 10;
-                int DrawY = 45;
+                int DrawX = 360;
+                int DrawY = 75;
                 int PlayerIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 45;
                 if (PlayerIndex >= 0 && PlayerIndex < Room.ListRoomPlayer.Count)
                 {
-                    Rectangle TeamCollisionBox = new Rectangle(DrawX + 280, DrawY + PlayerIndex * 45, 80, 25);
-                    if (PlayerManager.ListLocalPlayer.Contains(Room.ListRoomPlayer[PlayerIndex]) && TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    Rectangle LoadoutCollisionBox = new Rectangle(DrawX, DrawY + PlayerIndex * 45, 150, 25);
+                    if (PlayerManager.ListLocalPlayer.Contains(Room.ListRoomPlayer[PlayerIndex]) && LoadoutCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                     {
-                        SelectingTeam = PlayerIndex;
+                        ActivePlayer = (BattleMapPlayer)Room.ListRoomPlayer[PlayerIndex];
+                        ActivePlayerIndex = PlayerIndex;
+                        ActiveDropdownType = ActiveDropdownTypes.Loadout;
                     }
                 }
 
@@ -378,36 +225,100 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 PlayerIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 45;
                 if (PlayerIndex >= 0 && PlayerIndex < Room.ListRoomBot.Count)
                 {
-                    Rectangle TeamCollisionBox = new Rectangle(DrawX + 280, DrawY + PlayerIndex * 45, 80, 25);
+                    Rectangle TeamCollisionBox = new Rectangle(DrawX, DrawY + PlayerIndex * 45, 150, 25);
                     if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                     {
-                        SelectingTeam = Room.ListRoomPlayer.Count + PlayerIndex;
+                        ActivePlayer = (BattleMapPlayer)Room.ListRoomBot[PlayerIndex];
+                        ActivePlayerIndex = Room.ListRoomPlayer.Count + PlayerIndex;
+                        ActiveDropdownType = ActiveDropdownTypes.Loadout;
                     }
                 }
             }
-            else if (SelectingTeam != -1 && MouseHelper.InputLeftButtonPressed())
+            else if (ActiveDropdownType == ActiveDropdownTypes.Loadout && MouseHelper.InputLeftButtonPressed())
             {
-                int DrawX = 10;
-                int DrawY = 45 + 30 + SelectingTeam * 45;
-                int TeamIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 25;
-                if (TeamIndex >= 0 && TeamIndex < Room.ListMapTeam.Count && SelectingTeam < Room.ListRoomPlayer.Count)
+                int DrawX = 360;
+                int DrawY = 45 + 30 + ActivePlayerIndex * 45;
+                int LoadoutIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 25;
+
+                if (LoadoutIndex >= 0 && ActivePlayerIndex < Room.ListRoomPlayer.Count)
                 {
-                    Rectangle TeamCollisionBox = new Rectangle(DrawX + 285, DrawY + TeamIndex * 25, 85, 25);
+                    Rectangle LoadoutCollisionBox = new Rectangle(DrawX, DrawY + LoadoutIndex * 25, 150, 25);
+                    if (LoadoutCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    {
+                        ActivePlayer.Inventory.ActiveLoadout = ActivePlayer.Inventory.ListSquadLoadout[LoadoutIndex];
+                    }
+                }
+                else if (LoadoutIndex >= 0 && LoadoutIndex < Room.ListMapTeam.Count)
+                {
+                    Rectangle LoadoutCollisionBox = new Rectangle(DrawX, DrawY + LoadoutIndex * 25, 150, 25);
+                    if (LoadoutCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    {
+                        ActivePlayer.Inventory.ActiveLoadout = ActivePlayer.Inventory.ListSquadLoadout[LoadoutIndex];
+                    }
+                }
+
+                ActivePlayerIndex = -1;
+                ActivePlayer = null;
+                ActiveDropdownType = ActiveDropdownTypes.None;
+            }
+        }
+
+        private void HandleTeamSelection()
+        {
+            if (ActiveDropdownType == ActiveDropdownTypes.None && Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0 && MouseHelper.InputLeftButtonPressed())
+            {
+                int DrawX = 515;
+                int DrawY = 75;
+                int PlayerIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 45;
+                if (PlayerIndex >= 0 && PlayerIndex < Room.ListRoomPlayer.Count)
+                {
+                    Rectangle TeamCollisionBox = new Rectangle(DrawX, DrawY + PlayerIndex * 45, 110, 25);
+                    if (PlayerManager.ListLocalPlayer.Contains(Room.ListRoomPlayer[PlayerIndex]) && TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    {
+                        ActivePlayer = (BattleMapPlayer)Room.ListRoomPlayer[PlayerIndex];
+                        ActivePlayerIndex = PlayerIndex;
+                        ActiveDropdownType = ActiveDropdownTypes.Team;
+                    }
+                }
+
+                DrawY = 45 + Room.ListRoomPlayer.Count * 45;
+                PlayerIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 45;
+                if (PlayerIndex >= 0 && PlayerIndex < Room.ListRoomBot.Count)
+                {
+                    Rectangle TeamCollisionBox = new Rectangle(DrawX, DrawY + PlayerIndex * 45, 110, 25);
                     if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                     {
-                        Room.ListRoomPlayer[SelectingTeam].Team = TeamIndex;
+                        ActivePlayer = (BattleMapPlayer)Room.ListRoomBot[PlayerIndex];
+                        ActivePlayerIndex = Room.ListRoomPlayer.Count + PlayerIndex;
+                        ActiveDropdownType = ActiveDropdownTypes.Team;
+                    }
+                }
+            }
+            else if (ActiveDropdownType == ActiveDropdownTypes.Team && MouseHelper.InputLeftButtonPressed())
+            {
+                int DrawX = 515;
+                int DrawY = 45 + 30 + ActivePlayerIndex * 45;
+                int TeamIndex = (MouseHelper.MouseStateCurrent.Y - DrawY) / 25;
+                if (TeamIndex >= 0 && TeamIndex < Room.ListMapTeam.Count && ActivePlayerIndex < Room.ListRoomPlayer.Count)
+                {
+                    Rectangle TeamCollisionBox = new Rectangle(DrawX, DrawY + TeamIndex * 25, 110, 25);
+                    if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    {
+                        ActivePlayer.Team = TeamIndex;
                     }
                 }
                 else if (TeamIndex >= 0 && TeamIndex < Room.ListMapTeam.Count)
                 {
-                    Rectangle TeamCollisionBox = new Rectangle(DrawX + 285, DrawY + TeamIndex * 25, 85, 25);
+                    Rectangle TeamCollisionBox = new Rectangle(DrawX, DrawY + TeamIndex * 25, 110, 25);
                     if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                     {
-                        Room.ListRoomBot[SelectingTeam - Room.ListRoomPlayer.Count].Team = TeamIndex;
+                        ActivePlayer.Team = TeamIndex;
                     }
                 }
 
-                SelectingTeam = -1;
+                ActivePlayerIndex = -1;
+                ActivePlayer = null;
+                ActiveDropdownType = ActiveDropdownTypes.None;
             }
         }
 
@@ -460,6 +371,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             Room.MaxSquadPerPlayer = MaxSquadPerPlayer;
             Room.ListMandatoryMutator = ListMandatoryMutator;
             Room.ListMapTeam = ListMapTeam;
+            ListGameRuleError.Clear();
+            ReadyButton.Enable();
+            StartButton.Enable();
         }
 
         private void OnButtonOver()
@@ -483,7 +397,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
-                if (IsEveryoneReady && Room.MapPath != null)
+                if (IsEveryoneReady && Room.MapPath != null && ListGameRuleError.Count == 0)
                 {
                     StartButton.Enable();
                 }
@@ -492,13 +406,17 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     StartButton.Disable();
                 }
             }
-            else
+            else if (ListGameRuleError.Count == 0)
             {
                 ReadyButton.Enable();
             }
+            else
+            {
+                ReadyButton.Disable();
+            }
         }
 
-        private void SendMessage(string InputMessage)
+        private void SendMessage(TextInput SenderInput, string InputMessage)
         {
             ChatInput.SetText(string.Empty);
             OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));
@@ -506,6 +424,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void OptionsClosed()
         {
+            ListGameRuleError = Room.GameInfo.GetRule(null).Validate(Room);
+
             UpdateReadyOrHost();
 
             if (OnlineGameClient != null)
@@ -525,7 +445,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void PlayerSettingsScreen()
         {
-
+            PushScreen(new BattleMapInventoryScreen());
         }
 
         private void ReturnToLobby()
@@ -549,14 +469,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void StartGame()
         {
-            sndButtonClick.Play();
-
             if (OnlineGameClient != null && OnlineGameClient.IsConnected)
             {
+                sndButtonClick.Play();
+
                 OnlineGameClient.StartGame();
             }
             else
             {
+                sndButtonClick.Play();
+
                 BattleMap NewMap;
 
                 if (Room.MapPath == "Random")
@@ -614,43 +536,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public override void Draw(CustomSpriteBatch g)
         {
             GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(BackgroundColor);
+            GraphicsDevice.Clear(Lobby.BackgroundColor);
 
-            float aspectRatio = Constants.Width / Constants.Height;
-
-            int DrawOffset = 700;
-            int DrawLineIndex = CurrentPositionIndex - DrawOffset % ArrayNextPosition.Length;
-            if (DrawLineIndex < 0)
-            {
-                DrawLineIndex += ArrayNextPosition.Length;
-            }
-
-            int DrawTargetLineIndex = (DrawLineIndex + 80) % ArrayNextPosition.Length;
-
-            Vector3 position = new Vector3(ArrayNextPosition[DrawLineIndex].X,
-                                            ArrayNextPosition[DrawLineIndex].Y,
-                                            ArrayNextPosition[DrawLineIndex].Z);
-
-            Vector3 target = new Vector3(ArrayNextPosition[DrawTargetLineIndex].X,
-                                            ArrayNextPosition[DrawTargetLineIndex].Y,
-                                            ArrayNextPosition[DrawTargetLineIndex].Z);
-
-            Vector3 up = Vector3.Up;
-            Matrix View = Matrix.CreateLookAt(position, target, up);
-            Matrix Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-                                                                    aspectRatio,
-                                                                    0.1f, 1000);
-
-            IndexedLinesEffect.View = View;
-            IndexedLinesEffect.Projection = Projection;
-            IndexedLinesEffect.World = Matrix.Identity;
-
-            foreach (EffectPass pass in IndexedLinesEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                BackgroundGrid.Draw(g);
-            }
+            TunnelBackground.Draw(g);
 
             g.End();
             g.Begin();
@@ -711,22 +599,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             DrawPlayers(g);
-
-            if (SelectingTeam >= 0)
-            {
-                int DrawX = 10;
-                int DrawY = 45 + SelectingTeam * 45;
-                DrawBox(g, new Vector2(DrawX + 280, DrawY + 25), 85, 5 + 25 * Room.ListMapTeam.Count, Color.White);
-                for (int T = 0; T < Room.ListMapTeam.Count; T++)
-                {
-                    Rectangle TeamCollisionBox = new Rectangle(DrawX + 285, DrawY + 30 + T * 25, 85, 25);
-                    if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
-                    {
-                        g.Draw(sprPixel, new Rectangle(DrawX + 285, DrawY + 28 + T * 25, 75, 22), Color.FromNonPremultiplied(255, 255, 255, 127));
-                    }
-                    g.DrawString(fntText, ListAllTeamInfo[T].TeamName, new Vector2(DrawX + 285, DrawY + 30 + T * 25), Color.White);
-                }
-            }
+            DrawOpenDropdown(g);
         }
 
         protected virtual void DrawPlayers(CustomSpriteBatch g)
@@ -768,25 +641,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         private void DrawPlayerBox(CustomSpriteBatch g, int DrawX, int DrawY, BattleMapPlayer PlayerToDraw)
         {
+            Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX, DrawY, 320, 25);
+
             DrawEmptyBox(g, new Vector2(DrawX, DrawY), 60, 25);
-            DrawEmptyBox(g, new Vector2(DrawX + 65, DrawY), 70, 25);
-            DrawEmptyBox(g, new Vector2(DrawX + 140, DrawY), 200, 25);
-            if (Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0)
-            {
-                DrawBox(g, new Vector2(DrawX + 280, DrawY), 85, 25, Color.White);
-                g.DrawStringMiddleAligned(fntText, ListAllTeamInfo[PlayerToDraw.Team].TeamName, new Vector2(DrawX + 322, DrawY + 5), Color.White);
-            }
 
-            g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 72, DrawY + 5), Color.White);
-            g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 145, DrawY + 5), Color.White);
-
-            for (int S = 0; S < PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad.Count; S++)
-            {
-                if (PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S] != null)
-                {
-                    g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S].At(0).SpriteMap, new Rectangle(DrawX + 370 + S * 35, DrawY - 3, 32, 32), Color.White);
-                }
-            }
             if (PlayerToDraw.IsHost())
             {
                 g.DrawString(fntText, "Host", new Vector2(DrawX + 6, DrawY + 5), Color.White);
@@ -796,18 +654,84 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.DrawString(fntText, "Ready", new Vector2(DrawX + 6, DrawY + 5), Color.White);
             }
 
-            if (SelectingTeam == -1)
+            DrawX += 65;
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 70, 25);
+            g.DrawString(fntText, "Lv. 50", new Vector2(DrawX + 7, DrawY + 5), Color.White);
+            DrawX += 75;
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 200, 25);
+            g.DrawString(fntText, PlayerToDraw.Name, new Vector2(DrawX + 5, DrawY + 5), Color.White);
+            DrawX += 205;
+
+            Rectangle LoadoutCollisionBox = new Rectangle(DrawX, DrawY, 150, 25);
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), 150, 25);
+            g.DrawString(fntText, "Loadout 1", new Vector2(DrawX + 5, DrawY + 5), Color.White);
+            DrawX += 155;
+
+            if (Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0)
             {
-                Rectangle PlayerInfoCollisionBox = new Rectangle(DrawX, DrawY, 320, 25);
-                Rectangle TeamCollisionBox = new Rectangle(DrawX + 280, DrawY, 85, 25);
-                if (Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0 && TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y)
+                DrawEmptyBox(g, new Vector2(DrawX, DrawY), 110, 25);
+                g.DrawStringMiddleAligned(fntText, ListAllTeamInfo[PlayerToDraw.Team].TeamName, new Vector2(DrawX + 55, DrawY + 5), Color.White);
+                DrawX += 120;
+            }
+
+            for (int S = 0; S < PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad.Count; S++)
+            {
+                if (PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S] != null)
+                {
+                    g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S].At(0).SpriteMap, new Rectangle(DrawX + S * 35, DrawY - 3, 32, 32), Color.White);
+                }
+            }
+            
+            if (ActiveDropdownType == ActiveDropdownTypes.None)
+            {
+                Rectangle TeamCollisionBox = new Rectangle(DrawX - 120, DrawY, 110, 25);
+
+                if (LoadoutCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y) && (PlayerManager.ListLocalPlayer.Contains(PlayerToDraw)))
+                {
+                    g.Draw(sprPixel, LoadoutCollisionBox, Color.FromNonPremultiplied(255, 255, 255, 127));
+                }
+                else if (Room.GameInfo != null && Room.GameInfo.UseTeams && Room.ListMapTeam.Count > 0 && TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y)
                     && (PlayerManager.ListLocalPlayer.Contains(PlayerToDraw) || Room.ListRoomBot.Contains(PlayerToDraw)))
                 {
-                    g.Draw(sprPixel, new Rectangle(DrawX + 280, DrawY, 85, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
+                    g.Draw(sprPixel, TeamCollisionBox, Color.FromNonPremultiplied(255, 255, 255, 127));
                 }
                 else if (PlayerInfoCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
                 {
                     g.Draw(sprPixel, new Rectangle(DrawX, DrawY, 280, 25), Color.FromNonPremultiplied(255, 255, 255, 127));
+                }
+            }
+        }
+
+        protected void DrawOpenDropdown(CustomSpriteBatch g)
+        {
+            if (ActiveDropdownType == ActiveDropdownTypes.Team)
+            {
+                int DrawX = 515;
+                int DrawY = 45 + ActivePlayerIndex * 45;
+                DrawBox(g, new Vector2(DrawX, DrawY + 25), 120, 5 + 25 * Room.ListMapTeam.Count, Color.Black);
+                for (int T = 0; T < Room.ListMapTeam.Count; T++)
+                {
+                    Rectangle TeamCollisionBox = new Rectangle(DrawX, DrawY + 30 + T * 25, 110, 25);
+                    if (TeamCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    {
+                        g.Draw(sprPixel, TeamCollisionBox, Color.FromNonPremultiplied(255, 255, 255, 127));
+                    }
+                    g.DrawString(fntText, ListAllTeamInfo[T].TeamName, new Vector2(DrawX + 5, DrawY + 30 + T * 25), Color.White);
+                }
+            }
+            else if (ActiveDropdownType == ActiveDropdownTypes.Loadout)
+            {
+                int DrawX = 360;
+                int DrawY = 45 + ActivePlayerIndex * 45;
+                DrawBox(g, new Vector2(DrawX, DrawY + 25), 150, 5 + 25 * ActivePlayer.Inventory.ListSquadLoadout.Count, Color.Black);
+                for (int T = 0; T < ActivePlayer.Inventory.ListSquadLoadout.Count; T++)
+                {
+                    Rectangle LoadoutCollisionBox = new Rectangle(DrawX, DrawY + 28 + T * 25, 150, 25);
+                    if (LoadoutCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                    {
+                        g.Draw(sprPixel, LoadoutCollisionBox, Color.FromNonPremultiplied(255, 255, 255, 127));
+                    }
+                    g.DrawString(fntText, ActivePlayer.Inventory.ListSquadLoadout[T].Name, new Vector2(DrawX + 5, DrawY + 30 + T * 25), Color.White);
                 }
             }
         }

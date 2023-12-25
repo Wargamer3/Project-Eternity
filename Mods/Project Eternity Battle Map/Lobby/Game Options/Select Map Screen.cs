@@ -168,7 +168,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         }
 
         private SpriteFont fntText;
-        private BoxScrollbar MapScrollbar;
+        private EmptyBoxScrollbar MapScrollbar;
 
         private readonly RoomInformations Room;
         private readonly GameOptionsScreen OptionsScreen;
@@ -201,7 +201,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             fntText = Content.Load<SpriteFont>("Fonts/Arial10");
 
-            MapScrollbar = new BoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY), PanelHeight, 10, OnGametypeScrollbarChange);
+            MapScrollbar = new EmptyBoxScrollbar(new Vector2(LeftPanelX + PanelWidth - 20, PanelY), PanelHeight, 10, OnGametypeScrollbarChange);
         }
 
         private void OnGametypeScrollbarChange(float ScrollbarValue)
@@ -316,7 +316,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public override void Draw(CustomSpriteBatch g)
         {
-            DrawBox(g, new Vector2(LeftPanelX, PanelY), PanelWidth, PanelHeight, Color.White);
+            DrawEmptyBox(g, new Vector2(LeftPanelX, PanelY), PanelWidth, PanelHeight);
+            Color NewBackgroundColor = Color.FromNonPremultiplied((int)(Lobby.BackgroundColor.R * 0.8f), (int)(Lobby.BackgroundColor.G * 0.8f), (int)(Lobby.BackgroundColor.B * 0.8f), 150);
+            g.Draw(GameScreen.sprPixel, new Rectangle(LeftPanelX, PanelY, PanelWidth, PanelHeight), NewBackgroundColor);
             MapScrollbar.Draw(g);
 
             float DrawY = PanelY + 5;
@@ -354,11 +356,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int DescriptionBoxNameWidth = RightPanelContentWidth - DescriptionBoxNameOffset - DescriptionBoxNameOffset;
             int DescriptionBoxNameHeight = 30;
 
-            DrawBox(g, new Vector2(RightPanelX, PanelY), PanelWidth, PanelHeight, Color.White);
+            DrawEmptyBox(g, new Vector2(RightPanelX, PanelY), PanelWidth, PanelHeight);
+            g.Draw(GameScreen.sprPixel, new Rectangle(RightPanelX, PanelY, PanelWidth, PanelHeight), NewBackgroundColor);
 
-            DrawBox(g, new Vector2(RightPanelContentX, PreviewBoxY), RightPanelContentWidth, PreviewBoxHeight, Color.White);
-            DrawBox(g, new Vector2(RightPanelContentX, DescriptionBoxY), RightPanelContentWidth, DescriptionHeight, Color.White);
-            DrawBox(g, new Vector2(DescriptionBoxNameX, DescriptionBoxY), DescriptionBoxNameWidth, 30, Color.White);
+            DrawEmptyBox(g, new Vector2(RightPanelContentX, PreviewBoxY), RightPanelContentWidth, PreviewBoxHeight);
+            DrawEmptyBox(g, new Vector2(RightPanelContentX, DescriptionBoxY), RightPanelContentWidth, DescriptionHeight);
+            DrawEmptyBox(g, new Vector2(DescriptionBoxNameX, DescriptionBoxY), DescriptionBoxNameWidth, 30);
 
             if (ActiveMapInfo != null && ActiveMapInfo.MapName != null)
             {

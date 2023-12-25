@@ -55,5 +55,10 @@ namespace ProjectEternity.Core.Item
         {
             throw new System.NotImplementedException();
         }
+
+        public override string ToString()
+        {
+            return Text.OriginalText;
+        }
     }
 }

@@ -12,14 +12,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
     {
         private SpriteFont fntText;
 
-        private BoxNumericUpDown MaxBotNumberTextbox;
-        private BoxNumericUpDown MaxSquadPerBotNumberTextbox;
-        private BoxNumericUpDown GoalScoreTextbox;
-        private BoxNumericUpDown TimeLimitTextbox;
-        private BoxNumericUpDown TurnLimitTextbox;
-        private BoxNumericUpDown MinPlayerTextbox;
-        private BoxNumericUpDown MaxPlayerTextbox;
-        private BoxNumericUpDown MaxSquadPerPlayerTextbox;
+        private EmptyNumericUpDown MaxBotNumberTextbox;
+        private EmptyNumericUpDown MaxSquadPerBotNumberTextbox;
+        private EmptyNumericUpDown GoalScoreTextbox;
+        private EmptyNumericUpDown TimeLimitTextbox;
+        private EmptyNumericUpDown TurnLimitTextbox;
+        private EmptyNumericUpDown MinPlayerTextbox;
+        private EmptyNumericUpDown MaxPlayerTextbox;
+        private EmptyNumericUpDown MaxSquadPerPlayerTextbox;
 
         private List<IUIElement> ListMenuButton;
 
@@ -49,23 +49,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             int DrawY = PanelY;
             DrawY += 40;
 
-            MaxBotNumberTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20), OnMaxBotsChanged);
-            MaxSquadPerBotNumberTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20), OnMaxSquadPerBotChanged);
+            MaxBotNumberTextbox = new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20), OnMaxBotsChanged);
+            MaxSquadPerBotNumberTextbox = new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20), OnMaxSquadPerBotChanged);
             MaxBotNumberTextbox.SetText(Room.MaxNumberOfBots.ToString());
             MaxSquadPerBotNumberTextbox.SetText(Room.MaxSquadsPerBot.ToString());
 
             DrawY += 105;
             DrawY += 40;
 
-            MinPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
-            MaxPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
+            MinPlayerTextbox = new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
+            MaxPlayerTextbox = new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
             DrawY += 30;
-            MaxSquadPerPlayerTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
+            MaxSquadPerPlayerTextbox = new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
             DrawY += 30;
-            GoalScoreTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
-            TimeLimitTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
+            GoalScoreTextbox = new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(RightColumnX - 145, DrawY - 2), new Vector2(140, 20));
+            TimeLimitTextbox = new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
             DrawY += 30;
-            TurnLimitTextbox = new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
+            TurnLimitTextbox = new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(PanelWidth - 145, DrawY - 2), new Vector2(140, 20));
 
             ListMenuButton = new List<IUIElement>()
             {
@@ -99,14 +99,19 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 bool IsFirstColumn = true;
                 foreach (GameModeInfo.GameModeParameter ActiveParameter in ActiveCategory.Value)
                 {
-                    Type ObjectType = ActiveParameter.Value.GetType();
+                    if (!ActiveParameter.IsVisible)
+                    {
+                        continue;
+                    }
+
+                    Type ObjectType = ActiveParameter.Value.PropertyType;
                     if (typeof(int) == ObjectType)
                     {
-                        ListMenuButton.Add(new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(DrawX, DrawY), new Vector2(140, 20), (InputMessage) => { UpdateValue(InputMessage, ActiveParameter); }));
+                        ListMenuButton.Add(new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(DrawX, DrawY), new Vector2(140, 20), (Sender, InputMessage) => { UpdateValue(Sender, InputMessage, ActiveParameter); }, ActiveParameter.Value.GetValue(ActiveParameter.Owner).ToString()));
                     }
                     else if (typeof(bool) == ObjectType)
                     {
-                        ListMenuButton.Add(new BoxNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(DrawX, DrawY), new Vector2(140, 20), (InputMessage) => { UpdateValue(InputMessage, ActiveParameter); }));
+                        ListMenuButton.Add(new EmptyNumericUpDown(fntText, sprPixel, sprPixel, new Vector2(DrawX, DrawY), new Vector2(140, 20), (Sender, InputMessage) => { UpdateValue(Sender, InputMessage, ActiveParameter); }, ActiveParameter.Value.GetValue(ActiveParameter.Owner).ToString()));
                     }
 
                     if (IsFirstColumn)
@@ -119,18 +124,20 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                         ListMenuButton.Add(new UIText(Content, ActiveParameter.Name, new Vector2(RightColumnX + 10, DrawY), 200));
                         DrawX = RightColumnX - 145;
                     }
+
+                    IsFirstColumn = !IsFirstColumn;
                 }
             }
         }
 
-        private void OnMaxBotsChanged(string InputMessage)
+        private void OnMaxBotsChanged(TextInput SenderInput, string InputMessage)
         {
             Room.MaxNumberOfBots = int.Parse(InputMessage);
 
             Room.GameInfo.OnBotChanged(Room);
         }
 
-        private void OnMaxSquadPerBotChanged(string InputMessage)
+        private void OnMaxSquadPerBotChanged(TextInput SenderInput, string InputMessage)
         {
             Room.MaxSquadsPerBot = int.Parse(InputMessage);
 
@@ -140,12 +147,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
         }
 
-        private void UpdateValue(string InputMessage, GameModeInfo.GameModeParameter Sender)
+        private void UpdateValue(TextInput SenderInput, string InputMessage, GameModeInfo.GameModeParameter Sender)
         {
-            Type ObjectType = Sender.Value.GetType();
+            Type ObjectType = Sender.Value.PropertyType;
             if (typeof(int) == ObjectType)
             {
-                Sender.Value = int.Parse(InputMessage);
+                Sender.Value.SetValue(Sender.Owner, int.Parse(InputMessage));
+                SenderInput.SetText(Sender.Value.GetValue(Sender.Owner).ToString());
             }
         }
 
@@ -153,9 +161,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             int DrawX = PanelX;
             int DrawY = PanelY;
+            Color NewBackgroundColor = Color.FromNonPremultiplied((int)(Lobby.BackgroundColor.R * 0.8f), (int)(Lobby.BackgroundColor.G * 0.8f), (int)(Lobby.BackgroundColor.B * 0.8f), 150);
 
-            DrawBox(g, new Vector2(DrawX, DrawY), PanelWidth, PanelHeight, Color.White);
-            DrawBox(g, new Vector2(DrawX, DrawY), PanelWidth, 30, Color.White);
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), PanelWidth, 30);
+            g.Draw(GameScreen.sprPixel, new Rectangle(DrawX, DrawY, PanelWidth, 30), NewBackgroundColor);
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), PanelWidth, PanelHeight);
+            g.Draw(GameScreen.sprPixel, new Rectangle(DrawX, DrawY, PanelWidth, PanelHeight - 100), NewBackgroundColor);
+
             g.DrawString(fntText, "Bots", new Vector2(DrawX + 10, DrawY + 8), Color.White);
 
             DrawY += 40;
@@ -163,8 +175,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             g.DrawString(fntText, "Max Squads Per Bots", new Vector2(RightColumnX + 10, DrawY), Color.White);
 
             DrawY += 105;
-            DrawBox(g, new Vector2(DrawX, DrawY), PanelWidth, PanelHeight + 30, Color.White);
-            DrawBox(g, new Vector2(DrawX, DrawY), PanelWidth, 30, Color.White);
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), PanelWidth, 30);
+            g.Draw(GameScreen.sprPixel, new Rectangle(DrawX, DrawY, PanelWidth, 30), NewBackgroundColor);
+            DrawEmptyBox(g, new Vector2(DrawX, DrawY), PanelWidth, PanelHeight + 30);
+            g.Draw(GameScreen.sprPixel, new Rectangle(DrawX, DrawY, PanelWidth, PanelHeight), NewBackgroundColor);
+
             g.DrawString(fntText, "Game", new Vector2(DrawX + 10, DrawY + 8), Color.White);
 
             DrawY += 40;

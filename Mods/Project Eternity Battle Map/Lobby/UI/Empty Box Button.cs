@@ -122,9 +122,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 Vector2 TextSize = fntText.MeasureString(Text);
 
-                g.Draw(GameScreen.sprPixel, new Rectangle((int)(TextPosition.X - TextSize.X / 2), (int)(TextPosition.Y - TextSize.Y / 2), (int)TextSize.X, (int)TextSize.Y), BattleMapInventoryScreen.BackgroundColor);
+                g.Draw(GameScreen.sprPixel, new Rectangle((int)(TextPosition.X - TextSize.X / 2), (int)(TextPosition.Y - TextSize.Y / 2), (int)TextSize.X, (int)TextSize.Y), Lobby.BackgroundColor);
 
-                Color NewBackgroundColor = Color.FromNonPremultiplied((int)(BattleMapInventoryScreen.BackgroundColor.R * 0.9f), (int)(BattleMapInventoryScreen.BackgroundColor.G * 0.9f), (int)(BattleMapInventoryScreen.BackgroundColor.B * 0.9f), 125);
+                Color NewBackgroundColor = Color.FromNonPremultiplied((int)(Lobby.BackgroundColor.R * 0.9f), (int)(Lobby.BackgroundColor.G * 0.9f), (int)(Lobby.BackgroundColor.B * 0.9f), 125);
                 g.Draw(GameScreen.sprPixel, ButtonCollsionBox, NewBackgroundColor);
 
                 GameScreen.DrawEmptyBox(g, new Vector2(ButtonCollsionBox.X, ButtonCollsionBox.Y), ButtonCollsionBox.Width, ButtonCollsionBox.Height, 2, 0);
@@ -137,7 +137,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 g.Draw(GameScreen.sprPixel, new Rectangle(), Color.FromNonPremultiplied(127, 127, 127, 127));
 
                 g.DrawStringCenteredBackground(fntText, Text, new Vector2(ButtonCollsionBox.X + ButtonCollsionBox.Width / 2,
-                    ButtonCollsionBox.Y + ButtonCollsionBox.Height / 2), Color.White, GameScreen.sprPixel, BattleMapInventoryScreen.BackgroundColor);
+                    ButtonCollsionBox.Y + ButtonCollsionBox.Height / 2), Color.White, GameScreen.sprPixel, Lobby.BackgroundColor);
             }
             else if (ButtonState == ButtonStates.Checked)
             {
@@ -146,9 +146,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 Vector2 TextSize = fntText.MeasureString(Text);
 
-                g.Draw(GameScreen.sprPixel, new Rectangle((int)(TextPosition.X - TextSize.X / 2), (int)(TextPosition.Y - TextSize.Y / 2), (int)TextSize.X, (int)TextSize.Y), BattleMapInventoryScreen.BackgroundColor);
+                g.Draw(GameScreen.sprPixel, new Rectangle((int)(TextPosition.X - TextSize.X / 2), (int)(TextPosition.Y - TextSize.Y / 2), (int)TextSize.X, (int)TextSize.Y), Lobby.BackgroundColor);
 
-                Color NewBackgroundColor = Color.FromNonPremultiplied((int)(BattleMapInventoryScreen.BackgroundColor.R * 0.9f), (int)(BattleMapInventoryScreen.BackgroundColor.G * 0.9f), (int)(BattleMapInventoryScreen.BackgroundColor.B * 0.9f), 200);
+                Color NewBackgroundColor = Color.FromNonPremultiplied((int)(Lobby.BackgroundColor.R * 0.9f), (int)(Lobby.BackgroundColor.G * 0.9f), (int)(Lobby.BackgroundColor.B * 0.9f), 200);
                 g.Draw(GameScreen.sprPixel, ButtonCollsionBox, NewBackgroundColor);
 
                 GameScreen.DrawEmptyBox(g, new Vector2(ButtonCollsionBox.X, ButtonCollsionBox.Y), ButtonCollsionBox.Width, ButtonCollsionBox.Height, 5, 0);
@@ -162,9 +162,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                 Vector2 TextSize = fntText.MeasureString(Text);
 
-                g.Draw(GameScreen.sprPixel, new Rectangle((int)(TextPosition.X - TextSize.X / 2), (int)(TextPosition.Y - TextSize.Y / 2), (int)TextSize.X, (int)TextSize.Y), BattleMapInventoryScreen.BackgroundColor);
+                g.Draw(GameScreen.sprPixel, new Rectangle((int)(TextPosition.X - TextSize.X / 2), (int)(TextPosition.Y - TextSize.Y / 2), (int)TextSize.X, (int)TextSize.Y), Lobby.BackgroundColor);
 
-                Color NewBackgroundColor = Color.FromNonPremultiplied((int)(BattleMapInventoryScreen.BackgroundColor.R * 0.9f), (int)(BattleMapInventoryScreen.BackgroundColor.G * 0.9f), (int)(BattleMapInventoryScreen.BackgroundColor.B * 0.9f), 160);
+                Color NewBackgroundColor = Color.FromNonPremultiplied((int)(Lobby.BackgroundColor.R * 0.9f), (int)(Lobby.BackgroundColor.G * 0.9f), (int)(Lobby.BackgroundColor.B * 0.9f), 160);
                 g.Draw(GameScreen.sprPixel, ButtonCollsionBox, NewBackgroundColor);
 
                 GameScreen.DrawEmptyBox(g, new Vector2(ButtonCollsionBox.X, ButtonCollsionBox.Y), ButtonCollsionBox.Width, ButtonCollsionBox.Height, 5, HoverProgression);

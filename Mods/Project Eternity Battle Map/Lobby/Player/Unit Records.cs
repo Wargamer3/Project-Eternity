@@ -18,7 +18,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Dictionary<string, uint> DicUnitIDByNumberOfDeaths;
         public Dictionary<string, uint> DicUnitIDByNumberOfUses;
         public Dictionary<string, uint> DicUnitIDByTurnsOnField;
-        public Dictionary<string, uint> DicUnitNameByNumberOfTilesTraveled;
+        public Dictionary<string, uint> DicUnitIDByNumberOfTilesTraveled;
 
         public UnitRecords()
         {
@@ -34,7 +34,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicUnitIDByNumberOfDeaths = new Dictionary<string, uint>();
             DicUnitIDByNumberOfUses = new Dictionary<string, uint>();
             DicUnitIDByTurnsOnField = new Dictionary<string, uint>();
-            DicUnitNameByNumberOfTilesTraveled = new Dictionary<string, uint>();
+            DicUnitIDByNumberOfTilesTraveled = new Dictionary<string, uint>();
         }
 
         public UnitRecords(BinaryReader BR)
@@ -123,10 +123,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             int DicUnitNameByNumberOfTilesTraveledCount = BR.ReadInt32();
-            DicUnitNameByNumberOfTilesTraveled = new Dictionary<string, uint>(DicUnitNameByNumberOfTilesTraveledCount);
+            DicUnitIDByNumberOfTilesTraveled = new Dictionary<string, uint>(DicUnitNameByNumberOfTilesTraveledCount);
             for (int i = 0; i < DicUnitNameByNumberOfTilesTraveledCount; ++i)
             {
-                DicUnitNameByNumberOfTilesTraveled.Add(BR.ReadString(), BR.ReadUInt32());
+                DicUnitIDByNumberOfTilesTraveled.Add(BR.ReadString(), BR.ReadUInt32());
             }
 
             #endregion
@@ -218,10 +218,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             int DicUnitNameByNumberOfTilesTraveledCount = BR.ReadInt32();
-            DicUnitNameByNumberOfTilesTraveled = new Dictionary<string, uint>(DicUnitNameByNumberOfTilesTraveledCount);
+            DicUnitIDByNumberOfTilesTraveled = new Dictionary<string, uint>(DicUnitNameByNumberOfTilesTraveledCount);
             for (int i = 0; i < DicUnitNameByNumberOfTilesTraveledCount; ++i)
             {
-                DicUnitNameByNumberOfTilesTraveled.Add(BR.ReadString(), BR.ReadUInt32());
+                DicUnitIDByNumberOfTilesTraveled.Add(BR.ReadString(), BR.ReadUInt32());
             }
 
             #endregion
@@ -241,7 +241,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicUnitIDByNumberOfDeaths = new Dictionary<string, uint>(Clone.DicUnitIDByNumberOfDeaths);
             DicUnitIDByNumberOfUses = new Dictionary<string, uint>(Clone.DicUnitIDByNumberOfUses);
             DicUnitIDByTurnsOnField = new Dictionary<string, uint>(Clone.DicUnitIDByTurnsOnField);
-            DicUnitNameByNumberOfTilesTraveled = new Dictionary<string, uint>(Clone.DicUnitNameByNumberOfTilesTraveled);
+            DicUnitIDByNumberOfTilesTraveled = new Dictionary<string, uint>(Clone.DicUnitIDByNumberOfTilesTraveled);
         }
 
         public void Save(BinaryWriter BW)
@@ -326,8 +326,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                 BW.Write(ActiveEntry.Key);
                 BW.Write(ActiveEntry.Value);
             }
-            BW.Write(DicUnitNameByNumberOfTilesTraveled.Count);
-            foreach (KeyValuePair<string, uint> ActiveEntry in DicUnitNameByNumberOfTilesTraveled)
+            BW.Write(DicUnitIDByNumberOfTilesTraveled.Count);
+            foreach (KeyValuePair<string, uint> ActiveEntry in DicUnitIDByNumberOfTilesTraveled)
             {
                 BW.Write(ActiveEntry.Key);
                 BW.Write(ActiveEntry.Value);
@@ -353,7 +353,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicUnitIDByNumberOfDeaths.Add(ID, 0);
             DicUnitIDByNumberOfUses.Add(ID, 0);
             DicUnitIDByTurnsOnField.Add(ID, 0);
-            DicUnitNameByNumberOfTilesTraveled.Add(ID, 0);
+            DicUnitIDByNumberOfTilesTraveled.Add(ID, 0);
         }
 
         internal void AddCharacterKill(string ID)

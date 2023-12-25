@@ -353,7 +353,7 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
             }
         }
 
-        private void SendMessage(string InputMessage)
+        private void SendMessage(TextInput Sender, string InputMessage)
         {
             ChatInput.SetText(string.Empty);
             OnlineCommunicationClient.SendMessage(OnlineCommunicationClient.Chat.ActiveTabID, new ChatManager.ChatMessage(DateTime.UtcNow, InputMessage, ChatManager.MessageColors.White));

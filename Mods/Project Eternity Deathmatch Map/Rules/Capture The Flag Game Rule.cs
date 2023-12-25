@@ -109,5 +109,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawString(Owner.fntArial8, DicPointsByTeam[0].ToString(), new Vector2(Constants.Width / 2 - 50, 12), Color.White);
             g.DrawString(Owner.fntArial8, DicPointsByTeam[1].ToString(), new Vector2(Constants.Width / 2 + 50, 12), Color.White);
         }
+
+        public override List<GameRuleError> Validate(RoomInformations Room)
+        {
+            return new List<GameRuleError>();
+        }
     }
 }

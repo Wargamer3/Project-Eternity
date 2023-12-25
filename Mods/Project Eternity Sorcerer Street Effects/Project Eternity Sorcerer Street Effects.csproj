@@ -98,6 +98,7 @@
     <Compile Include="Effects\Neutralize Next Spell.cs" />
     <Compile Include="Manual Skills\Area Target Type.cs" />
     <Compile Include="Manual Skills\Enemy Cepter Target Type.cs" />
+    <Compile Include="Manual Skills\Player Movement Target Type.cs" />
     <Compile Include="Manual Skills\Player Target Type.cs" />
     <Compile Include="Manual Skills\All Creatures Target Type.cs" />
     <Compile Include="Manual Skills\Creature Target Type.cs" />

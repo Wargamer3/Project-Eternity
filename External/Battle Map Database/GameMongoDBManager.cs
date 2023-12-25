@@ -261,6 +261,16 @@ namespace Database.BattleMap
                                     {
                                     }
                                 },
+                                { "CharacterIDByTotalDamageGiven",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "CharacterIDByNumberOfDeaths",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
                                 { "CharacterIDByNumberOfUses",
                                     new BsonArray
                                     {
@@ -277,6 +287,16 @@ namespace Database.BattleMap
                                     }
                                 },
                                 { "UnitIDByNumberOfKills",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByTotalDamageGiven",
+                                    new BsonArray
+                                    {
+                                    }
+                                },
+                                { "UnitIDByNumberOfDeaths",
                                     new BsonArray
                                     {
                                     }
@@ -369,7 +389,12 @@ namespace Database.BattleMap
 
             BsonArray temp = new BsonArray();
             temp.Add(NewSquadLoadout);
-            SquadLoadouts.Add(temp);
+
+            BsonDocument ActiveSquadDocument = new BsonDocument();
+
+            ActiveSquadDocument.Add("Name", "Default");
+            ActiveSquadDocument.Add("Squads", temp);
+            SquadLoadouts.Add(ActiveSquadDocument);
 
             return NewPlayer;
         }
@@ -442,10 +467,14 @@ namespace Database.BattleMap
 
             foreach (BsonValue ActiveLoadout in SquadLoadoutsArray)
             {
-                BsonArray ActiveSquadDocument = ActiveLoadout.AsBsonArray;
-                BW.AppendInt32(ActiveSquadDocument.Count);
+                BsonDocument ActiveSquadDocument = ActiveLoadout.AsBsonDocument;
 
-                foreach (BsonValue ActiveSquad in ActiveSquadDocument)
+                BW.AppendString(ActiveSquadDocument.GetValue("Name").AsString);
+
+                BsonArray SquadArray = ActiveSquadDocument.GetValue("Squads").AsBsonArray;
+                BW.AppendInt32(SquadArray.Count);
+
+                foreach (BsonValue ActiveSquad in SquadArray)
                 {
                     BsonDocument ActiveUnitDocument = ActiveSquad.AsBsonDocument;
                     BW.AppendString(ActiveUnitDocument.GetValue("RelativePath").AsString);
@@ -518,7 +547,15 @@ namespace Database.BattleMap
                 BW.AppendUInt32((uint)ActiveCharacter.GetValue("Kills").AsInt32);
             }
 
-            BsonArray CharacterIDByNumberOfDeathsArray = UnitRecords.GetValue("CharacterIDByNumberOfKills").AsBsonArray;
+            BsonArray CharacterIDByTotalDamageGivenArray = UnitRecords.GetValue("CharacterIDByTotalDamageGiven").AsBsonArray;
+            BW.AppendInt32(CharacterIDByTotalDamageGivenArray.Count);
+            foreach (BsonDocument ActiveCharacter in CharacterIDByTotalDamageGivenArray)
+            {
+                BW.AppendString(ActiveCharacter.GetValue("Path").AsString);
+                BW.AppendUInt32((uint)ActiveCharacter.GetValue("Kills").AsInt32);
+            }
+
+            BsonArray CharacterIDByNumberOfDeathsArray = UnitRecords.GetValue("CharacterIDByNumberOfDeaths").AsBsonArray;
             BW.AppendInt32(CharacterIDByNumberOfDeathsArray.Count);
             foreach (BsonDocument ActiveCharacter in CharacterIDByNumberOfDeathsArray)
             {
@@ -550,6 +587,7 @@ namespace Database.BattleMap
                 BW.AppendUInt32((uint)ActiveCharacter.GetValue("Kills").AsInt32);
             }
 
+
             BsonArray UnitIDByNumberOfKillsArray = UnitRecords.GetValue("UnitIDByNumberOfKills").AsBsonArray;
             BW.AppendInt32(UnitIDByNumberOfKillsArray.Count);
             foreach (BsonDocument ActiveUnit in UnitIDByNumberOfKillsArray)
@@ -558,7 +596,15 @@ namespace Database.BattleMap
                 BW.AppendUInt32((uint)ActiveUnit.GetValue("Kills").AsInt32);
             }
 
-            BsonArray UnitIDByNumberOfDeathsArray = UnitRecords.GetValue("UnitIDByNumberOfKills").AsBsonArray;
+            BsonArray UnitIDByTotalDamageGivenArray = UnitRecords.GetValue("UnitIDByTotalDamageGiven").AsBsonArray;
+            BW.AppendInt32(UnitIDByTotalDamageGivenArray.Count);
+            foreach (BsonDocument ActiveUnit in UnitIDByTotalDamageGivenArray)
+            {
+                BW.AppendString(ActiveUnit.GetValue("Path").AsString);
+                BW.AppendUInt32((uint)ActiveUnit.GetValue("Kills").AsInt32);
+            }
+
+            BsonArray UnitIDByNumberOfDeathsArray = UnitRecords.GetValue("UnitIDByNumberOfDeaths").AsBsonArray;
             BW.AppendInt32(UnitIDByNumberOfDeathsArray.Count);
             foreach (BsonDocument ActiveUnit in UnitIDByNumberOfDeathsArray)
             {
@@ -864,7 +910,7 @@ namespace Database.BattleMap
 
             BsonArray OwnedUnitsArray = Inventory.GetValue("OwnedUnits").AsBsonArray;
             
-            foreach (UnitInfo ActiveSquad in Player.Inventory.DicOwnedSquad.Values)
+            foreach (UnitInfo ActiveSquad in Player.Inventory.DicOwnedUnit.Values)
             {
                 OwnedUnitsArray.Add(ActiveSquad.Leader.RelativePath);
                 OwnedUnitsArray.Add(ActiveSquad.QuantityOwned);
@@ -897,7 +943,11 @@ namespace Database.BattleMap
                     LoadoutArray.Add(NewSquadLoadout);
                 }
 
-                SquadLoadoutsArray.Add(LoadoutArray);
+                BsonDocument ActiveSquadDocument = new BsonDocument();
+
+                ActiveSquadDocument.Add("Name", ActiveLoadout.Name);
+                ActiveSquadDocument.Add("Squads", LoadoutArray);
+                SquadLoadoutsArray.Add(ActiveSquadDocument);
             }
         }
 

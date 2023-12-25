@@ -55,7 +55,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                         .OrderByDescending(U => U.First())
                                         .ToDictionary(C => C.Key, C => C.First());
 
-                DicUnitByKill = ActivePlayer.Inventory.DicOwnedSquad
+                DicUnitByKill = ActivePlayer.Inventory.DicOwnedUnit
                                         .GroupBy(U => U.Value.Leader.ItemName, U =>
                                         {
                                             uint KillCount = 0; ActivePlayer.Records.PlayerUnitRecords.DicUnitIDByNumberOfKills.TryGetValue(U.Value.Leader.ID, out KillCount);

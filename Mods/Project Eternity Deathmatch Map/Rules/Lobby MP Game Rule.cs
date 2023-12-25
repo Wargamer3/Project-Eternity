@@ -498,5 +498,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawString(Owner.fntArial8, MaxGameLengthInMinutes + " MIN", new Vector2(620, PosY + Max * 26), Color.White);
             g.DrawString(Owner.fntArial8, MaxKill + " KILL", new Vector2(670, PosY + Max * 26), Color.White);
         }
+
+        public abstract List<GameRuleError> Validate(RoomInformations Room);
     }
 }

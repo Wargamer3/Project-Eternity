@@ -86,14 +86,21 @@ namespace ProjectEternity.Core.Graphics
             g.Draw(texture, destinationRectangle, sourceRectangle, color, rotation, origin, effects, layerDepth);
         }
 
-        public void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color)
+        public void DrawString(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor)
         {
-            g.DrawString(spriteFont, text, position, color);
+            g.DrawString(spriteFont, Text, Position, TextColor);
         }
 
-        public void DrawString(SpriteFont spriteFont, string text, Vector2 position, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDept)
+        public void DrawString(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDept)
         {
-            g.DrawString(spriteFont, text, position, color, rotation, origin, scale, effects, layerDept);
+            g.DrawString(spriteFont, Text, Position, TextColor, rotation, origin, scale, effects, layerDept);
+        }
+
+        public void DrawStringBackground(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor, Texture2D sprPixel, Color BackgroundColor)
+        {
+            Vector2 TextSize = spriteFont.MeasureString(Text);
+            g.Draw(sprPixel, new Rectangle((int)Position.X, (int)Position.Y, (int)TextSize.X, (int)TextSize.Y), BackgroundColor);
+            g.DrawString(spriteFont, Text, Position, TextColor);
         }
 
         public void DrawStringMiddleAligned(SpriteFont spriteFont, string Text, Vector2 Position, Color TextColor)

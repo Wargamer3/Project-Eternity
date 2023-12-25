@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core.Units;
 using ProjectEternity.GameScreens.BattleMapScreen;
@@ -90,6 +91,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 ActionPanelPlayerAIStep.FinishAIPlayerTurn(Owner);
             }
+        }
+
+        public override List<GameRuleError> Validate(RoomInformations Room)
+        {
+            return new List<GameRuleError>();
         }
     }
 }

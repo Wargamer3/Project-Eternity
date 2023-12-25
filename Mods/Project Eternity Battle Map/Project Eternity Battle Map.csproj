@@ -130,13 +130,14 @@
     <Compile Include="Intermission Screen\Records\Unit Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Player Records Tab.cs" />
     <Compile Include="Intermission Screen\Records\Records Screen.cs" />
+    <Compile Include="Lobby\Background\Tunnel Manager.cs" />
     <Compile Include="Lobby\Game Options\Game Mode Info.cs" />
     <Compile Include="Lobby\Inventory\Squad Screen.cs" />
-    <Compile Include="Lobby\Inventory\Tunnel Behvaior Rotation Manager.cs" />
-    <Compile Include="Lobby\Inventory\Tunnel Behvaior Color Manager.cs" />
-    <Compile Include="Lobby\Inventory\Tunnel Behvaior Direction Manager.cs" />
-    <Compile Include="Lobby\Inventory\Tunnel Behvaior Speed Manager.cs" />
-    <Compile Include="Lobby\Inventory\Tunnel Behvaior Size Manager.cs" />
+    <Compile Include="Lobby\Background\Tunnel Behvaior Rotation Manager.cs" />
+    <Compile Include="Lobby\Background\Tunnel Behvaior Color Manager.cs" />
+    <Compile Include="Lobby\Background\Tunnel Behvaior Direction Manager.cs" />
+    <Compile Include="Lobby\Background\Tunnel Behvaior Speed Manager.cs" />
+    <Compile Include="Lobby\Background\Tunnel Behvaior Size Manager.cs" />
     <Compile Include="Lobby\Online Player Base.cs" />
     <Compile Include="Lobby\Player\Battle Records.cs" />
     <Compile Include="Lobby\Player\Bonus Records.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Lobby\Player\Player Records.cs" />
     <Compile Include="Lobby\Player\Unit Records.cs" />
     <Compile Include="Lobby\Shop\Confirm Unit Buy.cs" />
+    <Compile Include="Lobby\UI\Empty Numeric Up Down.cs" />
     <Compile Include="Lobby\UI\Empty Box Drop Down Button.cs" />
     <Compile Include="Lobby\UI\Empty Box Button.cs" />
     <Compile Include="Lobby\Unlocks\BattleMap Player Unlock Inventory.cs" />

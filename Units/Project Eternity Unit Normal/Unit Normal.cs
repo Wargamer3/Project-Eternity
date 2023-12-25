@@ -102,10 +102,10 @@ namespace ProjectEternity.Core.Units.Normal
             }
         }
 
-        public override Unit FromFile(string Name, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
+        public override Unit FromFile(string RelativePath, ContentManager Content, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,
             Dictionary<string, AutomaticSkillTargetType> DicAutomaticSkillTarget)
         {
-            return new UnitNormal(Name, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
+            return new UnitNormal(RelativePath, Content, DicRequirement, DicEffect, DicAutomaticSkillTarget);
         }
 
         public override void ReinitializeMembers(Unit InitializedUnitBase)

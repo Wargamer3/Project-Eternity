@@ -1,9 +1,23 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
+    public struct GameRuleError
+    {
+        public string Description;
+        public object ErrorTarget;
+
+        public GameRuleError(string Description, object ErrorTarget)
+        {
+            this.Description = Description;
+            this.ErrorTarget = ErrorTarget;
+        }
+    }
+
     public interface IGameRule
     {
         string Name { get; }
@@ -15,5 +29,6 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         void OnManualDefeat(int EXP, uint Money);
         void BeginDraw(CustomSpriteBatch g);
         void Draw(CustomSpriteBatch g);
+        List<GameRuleError> Validate(RoomInformations Room);
     }
 }
