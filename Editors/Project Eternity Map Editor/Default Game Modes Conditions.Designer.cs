@@ -60,10 +60,12 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // gbMandatoryMutators
             // 
+            this.gbMandatoryMutators.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gbMandatoryMutators.Controls.Add(this.dgvMandatoryMutators);
-            this.gbMandatoryMutators.Location = new System.Drawing.Point(504, 142);
+            this.gbMandatoryMutators.Location = new System.Drawing.Point(510, 142);
             this.gbMandatoryMutators.Name = "gbMandatoryMutators";
-            this.gbMandatoryMutators.Size = new System.Drawing.Size(193, 149);
+            this.gbMandatoryMutators.Size = new System.Drawing.Size(187, 149);
             this.gbMandatoryMutators.TabIndex = 24;
             this.gbMandatoryMutators.TabStop = false;
             this.gbMandatoryMutators.Text = "Mandatory Mutators";
@@ -81,7 +83,7 @@ namespace ProjectEternity.Editors.MapEditor
             this.dgvMandatoryMutators.MultiSelect = false;
             this.dgvMandatoryMutators.Name = "dgvMandatoryMutators";
             this.dgvMandatoryMutators.RowHeadersVisible = false;
-            this.dgvMandatoryMutators.Size = new System.Drawing.Size(181, 124);
+            this.dgvMandatoryMutators.Size = new System.Drawing.Size(175, 124);
             this.dgvMandatoryMutators.TabIndex = 1;
             // 
             // clMutatorName
@@ -92,6 +94,8 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // gbGameModes
             // 
+            this.gbGameModes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gbGameModes.Controls.Add(this.btnRemoveGameMode);
             this.gbGameModes.Controls.Add(this.lstGameModes);
             this.gbGameModes.Controls.Add(this.btnAddGameMode);
@@ -133,6 +137,8 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // cbGameMode
             // 
+            this.cbGameMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbGameMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbGameMode.FormattingEnabled = true;
             this.cbGameMode.Location = new System.Drawing.Point(9, 32);
@@ -143,6 +149,9 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // pgGameModeAttributes
             // 
+            this.pgGameModeAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pgGameModeAttributes.Location = new System.Drawing.Point(6, 72);
             this.pgGameModeAttributes.Name = "pgGameModeAttributes";
             this.pgGameModeAttributes.PropertySort = System.Windows.Forms.PropertySort.Categorized;
@@ -152,6 +161,8 @@ namespace ProjectEternity.Editors.MapEditor
             // 
             // gbGameModeAttributes
             // 
+            this.gbGameModeAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gbGameModeAttributes.Controls.Add(this.lblGameModeAttributes);
             this.gbGameModeAttributes.Controls.Add(this.lblGameMode);
             this.gbGameModeAttributes.Controls.Add(this.pgGameModeAttributes);
@@ -189,9 +200,9 @@ namespace ProjectEternity.Editors.MapEditor
             this.gbPlayers.Controls.Add(this.txtPlayersMax);
             this.gbPlayers.Controls.Add(this.lblPlayersMin);
             this.gbPlayers.Controls.Add(this.txtPlayersMin);
-            this.gbPlayers.Location = new System.Drawing.Point(504, 12);
+            this.gbPlayers.Location = new System.Drawing.Point(510, 12);
             this.gbPlayers.Name = "gbPlayers";
-            this.gbPlayers.Size = new System.Drawing.Size(193, 105);
+            this.gbPlayers.Size = new System.Drawing.Size(187, 105);
             this.gbPlayers.TabIndex = 27;
             this.gbPlayers.TabStop = false;
             this.gbPlayers.Text = "Players";

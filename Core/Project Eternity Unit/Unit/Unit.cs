@@ -599,7 +599,11 @@ namespace ProjectEternity.Core.Units
         {
             foreach (Attack ActiveAttack in ListAttack)
             {
-                if (!ActiveAttack.CanAttack)
+                if (UnitStat.RegularAttackDisabled && _UnitStat.ListAttack.Contains(ActiveAttack))
+                {
+                    ActiveAttack.DisableAttack();
+                }
+                else if (!ActiveAttack.CanAttack)
                 {
                     ActiveAttack.UpdateAttack(this, StartPosition, UnitTeam, TargetPosition, TargetTeam, ArrayTargetMapSize, TargetMovementType, CanMove);
                 }
@@ -913,7 +917,6 @@ namespace ProjectEternity.Core.Units
                 return 0;
             }
         }
-
 
         public string QualityRank
         {

@@ -29,6 +29,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         private readonly DeathmatchMap Owner;
 
+        protected int HPRegenPerTurnFixed;
+        protected int ENRegenPerTurnFixed;
+        protected int SPRegenPerTurnFixed;
+        protected int AmmoRegenPerTurnFixed;
+        protected float HPRegenPerTurnPercent;
+        protected float ENRegenPerTurnPercent;
+        protected float SPRegenPerTurnPercent;
+        protected float AmmoRegenPerTurnPercent;
+
         protected bool UseTeamsForSpawns;
         protected bool ShowRoomSummary;
         public const int TurnsToRespawn = 1;
@@ -44,6 +53,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         public LobbyMPGameRule(DeathmatchMap Owner)
         {
             this.Owner = Owner;
+
+            HPRegenPerTurnFixed = 0;
+            ENRegenPerTurnFixed = 5;
+            SPRegenPerTurnFixed = 10;
+            AmmoRegenPerTurnFixed = 0;
+
+            HPRegenPerTurnPercent = 0;
+            ENRegenPerTurnPercent = 0;
+            SPRegenPerTurnPercent = 0;
+            AmmoRegenPerTurnPercent = 0;
 
             UseTeamsForSpawns = true;
             GameLengthInSeconds = 0;
@@ -161,8 +180,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (!ActiveSquad.IsDead)
                     {
-                        ActiveSquad.CurrentLeader.RefillSP(10);
-                        ActiveSquad.CurrentLeader.RefillEN(5);
+                        for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+                        {
+                            ActiveSquad[U].HealUnit((int)(HPRegenPerTurnFixed + ActiveSquad[U].MaxHP * HPRegenPerTurnPercent * 0.01f));
+                            ActiveSquad[U].RefillEN((int)(ENRegenPerTurnFixed + ActiveSquad[U].MaxEN * ENRegenPerTurnPercent * 0.01f));
+                            ActiveSquad[U].RefillSP((int)(SPRegenPerTurnFixed + ActiveSquad[U].Pilot.MaxSP * SPRegenPerTurnPercent * 0.01f));
+                            ActiveSquad[U].RefillAmmo((byte)AmmoRegenPerTurnFixed, AmmoRegenPerTurnPercent);
+                        }
                     }
                 }
             }
@@ -207,21 +231,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 DefeatedSquad.DropItem();
             }
 
-            if (AttackerSquadPlayerIndex >= ListRemainingResapwn.Count || ListRemainingResapwn[AttackerSquadPlayerIndex] > 0)
+            if (AttackerSquadPlayerIndex >= ListRemainingResapwn.Count || ListRemainingResapwn[DefeatedSquadPlayerIndex] > 0)
             {
                 ListDeadSquadInfo.Add(new DeathInfo(DefeatedSquad, DefeatedSquadPlayerIndex, TurnsToRespawn));
 
-                if (AttackerSquadPlayerIndex < ListRemainingResapwn.Count)
+                if (DefeatedSquadPlayerIndex < ListRemainingResapwn.Count)
                 {
-                    ListRemainingResapwn[AttackerSquadPlayerIndex] -= DefeatedSquad.CurrentLeader.SpawnCost;
-                    if (ListRemainingResapwn[AttackerSquadPlayerIndex] < 0)
+                    ListRemainingResapwn[DefeatedSquadPlayerIndex] -= DefeatedSquad.At(0).SpawnCost;
+                    if (ListRemainingResapwn[DefeatedSquadPlayerIndex] < 0)
                     {
-                        ListRemainingResapwn[AttackerSquadPlayerIndex] = 0;
+                        ListRemainingResapwn[DefeatedSquadPlayerIndex] = 0;
                     }
                 }
             }
 
-            if ((ListRemainingResapwn.Count <= 0 || ListRemainingResapwn[AttackerSquadPlayerIndex] < 0) && Owner.IsOfflineOrServer)
+            if ((ListRemainingResapwn.Count <= 0 || ListRemainingResapwn[DefeatedSquadPlayerIndex] < 0) && Owner.IsOfflineOrServer)
             {
                 CheckGameOver();
             }
@@ -386,6 +410,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private void RespawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
         {
             List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
+            if (ListPossibleSpawnPoint.Count == 0)
+            {
+                return;
+            }
+
             for (int U = 0; U < ActiveSquad.UnitsInSquad; ++U)
             {
                 ActiveSquad.At(U).ReinitializeMembers(Owner.Params.DicUnitType[ActiveSquad.At(U).UnitTypeName]);

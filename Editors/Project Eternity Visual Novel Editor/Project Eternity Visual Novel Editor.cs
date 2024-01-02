@@ -366,8 +366,9 @@ namespace ProjectEternity.Editors.VisualNovelEditor
                 NewDialog.Position = new Microsoft.Xna.Framework.Point(0, 0);
             else
                 NewDialog.Position = new Microsoft.Xna.Framework.Point(0, VisualNovelViewer.ActiveVisualNovel.Timeline.Last().Position.Y + VisualNovelViewer.BoxHeight);
-            
+
             NewDialog.CutsceneBefore = new Cutscene(null, Scripts);
+            NewDialog.CutsceneDuring = new Cutscene(null, Scripts);
             NewDialog.CutsceneAfter = new Cutscene(null, Scripts);
 
             //Add it to the Lists
@@ -399,6 +400,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
                     NewDialog.Position = new Microsoft.Xna.Framework.Point(0, VisualNovelViewer.ActiveVisualNovel.Timeline.Last().Position.Y + VisualNovelViewer.BoxHeight);
 
                 NewDialog.CutsceneBefore = new Cutscene(null, Scripts);
+                NewDialog.CutsceneDuring = new Cutscene(null, Scripts);
                 NewDialog.CutsceneAfter = new Cutscene(null, Scripts);
 
                 //Add it to the Lists

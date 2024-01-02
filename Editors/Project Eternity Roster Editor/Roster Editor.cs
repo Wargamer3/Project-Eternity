@@ -424,7 +424,7 @@ namespace ProjectEternity.Editors.RosterEditor
                 switch (ItemSelectionChoice)
                 {
                     case ItemSelectionChoices.Unit:
-                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(Items[I].LastIndexOf("Units") + 6);
+                        Name = Items[I].Substring(0, Items[I].Length - 4).Substring(14);
                         if (Name != null)
                         {
                             string[] UnitInfo = Name.Split(new[] { "/" }, StringSplitOptions.None);

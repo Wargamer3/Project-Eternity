@@ -267,7 +267,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             foreach (PERAttack ActiveAttack in Map.ListPERAttack)
             {
-                ActiveAttack.ActiveAttack.PERAttributes.ProjectileAnimation.Draw(g, new Vector2(ActiveAttack.Position.X, ActiveAttack.Position.Y));
+                ActiveAttack.ActiveAttack.PERAttributes.ProjectileAnimation.Draw(g, new Vector2(ActiveAttack.Position.X * Map.TileSize.X, ActiveAttack.Position.Y * Map.TileSize.Y));
             }
         }
 

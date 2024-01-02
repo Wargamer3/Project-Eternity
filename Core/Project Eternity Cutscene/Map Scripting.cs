@@ -168,30 +168,19 @@ namespace ProjectEternity.Core.Scripts
         }
     }
 
-    public class MapEvent : MapScript
-    {        
+    public abstract class MapEvent : MapScript
+    {
         public MapEvent(int ScriptWidth, int ScriptHeight, string Name, string[] ArrayNameTrigger, string[] ArrayNameCondition)
             : base(ScriptWidth, ScriptHeight, Name, ArrayNameTrigger, ArrayNameCondition)
         {
             MapScriptType = MapScriptTypes.Event;
         }
 
-        public override void Save(BinaryWriter BW)
-        {
-        }
-
-        public override void Load(BinaryReader BR)
-        {
-        }
+        public abstract bool IsValid();
 
         public override void Update(int Index)
         {
             throw new NotImplementedException();
-        }
-
-        public override MapScript CopyScript()
-        {
-            return new MapEvent(ScriptSize.Width, ScriptSize.Height, Name, ArrayNameTrigger, ArrayNameCondition);
         }
     }
 

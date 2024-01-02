@@ -6,6 +6,8 @@ namespace ProjectEternity.Editors.MapEditor
 {
     public partial class DefaultGameModesConditions : Form
     {
+        private bool AllowEvent;
+
         public DefaultGameModesConditions()
         {
             InitializeComponent();
@@ -57,13 +59,22 @@ namespace ProjectEternity.Editors.MapEditor
             if (lstGameModes.SelectedIndex >= 0)
             {
                 pgGameModeAttributes.SelectedObject = lstGameModes.SelectedItem;
-                cbGameMode.SelectedText = lstGameModes.SelectedItem.ToString();
+                for(int i = 0; i < cbGameMode.Items.Count; ++i)
+                {
+                    if (cbGameMode.Items[i].ToString() == lstGameModes.SelectedItem.ToString())
+                    {
+                        AllowEvent = false;
+                        cbGameMode.SelectedIndex = i;
+                        AllowEvent = true;
+                        break;
+                    }
+                }
             }
         }
 
         private void cbGameMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstGameModes.SelectedIndex >= 0)
+            if (lstGameModes.SelectedIndex >= 0 && AllowEvent)
             {
                 lstGameModes.Items[lstGameModes.SelectedIndex] = ((GameModeInfo)cbGameMode.SelectedItem).Copy();
             }

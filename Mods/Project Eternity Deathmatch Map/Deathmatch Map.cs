@@ -1117,14 +1117,21 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void FinalizeMovement(Squad ActiveSquad, int UsedMovement, List<Vector3> ListMVHoverPoints)
         {
-            ActiveSquad.CurrentTerrainIndex = GetTerrain(ActiveSquad).TerrainTypeIndex;
+            Params.GlobalContext.ListAttackPickedUp.Clear();
+            Params.GlobalContext.ListMVPoints.Clear();
 
-            if (UsedMovement > 0)
+            Params.GlobalContext.ListMVPoints.AddRange(ListMVHoverPoints);
+
+            ActiveSquad.CurrentTerrainIndex = GetTerrain(ActiveSquad).TerrainTypeIndex;
+            HashSet<int> ListLayerIndex = new HashSet<int>();
+
+            if (ListMVHoverPoints.Count > 0)
             {
                 float TotalENCost = 0;
                 foreach (Vector3 TerrainCrossed in ListMVHoverPoints)
                 {
                     TotalENCost += TerrainRestrictions.GetENCost(ActiveSquad, ActiveSquad.CurrentLeader.UnitStat, GetTerrain(TerrainCrossed).TerrainTypeIndex);
+                    ListLayerIndex.Add((int)TerrainCrossed.Z);
                 }
                 if (TotalENCost > 0)
                 {
@@ -1133,39 +1140,43 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         ActiveSquad[U].ConsumeEN((int)TotalENCost);
                     }
                 }
-            }
 
-            if (ListMVHoverPoints.Count > 0)
-            {
-                BaseMapLayer ActiveLayer = LayerManager[(int)ActiveSquad.Position.Z];
-
-                foreach (InteractiveProp ActiveProp in ActiveLayer.ListProp)
+                foreach (int ActiveLayerIndex in ListLayerIndex)
                 {
-                    ActiveProp.FinishMoving(ActiveSquad, ListMVHoverPoints);
-                }
+                    BaseMapLayer ActiveLayer = LayerManager[ActiveLayerIndex];
 
-                foreach (Core.Attacks.TemporaryAttackPickup ActiveAttack in ActiveLayer.ListAttackPickup)
-                {
-                    if (ListMVHoverPoints.Contains(ActiveAttack.Position))
+                    for (int P = ActiveLayer.ListProp.Count - 1; P >= 0; P--)
                     {
-                        ActiveSquad.CurrentLeader.AddTemporaryAttack(ActiveAttack, Content, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
-                    }
-                }
-
-                for (int I = ActiveLayer.ListHoldableItem.Count - 1; I >= 0; I--)
-                {
-                    HoldableItem ActiveItem = ActiveLayer.ListHoldableItem[I];
-                    foreach (Vector3 MovedOverPoint in ListMVHoverPoints)
-                    {
-                        ActiveItem.OnMovedOverBeforeStop(ActiveSquad, MovedOverPoint, ActiveSquad.Position);
+                        ActiveLayer.ListProp[P].FinishMoving(ActiveSquad, ListMVHoverPoints);
                     }
 
-                    ActiveItem.OnUnitStop(ActiveSquad);
+                    for (int A = ActiveLayer.ListAttackPickup.Count - 1; A >= 0; A--)
+                    {
+                        Core.Attacks.TemporaryAttackPickup ActiveAttack = ActiveLayer.ListAttackPickup[A];
+                        if (ListMVHoverPoints.Contains(ActiveAttack.Position))
+                        {
+                            ActiveSquad.CurrentLeader.AddTemporaryAttack(ActiveAttack, Content, Params.DicRequirement, Params.DicEffect, Params.DicAutomaticSkillTarget);
+                            Params.GlobalContext.ListAttackPickedUp.Add(ActiveAttack.AttackName);
+                            ActiveLayer.ListAttackPickup.RemoveAt(A);
+                        }
+                    }
+
+                    for (int I = ActiveLayer.ListHoldableItem.Count - 1; I >= 0; I--)
+                    {
+                        HoldableItem ActiveItem = ActiveLayer.ListHoldableItem[I];
+                        foreach (Vector3 MovedOverPoint in ListMVHoverPoints)
+                        {
+                            ActiveItem.OnMovedOverBeforeStop(ActiveSquad, MovedOverPoint, ActiveSquad.Position);
+                        }
+
+                        ActiveItem.OnUnitStop(ActiveSquad);
+                    }
                 }
             }
 
             ActivateAutomaticSkills(ActiveSquad, ActiveSquad.CurrentLeader, BaseSkillRequirement.AfterMovingRequirementName, ActiveSquad, ActiveSquad.CurrentLeader);
             UpdateMapEvent(EventTypeUnitMoved, 0);
+            UpdateMapEvent(WeaponPickedUpMap, 0);
             LayerManager.UnitMoved(ActivePlayerIndex);
         }
 

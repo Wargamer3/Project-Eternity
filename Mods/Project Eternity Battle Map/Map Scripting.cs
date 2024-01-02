@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using ProjectEternity.Core.Scripts;
 
@@ -9,6 +10,23 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleEvent(string Name, string[] ArrayNameCondition)
             : base(140, 70, Name, new string[0], ArrayNameCondition)
         {
+        }
+        public override void Save(BinaryWriter BW)
+        {
+        }
+
+        public override void Load(BinaryReader BR)
+        {
+        }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
+
+        public override MapScript CopyScript()
+        {
+            return new BattleEvent(Name, ArrayNameCondition);
         }
     }
 
@@ -41,6 +59,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public const string EventTypeTurn = "Turn";
         public const string EventTypeUnitMoved = "Unit Moved";
         public const string EventTypeOnBattle = "On Battle";
+        public const string WeaponPickedUpMap = "Weapon Picked Up Map";
 
         public Dictionary<string, MapEvent> DicMapEvent = new Dictionary<string, MapEvent>();
         public Dictionary<string, MapCondition> DicMapCondition = new Dictionary<string, MapCondition>();
@@ -50,7 +69,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         {
             for (int E = ListMapEvent.Count - 1; E >= 0; --E)
             {
-                if (ListMapEvent[E].Name != EventType)
+                if (ListMapEvent[E].Name != EventType || !ListMapEvent[E].IsValid())
                     continue;
 
                 ExecuteFollowingScripts(ListMapEvent[E], Index);

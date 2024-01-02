@@ -185,7 +185,7 @@ namespace ProjectEternity.Editors.AttackEditor
                     BW.Write(PERAttackEditor.cbCanBeShotDown.Checked);
                     BW.Write(PERAttackEditor.cbHoming.Checked);
                     BW.Write((byte)PERAttackEditor.txtMaxLifetime.Value);
-                    BW.Write((byte)PERAttackEditor.cbAttackType.SelectedIndex);
+                    BW.Write((byte)Math.Max(0, PERAttackEditor.cbAttackType.SelectedIndex));
 
                     BW.Write(PERAttackEditor.IsProjectileAnimated);
                     BW.Write(PERAttackEditor.txtProjectilePath.Text);

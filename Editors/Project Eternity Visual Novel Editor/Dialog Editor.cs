@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace ProjectEternity.Editors.VisualNovelEditor
                 NewScriptListBox.Size = new Size(248, 243);
                 NewScriptListBox.TabIndex = 4;
                 NewScriptListBox.DoubleClick += new EventHandler(lstChoices_DoubleClick);
-                NewScriptListBox.Items.AddRange(ActiveScripts.Value.ToArray());
+                NewScriptListBox.Items.AddRange(ActiveScripts.Value.OrderBy(x => x.Name).ToArray());
 
                 TabPage NewScriptTab = new TabPage();
                 NewScriptTab.Controls.Add(NewScriptListBox);

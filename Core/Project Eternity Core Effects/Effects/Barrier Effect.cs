@@ -13,8 +13,8 @@ namespace ProjectEternity.Core.Effects
         public enum BarrierTypes { Defend = 0, Dodge = 1 };
 
         private BarrierTypes _BarrierType;
-        private string _ENCost;
         private Operators.NumberTypes _NumberType;
+        private string _ENCost;
         private string _DamageReduction;
         private string _BreakingDamage;//Damage limit for the BarrierEffect to break.
         private List<string> ListEffectiveAttack;//List of Attacks the BarrierEffect is usefull against.
@@ -37,6 +37,12 @@ namespace ProjectEternity.Core.Effects
         public BarrierEffect(UnitEffectParams Params)
             : base(Name, true, Params)
         {
+            _BarrierType = BarrierTypes.Defend;
+            _NumberType = Operators.NumberTypes.Absolute;
+            _ENCost = "0";
+            _DamageReduction = "0";
+            _BreakingDamage = "0";
+
             ListEffectiveAttack = new List<string>();
             ListBreakingAttack = new List<string>();
             ListBreakingSkill = new List<string>();

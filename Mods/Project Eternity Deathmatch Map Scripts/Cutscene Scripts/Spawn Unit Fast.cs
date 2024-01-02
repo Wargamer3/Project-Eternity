@@ -161,7 +161,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
 
             [CategoryAttribute("Spawner Attributes"),
-            DescriptionAttribute(".")]
+            DescriptionAttribute("Starts at 1.")]
             public int SpawnPlayer
             {
                 get

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectEternity.Core;
+using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.Core.Graphics;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -103,6 +104,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public virtual void Update(GameTime gameTime)
         {
             CurrentTime += gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (InputHelper.InputConfirmPressed())
+            {
+                CurrentTime += EndOfAnimatonInSeconds + 5;
+            }
 
             if (CurrentTime >= EndOfAnimatonInSeconds)
             {

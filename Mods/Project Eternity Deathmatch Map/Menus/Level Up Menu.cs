@@ -373,7 +373,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             g.DrawString(fntFinlanderFont, TotalMoneyGained.ToString(), new Vector2(500, Y), Color.White);
 
             DrawBox(g, new Vector2(30, Y += 32), 580, 45, Color.Black);
-            g.DrawStringMiddleAligned(fntFinlanderFont, "GAINED PARTS", new Vector2(Constants.Width / 2, Y += 8), Color.Yellow);
+            g.DrawStringMiddleAligned(fntFinlanderFont, "GAINED PARTS", new Vector2(320, Y += 8), Color.Yellow);
             DrawBox(g, new Vector2(30, Y += 36), 580, 90, Color.Green);
             for (int i = 0; i < 4; ++i)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace ProjectEternity.Core.Effects
 {
@@ -12,7 +13,18 @@ namespace ProjectEternity.Core.Effects
         {
             if (destinationType == typeof(string))
             {
-                return string.Join(",", (string[])value);
+                if (value.GetType() == typeof(string))
+                {
+                    return value;
+                }
+                else if (value.GetType() == typeof(List<string>))
+                {
+                    return string.Join(",", (List<string>)value);
+                }
+                else
+                {
+                    return string.Join(",", (string[])value);
+                }
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }

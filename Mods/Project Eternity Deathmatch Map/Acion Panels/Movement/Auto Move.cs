@@ -66,7 +66,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int S = 0; S < ActivePlayer.ListSquad.Count; S++)
                 {
                     Squad ActiveSquad = ActivePlayer.ListSquad[S];
-                    if (ActiveSquad.Speed != Vector3.Zero)
+                    if (ActiveSquad.Speed != Vector3.Zero && !ActiveSquad.IsDead)
                     {
                         ListSquadAutoMovement.Add(new SquadAutoMovement(P, S, ActiveSquad, Map.GetTerrain(ActiveSquad)));
                     }
@@ -92,7 +92,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     LastSquadIndex = S;
 
-                    if (ListSquadAutoMovement[S].Owner.CurrentLeader == null)
+                    if (ListSquadAutoMovement[S].Owner.CurrentLeader == null || ListSquadAutoMovement[S].Owner.IsDead)
                     {
                         ListSquadAutoMovement[S].Owner.SetPosition(new Vector3((int)ListSquadAutoMovement[S].LastPosition.X,
                             (int)ListSquadAutoMovement[S].LastPosition.Y, (int)ListSquadAutoMovement[S].LastPosition.Z));
@@ -120,6 +120,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             NewSpeedY += FrameProgress * Friction;
                         else
                             NewSpeedY = 0;
+
+                        if (NewSpeedX == 0 && NewSpeedY == 0)
+                        {
+                            NewSpeedZ = 0;
+                        }
 
                         ListSquadAutoMovement[S].Owner.Speed = new Vector3(NewSpeedX, NewSpeedY, NewSpeedZ);
 
@@ -183,6 +188,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private bool CheckForCollisions(SquadAutoMovement ActiveSquad, float FrameProgress)
         {
             Vector3 NextPosition = ActiveSquad.LastPosition + ActiveSquad.Owner.Speed * FrameProgress;
+            if (ActiveSquad.Owner.IsOnGround)
+            {
+                NextPosition.Z = ActiveSquad.LastPosition.Z;
+            }
 
             if (NextPosition.X < 0 || NextPosition.X >= Map.MapSize.X
                 || NextPosition.Y < 0 || NextPosition.Y >= Map.MapSize.Y

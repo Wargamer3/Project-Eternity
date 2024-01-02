@@ -240,7 +240,10 @@ namespace ProjectEternity.Core.Units
             }
 
             if (ListUnitIndex.Count == 0)
+            {
                 IsDead = true;
+                Speed = Vector3.Zero;
+            }
         }
 
         public void ReloadSkills(Dictionary<string, Unit> DicUnitType, Dictionary<string, BaseSkillRequirement> DicRequirement, Dictionary<string, BaseEffect> DicEffect,

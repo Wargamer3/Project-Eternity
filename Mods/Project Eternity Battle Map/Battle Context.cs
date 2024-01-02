@@ -6,6 +6,7 @@ using ProjectEternity.Core.Units;
 using ProjectEternity.Core.Item;
 using ProjectEternity.Core.Skill;
 using ProjectEternity.Core.Effects;
+using Microsoft.Xna.Framework;
 using Roslyn;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
@@ -22,12 +23,16 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public Unit SupportAttack;
         public Unit SupportDefend;
         public MovementAlgorithmTile[] ArrayAttackPosition;
+        public List<Vector3> ListMVPoints;
+        public List<string> ListAttackPickedUp;
 
         public BattleContext()
         {
             SupportAttack = null;
             SupportDefend = null;
             ArrayAttackPosition = new MovementAlgorithmTile[0];
+            ListMVPoints = new List<Vector3>();
+            ListAttackPickedUp = new List<string>();
         }
 
         public BattleContext(BattleContext GlobalContext)
@@ -37,6 +42,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             SupportAttack = GlobalContext.SupportAttack;
             SupportDefend = GlobalContext.SupportDefend;
             ArrayAttackPosition = GlobalContext.ArrayAttackPosition;
+            ListMVPoints = GlobalContext.ListMVPoints;
+            ListAttackPickedUp = GlobalContext.ListAttackPickedUp;
 
             SetContext(GlobalContext.EffectOwnerSquad, GlobalContext.EffectOwnerUnit, GlobalContext.EffectOwnerCharacter,
                  GlobalContext.EffectTargetSquad, GlobalContext.EffectTargetUnit, GlobalContext.EffectTargetCharacter, GlobalContext.ActiveParser);

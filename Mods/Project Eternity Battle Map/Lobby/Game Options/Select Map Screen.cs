@@ -129,6 +129,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public readonly string MapName;
             public readonly string MapModName;
             public readonly string MapPath;
+            public uint OrderNumber;
             public Point MapSize;
             public List<Color> ListMapTeam;
             public byte MinNumberOfPlayer;
@@ -251,6 +252,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             FileStream FS = new FileStream("Content/Maps/" + MapInfoToSelect.MapModName + "/" + MapInfoToSelect.MapPath + ".pem", FileMode.Open, FileAccess.Read);
             BinaryReader BR = new BinaryReader(FS, Encoding.UTF8);
             BR.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            MapInfoToSelect.OrderNumber = BR.ReadUInt32();
 
             MapInfoToSelect.MapSize.X = BR.ReadInt32();
             MapInfoToSelect.MapSize.Y = BR.ReadInt32();

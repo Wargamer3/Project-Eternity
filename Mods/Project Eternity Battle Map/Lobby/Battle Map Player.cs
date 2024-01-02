@@ -106,6 +106,15 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             Inventory.ActiveLoadout.ListSpawnSquad.Add(FirstSquad);
+
+            IniFile IniDefaultMissions = IniFile.ReadFromFile("Content/Battle Lobby Default Missions.ini");
+
+            foreach (string ActiveKey in IniDefaultMissions.ReadAllKeys())
+            {
+                string MissionPath = IniDefaultMissions.ReadField(ActiveKey, "Path");
+                Inventory.DicOwnedMission.Add(MissionPath, new MissionInfo(MissionPath, 0));
+            }
+
             UnlockInventory.LoadPlayerUnlocks(Name);
         }
 

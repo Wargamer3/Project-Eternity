@@ -561,7 +561,7 @@ FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) +
                 ListPlayer[DefenderPlayerIndex].Records.AddUnitDamageReceived((uint)Result.AttackDamage);
 
                 //Remove Leader Ammo if needed.
-                if (CurrentAttack != null && CurrentAttack.MaxAmmo > 0)
+                if (CurrentAttack != null && CurrentAttack.MaxAmmo > 0 && CurrentAttack.Pri != WeaponPrimaryProperty.PER)
                 {
                     CurrentAttack.ConsumeAmmo();
                 }

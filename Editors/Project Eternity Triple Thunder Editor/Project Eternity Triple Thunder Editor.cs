@@ -792,9 +792,9 @@ namespace ProjectEternity.Editors.TripleThunderEditor
         {
             #region Scripting
 
-            lstEvents.Items.Add(new MapEvent(140, 70, FightingZoneEvent.EventTypeGame, new string[0], new string[] { "Game Start" }));
-            lstEvents.Items.Add(new MapEvent(140, 70, FightingZoneEvent.EventTypeAllEnemiesDefeated, new string[0], new string[] { FightingZoneEvent.EventTypeAllEnemiesDefeated }));
-            lstEvents.Items.Add(new MapEvent(140, 70, FightingZoneEvent.EventOnStep, new string[0], new string[] { FightingZoneEvent.EventOnStep }));
+            lstEvents.Items.Add(new FightingZoneEvent(FightingZoneEvent.EventTypeGame, new string[] { "Game Start" }));
+            lstEvents.Items.Add(new FightingZoneEvent(FightingZoneEvent.EventTypeAllEnemiesDefeated, new string[] { FightingZoneEvent.EventTypeAllEnemiesDefeated }));
+            lstEvents.Items.Add(new FightingZoneEvent(FightingZoneEvent.EventOnStep, new string[] { FightingZoneEvent.EventOnStep }));
 
             string[] Files = Directory.GetFiles("Scripts", "*.dll");
             for (int F = 0; F < Files.Length; F++)

@@ -35,7 +35,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     List<string> Items = BaseEditor.ShowContextMenuWithItem(BaseEditor.GUIRootPathUnits);
                     if (Items != null)
                     {
-                        value = Items[0].Substring(0, Items[0].Length - 4).Substring(Items[0].LastIndexOf("Units") + 6);
+                        value = Items[0].Substring(0, Items[0].Length - 4).Substring(14);
                     }
                 }
                 return value;
@@ -63,7 +63,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                         for (int C = 0; C < Items.Count; C++)
                         {
-                            ArraySelectedCharacter[C] = Items[C].Substring(0, Items[C].Length - 4).Substring(Items[C].LastIndexOf("Characters") + 11);
+                            ArraySelectedCharacter[C] = Items[C].Substring(0, Items[C].Length - 4).Substring(19);
                         }
                         value = ArraySelectedCharacter;
                     }

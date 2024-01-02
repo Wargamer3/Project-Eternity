@@ -78,6 +78,7 @@ namespace ProjectEternity.Core.Units
         public byte Height;
         public bool[,] ArrayMapSize;//Custom mask for actual place a Unit is taking.
 
+        public bool RegularAttackDisabled;
         public List<Attack> ListAttack;
         public Attack PLAAttack;
         public Attack CurrentAttack;
@@ -389,8 +390,8 @@ namespace ProjectEternity.Core.Units
 
         public bool IsUnitAtPosition(Vector3 Position, Vector3 PositionToCheck)
         {
-            int FinalX = (int)(PositionToCheck.X - Position.X);
-            int FinalY = (int)(PositionToCheck.Y - Position.Y);
+            int FinalX = (int)Math.Round(PositionToCheck.X - Position.X);
+            int FinalY = (int)Math.Round(PositionToCheck.Y - Position.Y);
 
             if (FinalX < 0 || FinalY < 0 || FinalX >= ArrayMapSize.GetLength(0) || FinalY >= ArrayMapSize.GetLength(1) || (int)Position.Z != (int)PositionToCheck.Z)
                 return false;

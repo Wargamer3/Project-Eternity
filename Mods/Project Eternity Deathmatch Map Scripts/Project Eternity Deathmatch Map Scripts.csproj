@@ -55,7 +55,10 @@
   <ItemGroup>
     <Compile Include="Cutscene Scripts\Add Player.cs" />
     <Compile Include="Cutscene Scripts\Center Camera On Squad.cs" />
+    <Compile Include="Cutscene Scripts\Change Camera Type.cs" />
     <Compile Include="Cutscene Scripts\Damage Zone.cs" />
+    <Compile Include="Cutscene Scripts\Disable Unit Attacks.cs" />
+    <Compile Include="Cutscene Scripts\Shield Unit.cs" />
     <Compile Include="Cutscene Scripts\Edit Map.cs" />
     <Compile Include="Cutscene Scripts\Change Terrain.cs" />
     <Compile Include="Cutscene Scripts\Helpers\ScriptUnit.cs" />
@@ -148,6 +151,11 @@
     <ProjectReference Include="..\..\Core\Project Eternity Control Helper\Project Eternity Control Helper.csproj">
       <Project>{e16f59f6-9776-4db4-813a-59db1b39b636}</Project>
       <Name>Project Eternity Control Helper</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Project Eternity Core Effects\Project Eternity Core Effects.csproj">
+      <Project>{4443915C-152E-44F3-BD60-766080C0C0F0}</Project>
+      <Name>Project Eternity Core Effects</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Project Eternity Core Scripts\Project Eternity Core Scripts.csproj">

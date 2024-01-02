@@ -424,6 +424,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public void OptionsClosed()
         {
+            if (Room.GameInfo == null)
+            {
+                return;
+            }
+
             ListGameRuleError = Room.GameInfo.GetRule(null).Validate(Room);
 
             UpdateReadyOrHost();

@@ -90,7 +90,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     CreateAttack(Map, ActivePlayerIndex, ActiveSquad, ActiveSquad.CurrentLeader.CurrentAttack, AttackPosition, Map.CursorPosition - ActiveSquad.Position, new List<BaseAutomaticSkill>());
                 }
 
-
                 if (ActiveSquad.CurrentLeader.CurrentAttack.MaxAmmo > 0)
                 {
                     ActiveSquad.CurrentLeader.CurrentAttack.ConsumeAmmo();

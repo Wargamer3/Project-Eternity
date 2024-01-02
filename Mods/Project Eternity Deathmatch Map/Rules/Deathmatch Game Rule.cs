@@ -12,16 +12,22 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
     {
         public const string ModeName = "Deathmatch";
 
-        private int _ResapwnLimit = 3000;
-        private int _ResapwnLimitMin = 0;
-        private int _ResapwnLimitMax = 100000;
-        private int _UnitValueLimit = 400;
-        private int _UnitValueLimitMin = 0;
-        private int _UnitValueLimitMax = 10000;
+        private int _ResapwnLimit;
+        private int _ResapwnLimitMin;
+        private int _ResapwnLimitMax;
+        private int _UnitValueLimit;
+        private int _UnitValueLimitMin;
+        private int _UnitValueLimitMax;
 
         public DeathmatchGameInfo(bool IsUnlocked, Texture2D sprPreview)
             : base(ModeName, "Gain points for kills and assists, respawn on death.", CategoryPVP, IsUnlocked, sprPreview)
         {
+            _ResapwnLimit = 3000;
+            _ResapwnLimitMin = 0;
+            _ResapwnLimitMax = 100000;
+            _UnitValueLimit = 400;
+            _UnitValueLimitMin = 0;
+            _UnitValueLimitMax = 10000;
         }
 
         protected override void DoSave(BinaryWriter BW)
@@ -62,6 +68,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             return new DeathmatchGameInfo(IsUnlocked, sprPreview);
         }
+
+        #region Properties
 
         [DisplayNameAttribute("Resapwn Limit"),
         CategoryAttribute("Respawn"),
@@ -158,6 +166,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 _UnitValueLimitMax = value;
             }
         }
+
+        #endregion
     }
 
     class DeathmatchGameRule : LobbyMPGameRule

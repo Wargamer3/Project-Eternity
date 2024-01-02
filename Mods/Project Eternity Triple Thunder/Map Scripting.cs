@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using ProjectEternity.Core.Scripts;
 
 namespace ProjectEternity.GameScreens.TripleThunderScreen
@@ -12,6 +13,24 @@ namespace ProjectEternity.GameScreens.TripleThunderScreen
         public FightingZoneEvent(string Name, string[] ArrayNameCondition)
             : base(140, 70, Name, new string[0], ArrayNameCondition)
         {
+        }
+
+        public override void Load(BinaryReader BR)
+        {
+        }
+
+        public override void Save(BinaryWriter BW)
+        {
+        }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
+
+        public override MapScript CopyScript()
+        {
+            return new FightingZoneEvent(Name, ArrayNameCondition);
         }
     }
 

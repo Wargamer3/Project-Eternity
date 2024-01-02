@@ -108,12 +108,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 Squad ActiveSquad = Owner.ListPlayer[Owner.ActivePlayerIndex].ListSquad[S];
 
-                for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+                if (!ActiveSquad.IsDead)
                 {
-                    ActiveSquad[U].HealUnit((int)(HPRegenPerTurnFixed + ActiveSquad[U].MaxHP * HPRegenPerTurnPercent * 0.01f));
-                    ActiveSquad[U].RefillEN((int)(ENRegenPerTurnFixed + ActiveSquad[U].MaxEN * ENRegenPerTurnPercent * 0.01f));
-                    ActiveSquad[U].RefillSP((int)(SPRegenPerTurnFixed + ActiveSquad[U].Pilot.MaxSP * SPRegenPerTurnPercent * 0.01f));
-                    ActiveSquad[U].RefillAmmo((byte)AmmoRegenPerTurnFixed, AmmoRegenPerTurnPercent);
+                    for (int U = ActiveSquad.UnitsAliveInSquad - 1; U >= 0; --U)
+                    {
+                        ActiveSquad[U].HealUnit((int)(HPRegenPerTurnFixed + ActiveSquad[U].MaxHP * HPRegenPerTurnPercent * 0.01f));
+                        ActiveSquad[U].RefillEN((int)(ENRegenPerTurnFixed + ActiveSquad[U].MaxEN * ENRegenPerTurnPercent * 0.01f));
+                        ActiveSquad[U].RefillSP((int)(SPRegenPerTurnFixed + ActiveSquad[U].Pilot.MaxSP * SPRegenPerTurnPercent * 0.01f));
+                        ActiveSquad[U].RefillAmmo((byte)AmmoRegenPerTurnFixed, AmmoRegenPerTurnPercent);
+                    }
                 }
             }
         }

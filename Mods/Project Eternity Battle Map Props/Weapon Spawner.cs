@@ -93,6 +93,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public void PickupWeapon(Squad SquadToUse)
         {
             SquadToUse.CurrentLeader.AddTemporaryAttack(_WeaponName, _SpritePath, sprWeapon, Unit3D.UnitEffect3D, _Ammo, Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
+
+            Map.Params.GlobalContext.ListAttackPickedUp.Add(WeaponName);
+
             IsUsed = true;
             TurnUsed = Map.ActivePlayerIndex;
             TurnRemaining = _RespawnTime;

@@ -13,12 +13,12 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         private readonly SpriteFont fntUnitAttack;
         private readonly string BarrierName;
 
-        public NonDemoBarrierFrame(NonDemoBattleUnitFrame OtherFrame, bool IsRight, SpriteFont fntUnitAttack)
+        public NonDemoBarrierFrame(NonDemoBattleUnitFrame OtherFrame, bool IsRight, SpriteFont fntUnitAttack, string BarrierName)
             : base(OtherFrame.Map, OtherFrame.SharedUnitStats, OtherFrame.PositionX, OtherFrame.PositionY, IsRight)
         {
             this.fntUnitAttack = fntUnitAttack;
 
-            this.BarrierName = OtherFrame.SharedUnitStats.AttackerSquadResult.Barrier;
+            this.BarrierName = BarrierName;
         }
 
         public override void Draw(CustomSpriteBatch g, int NonDemoAnimationTimer)

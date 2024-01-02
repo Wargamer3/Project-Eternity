@@ -111,6 +111,7 @@
     <Compile Include="Environment\Map Zone.cs" />
     <Compile Include="Environment\Volatile Substance.cs" />
     <Compile Include="Environment\Zone Shape.cs" />
+    <Compile Include="Events\Weapon Picked Up Map Event.cs" />
     <Compile Include="IGameRule.cs" />
     <Compile Include="Inputs\Keyboard Input.cs" />
     <Compile Include="Inputs\Player Input.cs" />

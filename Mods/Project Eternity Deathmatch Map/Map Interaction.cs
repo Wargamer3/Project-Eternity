@@ -42,7 +42,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             //Check if there's a Construction.
             while (S < ListPlayer[PlayerIndex].ListSquad.Count && !SquadFound)
             {
-                if (ListPlayer[PlayerIndex].ListSquad[S].CurrentLeader == null)
+                if (ListPlayer[PlayerIndex].ListSquad[S].CurrentLeader == null || ListPlayer[PlayerIndex].ListSquad[S].IsDead)
                 {
                     ++S;
                     continue;

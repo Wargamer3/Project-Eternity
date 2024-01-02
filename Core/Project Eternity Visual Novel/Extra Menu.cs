@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
         public override void Load()
         {
-            for (int i = 0; i <= TimelineIndexMax; ++i)
+            for (int i = 0; i <= TimelineIndexMax && i < Owner.Timeline.Count; ++i)
             {
                 //Crop the text before drawing it.
                 string[] ArrayText = Owner.Timeline[i].Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);

@@ -29,6 +29,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             public int TargetSquadIndex;
             public int TargetUnitIndex;
             private Unit _Target;
+            public int TargetFinalEN;
             public Unit Target { get { return _Target; } }
             public void SetTarget(int TargetPlayerIndex, int TargetSquadIndex, int TargetUnitIndex, Unit Target)
             {
@@ -83,6 +84,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             //FINAL DAMAGE = (((ATTACK - DEFENSE) * (ATTACKED AND DEFENDER SIZE COMPARISON)) + Additive Final Damage Bonuses) * Final Damage Multiplier Bonuses
             BattleResult Result = new BattleResult();
             Result.SetTarget(TargetPlayerIndex, TargetSquadIndex, TargetUnitIndex, Defender);
+            Result.TargetFinalEN = Defender.EN;
 
             if (NullifyAttack)
             {
@@ -285,10 +287,12 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                             {
                                 int ENCost = int.Parse(Params.ActiveParser.Evaluate(ActiveBarrierEffect.ENCost), CultureInfo.InvariantCulture);
 
-                                if (Result.AttackAttackerFinalEN > ENCost)
+                                if (Result.Target.EN >= ENCost)
                                 {
                                     Result.AttackAttackerFinalEN -= ENCost;
+
                                     int BreakingDamage = int.Parse(Params.ActiveParser.Evaluate(ActiveBarrierEffect.BreakingDamage), CultureInfo.InvariantCulture);
+
                                     //Look for weapon breaker or damage breaker or if the Barrier can protect against that Attack.
                                     if ((ActiveBarrierEffect.EffectiveAttacks.Count > 0 && !ActiveBarrierEffect.EffectiveAttacks.Contains(CurrentAttack.RelativePath)) ||
                                         ActiveBarrierEffect.BreakingAttacks.Contains(CurrentAttack.RelativePath) ||
@@ -331,10 +335,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                                             else if (ActiveBarrierEffect.BarrierType == BarrierEffect.BarrierTypes.Defend)
                                             {
                                                 float DamageReduction = float.Parse(Params.ActiveParser.Evaluate(ActiveBarrierEffect.DamageReduction), CultureInfo.InvariantCulture);
+
                                                 if (ActiveBarrierEffect.NumberType == Operators.NumberTypes.Absolute)
                                                     Result.AttackDamage = Math.Max(0, Result.AttackDamage - (int)DamageReduction);
                                                 else if (ActiveBarrierEffect.NumberType == Operators.NumberTypes.Relative)
-                                                    Result.AttackDamage = (int)(Result.AttackDamage * DamageReduction);
+                                                    Result.AttackDamage = (int)(Result.AttackDamage * (100 - DamageReduction));
                                             }
                                         }
                                     }

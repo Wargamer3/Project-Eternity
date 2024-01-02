@@ -208,13 +208,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     throw new NotImplementedException();
                 }
 
-                public void PickupWeapon(Squad SquadToUse)
+                public void PickupWeapon(Squad SquadToUse, int LayerIndex)
                 {
                     SquadToUse.CurrentLeader.AddTemporaryAttack(WeaponName, SpritePath, sprWeapon, Unit3D.UnitEffect3D, Ammo, Map.Content, Map.Params.DicRequirement, Map.Params.DicEffect, Map.Params.DicAutomaticSkillTarget);
 
+                    Map.Params.GlobalContext.ListAttackPickedUp.Add(WeaponName);
+
                     if (RespawnTime < 0)
                     {
-                        Map.LayerManager[0].ListProp.Remove(this);
+                        Map.LayerManager[LayerIndex].ListProp.Remove(this);
                     }
                     else
                     {
@@ -238,17 +240,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 public override void OnMovedOverBeforeStop(Squad SelectedUnit, Vector3 PositionMovedOn, Vector3 PositionStoppedOn)
                 {
-                    if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y)
+                    if (!IsUsed && PositionMovedOn.X == Position.X && PositionMovedOn.Y == Position.Y && PositionMovedOn.Z == Position.Z)
                     {
-                        PickupWeapon(SelectedUnit);
+                        PickupWeapon(SelectedUnit, (int)PositionMovedOn.Z);
                     }
                 }
 
                 public override void OnUnitStop(Squad StoppedUnit)
                 {
-                    if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y)
+                    if (!IsUsed && StoppedUnit.X == Position.X && StoppedUnit.Y == Position.Y && StoppedUnit.Z == Position.Z)
                     {
-                        PickupWeapon(StoppedUnit);
+                        PickupWeapon(StoppedUnit, (int)StoppedUnit.Z);
                     }
                 }
 

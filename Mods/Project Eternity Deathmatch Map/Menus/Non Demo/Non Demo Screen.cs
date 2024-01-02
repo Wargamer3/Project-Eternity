@@ -1055,11 +1055,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 {
                     if (UnitIndex >= 0)
                     {
-                        DefendingFrame.ArrayStance[UnitIndex] = new NonDemoBarrierFrame(DefendingFrame.ArrayStance[UnitIndex], !IsRightAttacking, Map.fntUnitAttack);
+                        DefendingFrame.ArrayStance[UnitIndex] = new NonDemoBarrierFrame(DefendingFrame.ArrayStance[UnitIndex], !IsRightAttacking, Map.fntUnitAttack, Result.ArrayResult[UnitIndex].Barrier);
                     }
                     else
                     {
-                        DefendingFrame.SupportStance = new NonDemoBarrierFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntUnitAttack);
+                        DefendingFrame.SupportStance = new NonDemoBarrierFrame(DefendingFrame.SupportStance, !IsRightAttacking, Map.fntUnitAttack, Result.ArrayResult[0].Barrier);
                     }
                 }
 
@@ -1237,11 +1237,20 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             if (Map.ListMAPAttackTarget.Count > 0)
             {
                 Tuple<int, int> NextTarget = Map.ListMAPAttackTarget.Pop();
+
+                Squad Target = Map.ListPlayer[NextTarget.Item1].ListSquad[NextTarget.Item2];
+
+                if (Target.UnitsAliveInSquad == 0)
+                {
+                    //If the target squad is already dead it shouldn't be in the MAP attack list.
+                    throw new Exception();
+                }
+
                 Map.TargetPlayerIndex = NextTarget.Item1;
                 Map.TargetSquadIndex = NextTarget.Item2;
 
                 SupportSquadHolder TargetSquadSupport = new SupportSquadHolder();
-                TargetSquadSupport.PrepareDefenceSupport(Map, NextTarget.Item1, Map.ListPlayer[NextTarget.Item1].ListSquad[NextTarget.Item2]);
+                TargetSquadSupport.PrepareDefenceSupport(Map, NextTarget.Item1, Target);
                 Map.ReadyNextMAPAttack(AttackerPlayerIndex, Map.ListPlayer[AttackerPlayerIndex].ListSquad.IndexOf(AttackingSquad),
                     AttackingSquad.CurrentLeader.CurrentAttack, AttackingSupport, new List<Vector3>(),
                     NextTarget.Item1, NextTarget.Item2, TargetSquadSupport);

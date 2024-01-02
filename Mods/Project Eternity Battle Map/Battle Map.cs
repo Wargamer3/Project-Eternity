@@ -291,6 +291,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         protected void SaveProperties(BinaryWriter BW)
         {
             //Prioritise displyable informations to avoid reading unnecessary information
+            BW.Write(OrderNumber);
+
             BW.Write(MapSize.X);
             BW.Write(MapSize.Y);
 
@@ -455,6 +457,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             DicMapEvent.Add(EventTypeTurn, new BattleEvent(EventTypeTurn, new string[] { "Turn Start" }));
             DicMapEvent.Add(EventTypeUnitMoved, new BattleEvent(EventTypeUnitMoved, new string[] { "Unit Moved" }));
             DicMapEvent.Add(EventTypeOnBattle, new BattleEvent(EventTypeOnBattle, new string[] { "Battle Start", "Battle End" }));
+            DicMapEvent.Add(WeaponPickedUpMap, new WeaponPickedUpMapEvent(this));
 
             DicMapCondition = MapScript.LoadConditions<BattleCondition>(this);
             DicMapTrigger = MapScript.LoadTriggers<BattleTrigger>(this);
@@ -462,6 +465,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         protected void LoadProperties(BinaryReader BR)
         {
+            OrderNumber = BR.ReadUInt32();
+            
             MapSize.X = BR.ReadInt32();
             MapSize.Y = BR.ReadInt32();
 
