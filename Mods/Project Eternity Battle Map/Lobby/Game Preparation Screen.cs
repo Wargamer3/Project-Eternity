@@ -11,6 +11,7 @@ using ProjectEternity.Core.Online;
 using ProjectEternity.Core.Graphics;
 using ProjectEternity.Core.ControlHelper;
 using ProjectEternity.GameScreens.BattleMapScreen.Online;
+using ProjectEternity.Core.Units;
 
 namespace ProjectEternity.GameScreens.BattleMapScreen
 {
@@ -613,11 +614,32 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
             int DrawY = 65;
 
-            for (int P = 0; P < Room.ListRoomPlayer.Count; ++P)
+            while (DrawY < ChatZoneY)
+            {
+                int DrawX = 10;
+                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
+
+                DrawY += 55;
+            }
+
+            DrawY = 65 + 55 * Room.ListRoomPlayer.Count;
+
+            for (int P = 0; P < Room.ListRoomBot.Count && P < Room.MaxNumberOfBots - Room.ListRoomPlayer.Count; ++P)
             {
                 int DrawX = 10;
 
-                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
+                DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
+                DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomBot[P]);
+
+                DrawY += 55;
+            }
+
+            DrawY = 65;
+
+            for (int P = Room.ListRoomPlayer.Count - 1; P >= 0; --P)
+            {
+                int DrawX = 10;
+
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
                 DrawPlayerBox(g, DrawX + 5, DrawY + 10, (BattleMapPlayer)Room.ListRoomPlayer[P]);
 
@@ -628,17 +650,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 int DrawX = 10;
 
-                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
                 DrawEmptyBox(g, new Vector2(DrawX, DrawY), LeftSideWidth - 10, 45);
                 DrawPlayerBox(g, DrawX, DrawY, (BattleMapPlayer)Room.ListRoomBot[P]);
-
-                DrawY += 55;
-            }
-
-            while (DrawY < ChatZoneY)
-            {
-                int DrawX = 10;
-                g.Draw(sprPixel, new Rectangle(DrawX, DrawY, LeftSideWidth - 10, 45), Color.FromNonPremultiplied(0, 0, 0, 50));
 
                 DrawY += 55;
             }
@@ -683,7 +696,24 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             {
                 if (PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S] != null)
                 {
-                    g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S].At(0).SpriteMap, new Rectangle(DrawX + S * 35, DrawY - 3, 32, 32), Color.White);
+                    Rectangle UnitCollisionBox = new Rectangle(DrawX + S * 35, DrawY - 3, 32, 32);
+
+                    g.Draw(PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S].At(0).SpriteMap, UnitCollisionBox, Color.White);
+
+                    foreach (GameRuleError ActiveError in ListGameRuleError)
+                    {
+                        if (ActiveError.ErrorTarget == PlayerToDraw.Inventory.ActiveLoadout.ListSpawnSquad[S].At(0))
+                        {
+                            g.Draw(sprPixel, UnitCollisionBox, Color.FromNonPremultiplied(255, 0, 0, 127));
+                            if (UnitCollisionBox.Contains(MouseHelper.MouseStateCurrent.X, MouseHelper.MouseStateCurrent.Y))
+                            {
+                                List<string> ListDescriptionText = TextHelper.FitToWidth(fntText, ActiveError.Description, 100);
+                                DrawBox(g, new Vector2(DrawX, DrawY + 30), 150, 30 + ListDescriptionText.Count * 30, Color.Black);
+                                g.DrawString(fntText, "Error:", new Vector2(DrawX + 5, DrawY + 35), Color.White);
+                                TextHelper.DrawTextMultiline(g, ListDescriptionText, TextHelper.TextAligns.Left, DrawX + 10 + 50, DrawY + 65, 100);
+                            }
+                        }
+                    }
                 }
             }
             
