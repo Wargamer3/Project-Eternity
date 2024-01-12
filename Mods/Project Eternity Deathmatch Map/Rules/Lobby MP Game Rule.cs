@@ -260,12 +260,18 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void OnManualVictory(int EXP, uint Money)
         {
+            string FullMapPath = Owner.GetMapType() + "/" + Owner.BattleMapPath;
             List<LobbyVictoryScreen.PlayerGains> ListGains = new List<LobbyVictoryScreen.PlayerGains>();
             foreach (Player ActivePlayer in Owner.ListLocalPlayer)
             {
                 LobbyVictoryScreen.PlayerGains NewGains = new LobbyVictoryScreen.PlayerGains();
                 NewGains.EXP = EXP;
                 NewGains.Money = Money;
+
+                if (!ActivePlayer.Records.DicCampaignLevelInformation.ContainsKey(FullMapPath))
+                {
+                    ActivePlayer.Records.DicCampaignLevelInformation.Add(FullMapPath, new CampaignRecord(Owner.BattleMapPath, 0));
+                }
 
                 ListGains.Add(NewGains);
             }

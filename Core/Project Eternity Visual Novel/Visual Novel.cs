@@ -727,7 +727,7 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
         private bool HasControl()
         {
-            if (Room != null)
+            if (Room != null && OnlineClient != null)
             {
                 return false;
             }
@@ -796,17 +796,17 @@ namespace ProjectEternity.GameScreens.VisualNovelScreen
 
             if (InputHelper.InputConfirmPressed() && !WaitingForOtherPlayers)
             {
-                if (HasControl() || (Room != null && !HasMultipleChoices() && OnlineClient.Host.Roles.IsRoomHost) || Room.ListOnlinePlayer.Count == 1)
+                if (HasControl() || (Room != null && OnlineClient != null && !HasMultipleChoices() && OnlineClient.Host.Roles.IsRoomHost) || Room.ListOnlinePlayer.Count == 1)
                 {
                     AdvanceDialog();
 
-                    if (Room != null)
+                    if (OnlineClient != null)
                     {
                         OnlineClient.Host.Send(new ProceedVisualNovelChoiceScriptClient(VisualNovelPath, ListDialog.IndexOf(CurrentDialog), 0));
                         WaitingForOtherPlayers = true;
                     }
                 }
-                else if (Room != null && Room.ListOnlinePlayer.Count > 1 && HasMultipleChoices())
+                else if (Room != null && OnlineClient != null && Room.ListOnlinePlayer.Count > 1 && HasMultipleChoices())
                 {//Wait for all players
                     OnlineClient.Host.Send(new ConfirmChoiceVisualNovelScriptClient(VisualNovelPath, ListDialog.IndexOf(CurrentDialog), DialogChoice));
                     WaitingForOtherPlayers = true;

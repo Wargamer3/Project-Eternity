@@ -80,29 +80,29 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     FoundMapCache = new MapCache(GameMode);
                     FoundMapCache.PopulateMaps(ContentRootDirectory, ActiveModName);
                     DicMapCacheByFolder.Add(GameMode, FoundMapCache);
+                }
 
-                    List<string> ListLockedMission = new List<string>();
+                List<string> ListLockedMission = new List<string>();
 
-                    foreach (string ActiveMission in FoundMapCache.DicMapInfoByPath.Keys)
+                foreach (string ActiveMission in FoundMapCache.DicMapInfoByPath.Keys)
+                {
+                    bool MissionFound = false;
+                    foreach (MissionInfo UnlockedMission in ListUnlockedMission)
                     {
-                        bool MissionFound = false;
-                        foreach (MissionInfo UnlockedMission in ListUnlockedMission)
+                        if (ActiveMission == UnlockedMission.MapPath.Substring(ActiveModName.Length + 1))
                         {
-                            if (ActiveMission == UnlockedMission.MapPath)
-                            {
-                                MissionFound = true;
-                            }
-                        }
-                        if (!MissionFound)
-                        {
-                            ListLockedMission.Add(ActiveMission);
+                            MissionFound = true;
                         }
                     }
-
-                    foreach (string LockedMission in ListLockedMission)
+                    if (!MissionFound)
                     {
-                        FoundMapCache.DicMapInfoByPath.Remove(LockedMission);
+                        ListLockedMission.Add(ActiveMission);
                     }
+                }
+
+                foreach (string LockedMission in ListLockedMission)
+                {
+                    FoundMapCache.DicMapInfoByPath.Remove(LockedMission);
                 }
 
                 return FoundMapCache.DicMapInfoByPath;

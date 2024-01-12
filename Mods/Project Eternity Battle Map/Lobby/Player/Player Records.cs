@@ -26,7 +26,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public BattleRecords PlayerBattleRecords;
         public BonusRecords PlayerBonusRecords;
 
-        public List<CampaignRecord> ListCampaignLevelInformation;
+        public Dictionary<string, CampaignRecord> DicCampaignLevelInformation;
         public Dictionary<string, MapRecord> DicMapRecord;
 
         public PlayerRecords()
@@ -47,7 +47,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBattleRecords = new BattleRecords();
             PlayerBonusRecords = new BonusRecords();
 
-            ListCampaignLevelInformation = new List<CampaignRecord>();
+            DicCampaignLevelInformation = new Dictionary<string, CampaignRecord>();
             DicMapRecord = new Dictionary<string, MapRecord>();
         }
 
@@ -69,10 +69,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBattleRecords = new BattleRecords(Clone.PlayerBattleRecords);
             PlayerBonusRecords = new BonusRecords(Clone.PlayerBonusRecords);
 
-            ListCampaignLevelInformation = new List<CampaignRecord>(Clone.ListCampaignLevelInformation.Count);
-            foreach (CampaignRecord ActiveCloneRecord in Clone.ListCampaignLevelInformation)
+            DicCampaignLevelInformation = new Dictionary<string, CampaignRecord>(Clone.DicCampaignLevelInformation.Count);
+            foreach (KeyValuePair<string, CampaignRecord> ActiveCloneRecord in Clone.DicCampaignLevelInformation)
             {
-                ListCampaignLevelInformation.Add(new CampaignRecord(ActiveCloneRecord));
+                DicCampaignLevelInformation.Add(ActiveCloneRecord.Key, new CampaignRecord(ActiveCloneRecord.Value));
             }
 
             DicMapRecord = new Dictionary<string, MapRecord>(Clone.DicMapRecord.Count);
@@ -101,10 +101,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBonusRecords = new BonusRecords(BR);
 
             int ListCampaignLevelInformationCount = BR.ReadInt32();
-            ListCampaignLevelInformation = new List<CampaignRecord>(ListCampaignLevelInformationCount);
+            DicCampaignLevelInformation = new Dictionary<string, CampaignRecord>(ListCampaignLevelInformationCount);
             for (int i = 0; i < ListCampaignLevelInformationCount; ++i)
             {
-                ListCampaignLevelInformation.Add(new CampaignRecord(BR));
+                CampaignRecord LoadedCampaignRecord = new CampaignRecord(BR);
+                DicCampaignLevelInformation.Add(LoadedCampaignRecord.Name, LoadedCampaignRecord);
             }
 
             int ListMapRecordCount = BR.ReadInt32();
@@ -135,10 +136,11 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBonusRecords = new BonusRecords(BR);
 
             int ListCampaignLevelInformationCount = BR.ReadInt32();
-            ListCampaignLevelInformation = new List<CampaignRecord>(ListCampaignLevelInformationCount);
+            DicCampaignLevelInformation = new Dictionary<string, CampaignRecord>(ListCampaignLevelInformationCount);
             for (int i = 0; i < ListCampaignLevelInformationCount; ++i)
             {
-                ListCampaignLevelInformation.Add(new CampaignRecord(BR));
+                CampaignRecord LoadedCampaignRecord = new CampaignRecord(BR);
+                DicCampaignLevelInformation.Add(LoadedCampaignRecord.Name, LoadedCampaignRecord);
             }
 
             int ListMapRecordCount = BR.ReadInt32();
@@ -168,10 +170,10 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             PlayerBattleRecords.Save(BW);
             PlayerBonusRecords.Save(BW);
 
-            BW.Write(ListCampaignLevelInformation.Count);
-            for (int i = 0; i < ListCampaignLevelInformation.Count; ++i)
+            BW.Write(DicCampaignLevelInformation.Count);
+            foreach (KeyValuePair<string, CampaignRecord> ActiveLevel in DicCampaignLevelInformation)
             {
-                ListCampaignLevelInformation[i].Save(BW);
+                ActiveLevel.Value.Save(BW);
             }
 
             BW.Write(DicMapRecord.Count);

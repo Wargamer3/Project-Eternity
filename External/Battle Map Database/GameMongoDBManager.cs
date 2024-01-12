@@ -1121,12 +1121,12 @@ namespace Database.BattleMap
             BsonDocument MultiplayerInformation = Records.GetValue("MapRecords").AsBsonDocument;
             BsonArray CampaignLevelInformation = MultiplayerInformation.GetValue("CampaignLevelsInformation").AsBsonArray;
 
-            foreach (CampaignRecord LevelInformation in Player.Records.ListCampaignLevelInformation)
+            foreach (KeyValuePair<string, CampaignRecord> LevelInformation in Player.Records.DicCampaignLevelInformation)
             {
                 BsonDocument NumberOfBonusObtainedByNameDocument = new BsonDocument();
-                NumberOfBonusObtainedByNameDocument.Add("Name", LevelInformation.Name);
-                NumberOfBonusObtainedByNameDocument.Add("FirstCompletionDate", LevelInformation.FirstCompletionDate.UtcDateTime);
-                NumberOfBonusObtainedByNameDocument.Add("MaxScore", LevelInformation.MaxScore);
+                NumberOfBonusObtainedByNameDocument.Add("Name", LevelInformation.Value.Name);
+                NumberOfBonusObtainedByNameDocument.Add("FirstCompletionDate", LevelInformation.Value.FirstCompletionDate.UtcDateTime);
+                NumberOfBonusObtainedByNameDocument.Add("MaxScore", LevelInformation.Value.MaxScore);
 
                 CampaignLevelInformation.Add(NumberOfBonusObtainedByNameDocument);
             }

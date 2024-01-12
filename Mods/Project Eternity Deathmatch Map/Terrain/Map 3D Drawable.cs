@@ -963,11 +963,13 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 float TerrainZ = Owner.ArrayTerrain[(int)Owner.ListProp[P].Position.X, (int)Owner.ListProp[P].Position.Y].WorldPosition.Z;
 
-                Owner.ListProp[P].Unit3D.SetPosition(
-                    (Owner.ListProp[P].Position.X + 0.5f) * Map.TileSize.X,
-                    (TerrainZ + 0.5f) * Map.LayerHeight,
-                    (Owner.ListProp[P].Position.Y + 0.5f) * Map.TileSize.Y);
-
+                if (Owner.ListProp[P].Unit3D != null)
+                {
+                    Owner.ListProp[P].Unit3D.SetPosition(
+                        (Owner.ListProp[P].Position.X + 0.5f) * Map.TileSize.X,
+                        (TerrainZ + 0.5f) * Map.LayerHeight,
+                        (Owner.ListProp[P].Position.Y + 0.5f) * Map.TileSize.Y);
+                }
                 Owner.ListProp[P].Draw3D(GameScreen.GraphicsDevice,View, g);
             }
 

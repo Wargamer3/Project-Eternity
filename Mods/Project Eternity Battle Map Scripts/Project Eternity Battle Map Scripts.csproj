@@ -61,6 +61,7 @@
     <Compile Include="Cutscene Scripts\Flash Cursor.cs" />
     <Compile Include="Cutscene Scripts\Spawn Platform.cs" />
     <Compile Include="Cutscene Scripts\Trigger Defeat.cs" />
+    <Compile Include="Cutscene Scripts\Unlock Mission.cs" />
     <Compile Include="Map Conditions\Active Player.cs" />
     <Compile Include="Map Conditions\Gate.cs" />
     <Compile Include="Map Triggers\Asign Variable.cs" />

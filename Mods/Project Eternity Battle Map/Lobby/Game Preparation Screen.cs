@@ -518,6 +518,8 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
                     }
                 }
 
+                NewMap.Room = Room;
+
                 NewMap.Load();
                 NewMap.Init();
                 NewMap.TogglePreview(true);

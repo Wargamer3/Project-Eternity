@@ -67,7 +67,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             }
 
             GameModeInfo GametypeCampaign = new GameModeInfo("Campaign", "Classic mission based mode, no respawn.", GameModeInfo.CategoryPVE, true, null);
-            GameModeInfo GametypeArcade = new GameModeInfo("Arcade", "Campaign mission without cutscenes.", GameModeInfo.CategoryPVE, PlayerManager.ListLocalPlayer[0].Records.ListCampaignLevelInformation.Count > 0, null);
+            GameModeInfo GametypeArcade = new GameModeInfo("Arcade", "Campaign mission without cutscenes.", GameModeInfo.CategoryPVE, PlayerManager.ListLocalPlayer[0].Records.DicCampaignLevelInformation.Count > 0, null);
             GameModeInfo GametypeHorde = new GameModeInfo("Horde", "Wave survival mode, respawn at the start of each wave.", GameModeInfo.CategoryPVE, true, null);
             GameModeInfo GametypeBaseDefense = new GameModeInfo("Base Defense", "Wave survival mode, respawn at the start of each wave. Must defend a base by building turrets.", GameModeInfo.CategoryPVE, false, null);
 

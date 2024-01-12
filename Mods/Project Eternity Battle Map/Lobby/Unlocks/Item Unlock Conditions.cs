@@ -257,9 +257,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
                             bool CampaignLevelFound = false;
 
-                            foreach (CampaignRecord ActiveMission in ConditionsOwner.Records.ListCampaignLevelInformation)
+                            foreach (KeyValuePair<string, CampaignRecord> ActiveMission in ConditionsOwner.Records.DicCampaignLevelInformation)
                             {
-                                if (ActiveMission.Name == ActiveCondition.Item2)
+                                if (ActiveMission.Value.Name == ActiveCondition.Item2)
                                 {
                                     CampaignLevelFound = true;
                                     break;

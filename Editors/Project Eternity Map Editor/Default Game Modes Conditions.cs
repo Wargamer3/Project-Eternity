@@ -19,6 +19,7 @@ namespace ProjectEternity.Editors.MapEditor
 
             txtPlayersMin.Value = ActiveMap.PlayersMin;
             txtPlayersMax.Value = ActiveMap.PlayersMax;
+            txtMaxSquadsPerPlayer.Value = ActiveMap.MaxSquadsPerPlayer;
 
             foreach (GameModeInfo ActiveGameType in ActiveMap.ListGameType)
             {

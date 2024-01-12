@@ -10,6 +10,13 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         public DateTimeOffset FirstCompletionDate;
         public uint MaxScore;
 
+        public CampaignRecord(string Name, uint MaxScore)
+        {
+            this.Name = Name;
+            this.MaxScore = MaxScore;
+            FirstCompletionDate = DateTimeOffset.UtcNow;
+        }
+
         public CampaignRecord(BinaryReader BR)
         {
             Name = BR.ReadString();
