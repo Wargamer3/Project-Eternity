@@ -74,7 +74,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
                 CheckForMapSwitch();
 
-                ActionPanelJump.AddIfUsable(Map, this, ActiveSquad);
+                ActionPanelJump.AddIfUsable(Map, this, ActivePlayerIndex, ActiveSquadIndex, ActiveSquad);
                 ActionPanelRepair.AddIfUsable(Map, this, ActiveSquad);
                 ActionPanelResupply.AddIfUsable(Map, this, ActiveSquad);
             }

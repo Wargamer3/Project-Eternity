@@ -988,6 +988,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             byte CurrentTerrainIndex = StartingPosition.TerrainTypeIndex;
             TerrainType CurrentTerrainType = TerrainRestrictions.ListTerrainType[CurrentTerrainIndex];
 
+            bool IsOnUsableTerrain = CurrentTerrainType.ListRestriction.Count > 0;
+
             float CurrentZ = StartingPosition.WorldPosition.Z;
 
             MovementAlgorithmTile ClosestLayerIndexDown = null;
@@ -995,7 +997,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             float ClosestTerrainDistanceDown = float.MaxValue;
             float ClosestTerrainDistanceUp = float.MinValue;
 
-            bool IsOnUsableTerrain = CurrentTerrainType.ListRestriction.Count > 0;
 
             for (int L = 0; L < LayerManager.ListLayer.Count; L++)
             {

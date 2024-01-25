@@ -28,6 +28,7 @@ namespace ProjectEternity.Core.Units
         public float Direction;
         public float Pitch;
         public bool IsOnGround;
+        public bool IsStunned;//If stunned, take longer to stop moving on ground
         protected Vector3 _Speed;
         public Vector3 Position { get { return _Position; } }
         public Vector3 Speed { get { return _Speed; } set { _Speed = value; } }

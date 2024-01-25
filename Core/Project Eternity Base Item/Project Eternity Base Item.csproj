@@ -70,6 +70,7 @@
     <Compile Include="Action Panel.cs" />
     <Compile Include="Action Panel Holder.cs" />
     <Compile Include="Animated Sprite.cs" />
+    <Compile Include="Particle system\Arc Beam.cs" />
     <Compile Include="Text\Dynamic Text Part.cs" />
     <Compile Include="Text\Images Holder.cs" />
     <Compile Include="Text\Processors\Default Text Processor.cs" />

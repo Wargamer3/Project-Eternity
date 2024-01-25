@@ -974,9 +974,18 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             if (CursorMoved)
             {
                 MovementAlgorithmTile NextTerrain = GetNextLayerIndex(ActiveMap.CursorTerrain, Offset.X, Offset.Y, 1f, 15f, out _);
-                ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
-                ActiveMap.CursorPosition.X = NextTerrain.InternalPosition.X;
-                ActiveMap.CursorPosition.Y = NextTerrain.InternalPosition.Y;
+                if (NextTerrain == ActiveMap.CursorTerrain)//Force movement
+                {
+                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
+                    ActiveMap.CursorPosition.X = Math.Max(0, Math.Min(ActiveMap.MapSize.X - 1, NextTerrain.InternalPosition.X + Offset.X));
+                    ActiveMap.CursorPosition.Y = Math.Max(0, Math.Min(ActiveMap.MapSize.Y - 1, NextTerrain.InternalPosition.Y + Offset.Y));
+                }
+                else
+                {
+                    ActiveMap.CursorPosition.Z = NextTerrain.LayerIndex;
+                    ActiveMap.CursorPosition.X = NextTerrain.InternalPosition.X;
+                    ActiveMap.CursorPosition.Y = NextTerrain.InternalPosition.Y;
+                }
             }
 
             return CursorMoved;
