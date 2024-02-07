@@ -76,6 +76,7 @@
             this.tsmUnitTester = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmRosterEditor = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSystemList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmTerrainAndUnitTypes = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
             this.tsbOpen = new System.Windows.Forms.ToolStripButton();
@@ -90,7 +91,6 @@
             this.tsmDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmRename = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmProperties = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmTerrainAndUnitTypes = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -163,7 +163,7 @@
             this.tvItems.TabIndex = 0;
             this.tvItems.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvItems_BeforeLabelEdit);
             this.tvItems.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvItems_AfterLabelEdit);
-            this.tvItems.DoubleClick += new System.EventHandler(this.tvItems_DoubleClick);
+            this.tvItems.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvItems_NodeMouseDoubleClick);
             this.tvItems.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tvItems_MouseClick);
             this.tvItems.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvItems_MouseDown);
             // 
@@ -207,6 +207,13 @@
             this.tsmSystemList.Size = new System.Drawing.Size(78, 20);
             this.tsmSystemList.Text = "System List";
             this.tsmSystemList.Click += new System.EventHandler(this.tsmSystemList_Click);
+            // 
+            // tsmTerrainAndUnitTypes
+            // 
+            this.tsmTerrainAndUnitTypes.Name = "tsmTerrainAndUnitTypes";
+            this.tsmTerrainAndUnitTypes.Size = new System.Drawing.Size(134, 20);
+            this.tsmTerrainAndUnitTypes.Text = "Terrain and Unit Types";
+            this.tsmTerrainAndUnitTypes.Click += new System.EventHandler(this.tsmTerrainAndUnitTypes_Click);
             // 
             // toolStrip1
             // 
@@ -331,13 +338,6 @@
             this.tsmProperties.Size = new System.Drawing.Size(132, 22);
             this.tsmProperties.Text = "Properties";
             this.tsmProperties.Click += new System.EventHandler(this.tsmProperties_Click);
-            // 
-            // tsmTerrainAndUnitTypes
-            // 
-            this.tsmTerrainAndUnitTypes.Name = "tsmTerrainAndUnitTypes";
-            this.tsmTerrainAndUnitTypes.Size = new System.Drawing.Size(134, 20);
-            this.tsmTerrainAndUnitTypes.Text = "Terrain and Unit Types";
-            this.tsmTerrainAndUnitTypes.Click += new System.EventHandler(this.tsmTerrainAndUnitTypes_Click);
             // 
             // GUI
             // 

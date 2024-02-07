@@ -584,7 +584,34 @@ namespace ProjectEternity.GUI
 
         #region Events
 
-        private void tvItems_DoubleClick(object sender, EventArgs e)
+        private void tvItems_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeNode NodeClicked = tvItems.GetNodeAt(e.X, e.Y);
+
+            if (tvItems.SelectedNode == null || NodeClicked == null || NodeClicked != tvItems.SelectedNode)
+                return;
+
+            TreeNode ActiveNode = tvItems.SelectedNode;
+            TreeNode EditorNode = ActiveNode.Parent;
+            if (ActiveNode.Nodes.Count > 0 || EditorNode == null || EditorNode.Tag == null)
+                return;
+            EditorInfo Info = (EditorInfo)EditorNode.Tag;
+
+            try
+            {
+                BaseEditor instance = Activator.CreateInstance(Info.EditorType, GetFilePathForItemNode(ActiveNode), Info.InitParams) as BaseEditor;
+                instance.Show();
+            }
+            catch (Exception E)
+            {
+                MessageBox.Show(E.Message);
+            }
+
+            if (EditorNode == null)
+                MessageBox.Show("Unable to find a corresponding editor to open.");
+        }
+
+        private void tsmEdit_Click(object sender, EventArgs e)
         {
             if (tvItems.SelectedNode == null)
                 return;
@@ -750,11 +777,6 @@ namespace ProjectEternity.GUI
             tvItems.SelectedNode = NewItem;
 
             NewItem.BeginEdit();
-        }
-
-        private void tsmEdit_Click(object sender, EventArgs e)
-        {
-            tvItems_DoubleClick(sender, e);
         }
 
         private void tsmDelete_Click(object sender, EventArgs e)
