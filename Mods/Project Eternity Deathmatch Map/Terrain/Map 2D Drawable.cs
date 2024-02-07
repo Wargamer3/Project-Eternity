@@ -389,17 +389,17 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Color BrushMapSwitchEventPoint = Color.FromNonPremultiplied(191, 255, 0, 180);
                     Color BrushTeleportPoint = Color.FromNonPremultiplied(70, 13, 13, 180);
 
-                    for (int i = 0; i < Owner.ListSingleplayerSpawns.Count; i++)
+                    for (int i = 0; i < Owner.ListCampaignSpawns.Count; i++)
                     {
-                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListSingleplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X,
-                                                      (int)(Owner.ListSingleplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y,
+                        g.Draw(GameScreen.sprPixel, new Rectangle((int)(Owner.ListCampaignSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X,
+                                                      (int)(Owner.ListCampaignSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y,
                                                        Map.TileSize.X, Map.TileSize.Y),
                                                       null,
                                         BrushPlayer, 0f, Vector2.Zero, SpriteEffects.None, 0.1f);
 
-                        g.DrawString(Map.fntArial9, Owner.ListSingleplayerSpawns[i].Tag,
-                            new Vector2((Owner.ListSingleplayerSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X + 10,
-                                        (Owner.ListSingleplayerSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
+                        g.DrawString(Map.fntArial9, Owner.ListCampaignSpawns[i].Tag,
+                            new Vector2((Owner.ListCampaignSpawns[i].Position.X - Map.Camera2DPosition.X) * Map.TileSize.X + 10,
+                                        (Owner.ListCampaignSpawns[i].Position.Y - Map.Camera2DPosition.Y) * Map.TileSize.Y + 10),
                             Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.2f);
                     }
 

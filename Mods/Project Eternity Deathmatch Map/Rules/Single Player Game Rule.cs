@@ -60,9 +60,9 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                 for (int L = 0; L < Owner.LayerManager.ListLayer.Count; L++)
                 {
                     BaseMapLayer ActiveLayer = Owner.LayerManager[L];
-                    for (int S = 0; S < ActiveLayer.ListSingleplayerSpawns.Count; S++)
+                    for (int S = 0; S < ActiveLayer.ListCampaignSpawns.Count; S++)
                     {
-                        if (ActiveLayer.ListSingleplayerSpawns[S].Tag == PlayerTag)
+                        if (ActiveLayer.ListCampaignSpawns[S].Tag == PlayerTag)
                         {
                             Squad NewSquad = ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad[SpawnSquadIndex];
                             if (NewSquad == null)
@@ -77,7 +77,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                             }
 
                             NewSquad.ReloadSkills(Owner.Params.DicUnitType, Owner.Params.DicRequirement, Owner.Params.DicEffect, Owner.Params.DicAutomaticSkillTarget, Owner.Params.DicManualSkillTarget);
-                            Owner.SpawnSquad(PlayerIndex, NewSquad, 0, new Vector2(ActiveLayer.ListSingleplayerSpawns[S].Position.X, ActiveLayer.ListSingleplayerSpawns[S].Position.Y), L);
+                            Owner.SpawnSquad(PlayerIndex, NewSquad, 0, new Vector2(ActiveLayer.ListCampaignSpawns[S].Position.X, ActiveLayer.ListCampaignSpawns[S].Position.Y), L);
                             ++SpawnSquadIndex;
 
                             if (SpawnSquadIndex >= ActivePlayer.Inventory.ActiveLoadout.ListSpawnSquad.Count)
@@ -100,6 +100,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                     Owner.CursorPosition = Owner.ListPlayer[0].ListSquad[0].Position;
                 }
             }
+        }
+
+        public int GetRemainingResapwn(int PlayerIndex)
+        {
+            throw new NotImplementedException();
         }
 
         public void OnNewTurn(int ActivePlayerIndex)
@@ -202,8 +207,6 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
 
         }
-
-
 
         public List<GameRuleError> Validate(RoomInformations Room)
         {

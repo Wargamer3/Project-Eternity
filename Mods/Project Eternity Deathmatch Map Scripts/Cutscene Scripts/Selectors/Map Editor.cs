@@ -118,11 +118,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         return;
                     }
 
-                    for (int S = 0; S < ActiveMap.LayerManager[0].ListSingleplayerSpawns.Count; S++)
+                    for (int S = 0; S < ActiveMap.LayerManager[0].ListCampaignSpawns.Count; S++)
                     {
-                        if (ActiveMap.LayerManager[0].ListSingleplayerSpawns[S].Position.X == FinalX && ActiveMap.LayerManager[0].ListSingleplayerSpawns[S].Position.Y == FinalY)
+                        if (ActiveMap.LayerManager[0].ListCampaignSpawns[S].Position.X == FinalX && ActiveMap.LayerManager[0].ListCampaignSpawns[S].Position.Y == FinalY)
                         {
-                            ActiveMap.LayerManager[0].ListSingleplayerSpawns.RemoveAt(S);
+                            ActiveMap.LayerManager[0].ListCampaignSpawns.RemoveAt(S);
                             return;
                         }
                     }
@@ -150,15 +150,15 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         return;
                     }
 
-                    for (int S = 0; S < ActiveMap.LayerManager[0].ListSingleplayerSpawns.Count; S++)
+                    for (int S = 0; S < ActiveMap.LayerManager[0].ListCampaignSpawns.Count; S++)
                     {
-                        if (ActiveMap.LayerManager[0].ListSingleplayerSpawns[S].Position.X == FinalX && ActiveMap.LayerManager[0].ListSingleplayerSpawns[S].Position.Y == FinalY)
+                        if (ActiveMap.LayerManager[0].ListCampaignSpawns[S].Position.X == FinalX && ActiveMap.LayerManager[0].ListCampaignSpawns[S].Position.Y == FinalY)
                         {
                             return;
                         }
                     }
 
-                    ActiveMap.LayerManager[0].ListSingleplayerSpawns.Add(new EventPoint(new Vector3(FinalX, FinalY, 0), ActiveMap.LayerManager[0].ListSingleplayerSpawns.Count.ToString(), 255, 255, 255));
+                    ActiveMap.LayerManager[0].ListCampaignSpawns.Add(new EventPoint(new Vector3(FinalX, FinalY, 0), ActiveMap.LayerManager[0].ListCampaignSpawns.Count.ToString(), 255, 255, 255));
                 }
                 else if (e.Button == MouseButtons.Right)
                 {
@@ -171,16 +171,16 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         return;
                     }
 
-                    for (int S = 0; S < ActiveMap.LayerManager[0].ListSingleplayerSpawns.Count; S++)
+                    for (int S = 0; S < ActiveMap.LayerManager[0].ListCampaignSpawns.Count; S++)
                     {
-                        if (ActiveMap.LayerManager[0].ListSingleplayerSpawns[S].Position.X == FinalX && ActiveMap.LayerManager[0].ListSingleplayerSpawns[S].Position.Y == FinalY)
+                        if (ActiveMap.LayerManager[0].ListCampaignSpawns[S].Position.X == FinalX && ActiveMap.LayerManager[0].ListCampaignSpawns[S].Position.Y == FinalY)
                         {
                             if (TerrainAttribute.ListTerrainChangeLocation.Count > 0)
                             {
                                 TerrainAttribute.ListTerrainChangeLocation.RemoveAt(S);
                                 TerrainAttribute.ListTileChangeLocation.RemoveAt(S);
                             }
-                            ActiveMap.LayerManager[0].ListSingleplayerSpawns.RemoveAt(S);
+                            ActiveMap.LayerManager[0].ListCampaignSpawns.RemoveAt(S);
                             return;
                         }
                     }
@@ -266,10 +266,10 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             TerrainAttribute.ListTerrainChangeLocation.Clear();
             TerrainAttribute.ListTileChangeLocation.Clear();
 
-            for (int S = 0; S < ActiveMap.LayerManager[0].ListSingleplayerSpawns.Count; S++)
+            for (int S = 0; S < ActiveMap.LayerManager[0].ListCampaignSpawns.Count; S++)
             {
-                int FinalX = (int)ActiveMap.LayerManager[0].ListSingleplayerSpawns[S].Position.X;
-                int FinalY = (int)ActiveMap.LayerManager[0].ListSingleplayerSpawns[S].Position.Y;
+                int FinalX = (int)ActiveMap.LayerManager[0].ListCampaignSpawns[S].Position.X;
+                int FinalY = (int)ActiveMap.LayerManager[0].ListCampaignSpawns[S].Position.Y;
                 TerrainAttribute.ListTerrainChangeLocation.Add(Helper.GetTerrain(FinalX, FinalY, 0));
                 TerrainAttribute.ListTileChangeLocation.Add(Helper.GetTile(FinalX, FinalY, 0));
             }
@@ -312,7 +312,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         for (int T = 0; T < TerrainAttribute.ListTerrainChangeLocation.Count; T++)
                         {
                             Vector3 NewDestinationPoint = TerrainAttribute.ListTerrainChangeLocation[T].WorldPosition;
-                            NewMap.LayerManager[0].ListSingleplayerSpawns.Add(new EventPoint(NewDestinationPoint, T.ToString(), 255, 255, 255));
+                            NewMap.LayerManager[0].ListCampaignSpawns.Add(new EventPoint(NewDestinationPoint, T.ToString(), 255, 255, 255));
                         }
 
                         Matrix Projection = Matrix.CreateOrthographicOffCenter(0, BattleMapViewer.Width, BattleMapViewer.Height, 0, 0, -1f);

@@ -29,7 +29,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     if (ActivePlayer.Inventory == null)
                         continue;
 
-                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(ActivePlayer.Team);
+                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(ActivePlayer.Team);
                     int SpawnSquadIndex = 0;
                     foreach (MovementAlgorithmTile ActiveSpawn in ListPossibleSpawnPoint)
                     {
@@ -65,6 +65,11 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                     }
                 }
             }
+        }
+
+        public int GetRemainingResapwn(int PlayerIndex)
+        {
+            throw new NotImplementedException();
         }
 
         public void OnNewTurn(int ActivePlayerIndex)

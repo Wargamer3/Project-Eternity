@@ -46,6 +46,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         protected int MaxGameLengthInMinutes = 10;
         protected double GameLengthInSeconds;
         protected List<int> ListRemainingResapwn;
+        protected bool CheckForGameOver = true;
         protected Player CurrentPlayer { get { return Owner.ListPlayer[Owner.ActivePlayerIndex]; } }
 
         public abstract string Name { get; }
@@ -100,7 +101,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
                         DicSpawnSquadIndexPerTeam.Add(SpawnTeam, 0);
                     }
 
-                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(SpawnTeam);
+                    List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetMultiplayerSpawnLocations(SpawnTeam);
 
                     int SpawnSquadIndex = DicSpawnSquadIndexPerTeam[SpawnTeam];
 
@@ -168,6 +169,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             NewSquad.SquadAI = new DeathmatchScripAIContainer(new DeathmatchAIInfo(Owner, NewSquad));
             NewSquad.SquadAI.Load("Default AI");
+        }
+
+        public int GetRemainingResapwn(int PlayerIndex)
+        {
+            return ListRemainingResapwn[PlayerIndex];
         }
 
         public void OnNewTurn(int ActivePlayerIndex)
@@ -298,6 +304,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
 
         public void CheckGameOver()
         {
+            if (!CheckForGameOver)
+            {
+                return;
+            }
+
             HashSet<int> ListAliveTeam = new HashSet<int>();
 
             for (int P = 0; P < Owner.ListAllPlayer.Count && P < 10; P++)
@@ -413,9 +424,14 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             return 50u + (uint)ActivePlayer.Level * 5u;
         }
 
+        protected virtual List<MovementAlgorithmTile> GetSpawnLocations(int ActivePlayerIndex)
+        {
+            return Owner.GetMultiplayerSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
+        }
+
         private void RespawnSquad(int ActivePlayerIndex, Squad ActiveSquad)
         {
-            List<MovementAlgorithmTile> ListPossibleSpawnPoint = Owner.GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
+            List<MovementAlgorithmTile> ListPossibleSpawnPoint = GetSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
             if (ListPossibleSpawnPoint.Count == 0)
             {
                 return;

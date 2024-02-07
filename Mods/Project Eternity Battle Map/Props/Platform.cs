@@ -52,9 +52,14 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
             return PlatformMap.GetMovementTile(X, Y, Z);
         }
         
-        public List<MovementAlgorithmTile> GetSpawnLocations(int Team)
+        public List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations()
         {
-            return PlatformMap.GetSpawnLocations(Team);
+            return PlatformMap.GetCampaignEnemySpawnLocations();
+        }
+
+        public List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team)
+        {
+            return PlatformMap.GetMultiplayerSpawnLocations(Team);
         }
 
         public void Update(GameTime gameTime)

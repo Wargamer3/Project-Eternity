@@ -30,7 +30,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             : base(ModeName, "Classic mission based mode, no respawn.", CategoryPVE, IsUnlocked, sprPreview)
         {
             _ResapwnLimit = 3000;
-            _UnitValueLimit = 400;
+            _UnitValueLimit = 1000;
 
             _HPRegenPerTurnFixed = 0;
             _ENRegenPerTurnFixed = 5;
@@ -275,6 +275,8 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             this.Owner = Owner;
             this.GameInfo = GameInfo;
+
+            CheckForGameOver = false;
             UseTeamsForSpawns = false;
 
             HPRegenPerTurnFixed = GameInfo.HPRegenPerTurnFixed;
@@ -292,17 +294,39 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
         {
             base.Init();
 
-            foreach (Player ActivePlayer in Owner.ListPlayer)
+            for (int P = 20; P >= 0; --P)
             {
                 ListRemainingResapwn.Add(GameInfo.ResapwnLimit);
             }
         }
 
+        protected override List<MovementAlgorithmTile> GetSpawnLocations(int ActivePlayerIndex)
+        {
+            if (ActivePlayerIndex >= 10)
+            {
+                return Owner.GetCampaignEnemySpawnLocations();
+            }
+            else
+            {
+                return Owner.GetMultiplayerSpawnLocations(Owner.ListPlayer[ActivePlayerIndex].Team);
+            }
+        }
+
         public override void Draw(CustomSpriteBatch g)
         {
-            GameScreen.DrawBox(g, new Vector2(3, 3), 200, 24, Color.FromNonPremultiplied(0, 0, 0, 40));
-            g.DrawString(Owner.fntArial8, "Campaign", new Vector2(28, 7), Color.White);
-            g.DrawString(Owner.fntArial8, ListRemainingResapwn[0].ToString(), new Vector2(134, 9), Color.White);
+            if (Owner.ListPlayer.Count > 10)
+            {
+                GameScreen.DrawBox(g, new Vector2(3, 3), 300, 24, Color.FromNonPremultiplied(0, 0, 0, 40));
+                g.DrawString(Owner.fntArial8, "Campaign", new Vector2(28, 7), Color.White);
+                g.DrawString(Owner.fntArial8, ListRemainingResapwn[0].ToString(), new Vector2(134, 9), Color.White);
+                g.DrawString(Owner.fntArial8, ListRemainingResapwn[10].ToString(), new Vector2(334, 9), Color.White);
+            }
+            else
+            {
+                GameScreen.DrawBox(g, new Vector2(3, 3), 200, 24, Color.FromNonPremultiplied(0, 0, 0, 40));
+                g.DrawString(Owner.fntArial8, "Campaign", new Vector2(28, 7), Color.White);
+                g.DrawString(Owner.fntArial8, ListRemainingResapwn[0].ToString(), new Vector2(134, 9), Color.White);
+            }
 
             if (ShowRoomSummary)
             {

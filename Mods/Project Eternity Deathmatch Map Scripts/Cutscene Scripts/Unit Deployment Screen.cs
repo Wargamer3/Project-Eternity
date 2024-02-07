@@ -117,7 +117,7 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             {
                 if (Map.UnitDeploymentScreen.ListSelectedUnit.Count > 0)
                 {
-                    List<EventPoint> PlayerSpawnPoint = Map.LayerManager[0].ListSingleplayerSpawns;
+                    List<EventPoint> PlayerSpawnPoint = Map.LayerManager[0].ListCampaignSpawns;
 
                     if (AnimationSprite == null)
                     {

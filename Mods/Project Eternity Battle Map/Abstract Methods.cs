@@ -40,7 +40,9 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
 
         public abstract MovementAlgorithmTile GetMovementTile(int X, int Y, int LayerIndex);
 
-        public abstract List<MovementAlgorithmTile> GetSpawnLocations(int Team);
+        public abstract List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations();
+
+        public abstract List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team);
 
         public abstract void Save(string FilePath);
 

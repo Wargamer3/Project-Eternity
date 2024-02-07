@@ -755,16 +755,16 @@ namespace ProjectEternity.Editors.MapEditor
                 Spawn.Position = new Vector3(X, Y, TopLayerIndex);
             }
             //Loop in the SpawnPoint list to find if a SpawnPoint already exist at the X, Y position.
-            for (int S = 0; S < TopLayer.ListSingleplayerSpawns.Count; S++)
+            for (int S = 0; S < TopLayer.ListCampaignSpawns.Count; S++)
             {//If it exist.
-                if (TopLayer.ListSingleplayerSpawns[S].Position.X == X && TopLayer.ListSingleplayerSpawns[S].Position.Y == Y)
+                if (TopLayer.ListCampaignSpawns[S].Position.X == X && TopLayer.ListCampaignSpawns[S].Position.Y == Y)
                 {
                     //Delete it.
-                    TopLayer.ListSingleplayerSpawns.RemoveAt(S);
+                    TopLayer.ListCampaignSpawns.RemoveAt(S);
                     if (Spawn != null)
                     {
                         //Add the new one.
-                        TopLayer.ListSingleplayerSpawns.Add(Spawn);
+                        TopLayer.ListCampaignSpawns.Add(Spawn);
                     }
                     return;
                 }
@@ -772,7 +772,7 @@ namespace ProjectEternity.Editors.MapEditor
             if (Spawn != null)
             {
                 //Add the new SpawnPoint.
-                TopLayer.ListSingleplayerSpawns.Add(Spawn);
+                TopLayer.ListCampaignSpawns.Add(Spawn);
             }
         }
 

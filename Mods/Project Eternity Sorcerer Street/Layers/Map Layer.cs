@@ -23,7 +23,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             this.Map = Map;
 
-            ListSingleplayerSpawns = new List<EventPoint>();
+            ListCampaignSpawns = new List<EventPoint>();
             ListMultiplayerSpawns = new List<EventPoint>();
             ListMapSwitchPoint = new List<MapSwitchPoint>();
             ListTeleportPoint = new List<TeleportPoint>();
@@ -54,7 +54,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
         {
             this.Map = Map;
 
-            ListSingleplayerSpawns = new List<EventPoint>();
+            ListCampaignSpawns = new List<EventPoint>();
             ListMultiplayerSpawns = new List<EventPoint>();
             ListMapSwitchPoint = new List<MapSwitchPoint>();
             ListTeleportPoint = new List<TeleportPoint>();
@@ -146,7 +146,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
             }
 
             int ListSingleplayerSpawnsCount = BR.ReadInt32();
-            ListSingleplayerSpawns = new List<EventPoint>(ListSingleplayerSpawnsCount);
+            ListCampaignSpawns = new List<EventPoint>(ListSingleplayerSpawnsCount);
 
             for (int S = 0; S < ListSingleplayerSpawnsCount; S++)
             {
@@ -155,7 +155,7 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 NewPoint.ColorGreen = Color.Blue.G;
                 NewPoint.ColorBlue = Color.Blue.B;
 
-                ListSingleplayerSpawns.Add(NewPoint);
+                ListCampaignSpawns.Add(NewPoint);
             }
 
             int ListMultiplayerSpawnsCount = BR.ReadInt32();
@@ -234,10 +234,10 @@ namespace ProjectEternity.GameScreens.SorcererStreetScreen
                 ListSubLayer[L].Save(BW);
             }
 
-            BW.Write(ListSingleplayerSpawns.Count);
-            for (int S = 0; S < ListSingleplayerSpawns.Count; S++)
+            BW.Write(ListCampaignSpawns.Count);
+            for (int S = 0; S < ListCampaignSpawns.Count; S++)
             {
-                ListSingleplayerSpawns[S].Save(BW);
+                ListCampaignSpawns[S].Save(BW);
             }
             BW.Write(ListMultiplayerSpawns.Count);
             for (int S = 0; S < ListMultiplayerSpawns.Count; S++)

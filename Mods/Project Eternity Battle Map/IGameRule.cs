@@ -23,6 +23,7 @@ namespace ProjectEternity.GameScreens.BattleMapScreen
         string Name { get; }
         void Init();
         void Update(GameTime gameTime);
+        int GetRemainingResapwn(int PlayerIndex);
         void OnNewTurn(int ActivePlayerIndex);
         void OnSquadDefeated(int AttackerSquadPlayerIndex, Squad AttackerSquad, int DefeatedSquadPlayerIndex, Squad DefeatedSquad);
         void OnManualVictory(int EXP, uint Money);

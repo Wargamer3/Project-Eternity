@@ -122,6 +122,11 @@ namespace ProjectEternity.GameScreens.DeathmatchMapScreen
             }
         }
 
+        public int GetRemainingResapwn(int PlayerIndex)
+        {
+            throw new NotImplementedException();
+        }
+
         public void OnNewTurn(int ActivePlayerIndex)
         {
         }

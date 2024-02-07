@@ -171,13 +171,37 @@ namespace ProjectEternity.GameScreens.WorldMapScreen
             return ListLayer[LayerIndex].ArrayTerrain[X, Y];
         }
 
-        public override List<MovementAlgorithmTile> GetSpawnLocations(int Team)
+        public override List<MovementAlgorithmTile> GetCampaignEnemySpawnLocations()
         {
             List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
 
             foreach (BattleMapPlatform ActivePlatform in ListPlatform)
             {
-                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetSpawnLocations(Team));
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetCampaignEnemySpawnLocations());
+            }
+
+            for (int L = 0; L < ListLayer.Count; L++)
+            {
+                MapLayer ActiveLayer = ListLayer[L];
+                for (int S = 0; S < ActiveLayer.ListCampaignSpawns.Count; S++)
+                {
+                    if (ActiveLayer.ListCampaignSpawns[S].Tag == "E")
+                    {
+                        ListPossibleSpawnPoint.Add(ActiveLayer.ArrayTerrain[(int)ActiveLayer.ListMultiplayerSpawns[S].Position.X, (int)ActiveLayer.ListMultiplayerSpawns[S].Position.Y]);
+                    }
+                }
+            }
+
+            return ListPossibleSpawnPoint;
+        }
+
+        public override List<MovementAlgorithmTile> GetMultiplayerSpawnLocations(int Team)
+        {
+            List<MovementAlgorithmTile> ListPossibleSpawnPoint = new List<MovementAlgorithmTile>();
+
+            foreach (BattleMapPlatform ActivePlatform in ListPlatform)
+            {
+                ListPossibleSpawnPoint.AddRange(ActivePlatform.GetMultiplayerSpawnLocations(Team));
             }
 
             string PlayerTag = (Team + 1).ToString();
